@@ -49,7 +49,12 @@ $ mkdir eggs
 ```
 $ sandbox/bin/python bootstrap.py -c [archivo_buildout]
 ```
-- Y por último
+- Y por último:
+- descargar receta d openerp del repo de anybox en launchpad, en el archivo de configuración de buildout poner la ruta al repo de anybox.
+```
+$ bzr branch lp:anybox.recipe.openerp
+```
+- Lanzar buildout (el -c [archivo_buildout] se usa cuando no tiene el nombre por defecto buildout.cfg)
 ```
 $ bin/buildout -c [archivo_buildout]
 ```
