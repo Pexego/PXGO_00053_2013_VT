@@ -55,8 +55,18 @@ $ sandbox/bin/python bootstrap.py -c [archivo_buildout]
 $ bzr branch lp:anybox.recipe.openerp
 ```
 - Lanzar buildout (el -c [archivo_buildout] se usa cuando no tiene el nombre por defecto buildout.cfg)
-```
 $ bin/buildout -c [archivo_buildout]
+
+- Puede que de error, hay que lanzar el supervisor y volver a hacer bin/buildout:
+```
+$ bin/supervisord
+$ bin/buildout -c [archivo_buildout]
+```
+- Conectarse al supervisor con localhost:9002
+- Si fuera necesario hacer update all, se puede parar desde el supervisor y en la consola hacer:
+```
+$ cd bin
+$ ./upgrade_openerp
 ```
 
 
