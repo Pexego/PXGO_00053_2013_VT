@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="product_add_tags_form" model="ir.ui.view">
+            <field name="name">product.product.add.tags.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <div name="options" position="inside">
+                    <div>
+                        <label for="tag_ids" class="oe_edit_only"/>
+                        <field name="tag_ids" widget="many2many_tags">
+                            <form string="Product tag">
+                                <field name="name"/>
+                                <field name="parent_id"/>
+                            </form>
+                        </field>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <record id="product_add_tags_search" model="ir.ui.view">
+            <field name="name">product.add.tags.search</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_search_form_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                   <field name="tag_ids" string="Tags"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- product.tag views-->
+        <record id="product_tag_form" model="ir.ui.view">
+            <field name="name">product.tag.form</field>
+            <field name="model">product.tag</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Product tag">
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="parent_id"/>
+                        </group>
+                        <group colspan="4">
+                            <field name="child_id"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_tag_tree_view" model="ir.ui.view">
+            <field name="name">product.tag.tree</field>
+            <field name="model">product.tag</field>
+            <field name="field_parent">child_id</field>
+            <field name="arch" type="xml">
+                <tree toolbar="True" string="Product Tags">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        <record id="product_tag_action" model="ir.actions.act_window">
+            <field name="name">Products by tags</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.tag</field>
+            <field name="domain">[('parent_id','=',False)]</field>
+            <field name="view_type">tree</field>
+            <field name="view_id" ref="product_tag_tree_view"/>
+            <field name="help" type="html">
+              <p>
+                Here is a list of all your products classified by Tags. You
+                can click a tag to get the list of all products linked to
+                this tag or to a child of this tag.
+              </p>
+            </field>
+        </record>
+        <menuitem
+            action="product_tag_action"
+            id="product.menu_products_tag"
+            parent="base.menu_product"
+            sequence="30" groups="base.group_no_one"/>
+
+        <record id="product_tag_list_view" model="ir.ui.view">
+            <field name="name">product.tag.list</field>
+            <field name="model">product.tag</field>
+            <field name="priority">1</field>
+            <field name="arch" type="xml">
+                <tree string="Product Tags">
+                    <field name="complete_name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_tag_action_form" model="ir.actions.act_window">
+            <field name="name">Product Tags</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.tag</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="product_tag_list_view"/>
+        </record>
+        <menuitem action="product_tag_action_form"
+            groups="base.group_no_one"
+            id="menu_product_tag_action_form"
+            parent="product.prod_config_main" sequence="2"/>
+
+    </data>
+</openerp>
