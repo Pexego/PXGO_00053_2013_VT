@@ -78,7 +78,8 @@ class product_tag(orm.Model):
 
     _columns = {
         'name': fields.char('Name', size=64),
-        'complete_name': fields.function(_name_get_fnc, type="char", string='Name'),
+        'complete_name': fields.function(_name_get_fnc, type="char",
+                                         string='Name'),
         'product_ids': fields.many2many(
             'product.product',
             'product_tag_rel',
@@ -88,7 +89,7 @@ class product_tag(orm.Model):
         'parent_id': fields.many2one('product.tag', 'Parent',
                                      ondelete='cascade'),
         'child_id': fields.one2many('product.tag', 'parent_id',
-                                     string='Child tags'),
+                                    string='Child tags'),
         'parent_left': fields.integer('Left Parent', select=True),
         'parent_right': fields.integer('Right Parent', select=True),
 
