@@ -36,9 +36,9 @@ $ git clone https://github.com/Pexego/Buildouts.git
 ```
 $ git checkout <rama>
 ```
-- Crear un virtualenv dentro de la carpeta del respositorio. Esto podría ser opcional, obligatorio para desarrollo o servidor de pruebas, tal vez podríamos no hacerlo para un despliegue en producción. Si no está instalado, instalar el paquete de virtualenv
+- Crear un virtualenv dentro de la carpeta del respositorio. Esto podría ser opcional, obligatorio para desarrollo o servidor de pruebas, tal vez podríamos no hacerlo para un despliegue en producción. Si no está instalado, instalar el paquete de virtualenv. Es necesario tener la versión que se instala con easy_install o con pip, desinstalar el paquete python-virtualenv si fuera necesario e instalarlo con easy_install
 ```
-$ sudo apt-get install python-virtualenv
+$ sudo easy_install virtualenv
 $ virtualenv sandbox --no-setuptools
 ```
 - Crear la carpeta eggs (no se crea al vuelo, ¿debería?
@@ -47,11 +47,11 @@ $ mkdir eggs
 ```
 - Ahora procedemos a ehecutar el buildout en nuestro entorno virtual
 ```
-$ sandbox/bin/python bootstrap.py
+$ sandbox/bin/python bootstrap.py -c [archivo_buildout]
 ```
 - Y por último
 ```
-$ bin/buildout
+$ bin/buildout -c [archivo_buildout]
 ```
 
 
