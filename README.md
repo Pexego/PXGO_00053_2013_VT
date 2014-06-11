@@ -68,6 +68,7 @@ $ bin/buildout -c [archivo_buildout]
 $ cd bin
 $ ./upgrade_openerp
 ```
+- oddo se lanza en el puerto 9069 (se pude configurar en otro)
 
 
 
