@@ -19,4 +19,4 @@
 #
 ##############################################################################
 
-import product
+import sale_equivalent_products_wizard

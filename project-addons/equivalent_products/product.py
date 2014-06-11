@@ -93,7 +93,6 @@ class product_tag(orm.Model):
                                     string='Child tags'),
         'parent_left': fields.integer('Left Parent', select=True),
         'parent_right': fields.integer('Right Parent', select=True),
-
     }
 
     _constraints = [

@@ -19,16 +19,6 @@
 #
 ##############################################################################
 
-{
-    'name': "Product tags",
-    'version': '1.0',
-    'category': '',
-    'description': """This module adds tags an equivalent products fro sales""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["product_view.xml", "security/ir.model.access.csv"],
-    "installable": True
-}
+import product
+import sale
+import wizard

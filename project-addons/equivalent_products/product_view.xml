@@ -37,7 +37,8 @@
             <field name="model">product.tag</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Product tag">
+                <form string="Product tag" version="7.0">
+                    <sheet>
                     <group>
                         <group>
                             <field name="name"/>
@@ -47,6 +48,7 @@
                             <field name="child_id"/>
                         </group>
                     </group>
+                    </sheet>
                 </form>
             </field>
         </record>
