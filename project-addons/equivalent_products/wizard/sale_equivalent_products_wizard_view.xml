@@ -10,15 +10,20 @@
             <field name="arch" type="xml">
                 <form string="Equivalent products">
                     <group>
-                            <field name="tag_ids" widget="many2many_tags" domain="[('wiz_id', '=', active_id)]" on_change="onchange_tags(tag_ids)"/>
-                            <field name="product_ids" colspan="4">
+                            <field name="tag_ids" widget="many2many_tags" domain="[('wiz_id', '=', active_id)]" on_change="onchange_tags(tag_ids)" />
+                            <!-- El domain solo se añade en el onchange, por lo que si no se modifican los tags
+                                 aparecen todos los productos. No lo arreglo a la espera de la nueva api
+                                 por si se puede añadir directamente el domain en la vista.-->
+                            <field name="product_id" required="1"/>
+                            <field name="product_ids" colspan="4" select="1" nolabel="1">
                                 <tree string="Products">
                                     <field name="name"/>
                                     <field name="qty_available"/>
+                                    <field name="tag_ids"/>
                                 </tree>
                             </field>
                             <newline/>
-                            <button string="S" name="s" type="object" icon="gtk-ok"/>
+                            <button string="Select product" name="select_product" type="object" icon="gtk-ok"/>
                             <button string="Cancel" special="cancel" icon="gtk-cancel"/>
                     </group>
                 </form>
