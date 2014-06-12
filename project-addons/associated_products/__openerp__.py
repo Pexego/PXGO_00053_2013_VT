@@ -20,18 +20,14 @@
 ##############################################################################
 
 {
-    'name': "Equivalent products",
+    'name': "Associated products",
     'version': '1.0',
     'category': 'Sales Management',
-    'description': """This module adds tags an equivalent products for sales""",
+    'description': """This module adds associated products""",
     'author': 'Pexego Sistemas Informáticos',
     'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
+    "depends" : ["product"],
     "data" : ["security/ir.model.access.csv",
-              "sale_view.xml",
-              "product_view.xml",
-              "wizard/sale_equivalent_products_wizard_view.xml"],
+              "product_view.xml"],
     "installable": True
 }

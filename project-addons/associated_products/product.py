@@ -19,19 +19,26 @@
 #
 ##############################################################################
 
-{
-    'name': "Equivalent products",
-    'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds tags an equivalent products for sales""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "sale_view.xml",
-              "product_view.xml",
-              "wizard/sale_equivalent_products_wizard_view.xml"],
-    "installable": True
-}
+from openerp.osv import fields, orm
+
+
+class product(orm.Model):
+
+    _inherit = "product.product"
+
+    _columns = {
+        'associated_product_ids': fields.one2many('product.associated','product_id','Associated products'),
+    }
+
+
+class associated_products(orm.Model):
+
+    _name = "product.associated"
+    _description = "This model provides the association between a product an their associated products"
+
+    _columns = {
+        'product_id': fields.many2one('product.product','Product'),
+        'associated_id': fields.many2one('product.product','Associated product'),
+        'quantity': fields.float('Quantity'),
+        'uom_id': fields.many2one('product.uom','UoM'),
+    }
