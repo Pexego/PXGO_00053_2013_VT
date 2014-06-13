@@ -19,8 +19,9 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
+from openerp.osv import orm
 from openerp.tools.translate import _
+
 
 class sale_order_line(orm.Model):
 
@@ -29,16 +30,20 @@ class sale_order_line(orm.Model):
     def equivalent_products(self, cr, uid, ids, context=None):
         line = self.browse(cr, uid, ids[0], context)
         tag_wiz_obj = self.pool.get('sale.equivalent.tag')
-        wizard_id = self.pool.get("sale.equivalent.products").create(cr, uid, {'line_id':ids[0]}, context=context)
+        wiz_obj = self.pool.get("sale.equivalent.products")
+        wizard_id = wiz_obj.create(cr, uid, {'line_id': ids[0]},
+                                   context=context)
         for tag in line.product_id.tag_ids:
-            tag_wiz_obj.create(cr, uid, {'name': tag.name, 'wiz_id': wizard_id}, context)
+            tag_wiz_obj.create(cr, uid,
+                               {'name': tag.name, 'wiz_id': wizard_id},
+                               context)
         return {
-            'name':_("Equivalent products"),
+            'name': _("Equivalent products"),
             'view_mode': 'form',
             'view_id': False,
             'view_type': 'form',
             'res_model': 'sale.equivalent.products',
-            'res_id':wizard_id,
+            'res_id': wizard_id,
             'type': 'ir.actions.act_window',
             'nodestroy': True,
             'target': 'new',

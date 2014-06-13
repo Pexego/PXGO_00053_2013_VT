@@ -43,7 +43,7 @@ class product_tag(orm.Model):
             return []
         if isinstance(ids, (long, int)):
             ids = [ids]
-        reads = self.read(cr, uid, ids, ['name','parent_id'], context=context)
+        reads = self.read(cr, uid, ids, ['name', 'parent_id'], context=context)
         res = []
         for record in reads:
             name = record['name']
@@ -61,8 +61,12 @@ class product_tag(orm.Model):
         if name:
             # Be sure name_search is symetric to name_get
             name = name.split(' / ')[-1]
-            ids = self.search(cr, uid, [('name', operator, name)] + args, limit=limit, context=context)
-            ids = ids + self.search(cr, uid, [('parent_id', 'in', ids)] + args, limit=limit, context=context)
+            ids = self.search(cr, uid,
+                              [('name', operator, name)] + args,
+                              limit=limit, context=context)
+            ids = ids + self.search(cr, uid,
+                                    [('parent_id', 'in', ids)] + args,
+                                    limit=limit, context=context)
         else:
             ids = self.search(cr, uid, args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
@@ -96,5 +100,6 @@ class product_tag(orm.Model):
     }
 
     _constraints = [
-        (orm.Model._check_recursion, 'Error ! You cannot create recursive tags.', ['parent_id'])
+        (orm.Model._check_recursion,
+         'Error ! You cannot create recursive tags.', ['parent_id'])
     ]

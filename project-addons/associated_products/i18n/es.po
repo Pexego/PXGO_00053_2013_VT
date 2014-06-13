@@ -1,0 +1,59 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#   * associated_products
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 8.0alpha1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-06-13 09:40+0000\n"
+"PO-Revision-Date: 2014-06-13 09:40+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: associated_products
+#: view:product.product:0
+msgid "Associated Products"
+msgstr "Productos asociados"
+
+#. module: associated_products
+#: field:product.associated,associated_id:0
+msgid "Associated product"
+msgstr "Producto asociado"
+
+#. module: associated_products
+#: view:product.associated:0
+#: field:product.product,associated_product_ids:0
+msgid "Associated products"
+msgstr "Productos asociados"
+
+#. module: associated_products
+#: model:ir.model,name:associated_products.model_product_product
+#: field:product.associated,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: associated_products
+#: view:product.associated:0
+msgid "Products Associated"
+msgstr "Productos asociados"
+
+#. module: associated_products
+#: field:product.associated,quantity:0
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: associated_products
+#: model:ir.model,name:associated_products.model_product_associated
+msgid "This model provides the association between a product an their associated products"
+msgstr "Relación entre producto y sus productos asociados"
+
+#. module: associated_products
+#: field:product.associated,uom_id:0
+msgid "UoM"
+msgstr "UdM"
+

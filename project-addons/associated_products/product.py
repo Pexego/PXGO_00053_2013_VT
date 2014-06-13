@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp.osv import fields, orm
+from openerp.tools.translate import _
 
 
 class product(orm.Model):
@@ -27,18 +28,47 @@ class product(orm.Model):
     _inherit = "product.product"
 
     _columns = {
-        'associated_product_ids': fields.one2many('product.associated','product_id','Associated products'),
+        'associated_product_ids': fields.one2many('product.associated',
+                                                  'product_id',
+                                                  'Associated products'),
     }
 
 
 class associated_products(orm.Model):
 
     _name = "product.associated"
-    _description = "This model provides the association between a product an their associated products"
+    _description = "This model provides the association between a \
+        product an their associated products"
+
+    _parent_name = "product_id"
+    _parent_store = True
 
     _columns = {
-        'product_id': fields.many2one('product.product','Product'),
-        'associated_id': fields.many2one('product.product','Associated product'),
-        'quantity': fields.float('Quantity'),
-        'uom_id': fields.many2one('product.uom','UoM'),
+        'product_id': fields.many2one('product.product', 'Product', required=True),
+        'associated_id': fields.many2one('product.product',
+                                         'Associated product', required=True),
+        'quantity': fields.float('Quantity', required=True),
+        'uom_id': fields.many2one('product.uom', 'UoM', required=True),
     }
+
+    _constraints = [
+        (orm.Model._check_recursion,
+         'Error ! You cannot create recursive tags.', ['parent_id'])
+    ]
+
+    """def create(self, cr, uid, vals, context=None):
+        assoc_id = super(associated_products,self).create(cr, uid, vals, context)
+        assoc = self.browse(cr, uid, assoc_id, context)
+        if assoc.product_id == assoc.associated_id:
+            raise orm.except_orm(_('Recursive error'), _('Error ! You cannot create recursive associations.'))
+        if assoc
+        return assoc_id
+
+    def write(self, cr, uid, ids, vals, context=None):
+        ok = super(associated_products,self).write(cr, uid, ids, vals, context)
+        for associated in self.browse(cr, uid, ids, context):
+            if associated.product_id.id == associated.associated_id.id:
+                raise orm.except_orm(_('Recursive error'), _('Error ! You cannot create recursive associations.'))
+        return ok"""
+
+
