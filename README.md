@@ -49,7 +49,7 @@ $ mkdir eggs
 ```
 $ sandbox/bin/python bootstrap.py -c [archivo_buildout]
 ```
-- Y por último:
+- Y por último, si se desea usar la receta de OpenERP de desarrollo se hará lo siguiente. ÇYA se ha publicado un anueva versión con soporte para Odoo con lo que , en principio no parece necesario:
 - descargar receta de openerp del repo de anybox en launchpad, en el archivo de configuración de buildout poner la ruta al repo de anybox.
 ```
 $ bzr branch lp:anybox.recipe.openerp
