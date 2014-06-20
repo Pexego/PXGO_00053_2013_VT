@@ -9,12 +9,8 @@
                 <div name="options" position="inside">
                     <div>
                         <label for="tag_ids" class="oe_edit_only"/>
-                        <field name="tag_ids" widget="many2many_tags">
-                            <form string="Product tag">
-                                <field name="name"/>
-                                <field name="parent_id"/>
-                            </form>
-                        </field>
+                        <field name="tag_ids" widget="many2many_tags"/>
+
                     </div>
                 </div>
             </field>
