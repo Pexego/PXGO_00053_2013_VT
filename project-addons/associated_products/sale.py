@@ -26,29 +26,70 @@ class sale_order_line(orm.Model):
 
     _inherit = "sale.order.line"
 
-    # la llamada recursiva falla
-    """def create_associated_line(self, cr, uid, product, flag=False, qty=0.0, uom_id=None, order_id=None, context=None):
-        import pdb; pdb.set_trace()
-        for associated in product.associated_product_ids:
-            self.create_associated_line(cr, uid, associated.associated_id, True, associated.quantity, associated.uom_id.id, order_id, context)
-        if flag:
-            args_line = {
-                'order_id': order_id,
-                'product_uom': uom_id,
-                'product_uom_qty': qty,
-                'product_id': product.id,
-            }
-            line_assoc_id = self.pool.get('sale.order.line').create(cr, uid, args_line, context)
+    _columns = {
+        'original_line_id': fields.many2one('sale.order.line', 'Origin', ondelete='cascade'),
+        'assoc_line_ids': fields.one2many('sale.order.line',
+                                          'original_line_id',
+                                          'Associated lines', ondelete='cascade'),
+    }
 
     def create(self, cr, uid, vals, context=None):
         product_obj = self.pool.get('product.product')
         line_obj = self.pool.get('sale.order.line')
         product_id = vals.get('product_id')
-        line_id = super(sale_order_line,self).create(cr, uid, vals, context)
+        line_id = super(sale_order_line, self).create(cr, uid, vals, context)
         line = line_obj.browse(cr, uid, line_id, context)
         if product_id:
             product = product_obj.browse(cr, uid, product_id, context)
-            self.create_associated_line(cr, uid, product, order_id=line.order_id.id, context=context)
+            for associated in product.associated_product_ids:
+                args_line = {
+                    'order_id': line.order_id.id,
+                    'product_uom': associated.uom_id.id,
+                    'product_uom_qty': associated.quantity * line.product_uom_qty,
+                    'product_id': associated.associated_id.id,
+                    'original_line_id': line_id,
+                }
+                self.create(cr, uid, args_line, context)
+        return line_id
 
-        return line_id"""
+    def write(self, cr, uid, ids, vals, context=None):
+        assoc_obj = self.pool.get('product.associated')
+        if vals.get('product_id'):
+            res = super(sale_order_line, self).write(cr, uid, ids, vals, context)
+            product_id = vals.get('product_id')
+            for line in self.browse(cr, uid, ids, context):
+                if line.assoc_line_ids:
+                    #self.unlink(cr, uid, [x.id for x in line.assoc_line_ids], context)
+                    self.write(cr, uid, [line.id], {'assoc_line_ids': [(2, x.id) for x in line.assoc_line_ids]}, context)
+                line = self.browse(cr, uid, line.id, context)
+                for associated in line.product_id.associated_product_ids:
+                    args_line = {
+                        'order_id': line.order_id.id,
+                        'product_uom': associated.uom_id.id,
+                        'product_uom_qty': associated.quantity * line.product_uom_qty,
+                        'product_id': associated.associated_id.id,
+                        'original_line_id': line.id,
+                    }
+                    self.create(cr, uid, args_line, context)
+            return res
 
+        if vals.get('product_uom_qty'):
+            for line in self.browse(cr, uid, ids, context):
+                if line.assoc_line_ids:
+                    diff = vals.get('product_uom_qty', line.product_uom_qty) - line.product_uom_qty
+                    for assoc_line in line.assoc_line_ids:
+                        association_id = assoc_obj.search(cr, uid, [('product_id', '=', line.product_id.id), ('associated_id', '=', assoc_line.product_id.id)], context=context)
+                        association = assoc_obj.browse(cr, uid, association_id[0], context)
+                        quantity = diff * association.quantity
+                        self.write(cr, uid, [assoc_line.id],
+                                   {'product_uom_qty':
+                                       (assoc_line.product_uom_qty +
+                                        quantity)}, context)
+        return super(sale_order_line, self).write(cr, uid, ids, vals, context)
+
+    """def unlink(self, cr, uid, ids, context=None):
+        for line in self.browse(cr, uid, ids, context):
+            if line.assoc_line_ids:
+                assoc_ids = [x.id for x in line.assoc_line_ids]
+                self.unlink(cr, uid, assoc_ids, context)
+        return super(sale_order_line, self).unlink(cr, uid, ids, context)"""

@@ -86,7 +86,6 @@ class sale_equivalent_products(orm.TransientModel):
                              wiz.line_id.id,
                              {'product_id': wiz.product_id.id}, context)
         line_vals = order_line_obj.product_id_change(cr, uid, wiz.line_id.id, wiz.line_id.order_id.pricelist_id.id, wiz.product_id.id, wiz.line_id.product_uom_qty, False, wiz.line_id.product_uos_qty, False, wiz.line_id.name, wiz.line_id.order_id.partner_id, False, True, wiz.line_id.order_id.date_order, False, wiz.line_id.order_id.fiscal_position, False, context)
-        # TODO: probar que funciona bien
         line_vals = line_vals['value']
         order_line_obj.write(cr, uid,
                              wiz.line_id.id, line_vals, context)
