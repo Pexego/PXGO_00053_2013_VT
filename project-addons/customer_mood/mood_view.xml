@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_mood_tree" model="ir.ui.view">
+            <field name="name">mood.tree</field>
+            <field name="model">mood</field>
+            <field name="arch" type="xml">
+                <tree string="Moods">
+                    <field name="name"/>
+                    <field name="image" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_mood_form" model="ir.ui.view">
+            <field name="name">mood.form</field>
+            <field name="model">mood</field>
+            <field name="arch" type="xml">
+                <form string="Moods">
+                <sheet>
+                    <field name="image" widget='image' class="oe_left oe_avatar" />
+                    <div class="oe_title oe_left">
+                        <div class="oe_edit_only">
+                            <label for="name"/>
+                        </div>
+                        <h1>
+                            <field name="name" default_focus="1" placeholder="Name" />
+                        </h1>
+                    </div>
+                </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_mood" model="ir.actions.act_window">
+            <field name="name">Moods</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">mood</field>
+            <field name="view_type">form</field>
+            <field name="help">Manage the moods</field>
+        </record>
+
+        <menuitem action="action_mood" id="menu_mood" parent="base.menu_base_config" sequence="2"/>
+
+    </data>
+</openerp>
