@@ -33,6 +33,7 @@ class sale_order_line(orm.Model):
                 'margin': 0.0,
                 'margin_perc': 0.0,
             }
+            margin = 0.0
             if line.product_id:
                 if line.purchase_price:
                     margin = round((line.price_unit * line.product_uos_qty *
@@ -42,7 +43,7 @@ class sale_order_line(orm.Model):
                                                         (line.purchase_price *
                                                          line.product_uos_qty),
                                                         2)
-                else:
+                elif line.product_id.standard_price:
                     margin = round((line.price_unit * line.product_uos_qty *
                                     (100.0 - line.discount) / 100.0) -
                                    (line.product_id.standard_price *
