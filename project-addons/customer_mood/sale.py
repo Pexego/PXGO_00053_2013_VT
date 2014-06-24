@@ -29,9 +29,11 @@ class sale_order(osv.osv):
     }
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
-        result = super(sale_order, self).onchange_partner_id(cr, uid, ids, part, context)
+        result = super(sale_order, self).onchange_partner_id(cr, uid, ids,
+                                                             part, context)
         if part:
-            part = self.pool.get('res.partner').browse(cr, uid, part, context=context)
+            part = self.pool.get('res.partner').browse(cr, uid, part,
+                                                       context=context)
             if part.mood_image and part.mood_image.image:
                 result['value']['customer_mood']= part.mood_image.image_small
         return result
