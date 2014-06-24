@@ -20,22 +20,22 @@
 ##############################################################################
 
 {
-    "name" : "Sale delivery type",
-    "version" : "1.0",
-    "author" : "Pexego",
-    'website' : 'www.pexego.es',
-    "category" : "Sales",
+    "name": "Sale delivery type",
+    "version": "1.0",
+    "author": "Pexego",
+    'website': 'www.pexego.es',
+    "category": "Sales",
     "description": """
 Sales delivery type
 ========================================
 
     * Add the delivery type field to sales.
 """,
-    "depends" : ["base", "sale"],
-    "data" : [
+    "depends": ["base", "sale"],
+    "data": [
         "sale_view.xml",
     ],
-    "demo" : [],
+    "demo": [],
     'auto_install': False,
     "installable": True,
     'images': [],

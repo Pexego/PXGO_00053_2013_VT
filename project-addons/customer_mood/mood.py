@@ -22,10 +22,11 @@ import openerp
 from openerp import tools
 from openerp.osv import osv, fields
 
+
 class mood(osv.osv):
     _name = 'mood'
     _descrition = 'Moods'
-    
+
     def _get_image(self, cr, uid, ids, name, args, context=None):
         result = dict.fromkeys(ids, False)
         for obj in self.browse(cr, uid, ids, context=context):
@@ -34,20 +35,18 @@ class mood(osv.osv):
 
     def _set_image(self, cr, uid, id, name, value, args, context=None):
         return self.write(cr, uid, [id],
-                           {'image': tools.image_resize_image_big(value)},
-                           context=context)
-    
+                          {'image': tools.image_resize_image_big(value)},
+                          context=context)
+
     _columns = {
         'name': fields.char('Name', size=128, required=True, select=True),
         'image': fields.binary("Image",
-            help="This field contains the image used to set the mood, \
-                  limited to 1024x1024px"),
+                               help="This field contains the image used to \
+                                     set the mood, limited to 1024x1024px"),
         'image_small': fields.function(_get_image, fnct_inv=_set_image,
-            string="Small-sized image", type="binary", multi="_get_image",
-            store={
-                'mood': (lambda self, cr, uid, ids, c={}: ids, ['image'], 10),
-            },
-            help="Small-sized image of this mood. It is automatically "\
-                 "resized as a 64x64px image, with aspect ratio preserved. "\
-                 "Use this field anywhere a small image is required."),
+                                       string="Small-sized image",
+                                       type="binary", multi="_get_image",
+                                       store={'mood': (lambda self, cr, uid,
+                                                       ids, c={}: ids,
+                                                       ['image'], 10), })
     }

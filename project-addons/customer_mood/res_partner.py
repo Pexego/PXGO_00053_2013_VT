@@ -22,6 +22,7 @@ import openerp
 from openerp import tools
 from openerp.osv import osv, fields
 
+
 class res_partner(osv.osv):
     _inherit = 'res.partner'
 
@@ -30,11 +31,11 @@ class res_partner(osv.osv):
         result = dict.fromkeys(ids, False)
         for partner in self.browse(cr, uid, ids, context=context):
             if partner.mood_image and partner.mood_image.image_small:
-                result[partner.id] = partner.mood_image.image_small 
+                result[partner.id] = partner.mood_image.image_small
         return result
 
     _columns = {
         'mood_image': fields.many2one('mood', 'Mood'),
-        'selected_image': fields.function(_get_image,
-            string="Mood", type="binary"),
+        'selected_image': fields.function(_get_image, string="Mood",
+                                          type="binary"),
     }

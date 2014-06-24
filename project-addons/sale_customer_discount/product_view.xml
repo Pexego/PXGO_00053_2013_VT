@@ -25,17 +25,23 @@
                 
                 <field name="lst_price" position="replace"/>
                 <xpath expr="//page[@string='Information']/group" position="after">
-                    <div>
-                    <group colspan="4" col="6" string="Prices">
+                    
+                    <group colspan="8" col="8" string="Prices">
+                     <field name="list_price2"/>
                      
-                        <field name="list_price2"/> <field name="cmargin_price2" /><field name="smargin_price2" />
-                        <field name="list_price3"/> <field name="cmargin_price3"/><field name="smargin_price3"/>
+                     <label for="cmargin_price2"/><div name="margins2"><field name="cmargin_price2" class="oe_inline"/> %% </div>
+                     <label for="smargin_price2"/><div name="margins3"><field name="smargin_price2" class="oe_inline"/> %% </div>
+                     <newline/>
+                    <field name="list_price3"/>
+                     <label for="cmargin_price3"/><div name="margins4"><field name="cmargin_price3" class="oe_inline"/> %% </div>
+                     <label for="smargin_price3"/><div name="margins5"><field name="smargin_price3" class="oe_inline"/> %% </div>
+                        <newline/>
                         <field name="standard_price" />
                         <newline/>
                             <field name="commercial_cost"/>
                         
                     </group>
-                    </div>
+                   
                     
                 </xpath>
                 

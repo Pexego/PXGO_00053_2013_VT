@@ -20,26 +20,26 @@
 ##############################################################################
 
 {
-    "name" : "Customer Mood",
-    "version" : "1.0",
-    "author" : "Pexego",
-    'website' : 'www.pexego.es',
-    "category" : "Sales",
+    "name": "Customer Mood",
+    "version": "1.0",
+    "author": "Pexego",
+    'website': 'www.pexego.es',
+    "category": "Sales",
     "description": """
 Customer Mood
 ========================================
 
-    * Set the mood in which a customer is, and to know at a glance. 
+    * Set the mood in which a customer is, and to know at a glance.
     * When ordering, it also shows the mood icon for the selected customer.
 """,
-    "depends" : ["base", "sale",],
-    "data" : [
+    "depends": ["base", "sale"],
+    "data": [
         "mood_view.xml",
         "res_partner_view.xml",
         "sale_view.xml",
         "security/ir.model.access.csv"
     ],
-    "demo" : [],
+    "demo": [],
     'auto_install': False,
     "installable": True,
     'images': [],

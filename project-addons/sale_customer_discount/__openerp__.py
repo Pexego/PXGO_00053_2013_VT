@@ -20,11 +20,11 @@
 ##############################################################################
 
 {
-    "name" : "Sale customer discount",
-    "version" : "1.0",
-    "author" : "Pexego",
-    'website' : 'www.pexego.es',
-    "category" : "Sales",
+    "name": "Sale customer discount",
+    "version": "1.0",
+    "author": "Pexego",
+    'website': 'www.pexego.es',
+    "category": "Sales",
     "description": """
 Sales customer discount
 ========================================
@@ -33,11 +33,11 @@ Sales customer discount
     * Also, added the 'cost margin' and 'commercial margin' of the sale price
     and 'cost margin' and 'commercial margin' of the sale price 2.
 """,
-    "depends" : ["base", "product"],
-    "data" : [
+    "depends": ["base", "product"],
+    "data": [
         "product_view.xml",
     ],
-    "demo" : [],
+    "demo": [],
     'auto_install': False,
     "installable": True,
     'images': [],

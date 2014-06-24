@@ -22,6 +22,7 @@ import openerp
 from openerp import tools
 from openerp.osv import osv, fields
 
+
 class sale_order(osv.osv):
     _inherit = 'sale.order'
     _columns = {
@@ -35,5 +36,5 @@ class sale_order(osv.osv):
             part = self.pool.get('res.partner').browse(cr, uid, part,
                                                        context=context)
             if part.mood_image and part.mood_image.image:
-                result['value']['customer_mood']= part.mood_image.image_small
+                result['value']['customer_mood'] = part.mood_image.image_small
         return result

@@ -22,36 +22,40 @@ import openerp
 from openerp.osv import osv, fields
 import openerp.addons.decimal_precision as dp
 
+
 class sale_order_line(osv.osv):
     _inherit = 'sale.order.line'
     _columns = {
         'qty_available': fields.float('Qty available', readonly=True,
-            digits_compute=dp.get_precision('Product Unit of Measure'))
+                                      digits_compute=
+                                      dp.get_precision('Product \
+                                                        Unit of Measure'))
     }
 
     def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
-            uom=False, qty_uos=0, uos=False, name='', partner_id=False,
-            lang=False, update_tax=True, date_order=False, packaging=False,
-            fiscal_position=False, flag=False, context=None):
+                          uom=False, qty_uos=0, uos=False, name='',
+                          partner_id=False, lang=False, update_tax=True,
+                          date_order=False, packaging=False,
+                          fiscal_position=False, flag=False, context=None):
 
-        result = super(sale_order_line, self).product_id_change(cr, uid, ids,
-            pricelist, product, qty, uom, qty_uos, uos, name, partner_id, lang,
-            update_tax, date_order, packaging, fiscal_position, flag, context)
+        result = super(sale_order_line,
+                       self).product_id_change(cr, uid, ids, pricelist,
+                                               product, qty, uom, qty_uos, uos,
+                                               name, partner_id, lang,
+                                               update_tax, date_order,
+                                               packaging, fiscal_position,
+                                               flag, context)
         context = context or {}
         product_obj = self.pool.get('product.product')
         partner_obj = self.pool.get('res.partner')
         lang = lang or context.get('lang', False)
-        if not partner_id:
-            raise osv.except_osv(_('No Customer Defined!'),
-                                  _('Before choosing a product,\n \
-                                     select a customer in the sales form.'))
         context = {'lang': lang, 'partner_id': partner_id}
         partner = partner_obj.browse(cr, uid, partner_id)
         lang = partner.lang
         context_partner = {'lang': lang, 'partner_id': partner_id}
         if product:
             product = product_obj.browse(cr, uid, product,
-                context=context_partner)
+                                         context=context_partner)
             if product.qty_available:
                 result['value']['qty_available'] = product.qty_available
             else:

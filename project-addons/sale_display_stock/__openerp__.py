@@ -20,22 +20,22 @@
 ##############################################################################
 
 {
-    "name" : "Sale display stock",
-    "version" : "1.0",
-    "author" : "Pexego",
-    'website' : 'www.pexego.es',
-    "category" : "Sales",
+    "name": "Sale display stock",
+    "version": "1.0",
+    "author": "Pexego",
+    'website': 'www.pexego.es',
+    "category": "Sales",
     "description": """
 Sales display stock
 ========================================
 
     * Displays the real stock of product at each sale order line.
 """,
-    "depends" : ["base", "sale", "stock"],
-    "data" : [
+    "depends": ["base", "sale", "stock"],
+    "data": [
         "sale_view.xml",
     ],
-    "demo" : [],
+    "demo": [],
     'auto_install': False,
     "installable": True,
     'images': [],

@@ -21,13 +21,14 @@
 import openerp
 from openerp.osv import osv, fields
 
+
 class sale_order(osv.osv):
     _inherit = 'sale.order'
     _columns = {
         'delivery_type': fields.selection([
             ('shipping', 'Shipping'),
             ('carrier', 'Carrier - Customer'),
-            ('installations', 'Pickup in installations'),],
+            ('installations', 'Pickup in installations'), ],
             'Delivery type', required=True)
     }
     _defaults = {
