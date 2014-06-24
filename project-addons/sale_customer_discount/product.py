@@ -42,11 +42,12 @@ class product_product(osv.osv):
             smargin3 = product.list_price3 - product.standard_price
             lst_price2 = product.list_price2
             lst_price3 = product.list_price3
-            res[product.id]['cmargin_price2'] = (cmargin2 * 100.0) / lst_price2
-            res[product.id]['smargin_price2'] = (smargin2 * 100.0) / lst_price2
-            res[product.id]['cmargin_price3'] = (cmargin3 * 100.0) / lst_price3
-            res[product.id]['smargin_price3'] = (smargin3 * 100.0) / lst_price3
-
+            if lst_price2 != 0:
+                res[product.id]['cmargin_price2'] = (cmargin2 * 100.0) / lst_price2
+                res[product.id]['smargin_price2'] = (smargin2 * 100.0) / lst_price2
+            if lst_price3 != 0:
+                res[product.id]['cmargin_price3'] = (cmargin3 * 100.0) / lst_price3
+                res[product.id]['smargin_price3'] = (smargin3 * 100.0) / lst_price3
         return res
 
     _columns = {
