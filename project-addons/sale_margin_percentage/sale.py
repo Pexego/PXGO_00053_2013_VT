@@ -57,9 +57,9 @@ class sale_order_line(orm.Model):
 
     _columns = {
         'margin': fields.function(_product_margin, string='Margin',
-                                  store = True, multi='marg'),
+                                  store=True, multi='marg'),
         'margin_perc': fields.function(_product_margin, string='Margin',
-                                       store = True, multi='marg'),
+                                       store=True, multi='marg'),
     }
 
 
@@ -70,12 +70,15 @@ class sale_order(orm.Model):
     def _product_margin(self, cr, uid, ids, field_name, arg, context=None):
         result = {}
         for sale in self.browse(cr, uid, ids, context=context):
-            if sale.total_purch != 0:
+            total_purchase = sale.total_purchase or \
+                self._get_total_price_purchase(cr, uid, ids, 'total_purchase',
+                                               arg, context)[sale.id]
+            if total_purchase != 0:
                 result[sale.id] = 0.0
                 for line in sale.order_line:
                     result[sale.id] += line.margin or 0.0
                 result[sale.id] = round((result[sale.id] * 100) /
-                                        sale.total_purch, 2)
+                                        total_purchase, 2)
         return result
 
     def _get_total_price_purchase(self, cr, uid, ids, field_name, arg,
@@ -101,7 +104,7 @@ class sale_order(orm.Model):
         return result.keys()
 
     _columns = {
-        'total_purch': fields.function(_get_total_price_purchase,
+        'total_purchase': fields.function(_get_total_price_purchase,
                                        string='Price purchase',
                                        store={
                                            'sale.order.line': (_get_order,
