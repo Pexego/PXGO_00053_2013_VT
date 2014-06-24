@@ -24,20 +24,14 @@ from openerp.osv import osv, fields
 
 class sale_order(osv.osv):
     _inherit = 'sale.order'
-
-    def _get_image(self, cr, uid, ids, name, args, context=None):
-        """ """
-        result = dict.fromkeys(ids, False)
-        for order in self.browse(cr, uid, ids, context=context):
-            if order.partner_id and order.partner_id.mood_image and order.partner_id.mood_image.image_small:
-                result[order.id] = order.partner_id.mood_image.image_small 
-        return result
-    
     _columns = {
-        'customer_mood': fields.function(_get_image,
-            string="Customer Mood", type="binary", 
-            #store={
-            #    'res.partner': (lambda self, cr, uid, ids, c={}: ids, ['mood_image'], 10),
-            #}
-            ),
+        'customer_mood': fields.binary('Customer Mood', readonly=True)
     }
+
+    def onchange_partner_id(self, cr, uid, ids, part, context=None):
+        result = super(sale_order, self).onchange_partner_id(cr, uid, ids, part, context)
+        if part:
+            part = self.pool.get('res.partner').browse(cr, uid, part, context=context)
+            if part.mood_image and part.mood_image.image:
+                result['value']['customer_mood']= part.mood_image.image_small
+        return result
