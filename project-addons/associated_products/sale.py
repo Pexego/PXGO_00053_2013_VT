@@ -50,7 +50,8 @@ class sale_order_line(orm.Model):
             product = product_obj.browse(cr, uid, product_id, context)
             for associated in product.associated_product_ids:
                 qty = uom_obj._compute_qty(cr, uid, line.product_uom.id,
-                                           line.product_uom_qty, line.product_id.uom_id.id)
+                                           line.product_uom_qty,
+                                           line.product_id.uom_id.id)
 
                 fiscal_position = (line.order_id.fiscal_position and
                                    fiscal_obj.browse(cr, uid,
@@ -66,7 +67,8 @@ class sale_order_line(orm.Model):
                                                 line.order_id.partner_id.id,
                                                 {
                                                 'uom': associated.uom_id.id,
-                                                'date': line.order_id.date_order,
+                                                'date':
+                                                    line.order_id.date_order,
                                                 }
                                                 )[pricelist]
                 args_line = {
@@ -114,8 +116,10 @@ class sale_order_line(orm.Model):
                                                     associated.quantity * qty,
                                                     line.order_id.partner_id.id,
                                                     {
-                                                    'uom': associated.uom_id.id,
-                                                    'date': line.order_id.date_order,
+                                                    'uom':
+                                                        associated.uom_id.id,
+                                                    'date':
+                                                        line.order_id.date_order,
                                                     }
                                                     )[pricelist]
                     args_line = {
@@ -140,8 +144,10 @@ class sale_order_line(orm.Model):
                     for assoc_line in line.assoc_line_ids:
                         association_id = assoc_obj.search(cr, uid,
                                                           [('product_id', '=',
-                                                            line.product_id.id),
-                                                           ('associated_id', '=',
+                                                            line.product_id.id
+                                                            ),
+                                                           ('associated_id',
+                                                            '=',
                                                             assoc_line.product_id.id)],
                                                           context=context)
                         association = assoc_obj.browse(cr, uid,
@@ -149,6 +155,8 @@ class sale_order_line(orm.Model):
                                                        context)
                         quantity = diff * association.quantity
                         self.write(cr, uid, [assoc_line.id],
-                                   {'product_uom_qty': (assoc_line.product_uom_qty + quantity)},
+                                   {'product_uom_qty':
+                                       (assoc_line.product_uom_qty + quantity)
+                                    },
                                    context)
         return super(sale_order_line, self).write(cr, uid, ids, vals, context)

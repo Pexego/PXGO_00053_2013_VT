@@ -38,7 +38,8 @@ class sale_order_line(orm.Model):
                 if line.purchase_price:
                     margin = round((line.price_unit * line.product_uos_qty *
                                    (100.0 - line.discount) / 100.0) -
-                                   (line.purchase_price * line.product_uos_qty), 2)
+                                   (line.purchase_price *
+                                    line.product_uos_qty), 2)
                     res[line.id]['margin_perc'] = round((margin * 100) /
                                                         (line.purchase_price *
                                                          line.product_uos_qty),
@@ -105,20 +106,25 @@ class sale_order(orm.Model):
 
     _columns = {
         'total_purchase': fields.function(_get_total_price_purchase,
-                                       string='Price purchase',
-                                       store={
-                                           'sale.order.line': (_get_order,
-                                                               ['margin'],
-                                                               20),
-                                           'sale.order': (lambda self, cr,
-                                                          uid, ids, c={}: ids,
-                                                          ['order_line'], 20),
-                                       }),
+                                          string='Price purchase',
+                                          store={
+                                              'sale.order.line': (_get_order,
+                                                                  ['margin'],
+                                                                  20),
+                                              'sale.order': (lambda self, cr,
+                                                             uid, ids, c={}:
+                                                             ids,
+                                                             ['order_line'],
+                                                             20),
+                                          }),
         'margin': fields.function(_product_margin, string='Margin',
-                                  help="It gives profitability by calculating percentage.",
+                                  help="It gives profitability by calculating \
+                                        percentage.",
                                   store={
-                                      'sale.order.line': (_get_order, ['margin'], 20),
-                                      'sale.order': (lambda self, cr, uid, ids, c={}: ids,
-                                                     ['order_line'], 20),
+                                      'sale.order.line':
+                                          (_get_order, ['margin'], 20),
+                                      'sale.order':
+                                          (lambda self, cr, uid, ids, c={}:
+                                           ids, ['order_line'], 20),
                                   }),
     }

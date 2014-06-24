@@ -145,7 +145,7 @@ class sale_order_line(orm.Model):
         ),
         'pack_parent_line_id': fields.many2one(
             'sale.order.line', 'Pack',
-            help='The pack that contains this product.'
+            help='The pack that contains this product.', ondelete="cascade"
         ),
         'pack_child_line_ids': fields.one2many(
             'sale.order.line', 'pack_parent_line_id', 'Lines in pack'),

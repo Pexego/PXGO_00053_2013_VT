@@ -89,12 +89,15 @@ class sale_equivalent_products(orm.TransientModel):
             order_line_obj.product_id_change(cr, uid, wiz.line_id.id,
                                              wiz.line_id.order_id.pricelist_id.id,
                                              wiz.product_id.id,
-                                             wiz.line_id.product_uom_qty, False,
-                                             wiz.line_id.product_uos_qty, False,
+                                             wiz.line_id.product_uom_qty,
+                                             False,
+                                             wiz.line_id.product_uos_qty,
+                                             False,
                                              wiz.line_id.name,
                                              wiz.line_id.order_id.partner_id,
                                              False, True,
-                                             wiz.line_id.order_id.date_order, False,
+                                             wiz.line_id.order_id.date_order,
+                                             False,
                                              wiz.line_id.order_id.fiscal_position,
                                              False, context)
         line_vals = line_vals['value']
