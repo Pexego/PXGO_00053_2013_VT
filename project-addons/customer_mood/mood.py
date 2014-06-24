@@ -33,12 +33,15 @@ class mood(osv.osv):
         return result
 
     def _set_image(self, cr, uid, id, name, value, args, context=None):
-        return self.write(cr, uid, [id], {'image': tools.image_resize_image_big(value)}, context=context)
+        return self.write(cr, uid, [id],
+                           {'image': tools.image_resize_image_big(value)},
+                           context=context)
     
     _columns = {
         'name': fields.char('Name', size=128, required=True, select=True),
         'image': fields.binary("Image",
-            help="This field contains the image used to set the mood, limited to 1024x1024px"),
+            help="This field contains the image used to set the mood, \
+                  limited to 1024x1024px"),
         'image_small': fields.function(_get_image, fnct_inv=_set_image,
             string="Small-sized image", type="binary", multi="_get_image",
             store={

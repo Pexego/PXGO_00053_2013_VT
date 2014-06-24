@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+        <record id="view_order_form_add_dispaly_stock" model="ir.ui.view">
+            <field name="name">sale.order.form_add_display_stock</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/form/group/group/field[@name='product_id']" position="after">
+                    <field name="qty_available"/>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                    <field name="qty_available"/>
+                </xpath>
+            </field>
+        </record>
+        
+        <record id="view_order_line_tree_add_display_stock" model="ir.ui.view">
+            <field name="name">sale.order.line.tree.add.display.stock</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="qty_available"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="view_order_line_form2_add_display_stock" model="ir.ui.view">
+            <field name="name">sale.order.line.form2.add.display.stock</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_form2"/>
+            <field name="arch" type="xml">
+                 <field name="product_id" position="after">
+                    <field name="qty_available"/>
+                </field>
+            </field>
+        </record>
+        
+    </data>
+</openerp>
