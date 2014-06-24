@@ -20,7 +20,6 @@
 ##############################################################################
 
 from openerp.osv import fields, orm
-from openerp.tools.translate import _
 
 
 class product(orm.Model):
@@ -41,12 +40,10 @@ class associated_products(orm.Model):
         product and their associated products"
 
     _columns = {
-        'product_id': fields.many2one('product.product', 'Product', required=True),
+        'product_id': fields.many2one('product.product', 'Product',
+                                      required=True),
         'associated_id': fields.many2one('product.product',
                                          'Associated product', required=True),
         'quantity': fields.float('Quantity', required=True),
         'uom_id': fields.many2one('product.uom', 'UoM', required=True),
     }
-
-
-
