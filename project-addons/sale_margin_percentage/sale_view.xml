@@ -12,6 +12,10 @@
                         <field name="margin_perc" class="oe_inline" groups="base.group_user" readonly="1"/> %%
                     </div>
                 </xpath>
+                <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="after">
+                        <field name="margin_perc" class="oe_inline" groups="base.group_user" readonly="1"/>
+                </xpath>
+
             </field>
         </record>
 
