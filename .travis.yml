@@ -17,7 +17,7 @@ python:
 # Install tested version of odoo (official or ocb)
 # Get modules from other repos which have dependencies (in this case travel requires modules from lp:partner-contact-management and lp:openerp-hr
 install:
-    - echo "deb http://apt.anybox.fr/openerp common main" >> /etc/apt/sources.list
+    - echo 'deb http://apt.anybox.fr/openerp common main' >> /etc/apt/sources.list
     - apt-key adv --keyserver hkp://subkeys.pgp.net --recv-keys 0xE38CEB07
     - apt-get update
     - apt-get install openerp-server-system-build-deps
