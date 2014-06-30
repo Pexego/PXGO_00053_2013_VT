@@ -1,0 +1,54 @@
+# Config file .travis.yml
+# for trigger
+
+language: python
+
+python:
+# - "pypy" # not supported by odoo 8
+# - "3.4" # not supported by odoo 8
+# - "3.3" # not supported by odoo 8
+    - "2.7"
+# - "2.6" # not supported by odoo 8
+
+
+# Need coveralls for coverage reports
+# Need flake8 for pep8 testing
+# Manually get PyChart
+# Install tested version of odoo (official or ocb)
+# Get modules from other repos which have dependencies (in this case travel requires modules from lp:partner-contact-management and lp:openerp-hr
+install:
+    - echo "deb http://apt.anybox.fr/openerp common main" >> /etc/apt/sources.list
+    - apt-key adv --keyserver hkp://subkeys.pgp.net --recv-keys 0xE38CEB07
+    - apt-get update
+    - apt-get install openerp-server-system-build-deps
+    - apt-get install libreadline-dev
+    - virtualenv sandbox --no-setuptools
+    - mkdir eggs
+    - sandbox/bin/python bootstrap.py -c ./buildoutVT.cfg
+    - bin/buildout -c ./buildoutVT.cfg
+    - pip install coveralls flake8
+    - bin/supervisord
+    - bin/buildout -c ./buildoutVT.cfg
+    - bzr branch --stacked lp:partner-contact-management ~/partner-contact-management
+    - bzr branch --stacked lp:openerp-hr ~/openerp-hr
+
+# Create databae
+# Pre-install modules and dependencies
+
+
+# Test with flake, ignore F401 for __init__.py files, use a max length of 120
+# Run tests with coverage
+# Due to oddness of the odoo setup.py process, assure that import openerp gets it from env/openerp and not env/lib/python2.7/site-packages/openerp
+# only test modules in repo (list populated by directories in repo)
+# preload modules before testing to only run tests of repo's modules
+# include current director and dependent repos in addons-path
+script:
+    - flake8 . --max-line-length=120 --filename=__init__.py --ignore=F401
+    - flake8 . --max-line-length=120 --exclude=__init__.py
+# - git diff $TRAVIS_BRANCH | flake8 . --diff --max-line-length=120 --filename=__init__.py --ignore=F401
+# - git diff $TRAVIS_BRANCH | flake8 . --diff --max-line-length=120 --exclude=__init__.py
+    - odoo.py -d test --stop-after-init --init=$(python -c 'import os; print(",".join(x for x in os.listdir("./project-addons") if os.path.isdir(x) and not x.startswith(".")))') --addons-path=$(pwd),`python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"`/addons,~/partner-contact-management,~/openerp-hr
+    - coverage run $(which odoo.py) -d test --test-enable --log-level=test --stop-after-init --init=$(python -c 'import os; print(",".join(x for x in os.listdir("./project-addons") if os.path.isdir(x) and not x.startswith(".")))') --addons-path=$(pwd),`python -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())"`/addons,~/partner-contact-management,~/openerp-hr
+
+after_success:
+  coveralls
