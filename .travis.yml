@@ -26,9 +26,9 @@ install:
     - mkdir eggs
     - pip install coveralls flake8
     - sandbox/bin/python bootstrap.py -c ./buildoutVT_NOPG.cfg
-    - bin/buildout -c ./buildoutVT.cfg
+    - bin/buildout -c ./buildoutVT_NOPG.cfg
     - bin/supervisord
-    - bin/buildout -c ./buildoutVT.cfg
+    - bin/buildout -c ./buildoutVT_NOPG.cfg
 
 # Create databae
 # Pre-install modules and dependencies
