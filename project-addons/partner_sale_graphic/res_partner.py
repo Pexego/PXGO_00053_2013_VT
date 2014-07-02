@@ -30,13 +30,21 @@ from pychart import *
 import pychart.legend
 
 
-class res.partner(orm.Model):
+class res_partner(orm.Model):
 
     _inherit = 'res.partner'
 
     _columns = {
         'sale_graphic': fields.binary("Sale graphic"),
     }
+
+    def __get_partner_data(self, cr, uid, partner_id, context={}):
+        sale_obj = self.pool.get('sale.order')
+        sale_ids = sale_obj.read_group(cr, uid,
+                                       [('partner_id', '=', partner_id),
+                                        ('state', 'not in', ['draft'])],
+                                       ['total'], ['date'],
+                                       context=context)
 
     def run_scheduler_grpahic(self, cr, uid, automatic=False,
                               use_new_cursor=False, context=None):
@@ -47,8 +55,11 @@ class res.partner(orm.Model):
         if context is None:
             context = {}
 
-        partner_ids = partner_obj.search(cr, uid, [('customer', '=', True)], context=context)
-        for partner in partner_obj.browse(cr, uid, partner_ids, context):
-            pass
+        partner_ids = partner_obj.search(cr, uid, [('customer', '=', True)],
+                                         context=context)
+        for partner_id in partner_ids:
+            data = self.__get_partner_data(cr, uid, partner_id, context)
+
         return
+
 
