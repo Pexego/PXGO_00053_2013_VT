@@ -28,6 +28,7 @@
     'website': 'www.pexego.es',
     "depends" : ["base",
                  "sale",],
-    "data" : ["data/cron.xml"],
+    "data" : ["data/cron.xml",
+              "res_partner_view.xml"],
     "installable": True
 }
