@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="product_add_states" model="ir.ui.view">
+            <field name="name">product.add.states</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="sale_ok" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state', 'in', ['active', 'edition'])]}</attribute>
+                </field>
+                <xpath expr="/form/sheet" position="before">
+                    <header>
+                        <button name="signal_edition" string="Edition" attrs="{'invisible': [('state2','in', ['edition', 'published'])]}" class="oe_highlight"/>
+                        <button name="signal_publish" string="Publish" attrs="{'invisible': [('state2','in', ['active', 'published'])]}" class="oe_highlight"/>
+                        <field name="state2" widget="statusbar"/>
+                    </header>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
