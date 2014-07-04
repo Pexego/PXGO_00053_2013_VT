@@ -23,7 +23,7 @@
     'name': "Product states",
     'version': '1.0',
     'category': 'product',
-    'description': """Added 3 states to the product""",
+    'description': """Adds states to the product""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
     "depends" : ["base", "product"],

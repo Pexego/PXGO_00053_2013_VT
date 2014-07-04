@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp.osv import fields, orm
+from openerp.tools.translate import _
 
 
 class ui(orm.Model):
@@ -41,11 +42,32 @@ class ui(orm.Model):
 
     def act_active(self, cr, uid, ids, context=None):
         return True
+
     def act_edition(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state2': 'edition'}, context)
+        for product in self.browse(cr, uid, ids, context):
+            vals = {
+                'body':
+                _(u'The product %s is in edition state') % product.name,
+                'model': 'product.product',
+                'res_id': product.id,
+                'type': 'comment'
+            }
+            self.pool.get('mail.message').create(cr, uid, vals,
+                                                 context=context)
         return True
 
     def act_publish(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state2': 'published', 'sale_ok': True}, context)
+        self.write(cr, uid, ids, {'state2': 'published', 'sale_ok': True},
+                   context)
+        for product in self.browse(cr, uid, ids, context):
+            vals = {
+                'body':
+                _(u'The product %s has been published') % product.name,
+                'model': 'product.product',
+                'res_id': product.id,
+                'type': 'comment'
+            }
+            self.pool.get('mail.message').create(cr, uid, vals,
+                                                 context=context)
         return True
-

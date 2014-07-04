@@ -8,8 +8,11 @@
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <field name="sale_ok" position="attributes">
-                    <attribute name="attrs">{'readonly':[('state', 'in', ['active', 'edition'])]}</attribute>
+                    <attribute name="attrs">{'readonly':[('state2', '!=', 'published')]}</attribute>
                 </field>
+                <page string="Sales" position="attributes">
+                    <attribute name="attrs"></attribute>
+                </page>
                 <xpath expr="/form/sheet" position="before">
                     <header>
                         <button name="signal_edition" string="Edition" attrs="{'invisible': [('state2','in', ['edition', 'published'])]}" class="oe_highlight"/>
