@@ -15,8 +15,10 @@
                 </page>
                 <xpath expr="/form/sheet" position="before">
                     <header>
-                        <button name="signal_edition" string="Edition" attrs="{'invisible': [('state2','in', ['edition', 'published'])]}" class="oe_highlight"/>
-                        <button name="signal_publish" string="Publish" attrs="{'invisible': [('state2','in', ['active', 'published'])]}" class="oe_highlight"/>
+                        <button name="signal_edition" string="Edition"
+                                attrs="{'invisible': [('state2','in', ['edition', 'published'])]}" class="oe_highlight"/>
+                        <button name="signal_publish" string="Publish"
+                                attrs="{'invisible': [('state2','in', ['active', 'published'])]}" class="oe_highlight"/>
                         <field name="state2" widget="statusbar"/>
                     </header>
                 </xpath>
