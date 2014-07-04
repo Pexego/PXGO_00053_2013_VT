@@ -7,11 +7,8 @@
             <field name="model">calendar.event</field>
             <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
             <field name="arch" type="xml">
-                <field name="partner_ids" position="replace">
-                    <field name="partner_ids" widget="many2manyattendee"
-                                context="{'force_email':True, 'show_prospective':1}"
-                                on_change="onchange_partner_ids(partner_ids)"
-                                class="oe_inline"/>
+                <field name="partner_ids" position="attributes">
+                    <attribute name="context">{'force_email':True, 'show_prospective':1}</attribute>
                 </field>
             </field>
         </record>
