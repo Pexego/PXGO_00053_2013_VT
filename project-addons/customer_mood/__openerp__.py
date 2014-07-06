@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,16 +20,27 @@
 ##############################################################################
 
 {
-    'name': "Associated products",
-    'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
-    "installable": True
+    "name": "Customer Mood",
+    "version": "1.0",
+    "author": "Pexego",
+    'website': 'www.pexego.es',
+    "category": "Sales",
+    "description": """
+Customer Mood
+========================================
+
+    * Set the mood in which a customer is, and to know at a glance.
+    * When ordering, it also shows the mood icon for the selected customer.
+""",
+    "depends": ["base", "sale"],
+    "data": [
+        "mood_view.xml",
+        "res_partner_view.xml",
+        "sale_view.xml",
+        "security/ir.model.access.csv"
+    ],
+    "demo": [],
+    'auto_install': False,
+    "installable": True,
+    'images': [],
 }

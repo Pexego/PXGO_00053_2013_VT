@@ -20,16 +20,15 @@
 ##############################################################################
 
 {
-    'name': "Associated products",
-    'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
-    "installable": True
+    'name': 'Percentage of margins in Sales Orders',
+    'version':'1.0',
+    'category' : 'Sales Management',
+    'description': """
+    """,
+    'author':'Pexego',
+    'depends':['sale',
+               'sale_margin'],
+    'data':["sale_view.xml"],
+    'auto_install': False,
+    'installable': True,
 }

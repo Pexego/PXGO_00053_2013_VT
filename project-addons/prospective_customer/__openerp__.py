@@ -20,16 +20,19 @@
 ##############################################################################
 
 {
-    'name': "Associated products",
+    'name': "Prospective customer",
     'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
+    'category': '',
+    'description': """Adds prospective customers menu and search it on sale order, and crm views""",
     'author': 'Pexego Sistemas Informáticos',
-    'website': '',
+    'website': 'www.pexego.es',
     "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
+                 "sale",
+                 "crm",
+                 "sale_crm"],
+    "data" : ["res_partner_view.xml",
+              "sale_order_view.xml",
+              "crm_view.xml",
+              "calendar_view.xml"],
     "installable": True
 }

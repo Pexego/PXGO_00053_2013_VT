@@ -20,16 +20,13 @@
 ##############################################################################
 
 {
-    'name': "Associated products",
+    'name': "Product states",
     'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
+    'category': 'product',
+    'description': """Adds states to the product""",
     'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
+    'website': 'www.pexego.es',
+    "depends" : ["base", "product"],
+    "data" : ["product_workflow.xml", "product_view.xml"],
     "installable": True
 }

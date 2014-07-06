@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,18 +18,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import openerp
+from openerp import tools
+from openerp.osv import osv, fields
 
-{
-    'name': "Associated products",
-    'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
-    "installable": True
-}
+
+class res_partner(osv.osv):
+    _inherit = 'res.partner'
+
+    def _get_image(self, cr, uid, ids, name, args, context=None):
+        """ """
+        result = dict.fromkeys(ids, False)
+        for partner in self.browse(cr, uid, ids, context=context):
+            if partner.mood_image and partner.mood_image.image_small:
+                result[partner.id] = partner.mood_image.image_small
+        return result
+
+    _columns = {
+        'mood_image': fields.many2one('mood', 'Mood'),
+        'selected_image': fields.function(_get_image, string="Mood",
+                                          type="binary"),
+    }

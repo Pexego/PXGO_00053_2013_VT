@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="product_product_tree_view_add_discount" model="ir.ui.view">
+            <field name="name">product.product.tree.add.discount</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_product_tree_view"/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+                <field name="lst_price" position="replace">
+                    <field name="list_price2"/>
+                    <field name="list_price3"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="product_normal_form_view_add_discount" model="ir.ui.view">
+            <field name="name">product.product.form.add.discount</field>
+            <field name="model">product.product</field>
+            <field name="mode">primary</field>
+            <field eval="1" name="priority"/>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Procurements']/group/group" position="replace"/>
+                
+                <field name="lst_price" position="replace"/>
+                <xpath expr="//page[@string='Information']/group" position="after">
+                    
+                    <group colspan="8" col="8" string="Prices">
+                     <field name="list_price2"/>
+                     
+                     <label for="cmargin_price2"/><div name="margins2"><field name="cmargin_price2" class="oe_inline"/> %% </div>
+                     <label for="smargin_price2"/><div name="margins3"><field name="smargin_price2" class="oe_inline"/> %% </div>
+                     <newline/>
+                    <field name="list_price3"/>
+                     <label for="cmargin_price3"/><div name="margins4"><field name="cmargin_price3" class="oe_inline"/> %% </div>
+                     <label for="smargin_price3"/><div name="margins5"><field name="smargin_price3" class="oe_inline"/> %% </div>
+                        <newline/>
+                        <field name="standard_price" />
+                        <newline/>
+                            <field name="commercial_cost"/>
+                        
+                    </group>
+                   
+                    
+                </xpath>
+                
+            </field>
+        </record>
+
+         <record id="product_kanban_view_add_discount" model="ir.ui.view">
+            <field name="name">Product Kanban</field>
+            <field name="model">product.product</field>
+            <field name="mode">primary</field>
+            <field eval="1" name="priority"/>
+            <field name="inherit_id" ref="product.product_kanban_view"/>
+            <field name="arch" type="xml">
+                <field name="lst_price" position="replace">
+                    <field name="list_price2"/>
+                    <field name="list_price3"/>
+                </field>
+            </field>
+        </record>
+        
+    </data>
+</openerp>
+
+
+
+
+        
+       

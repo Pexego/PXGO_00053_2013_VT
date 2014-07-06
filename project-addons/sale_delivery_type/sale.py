@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,18 +18,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import openerp
+from openerp.osv import osv, fields
 
-{
-    'name': "Associated products",
-    'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
-    "installable": True
-}
+
+class sale_order(osv.osv):
+    _inherit = 'sale.order'
+    _columns = {
+        'delivery_type': fields.selection([
+            ('shipping', 'Shipping'),
+            ('carrier', 'Carrier - Customer'),
+            ('installations', 'Pickup in installations'), ],
+            'Delivery type', required=True)
+    }
+    _defaults = {
+        'delivery_type': 'shipping'
+    }

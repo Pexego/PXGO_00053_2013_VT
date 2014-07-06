@@ -20,16 +20,15 @@
 ##############################################################################
 
 {
-    'name': "Associated products",
+    'name': "Partner sale graphic",
     'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
+    'category': '',
+    'description': """Adds a graphic of sales in the partner form view""",
     'author': 'Pexego Sistemas Informáticos',
-    'website': '',
+    'website': 'www.pexego.es',
     "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
+                 "sale",],
+    "data" : ["data/cron.xml",
+              "res_partner_view.xml"],
     "installable": True
 }

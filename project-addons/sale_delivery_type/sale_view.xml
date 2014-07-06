@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_order_form_add_delivery_type" model="ir.ui.view">
+            <field name="name">sale.order.form.add.delivery.type</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_invoice_id" position="before">
+                    <field name="delivery_type" widget='selection'/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

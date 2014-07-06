@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+         <record id="view_partner_simple_form_add_mood" model="ir.ui.view">
+            <field name="name">res.partner.simplified.form.add.mood</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_simple_form"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="before">
+                     <field name="selected_image" widget='image' class="oe_left oe_avatar"/>
+                    <field name="mood_image" colspan="2" placeholder="Mood..." nolabel="1" class="oe_inline"/>
+                    
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_mood" model="ir.ui.view">
+            <field name="name">res.partner.form.add.mood</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+               <field name="category_id" position="before">
+                     <field name="selected_image" widget='image' class="oe_left oe_avatar"/>
+                    <field name="mood_image" colspan="2" placeholder="Mood..." nolabel="1" class="oe_inline"/>
+                    
+                </field>
+            </field>
+        </record>
+        
+    </data>
+</openerp>

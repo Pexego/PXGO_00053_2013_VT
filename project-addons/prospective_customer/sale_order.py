@@ -19,17 +19,15 @@
 #
 ##############################################################################
 
-{
-    'name': "Associated products",
-    'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
-    "installable": True
-}
+from openerp.osv import orm
+
+
+class sale_order(orm.Model):
+
+    _inherit = "sale.order"
+
+    def action_button_confirm(self, cr, uid, ids, context=None):
+        for order in self.browse(cr, uid, ids, context):
+            if order.partner_id.prospective:
+                self.pool.get('res.partner').write(cr, uid, order.partner_id.id, {'active': True, 'prospective': False})
+        super(sale_order,self).action_button_confirm(cr, uid, ids, context)
