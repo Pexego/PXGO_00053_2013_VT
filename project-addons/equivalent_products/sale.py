@@ -28,9 +28,12 @@ class sale_order_line(orm.Model):
     _inherit = "sale.order.line"
 
     def equivalent_products(self, cr, uid, ids, context=None):
+        if not ids:
+            return False
         line = self.browse(cr, uid, ids[0], context)
         tag_wiz_obj = self.pool.get('sale.equivalent.tag')
         wiz_obj = self.pool.get("sale.equivalent.products")
+        context['line_id'] = line.id
         wizard_id = wiz_obj.create(cr, uid, {'line_id': ids[0]},
                                    context=context)
         for tag in line.product_id.tag_ids:

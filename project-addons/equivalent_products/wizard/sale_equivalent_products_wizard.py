@@ -21,6 +21,7 @@
 
 
 from openerp.osv import fields, orm
+from lxml import etree
 from openerp.tools.translate import _
 
 
@@ -63,6 +64,46 @@ class sale_equivalent_products(orm.TransientModel):
         'product_id': fields.many2one('product.product', 'Product selected'),
     }
 
+
+    def fields_view_get(self, cr, uid, view_id=None, view_type='form',
+                        context=None, toolbar=False, submenu=False):
+        """
+            se añade domain al campo product_id.
+        """
+        product_obj = self.pool.get('product.product')
+        if context is None:
+            context = {}
+        line_id = context.get('line_id', False)
+        res = super(sale_equivalent_products, self).fields_view_get(cr, uid,
+                                                                    view_id,
+                                                                    view_type,
+                                                                    context,
+                                                                    toolbar,
+                                                                    submenu)
+        if line_id:
+            # se buscan productos con los mismos tags que el de la linea
+            product_ids = set(product_obj.search(cr, uid,
+                                                 [('sale_ok', '=', True)],
+                                                 context=context))
+            line = self.pool.get('sale.order.line').browse(cr, uid, line_id,
+                                                           context)
+            product = line.product_id
+            for tag in product.tag_ids:
+                products = product_obj.search(cr, uid,
+                                              [('tag_ids', 'in', [tag.id]),
+                                               ('sale_ok', '=', True)],
+                                              context=context)
+                product_ids = product_ids & set(products)
+
+            # se añade a la vista el domain
+            doc = etree.XML(res['arch'])
+            for node in doc.xpath("//field[@name='product_id']"):
+                node.set('domain', "[('id', 'in', " +
+                         str(list(product_ids)) + ")]")
+            res['arch'] = etree.tostring(doc)
+
+        return res
+
     def onchange_tags(self, cr, uid, ids, tag_ids=False, context=None):
         if not tag_ids:
             return True
@@ -77,7 +118,6 @@ class sale_equivalent_products(orm.TransientModel):
     def select_product(self, cr, uid, ids, context=None):
         wiz = self.browse(cr, uid, ids[0], context)
 
-        # borrar el if al arreglar el domain
         if wiz.product_id.id not in [x.id for x in wiz.product_ids]:
             raise orm.except_orm(_('Error'),
                                  _('El producto no es equivalente'))
