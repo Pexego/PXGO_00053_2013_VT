@@ -5,7 +5,7 @@ include/
 eggs/
 develop-eggs/
 downloads/
-data/
+/data/
 etc/
 bin/
 sandbox/
