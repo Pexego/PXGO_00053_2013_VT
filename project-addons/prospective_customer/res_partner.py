@@ -53,8 +53,9 @@ class res_partner(orm.Model):
         if context is None:
             context = {}
         if context.get('show_prospective', False):
-            context.pop('show_prospective', None)
-            ids = self.search(cr, user, [('prospective', '=', 1), ('active', '=', 0)], offset, limit, order, context, count)
+            context2 = dict(context)
+            context2.pop('show_prospective')
+            ids = self.search(cr, user, [('prospective', '=', 1), ('active', '=', 0)], offset, limit, order, context2, count)
             res += ids
             if count:
                 res += len(ids)

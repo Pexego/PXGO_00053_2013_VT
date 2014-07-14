@@ -126,7 +126,7 @@ class sale_equivalent_products(orm.TransientModel):
                              [wiz.line_id.id],
                              {'product_id': wiz.product_id.id}, context)
         line_vals = \
-            order_line_obj.product_id_change(cr, uid, wiz.line_id.id,
+            order_line_obj.product_id_change(cr, uid, [wiz.line_id.id],
                                              wiz.line_id.order_id.pricelist_id.id,
                                              wiz.product_id.id,
                                              wiz.line_id.product_uom_qty,
