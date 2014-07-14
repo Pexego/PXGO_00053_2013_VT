@@ -134,7 +134,7 @@ class sale_equivalent_products(orm.TransientModel):
                                              wiz.line_id.product_uos_qty,
                                              False,
                                              wiz.line_id.name,
-                                             wiz.line_id.order_id.partner_id,
+                                             wiz.line_id.order_id.partner_id.id,
                                              False, True,
                                              wiz.line_id.order_id.date_order,
                                              False,
