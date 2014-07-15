@@ -71,7 +71,7 @@ class res_partner(models.Model):
             return
         min_sale_date = date.today() + relativedelta(months=-months_min_sale)
         max_sale_date = date.today() + relativedelta(months=-months_max_sale)
-        partner_ids = self.search(cr, uid, [], context=context)
+        partner_ids = self.search(cr, uid, [('customer', '=', True)], context=context)
         for partner in self.browse(cr, uid, partner_ids, context):
             last_sale_id = sale_obj.search(cr, uid,
                                            [('partner_id', '=', partner.id),
@@ -94,12 +94,17 @@ class res_partner(models.Model):
                     if partner.customer_lost:
                         self.write(cr, uid, [partner.id],
                                    {'customer_lost': False,
-                                    'customer_win': True}, context)
+                                    'customer_win': True,
+                                    'last_sale_date': last_sale_date}, context)
+                        continue
                 else:
                     # se comprueba si tiene compras anteriores para
                     # considerarlo como perdido
                     if last_sale_date >= max_sale_date:
                         self.write(cr, uid, [partner.id],
                                    {'customer_lost': True,
-                                    'customer_win': False}, context)
+                                    'customer_win': False,
+                                    'last_sale_date': last_sale_date}, context)
+                        continue
+                self.write(cr, uid, [partner.id], {'last_sale_date': last_sale_date}, context)
         return
