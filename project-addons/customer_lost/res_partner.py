@@ -29,7 +29,7 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     customer_lost = fields.Boolean('Customer lost', readonly=True)
-    last_sale_date = fields.Date('Last sale')
+    last_sale_date = fields.Date('Last sale', readonly=True)
     customer_win = fields.Boolean('Customer win', readonly=True)
 
     _defaults = {
@@ -37,11 +37,40 @@ class res_partner(models.Model):
         'customer_lost': False,
     }
 
+    def _get_month_parameters(self, cr, uid, context):
+        """
+            Devuelve los meses configurados en los parametros en una tupla.
+        """
+        param_pool = self.pool.get("ir.config_parameter")
+        config_min_months_id = param_pool.search(cr, uid,
+                                                 [('key', '=',
+                                                   'min.months.last.purchase')],
+                                                 context=context)
+        config_max_months_id = param_pool.search(cr, uid,
+                                                 [('key', '=',
+                                                   'max.months.last.purchase')],
+                                                 context=context)
+        if not config_min_months_id or not config_max_months_id:
+            return (False, False)
+        config_min_months = param_pool.browse(cr, uid, config_min_months_id,
+                                              context)[0]
+        config_max_months = param_pool.browse(cr, uid, config_max_months_id,
+                                              context)[0]
+
+        months_min_sale = int(config_min_months.value)
+        months_max_sale = int(config_max_months.value)
+        return (months_min_sale, months_max_sale)
+
     def run_scheduler_custmer_lost(self, cr, uid, automatic=False,
                                    use_new_cursor=False, context=None):
         sale_obj = self.pool.get('sale.order')
-        min_sale_date = (date.today() + relativedelta(months=-6))
-        max_sale_date = (date.today() + relativedelta(years=-1))
+
+        months_min_sale, months_max_sale = self._get_month_parameters(cr, uid,
+                                                                      context)
+        if not months_min_sale or not months_max_sale:
+            return
+        min_sale_date = date.today() + relativedelta(months=-months_min_sale)
+        max_sale_date = date.today() + relativedelta(months=-months_max_sale)
         partner_ids = self.search(cr, uid, [], context=context)
         for partner in self.browse(cr, uid, partner_ids, context):
             last_sale_id = sale_obj.search(cr, uid,
@@ -73,5 +102,4 @@ class res_partner(models.Model):
                         self.write(cr, uid, [partner.id],
                                    {'customer_lost': True,
                                     'customer_win': False}, context)
-
         return

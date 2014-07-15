@@ -26,9 +26,11 @@
     'description': """ Show the lost customers""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    "depends" : ['base',
-                 'sale',
-                 'customer_area'],
-    "data" : ['data/cron.xml', 'res_partner_view.xml'],
+    "depends": ['base',
+                'sale',
+                'customer_area'],
+    "data": ['data/cron.xml',
+              'data/ir.config_parameter.xml',
+              'res_partner_view.xml'],
     "installable": True
 }

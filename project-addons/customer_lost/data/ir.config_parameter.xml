@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="0">
+        <record forcecreate="True" id="min_months_last_purchase" model="ir.config_parameter">
+            <field name="key">min.months.last.purchase</field>
+            <field name="value">6</field>
+        </record>
+
+        <record forcecreate="True" id="max_months_last_purchase" model="ir.config_parameter">
+            <field name="key">max.months.last.purchase</field>
+            <field name="value">12</field>
+        </record>
+    </data>
+</openerp>
