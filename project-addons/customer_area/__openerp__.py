@@ -20,15 +20,17 @@
 ##############################################################################
 
 {
-    'name': "Customer lost",
+    'name': "Customer area",
     'version': '1.0',
     'category': 'sale',
-    'description': """ Show the lost customers""",
+    'description': """Add area to partner""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
     "depends" : ['base',
                  'sale',
-                 'customer_area'],
-    "data" : ['data/cron.xml', 'res_partner_view.xml'],
+                 ],
+    "data" : ['res_partner_view.xml',
+              'partner_area_view.xml',
+              'security/ir.model.access.csv'],
     "installable": True
 }
