@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="res_partner_view_lost_search" model="ir.ui.view">
+            <field name="name">View.lost.customers</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <filter name="supplier" position="after">
+                    <separator/>
+                   <filter string="Lost" name="lost" domain="[('customer_lost','=',1)]" help="Customer lost"/>
+                   <filter string="No lost" name="no_lost" domain="[('customer_lost','=',0)]" help="No lost customers"/>
+                </filter>
+            </field>
+        </record>
+
+        <record id="res_partner_view__lost_simple_form" model="ir.ui.view">
+            <field name="name">res.partner.view.lost</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_simple_form" />
+            <field name="arch" type="xml">
+                <field name="phone" position="before">
+                    <field name="customer_lost"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="res_partner_view_lost_form" model="ir.ui.view">
+            <field name="name">res.partner.view.lost</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <field name="phone" position="before">
+                    <field name="customer_lost"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
