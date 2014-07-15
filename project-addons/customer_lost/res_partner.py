@@ -37,64 +37,12 @@ class res_partner(models.Model):
         'customer_lost': False,
     }
 
-    """def write(self, cr, uid, ids, vals, context=None):
-        """
-            # Los clientes se consideran ganados al marcarlos como activos.
-        """
-        if vals.get('active', False):
-            for partner in self.browse(cr, uid, ids, context):
-                if vals.get('customer', partner.customer):
-                    vals['customer_win'] = True
-                    vals['win_date'] = date.today()
-                    break
-        return super(res_partner, self).write(cr, uid, ids, vals, context)
-
-    def run_scheduler_custmer_lost(self, cr, uid, automatic=False,
-                                   use_new_cursor=False, context=None):
-        sale_obj = self.pool.get('sale.order')
-        min_sale_date = (date.today() + relativedelta(months=-6)).strftime("%Y-%m-%d")
-        max_sale_date = (date.today() + relativedelta(years=-1)).strftime("%Y-%m-%d")
-        partner_ids = self.search(cr, uid, [], context=context)
-        customer_lost = []
-        for partner in self.browse(cr, uid, partner_ids, context):
-            sale_domain = [('partner_id', '=', partner.id),
-                           ('date_order', '>=', min_sale_date)]
-            sale_ids = sale_obj.search(cr, uid, sale_domain,
-                                       context=context)
-            if not sale_ids:
-                sale_ids = sale_obj.search(cr, uid,
-                                           [('partner_id', '=', partner.id),
-                                            ('date_order', '>=',
-                                             max_sale_date)],
-                                           context=context)
-                if sale_ids:
-                    customer_lost.append(partner.id)
-            else:
-                if partner.customer_lost:
-                    last_sale_date = sale_obj.read_group(cr, uid,
-                                                         sale_domain,
-                                                         ['date_order'],
-                                                         ['date_order'],
-                                                         limit=1,
-                                                         context=context,
-                                                         orderby='date_order')
-                    import ipdb; ipdb.set_trace()
-                    self.write(cr, uid, partner.id,
-                               {'customer_lost': False, 'customer_win': True,
-                                'win_date': last_sale_date, 'lost_date': None},
-                               context)
-        self.write(cr, uid, customer_lost,
-                   {'customer_lost': True, 'customer_win': False,
-                    'win_date': None, 'lost_date': min_sale_date}, context)
-        return"""
-
     def run_scheduler_custmer_lost(self, cr, uid, automatic=False,
                                    use_new_cursor=False, context=None):
         sale_obj = self.pool.get('sale.order')
         min_sale_date = (date.today() + relativedelta(months=-6))
         max_sale_date = (date.today() + relativedelta(years=-1))
         partner_ids = self.search(cr, uid, [], context=context)
-        customer_lost = []
         for partner in self.browse(cr, uid, partner_ids, context):
             last_sale_id = sale_obj.search(cr, uid,
                                            [('partner_id', '=', partner.id),
