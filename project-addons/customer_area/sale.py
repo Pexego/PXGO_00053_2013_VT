@@ -19,15 +19,12 @@
 #
 ##############################################################################
 
-{
-    'name': "Sale commercial report",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends" : ['base',
-                 'sale'],
-    "data" : [],
-    "installable": True
-}
+from openerp import models, fields
+
+
+class sale_order(models.Model):
+
+    _inherit = 'sale.order'
+
+    area_id = fields.Many2one('res.partner.area', string='Area', store=True,
+                              related='partner_id.area_id')

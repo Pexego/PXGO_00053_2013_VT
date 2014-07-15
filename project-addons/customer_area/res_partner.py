@@ -19,18 +19,18 @@
 #
 ##############################################################################
 
-{
-    'name': "Customer lost",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """ Show the lost customers""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['base',
-                'sale',
-                'customer_area'],
-    "data": ['data/cron.xml',
-              'data/ir.config_parameter.xml',
-              'res_partner_view.xml'],
-    "installable": True
-}
+from openerp import models, fields, api
+
+
+class res_partner(models.Model):
+
+    _inherit = 'res.partner'
+
+    area_id = fields.Many2one('res.partner.area', 'Area')
+
+class res_partner_area(models.Model):
+
+    _name="res.partner.area"
+
+    name = fields.Char('Name', size=64, required=True)
+    code = fields.Char('Code', size=15)

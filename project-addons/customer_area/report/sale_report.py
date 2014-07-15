@@ -19,15 +19,21 @@
 #
 ##############################################################################
 
-from osv import fields, orm
-from tools.translate import _
+from openerp import models, fields
+
+class sale_report(models.Model):
+
+    _inherit = 'sale.report'
+
+    area_id = fields.Many2one('res.partner.area','Area')
+
+    def _select(self):
+        select_str = super(sale_report,self)._select()
+        this_str = """, s.area_id as area_id"""
+        return select_str + this_str
 
 
-class sale_commercial_report(orm.Model):
-
-    _name = "sale.commercial.report"
-
-    _columns = {
-
-        }
-
+    def _group_by(self):
+        group_by_str = super(sale_report,self)._group_by()
+        this_str = """, s.area_id"""
+        return group_by_str + this_str

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="res_partner_view_area_search" model="ir.ui.view">
+            <field name="name">View.lost.customers</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <filter string="Country"  position="after">
+                   <filter string="Area" context="{'group_by': 'area_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+        <record id="res_partner_view__area_simple_form" model="ir.ui.view">
+            <field name="name">res.partner.view.lost</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_simple_form" />
+            <field name="arch" type="xml">
+                <field name="mobile" position="after">
+                    <field name="area_id" attrs="{'invisible':[('customer', '==', False)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="res_partner_view_area_form" model="ir.ui.view">
+            <field name="name">res.partner.view.lost</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="arch" type="xml">
+                <field name="website" position="before">
+                    <field name="area_id" attrs="{'invisible':[('customer', '==', False)]}"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

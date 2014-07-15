@@ -19,7 +19,9 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import models, fields
+from datetime import date, datetime
+from dateutil.relativedelta import relativedelta
 
 
 class res_partner(models.Model):
@@ -27,29 +29,82 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     customer_lost = fields.Boolean('Customer lost', readonly=True)
+    last_sale_date = fields.Date('Last sale', readonly=True)
+    customer_win = fields.Boolean('Customer win', readonly=True)
+
+    _defaults = {
+        'customer_win': False,
+        'customer_lost': False,
+    }
+
+    def _get_month_parameters(self, cr, uid, context):
+        """
+            Devuelve los meses configurados en los parametros en una tupla.
+        """
+        param_pool = self.pool.get("ir.config_parameter")
+        config_min_months_id = param_pool.search(cr, uid,
+                                                 [('key', '=',
+                                                   'min.months.last.purchase')],
+                                                 context=context)
+        config_max_months_id = param_pool.search(cr, uid,
+                                                 [('key', '=',
+                                                   'max.months.last.purchase')],
+                                                 context=context)
+        if not config_min_months_id or not config_max_months_id:
+            return (False, False)
+        config_min_months = param_pool.browse(cr, uid, config_min_months_id,
+                                              context)[0]
+        config_max_months = param_pool.browse(cr, uid, config_max_months_id,
+                                              context)[0]
+
+        months_min_sale = int(config_min_months.value)
+        months_max_sale = int(config_max_months.value)
+        return (months_min_sale, months_max_sale)
 
     def run_scheduler_custmer_lost(self, cr, uid, automatic=False,
                                    use_new_cursor=False, context=None):
-        """
-            Mark customers who did not buy in a period of time like lost
-        """
-        purchase_obj = self.pool.get('purchase.order')
-        last_purchase_date = '2014-01-14'
-        partner_ids = self.search(cr, uid, [], context=context)
-        customer_lost = []
-        customer_not_lost = []
-        for partner in self.browse(cr, uid, partner_ids, context):
-            purchase_ids = purchase_obj.search(cr, uid,
-                                               [('partner_id', '=', partner.id),
-                                                ('date_order', '>=', last_purchase_date)],
-                                               context=context)
-            if not purchase_ids:
-                purchase_ids = purchase_obj.search(cr, uid, [('partner_id', '=', partner.id)], context=context)
-                if purchase_ids:
-                    customer_lost.append(partner.id)
-            else:
-                customer_no_lost.append(partner.id)
-        self.write(cr, uid, customer_lost, {'customer_lost': True}, context)
-        self.write(cr, uid, customer_no_lost, {'customer_lost': False}, context)
-        return
+        sale_obj = self.pool.get('sale.order')
 
+        months_min_sale, months_max_sale = self._get_month_parameters(cr, uid,
+                                                                      context)
+        if not months_min_sale or not months_max_sale:
+            return
+        min_sale_date = date.today() + relativedelta(months=-months_min_sale)
+        max_sale_date = date.today() + relativedelta(months=-months_max_sale)
+        partner_ids = self.search(cr, uid, [('customer', '=', True)], context=context)
+        for partner in self.browse(cr, uid, partner_ids, context):
+            last_sale_id = sale_obj.search(cr, uid,
+                                           [('partner_id', '=', partner.id),
+                                            ('state', 'in', ['progress',
+                                                             'manual',
+                                                             'shipping_except',
+                                                             'invoice_except',
+                                                             'done'])],
+                                           limit=1, order='date_order',
+                                           context=context)
+            if last_sale_id:
+                last_sale_str = sale_obj.browse(cr, uid, last_sale_id[0],
+                                                context).date_order
+                last_sale_date = datetime.strptime(last_sale_str[:10],
+                                                   "%Y-%m-%d").date()
+
+                # No puede ser perdido
+                if last_sale_date >= min_sale_date:
+                    # si estaba como perdido se marca como ganado
+                    if partner.customer_lost:
+                        self.write(cr, uid, [partner.id],
+                                   {'customer_lost': False,
+                                    'customer_win': True,
+                                    'last_sale_date': last_sale_date}, context)
+                        continue
+                else:
+                    # se comprueba si tiene compras anteriores para
+                    # considerarlo como perdido
+                    if last_sale_date >= max_sale_date:
+                        self.write(cr, uid, [partner.id],
+                                   {'customer_lost': True,
+                                    'customer_win': False,
+                                    'last_sale_date': last_sale_date}, context)
+                        continue
+                self.write(cr, uid, [partner.id], {'last_sale_date': last_sale_date}, context)
+        return

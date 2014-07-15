@@ -19,4 +19,6 @@
 #
 ##############################################################################
 
-import sale_commercial_report
+import res_partner
+import sale
+import report
