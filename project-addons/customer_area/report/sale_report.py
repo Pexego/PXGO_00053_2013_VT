@@ -19,20 +19,21 @@
 #
 ##############################################################################
 
-{
-    'name': "Customer area",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Add area to partner""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends" : ['base',
-                 'sale',
-                 ],
-    "data" : ['res_partner_view.xml',
-              'partner_area_view.xml',
-              'report/sale_report_view.xml',
-              'sale_view.xml',
-              'security/ir.model.access.csv'],
-    "installable": True
-}
+from openerp import models, fields
+
+class sale_report(models.Model):
+
+    _inherit = 'sale.report'
+
+    area_id = fields.Many2one('res.partner.area','Area')
+
+    def _select(self):
+        select_str = super(sale_report,self)._select()
+        this_str = """, s.area_id as area_id"""
+        return select_str + this_str
+
+
+    def _group_by(self):
+        group_by_str = super(sale_report,self)._group_by()
+        this_str = """, s.area_id"""
+        return group_by_str + this_str

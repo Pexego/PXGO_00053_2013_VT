@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: OpenERP Server 8.0rc1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-15 09:21+0000\n"
-"PO-Revision-Date: 2014-07-15 09:21+0000\n"
+"POT-Creation-Date: 2014-07-15 15:19+0000\n"
+"PO-Revision-Date: 2014-07-15 15:19+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,14 +17,70 @@ msgstr ""
 
 #. module: customer_lost
 #: view:res.partner:0
+msgid "Area"
+msgstr "Zona"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Company"
+msgstr "Compañía"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Contacts"
+msgstr "Contactos"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Country"
+msgstr "País"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Customer Partners"
+msgstr "Clientes"
+
+#. module: customer_lost
+#: view:res.partner:0
 #: field:res.partner,customer_lost:0
 msgid "Customer lost"
 msgstr "Cliente perdido"
 
 #. module: customer_lost
+#: field:res.partner,customer_win:0
+msgid "Customer win"
+msgstr "Cliente ganado"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Customers"
+msgstr "Clientes"
+
+#. module: customer_lost
+#: field:res.partner,last_sale_date:0
+msgid "Last sale"
+msgstr "Última venta"
+
+#. module: customer_lost
 #: view:res.partner:0
 msgid "Lost"
 msgstr "Perdido"
+
+#. module: customer_lost
+#: model:ir.actions.act_window,name:customer_lost.action_show_customer_lost
+#: model:ir.ui.menu,name:customer_lost.menu_customer_lost_report
+msgid "Lost and win customers"
+msgstr "Clientes perdidos y ganados"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "My Partners"
+msgstr "Mis empresas"
 
 #. module: customer_lost
 #: view:res.partner:0
@@ -40,4 +96,34 @@ msgstr "Clientes no perdidos"
 #: model:ir.model,name:customer_lost.model_res_partner
 msgid "Partner"
 msgstr "Empresa"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Persons"
+msgstr "Personas"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Salesperson"
+msgstr "Comercial"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Search Partner"
+msgstr "Buscar empresa"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Supplier Partners"
+msgstr "Proveedores"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Suppliers"
+msgstr "Proveedores"
+
+#. module: customer_lost
+#: view:res.partner:0
+msgid "Tag"
+msgstr "Etiqueta"
 

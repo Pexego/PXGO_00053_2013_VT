@@ -19,20 +19,4 @@
 #
 ##############################################################################
 
-{
-    'name': "Customer area",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Add area to partner""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends" : ['base',
-                 'sale',
-                 ],
-    "data" : ['res_partner_view.xml',
-              'partner_area_view.xml',
-              'report/sale_report_view.xml',
-              'sale_view.xml',
-              'security/ir.model.access.csv'],
-    "installable": True
-}
+import sale_report
