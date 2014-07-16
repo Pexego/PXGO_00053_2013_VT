@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record id="view_order_form_deposit" model="ir.ui.view">
+            <field name="name">sale.order.form.deposit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='order_line']/form//field[@name='state']" position="before">
+                    <field name="deposit" />
+                </xpath>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
+                    <field name="deposit" />
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
