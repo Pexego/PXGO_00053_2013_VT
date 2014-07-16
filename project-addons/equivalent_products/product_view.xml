@@ -44,6 +44,11 @@
                                 <field name="child_id"/>
                             </group>
                         </group>
+                        <notebook>
+                            <page string="Products">
+                                <field name="product_ids"/>
+                            </page>
+                        </notebook>
                     </sheet>
                 </form>
             </field>
@@ -65,6 +70,7 @@
             <field name="res_model">product.tag</field>
             <field name="domain">[('parent_id','=',False)]</field>
             <field name="view_type">tree</field>
+            <field name="view_mode">tree,form</field>
             <field name="view_id" ref="product_tag_tree_view"/>
             <field name="help" type="html">
               <p>
@@ -74,6 +80,24 @@
               </p>
             </field>
         </record>
+
+        <record id="products_by_tag" model="ir.actions.act_window">
+            <field name="name">Product</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="product.product_product_tree_view"/>
+            <field name="domain">[('tag_ids', 'in', active_ids)]</field>
+        </record>
+
+        <record model="ir.values" id="ir_open_tag">
+            <field name="key2">tree_but_open</field>
+            <field name="model">product.tag</field>
+            <field name="name">Open tag</field>
+            <field name="value" eval="'ir.actions.act_window,' + str(ref('products_by_tag'))"/>
+            <field name="object" eval="True"/>
+        </record>
+
         <menuitem
             action="product_tag_action"
             id="product.menu_products_tag"
