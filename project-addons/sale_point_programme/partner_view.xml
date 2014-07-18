@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="view_partner_form_add_points_widget">
+            <field name="name">view.partner.form.add.points.widget</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+               <xpath expr="//div[@name='buttons']" position="inside">
+                    <button
+                        class="oe_stat_button"
+                        icon="fa-shopping-cart"
+                        name="%(action_open_partner_points)d"
+                        type="action">
+                        <field string="Points" name="points_in_bag" widget="statinfo"/>
+                   </button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</openerp>
