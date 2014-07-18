@@ -17,3 +17,4 @@ upgrade.py
 *.pyc
 atlassian-ide-plugin.xml
 *~
+devel_*

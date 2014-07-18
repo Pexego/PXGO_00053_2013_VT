@@ -41,7 +41,11 @@
                                 <field name="parent_id"/>
                             </group>
                             <group colspan="4">
-                                <field name="child_id"/>
+                                <field name="child_id">
+                                    <tree>
+                                        <field name="name"/>
+                                    </tree>
+                                </field>
                             </group>
                         </group>
                         <notebook>
