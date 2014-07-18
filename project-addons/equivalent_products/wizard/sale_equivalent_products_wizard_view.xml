@@ -16,6 +16,7 @@
                                 <tree string="Products">
                                     <field name="name"/>
                                     <field name="qty_available"/>
+                                    <field name="virtual_available"/>
                                     <field name="tag_ids"/>
                                 </tree>
                             </field>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="stock_location_deposit" model="stock.location">
+            <field name="name">Deposit</field>
+            <field name="location_id" ref="stock.stock_location_locations_partner"/>
+            <field name="usage">customer</field>
+            <field name="company_id"></field>
+        </record>
+    </data>
+</openerp>

@@ -33,6 +33,7 @@ class sale_order_line(orm.Model):
                 'margin': 0.0,
                 'margin_perc': 0.0,
             }
+
             margin = 0.0
             if line.product_id:
                 if line.purchase_price:
@@ -74,10 +75,12 @@ class sale_order(orm.Model):
             total_purchase = sale.total_purchase or \
                 self._get_total_price_purchase(cr, uid, ids, 'total_purchase',
                                                arg, context)[sale.id]
+
+            result[sale.id] = 0.0
             if total_purchase != 0:
-                result[sale.id] = 0.0
                 for line in sale.order_line:
-                    result[sale.id] += line.margin or 0.0
+                    if not line.deposit:
+                        result[sale.id] += line.margin or 0.0
                 result[sale.id] = round((result[sale.id] * 100) /
                                         total_purchase, 2)
         return result
@@ -88,13 +91,15 @@ class sale_order(orm.Model):
         for sale in self.browse(cr, uid, ids, context=context):
             result[sale.id] = 0.0
             for line in sale.order_line:
-                if line.product_id:
-                    if line.purchase_price:
-                        result[sale.id] += line.purchase_price * \
-                            line.product_uos_qty
-                    else:
-                        result[sale.id] += line.product_id.standard_price * \
-                            line.product_uos_qty
+                #ADDED for dependency with stock_deposit for not count deposit in total margin
+                if not line.deposit:
+                    if line.product_id:
+                        if line.purchase_price:
+                            result[sale.id] += line.purchase_price * \
+                                line.product_uos_qty
+                        else:
+                            result[sale.id] += line.product_id.standard_price * \
+                                line.product_uos_qty
         return result
 
     def _get_order(self, cr, uid, ids, context=None):
@@ -109,7 +114,7 @@ class sale_order(orm.Model):
                                           string='Price purchase',
                                           store={
                                               'sale.order.line': (_get_order,
-                                                                  ['margin'],
+                                                                  ['margin', 'deposit'],
                                                                   20),
                                               'sale.order': (lambda self, cr,
                                                              uid, ids, c={}:
@@ -122,7 +127,7 @@ class sale_order(orm.Model):
                                         percentage.",
                                   store={
                                       'sale.order.line':
-                                          (_get_order, ['margin'], 20),
+                                          (_get_order, ['margin', 'deposit'], 20),
                                       'sale.order':
                                           (lambda self, cr, uid, ids, c={}:
                                            ids, ['order_line'], 20),
