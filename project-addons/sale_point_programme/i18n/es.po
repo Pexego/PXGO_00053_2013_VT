@@ -1,0 +1,222 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#   * sale_point_programme
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 8.0rc1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-07-18 15:05+0000\n"
+"PO-Revision-Date: 2014-07-18 15:05+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,active:0
+msgid "Active"
+msgstr "Activa"
+
+#. module: sale_point_programme
+#: view:sale.point.programme.rule:0
+msgid "Actives"
+msgstr "Activas"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,attribute:0
+msgid "Amount untaxed"
+msgstr "Base imponible"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,attribute:0
+msgid "Attribute to value"
+msgstr "Atributo a valorar"
+
+#. module: sale_point_programme
+#: view:sale.point.programme.rule:0
+#: field:sale.point.programme.rule,category_id:0
+msgid "Category"
+msgstr "Categoría"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,create_uid:0
+#: field:sale.point.programme.rule,create_uid:0
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,create_date:0
+#: field:sale.point.programme.rule,create_date:0
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,name:0
+#: field:sale.point.programme.rule,name:0
+msgid "Description"
+msgstr "Descripción"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,date_end:0
+msgid "End date"
+msgstr "Fecha fin"
+
+#. module: sale_point_programme
+#: code:addons/sale_point_programme/sale_point_rule.py:51
+#, python-format
+msgid "End date is less than start date"
+msgstr "La fecha fin es menor que la fecha de inicio"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Equal"
+msgstr "Igual"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "For each"
+msgstr "Para cada"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Greater than"
+msgstr "Mayor que"
+
+#. module: sale_point_programme
+#: view:res.partner.point.programme.bag:0
+#: view:sale.point.programme.rule:0
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,id:0
+#: field:sale.point.programme.rule,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,write_uid:0
+#: field:sale.point.programme.rule,write_uid:0
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,write_date:0
+#: field:sale.point.programme.rule,write_date:0
+msgid "Last Updated on"
+msgstr "Fecha última actualización"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Less than"
+msgstr "Menor que"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,operator:0
+msgid "Operator"
+msgstr "Operador"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_res_partner
+#: view:res.partner.point.programme.bag:0
+#: field:res.partner.point.programme.bag,partner_id:0
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: sale_point_programme
+#: model:ir.ui.menu,name:sale_point_programme.point_programme_menu
+msgid "Point programmes"
+msgstr "Programas puntos"
+
+#. module: sale_point_programme
+#: view:res.partner:0
+#: view:res.partner.point.programme.bag:0
+#: field:res.partner.point.programme.bag,points:0
+#: field:sale.point.programme.rule,points:0
+msgid "Points"
+msgstr "Puntos"
+
+#. module: sale_point_programme
+#: model:ir.actions.act_window,name:sale_point_programme.action_points_rules
+msgid "Points Reward Rules"
+msgstr "Reglas recompensa puntos"
+
+#. module: sale_point_programme
+#: model:ir.ui.menu,name:sale_point_programme.points_rules_menu
+#: view:sale.point.programme.rule:0
+msgid "Points reward rules"
+msgstr "Reglas recompensa puntos"
+
+#. module: sale_point_programme
+#: model:ir.actions.act_window,name:sale_point_programme.action_open_partner_points
+#: model:ir.actions.act_window,name:sale_point_programme.action_points_tracebility
+#: model:ir.ui.menu,name:sale_point_programme.points_traceability_menu
+#: view:res.partner.point.programme.bag:0
+msgid "Points traceability"
+msgstr "Trazabilidad puntos"
+
+#. module: sale_point_programme
+#: view:sale.point.programme.rule:0
+#: field:sale.point.programme.rule,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,attribute:0
+msgid "Product qty."
+msgstr "Cant. producto"
+
+#. module: sale_point_programme
+#: view:res.partner.point.programme.bag:0
+#: view:sale.point.programme.rule:0
+msgid "Reward rule"
+msgstr "Regla recompensa"
+
+#. module: sale_point_programme
+#: view:sale.point.programme.rule:0
+msgid "Reward rules"
+msgstr "Reglas recompensa"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,point_rule_id:0
+msgid "Rule"
+msgstr "Regla"
+
+#. module: sale_point_programme
+#: view:res.partner.point.programme.bag:0
+msgid "Sale"
+msgstr "Venta"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,order_id:0
+msgid "Sale order"
+msgstr "Venta"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,date_start:0
+msgid "Start date"
+msgstr "Fecha inicio"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,value:0
+msgid "Value"
+msgstr "Valor"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_res_partner_point_programme_bag
+msgid "res.partner.point.programme.bag"
+msgstr "res.partner.point.programme.bag"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_sale_point_programme_rule
+msgid "sale.point.programme.rule"
+msgstr "sale.point.programme.rule"
+
