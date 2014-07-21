@@ -65,25 +65,27 @@ class SaleOrder(models.Model):
                     total_product_qty += line.product_uom_qty
 
                 for rule in rule_obj.browse(cr, uid, rules, context=context):
-                    if rule.product_id and rule.product_id.id in products:
-                        record = products[rule.product_id.id]
-                        if rule.attribute == 'product_qty':
-                            points = rule.evaluate(record['qty'])
-                        else:
-                            points = rule.evaluate(record['amount'])
-                    elif (rule.category_id and
-                            rule.category_id.id in categories):
-                        record = categories[rule.category_id.id]
-                        if rule.attribute == 'product_qty':
-                            points = rule.evaluate(record['qty'])
-                        else:
-                            points = rule.evaluate(record['amount'])
+                    points = False
+                    if rule.product_id:
+                        if rule.product_id.id in products:
+                            record = products[rule.product_id.id]
+                            if rule.attribute == 'product_qty':
+                                points = rule.evaluate(record['qty'])
+                            else:
+                                points = rule.evaluate(record['amount'])
+                    elif rule.category_id:
+                        if rule.category_id.id in categories:
+                            record = categories[rule.category_id.id]
+                            if rule.attribute == 'product_qty':
+                                points = rule.evaluate(record['qty'])
+                            else:
+                                points = rule.evaluate(record['amount'])
                     elif rule.attribute == 'amount_untaxed':
                         points = rule.evaluate(order.amount_untaxed)
                     else:
                         points = rule.evaluate(total_product_qty)
 
-                    if points:
+                    if points and points[0]:
                         bag_obj.create(cr, uid,
                                        {'name': rule.name,
                                         'point_rule_id': rule.id,
