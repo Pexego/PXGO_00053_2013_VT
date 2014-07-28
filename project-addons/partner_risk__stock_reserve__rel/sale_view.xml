@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+
+
+    <record id="sale_change_reserve_button_state" model="ir.ui.view">
+        <field name="name">sale.change.reserve.button.state.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
+        <field name="arch" type="xml">
+            <button name="order_reserve" position="replace">
+                <button name="order_reserve" type="object" string="Reserve Stock"
+                        states="risk_aproval" />
+            </button>
+        </field>
+    </record>
+    </data>
+</openerp>
