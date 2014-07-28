@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+<!-- Sobreescribir el flujo para que se pase de aprobado a risk_aproval, en este estado añadir el botón de reservar stock.-->
+        <record id="act_risk_approval" model="workflow.activity">
+                    <field name="wkf_id" ref="sale.wkf_sale"/>
+                    <field name="name">risk_approval</field>
+        </record>
+
+        <record id="nan_partner_risk.trans_risk_router_to_router" model="workflow.transition">
+            <field name="act_from" ref="nan_partner_risk.act_risk_router"/>
+            <field name="act_to" ref="act_risk_approval"/>
+            <field name="condition">partner_id.available_risk - amount_total >= 0.0</field>
+        </record>
+
+        <record id="nan_partner_risk.trans_wait_risk_to_router_signal" model="workflow.transition">
+            <field name="act_from" ref="nan_partner_risk.act_wait_risk_approval"/>
+            <field name="act_to" ref="act_risk_approval"/>
+            <field name="signal">risk_to_router</field>
+            <field name="group_id" ref="group_risk_manager"/>
+        </record>
+    </data>
+</openerp>
