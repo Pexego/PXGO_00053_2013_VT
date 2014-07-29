@@ -6,7 +6,7 @@
         <field name="name">sale.order.form.risk</field>
         <field name="model">sale.order</field>
         <field name="type">form</field>
-        <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve" />
+        <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
             <button name="action_button_confirm" position="replace">
                     <button name="draft_to_risk" string="Confirm Order" states="draft"/>

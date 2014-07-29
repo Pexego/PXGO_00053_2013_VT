@@ -16,7 +16,6 @@ Developed for Trod y Avia, S.L.""",
         'sale',
         'sale_stock',
         'account_payment',
-        'stock_reserve_sale',
     ],
     "category" : "Custom Modules",
     "data" : [
