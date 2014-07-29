@@ -20,7 +20,7 @@
 ##############################################################################
 
 {
-    'name': "Relation betweend partner_risk and sale_reserve module",
+    'name': "Relation between nan_partner_risk and sale_reserve module",
     'version': '1.0',
     'category': 'sale',
     'description': """Add a relationship between partner_risk and sale_reserve to the sales workflow is not overwritted""",
@@ -30,6 +30,7 @@
                 'sale_stock',
                 'nan_partner_risk',
                 'stock_reserve_sale'],
-    "data": ['sale_workflow.xml'],
+    "data": ['sale_workflow.xml',
+             'sale_view.xml'],
     "installable": True
 }

@@ -6,16 +6,16 @@
         <field name="name">sale.order.form.risk</field>
         <field name="model">sale.order</field>
         <field name="type">form</field>
-        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve" />
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_button_confirm'][@states='sent']" position="replace">
-                <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight"/>
-            </xpath>
             <button name="action_button_confirm" position="replace">
                     <button name="draft_to_risk" string="Confirm Order" states="draft"/>
                     <button name="risk_to_router" string="Approve Order" states="wait_risk" class="oe_highlight"/>
                     <button name="risk_to_cancel" string="Cancel Order" states="wait_risk" />
             </button>
+            <xpath expr="//button[@name='action_button_confirm'][@states='sent']" position="replace">
+                <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight"/>
+            </xpath>
         </field>
     </record>
 

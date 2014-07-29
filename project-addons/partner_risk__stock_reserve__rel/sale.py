@@ -30,9 +30,10 @@ class sale_order(orm.Model):
             ('draft', 'Draft Quotation'),
             ('sent', 'Quotation Sent'),
             ('cancel', 'Cancelled'),
+            ('reserve', 'Reserved'),
             ('waiting_date', 'Waiting Schedule'),
             ('wait_risk', 'Waiting Risk Approval'),
-            ('risk_aproval', 'Risk approval'),
+            ('risk_approval', 'Risk approval'),
             ('progress', 'Sales Order'),
             ('manual', 'Sale to Invoice'),
             ('shipping_except', 'Shipping Exception'),
@@ -43,3 +44,7 @@ class sale_order(orm.Model):
               in the invoice validation (Invoice Exception) or in the picking list process (Shipping Exception).\nThe 'Waiting Schedule' status is set when the invoice is confirmed\
                but waiting for the scheduler to run on the order date.", select=True),
     }
+
+    def action_risk_approval(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'risk_approval'}, context)
+        return True
