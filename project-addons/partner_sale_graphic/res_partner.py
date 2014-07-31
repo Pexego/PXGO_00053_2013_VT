@@ -66,6 +66,7 @@ class res_partner(orm.Model):
         """
         data = []
         sale_obj = self.pool.get('sale.order')
+        import ipdb; ipdb.set_trace()
         for month_period in self._get_year_periods():
             start_month = month_period[0].strftime('%Y-%m-%d')
             end_month = month_period[1]
@@ -73,7 +74,7 @@ class res_partner(orm.Model):
             end_month_seconds = time.mktime(end_month.timetuple())
             total_sale = sale_obj.read_group(cr, uid,
                                              [('partner_id', '=', partner_id),
-                                              ('state', 'not in', ['draft']),
+                                              ('state', 'in', ['done']),
                                               ('date_order', '>=', start_month),
                                               ('date_order', '<=', end_month_str)],
                                              ['amount_total'],
