@@ -8,13 +8,13 @@
         <field name="type">form</field>
         <field name="inherit_id" ref="sale.view_order_form" />
         <field name="arch" type="xml">
-            <button name="action_button_confirm" position="replace">
-                    <button name="draft_to_risk" string="Confirm Order" states="draft"/>
-                    <button name="risk_to_router" string="Approve Order" states="wait_risk" class="oe_highlight"/>
-                    <button name="risk_to_cancel" string="Cancel Order" states="wait_risk" />
-            </button>
+            <xpath expr="//button[@name='action_button_confirm']" position="replace">
+                    <button name="draft_to_risk" string="Confirm Order" states="draft" groups="base.group_user"/>
+                    <button name="risk_to_router" string="Approve Order" states="wait_risk" class="oe_highlight" groups="base.group_user"/>
+                    <button name="risk_to_cancel" string="Cancel Order" states="wait_risk" groups="base.group_user"/>
+            </xpath>
             <xpath expr="//button[@name='action_button_confirm'][@states='sent']" position="replace">
-                <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight"/>
+                <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight" groups="base.group_user"/>
             </xpath>
         </field>
     </record>
