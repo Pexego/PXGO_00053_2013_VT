@@ -22,7 +22,8 @@ Developed for Trod y Avia, S.L.""",
         'wizard/open_risk_window_view.xml',
         'risk_view.xml',
         'sale_view.xml',
-        'sale_workflow.xml'
+        'sale_workflow.xml',
+        'res_partner_view.xml'
     ],
     "installable": True
 }

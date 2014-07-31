@@ -233,9 +233,18 @@ class partner(osv.osv):
 
     def _available_risk(self, cr, uid, ids, name, arg, context=None):
         res = {}
-        for partner in self.browse( cr, uid, ids, context ):
+        for partner in self.browse(cr, uid, ids, context):
             res[partner.id] = partner.credit_limit - partner.total_debt
         return res
+
+    def _search_available_risk(self, cr, uid, obj, name, domain, context):
+        partner_ids = self.search(cr, uid, [], context=context)
+        ids = []
+        for field, operator, value in domain:
+            for element in self.browse(cr, uid, partner_ids, context=context):
+                if eval(str(element[field]) + operator + str(value)):
+                    ids.append(element.id)
+        return [('id', 'in', ids)]
 
     def _total_risk_percent(self, cr, uid, ids, name, arg, context=None):
         res = {}
@@ -253,7 +262,7 @@ class partner(osv.osv):
         'circulating_amount': fields.function(_circulating_amount, method=True, string=_('Payments Sent to Bank'), type='float'),
         'pending_orders_amount': fields.function(_pending_orders_amount, method=True, string=_('Uninvoiced Orders'), type='float'),
         'total_debt': fields.function(_total_debt, method=True, string=_('Total Debt'), type='float'),
-        'available_risk': fields.function(_available_risk, method=True, string=_('Available Credit'), type='float'),
+        'available_risk': fields.function(_available_risk, fnct_search=_search_available_risk, method=True, string=_('Available Credit'), type='float'),
         'total_risk_percent': fields.function(_total_risk_percent, method=True, string=_('Credit Usage (%)'), type='float')
     }
 partner()
