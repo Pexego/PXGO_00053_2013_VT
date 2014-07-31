@@ -66,7 +66,6 @@ class res_partner(orm.Model):
         """
         data = []
         sale_obj = self.pool.get('sale.order')
-        import ipdb; ipdb.set_trace()
         for month_period in self._get_year_periods():
             start_month = month_period[0].strftime('%Y-%m-%d')
             end_month = month_period[1]
