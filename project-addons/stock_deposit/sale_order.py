@@ -67,7 +67,7 @@ class sale_order(orm.Model):
 
     def _prepare_order_line_procurement(self, cr, uid, order, line, group_id=False, context=None):
         vals = super(sale_order, self)._prepare_order_line_procurement(cr, uid, order, line, group_id=group_id, context=context)
-
+        import ipdb; ipdb.set_trace()
         #FIX --  ONLY FOR TESTING
         # We have to obtain yhe location for deposit (TESTING)
         location_id = order.partner_shipping_id.property_stock_customer.id
