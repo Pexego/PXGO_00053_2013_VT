@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="res_partner_add_transport" model="ir.ui.view">
+            <field name="name">partner.add.transport</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="transporter_id"/>
+                    <field name="service_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="res_country_add_default_transporter" model="ir.ui.view">
+            <field name="name">res.country.add.transporter</field>
+            <field name="model">res.country</field>
+            <field name="inherit_id" ref="base.view_country_form"/>
+            <field name="arch" type="xml">
+                <field name="code" position="after">
+                    <field name="default_transporter"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

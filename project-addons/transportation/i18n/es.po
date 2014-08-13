@@ -1,0 +1,102 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * transportation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0rc1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-08-13 10:09+0000\n"
+"PO-Revision-Date: 2014-08-13 10:09+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_res_country
+msgid "Country"
+msgstr "País"
+
+#. module: transportation
+#: field:res.country,default_transporter:0
+msgid "Default transporter"
+msgstr "Transportista por defecto"
+
+#. module: transportation
+#: field:transportation.service,name:0
+#: field:transportation.transporter,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_res_partner
+#: field:transportation.transporter,partner_id:0
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: transportation
+#: view:transportation.transporter:0
+msgid "Service"
+msgstr "Servicio"
+
+#. module: transportation
+#: field:transportation.transporter,service_ids:0
+msgid "Services"
+msgstr "Servicios"
+
+#. module: transportation
+#: field:res.partner,service_id:0
+#: field:sale.order,service_id:0
+msgid "Transport service"
+msgstr "Servicio"
+
+#. module: transportation
+#: model:ir.ui.menu,name:transportation.menu_transportation_sale
+msgid "Transportation"
+msgstr "Transporte"
+
+#. module: transportation
+#: model:ir.actions.act_window,name:transportation.action_transportation_service
+#: model:ir.ui.menu,name:transportation.menu_transportation_service_sale
+#: view:transportation.service:0
+msgid "Transportation services"
+msgstr "Servicios de transporte"
+
+#. module: transportation
+#: model:ir.actions.act_window,name:transportation.action_transporter
+#: model:ir.ui.menu,name:transportation.menu_transporter_sale
+#: view:transportation.service:0
+#: view:transportation.transporter:0
+msgid "Transporter"
+msgstr "Transportista"
+
+#. module: transportation
+#: field:transportation.service,transporter_ids:0
+#: view:transportation.transporter:0
+msgid "Transporters"
+msgstr "Transportistas"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_transportation_service
+msgid "transportation.service"
+msgstr "transportation.service"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_transportation_transporter
+msgid "transportation.transporter"
+msgstr "transportation.transporter"
+
+#. module: transportation
+#: field:res.partner,transporter_id:0
+#: field:sale.order,transporter_id:0
+msgid "transporter"
+msgstr "Transportista"
+
