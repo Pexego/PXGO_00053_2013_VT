@@ -143,7 +143,7 @@ class stock_deposit(osv.osv):
             'product_uom_qty': deposit.product_uom_qty,
             'product_uos': deposit.product_uom.id,
             'location_id': deposit_id[1],
-            'location_dest_id': picking.picking_type_id.warehouse_id.wh_input_stock_loc_id.id,
+            'location_dest_id': picking.picking_type_id.default_location_dest_id.id,
             'picking_id': picking_id,
             'partner_id': deposit.partner_id.id ,
             'move_dest_id': False,
