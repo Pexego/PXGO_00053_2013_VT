@@ -28,3 +28,8 @@ class stock_move(models.Model):
 
     partner_id = fields.Many2one('res.partner', 'Partner')
 
+
+    def _get_master_data(self, cr, uid, move, company, context=None):
+        ''' returns a tuple (browse_record(res.partner), ID(res.users),
+            ID(res.currency)'''
+        return move.partner_id, uid, company.currency_id.id

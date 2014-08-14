@@ -31,6 +31,7 @@
                 'stock'],
     "data": ['purchase_view.xml',
              'data/res_partner_data.xml',
-             'wizard/create_picking_move_view.xml'],
+             'wizard/create_picking_move_view.xml',
+             'stock_view.xml'],
     "installable": True
 }

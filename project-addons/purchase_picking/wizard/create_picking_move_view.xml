@@ -9,8 +9,11 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Create Picking">
-                    <button string="Create" name="action_create_picking" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                    <group>
+                        <field name="date_picking"/>
+                        <button string="Create" name="action_create_picking" type="object" icon="gtk-ok"/>
+                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                    </group>
                 </form>
             </field>
         </record>

@@ -27,6 +27,8 @@ class create_picking_move(models.TransientModel):
 
     _name = "picking.from.moves.wizard"
 
+    date_picking = fields.Datetime('Date planned', required=True)
+
 
     def _view_picking(self):
         action = self.env.ref('stock.action_picking_tree').read()[0]
@@ -62,6 +64,7 @@ class create_picking_move(models.TransientModel):
             if move.picking_type_id.id not in picking_types.keys():
                 picking_types[move.picking_type_id.id] = []
             picking_types[move.picking_type_id.id].append(move)
+            move.date_expected = self.date_picking
             all_moves.append(move.id)
         if not same_partner:
             partner_id = self.env.ref('purchase_picking.partner_multisupplier').id
@@ -76,7 +79,7 @@ class create_picking_move(models.TransientModel):
                 'move_lines': [(6, 0, [x.id for x in moves_type])],
                 'origin': ''.join([x.purchase_line_id.order_id.name + ", "
                            for x in moves_type]),
-                'date': max([x.date_expected for x in moves_type])
+                'date': self.date_picking
             }
             picking_vals['origin'] = picking_vals['origin'][:-2]
             picking_ids.append(self.env['stock.picking'].create(picking_vals))
