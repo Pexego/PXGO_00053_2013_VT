@@ -42,6 +42,7 @@ class purchase_order(models.Model):
             cr, uid, order, order_line, picking_id, group_id, context)
         for move_dict in res:
             move_dict.pop('picking_id', None)
+            move_dict['partner_id'] = order.partner_id.id
 
         return res
 

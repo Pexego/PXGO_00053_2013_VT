@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+
+        <record id="create_picking_move_view" model="ir.ui.view">
+            <field name="name">create.picking.form</field>
+            <field name="model">picking.from.moves.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create Picking">
+                    <button string="Create" name="action_create_picking" type="object" icon="gtk-ok"/>
+                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Create picking"
+            res_model="picking.from.moves.wizard"
+            src_model="stock.move"
+            view_id="create_picking_move_view"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"
+            id="action_create_picking"/>
+
+    </data>
+</openerp>
+

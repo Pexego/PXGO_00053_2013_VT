@@ -19,27 +19,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import models, fields
 
 
-class res_partner(models.Model):
+class stock_move(models.Model):
 
-    _inherit = 'res.partner'
-    # TODO: Establecer domain para que solo aparezcan los servicios
-    #       que tiene el transportista seleccionado.
-    transporter_id = fields.Many2one('transportation.transporter',
-                                     'transporter')
-    service_id = fields.Many2one('transportation.service',
-                                 'Transport service')
+    _inherit = 'stock.move'
 
-    @api.one
-    @api.onchange('country_id')
-    def onchange_country_id(self):
-        self.transporter_id = self.country_id.default_transporter
+    partner_id = fields.Many2one('res.partner', 'Partner')
 
-class res_country(models.Model):
-
-    _inherit = 'res.country'
-
-    default_transporter = fields.Many2one('transportation.transporter',
-                                          'Default transporter')

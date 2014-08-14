@@ -29,6 +29,8 @@
     "depends": ['base',
                 'purchase',
                 'stock'],
-    "data": ['purchase_view.xml'],
+    "data": ['purchase_view.xml',
+             'data/res_partner_data.xml',
+             'wizard/create_picking_move_view.xml'],
     "installable": True
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <record id="partner_multisupplier" model="res.partner">
+        <field name="name">Multiproveedor</field>
+        <field eval="True" name="is_company"/>
+        <field eval="True" name="supplier"/>
+        <field eval="False" name="customer"/>
+        <field name="sale_warn">no-message</field>
+        <field name="purchase_warn">no-message</field>
+        <field name="picking_warn">no-message</field>
+        <field name="invoice_warn">no-message</field>
+    </record>
+
+</data>
+</openerp>
