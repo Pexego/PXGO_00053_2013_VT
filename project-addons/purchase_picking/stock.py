@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class stock_move(models.Model):
@@ -33,3 +33,23 @@ class stock_move(models.Model):
         ''' returns a tuple (browse_record(res.partner), ID(res.users),
             ID(res.currency)'''
         return move.partner_id, uid, company.currency_id.id
+
+    @api.one
+    def write(self, vals):
+        if self.picking_type_id.code == 'incoming':
+            if 'date_expected' in vals.keys():
+                reservations = self.env['stock.reservation'].search(
+                    [('product_id', '=', self.product_id.id),
+                     ('state', '=', 'confirmed')])
+                # no se necesita hacer browse.
+                # reservations = self.env['stock.reservation'].browse(reservation_ids)
+                for reservation in reservations:
+                    reservation.date_planned = self.date_expected
+                    if not reservation.sale_id:
+                        continue
+                    sale = reservation.sale_id
+                    followers = sale.message_follower_ids
+                    sale.message_post(body="The date planned was changed.",
+                                      subtype='mt_comment',
+                                      partner_ids=followers)
+        return super(stock_move, self).write(vals)

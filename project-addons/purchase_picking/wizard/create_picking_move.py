@@ -79,7 +79,7 @@ class create_picking_move(models.TransientModel):
                 'move_lines': [(6, 0, [x.id for x in moves_type])],
                 'origin': ''.join([x.purchase_line_id.order_id.name + ", "
                            for x in moves_type]),
-                'date': self.date_picking
+                'min_date': self.date_picking
             }
             picking_vals['origin'] = picking_vals['origin'][:-2]
             picking_ids.append(self.env['stock.picking'].create(picking_vals))

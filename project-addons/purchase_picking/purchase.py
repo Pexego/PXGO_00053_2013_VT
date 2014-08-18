@@ -43,7 +43,6 @@ class purchase_order(models.Model):
         for move_dict in res:
             move_dict.pop('picking_id', None)
             move_dict['partner_id'] = order.partner_id.id
-
         return res
 
     def action_picking_create(self, cr, uid, ids, context=None):
