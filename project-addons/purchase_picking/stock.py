@@ -22,6 +22,13 @@
 from openerp import models, fields, api
 
 
+class stock_picking(models.Model):
+
+    _inherit = 'stock.picking'
+
+    shipping_identifier = fields.Char('Shipping identifier', size=64)
+
+
 class stock_move(models.Model):
 
     _inherit = 'stock.move'
