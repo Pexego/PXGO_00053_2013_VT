@@ -19,14 +19,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class sale_order(models.Model):
 
     _inherit = 'sale.order'
-    # TODO: Establecer domain para que solo aparezcan los servicios
-    #       que tiene el transportista seleccionado.
     transporter_id = fields.Many2one('transportation.transporter',
                                      'transporter')
     service_id = fields.Many2one('transportation.service',
@@ -43,3 +41,10 @@ class sale_order(models.Model):
             values['service_id'] = partner.service_id.id
         res['value'] = values
         return res
+
+    @api.onchange('transporter_id')
+    def onchange_transporter_id(self):
+        service_ids = [x.id for x in self.transporter_id.service_ids]
+        if self.service_id.id not in service_ids:
+            self.service_id  = False
+        return {'domain':{'service_id': [('id', 'in', service_ids)]}}
