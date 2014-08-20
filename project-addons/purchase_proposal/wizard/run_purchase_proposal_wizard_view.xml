@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+
+        <record id="run_proposal_wizard" model="ir.ui.view">
+            <field name="name">run.proposal.wizard</field>
+            <field name="model">run.purchase.proposal.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Run purchase proposal">
+                    <button string="Run" name="run_scheduler" type="object" icon="gtk-ok"/>
+                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Run proposal wizard"
+            res_model="run.purchase.proposal.wizard"
+            view_id="run_proposal_wizard"
+            view_mode="form"
+            target="new"
+            id="action_purchase_proposal_wiz"/>
+
+        <menuitem name="run scheduler" parent="stock.menu_stock_sched" action="action_purchase_proposal_wiz" id="menu_proposal_scheduler"/>
+
+    </data>
+</openerp>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="product_add_security_margin" model="ir.ui.view">
+            <field name="name">product_add_security_margin</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="route_ids" position="after">
+                    <field name="security_margin" />
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>
