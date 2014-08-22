@@ -73,9 +73,14 @@ class res_partner(orm.Model):
             end_month_seconds = time.mktime(end_month.timetuple())
             total_sale = sale_obj.read_group(cr, uid,
                                              [('partner_id', '=', partner_id),
-                                              ('state', 'in', ['done']),
-                                              ('date_order', '>=', start_month),
-                                              ('date_order', '<=', end_month_str)],
+                                              ('state', 'not in',
+                                               ['draft', 'sent', 'cancel',
+                                                'reserve', 'waiting_date',
+                                                'wait_risk', 'risk_approval']),
+                                              ('date_order', '>=',
+                                               start_month),
+                                              ('date_order', '<=',
+                                               end_month_str)],
                                              ['amount_total'],
                                              ['amount_total'],
                                              context=context)

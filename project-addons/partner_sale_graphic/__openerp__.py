@@ -27,7 +27,8 @@
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
     "depends" : ["base",
-                 "sale",],
+                 "sale",
+                 "partner_risk__stock_reserve__rel"],
     "data" : ["data/cron.xml",
               "res_partner_view.xml"],
     "installable": True
