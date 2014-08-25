@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+
+        <record id="product_outlet_wizard_form" model="ir.ui.view">
+            <field name="name">product.outlet.wizard.form</field>
+            <field name="model">product.outlet.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Send product to wizard">
+                    <group>
+                    <field name="qty" />
+                    <button string="Send outlet" name="make_move" type="object" icon="gtk-ok"/>
+                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+        id="act_product_to_outlet_wizard"
+        name="send_to_outlet"
+        res_model="product.outlet.wizard"
+        src_model="product.product"
+        view_id="product_outlet_wizard_form"
+        view_mode="form"
+        target="new"/>
+
+    </data>
+</openerp>
+

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="product_category_outlet" model="product.category">
+            <field name="name">Outlet</field>
+            <field name="type">normal</field>
+        </record>
+
+        <record id="stock_location_outlet" model="stock.location">
+            <field name="name">Outlet</field>
+            <field name="usage">internal</field>
+            <field name="location_id" ref="stock.stock_location_stock"/>
+        </record>
+
+    </data>
+</openerp>
+
