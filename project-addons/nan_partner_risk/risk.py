@@ -22,6 +22,7 @@
 ##############################################################################
 
 from openerp.osv import osv, fields
+from openerp import api
 import time
 from openerp.tools.translate import _
 
@@ -86,6 +87,16 @@ class sale_order(osv.osv):
                     amount += line.amount_invoiced
             result[order.id] = amount
         return result
+
+    @api.one
+    def action_wait_risk(self):
+        self.write({'state':'wait_risk'})
+        risk_group = self.env.ref('nan_partner_risk.group_risk_manager')
+        user_ids = [x.id for x in risk_group.users]
+        partner_ids = [x.partner_id.id for x in self.env['res.users'].browse(user_ids)]
+        self.message_post(body=_("Sale %s waiting risk approval.") % self.name,
+                                      subtype='mt_comment',
+                                      partner_ids=partner_ids)
 
     _columns = {
         'amount_invoiced': fields.function(_amount_invoiced, method=True, string='Invoiced Amount', type='float'),

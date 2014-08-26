@@ -10,8 +10,8 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_button_confirm']" position="replace">
                     <button name="draft_to_risk" string="Confirm Order" states="draft" groups="base.group_user"/>
-                    <button name="risk_to_router" string="Approve Order" states="wait_risk" class="oe_highlight" groups="base.group_user"/>
-                    <button name="risk_to_cancel" string="Cancel Order" states="wait_risk" groups="base.group_user"/>
+                    <button name="risk_to_router" string="Approve Order" states="wait_risk" class="oe_highlight" groups="nan_partner_risk.group_risk_manager"/>
+                    <button name="risk_to_cancel" string="Cancel Order" states="wait_risk" groups="nan_partner_risk.group_risk_manager"/>
             </xpath>
             <xpath expr="//button[@name='action_button_confirm'][@states='sent']" position="replace">
                 <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight" groups="base.group_user"/>

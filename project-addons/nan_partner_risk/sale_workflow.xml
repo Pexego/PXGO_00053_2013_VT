@@ -14,7 +14,7 @@
         <field name="wkf_id" ref="sale.wkf_sale"/>
         <field name="kind">function</field>
         <field name="name">wait_risk</field>
-        <field name="action">write({'state':'wait_risk'})</field>
+        <field name="action">action_wait_risk()</field>
     </record>
 
     <!-- Transitions -->
