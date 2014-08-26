@@ -1,0 +1,88 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * product_outlet
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0rc1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-08-26 09:11+0000\n"
+"PO-Revision-Date: 2014-08-26 09:11+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_outlet
+#: view:product.outlet.wizard:product_outlet.product_outlet_wizard_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: product_outlet
+#: model:product.category,name:product_outlet.product_category_outlet
+#: model:stock.location,name:product_outlet.stock_location_outlet
+msgid "Outlet"
+msgstr "Outlet"
+
+#. module: product_outlet
+#: field:product.product,outlet_product_id:0
+msgid "Outlet product"
+msgstr "Producto outlet"
+
+#. module: product_outlet
+#: model:ir.model,name:product_outlet.model_product_product
+#: field:product.outlet.wizard,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: product_outlet
+#: model:ir.model,name:product_outlet.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: product_outlet
+#: field:product.outlet.wizard,qty:0
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:45
+#, python-format
+msgid "Quantity error"
+msgstr "Error de cantidad"
+
+#. module: product_outlet
+#: view:product.outlet.wizard:product_outlet.product_outlet_wizard_form
+msgid "Send outlet"
+msgstr "Enviar outlet"
+
+#. module: product_outlet
+#: view:product.outlet.wizard:product_outlet.product_outlet_wizard_form
+msgid "Send product to wizard"
+msgstr "Send product to wizard"
+
+#. module: product_outlet
+#: model:ir.actions.act_window,name:product_outlet.act_product_to_outlet_wizard
+msgid "Send to outlet"
+msgstr "Enviar a outlet"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:51
+#, python-format
+msgid "This product is in outlet category."
+msgstr "Este producto está en la categoría outlet."
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:50
+#, python-format
+msgid "product error"
+msgstr "Error de producto"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:46
+#, python-format
+msgid "the amount entered is greater than the quantity available."
+msgstr "La cantidad introducida es mayor que la cantidad disponible."
+

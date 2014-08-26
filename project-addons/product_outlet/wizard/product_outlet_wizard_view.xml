@@ -20,7 +20,7 @@
 
         <act_window
         id="act_product_to_outlet_wizard"
-        name="send_to_outlet"
+        name="Send to outlet"
         res_model="product.outlet.wizard"
         src_model="product.product"
         view_id="product_outlet_wizard_form"
