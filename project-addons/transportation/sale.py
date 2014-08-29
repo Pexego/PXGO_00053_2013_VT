@@ -36,15 +36,36 @@ class sale_order(models.Model):
         if part:
             values = res.get('value', {})
             partner = self.pool.get('res.partner').browse(cr, uid, part,
-                                                         context)
+                                                          context)
             values['transporter_id'] = partner.transporter_id.id
             values['service_id'] = partner.service_id.id
-        res['value'] = values
+            res['value'] = values
         return res
 
     @api.onchange('transporter_id')
     def onchange_transporter_id(self):
         service_ids = [x.id for x in self.transporter_id.service_ids]
         if self.service_id.id not in service_ids:
-            self.service_id  = False
-        return {'domain':{'service_id': [('id', 'in', service_ids)]}}
+            self.service_id = False
+        return {'domain': {'service_id': [('id', 'in', service_ids)]}}
+
+    @api.one
+    def write(self, vals):
+        super(sale_order, self).write(vals)
+        if self.transporter_id and vals.get('transporter_id', False):
+            assigned = self.env['transport.assigned'].search([('sale_id', '=', self.id)])
+            if not assigned:
+                create_vals = {
+                    'date': fields.Date.today(),
+                    'area_id': self.partner_id.area_id.id,
+                    'transporter_id': self.transporter_id.id,
+                    'sale_id': self.id,
+                }
+                assigned = self.env['transport.assigned'].create(create_vals)
+            else:
+                assigned.write({'date': fields.Date.today(), 'transporter_id': self.transporter_id.id})
+        return True
+
+    @api.one
+    def assign_transporter(self):
+        self.transporter_id = self.env['transport.assigned'].get_transporter(self.partner_id)

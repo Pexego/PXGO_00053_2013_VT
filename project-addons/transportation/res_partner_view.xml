@@ -25,5 +25,29 @@
             </field>
         </record>
 
+        <record id="res_partner_area_form_add_rotation" model="ir.ui.view">
+            <field name="name">res.partner.area.form</field>
+            <field name="model">res.partner.area</field>
+            <field name="inherit_id" ref="customer_area.res_partner_area_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group[1]" position="after">
+                    <group>
+                        <field name="transporter_rotation_ids">
+                            <tree>
+                                <field name="transporter_id"/>
+                                <field name="percentage_shipping"/>
+                            </tree>
+                            <form>
+                                <group>
+                                    <field name="transporter_id"/>
+                                    <field name="percentage_shipping"/>
+                                </group>
+                            </form>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </openerp>

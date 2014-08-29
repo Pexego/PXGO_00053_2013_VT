@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import models, fields, api, exceptions, _
 
 
 class res_partner(models.Model):
@@ -30,7 +30,6 @@ class res_partner(models.Model):
     service_id = fields.Many2one('transportation.service',
                                  'Transport service')
 
-
     @api.onchange('country_id')
     def onchange_country_id(self):
         self.transporter_id = self.country_id.default_transporter
@@ -39,8 +38,9 @@ class res_partner(models.Model):
     def onchange_transporter_id(self):
         service_ids = [x.id for x in self.transporter_id.service_ids]
         if self.service_id.id not in service_ids:
-            self.service_id  = False
-        return {'domain':{'service_id': [('id', 'in', service_ids)]}}
+            self.service_id = False
+        return {'domain': {'service_id': [('id', 'in', service_ids)]}}
+
 
 class res_country(models.Model):
 
@@ -48,3 +48,31 @@ class res_country(models.Model):
 
     default_transporter = fields.Many2one('transportation.transporter',
                                           'Default transporter')
+
+
+class res_partner_area(models.Model):
+
+    _inherit = "res.partner.area"
+
+    transporter_rotation_ids = fields.One2many('area.transportist.rel',
+                                               'area_id', 'Rotation')
+
+    @api.onchange('transporter_rotation_ids')
+    def onchange_transporter_rotation(self):
+        total_percentage = sum([x.percentage_shipping
+                                for x in self.transporter_rotation_ids])
+        if total_percentage > 100:
+            raise exceptions.except_orm(
+                _('Value error'),
+                _('The total of percentages in rotation exceeds the 100%'))
+
+    @api.one
+    def write(self, values):
+        super(res_partner_area, self).write(values)
+
+        total_percentage = sum([x.percentage_shipping
+                                for x in self.transporter_rotation_ids])
+        if total_percentage > 100:
+            raise exceptions.except_orm(
+                _('Value error'),
+                _('The total of percentages in rotation exceeds the 100%'))

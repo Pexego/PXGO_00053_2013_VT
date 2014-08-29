@@ -10,6 +10,9 @@
                     <field name="transporter_id"/>
                     <field name="service_id"/>
                 </field>
+                <button name="action_button_confirm" position="after">
+                    <button name="assign_transporter" type="object" string="assign transporter"/>
+                </button>
             </field>
         </record>
     </data>

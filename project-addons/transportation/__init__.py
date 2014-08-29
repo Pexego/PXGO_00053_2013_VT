@@ -19,4 +19,7 @@
 #
 ##############################################################################
 
-import transportation, res_partner, sale
+import transportation
+import res_partner
+import sale
+import rotation
