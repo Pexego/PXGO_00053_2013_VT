@@ -4,16 +4,18 @@
     <record id="sale_change_reserve_button_state" model="ir.ui.view">
         <field name="name">sale.change.reserve.button.state.form</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
+        <field name="inherit_id" ref="nan_partner_risk.sale_order_form_risk"/>
         <field name="arch" type="xml">
-            <button name="order_reserve" position="replace">
-                <button name="order_reserve" type="object" string="Reserve Stock"
-                        states="risk_approval" />
-                <button name="action_button_confirm" states="reserve" class="oe_highlight" string="Confirm Sale" type="object" groups="base.group_user"/>
+            <button name="draft_to_risk" position="replace">
+                <button name="draft_to_risk" string="Confirm Order" states="reserve" groups="base.group_user"/>
             </button>
+
             <button name="cancel" position="replace">
                     <button name="cancel" states="draft,sent,reserve,risk_approval" string="Cancel Quotation" groups="base.group_user"/>
             </button>
+           <xpath expr="//button[@name='draft_to_risk'][@states='sent']" position="replace">
+               <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight" groups="base.group_user" invisible="1"/>
+           </xpath>
         </field>
     </record>
     </data>
