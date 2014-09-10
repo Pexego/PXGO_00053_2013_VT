@@ -1,0 +1,94 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* openerp_sale_promotions_extend
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0rc1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-09-10 15:45+0000\n"
+"PO-Revision-Date: 2014-09-10 17:51+0100\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. module: openerp_sale_promotions_extend
+#: view:sale.order:openerp_sale_promotions_extend.view_sale_promo_form2_remove_button
+msgid "Apply Promotions"
+msgstr "Aplicar promociones"
+
+#. module: openerp_sale_promotions_extend
+#: code:addons/openerp_sale_promotions_extend/rule.py:58
+#, python-format
+msgid "Buy X get Y free"
+msgstr "Compra X, llévate Y gratis"
+
+#. module: openerp_sale_promotions_extend
+#: code:addons/openerp_sale_promotions_extend/rule.py:53
+#, python-format
+msgid "Discount % on Product"
+msgstr "Descuento % en producto"
+
+#. module: openerp_sale_promotions_extend
+#: code:addons/openerp_sale_promotions_extend/rule.py:56
+#, python-format
+msgid "Discount % on Sub Total"
+msgstr "Descuento % en el subtotal"
+
+#. module: openerp_sale_promotions_extend
+#: code:addons/openerp_sale_promotions_extend/rule.py:54
+#, python-format
+msgid "Discount % on Tag"
+msgstr "Descuento % en los productos de la etiqueta"
+
+#. module: openerp_sale_promotions_extend
+#: model:ir.model,name:openerp_sale_promotions_extend.model_promos_rules_conditions_exps
+msgid "Expressions for conditions"
+msgstr "Condiciones"
+
+#. module: openerp_sale_promotions_extend
+#: code:addons/openerp_sale_promotions_extend/rule.py:55
+#, python-format
+msgid "Fixed amount on Product"
+msgstr "Cantidad fija del producto"
+
+#. module: openerp_sale_promotions_extend
+#: code:addons/openerp_sale_promotions_extend/rule.py:57
+#, python-format
+msgid "Fixed amount on Sub Total"
+msgstr "Cantidad fija en el subtotal"
+
+#. module: openerp_sale_promotions_extend
+#: field:promos.rules.actions,product_tag:0
+msgid "Product Tag"
+msgstr "Etiqueta producto"
+
+#. module: openerp_sale_promotions_extend
+#: model:ir.model,name:openerp_sale_promotions_extend.model_promos_rules
+msgid "Promotion Rules"
+msgstr "Reglas promociones"
+
+#. module: openerp_sale_promotions_extend
+#: model:ir.model,name:openerp_sale_promotions_extend.model_promos_rules_actions
+msgid "Promotions actions"
+msgstr "Acciones"
+
+#. module: openerp_sale_promotions_extend
+#: model:ir.model,name:openerp_sale_promotions_extend.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea pedido de venta"
+
+#. module: openerp_sale_promotions_extend
+#: field:sale.order.line,product_tags:0
+msgid "Tags"
+msgstr "Etiquetas"
+
+#. module: openerp_sale_promotions_extend
+#: code:addons/openerp_sale_promotions_extend/rule.py:37
+#, python-format
+msgid "Untaxed Total"
+msgstr "Untaxed Total"
