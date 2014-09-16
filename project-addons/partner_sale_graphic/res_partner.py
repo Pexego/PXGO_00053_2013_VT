@@ -72,7 +72,7 @@ class res_partner(orm.Model):
             end_month_str = end_month.strftime('%Y-%m-%d')
             end_month_seconds = time.mktime(end_month.timetuple())
             total_sale = sale_obj.read_group(cr, uid,
-                                             [('partner_id', '=', partner_id),
+                                             [('partner_id', 'child_of', partner_id),
                                               ('state', 'not in',
                                                ['draft', 'sent', 'cancel',
                                                 'reserve', 'waiting_date',
@@ -81,11 +81,15 @@ class res_partner(orm.Model):
                                                start_month),
                                               ('date_order', '<=',
                                                end_month_str)],
-                                             ['amount_total'],
-                                             ['amount_total'],
+                                             ['amount_total', 'partner_id'],
+                                             ['partner_id'],
                                              context=context)
             if total_sale:
-                data.append([end_month_seconds, total_sale[0]['amount_total']])
+                total = 0.0
+                for total_partner in total_sale:
+                    total += total_partner['amount_total']
+                if total != 0:
+                    data.append([end_month_seconds, total])
         return data
 
     def run_scheduler_grpahic(self, cr, uid, automatic=False,
@@ -99,28 +103,25 @@ class res_partner(orm.Model):
         int_to_date = lambda x: '/a60{}' + \
             datetime(time.localtime(x).tm_year, time.localtime(x).tm_mon,
                      time.localtime(x).tm_mday).strftime('%m-%y')
-        partner_ids = partner_obj.search(cr, uid, [('customer', '=', True)],
+        partner_ids = partner_obj.search(cr, uid, [('customer', '=', True), ('parent_id', '=', False)],
                                          context=context)
         for partner_id in partner_ids:
             data = self._get_partner_data(cr, uid, partner_id, context)
             if data:
-
                 # Create the graphic with the data
                 io = StringIO.StringIO()
                 canv = canvas.init(fname=io, format='png')
-                max_total = data[0][1]
-                min_total = data[0][1]
-                for tup in data[1:]:
-                    if tup[1] > max_total:
-                        max_total = tup[1]
-                    elif tup[1] < min_total:
-                        min_total = tup[1]
-                min_total = min_total / 2
+                #max_total = data[0][1]
+                #min_total = data[0][1]
+                #for tup in data[1:]:
+                #    if tup[1] > max_total:
+                #        max_total = tup[1]
+                #    elif tup[1] < min_total:
+                #        min_total = tup[1]
+                #min_total = min_total / 2
                 ar = area.T(x_coord=category_coord.T(data, 0),
                             x_axis=axis.X(label=_("Date"), format=int_to_date),
                             y_axis=axis.Y(label=_("Amount total")),
-                            x_range=(data[0][0], data[-1][0]),
-                            y_range=(min_total, max_total),
                             legend=None,
                             size=(680, 450))
 
