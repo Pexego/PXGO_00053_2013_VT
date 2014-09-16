@@ -37,12 +37,12 @@ class SaleOrder(models.Model):
             total_product_qty = 0.0
             categories = {}
             products = {}
-            rules = rule_obj.search(cr, uid, ['|', ('date_start', '>=',
+            rules = rule_obj.search(cr, uid, ['|', ('date_start', '<=',
                                                     order.date_order[:10]),
                                               ('date_start', '=', False),
-                                              '|', ('date_end', '<=',
+                                              '|', ('date_end', '>=',
                                                     order.date_order[:10]),
-                                              ('date_start', '=', False)],
+                                              ('date_end', '=', False)],
                                     context=context)
 
             if rules:
