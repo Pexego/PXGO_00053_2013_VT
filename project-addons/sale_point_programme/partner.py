@@ -34,4 +34,4 @@ class ResPartner(models.Model):
         self.points_in_bag = \
             sum([x.points for x in
                  self.env['res.partner.point.programme.bag'].
-                 search([('partner_id', '=', self.id)])])
+                 search([('partner_id', 'child_of', self.id)])])
