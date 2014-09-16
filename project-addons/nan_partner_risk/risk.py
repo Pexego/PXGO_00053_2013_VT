@@ -66,12 +66,25 @@ class sale_order(osv.osv):
         result = super(sale_order,self).onchange_partner_id(cr, uid, ids, part, context=context)
         if part:
             partner = self.pool.get('res.partner').browse(cr, uid, part)
-            if partner.available_risk < 0.0:
+            if partner.is_company:
+                available_risk = partner.available_risk
+                credit_limit = partner.credit_limit
+                total_debt = partner.total_debt
+            else:
+                if partner.parent_id:
+                    available_risk = partner.parent_id.available_risk
+                    credit_limit = partner.parent_id.credit_limit
+                    total_debt = partner.parent_id.total_debt
+                else:
+                    available_risk = partner.available_risk
+                    credit_limit = partner.credit_limit
+                    total_debt = partner.total_debt
+            if available_risk < 0.0:
                 result['warning'] = {
                     'title': _('Credit Limit Exceeded'),
                     'message': _('Warning: Credit Limit Exceeded.\n\nThis partner has a credit limit of %(limit).2f and already has a debt of %(debt).2f.') % {
-                        'limit': partner.credit_limit,
-                        'debt': partner.total_debt,
+                        'limit': credit_limit,
+                        'debt': total_debt,
                     }
                 }
         return result
@@ -200,7 +213,7 @@ class partner(osv.osv):
         today = time.strftime('%Y-%m-%d')
         for id in ids:
             invids = self.pool.get('account.invoice').search( cr, uid, [
-                ('partner_id','=',id),
+                ('partner_id', 'child_of',id),
                 ('state','=','draft'),
                 '|', ('date_due','>=',today), ('date_due','=',False)
             ], context=context )
@@ -220,9 +233,10 @@ class partner(osv.osv):
 
     def _pending_orders_amount(self, cr, uid, ids, name, arg, context=None):
         res = {}
+
         for id in ids:
             sids = self.pool.get('sale.order').search( cr, uid, [
-                ('partner_id','=',id),
+                ('partner_id', 'child_of', id),
                 ('state','not in',['draft','cancel','wait_risk'])
             ], context=context )
             total = 0.0
