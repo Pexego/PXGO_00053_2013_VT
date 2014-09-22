@@ -67,6 +67,7 @@ class stock_move(orm.Model):
                     'move_id': move.id,
                     'delivery_date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                     'return_date': move.procurement_id.sale_line_id.deposit_date,
+                    'user_id': move.procurement_id.sale_line_id.order_id.user_id.id,
                     'state': 'done'
                 }
                 deposit_obj.create(cr, uid, values)

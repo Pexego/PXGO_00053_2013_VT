@@ -102,6 +102,12 @@ class stock_deposit(osv.osv):
                                    readonly=True,
                                    ondelete='cascade',
                                    select=1),
+        'user_id': fields.many2one('res.users',
+                                   'Comercial',
+                                   required=False,
+                                   readonly=True,
+                                   ondelete='cascade',
+                                   select=1),
     }
 
     def sale(self, cr, uid, ids, context=None):

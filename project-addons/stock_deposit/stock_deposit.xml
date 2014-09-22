@@ -41,6 +41,7 @@
                                     <field name="delivery_date" />
                                     <field name="return_date" />
                                 </group>
+                                <field name="user_id"/>
                                 <field name="company_id"
                                     groups="base.group_multi_company"
                                     widget="selection"/>
@@ -64,6 +65,7 @@
                 <tree string="Deposits" version="7.0" >
                     <field name="product_id" />
                     <field name="partner_id" />
+                    <field name="user_id"/>
                     <field name="product_uom_qty" sum="Total" />
                     <field name="product_uom" />
                     <field name="delivery_date" />
@@ -79,6 +81,7 @@
             <field name="arch" type="xml">
                 <search string="Deposits" version="7.0">
                     <field name="product_id" />
+                    <field name="user_id" />
                     <field name="partner_id" />
                     <filter name="done" string="Deposits"
                         domain="[('state', '=', 'done')]"
@@ -87,6 +90,9 @@
                         <filter string="Partner"
                             name="groupby_parner"
                             context="{'group_by': 'partner_id'}"/>
+                        <filter string="Comercial"
+                            name="groupby_comercial"
+                            context="{'group_by': 'user_id'}"/>
                         <filter string="Product" domain="[]"
                             name="groupby_product"
                             context="{'group_by': 'product_id'}"/>
