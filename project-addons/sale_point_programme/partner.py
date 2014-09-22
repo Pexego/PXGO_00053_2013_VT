@@ -31,7 +31,10 @@ class ResPartner(models.Model):
 
     @api.one
     def _get_points(self):
-        self.points_in_bag = \
-            sum([x.points for x in
-                 self.env['res.partner.point.programme.bag'].
-                 search([('partner_id', 'child_of', self.id)])])
+        if self.id:
+            self.points_in_bag = \
+                sum([x.points for x in
+                     self.env['res.partner.point.programme.bag'].
+                     search([('partner_id', 'child_of', self.id)])])
+        else:
+            self.points_in_bag = 0
