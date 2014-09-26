@@ -9,7 +9,9 @@ downloads/
 etc/
 bin/
 sandbox/
-openerp*
+openerp_*
+openerp-*
+odoo-repos/
 .installed.cfg
 .idea
 upgrade.py
