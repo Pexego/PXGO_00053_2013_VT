@@ -19,6 +19,10 @@
 #
 ##############################################################################
 
-import stock_landed_costs
-import product
-import stock
+from openerp import models, fields
+
+class product(models.Model):
+
+    _inherit = 'product.template'
+
+    standard_price_cost = fields.Float('Standard price with landed cost')

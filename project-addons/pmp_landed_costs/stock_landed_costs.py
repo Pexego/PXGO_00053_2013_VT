@@ -51,6 +51,7 @@ class StockLandedCost(models.Model):
 
     def button_validate(self, cr, uid, ids, context=None):
         quant_obj = self.pool.get('stock.quant')
+        product_obj = self.pool.get('product.product')
 
         for cost in self.browse(cr, uid, ids, context=context):
             if not cost.valuation_adjustment_lines or not self._check_sum(cr, uid, cost, context=context):
@@ -59,7 +60,11 @@ class StockLandedCost(models.Model):
             for line in cost.valuation_adjustment_lines:
                 if not line.move_id:
                     continue
-
+                if line.product_id.cost_method == 'average':
+                    # (((ctdad_total - ctdad_move) * precio_coste_antes_mov) + (ctdad_move * precio_coste + costes)) / ctdad_total
+                    # average_price = (((line.product_id.qty_available - line.move_id.product_qty) * line.product_id.standard_price) + (line.move_id.product_qty * (line.product_id.standard_price + line.additional_landed_cost))) / line.product_id.qty_available
+                    average_price = (line.product_id.qty_available * line.product_id.standard_price + line.additional_landed_cost) / line.product_id.qty_available
+                    product_obj.write(cr, uid, [line.product_id.id], {'standard_price_cost': average_price}, context)
                 per_unit = line.final_cost / line.quantity
                 diff = per_unit - line.former_cost_per_unit
                 quants = [quant for quant in line.move_id.quant_ids]

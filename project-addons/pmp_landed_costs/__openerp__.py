@@ -26,7 +26,9 @@
     'description': """""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    "depends": ['stock_landed_costs'],
-    "data": ['stock_landed_costs_view.xml'],
+    "depends": ['stock_landed_costs',
+                'stock_account'],
+    "data": ['stock_landed_costs_view.xml',
+             'product_view.xml'],
     "installable": True
 }
