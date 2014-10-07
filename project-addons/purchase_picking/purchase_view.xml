@@ -16,5 +16,9 @@
         </field>
     </record>
 
+    <record id="stock.action_receipt_picking_move" model="ir.actions.act_window">
+            <field name="domain" eval="[('picking_id','=', False), ('location_id.usage','!=','internal'), ('location_dest_id.usage', '=', 'internal')]"/>
+    </record>
+
 </data>
 </openerp>
