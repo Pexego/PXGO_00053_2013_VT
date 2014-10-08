@@ -61,7 +61,8 @@ class product_outlet_wizard(models.TransientModel):
             if not self.product_id.outlet_product_id:
                 new_product = self.product_id.copy(
                     {'categ_id': outlet_categ_id.id,
-                     'name': self.product_id.name + u' Outlet'})
+                     'name': self.product_id.name + u' Outlet',
+                     'image_medium': self.product_id.image_medium})
                 self.product_id.outlet_product_id = new_product.id
             else:
                 new_product = self.product_id.outlet_product_id
