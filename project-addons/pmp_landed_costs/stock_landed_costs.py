@@ -55,7 +55,7 @@ class StockLandedCost(models.Model):
 
         for cost in self.browse(cr, uid, ids, context=context):
             if not cost.valuation_adjustment_lines or not self._check_sum(cr, uid, cost, context=context):
-                raise osv.except_osv(_('Error!'), _('You cannot validate a landed cost which has no valid valuation lines.'))
+                raise exceptions.except_orm(_('Error!'), _('You cannot validate a landed cost which has no valid valuation lines.'))
             quant_dict = {}
             for line in cost.valuation_adjustment_lines:
                 if not line.move_id:
