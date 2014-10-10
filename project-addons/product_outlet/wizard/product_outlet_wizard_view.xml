@@ -9,11 +9,19 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Send product to wizard">
-                    <group>
-                    <field name="qty" />
-                    <button string="Send outlet" name="make_move" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                    <field invisible="1" name="state" />
+                    <group states="first">
+                        <field name="all_product"/>
+
                     </group>
+                    <group states="last">
+                        <field name="qty"/>
+                        <field name="categ_id"/>
+                    </group>
+                    <footer>
+                        <button string="Send outlet" name="make_move" type="object" icon="gtk-ok"/>
+                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                    </footer>
                 </form>
             </field>
         </record>

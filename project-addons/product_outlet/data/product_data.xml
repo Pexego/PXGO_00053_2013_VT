@@ -7,6 +7,18 @@
             <field name="type">normal</field>
         </record>
 
+        <record id="product_category_o1" model="product.category">
+            <field name="parent_id" ref="product_category_outlet"/>
+            <field name="name">O1</field>
+            <field name="type">normal</field>
+        </record>
+
+        <record id="product_category_o2" model="product.category">
+            <field name="parent_id" ref="product_category_outlet"/>
+            <field name="name">O2</field>
+            <field name="type">normal</field>
+        </record>
+
         <record id="stock_location_outlet" model="stock.location">
             <field name="name">Outlet</field>
             <field name="usage">internal</field>

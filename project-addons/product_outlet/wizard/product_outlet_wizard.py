@@ -33,6 +33,20 @@ class product_outlet_wizard(models.TransientModel):
     product_id = fields.Many2one('product.product', 'Product',
                                  default=lambda self:
                                  self.env.context.get('active_id', False))
+    all_product = fields.Boolean('Move all to outlet.')
+    # categ_id = fields.Many2one('product.category', 'Category')
+    categ_id = fields.Selection(selection='_get_outlet_categories',
+                                string='category')
+    state = fields.Selection([('first', 'First'), ('last', 'Last')],
+                             default='first')
+
+    @api.model
+    def _get_outlet_categories(self):
+        res = []
+        outlet_categ_id = self.env.ref('product_outlet.product_category_outlet')
+        for categ in outlet_categ_id.child_id:
+            res.append((categ.id, categ.name))
+        return res
 
     @api.multi
     def make_move(self):
@@ -40,32 +54,48 @@ class product_outlet_wizard(models.TransientModel):
         stock_location = self.env.ref('stock.stock_location_stock')
         outlet_location = self.env.ref('product_outlet.stock_location_outlet')
         stock_change_qty_obj = self.env['stock.change.product.qty']
-        if self.qty > self.product_id.qty_available:
-            raise exceptions.except_orm(
-                _('Quantity error'),
-                _('the amount entered is greater than the quantity available.'))
-
-        if self.product_id.categ_id == outlet_categ_id:
-            raise exceptions.except_orm(
-                _('product error'),
-                _('This product is in outlet category.'))
-
-        # todo el producto pasa a outlet.
-        if self.qty == self.product_id.virtual_available:
+        categ_obj = self.env['product.category']
+        # mover toda la cantidad
+        if self.all_product:
             self.product_id.categ_id = outlet_categ_id
             new_product = self.product_id
 
-        # Alguna cantidad se mantiene en stock.
         else:
+            if self.state == 'first':
+                self.state = 'last'
+                return {
+                    'type': 'ir.actions.act_window',
+                    'res_model': 'product.outlet.wizard',
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'res_id': self.id,
+                    'views': [(False, 'form')],
+                    'target': 'new',
+                }
+            if self.qty > self.product_id.qty_available:
+                raise exceptions.except_orm(
+                    _('Quantity error'),
+                    _('the amount entered is greater than the quantity available.'))
+            if self.product_id.categ_id == outlet_categ_id or \
+                    self.product_id.categ_id.parent_id == outlet_categ_id:
+                raise exceptions.except_orm(
+                    _('product error'),
+                    _('This product is in outlet category.'))
+
             # crear nuevo producto
-            if not self.product_id.outlet_product_id:
+            outlet_product = self.env['product.product'].search(
+                [('normal_product_id', '=', self.product_id.id),
+                 ('categ_id', '=', int(self.categ_id))])
+            if not outlet_product:
                 new_product = self.product_id.copy(
-                    {'categ_id': outlet_categ_id.id,
-                     'name': self.product_id.name + u' Outlet',
+                    {'categ_id': int(self.categ_id),
+                     'name': self.product_id.name + u' ' +
+                        categ_obj.browse(int(self.categ_id)).name,
                      'image_medium': self.product_id.image_medium})
-                self.product_id.outlet_product_id = new_product.id
+                new_product.normal_product_id = self.product_id
             else:
-                new_product = self.product_id.outlet_product_id
+                new_product = outlet_product
+
         stock_change_qty_obj.create(
             {'product_id': self.product_id.id,
              'new_quantity': self.product_id.qty_available - self.qty,

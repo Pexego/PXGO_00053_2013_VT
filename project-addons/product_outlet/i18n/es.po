@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0rc1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-26 09:11+0000\n"
-"PO-Revision-Date: 2014-08-26 09:11+0000\n"
+"POT-Creation-Date: 2014-10-10 09:25+0000\n"
+"PO-Revision-Date: 2014-10-10 09:25+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,15 +21,65 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: product_outlet
+#: field:product.outlet.wizard,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: product_outlet
+#: field:product.outlet.wizard,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: product_outlet
+#: selection:product.outlet.wizard,state:0
+msgid "First"
+msgstr "First"
+
+#. module: product_outlet
+#: field:product.outlet.wizard,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: product_outlet
+#: selection:product.outlet.wizard,state:0
+msgid "Last"
+msgstr "Last"
+
+#. module: product_outlet
+#: field:product.outlet.wizard,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: product_outlet
+#: field:product.outlet.wizard,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: product_outlet
+#: field:product.outlet.wizard,all_product:0
+msgid "Move all to outlet."
+msgstr "Mover todo el stock a outlet."
+
+#. module: product_outlet
+#: model:product.category,name:product_outlet.product_category_o1
+msgid "O1"
+msgstr "O1"
+
+#. module: product_outlet
+#: model:product.category,name:product_outlet.product_category_o2
+msgid "O2"
+msgstr "O2"
+
+#. module: product_outlet
 #: model:product.category,name:product_outlet.product_category_outlet
 #: model:stock.location,name:product_outlet.stock_location_outlet
 msgid "Outlet"
 msgstr "Outlet"
 
 #. module: product_outlet
-#: field:product.product,outlet_product_id:0
-msgid "Outlet product"
-msgstr "Producto outlet"
+#: field:product.product,outlet_product_ids:0
+msgid "Outlet products"
+msgstr "Productos outlet"
 
 #. module: product_outlet
 #: model:ir.model,name:product_outlet.model_product_product
@@ -38,17 +88,12 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: product_outlet
-#: model:ir.model,name:product_outlet.model_product_template
-msgid "Product Template"
-msgstr "Plantilla de producto"
-
-#. module: product_outlet
 #: field:product.outlet.wizard,qty:0
 msgid "Quantity"
 msgstr "Cantidad"
 
 #. module: product_outlet
-#: code:addons/product_outlet/wizard/product_outlet_wizard.py:45
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:77
 #, python-format
 msgid "Quantity error"
 msgstr "Error de cantidad"
@@ -69,19 +114,34 @@ msgid "Send to outlet"
 msgstr "Enviar a outlet"
 
 #. module: product_outlet
-#: code:addons/product_outlet/wizard/product_outlet_wizard.py:51
+#: field:product.outlet.wizard,state:0
+msgid "State"
+msgstr "State"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:83
 #, python-format
 msgid "This product is in outlet category."
 msgstr "Este producto está en la categoría outlet."
 
 #. module: product_outlet
-#: code:addons/product_outlet/wizard/product_outlet_wizard.py:50
+#: field:product.outlet.wizard,categ_id:0
+msgid "category"
+msgstr "Categoría"
+
+#. module: product_outlet
+#: field:product.product,normal_product_id:0
+msgid "normal product"
+msgstr "normal product"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:82
 #, python-format
 msgid "product error"
 msgstr "Error de producto"
 
 #. module: product_outlet
-#: code:addons/product_outlet/wizard/product_outlet_wizard.py:46
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:78
 #, python-format
 msgid "the amount entered is greater than the quantity available."
 msgstr "La cantidad introducida es mayor que la cantidad disponible."

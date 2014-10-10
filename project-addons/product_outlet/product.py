@@ -20,7 +20,6 @@
 ##############################################################################
 
 from openerp import fields, models, api
-import openerp.addons.decimal_precision as dp
 
 
 class product_product(models.Model):
@@ -28,11 +27,16 @@ class product_product(models.Model):
     _inherit = 'product.product'
 
     is_outlet = fields.Boolean('Is outlet', compute='_is_outlet')
-    outlet_product_id = fields.Many2one('product.product', 'Outlet product')
+    normal_product_id = fields.Many2one('product.product', 'normal product')
+    outlet_product_ids = fields.One2many('product.product',
+                                         'normal_product_id',
+                                         'Outlet products')
 
     @api.one
     def _is_outlet(self):
-        if self.categ_id == self.env.ref('product_outlet.product_category_outlet'):
+        outlet_cat = self.env.ref('product_outlet.product_category_outlet')
+        if self.categ_id == outlet_cat or \
+                self.categ_id.parent_id == outlet_cat:
             self.is_outlet = True
         else:
             self.is_outlet = False
