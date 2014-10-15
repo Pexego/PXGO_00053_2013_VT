@@ -55,10 +55,12 @@ class product_outlet_wizard(models.TransientModel):
         outlet_location = self.env.ref('product_outlet.stock_location_outlet')
         stock_change_qty_obj = self.env['stock.change.product.qty']
         categ_obj = self.env['product.category']
+        outlet_tag = self.env.ref('product_outlet.tag_outlet')
         # mover toda la cantidad
         if self.all_product:
             self.product_id.categ_id = outlet_categ_id
             new_product = self.product_id
+            new_product.write({'tag_ids': [(4,outlet_tag.id)]})
 
         else:
             if self.state == 'first':
@@ -92,6 +94,13 @@ class product_outlet_wizard(models.TransientModel):
                      'name': self.product_id.name + u' ' +
                         categ_obj.browse(int(self.categ_id)).name,
                      'image_medium': self.product_id.image_medium})
+                categ = self.env['product.category'].browse(int(self.categ_id))
+                tag = self.env['product.tag'].search([('name', '=', categ.name)])
+                if not tag:
+                    outlet_tag = self.env.ref('product_outlet.tag_outlet')
+                    tag = self.env['product.tag'].create(
+                        {'name': categ.name, 'parent_id': outlet_tag.id})
+                new_product.write({'tag_ids': [(4,tag.id)]})
                 new_product.normal_product_id = self.product_id
             else:
                 new_product = outlet_product

@@ -28,7 +28,8 @@
     'website': 'www.pexego.es',
     "depends": ['base',
                 'product',
-                'stock'],
+                'stock',
+                'equivalent_products'],
     "data": ['data/product_data.xml',
              'wizard/product_outlet_wizard_view.xml'],
     "installable": True

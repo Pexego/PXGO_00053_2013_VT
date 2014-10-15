@@ -16,7 +16,7 @@
                     </group>
                     <group states="last">
                         <field name="qty"/>
-                        <field name="categ_id"/>
+                        <field name="categ_id" attrs="{'required': [('state', '=', 'last')]}"/>
                     </group>
                     <footer>
                         <button string="Send outlet" name="make_move" type="object" icon="gtk-ok"/>
