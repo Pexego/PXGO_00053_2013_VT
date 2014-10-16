@@ -71,14 +71,18 @@ class create_picking_move(models.TransientModel):
         context = self.env.context
         if not context.get('active_ids', False):
             return
-
+        type_ids = self.env['stock.picking.type'].search([('code', '=', 'incoming')])
+        if not type_ids:
+            raise exceptions.except_orm(_('Picking error'), _('Type not found'))
+        type_id = type_ids[0]
         picking_types = {}
         all_moves = []
         partner_id = self.move_detail_ids[0].move_id.partner_id.id
         same_partner = True
         # se recorren los movimientos para agruparlos por tipo
         for move in self.move_detail_ids:
-
+            if not move.move_id.picking_type_id:
+                move.move_id.picking_type_id = type_id
             if partner_id != move.move_id.partner_id.id:
                 same_partner = False
             if move.move_id.picking_type_id.id not in picking_types.keys():
@@ -105,11 +109,15 @@ class create_picking_move(models.TransientModel):
                 'partner_id': partner_id,
                 'picking_type_id': pick_type,
                 'move_lines': [(6, 0, [x.id for x in moves_type])],
-                'origin': ''.join([x.purchase_line_id.order_id.name + ", "
-                           for x in moves_type]),
+                'origin': '',
                 'min_date': self.date_picking
             }
-            picking_vals['origin'] = picking_vals['origin'][:-2]
+
+            for move in moves_type:
+                if move.purchase_line_id:
+                    picking_vals['origin'] += move.purchase_line_id.order_id.name + ", "
+            if picking_vals['origin']:
+                picking_vals['origin'] = picking_vals['origin'][:-2]
             picking_ids.append(self.env['stock.picking'].create(picking_vals))
         # TODO: Se vuelven a buscar todos los movimientos para tener un
         #       recordset y poder llamar a las funciones, tal vez se pueda
