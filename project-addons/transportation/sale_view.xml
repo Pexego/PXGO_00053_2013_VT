@@ -7,12 +7,9 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <field name="pricelist_id" position="after">
-                    <field name="transporter_id"/>
+                    <field name="transporter_id" attrs="{'readonly': [('state', 'not in', ['draft', 'sent', 'reserve'])]}"/>
                     <field name="service_id"/>
                 </field>
-                <button name="action_button_confirm" position="after">
-                    <button name="assign_transporter" type="object" string="assign transporter"/>
-                </button>
             </field>
         </record>
     </data>

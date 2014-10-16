@@ -23,7 +23,10 @@
     'name': "Transportation",
     'version': '1.0',
     'category': 'sale',
-    'description': """module for manage the transportation.""",
+    'description':
+    """
+        Gestión de transportistas y rotación.
+    """,
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
     "depends": ['base',

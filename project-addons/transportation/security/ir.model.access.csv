@@ -2,3 +2,5 @@ id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_transportation_transporter,access_transportation_transporter,model_transportation_transporter,base.group_user,1,1,1,1
 access_transportation_service,access_transportation_service,model_transportation_service,base.group_user,1,1,1,1
 access_area_transportist_rel,access_area_transportist_rel,model_area_transportist_rel,base.group_user,1,1,1,1
+access_transportation_daily,access_transportation_daily,model_transportation_daily,base.group_user,1,1,1,1
+access_assignation_counter,access_assignation_counter,model_assignation_counter,base.group_user,1,1,1,1

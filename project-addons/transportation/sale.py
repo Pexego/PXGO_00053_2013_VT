@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp import models, fields, api
+from datetime import date
 
 
 class sale_order(models.Model):
@@ -45,27 +46,29 @@ class sale_order(models.Model):
     @api.onchange('transporter_id')
     def onchange_transporter_id(self):
         service_ids = [x.id for x in self.transporter_id.service_ids]
-        if self.service_id.id not in service_ids:
-            self.service_id = False
-        return {'domain': {'service_id': [('id', 'in', service_ids)]}}
+        if service_ids:
+            if self.service_id.id not in service_ids:
+                self.service_id = False
+            import ipdb; ipdb.set_trace()
+            return {'domain': {'service_id': [('id', 'in', service_ids)]}}
+        all_services  = [x.id for x in self.env['transportation.service'].search([])]
+        return {'domain': {'service_id': [('id', 'in', all_services)]}}
 
-    @api.one
-    def write(self, vals):
-        super(sale_order, self).write(vals)
-        if self.transporter_id and vals.get('transporter_id', False):
-            assigned = self.env['transport.assigned'].search([('sale_id', '=', self.id)])
-            if not assigned:
-                create_vals = {
-                    'date': fields.Date.today(),
-                    'area_id': self.partner_id.area_id.id,
-                    'transporter_id': self.transporter_id.id,
-                    'sale_id': self.id,
-                }
-                assigned = self.env['transport.assigned'].create(create_vals)
-            else:
-                assigned.write({'date': fields.Date.today(), 'transporter_id': self.transporter_id.id})
+    @api.multi
+    def action_wait(self):
+        super(sale_order, self).action_wait()
+        daily_obj = self.env['transportation.daily']
+        trans_daily = daily_obj.search([('date', '=', date.today()), ('area_id', '=', self.partner_id.area_id.id)])
+        if trans_daily:
+            trans_daily = trans_daily[0]
+        else:
+            trans_daily = daily_obj.create({'date': date.today(), 'area_id': self.partner_id.area_id.id})
+
+        if self.transporter_id:
+            trans_daily.assign_transporter(self.transporter_id)
+        else:
+            transporter = trans_daily.get_transporter(self.partner_id)
+            self.transporter_id = transporter
+            trans_daily.assign_transporter(transporter)
         return True
 
-    @api.one
-    def assign_transporter(self):
-        self.transporter_id = self.env['transport.assigned'].get_transporter(self.partner_id)

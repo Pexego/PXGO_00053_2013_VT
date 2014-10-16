@@ -35,12 +35,12 @@
                         <field name="transporter_rotation_ids">
                             <tree>
                                 <field name="transporter_id"/>
-                                <field name="percentage_shipping"/>
+                                <field name="ratio_shipping"/>
                             </tree>
                             <form>
                                 <group>
                                     <field name="transporter_id"/>
-                                    <field name="percentage_shipping"/>
+                                    <field name="ratio_shipping"/>
                                 </group>
                             </form>
                         </field>

@@ -59,20 +59,15 @@ class res_partner_area(models.Model):
 
     @api.onchange('transporter_rotation_ids')
     def onchange_transporter_rotation(self):
-        total_percentage = sum([x.percentage_shipping
-                                for x in self.transporter_rotation_ids])
-        if total_percentage > 100:
-            raise exceptions.except_orm(
-                _('Value error'),
-                _('The total of percentages in rotation exceeds the 100%'))
+        for rot in self.transporter_rotation_ids:
+            if rot.ratio_shipping == 0:
+                raise exceptions.except_orm(
+                    _('Value error'), _('the ratio can not be 0'))
 
     @api.one
     def write(self, values):
         super(res_partner_area, self).write(values)
-
-        total_percentage = sum([x.percentage_shipping
-                                for x in self.transporter_rotation_ids])
-        if total_percentage > 100:
-            raise exceptions.except_orm(
-                _('Value error'),
-                _('The total of percentages in rotation exceeds the 100%'))
+        for rot in self.transporter_rotation_ids:
+            if rot.ratio_shipping == 0:
+                raise exceptions.except_orm(
+                    _('Value error'), _('the ratio can not be 0'))

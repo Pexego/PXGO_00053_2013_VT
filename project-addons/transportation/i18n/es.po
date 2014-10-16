@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0rc1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-08-13 10:09+0000\n"
-"PO-Revision-Date: 2014-08-13 10:09+0000\n"
+"POT-Creation-Date: 2014-10-16 17:52+0000\n"
+"PO-Revision-Date: 2014-10-16 17:52+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,14 +16,75 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: transportation
+#: field:area.transportist.rel,area_id:0
+#: field:transportation.daily,area_id:0
+msgid "Area"
+msgstr "Area"
+
+#. module: transportation
+#: field:transportation.daily,assignations:0
+msgid "Assignations"
+msgstr "Assignations"
+
+#. module: transportation
 #: model:ir.model,name:transportation.model_res_country
 msgid "Country"
 msgstr "País"
 
 #. module: transportation
+#: field:area.transportist.rel,create_uid:0
+#: field:assignation.counter,create_uid:0
+#: field:transportation.daily,create_uid:0
+#: field:transportation.service,create_uid:0
+#: field:transportation.transporter,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: transportation
+#: field:area.transportist.rel,create_date:0
+#: field:assignation.counter,create_date:0
+#: field:transportation.daily,create_date:0
+#: field:transportation.service,create_date:0
+#: field:transportation.transporter,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: transportation
+#: field:transportation.daily,date:0
+msgid "Date"
+msgstr "Date"
+
+#. module: transportation
 #: field:res.country,default_transporter:0
 msgid "Default transporter"
 msgstr "Transportista por defecto"
+
+#. module: transportation
+#: field:area.transportist.rel,id:0
+#: field:assignation.counter,id:0
+#: field:transportation.daily,id:0
+#: field:transportation.service,id:0
+#: field:transportation.transporter,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: transportation
+#: field:area.transportist.rel,write_uid:0
+#: field:assignation.counter,write_uid:0
+#: field:transportation.daily,write_uid:0
+#: field:transportation.service,write_uid:0
+#: field:transportation.transporter,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: transportation
+#: field:area.transportist.rel,write_date:0
+#: field:assignation.counter,write_date:0
+#: field:transportation.daily,write_date:0
+#: field:transportation.service,write_date:0
+#: field:transportation.transporter,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
 
 #. module: transportation
 #: field:transportation.service,name:0
@@ -38,12 +99,32 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: transportation
+#: field:assignation.counter,quantity:0
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: transportation
+#: field:assignation.counter,ratio:0
+msgid "Ratio"
+msgstr "Ratio"
+
+#. module: transportation
+#: field:res.partner.area,transporter_rotation_ids:0
+msgid "Rotation"
+msgstr "Rotación"
+
+#. module: transportation
+#: field:assignation.counter,rot_counter:0
+msgid "Rotation counter"
+msgstr "Rotation counter"
+
+#. module: transportation
 #: model:ir.model,name:transportation.model_sale_order
 msgid "Sales Order"
 msgstr "Pedido de venta"
 
 #. module: transportation
-#: view:transportation.transporter:0
+#: view:transportation.transporter:transportation.transporter_form
 msgid "Service"
 msgstr "Servicio"
 
@@ -66,33 +147,52 @@ msgstr "Transporte"
 #. module: transportation
 #: model:ir.actions.act_window,name:transportation.action_transportation_service
 #: model:ir.ui.menu,name:transportation.menu_transportation_service_sale
-#: view:transportation.service:0
+#: view:transportation.service:transportation.transportation_service_filter
+#: view:transportation.service:transportation.transportation_service_form
+#: view:transportation.service:transportation.transportation_service_tree
 msgid "Transportation services"
 msgstr "Servicios de transporte"
 
 #. module: transportation
+#: field:area.transportist.rel,transporter_id:0
+#: field:assignation.counter,transporter:0
 #: model:ir.actions.act_window,name:transportation.action_transporter
 #: model:ir.ui.menu,name:transportation.menu_transporter_sale
-#: view:transportation.service:0
-#: view:transportation.transporter:0
+#: view:transportation.service:transportation.transportation_service_form
+#: view:transportation.transporter:transportation.transporter_filter
+#: view:transportation.transporter:transportation.transporter_form
 msgid "Transporter"
 msgstr "Transportista"
 
 #. module: transportation
 #: field:transportation.service,transporter_ids:0
-#: view:transportation.transporter:0
+#: view:transportation.transporter:transportation.transporter_tree
 msgid "Transporters"
 msgstr "Transportistas"
 
 #. module: transportation
-#: model:ir.model,name:transportation.model_transportation_service
-msgid "transportation.service"
-msgstr "transportation.service"
+#: code:addons/transportation/res_partner.py:65
+#: code:addons/transportation/res_partner.py:73
+#, python-format
+msgid "Value error"
+msgstr "Value error"
 
 #. module: transportation
-#: model:ir.model,name:transportation.model_transportation_transporter
-msgid "transportation.transporter"
-msgstr "transportation.transporter"
+#: field:assignation.counter,daily_assigned:0
+msgid "daily"
+msgstr "daily"
+
+#. module: transportation
+#: field:area.transportist.rel,ratio_shipping:0
+msgid "ratio"
+msgstr "ratio"
+
+#. module: transportation
+#: code:addons/transportation/res_partner.py:65
+#: code:addons/transportation/res_partner.py:73
+#, python-format
+msgid "the ratio can not be 0"
+msgstr "el ratio no puede ser 0"
 
 #. module: transportation
 #: field:res.partner,transporter_id:0

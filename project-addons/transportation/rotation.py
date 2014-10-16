@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, exceptions, _
+import math
 
 
 class area_transportist_rel(models.Model):
@@ -31,28 +32,67 @@ class area_transportist_rel(models.Model):
     transporter_id = fields.Many2one('transportation.transporter',
                                      'Transporter')
 
-    percentage_shipping = fields.Float('Percentage')
+    ratio_shipping = fields.Float('ratio')
 
 
-class transport_assigned(models.Model):
+class transportation_daily(models.Model):
 
-    _name = "transport.assigned"
+    _name = "transportation.daily"
 
     date = fields.Date('Date')
     area_id = fields.Many2one('res.partner.area', 'Area')
-    transporter_id = fields.Many2one('transportation.transporter', 'Transporter')
-    sale_id = fields.Many2one('sale.order', 'Sale')
+    assignations = fields.One2many('assignation.counter', 'daily_assigned', 'Assignations')
+
+    def create(self, vals):
+        counter_obj =  self.env['assignation.counter']
+        obj = super(transportation_daily, self).create(vals)
+        for transporter in obj.area_id.transporter_rotation_ids:
+            counter_vals = {
+                'transporter': transporter.transporter_id.id,
+                'ratio': transporter.ratio_shipping,
+                'daily_assigned': obj.id,
+            }
+            counter_obj.create(counter_vals)
+        return obj
 
     @api.returns('transportation.transporter')
     def get_transporter(self, partner):
         """
-            Not need to be called from recordset
             Returns the transporter recomended for this area.
         """
-        all_assignments = self.search([('area_id', '=', partner.area_id.id),
-                                       ('date', '=', fields.Date.today())])
+        counter_obj =  self.env['assignation.counter']
 
-        return self.env['transportation.transporter'].search([])[0]
+        if partner.transporter_id:
+            return partner.transporter_id
+        if self.assignations:
+            return self.assignations[0].transporter
 
+    @api.one
+    def assign_transporter(self, transporter):
+        # se aumenta el contador del nuevo partner
+        counter = self.env['assignation.counter'].search(
+            [('daily_assigned', '=', self.id),
+             ('transporter', '=', transporter.id)])
+        if counter:
+            counter[0].quantity += 1
+
+class assignation_counter(models.Model):
+
+    _name = 'assignation.counter'
+    _order = 'rot_counter, ratio desc'
+
+    daily_assigned = fields.Many2one('transportation.daily', 'daily')
+    transporter = fields.Many2one('transportation.transporter', 'Transporter')
+    quantity = fields.Float('Quantity', default=0)
+    ratio = fields.Integer('Ratio')
+    rot_counter = fields.Integer('Rotation counter', compute='_get_rot_counter', store=True)
+
+    @api.one
+    @api.depends('quantity', 'ratio')
+    def _get_rot_counter(self):
+        if self.ratio:
+            self.rot_counter = int(math.floor(self.quantity / self.ratio))
+        else:
+            self.rot_counter = 0
 
 
