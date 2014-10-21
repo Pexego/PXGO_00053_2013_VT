@@ -8,10 +8,23 @@
             <field name="inherit_id" ref="stock.view_move_search"/>
             <field name="arch" type="xml">
                 <filter name="ready" position="before">
-                    <filter name="new" domain="[('state', '=', 'draft')]"/>
+                    <filter name="New" domain="[('state', '=', 'draft')]"/>
                 </filter>
             </field>
         </record>
+
+
+        <record id="stock_move_tree_add_date_expected" model="ir.ui.view">
+            <field name="name">stock.move.search.add.new.state</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_tree_receipt_picking"/>
+            <field name="arch" type="xml">
+                <field name="date" position="after">
+                    <field name="date_expected" widget="date"/>
+                </field>
+            </field>
+        </record>
+
 
         <record id="stock_picking_supplier_add_shipping_id" model="ir.ui.view">
             <field name="name">stock.picking.add</field>
