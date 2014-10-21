@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api, _
 
 
 class purchase_order(models.Model):
@@ -93,3 +93,26 @@ class purchase_order(models.Model):
 
         # todo_moves = stock_move.action_confirm(cr, uid, todo_moves)
         # stock_move.force_assign(cr, uid, todo_moves)
+
+
+
+class purchase_order_line(models.Model):
+
+    _inherit = 'purchase.order.line'
+
+    @api.one
+    def write(self, vals):
+        if 'date_planned' in vals.keys():
+            reservations = self.env['stock.reservation'].search(
+                [('product_id', '=', self.product_id.id),
+                 ('state', '=', 'confirmed')])
+            for reservation in reservations:
+                reservation.date_planned = self.date_planned
+                if not reservation.sale_id:
+                    continue
+                sale = reservation.sale_id
+                followers = sale.message_follower_ids
+                sale.message_post(body=_("The date planned was changed."),
+                                  subtype='mt_comment',
+                                  partner_ids=followers)
+        return super(purchase_order_line, self).write(vals)
