@@ -32,7 +32,7 @@ class area_transportist_rel(models.Model):
     transporter_id = fields.Many2one('transportation.transporter',
                                      'Transporter')
 
-    ratio_shipping = fields.Float('ratio')
+    ratio_shipping = fields.Integer('ratio')
 
 
 class transportation_daily(models.Model):

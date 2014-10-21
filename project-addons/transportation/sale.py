@@ -68,7 +68,8 @@ class sale_order(models.Model):
             trans_daily.assign_transporter(self.transporter_id)
         else:
             transporter = trans_daily.get_transporter(self.partner_id)
-            self.transporter_id = transporter
-            trans_daily.assign_transporter(transporter)
+            if transporter:
+                self.transporter_id = transporter
+                trans_daily.assign_transporter(transporter)
         return True
 
