@@ -49,7 +49,7 @@ class sale_order(models.Model):
         if service_ids:
             if self.service_id.id not in service_ids:
                 self.service_id = False
-            import ipdb; ipdb.set_trace()
+
             return {'domain': {'service_id': [('id', 'in', service_ids)]}}
         all_services  = [x.id for x in self.env['transportation.service'].search([])]
         return {'domain': {'service_id': [('id', 'in', all_services)]}}
