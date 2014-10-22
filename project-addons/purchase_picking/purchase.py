@@ -116,3 +116,21 @@ class purchase_order_line(models.Model):
                                   subtype='mt_comment',
                                   partner_ids=followers)
         return super(purchase_order_line, self).write(vals)
+
+    @api.model
+    def create(self, vals):
+        res = super(purchase_order_line, self).create(vals)
+        if 'date_planned' in vals.keys():
+            reservations = self.env['stock.reservation'].search(
+                [('product_id', '=', res.product_id.id),
+                 ('state', '=', 'confirmed')])
+            for reservation in reservations:
+                reservation.date_planned = res.date_planned
+                if not reservation.sale_id:
+                    continue
+                sale = reservation.sale_id
+                followers = sale.message_follower_ids
+                sale.message_post(body=_("The date planned was changed."),
+                                  subtype='mt_comment',
+                                  partner_ids=followers)
+        return res
