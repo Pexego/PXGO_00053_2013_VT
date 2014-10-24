@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
 
 
 class stock_picking(models.Model):
@@ -43,20 +43,69 @@ class stock_move(models.Model):
 
     @api.one
     def write(self, vals):
+        res = super (stock_move, self).write(vals)
         if self.picking_type_id.code == 'incoming':
             if 'date_expected' in vals.keys():
-                reservations = self.env['stock.reservation'].search(
-                    [('product_id', '=', self.product_id.id),
-                     ('state', '=', 'confirmed')])
-                # no se necesita hacer browse.
-                # reservations = self.env['stock.reservation'].browse(reservation_ids)
-                for reservation in reservations:
-                    reservation.date_planned = self.date_expected
-                    if not reservation.sale_id:
-                        continue
-                    sale = reservation.sale_id
-                    followers = sale.message_follower_ids
-                    sale.message_post(body="The date planned was changed.",
-                                      subtype='mt_comment',
-                                      partner_ids=followers)
-        return super(stock_move, self).write(vals)
+                self.env['stock.reservation'].reassign_reservation_dates(self.product_id)
+        return res
+
+    @api.model
+    def create(self, vals):
+        res = super(stock_move, self).create(vals)
+        if 'picking_type_id' in vals.keys() and res.picking_type_id.code == 'incoming':
+            if 'date_expected' in vals.keys():
+                self.env['stock.reservation'].reassign_reservation_dates(res.product_id)
+        return res
+
+
+class stock_reservation(models.Model):
+    _inherit = 'stock.reservation'
+
+    @api.model
+    def reassign_reservation_dates(self, product_id):
+        uom_obj = self.env['product.uom']
+        product_uom = product_id.uom_id
+        reservations = self.search(
+            [('product_id', '=', product_id.id),
+             ('state', '=', 'confirmed')])
+        moves = self.env['stock.move'].search(
+            [('product_id', '=', product_id.id),
+             ('state', '=', 'draft'),
+             ('picking_type_id.code', '=', u'incoming')],
+             order='date_expected')
+        reservation_index = 0
+
+        reservation_used = 0
+        for move in moves:
+            qty_used = 0
+            product_uom_qty = uom_obj._compute_qty_obj(move.product_uom, move.product_uom_qty, product_uom)
+            while qty_used < product_uom_qty and reservation_index < len(reservations):
+                reservation = reservations[reservation_index]
+                reservation_qty = reservation.product_uom_qty - reservation.reserved_availability
+                reservation_qty = uom_obj._compute_qty_obj(reservation.product_uom, reservation_qty, product_uom)
+                if reservation_qty - reservation_used <= product_uom_qty - qty_used:
+                    reservation.date_planned = move.date_expected
+                    reservation_index += 1
+                    if reservation.sale_id:
+                        sale = reservation.sale_id
+                        followers = sale.message_follower_ids
+                        sale.message_post(body=_("The date planned of the reservation was changed."),
+                                          subtype='mt_comment',
+                                          partner_ids=followers)
+                else:
+                    reservation_used += product_uom_qty - qty_used
+                    break
+                qty_used += reservation_qty - reservation_used
+                reservation_used = 0
+        while reservation_index < len(reservations):
+            reservations[reservation_index].date_planned = False
+            reservation_index += 1
+
+    @api.multi
+    def reassign(self):
+        context = dict(self.env.context)
+        context.pop('first', False)
+        res = super(stock_reservation, self).reassign()
+        for reservation in self:
+            self.with_context(context).reassign_reservation_dates(reservation.product_id)
+        return res
