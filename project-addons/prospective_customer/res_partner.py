@@ -31,36 +31,4 @@ class res_partner(orm.Model):
         'prospective': fields.boolean('Prospective'),
         }
 
-    def name_search(self, cr, uid, name, args=None, operator='ilike',
-                    context=None, limit=100):
-        res = super(res_partner,self).name_search(cr, uid, name, args,
-                                                  operator, context, limit)
-        if context.get('show_prospective', False):
-            context.pop('show_prospective', None)
-            if not args:
-                args = []
-            args.append(('prospective', '=', True))
-            args.append(('active', '=' , False))
-            ids = self.pool.get('res.partner').search(cr, uid, args, context=context)
-            names = self.name_get(cr, uid, ids, context)
-            res += names
-            if len(res) > limit:
-                res = res[:limit]
-        return res
-
-    def search(self, cr, user, args, offset=0, limit=None, order=None, context=None, count=False):
-        res = super(res_partner,self).search(cr, user, args, offset, limit, order, context, count)
-        if context is None:
-            context = {}
-        if context.get('show_prospective', False):
-            context2 = dict(context)
-            context2.pop('show_prospective')
-            ids = self.search(cr, user, [('prospective', '=', 1), ('active', '=', 0)], offset, limit, order, context2, count)
-            res += ids
-            if count:
-                res += len(ids)
-            if limit and len(res) > limit:
-                res = res[:limit]
-        return res
-
 

@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
             <field name="arch" type="xml">
                 <field name="partner_ids" position="attributes">
-                    <attribute name="context">{'force_email':True, 'show_prospective':1}</attribute>
+                    <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
             </field>
         </record>

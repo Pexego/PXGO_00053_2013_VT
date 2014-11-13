@@ -8,11 +8,22 @@
             <field name="inherit_id" ref="crm.crm_case_phone_form_view"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
-                    <attribute name="context">{'show_prospective':1}</attribute>
+                    <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
             </field>
         </record>
 
+
+        <record id="crm_phonecall_add_prospective_customer_tree" model="ir.ui.view">
+            <field name="name">crm.phonecall.tree</field>
+            <field name="model">crm.phonecall</field>
+            <field name="inherit_id" ref="crm.crm_case_inbound_phone_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
+                </field>
+            </field>
+        </record>
 
         <record id="crm_lead_add_prospective_customer_form" model="ir.ui.view">
             <field name="name">crm.lead.add.prospective.customer.form</field>
@@ -20,7 +31,7 @@
             <field name="inherit_id" ref="crm.crm_case_form_view_leads"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
-                    <attribute name="context">{'default_name': contact_name, 'default_street': street, 'default_city': city, 'default_state_id': state_id, 'default_zip': zip, 'default_country_id': country_id, 'default_function': function, 'default_phone': phone, 'default_mobile': mobile, 'default_fax': fax, 'default_email': email_from, 'default_user_id': user_id, 'default_section_id': section_id, 'show_prospective':1}</attribute>
+                    <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
             </field>
         </record>
@@ -32,18 +43,7 @@
             <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
-                    <attribute name="context">{'default_name': partner_name, 'default_email': email_from, 'default_phone': phone, 'show_prospective':1}</attribute>
-                </field>
-            </field>
-        </record>
-
-        <record id="crm_phonecall_add_prospective_customer_tree" model="ir.ui.view">
-            <field name="name">crm.phonecall.add.prospective.customer</field>
-            <field name="model">crm.phonecall</field>
-            <field name="inherit_id" ref="crm.crm_case_inbound_phone_tree_view"/>
-            <field name="arch" type="xml">
-                <field name="partner_id" position="attributes">
-                    <attribute name="context">{'show_prospective':1}</attribute>
+                    <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
             </field>
         </record>
@@ -56,7 +56,7 @@
             <field name="inherit_id" ref="crm.view_crm_lead2opportunity_partner"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
-                    <attribute name="context">{'show_prospective':1}</attribute>
+                    <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
             </field>
         </record>
@@ -67,7 +67,7 @@
             <field name="inherit_id" ref="sale_crm.view_crm_make_sale"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
-                    <field name="partner_id" required="1" context="{'show_prospective':1}"/>
+                    <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
             </field>
         </record>
