@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="stock_reservation_add_mrp" model="ir.ui.view">
+            <field name="name">stock.reservation.form</field>
+            <field name="model">stock.reservation</field>
+            <field name="inherit_id" ref="stock_reserve_sale.view_stock_reservation_form"/>
+            <field name="arch" type="xml">
+                <group name="sale" position="inside">
+                    <field name="mrp_id"/>
+                </group>
+            </field>
+        </record>
+
+    </data>
+</openerp>

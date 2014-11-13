@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    Copyright (C) 2014 Pexego All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,18 +20,15 @@
 ##############################################################################
 
 {
-    'name': "Relation between nan_partner_risk and sale_reserve module",
+    'name': "Product mount",
     'version': '1.0',
     'category': 'sale',
-    'description': """Add a relationship between partner_risk and sale_reserve to the sales workflow is not overwritted""",
-    'author': 'Pexego Sistemas Informáticos',
+    'description': """""",
+    'author': 'Pexego',
     'website': 'www.pexego.es',
-    "depends": ['sale',
-                'sale_stock',
-                'nan_partner_risk',
-                'stock_reserve',
+    "depends": ['base', 'sale', 'sale_stock', 'mrp', 'product',
                 'stock_reserve_sale'],
-    "data": ['sale_workflow.xml',
-             'sale_view.xml'],
+    "data": ['view/sale_view.xml', 'view/product_view.xml',
+             'view/stock_reserve_view.xml'],
     "installable": True
 }

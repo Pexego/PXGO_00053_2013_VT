@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    Copyright (C) 2014 Pexego All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,20 +18,23 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, api
 
-{
-    'name': "Relation between nan_partner_risk and sale_reserve module",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Add a relationship between partner_risk and sale_reserve to the sales workflow is not overwritted""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['sale',
-                'sale_stock',
-                'nan_partner_risk',
-                'stock_reserve',
-                'stock_reserve_sale'],
-    "data": ['sale_workflow.xml',
-             'sale_view.xml'],
-    "installable": True
-}
+
+class MrpProduction(models.Model):
+
+    _inherit = 'mrp.production'
+
+    @api.one
+    def action_assign(self):
+        super(MrpProduction, self).action_assign()
+        for move in self.move_lines:
+            if move.state == 'confirmed':
+                reserv_dict = {
+                    'date_validity': False,
+                    'name': u"{} ({})".format(self.name, move.name),
+                    'mrp_id': self.id,
+                    'move_id': move.id
+                }
+                reservation = self.env['stock.reservation'].create(reserv_dict)
+                reservation.reserve()

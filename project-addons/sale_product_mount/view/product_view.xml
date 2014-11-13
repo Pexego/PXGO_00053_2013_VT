@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="product_add_mounted_products" model="ir.ui.view">
+            <field name="name">product.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Can mount products">
+                        <field name="can_mount_ids" nolabel="1" domain="[('sale_ok', '=', True)]"/>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+    </data>
+</openerp>
