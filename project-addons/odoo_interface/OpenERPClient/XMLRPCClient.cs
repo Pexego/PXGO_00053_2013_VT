@@ -1,6 +1,7 @@
 /*
     OpenERP, Open Source Business Applications
     Copyright (c) 2011 OpenERP S.A. <http://openerp.com>
+    Copyright (c) 2014 Pexego. <http://pexego.es>
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as
@@ -23,6 +24,7 @@ using CookComputing.XmlRpc;
 
 namespace OpenERPClient
 {
+	
     public interface IOpenERPCommon : IXmlRpcProxy
     {
         [XmlRpcMethod("login")]
@@ -36,7 +38,7 @@ namespace OpenERPClient
     {
 
 		[XmlRpcMethod("execute")]
-        long Create(string dbName, int userId, string pwd, string model, string method, XmlRpcStruct fieldValues);
+        object Create(string dbName, int userId, string pwd, string model, string method, XmlRpcStruct fieldValues);
 		
 		[XmlRpcMethod("execute")]
         Object[] Search(string dbName, int userId, string pwd, string model, string method, Object[] filters);
@@ -49,6 +51,9 @@ namespace OpenERPClient
 		
 		[XmlRpcMethod("execute")]
         Object[] Read(string dbName, int userId, string pwd, string model, string method, long[] ids, string[] fieldNames);
+		
+		[XmlRpcMethod("execute")]
+        Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids);
 
     }
 	
@@ -74,7 +79,7 @@ namespace OpenERPClient
 			return rpcclient.Logout(dbname, username, pwd);
 		}
 		
-		public long Create(string dbName, int userId, string pwd, string model, string method, XmlRpcStruct fieldValues)
+		public object Create(string dbName, int userId, string pwd, string model, string method, XmlRpcStruct fieldValues)
 		{
 			return rpcclient.Create(dbName, userId, pwd, model, method, fieldValues);
 		}
@@ -97,6 +102,11 @@ namespace OpenERPClient
 		public Object[] Read(string dbName, int userId, string pwd, string model, string method, long[] ids, string[] fieldNames)
 		{
 			return rpcclient.Read(dbName, userId, pwd, model, method, ids, fieldNames);
+		}
+		
+		public Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids)
+		{
+			return rpcclient.Execute(dbName, userId, pwd, model, method, ids);
 		}
 		
 		#region NotImplemanted
