@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="mrp.view_mrp_product_produce_wizard"/>
             <field name="arch" type="xml">
                 <field name="lot_id" position="before">
-                    <field name="final_lot" invisible="0"/>
+                    <field name="final_lot" invisible="1"/>
                 </field>
                 <field name="lot_id" position="attributes">
                     <attribute name="attrs">{'required': [('track_production', '=', True),
@@ -16,7 +16,7 @@
                 </field>
 
                 <xpath expr="//tree/field[@name='lot_id']" position="before">
-                    <field name="final_lot" invisible="0"/>
+                    <field name="final_lot" invisible="1"/>
                 </xpath>
                 <xpath expr="//tree/field[@name='lot_id']" position="attributes">
                     <attribute name="attrs">{'required': [('final_lot', '=', True)]}</attribute>
@@ -30,7 +30,7 @@
             <field name="inherit_id" ref="mrp.view_stock_move_consume_wizard"/>
             <field name="arch" type="xml">
                 <field name="restrict_lot_id" position="before">
-                    <field name="final_lot" invisible="0"/>
+                    <field name="final_lot" invisible="1"/>
                 </field>
                 <field name="restrict_lot_id" position="attributes">
                     <attribute name="attrs">{'required': [('final_lot', '=', True)]}</attribute>
