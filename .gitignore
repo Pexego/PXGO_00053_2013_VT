@@ -20,3 +20,5 @@ upgrade.py
 atlassian-ide-plugin.xml
 *~
 devel_*
+*.pidb
+*.userprefs
