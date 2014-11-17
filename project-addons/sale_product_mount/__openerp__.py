@@ -29,6 +29,7 @@
     "depends": ['base', 'sale', 'sale_stock', 'mrp', 'product',
                 'stock_reserve_sale'],
     "data": ['view/sale_view.xml', 'view/product_view.xml',
-             'view/stock_reserve_view.xml'],
+             'view/stock_reserve_view.xml', 'view/mrp_production_view.xml',
+             'wizard/mrp_create_prod_view.xml'],
     "installable": True
 }

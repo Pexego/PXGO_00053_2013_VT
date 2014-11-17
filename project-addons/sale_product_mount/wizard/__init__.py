@@ -19,5 +19,4 @@
 #
 ##############################################################################
 
-from . import model
-from . import wizard
+from . import mrp_create_prod
