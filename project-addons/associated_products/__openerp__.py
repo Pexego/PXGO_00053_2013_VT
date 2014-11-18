@@ -28,7 +28,8 @@
     'website': '',
     "depends" : ["base",
                  "product",
-                 "sale"],
+                 "sale",
+                 "sale_commission"],
     "data" : ["security/ir.model.access.csv",
               "product_view.xml"],
     "installable": True

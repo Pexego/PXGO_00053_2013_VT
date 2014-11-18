@@ -1,0 +1,92 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * commission_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-18 16:25+0000\n"
+"PO-Revision-Date: 2014-11-18 16:25+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+#: field:commission.report,agent_id:0
+msgid "Agent"
+msgstr "Agente"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+#: model:ir.actions.act_window,name:commission_report.action_commission_report_all
+#: model:ir.ui.menu,name:commission_report.menu_action_commission_report_all
+msgid "Commission Analysis"
+msgstr "Analisis de comisiones"
+
+#. module: commission_report
+#: view:commission.report:commission_report.view_commssion_report
+msgid "Commissions Analysis"
+msgstr "Analisis de comisiones"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+msgid "Date"
+msgstr "Fecha"
+
+#. module: commission_report
+#: field:commission.report,inv_date:0
+msgid "Date invoice"
+msgstr "Fecha de factura"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: commission_report
+#: field:commission.report,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+msgid "Journal invoices with period in current year"
+msgstr "Journal invoices with period in current year"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+msgid "Not settled"
+msgstr "No liquidado"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+#: field:commission.report,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: commission_report
+#: field:commission.report,qty:0
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: commission_report
+#: model:ir.model,name:commission_report.model_commission_report
+msgid "Sale commission report"
+msgstr "Sale commission report"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+#: field:commission.report,settled:0
+msgid "Settled"
+msgstr "Liquidado"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+msgid "This Year"
+msgstr "Este año"
+

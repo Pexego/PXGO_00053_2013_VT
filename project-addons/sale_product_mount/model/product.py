@@ -38,3 +38,38 @@ class ProductProduct(models.Model):
         'mounted_product_id',
         'product_id',
         'Mounted in')
+
+    def create_mounted_product(self, mount_product, mounted_product):
+        prod_dict = {
+            'name': mount_product.name + ' - ' +
+            mounted_product.name,
+            'type': 'product',
+            'default_code':
+                mount_product.default_code +
+                mounted_product.default_code,
+            'route_ids':
+                [(6, 0,
+                  [self.env.ref('mrp.route_warehouse0_manufacture').id])],
+            'sale_ok': False,
+            'purchase_ok': False,
+            'state2': 'published',
+            'valuation': 'manual_periodic',
+        }
+        final_prod = self.create(prod_dict)
+
+        bom_list_dict = {
+            'name': final_prod.name,
+            'product_tmpl_id': final_prod.product_tmpl_id.id,
+            'product_id': final_prod.id,
+            'bom_line_ids':
+                [(0, 0,
+                  {'product_id': mount_product.id,
+                   'product_qty': 1,
+                   'final_lot': True}),
+                 (0, 0,
+                  {'product_id': mounted_product.id,
+                   'product_qty': 1,
+                   'final_lot': False})],
+        }
+        self.env['mrp.bom'].create(bom_list_dict)
+        return final_prod

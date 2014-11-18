@@ -125,8 +125,9 @@ class sale_equivalent_products(orm.TransientModel):
         order_line_obj.write(cr, uid,
                              [wiz.line_id.id],
                              {'product_id': wiz.product_id.id}, context)
+        agent_ids = [(6, 0, [x.id]) for x in wiz.line_id.order_id.sale_agent_ids]
         line_vals = \
-            order_line_obj.product_id_change(cr, uid, [wiz.line_id.id],
+            order_line_obj.product_id_change2(cr, uid, [wiz.line_id.id],
                                              wiz.line_id.order_id.pricelist_id.id,
                                              wiz.product_id.id,
                                              wiz.line_id.product_uom_qty,
@@ -139,8 +140,11 @@ class sale_equivalent_products(orm.TransientModel):
                                              wiz.line_id.order_id.date_order,
                                              False,
                                              wiz.line_id.order_id.fiscal_position,
-                                             False, context)
+                                             False,
+                                             agent_ids,
+                                             context)
         line_vals = line_vals['value']
+        line_vals['line_agent_ids'] = [(6, 0, line_vals['line_agent_ids'])]
         order_line_obj.write(cr, uid,
                              [wiz.line_id.id], line_vals, context)
         return {

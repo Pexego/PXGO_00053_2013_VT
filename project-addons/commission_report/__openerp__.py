@@ -19,5 +19,14 @@
 #
 ##############################################################################
 
-from . import model
-from . import wizard
+{
+    'name': "Commission report",
+    'version': '1.0',
+    'category': 'sale',
+    'description': """Adds analysis view for sale commissions""",
+    'author': 'Pexego',
+    'website': 'www.pexego.es',
+    "depends": ['base', 'sale_commission'],
+    "data": ['commission_report_view.xml', 'security/ir.model.access.csv'],
+    "installable": True
+}
