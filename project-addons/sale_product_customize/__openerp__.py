@@ -20,16 +20,20 @@
 ##############################################################################
 
 {
-    'name': "Product mount",
+    'name': "Sale customizations",
     'version': '1.0',
     'category': 'sale',
     'description': """""",
     'author': 'Pexego',
     'website': 'www.pexego.es',
-    "depends": ['base', 'sale', 'sale_stock', 'mrp', 'product',
-                'stock_reserve_sale'],
+    "depends": ['base', 'sale', 'stock', 'sale_stock', 'mrp', 'product',
+                'stock_reserve_sale', 'sale_commission'],
     "data": ['view/sale_view.xml', 'view/product_view.xml',
              'view/stock_reserve_view.xml', 'view/mrp_production_view.xml',
-             'wizard/mrp_create_prod_view.xml'],
+             'wizard/mrp_create_prod_view.xml',
+             'view/mrp_customize.xml',
+             'data/customize_type_data.xml',
+             'wizard/mrp_customization_view.xml',
+            ],
     "installable": True
 }

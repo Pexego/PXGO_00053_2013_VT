@@ -19,4 +19,12 @@
 #
 ##############################################################################
 
-from . import mrp_create_prod
+from openerp import models, fields, api
+
+
+class MrpCustomizeType(models.Model):
+
+    _name = 'mrp.customize.type'
+
+    name = fields.Char('Name', size=64)
+    show = fields.Boolean('Show')
