@@ -28,6 +28,19 @@ class stock_picking(models.Model):
 
     shipping_identifier = fields.Char('Shipping identifier', size=64)
 
+    @api.one
+    def action_done(self):
+        all_purchases = []
+        super(stock_picking, self).action_done()
+        for line in self.move_lines:
+            if line.state == 'done' and line.purchase_line_id.order_id not in all_purchases:
+                all_purchases.append(line.purchase_line_id.order_id)
+        for purchase in all_purchases:
+            followers = purchase.message_follower_ids
+            purchase.message_post(body=_("Goods received."),
+                                  subtype='mt_comment',
+                                  partner_ids=followers)
+
 
 class stock_move(models.Model):
 
