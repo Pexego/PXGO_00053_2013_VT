@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="stock_location_pantry" model="stock.location">
+            <field name="name">Despensa</field>
+            <field name="location_id" ref="stock.warehouse0" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="stock_location_kitchen" model="stock.location">
+            <field name="name">Cocina</field>
+            <field name="location_id" ref="stock.warehouse0" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <!--record id="stock_location_coocked" model="stock.location">
+            <field name="name">Cocinados</field>
+            <field name="location_id" ref="stock.stock_location_stock" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record-->
+
+        <record id="stock_location_nursing" model="stock.location">
+            <field name="name">Enfermeria</field>
+            <field name="location_id" ref="stock.warehouse0" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="stock_location_damaged" model="stock.location">
+            <field name="name">Averiados</field>
+            <field name="location_id" ref="stock.warehouse0" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
+    </data>
+</openerp>
+

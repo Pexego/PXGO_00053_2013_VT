@@ -27,20 +27,38 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     can_mount = fields.Many2one('product.product', 'Mount')
+    mrp_production_ids = fields.One2many('mrp.production', 'sale_line_id', 'Productions')
 
-    def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
+
+    '''def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
                           uom=False, qty_uos=0, uos=False, name='',
                           partner_id=False, lang=False, update_tax=True,
                           date_order=False, packaging=False,
                           fiscal_position=False, flag=False, context=None):
 
-        prod = self.pool.get('product.product').browse(cr, uid, product,
-                                                       context)
-
         res = super(SaleOrderLine, self).product_id_change(
             cr, uid, ids, pricelist, product, qty, uom, qty_uos, uos, name,
             partner_id, lang, update_tax, date_order, packaging,
             fiscal_position, flag, context)
+        prod = self.pool.get('product.product').browse(cr, uid, product,
+                                                       context)
+        res['domain']['can_mount'] = [('id', 'in',
+                                       [x.id for x in prod.can_mount_ids])]
+        return res'''
+
+    def product_id_change2(self, cr, uid, ids, pricelist, product, qty=0,
+                           uom=False, qty_uos=0, uos=False, name='',
+                           partner_id=False, lang=False, update_tax=True,
+                           date_order=False, packaging=False,
+                           fiscal_position=False,
+                           flag=False, sale_agent_ids=False, context=None):
+
+        res = super(SaleOrderLine, self).product_id_change2(
+            cr, uid, ids, pricelist, product, qty, uom, qty_uos, uos, name,
+            partner_id, lang, update_tax, date_order, packaging,
+            fiscal_position, flag, sale_agent_ids, context)
+        prod = self.pool.get('product.product').browse(cr, uid, product,
+                                                       context)
         res['domain']['can_mount'] = [('id', 'in',
                                        [x.id for x in prod.can_mount_ids])]
         return res
@@ -84,14 +102,17 @@ class SaleOrder(models.Model):
                     final_line_dict)
                 if final_prod.qty_available <= 0:
                     bom_id = final_prod.bom_ids[0]
+                    productions = []
                     for i in range(int(final_line.product_uom_qty - final_prod.qty_available)):
                         mrp_dict = {
                             'product_id': final_prod.id,
                             'bom_id': bom_id.id,
                             'product_uom': bom_id.product_uom.id,
                             'product_qty': 1,
+                            'type_id': self.env.ref('sale_product_customize.customize_mount').id
                         }
-                        self.env['mrp.production'].create(mrp_dict)
+                        productions.append(self.env['mrp.production'].create(mrp_dict).id)
+                    final_line.mrp_production_ids = [(6, 0, productions)]
                 final_lines.append(final_line.id)
 
             else:
@@ -101,3 +122,10 @@ class SaleOrder(models.Model):
                 line.unlink()
         self.write({'order_line': [(6, 0, final_lines)]})
         super(SaleOrder, self).order_reserve()
+
+    @api.one
+    def action_button_confirm(self):
+        super(SaleOrder,self).action_button_confirm()
+        for line in self.order_line:
+            for production in line.mrp_production_ids:
+                production.signal_workflow('button_confirm')

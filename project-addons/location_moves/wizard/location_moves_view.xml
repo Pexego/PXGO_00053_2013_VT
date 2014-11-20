@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+
+        <record id="location_moves_form" model="ir.ui.view">
+            <field name="name">location.moves.fomr</field>
+            <field name="model">location.moves</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Location moves">
+                    <group>
+                        <field name="product_id"/>
+                        <field name="qty"/>
+                        <field name="move_type"/>
+                    </group>
+                    <newline/>
+                    <button string="create moves" name="create_moves" type="object" icon="gtk-ok"/>
+                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="create moves"
+            res_model="location.moves"
+            view_id="location_moves_form"
+            view_mode="form"
+            target="new"
+            id="act_location_moves"/>
+
+        <menuitem
+            id="menucreatemoves"
+            name="Create moves"
+            string="Create moves"
+            action="act_location_moves"
+            parent="stock.menu_stock_configuration"/>
+
+    </data>
+</openerp>
+

@@ -26,6 +26,8 @@ class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
     final_prod_lot = fields.Many2one('stock.production.lot', 'Final lot')
+    type_id = fields.Many2one('mrp.customize.type', 'Type')
+    sale_line_id = fields.Many2one('sale.order.line', 'order line')
 
     @api.one
     def action_assign(self):

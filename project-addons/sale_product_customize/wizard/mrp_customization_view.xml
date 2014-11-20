@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+
+        <record id="mrp_customization_form" model="ir.ui.view">
+            <field name="name">mrp.customization.wizard.form</field>
+            <field name="model">mrp.customization.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Make customization">
+                    <group>
+                        <group>
+                            <field name="product_id" required="1"/>
+                            <field name="qty" required="1"/>
+                            <field name="product_uom" required="1"/>
+                        </group>
+                        <group>
+                            <field name="customization_type" required="1" widget="selection" domain="[('show', '=', True)]"/>
+                        </group>
+                    </group>
+                    <button string="Make" name="create_customization" type="object" icon="gtk-ok"/>
+                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="request supply"
+            res_model="mrp.customization.wizard"
+            view_id="mrp_customization_form"
+            view_mode="form"
+            target="new"
+            id="action_customization_wizard"/>
+
+        <menuitem id="menu_make_customization" name="request supply" action="action_customization_wizard" parent="crm.root_menu"/>
+
+    </data>
+</openerp>
+
