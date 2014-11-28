@@ -11,7 +11,7 @@
                     <field name="final_lot" invisible="1"/>
                 </field>
                 <field name="lot_id" position="attributes">
-                    <attribute name="attrs">{'required': [('track_production', '=', True),
+                    <attribute name="attrs">{'required': [('final_lot', '=', False),
                         ('mode', '=', 'consume_produce')], 'readonly': [('final_lot', '=', True)]}</attribute>
                 </field>
 

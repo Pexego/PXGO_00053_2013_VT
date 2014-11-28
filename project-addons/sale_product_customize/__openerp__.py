@@ -34,6 +34,7 @@
              'view/mrp_customize.xml',
              'data/customize_type_data.xml',
              'wizard/mrp_customization_view.xml',
+             'security/ir.model.access.csv'
             ],
     "installable": True
 }

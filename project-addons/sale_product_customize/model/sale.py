@@ -52,7 +52,6 @@ class SaleOrderLine(models.Model):
                            date_order=False, packaging=False,
                            fiscal_position=False,
                            flag=False, sale_agent_ids=False, context=None):
-
         res = super(SaleOrderLine, self).product_id_change2(
             cr, uid, ids, pricelist, product, qty, uom, qty_uos, uos, name,
             partner_id, lang, update_tax, date_order, packaging,
