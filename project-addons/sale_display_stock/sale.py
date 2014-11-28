@@ -19,28 +19,16 @@
 #
 ##############################################################################
 import openerp
-from openerp.osv import osv, fields
+from openerp import models, fields
 import openerp.addons.decimal_precision as dp
 
 
-class sale_order_line(osv.osv):
+class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
 
-    def _get_qty_available(self, cr, uid, ids, field_name, arg,
-                                  context=None):
-        result = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            result[line.id] = 0.0
-            if line.product_id:
-                result[line.id] = line.product_id.qty_available
-        return result
-        
-    _columns = {
-        'qty_available': fields.function(_get_qty_available,
-                                      string='Qty available', readonly=True,
-                                      type="float",
-                                      digits_compute=
-                                      dp.get_precision('Product \
-                                                        Unit of Measure'))
-                                                        
-    }
+
+    qty_available = fields.Float('Qty available', readonly=True,
+                                  related='product_id.qty_available',
+                                  digits_compute=
+                                  dp.get_precision('Product \
+                                                    Unit of Measure'))

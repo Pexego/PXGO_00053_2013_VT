@@ -19,27 +19,15 @@
 #
 ##############################################################################
 import openerp
-from openerp.osv import osv, fields
+from openerp import models, fields
 import openerp.addons.decimal_precision as dp
 
 
-class sale_order_line(osv.osv):
+class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
 
-    def _get_qty_reserved(self, cr, uid, ids, field_name, arg,
-                                  context=None):
-        result = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            result[line.id] = 0.0
-            if line.product_id:
-                result[line.id] = line.product_id.reserves_count
-        return result
-    
-    _columns = {
-        'qty_reserved': fields.function(_get_qty_reserved,
-                                     string='Qty reserved', readonly=True,
-                                     type="float",
-                                     digits_compute=
-                                     dp.get_precision('Product Unit \
-                                                      of Measure'))
-    }
+    qty_reserved = fields.Float('Qty reserved', related='product_id.reserves_count',
+                                readonly=True,
+                                 digits_compute=
+                                 dp.get_precision('Product Unit \
+                                                  of Measure'))
