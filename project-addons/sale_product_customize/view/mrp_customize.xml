@@ -8,8 +8,9 @@
         <field name="type">tree</field>
         <field name="arch" type="xml">
             <tree string="Customize type">
+                <field name="code"/>
                 <field name="name"/>
-                <field name="show"/>
+                <field name="aux_product"/>
             </tree>
         </field>
     </record>
@@ -21,8 +22,9 @@
         <field name="arch" type="xml">
             <form string="Customize type">
                 <group>
+                    <field name="code"/>
                     <field name="name"/>
-                <field name="show"/>
+                    <field name="aux_product"/>
                 </group>
             </form>
         </field>

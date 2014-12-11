@@ -18,13 +18,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from openerp import models, fields, api
+from openerp import models, fields
 
 
 class MrpCustomizeType(models.Model):
 
     _name = 'mrp.customize.type'
 
-    name = fields.Char('Name', size=64)
-    show = fields.Boolean('Show')
+    name = fields.Char('Name', required=True)
+    code = fields.Integer('Code', required=True)
+    aux_product = fields.Boolean('Needs another product')

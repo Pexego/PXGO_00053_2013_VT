@@ -26,7 +26,9 @@ class MrpProduction(models.Model):
     _inherit = 'mrp.production'
 
     final_prod_lot = fields.Many2one('stock.production.lot', 'Final lot')
-    type_id = fields.Many2one('mrp.customize.type', 'Type')
+    type_ids = fields.Many2many(
+        'mrp.customize.type', 'mrp_customizations_rel',
+        'production_id', 'customization_id', 'Type')
     sale_line_id = fields.Many2one('sale.order.line', 'order line')
 
     @api.one
@@ -50,6 +52,7 @@ class MrpBomLine(models.Model):
 
     final_lot = fields.Boolean('Same final product lot')
 
+
 class MrpProductProduceLine(models.TransientModel):
 
     _inherit = 'mrp.product.produce.line'
@@ -59,7 +62,8 @@ class MrpProductProduceLine(models.TransientModel):
     @api.one
     @api.depends('product_id')
     def _get_final_lot(self):
-        production = self.env['mrp.production'].browse(self.env.context.get('active_id', False))
+        production = self.env['mrp.production'].browse(
+            self.env.context.get('active_id', False))
         bom_line = []
         if not production.final_prod_lot:
             bom_line = self.env['mrp.bom.line'].search(
@@ -71,6 +75,7 @@ class MrpProductProduceLine(models.TransientModel):
         else:
             self.final_lot = False
 
+
 class MrpProductProduce(models.TransientModel):
 
     _inherit = 'mrp.product.produce'
@@ -81,19 +86,23 @@ class MrpProductProduce(models.TransientModel):
     @api.one
     @api.depends('final_lot')
     def _get_lot(self):
-        production = self.env['mrp.production'].browse(self.env.context.get('active_id'))
+        production = self.env['mrp.production'].browse(
+            self.env.context.get('active_id'))
         if production.final_prod_lot:
             self.lot_id = production.final_prod_lot
 
     @api.multi
     def do_produce(self):
         production_id = self.env.context.get('active_id', False)
-        assert production_id, "Production Id should be specified in context as a Active ID."
+        assert production_id, \
+            "Production Id should be specified in context as a Active ID."
         production = self.env['mrp.production'].browse(production_id)
         if not self.lot_id and self.final_lot:
             for line in self.consume_lines:
                 if line.final_lot and line.lot_id:
-                    self.lot_id = self.env['stock.production.lot'].create({'name': line.lot_id.name, 'product_id': production.product_id.id}).id
+                    self.lot_id = self.env['stock.production.lot'].create(
+                        {'name': line.lot_id.name,
+                         'product_id': production.product_id.id}).id
         super(MrpProductProduce, self).do_produce()
         return True
 
@@ -101,7 +110,8 @@ class MrpProductProduce(models.TransientModel):
     @api.depends('consume_lines')
     def _get_final_lot(self):
         final_lot = False
-        production = self.env['mrp.production'].browse(self.env.context.get('active_id'))
+        production = self.env['mrp.production'].browse(
+            self.env.context.get('active_id'))
         for line in self.consume_lines:
             if line.final_lot:
                 final_lot = True
@@ -132,6 +142,8 @@ class StockMoveConsume(models.TransientModel):
     def do_move_consume(self):
         move = self.env['stock.move'].browse(self.env.context['active_id'])
         if self.final_lot:
-            production_lot = self.env['stock.production.lot'].create({'name': self.restrict_lot_id.name, 'product_id':move.raw_material_production_id.product_id.id})
+            production_lot = self.env['stock.production.lot'].create(
+                {'name': self.restrict_lot_id.name,
+                 'product_id': move.raw_material_production_id.product_id.id})
             move.raw_material_production_id.final_prod_lot = production_lot
         return super(StockMoveConsume, self).do_move_consume()

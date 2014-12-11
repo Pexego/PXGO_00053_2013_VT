@@ -3,18 +3,21 @@
     <data noupdate="1">
 
         <record id="customize_mount" model="mrp.customize.type">
+            <field name="code">0</field>
             <field name="name">Montaje</field>
-            <field name="show" eval="False"/>
+            <field name="aux_product" eval="True"/>
         </record>
 
         <record id="customize_paint" model="mrp.customize.type">
+            <field name="code">1</field>
             <field name="name">Pintura</field>
-            <field name="show" eval="True"/>
+            <field name="aux_product" eval="False"/>
         </record>
 
         <record id="customize_sticker" model="mrp.customize.type">
+            <field name="code">2</field>
             <field name="name">Pegatinas</field>
-            <field name="show" eval="True"/>
+            <field name="aux_product" eval="False"/>
         </record>
 
     </data>

@@ -39,37 +39,64 @@ class ProductProduct(models.Model):
         'product_id',
         'Mounted in')
 
-    def create_mounted_product(self, mount_product, mounted_product):
-        prod_dict = {
-            'name': mount_product.name + ' - ' +
-            mounted_product.name,
-            'type': 'product',
-            'default_code':
-                mount_product.default_code +
-                mounted_product.default_code,
-            'route_ids':
-                [(6, 0,
-                  [self.env.ref('mrp.route_warehouse0_manufacture').id])],
-            'sale_ok': False,
-            'purchase_ok': False,
-            'state2': 'published',
-            'valuation': 'manual_periodic',
-        }
-        final_prod = self.create(prod_dict)
-
-        bom_list_dict = {
-            'name': final_prod.name,
-            'product_tmpl_id': final_prod.product_tmpl_id.id,
-            'product_id': final_prod.id,
-            'bom_line_ids':
-                [(0, 0,
-                  {'product_id': mount_product.id,
-                   'product_qty': 1,
-                   'final_lot': True}),
-                 (0, 0,
-                  {'product_id': mounted_product.id,
-                   'product_qty': 1,
-                   'final_lot': False})],
-        }
-        self.env['mrp.bom'].create(bom_list_dict)
-        return final_prod
+    def get_product_customized(self, prod_code):
+        product = self.search([('default_code', '=', prod_code)])
+        if not product:
+            prod_dict = {
+                'type': 'product',
+                'default_code': prod_code,
+                'route_ids':
+                    [(6, 0,
+                      [self.env.ref('mrp.route_warehouse0_manufacture').id])],
+                'sale_ok': False,
+                'purchase_ok': False,
+                'state2': 'published',
+                'valuation': 'manual_periodic',
+            }
+            bom_lines = []
+            if '#' in prod_code:
+                # hay varios productos
+                code = prod_code.split('#')
+                first_prod = self.search([('default_code', '=', code[0])])
+                sec_prod = self.search([('default_code', '=',
+                                         code[1][:code[1].index('|')])])
+                prod_dict['name'] = first_prod.name + ' - ' + sec_prod.name
+                prod_dict['standard_price'] = first_prod.standard_price + \
+                    sec_prod.standard_price
+                prod_dict['list_price'] = first_prod.list_price + \
+                    sec_prod.list_price
+                prod_dict['list_price2'] = first_prod.list_price2 + \
+                    sec_prod.list_price2
+                prod_dict['list_price3'] = first_prod.list_price3 + \
+                    sec_prod.list_price3
+                bom_lines = \
+                    [(0, 0,
+                      {'product_id': first_prod.id,
+                       'product_qty': 1,
+                       'final_lot': True}),
+                     (0, 0,
+                      {'product_id': sec_prod.id,
+                       'product_qty': 1,
+                       'final_lot': False})]
+            else:
+                first_prod = self.search([('default_code', '=',
+                                           prod_code.split('|')[0])])
+                prod_dict['name'] = first_prod.name
+                prod_dict['standard_price'] = first_prod.standard_price
+                prod_dict['list_price'] = first_prod.list_price
+                prod_dict['list_price2'] = first_prod.list_price2
+                prod_dict['list_price3'] = first_prod.list_price3
+                bom_lines = \
+                    [(0, 0,
+                      {'product_id': first_prod.id,
+                       'product_qty': 1,
+                       'final_lot': True})]
+            product = self.create(prod_dict)
+            bom_list_dict = {
+                'name': product.name,
+                'product_tmpl_id': product.product_tmpl_id.id,
+                'product_id': product.id,
+                'bom_line_ids': bom_lines,
+            }
+            self.env['mrp.bom'].create(bom_list_dict)
+        return product
