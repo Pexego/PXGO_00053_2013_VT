@@ -32,7 +32,7 @@
             target="new"
             id="action_customization_wizard"/>
 
-        <menuitem id="menu_make_customization" name="request supply" action="action_customization_wizard" parent="crm.root_menu"/>
+        <!--menuitem id="menu_make_customization" name="request supply" action="action_customization_wizard" parent="crm.root_menu"/-->
 
     </data>
 </openerp>

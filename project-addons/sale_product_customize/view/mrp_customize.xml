@@ -37,7 +37,7 @@
         <field name="view_mode">tree,form</field>
     </record>
 
-    <menuitem name="Customize type" parent="crm.root_menu" action="action_mrp_customize_type" id="menu_customize_type"/>
+    <menuitem name="Customize type" parent="base.menu_base_config" action="action_mrp_customize_type" id="menu_customize_type"/>
 
 </data>
 </openerp>

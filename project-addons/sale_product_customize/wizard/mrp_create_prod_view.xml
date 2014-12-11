@@ -26,7 +26,7 @@
             target="new"
             id="mrp_create_product_action"/>
 
-        <menuitem name="Create mounted products" parent="mrp.menu_mrp_configuration" action="mrp_create_product_action" id="mrp_create_product_menu"/>
+        <!--menuitem name="Create mounted products" parent="mrp.menu_mrp_configuration" action="mrp_create_product_action" id="mrp_create_product_menu"/-->
 
     </data>
 </openerp>
