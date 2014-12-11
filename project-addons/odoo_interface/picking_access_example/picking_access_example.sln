@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "picking_access_example", "picking_access_example\picking_access_example.csproj", "{424394FE-0621-4D1A-A119-958EC5C1D149}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{424394FE-0621-4D1A-A119-958EC5C1D149}.Debug|x86.ActiveCfg = Debug|x86
+		{424394FE-0621-4D1A-A119-958EC5C1D149}.Debug|x86.Build.0 = Debug|x86
+		{424394FE-0621-4D1A-A119-958EC5C1D149}.Release|x86.ActiveCfg = Release|x86
+		{424394FE-0621-4D1A-A119-958EC5C1D149}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = picking_access_example\picking_access_example.csproj
+	EndGlobalSection
+EndGlobal
