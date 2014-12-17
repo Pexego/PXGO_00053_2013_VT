@@ -1,19 +1,29 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* customer_mood
+#   * customer_mood
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 8.0alpha1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-24 12:03+0000\n"
-"PO-Revision-Date: 2014-06-24 14:06+0100\n"
-"Last-Translator: marta <marta@pexego.es>\n"
+"POT-Creation-Date: 2014-12-17 16:15+0000\n"
+"PO-Revision-Date: 2014-12-17 16:15+0000\n"
+"Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: customer_mood
+#: field:mood,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: customer_mood
+#: field:mood,create_date:0
+msgid "Created on"
+msgstr "Created on"
 
 #. module: customer_mood
 #: field:sale.order,customer_mood:0
@@ -21,9 +31,24 @@ msgid "Customer Mood"
 msgstr "Estado de ánimo"
 
 #. module: customer_mood
+#: field:mood,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: customer_mood
 #: field:mood,image:0
 msgid "Image"
 msgstr "Imagen"
+
+#. module: customer_mood
+#: field:mood,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: customer_mood
+#: field:mood,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
 
 #. module: customer_mood
 #: model:ir.actions.act_window,help:customer_mood.action_mood
@@ -37,19 +62,21 @@ msgid "Mood"
 msgstr "Estado de ánimo"
 
 #. module: customer_mood
-#: view:res.partner:0
+#: view:res.partner:customer_mood.view_partner_form_add_mood
+#: view:res.partner:customer_mood.view_partner_simple_form_add_mood
 msgid "Mood..."
 msgstr "Estado de ánimo"
 
 #. module: customer_mood
 #: model:ir.actions.act_window,name:customer_mood.action_mood
 #: model:ir.ui.menu,name:customer_mood.menu_mood
-#: view:mood:0
+#: view:mood:customer_mood.view_mood_form
+#: view:mood:customer_mood.view_mood_tree
 msgid "Moods"
 msgstr "Estados de ánimo"
 
 #. module: customer_mood
-#: view:mood:0
+#: view:mood:customer_mood.view_mood_form
 #: field:mood,name:0
 msgid "Name"
 msgstr "Nombre"
@@ -67,20 +94,10 @@ msgstr "Pedido de venta"
 #. module: customer_mood
 #: field:mood,image_small:0
 msgid "Small-sized image"
-msgstr "Small-sized image"
-
-#. module: customer_mood
-#: help:mood,image_small:0
-msgid "Small-sized image of this mood. It is automatically resized as a 64x64px image, with aspect ratio preserved. Use this field anywhere a small image is required."
-msgstr "Small-sized image of this mood. It is automatically resized as a 64x64px image, with aspect ratio preserved. Use this field anywhere a small image is required."
+msgstr "Imagen pequeña"
 
 #. module: customer_mood
 #: help:mood,image:0
-msgid "This field contains the image used to set the mood,                   limited to 1024x1024px"
-msgstr "This field contains the image used to set the mood,                   limited to 1024x1024px"
-
-#. module: customer_mood
-#: model:ir.model,name:customer_mood.model_mood
-msgid "mood"
-msgstr "Estado de ánimo"
+msgid "This field contains the image used to                                      set the mood, limited to 1024x1024px"
+msgstr "Este campo contiene la imágen usada para establecer el estado de animo, limitado a 1024x1024px"
 

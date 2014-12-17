@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-19 17:14+0000\n"
-"PO-Revision-Date: 2014-11-19 17:14+0000\n"
+"POT-Creation-Date: 2014-12-17 16:24+0000\n"
+"PO-Revision-Date: 2014-12-17 16:24+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -90,7 +90,7 @@ msgstr "Albarán"
 #: code:addons/purchase_picking/wizard/create_picking_move.py:76
 #, python-format
 msgid "Picking error"
-msgstr "Picking error"
+msgstr "Error en albarán"
 
 #. module: purchase_picking
 #: field:picking.wizard.move.details,product_id:0
@@ -110,13 +110,13 @@ msgstr "Línea pedido de compra"
 #. module: purchase_picking
 #: field:picking.wizard.move.details,qty:0
 msgid "Quantity"
-msgstr "Quantity"
+msgstr "Cantidad"
 
 #. module: purchase_picking
 #: code:addons/purchase_picking/wizard/create_picking_move.py:92
 #, python-format
 msgid "Quantity error"
-msgstr "Quantity error"
+msgstr "Error en cantidad"
 
 #. module: purchase_picking
 #: view:purchase.order:purchase_picking.purchase_order_form_change_view_picking
@@ -142,27 +142,27 @@ msgstr "Reserva de stock"
 #: code:addons/purchase_picking/stock.py:105
 #, python-format
 msgid "The date planned of the reservation was changed."
-msgstr "The date planned of the reservation was changed."
+msgstr "La fecha planeada de la reserva ha sido cambiada."
 
 #. module: purchase_picking
 #: code:addons/purchase_picking/wizard/create_picking_move.py:92
 #, python-format
 msgid "The quantity is greater than the original."
-msgstr "The quantity is greater than the original."
+msgstr "La cantidad es mayor a la original."
 
 #. module: purchase_picking
 #: code:addons/purchase_picking/wizard/create_picking_move.py:76
 #, python-format
 msgid "Type not found"
-msgstr "Type not found"
+msgstr "Tipo no encontrado"
 
 #. module: purchase_picking
 #: field:picking.from.moves.wizard,move_detail_ids:0
 msgid "lines"
-msgstr "lines"
+msgstr "Lineas"
 
 #. module: purchase_picking
 #: field:picking.wizard.move.details,wizard_id:0
 msgid "wizard"
-msgstr "wizard"
+msgstr "Asistente"
 

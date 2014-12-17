@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * sale_point_programme
+#	* sale_point_programme
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 8.0rc1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-18 15:05+0000\n"
-"PO-Revision-Date: 2014-07-18 15:05+0000\n"
+"POT-Creation-Date: 2014-12-17 16:33+0000\n"
+"PO-Revision-Date: 2014-12-17 16:33+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,7 +21,7 @@ msgid "Active"
 msgstr "Activa"
 
 #. module: sale_point_programme
-#: view:sale.point.programme.rule:0
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
 msgid "Actives"
 msgstr "Activas"
 
@@ -36,7 +36,7 @@ msgid "Attribute to value"
 msgstr "Atributo a valorar"
 
 #. module: sale_point_programme
-#: view:sale.point.programme.rule:0
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
 #: field:sale.point.programme.rule,category_id:0
 msgid "Category"
 msgstr "Categoría"
@@ -86,8 +86,8 @@ msgid "Greater than"
 msgstr "Mayor que"
 
 #. module: sale_point_programme
-#: view:res.partner.point.programme.bag:0
-#: view:sale.point.programme.rule:0
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
 msgid "Group By"
 msgstr "Agrupar por"
 
@@ -121,7 +121,7 @@ msgstr "Operador"
 
 #. module: sale_point_programme
 #: model:ir.model,name:sale_point_programme.model_res_partner
-#: view:res.partner.point.programme.bag:0
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
 #: field:res.partner.point.programme.bag,partner_id:0
 msgid "Partner"
 msgstr "Empresa"
@@ -132,8 +132,9 @@ msgid "Point programmes"
 msgstr "Programas puntos"
 
 #. module: sale_point_programme
-#: view:res.partner:0
-#: view:res.partner.point.programme.bag:0
+#: view:res.partner:sale_point_programme.view_partner_form_add_points_widget
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_form
 #: field:res.partner.point.programme.bag,points:0
 #: field:sale.point.programme.rule,points:0
 msgid "Points"
@@ -146,7 +147,7 @@ msgstr "Reglas recompensa puntos"
 
 #. module: sale_point_programme
 #: model:ir.ui.menu,name:sale_point_programme.points_rules_menu
-#: view:sale.point.programme.rule:0
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_tree
 msgid "Points reward rules"
 msgstr "Reglas recompensa puntos"
 
@@ -154,12 +155,12 @@ msgstr "Reglas recompensa puntos"
 #: model:ir.actions.act_window,name:sale_point_programme.action_open_partner_points
 #: model:ir.actions.act_window,name:sale_point_programme.action_points_tracebility
 #: model:ir.ui.menu,name:sale_point_programme.points_traceability_menu
-#: view:res.partner.point.programme.bag:0
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_tree
 msgid "Points traceability"
 msgstr "Trazabilidad puntos"
 
 #. module: sale_point_programme
-#: view:sale.point.programme.rule:0
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
 #: field:sale.point.programme.rule,product_id:0
 msgid "Product"
 msgstr "Producto"
@@ -170,13 +171,13 @@ msgid "Product qty."
 msgstr "Cant. producto"
 
 #. module: sale_point_programme
-#: view:res.partner.point.programme.bag:0
-#: view:sale.point.programme.rule:0
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_form
 msgid "Reward rule"
 msgstr "Regla recompensa"
 
 #. module: sale_point_programme
-#: view:sale.point.programme.rule:0
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
 msgid "Reward rules"
 msgstr "Reglas recompensa"
 
@@ -186,7 +187,7 @@ msgid "Rule"
 msgstr "Regla"
 
 #. module: sale_point_programme
-#: view:res.partner.point.programme.bag:0
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
 msgid "Sale"
 msgstr "Venta"
 
@@ -209,14 +210,4 @@ msgstr "Fecha inicio"
 #: field:sale.point.programme.rule,value:0
 msgid "Value"
 msgstr "Valor"
-
-#. module: sale_point_programme
-#: model:ir.model,name:sale_point_programme.model_res_partner_point_programme_bag
-msgid "res.partner.point.programme.bag"
-msgstr "res.partner.point.programme.bag"
-
-#. module: sale_point_programme
-#: model:ir.model,name:sale_point_programme.model_sale_point_programme_rule
-msgid "sale.point.programme.rule"
-msgstr "sale.point.programme.rule"
 

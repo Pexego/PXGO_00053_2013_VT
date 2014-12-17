@@ -1,0 +1,134 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * location_moves
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:17+0000\n"
+"PO-Revision-Date: 2014-12-17 16:17+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: location_moves
+#: model:stock.location,name:location_moves.stock_location_damaged
+msgid "Averiados"
+msgstr "Averiados"
+
+#. module: location_moves
+#: view:location.moves:location_moves.location_moves_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: location_moves
+#: model:stock.location,name:location_moves.stock_location_kitchen
+msgid "Cocina"
+msgstr "Cocina"
+
+#. module: location_moves
+#: model:ir.ui.menu,name:location_moves.menucreatemoves
+msgid "Create moves"
+msgstr "Crear movimientos"
+
+#. module: location_moves
+#: field:location.moves,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: location_moves
+#: field:location.moves,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: location_moves
+#: model:stock.location,name:location_moves.stock_location_pantry
+msgid "Despensa"
+msgstr "Despensa"
+
+#. module: location_moves
+#: model:stock.location,name:location_moves.stock_location_nursing
+msgid "Enfermeria"
+msgstr "Enfermeria"
+
+#. module: location_moves
+#: field:location.moves,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: location_moves
+#: model:ir.model,name:location_moves.model_stock_location
+msgid "Inventory Locations"
+msgstr "Ubicaciones de inventario"
+
+#. module: location_moves
+#: field:location.moves,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: location_moves
+#: field:location.moves,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: location_moves
+#: view:location.moves:location_moves.location_moves_form
+msgid "Location moves"
+msgstr "Movimientos de localizacion"
+
+#. module: location_moves
+#: field:location.moves,move_type:0
+msgid "Move type"
+msgstr "Tipo de movimiento"
+
+#. module: location_moves
+#: field:location.moves,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: location_moves
+#: field:location.moves,qty:0
+msgid "Qty"
+msgstr "Cantidad"
+
+#. module: location_moves
+#: code:addons/location_moves/stock.py:116
+#, python-format
+msgid "The date planned of the reservation was                                    changed."
+msgstr "The date planned of the reservation was                                    changed."
+
+#. module: location_moves
+#: model:ir.actions.act_window,name:location_moves.act_location_moves
+#: view:location.moves:location_moves.location_moves_form
+msgid "create moves"
+msgstr "create moves"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "kitchen->coocked"
+msgstr "kitchen->coocked"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "kitchen->nursing"
+msgstr "kitchen->nursing"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "nursing->coocked"
+msgstr "nursing->coocked"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "nursing->damaged"
+msgstr "nursing->damaged"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "pantry->kitchen"
+msgstr "pantry->kitchen"
+

@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 #   * equivalent_products
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 8.0alpha1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-13 09:43+0000\n"
-"PO-Revision-Date: 2014-06-13 09:43+0000\n"
+"POT-Creation-Date: 2014-12-17 16:16+0000\n"
+"PO-Revision-Date: 2014-12-17 16:16+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,16 +23,10 @@ msgid "<p>\n"
 "                this tag or to a child of this tag.\n"
 "              </p>\n"
 "            "
-msgstr ""
-"<p>\n"
-"Ésta es una lista de todos los productos clasificados por tags. Puede "
-"pulsar untag para obtener la lista de todos los productos asociados "
-"con este tag o con sus tags hijos.\n"
-"</p>\n"
-"            "
+msgstr "<p>Ésta es una lista de todos los productos clasificados por tags. Puede pulsar untag para obtener la lista de todos los productos asociados con este tag o con sus tags hijos.</p>            "
 
 #. module: equivalent_products
-#: view:sale.equivalent.products:0
+#: view:sale.equivalent.products:equivalent_products.equivalent_products_wizard
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -42,21 +36,34 @@ msgid "Child tags"
 msgstr "Tags hijos"
 
 #. module: equivalent_products
-#: code:addons/equivalent_products/wizard/sale_equivalent_products_wizard.py:68
+#: field:product.tag,create_uid:0
+#: field:sale.equivalent.products,create_uid:0
+#: field:sale.equivalent.tag,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: equivalent_products
+#: field:product.tag,create_date:0
+#: field:sale.equivalent.products,create_date:0
+#: field:sale.equivalent.tag,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: equivalent_products
+#: code:addons/equivalent_products/wizard/sale_equivalent_products_wizard.py:123
 #, python-format
 msgid "El producto no es equivalente"
 msgstr "El producto no es equivalente"
 
 #. module: equivalent_products
-#: code:addons/equivalent_products/sale.py:36
-#: view:sale.equivalent.products:0
-#: view:sale.order:0
+#: code:addons/equivalent_products/sale.py:44
+#: view:sale.equivalent.products:equivalent_products.equivalent_products_wizard
 #, python-format
 msgid "Equivalent products"
 msgstr "Productos equivalentes"
 
 #. module: equivalent_products
-#: code:addons/equivalent_products/wizard/sale_equivalent_products_wizard.py:68
+#: code:addons/equivalent_products/wizard/sale_equivalent_products_wizard.py:122
 #, python-format
 msgid "Error"
 msgstr "Error"
@@ -65,6 +72,27 @@ msgstr "Error"
 #: constraint:product.tag:0
 msgid "Error ! You cannot create recursive tags."
 msgstr "Error ! No puedes crear tags recursivos."
+
+#. module: equivalent_products
+#: field:product.tag,id:0
+#: field:sale.equivalent.products,id:0
+#: field:sale.equivalent.tag,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: equivalent_products
+#: field:product.tag,write_uid:0
+#: field:sale.equivalent.products,write_uid:0
+#: field:sale.equivalent.tag,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: equivalent_products
+#: field:product.tag,write_date:0
+#: field:sale.equivalent.products,write_date:0
+#: field:sale.equivalent.tag,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
 
 #. module: equivalent_products
 #: field:product.tag,parent_left:0
@@ -89,6 +117,7 @@ msgid "Parent"
 msgstr "Tag padre"
 
 #. module: equivalent_products
+#: model:ir.actions.act_window,name:equivalent_products.products_by_tag
 #: model:ir.model,name:equivalent_products.model_product_product
 msgid "Product"
 msgstr "Producto"
@@ -96,7 +125,8 @@ msgstr "Producto"
 #. module: equivalent_products
 #: model:ir.actions.act_window,name:equivalent_products.product_tag_action_form
 #: model:ir.ui.menu,name:equivalent_products.menu_product_tag_action_form
-#: view:product.tag:0
+#: view:product.tag:equivalent_products.product_tag_list_view
+#: view:product.tag:equivalent_products.product_tag_tree_view
 msgid "Product Tags"
 msgstr "Tags de productos"
 
@@ -106,14 +136,14 @@ msgid "Product selected"
 msgstr "Producto seleccionado"
 
 #. module: equivalent_products
-#: view:product.product:0
-#: view:product.tag:0
+#: view:product.tag:equivalent_products.product_tag_form
 msgid "Product tag"
 msgstr "Tag de producto"
 
 #. module: equivalent_products
+#: view:product.tag:equivalent_products.product_tag_form
 #: field:product.tag,product_ids:0
-#: view:sale.equivalent.products:0
+#: view:sale.equivalent.products:equivalent_products.equivalent_products_wizard
 #: field:sale.equivalent.products,product_ids:0
 msgid "Products"
 msgstr "Productos"
@@ -134,12 +164,23 @@ msgid "Sales Order Line"
 msgstr "Línea pedido de venta"
 
 #. module: equivalent_products
-#: view:sale.equivalent.products:0
+#: model:ir.model,name:equivalent_products.model_sale_report
+msgid "Sales Orders Statistics"
+msgstr "Estadísticas pedidos de venta"
+
+#. module: equivalent_products
+#: view:sale.equivalent.products:equivalent_products.equivalent_products_wizard
 msgid "Select product"
 msgstr "Seleccionar producto"
 
 #. module: equivalent_products
-#: view:product.product:0
+#: view:sale.report:equivalent_products.view_order_product_search_add_brand
+#: field:sale.report,tag_id:0
+msgid "Tag"
+msgstr "Tag"
+
+#. module: equivalent_products
+#: view:product.product:equivalent_products.product_add_tags_search
 #: field:product.product,tag_ids:0
 #: field:sale.equivalent.products,tag_ids:0
 msgid "Tags"
@@ -153,15 +194,10 @@ msgstr "Tags para productos equivalentes en wizard"
 #. module: equivalent_products
 #: field:sale.equivalent.tag,wiz_id:0
 msgid "Wizard"
-msgstr "Wizard"
+msgstr "Asistente"
 
 #. module: equivalent_products
 #: model:ir.model,name:equivalent_products.model_sale_equivalent_products
 msgid "Wizard for change products in sale order line"
-msgstr "Wizard for change products in sale order line"
-
-#. module: equivalent_products
-#: model:ir.model,name:equivalent_products.model_product_tag
-msgid "product.tag"
-msgstr "product.tag"
+msgstr "Asistente para modificar los productos en las lineas de venta"
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-18 16:25+0000\n"
-"PO-Revision-Date: 2014-11-18 16:25+0000\n"
+"POT-Creation-Date: 2014-12-17 16:13+0000\n"
+"PO-Revision-Date: 2014-12-17 16:13+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -55,11 +55,6 @@ msgstr "ID"
 
 #. module: commission_report
 #: view:commission.report:commission_report.commission_report_filter
-msgid "Journal invoices with period in current year"
-msgstr "Journal invoices with period in current year"
-
-#. module: commission_report
-#: view:commission.report:commission_report.commission_report_filter
 msgid "Not settled"
 msgstr "No liquidado"
 
@@ -77,7 +72,7 @@ msgstr "Cantidad"
 #. module: commission_report
 #: model:ir.model,name:commission_report.model_commission_report
 msgid "Sale commission report"
-msgstr "Sale commission report"
+msgstr "Informe de comisiones de ventas"
 
 #. module: commission_report
 #: view:commission.report:commission_report.commission_report_filter
@@ -89,4 +84,9 @@ msgstr "Liquidado"
 #: view:commission.report:commission_report.commission_report_filter
 msgid "This Year"
 msgstr "Este año"
+
+#. module: commission_report
+#: view:commission.report:commission_report.commission_report_filter
+msgid "commissions of the current year"
+msgstr "Comisiones del año actual"
 

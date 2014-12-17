@@ -1,0 +1,275 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * stock_deposit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:35+0000\n"
+"PO-Revision-Date: 2014-12-17 16:35+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_deposit
+#: field:res.partner,deposit_count:0
+msgid "# of Deposits"
+msgstr "# de depositos"
+
+#. module: stock_deposit
+#: model:ir.actions.act_window,help:stock_deposit.action_stock_deposit
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                    This menu allow you to view deposit\n"
+"                    of products.\n"
+"                </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                    This menu allow you to view deposit\n"
+"                    of products.\n"
+"                </p>\n"
+"            "
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_search
+msgid "Active deposits"
+msgstr "Depositos activos"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_search
+#: field:stock.deposit,user_id:0
+msgid "Comercial"
+msgstr "Comercial"
+
+#. module: stock_deposit
+#: field:stock.deposit,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: stock_deposit
+#: field:stock.deposit,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: stock_deposit
+#: field:sale.order.line,deposit_date:0
+msgid "Date Dep."
+msgstr "Date Dep."
+
+#. module: stock_deposit
+#: field:stock.deposit,company_id:0
+#: field:stock.deposit,delivery_date:0
+msgid "Date of Transfer"
+msgstr "Fecha de transferencia"
+
+#. module: stock_deposit
+#: help:stock.deposit,message_last_post:0
+msgid "Date of the last message posted on the record."
+msgstr "Fecha del ultimo mensaje."
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_form
+msgid "Dates"
+msgstr "Fechas"
+
+#. module: stock_deposit
+#: field:sale.order.line,deposit:0
+#: model:stock.location,name:stock_deposit.stock_location_deposit
+msgid "Deposit"
+msgstr "Deposito"
+
+#. module: stock_deposit
+#: field:stock.deposit,move_id:0
+msgid "Deposit Move"
+msgstr "Movimiento de deposito"
+
+#. module: stock_deposit
+#: model:ir.actions.act_window,name:stock_deposit.act_res_partner_2_deposit
+#: model:ir.actions.act_window,name:stock_deposit.action_stock_deposit
+#: model:ir.ui.menu,name:stock_deposit.menu_action_stock_deposit
+#: view:res.partner:stock_deposit.deposit_partner_kanban_view
+#: view:res.partner:stock_deposit.res_partner_view_deposit_buttons
+#: field:res.partner,deposit_ids:0
+#: view:stock.deposit:stock_deposit.view_stock_deposit_form
+#: view:stock.deposit:stock_deposit.view_stock_deposit_search
+#: view:stock.deposit:stock_deposit.view_stock_deposit_tree
+msgid "Deposits"
+msgstr "Depositos"
+
+#. module: stock_deposit
+#: field:stock.deposit,partner_id:0
+msgid "Destination Address"
+msgstr "Dirección de destino"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_form
+msgid "Details"
+msgstr "Detalles"
+
+#. module: stock_deposit
+#: selection:stock.deposit,state:0
+msgid "Done"
+msgstr "Finalizado"
+
+#. module: stock_deposit
+#: model:ir.model,name:stock_deposit.model_stock_deposit
+msgid "Email Thread"
+msgstr "Hilo de mensajes"
+
+#. module: stock_deposit
+#: field:stock.deposit,message_follower_ids:0
+msgid "Followers"
+msgstr "Seguidores"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_search
+msgid "Group By..."
+msgstr "Group By..."
+
+#. module: stock_deposit
+#: help:stock.deposit,message_summary:0
+msgid "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+msgstr "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+
+#. module: stock_deposit
+#: field:stock.deposit,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: stock_deposit
+#: help:stock.deposit,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr "If checked new messages require your attention."
+
+#. module: stock_deposit
+#: field:stock.deposit,message_is_follower:0
+msgid "Is a Follower"
+msgstr "Is a Follower"
+
+#. module: stock_deposit
+#: field:stock.deposit,message_last_post:0
+msgid "Last Message Date"
+msgstr "Last Message Date"
+
+#. module: stock_deposit
+#: field:stock.deposit,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: stock_deposit
+#: field:stock.deposit,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: stock_deposit
+#: field:stock.deposit,message_ids:0
+msgid "Messages"
+msgstr "Messages"
+
+#. module: stock_deposit
+#: help:stock.deposit,message_ids:0
+msgid "Messages and communication history"
+msgstr "Messages and communication history"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_form
+msgid "Moves"
+msgstr "Moves"
+
+#. module: stock_deposit
+#: model:ir.model,name:stock_deposit.model_res_partner
+#: view:stock.deposit:stock_deposit.view_stock_deposit_search
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: stock_deposit
+#: field:stock.deposit,picking_id:0
+msgid "Picking"
+msgstr "Picking"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_search
+#: field:stock.deposit,product_id:0
+msgid "Product"
+msgstr "Product"
+
+#. module: stock_deposit
+#: field:stock.deposit,product_uom_qty:0
+msgid "Product qty"
+msgstr "Product qty"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_form
+msgid "Return"
+msgstr "Return"
+
+#. module: stock_deposit
+#: field:stock.deposit,return_picking_id:0
+msgid "Return Picking"
+msgstr "Return Picking"
+
+#. module: stock_deposit
+#: field:stock.deposit,return_date:0
+msgid "Return date"
+msgstr "Return date"
+
+#. module: stock_deposit
+#: selection:stock.deposit,state:0
+msgid "Returned"
+msgstr "Returned"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_form
+#: selection:stock.deposit,state:0
+msgid "Sale"
+msgstr "Sale"
+
+#. module: stock_deposit
+#: field:stock.deposit,sale_move_id:0
+msgid "Sale Move"
+msgstr "Sale Move"
+
+#. module: stock_deposit
+#: model:ir.model,name:stock_deposit.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: stock_deposit
+#: model:ir.model,name:stock_deposit.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea pedido de venta"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_search
+#: field:stock.deposit,state:0
+msgid "State"
+msgstr "State"
+
+#. module: stock_deposit
+#: model:ir.model,name:stock_deposit.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: stock_deposit
+#: field:stock.deposit,message_summary:0
+msgid "Summary"
+msgstr "Summary"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_tree
+msgid "Total"
+msgstr "Total"
+
+#. module: stock_deposit
+#: field:stock.deposit,message_unread:0
+msgid "Unread Messages"
+msgstr "Unread Messages"
+
+#. module: stock_deposit
+#: field:stock.deposit,product_uom:0
+msgid "Uom"
+msgstr "Uom"
+

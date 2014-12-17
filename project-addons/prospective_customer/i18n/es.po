@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * prospective_customer
+#	* prospective_customer
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 8.0alpha1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-03 16:18+0000\n"
-"PO-Revision-Date: 2014-07-03 16:18+0000\n"
+"POT-Creation-Date: 2014-12-17 16:24+0000\n"
+"PO-Revision-Date: 2014-12-17 16:24+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -25,19 +25,7 @@ msgid "<p class=\"oe_view_nocontent_create\">\n"
 "                documents, etc.\n"
 "              </p>\n"
 "            "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"                Click para añadir un cliente potencial.\n"
-"              </p><p>\n"
-"                OpenERP helps you easily track all activities related to\n"
-"                a customer; discussions, history of business opportunities,\n"
-"                documents, etc.\n"
-"              </p>\n"
-"            "
-
-#. module: prospective_customer
-#: view:crm.lead:0
-msgid "Customer"
-msgstr "Cliente"
+msgstr "<p class=\"oe_view_nocontent_create\">                Click para añadir un cliente potencial.              </p><p>                OpenERP helps you easily track all activities related to                a customer; discussions, history of business opportunities,                documents, etc.              </p>            "
 
 #. module: prospective_customer
 #: model:ir.model,name:prospective_customer.model_res_partner
@@ -59,4 +47,20 @@ msgstr "Clientes potenciales"
 #: model:ir.model,name:prospective_customer.model_sale_order
 msgid "Sales Order"
 msgstr "Pedido de venta"
+
+#. module: prospective_customer
+#: view:sale.order:prospective_customer.sale_order_add_prospective_form
+msgid "[ ('customer', '=', True), '|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
+msgstr "[ ('customer', '=', True), '|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
+
+#. module: prospective_customer
+#: view:calendar.event:prospective_customer.calendar_event_add_prospective
+#: view:crm.lead:prospective_customer.crm_lead_add_prospective_customer_form
+#: view:crm.lead:prospective_customer.crm_opportunity_add_prospective_form
+#: view:crm.lead2opportunity.partner:prospective_customer.crm_lead2oppportunity_add_prospective_form
+#: view:crm.make.sale:prospective_customer.crm_make_sale_add_prospective
+#: view:crm.phonecall:prospective_customer.crm_phonecall_add_prospective_customer_form
+#: view:crm.phonecall:prospective_customer.crm_phonecall_add_prospective_customer_tree
+msgid "['|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
+msgstr "['|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
 

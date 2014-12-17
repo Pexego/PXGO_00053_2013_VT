@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
 #   * associated_products
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 8.0alpha1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-13 09:40+0000\n"
-"PO-Revision-Date: 2014-06-13 09:40+0000\n"
+"POT-Creation-Date: 2014-12-17 16:11+0000\n"
+"PO-Revision-Date: 2014-12-17 16:11+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,9 +16,14 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: associated_products
-#: view:product.product:0
+#: view:product.product:associated_products.product_add_associateds_products_form
 msgid "Associated Products"
 msgstr "Productos asociados"
+
+#. module: associated_products
+#: field:sale.order.line,assoc_line_ids:0
+msgid "Associated lines"
+msgstr "Associated lines"
 
 #. module: associated_products
 #: field:product.associated,associated_id:0
@@ -26,10 +31,40 @@ msgid "Associated product"
 msgstr "Producto asociado"
 
 #. module: associated_products
-#: view:product.associated:0
+#: view:product.associated:associated_products.product_associated_form
 #: field:product.product,associated_product_ids:0
 msgid "Associated products"
 msgstr "Productos asociados"
+
+#. module: associated_products
+#: field:product.associated,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: associated_products
+#: field:product.associated,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: associated_products
+#: field:product.associated,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: associated_products
+#: field:product.associated,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: associated_products
+#: field:product.associated,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: associated_products
+#: field:sale.order.line,original_line_id:0
+msgid "Origin"
+msgstr "Origen"
 
 #. module: associated_products
 #: model:ir.model,name:associated_products.model_product_product
@@ -38,7 +73,7 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: associated_products
-#: view:product.associated:0
+#: view:product.associated:associated_products.product_associated_tree_view
 msgid "Products Associated"
 msgstr "Productos asociados"
 
@@ -48,9 +83,14 @@ msgid "Quantity"
 msgstr "Cantidad"
 
 #. module: associated_products
+#: model:ir.model,name:associated_products.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea pedido de venta"
+
+#. module: associated_products
 #: model:ir.model,name:associated_products.model_product_associated
-msgid "This model provides the association between a product an their associated products"
-msgstr "Relación entre producto y sus productos asociados"
+msgid "This model provides the association between a         product and their associated products"
+msgstr "productos asociados."
 
 #. module: associated_products
 #: field:product.associated,uom_id:0

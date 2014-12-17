@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * partner_sale_graphic
+#	* partner_sale_graphic
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 8.0alpha1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-02 16:00+0000\n"
-"PO-Revision-Date: 2014-07-02 16:00+0000\n"
+"POT-Creation-Date: 2014-12-17 16:19+0000\n"
+"PO-Revision-Date: 2014-12-17 16:19+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,13 +16,13 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: partner_sale_graphic
-#: code:addons/partner_sale_graphic/res_partner.py:116
+#: code:addons/partner_sale_graphic/res_partner.py:124
 #, python-format
 msgid "Amount total"
 msgstr "Cantidad total"
 
 #. module: partner_sale_graphic
-#: code:addons/partner_sale_graphic/res_partner.py:115
+#: code:addons/partner_sale_graphic/res_partner.py:123
 #, python-format
 msgid "Date"
 msgstr "Fecha"
@@ -38,7 +38,7 @@ msgid "Sale graphic"
 msgstr "Gráfico de ventas"
 
 #. module: partner_sale_graphic
-#: view:res.partner:0
+#: view:res.partner:partner_sale_graphic.res_parnter_add_sale_graphic_form
 msgid "Sales graphic"
 msgstr "Gráfico de ventas"
 

@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * customer_lost
+#	* customer_lost
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 8.0rc1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-15 15:19+0000\n"
-"PO-Revision-Date: 2014-07-15 15:19+0000\n"
+"POT-Creation-Date: 2014-12-17 16:15+0000\n"
+"PO-Revision-Date: 2014-12-17 16:15+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,37 +16,38 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Area"
 msgstr "Zona"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Companies"
 msgstr "Compañías"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Company"
 msgstr "Compañía"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_partner_tree
 msgid "Contacts"
 msgstr "Contactos"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Country"
 msgstr "País"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Customer Partners"
 msgstr "Clientes"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.res_partner_view_lost_search
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 #: field:res.partner,customer_lost:0
 msgid "Customer lost"
 msgstr "Cliente perdido"
@@ -57,9 +58,14 @@ msgid "Customer win"
 msgstr "Cliente ganado"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Customers"
 msgstr "Clientes"
+
+#. module: customer_lost
+#: view:res.partner:customer_lost.view_res_partner_filter_report
+msgid "Group By"
+msgstr "Agrupar por"
 
 #. module: customer_lost
 #: field:res.partner,last_sale_date:0
@@ -67,7 +73,8 @@ msgid "Last sale"
 msgstr "Última venta"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.res_partner_view_lost_search
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Lost"
 msgstr "Perdido"
 
@@ -78,17 +85,19 @@ msgid "Lost and win customers"
 msgstr "Clientes perdidos y ganados"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "My Partners"
 msgstr "Mis empresas"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.res_partner_view_lost_search
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "No lost"
 msgstr "No perdido"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.res_partner_view_lost_search
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "No lost customers"
 msgstr "Clientes no perdidos"
 
@@ -98,32 +107,32 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Persons"
 msgstr "Personas"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Salesperson"
 msgstr "Comercial"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Search Partner"
 msgstr "Buscar empresa"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Supplier Partners"
 msgstr "Proveedores"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Suppliers"
 msgstr "Proveedores"
 
 #. module: customer_lost
-#: view:res.partner:0
+#: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Tag"
 msgstr "Etiqueta"
 

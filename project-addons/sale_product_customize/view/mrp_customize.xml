@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-<data>
+    <data>
 
-    <record id="mrp_customize_type_tree" model="ir.ui.view">
-        <field name="name">mrp.customize.type</field>
-        <field name="model">mrp.customize.type</field>
-        <field name="type">tree</field>
-        <field name="arch" type="xml">
-            <tree string="Customize type">
-                <field name="code"/>
-                <field name="name"/>
-                <field name="aux_product"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id="mrp_customize_type_form" model="ir.ui.view">
-        <field name="name">mrp.customize.type</field>
-        <field name="model">mrp.customize.type</field>
-        <field name="type">form</field>
-        <field name="arch" type="xml">
-            <form string="Customize type">
-                <group>
+        <record id="mrp_customize_type_tree" model="ir.ui.view">
+            <field name="name">mrp.customize.type</field>
+            <field name="model">mrp.customize.type</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Customize type">
                     <field name="code"/>
                     <field name="name"/>
                     <field name="aux_product"/>
-                </group>
-            </form>
-        </field>
-    </record>
+                </tree>
+            </field>
+        </record>
 
-    <record model="ir.actions.act_window" id="action_mrp_customize_type">
-        <field name="name">Customize type</field>
-        <field name="res_model">mrp.customize.type</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
-    </record>
+        <record id="mrp_customize_type_form" model="ir.ui.view">
+            <field name="name">mrp.customize.type</field>
+            <field name="model">mrp.customize.type</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Customize type">
+                    <group>
+                        <field name="code"/>
+                        <field name="name"/>
+                        <field name="aux_product"/>
+                    </group>
+                </form>
+            </field>
+        </record>
 
-    <menuitem name="Customize type" parent="base.menu_base_config" action="action_mrp_customize_type" id="menu_customize_type"/>
+        <record model="ir.actions.act_window" id="action_mrp_customize_type">
+            <field name="name">Customize type</field>
+            <field name="res_model">mrp.customize.type</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
 
-</data>
+        <menuitem name="Customize type" parent="base.menu_base_config" action="action_mrp_customize_type" id="menu_customize_type"/>
+
+    </data>
 </openerp>

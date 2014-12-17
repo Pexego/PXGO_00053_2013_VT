@@ -1,13 +1,13 @@
-# Translation of OpenERP Server.
+# Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * customer_area
+#	* customer_area
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: OpenERP Server 8.0rc1\n"
+"Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-15 15:18+0000\n"
-"PO-Revision-Date: 2014-07-15 15:18+0000\n"
+"POT-Creation-Date: 2014-12-17 16:14+0000\n"
+"PO-Revision-Date: 2014-12-17 16:14+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,11 +16,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: customer_area
-#: view:res.partner:0
+#: view:res.partner:customer_area.res_partner_view_area_search
 #: field:res.partner,area_id:0
-#: view:res.partner.area:0
+#: view:res.partner.area:customer_area.res_partner_area_form
 #: field:sale.order,area_id:0
-#: view:sale.report:0
+#: view:sale.report:customer_area.search_sale_report_add_area
 #: field:sale.report,area_id:0
 msgid "Area"
 msgstr "Zona"
@@ -28,7 +28,8 @@ msgstr "Zona"
 #. module: customer_area
 #: model:ir.actions.act_window,name:customer_area.action_res_partner_area
 #: model:ir.ui.menu,name:customer_area.res_partner_area_menu
-#: view:res.partner.area:0
+#: view:res.partner.area:customer_area.res_partner_area_filter
+#: view:res.partner.area:customer_area.res_partner_area_tree
 msgid "Areas"
 msgstr "Zonas"
 
@@ -36,6 +37,41 @@ msgstr "Zonas"
 #: field:res.partner.area,code:0
 msgid "Code"
 msgstr "Código"
+
+#. module: customer_area
+#: view:sale.report:customer_area.search_sale_report_add_area
+msgid "Company"
+msgstr "Compañía"
+
+#. module: customer_area
+#: view:res.partner:customer_area.res_partner_view_area_search
+msgid "Country"
+msgstr "País"
+
+#. module: customer_area
+#: field:res.partner.area,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: customer_area
+#: field:res.partner.area,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: customer_area
+#: field:res.partner.area,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: customer_area
+#: field:res.partner.area,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: customer_area
+#: field:res.partner.area,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
 
 #. module: customer_area
 #: field:res.partner.area,name:0
@@ -56,9 +92,4 @@ msgstr "Pedido de venta"
 #: model:ir.model,name:customer_area.model_sale_report
 msgid "Sales Orders Statistics"
 msgstr "Estadísticas pedidos de venta"
-
-#. module: customer_area
-#: model:ir.model,name:customer_area.model_res_partner_area
-msgid "res.partner.area"
-msgstr "res.partner.area"
 
