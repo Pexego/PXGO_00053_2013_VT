@@ -41,19 +41,34 @@ namespace OpenERPClient
         object Create(string dbName, int userId, string pwd, string model, string method, XmlRpcStruct fieldValues);
 		
 		[XmlRpcMethod("execute")]
+        object Create(string dbName, int userId, string pwd, string model, string method, XmlRpcStruct fieldValues, XmlRpcStruct context);
+		
+		[XmlRpcMethod("execute")]
         Object[] Search(string dbName, int userId, string pwd, string model, string method, Object[] filters);
 		
 		[XmlRpcMethod("execute")]
         bool Write(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct fieldValues);
 		
 		[XmlRpcMethod("execute")]
+        bool Write(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct fieldValues, XmlRpcStruct context);
+		
+		[XmlRpcMethod("execute")]
         bool Unlink(string dbName, int userId, string pwd, string model, string method, long[] ids);
+		
+		[XmlRpcMethod("execute")]
+        bool Unlink(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct context);
 		
 		[XmlRpcMethod("execute")]
         Object[] Read(string dbName, int userId, string pwd, string model, string method, long[] ids, string[] fieldNames);
 		
 		[XmlRpcMethod("execute")]
+        Object[] Read(string dbName, int userId, string pwd, string model, string method, long[] ids, string[] fieldNames, XmlRpcStruct context);
+		
+		[XmlRpcMethod("execute")]
         Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids);
+		
+		[XmlRpcMethod("execute")]
+        Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct context);
 
     }
 	
@@ -84,6 +99,11 @@ namespace OpenERPClient
 			return rpcclient.Create(dbName, userId, pwd, model, method, fieldValues);
 		}
 		
+		public object Create(string dbName, int userId, string pwd, string model, string method, XmlRpcStruct fieldValues, XmlRpcStruct context)
+		{
+			return rpcclient.Create(dbName, userId, pwd, model, method, fieldValues, context);
+		}
+		
 		public Object[] Search(string dbName, int userId, string pwd, string model, string method, Object[] filters)
 		{
 			return rpcclient.Search(dbName, userId, pwd, model, method, filters);
@@ -94,9 +114,19 @@ namespace OpenERPClient
 			return rpcclient.Write(dbName, userId, pwd, model, method, ids, fieldValues);
 		}
 		
+		public bool Write(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct fieldValues, XmlRpcStruct context)
+		{
+			return rpcclient.Write(dbName, userId, pwd, model, method, ids, fieldValues, context);
+		}
+		
 		public bool Unlink(string dbName, int userId, string pwd, string model, string method, long[] ids)
 		{
 			return rpcclient.Unlink(dbName, userId, pwd, model, method, ids);
+		}
+		
+		public bool Unlink(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct context)
+		{
+			return rpcclient.Unlink(dbName, userId, pwd, model, method, ids, context);
 		}
 		
 		public Object[] Read(string dbName, int userId, string pwd, string model, string method, long[] ids, string[] fieldNames)
@@ -104,9 +134,19 @@ namespace OpenERPClient
 			return rpcclient.Read(dbName, userId, pwd, model, method, ids, fieldNames);
 		}
 		
+		public Object[] Read(string dbName, int userId, string pwd, string model, string method, long[] ids, string[] fieldNames, XmlRpcStruct context)
+		{
+			return rpcclient.Read(dbName, userId, pwd, model, method, ids, fieldNames, context);
+		}
+		
 		public Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids)
 		{
 			return rpcclient.Execute(dbName, userId, pwd, model, method, ids);
+		}
+		
+		public Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct context)
+		{
+			return rpcclient.Execute(dbName, userId, pwd, model, method, ids, context);
 		}
 		
 		#region NotImplemanted

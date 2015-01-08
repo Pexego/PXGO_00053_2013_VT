@@ -11,7 +11,7 @@ namespace picking_management_example
 		{
 			// Datos de conexión
 			String Url = "http://localhost:8069";
-			String Dbname = "visiotech_devel";
+			String Dbname = "test_db";
 			String Login = "admin";
 			String Password = "admin";
 			
@@ -31,6 +31,8 @@ namespace picking_management_example
 			fields.Add("carrier_id"); // Transportista asociado
 			long[] picking_ids = new long[] {40,48};
 			XmlRpcStruct[] pickings_data = connection.Read("stock.picking", picking_ids, (string[]) fields.ToArray(typeof(string)));
+			XmlRpcStruct context = new XmlRpcStruct();
+			context.Add("lang", "es_ES");
 			foreach(var picking in pickings_data)
 			{
 				Console.WriteLine("Albaran {0} en estado {1}", picking["name"], picking["state"]);	
@@ -42,11 +44,11 @@ namespace picking_management_example
 					Console.WriteLine("Población: {0}", partner_data[0]["city"]);
 					Console.WriteLine("Cód. Postal: {0}", partner_data[0]["zip"]);
 					if (!partner_data[0]["state_id"].Equals(false)) { // Si tiene provincia
-						XmlRpcStruct[] state_data = connection.Read("res.country.state", new long[] {Convert.ToInt64(((object[]) partner_data[0]["state_id"])[0])}, new string[] {"name"});
+						XmlRpcStruct[] state_data = connection.Read("res.country.state", new long[] {Convert.ToInt64(((object[]) partner_data[0]["state_id"])[0])}, new string[] {"name"}, context);
 						Console.WriteLine("Provincia: {0}", state_data[0]["name"]);
 					}
 					if (!partner_data[0]["country_id"].Equals(false)) { // Si tiene país
-						XmlRpcStruct[] country_data = connection.Read("res.country", new long[] {Convert.ToInt64(((object[]) partner_data[0]["country_id"])[0])}, new string[] {"name"});
+						XmlRpcStruct[] country_data = connection.Read("res.country", new long[] {Convert.ToInt64(((object[]) partner_data[0]["country_id"])[0])}, new string[] {"name"}, context);
 						Console.WriteLine("País: {0}", country_data[0]["name"]);
 					}
 				}
