@@ -55,11 +55,11 @@ class SaleOrderLine(models.Model):
                            partner_id=False, lang=False, update_tax=True,
                            date_order=False, packaging=False,
                            fiscal_position=False,
-                           flag=False, sale_agent_ids=False, context=None):
+                           flag=False, warehouse_id=False, sale_agent_ids=False, context=None):
         res = super(SaleOrderLine, self).product_id_change2(
             cr, uid, ids, pricelist, product, qty, uom, qty_uos, uos, name,
             partner_id, lang, update_tax, date_order, packaging,
-            fiscal_position, flag, sale_agent_ids, context)
+            fiscal_position, flag, warehouse_id, sale_agent_ids, context)
         prod = self.pool.get('product.product').browse(cr, uid, product,
                                                        context)
         res['domain']['can_mount'] = [('id', 'in',

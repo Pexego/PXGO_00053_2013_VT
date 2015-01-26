@@ -63,7 +63,7 @@ class create_picking_move(models.TransientModel):
         else:
             res =  self.env.ref('stock.view_picking_form').id
             action['views'] = [(res, 'form')]
-            action['res_id'] = pick_ids and pick_ids[0].id or False
+            action['res_id'] = pick_ids and pick_ids[0] or False
         return action
 
     @api.multi
@@ -76,53 +76,61 @@ class create_picking_move(models.TransientModel):
             raise exceptions.except_orm(_('Picking error'), _('Type not found'))
         type_id = type_ids[0]
         picking_types = {}
-        all_moves = []
-        partner_id = self.move_detail_ids[0].move_id.partner_id.id
-        same_partner = True
+        all_moves = self.env['stock.move']
         # se recorren los movimientos para agruparlos por tipo
         for move in self.move_detail_ids:
             if not move.move_id.picking_type_id:
                 move.move_id.picking_type_id = type_id
-            if partner_id != move.move_id.partner_id.id:
-                same_partner = False
             if move.move_id.picking_type_id.id not in picking_types.keys():
-                picking_types[move.move_id.picking_type_id.id] = []
+                picking_types[move.move_id.picking_type_id.id] = {'inv': [], 'not_inv': []}
             if move.qty != move.move_id.product_uom_qty:
                 if move.qty > move.move_id.product_uom_qty:
                     raise exceptions.except_orm(_('Quantity error'), _('The quantity is greater than the original.'))
                 new_move = move.move_id.copy({'product_uom_qty': move.qty})
                 new_move.purchase_line_id = move.move_id.purchase_line_id
-                picking_types[move.move_id.picking_type_id.id].append(new_move)
+                if move.move_id.invoice_state == 'none':
+                    key = 'not_inv'
+                else:
+                    key = 'inv'
+                picking_types[move.move_id.picking_type_id.id][key].append(new_move)
                 move.move_id.product_uom_qty = move.move_id.product_uom_qty - move.qty
             else:
-                picking_types[move.move_id.picking_type_id.id].append(move.move_id)
+                if move.move_id.invoice_state == 'none':
+                    key = 'not_inv'
+                else:
+                    key = 'inv'
+                picking_types[move.move_id.picking_type_id.id][key].append(move.move_id)
                 move.move_id.date_expected = self.date_picking
-                all_moves.append(move.move_id.id)
-        if not same_partner:
-            partner_id = self.env.ref('purchase_picking.partner_multisupplier').id
+                all_moves += move.move_id
         picking_ids = []
 
         # se crea un albarán por cada tipo
         for pick_type in picking_types.keys():
-            moves_type = picking_types[pick_type]
-            picking_vals = {
-                'partner_id': partner_id,
-                'picking_type_id': pick_type,
-                'move_lines': [(6, 0, [x.id for x in moves_type])],
-                'origin': '',
-                'min_date': self.date_picking
-            }
+            for inv_type in picking_types[pick_type].keys():
+                moves_type = picking_types[pick_type][inv_type]
+                if not moves_type:
+                    continue
+                partner = moves_type[0].partner_id.id
+                for move in moves_type[1:]:
+                    if move.partner_id.id != partner:
+                        partner = self.env.ref('purchase_picking.partner_multisupplier').id
+                        break
 
-            for move in moves_type:
-                if move.purchase_line_id:
-                    picking_vals['origin'] += move.purchase_line_id.order_id.name + ", "
-            if picking_vals['origin']:
-                picking_vals['origin'] = picking_vals['origin'][:-2]
-            picking_ids.append(self.env['stock.picking'].create(picking_vals))
-        # TODO: Se vuelven a buscar todos los movimientos para tener un
-        #       recordset y poder llamar a las funciones, tal vez se pueda
-        #       conseguir sin volver a buscar 2 veces.
-        all_moves = self.env['stock.move'].browse(all_moves)
+                picking_vals = {
+                    'partner_id': partner,
+                    'picking_type_id': pick_type,
+                    'move_lines': [(6, 0, [x.id for x in moves_type])],
+                    'origin': '',
+                    'min_date': self.date_picking,
+                    'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none'
+                }
+
+                for move in moves_type:
+                    if move.purchase_line_id:
+                        picking_vals['origin'] += move.purchase_line_id.order_id.name + ", "
+                if picking_vals['origin']:
+                    picking_vals['origin'] = picking_vals['origin'][:-2]
+                picking_ids.append(self.env['stock.picking'].create(picking_vals).id)
         all_moves = all_moves.action_confirm()
 
         all_moves = self.env['stock.move'].browse(all_moves)

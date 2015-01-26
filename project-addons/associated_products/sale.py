@@ -102,6 +102,7 @@ class sale_order_line(orm.Model):
                                             False,
                                             new_line.order_id.fiscal_position,
                                             False,
+                                            False,
                                             agent_ids,
                                             context)
                 line_vals = line_vals['value']
@@ -174,6 +175,7 @@ class sale_order_line(orm.Model):
                                                 new_line.order_id.date_order,
                                                 False,
                                                 new_line.order_id.fiscal_position,
+                                                False,
                                                 False,
                                                 agent_ids,
                                                 context)

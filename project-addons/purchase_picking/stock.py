@@ -71,6 +71,13 @@ class stock_move(models.Model):
         return res
 
 
+    def _get_master_data(self, cr, uid, move, company, context=None):
+        partner, uid, currency = super(stock_move, self)._get_master_data(
+            cr, uid, move, company, context)
+        partner = move.partner_id
+        return partner, uid, currency
+
+
 class stock_reservation(models.Model):
     _inherit = 'stock.reservation'
 

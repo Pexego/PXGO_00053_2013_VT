@@ -141,6 +141,7 @@ class sale_equivalent_products(orm.TransientModel):
                                              False,
                                              wiz.line_id.order_id.fiscal_position,
                                              False,
+                                             False,
                                              agent_ids,
                                              context)
         line_vals = line_vals['value']

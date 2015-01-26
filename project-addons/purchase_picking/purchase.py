@@ -28,6 +28,16 @@ class purchase_order(models.Model):
 
     picking_created = fields.Boolean('Picking created', compute='is_picking_created')
 
+    @api.multi
+    def test_moves_done(self):
+        '''PO is done at the delivery side if all the incoming shipments are done'''
+        for purchase in self:
+            for line in purchase.order_line:
+                for move in line.move_ids:
+                    if move.state != 'done':
+                        return False
+        return True
+
     def is_picking_created(self):
         self.picking_created = self.picking_ids and True or False
 
@@ -42,6 +52,8 @@ class purchase_order(models.Model):
             cr, uid, order, order_line, picking_id, group_id, context)
         for move_dict in res:
             move_dict.pop('picking_id', None)
+            move_dict.pop('product_uos_qty', None)
+            move_dict.pop('product_uos', None)
             move_dict['partner_id'] = order.partner_id.id
         return res
 
@@ -90,6 +102,3 @@ class purchase_order(models.Model):
                         context=context):
                     move = stock_move.create(cr, uid, vals, context=context)
                     todo_moves.append(move)
-
-        # todo_moves = stock_move.action_confirm(cr, uid, todo_moves)
-        # stock_move.force_assign(cr, uid, todo_moves)
