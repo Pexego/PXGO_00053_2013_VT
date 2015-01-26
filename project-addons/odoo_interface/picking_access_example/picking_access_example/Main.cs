@@ -11,7 +11,7 @@ namespace picking_access_example
 		{
 			// Datos de conexión
 			String Url = "http://localhost:8069";
-			String Dbname = "visiotech_devel";
+			String Dbname = "test_db";
 			String Login = "admin";
 			String Password = "admin";
 			
@@ -29,6 +29,8 @@ namespace picking_access_example
 			long[] picking_ids = connection.Search("stock.picking", domain);
 			Console.WriteLine("Albaranes encontrados: {0}", picking_ids.Length);
 			
+			XmlRpcStruct context = new XmlRpcStruct();
+			context.Add("lang", "es_ES");
 			ArrayList fields = new ArrayList();
 			fields.Add("name"); // Num. albaran
 			fields.Add("partner_id"); // Empresa asociada al albaran
@@ -58,7 +60,7 @@ namespace picking_access_example
 				foreach(var move in moves)
 				{
 					XmlRpcStruct[] move_data = connection.Read("stock.move", new long[] {(long) move}, new string[] {"product_id", "product_uom_qty"});
-					XmlRpcStruct[] product_data = connection.Read("product.product", new long[] {Convert.ToInt64(((object[]) move_data[0]["product_id"])[0])}, new string[] {"default_code", "name"});
+					XmlRpcStruct[] product_data = connection.Read("product.product", new long[] {Convert.ToInt64(((object[]) move_data[0]["product_id"])[0])}, new string[] {"default_code", "name"}, context);
 					Console.WriteLine("[{0}] {1}, {2} Unidades", product_data[0]["default_code"], product_data[0]["name"], move_data[0]["product_uom_qty"]);	
 				}
 				

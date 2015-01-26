@@ -293,6 +293,24 @@ namespace OpenERPClient
 			return records.ToArray(typeof(XmlRpcStruct)) as XmlRpcStruct[];
 		}
 		
+		public XmlRpcStruct[] Read(string model, long[] ids, string[] fields, XmlRpcStruct context)
+		{
+			/* 
+			 It obtains data from OpenERP registries
+			 :param model : _name of model where you request
+			 :param ids : ids of registries whose you can obtain data
+             :param fields : names of models's fields you want to obtain
+             :param context : Odoo's context
+             
+             :return : XmlRpcStruct[] (data [[("id", 1), ("name", "Test")]])
+			*/
+			this.Open(OpenERPClient.OpenERPService.Object);
+			var data = this.rpcclient.Read (this.dbname, this.UserId, this.password, model, "read", ids, fields, context);
+			this.Close();
+			ArrayList records = new ArrayList(data);
+			return records.ToArray(typeof(XmlRpcStruct)) as XmlRpcStruct[];
+		}
+		
 		public bool Unlink(string model, long[] ids)
 		{
 			/* 
@@ -304,6 +322,22 @@ namespace OpenERPClient
 			*/
 			this.Open(OpenERPClient.OpenERPService.Object);
 			bool result = this.rpcclient.Unlink(this.dbname, this.UserId, this.password, model, "unlink", ids);
+			this.Close();
+			return result;
+		}
+		
+		public bool Unlink(string model, long[] ids, XmlRpcStruct context)
+		{
+			/* 
+			 It removes OpenERP registries
+			 :param model : _name of model where you remove
+			 :param ids: ids of registries to remove
+			 :param context : Odoo's context
+             
+             :return : Boolean
+			*/
+			this.Open(OpenERPClient.OpenERPService.Object);
+			bool result = this.rpcclient.Unlink(this.dbname, this.UserId, this.password, model, "unlink", ids, context);
 			this.Close();
 			return result;
 		}
@@ -324,6 +358,23 @@ namespace OpenERPClient
 			return result;
 		}
 		
+		public bool Write(string model, long[] ids, XmlRpcStruct fieldValues, XmlRpcStruct context)
+		{
+			/* 
+			 It updates OpenERp's registries
+			 :param model : _name of model where you update
+			 :param ids : Ids of registries whose you can update
+             :param fieldValues : struct with data to update [key, value]
+             :param context : Odoo's context 
+             
+             :return : Boolean
+			*/
+			this.Open(OpenERPClient.OpenERPService.Object);
+			bool result = this.rpcclient.Write(this.dbname, this.UserId, this.password, model, "write", ids, fieldValues, context);
+			this.Close();
+			return result;
+		}
+		
 		public Object Execute(string model, string method, long[] ids)
 		{
 			/* 
@@ -336,6 +387,23 @@ namespace OpenERPClient
 			*/
 			this.Open(OpenERPClient.OpenERPService.Object);
 			Object res = this.rpcclient.Execute(this.dbname, this.UserId, this.password, model, method, ids);
+			this.Close();
+			return res;
+		}
+		
+		public Object Execute(string model, string method, long[] ids, XmlRpcStruct context)
+		{
+			/* 
+			 It allows to execute any OpenERP's method
+			 :param model : _name of model where method is defined
+			 :param method : name of method to execute
+			 :param ids : ids of registries whose you can update
+			 :param context : Odoo's context
+             
+             :return : Object (depends on method)
+			*/
+			this.Open(OpenERPClient.OpenERPService.Object);
+			Object res = this.rpcclient.Execute(this.dbname, this.UserId, this.password, model, method, ids, context);
 			this.Close();
 			return res;
 		}
