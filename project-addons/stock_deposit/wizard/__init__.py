@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    Copyright (C) 2015 Pexego All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,17 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-{
-    'name': 'Stock deposit',
-    'version': '1.0',
-    'category': 'product',
-    'description': """Manage deposit of goods in a customer location""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    'depends' : ['base', 'sale', 'sale_stock', 'stock_reserve_sale'],
-    'data' : ['wizard/stock_invoice_deposit.xml',
-              'stock_data.xml', 'stock_deposit.xml', 'res_partner_view.xml',
-              'security/ir.model.access.csv', 'sale_view.xml'],
-    'installable': True
-}
+from . import stock_invoice_deposit

@@ -18,24 +18,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api
 
-from openerp.osv import fields,osv
 
-class res_partner(osv.osv):
+class res_partner(models.Model):
     _inherit = 'res.partner'
 
-    def _deposit_count(self, cr, uid, ids, field_name, arg, context=None):
-        res = dict(map(lambda x: (x,0), ids))
-        # The current user may not have access rights for sale orders
-        try:
-            for partner in self.browse(cr, uid, ids, context):
-                res[partner.id] = len(partner.deposit_ids)
-        except:
-            pass
-        return res
+    deposit_count = fields.Integer(string='# of Deposits',
+                                   compute='_deposit_count')
+    deposit_ids = fields.One2many('stock.deposit', 'partner_id', 'Deposits')
 
-    _columns = {
-        'deposit_count': fields.function(_deposit_count, string='# of Deposits', type='integer'),
-        'deposit_ids': fields.one2many('stock.deposit', 'partner_id','Deposits')
-    }
-
+    @api.one
+    @api.depends('deposit_ids')
+    def _deposit_count(self):
+        self.deposit_count = len(self.deposit_ids)
