@@ -31,7 +31,7 @@ class stock_picking(models.Model):
     @api.one
     def action_done(self):
         all_purchases = []
-        super(stock_picking, self).action_done()
+        res = super(stock_picking, self).action_done()
         for line in self.move_lines:
             if line.state == 'done' and line.purchase_line_id.order_id not in all_purchases:
                 all_purchases.append(line.purchase_line_id.order_id)
@@ -40,6 +40,8 @@ class stock_picking(models.Model):
             purchase.message_post(body=_("Goods received."),
                                   subtype='mt_comment',
                                   partner_ids=followers)
+
+        return res
 
 
 class stock_move(models.Model):
