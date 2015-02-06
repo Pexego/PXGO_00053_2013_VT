@@ -33,8 +33,9 @@ class stock_picking(models.Model):
         all_purchases = []
         res = super(stock_picking, self).action_done()
         for line in self.move_lines:
-            if line.state == 'done' and line.purchase_line_id.order_id not in all_purchases:
+            if line.state == 'done' and line.purchase_line_id and line.purchase_line_id.order_id not in all_purchases:
                 all_purchases.append(line.purchase_line_id.order_id)
+        all_purchases = list(set(all_purchases))
         for purchase in all_purchases:
             followers = purchase.message_follower_ids
             purchase.message_post(body=_("Goods received."),
