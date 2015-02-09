@@ -272,8 +272,7 @@ namespace OpenERPClient
 			this.Open(OpenERPClient.OpenERPService.Object);	
 			var ids_obj = this.rpcclient.Search(this.dbname, this.UserId, this.password, model, "search", filters);
 			this.Close();
-			ArrayList ids = new ArrayList(ids_obj);
-			return ids.ToArray(typeof(long)) as long[];
+			return Array.ConvertAll(ids_obj, ids => Convert.ToInt64(ids));
 		}
 		
 		public XmlRpcStruct[] Read(string model, long[] ids, string[] fields)
