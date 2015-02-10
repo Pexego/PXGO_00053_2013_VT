@@ -10,11 +10,15 @@
                         <button name="return_deposit" type="object"
                             string="Return"
                             class="oe_highlight"
-                            states="done"/>
+                            states="draft"/>
                         <button name="sale" type="object"
                             string="Sale"
                             class="oe_highlight"
-                            states="done"/>
+                            states="draft"/>
+                        <button name="%(stock_deposit.stock_invoice_deposit_action)d" type="action"
+                            string="Invoice"
+                            class="oe_highlight"
+                            states="sale"/>
 
                         <field name="state" widget="statusbar"
                         />
@@ -32,9 +36,9 @@
                                         class="oe_inline"/>
                                 </div>
                                 <group name="moves_grp" string="Moves">
-                                    <field name="invoiced" />
                                     <field name="picking_id" />
                                     <field name="sale_id" />
+                                    <field name="invoice_id" />
                                     <field name="move_id" />
                                     <field name="sale_move_id" />
                                     <field name="return_picking_id" />
@@ -69,6 +73,7 @@
                     <field name="partner_id" />
                     <field name="picking_id" />
                     <field name="sale_id" />
+                    <field name="invoice_id" />
                     <field name="user_id"/>
                     <field name="product_uom_qty" sum="Total" />
                     <field name="product_uom" />
@@ -89,8 +94,8 @@
                     <field name="partner_id" />
                     <field name="picking_id" />
                     <field name="sale_id" />
-                    <filter name="done" string="Deposits"
-                        domain="[('state', '=', 'done')]"
+                    <filter name="draft" string="Deposits"
+                        domain="[('state', '=', 'draft')]"
                         help="Active deposits"/>
                     <group expand="0" string="Group By...">
                         <filter string="Partner"
@@ -117,7 +122,7 @@
             <field name="view_type">form</field>
             <field name="view_id" ref="view_stock_deposit_tree"/>
             <field name="search_view_id" ref="view_stock_deposit_search"/>
-            <field name="context">{'search_default_done': 1,
+            <field name="context">{'search_default_draft': 1,
                                   'search_default_groupby_partner': 1,
                                   'search_default_groupby_product': 1}</field>
             <field name="help" type="html">

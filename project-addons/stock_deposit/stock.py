@@ -74,7 +74,7 @@ class stock_move(models.Model):
                         move.procurement_id.sale_line_id.deposit_date,
                     'user_id':
                         move.procurement_id.sale_line_id.order_id.user_id.id,
-                    'state': 'done'
+                    'state': 'draft'
                 }
                 deposit_obj.create(values)
         return res
@@ -98,14 +98,15 @@ class stock_picking(models.Model):
     def action_assign(self):
         for picking in self:
             all_deposit = True
-            for move in picking.move_line:
+            for move in picking.move_lines:
                 if not move.procurement_id.sale_line_id.deposit:
                     all_deposit = False
             if all_deposit and picking.invoice_state == '2binvoiced':
                 picking.invoice_state = 'invoiced'
+        return super(stock_picking, self).action_assign()
 
 
-class stock_invoice_onshipping(models.TransientModel):
+'''class stock_invoice_onshipping(models.TransientModel):
 
     _inherit = 'stock.invoice.onshipping'
 
@@ -135,4 +136,4 @@ class stock_invoice_onshipping(models.TransientModel):
             act_data['domain'] = "[('id','in', [" + \
                 ','.join(map(str, invoice_ids)) + "])]"
             return action
-        return True
+        return True'''

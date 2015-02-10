@@ -10,8 +10,6 @@
                 <form string="Invoice deposits">
                     <group>
                         <field name="journal_id"/>
-                        <field name="date_invoice"/>
-                        <field name="group_by_sale"/>
                     </group>
                     <button string="Create invoice" name="create_invoice" type="object" icon="gtk-ok"/>
                     <button string="Cancel" special="cancel" icon="gtk-cancel"/>

@@ -35,7 +35,7 @@ class stock_deposit(models.Model):
                                   string='Uom',
                                   store=True,
                                   readonly=True)
-    invoiced = fields.Boolean('Invoiced')
+    invoice_id = fields.Many2one('account.invoice', 'Invoice')
     move_id = fields.Many2one('stock.move', 'Deposit Move', required=True,
                               readonly=True, ondelete='cascade', select=1)
     picking_id = fields.Many2one(related='move_id.picking_id',
@@ -56,8 +56,9 @@ class stock_deposit(models.Model):
                                  string='Date of Transfer',
                                  store=True,
                                  readonly=True)
-    state = fields.Selection([('done', 'Done'), ('sale', 'Sale'),
-                              ('returned', 'Returned')], 'State',
+    state = fields.Selection([('draft', 'Draft'), ('sale', 'Sale'),
+                              ('returned', 'Returned'),
+                              ('invoiced', 'Invoiced')], 'State',
                              readonly=True, required=True)
     sale_move_id = fields.Many2one('stock.move', 'Sale Move', required=False,
                                    readonly=True, ondelete='cascade', select=1)

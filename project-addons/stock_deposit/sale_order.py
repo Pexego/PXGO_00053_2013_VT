@@ -59,6 +59,14 @@ class sale_order_line(models.Model):
         else:
             self.deposit_date = False
 
+    @api.multi
+    def invoice_line_create(self):
+        lines = self.env['sale.order.line']
+        for line in self:
+            if not line.deposit or self.env.context.get('invoice_deposit', False):
+                lines += line
+        return super(sale_order_line, lines).invoice_line_create()
+
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
