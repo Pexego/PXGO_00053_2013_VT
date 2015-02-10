@@ -12,9 +12,29 @@
                     <field name="deposit" />
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
-                     <field name="deposit" on_change="onchange_deposit(deposit)"/>
+                     <field name="deposit"/>
                      <field name="deposit_date" attrs="{'invisible': [('deposit', '!=', True)]}"/>
                 </xpath>
+            </field>
+        </record>
+
+        <record id="view_order_form_deposit_button" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
+            <field name="arch" type="xml">
+                <div name="buttons" position="inside">
+                    <field name="id" invisible="1"/>
+                    <field name="deposit_count" invisible="1"/>
+                    <button
+                            class="oe_stat_button"
+                            icon="fa-cogs"
+                            name="%(stock_deposit.action_stock_deposit)d"
+                            type="action"
+                            string="Deposits"
+                            attrs="{'invisible': [('deposit_count', '=', 0)]}"
+                            context="{'search_default_sale_id': id}"/>
+                </div>
             </field>
         </record>
 
