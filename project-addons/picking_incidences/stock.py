@@ -26,7 +26,7 @@ class StockPicking(models.Model):
 
     _inherit = "stock.picking"
 
-    with_incidences = fields.Boolean('With incidences')#, readonly=True)
+    with_incidences = fields.Boolean('With incidences', readonly=True)
 
     @api.one
     def action_ignore_incidences(self):

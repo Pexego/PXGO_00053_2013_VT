@@ -1,0 +1,55 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * picking_incidences
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-02-12 18:56+0000\n"
+"PO-Revision-Date: 2015-02-12 18:56+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: picking_incidences
+#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+msgid "Back to Edit"
+msgstr "Volver a editar"
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:53
+#: code:addons/picking_incidences/stock.py:64
+#, python-format
+msgid "Cannot process picking with incidences. Please fix or ignore it."
+msgstr "No puede procesar un albarán con incidencias. Por favor arréglelo o ignórelo."
+
+#. module: picking_incidences
+#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+msgid "Ignore incidence"
+msgstr "Ignorar incidencia"
+
+#. module: picking_incidences
+#: model:ir.model,name:picking_incidences.model_stock_picking
+msgid "Picking List"
+msgstr "Albarán"
+
+#. module: picking_incidences
+#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+msgid "Unreserve"
+msgstr "Anular reserva"
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:34
+#, python-format
+msgid "User %s ignored the last incidence."
+msgstr "El usuario %s ha ignorado la última incidencia."
+
+#. module: picking_incidences
+#: field:stock.picking,with_incidences:0
+msgid "With incidences"
+msgstr "Con incidencias"
+
