@@ -69,6 +69,9 @@ namespace OpenERPClient
 		
 		[XmlRpcMethod("execute")]
         Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct context);
+		
+		[XmlRpcMethod("execute")]
+        void MessagePost(string dbName, int userId, string pwd, string model, string method, long[] ids, string message);
 
     }
 	
@@ -147,6 +150,11 @@ namespace OpenERPClient
 		public Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct context)
 		{
 			return rpcclient.Execute(dbName, userId, pwd, model, method, ids, context);
+		}
+		
+		public void MessagePost(string dbName, int userId, string pwd, string model, string method, long[] ids, string message)
+		{
+			rpcclient.MessagePost(dbName, userId, pwd, model, method, ids, message);
 		}
 		
 		#region NotImplemanted

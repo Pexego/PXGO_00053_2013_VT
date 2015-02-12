@@ -5,10 +5,10 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.0</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2FCB80DF-1890-47D0-B795-3E7E39F84A0D}</ProjectGuid>
+    <ProjectGuid>{AE9FD94D-4813-4414-A0D8-859A964827E6}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>odoo_interface</RootNamespace>
-    <AssemblyName>odoo_interface</AssemblyName>
+    <RootNamespace>register_picking_incidence</RootNamespace>
+    <AssemblyName>register_picking_incidence</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,7 +33,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\CookComputing.XmlRpcV2.dll</HintPath>
+      <HintPath>..\..\OpenERPClient\bin\Debug\CookComputing.XmlRpcV2.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenERPClient">
+      <HintPath>..\..\OpenERPClient\bin\Debug\OpenERPClient.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

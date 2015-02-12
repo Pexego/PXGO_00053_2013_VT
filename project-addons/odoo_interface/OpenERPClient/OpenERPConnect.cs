@@ -407,6 +407,21 @@ namespace OpenERPClient
 			return res;
 		}
 		
+		public void MessagePost(string model, long[] ids, string message)
+		{
+			/* 
+			 It allows to create a message in any OpenERP's record
+			 :param model : _name of model where method is defined
+			 :param ids : ids of registries whose you can update
+			 :param message : message to send
+             
+             :return : long (Id of message)
+			*/
+			this.Open(OpenERPClient.OpenERPService.Object);
+			this.rpcclient.MessagePost(this.dbname, this.UserId, this.password, model, "message_post", ids, message);
+			this.Close();
+		}
+		
 	}
 
 }

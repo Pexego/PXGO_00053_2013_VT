@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_picking_form_add_incidences" model="ir.ui.view">
+            <field name="name">stock.picking.form_add_incidences</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <button name="action_cancel" position="after">
+                    <button name="action_ignore_incidences" attrs="{'invisible': ['|',('state', '!=', 'assigned'),('with_incidences','=',False)]}" string="Ignore incidence" groups="base.group_user" type="object"/>
+                    <button name="unassign_picking" attrs="{'invisible': ['|',('state', '!=', 'assigned'),('with_incidences','=',False)]}" string="Back to Edit" groups="base.group_user" type="object"/>
+                </button>
+                <button name="do_unreserve" position="replace">
+                    <button name="do_unreserve" string="Unreserve" groups="base.group_user" type="object" attrs="{'invisible': ['|',('quant_reserved_exist', '=', False),('with_incidences','=',True)]}"/>
+                </button>
+                <field name="origin" position="after">
+                    <field name="with_incidences"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
