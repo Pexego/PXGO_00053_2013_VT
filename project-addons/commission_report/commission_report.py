@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, tools
+from openerp import models, fields, tools
 
 
 class commission_report(models.Model):

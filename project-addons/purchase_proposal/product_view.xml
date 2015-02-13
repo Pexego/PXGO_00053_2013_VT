@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <record id="product_add_security_margin" model="ir.ui.view">
-            <field name="name">product_add_security_margin</field>
+
+        <record id="product_add_proposal_data" model="ir.ui.view">
+            <field name="name">product.product.form</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
-                <field name="route_ids" position="after">
-                    <field name="security_margin" />
-                </field>
+                <group name="sale_condition" position="inside">
+                    <label for="order_cycle"/>
+                    <div>
+                        <field name="order_cycle" class="oe_inline"/> days
+                    </div>
+                    <label for="transport_time"/>
+                    <div>
+                        <field name="transport_time" class="oe_inline"/> days
+                    </div>
+                    <label for="security_margin"/>
+                    <div>
+                        <field name="security_margin" class="oe_inline"/> days
+                    </div>
+                </group>
             </field>
         </record>
+
     </data>
 </openerp>
