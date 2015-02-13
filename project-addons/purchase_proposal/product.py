@@ -29,6 +29,7 @@ class ProductProduct(models.Model):
     order_cycle = fields.Integer('Order cycle')
     transport_time = fields.Integer('Transport time')
     security_margin = fields.Integer('Security margin')
+
     @api.model
     def compute_last_sixty_days_sales(self):
         positive_days_obj = self.env['stock.days.positive']
@@ -44,4 +45,6 @@ class ProductProduct(models.Model):
                                      ('product_id', '=', product.id),
                                      ('picking_type_id.code', '=',
                                       'outgoing')])
-            product.last_sixty_days_sales = sum([x.product_uom_qty for x in moves if x.procurement_id.sale_line_id])
+            product.last_sixty_days_sales = sum(
+                [x.product_uom_qty for x in moves
+                 if x.procurement_id.sale_line_id])
