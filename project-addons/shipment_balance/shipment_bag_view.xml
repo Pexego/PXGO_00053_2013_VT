@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="shipment_bag_tree" model="ir.ui.view">
+            <field name="name">shipment.bag.tree</field>
+            <field name="model">shipment.bag</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Shipment bags">
+                    <field name="partner_id"/>
+                    <field name="date"/>
+                    <field name="origin"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="shipment_bag_form" model="ir.ui.view">
+            <field name="name">shipment.bag.form</field>
+            <field name="model">shipment.bag</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Shipment bag">
+                    <sheet>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="date"/>
+                            <field name="origin"/>
+                            <field name="active"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="shipment_bag_filter" model="ir.ui.view">
+            <field name="name">shipment.bag.search</field>
+            <field name="model">shipment.bag</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Shipment bags">
+                    <field name="partner_id"/>
+                    <field name="origin"/>
+               </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_view_shipment_bag">
+            <field name="name">shipment.bag</field>
+            <field name="res_model">shipment.bag</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="shipment_bag_tree"/>
+            <field name="search_view_id" ref="shipment_bag_filter"/>
+        </record>
+
+    </data>
+</openerp>

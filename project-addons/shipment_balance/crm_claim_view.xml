@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="crm_claim_show_shipping_button" model="ir.ui.view">
+            <field name="name">crm.claim.form</field>
+            <field name="model">crm.claim</field>
+            <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
+            <field name="arch" type="xml">
+                <header position="inside">
+                    <field name="shipment_paid" invisible="1"/>
+                    <button name="customer_paid_shipping" string="Shipping paid by customer" type="object" attrs="{'invisible':['|', '|', ('state_show_buttons', '=', False), ('claim_type', '=', 'supplier'), ('shipment_paid', '=', True)]}"/>
+                </header>
+            </field>
+        </record>
+    </data>
+</openerp>
