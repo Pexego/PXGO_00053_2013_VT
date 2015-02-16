@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="account_invoice_report_add_filters" model="ir.ui.view">
+            <field name="name">account.invoice.report.search</field>
+            <field name="model">account.invoice.report</field>
+            <field name="inherit_id" ref="account.view_account_invoice_report_search"/>
+            <field name="arch" type="xml">
+                <filter string="Partner" name="partner_id" position="after">
+                    <filter string="country" name="country_id" context="{'group_by':'country_id'}"/>
+                    <filter string="Payment mode" name="payment_mode_id" context="{'group_by':'payment_mode_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+    </data>
+</openerp>
