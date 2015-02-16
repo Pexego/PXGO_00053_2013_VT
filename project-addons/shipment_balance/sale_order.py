@@ -18,19 +18,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, exceptions, _
 
-{
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'stock_account', 'sale_stock'],
-    "data": ['account_view.xml', 'report/account_invoice_report_view.xml'],
-    "installable": True
-}
+
+class SaleOrder(models.Model):
+
+    _inherit = 'sale.order'
+
+    shipment_added = fields.Boolean('Shipment added')
+
+    @api.one
+    def use_paid_shipment(self):
+        if self.shipment_added:
+            return
+        shipping = self.env['shipment.bag'].search([('partner_id', '=', self.partner_id.id)])
+        if shipping:
+            shipping[0].active = False
+            self.shipment_added = True
+        else:
+            raise exceptions.Warning(_('Shipment error'), _('Not shipments paid founded'))

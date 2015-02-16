@@ -21,3 +21,4 @@
 from . import stock
 from . import account
 from . import email_template
+from . import report

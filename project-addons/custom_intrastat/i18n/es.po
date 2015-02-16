@@ -1,0 +1,47 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * custom_intrastat
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-06 13:07+0000\n"
+"PO-Revision-Date: 2014-11-06 13:07+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_intrastat
+#: field:report.intrastat,country_id:0
+msgid "Country"
+msgstr "País"
+
+#. module: custom_intrastat
+#: model:ir.model,name:custom_intrastat.model_report_intrastat
+msgid "Intrastat report"
+msgstr "Informe Intrastat"
+
+#. module: custom_intrastat
+#: field:report.intrastat,partner_id:0
+msgid "Partner"
+msgstr "Partner"
+
+#. module: custom_intrastat
+#: view:report.intrastat:custom_intrastat.intrastat_custom_search
+msgid "country"
+msgstr "País"
+
+#. module: custom_intrastat
+#: view:report.intrastat:custom_intrastat.intrastat_custom_search
+msgid "intrastat code"
+msgstr "Código intrastat"
+
+#. module: custom_intrastat
+#: view:report.intrastat:custom_intrastat.intrastat_custom_search
+msgid "partner"
+msgstr "partner"
+

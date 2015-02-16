@@ -18,19 +18,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields
 
-{
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'stock_account', 'sale_stock'],
-    "data": ['account_view.xml', 'report/account_invoice_report_view.xml'],
-    "installable": True
-}
+
+class account_invoice_report(models.Model):
+
+    _inherit = 'account.invoice.report'
+
+    payment_mode_id = fields.Many2one('payment.mode', 'Payment mode')
+
+
+    def _select(self):
+        select_str = super(account_invoice_report, self)._select()
+        select_str += ', sub.payment_mode_id as payment_mode_id'
+        return select_str
+
+    def _sub_select(self):
+        select_str = super(account_invoice_report, self)._sub_select()
+        select_str += ', ai.payment_mode_id'
+        return select_str
+
+    def _group_by(self):
+        group_by_str = super(account_invoice_report, self)._group_by()
+        group_by_str += ', ai.payment_mode_id'
+        return group_by_str

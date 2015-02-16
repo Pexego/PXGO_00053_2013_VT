@@ -18,19 +18,15 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, exceptions, _
 
-{
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'stock_account', 'sale_stock'],
-    "data": ['account_view.xml', 'report/account_invoice_report_view.xml'],
-    "installable": True
-}
+
+class ShipmentBag(models.Model):
+
+    _name = 'shipment.bag'
+    _order = 'date asc'
+
+    date = fields.Date('Date')
+    partner_id = fields.Many2one('res.partner', 'Customer')
+    active = fields.Boolean('Active')
+    origin = fields.Char('Origin')

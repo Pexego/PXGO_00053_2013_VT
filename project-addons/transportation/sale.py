@@ -50,18 +50,23 @@ class sale_order(models.Model):
             if self.service_id.id not in service_ids:
                 self.service_id = False
             return {'domain': {'service_id': [('id', 'in', service_ids)]}}
-        all_services  = [x.id for x in self.env['transportation.service'].search([])]
+        all_services = [x.id for x in
+                        self.env['transportation.service'].search([])]
         return {'domain': {'service_id': [('id', 'in', all_services)]}}
 
     @api.multi
     def action_wait(self):
         super(sale_order, self).action_wait()
         daily_obj = self.env['transportation.daily']
-        trans_daily = daily_obj.search([('date', '=', date.today()), ('area_id', '=', self.partner_id.area_id.id)])
+        trans_daily = daily_obj.search([('date', '=', date.today()),
+                                        ('area_id', '=',
+                                         self.partner_id.area_id.id)])
         if trans_daily:
             trans_daily = trans_daily[0]
         else:
-            trans_daily = daily_obj.create({'date': date.today(), 'area_id': self.partner_id.area_id.id})
+            trans_daily = daily_obj.create({'date': date.today(),
+                                            'area_id':
+                                                self.partner_id.area_id.id})
 
         if self.transporter_id:
             trans_daily.assign_transporter(self.transporter_id)

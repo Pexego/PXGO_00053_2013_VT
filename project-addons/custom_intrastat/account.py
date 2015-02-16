@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
+#    Copyright (C) 2014 Pexego All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,19 +18,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields
 
-{
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'stock_account', 'sale_stock'],
-    "data": ['account_view.xml', 'report/account_invoice_report_view.xml'],
-    "installable": True
-}
+
+class AccountInvoiceLine(models.Model):
+
+    _inherit = 'account.invoice.line'
+
+    weight = fields.Float('Weight')

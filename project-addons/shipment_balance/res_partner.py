@@ -18,19 +18,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api
 
-{
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'stock_account', 'sale_stock'],
-    "data": ['account_view.xml', 'report/account_invoice_report_view.xml'],
-    "installable": True
-}
+
+class res_partner(models.Model):
+
+    _inherit = 'res.partner'
+
+    shipment_bag_ids = fields.One2many('shipment.bag', 'partner_id',
+                                       'Shipments')
+    shipment_count = fields.Float('shipments', compute='_get_shipment_count')
+
+    @api.multi
+    @api.depends('shipment_bag_ids')
+    def _get_shipment_count(self):
+        for partner in self:
+            partner.shipment_count = len(partner.shipment_bag_ids)

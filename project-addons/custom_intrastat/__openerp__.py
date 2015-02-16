@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
+#    Copyright (C) 2014 Pexego All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,17 +20,13 @@
 ##############################################################################
 
 {
-    'name': 'Account custom',
+    'name': "Intrastat custom",
     'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
+    'category': 'stock',
+    'description': """""",
     'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'stock_account', 'sale_stock'],
-    "data": ['account_view.xml', 'report/account_invoice_report_view.xml'],
+    'website': 'www.pexego.es',
+    "depends": ['report_intrastat'],
+    "data": ['intrastat_report_view.xml'],
     "installable": True
 }

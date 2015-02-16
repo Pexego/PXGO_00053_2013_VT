@@ -20,17 +20,13 @@
 ##############################################################################
 
 {
-    'name': 'Account custom',
+    'name': 'Shipments balance',
     'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
+    'category': 'sale',
+    'description': """""",
     'author': 'Pexego',
     'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'stock_account', 'sale_stock'],
-    "data": ['account_view.xml', 'report/account_invoice_report_view.xml'],
+    "depends": ['sale', 'sale_stock'],
+    "data": ['shipment_bag_view.xml', 'crm_claim_view.xml', 'res_partner_view.xml', 'sale_order_view.xml'],
     "installable": True
 }

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    Copyright (C) 2015 Pexego All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,16 +18,23 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, exceptions, _
+from datetime import date
 
 
-from openerp import models, fields, api
+class CrmClaim(models.Model):
 
+    _inherit = 'crm.claim'
 
-class run_purchase_proposal_wizard(models.TransientModel):
-
-    _name = "run.purchase.proposal.wizard"
+    shipment_paid = fields.Boolean('Shipment paid')
 
     @api.one
-    def run_scheduler(self):
-        self.env['purchase.proposal'].run_scheduler()
-        return {'type': 'ir.actions.act_window_close'}
+    def customer_paid_shipping(self):
+        shipment_dict = {
+            'partner_id': self.partner_id.id,
+            'date': date.today(),
+            'active': True,
+            'origin': self.name
+        }
+        self.env['shipment.bag'].create(shipment_dict)
+        self.shipment_paid = True
