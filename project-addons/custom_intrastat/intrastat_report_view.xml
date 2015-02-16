@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="intrastat_custom_report" model="ir.ui.view">
+            <field name="name">instrastat.tree</field>
+            <field name="model">report.intrastat</field>
+            <field name="inherit_id" ref="report_intrastat.view_report_intrastat_tree"/>
+            <field name="arch" type="xml">
+                    <field name="code" position="replace">
+                        <field name="partner_id"/>
+                        <field name="country_id"/>
+                    </field>
+            </field>
+        </record>
+
+        <record id="intrastat_custom_search" model="ir.ui.view">
+            <field name="name">instrastat.search</field>
+            <field name="model">report.intrastat</field>
+            <field name="inherit_id" ref="report_intrastat.view_report_intrastat_search"/>
+            <field name="arch" type="xml">
+                <field name="intrastat_id" position="after">
+                    <field name="partner_id"/>
+                    <field name="country_id"/>
+                    <filter string='country' domain="[]" context="{'group_by' : 'country_id'}"/>
+                    <filter string='partner' domain="[]" context="{'group_by' : 'partner_id'}"/>
+                    <filter string='intrastat code' domain="[]" context="{'group_by' : 'intrastat_id'}"/>
+                </field>
+            </field>
+        </record>
+
+        <template id="report_intrastatinvoice_document_change_weight" inherit_id="report_intrastat.report_intrastatinvoice_document">
+            <xpath expr="//span[@t-esc='l.product_id.weight']" position="replace">
+                <span t-esc="l.weight"/>
+            </xpath>
+        </template>
+
+    </data>
+</openerp>

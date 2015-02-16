@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from openerp import models, fields, api
 import math
 
 
@@ -41,10 +41,11 @@ class transportation_daily(models.Model):
 
     date = fields.Date('Date')
     area_id = fields.Many2one('res.partner.area', 'Area')
-    assignations = fields.One2many('assignation.counter', 'daily_assigned', 'Assignations')
+    assignations = fields.One2many('assignation.counter', 'daily_assigned',
+                                   'Assignations')
 
     def create(self, vals):
-        counter_obj =  self.env['assignation.counter']
+        counter_obj = self.env['assignation.counter']
         obj = super(transportation_daily, self).create(vals)
         for transporter in obj.area_id.transporter_rotation_ids:
             counter_vals = {
@@ -60,7 +61,7 @@ class transportation_daily(models.Model):
         """
             Returns the transporter recomended for this area.
         """
-        counter_obj =  self.env['assignation.counter']
+        counter_obj = self.env['assignation.counter']
 
         if partner.transporter_id:
             return partner.transporter_id
@@ -76,6 +77,7 @@ class transportation_daily(models.Model):
         if counter:
             counter[0].quantity += 1
 
+
 class assignation_counter(models.Model):
 
     _name = 'assignation.counter'
@@ -85,7 +87,8 @@ class assignation_counter(models.Model):
     transporter = fields.Many2one('transportation.transporter', 'Transporter')
     quantity = fields.Float('Quantity', default=0)
     ratio = fields.Integer('Ratio')
-    rot_counter = fields.Integer('Rotation counter', compute='_get_rot_counter', store=True)
+    rot_counter = fields.Integer('Rotation counter',
+                                 compute='_get_rot_counter', store=True)
 
     @api.one
     @api.depends('quantity', 'ratio')
@@ -94,5 +97,3 @@ class assignation_counter(models.Model):
             self.rot_counter = int(math.floor(self.quantity / self.ratio))
         else:
             self.rot_counter = 0
-
-
