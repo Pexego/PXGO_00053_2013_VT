@@ -29,10 +29,14 @@
     'author': 'Banking addons community',
     'website': 'https://launchpad.net/banking-addons',
     'category': 'Banking addons',
-    'depends': ['account_banking_pain_base'],
-    'data': ['wizard/export_sdd_view.xml'],
+    'depends': ['account_banking_sepa_direct_debit',
+                'account_banking_payment_export',
+                'account_payment'],
+    'data': ['wizard/export_sdd_view.xml',
+             'payment_order_data.xml'],
     'demo': [],
     'description': '''
-Allow to export sepa direct debit files grouped by partner''',
+Allow to export sepa direct debit files grouped by partner.
+Send email to partners when payment order is done''',
     'installable': True,
 }
