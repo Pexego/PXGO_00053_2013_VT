@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-12 18:56+0000\n"
-"PO-Revision-Date: 2015-02-12 18:56+0000\n"
+"POT-Creation-Date: 2015-02-25 18:59+0000\n"
+"PO-Revision-Date: 2015-02-25 18:59+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,20 +17,15 @@ msgstr ""
 
 #. module: picking_incidences
 #: view:stock.picking:picking_incidences.view_picking_form_add_incidences
-msgid "Back to Edit"
-msgstr "Volver a editar"
+msgid "Accept ready qtys."
+msgstr "Aceptar cantidad preparada"
 
 #. module: picking_incidences
-#: code:addons/picking_incidences/stock.py:53
-#: code:addons/picking_incidences/stock.py:64
+#: code:addons/picking_incidences/stock.py:81
+#: code:addons/picking_incidences/stock.py:92
 #, python-format
 msgid "Cannot process picking with incidences. Please fix or ignore it."
 msgstr "No puede procesar un albarán con incidencias. Por favor arréglelo o ignórelo."
-
-#. module: picking_incidences
-#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
-msgid "Ignore incidence"
-msgstr "Ignorar incidencia"
 
 #. module: picking_incidences
 #: model:ir.model,name:picking_incidences.model_stock_picking
@@ -38,15 +33,25 @@ msgid "Picking List"
 msgstr "Albarán"
 
 #. module: picking_incidences
+#: field:stock.move,qty_ready:0
+msgid "Qty ready"
+msgstr "Cant. preparada"
+
+#. module: picking_incidences
+#: model:ir.model,name:picking_incidences.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: picking_incidences
 #: view:stock.picking:picking_incidences.view_picking_form_add_incidences
 msgid "Unreserve"
 msgstr "Anular reserva"
 
 #. module: picking_incidences
-#: code:addons/picking_incidences/stock.py:34
+#: code:addons/picking_incidences/stock.py:66
 #, python-format
-msgid "User %s ignored the last incidence."
-msgstr "El usuario %s ha ignorado la última incidencia."
+msgid "User %s accepted ready quantities."
+msgstr "El usuario %s ha aceptado las cantidades preparadas."
 
 #. module: picking_incidences
 #: field:stock.picking,with_incidences:0

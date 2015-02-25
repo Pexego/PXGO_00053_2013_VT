@@ -20,6 +20,17 @@
 ##############################################################################
 
 from openerp import fields, models, api, _, exceptions
+import openerp.addons.decimal_precision as dp
+from openerp.tools.float_utils import float_compare, float_round
+
+
+class StockMove(models.Model):
+
+    _inherit = "stock.move"
+
+    qty_ready = fields.Float('Qty ready', readonly=True,
+                             digits=dp.get_precision('Product Unit of'
+                                                     ' Measure'))
 
 
 class StockPicking(models.Model):
@@ -29,9 +40,30 @@ class StockPicking(models.Model):
     with_incidences = fields.Boolean('With incidences', readonly=True)
 
     @api.one
-    def action_ignore_incidences(self):
+    def action_accept_ready_qty(self):
         self.with_incidences = False
-        self.message_post(body=_("User %s ignored the last incidence.") %
+        new_moves = []
+        for move in self.move_lines:
+            if move.state in ('done', 'cancel'):
+                # ignore stock moves cancelled or already done
+                continue
+            precision = move.product_uom.rounding
+            remaining_qty = move.product_uom_qty - move.qty_ready
+            remaining_qty = float_round(remaining_qty,
+                                        precision_rounding=precision)
+            if float_compare(remaining_qty, 0,
+                             precision_rounding=precision) > 0 and \
+                float_compare(remaining_qty, move.product_qty,
+                              precision_rounding=precision) < 0:
+                new_move = move.split(move, remaining_qty)
+                new_moves.append(new_move)
+        if new_moves:
+            new_moves = self.env['stock.move'].browse(new_moves)
+            self._create_backorder(self, backorder_moves=new_moves)
+            new_moves.write({'qty_ready': 0.0})
+            self.do_unreserve()
+            self.recheck_availability()
+        self.message_post(body=_("User %s accepted ready quantities.") %
                           (self.env.user.name))
 
     @api.multi
@@ -40,10 +72,6 @@ class StockPicking(models.Model):
         for pick in self:
             pick.write({'with_incidences': False})
         return res
-
-    @api.multi
-    def unassign_picking(self):
-        self.do_unreserve()
 
     @api.cr_uid_ids_context
     def do_enter_transfer_details(self, cr, uid, picking, context=None):
