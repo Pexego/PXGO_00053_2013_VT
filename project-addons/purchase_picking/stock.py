@@ -51,28 +51,31 @@ class stock_move(models.Model):
 
     partner_id = fields.Many2one('res.partner', 'Partner')
 
-
     def _get_master_data(self, cr, uid, move, company, context=None):
         ''' returns a tuple (browse_record(res.partner), ID(res.users),
             ID(res.currency)'''
         return move.partner_id, uid, company.currency_id.id
 
-    @api.one
+    @api.multi
     def write(self, vals):
-        res = super (stock_move, self).write(vals)
-        if self.picking_type_id.code == 'incoming':
-            if 'date_expected' in vals.keys():
-                self.env['stock.reservation'].reassign_reservation_dates(self.product_id)
+        res = super(stock_move, self).write(vals)
+        for move in self:
+            move.refresh()
+            if move.picking_type_id.code == 'incoming':
+                if vals.get('date_expected', False):
+                    self.env['stock.reservation'].\
+                        reassign_reservation_dates(move.product_id)
         return res
 
     @api.model
     def create(self, vals):
         res = super(stock_move, self).create(vals)
-        if 'picking_type_id' in vals.keys() and res.picking_type_id.code == 'incoming':
+        if (vals.get('picking_type_id', False) and
+                res.picking_type_id.code == 'incoming'):
             if 'date_expected' in vals.keys():
-                self.env['stock.reservation'].reassign_reservation_dates(res.product_id)
+                self.env['stock.reservation'].\
+                    reassign_reservation_dates(res.product_id)
         return res
-
 
     def _get_master_data(self, cr, uid, move, company, context=None):
         partner, uid, currency = super(stock_move, self)._get_master_data(
