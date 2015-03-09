@@ -125,7 +125,7 @@ class res_partner(orm.Model):
                             legend=None,
                             size=(680, 450))
 
-                ar.add_plot(bar_plot.T(data=data, fill_style=fill_style.red))
+                ar.add_plot(bar_plot.T(data=data, fill_style=fill_style.red, width=15))
 
                 ar.draw(canv)
                 canv.close()
