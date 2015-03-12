@@ -9,12 +9,12 @@
                 <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="after">
                     <field name="customization_types"  widget="many2many_tags"/>
                     <field name="requires_mount"  invisible="1"/>
-                    <field name="can_mount" widget="selection" attrs="{'invisible': [('requires_mount', '=', False)], 'required': [('requires_mount', '=', True)]}"/>/>
+                    <field name="can_mount" widget="selection" domain="[('mounted_in_ids', '=', product_id)]" attrs="{'invisible': [('requires_mount', '=', False)], 'required': [('requires_mount', '=', True)]}"/>/>
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="after">
                     <field name="customization_types"  widget="many2many_tags"/>
                     <field name="requires_mount"  invisible="1"/>
-                    <field name="can_mount"  widget="selection" attrs="{'readonly': [('requires_mount', '=', False)], 'required': [('requires_mount', '=', True)]}"/>
+                    <field name="can_mount"  widget="selection" domain="[('mounted_in_ids', '=', product_id)]" attrs="{'readonly': [('requires_mount', '=', False)], 'required': [('requires_mount', '=', True)]}"/>
                 </xpath>
             </field>
         </record>

@@ -50,22 +50,6 @@ class SaleOrderLine(models.Model):
                                        [x.id for x in prod.can_mount_ids])]
         return res
 
-    def product_id_change2(self, cr, uid, ids, pricelist, product, qty=0,
-                           uom=False, qty_uos=0, uos=False, name='',
-                           partner_id=False, lang=False, update_tax=True,
-                           date_order=False, packaging=False,
-                           fiscal_position=False,
-                           flag=False, warehouse_id=False, sale_agent_ids=False, context=None):
-        res = super(SaleOrderLine, self).product_id_change2(
-            cr, uid, ids, pricelist, product, qty, uom, qty_uos, uos, name,
-            partner_id, lang, update_tax, date_order, packaging,
-            fiscal_position, flag, warehouse_id, sale_agent_ids, context)
-        prod = self.pool.get('product.product').browse(cr, uid, product,
-                                                       context)
-        res['domain']['can_mount'] = [('id', 'in',
-                                       [x.id for x in prod.can_mount_ids])]
-        return res
-
     @api.multi
     @api.onchange('customization_types')
     def onchange_customization_types(self):
