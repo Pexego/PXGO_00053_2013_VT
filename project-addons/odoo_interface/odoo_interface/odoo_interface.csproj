@@ -41,4 +41,10 @@
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\OpenERPClient\OpenERPClient.csproj">
+      <Project>{8E62B8DF-E3A2-4429-A820-FB8A31C2EB00}</Project>
+      <Name>OpenERPClient</Name>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

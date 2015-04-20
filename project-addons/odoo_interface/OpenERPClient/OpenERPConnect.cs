@@ -377,7 +377,7 @@ namespace OpenERPClient
 		public Object Execute(string model, string method, long[] ids)
 		{
 			/* 
-			 It allows to execute any OpenERP's method
+			 It allows to execute any OpenERP's method with typical signature (cr, uid, ids)
 			 :param model : _name of model where method is defined
 			 :param method : name of method to execute
 			 :param ids : ids of registries whose you can update
@@ -393,7 +393,7 @@ namespace OpenERPClient
 		public Object Execute(string model, string method, long[] ids, XmlRpcStruct context)
 		{
 			/* 
-			 It allows to execute any OpenERP's method
+			 It allows to execute any OpenERP's method with typical signature (cr, uid, ids, context={})
 			 :param model : _name of model where method is defined
 			 :param method : name of method to execute
 			 :param ids : ids of registries whose you can update
@@ -403,6 +403,23 @@ namespace OpenERPClient
 			*/
 			this.Open(OpenERPClient.OpenERPService.Object);
 			Object res = this.rpcclient.Execute(this.dbname, this.UserId, this.password, model, method, ids, context);
+			this.Close();
+			return res;
+		}
+		
+		public bool ActionProduce(int id, double qty, string consumeMethod)
+		{
+			/* 
+			 Executes action_produce method
+			 :param model : _name of model where method is defined
+			 :param method : name of method to execute
+			 :param args : list of arguments
+			 :param kwargs : list of dictionary arguments
+             
+             :return : Object (depends on method)
+			*/
+			this.Open(OpenERPClient.OpenERPService.Object);
+			bool res = this.rpcclient.ActionProduce(this.dbname, this.UserId, this.password, "mrp.production", "action_produce", id, qty, consumeMethod);
 			this.Close();
 			return res;
 		}
