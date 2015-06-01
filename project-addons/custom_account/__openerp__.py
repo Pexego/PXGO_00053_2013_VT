@@ -30,7 +30,10 @@
     """,
     'author': 'Pexego',
     'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'stock_account', 'sale_stock'],
-    "data": ['account_view.xml', 'report/account_invoice_report_view.xml'],
+    "depends": ['email_template', 'report', 'account', 'stock',
+                'stock_account', 'sale_stock', 'account_payment_partner'],
+    "data": ['account_view.xml',
+             'report/account_invoice_report_view.xml',
+             'report_custom_view.xml'],
     "installable": True
 }
