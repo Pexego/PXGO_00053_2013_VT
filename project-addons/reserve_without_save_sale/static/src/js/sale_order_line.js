@@ -70,7 +70,7 @@ openerp.reserve_without_save_sale = function(instance) {
                                 'price_unit': line['values']['price_unit'],
                                 'name': line['values']['name']
                             }
-                            dat['warehouse'] = line['values']['warehouse_id'][0]
+                            dat['warehouse'] = this.parent_view.datarecord.warehouse_id[0]
                             var date = new Date();
                             var components = [
                                 date.getYear(),

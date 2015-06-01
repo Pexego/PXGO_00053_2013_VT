@@ -27,13 +27,13 @@ class sale_order_line(models.Model):
 
     unique_js_id = fields.Char('', size=64)
     temp_unique_js_id = fields.Char('', size=64)
-    warehouse_id = fields.Many2one('stock.warehouse', 'warehouse', related='order_id.warehouse_id')
 
     @api.multi
     def write(self, vals):
         for line in self:
             unique_js_id = vals.get('unique_js_id', line.unique_js_id)
-            temp_unique_js_id = vals.get('temp_unique_js_id', line.temp_unique_js_id)
+            temp_unique_js_id = vals.get('temp_unique_js_id',
+                                         line.temp_unique_js_id)
             if temp_unique_js_id:
                 if unique_js_id:
                     reserve_to_delete = self.env['stock.reservation'].search(
