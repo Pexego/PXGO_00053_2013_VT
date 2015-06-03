@@ -28,6 +28,6 @@
             <field name="signal"></field>
         </record>
 
-        <delete model="workflow.transition" id="sale.trans_sent_router"/>
+        <!--<delete model="workflow.transition" id="sale.trans_sent_router"/>-->
     </data>
 </openerp>
