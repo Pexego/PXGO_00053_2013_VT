@@ -69,6 +69,7 @@ class SaleOrder(models.Model):
     def _prepare_custom_line(self):
         prod_obj = self.env['product.product']
         for line in self.order_line:
+            new_line = False
             if line.customization_types and not line.product_id.custom:
                 if not line.product_id.default_code:
                     raise exceptions.except_orm(
@@ -110,13 +111,25 @@ class SaleOrder(models.Model):
                 }
                 final_line = self.env['sale.order.line'].create(
                     final_line_dict)
-                #if self.state != "draft":
-                #    final_line.stock_reserve()
-                if product.qty_available <= 0:
-                    bom_id = product.bom_ids[0]
-                    productions = []
-                    for i in range(int(final_line.product_uom_qty -
-                                       product.qty_available)):
+                new_line = True
+            elif line.customization_types and line.product_id.custom:
+                final_line = line
+                product = line.product_id
+            else:
+                final_line = False
+
+            if final_line and product.qty_available <= \
+                    final_line.product_uom_qty:
+                bom_id = product.bom_ids[0]
+                productions = []
+                needed = final_line.product_uom_qty
+                if product.qty_available > 0:
+                    needed -= product.qty_available
+                needed = int(needed)
+                if final_line.mrp_production_ids:
+                    needed -= len(final_line.mrp_production_ids)
+                if needed > 0:
+                    for i in range(needed):
                         mrp_dict = {
                             'product_id': product.id,
                             'bom_id': bom_id.id,
@@ -127,7 +140,14 @@ class SaleOrder(models.Model):
                         }
                         productions.append(
                             self.env['mrp.production'].create(mrp_dict).id)
-                    final_line.mrp_production_ids = [(6, 0, productions)]
+                if productions:
+                    if new_line:
+                        final_line.mrp_production_ids = [(6, 0, productions)]
+                    else:
+                        productions.extend([x.id for x in
+                                            final_line.mrp_production_ids])
+                        final_line.mrp_production_ids = [(6, 0, productions)]
+            if new_line:
                 line.unlink()
 
     @api.one
