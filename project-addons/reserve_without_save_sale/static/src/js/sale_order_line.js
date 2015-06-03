@@ -47,19 +47,35 @@ openerp.reserve_without_save_sale = function(instance) {
                 dat['unique_js_id'] = id
                 data['temp_unique_js_id'] = id
                 var line_obj = this
+                /*var wh_model = new instance.web.Model("stock.warehouse");
+                console.log(dat['warehouse']);
+                wh_model.query(['lot_stock_id']).filter([['id', '=', dat['warehouse']]]).all().then(function(wh){
+                    console.log(wh);
+                    dat['location_id'] = wh[0].lot_stock_id[0];
+                    var model = new instance.web.Model("stock.reservation");
+                    model.call("create",[dat], {context:new instance.web.CompoundContext()})
+                    .then(function() {
+
+                    });
+                });*/
                 $.ajax({
                     url: '/reservations/create/',
                     type: 'POST',
                     data: dat,
                     dataType: 'json',
                     timeout: 5000,
-                });
+                })
+
+
+
             }
+
             return this._super.apply(this, arguments);
         },
         write: function(id, data, options) {
             if (this._model.name == 'sale.order.line' && this.parent_view.datarecord.state == 'reserve') {
                 console.log(this.get('auxiliar_reserv_id'))
+                var _this = this;
                 this.cache.forEach(function(line) {
                     if (line.id == id) {
                         if(line['values']['temp_unique_js_id'] == ""){
@@ -70,7 +86,11 @@ openerp.reserve_without_save_sale = function(instance) {
                                 'price_unit': line['values']['price_unit'],
                                 'name': line['values']['name']
                             }
-                            dat['warehouse'] = this.parent_view.datarecord.warehouse_id[0]
+                            if (_this.parent_view.datarecord.warehouse_id instanceof Array) {
+                                dat['warehouse'] = _this.parent_view.datarecord.warehouse_id[0]
+                            } else {
+                                dat['warehouse'] = _this.parent_view.datarecord.warehouse_id
+                            }
                             var date = new Date();
                             var components = [
                                 date.getYear(),
@@ -184,6 +204,9 @@ openerp.reserve_without_save_sale = function(instance) {
                     if ($.inArray(line.id, ids) > -1) {
                         if(line['values']['temp_unique_js_id'] != ""){
                             to_delete_reserve = line['values']['temp_unique_js_id']
+                        }
+                        if(line['values']['unique_js_id'] != ""){
+                            to_delete_reserve = line['values']['unique_js_id']
                         }
                         $.ajax({
                             url: '/reservations/unlink/',

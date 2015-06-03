@@ -66,10 +66,10 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.one
-    def order_reserve(self):
+    def _prepare_custom_line(self):
         prod_obj = self.env['product.product']
         for line in self.order_line:
-            if line.customization_types:
+            if line.customization_types and not line.product_id.custom:
                 if not line.product_id.default_code:
                     raise exceptions.except_orm(
                         _('Error'),
@@ -110,6 +110,8 @@ class SaleOrder(models.Model):
                 }
                 final_line = self.env['sale.order.line'].create(
                     final_line_dict)
+                #if self.state != "draft":
+                #    final_line.stock_reserve()
                 if product.qty_available <= 0:
                     bom_id = product.bom_ids[0]
                     productions = []
@@ -126,11 +128,17 @@ class SaleOrder(models.Model):
                         productions.append(
                             self.env['mrp.production'].create(mrp_dict).id)
                     final_line.mrp_production_ids = [(6, 0, productions)]
-                    line.unlink()
+                line.unlink()
+
+    @api.one
+    def order_reserve(self):
+        self._prepare_custom_line()
         super(SaleOrder, self).order_reserve()
 
     @api.one
     def action_button_confirm(self):
+        self._prepare_custom_line()
+        self.order_reserve()
         super(SaleOrder, self).action_button_confirm()
         for line in self.order_line:
             for production in line.mrp_production_ids:

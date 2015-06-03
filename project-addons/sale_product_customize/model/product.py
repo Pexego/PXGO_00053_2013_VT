@@ -38,6 +38,7 @@ class ProductProduct(models.Model):
         'mounted_product_id',
         'product_id',
         'Mounted in')
+    custom = fields.Boolean("Custom", readonly=True)
 
     def get_product_customized(self, prod_code):
         product = self.search([('default_code', '=', prod_code)])
@@ -52,6 +53,7 @@ class ProductProduct(models.Model):
                 'purchase_ok': False,
                 'state2': 'published',
                 'valuation': 'manual_periodic',
+                'custom': True
             }
             bom_lines = []
             if '#' in prod_code:
@@ -99,4 +101,6 @@ class ProductProduct(models.Model):
                 'bom_line_ids': bom_lines,
             }
             self.env['mrp.bom'].create(bom_list_dict)
+        else:
+            product.custom = True
         return product
