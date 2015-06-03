@@ -27,15 +27,15 @@ class location_moves(models.TransientModel):
 
     _name = 'location.moves'
 
-    product_id = fields.Many2one('product.product', 'Product')
-    qty = fields.Float('Qty')
+    product_id = fields.Many2one('product.product', 'Product', required=True)
+    qty = fields.Float('Qty', required=True)
     move_type = fields.Selection(
-        (('pantry_kitchen', 'pantry->kitchen'),
-         ('kitchen_cooked', 'kitchen->coocked'),
-         ('kitchen_nursing', 'kitchen->nursing'),
-         ('nursing_damaged', 'nursing->damaged'),
-         ('nursing_coocked', 'nursing->coocked')),
-        'Move type')
+        [('pantry_kitchen', 'Pantry -> Kitchen'),
+         ('kitchen_cooked', 'Kitchen -> Coocked'),
+         ('kitchen_nursing', 'Kitchen -> Nursing'),
+         ('nursing_damaged', 'Nursing -> Damaged'),
+         ('nursing_coocked', 'Nursing -> Coocked')],
+        'Move type', required=True)
 
     @api.one
     def create_moves(self):

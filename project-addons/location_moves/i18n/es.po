@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * location_moves
+#       * location_moves
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-17 16:17+0000\n"
-"PO-Revision-Date: 2014-12-17 16:17+0000\n"
+"POT-Creation-Date: 2015-06-03 17:02+0000\n"
+"PO-Revision-Date: 2015-06-03 17:02+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -38,12 +38,12 @@ msgstr "Crear movimientos"
 #. module: location_moves
 #: field:location.moves,create_uid:0
 msgid "Created by"
-msgstr "Created by"
+msgstr "Creado por"
 
 #. module: location_moves
 #: field:location.moves,create_date:0
 msgid "Created on"
-msgstr "Created on"
+msgstr "Creado el"
 
 #. module: location_moves
 #: model:stock.location,name:location_moves.stock_location_pantry
@@ -53,7 +53,7 @@ msgstr "Despensa"
 #. module: location_moves
 #: model:stock.location,name:location_moves.stock_location_nursing
 msgid "Enfermeria"
-msgstr "Enfermeria"
+msgstr "Enfermería"
 
 #. module: location_moves
 #: field:location.moves,id:0
@@ -63,22 +63,22 @@ msgstr "ID"
 #. module: location_moves
 #: model:ir.model,name:location_moves.model_stock_location
 msgid "Inventory Locations"
-msgstr "Ubicaciones de inventario"
+msgstr "Ubicaciones inventario"
 
 #. module: location_moves
 #: field:location.moves,write_uid:0
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "Últ. actualización por"
 
 #. module: location_moves
 #: field:location.moves,write_date:0
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "Últ. actualización el"
 
 #. module: location_moves
 #: view:location.moves:location_moves.location_moves_form
 msgid "Location moves"
-msgstr "Movimientos de localizacion"
+msgstr "Movimientos de ubicación"
 
 #. module: location_moves
 #: field:location.moves,move_type:0
@@ -96,39 +96,38 @@ msgid "Qty"
 msgstr "Cantidad"
 
 #. module: location_moves
-#: code:addons/location_moves/stock.py:116
+#: code:addons/location_moves/stock.py:117
 #, python-format
 msgid "The date planned of the reservation was                                    changed."
-msgstr "The date planned of the reservation was                                    changed."
+msgstr "La fecha planificada de la reserva ha cambiado."
 
 #. module: location_moves
 #: model:ir.actions.act_window,name:location_moves.act_location_moves
 #: view:location.moves:location_moves.location_moves_form
 msgid "create moves"
-msgstr "create moves"
+msgstr "Crear movimientos"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
-msgid "kitchen->coocked"
-msgstr "kitchen->coocked"
+msgid "Kitchen -> Coocked"
+msgstr "Cocina -> Cocinado"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
-msgid "kitchen->nursing"
-msgstr "kitchen->nursing"
+msgid "Kitchen -> Nursing"
+msgstr "Cocina -> Enfermería"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
-msgid "nursing->coocked"
-msgstr "nursing->coocked"
+msgid "Nursing -> Coocked"
+msgstr "Enfermería -> Cocinado"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
-msgid "nursing->damaged"
-msgstr "nursing->damaged"
+msgid "Nursing -> Damaged"
+msgstr "Enfermería -> Averiados"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
-msgid "pantry->kitchen"
-msgstr "pantry->kitchen"
-
+msgid "Pantry -> Kitchen"
+msgstr "Despensa -> Cocina"

@@ -82,7 +82,8 @@ class StockLotacion(models.Model):
         new_move = self.env['stock.move'].create(move_template)
         if send_message:
             self.reassign_reservation_dates(product, [new_move])
-        picking.action_confirm()
+        picking.action_assign()
+        picking.action_done()
 
     @api.model
     def reassign_reservation_dates(self, product_id, moves):
