@@ -20,6 +20,7 @@
                     <div>
                         <field name="security_margin" class="oe_inline"/> days
                     </div>
+                    <field name="last_sixty_days_sales"/>
                 </group>
             </field>
         </record>
