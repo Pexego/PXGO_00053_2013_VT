@@ -11,12 +11,12 @@
                 <form string="Make customization">
                     <group>
                         <group>
-                            <field name="product_id" required="1"/>
-                            <field name="qty" required="1"/>
-                            <field name="product_uom" required="1"/>
+                            <field name="product_id"/>
+                            <field name="qty"/>
+                            <field name="product_uom"/>
                         </group>
                         <group>
-                            <field name="customization_type" required="1" widget="selection" domain="[('show', '=', True)]"/>
+                            <field name="customization_type_ids" widget="many2many_tags"/>
                         </group>
                     </group>
                     <button string="Make" name="create_customization" type="object" icon="gtk-ok"/>
@@ -25,14 +25,15 @@
             </field>
         </record>
 
-        <act_window name="request supply"
+        <act_window name="Make customizations"
             res_model="mrp.customization.wizard"
             view_id="mrp_customization_form"
             view_mode="form"
             target="new"
             id="action_customization_wizard"/>
 
-        <!--menuitem id="menu_make_customization" name="request supply" action="action_customization_wizard" parent="crm.root_menu"/-->
+        <menuitem action="action_customization_wizard" id="menu_action_customization_wizard"
+            parent="mrp.menu_mrp_manufacturing" sequence="2"/>
 
     </data>
 </openerp>
