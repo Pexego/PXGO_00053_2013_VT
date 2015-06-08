@@ -34,7 +34,8 @@ class location_moves(models.TransientModel):
          ('kitchen_cooked', 'Kitchen -> Coocked'),
          ('kitchen_nursing', 'Kitchen -> Nursing'),
          ('nursing_damaged', 'Nursing -> Damaged'),
-         ('nursing_coocked', 'Nursing -> Coocked')],
+         ('nursing_coocked', 'Nursing -> Coocked'),
+         ('quality_cooked', 'Quality -> Cooked')],
         'Move type', required=True)
 
     @api.one
@@ -46,6 +47,7 @@ class location_moves(models.TransientModel):
             'kitchen_nursing': loc_obj.move_kitchen_nursing,
             'nursing_damaged': loc_obj.move_nursing_damaged,
             'nursing_coocked': loc_obj.move_nursing_coocked,
+            'quality_cooked': loc_obj.move_quality_cooked
         }
         types[self.move_type](self.product_id.id, self.qty)
         return True

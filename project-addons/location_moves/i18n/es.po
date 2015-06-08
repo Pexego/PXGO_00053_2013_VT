@@ -37,11 +37,13 @@ msgstr "Crear movimientos"
 
 #. module: location_moves
 #: field:location.moves,create_uid:0
+#: field:quality.move.wzd,create_uid:0
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: location_moves
 #: field:location.moves,create_date:0
+#: field:quality.move.wzd,create_date:0
 msgid "Created on"
 msgstr "Creado el"
 
@@ -67,11 +69,13 @@ msgstr "Ubicaciones inventario"
 
 #. module: location_moves
 #: field:location.moves,write_uid:0
+#: field:quality.move.wzd,write_uid:0
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
 
 #. module: location_moves
 #: field:location.moves,write_date:0
+#: field:quality.move.wzd,write_date:0
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
 
@@ -124,6 +128,11 @@ msgstr "Enfermería -> Cocinado"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
+msgid "Quality -> Cooked"
+msgstr "Calidad -> Cocinado"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
 msgid "Nursing -> Damaged"
 msgstr "Enfermería -> Averiados"
 
@@ -131,3 +140,41 @@ msgstr "Enfermería -> Averiados"
 #: selection:location.moves,move_type:0
 msgid "Pantry -> Kitchen"
 msgstr "Despensa -> Cocina"
+
+#. module: location_moves
+#: code:addons/location_moves/wizard/quality_move.py:37
+#, python-format
+msgid "Cannot move more than origin move qty."
+msgstr "No puede mover más de la cantidad original del movimiento."
+
+#. module: location_moves
+#: view:quality.move.wzd:location_moves.quality_move_wzd_form
+msgid "Create move"
+msgstr "Crear movimiento"
+
+#. module: location_moves
+#: code:addons/location_moves/wizard/quality_move.py:43
+#: code:addons/location_moves/wizard/quality_move.py:46
+#, python-format
+msgid "Only can do this operation with incoming pickings"
+msgstr "Sólo puede hacer esta operación con albaranes de entrada"
+
+#. module: location_moves
+#: code:addons/location_moves/wizard/quality_move.py:40
+#, python-format
+msgid "Only can do this operation with picked moves"
+msgstr "Sólo puede hacer esta operación con movimientos albaranados"
+
+#. module: location_moves
+#: field:quality.move.wzd,qty:0
+msgid "Qty. to move"
+msgstr "Cant. a mover"
+
+#. module: location_moves
+#: model:ir.actions.act_window,name:location_moves.act_quality_move_wzd
+#: view:quality.move.wzd:location_moves.quality_move_wzd_form
+#: view:stock.move:location_moves.view_move_picking_tree_add_quality_btn
+#: view:stock.move:location_moves.view_move_tree_add_quality_btn
+#: view:stock.move:location_moves.view_move_tree_receipt_picking_add_quality_btn
+msgid "Quality move"
+msgstr "Movimiento calidad"

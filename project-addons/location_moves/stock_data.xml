@@ -37,6 +37,13 @@
             <field name="active" eval="True"/>
         </record>
 
+        <record id="stock_location_quality" model="stock.location">
+            <field name="name">Calidad</field>
+            <field name="location_id" ref="stock.warehouse0" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
     </data>
 </openerp>
 

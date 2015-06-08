@@ -19,4 +19,5 @@
 #
 ##############################################################################
 
-import location_moves
+from . import location_moves
+from . import quality_move

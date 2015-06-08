@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, api, _
+from openerp import models, api, _, fields
 
 
 class StockLotacion(models.Model):
@@ -44,6 +44,10 @@ class StockLotacion(models.Model):
 
     def move_nursing_coocked(self, product_id, qty):
         self.location_move(product_id, 'stock_location_nursing', qty,
+                           'stock.stock_location_stock', True)
+
+    def move_quality_cooked(self, product_id, qty):
+        self.location_move(product_id, 'stock_location_quality', qty,
                            'stock.stock_location_stock', True)
 
     def location_move(self, product_id, source_location, qty, dest_location,
@@ -125,3 +129,32 @@ class StockLotacion(models.Model):
         while reservation_index < len(reservations):
             reservations[reservation_index].date_planned = False
             reservation_index += 1
+
+
+class StockMove(models.Model):
+
+    _inherit = "stock.move"
+
+    location_usage = fields.Selection([('supplier', 'Supplier Location'),
+                                       ('view', 'View'),
+                                       ('internal', 'Internal Location'),
+                                       ('customer', 'Customer Location'),
+                                       ('inventory', 'Inventory'),
+                                       ('procurement', 'Procurement'),
+                                       ('production', 'Production'),
+                                       ('transit', 'Transit Location')],
+                                      related="location_id.usage",
+                                      readonly=True)
+    picking_type_code = fields.Selection([('incoming', 'Suppliers'),
+                                          ('outgoing', 'Customers'),
+                                          ('internal', 'Internal')],
+                                         related="picking_type_id.code",
+                                         readonly=True)
+
+    @api.multi
+    def unit_to_quality(self):
+        wzd_obj = self.env["quality.move.wzd"]
+        for move in self:
+            wzd = wzd_obj.create({'qty': 1.0})
+            wzd.with_context(active_id=move.id).action_move()
+        return True
