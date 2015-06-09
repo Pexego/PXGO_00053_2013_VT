@@ -19,7 +19,8 @@
 #
 ##############################################################################
 
-from openerp import fields, models
+from openerp import fields, models, api
+from datetime import datetime, timedelta
 
 
 class stock_reservation(models.Model):
@@ -27,3 +28,21 @@ class stock_reservation(models.Model):
     _inherit = 'stock.reservation'
 
     unique_js_id = fields.Char('', size=64)
+
+    @api.model
+    def delete_orphan_reserves(self):
+        now = fields.Datetime.now()
+        d = datetime.strptime(now, '%Y-%m-%d %H:%M:%S') + \
+            timedelta(minutes=-30)
+        last_date = datetime.strftime(d, '%Y-%m-%d %H:%M:%S')
+        reserves = self.search([('create_date', '<=', last_date),
+                                ('sale_line_id', '=', False),
+                                ('mrp_id', '=', False),
+                                ('claim_id', '=', False),
+                                ('move_id.state', 'not in', ['done',
+                                                             'cancel'])])
+
+        if reserves:
+            reserves.unlink()
+
+        return True

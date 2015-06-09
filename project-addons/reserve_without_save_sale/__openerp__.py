@@ -27,6 +27,6 @@
     'author': 'Pexego',
     'website': 'www.pexego.es',
     "depends": ['base', 'web', 'sale', 'stock_reserve', 'stock_reserve_sale'],
-    "data": ['sale_view.xml'],
+    "data": ['sale_view.xml', 'data/cron.xml'],
     "installable": True
 }
