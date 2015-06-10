@@ -12,7 +12,7 @@
         <record id="nan_partner_risk.trans_risk_router_to_router" model="workflow.transition">
             <field name="act_from" ref="nan_partner_risk.act_risk_router"/>
             <field name="act_to" ref="act_risk_approval"/>
-            <field name="condition">partner_id.available_risk - amount_total >= 0.0</field>
+            <field name="condition">not partner_id.credit_limit or partner_id.available_risk - amount_total >= 0.0</field>
         </record>
 
         <record id="nan_partner_risk.trans_wait_risk_to_router_signal" model="workflow.transition">
