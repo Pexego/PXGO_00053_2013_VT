@@ -202,21 +202,24 @@ openerp.reserve_without_save_sale = function(instance) {
             if (this._model.name == 'sale.order.line' && this.parent_view.datarecord.state == 'reserve') {
                 this.cache.forEach(function(line) {
                     if ($.inArray(line.id, ids) > -1) {
+                        var to_delete_reserve = ""
                         if(line['values']['temp_unique_js_id'] != ""){
                             to_delete_reserve = line['values']['temp_unique_js_id']
                         }
                         if(line['values']['unique_js_id'] != ""){
                             to_delete_reserve = line['values']['unique_js_id']
                         }
-                        $.ajax({
-                            url: '/reservations/unlink/',
-                            type: 'POST',
-                            data: {
-                                'unique_js_id': to_delete_reserve
-                            },
-                            dataType: 'json',
-                            timeout: 5000,
-                        });
+                        if (to_delete_reserve != "") {
+                            $.ajax({
+                                url: '/reservations/unlink/',
+                                type: 'POST',
+                                data: {
+                                    'unique_js_id': to_delete_reserve
+                                },
+                                dataType: 'json',
+                                timeout: 5000,
+                            });
+                        }
                     }
                 });
             }
