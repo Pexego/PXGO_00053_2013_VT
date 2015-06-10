@@ -46,8 +46,9 @@ class SaleOrderLine(models.Model):
             fiscal_position, flag, context)
         prod = self.pool.get('product.product').browse(cr, uid, product,
                                                        context)
-        res['domain']['can_mount'] = [('id', 'in',
-                                       [x.id for x in prod.can_mount_ids])]
+        if prod.can_mount_ids:
+            res['domain']['can_mount'] = [('id', 'in',
+                                           [x.id for x in prod.can_mount_ids])]
         return res
 
     @api.multi

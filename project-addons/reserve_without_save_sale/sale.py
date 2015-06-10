@@ -82,7 +82,7 @@ class sale_order_line(models.Model):
                                  "where sale_order_line.id = %s"
                                  % str(line.id))
                 line_data = self._cr.fetchone()
-                if line_data[0] == "reserve" and line_data[1]:
+                if line_data and line_data[0] == "reserve" and line_data[1]:
                     reserves = reserv_obj.search([('unique_js_id', '=',
                                                    line_data[1])])
                     if reserves and not reserves[0].sale_line_id:

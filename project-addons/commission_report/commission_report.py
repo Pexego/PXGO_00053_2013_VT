@@ -29,7 +29,7 @@ class commission_report(models.Model):
     _auto = False
 
     product_id = fields.Many2one('product.product', 'Product')
-    agent_id = fields.Many2one('sale.agent', 'Agent')
+    agent_id = fields.Many2one('res.partner', 'Agent')
     qty = fields.Float('Quantity')
     settled = fields.Boolean('Settled')
     inv_date = fields.Date('Date invoice')
@@ -39,14 +39,14 @@ class commission_report(models.Model):
         cr.execute("""CREATE or REPLACE VIEW %s as (
             SELECT c_line.id,
                 i_line.product_id  AS product_id,
-                c_line.agent_id  AS agent_id,
-                c_line.quantity  AS qty,
+                c_line.agent  AS agent_id,
+                c_line.amount  AS qty,
                 c_line.settled  AS settled,
                 inv.date_invoice  AS inv_date,
                 inv.state  AS state
             FROM account_invoice_line AS i_line
-                JOIN invoice_line_agent  AS c_line ON i_line.id=c_line.invoice_line_id
+                JOIN account_invoice_line_agent  AS c_line ON i_line.id=c_line.invoice_line
                 JOIN account_invoice  AS inv ON i_line.invoice_id=inv.id
             WHERE inv.state IN ('open', 'paid')
-            GROUP BY i_line.product_id, c_line.agent_id, c_line.quantity, c_line.settled, inv.date_invoice, inv.state, c_line.id
+            GROUP BY i_line.product_id, c_line.agent, c_line.amount, c_line.settled, inv.date_invoice, inv.state, c_line.id
         )""" % (self._table,))

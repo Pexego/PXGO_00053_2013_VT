@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,6 +19,26 @@
 #
 ##############################################################################
 
-from . import commission_report
-from . import wizard
-from . import invoice
+from openerp import models, api, fields
+
+
+class AccountInvoice(models.Model):
+
+    _inherit = "account.invoice"
+
+    @api.multi
+    def unlink(self):
+        for invoic in self:
+            if self.state == 'draft':
+                settlements = self.env['sale.commission.settlement'].search(
+                    [('invoice', '=', invoic.id)])
+                if settlements:
+                    settlements.write({'state': 'except_invoice'})
+        return super(AccountInvoice, self).unlink()
+
+
+class AccountInvoiceLineAgent(models.Model):
+
+    _inherit = "account.invoice.line.agent"
+
+    fields.Boolean(default=False)

@@ -26,8 +26,8 @@
                 <field name="product_id"/>
                 <field name="agent_id"/>
                 <filter string="This Year" name="thisyear" domain="['|', ('inv_date', '=', False), '&amp;',('inv_date','&lt;=', time.strftime('%%Y-12-31')),('inv_date','&gt;=',time.strftime('%%Y-01-01'))]" help="commissions of the current year"/>
-                <filter string="Settled" name="settled" domain="[('settled', '=', 't')]"/>
-                <filter string="Not settled" name="nosettled" domain="[('settled', '=', 'f')]"/>
+                <filter string="Settled" name="settled" domain="[('settled', '=', True)]"/>
+                <filter string="Not settled" name="nosettled" domain="[('settled', '=', False)]"/>
                 <group expand="1" string="Group By">
                     <filter string="Product" name="product" context="{'group_by':'product_id'}" />
                     <filter string="Agent" name="agent" context="{'group_by':'agent_id'}" />
@@ -46,7 +46,7 @@
         <field name="search_view_id" ref="commission_report_filter"/>
     </record>
 
-    <menuitem action="action_commission_report_all" id="menu_action_commission_report_all" parent="sale_commission.menu_commisions_report" sequence="0"/>
+    <menuitem action="action_commission_report_all" id="menu_action_commission_report_all" parent="sale_commission.menu_sale_commissions_conf" sequence="0"/>
 
     </data>
 </openerp>
