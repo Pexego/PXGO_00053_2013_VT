@@ -21,8 +21,8 @@
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
                 <field name="phone" position="before">
-                    <field name="customer_lost" attrs="{'invisible':[('customer', '==', False)]}"/>
-                    <field name="last_sale_date" attrs="{'invisible':[('customer', '==', False)]}"/>
+                    <field name="customer_lost" attrs="{'invisible':[('customer', '=', False)]}"/>
+                    <field name="last_sale_date" attrs="{'invisible':[('customer', '=', False)]}"/>
                 </field>
             </field>
         </record>
