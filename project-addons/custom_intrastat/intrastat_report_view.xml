@@ -21,9 +21,9 @@
                 <field name="intrastat_id" position="after">
                     <field name="partner_id"/>
                     <field name="country_id"/>
-                    <filter string='country' domain="[]" context="{'group_by' : 'country_id'}"/>
-                    <filter string='partner' domain="[]" context="{'group_by' : 'partner_id'}"/>
-                    <filter string='intrastat code' domain="[]" context="{'group_by' : 'intrastat_id'}"/>
+                    <filter string='Country' domain="[]" context="{'group_by' : 'country_id'}"/>
+                    <filter string='Partner' domain="[]" context="{'group_by' : 'partner_id'}"/>
+                    <filter string='Intrastat code' domain="[]" context="{'group_by' : 'intrastat_id'}"/>
                 </field>
             </field>
         </record>

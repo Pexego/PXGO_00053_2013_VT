@@ -26,6 +26,19 @@ class AccountInvoice(models.Model):
 
     _inherit = "account.invoice"
 
+    @api.one
+    @api.depends('invoice_line.agents.agent')
+    def _get_agents_str(self):
+        agents = self.env["res.partner"]
+        for line in self.invoice_line:
+            for agent_line in line.agents:
+                agents += agent_line.agent
+
+        self.agents_str = u", ".join([x.name for x in agents])
+
+    agents_str = fields.Char("Agents", compute='_get_agents_str',
+                             readonly=True, store=True)
+
     @api.multi
     def unlink(self):
         for invoic in self:
@@ -35,10 +48,3 @@ class AccountInvoice(models.Model):
                 if settlements:
                     settlements.write({'state': 'except_invoice'})
         return super(AccountInvoice, self).unlink()
-
-
-class AccountInvoiceLineAgent(models.Model):
-
-    _inherit = "account.invoice.line.agent"
-
-    fields.Boolean(default=False)

@@ -13,5 +13,16 @@
             </field>
         </record>
 
+        <record id="view_account_invoice_filter_add_country_grp" model="ir.ui.view">
+            <field name="name">account.invoice.select.add_country_grp</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <filter string="Salesperson" position="after">
+                    <filter string="Country" context="{'group_by':'country_id'}"/>
+                </filter>
+            </field>
+        </record>
+
     </data>
 </openerp>
