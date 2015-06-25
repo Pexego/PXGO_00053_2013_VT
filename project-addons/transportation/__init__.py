@@ -19,7 +19,8 @@
 #
 ##############################################################################
 
-import transportation
-import res_partner
-import sale
-import rotation
+from . import transportation
+from . import res_partner
+from . import sale
+from . import rotation
+from . import stock

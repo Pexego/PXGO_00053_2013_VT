@@ -27,39 +27,6 @@ import time
 class stock_move(models.Model):
     _inherit = 'stock.move'
 
-    @api.model
-    def _picking_assign(self, move_ids, procurement_group, location_from,
-                        location_to):
-        """
-            Assign a picking on the given move_ids, which is a list of move
-            supposed to share the same procurement_group, location_from and
-            location_to (and company). Those attributes are also given as
-            parameters.
-        """
-
-        pick_obj = self.env['stock.picking']
-        moves = self.browse(move_ids)
-        picks = pick_obj.search(
-            [('group_id', '=', procurement_group),
-             ('location_id', '=', location_from),
-             ('state', 'in', ['draft', 'confirmed', 'waiting'])])
-        if picks:
-            pick = picks[0]
-        else:
-            move = moves[0]
-            values = {
-                'origin': move.origin,
-                'company_id':
-                    move.company_id and move.company_id.id or False,
-                'move_type':
-                    move.group_id and move.group_id.move_type or 'direct',
-                'partner_id': move.partner_id.id or False,
-                'picking_type_id':
-                    move.picking_type_id and move.picking_type_id.id or False,
-            }
-            pick = pick_obj.create(values)
-        return moves.write({'picking_id': pick.id})
-
     @api.multi
     def action_done(self):
         res = super(stock_move, self).action_done()
