@@ -8,10 +8,8 @@
             <field name="arch" type="xml">
                 <search string="Search Rappel">
                     <field name="name"/>
-                    <field name="partner_id"/>
                     <field name="type_id"/>
-                    <field name="date_start"/>
-                    <field name="date_stop"/>
+                    <filter string="Type" context="{'group_by': 'type_id'}"/>
                 </search>
             </field>
         </record>
@@ -23,10 +21,7 @@
                 <tree string="Rappel">
                     <field name="name"/>
                     <field name="type_id"/>
-                    <field name="periodicity"/>
                     <field name="calc_mode"/>
-                    <field name="date_start"/>
-                    <field name="date_stop"/>
                 </tree>
             </field>
         </record>
@@ -47,20 +42,11 @@
                                 <field name="type_id" placeholder="Rappel type..."/>
                             </h2>
                         </div>
-                        <group>
-                            <group string="Dates">
-                                <field name="date_start" placeholder="01/01/2014"/>
-                                <field name="last_execution"/>
-                                <field name="date_stop" placeholder="31/01/2014"/>
-                            </group>
-                            <group string="Other data">
-                                <field name="partner_id" domain="[('customer', '=', True)]"/>
-                                <field name="periodicity"/>
-                                <field name="global_application"/>
-                                <field name="product_id" attrs="{'invisible':[('global_application','=', True)]}"/>
-                                <field name="product_categ_id" attrs="{'invisible':[('global_application','=', True)]}"/>
-                            </group>
-                       </group>
+                        <group string="Other data">
+                            <field name="global_application"/>
+                            <field name="product_id" attrs="{'invisible':[('global_application','=', True)]}"/>
+                            <field name="product_categ_id" attrs="{'invisible':[('global_application','=', True)]}"/>
+                        </group>
                         <notebook>
                             <page string="Calc Configuration">
                                 <group>
@@ -74,6 +60,17 @@
                                         <field name="rappel_from"/>
                                         <field name="rappel_until"/>
                                         <field name="percent"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Customers">
+                                <field name="customer_ids" nolabel="1">
+                                    <tree editable="top">
+                                        <field name="partner_id"/>
+                                        <field name="periodicity"/>
+                                        <field name="date_start"/>
+                                        <field name="date_end"/>
+                                        <field name="last_settlement_date"/>
                                     </tree>
                                 </field>
                             </page>
@@ -107,6 +104,7 @@
                     <field name="date_start"/>
                     <field name="date_end"/>
                     <field name="quantity"/>
+                    <field name="invoice_id"/>
                 </tree>
             </field>
         </record>
@@ -118,27 +116,38 @@
             <field name="arch" type="xml">
                 <form string="Rappel calculated">
                     <group>
-                        <field name="partner_id" readonly="1"/>
-                        <field name="rappel_id" readonly="1"/>
-                        <field name="date_start" readonly="1"/>
-                        <field name="date_end" readonly="1"/>
-                        <field name="quantity" readonly="1"/>
+                        <field name="partner_id"/>
+                        <field name="rappel_id"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="quantity"/>
+                        <field name="invoice_id"/>
                     </group>
                 </form>
             </field>
         </record>
 
+        <record id="view_rappel_calculated_filter" model="ir.ui.view">
+            <field name="name">rappel.calculated.filter</field>
+            <field name="model">rappel.calculated</field>
+            <field name="arch" type="xml">
+                <search string="Search Rappel">
+                    <field name="rappel_id"/>
+                    <field name="partner_id"/>
+                    <filter name="pending" string="Pending to invoice" domain="[('invoice_id', '=', False),('quantity', '>', 0.0)]"/>
+                    <filter string="Rappel" context="{'group_by': 'rappel_id'}"/>
+                    <filter string="Customer" context="{'group_by': 'partner_id'}"/>
+                </search>
+            </field>
+        </record>
+
         <record id="action_rappel_calculated" model="ir.actions.act_window">
-            <field name="name">Rappel Calculated</field>
+            <field name="name">Rappels computed</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">rappel.calculated</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
-            <field name="help" type="html">
-              <p class="oe_view_nocontent_create">
-                Click to create a new rappel.
-              </p>
-            </field>
+            <field name="context">{'search_default_pending': 1}</field>
         </record>
 
     </data>

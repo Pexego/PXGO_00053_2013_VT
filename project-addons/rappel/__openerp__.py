@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2004-2015 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Omar Castiñeira Saaevdra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,9 +20,9 @@
 ##############################################################################
 {
     'name': 'Rappel management',
-    'author': 'Pexego',
+    'author': 'Comunitea',
     'category': 'Sale',
-    'website': 'www.pexego.es',
+    'website': 'www.comunitea.com',
     'description': """
 Rappel Management
 =====================================================
@@ -30,22 +30,18 @@ Rappel Management
     """,
     'images': [],
     'depends': ['base',
-                'sale',
+                'account',
                 'account',
                 'stock',
-                'purchase',
-                'product',
-                'sale_stock',
-                'account_refund_original'
-                ],
+                'product'],
     'data': ['rappel_type_view.xml',
              'rappel_view.xml',
              'res_partner_view.xml',
+             'rappel_info_view.xml',
              'rappel_menus.xml',
              'data/ir.cron.xml',
+             'wizard/compute_rappel_invoice_view.xml',
              'security/ir.model.access.csv'],
-    'demo': [],
-    'test': [],
     'installable': True,
     'application': True,
 }

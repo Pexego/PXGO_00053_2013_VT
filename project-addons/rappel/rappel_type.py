@@ -28,3 +28,6 @@ class rappel_type(models.Model):
 
     name = fields.Char('Name', size=255, required=True)
     code = fields.Char('Code', size=56)
+    product_id = fields.Many2one("product.product", "Rappel product",
+                                 required=True, help="Product used to invoice"
+                                                     " rappels this type.")
