@@ -32,11 +32,8 @@ class PaymentOrder(models.Model):
     @api.multi
     def action_done(self):
         res = super(PaymentOrder, self).action_done()
-
-        template_pool = self.pool['email.template']
-        mail_pool = self.pool['mail.mail']
-        mail_ids = []
-        import ipdb; ipdb.set_trace()
+        mail_pool = self.env['mail.mail']
+        mail_ids = self.env['mail.mail']
         for order in self:
             partners = {}
             for line in order.line_ids:
@@ -48,15 +45,16 @@ class PaymentOrder(models.Model):
 
             for partner_data in partners:
                 template = self.env.ref('account_banking_sepadd_groupby_partner.payment_order_advise_partner', False)
-                ctx = {
+                ctx = dict(self._context)
+                ctx.update({
                     'partner_email': partner_data.email,
                     'partner_id': partner_data.id,
                     'partner_name': partner_data.name,
                     'lines': partners[partner_data]
-                }
-                mail_id = template_pool.send_mail(self._cr, self._uid, template.id, order.id, context=ctx)
-                mail_ids.append(mail_id)
+                })
+                mail_id = template.with_context(ctx).send_mail(order.id)
+                mail_ids += mail_pool.browse(mail_id)
 
         if mail_ids:
-            res = mail_pool.send(self._cr, self._uid, mail_ids)
+            mail_ids.send()
         return res

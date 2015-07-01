@@ -18,28 +18,39 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
+from openerp import models
 import base64
+
 
 class EmailTemplate(models.Model):
 
     _inherit = 'email.template'
 
-
-    @api.model
-    def generate_email_batch(self, template_id, res_ids, fields=None):
-        res = super(EmailTemplate,self).generate_email_batch(template_id, res_ids, fields=fields)
-        if self.env.context.get('active_model', '') != 'account.invoice':
+    def generate_email_batch(self, cr, uid, template_id, res_ids, context=None,
+                             fields=None):
+        res = super(EmailTemplate, self).generate_email_batch(cr, uid,
+                                                              template_id,
+                                                              res_ids,
+                                                              context=context,
+                                                              fields=fields)
+        if context.get('active_model', '') != 'account.invoice':
             return res
+        ir_model_data = self.pool['ir.model.data']
+        report_pool = self.pool['ir.actions.report.xml']
         for res_id in res.keys():
             attachments = res[res_id]['attachments']
-            invoice = self.env['account.invoice'].browse(res_id)
+            invoice = self.pool['account.invoice'].browse(cr, uid, res_id)
             if not invoice.attach_picking:
                 continue
             for picking in invoice.picking_ids:
-                report = self.env.ref('stock.action_report_picking')
+                report_id = ir_model_data.\
+                    get_object_reference(cr, uid, 'stock',
+                                         'action_report_picking')[1]
+                report = report_pool.browse(cr, uid, report_id)
                 report_service = report.report_name
-                result, format = self.env['report'].get_pdf(picking, report_service), 'pdf'
+                result = self.pool['report'].get_pdf(cr, uid, [picking.id],
+                                                     report_service)
+                format = 'pdf'
 
                 result = base64.b64encode(result)
                 report_name = 'stock.' + picking.name.replace('/', '')
