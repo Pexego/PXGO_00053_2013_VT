@@ -32,7 +32,7 @@
     'website': '',
     "depends": ['email_template', 'report', 'account', 'stock',
                 'stock_account', 'sale_stock', 'account_payment_partner',
-                'account_payment'],
+                'account_payment', 'sale'],
     "data": ['account_view.xml',
              'report/account_invoice_report_view.xml',
              'report_custom_view.xml'],

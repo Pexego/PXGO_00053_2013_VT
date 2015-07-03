@@ -12,8 +12,17 @@
                         <field name="margin_perc" class="oe_inline" groups="base.group_user" readonly="1"/> %%
                     </div>
                 </xpath>
-                <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="after">
-                        <field name="margin_perc" class="oe_inline" groups="base.group_user" readonly="1"/>
+            </field>
+        </record>
+
+        <record id="sale_order_line_tree_add_margin" model="ir.ui.view">
+            <field name="name">sale.order.line.add.margin</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_margin.sale_margin_sale_order_line_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='order_line']/tree//field[@name='purchase_price']" position="replace">
+                    <field name="purchase_price" readonly="1" invisible="1"/>
+                    <field name="margin_perc" readonly="1"/>
                 </xpath>
 
             </field>

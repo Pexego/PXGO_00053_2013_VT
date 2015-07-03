@@ -83,7 +83,7 @@ msgstr "Tipos personalización"
 #. module: sale_product_customize
 #: field:sale.order.line,customization_types:0
 msgid "Customizations"
-msgstr "Personalizaciones"
+msgstr "Person."
 
 #. module: sale_product_customize
 #: model:ir.actions.act_window,name:sale_product_customize.action_mrp_customize_type
