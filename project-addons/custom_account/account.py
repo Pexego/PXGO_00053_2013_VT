@@ -35,9 +35,13 @@ class AccountInvoice(models.Model):
     attach_picking = fields.Boolean('Attach picking')
     picking_ids = fields.One2many('stock.picking', string='pickings',
                                   compute='_get_picking_ids')
+    country_id = fields.Many2one('res.country', 'Country',
+                                 related="partner_id.country_id",
+                                 readonly=True, store=True)
 
     @api.multi
     @api.depends('invoice_line')
     def _get_picking_ids(self):
         for invoice in self:
-            invoice.picking_ids = invoice.mapped('invoice_line.move_id.picking_id').sorted()
+            invoice.picking_ids = invoice.\
+                mapped('invoice_line.move_id.picking_id').sorted()

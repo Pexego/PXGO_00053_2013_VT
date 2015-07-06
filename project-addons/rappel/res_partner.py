@@ -24,4 +24,5 @@ from openerp import models, fields
 class res_partner(models.Model):
     _inherit = 'res.partner'
 
-    rappel_ids = fields.One2many('rappel', 'partner_id', 'Rappels')
+    rappel_ids = fields.One2many('res.partner.rappel.rel', 'partner_id',
+                                 'Rappels')

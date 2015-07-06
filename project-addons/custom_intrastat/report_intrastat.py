@@ -35,14 +35,14 @@ class report_intrastat(models.Model):
         cr.execute("""
             create or replace view report_intrastat as (
                 select
-                    to_char(inv.create_date, 'YYYY') as name,
-                    to_char(inv.create_date, 'MM') as month,
+                    to_char(inv.date_invoice, 'YYYY') as name,
+                    to_char(inv.date_invoice, 'MM') as month,
                     inv.partner_id as partner_id,
                     min(inv_line.id) as id,
                     intrastat.id as intrastat_id,
                     inv_country.id as country_id,
                     sum(case when inv_line.price_unit is not null
-                            then inv_line.price_unit * inv_line.quantity
+                            then inv_line.price_subtotal
                             else 0
                         end) as value,
                     sum(
@@ -76,5 +76,5 @@ class report_intrastat(models.Model):
                     inv.state in ('open','paid')
                     and inv_line.product_id is not null
                     and inv_country.intrastat=true
-                group by to_char(inv.create_date, 'YYYY'), to_char(inv.create_date, 'MM'),inv.partner_id,intrastat.id,inv.type,pt.intrastat_id, inv_country.id,inv.number,  inv.currency_id)""")
+                group by to_char(inv.date_invoice, 'YYYY'), to_char(inv.date_invoice, 'MM'),inv.partner_id,intrastat.id,inv.type,pt.intrastat_id, inv_country.id,inv.number,  inv.currency_id)""")
 

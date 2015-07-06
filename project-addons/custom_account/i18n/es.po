@@ -20,6 +20,22 @@ msgstr ""
 msgid "Attach picking"
 msgstr "Enviar albarán"
 
+#. module: sale
+#: field:sale.order.line,tax_id:0
+msgid "Taxes"
+msgstr "Imp."
+
+#. module: sale
+#: field:sale.order.line,discount:0
+msgid "Discount (%)"
+msgstr "Desc. (%)"
+
+#. module: custom_account
+#: view:account.invoice:custom_account.view_account_invoice_filter_add_country_grp
+#: field:account.invoice,country_id:0
+msgid "Country"
+msgstr "País"
+
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_email_template
 msgid "Email Templates"

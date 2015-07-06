@@ -31,11 +31,13 @@ class location_moves(models.TransientModel):
     qty = fields.Float('Qty', required=True)
     move_type = fields.Selection(
         [('pantry_kitchen', 'Pantry -> Kitchen'),
-         ('kitchen_cooked', 'Kitchen -> Coocked'),
+         ('kitchen_cooked', 'Kitchen -> Cooked'),
          ('kitchen_nursing', 'Kitchen -> Nursing'),
          ('nursing_damaged', 'Nursing -> Damaged'),
-         ('nursing_coocked', 'Nursing -> Coocked'),
-         ('quality_cooked', 'Quality -> Cooked')],
+         ('nursing_cooked', 'Nursing -> Cooked'),
+         ('quality_cooked', 'Quality -> Cooked'),
+         ('cooked_nursing', 'Cooked -> Nursing'),
+         ('cooked_damaged', 'Cooked -> Damaged')],
         'Move type', required=True)
 
     @api.one
@@ -43,11 +45,13 @@ class location_moves(models.TransientModel):
         loc_obj = self.env['stock.location']
         types = {
             'pantry_kitchen': loc_obj.move_pantry_kitchen,
-            'kitchen_cooked': loc_obj.move_kitchen_coocked,
+            'kitchen_cooked': loc_obj.move_kitchen_cooked,
             'kitchen_nursing': loc_obj.move_kitchen_nursing,
             'nursing_damaged': loc_obj.move_nursing_damaged,
-            'nursing_coocked': loc_obj.move_nursing_coocked,
-            'quality_cooked': loc_obj.move_quality_cooked
+            'nursing_cooked': loc_obj.move_nursing_cooked,
+            'quality_cooked': loc_obj.move_quality_cooked,
+            'cooked_nursing': loc_obj.move_cooked_nursing,
+            'cooked_damaged': loc_obj.move_cooked_damaged
         }
         types[self.move_type](self.product_id.id, self.qty)
         return True

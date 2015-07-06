@@ -17,6 +17,7 @@ msgstr ""
 
 #. module: custom_intrastat
 #: field:report.intrastat,country_id:0
+#: view:report.intrastat:custom_intrastat.intrastat_custom_search
 msgid "Country"
 msgstr "País"
 
@@ -27,21 +28,12 @@ msgstr "Informe Intrastat"
 
 #. module: custom_intrastat
 #: field:report.intrastat,partner_id:0
+#: view:report.intrastat:custom_intrastat.intrastat_custom_search
 msgid "Partner"
 msgstr "Partner"
 
 #. module: custom_intrastat
 #: view:report.intrastat:custom_intrastat.intrastat_custom_search
-msgid "country"
-msgstr "País"
-
-#. module: custom_intrastat
-#: view:report.intrastat:custom_intrastat.intrastat_custom_search
-msgid "intrastat code"
+msgid "Intrastat code"
 msgstr "Código intrastat"
-
-#. module: custom_intrastat
-#: view:report.intrastat:custom_intrastat.intrastat_custom_search
-msgid "partner"
-msgstr "partner"
 

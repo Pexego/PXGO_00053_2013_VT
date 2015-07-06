@@ -31,10 +31,11 @@
     'website': 'www.pexego.es',
     "depends": ['base',
                 'sale',
-                'customer_area'],
+                'customer_area',
+                'stock'],
     "data": ['security/ir.model.access.csv',
              'res_partner_view.xml',
              'transportation_view.xml',
-             'sale_view.xml'],
+             'sale_view.xml', 'stock_view.xml'],
     "installable": True
 }

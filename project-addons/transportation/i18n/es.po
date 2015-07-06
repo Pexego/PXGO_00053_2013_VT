@@ -27,6 +27,16 @@ msgid "Assignations"
 msgstr "Asignaciones"
 
 #. module: transportation
+#: view:stock.picking:transportation.view_picking_withtransport_out_form
+msgid "Carrier Information"
+msgstr "Información transportista"
+
+#. module: transportation
+#: field:stock.picking,carrier_tracking_ref:0
+msgid "Carrier Tracking Ref"
+msgstr "Nº seguimiento transporte"
+
+#. module: transportation
 #: model:ir.model,name:transportation.model_res_country
 msgid "Country"
 msgstr "País"
@@ -38,7 +48,7 @@ msgstr "País"
 #: field:transportation.service,create_uid:0
 #: field:transportation.transporter,create_uid:0
 msgid "Created by"
-msgstr "Created by"
+msgstr "Creado por"
 
 #. module: transportation
 #: field:area.transportist.rel,create_date:0
@@ -47,7 +57,7 @@ msgstr "Created by"
 #: field:transportation.service,create_date:0
 #: field:transportation.transporter,create_date:0
 msgid "Created on"
-msgstr "Created on"
+msgstr "Creado el"
 
 #. module: transportation
 #: field:transportation.daily,date:0
@@ -75,7 +85,7 @@ msgstr "ID"
 #: field:transportation.service,write_uid:0
 #: field:transportation.transporter,write_uid:0
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "Últ. actualización por"
 
 #. module: transportation
 #: field:area.transportist.rel,write_date:0
@@ -84,13 +94,23 @@ msgstr "Last Updated by"
 #: field:transportation.service,write_date:0
 #: field:transportation.transporter,write_date:0
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "Últ. actualización el"
 
 #. module: transportation
 #: field:transportation.service,name:0
 #: field:transportation.transporter,name:0
 msgid "Name"
 msgstr "Nombre"
+
+#. module: transportation
+#: field:stock.move,weight_net:0
+msgid "Net weight"
+msgstr "Peso neto"
+
+#. module: transportation
+#: field:stock.picking,number_of_packages:0
+msgid "Number of Packages"
+msgstr "Nº paquetes"
 
 #. module: transportation
 #: model:ir.model,name:transportation.model_res_partner
@@ -171,11 +191,33 @@ msgid "Transporters"
 msgstr "Transportistas"
 
 #. module: transportation
+#: field:stock.move,weight_uom_id:0
+#: field:stock.picking,weight_uom_id:0
+msgid "Unit of Measure"
+msgstr "Unidad de medida"
+
+#. module: transportation
+#: help:stock.move,weight_uom_id:0
+msgid "Unit of Measure (Unit of Measure) is the unit of measurement for Weight"
+msgstr "Unidad de medida base para el Peso"
+
+#. module: transportation
 #: code:addons/transportation/res_partner.py:65
 #: code:addons/transportation/res_partner.py:73
 #, python-format
 msgid "Value error"
 msgstr "Error de valor"
+
+#. module: transportation
+#: field:stock.picking,volume:0
+msgid "Volume"
+msgstr "Volumen"
+
+#. module: transportation
+#: field:stock.move,weight:0
+#: view:stock.picking:transportation.view_picking_withtransport_out_form
+msgid "Weight"
+msgstr "Peso"
 
 #. module: transportation
 #: field:assignation.counter,daily_assigned:0

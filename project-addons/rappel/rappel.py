@@ -3,6 +3,8 @@
 #
 #    Copyright (C) 2004-2015 Pexego Sistemas Informáticos All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Omar Castiñeira Saaevdra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,29 +21,19 @@
 #
 ##############################################################################
 from openerp import models, fields, api, exceptions, _
-from datetime import datetime, date
-from dateutil.relativedelta import relativedelta
 
 
 class rappel(models.Model):
     _name = 'rappel'
     _description = 'Rappel Model'
-    PERIODICITIES = [('monthly', 'Monthly'), ('quarterly', 'Quarterly'),
-                     ('semiannual', 'Semiannual'), ('annual', 'Annual')]
-    PERIODICITIES_MONTHS = {'monthly': 1, 'quarterly': 3, 'semiannual': 6,
-                            'annual': 12}
+
     CALC_MODE = [('fixed', 'Fixed'), ('variable', 'Variable')]
-    QTY_TYPE = [('quantity', 'Quantity'), ('Value', 'value')]
+    QTY_TYPE = [('quantity', 'Quantity'), ('value', 'Value')]
     CALC_AMOUNT = [('percent', 'Percent'), ('qty', 'Quantity')]
 
     name = fields.Char('Concept', size=255, required=True)
     type_id = fields.Many2one('rappel.type', 'Type', required=True)
-    date_start = fields.Date('Date Start', required=True)
-    date_stop = fields.Date('Date Stop')
     qty_type = fields.Selection(QTY_TYPE, 'Quantity type', required=True)
-    periodicity = fields.Selection(PERIODICITIES,
-                                   'Periodicity',
-                                   required=True)
     calc_mode = fields.Selection(CALC_MODE, 'Fixed/Variable', required=True)
     fix_qty = fields.Float('Fix')
     sections = fields.One2many('rappel.section', 'rappel_id', 'Sections')
@@ -50,31 +42,15 @@ class rappel(models.Model):
     product_categ_id = fields.Many2one('product.category', 'Category')
     calc_amount = fields.Selection(CALC_AMOUNT, 'Percent/Quantity',
                                    required=True)
-    last_execution = fields.Date('Last execution')
-    partner_id = fields.Many2one('res.partner', 'Partner', required=True)
+    customer_ids = fields.One2many("res.partner.rappel.rel", "rappel_id",
+                                   "Customers")
 
-    @api.model
-    def create(self, vals):
-        if vals['global_application'] is False:
-            if not vals['product_id'] and not vals['product_categ_id']:
-                raise exceptions.Warning(_('Error'),
-                                         _('Product and category are empty'))
-        return super(rappel, self).create(vals)
-
-    @api.multi
-    def write(self, vals):
-        res = super(rappel, self).write(vals)
-        keys = vals.keys()
-        if 'global_application' in keys or 'product_id' in keys or \
-                'product_categ_id' in keys:
-            for rappel_o in self:
-                if rappel_o['global_application'] is False:
-                    if not rappel_o['product_id'] and not \
-                            rappel_o['product_categ_id']:
-                        raise exceptions.Warning(_('Error'),
-                                                 _('Product and category are \
-empty'))
-        return res
+    @api.constrains('global_application', 'product_id', 'product_categ_id')
+    def _check_application(self):
+        if not self.global_application and not self.product_id \
+                and not self.product_categ_id:
+            raise exceptions.\
+                ValidationError(_('Product and category are empty'))
 
     @api.multi
     def get_products(self):
@@ -82,122 +58,33 @@ empty'))
         product_ids = self.env['product.product']
         for rappel in self:
             if not rappel.global_application:
-                if rappel.product_categ_id:
-                    product_ids = \
-                        [x.id for x in product_obj.search(
-                            [('categ_id', '=', rappel.product_categ_id.id)])]
                 if rappel.product_id:
-                    product_ids = [rappel.product_id.id]
+                    product_ids += rappel.product_id
+                elif rappel.product_categ_id:
+                    product_ids += product_obj.search(
+                        [('categ_id', '=', rappel.product_categ_id.id)])
             else:
-                product_ids = [x.id for x in product_obj.search([])]
-        return product_ids
-
-    @api.multi
-    def _get_periods(self):
-        if self.last_execution and self.last_execution > self.date_start:
-            date_start = \
-                datetime.strptime(self.last_execution, '%Y-%m-%d').date()
-        else:
-            date_start = \
-                datetime.strptime(self.date_start, '%Y-%m-%d').date()
-        if self.date_stop:
-            date_stop = datetime.strptime(self.date_stop, '%Y-%m-%d').date()
-        else:
-            date_stop = date.today() + relativedelta(months=3)
-        periods = []
-        date_aux = date_start
-        while date_aux < date_stop:
-            start = date_aux
-            end = date_aux + \
-                relativedelta(months=self.PERIODICITIES_MONTHS[self.periodicity]) + relativedelta(days=-1)
-            date_aux = date_aux + \
-                relativedelta(months=self.PERIODICITIES_MONTHS[self.periodicity])
-            period = (start, end)
-            if end <= date_stop and end <= date.today():
-                periods.append(period)
-        return periods
-
-    @api.multi
-    def create_calculation(self, period, invoice_lines, refund_lines):
-        total_rappel = 0.0
-        if self.calc_mode == 'fixed':
-            if self.calc_amount == 'qty':
-                total_rappel = self.fix_qty
-            else:
-                total = sum([x.price_subtotal for x in invoice_lines]) - \
-                    sum([x.price_subtotal for x in refund_lines])
-                total_rappel = total * self.fix_qty / 100
-        else:
-            field = ''
-            if self.qty_type == 'value':
-                field = 'price_subtotal'
-            else:
-                field = 'quantity'
-            total = sum([x[field] for x in invoice_lines]) - \
-                sum([x[field] for x in refund_lines])
-            if total == 0:
-                return True
-            section = self.env['rappel.section'].search(
-                [('rappel_id', '=', self.id), ('rappel_from', '<=', total),
-                 ('rappel_until', '>=', total)])
-            if not section:
-                section = self.env['rappel.section'].search(
-                    [('rappel_id', '=', self.id),
-                     ('rappel_from', '<=', total)], order='rappel_until desc')
-                if not section:
-                    return True
-            section = section[0]
-            if self.calc_amount == 'qty':
-                total_rappel = section.percent
-            else:
-                total = sum([x.price_subtotal for x in invoice_lines]) - \
-                    sum([x.price_subtotal for x in refund_lines])
-                total_rappel = total * section.percent / 100
-        if total_rappel:
-            self.env['rappel.calculated'].create({
-                'partner_id': self.partner_id.id,
-                'date_start': period[0],
-                'date_end': period[1],
-                'quantity': total_rappel,
-                'rappel_id': self.id
-            })
-        return True
+                product_ids += product_obj.search([])
+        return [x.id for x in product_ids]
 
     @api.model
-    def calculate_rappel(self):
-        today = date.today()
-        for rappel in self.search([('date_start', '<', today)]):
-            if (today +
-                    relativedelta(months=-self.PERIODICITIES_MONTHS[rappel.periodicity])).strftime('%Y-%m-%d') > rappel.date_stop:
-                continue
-            periods = rappel._get_periods()
+    def compute_rappel(self):
+        if not self.ids:
+            rappels = self.search([])
+        else:
+            rappels = self
+        rappel_infos = self.env["rappel.current.info"].search([])
+        if rappel_infos:
+            rappel_infos.unlink()
+        for rappel in rappels:
             products = rappel.get_products()
-            for period in periods:
-                invoices = self.env['account.invoice'].search(
-                    [('type', '=', 'out_invoice'),
-                     ('date_invoice', '>=', period[0]),
-                     ('date_invoice', '<=', period[1]),
-                     ('state', '=', 'paid'),
-                     ('partner_id', '=', rappel.partner_id.id)])
-
-                # se buscan las rectificativas
-                refund_lines = self.env['account.invoice.line']
-                invoice_ids = []
-                for invoice in invoices:
-                    refunds = self.env['account.invoice'].search(
-                        [('type', '=', 'out_refund'),
-                         ('state', '=', 'paid'),
-                         ('origin_invoices_ids', '=', invoice.id)])
-                    refund_lines += self.env['account.invoice.line'].search(
-                        [('invoice_id', 'in', [x.id for x in refunds]),
-                         ('product_id', 'in', products)])
-                    invoice_ids.append(invoice.id)
-                invoice_lines = self.env['account.invoice.line'].search(
-                    [('invoice_id', 'in', invoice_ids),
-                     ('product_id', 'in', products)])
-                rappel.create_calculation(period, invoice_lines, refund_lines)
-            if periods:
-                rappel.last_execution = periods[-1][1]
+            for customer in rappel.customer_ids:
+                period = customer._get_next_period()
+                if period:
+                    invoice_lines, refund_lines = customer.\
+                        _get_invoices(period, products)
+                    customer.compute(period, invoice_lines, refund_lines,
+                                     tmp_model=True)
 
 
 class rappel_section(models.Model):
@@ -205,17 +92,28 @@ class rappel_section(models.Model):
     _name = 'rappel.section'
     _description = 'Rappel section model'
 
-    rappel_from = fields.Float('From')
+    @api.multi
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "%s - %s" % (record.rappel_from,
+                                                   record.rappel_until)))
+
+        return result
+
+    rappel_from = fields.Float('From', required=True)
     rappel_until = fields.Float('Until')
-    percent = fields.Float('Value')
+    percent = fields.Float('Value', required=True)
     rappel_id = fields.Many2one('rappel', 'Rappel')
 
 
 class rappel_calculated(models.Model):
 
     _name = 'rappel.calculated'
-    partner_id = fields.Many2one('res.partner', 'Customer')
-    date_start = fields.Date('Date start')
-    date_end = fields.Date('Date end')
-    quantity = fields.Float('Quantity')
-    rappel_id = fields.Many2one('rappel', 'Rappel')
+
+    partner_id = fields.Many2one('res.partner', 'Customer', required=True)
+    date_start = fields.Date('Date start', required=True)
+    date_end = fields.Date('Date end', required=True)
+    quantity = fields.Float('Quantity', required=True)
+    rappel_id = fields.Many2one('rappel', 'Rappel', required=True)
+    invoice_id = fields.Many2one("account.invoice", "Invoice", readonly=True)

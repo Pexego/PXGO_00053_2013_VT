@@ -23,15 +23,15 @@ msgid "<p class=\"oe_view_nocontent_create\">\n"
 "                </p>\n"
 "            "
 msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"                    This menu allow you to view deposit\n"
-"                    of products.\n"
+"                    Este menú permite ver los depósitos\n"
+"                    de productos.\n"
 "                </p>\n"
 "            "
 
 #. module: stock_deposit
 #: view:stock.deposit:stock_deposit.view_stock_deposit_search
 msgid "Active deposits"
-msgstr "Depositos activos"
+msgstr "Depósitos activos"
 
 #. module: stock_deposit
 #: view:stock.invoice.deposit:stock_deposit.stock_invoice_deposit_form
@@ -58,13 +58,13 @@ msgstr "Crear facturas"
 #: field:stock.deposit,create_uid:0
 #: field:stock.invoice.deposit,create_uid:0
 msgid "Created by"
-msgstr "Created by"
+msgstr "Creado por"
 
 #. module: stock_deposit
 #: field:stock.deposit,create_date:0
 #: field:stock.invoice.deposit,create_date:0
 msgid "Created on"
-msgstr "Created on"
+msgstr "Creado el"
 
 #. module: stock_deposit
 #: field:sale.order.line,deposit_date:0
@@ -96,7 +96,7 @@ msgstr "Depósito"
 #. module: stock_deposit
 #: field:stock.deposit,move_id:0
 msgid "Deposit Move"
-msgstr "Movimiento de deposito"
+msgstr "Movimiento de depósito"
 
 #. module: stock_deposit
 #: model:ir.actions.act_window,name:stock_deposit.act_res_partner_2_deposit
@@ -151,7 +151,7 @@ msgstr "Agrupar por..."
 #. module: stock_deposit
 #: help:stock.deposit,message_summary:0
 msgid "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
-msgstr "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+msgstr "Muestra el resumen de comunicación (núm. de mensajes, ...). Este resumen está directamente en formato html para poder insertarlo en las vistas kanban."
 
 #. module: stock_deposit
 #: field:stock.deposit,id:0
@@ -162,7 +162,7 @@ msgstr "ID"
 #. module: stock_deposit
 #: help:stock.deposit,message_unread:0
 msgid "If checked new messages require your attention."
-msgstr "If checked new messages require your attention."
+msgstr "Si está marcado los nuevos mensajes requerirán su atención."
 
 #. module: stock_deposit
 #: view:stock.deposit:stock_deposit.view_stock_deposit_form
@@ -183,34 +183,34 @@ msgstr "Facturado"
 #. module: stock_deposit
 #: field:stock.deposit,message_is_follower:0
 msgid "Is a Follower"
-msgstr "Is a Follower"
+msgstr "Es un seguidor"
 
 #. module: stock_deposit
 #: field:stock.deposit,message_last_post:0
 msgid "Last Message Date"
-msgstr "Last Message Date"
+msgstr "Últ. fecha mensaje"
 
 #. module: stock_deposit
 #: field:stock.deposit,write_uid:0
 #: field:stock.invoice.deposit,write_uid:0
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "Últ actualización por"
 
 #. module: stock_deposit
 #: field:stock.deposit,write_date:0
 #: field:stock.invoice.deposit,write_date:0
 msgid "Last Updated on"
-msgstr "Last Updated on"
+msgstr "Últ. actualización el"
 
 #. module: stock_deposit
 #: field:stock.deposit,message_ids:0
 msgid "Messages"
-msgstr "Messages"
+msgstr "Mensajes"
 
 #. module: stock_deposit
 #: help:stock.deposit,message_ids:0
 msgid "Messages and communication history"
-msgstr "Messages and communication history"
+msgstr "Historial de mensajes y comunicación"
 
 #. module: stock_deposit
 #: view:stock.deposit:stock_deposit.view_stock_deposit_form
@@ -218,9 +218,21 @@ msgid "Moves"
 msgstr "Movimientos"
 
 #. module: stock_deposit
+#: code:addons/stock_deposit/wizard/stock_invoice_deposit.py:41
+#, python-format
+msgid "No deposit"
+msgstr "Sin depósito"
+
+#. module: stock_deposit
+#: code:addons/stock_deposit/wizard/stock_invoice_deposit.py:41
+#, python-format
+msgid "No deposit selected"
+msgstr "Sin depósito seleccionado"
+
+#. module: stock_deposit
 #: help:stock.deposit,partner_id:0
 msgid "Optional address where goods are to be delivered, specifically used for allotment"
-msgstr "Optional address where goods are to be delivered, specifically used for allotment"
+msgstr "Dirección opcional, donde se entregarán los bienes, especialmente utilizada para la adjudicación"
 
 #. module: stock_deposit
 #: model:ir.model,name:stock_deposit.model_res_partner
@@ -305,12 +317,12 @@ msgstr "Movimiento de existencias"
 #. module: stock_deposit
 #: field:stock.deposit,message_summary:0
 msgid "Summary"
-msgstr "Summary"
+msgstr "Resumen"
 
 #. module: stock_deposit
 #: help:stock.deposit,product_uom_qty:0
 msgid "This is the quantity of products from an inventory point of view. For moves in the state 'done', this is the quantity of products that were actually moved. For other moves, this is the quantity of product that is planned to be moved. Lowering this quantity does not generate a backorder. Changing this quantity on assigned moves affects the product reservation, and should be done with care."
-msgstr "This is the quantity of products from an inventory point of view. For moves in the state 'done', this is the quantity of products that were actually moved. For other moves, this is the quantity of product that is planned to be moved. Lowering this quantity does not generate a backorder. Changing this quantity on assigned moves affects the product reservation, and should be done with care."
+msgstr "Esta es la cantidad de productos desde el punto de vista del inventario. Para los movimientos en estado 'Realizado', esta es la cantidad de producto que fue actualmente movida. Para los otros movimientos, esta es la cantidad de producto que está planeada para ser movida. Alterar hacia abajo esta cantidad no generará un albarán parcial. Cambiar esta cantidad en movimientos asignados afectará a la reserva del producto, debería realizarse con cuidado."
 
 #. module: stock_deposit
 #: view:stock.deposit:stock_deposit.view_stock_deposit_tree
@@ -320,15 +332,15 @@ msgstr "Total"
 #. module: stock_deposit
 #: field:stock.deposit,message_unread:0
 msgid "Unread Messages"
-msgstr "Unread Messages"
+msgstr "Mensajes no leídos"
 
 #. module: stock_deposit
 #: field:stock.deposit,product_uom:0
 msgid "Uom"
-msgstr "Uom"
+msgstr "Udm"
 
 #. module: stock_deposit
 #: field:sale.order,deposit_count:0
 msgid "deposit count"
-msgstr "deposit count"
+msgstr "Depósitos #"
 

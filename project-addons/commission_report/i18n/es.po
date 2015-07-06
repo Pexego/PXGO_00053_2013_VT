@@ -22,11 +22,22 @@ msgid "Agent"
 msgstr "Agente"
 
 #. module: commission_report
+#: field:account.invoice,agents_str:0
+msgid "Agents"
+msgstr "Agentes"
+
+#. module: commission_report
+#: model:ir.actions.act_window,name:commission_report.action_settlement
+#: model:ir.ui.menu,name:commission_report.menu_action_settlement
+msgid "Agents settlements"
+msgstr "Liquidaciones agentes"
+
+#. module: commission_report
 #: view:commission.report:commission_report.commission_report_filter
 #: model:ir.actions.act_window,name:commission_report.action_commission_report_all
 #: model:ir.ui.menu,name:commission_report.menu_action_commission_report_all
 msgid "Commission Analysis"
-msgstr "Analisis de comisiones"
+msgstr "Análisis de comisiones"
 
 #. module: commission_report
 #: view:commission.report:commission_report.view_commssion_report
@@ -52,6 +63,11 @@ msgstr "Agrupar por"
 #: field:commission.report,id:0
 msgid "ID"
 msgstr "ID"
+
+#. module: commission_report
+#: view:account.invoice.line.agent:commission_report.invoice_line_agent_form
+msgid "Invoice line agent and commission"
+msgstr "Agente y comisión"
 
 #. module: commission_report
 #: view:commission.report:commission_report.commission_report_filter

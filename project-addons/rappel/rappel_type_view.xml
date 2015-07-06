@@ -38,6 +38,9 @@
                                 <field name="code" placeholder="Code..."/>
                             </h2>
                         </div>
+                        <group>
+                            <field name="product_id"/>
+                        </group>
                     </sheet>
                 </form>
             </field>
