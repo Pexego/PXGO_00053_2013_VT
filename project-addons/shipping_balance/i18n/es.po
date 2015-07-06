@@ -1,0 +1,186 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* shipping_balance
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-06 09:43+0000\n"
+"PO-Revision-Date: 2015-07-06 09:43+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: shipping_balance
+#: field:shipping.balance,amount:0
+msgid "Amount"
+msgstr "Importe"
+
+#. module: shipping_balance
+#: view:shipping.balance:shipping_balance.shipping_balance_search_filter
+msgid "Amounts"
+msgstr "Importe"
+
+#. module: shipping_balance
+#: field:shipping.balance,aproved_ok:0
+msgid "Aproved"
+msgstr "Aprovada"
+
+#. module: shipping_balance
+#: field:shipping.balance,balance:0
+msgid "Balance"
+msgstr "Balance"
+
+#. module: shipping_balance
+#: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: shipping_balance
+#: model:ir.model,name:shipping_balance.model_crm_claim
+msgid "Claim"
+msgstr "Reclamación"
+
+#. module: shipping_balance
+#: field:shipping.balance,create_uid:0
+#: field:shipping.balance.wizard,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: shipping_balance
+#: field:shipping.balance,create_date:0
+#: field:shipping.balance.wizard,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: shipping_balance
+#: view:shipping.balance:shipping_balance.shipping_balance_search_filter
+msgid "Group By"
+msgstr "Group By"
+
+#. module: shipping_balance
+#: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
+msgid "How much from shipping balance"
+msgstr "Importe a aplicar"
+
+#. module: shipping_balance
+#: field:shipping.balance,id:0
+#: field:shipping.balance.wizard,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: shipping_balance
+#: model:ir.actions.act_window,name:shipping_balance.action_shipping_balance_wizard
+msgid "Invoice Session"
+msgstr "Invoice Session"
+
+#. module: shipping_balance
+#: field:shipping.balance,write_uid:0
+#: field:shipping.balance.wizard,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: shipping_balance
+#: field:shipping.balance,write_date:0
+#: field:shipping.balance.wizard,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: shipping_balance
+#: field:res.partner,shipping_balance_ids:0
+msgid "Listado Saldos de Envíos"
+msgstr "Listado Saldos de Envíos"
+
+#. module: shipping_balance
+#: help:shipping.balance,aproved_ok:0
+msgid "Must be aproved before use"
+msgstr "Debe ser aprovado antes de aplicarlo"
+
+#. module: shipping_balance
+#: model:ir.model,name:shipping_balance.model_res_partner
+#: view:shipping.balance:shipping_balance.shipping_balance_search_filter
+#: field:shipping.balance,partner_id:0
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: shipping_balance
+#: model:ir.model,name:shipping_balance.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: shipping_balance
+#: model:ir.model,name:shipping_balance.model_mrp_repair_fee
+msgid "Repair Fees Line"
+msgstr "Líneas honorarios reparación"
+
+#. module: shipping_balance
+#: model:ir.model,name:shipping_balance.model_mrp_repair
+msgid "Repair Order"
+msgstr "Orden reparación"
+
+#. module: shipping_balance
+#: field:shipping.balance,repair_id:0
+msgid "Repair id"
+msgstr "Reparación"
+
+#. module: shipping_balance
+#: field:shipping.balance,sale_id:0
+msgid "Sale id"
+msgstr "Venta"
+
+#. module: shipping_balance
+#: field:shipping.balance,final_id:0
+msgid "Refers to"
+msgstr "Origen"
+
+#. module: shipping_balance
+#: model:ir.model,name:shipping_balance.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: shipping_balance
+#: model:ir.model,name:shipping_balance.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea pedido de venta"
+
+#. module: shipping_balance
+#: model:ir.actions.act_window,name:shipping_balance.action_tree_shipping_balance_from_partner
+#: model:ir.actions.act_window,name:shipping_balance.action_tree_shipping_balance_from_partner_ok
+#: model:ir.actions.act_window,name:shipping_balance.action_tree_shipping_balance_from_sale
+#: model:ir.model,name:shipping_balance.model_shipping_balance_wizard_apply
+#: field:mrp.repair,shipping_balance:0
+#: field:product.product,shipping_balance:0
+#: view:res.partner:shipping_balance.view_partner_ship_balance_form
+#: view:sale.order:shipping_balance.view_order_form_shipping_balance
+msgid "Shipping Balance"
+msgstr "Saldo de Envíos"
+
+#. module: shipping_balance
+#: field:shipping.balance.wizard,amount_ok:0
+msgid "Shipping Balance OK"
+msgstr "Saldo de Envíos OK"
+
+#. module: shipping_balance
+#: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
+msgid "Shipping Balance Wizard"
+msgstr "Shipping Balance Wizard"
+
+#. module: shipping_balance
+#: help:shipping.balance,balance:0
+msgid "True > positive"
+msgstr "True > positive"
+
+#. module: shipping_balance
+#: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
+msgid "or"
+msgstr "or"
+
+#. module: shipping_balance
+#: field:sale.order,shipping_balance:0
+msgid "shipping_balance"
+msgstr "shipping_balance"
+
