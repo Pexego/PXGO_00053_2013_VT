@@ -14,7 +14,7 @@ class import_customers(object):
         try:
             self.url_template = "http://%s:%s/xmlrpc/%s"
             self.server = "localhost"
-            self.port = 8069
+            self.port = 9069
             self.dbname = dbname
             self.user_name = user
             self.user_passwd = passwd
@@ -155,20 +155,23 @@ class import_customers(object):
         cont = 1
         all_lines = sh.nrows - 1
         print "partners no: ", all_lines
-        import ipdb; ipdb.set_trace()
         spain_id = self.search("res.country", [('code', '=', "ES")])[0]
         for rownum in range(1, all_lines):
             record = sh.row_values(rownum)
             try:
                 partner_vals = {
                     "customer": True,
-                    "ref": str(int(record[0].replace("4300", ""))),
+                    "ref": str(int(record[0][4:])),
                     "name": record[1],
                     "website": record[3],
                     "email": record[4],
                     "is_company": True
                 }
-
+                partner_check = self.search("res.partner", [('ref', '=', partner_vals['ref'])])
+                if partner_check:
+                    print "%s de %s" % (cont, all_lines)
+                    cont += 1
+                    continue
                 partner_id = self.create("res.partner", partner_vals)
 
                 if record[2]:
@@ -195,7 +198,6 @@ class import_customers(object):
             except Exception, e:
                 print "EXCEPTION: REC: %" % (record), e
 
-        print u"Pendientes de jerarquía: ", partner_hierarchy
         return True
 
 
