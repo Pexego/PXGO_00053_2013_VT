@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
+#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -20,21 +20,19 @@
 ##############################################################################
 
 {
-    'name': 'Account custom',
+    'name': "Product Ship Balance",
     'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock',
-                'stock_account', 'sale_stock', 'account_payment_partner',
-                'account_payment', 'sale'],
-    "data": ['account_view.xml',
-             'report/account_invoice_report_view.xml',
-             'report_custom_view.xml'],
+    'category': 'product',
+    'description': """Adds shipping balance""",
+    'author': 'Comunitea Servicios Tecnologicos',
+    'website': 'www.comunitea.com',
+    "depends" : ["base", "product", "mrp_repair", "sale", "account"],
+
+    "data" : ["shipping_balance_view.xml",
+              "wizard/shipping_balance_wizard.xml",
+              "partner_view.xml",
+              "sale_order.xml",
+              "product_view.xml",
+             ],
     "installable": True
 }

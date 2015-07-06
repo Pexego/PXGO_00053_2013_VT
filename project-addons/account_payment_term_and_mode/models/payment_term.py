@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Omar Castiñeira Saaevdra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,22 +19,11 @@
 #
 ##############################################################################
 
-{
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock',
-                'stock_account', 'sale_stock', 'account_payment_partner',
-                'account_payment', 'sale'],
-    "data": ['account_view.xml',
-             'report/account_invoice_report_view.xml',
-             'report_custom_view.xml'],
-    "installable": True
-}
+from openerp import models, fields
+
+
+class AccountPaymentTermLine(models.Model):
+
+    _inherit = "account.payment.term.line"
+
+    payment_mode_id = fields.Many2one("payment.mode", "Payment mode")

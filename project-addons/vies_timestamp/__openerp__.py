@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    @author Alberto Luengo Cabanillas
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,21 +20,13 @@
 ##############################################################################
 
 {
-    'name': 'Account custom',
+    'name': "VIES timestamp",
     'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock',
-                'stock_account', 'sale_stock', 'account_payment_partner',
-                'account_payment', 'sale'],
-    "data": ['account_view.xml',
-             'report/account_invoice_report_view.xml',
-             'report_custom_view.xml'],
+    'category': 'visiotech',
+    'description': """Adds a VIES validation timestamp when confirming sale orders. Needs installed 'suds' library before.""",
+    'author': 'Alberto Luengo para Comunitea',
+    'website': 'luengocabanillas.com',
+    "depends": ['sale'],
+    "data": ['sale_order_view.xml'],
     "installable": True
 }

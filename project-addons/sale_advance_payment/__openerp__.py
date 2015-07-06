@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Omar Castiñeira Saaevdra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,21 +20,19 @@
 ##############################################################################
 
 {
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock',
-                'stock_account', 'sale_stock', 'account_payment_partner',
-                'account_payment', 'sale'],
-    "data": ['account_view.xml',
-             'report/account_invoice_report_view.xml',
-             'report_custom_view.xml'],
-    "installable": True
+    "name": "Sale Advance Payment",
+    "version": "1.0",
+    "author": "Comunitea",
+    'website': 'www.counitea.com',
+    "category": "Sales",
+    "description": """Allow to add advance payments on sales and then use its
+ on invoices""",
+    "depends": ["base", "sale", "account_voucher",
+                "partner_risk__stock_reserve__rel"],
+    "data": ["wizard/sale_advance_payment_wzd_view.xml",
+             "sale_view.xml",
+             "wizard/apply_on_account_amount_view.xml",
+             "invoice_view.xml",
+             "partner_view.xml"],
+    "installable": True,
 }

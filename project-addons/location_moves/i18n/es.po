@@ -113,7 +113,7 @@ msgstr "Crear movimientos"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
-msgid "Kitchen -> Coocked"
+msgid "Kitchen -> Cooked"
 msgstr "Cocina -> Cocinado"
 
 #. module: location_moves
@@ -123,7 +123,7 @@ msgstr "Cocina -> Enfermería"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
-msgid "Nursing -> Coocked"
+msgid "Nursing -> Cooked"
 msgstr "Enfermería -> Cocinado"
 
 #. module: location_moves
@@ -134,12 +134,22 @@ msgstr "Calidad -> Cocinado"
 #. module: location_moves
 #: selection:location.moves,move_type:0
 msgid "Nursing -> Damaged"
-msgstr "Enfermería -> Averiados"
+msgstr "Enfermería -> Averiado"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
 msgid "Pantry -> Kitchen"
 msgstr "Despensa -> Cocina"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Cooked -> Nursing"
+msgstr "Cocinado -> Enfermería"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Cooked -> Damaged"
+msgstr "Cocinado -> Averiado"
 
 #. module: location_moves
 #: code:addons/location_moves/wizard/quality_move.py:37

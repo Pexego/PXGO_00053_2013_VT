@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Omar Castiñeira Saaevdra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,21 +20,16 @@
 ##############################################################################
 
 {
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock',
-                'stock_account', 'sale_stock', 'account_payment_partner',
-                'account_payment', 'sale'],
-    "data": ['account_view.xml',
-             'report/account_invoice_report_view.xml',
-             'report_custom_view.xml'],
-    "installable": True
+    'name': 'Add payment mode to payment terms',
+    'version': '0.1',
+    'license': 'AGPL-3',
+    'author': 'Banking addons community',
+    'website': 'https://launchpad.net/banking-addons',
+    'category': 'Banking addons',
+    'depends': ['account', 'account_payment'],
+    'data': ['views/account_view.xml'],
+    'description': '''
+Allow to set a preferer payment mode on payment term lines. Only informative
+on invoices''',
+    'installable': True,
 }

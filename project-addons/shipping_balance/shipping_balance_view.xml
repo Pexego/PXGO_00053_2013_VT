@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- Ver en rojo cuando vengan de una rma-->
+        <record id="view_tree_shipping_balance" model="ir.ui.view">
+            <field name="name">Shipping Balance</field>
+            <field name="model">shipping.balance</field>
+            <field name="arch" type="xml" >
+                <tree editable="top" colors="red: balance==True" >
+
+                    <field name="partner_id" invisible="1"/>
+                    <field name="repair_id" invisible="1"/>
+                    <field name="sale_id" invisible="1"/>
+                    <field name="final_id" />
+                    <field name="aproved_ok"/>
+                    <field name="amount"/>
+                    <field name="balance" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+        <record model="ir.actions.act_window" id="action_tree_shipping_balance_from_partner_ok">
+            <field name="name">Shipping Balance</field>
+            <field name="context">{'search_default_partner_id': active_id, 'default_partner_id': active_id}</field>
+            <field name="res_model">shipping.balance</field>
+            <field name="src_model">res.partner</field>
+            <field name="view_id" ref="view_tree_shipping_balance"/>
+        </record>
+
+         <record model="ir.actions.act_window" id="action_tree_shipping_balance_from_partner">
+            <field name="name">Shipping Balance</field>
+            <field name="context">{'search_default_partner_id': active_id, 'default_partner_id': active_id}</field>
+            <field name="res_model">shipping.balance</field>
+            <field name="src_model">res.partner</field>
+             <field name="target">new</field>
+            <field name="view_id" ref="view_tree_shipping_balance"/>
+        </record>
+
+
+         <record model="ir.actions.act_window" id="action_tree_shipping_balance_from_sale">
+            <field name="name">Shipping Balance</field>
+            <field name="res_model">shipping.balance</field>
+            <field name="src_model">sale.order</field>
+            <field name="view_id" ref="view_tree_shipping_balance"/>
+    </record>
+
+    <record id="shipping_balance_search_filter" model="ir.ui.view">
+        <field name="name">shipping.balance.search.filter</field>
+        <field name="model">shipping.balance</field>
+        <field name="arch" type="xml">
+            <search string="Amounts">
+                <field name="repair_id"/>
+                <field name="partner_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                </group>
+           </search>
+        </field>
+    </record>
+
+
+
+
+    </data>
+</openerp>

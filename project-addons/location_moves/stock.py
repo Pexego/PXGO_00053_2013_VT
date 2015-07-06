@@ -30,7 +30,7 @@ class StockLotacion(models.Model):
         self.location_move(product_id, 'stock_location_pantry', qty,
                            'stock_location_kitchen')
 
-    def move_kitchen_coocked(self, product_id, qty):
+    def move_kitchen_cooked(self, product_id, qty):
         self.location_move(product_id, 'stock_location_kitchen', qty,
                            'stock.stock_location_stock', True)
 
@@ -42,13 +42,21 @@ class StockLotacion(models.Model):
         self.location_move(product_id, 'stock_location_nursing', qty,
                            'stock_location_damaged')
 
-    def move_nursing_coocked(self, product_id, qty):
+    def move_nursing_cooked(self, product_id, qty):
         self.location_move(product_id, 'stock_location_nursing', qty,
                            'stock.stock_location_stock', True)
 
     def move_quality_cooked(self, product_id, qty):
         self.location_move(product_id, 'stock_location_quality', qty,
                            'stock.stock_location_stock', True)
+
+    def move_cooked_nursing(self, product_id, qty):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_nursing')
+
+    def move_cooked_damaged(self, product_id, qty):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_damaged')
 
     def location_move(self, product_id, source_location, qty, dest_location,
                       send_message=False):

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Kiko Sanchez <kiko@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -14,27 +14,30 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
 #
+#
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
 
-{
-    'name': 'Account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': """
-        Account customizations:
-            -Relation between stock.move and account.invoice.line
-            -Attach the picking report in invoice email.
-    """,
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock',
-                'stock_account', 'sale_stock', 'account_payment_partner',
-                'account_payment', 'sale'],
-    "data": ['account_view.xml',
-             'report/account_invoice_report_view.xml',
-             'report_custom_view.xml'],
-    "installable": True
-}
+
+from openerp import fields, models, api
+
+
+class Partner(models.Model):
+
+    _inherit = "res.partner"
+    amount_shipping_balance = fields.Float("Shipping Balance", help = "Shipping Balance Amount", compute='_get_shipping_balance')
+    shipping_balance_ids = fields.One2many ("shipping.balance","partner_id", string="Listado Saldos de Envíos")
+
+
+    @api.one
+    @api.depends('shipping_balance_ids', 'shipping_balance_ids.amount')
+    def _get_shipping_balance(self):
+        final_amount=0.00
+        for d in self.shipping_balance_ids:
+            final_amount += (d.amount or 0.00)*(d.aproved_ok or 0.00)
+        self.amount_shipping_balance=final_amount
+        return True
+
+
