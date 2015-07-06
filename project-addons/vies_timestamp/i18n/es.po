@@ -1,0 +1,61 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* vies_timestamp
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-02 16:40+0000\n"
+"PO-Revision-Date: 2015-07-02 16:40+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: vies_timestamp
+#: field:sale.order,vies_validation_timestamp:0
+msgid "Date when VAT validated through VIES"
+msgstr "Fecha y hora de la validacion en VIES"
+
+#. module: vies_timestamp
+#: code:addons/vies_timestamp/sale_order.py:49
+#, python-format
+msgid "Error"
+msgstr "Error"
+
+#. module: vies_timestamp
+#: code:addons/vies_timestamp/sale_order.py:58
+#, python-format
+msgid "General Error: connection timeout for \"%s\""
+msgstr "Error: tiempo maximo de espera superado para \"%s\""
+
+#. module: vies_timestamp
+#: model:ir.model,name:vies_timestamp.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: vies_timestamp
+#: field:sale.order,vies_validation_check:0
+msgid "VAT Validated through VIES?"
+msgstr "CIF/NIF validado en VIES?"
+
+#. module: vies_timestamp
+#: code:addons/vies_timestamp/sale_order.py:58
+#, python-format
+msgid "VIES Error"
+msgstr "Error VIES"
+
+#. module: vies_timestamp
+#: view:sale.order:vies_timestamp.sale_order_form_add_vies_fields
+msgid "VIES validation results"
+msgstr "Resultados validacion VIES"
+
+#. module: vies_timestamp
+#: code:addons/vies_timestamp/sale_order.py:49
+#, python-format
+msgid "import module \"suds\" failed - check VIES needs this module"
+msgstr "Necesita instalar la libreria \"suds\" en su sistema antes de continuar..."
+
