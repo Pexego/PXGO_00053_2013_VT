@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+
+        <record id="view_tree_outlet_loss" model="ir.ui.view">
+            <field name="name">outlet.loss.tree</field>
+            <field name="model">outlet.loss</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+
+                <tree string="Product Outlet Loss">
+                    <field name="create_date"/>
+                    <field name="product_id"/>
+                    <field name="qty"/>
+                    <field name="total_lost"/>
+                </tree>
+
+            </field>
+        </record>
+
+
+        <record id="view_search_outlet_loss" model="ir.ui.view">
+            <field name="name">view.outlet.loss.search</field>
+            <field name="model">outlet.loss</field>
+            <field name="arch" type="xml">
+                <search string="Outlet Loss" >
+                    <field name="product_id" />
+                    <field name="create_date" />
+
+                    <group expand="0" string="Group By...">
+                        <filter string="Status"
+                            name="groupby_state"
+                            domain="[]" context="{'group_by': 'create_date'}"/>
+                        <filter string="Product" domain="[]"
+                            name="groupby_product"
+                            context="{'group_by': 'product_id'}"/>
+
+                    </group>
+
+                </search>
+            </field>
+        </record>
+
+
+
+
+         <act_window
+        id="action_open_tree_outlet_loss"
+        name="Open Outlet Loss"
+        res_model="outlet.loss"
+        view_id="view_tree_outlet_loss"
+        view_mode="tree"
+        target="current"/>
+
+
+
+         <record id="action_open_tree_outlet_loss2" model="ir.actions.act_window">
+            <field name="name">Open Outlet Loss Filtro</field>
+            <field name="res_model">outlet.loss</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">tree</field>
+            <field name="view_id" ref="view_tree_outlet_loss"/>
+            <field name="search_view_id" ref="view_search_outlet_loss"/>
+            <field name="context">{'search_default_groupby_create_date': 1,
+                                   'search_default_groupby_product': 1}</field>
+
+        </record>
+        <!--
+        <menuitem id="menu_action_open_tree_outlet_loss" action="action_open_tree_outlet_loss" parent="stock.menu_traceability" sequence="1"/>
+        <menuitem id="menu_action_open_tree_outlet_loss2" action="action_open_tree_outlet_loss2" parent="stock.menu_traceability" sequence="1"/>
+        <menuitem id="menu_action_create_account_from_outlet" action="act_outlet_loss_to_account_wizard" parent="stock.menu_traceability" sequence="1"/>
+        -->
+
+
+
+        <record id="view_tree_outlet_loss_searched" model="ir.ui.view">
+            <field name="name">outlet.loss.tree</field>
+            <field name="model">outlet.loss</field>
+            <field name="arch" type="xml">
+                <tree string="Product Outlet Lost" version="7.0">
+
+
+                    <field name="product_id" />
+                    <field name="qty" />
+                    <field name="price_unit" />
+                    <field name="price_outlet" />
+                    <field name="total_lost" sum="Total" />
+                    <field name="date_move" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_outlet_loss_search" model="ir.ui.view">
+            <field name="name">outlet.loss.tree</field>
+            <field name="model">outlet.loss</field>
+            <field name="arch" type="xml">
+                <search string="Product Outlet Lost" version="7.0">
+                    <field name="id" />
+                    <field name="product_id" />
+                    <separator/>
+                    <group string="Group By...">
+                        <filter string="Current Year" domain="[('date_move','&gt;=', datetime.datetime.now().strftime('%Y-01-01'))]" />
+                        <filter string="Product" domain="[]"
+                            name="groupby_product"
+                            context="{'group_by': 'product_id'}"/>
+
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_open_search_outlet_loss" model="ir.actions.act_window">
+            <field name="name">Outlet Lost</field>
+            <field name="res_model">outlet.loss</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_tree_outlet_loss_searched"/>
+            <field name="search_view_id" ref="view_outlet_loss_search"/>
+            <field name="context">{'search_default_groupby_product': 1}</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    No outlet loss
+                    </p><p>
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_open_search_outlet_loss"
+            id="menu_action_outlet_loss_search"
+            parent="stock.menu_stock_inventory_control"
+            sequence="30"/>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </data>
+</openerp>

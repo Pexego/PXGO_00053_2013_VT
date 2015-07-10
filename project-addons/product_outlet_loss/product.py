@@ -1,0 +1,43 @@
+# -*- coding: utf-8 -*-
+##############################################################################
+#
+#    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Kiko Sánchez <kiko@comunitea.com>$
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as published
+#    by the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+##############################################################################
+
+from openerp import fields, models, api
+from datetime import datetime
+
+class outlet_loss(models.Model):
+
+    _name = "outlet.loss"
+
+    @api.one
+    def _get_outlet_loss(self):
+        self.total_lost=self.qty*(self.price_unit-self.price_outlet)
+
+
+    qty = fields.Float('Quantity')
+    product_id = fields.Many2one('product.product', 'Product')
+    price_unit = fields.Float('Price')
+    price_outlet = fields.Float ('Outlet Price')
+    total_lost = fields.Float ("Outlet Loss", compute = _get_outlet_loss)
+    date_move = fields.Date('Move to outlet on', default = fields.datetime.now())
+
+
+
+
