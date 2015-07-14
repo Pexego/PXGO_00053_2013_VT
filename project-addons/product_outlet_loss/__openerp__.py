@@ -31,6 +31,7 @@
                 'stock',
                 'equivalent_products'],
     "data": ['wizard/product_outlet_wizard_view.xml',
-             'outlet_loss.xml'],
+             'outlet_loss.xml',
+             'res_company.xml'],
     "installable": True
 }
