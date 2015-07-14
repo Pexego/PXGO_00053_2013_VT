@@ -54,6 +54,7 @@ class ShipBalanWzd(models.TransientModel):
             line2 = self.env['shipping.balance'].search([('sale_id', '=', self1.id)])
             if line2:
                 line2.write(shipping_vals)
+
             else:
                 self.env['shipping.balance'].create(shipping_vals)
 

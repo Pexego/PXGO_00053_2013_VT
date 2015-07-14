@@ -7,7 +7,7 @@
             <field name="name">Shipping Balance</field>
             <field name="model">shipping.balance</field>
             <field name="arch" type="xml" >
-                <tree editable="top" colors="red: balance==True" >
+                <tree editable="top" colors="red: balance==True">
 
                     <field name="partner_id" invisible="1"/>
                     <field name="repair_id" invisible="1"/>
@@ -35,7 +35,7 @@
             <field name="context">{'search_default_partner_id': active_id, 'default_partner_id': active_id}</field>
             <field name="res_model">shipping.balance</field>
             <field name="src_model">res.partner</field>
-             <field name="target">new</field>
+             <field name="target"></field>
             <field name="view_id" ref="view_tree_shipping_balance"/>
         </record>
 

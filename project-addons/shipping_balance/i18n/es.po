@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-06 09:43+0000\n"
-"PO-Revision-Date: 2015-07-06 09:43+0000\n"
+"POT-Creation-Date: 2015-07-14 11:27+0000\n"
+"PO-Revision-Date: 2015-07-14 11:27+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,12 +23,12 @@ msgstr "Importe"
 #. module: shipping_balance
 #: view:shipping.balance:shipping_balance.shipping_balance_search_filter
 msgid "Amounts"
-msgstr "Importe"
+msgstr "Importes"
 
 #. module: shipping_balance
 #: field:shipping.balance,aproved_ok:0
 msgid "Aproved"
-msgstr "Aprovada"
+msgstr "Aprobada"
 
 #. module: shipping_balance
 #: field:shipping.balance,balance:0
@@ -60,7 +60,7 @@ msgstr "Created on"
 #. module: shipping_balance
 #: view:shipping.balance:shipping_balance.shipping_balance_search_filter
 msgid "Group By"
-msgstr "Group By"
+msgstr "Agrupado Por"
 
 #. module: shipping_balance
 #: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
@@ -93,12 +93,12 @@ msgstr "Last Updated on"
 #. module: shipping_balance
 #: field:res.partner,shipping_balance_ids:0
 msgid "Listado Saldos de Envíos"
-msgstr "Listado Saldos de Envíos"
+msgstr "Balance de Gastos de Transporte"
 
 #. module: shipping_balance
 #: help:shipping.balance,aproved_ok:0
 msgid "Must be aproved before use"
-msgstr "Debe ser aprovado antes de aplicarlo"
+msgstr "Debe ser aprobado antes de aplicarlo"
 
 #. module: shipping_balance
 #: model:ir.model,name:shipping_balance.model_res_partner
@@ -115,27 +115,22 @@ msgstr "Producto"
 #. module: shipping_balance
 #: model:ir.model,name:shipping_balance.model_mrp_repair_fee
 msgid "Repair Fees Line"
-msgstr "Líneas honorarios reparación"
+msgstr "Costes de Reparación"
 
 #. module: shipping_balance
 #: model:ir.model,name:shipping_balance.model_mrp_repair
 msgid "Repair Order"
-msgstr "Orden reparación"
+msgstr "Orden de Reparación"
 
 #. module: shipping_balance
 #: field:shipping.balance,repair_id:0
 msgid "Repair id"
-msgstr "Reparación"
+msgstr "Repair id"
 
 #. module: shipping_balance
 #: field:shipping.balance,sale_id:0
 msgid "Sale id"
-msgstr "Venta"
-
-#. module: shipping_balance
-#: field:shipping.balance,final_id:0
-msgid "Refers to"
-msgstr "Origen"
+msgstr "Sale id"
 
 #. module: shipping_balance
 #: model:ir.model,name:shipping_balance.model_sale_order
@@ -145,7 +140,7 @@ msgstr "Pedido de venta"
 #. module: shipping_balance
 #: model:ir.model,name:shipping_balance.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Línea pedido de venta"
+msgstr "Línea Pedido de Venta"
 
 #. module: shipping_balance
 #: model:ir.actions.act_window,name:shipping_balance.action_tree_shipping_balance_from_partner
@@ -157,17 +152,17 @@ msgstr "Línea pedido de venta"
 #: view:res.partner:shipping_balance.view_partner_ship_balance_form
 #: view:sale.order:shipping_balance.view_order_form_shipping_balance
 msgid "Shipping Balance"
-msgstr "Saldo de Envíos"
+msgstr "Costes de Transporte"
 
 #. module: shipping_balance
 #: field:shipping.balance.wizard,amount_ok:0
 msgid "Shipping Balance OK"
-msgstr "Saldo de Envíos OK"
+msgstr "Costes de Transporte OK"
 
 #. module: shipping_balance
 #: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
 msgid "Shipping Balance Wizard"
-msgstr "Shipping Balance Wizard"
+msgstr "Aplicar Descuento por Coste de Transporte"
 
 #. module: shipping_balance
 #: help:shipping.balance,balance:0

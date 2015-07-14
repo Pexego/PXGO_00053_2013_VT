@@ -28,34 +28,44 @@ from openerp.exceptions import ValidationError
 class sale_order(models.Model):
 
     _inherit = "sale.order"
+
     shipping_balance = fields.Boolean('shipping_balance')
     amount_shipping_balance=fields.Float(related='partner_id.amount_shipping_balance')
 
-
-    @api.constrains('state')
+    @api.constrains('state', 'amount_shipping_balance')
     def _check_amount_on_state(self):
         if self.amount_untaxed < 0:
             raise ValidationError("Total amount must be > 0")
 
+    @api.multi
+    def unlink(self):
+        # import ipdb; ipdb.set_trace()
+        res = super(sale_order, self).unlink()
+
+        if res:
+            return sale_order._action_unlink_shipping(self)
+
 
     @api.multi
-    def create_shipping_line(self):
-        import ipdb; ipdb.set_trace()
-        sale_order_pool = self.env['sale.order']
-        sale_order_line_pool = self.env['sale.order.line']
-        product_pool = self.env['product.product']
-        product=product_pool.search([('shipping_balance', '=', "true")])[0]
-        new_line_vals = {
-            'order_id' : self.id,
-            'product_id' : product.id,
-            'price_unit' : -self.partner_id.amount_shipping_balance,
-            'product_uom_qty' : 1,
-            'name' : product.name
-        }
-        sale_order_line_pool.create(new_line_vals)
+    def action_cancel(self, group=False):
+        # import ipdb; ipdb.set_trace()
+        res = super(sale_order, self).action_cancel()
+        if res:
+            return sale_order._action_unlink_shipping(self)
+
+    @api.one
+    def _action_unlink_shipping(self):
+        # import ipdb; ipdb.set_trace()
+        res_id = self.id
+        order_line = self.env['sale.order.line'].search(
+            [('order_id', '=', res_id), ('product_id.shipping_balance', '=', True)])
+        if order_line:
+            order_line.unlink()
+
+        line2 = self.env['shipping.balance'].search([('sale_id', '=', res_id)])
+        if line2:
+            line2.unlink()
         return True
-
-
 
 
 class sale_order_line(models.Model):
@@ -64,8 +74,10 @@ class sale_order_line(models.Model):
 
     @api.multi
     def unlink(self):
-
+        #import ipdb; ipdb.set_trace()
         res_id= self.order_id.id
+
+        res = super(sale_order_line, self).unlink()
         line2 = self.env['shipping.balance'].search([('sale_id', '=', res_id)])
         if line2:
             line2.unlink()
@@ -73,10 +85,13 @@ class sale_order_line(models.Model):
 
     @api.constrains('price_unit')
     def _check_description(self):
-        if self.product_id.shipping_balance:
-            if self.price_unit < -self.order_id.partner_id.amount_shipping_balance:
-                raise ValidationError("Price < Shipping Balance")
+        old_value = self.env['shipping.balance'].search([('sale_id', '=', self.order_id.id)]).amount
 
+        if self.product_id.shipping_balance:
             if self.price_unit > 0:
                 raise ValidationError("Price unit must be < 0. (Discount)")
 
+            if (self.order_id.amount_shipping_balance - old_value + self.price_unit) < 0:
+                raise ValidationError("Not enough Shipping Balance.")
+
+            self.env['shipping.balance'].search([('sale_id', '=', self.order_id.id)]).write({'amount': self.price_unit})
