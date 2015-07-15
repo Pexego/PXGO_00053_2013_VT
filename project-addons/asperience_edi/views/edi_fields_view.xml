@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_order_form_add_edi_fields" model="ir.ui.view">
+            <field name="name">sale.order.form.add_edi_fields</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="model">sale.order</field>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="urgent"/>
+                    <field name="top_date"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="product_uom_form_view_add_edi_fields" model="ir.ui.view">
+            <field name="name">product.uom.form.add_edi_fields</field>
+            <field name="model">product.uom</field>
+            <field name="inherit_id" ref="product.product_uom_form_view"/>
+            <field name="arch" type="xml">
+                <field name="category_id" position="after">
+                    <field name="edi_code"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_payment_mode_form_add_edi_fields" model="ir.ui.view">
+            <field name="name">payment.mode.form.add_edi_fields</field>
+            <field name="model">payment.mode</field>
+            <field name="inherit_id" ref="account_payment.view_payment_mode_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="edi_code"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form" model="ir.ui.view">
+            <field name="name">res.partner.form</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <field name="website" position="after">
+                    <field name="gln"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="0">
+
+            <record id="edi_edi_orders" model="edi.edi">
+            <field name="name">Import sale orders</field>
+            <field name="code">ORDERS</field>
+            <field name="type">csv_struct</field>
+            <field name="file_template" eval="'ORDERS_*'" />
+            <field name="float_separator" eval="'.'" />
+            <field name="start_identifier" eval="0" />
+            <field name="skip_first" eval="1"/>
+            <field name="stop_identifier" eval="0" />
+            <field name="charset" eval="'ISO-8859-1'" />
+            <field name="delimiter">|</field>
+            <field name="eval_in" >
+sale_obj = self.pool.get('sale.order')
+sale_line_obj = self.pool.get('sale.order.line')
+partner_obj = self.pool.get('res.partner')
+pay_mode_obj = self.pool.get('payment.mode')
+product_obj = self.pool.get('product.product')
+uom_obj = self.pool.get('product.uom')
+fpos_obj = self.pool.get('account.fiscal.position')
+sale_ok = False
+vals = {}
+old_sale_id = False
+new_sale_id = False
+line_vals = {}
+for line in data[filename]:
+        if line and line[0] == 'ORD':
+                vals = {}
+                old_sale_id = False
+                new_sale_id = False
+                ref = line[1]['numdoc']
+                if line[1]['function'] == "5":
+                        old_sale_id = sale_obj.search(cr,uid,[('client_order_ref','=',ref)])
+                if line[1]['type'] == "224":
+                        vals["urgent"] = True
+                vals['client_order_ref'] = ref
+                vals['note'] = ''
+        if line and line[0] == 'DTM':
+                vals['date_order'] = line[1]['document_date'] and datetime.strftime(datetime.strptime(line[1]['document_date'], "%Y%m%d%H%M"), '%Y-%m-%d %H:%M') or time.strftime('%Y-%m-%d %H:%M:%S')
+                vals['top_date'] = line[1]['limit_date'] and datetime.strftime(datetime.strptime(line[1]['limit_date'], "%Y%m%d%H%M"), '%Y-%m-%d') or False
+        if line and line[0] == 'PAI' and line[1]['fpago']:
+                payment_mode = pay_mode_obj.search(cr, uid, [('edi_code', '=', line[1]['fpago'])])
+                if payment_mode:
+                        vals['payment_mode_id'] = payment_mode and payment_mode[0] or False
+        if line and ((line[0] == 'ALI' and line[1]['info']) or (line[0] == 'FTX' and line[1]['texto'])):
+                vals['note'] += line[0] == 'ALI' and line[1]['info'] or line[1]['texto']
+        if line and line[0] == 'NADBY':
+                partner_id = partner_obj.search(cr, uid, [('gln', '=', line[1]['comprador'])])
+                if not partner_id:
+                        raise Exception("El comprador con gln %s no se ha encontrado" % (line[1]['comprador']))
+                else:
+                        vals['partner_invoice_id'] = partner_id[0]
+                        vals['partner_id'] = partner_id[0]
+                        partner = partner_obj.browse(cr, uid, partner_id[0])
+                        vals['pricelist_id'] = partner.property_product_pricelist.id
+                        vals['fiscal_position'] = partner.property_account_position.id
+                        if not vals.get('payment_mode_id', False):
+                                vals['payment_mode_id'] = partner.customer_payment_mode.id
+                        vals['payment_term'] = partner.property_payment_term.id
+        if line and line[0] == 'NADDP':
+                partner_id = partner_obj.search(cr, uid, [('gln', '=', line[1]['destino'])])
+                if not partner_id:
+                        raise Exception("El destinatario con gln %s no se ha encontrado" % (line[1]['destino']))
+                else:
+                        vals['partner_shipping_id'] = partner_id[0]
+        if line and line[0] == 'NADIV':
+                partner_id = partner_obj.search(cr, uid, [('gln', '=', line[1]['emisor'])])
+                if not partner_id:
+                        raise Exception("El emisor con gln %s no se ha encontrado" % (line[1]['emisor']))
+                else:
+                        vals['partner_id'] = partner_id[0]
+                        partner = partner_obj.browse(cr, uid, partner_id[0])
+                        vals['pricelist_id'] = partner.property_product_pricelist.id
+                        vals['fiscal_position'] = partner.property_account_position.id
+                        if not vals.get('payment_mode_id', False):
+                                vals['payment_mode_id'] = partner.customer_payment_mode.id
+                        vals['payment_term'] = partner.property_payment_term.id
+        if line and 'LIN' in line[0]:
+                if old_sale_id:
+                        wf_service = netsvc.LocalService('workflow')
+                        wf_service.trg_validate(uid, 'sale.order', old_sale_id[0], 'cancel', cr)
+                        old_sale_id = False
+                if not new_sale_id:
+                        new_sale_id = sale_obj.create(cr, uid, vals, context=context)
+
+                if line[0] == 'LIN':
+                        if line_vals:
+                                line_vals['order_id'] = new_sale_id
+                                taxes = fpos_obj.map_tax(cr,uid,vals['fiscal_position'],product.taxes_id)
+                                line_vals['tax_id'] = [(6,0,taxes)]
+                                sale_line_obj.create(cr, uid, line_vals)
+                                line_vals = {}
+                                product = False
+                        product_id = product_obj.search(cr, uid, [('ean13', '=', line[1]['ean13'][:13])])
+                        if not product_id:
+                                raise Exception("El producto con ean13 %s no se ha encontrado" % (line[1]['ean13'][:13]))
+                        else:
+                                line_vals['product_id'] = product_id[0]
+                                product = product_obj.browse(cr, uid, product_id[0])
+                elif line[0] == 'IMDLIN' and line[1]['descripcion'] and line_vals:
+                        if line_vals.get('name', False):
+                                line_vals["name"] += u" " + line[1]['descripcion']
+                        else:
+                                line_vals["name"] = line[1]['descripcion']
+                elif line[0] == 'QTYLIN' and line[1]['calificador'] == '21' and line_vals:
+                        line_vals["product_uom_qty"] = line[1]['qty']
+                        line_vals["product_uos_qty"] = line[1]['qty']
+                        edi_code = line[1]['uom_code'] or 'PCE'
+                        uom_ids = uom_obj.search(cr, uid, [('edi_code', '=', edi_code)])
+                        if not uom_ids:
+                                raise Exception("La unidad de medida con codigo %s no se ha encontrado" % (line[1]['uom_code']))
+                        else:
+                                line_vals["product_uom"] = uom_ids[0]
+                                line_vals["product_uos"] = uom_ids[0]
+
+                elif line[0] == 'PRILIN' and line_vals:
+                        line_vals['price_unit'] = line[1]['precio']
+if line_vals:
+                line_vals['order_id'] = new_sale_id
+                taxes = fpos_obj.map_tax(cr,uid,vals['fiscal_position'],product.taxes_id)
+                line_vals['tax_id'] = [(6,0,taxes)]
+                sale_line_obj.create(cr, uid, line_vals)
+                </field>
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_1" model="edi.edi.line.csv">
+            <field name="name">ORD</field>
+            <field name="sequence" eval="1" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_2" model="edi.edi.line.csv">
+            <field name="name">DTM</field>
+            <field name="sequence" eval="2" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_3" model="edi.edi.line.csv">
+            <field name="name">PAI</field>
+            <field name="sequence" eval="3" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_4" model="edi.edi.line.csv">
+            <field name="name">ALI</field>
+            <field name="sequence" eval="4" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_5" model="edi.edi.line.csv">
+            <field name="name">FTX</field>
+            <field name="sequence" eval="5" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_6" model="edi.edi.line.csv">
+            <field name="name">NADIV</field>
+            <field name="sequence" eval="8" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_7" model="edi.edi.line.csv">
+            <field name="name">NADBY</field>
+            <field name="sequence" eval="6" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_8" model="edi.edi.line.csv">
+            <field name="name">NADDP</field>
+            <field name="sequence" eval="7" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_9" model="edi.edi.line.csv">
+            <field name="name">LIN</field>
+            <field name="sequence" eval="9" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_10" model="edi.edi.line.csv">
+            <field name="name">IMDLIN</field>
+            <field name="sequence" eval="10" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_11" model="edi.edi.line.csv">
+            <field name="name">QTYLIN</field>
+            <field name="sequence" eval="11" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_12" model="edi.edi.line.csv">
+            <field name="name">PRILIN</field>
+            <field name="sequence" eval="12" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_13" model="edi.edi.line.csv">
+            <field name="name">NADSU</field>
+            <field name="sequence" eval="13" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_14" model="edi.edi.line.csv">
+            <field name="name">PACLIN</field>
+            <field name="sequence" eval="14" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_15" model="edi.edi.line.csv">
+            <field name="name">CNTRES</field>
+            <field name="sequence" eval="15" />
+            <field name="edi" ref="edi_edi_orders" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_1_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_1" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_1_field_2" model="edi.edi.line.csv.field">
+            <field name="name">numdoc</field>
+            <field name="line" ref="edi_edi_orders_line_1" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Número de pedido asignado por el emisor del documento'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_1_field_3" model="edi.edi.line.csv.field">
+            <field name="name">type</field>
+            <field name="line" ref="edi_edi_orders_line_1" />
+            <field name="sequence" eval="3" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Tipo de documento'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_1_field_4" model="edi.edi.line.csv.field">
+            <field name="name">function</field>
+            <field name="line" ref="edi_edi_orders_line_1" />
+            <field name="sequence" eval="4" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Función del mensaje'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_2_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_2" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_2_field_2" model="edi.edi.line.csv.field">
+            <field name="name">document_date</field>
+            <field name="line" ref="edi_edi_orders_line_2" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Fecha de emisión del pedido'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_2_field_3" model="edi.edi.line.csv.field">
+            <field name="name">limit_date</field>
+            <field name="line" ref="edi_edi_orders_line_2" />
+            <field name="sequence" eval="4" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Fecha límite de entrega'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_3_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_3" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_3_field_2" model="edi.edi.line.csv.field">
+            <field name="name">fpago</field>
+            <field name="line" ref="edi_edi_orders_line_3" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Instrucciones de pago, codificado'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_4_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_4" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_4_field_2" model="edi.edi.line.csv.field">
+            <field name="name">info</field>
+            <field name="line" ref="edi_edi_orders_line_4" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Condiciones especiales, codificado'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_5_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_5" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_5_field_2" model="edi.edi.line.csv.field">
+            <field name="name">texto</field>
+            <field name="line" ref="edi_edi_orders_line_5" />
+            <field name="sequence" eval="4" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Texto libre'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_6_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_6" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_6_field_2" model="edi.edi.line.csv.field">
+            <field name="name">emisor</field>
+            <field name="line" ref="edi_edi_orders_line_6" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Punto operacional del emisor del mensaje'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_7_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_7" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_7_field_2" model="edi.edi.line.csv.field">
+            <field name="name">comprador</field>
+            <field name="line" ref="edi_edi_orders_line_7" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Punto operacional del comprador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_8_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_8" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_8_field_2" model="edi.edi.line.csv.field">
+            <field name="name">destino</field>
+            <field name="line" ref="edi_edi_orders_line_8" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Punto operacional del punto de entrega de la mercancía'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_9_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_9" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_9_field_2" model="edi.edi.line.csv.field">
+            <field name="name">ean13</field>
+            <field name="line" ref="edi_edi_orders_line_9" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Código normalizado del artículo (EAN13 o el interno del proveedor)'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_10_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_10" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_10_field_2" model="edi.edi.line.csv.field">
+            <field name="name">descripcion</field>
+            <field name="line" ref="edi_edi_orders_line_10" />
+            <field name="sequence" eval="5" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Descripción del artículo en forma libre'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_11_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_11" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_11_field_2" model="edi.edi.line.csv.field">
+            <field name="name">calificador</field>
+            <field name="line" ref="edi_edi_orders_line_11" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Calificador de cantidad'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_11_field_3" model="edi.edi.line.csv.field">
+            <field name="name">qty</field>
+            <field name="line" ref="edi_edi_orders_line_11" />
+            <field name="sequence" eval="3" />
+            <field name="type" eval="'float'" />
+            <field name="description" eval="'Cantidad expresada según el calificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_11_field_4" model="edi.edi.line.csv.field">
+            <field name="name">uom_code</field>
+            <field name="line" ref="edi_edi_orders_line_11" />
+            <field name="sequence" eval="4" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Especificador de la unidad de medida'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_12_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_orders_line_12" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_orders_line_12_field_2" model="edi.edi.line.csv.field">
+            <field name="name">precio</field>
+            <field name="line" ref="edi_edi_orders_line_12" />
+            <field name="sequence" eval="3" />
+            <field name="type" eval="'float'" />
+            <field name="description" eval="'Cantidad expresada según el calificador'" />
+        </record>
+
+    </data>
+</openerp>

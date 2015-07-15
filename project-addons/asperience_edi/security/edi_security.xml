@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="0">
+
+    <record model="res.groups" id="group_edi_user">
+        <field name="name">EDI User</field>
+        <field name="category_id" ref="module_category_edi"/>
+    </record>
+    <record model="res.groups" id="group_edi_manager">
+        <field name="name">EDI Manager</field>
+        <field name="category_id" ref="module_category_edi"/>
+        <field name="implied_ids" eval="[(4, ref('group_edi_user'))]"/>
+    </record>    
+</data>
+</openerp>
