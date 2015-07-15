@@ -20,4 +20,4 @@
 ##############################################################################
 
 import wizard
-import product
+import product, res_company

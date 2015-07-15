@@ -2,7 +2,7 @@
 
 <openerp>
     <data>
-
+        <!--
         <record id="product_outlet_wizard_form" model="ir.ui.view">
             <field name="name">product.outlet.wizard.form</field>
             <field name="model">product.outlet.wizard</field>
@@ -21,7 +21,27 @@
                 </field>
             </field>
         </record>
-
+        -->
+        <record id="product_outlet_wizard_form" model="ir.ui.view">
+            <field name="name">product.outlet.wizard.form</field>
+            <field name="model">product.outlet.wizard</field>
+            <field name="inherit_id" ref="product_outlet.product_outlet_wizard_form"/>
+            <field name="arch" type="xml">
+                <field name="qty" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','last')]}</attribute>
+                </field>
+                <xpath expr="/form/group/field[@name='all_product']" position="after">
+                    <group>
+                        <field name="price_unit" invisible="1"/>
+                        <field name="qty_available" invisible="1"/>
+                        <field name="price_outlet"/>
+                        <field name="percent" readonly="1"/>
+                        <label for="date_move" string="Outlet on"/>
+                        <field name="date_move" nolabel="1"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
 
         <!-- EL APUNTE SE HACE MANUAL
 

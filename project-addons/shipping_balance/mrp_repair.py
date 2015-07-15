@@ -31,43 +31,36 @@ class mrp_repair_fees(models.Model):
     @api.constrains('product_id')
     def _check_duplicate_fees(self):
 
-
         line2 = self.env['mrp.repair.fee'].search([('repair_id', '=', self.repair_id.id),('product_id.shipping_balance','=','true')])
         if len(line2) > 1:
             raise ValidationError("Shipping Balance must be unique")
 
-
-
 class mrp_repair(models.Model):
 
     _inherit = "mrp.repair"
+
     shipping_balance = fields.Boolean("Shipping Balance", default=False)
 
     @api.multi
     def action_invoice_create(self, group=False):
 
         res = super(mrp_repair, self).action_invoice_create(group)
-
         for repair in self:
             for line in repair.fees_lines:
                 if line.product_id.shipping_balance:
                     shipping_vals = {
                         'partner_id': line.repair_id.partner_id.id,
                         'repair_id': line.repair_id.id,
-                        'aproved': False,
+                        'aproved': True,
                         'amount': line.price_unit,
                         'balance': True,
                         }
-
                     line2 = self.env['shipping.balance'].search([('repair_id', '=', line.repair_id.id)])
                     if line2:
                         line2.unlink()
                     else:
                         self.env['shipping.balance'].create(shipping_vals)
-
-
                     repair.shipping_balance=True
-
         return res
 
 

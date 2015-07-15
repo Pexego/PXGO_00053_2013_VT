@@ -28,15 +28,21 @@ from openerp.exceptions import ValidationError
 class product_outlet_wizard(models.TransientModel):
 
     _inherit = 'product.outlet.wizard'
-    price_outlet = fields.Float(
-        'Outlet Price',
-        default=lambda self: self.env['product.product'].browse(
-            self.env.context.get('active_id', False)).list_price2)
 
     price_unit = fields.Float(
-        'Price',
+        'Price Before',
         default=lambda self: self.env['product.product'].browse(
-            self.env.context.get('active_id', False)).list_price2, Readonly=True)
+            self.env.context.get('active_id', False)).standard_price, Readonly=True)
+
+    price_outlet = fields.Float(
+        'Price After',
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).standard_price *
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent
+        / 100)
+
+    percent = fields.Char('Default Outlet Price in %', default=lambda self: self.env['product.product'].browse(
+        self.env.context.get('active_id', False)).company_id.outlet_per_cent, Readonly=True)
 
     qty_available = fields.Float(
         'Qty from stock',
@@ -48,23 +54,34 @@ class product_outlet_wizard(models.TransientModel):
 
     @api.multi
     def make_move(self):
-        last = self.state
-        if self.qty_available < self.qty:
-            raise ValidationError("Qty to outlet must be <= qty available")
 
-        if self.qty <= 0:
-            raise ValidationError("Qty to outlet must be >=0")
+        if self.state == "first":
+            res = super(product_outlet_wizard, self).make_move()
+        else:
 
-        res = super(product_outlet_wizard, self).make_move()
-        if last == "last":
-            price_unit=  self.env['product.product'].search([('id', '=', self.product_id.id)]).list_price2
-            values = {
-                'qty' :self.qty,
-                'price_outlet' : self.price_outlet,
-                'price_unit' : price_unit,
-                'product_id' : self.product_id.id,
-                'date_move' : self.date_move
-            }
-            self.env['outlet.loss'].create (values)
+            if self.qty_available < self.qty:
+                raise ValidationError("Qty to outlet must be <= qty available")
+
+            if self.qty <= 0:
+                raise ValidationError("Qty to outlet must be >=0")
+
+            res = super(product_outlet_wizard, self).make_move()
+            old_prod = self.env['product.product'].browse(self.env.context.get('active_id', False)).id
+            new_prod = self.env['product.product'].search([], limit=1, order='id desc').id
+            last = self.state
+            new_id = new_prod
+            if self.all_product:
+                new_id = old_prod
+
+            if last == "last":
+                values = {
+                    'qty': self.qty,
+                    'price_outlet': self.price_outlet,
+                    'price_unit': self.price_unit,
+                    'product_id': new_id,
+                    'date_move': self.date_move
+                }
+                self.env['outlet.loss'].create(values)
+
         return res
 

@@ -23,6 +23,7 @@
 
 from openerp import fields, models, api
 
+from openerp.exceptions import ValidationError
 
 class Shipping_Balance(models.Model):
 
@@ -32,7 +33,7 @@ class Shipping_Balance(models.Model):
     repair_id = fields.Many2one('mrp.repair', required=False)
     sale_id = fields.Many2one('sale.order', required=False)
     amount = fields.Float ('Amount', default=0)
-    aproved_ok = fields.Boolean("Aproved", default=False, help="Must be aproved before use")
+    aproved_ok = fields.Boolean("Aproved", default=True, help="Must be aproved before use")
     balance = fields.Boolean ("Balance", help="True > positive")
     final_id=fields.Char("Refers to", compute ="get_refer_to")
 
