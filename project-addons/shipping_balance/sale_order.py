@@ -32,18 +32,19 @@ class sale_order(models.Model):
     shipping_balance = fields.Boolean('shipping_balance')
     amount_shipping_balance=fields.Float(related='partner_id.amount_shipping_balance')
 
-    @api.constrains('state', 'amount_shipping_balance')
+    @api.constrains('state', 'amount_shipping_balance', 'amount_untaxed')
     def _check_amount_on_state(self):
         if self.amount_untaxed < 0:
             raise ValidationError("Total amount must be > 0")
 
+
     @api.multi
     def unlink(self):
-        # import ipdb; ipdb.set_trace()
-        res = super(sale_order, self).unlink()
+
+        res = sale_order._action_unlink_shipping(self)
 
         if res:
-            return sale_order._action_unlink_shipping(self)
+            return super(sale_order, self).unlink()
 
 
     @api.multi
@@ -55,14 +56,13 @@ class sale_order(models.Model):
 
     @api.one
     def _action_unlink_shipping(self):
-        # import ipdb; ipdb.set_trace()
-        res_id = self.id
-        order_line = self.env['sale.order.line'].search(
-            [('order_id', '=', res_id), ('product_id.shipping_balance', '=', True)])
-        if order_line:
-            order_line.unlink()
 
-        line2 = self.env['shipping.balance'].search([('sale_id', '=', res_id)])
+        #res_id = self.id
+        #order_line = self.env['sale.order.line'].search(
+        #    [('order_id', '=', res_id), ('product_id.shipping_balance', '=', True)])
+        #if order_line:
+        #    order_line.unlink()
+        line2 = self.env['shipping.balance'].search([('sale_id', '=', self.id)])
         if line2:
             line2.unlink()
         return True
@@ -74,7 +74,7 @@ class sale_order_line(models.Model):
 
     @api.multi
     def unlink(self):
-        #import ipdb; ipdb.set_trace()
+        import ipdb; ipdb.set_trace()
         res_id= self.order_id.id
 
         res = super(sale_order_line, self).unlink()
@@ -86,7 +86,11 @@ class sale_order_line(models.Model):
     @api.constrains('price_unit')
     def _check_description(self):
         old_value = self.env['shipping.balance'].search([('sale_id', '=', self.order_id.id)]).amount
+        old_line_value = self.env['sale.order.line'].search([('id', '=', self.id)]).price_unit
 
+        amount_untaxed = self.order_id.amount_untaxed - old_line_value + self.price_unit
+        if amount_untaxed <0:
+            raise ValidationError("Total amount must be > 0")
         if self.product_id.shipping_balance:
             if self.price_unit > 0:
                 raise ValidationError("Price unit must be < 0. (Discount)")
