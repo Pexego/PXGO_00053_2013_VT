@@ -38,7 +38,7 @@ class ResPartnerRappelRel(models.Model):
                                          ("is_company", '=', True)])
     rappel_id = fields.Many2one("rappel", "Rappel", required=True)
     date_start = fields.Date("Start date", required=True,
-                             default=fields.Date.today())
+                             default=fields.Date.context_today)
     date_end = fields.Date("End date")
     periodicity = fields.Selection(PERIODICITIES, "Periodicity",
                                    default="annual", required=True)
