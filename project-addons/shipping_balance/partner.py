@@ -46,8 +46,8 @@ class Partner(models.Model):
 
         return True
 
-    @api.constrains('amount_shipping_balance')
-    def _check_amount_shipping_balance(self):
+    #@api.constrains('amount_shipping_balance')
+    #def _check_amount_shipping_balance(self):
 
-        if self.amount_shipping_balance < 0:
-            raise ValidationError("Shipping Balance amount must be > 0")
+        #if self.amount_shipping_balance < 0:
+        #    raise ValidationError("Shipping Balance amount must be > 0")

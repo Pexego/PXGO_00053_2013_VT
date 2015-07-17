@@ -19,18 +19,6 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api
-from openerp.exceptions import ValidationError
+import wizard
+import product
 
-
-class res_company(models.Model):
-    _inherit = "res.company"
-
-    outlet_per_cent = fields.Float("% Outlet Devalue", default = 100)
-
-    @api.constrains('outlet_per_cent')
-    def _check_outlet_per_cent(self):
-        if self.outlet_per_cent < 0:
-            raise ValidationError("% must be > 0")
-        if self.outlet_per_cent >= 100:
-            raise ValidationError("% must be <=100")

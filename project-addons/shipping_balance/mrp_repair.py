@@ -65,3 +65,12 @@ class mrp_repair(models.Model):
 
 
 
+    @api.multi
+    def unlink(self):
+
+        line2 = self.env['shipping.balance'].search([('repair_id', '=', self.id)])
+        if line2:
+            line2.unlink()
+
+
+        res = super(mrp_repair, self).unlink()
