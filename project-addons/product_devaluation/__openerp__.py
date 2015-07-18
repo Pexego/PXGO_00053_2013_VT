@@ -32,6 +32,7 @@
                 'equivalent_products'],
     "data": ['wizard/product_devaluation_wizard_view.xml',
              'product_devaluation.xml',
+             'res_company.xml'
              ],
     "installable": True
 }

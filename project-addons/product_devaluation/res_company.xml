@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+        <record id="view_company_form_outlet_prod_dev" model="ir.ui.view">
+            <field name="name">res.company.form.outlet.prod.dev</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <field name="currency_id" position="after">
+                    <field name="devaluation_journal_id" required="1"/>
+                    <field name="devaluation_account_provision_id" required="1"/>
+                    <field name="devaluation_account_debit_id" required="1"/>
+                    <field name="devaluation_account_credit_id" required="1"/>
+                    <field name="devaluation_tax_code_id"/>
+
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

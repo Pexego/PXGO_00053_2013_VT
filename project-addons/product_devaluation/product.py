@@ -26,15 +26,32 @@ class product_category(models.Model):
 
     _inherit='product.category'
 
-    devaluation_journal_id = fields.Many2one('account.journal', 'Journal')
-
+    devaluation_journal_id = fields.Many2one('account.journal', 'Journal',
+                                             default=lambda self:
+                                             self.env['res.company'].browse(self.env.context.get('active_ids', False))[
+                                                 0].devaluation_journal_id)
     devaluation_account_provision_id = fields.Many2one('account.account', 'Provision Account',
-        domain=[('type','<>','view'), ('type', '<>', 'closed')])
+                                                       domain=[('type', '<>', 'view'), ('type', '<>', 'closed')],
+                                                       default=lambda self:
+                                                       self.env['res.company'].browse(
+                                                           self.env.context.get('active_ids', False))[
+                                                           0].devaluation_account_provision_id)
     devaluation_account_debit_id = fields.Many2one('account.account', 'Debit Account',
-        domain=[('type','<>','view'), ('type', '<>', 'closed')])
+                                                   domain=[('type', '<>', 'view'), ('type', '<>', 'closed')],
+                                                   default=lambda self:
+                                                   self.env['res.company'].browse(
+                                                       self.env.context.get('active_ids', False))[
+                                                       0].devaluation_account_debit_id)
     devaluation_account_credit_id = fields.Many2one('account.account', 'Credit Account',
-        domain=[('type','<>','view'), ('type', '<>', 'closed')])
-    devaluation_tax_code_id = fields.Many2one('account.tax.code', 'Tax Code')
+                                                    domain=[('type', '<>', 'view'), ('type', '<>', 'closed')],
+                                                    default=lambda self:
+                                                    self.env['res.company'].browse(
+                                                        self.env.context.get('active_ids', False))[
+                                                        0].devaluation_account_credit_id)
+    devaluation_tax_code_id = fields.Many2one('account.tax.code', 'Tax Code',
+                                              default=lambda self:
+                                              self.env['res.company'].browse(self.env.context.get('active_ids', False))[
+                                                  0].devaluation_tax_code_id)
 
 class product_devaluation(models.Model):
 

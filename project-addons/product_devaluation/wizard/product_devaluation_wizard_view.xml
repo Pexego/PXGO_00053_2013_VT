@@ -51,20 +51,20 @@
                 <form string="Create Account from Devaluate Product Wizard">
 
                     <group>
-                        <field name="name"/>
+                        <field name="name" required="1"/>
                         <field name="account_move_id" invisible="1"/>
 
                     </group>
                     <group >
-                        <field name="date"/>
-                        <field name="company_id"/>
+                        <field name="date" required="1"/>
+                        <field name="company_id" required="1"/>
                     </group>
                     <group>
                         <group>
-                            <field name="journal_id"/>
+                            <field name="journal_id" required="1"/>
                         </group>
                         <group>
-                            <field name="period_id"/>
+                            <field name="period_id" required="1" domain="[('state', '=', 'draft')]"/>
                         </group>
 
 
@@ -76,9 +76,11 @@
 
                     </group>
                     <footer>
-                        <button string="Create Lines" name="create_dev_account" type="object" icon="gtk-ok" states="open"/>
-                        <button string="Create Account And Lines" name="create_dev_account" type="object" icon="gtk-ok" states="draft"/>
-                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                        <button string="Create Lines" name="create_dev_account" type="object" class="oe_highlight"
+                                states="open"/>
+                        <button string="Create Account And Lines" name="create_dev_account" type="object"
+                                class="oe_highlight" states="draft"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
                     </footer>
                 </form>
             </field>

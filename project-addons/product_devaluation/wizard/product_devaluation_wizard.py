@@ -47,11 +47,11 @@ class product_devaluation_wizard(models.TransientModel):
         self.env['product.product'].browse(self.env.context.get('active_id', False)).standard_price)
 
     quantity = fields.Float(
-        'Qty',
+        'Quantity',
         default=lambda self: self.env['product.product'].browse(
             self.env.context.get('active_id', False)).qty_available, Readonly=True)
 
-    date_dev = fields.Date('Move to outlet on', default = fields.datetime.now())
+    date_dev = fields.Date('Date', default=fields.datetime.now())
 
 
 
