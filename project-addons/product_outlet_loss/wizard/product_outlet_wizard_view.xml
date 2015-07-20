@@ -42,6 +42,7 @@
                             <field name="commercial_cost"/>
                         </group>
                         <group>
+                            <field name="list_price"/>
                             <field name="list_price2"/>
                             <field name="list_price3"/>
                         </group>
