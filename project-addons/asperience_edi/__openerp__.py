@@ -27,7 +27,8 @@
     "sequence": 0,
     "certificate": "",
     "license": "",
-    "depends": ["board", "account_payment_sale", "sale"],
+    "depends": ["board", "account_payment_sale", "sale",
+                "stock_valued_picking"],
     "category": "Generic Modules/EDI",
     "complexity": "easy",
     "description": """
@@ -46,6 +47,8 @@ WARNING: folders tree and folders management is not fully secured. This must NOT
         "views/edi_fields_view.xml",
         "docs/import_orders.xml",
         "docs/export_invoic.xml",
+        "docs/export_desadv.xml",
+        "docs/import_recadv.xml",
         "wizard/export_edi_view.xml"
     ],
     "images": [

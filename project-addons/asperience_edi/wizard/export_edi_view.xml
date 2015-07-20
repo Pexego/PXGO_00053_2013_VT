@@ -29,5 +29,21 @@
             <field name="value" eval="'ir.actions.act_window,%d'%act_export_invoic_file_form" />
         </record>
 
+        <record id="act_export_desadv_file_form" model="ir.actions.act_window">
+            <field name="name">Export Edi</field>
+            <field name="res_model">export.edi.wzd</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="export_edi_wzd_form"/>
+            <field name="target">new</field>
+        </record>
+
+        <record id="ir_export_desadv_file_form" model="ir.values">
+            <field name="name">Export Edi</field>
+            <field name="key2">client_action_multi</field>
+            <field name="model">stock.picking</field>
+            <field name="value" eval="'ir.actions.act_window,%d'%act_export_desadv_file_form" />
+        </record>
+
     </data>
 </openerp>

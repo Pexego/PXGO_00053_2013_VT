@@ -36,4 +36,11 @@ class ExportEdiWzd(models.TransientModel):
                                                'done'))
             invoic = self.env.ref('asperience_edi.edi_invoic')
             invoic.export_csv()
+        elif self.env.context['active_model'] == "stock.picking":
+            for pick in self.env["stock.picking"].\
+                    browse(self.env.context['active_ids']):
+                if pick.state != "done":
+                    raise exceptions.Warning(_('Picking must be done'))
+            desadv = self.env.ref('asperience_edi.edi_desadv')
+            desadv.export_csv()
         return True
