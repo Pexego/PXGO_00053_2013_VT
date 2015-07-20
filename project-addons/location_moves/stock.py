@@ -20,46 +20,60 @@
 ##############################################################################
 
 from openerp import models, api, _, fields
+from openerp.exceptions import ValidationError, Warning
 
 
 class StockLotacion(models.Model):
 
     _inherit = 'stock.location'
 
-    def move_pantry_kitchen(self, product_id, qty):
+    def get_quantity_source_location(self,location_id,product_id):
+        #import ipdb; ipdb.set_trace()
+        ctx = dict(self.env.context)
+        ctx.update({'location' : location_id.id})
+        product = self.env['product.product'].with_context(ctx).browse(product_id)
+        qty=product.qty_available
+        return qty
+
+
+    def move_pantry_kitchen(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock_location_pantry', qty,
-                           'stock_location_kitchen')
+                           'stock_location_kitchen', False, check_qty)
 
-    def move_kitchen_cooked(self, product_id, qty):
+    def move_kitchen_cooked(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock_location_kitchen', qty,
-                           'stock.stock_location_stock', True)
+                           'stock.stock_location_stock', True, check_qty)
 
-    def move_kitchen_nursing(self, product_id, qty):
+    def move_kitchen_nursing(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock_location_kitchen', qty,
-                           'stock_location_nursing')
+                           'stock_location_nursing',False, check_qty)
 
     def move_nursing_damaged(self, product_id, qty):
         self.location_move(product_id, 'stock_location_nursing', qty,
-                           'stock_location_damaged')
+                           'stock_location_damaged',False, check_qty)
 
-    def move_nursing_cooked(self, product_id, qty):
+    def move_nursing_cooked(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock_location_nursing', qty,
-                           'stock.stock_location_stock', True)
+                           'stock.stock_location_stock', True, check_qty)
 
-    def move_quality_cooked(self, product_id, qty):
+    def move_quality_cooked(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock_location_quality', qty,
-                           'stock.stock_location_stock', True)
+                           'stock.stock_location_stock', True, check_qty)
 
-    def move_cooked_nursing(self, product_id, qty):
+    def move_cooked_nursing(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_nursing')
+                           'stock_location_nursing',False, check_qty)
 
-    def move_cooked_damaged(self, product_id, qty):
+    def move_cooked_damaged(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_damaged')
+                           'stock_location_damaged',False, check_qty)
+
+
+
 
     def location_move(self, product_id, source_location, qty, dest_location,
-                      send_message=False):
+                      send_message=False, check_qty=False):
+
         product = self.env['product.product'].browse(product_id)
         source_location = '.' in source_location and \
             source_location or 'location_moves.' + source_location
@@ -67,8 +81,13 @@ class StockLotacion(models.Model):
             dest_location or 'location_moves.' + dest_location
         source_location = self.env.ref(source_location)
         dest_location = self.env.ref(dest_location)
-        type_id = self.env['stock.picking.type'].search([('code', '=',
-                                                          'internal')])
+
+        if check_qty:
+            if qty > self.get_quantity_source_location(source_location,product_id):
+                raise Warning ("Check qty in source location")
+
+
+        type_id = self.env['stock.picking.type'].search([('code', '=', 'internal')])
         pick_vals = {
             'partner_id': self.env.user.company_id.partner_id.id,
             'picking_type_id': type_id.id,
@@ -77,6 +96,7 @@ class StockLotacion(models.Model):
         move_template = {
             'name': product.name,
             'product_id': product.id,
+
             'picking_type_id': type_id.id,
             'product_uom': product.uom_id.id,
             'product_uos': product.uom_id.id,
