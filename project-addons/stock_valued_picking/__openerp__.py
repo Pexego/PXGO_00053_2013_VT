@@ -18,19 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
 
-
-class res_partner(models.Model):
-
-    _inherit = 'res.partner'
-
-    shipment_bag_ids = fields.One2many('shipment.bag', 'partner_id',
-                                       'Shipments')
-    shipment_count = fields.Float('shipments', compute='_get_shipment_count')
-
-    @api.multi
-    @api.depends('shipment_bag_ids')
-    def _get_shipment_count(self):
-        for partner in self:
-            partner.shipment_count = len(partner.shipment_bag_ids)
+{
+    'name': 'Stock valued picking',
+    'version': '1.0',
+    'category': 'stock',
+    'description': """""",
+    'author': 'Pexego',
+    'website': '',
+    "depends": ['sale', 'stock', 'sale_stock'],
+    "data": [
+        'views/valued_picking_report.xml',
+        # 'stock_report.xml',
+        'partner_view.xml'],
+    "installable": True
+}

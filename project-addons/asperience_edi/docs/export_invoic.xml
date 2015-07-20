@@ -23,6 +23,10 @@ for invoice in invoice_obj.browse(cr, uid, ctx['active_ids']):
     filename = time.strftime('INVOIC_' + invoice.number.replace('/',"") + '_%Y%m%d%H%M', time.localtime(time.time()))
     data[filename] = []
     _logger.info("Factura %s" % (str(invoice.id)))
+    CAB = {
+        'lineId': "INVOIC_D_93A_UN_EAN007"
+    }
+    data[filename].append(edi._create_line_csv(CAB,structs))
     INV = {
         'lineId': "INV",
         'col1': invoice.number,

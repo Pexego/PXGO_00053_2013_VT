@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Omar Castiñeira Saaevdra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -14,26 +14,8 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
 #
+#
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, _
-
-
-class SaleOrder(models.Model):
-
-    _inherit = 'sale.order'
-
-    shipment_added = fields.Boolean('Shipment added')
-
-    @api.one
-    def use_paid_shipment(self):
-        if self.shipment_added:
-            return
-        shipping = self.env['shipment.bag'].search([('partner_id', '=', self.partner_id.id)])
-        if shipping:
-            shipping[0].active = False
-            self.shipment_added = True
-        else:
-            raise exceptions.Warning(_('Shipment error'), _('Not shipments paid founded'))

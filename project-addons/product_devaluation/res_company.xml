@@ -8,15 +8,12 @@
             <field name="inherit_id" ref="base.view_company_form"/>
             <field name="arch" type="xml">
                 <field name="currency_id" position="after">
-                    <separator string="Devaluation And Outlet" colspan="4"/>
-
-
+                    <group string="Devaluations">
                         <field name="devaluation_journal_id" required="1"/>
                         <field name="devaluation_account_provision_id" required="1"/>
                         <field name="devaluation_account_debit_id" required="1"/>
                         <field name="devaluation_account_credit_id" required="1"/>
-                        <field name="devaluation_tax_code_id"/>
-
+                    </group>
                 </field>
             </field>
         </record>

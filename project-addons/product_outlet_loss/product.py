@@ -27,6 +27,7 @@ class outlet_loss(models.Model):
     _name = "outlet.loss"
 
     @api.one
+    @api.depends('qty','price_outlet','price_unit')
     def _get_outlet_loss(self):
         self.total_lost=self.qty*(self.price_outlet-self.price_unit)
 
@@ -34,8 +35,9 @@ class outlet_loss(models.Model):
     qty = fields.Float('Quantity')
     product_id = fields.Many2one('product.product', 'Product')
     price_unit = fields.Float('Price')
-    price_outlet = fields.Float ('Outlet Price')
-    total_lost = fields.Float ("Outlet Loss", compute = _get_outlet_loss)
+    price_outlet = fields.Float('Outlet Price')
+    total_lost = fields.Float("Outlet Loss", compute = _get_outlet_loss,
+                               store=True, readonly=True)
     date_move = fields.Date('Move to outlet on', default = fields.datetime.now())
     outlet_ok = fields.Boolean('Outlet')
     order_line_id = fields.Many2one('sale.order.line', 'Order Line')

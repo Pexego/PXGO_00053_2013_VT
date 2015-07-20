@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -14,19 +14,20 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
 #
+#
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, _
 
-
-class ShipmentBag(models.Model):
-
-    _name = 'shipment.bag'
-    _order = 'date asc'
-
-    date = fields.Date('Date')
-    partner_id = fields.Many2one('res.partner', 'Customer')
-    active = fields.Boolean('Active')
-    origin = fields.Char('Origin')
+{
+    'name': "Mrp repair customizations",
+    'version': '1.0',
+    'category': 'product',
+    'description': """Several customizations mrp repair""",
+    'author': 'Comunitea Servicios Tecnologicos',
+    'website': 'www.comunitea.com',
+    "depends" : ["base", "mrp_repair"],
+    "data" : ["mrp_repair_view.xml"],
+    "installable": True
+}

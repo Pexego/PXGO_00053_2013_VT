@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Javier Colmenero Fernández <javier@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,23 +18,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, _
-from datetime import date
+from openerp import models, fields
 
 
-class CrmClaim(models.Model):
+class resPartner(models.Model):
+    _inherit = 'res.partner'
 
-    _inherit = 'crm.claim'
-
-    shipment_paid = fields.Boolean('Shipment paid')
-
-    @api.one
-    def customer_paid_shipping(self):
-        shipment_dict = {
-            'partner_id': self.partner_id.id,
-            'date': date.today(),
-            'active': True,
-            'origin': self.name
-        }
-        self.env['shipment.bag'].create(shipment_dict)
-        self.shipment_paid = True
+    valued_picking = fields.Boolean(string="Print valued picking",
+                                    domain=[('customer', '=', True)],
+                                    help="If checked It will print valued "
+                                    "picks for this customer")

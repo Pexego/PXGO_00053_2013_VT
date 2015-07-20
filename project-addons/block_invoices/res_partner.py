@@ -19,20 +19,20 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm, osv
-from datetime import date,datetime,timedelta
+from openerp.osv import fields, osv
+from datetime import datetime,timedelta
 import time
 
 class ResPartner(osv.osv):
     """
     Herencia de la clase Empresa
     """
-    
+
     def check_customer_blocked_sales(self, cr, uid, automatic=False,use_new_cursor=False, context=None):
         """
         Buscamos todos los asientos contables de aquellas facturas de cliente que no estén pagadas que posean una fecha de vencimiento
         anterior a la fecha actual+periodo de gracia configurable en la compañia...
-        """        
+        """
         move_line_facade = self.pool.get('account.move.line')
         account_facade = self.pool.get('account.account')
         partner_facade = self.pool.get('res.partner')
@@ -42,7 +42,7 @@ class ResPartner(osv.osv):
         company_dict = self.pool.get('res.company').read(cr, uid,root_company_id,['block_customer_days'])
         formatted_date = datetime.strptime(time.strftime('%Y-%m-%d'), "%Y-%m-%d")
         limit_customer_date = datetime.strftime(formatted_date + timedelta(days=int(company_dict['block_customer_days'])),"%Y-%m-%d")
-        
+
         #Buscamos efectos no conciliados, con fecha anterior a la fecha limite, de tipo 'receivable'
         cust_account_ids = account_facade.search(cr, uid, [('company_id','=',root_company_id),('type','=','receivable'),('code','like','430%')])
         move_line_ids = move_line_facade.search(cr, uid, [('account_id','in',cust_account_ids),('date_maturity','<',limit_customer_date),('reconcile_id','=',False)])
@@ -51,16 +51,51 @@ class ResPartner(osv.osv):
             for dict in moves_to_search_dict:
                 if dict['partner_id'][0] not in blocked_partner_ids:
                     blocked_partner_ids.append(dict['partner_id'][0])
-        
+
         #Bloqueamos todos los clientes de la anterior lista
         partner_facade.write(cr, uid, blocked_partner_ids,{'blocked_sales': True},context)
         #Empresas no bloqueadas: todas aquellas que no figuran en el listado de empresas bloqueadas
         all_customer_ids = partner_facade.search(cr, uid, [('customer','=',True),('company_id','=',root_company_id)])
         non_blocked_partner_ids = list(set(all_customer_ids) - set(blocked_partner_ids))
         partner_facade.write(cr, uid, non_blocked_partner_ids,{'blocked_sales': False},context)
-        
+
         return
-    
+
+    def check_customer_block_state(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        account_facade = self.pool.get('account.account')
+        move_line_facade = self.pool.get('account.move.line')
+        user = self.pool.get('res.users').browse(cr, uid, uid)
+        formatted_date = datetime.strptime(time.strftime('%Y-%m-%d'),
+                                           "%Y-%m-%d")
+        limit_customer_date = datetime.\
+            strftime(formatted_date + timedelta(days=\
+                int(user.company_id.block_customer_days)),"%Y-%m-%d")
+        for partner in self.browse(cr, uid, ids, context=context):
+            cust_account_ids = account_facade.search(cr, uid,
+                                                     [('company_id', '=',
+                                                       user.company_id.id),
+                                                      ('type', '=',
+                                                       'receivable'),
+                                                      ('code', 'like',
+                                                       '430%')])
+            move_line_ids = move_line_facade.search(cr, uid,
+                                                    [('account_id', 'in',
+                                                      cust_account_ids),
+                                                     ('date_maturity', '<',
+                                                      limit_customer_date),
+                                                     ('reconcile_id', '=',
+                                                      False),
+                                                     ('partner_id', '=',
+                                                      partner.id)])
+            if move_line_ids:
+                partner.write({'blocked_sales': True})
+            else:
+                partner.write({'blocked_sales': False})
+
+        return True
+
     _inherit = "res.partner"
     _columns = {
         'blocked_sales': fields.boolean('Sales blocked?')

@@ -22,3 +22,5 @@ atlassian-ide-plugin.xml
 devel_*
 *.pidb
 *.userprefs
+project-addons/asperience_edi/data_import
+project-addons/asperience_edi/data_export

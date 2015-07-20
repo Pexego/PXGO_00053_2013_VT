@@ -74,26 +74,31 @@ class product_outlet_wizard(models.TransientModel):
                     'views': [(False, 'form')],
                     'target': 'new',
                 }
-            if self.qty > self.product_id.qty_available:
+            ctx = dict(self.env.context)
+            ctx['location'] = stock_location.id
+            product = self.env['product.product'].\
+                with_context(ctx).browse(self.product_id.id)
+            if self.qty > product.qty_available:
                 raise exceptions.except_orm(
                     _('Quantity error'),
-                    _('the amount entered is greater than the quantity available.'))
-            if self.product_id.categ_id == outlet_categ_id or \
-                    self.product_id.categ_id.parent_id == outlet_categ_id:
+                    _('the amount entered is greater than the quantity '
+                      'available in stock.'))
+            if product.categ_id == outlet_categ_id or \
+                    product.categ_id.parent_id == outlet_categ_id:
                 raise exceptions.except_orm(
                     _('product error'),
-                    _('This product is in outlet category.'))
+                    _('This product is already in outlet category.'))
 
             # crear nuevo producto
             outlet_product = self.env['product.product'].search(
-                [('normal_product_id', '=', self.product_id.id),
+                [('normal_product_id', '=', product.id),
                  ('categ_id', '=', int(self.categ_id))])
             if not outlet_product:
-                new_product = self.product_id.copy(
+                new_product = product.copy(
                     {'categ_id': int(self.categ_id),
-                     'name': self.product_id.name + u' ' +
+                     'name': product.name + u' ' +
                         categ_obj.browse(int(self.categ_id)).name,
-                     'image_medium': self.product_id.image_medium})
+                     'image_medium': product.image_medium})
                 categ = self.env['product.category'].browse(int(self.categ_id))
                 tag = self.env['product.tag'].search([('name', '=', categ.name)])
                 if not tag:
@@ -104,13 +109,14 @@ class product_outlet_wizard(models.TransientModel):
                 new_product.normal_product_id = self.product_id
             else:
                 new_product = outlet_product
+            new_product = self.env['product.product'].\
+                with_context(ctx).browse(new_product.id)
+            stock_change_qty_obj.create(
+                {'product_id': product.id,
+                 'new_quantity': product.qty_available - self.qty,
+                 'location_id': stock_location.id}).change_product_qty()
 
-        stock_change_qty_obj.create(
-            {'product_id': self.product_id.id,
-             'new_quantity': self.product_id.qty_available - self.qty,
-             'location_id': stock_location.id}).change_product_qty()
-
-        stock_change_qty_obj.create({'product_id': new_product.id,
-                                     'new_quantity': new_product.qty_available + self.qty,
-                                     'location_id': outlet_location.id}).change_product_qty()
+            stock_change_qty_obj.create({'product_id': new_product.id,
+                                         'new_quantity': new_product.qty_available + self.qty,
+                                         'location_id': outlet_location.id}).change_product_qty()
         return {'type': 'ir.actions.act_window_close'}

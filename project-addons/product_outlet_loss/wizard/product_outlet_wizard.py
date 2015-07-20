@@ -42,14 +42,21 @@ class product_outlet_wizard(models.TransientModel):
         / 100)
 
     list_price2 = fields.Float(
-        'Price PVP',
+        'Price PVP 2',
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price2 *
         (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
         / 100)
 
+    list_price = fields.Float(
+        'Price PVP',
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price *
+        (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
+        / 100)
+
     list_price3 = fields.Float(
-        'Price PVP2',
+        'Price PVP 3',
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price3 *
         (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
@@ -75,7 +82,6 @@ class product_outlet_wizard(models.TransientModel):
 
     @api.multi
     def make_move(self):
-
         product = self.product_id
         outlet_id = product.id
         act_prod=False
@@ -84,29 +90,23 @@ class product_outlet_wizard(models.TransientModel):
             res = super(product_outlet_wizard, self).make_move()
             if self.all_product:
                 #Nuevos precios. En este caso el product.id es el mismo
-                outlet_id = product.id
                 act_prod = True
                 create_loss = True
-
         else:
-
             if self.qty_available < self.qty:
-                raise ValidationError("Qty to outlet must be <= qty available")
+                raise ValidationError(_("Qty to outlet must be <= qty available"))
             if self.qty <= 0:
-                raise ValidationError("Qty to outlet must be >=0")
+                raise ValidationError(_("Qty to outlet must be >=0"))
 
             res = super(product_outlet_wizard, self).make_move()
-            old_prod = self.env['product.product'].browse(self.env.context.get('active_id', False)).id
-            new_prod = self.env['product.product'].search([], limit=1, order='id desc').id
-
-            outlet_id = new_prod
-
-            if self.all_product:
-                outlet_id = old_prod
 
             if self.state == "last":
                 act_prod=True
                 create_loss=True
+
+        outlet_product = self.env['product.product'].search(
+                [('normal_product_id', '=', self.product_id.id),
+                 ('categ_id', '=', int(self.categ_id))])
 
 
         if create_loss:
@@ -114,7 +114,7 @@ class product_outlet_wizard(models.TransientModel):
                     'qty': self.qty,
                     'price_outlet': self.price_outlet,
                     'price_unit': self.price_unit,
-                    'product_id': outlet_id,
+                    'product_id': outlet_product.id,
                     'date_move': self.date_move,
                     'outlet_ok': True
                 }
@@ -126,8 +126,9 @@ class product_outlet_wizard(models.TransientModel):
                         'list_price2': self.list_price2,
                         'list_price3': self.list_price3,
                         'commercial_cost': self.commercial_cost,
+                        'list_price': self.list_price
                     }
-            self.env['product.product'].search([('id','=',outlet_id)]).write(values)
+            outlet_product.write(values)
 
         return res
 

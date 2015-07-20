@@ -33,4 +33,3 @@ class res_company(models.Model):
                                                    domain=[('type', '<>', 'view'), ('type', '<>', 'closed')])
     devaluation_account_credit_id = fields.Many2one('account.account', 'Credit Account',
                                                     domain=[('type', '<>', 'view'), ('type', '<>', 'closed')])
-    devaluation_tax_code_id = fields.Many2one('account.tax.code', 'Tax Code')

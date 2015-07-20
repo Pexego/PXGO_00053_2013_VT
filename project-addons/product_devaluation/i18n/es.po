@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* product_devaluation
+#       * product_devaluation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-20 08:39+0000\n"
-"PO-Revision-Date: 2015-07-20 08:39+0000\n"
+"POT-Creation-Date: 2015-07-20 16:10+0000\n"
+"PO-Revision-Date: 2015-07-20 16:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,34 +16,19 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_devaluation
-#: model:ir.actions.act_window,help:product_devaluation.action_open_search_devaluation_product
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"                    No outlet loss\n"
-"                    </p><p>\n"
-"\n"
-"                </p>\n"
-"            "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"                    Listado Vacío\n"
-"                    </p><p>\n"
-"\n"
-"                </p>\n"
-"            "
-
-#. module: product_devaluation
 #: view:product.category:product_devaluation.view_category_property_devaluation_form
 msgid "Account Devaluation Properties"
-msgstr "Propiedades de la cuenta de devaluación"
+msgstr "Propiedades contabilización devaluaciones"
 
 #. module: product_devaluation
 #: field:product.devaluation.account.wizard,account_move_id:0
 msgid "Account ID"
-msgstr "Account ID"
+msgstr "Cuenta"
 
 #. module: product_devaluation
 #: field:product.devaluation.account.wizard,name:0
 msgid "Account Ref"
-msgstr "Account Ref"
+msgstr "Referencia"
 
 #. module: product_devaluation
 #: view:product.devaluation:product_devaluation.view_devaluation_product_search
@@ -58,11 +43,6 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: product_devaluation
-#: selection:product.devaluation.account.wizard,state:0
-msgid "Close"
-msgstr "Cerrado"
-
-#. module: product_devaluation
 #: model:ir.model,name:product_devaluation.model_res_company
 msgid "Companies"
 msgstr "Compañías"
@@ -75,43 +55,38 @@ msgstr "Crear cuenta"
 
 #. module: product_devaluation
 #: view:product.devaluation.account.wizard:product_devaluation.product_devaluation_account_wizard_form
-msgid "Create Account And Lines"
-msgstr "Crar Asiento Contable"
-
-#. module: product_devaluation
-#: view:product.devaluation.account.wizard:product_devaluation.product_devaluation_account_wizard_form
 msgid "Create Account from Devaluate Product Wizard"
-msgstr "Contabilizar devaluaciones de existencias"
+msgstr "Contabilizar devaluaciones de productos"
 
 #. module: product_devaluation
 #: view:product.devaluation.account.wizard:product_devaluation.product_devaluation_account_wizard_form
 msgid "Create Lines"
-msgstr "Crear asientos"
+msgstr "Crear lineas"
 
 #. module: product_devaluation
 #: field:product.devaluation,create_uid:0
 #: field:product.devaluation.account.wizard,create_uid:0
 #: field:product.devaluation.wizard,create_uid:0
 msgid "Created by"
-msgstr "Created by"
+msgstr "Creado por"
 
 #. module: product_devaluation
 #: field:product.devaluation,create_date:0
 #: field:product.devaluation.account.wizard,create_date:0
 #: field:product.devaluation.wizard,create_date:0
 msgid "Created on"
-msgstr "Created on"
+msgstr "Creado el"
 
 #. module: product_devaluation
 #: field:product.category,devaluation_account_credit_id:0
 #: field:res.company,devaluation_account_credit_id:0
 msgid "Credit Account"
-msgstr "Haber (Devaluaciones de existencias)"
+msgstr "Cuenta haber"
 
 #. module: product_devaluation
 #: view:product.devaluation:product_devaluation.view_devaluation_product_search
 msgid "Current Year"
-msgstr "Current Year"
+msgstr "Año actual"
 
 #. module: product_devaluation
 #: field:product.devaluation.account.wizard,date:0
@@ -123,38 +98,33 @@ msgstr "Fecha"
 #: field:product.category,devaluation_account_debit_id:0
 #: field:res.company,devaluation_account_debit_id:0
 msgid "Debit Account"
-msgstr "Debe (Devaluaciones de existencias)"
+msgstr "Cuenta debe"
 
 #. module: product_devaluation
 #: model:ir.actions.act_window,name:product_devaluation.act_product_devaluation_wizard
 #: view:product.devaluation.wizard:product_devaluation.product_devaluation_wizard_form
 msgid "Devaluate Product"
-msgstr "Devaluaciones de Existencias"
+msgstr "Producto devaluado"
 
 #. module: product_devaluation
 #: view:product.devaluation.wizard:product_devaluation.product_devaluation_wizard_form
 msgid "Devaluate Product Wizard"
-msgstr "Devaluar Existencias"
+msgstr "Asistente de devaluación"
 
 #. module: product_devaluation
 #: field:product.devaluation,date_dev:0
 msgid "Devaluated on"
-msgstr "Devaluated on"
+msgstr "Devaluado el"
 
 #. module: product_devaluation
 #: view:res.company:product_devaluation.view_company_form_outlet_prod_dev
-msgid "Devaluation And Outlet"
-msgstr "Devaluaciones y Outlet"
-
-#. module: product_devaluation
-#: selection:product.devaluation.account.wizard,state:0
-msgid "Draft"
-msgstr "Borrador"
+msgid "Devaluations"
+msgstr "Devaluaciones"
 
 #. module: product_devaluation
 #: view:product.devaluation:product_devaluation.view_devaluation_product_search
 msgid "Group By..."
-msgstr "Agrupado por..."
+msgstr "Agrupar por..."
 
 #. module: product_devaluation
 #: field:product.devaluation,id:0
@@ -175,37 +145,38 @@ msgstr "Diario"
 #: field:product.devaluation.account.wizard,write_uid:0
 #: field:product.devaluation.wizard,write_uid:0
 msgid "Last Updated by"
-msgstr "Last Updated by"
+msgstr "Últ. actualización por"
 
 #. module: product_devaluation
 #: field:product.devaluation,write_date:0
 #: field:product.devaluation.account.wizard,write_date:0
 #: field:product.devaluation.wizard,write_date:0
 msgid "Last Updated on"
-msgstr "Last Updated on"
-
-#. module: product_devaluation
-#: selection:product.devaluation.account.wizard,state:0
-msgid "Open"
-msgstr "Abierto"
+msgstr "Últ. actualización el"
 
 #. module: product_devaluation
 #: field:product.devaluation,period_id:0
 #: field:product.devaluation.account.wizard,period_id:0
 msgid "Period"
-msgstr "Perríodo"
+msgstr "Periodo"
+
+#. module: product_devaluation
+#: code:addons/product_devaluation/wizard/product_devaluation_account_wizard.py:53
+#, python-format
+msgid "Please, select lines not accounted"
+msgstr "Por favor, seleccione lineas no contabilizadas"
 
 #. module: product_devaluation
 #: field:product.devaluation,price_after:0
 #: field:product.devaluation.wizard,price_after:0
 msgid "Price After"
-msgstr "Precio Final"
+msgstr "Precio después"
 
 #. module: product_devaluation
 #: field:product.devaluation,price_before:0
 #: field:product.devaluation.wizard,price_before:0
 msgid "Price Before"
-msgstr "Precio Inicial"
+msgstr "Precio antes"
 
 #. module: product_devaluation
 #: view:product.devaluation:product_devaluation.view_devaluation_product_search
@@ -215,38 +186,30 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: product_devaluation
+#: model:ir.model,name:product_devaluation.model_product_category
+msgid "Product Category"
+msgstr "Categoría de producto"
+
+#. module: product_devaluation
 #: model:ir.actions.act_window,name:product_devaluation.action_open_search_devaluation_product
 #: model:ir.ui.menu,name:product_devaluation.menu_action_devaluation_product_search
 #: view:product.devaluation:product_devaluation.view_devaluation_product_search
 #: view:product.devaluation:product_devaluation.view_tree_devaluation_searched
 msgid "Product Devaluation"
-msgstr "Devaluación de existencias"
+msgstr "Devaluación producto"
 
 #. module: product_devaluation
 #: field:product.category,devaluation_account_provision_id:0
 #: field:res.company,devaluation_account_provision_id:0
 msgid "Provision Account"
-msgstr "Cuenta de Provisión (Devaluación)"
+msgstr "Cuenta provisiones"
 
 #. module: product_devaluation
 #: field:product.devaluation,quantity:0
-#: field:product.devaluation.wizard,quantity:0
 msgid "Quantity"
 msgstr "Cantidad"
-
-#. module: product_devaluation
-#: field:product.devaluation.account.wizard,state:0
-msgid "State"
-msgstr "Estado"
-
-#. module: product_devaluation
-#: field:product.category,devaluation_tax_code_id:0
-#: field:res.company,devaluation_tax_code_id:0
-msgid "Tax Code"
-msgstr "Impuestos"
 
 #. module: product_devaluation
 #: view:product.devaluation:product_devaluation.view_tree_devaluation_searched
 msgid "Total"
 msgstr "Total"
-
