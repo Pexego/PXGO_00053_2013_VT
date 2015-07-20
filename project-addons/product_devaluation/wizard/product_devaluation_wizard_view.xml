@@ -14,9 +14,6 @@
                     <group>
                         <field name="product_id"/>
                     </group>
-                    <group >
-                        <field name="quantity"/>
-                    </group>
                     <group>
 
                             <field name="price_before"/>
@@ -57,7 +54,6 @@
                     </group>
                     <group >
                         <field name="date" required="1"/>
-                        <field name="company_id" required="1"/>
                     </group>
                     <group>
                         <group>
@@ -70,16 +66,10 @@
 
                     </group>
                     <group >
-                        <field name="state" invisible="1"/>
-                    </group>
-                    <group >
 
                     </group>
                     <footer>
-                        <button string="Create Lines" name="create_dev_account" type="object" class="oe_highlight"
-                                states="open"/>
-                        <button string="Create Account And Lines" name="create_dev_account" type="object"
-                                class="oe_highlight" states="draft"/>
+                        <button string="Create Lines" name="create_dev_account" type="object" class="oe_highlight"/>
                         <button string="Cancel" special="cancel" class="oe_highlight"/>
                     </footer>
                 </form>

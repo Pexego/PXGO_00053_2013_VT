@@ -47,13 +47,6 @@
             <field name="view_id" ref="view_tree_devaluation_searched"/>
             <field name="search_view_id" ref="view_devaluation_product_search"/>
             <field name="context">{'search_default_groupby_product': 1, 'search_default_accounted' : 1}</field>
-            <field name="help" type="html">
-                <p class="oe_view_nocontent_create">
-                    No outlet loss
-                    </p><p>
-
-                </p>
-            </field>
         </record>
 
         <menuitem
@@ -77,7 +70,6 @@
                             <field name="devaluation_account_provision_id"/>
                             <field name="devaluation_account_debit_id"/>
                             <field name="devaluation_account_credit_id"/>
-                            <field name="devaluation_tax_code_id"/>
                         </group>
                     </group>
                 </data>

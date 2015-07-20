@@ -34,31 +34,26 @@ class product_devaluation_wizard(models.TransientModel):
     product_id = fields.Many2one('product.product',
         'Product',
         default=lambda self: self.env['product.product'].browse(
-            self.env.context.get('active_id', False)), Readonly=True)
+            self.env.context.get('active_id', False)), readonly=True)
 
     price_before = fields.Float(
         'Price Before',
         default=lambda self: self.env['product.product'].browse(
-            self.env.context.get('active_id', False)).standard_price, Readonly=True)
+            self.env.context.get('active_id', False)).standard_price, readonly=True)
 
     price_after = fields.Float(
-        'Price After',
+        'Price After', required=True,
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).standard_price)
 
-    quantity = fields.Float(
-        'Quantity',
-        default=lambda self: self.env['product.product'].browse(
-            self.env.context.get('active_id', False)).qty_available, Readonly=True)
-
-    date_dev = fields.Date('Date', default=fields.datetime.now())
+    date_dev = fields.Date('Date', default=fields.Date.today, required=True)
 
 
 
     @api.multi
     def create_dev(self):
         values = {
-                'quantity': self.quantity,
+                'quantity': self.product_id.qty_available,
                 'price_before': self.price_before,
                 'price_after': self.price_after,
                 'product_id': self.product_id.id,

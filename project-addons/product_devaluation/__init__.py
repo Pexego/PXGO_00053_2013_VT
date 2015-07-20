@@ -19,5 +19,6 @@
 #
 ##############################################################################
 
-import wizard
-import product, res_company
+from . import res_company
+from . import product
+from . import wizard
