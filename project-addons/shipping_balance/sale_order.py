@@ -74,7 +74,7 @@ class sale_order_line(models.Model):
 
     @api.multi
     def unlink(self):
-        import ipdb; ipdb.set_trace()
+
         res_id= self.order_id.id
 
         res = super(sale_order_line, self).unlink()

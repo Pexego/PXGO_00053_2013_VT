@@ -30,15 +30,28 @@
                 <field name="qty" position="attributes">
                     <attribute name="attrs">{'readonly':[('state','!=','last')]}</attribute>
                 </field>
-                <xpath expr="/form/group/field[@name='all_product']" position="after">
-                    <group>
-                        <field name="price_unit" invisible="1"/>
-                        <field name="qty_available" invisible="1"/>
-                        <field name="price_outlet"/>
-                        <field name="percent" readonly="1"/>
-                        <label for="date_move" string="Outlet on"/>
-                        <field name="date_move" nolabel="1"/>
-                    </group>
+                <xpath expr="/form/group/field[@name='all_product']/" position="after">
+
+
+                        <group>
+                            <field name="percent" readonly="1"/>
+                            <field name="price_unit" invisible="1"/>
+                            <field name="qty_available" invisible="1"/>
+                        </group>
+
+                        <group>
+                            <field name="price_outlet"/>
+                            <field name="commercial_cost"/>
+                        </group>
+                        <group>
+                            <field name="list_price2"/>
+                            <field name="list_price3"/>
+                        </group>
+                        <group>
+                            <label for="date_move" string="Outlet on"/>
+                            <field name="date_move" nolabel="1"/>
+                        </group>
+
                 </xpath>
             </field>
         </record>

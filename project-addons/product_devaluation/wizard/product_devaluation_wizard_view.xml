@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+
+
+        <record id="product_devaluation_wizard_form" model="ir.ui.view">
+            <field name="name">product.devaluation.wizard.form</field>
+            <field name="model">product.devaluation.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Devaluate Product Wizard">
+
+                    <group>
+                        <field name="product_id"/>
+                    </group>
+                    <group >
+                        <field name="quantity"/>
+                    </group>
+                    <group>
+
+                            <field name="price_before"/>
+                            <field name="price_after"/>
+
+                    </group>
+                    <group >
+                        <field name="date_dev"/>
+                    </group>
+                    <footer>
+                        <button string="Devaluate Product" name="create_dev" type="object" icon="gtk-ok"/>
+                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+        id="act_product_devaluation_wizard"
+        name="Devaluate Product"
+        res_model="product.devaluation.wizard"
+        src_model="product.product"
+        view_id="product_devaluation_wizard_form"
+        view_mode="form"
+        target="new"/>
+
+         <record id="product_devaluation_account_wizard_form" model="ir.ui.view">
+            <field name="name">product.devaluation.account.wizard.form</field>
+            <field name="model">product.devaluation.account.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create Account from Devaluate Product Wizard">
+
+                    <group>
+                        <field name="name" required="1"/>
+                        <field name="account_move_id" invisible="1"/>
+
+                    </group>
+                    <group >
+                        <field name="date" required="1"/>
+                        <field name="company_id" required="1"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="journal_id" required="1"/>
+                        </group>
+                        <group>
+                            <field name="period_id" required="1" domain="[('state', '=', 'draft')]"/>
+                        </group>
+
+
+                    </group>
+                    <group >
+                        <field name="state" invisible="1"/>
+                    </group>
+                    <group >
+
+                    </group>
+                    <footer>
+                        <button string="Create Lines" name="create_dev_account" type="object" class="oe_highlight"
+                                states="open"/>
+                        <button string="Create Account And Lines" name="create_dev_account" type="object"
+                                class="oe_highlight" states="draft"/>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+        id="act_product_devaluation_wizard2"
+        name="Create Account"
+        res_model="product.devaluation.wizard"
+        src_model="product.devaluation"
+        view_id="product_devaluation_wizard_form"
+        view_mode="tree"
+        target="new"/>
+
+
+
+    </data>
+</openerp>
+
+
+

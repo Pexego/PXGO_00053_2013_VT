@@ -20,4 +20,5 @@
 ##############################################################################
 
 import wizard
-import product, res_company
+import product, res_company, sale_order
+

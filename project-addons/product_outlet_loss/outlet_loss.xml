@@ -8,12 +8,12 @@
             <field name="model">outlet.loss</field>
             <field name="type">tree</field>
             <field name="arch" type="xml">
-
-                <tree string="Product Outlet Loss">
-                    <field name="create_date"/>
+                <tree string="Product Outlet Loss" colors="red: outlet_ok==True">
+                    <field name="date_move"/>
                     <field name="product_id"/>
                     <field name="qty"/>
                     <field name="total_lost"/>
+                    <field name="outlet_ok"/>
                 </tree>
 
             </field>
@@ -35,7 +35,9 @@
                         <filter string="Product" domain="[]"
                             name="groupby_product"
                             context="{'group_by': 'product_id'}"/>
-
+                        <filter string="Outlet" domain="[]"
+                            name="groupby_outlet"
+                            context="{'group_by': 'outlet_ok'}"/>
                     </group>
 
                 </search>
@@ -78,15 +80,16 @@
             <field name="name">outlet.loss.tree</field>
             <field name="model">outlet.loss</field>
             <field name="arch" type="xml">
-                <tree string="Product Outlet Lost" version="7.0">
+                <tree string="Product Outlet Lost" version="7.0"  colors="red: outlet_ok==True">
 
 
-                    <field name="product_id" />
+                    <field name="product_id" invisible="1" />
                     <field name="qty" />
-                    <field name="price_unit" />
-                    <field name="price_outlet" />
-                    <field name="total_lost" sum="Total" />
+                    <field name="price_unit" string="Inicial/Coste"/>
+                    <field name="price_outlet" string="Outlet/Venta" />
+                    <field name="total_lost" string="Resultado" sum="Total" />
                     <field name="date_move" />
+                    <field name="outlet_ok" invisible="1" />
                 </tree>
             </field>
         </record>
@@ -104,7 +107,9 @@
                         <filter string="Product" domain="[]"
                             name="groupby_product"
                             context="{'group_by': 'product_id'}"/>
-
+                        <filter string="Outlet" domain="[]"
+                            name="groupby_outlet"
+                            context="{'group_by': 'outlet_ok'}"/>
                     </group>
                 </search>
             </field>

@@ -26,11 +26,11 @@ from openerp.exceptions import ValidationError
 class res_company(models.Model):
     _inherit = "res.company"
 
-    outlet_per_cent = fields.Float("% Outlet Devalue", default = 100)
-
-    @api.constrains('outlet_per_cent')
-    def _check_outlet_per_cent(self):
-        if self.outlet_per_cent < 0:
-            raise ValidationError("% must be > 0")
-        if self.outlet_per_cent >= 100:
-            raise ValidationError("% must be <=100")
+    devaluation_journal_id = fields.Many2one('account.journal', 'Journal')
+    devaluation_account_provision_id = fields.Many2one('account.account', 'Provision Account',
+                                                       domain=[('type', '<>', 'view'), ('type', '<>', 'closed')])
+    devaluation_account_debit_id = fields.Many2one('account.account', 'Debit Account',
+                                                   domain=[('type', '<>', 'view'), ('type', '<>', 'closed')])
+    devaluation_account_credit_id = fields.Many2one('account.account', 'Credit Account',
+                                                    domain=[('type', '<>', 'view'), ('type', '<>', 'closed')])
+    devaluation_tax_code_id = fields.Many2one('account.tax.code', 'Tax Code')
