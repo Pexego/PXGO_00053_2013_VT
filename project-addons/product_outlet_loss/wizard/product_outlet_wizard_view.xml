@@ -30,9 +30,7 @@
                 <field name="qty" position="attributes">
                     <attribute name="attrs">{'readonly':[('state','!=','last')]}</attribute>
                 </field>
-                <xpath expr="/form/group/field[@name='all_product']/" position="after">
-
-
+                <field name='all_product' position="after">
                         <group>
                             <field name="percent" readonly="1"/>
                             <field name="price_unit" invisible="1"/>
@@ -52,7 +50,7 @@
                             <field name="date_move" nolabel="1"/>
                         </group>
 
-                </xpath>
+                </field>
             </field>
         </record>
 

@@ -29,9 +29,11 @@
     "depends": ['base',
                 'product',
                 'stock',
-                'equivalent_products'],
+                'equivalent_products',
+                'product_outlet'],
     "data": ['wizard/product_outlet_wizard_view.xml',
              'outlet_loss.xml',
-             'res_company.xml'],
+             'res_company.xml',
+             'security/ir.model.access.csv'],
     "installable": True
 }
