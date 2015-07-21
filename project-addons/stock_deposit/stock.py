@@ -22,6 +22,7 @@
 from openerp import models, api
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
+from datetime import datetime, timedelta
 
 
 class stock_move(models.Model):
@@ -33,14 +34,19 @@ class stock_move(models.Model):
         deposit_obj = self.env['stock.deposit']
         for move in self:
             if move.procurement_id.sale_line_id.deposit:
+                formatted_date = datetime.strptime(time.strftime('%Y-%m-%d'),
+                                                   "%Y-%m-%d")
+                return_date = datetime.\
+                    strftime(formatted_date + timedelta(days=15), "%Y-%m-%d")
                 values = {
                     'move_id': move.id,
                     'delivery_date':
-                        time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                    time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                     'return_date':
-                        move.procurement_id.sale_line_id.deposit_date,
+                    move.procurement_id.sale_line_id.deposit_date or
+                    return_date,
                     'user_id':
-                        move.procurement_id.sale_line_id.order_id.user_id.id,
+                    move.procurement_id.sale_line_id.order_id.user_id.id,
                     'state': 'draft'
                 }
                 deposit_obj.create(values)

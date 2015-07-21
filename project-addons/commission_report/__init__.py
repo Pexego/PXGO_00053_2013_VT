@@ -22,3 +22,4 @@
 from . import commission_report
 from . import wizard
 from . import invoice
+from . import sale

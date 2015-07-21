@@ -13,7 +13,7 @@
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
                      <field name="deposit"/>
-                     <field name="deposit_date" attrs="{'invisible': [('deposit', '!=', True)]}"/>
+                     <field name="deposit_date" invisible="1"/>
                 </xpath>
             </field>
         </record>
