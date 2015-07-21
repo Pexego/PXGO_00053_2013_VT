@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Kiko Sanchez <kiko@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -14,25 +14,19 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
 #
+#
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
 
 
-class StockMove(models.Model):
+from openerp import fields, models, api
 
-    _inherit = 'stock.move'
+from openerp.exceptions import ValidationError
 
-    @api.model
-    def _get_invoice_line_vals(self, move, partner, inv_type):
-        res = super(StockMove, self)._get_invoice_line_vals(move, partner, inv_type)
-        res['move_id'] = move.id
-        return res
+class Partner(models.Model):
 
-#class stock_invoice_onshipping(models.Model):custom
+    _inherit = "res.partner"
+    attach_picking= fields.Boolean("Attach picking")
 
-#    _inherit = 'stock.invoice.onshipping'
-#    attach_picking = fields.Boolean ('Attach Picking', default= lambda self:
-#         self.env['stock.picking'].browse(self.env.context.get('active_ids', False))[0].partner_id.attach_picking)

@@ -32,7 +32,11 @@ class AccountInvoice(models.Model):
 
     _inherit = 'account.invoice'
 
-    attach_picking = fields.Boolean('Attach picking')
+    def default_attach_picking(self):
+        r=self.env['stock.picking'].browse(self.env.context.get('active_ids', False))[0].partner_id.attach_picking
+        return r
+
+    attach_picking = fields.Boolean('Attach picking' , default= default_attach_picking)
     picking_ids = fields.One2many('stock.picking', string='pickings',
                                   compute='_get_picking_ids')
     country_id = fields.Many2one('res.country', 'Country',
