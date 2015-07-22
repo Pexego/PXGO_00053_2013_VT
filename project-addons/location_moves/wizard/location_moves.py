@@ -32,6 +32,7 @@ class location_moves(models.TransientModel):
     check_qty = fields.Boolean('Check Qty',
                                default=lambda self: self.env.context.
                                get('manual', False))
+
     move_type = fields.Selection(
         [('pantry_kitchen', 'Pantry -> Kitchen'),
          ('kitchen_cooked', 'Kitchen -> Cooked'),

@@ -28,22 +28,21 @@ class SaleOrderLine(models.Model):
 
     @api.model
     def _default_agent(self):
-        agent = False
+        agent = self.env['res.partner']
         if self.env.context.get('partner_id'):
-            partner = self.env['res.partner'].browse(
-                self.env.context['partner_id'])
+            partner = self.env['res.partner'].browse(self.env.context['partner_id'])
             if partner.agents:
-                agent = partner.agents[0].id
+                agent = partner.agents[0]
         return agent
 
     @api.model
     def _default_commission(self):
-        commission = False
+        commission = self.env["sale.commission"]
         if self.env.context.get('partner_id'):
             partner = self.env['res.partner'].browse(
                 self.env.context['partner_id'])
             if partner.agents:
-                commission = partner.agents[0].commission.id
+                commission = partner.agents[0].commission
         return commission
 
     agent = fields.Many2one("res.partner", "Agent", ondelete="restrict",
