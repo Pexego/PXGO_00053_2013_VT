@@ -24,7 +24,6 @@ msgstr "Enviar albarán"
 #: field:res.partner,attach_picking:0
 msgid "Attach picking"
 msgstr "Enviar albarán"
-s
 
 #. module: sale
 #: field:sale.order.line,tax_id:0

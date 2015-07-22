@@ -21,7 +21,7 @@
 
 
 from openerp import models, fields, api
-from openerp.exceptions import ValidationError, Warning
+
 
 class location_moves(models.TransientModel):
 
@@ -29,7 +29,9 @@ class location_moves(models.TransientModel):
 
     product_id = fields.Many2one('product.product', 'Product', required=True)
     qty = fields.Float('Qty', required=True)
-    check_qty = fields.Boolean('Check Qty', default= True)
+    check_qty = fields.Boolean('Check Qty',
+                               default=lambda self: self.env.context.
+                               get('manual', False))
     move_type = fields.Selection(
         [('pantry_kitchen', 'Pantry -> Kitchen'),
          ('kitchen_cooked', 'Kitchen -> Cooked'),
@@ -56,7 +58,3 @@ class location_moves(models.TransientModel):
         }
         types[self.move_type](self.product_id.id, self.qty, self.check_qty)
         return True
-
-
-
-

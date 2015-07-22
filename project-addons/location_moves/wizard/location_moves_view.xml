@@ -35,7 +35,8 @@
             view_id="location_moves_form"
             view_mode="form"
             target="new"
-            id="act_location_moves"/>
+            id="act_location_moves"
+            context="{'manual': True}"/>
 
         <menuitem
             id="menucreatemoves"
