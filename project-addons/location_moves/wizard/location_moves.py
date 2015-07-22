@@ -29,7 +29,7 @@ class location_moves(models.TransientModel):
 
     product_id = fields.Many2one('product.product', 'Product', required=True)
     qty = fields.Float('Qty', required=True)
-    check_qty = fields.Boolean('Check Qty', default= True)
+    check_qty = fields.Boolean('Check Qty', default= False)
     move_type = fields.Selection(
         [('pantry_kitchen', 'Pantry -> Kitchen'),
          ('kitchen_cooked', 'Kitchen -> Cooked'),
