@@ -12,7 +12,6 @@
                     <field invisible="1" name="state" />
                     <group states="first">
                         <field name="all_product"/>
-
                     </group>
                     <group states="last">
                         <field name="qty"/>

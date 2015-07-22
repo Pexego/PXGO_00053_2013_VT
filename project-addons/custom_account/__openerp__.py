@@ -34,6 +34,7 @@
                 'stock_account', 'sale_stock', 'account_payment_partner',
                 'account_payment', 'sale'],
     "data": ['account_view.xml',
+             'partner_view.xml',
              'report/account_invoice_report_view.xml',
              'report_custom_view.xml'],
     "installable": True

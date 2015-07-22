@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <!-- le añado el boton a la orden de compra -->
+
         <record id="view_order_form_shipping_balance" model="ir.ui.view">
             <field name="name">sale.order.shipping.balance.form</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
             <field name="arch" type="xml">
-
-            <xpath expr="//field[@name='proforma']" position="after">
-            <div class="oe_right oe_button_box" style="width: 150px;" name="buttons1"
-                    states="draft, send, reserve">
-
-                        <button
+                <xpath expr="//button[@name='open_stock_reservation']" position="after">
+                    <button
                             class="oe_stat_button"
                             icon="fa-euro"
                             type="action"
                             name="%(action_shipping_balance_wizard)d"
-
-                            attrs="{'invisible':[('amount_shipping_balance', '&lt;', '1')]}">
+                            attrs="{'invisible':['|', ('amount_shipping_balance','=', 0), ('state','not in',['draft','sent','reserve'])]}"
+                            >
                             <field string="Shipping Balance" name="amount_shipping_balance" widget="statinfo"/>
                         </button>
-            </div>
-                <!-- <xpath expr="/form/sheet/h1" position="after"><button name="create_shipping_line"
-                                string="Create Shipping Balance Line" type="object" class="oe_highlight"
-                                invisible="1"
-                                />
-                -->
-            </xpath>
+                </xpath>
             </field>
         </record>
-
 
     </data>
 </openerp>

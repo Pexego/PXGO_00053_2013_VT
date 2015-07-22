@@ -23,6 +23,7 @@ from openerp import models, fields, api
 
 class stock_deposit(models.Model):
     _name = 'stock.deposit'
+    _description = "Deposits"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
     product_id = fields.Many2one(string='Product',
@@ -141,3 +142,28 @@ class stock_deposit(models.Model):
             deposit._create_stock_moves(picking)
             deposit.write({'state': 'returned',
                            'return_picking_id': picking.id})
+
+    @api.model
+    def send_advise_email(self):
+        deposits = self.search([('return_date', '=', fields.Date.today())])
+        #~ mail_pool = self.env['mail.mail']
+        #~ mail_ids = self.env['mail.mail']
+        template = self.env.ref('stock_deposit.stock_deposit_advise_partner', False)
+        for deposit in deposits:
+            ctx = dict(self._context)
+            ctx.update({
+                'default_model': 'stock.deposit',
+                'default_res_id': deposit.id,
+                'default_use_template': bool(template.id),
+                'default_template_id': template.id,
+                'default_composition_mode': 'comment',
+                'mark_so_as_sent': True
+            })
+            composer_id = self.env['mail.compose.message'].with_context(
+                ctx).create({})
+            composer_id.with_context(ctx).send_mail()
+            #~ mail_id = template.send_mail(deposit.id)
+            #~ mail_ids += mail_pool.browse(mail_id)
+        #~ if mail_ids:
+            #~ mail_ids.send()
+        return True

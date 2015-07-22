@@ -1,0 +1,359 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+        <data>
+                <!--                      EDI                      -->
+                <record id="view_edi_edi_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.form</field>
+                        <field name="model">edi.edi</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Edi process">
+                                    <group colspan="4" col="4">
+                                        <field name="name" />
+                                        <field name="code" />
+                                        <field name="type" />
+                                        <field name="thread" />
+                                        <notebook colspan="4">
+                                                <page string="Parameters">
+                                                        <group colspan="4">
+                                                                <separator string="Import" colspan="4"/>
+                                                                <field name="file_template" colspan="4"/>
+                                                                <field name="line_start" attrs="{'invisible':[('type','!=','csv')]}" groups="base.group_extended"/>
+                                                                <field name="line_stop" attrs="{'invisible':[('type','!=','csv')]}" groups="base.group_extended"/>
+                                                                <field name="start_identifier" attrs="{'invisible':[('type','not in',('edi','csv_struct'))]}" groups="base.group_extended"/>
+                                                                <field name="stop_identifier" attrs="{'invisible':[('type','not in',('edi','csv_struct'))]}" groups="base.group_extended"/>
+                                                                <field name="length_identifier" attrs="{'invisible':[('type','not in',('edi','csv_struct'))]}" groups="base.group_extended"/>
+                                                        </group>
+                                                        <group colspan="4">
+                                                                <separator string="Export" colspan="4"/>
+                                                                <field name="force"/>
+                                                                <field name="no_empty_file" groups="base.group_extended"/>
+                                                                <field name="float_separator" groups="base.group_extended"/>
+                                                                <field name="end_line" groups="base.group_extended"/>
+                                                                <field name="header_xml" attrs="{'invisible':[('type','!=','xml')]}" colspan="4" nolabel="1" groups="base.group_extended"/>
+                                                        </group>
+                                                        <group colspan="4" groups="base.group_extended">
+                                                                <separator string="Import/Export" colspan="4"/>
+                                                                <field name="charset"/>
+                                                                <field name="skip_first" attrs="{'invisible':[('type','!=','csv')]}" groups="base.group_extended"/>
+                                                                <field name="delimiter" attrs="{'invisible':[('type','not in',('csv','csv_struct'))]}" groups="base.group_extended"/>
+                                                                <field name="quotechar" attrs="{'invisible':[('type','not in',('csv','csv_struct'))]}" groups="base.group_extended"/>
+                                                                <field name="fields_ids" attrs="{'invisible':[('type','!=','csv')]}" colspan="4" nolabel="1"/>
+                                                                <field name="line_edi_ids" attrs="{'invisible':[('type','!=','edi')]}" colspan="4" nolabel="1"/>
+                                                                <field name="line_csv_ids" attrs="{'invisible':[('type','!=','csv_struct')]}" colspan="4" nolabel="1"/>
+                                                                <field name="fields_xml_ids" attrs="{'invisible':[('type','!=','xml')]}" colspan="4" nolabel="1"/>
+                                                        </group>
+                                                </page>
+                                                <page string="Import" >
+                                                        <button icon="gtk-ok" context="{thread:1}" name="import_edi_thread" string="Import edi Background" type="object" colspan="4" attrs="{'invisible':[('type','!=','edi')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:1}" name="import_csv_thread" string="Import csv Background" type="object" colspan="4" attrs="{'invisible':[('type','!=','csv')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:1}" name="import_xml_thread" string="Import xml Background" type="object" colspan="4" attrs="{'invisible':[('type','!=','xml')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:1}" name="import_csv_struct_thread" string="Import csv struct Background" type="object" colspan="4" attrs="{'invisible':[('type','!=','csv_struct')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:0}" name="import_edi" string="Import edi" type="object" colspan="4" attrs="{'invisible':[('type','!=','edi')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:0}" name="import_csv" string="Import csv" type="object" colspan="4" attrs="{'invisible':[('type','!=','csv')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:0}" name="import_xml" string="Import xml" type="object" colspan="4" attrs="{'invisible':[('type','!=','xml')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:0}" name="import_csv_struct" string="Import csv struct" type="object" colspan="4" attrs="{'invisible':[('type','!=','csv_struct')]}"/>
+                                                        <group>
+                                                            <field name="path_in" colspan="4"/>
+                                                            <field name="path_in_move" colspan="4" />
+                                                            <field name="eval_in" colspan="4" nolabel="1" groups="base.group_extended"/>
+                                                        </group>
+                                                </page>
+                                                <page string="Export" >
+                                                        <button icon="gtk-ok" context="{thread:1}" name="export_edi_thread" string="Export edi Background" type="object" colspan="4" attrs="{'invisible':[('type','!=','edi')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:1}" name="export_csv_thread" string="Export csv Background" type="object" colspan="4" attrs="{'invisible':[('type','!=','csv')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:1}" name="export_xml_thread" string="Export xml Background" type="object" colspan="4" attrs="{'invisible':[('type','!=','xml')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:1}" name="export_csv_struct_thread" string="Export csv struct Background" type="object" colspan="4" attrs="{'invisible':[('type','!=','csv_struct')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:0}" name="export_edi" string="Export edi" type="object" colspan="4" attrs="{'invisible':[('type','!=','edi')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:0}" name="export_csv" string="Export csv" type="object" colspan="4" attrs="{'invisible':[('type','!=','csv')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:0}" name="export_xml" string="Export xml" type="object" colspan="4" attrs="{'invisible':[('type','!=','xml')]}"/>
+                                                        <button icon="gtk-ok" context="{thread:0}" name="export_csv_struct" string="Export csv struct" type="object" colspan="4" attrs="{'invisible':[('type','!=','csv_struct')]}"/>
+                                                        <group>
+                                                            <field name="path_out" colspan="4"/>
+                                                            <field name="eval_out" colspan="4" nolabel="1" groups="base.group_extended"/>
+                                                        </group>
+                                                </page>
+                                                <page string="Log">
+                                                        <field name="log_ids" colspan="4" nolabel="1" groups="base.group_extended"/>
+                                                        <field name="result_ids" colspan="4" nolabel="1"/>
+                                                </page>
+                                                <page string="FTP" groups="base.group_extended">
+                                                        <field name="copy_in" colspan="4"/>
+                                                        <field name="ftp_path_in" colspan="4" attrs="{'required':[('copy_in','==',True)],'invisible':[('copy_in','!=',True)]}"/>
+                                                        <field name="ftp_path_in_archive" colspan="4" attrs="{'required':[('copy_in','==',True)],'invisible':[('copy_in','!=',True)]}"/>
+                            <field name="ftp_url_in" colspan="4" attrs="{'required':[('copy_in','==',True)],'invisible':[('copy_in','!=',True)]}"/>
+                                                        <field name="ftp_port_in" colspan="4" attrs="{'required':[('copy_in','==',True)],'invisible':[('copy_in','!=',True)]}"/>
+                                                        <field name="ftp_login_in" colspan="4" attrs="{'required':[('copy_in','==',True)],'invisible':[('copy_in','!=',True)]}"/>
+                                                        <field name="ftp_password_in" colspan="4" attrs="{'required':[('copy_in','==',True)],'invisible':[('copy_in','!=',True)]}"/>
+
+                                                        <field name="copy_out" colspan="4"/>
+                                                        <field name="ftp_path_out" colspan="4" attrs="{'required':[('copy_out','==',True)],'invisible':[('copy_out','!=',True)]}"/>
+                                                        <field name="ftp_url_out" colspan="4" attrs="{'required':[('copy_out','==',True)],'invisible':[('copy_out','!=',True)]}"/>
+                                                        <field name="ftp_port_out" colspan="4" attrs="{'required':[('copy_out','==',True)],'invisible':[('copy_out','!=',True)]}"/>
+                                                        <field name="ftp_login_out" colspan="4" attrs="{'required':[('copy_out','==',True)],'invisible':[('copy_out','!=',True)]}"/>
+                                                        <field name="ftp_password_out" colspan="4" attrs="{'required':[('copy_out','==',True)],'invisible':[('copy_out','!=',True)]}"/>
+                                                </page>
+                                        </notebook>
+                                    </group>
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.tree</field>
+                        <field name="model">edi.edi</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Edi edi">
+                                        <field name="name" />
+                                        <field name="code" />
+                                        <field name="type" />
+                                        <field name="thread" />
+                                        <field name="log_ids"/>
+                                </tree>
+                        </field>
+                </record>
+
+        <!--                      EDI LOG                          -->
+                <record id="view_edi_edi_log_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.log.form</field>
+                        <field name="model">edi.edi.log</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Edi logs">
+                                        <field name="name" />
+                                        <field name="date" />
+                                        <field name="object_id" />
+                                        <field name="type" />
+                                        <field name="ref" />
+                                        <field name="write_access" />
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_log_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.log.tree</field>
+                        <field name="model">edi.edi.log</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Edi logs">
+                                        <field name="name" select="1"/>
+                                        <field name="date" select="1"/>
+                                        <field name="object_id" select="1"/>
+                                        <field name="type" select="1"/>
+                                        <field name="ref" select="1"/>
+                                        <field name="write_access" select="1"/>
+                                </tree>
+                        </field>
+                </record>
+
+
+        <!--                      EDI RESULT                       -->
+                <record id="view_edi_edi_result_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.result.form</field>
+                        <field name="model">edi.edi.result</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Edi edi Result">
+                                        <field name="name" />
+                                        <field name="date" />
+                                        <field name="value" colspan="4" />
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_result_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.result.tree</field>
+                        <field name="model">edi.edi.result</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Edi edi Result">
+                                        <field name="name" />
+                                        <field name="date" />
+                                        <field name="value" />
+                                </tree>
+                        </field>
+                </record>
+
+        <!--                      EDI LINE EDI                   -->
+                <record id="view_edi_edi_line_edi_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.line.edi.form</field>
+                        <field name="model">edi.edi.line.edi</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Edi line">
+                                        <field name="sequence" />
+                                        <field name="name" />
+                                        <newline/>
+                                        <field name="fields_ids" colspan="4" nolabel="1"/>
+                                        <field name="dict" />
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_line_edi_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.line.edi.tree</field>
+                        <field name="model">edi.edi.line.edi</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Edi line">
+                                        <field name="sequence" />
+                                        <field name="name" />
+                                        <field name="fields_ids" />
+                                </tree>
+                        </field>
+                </record>
+
+        <!--                      EDI LINE EDI FIELD                     -->
+                <record id="view_edi_edi_line_edi_field_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.line.edi.field.form</field>
+                        <field name="model">edi.edi.line.edi.field</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Edi field">
+                                        <field name="name" />
+                                        <field name="start" />
+                                        <field name="stop" />
+                                        <field name="length" />
+                                        <field name="align" />
+                                        <field name="type" />
+                                        <field name="cast" />
+                                        <field name="description" />
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_line_edi_field_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.line.edi.field.tree</field>
+                        <field name="model">edi.edi.line.edi.field</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Edi field" editable="top">
+                                        <field name="name" />
+                                        <field name="start" />
+                                        <field name="stop" />
+                                        <field name="length" />
+                                        <field name="align" />
+                                        <field name="type" />
+                                        <field name="cast" />
+                                        <field name="description" />
+                                </tree>
+                        </field>
+                </record>
+
+                <!--                      EDI LINE CSV FIELD                     -->
+                <record id="view_edi_edi_csv_field_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.csv.field.form</field>
+                        <field name="model">edi.edi.csv.field</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Edi field">
+                                        <field name="name" />
+                                        <field name="sequence" />
+                                        <field name="type" />
+                                        <field name="cast" />
+                                        <field name="description" />
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_csv_field_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.csv.field.tree</field>
+                        <field name="model">edi.edi.csv.field</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Edi field" editable="top">
+                                        <field name="name" />
+                                        <field name="sequence" />
+                                        <field name="type" />
+                                        <field name="cast" />
+                                        <field name="description" />
+                                </tree>
+                        </field>
+                </record>
+
+        <!--                      EDI LINE XML FIELD                     -->
+                <record id="view_edi_edi_xml_field_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.xml.field.form</field>
+                        <field name="model">edi.edi.xml.field</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Edi field">
+                                        <field name="name" />
+                                        <field name="parent" />
+                                        <field name="sequence" />
+                                        <field name="type" />
+                                        <field name="cast" />
+                                        <field name="description" />
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_xml_field_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.xml.field.tree</field>
+                        <field name="model">edi.edi.xml.field</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Edi field" editable="top">
+                                        <field name="name" />
+                                        <field name="parent" />
+                                        <field name="sequence" />
+                                        <field name="type" />
+                                        <field name="cast" />
+                                        <field name="description" />
+                                </tree>
+                        </field>
+                </record>
+
+        <!--                      EDI LINE CSV STRUCT                    -->
+                <record id="view_edi_edi_line_csv_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.line.csv.form</field>
+                        <field name="model">edi.edi.line.csv</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Csv line">
+                                        <field name="sequence" />
+                                        <field name="name" />
+                                        <newline/>
+                                        <field name="fields_ids" colspan="4" nolabel="1"/>
+                                        <field name="dict" />
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_line_csv_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.line.csv.tree</field>
+                        <field name="model">edi.edi.line.csv</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Csv line">
+                                        <field name="sequence" />
+                                        <field name="name" />
+                                        <field name="fields_ids" />
+                                </tree>
+                        </field>
+                </record>
+
+        <!--                      EDI LINE EDI FIELD                     -->
+                <record id="view_edi_edi_line_csv_field_form" model="ir.ui.view">
+                        <field name="name">view.edi.edi.line.csv.field.form</field>
+                        <field name="model">edi.edi.line.csv.field</field>
+                        <field name="type">form</field>
+                        <field name="arch" type="xml">
+                                <form string="Csv field">
+                                        <field name="name" />
+                                        <field name="sequence" />
+                                        <field name="type" />
+                                        <field name="cast" />
+                                        <field name="description" />
+                                </form>
+                        </field>
+                </record>
+                <record id="view_edi_edi_line_csv_field_tree" model="ir.ui.view">
+                        <field name="name">view.edi.edi.line.csv.field.tree</field>
+                        <field name="model">edi.edi.line.csv.field</field>
+                        <field name="type">tree</field>
+                        <field name="arch" type="xml">
+                                <tree string="Csv field" editable="top">
+                                        <field name="name" />
+                                        <field name="sequence" />
+                                        <field name="type" />
+                                        <field name="cast" />
+                                        <field name="description" />
+                                </tree>
+                        </field>
+                </record>
+        </data>
+</openerp>

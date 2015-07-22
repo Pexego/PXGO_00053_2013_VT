@@ -32,7 +32,8 @@ class AccountVoucherWizard(models.TransientModel):
     amount_advance = fields.Float('Amount advanced', required=True,
                                   digits_compute=
                                   dp.get_precision('Sale Price'))
-    date = fields.Date("Date", required=True, default=fields.Date.today())
+    date = fields.Date("Date", required=True,
+                       default=fields.Date.context_today)
 
     @api.constrains('amount_advance')
     def check_amount(self):

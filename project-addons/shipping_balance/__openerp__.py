@@ -33,6 +33,7 @@
               "partner_view.xml",
               "sale_order.xml",
               "product_view.xml",
+              "security/ir.model.access.csv"
              ],
     "installable": True
 }

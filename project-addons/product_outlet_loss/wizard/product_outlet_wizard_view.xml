@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+        <!--
+        <record id="product_outlet_wizard_form" model="ir.ui.view">
+            <field name="name">product.outlet.wizard.form</field>
+            <field name="model">product.outlet.wizard</field>
+            <field name="inherit_id" ref="product_outlet.product_outlet_wizard_form" />
+            <field name="arch" type="xml">
+                <field name="all_product" position="after">
+                    <group>
+                        <field name="price_unit" invisible="1" />
+                        <field name="qty_available" invisible="1"/>
+                    </group>
+                </field>
+                <field name="qty" position="after">
+                    <field name="price_outlet"/>
+                    <label for="date_move" string="Outlet on"/>
+                    <field name="date_move" nolabel="1"/>
+                </field>
+            </field>
+        </record>
+        -->
+        <record id="product_outlet_wizard_form" model="ir.ui.view">
+            <field name="name">product.outlet.wizard.form</field>
+            <field name="model">product.outlet.wizard</field>
+            <field name="inherit_id" ref="product_outlet.product_outlet_wizard_form"/>
+            <field name="arch" type="xml">
+                <field name="qty" position="attributes">
+                    <attribute name="attrs">{'readonly':[('state','!=','last')]}</attribute>
+                </field>
+                <field name='all_product' position="after">
+                        <group>
+                            <field name="percent" readonly="1"/>
+                            <field name="price_unit" invisible="1"/>
+                            <field name="qty_available" invisible="1"/>
+                        </group>
+
+                        <group>
+                            <field name="price_outlet"/>
+                            <field name="commercial_cost"/>
+                        </group>
+                        <group>
+                            <field name="list_price"/>
+                            <field name="list_price2"/>
+                            <field name="list_price3"/>
+                        </group>
+                        <group>
+                            <label for="date_move" string="Outlet on"/>
+                            <field name="date_move" nolabel="1"/>
+                        </group>
+
+                </field>
+            </field>
+        </record>
+
+        <!-- EL APUNTE SE HACE MANUAL
+
+        <record id="outlet_loss_account_wizard" model="ir.ui.view">
+            <field name="name">account.outlet.loss.wizard.form</field>
+            <field name="model">outlet.account.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+
+                <form string="Create account">
+
+                    <group>
+                        <group>
+                            <field name="ref"/>
+                        </group>
+                        <group>
+                            <field name="period_id"/>
+                            <field name="state_move"/>
+
+                        </group>
+                        <group>
+                            <field name="journal_id"/>
+                            <field name="date"/>
+                        </group>
+
+                    </group>
+
+                    <group >
+                        <group>
+                            <field name="line_id_name"/>
+                            <field name="line_id_move_id" />
+                        </group>
+
+                        <group>
+                            <field name="line_id_account_id" />
+                            <field name="line_id_debit" />
+
+                        </group>
+
+                    </group>
+
+                    <footer>
+                        <button string="Create" name="create_account1" type="object" icon="gtk-ok"
+                                />
+                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                    </footer>
+                </form>
+
+            </field>
+        </record>
+
+        <act_window
+        id="act_outlet_loss_to_account_wizard"
+        name="Create Account from Outlet Loss"
+        res_model="outlet.account.wizard"
+        src_model="outlet.loss"
+        view_id="outlet_loss_account_wizard"
+        view_mode="form"
+        target="new"/>
+
+        -->
+
+
+        <act_window
+        id="act_product_to_outlet_wizard"
+        name="Send to outlet"
+        res_model="product.outlet.wizard"
+        src_model="product.product"
+        view_id="product_outlet_wizard_form"
+        view_mode="form"
+        target="new"/>
+
+
+
+    </data>
+</openerp>
+

@@ -23,13 +23,14 @@
 
 from openerp import fields, models, api
 
+from openerp.exceptions import ValidationError
 
 class Partner(models.Model):
 
     _inherit = "res.partner"
+
     amount_shipping_balance = fields.Float("Shipping Balance", help = "Shipping Balance Amount", compute='_get_shipping_balance')
     shipping_balance_ids = fields.One2many ("shipping.balance","partner_id", string="Listado Saldos de Envíos")
-
 
     @api.one
     @api.depends('shipping_balance_ids', 'shipping_balance_ids.amount')
@@ -37,7 +38,16 @@ class Partner(models.Model):
         final_amount=0.00
         for d in self.shipping_balance_ids:
             final_amount += (d.amount or 0.00)*(d.aproved_ok or 0.00)
-        self.amount_shipping_balance=final_amount
+
+        if final_amount >= 0:
+            self.amount_shipping_balance = final_amount
+        else:
+            raise ValidationError("Shipping Balance amount must be > 0")
+
         return True
 
+    #@api.constrains('amount_shipping_balance')
+    #def _check_amount_shipping_balance(self):
 
+        #if self.amount_shipping_balance < 0:
+        #    raise ValidationError("Shipping Balance amount must be > 0")

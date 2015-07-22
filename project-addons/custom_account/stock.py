@@ -30,3 +30,9 @@ class StockMove(models.Model):
         res = super(StockMove, self)._get_invoice_line_vals(move, partner, inv_type)
         res['move_id'] = move.id
         return res
+
+#class stock_invoice_onshipping(models.Model):custom
+
+#    _inherit = 'stock.invoice.onshipping'
+#    attach_picking = fields.Boolean ('Attach Picking', default= lambda self:
+#         self.env['stock.picking'].browse(self.env.context.get('active_ids', False))[0].partner_id.attach_picking)

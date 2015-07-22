@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="0">
+
+            <record id="edi_edi_recadv" model="edi.edi">
+            <field name="name">Import return pickings</field>
+            <field name="code">RECADV</field>
+            <field name="type">csv_struct</field>
+            <field name="file_template" eval="'RECADV_*'" />
+            <field name="float_separator" eval="'.'" />
+            <field name="start_identifier" eval="0" />
+            <field name="skip_first" eval="1"/>
+            <field name="stop_identifier" eval="0" />
+            <field name="charset" eval="'ISO-8859-1'" />
+            <field name="delimiter">|</field>
+            <field name="eval_in" >
+pick_obj = self.pool.get('stock.picking')
+move_obj = self.pool.get('stock.move')
+partner_obj = self.pool.get('res.partner')
+product_obj = self.pool.get('product.product')
+uom_obj = self.pool.get('product.uom')
+vals = {}
+old_pick_id = False
+new_pick_id = False
+possible_move_ids = []
+visited_moves = []
+return_moves = []
+for line in data[filename]:
+        if line and line[0] == 'BGM':
+                vals = {}
+                vals['origin'] = line[1]['numdoc']
+        if line and line[0] == 'DTM':
+                vals['date'] = line[1]['date'] and datetime.strftime(datetime.strptime(line[1]['date'], "%Y%m%d"), '%Y-%m-%d %H:%M:%S') or time.strftime('%Y-%m-%d %H:%M:%S')
+                vals['min_date'] = line[1]['min_date'] and datetime.strftime(datetime.strptime(line[1]['min_date'], "%Y%m%d"), '%Y-%m-%d %H:%M:%S') or time.strftime('%Y-%m-%d %H:%M:%S')
+        if line and line[0] == 'RFF':
+                old_pick_id = pick_obj.search(cr, uid, [('name', '=', line[1]['ref'])])
+                if not old_pick_id:
+                        raise Exception("No se ha encontrado el albarán referenciado %s" % line[1]['ref'])
+                else:
+                        old_pick_id = old_pick_id[0]
+        if line and line[0] == 'NADMS':
+                partner_id = partner_obj.search(cr, uid, [('gln', '=', line[1]['emisor'])])
+                if not partner_id:
+                        raise Exception("El emisor con gln %s no se ha encontrado" % (line[1]['emisor']))
+                else:
+                        vals['partner_id'] = partner_id[0]
+        if line and line[0] == 'NADDP':
+                partner_id = partner_obj.search(cr, uid, [('gln', '=', line[1]['destino'])])
+                if not partner_id:
+                        raise Exception("El destinatario con gln %s no se ha encontrado" % (line[1]['destino']))
+                else:
+                        vals['partner_id'] = partner_id[0]
+        if line and 'LIN' in line[0]:
+                if line[0] == 'LIN':
+                        possible_move_ids = move_obj.search(cr, uid, [('picking_id', '=', old_pick_id),('product_id.ean13', '=', line[1]['ean13'][:13]),('id', 'not in', visited_moves)])
+                        if not possible_move_ids:
+                                raise Exception("No se ha encontrado el producto con ean13 %s en el albaran con id %s" % (line[1]['ean13'][:13], old_pick_id))
+                elif line[0] == 'QTYLIN' and possible_move_ids:
+                        move = False
+                        for pos_move in move_obj.browse(cr, uid, possible_move_ids):
+                                if pos_move.product_uom_qty == float(line[1]['enviadas']):
+                                        visited_moves.append(pos_move.id)
+                                        move = pos_move
+                                        break
+                        if move.product_uom_qty != float(line[1]['aceptadas']):
+                                return_moves.append((move, move.product_uom_qty - float(line[1]['aceptadas'])))
+
+if return_moves:
+        return_wzd = self.pool.get('stock.return.picking').create(cr, uid, {'invoice_state': '2binvoiced'})
+        for move_data in return_moves:
+                self.pool.get('stock.return.picking.line').create(cr, uid, {'product_id': move_data[0].product_id.id,
+                                                                            'quantity': move_data[1],
+                                                                            'wizard_id': return_wzd,
+                                                                            'move_id': move_data[0].id})
+        return_view = self.pool.get('stock.return.picking').create_returns(cr, uid, [return_wzd], {'active_ids': [old_pick_id], 'active_id': old_pick_id})
+        new_pick_id = eval(return_view['domain'])[0][2]
+        pick_obj.write(cr, uid, new_pick_id, vals)
+                </field>
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_1" model="edi.edi.line.csv">
+            <field name="name">BGM</field>
+            <field name="sequence" eval="1" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_2" model="edi.edi.line.csv">
+            <field name="name">DTM</field>
+            <field name="sequence" eval="2" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_3" model="edi.edi.line.csv">
+            <field name="name">FTX</field>
+            <field name="sequence" eval="3" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_4" model="edi.edi.line.csv">
+            <field name="name">RFF</field>
+            <field name="sequence" eval="4" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_5" model="edi.edi.line.csv">
+            <field name="name">NADMS</field>
+            <field name="sequence" eval="5" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_6" model="edi.edi.line.csv">
+            <field name="name">NADMR</field>
+            <field name="sequence" eval="8" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_7" model="edi.edi.line.csv">
+            <field name="name">NADBY</field>
+            <field name="sequence" eval="6" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_8" model="edi.edi.line.csv">
+            <field name="name">NADSU</field>
+            <field name="sequence" eval="7" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_9" model="edi.edi.line.csv">
+            <field name="name">NADDP</field>
+            <field name="sequence" eval="9" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_10" model="edi.edi.line.csv">
+            <field name="name">NADSH</field>
+            <field name="sequence" eval="10" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_11" model="edi.edi.line.csv">
+            <field name="name">NADIV</field>
+            <field name="sequence" eval="11" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_12" model="edi.edi.line.csv">
+            <field name="name">TDT</field>
+            <field name="sequence" eval="12" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_13" model="edi.edi.line.csv">
+            <field name="name">CPS</field>
+            <field name="sequence" eval="13" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_14" model="edi.edi.line.csv">
+            <field name="name">LIN</field>
+            <field name="sequence" eval="14" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_15" model="edi.edi.line.csv">
+            <field name="name">PIALIN</field>
+            <field name="sequence" eval="15" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_16" model="edi.edi.line.csv">
+            <field name="name">QTYLIN</field>
+            <field name="sequence" eval="16" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_17" model="edi.edi.line.csv">
+            <field name="name">QVRLIN</field>
+            <field name="sequence" eval="17" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_18" model="edi.edi.line.csv">
+            <field name="name">CNTRES</field>
+            <field name="sequence" eval="18" />
+            <field name="edi" ref="edi_edi_recadv" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_1_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_recadv_line_1" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_1_field_2" model="edi.edi.line.csv.field">
+            <field name="name">numdoc</field>
+            <field name="line" ref="edi_edi_recadv_line_1" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Número de documento asignado por el emisor del documento'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_2_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_recadv_line_2" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_2_field_2" model="edi.edi.line.csv.field">
+            <field name="name">date</field>
+            <field name="line" ref="edi_edi_recadv_line_2" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Fecha de creación del documento'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_2_field_3" model="edi.edi.line.csv.field">
+            <field name="name">min_date</field>
+            <field name="line" ref="edi_edi_recadv_line_2" />
+            <field name="sequence" eval="3" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Fecha de recepción de la mercancía'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_4_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_recadv_line_4" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_4_field_2" model="edi.edi.line.csv.field">
+            <field name="name">calificator</field>
+            <field name="line" ref="edi_edi_recadv_line_4" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Calificador de tipo de documento'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_4_field_3" model="edi.edi.line.csv.field">
+            <field name="name">ref</field>
+            <field name="line" ref="edi_edi_recadv_line_4" />
+            <field name="sequence" eval="3" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Número del documento referenciado'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_5_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_recadv_line_5" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_5_field_2" model="edi.edi.line.csv.field">
+            <field name="name">emisor</field>
+            <field name="line" ref="edi_edi_recadv_line_5" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Código EDI del emisor del mensaje (GLN, EAN-13)'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_9_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_recadv_line_9" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_9_field_2" model="edi.edi.line.csv.field">
+            <field name="name">destino</field>
+            <field name="line" ref="edi_edi_recadv_line_9" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Código EDI del punto de entrega (GLN, EAN-13)'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_9_field_3" model="edi.edi.line.csv.field">
+            <field name="name">departamento</field>
+            <field name="line" ref="edi_edi_recadv_line_9" />
+            <field name="sequence" eval="3" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Código interno del departamento o sección al que corresponde la mercancía'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_14_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_recadv_line_14" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_14_field_2" model="edi.edi.line.csv.field">
+            <field name="name">ean13</field>
+            <field name="line" ref="edi_edi_recadv_line_14" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Código normalizado del artículo'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_14_field_3" model="edi.edi.line.csv.field">
+            <field name="name">tipo</field>
+            <field name="line" ref="edi_edi_recadv_line_14" />
+            <field name="sequence" eval="3" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Tipo de codificación utilizada'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_14_field_4" model="edi.edi.line.csv.field">
+            <field name="name">linea</field>
+            <field name="line" ref="edi_edi_recadv_line_14" />
+            <field name="sequence" eval="4" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Número correlativo de línea de detalle. Al traducir de plano a EDI, en caso de no especificarse, la aplicación lo asigna por defecto.'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_16_field_1" model="edi.edi.line.csv.field">
+            <field name="name">lineId</field>
+            <field name="line" ref="edi_edi_recadv_line_16" />
+            <field name="sequence" eval="1" />
+            <field name="type" eval="'char'" />
+            <field name="description" eval="'Identificador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_16_field_2" model="edi.edi.line.csv.field">
+            <field name="name">aceptadas</field>
+            <field name="line" ref="edi_edi_recadv_line_16" />
+            <field name="sequence" eval="2" />
+            <field name="type" eval="'float'" />
+            <field name="description" eval="'Unidades recibidas y aceptadas'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_16_field_3" model="edi.edi.line.csv.field">
+            <field name="name">pedidas</field>
+            <field name="line" ref="edi_edi_recadv_line_16" />
+            <field name="sequence" eval="3" />
+            <field name="type" eval="'float'" />
+            <field name="description" eval="'Unidades pedidas por el comprador'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_16_field_4" model="edi.edi.line.csv.field">
+            <field name="name">enviadas</field>
+            <field name="line" ref="edi_edi_recadv_line_16" />
+            <field name="sequence" eval="4" />
+            <field name="type" eval="'float'" />
+            <field name="description" eval="'Unidades enviadas por el proveedor'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_16_field_5" model="edi.edi.line.csv.field">
+            <field name="name">unidades</field>
+            <field name="line" ref="edi_edi_recadv_line_16" />
+            <field name="sequence" eval="5" />
+            <field name="type" eval="'float'" />
+            <field name="description" eval="'Unidades enviadas por el proveedor'" />
+        </record>
+
+        <record forcecreate="True" id="edi_edi_recadv_line_16_field_6" model="edi.edi.line.csv.field">
+            <field name="name">entregada</field>
+            <field name="line" ref="edi_edi_recadv_line_16" />
+            <field name="sequence" eval="6" />
+            <field name="type" eval="'float'" />
+            <field name="description" eval="'Unidades enviadas por el proveedor'" />
+        </record>
+
+    </data>
+</openerp>
