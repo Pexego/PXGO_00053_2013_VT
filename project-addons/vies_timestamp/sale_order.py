@@ -21,6 +21,7 @@
 
 from openerp.osv import fields, osv
 from openerp.tools.translate import _
+from openerp import tools
 import time
 from urllib import getproxies
 
@@ -59,7 +60,26 @@ class sale_order(osv.osv):
             check = bool(res["valid"])
             if check :
                 vals = {'vies_validation_check': check, 'vies_validation_timestamp': date_now}
+                from reportlab.pdfgen import canvas
+                sale = self.browse(cr, uid, ids)
+                name = '%s.pdf' % sale.name.replace(" ","").replace("\\","").replace("/","").replace("-","_")
+                c = canvas.Canvas(name)
+                height= 700
+                for key in dict(res):
+                    c.drawString(100, height, key + u": " + tools.ustr(res[key]).replace('\n',' '))
+                    height = height - 25
+                c.showPage()
+                c.save()
+                a = open(name, "rb").read().encode("base64")
                 self.write(cr, uid, ids, vals)
+                attach_vals = {
+                    'name': name,
+                    'datas_fname': name,
+                    'datas': a,
+                    'res_id': sale.id,
+                    'res_model': 'sale.order',
+                }
+                self.pool.get('ir.attachment').create(cr, uid, attach_vals)
         return True
 
     def action_button_confirm(self, cr, uid, ids, context=None):

@@ -41,7 +41,7 @@ class ResPartner(osv.osv):
         root_company_id = root_company_dict['company_id'][0]
         company_dict = self.pool.get('res.company').read(cr, uid,root_company_id,['block_customer_days'])
         formatted_date = datetime.strptime(time.strftime('%Y-%m-%d'), "%Y-%m-%d")
-        limit_customer_date = datetime.strftime(formatted_date + timedelta(days=int(company_dict['block_customer_days'])),"%Y-%m-%d")
+        limit_customer_date = datetime.strftime(formatted_date + timedelta(days=-int(company_dict['block_customer_days'])),"%Y-%m-%d")
 
         #Buscamos efectos no conciliados, con fecha anterior a la fecha limite, de tipo 'receivable'
         cust_account_ids = account_facade.search(cr, uid, [('company_id','=',root_company_id),('type','=','receivable'),('code','like','430%')])
@@ -71,7 +71,7 @@ class ResPartner(osv.osv):
                                            "%Y-%m-%d")
         limit_customer_date = datetime.\
             strftime(formatted_date + timedelta(days=\
-                int(user.company_id.block_customer_days)),"%Y-%m-%d")
+                -int(user.company_id.block_customer_days)),"%Y-%m-%d")
         for partner in self.browse(cr, uid, ids, context=context):
             cust_account_ids = account_facade.search(cr, uid,
                                                      [('company_id', '=',
