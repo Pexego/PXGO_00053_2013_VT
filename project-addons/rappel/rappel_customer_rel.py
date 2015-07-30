@@ -101,6 +101,7 @@ class ResPartnerRappelRel(models.Model):
             rappel_info = {'rappel_id': rappel.rappel_id.id,
                            'partner_id': rappel.partner_id.id,
                            'date_start': period[0],
+                           'amount' :0.0,
                            'date_end': period[1]}
             total_rappel = 0.0
             if rappel.rappel_id.calc_mode == 'fixed':

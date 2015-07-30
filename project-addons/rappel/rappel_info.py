@@ -19,7 +19,32 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, _, api
+from datetime import datetime
+from dateutil import relativedelta
+from openerp import exceptions
+
+
+class RappelAdvices(models.Model):
+
+    _name="rappel.advice.email"
+
+    ADVICE_TIMING = [('fixed', 'Days to finish'), ('variable', '% Periodo')]
+
+    rappel_id = fields.Many2one("rappel", "Rappel", required=True)
+    advice_timing = fields.Selection(ADVICE_TIMING, "Fixed/Variable", required = True,
+         help="fixed: days to finish, % days" )
+    timing = fields.Integer("Value", required = True)
+
+    @api.one
+    @api.constrains('advice_timing', 'timing')
+    def check_timing(self):
+        if self.advice_timing == 'variable':
+            if self.timing <=0 or self.timing >=100:
+                raise exceptions.\
+                    ValidationError (_("Timing must be between 0 and 100 %"))
+
+
 
 
 class RappelCurrentInfo(models.Model):
@@ -34,7 +59,7 @@ class RappelCurrentInfo(models.Model):
     partner_id = fields.Many2one("res.partner", "Customer", required=True)
     date_start = fields.Date("Start date", required=True)
     date_end = fields.Date("End date", required=True)
-    amount = fields.Float("Current Amount", required=True)
+    amount = fields.Float("Current Amount", default = 0)
     qty_type = fields.Selection(QTY_TYPE, 'Quantity type', readonly=True,
                                 related="rappel_id.qty_type")
     calc_mode = fields.Selection(CALC_MODE, 'Fixed/Variable', readonly=True,
@@ -46,3 +71,87 @@ class RappelCurrentInfo(models.Model):
     section_id = fields.Many2one("rappel.section", "Section")
     section_goal = fields.Float("Section goal", readonly=True,
                                 related="section_id.rappel_until")
+
+
+    @api.model
+    def send_rappel_info_mail(self):
+
+        rappel_inic=self.env["rappel"]
+        rappel_inic.compute_rappel()
+
+        mail_pool = self.env['mail.mail']
+        mail_ids = self.env['mail.mail']
+        partner_pool = self.env['res.partner'].search([('rappel_ids','!=', '')])
+
+        for partner in partner_pool:
+            partner_list=[]
+            partner_list.append(partner.id)
+            pool_partners = self.search([('partner_id','=',partner.id)])
+            test=False
+            send=test
+            if pool_partners:
+
+                values={}
+                for rappel in pool_partners:
+
+                    date_end = datetime.strptime(str(rappel.date_end), '%Y-%m-%d')
+                    date_start = datetime.strptime(str(rappel.date_start), '%Y-%m-%d')
+                    today = datetime.strptime(str(fields.Date.today()), '%Y-%m-%d')
+
+                    for rappel_timing in rappel.rappel_id.advice_timing_ids:
+
+                        if rappel_timing.advice_timing == 'fixed':
+
+                            timing = relativedelta.relativedelta(date_end, today)
+                            if timing.days == rappel_timing.timing:
+                                send = True
+
+                        if rappel_timing.advice_timing == 'variable':
+
+                            timing = relativedelta.relativedelta(date_end, date_start)*rappel_timing.timing/100
+                            timing2= relativedelta.relativedelta(today, date_start)
+
+                            if timing.days == timing2.days:
+                                send = True
+
+                        if send == True:
+                            if values.get(partner.id):
+                                values[partner.id].append ({
+                                    'concepto' : rappel.rappel_id.name,
+                                    'date_start' : date_start.strftime('%d/%m/%Y'),
+                                    'date_end':date_end.strftime('%d/%m/%Y'),
+                                    'advice_timing' : rappel_timing.advice_timing,
+                                    'timing' : rappel_timing.timing,
+                                    'amount' : rappel.amount,
+                                    'section_goal': rappel.section_goal
+                                })
+                            else:
+                                values[partner.id]= [{
+                                    'concepto' : rappel.rappel_id.name,
+                                    'date_start' : date_start.strftime('%d/%m/%Y'),
+                                    'date_end':date_end.strftime('%d/%m/%Y'),
+                                    'advice_timing' : rappel_timing.advice_timing,
+                                    'timing' : rappel_timing.timing,
+                                    'amount' : rappel.amount,
+                                    'section_goal': rappel.section_goal
+                                }]
+                            send = False
+
+                if values.get(partner.id):
+                    template = self.env.ref('rappel.rappel_mail_advice')
+                    ctx = dict(self._context)
+                    ctx.update({
+                        'partner_email': partner.email,
+                        'partner_id': partner.id,
+                        'partner_name': partner.name,
+                        'mail_from': self.env.user.company_id.email,
+                        'values' : values[partner.id]
+                    })
+
+                    mail_id = template.with_context(ctx).send_mail(rappel.partner_id.id)
+                    mail_ids += mail_pool.browse(mail_id)
+                    send_ = False
+                    if test:
+                        import ipdb; ipdb.set_trace()
+                    if mail_ids:
+                        mail_ids.send()

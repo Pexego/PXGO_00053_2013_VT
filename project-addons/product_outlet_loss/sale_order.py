@@ -60,7 +60,6 @@ class SaleOrder(models.Model):
     def action_cancel(self):
 
         res = super(SaleOrder, self).action_cancel()
-
         if self:
             for line in self.order_line:
                 if line.product_id.is_outlet:

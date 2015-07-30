@@ -74,6 +74,14 @@
                                     </tree>
                                 </field>
                             </page>
+                            <page string="Email Advice Timing">
+                                <field name="advice_timing_ids" nolabel="1">
+                                    <tree editable="top">
+                                        <field name="advice_timing"/>
+                                        <field name="timing"/>
+                                    </tree>
+                                </field>
+                            </page>
                         </notebook>
                     </sheet>
                 </form>

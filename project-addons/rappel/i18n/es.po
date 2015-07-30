@@ -389,7 +389,7 @@ msgstr "Rappels calculados"
 #: field:rappel.type,product_id:0
 msgid "Rappel product"
 msgstr "Producto rappel"
-#. module: rappel
+#: module: rappel
 #: model:ir.model,name:rappel.model_rappel_section
 msgid "Rappel section model"
 msgstr "Tramo rappel"

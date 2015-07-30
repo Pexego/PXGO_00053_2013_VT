@@ -105,8 +105,7 @@ class product_outlet_wizard(models.TransientModel):
                 create_loss=True
 
         outlet_product = self.env['product.product'].search(
-                [('normal_product_id', '=', self.product_id.id),
-                 ('categ_id', '=', int(self.categ_id))])
+            [('normal_product_id', '=', self.product_id.id),('categ_id', '=', int(self.categ_id))])
 
 
         if create_loss:

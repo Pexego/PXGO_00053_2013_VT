@@ -29,20 +29,17 @@ class product_devaluation_account_wizard(models.TransientModel):
     _name = 'product.devaluation.account.wizard'
 
     name = fields.Char('Account Ref', readonly=True, default=lambda self:
-    self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].product_id.name,
-                       )
+    self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].product_id.name)
     account_move_id = fields.Integer("Account ID")
     period_id = fields.Many2one('account.period', 'Period', default=lambda self:
-    self.env['account.period'].find(time())[0].id)
+        self.env['account.period'].find(time())[0].id)
     journal_id = fields.Many2one('account.journal', 'Journal', default=lambda self:
-    self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].product_id.categ_id.devaluation_journal_id or self.env.user.company_id.devaluation_journal_id,
-                                 required=True)
-    # line_ids = fields.One2many('account.move.line','move_id')
+        self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].
+        product_id.categ_id.devaluation_journal_id or self.env.user.company_id.devaluation_journal_id, required=True)
     date = fields.Date("Date", required=True, default=fields.Date.today)
 
     @api.multi
     def create_dev_account(self):
-        #import ipdb
 
         product_devaluation = self.env['product.devaluation']
         context_pool = self.env.context.get('active_ids', False)
@@ -126,5 +123,4 @@ class product_devaluation_account_wizard(models.TransientModel):
                 'view_id': 'account.view_move_form',
                 'res_id': account_move_id,
                 'views': [(False, 'form')],
-
                 }

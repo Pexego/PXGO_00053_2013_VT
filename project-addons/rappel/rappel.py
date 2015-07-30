@@ -44,6 +44,8 @@ class rappel(models.Model):
                                    required=True)
     customer_ids = fields.One2many("res.partner.rappel.rel", "rappel_id",
                                    "Customers")
+    advice_timing_ids=fields.One2many("rappel.advice.email", "rappel_id", "Email Timing Advice")
+
 
     @api.constrains('global_application', 'product_id', 'product_categ_id')
     def _check_application(self):
