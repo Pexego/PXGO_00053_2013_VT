@@ -57,7 +57,7 @@ class product_devaluation(models.Model):
     total_dev = fields.Float ("Total Devaluation", compute = _get_total_dev)
     date_dev = fields.Date('Devaluated on', default = fields.datetime.now())
     period_id = fields.Many2one('account.period', 'Period', default=lambda self:
-    self.env['account.period'].find(time())[0], required=True)
+        self.env['account.period'].find(time())[0], required=True)
     accounted_ok = fields.Boolean("Accounted", default=False)
 
 

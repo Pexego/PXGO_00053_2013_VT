@@ -39,6 +39,7 @@ Rappel Management
              'res_partner_view.xml',
              'rappel_info_view.xml',
              'rappel_menus.xml',
+             'rappel_mail_advice_data.xml',
              'data/ir.cron.xml',
              'wizard/compute_rappel_invoice_view.xml',
              'security/ir.model.access.csv'],

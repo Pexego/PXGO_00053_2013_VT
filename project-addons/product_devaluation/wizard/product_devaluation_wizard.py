@@ -60,9 +60,7 @@ class product_devaluation_wizard(models.TransientModel):
                 'date_dev': self.date_dev,
         }
         self.env['product.devaluation'].create(values)
-        #import ipdb; ipdb.set_trace()
-
         values = {
                 'standard_price' : self.price_after,
-        }
+                }
         self.env['product.product'].search([('id','=',self.product_id.id)]).write(values)
