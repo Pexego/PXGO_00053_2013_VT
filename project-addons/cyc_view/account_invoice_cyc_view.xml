@@ -31,7 +31,7 @@
                    <field name="invoice_month"/>
                    <field name="country_id"/>
                    <field name="invoice_state"/>
-                   <filter string="This Year" name="thisyear" domain="[('invoice_year','=', time.strftime('%%Y'))" help="Sale invoices in current year"/>
+                   <filter string="This Year" name="thisyear" domain="[('invoice_year','=', time.strftime('%%Y'))]" help="Sale invoices in current year"/>
                    <filter string="This Month" name="thismonth" domain="[('invoice_year','=', time.strftime('%%Y')),('invoice_month','=',time.strftime('%%m'))]" help="Sale invoices in current month"/>
                    <filter name="country" string="Country" context="{'group_by': 'country_id'}"/>
                    <filter name="year" string="Year" context="{'group_by': 'invoice_year'}"/>
