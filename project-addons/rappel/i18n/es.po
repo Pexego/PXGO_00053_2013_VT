@@ -169,6 +169,21 @@ msgid "Date start"
 msgstr "Fecha inicio"
 
 #. module: rappel
+#: selection:rappel.advice.email,advice_timing:0
+msgid "Days to finish"
+msgstr "Días para terminar"
+
+#. module: rappel
+#: view:rappel:rappel.rappel_form
+msgid "Email Advice Timing"
+msgstr "Avisos por email"
+
+#. module: rappel
+#: field:rappel,advice_timing_ids:0
+msgid "Email Timing Advice"
+msgstr "Avisos por email"
+
+#. module: rappel
 #: field:rappel.current.info,date_end:0
 #: field:res.partner.rappel.rel,date_end:0
 msgid "End date"
@@ -389,7 +404,8 @@ msgstr "Rappels calculados"
 #: field:rappel.type,product_id:0
 msgid "Rappel product"
 msgstr "Producto rappel"
-#: module: rappel
+
+#. module: rappel
 #: model:ir.model,name:rappel.model_rappel_section
 msgid "Rappel section model"
 msgstr "Tramo rappel"
@@ -455,6 +471,12 @@ msgid "The rappel %s of %s with period %s - %s is already invoiced"
 msgstr "El rappel %s de %s perteneciente al periodo %s - %s ya está facturado"
 
 #. module: rappel
+#: code:addons/rappel/rappel_info.py:45
+#, python-format
+msgid "Timing must be between 0 and 100 %"
+msgstr "El periodo de aviso debe estar entre el 0 y el 100 %"
+
+#. module: rappel
 #: view:rappel:rappel.view_rappel_filter
 #: field:rappel,type_id:0
 msgid "Type"
@@ -475,6 +497,11 @@ msgstr "Valor"
 #: selection:rappel,calc_mode:0
 msgid "Variable"
 msgstr "Variable"
+
+#. module: rappel
+#: help:rappel.advice.email,advice_timing:0
+msgid "fixed: days to finish, % days"
+msgstr "fijo: días para terminar, % días"
 
 #. module: rappel
 #: view:rappel.invoice.wzd:rappel.view_rappel_invoice

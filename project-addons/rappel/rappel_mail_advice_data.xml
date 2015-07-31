@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <openerp>
-    <data noupdate="0">
+    <data noupdate="1">
 
 
 
@@ -13,7 +13,6 @@
             <field name="subject">Aviso de Rappel</field>
             <!--<field name="model_id" ref="rappel.model_rappel_current_info"/>-->
             <field name="model_id" ref="base.model_res_partner"/>
-            <field name="email_to" >${(ctx.get('partner_email') or '')}</field>
             <field name="partner_to">${ctx.get('partner_id') or ''}</field>
 
             <field name="auto_delete" eval="False"/>
@@ -43,18 +42,21 @@
                             <em>${line.concepto}:</em>
 
                             % if line.advice_timing == 'fixed':
-                                A falta de ${line.timing} días para el ${line.date_end}.
+                                <p>A falta de ${line.timing} días para el ${line.date_end}.</p>
                             % endif
 
                             % if line.advice_timing == 'variable':
-                                En el ${line.timing} % del período ${line.date_start} - ${line.date_end}.
+                                <p>En el ${line.timing} % del período ${line.date_start} - ${line.date_end}.</p>
                             % endif
 
-                            %if line.amount:
-                                Cantidad: ${line.amount}
+                            %if line.curr_qty:
+                                <p>Cantidad: ${line.curr_qty}</p>
                             %endif
-                            %if line.section_goal:
-                            Siguiente Objetivo: ${line.section_goal}
+                            %if line.section_id:
+                                <p>Siguiente Objetivo: ${line.section_goal}</p>
+                            %endif
+                            %if line.amount:
+                                <p>Liquidación actual: ${line.amount}</p>
                             %endif
                             </p>
 

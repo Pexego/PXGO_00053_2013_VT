@@ -75,10 +75,6 @@ class RappelCurrentInfo(models.Model):
 
     @api.model
     def send_rappel_info_mail(self):
-
-        rappel_inic=self.env["rappel"]
-        rappel_inic.compute_rappel()
-
         mail_pool = self.env['mail.mail']
         mail_ids = self.env['mail.mail']
         partner_pool = self.env['res.partner'].search([('rappel_ids','!=', '')])
@@ -114,7 +110,7 @@ class RappelCurrentInfo(models.Model):
                             if timing.days == timing2.days:
                                 send = True
 
-                        if send == True:
+                        if send == True and rappel.curr_qty:
                             if values.get(partner.id):
                                 values[partner.id].append ({
                                     'concepto' : rappel.rappel_id.name,
@@ -122,8 +118,10 @@ class RappelCurrentInfo(models.Model):
                                     'date_end':date_end.strftime('%d/%m/%Y'),
                                     'advice_timing' : rappel_timing.advice_timing,
                                     'timing' : rappel_timing.timing,
-                                    'amount' : rappel.amount,
-                                    'section_goal': rappel.section_goal
+                                    'curr_qty' : rappel.curr_qty,
+                                    'section_goal': rappel.section_goal,
+                                    'section_id': rappel.section_id,
+                                    'amount': rappel.amount
                                 })
                             else:
                                 values[partner.id]= [{
@@ -132,10 +130,12 @@ class RappelCurrentInfo(models.Model):
                                     'date_end':date_end.strftime('%d/%m/%Y'),
                                     'advice_timing' : rappel_timing.advice_timing,
                                     'timing' : rappel_timing.timing,
-                                    'amount' : rappel.amount,
-                                    'section_goal': rappel.section_goal
+                                    'curr_qty' : rappel.curr_qty,
+                                    'section_goal': rappel.section_goal,
+                                    'section_id': rappel.section_id,
+                                    'amount': rappel.amount
                                 }]
-                            send = False
+                        send = False
 
                 if values.get(partner.id):
                     template = self.env.ref('rappel.rappel_mail_advice')

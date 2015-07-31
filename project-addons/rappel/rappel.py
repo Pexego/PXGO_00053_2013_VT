@@ -87,6 +87,7 @@ class rappel(models.Model):
                         _get_invoices(period, products)
                     customer.compute(period, invoice_lines, refund_lines,
                                      tmp_model=True)
+        self.env["rappel.current.info"].send_rappel_info_mail()
 
 
 class rappel_section(models.Model):
