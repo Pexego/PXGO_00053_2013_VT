@@ -20,7 +20,6 @@
 ##############################################################################
 
 from openerp import fields, models, api
-from openerp.exceptions import ValidationError
 
 
 class res_partner(models.Model):

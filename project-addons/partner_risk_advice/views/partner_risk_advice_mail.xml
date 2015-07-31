@@ -34,9 +34,7 @@
                         </p>
                         <br>
                         Fecha de vencimiento ${ctx['date']}. Referencia de Operación: ${ctx['name']}. Importe: ${ctx['amount']} €
-
                         </div>
-
                         <div>
                         <p>
                         </div>

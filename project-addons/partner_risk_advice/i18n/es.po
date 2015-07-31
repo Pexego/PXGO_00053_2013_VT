@@ -1,0 +1,249 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* partner_risk_advice
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-31 13:41+0000\n"
+"PO-Revision-Date: 2015-07-31 13:41+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: partner_risk_advice
+#: model:email.template,body_html:partner_risk_advice.partner_risk_advice_mail_global_ok
+msgid "\n"
+"\n"
+"                <html>\n"
+"                    <head>\n"
+"                        <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />\n"
+"                        <title>Rappels ${ctx['partner_name']}</title>\n"
+"                        <style>\n"
+"                            span.oe_mail_footer_access {\n"
+"                                display:block;\n"
+"                                text-align:center;\n"
+"                                color:grey;\n"
+"                            }\n"
+"                        </style>\n"
+"                    </head>\n"
+"\n"
+"                    <body>\n"
+"                        <div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"                        <p>Hola ${ctx['partner_name']}.</p><br>\n"
+"                        <div>\n"
+"                        <p>\n"
+"                            Le informamos que ha sobrepasado el limite de crédito concedido.\n"
+"                        </p>\n"
+"                        <br>\n"
+"                        Fecha de vencimiento ${ctx['date']}. Referencia de Operación: ${ctx['name']}. Importe: ${ctx['amount']} €\n"
+"\n"
+"                        </div>\n"
+"\n"
+"                        <div>\n"
+"                        <p>\n"
+"                        </div>\n"
+"                        <br>\n"
+"                        <p>Si tiene cualquier pregunta, no dude en contactarnos.</p>\n"
+"                        <p>Un cordial saludo</p>\n"
+"                        <br>\n"
+"                        <br>\n"
+"                        <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"                            <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"                                <strong style=\"text-transform:uppercase;\">${object.company_id.name}</strong></h3>\n"
+"                        </div>\n"
+"                        <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"                            <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"                            % if object.company_id.street:\n"
+"                                ${object.company_id.street}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.street2:\n"
+"                                ${object.company_id.street2}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.city or object.company_id.zip:\n"
+"                                ${object.company_id.zip} ${object.company_id.city}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.country_id:\n"
+"                                ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br>\n"
+"                            % endif\n"
+"                            </span>\n"
+"                            % if object.company_id.phone:\n"
+"                                <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                                    Teléfono:&nbsp; ${object.company_id.phone}\n"
+"                                </div>\n"
+"                            % endif\n"
+"                            % if object.company_id.website:\n"
+"                                <div>\n"
+"                                    Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"                                </div>\n"
+"                            %endif\n"
+"                            <p></p>\n"
+"                        </div>\n"
+"                        </div>\n"
+"                    </body>\n"
+"                </html>\n"
+"                \n"
+"                "
+msgstr "\n"
+"\n"
+"                <html>\n"
+"                    <head>\n"
+"                        <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\" />\n"
+"                        <title>Rappels ${ctx['partner_name']}</title>\n"
+"                        <style>\n"
+"                            span.oe_mail_footer_access {\n"
+"                                display:block;\n"
+"                                text-align:center;\n"
+"                                color:grey;\n"
+"                            }\n"
+"                        </style>\n"
+"                    </head>\n"
+"\n"
+"                    <body>\n"
+"                        <div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"                        <p>Hola ${ctx['partner_name']}.</p><br>\n"
+"                        <div>\n"
+"                        <p>\n"
+"                            Le informamos que ha sobrepasado el limite de crédito concedido.\n"
+"                        </p>\n"
+"                        <br>\n"
+"                        Fecha de vencimiento ${ctx['date']}. Referencia de Operación: ${ctx['name']}. Importe: ${ctx['amount']} €\n"
+"\n"
+"                        </div>\n"
+"\n"
+"                        <div>\n"
+"                        <p>\n"
+"                        </div>\n"
+"                        <br>\n"
+"                        <p>Si tiene cualquier pregunta, no dude en contactarnos.</p>\n"
+"                        <p>Un cordial saludo</p>\n"
+"                        <br>\n"
+"                        <br>\n"
+"                        <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"                            <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"                                <strong style=\"text-transform:uppercase;\">${object.company_id.name}</strong></h3>\n"
+"                        </div>\n"
+"                        <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"                            <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"                            % if object.company_id.street:\n"
+"                                ${object.company_id.street}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.street2:\n"
+"                                ${object.company_id.street2}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.city or object.company_id.zip:\n"
+"                                ${object.company_id.zip} ${object.company_id.city}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.country_id:\n"
+"                                ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br>\n"
+"                            % endif\n"
+"                            </span>\n"
+"                            % if object.company_id.phone:\n"
+"                                <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                                    Teléfono:&nbsp; ${object.company_id.phone}\n"
+"                                </div>\n"
+"                            % endif\n"
+"                            % if object.company_id.website:\n"
+"                                <div>\n"
+"                                    Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"                                </div>\n"
+"                            %endif\n"
+"                            <p></p>\n"
+"                        </div>\n"
+"                        </div>\n"
+"                    </body>\n"
+"                </html>\n"
+"                \n"
+"                "
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,partner_id:0
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,days_after:0
+msgid "Days from last invoice"
+msgstr "Días desde Vencimiento"
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,global_ok:0
+msgid "Global"
+msgstr "Global"
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: partner_risk_advice
+#: model:ir.model,name:partner_risk_advice.model_res_partner
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: partner_risk_advice
+#: model:email.template,subject:partner_risk_advice.partner_risk_advice_mail_global_ok
+#: view:partner.risk.advice:partner_risk_advice.view_risk_advice_tree
+#: view:res.partner:partner_risk_advice.view_partner_form_risk_advice
+msgid "Risk Advice"
+msgstr "Notificación de Rotura de Riesgo"
+
+#. module: partner_risk_advice
+#: model:ir.actions.act_window,name:partner_risk_advice.action_view_risk_advice_tree
+msgid "Risk Advice Conf"
+msgstr "Configuración de Notificaciones de riesgo"
+
+#. module: partner_risk_advice
+#: model:ir.ui.menu,name:partner_risk_advice.menu_risk_advice_tree
+msgid "Risk Advices"
+msgstr "Notificaciones de Rotura de Riesgo"
+
+#. module: partner_risk_advice
+#: field:res.partner,risk_advice_ids:0
+msgid "Risk advice ids"
+msgstr "Notificaciones de Riesgo"
+
+#. module: partner_risk_advice
+#: view:partner.risk.advice:partner_risk_advice.view_risk_advice_filter
+msgid "Search Risk Advice"
+msgstr "Busqueda de Notificaciones de Riesgo"
+
+#. module: partner_risk_advice
+#: field:partner.risk.advice,template_id:0
+msgid "Template"
+msgstr "Plantilla"
+
+#. module: partner_risk_advice
+#: help:partner.risk.advice,global_ok:0
+msgid "True: all partners but those with specific advices"
+msgstr "True: Todos los clientes, excepto los que tengan avisos definidos"
+
+#. module: partner_risk_advice
+#: sql_constraint:partner.risk.advice:0
+msgid "global_ok, days_after must be unique"
+msgstr "Valores repetidos"
+

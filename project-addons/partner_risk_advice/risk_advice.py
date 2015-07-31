@@ -22,7 +22,6 @@
 
 
 from openerp import fields, models, api, _
-import time
 from datetime import datetime
 from dateutil import relativedelta
 
@@ -43,7 +42,7 @@ class RiskAdviceMail(models.Model):
     def check_partner_risk(self):
 
         partner_pool = self.env['res.partner'].search([])
-
+        res = {}
         for partner in partner_pool:
             accounts = []
             res = False

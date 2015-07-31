@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
 <openerp>
 <data>
-    <!--Add risk insurance tab in partner form. -->
     <record model="ir.ui.view" id="view_partner_form_risk_advice">
         <field name="name">res.partner.form.risk_advice</field>
         <field name="model">res.partner</field>
         <field name="type">form</field>
         <field name="inherit_id" ref="warning.view_partner_warning_form" />
         <field name="arch" type="xml">
-
             <xpath expr="//separator[@string='Warning on the Invoice']/.." position="after">
                 <separator string="Risk Advice" colspan="2"/>
                 <!--
@@ -22,7 +20,6 @@
                     </tree>
                 </field>
             </xpath>
-
         </field>
     </record>
 </data>
