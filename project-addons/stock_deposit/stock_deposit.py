@@ -91,14 +91,13 @@ class stock_deposit(models.Model):
     @api.one
     def _prepare_deposit_move(self, picking, group):
         deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
-        res = []
         move_template = {
             'name': 'RET' or '',
             'product_id': self.product_id.id,
             'product_uom': self.product_uom.id,
             'product_uom_qty': self.product_uom_qty,
             'product_uos': self.product_uom.id,
-            'location_id': deposit_id[1],
+            'location_id': deposit_id.id,
             'location_dest_id':
                 picking.picking_type_id.default_location_dest_id.id,
             'picking_id': picking.id,
@@ -117,8 +116,7 @@ class stock_deposit(models.Model):
             'warehouse_id': picking.picking_type_id.warehouse_id.id,
             'invoice_state': 'none'
         }
-        res.append(move_template)
-        return res
+        return move_template
 
     @api.one
     def _create_stock_moves(self, picking=False):
@@ -129,7 +127,7 @@ class stock_deposit(models.Model):
         for vals in self._prepare_deposit_move(picking, new_group):
             todo_moves += stock_move.create(vals)
 
-        todo_moves = todo_moves.action_confirm()
+        todo_moves.action_confirm()
         todo_moves.force_assign()
 
     @api.multi
@@ -137,7 +135,7 @@ class stock_deposit(models.Model):
         picking_type_id = self.env.ref('stock.picking_type_in')
         for deposit in self:
             picking = self.env['stock.picking'].create(
-                {'picking_type_id': picking_type_id[1],
+                {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id})
             deposit._create_stock_moves(picking)
             deposit.write({'state': 'returned',
