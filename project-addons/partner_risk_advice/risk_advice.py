@@ -40,10 +40,17 @@ class RiskAdviceMail(models.Model):
 
     @api.model
     def check_partner_risk(self):
+        acc_move_line_obj = self.env['account.move.line']
+        partners = acc_move_line_obj.\
+            read_group([('partner_id', '!=', False),
+                        ('reconcile_id', '!=', False)], ["partner_id"],
+                       groupby="partner_id")
 
-        partner_pool = self.env['res.partner'].search([])
         res = {}
-        for partner in partner_pool:
+        for elem in partners:
+            partner = self.env['res.partner'].browse(elem['partner_id'][0])
+            if not partner.credit_limit or partner.available_risk > 0:
+                continue
             accounts = []
             res = False
             break_risk=False
@@ -54,14 +61,13 @@ class RiskAdviceMail(models.Model):
             if partner.property_account_payable:
                 accounts.append( partner.property_account_payable.id )
 
-            line_ids = self.env['account.move.line'].search([
+            line_ids = acc_move_line_obj.search([
                 ('partner_id','=',partner.id),
                 ('account_id', 'in', accounts),
                 ('reconcile_id','=',False)
                 ], order = "date_maturity asc")
 
             amount = 0.0
-
             for line in line_ids:
 
                 if line.currency_id:
@@ -70,13 +76,13 @@ class RiskAdviceMail(models.Model):
                     sign = (line.debit - line.credit) < 0 and -1 or 1
                 amount += sign * line.amount_residual
 
-                if amount > partner.available_risk:
+                if amount > partner.credit_limit:
                     #rotura de risk
                     res = {
                         'partner': partner.id,
                         'line': line.id,
-                        'amount': amount - partner.available_risk,
-                        'date' : line.date_maturity,
+                        'amount': -partner.available_risk,
+                        'date' : line.date_maturity or line.move_id.date,
                         'name' : line.ref
                     }
                     ok  = self.send_risk_advice_mail (res)
@@ -90,20 +96,19 @@ class RiskAdviceMail(models.Model):
 
 
     def send_risk_advice_mail (self, values):
-
         partner= self.env['res.partner'].search([('id', '=', values['partner'])])
         mail_pool = self.env['mail.mail']
         mail_ids = self.env['mail.mail']
         date = datetime.strptime(str(values['date']), '%Y-%m-%d')
         today = datetime.strptime(str(fields.Date.today()), '%Y-%m-%d')
         timing = relativedelta.relativedelta(today, date)
-
+        advices = self.env["partner.risk.advice"]
         if partner.risk_advice_ids:
-            advice_pool = partner.risk_advice_ids
-        else:
-            advice_pool = self.env['partner.risk.advice'].search([('global_ok','=',True)])
+            advices += partner.risk_advice_ids
 
-        for advice in advice_pool:
+        advices += self.env['partner.risk.advice'].search([('global_ok','=',True)])
+
+        for advice in advices:
 
             if timing.days == advice.days_after:
                 template_id = advice.template_id
