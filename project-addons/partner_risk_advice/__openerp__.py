@@ -32,6 +32,7 @@
             'views/res_partner_view.xml',
             'views/partner_risk_advice_mail.xml',
             'views/risk_advice_view.xml',
-            'data/ir.cron.xml'],
+            'data/ir.cron.xml',
+            'security/ir.model.access.csv'],
     "installable": True
 }
