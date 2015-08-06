@@ -33,7 +33,8 @@ class rappel(models.Model):
 
     name = fields.Char('Concept', size=255, required=True)
     type_id = fields.Many2one('rappel.type', 'Type', required=True)
-    qty_type = fields.Selection(QTY_TYPE, 'Quantity type', required=True)
+    qty_type = fields.Selection(QTY_TYPE, 'Quantity type', required=True,
+                                default='value')
     calc_mode = fields.Selection(CALC_MODE, 'Fixed/Variable', required=True)
     fix_qty = fields.Float('Fix')
     sections = fields.One2many('rappel.section', 'rappel_id', 'Sections')
