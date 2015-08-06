@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Kiko Sánchez <kiko@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,16 +19,15 @@
 #
 ##############################################################################
 
-{
-    'name': "Commission report",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Adds analysis view for sale commissions""",
-    'author': 'Pexego',
-    'website': 'www.pexego.es',
-    "depends": ['base', 'sale_commission', 'sale_stock_commission'],
-    "data": ['commission_report_view.xml', 'security/ir.model.access.csv',
-             'sale_commission_view.xml', 'settlement_view.xml',
-             'sale_view.xml'],
-    "installable": True
-}
+from openerp import fields, models, api
+
+
+class res_partner(models.Model):
+    _inherit = "res.partner"
+
+    risk_advice_ids = fields.One2many ("partner.risk.advice", "partner_id")
+
+    # Descomentar para probar el cron con el botón en el formulario partner
+    #@api.multi
+    #def check_partner_risk(self):
+    #    e = self.env['partner.risk.advice'].check_partner_risk()

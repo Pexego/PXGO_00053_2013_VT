@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Kiko Sánchez <kiko@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,15 +20,18 @@
 ##############################################################################
 
 {
-    'name': "Commission report",
+    'name': "Partner Risk Advice",
     'version': '1.0',
-    'category': 'sale',
-    'description': """Adds analysis view for sale commissions""",
-    'author': 'Pexego',
-    'website': 'www.pexego.es',
-    "depends": ['base', 'sale_commission', 'sale_stock_commission'],
-    "data": ['commission_report_view.xml', 'security/ir.model.access.csv',
-             'sale_commission_view.xml', 'settlement_view.xml',
-             'sale_view.xml'],
+    'category': 'partner',
+    'description': """Manage Risk Advices by Email""",
+    'author': 'Comunitea Servicios Tecnológicos',
+    'website': 'www.comunitea.com',
+    "depends": ['base','mail'
+                ],
+    "data": [
+            'views/res_partner_view.xml',
+            'views/partner_risk_advice_mail.xml',
+            'views/risk_advice_view.xml',
+            'data/ir.cron.xml'],
     "installable": True
 }
