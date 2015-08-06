@@ -81,7 +81,7 @@ class RiskAdviceMail(models.Model):
                     res = {
                         'partner': partner.id,
                         'line': line.id,
-                        'amount': -partner.available_risk,
+                        'amount': partner.credit - partner.debit,
                         'date' : line.date_maturity or line.move_id.date,
                         'name' : line.ref
                     }
