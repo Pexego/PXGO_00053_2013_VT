@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Create new partner</title>
+        <meta charset="UTF-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script>
+            $(document).ready(function() {
+              $('#country_select').load("get_odoo_countries.php");
+            });
+            function func(){
+                event.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: 'create_odoo_partner.php',
+                    dataType: 'json',
+                    data: $("form#create_partner").serialize(),
+                    error: function(xhr, desc, e) {
+                        obj = JSON.parse(xhr.responseText);
+                        alert(obj.message);
+                    },
+                    success: function(data){
+                        $('form').get(0).reset();
+                    },
+                });
+            };
+    </script>
+    </head>
+    <body>
+        <form id="create_partner" method="post" onsubmit="func()">
+
+        Nombre: <input type="text" name="name" required><br>
+        E-mail: <input type="text" name="email" required><br>
+        Dirección: <input type="text" name="street" required><br>
+        Ciudad: <input type="text" name="city" required><br>
+        C.P.: <input type="text" name="zip" required><br>
+        País: <select name="country" id="country_select" required></select><br>
+        NIF: <input type="text" name="vat" required>(*ES delante si España, sino código país)<br>
+        <input type="submit">
+
+        </form>
+    </body>
+</html>
