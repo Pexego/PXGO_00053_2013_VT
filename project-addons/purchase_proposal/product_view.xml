@@ -21,6 +21,7 @@
                         <field name="security_margin" class="oe_inline"/> days
                     </div>
                     <field name="last_sixty_days_sales"/>
+                    <field name="joking_index"/>
                 </group>
             </field>
         </record>

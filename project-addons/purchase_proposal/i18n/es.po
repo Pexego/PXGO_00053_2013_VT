@@ -26,6 +26,11 @@ msgid "ID"
 msgstr "ID"
 
 #. module: purchase_proposal
+#: field:product.product,joking_index:0
+msgid "Joking index"
+msgstr "Índice de puteamiento"
+
+#. module: purchase_proposal
 #: field:product.product,order_cycle:0
 msgid "Order cycle"
 msgstr "Ciclo de pedido"

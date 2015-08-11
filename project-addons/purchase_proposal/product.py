@@ -25,7 +25,9 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
-    last_sixty_days_sales = fields.Float('Sales in last 60 days with stock')
+    last_sixty_days_sales = fields.Float('Sales in last 60 days with stock',
+                                         readonly=True)
+    joking_index = fields.Float("Joking index", readonly=True)
     order_cycle = fields.Integer('Order cycle')
     transport_time = fields.Integer('Transport time')
     security_margin = fields.Integer('Security margin')
@@ -48,3 +50,5 @@ class ProductProduct(models.Model):
             product.last_sixty_days_sales = sum(
                 [x.product_uom_qty for x in moves
                  if x.procurement_id.sale_line_id])
+            product.joking_index = product.last_sixty_days_sales * \
+                product.standard_price
