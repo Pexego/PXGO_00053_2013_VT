@@ -32,6 +32,8 @@ try {
         "country_id" => new xmlrpcval($country_id, "int"),
         "customer" => new xmlrpcval(1, "int"),
         "is_company" => new xmlrpcval(1, "int"),
+        "web" => new xmlrpcval(1, "int"),
+        "active" => new xmlrpcval(0, "int"),
     );
 
     $connection->create("res.partner", $val);

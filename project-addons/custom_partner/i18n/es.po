@@ -1,0 +1,48 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * custom_partner
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-08-11 10:13+0000\n"
+"PO-Revision-Date: 2015-08-11 10:13+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,help:custom_partner.action_view_web_customers
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                Click to add a web customer in your address book.\n"
+"              </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                Click para añadir un cliente de web en su libreta de direcciones.\n"
+"              </p>\n"
+"            "
+
+#. module: custom_partner
+#: help:res.partner,web:0
+msgid "Created from web"
+msgstr "Creado desde la web"
+
+#. module: custom_partner
+#: model:ir.model,name:custom_partner.model_res_partner
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: custom_partner
+#: field:res.partner,web:0
+msgid "Web"
+msgstr "Web"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.action_view_web_customers
+#: model:ir.ui.menu,name:custom_partner.res_partner_web
+msgid "Web customers"
+msgstr "Clientes desde web"

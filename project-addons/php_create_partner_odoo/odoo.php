@@ -7,7 +7,7 @@ $GLOBALS['xmlrpc_internalencoding']='UTF-8';
 class OdooConnect {
 
     private $uid;
-    const dbname = 'visiotech_devel';
+    const dbname = 'demo';
     const user = 'admin';
     const password = 'admin';
     const server_url = 'http://localhost:8069';
