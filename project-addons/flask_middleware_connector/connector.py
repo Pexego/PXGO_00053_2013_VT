@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@pcomunitea.com>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,10 +20,17 @@
 ##############################################################################
 
 from openerp import models, fields
+from openerp.addons.connector.connector import ConnectorEnvironment
 
 
-class ResPartner(models.Model):
-
-    _inherit = "res.partner"
-
-    web = fields.Boolean("Web", help="Created from web", copy=False)
+def get_environment(session, model_name, backend_id):
+    """ Create an environment to work with.  """
+    backend_record = session.env['middleware.backend'].browse(backend_id)
+    env = ConnectorEnvironment(backend_record, session, model_name)
+    lang = backend_record.default_lang_id
+    lang_code = lang.code if lang else 'en_US'
+    if lang_code == session.context.get('lang'):
+        return env
+    else:
+        with env.session.change_context(lang=lang_code):
+            return env

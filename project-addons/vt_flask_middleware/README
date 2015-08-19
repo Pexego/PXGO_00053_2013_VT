@@ -1,0 +1,5 @@
+- Instalación
+
+sudo pip install Flask
+sudo pip install Flask-XML-RPC
+sudo pip install flask-peewee

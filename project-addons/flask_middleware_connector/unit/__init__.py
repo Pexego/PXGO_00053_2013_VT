@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@pcomunitea.com>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,11 +19,4 @@
 #
 ##############################################################################
 
-from openerp import models, fields
-
-
-class ResPartner(models.Model):
-
-    _inherit = "res.partner"
-
-    web = fields.Boolean("Web", help="Created from web", copy=False)
+from . import backend_adapter

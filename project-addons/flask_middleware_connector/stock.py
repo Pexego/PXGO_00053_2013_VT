@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@pcomunitea.com>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,14 +19,24 @@
 #
 ##############################################################################
 
-{
-    'name': "Product custom",
-    'version': '1.0',
-    'category': 'stock',
-    'description': """Several little customizations in products""",
-    'author': 'Comunitea Servicios Tecnológicos',
-    'website': 'www.comunitea.com',
-    "depends": ['product'],
-    "data": ["product_view.xml"],
-    "installable": True
-}
+from openerp import models, api
+from .events import on_stock_move_change
+from openerp.addons.connector.session import ConnectorSession
+
+
+class StockMove(models.Model):
+
+    _inherit = "stock.move"
+
+    #TODO: Debería ser al asignar un producto, al cancelarlo, al finalizarlo y al eliminar la reserve
+
+    @api.multi
+    def write(self, vals):
+        res = super(StockMove, self).write(vals)
+        if vals.get('state', False) and vals["state"] != "draft":
+            for move in self:
+                session = ConnectorSession(self.env.cr, self.env.uid,
+                                           context=self.env.context)
+                on_stock_move_change.fire(session, 'stock.move',
+                                          move.id)
+        return res

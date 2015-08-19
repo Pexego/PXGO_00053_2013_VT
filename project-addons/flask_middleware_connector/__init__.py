@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@pcomunitea.com>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,18 +19,11 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from . import connector
+from . import backend
 
+from . import middleware
+from . import events
 
-class ProductTemplate(models.Model):
-
-    _inherit = "product.template"
-
-    web = fields.Selection([('not_published', 'Not published'),
-                            ('published', 'Published')], "Web",
-                           default="not_published",
-                           help="Allow to publish product description "
-                                "in public web service")
-    show_stock_outside = fields.Boolean("Show stock outside",
-                                        help="Allow to publish stock info "
-                                             "in public web service")
+from . import product
+from . import stock

@@ -24,3 +24,4 @@ devel_*
 *.userprefs
 project-addons/asperience_edi/data_import
 project-addons/asperience_edi/data_export
+*.db

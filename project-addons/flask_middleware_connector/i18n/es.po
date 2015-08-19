@@ -1,0 +1,194 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * flask_middleware_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-08-19 14:47+0000\n"
+"PO-Revision-Date: 2015-08-19 14:47+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: flask_middleware_connector
+#: help:product.template,web:0
+msgid "Allow to publish product description in public web service"
+msgstr "Permite publicar el producto en el servicio web público"
+
+#. module: flask_middleware_connector
+#: help:product.template,show_stock_outside:0
+msgid "Allow to publish stock info in public web service"
+msgstr "Permite publicar información de stock en el servicios web público"
+
+#. module: flask_middleware_connector
+#: help:middleware.backend,price_unit_field_id:0
+msgid "Choose the field of the product which will be used for sale price unit updates."
+msgstr "Elija el campo del producto que será usado para las actualizaciones del precio unidad de venta."
+
+#. module: flask_middleware_connector
+#: help:middleware.backend,product_stock_field_id:0
+msgid "Choose the field of the product which will be used for stock inventory updates."
+msgstr "Elija el campo del producto que será usado para las actualizaciones de stock."
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,create_uid:0
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,create_date:0
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,default_lang_id:0
+msgid "Default Language"
+msgstr "Lenguaje por defecto"
+
+#. module: flask_middleware_connector
+#: view:middleware.backend:flask_middleware_connector.middleware_backend_form
+msgid "Export current data"
+msgstr "Exportar datos actuales"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: flask_middleware_connector
+#: help:middleware.backend,default_lang_id:0
+msgid "If a default language is selected, the records will be imported in the translation of this language."
+msgstr "Si está seleccionado un idioma por defecto, los registros serán exportados con la traducción a este lenguaje"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,write_uid:0
+msgid "Last Updated by"
+msgstr "Últ. actualización por"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,write_date:0
+msgid "Last Updated on"
+msgstr "Úlr. actualización el"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,location:0
+msgid "Location"
+msgstr "Url"
+
+#. module: flask_middleware_connector
+#: model:ir.model,name:flask_middleware_connector.model_middleware_backend
+msgid "Middleware Backend"
+msgstr "Middleware Backend"
+
+#. module: flask_middleware_connector
+#: model:ir.actions.act_window,name:flask_middleware_connector.action_middleware_backend
+#: model:ir.ui.menu,name:flask_middleware_connector.menu_middleware_backend
+msgid "Middleware Backends"
+msgstr "Middleware Backends"
+
+#. module: flask_middleware_connector
+#: view:middleware.backend:flask_middleware_connector.middleware_backend_form
+#: view:middleware.backend:flask_middleware_connector.middleware_backend_tree
+msgid "Middleware backend"
+msgstr "Middleware backend"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: flask_middleware_connector
+#: selection:product.template,web:0
+msgid "Not published"
+msgstr "No publicado"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,password:0
+msgid "Password"
+msgstr "Contraseña"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,price_unit_field_id:0
+msgid "Price Field"
+msgstr "Campo para precio"
+
+#. module: flask_middleware_connector
+#: model:ir.model,name:flask_middleware_connector.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: flask_middleware_connector
+#: model:ir.model,name:flask_middleware_connector.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: flask_middleware_connector
+#: selection:product.template,web:0
+msgid "Published"
+msgstr "Publicado"
+
+#. module: flask_middleware_connector
+#: field:product.template,show_stock_outside:0
+msgid "Show stock outside"
+msgstr "Ver stock desde fuera"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,product_stock_field_id:0
+msgid "Stock Field"
+msgstr "Campo para stock"
+
+#. module: flask_middleware_connector
+#: model:ir.model,name:flask_middleware_connector.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: flask_middleware_connector
+#: help:middleware.backend,location:0
+msgid "Url to middleware application xmlrpc api"
+msgstr "Url a la api xmlrpc del middleware."
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,username:0
+msgid "Username"
+msgstr "Usuario"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,version:0
+msgid "Version"
+msgstr "Versión"
+
+#. module: flask_middleware_connector
+#: field:middleware.backend,warehouse_id:0
+msgid "Warehouse"
+msgstr "Almacén"
+
+#. module: flask_middleware_connector
+#: help:middleware.backend,warehouse_id:0
+msgid "Warehouse used to compute the stock quantities."
+msgstr "Almacén utilizado para calcular el stock."
+
+#. module: flask_middleware_connector
+#: field:product.template,web:0
+msgid "Web"
+msgstr "Web"
+
+#. module: flask_middleware_connector
+#: field:product.template,virtual_stock_conservative:0
+#: field:product.product,virtual_stock_conservative:0
+msgid "Virtual Stock Conservative"
+msgstr "Stock virtual conservativo"
+
+#. module: flask_middleware_connector
+#: help:middleware.backend,password:0
+msgid "Webservice password"
+msgstr "Contraseña del webservice"
+
+#. module: flask_middleware_connector
+#: help:middleware.backend,username:0
+msgid "Webservice user"
+msgstr "Usuario del webservice"
