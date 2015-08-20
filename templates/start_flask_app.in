@@ -1,0 +1,7 @@
+#!/bin/sh
+cd ${parts.buildout.directory}/bin
+export PYTHONPATH="$${PYTHONPATH}:${parts.buildout.directory}/project-addons/vt_flask_middleware"
+for d in ${parts.buildout.directory}/eggs/*; do
+    export PYTHONPATH="$${PYTHONPATH}:"$$d
+done
+./py ../project-addons/vt_flask_middleware/middleware.py
