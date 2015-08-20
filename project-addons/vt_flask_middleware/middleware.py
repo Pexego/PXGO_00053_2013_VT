@@ -12,6 +12,7 @@ from database import db
 from user import User
 from auth import auth
 from admin import admin
+import rest_interface
 import xmlrpc_interface
 
 ################################################################################
@@ -62,4 +63,4 @@ def teardown_request(exception):
 if __name__ == "__main__":
     # This code is only executed if the cowlab.py file is directly called from
     # python and not imported from another python file / console.
-    app.run(debug=True)
+    app.run(debug=True,host="0.0.0.0")
