@@ -24,3 +24,4 @@ from . import procurement
 from . import sale
 from . import wizard
 from . import company
+from . import users

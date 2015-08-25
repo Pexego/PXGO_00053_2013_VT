@@ -33,5 +33,6 @@
              'stock_view.xml',
              'sale_view.xml',
              'company_view.xml'],
+    'conflicts': ['auth_crypt'],
     "installable": True
 }
