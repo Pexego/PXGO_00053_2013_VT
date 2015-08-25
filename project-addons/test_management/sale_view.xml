@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_order_form_add_tests" model="ir.ui.view">
+            <field name="name">sale.order.form.add_tests</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <group colspan="4" col="4" groups="test_management.group_test_manager">
+                        <field name="tests"/>
+                        <button name="set_tests" type="object" string="Set" attrs="{'invisible': ['|',('tests', '=', True),('state', 'in', ['done','cancel'])]}" colspan="1"/>
+                        <button name="unset_tests" type="object" string="Unset" attrs="{'invisible': ['|',('tests', '=', False),('state', 'in', ['done','cancel'])]}" colspan="1"/>
+                    </group>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
