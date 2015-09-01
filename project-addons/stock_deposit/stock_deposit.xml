@@ -68,7 +68,7 @@
             <field name="name">stock.deposit.tree</field>
             <field name="model">stock.deposit</field>
             <field name="arch" type="xml">
-                <tree string="Deposits" version="7.0" >
+                <tree string="Deposits" create="0" >
                     <field name="product_id" />
                     <field name="partner_id" />
                     <field name="picking_id" />
