@@ -19,11 +19,22 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class ResPartner(models.Model):
 
     _inherit = "res.partner"
 
+    @api.one
+    def _get_products_sold(self):
+        lines = self.env["sale.order.line"].read_group([('order_partner_id',
+                                                         '=', self.id)],
+                                                       ['product_id'],
+                                                       groupby="product_id")
+        self.sale_product_count = len(lines)
+
     web = fields.Boolean("Web", help="Created from web", copy=False)
+    sale_product_count = fields.Integer(compute=_get_products_sold,
+                                        string="# Products sold",
+                                        readonly=True)

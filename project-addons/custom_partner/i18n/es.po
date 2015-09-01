@@ -37,6 +37,16 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: custom_partner
+#: view:res.partner:custom_partner.res_partner_view_buttons_add_products_no
+msgid "Products sold"
+msgstr "Prod. vendidos"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_sale_order_line
+msgid "Quotations and Sales Lines"
+msgstr "Presupuestos y lineas de venta"
+
+#. module: custom_partner
 #: field:res.partner,web:0
 msgid "Web"
 msgstr "Web"
