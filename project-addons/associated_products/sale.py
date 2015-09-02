@@ -80,15 +80,13 @@ class sale_order_line(orm.Model):
                     'original_line_id': line_id,
                     'delay': associated.associated_id.sale_delay or 0.0,
                     'tax_id': [(6, 0, tax_ids)],
+                    'agent': line.agent.id,
+                    'commission': line.commission.id
                 }
                 new_line_id = self.create(cr, uid, args_line, context)
                 new_line = self.browse(cr, uid, new_line_id, context)
-                if context.get('sale_agent_ids', False):
-                    agent_ids = [(6, 0, [x]) for x in context['sale_agent_ids'][0]]
-                else:
-                    agent_ids = [(6, 0, [x.id]) for x in new_line.order_id.sale_agent_ids]
                 line_vals = \
-                    self.product_id_change2(cr, uid, [new_line_id],
+                    self.product_id_change(cr, uid, [new_line_id],
                                             new_line.order_id.pricelist_id.id,
                                             new_line.product_id.id,
                                             new_line.product_uom_qty,
@@ -102,11 +100,8 @@ class sale_order_line(orm.Model):
                                             False,
                                             new_line.order_id.fiscal_position,
                                             False,
-                                            False,
-                                            agent_ids,
                                             context)
                 line_vals = line_vals['value']
-                line_vals['line_agent_ids'] = [(6, 0, line_vals['line_agent_ids'])]
                 self.write(cr, uid, [new_line_id], line_vals, context)
         return line_id
 
@@ -157,12 +152,13 @@ class sale_order_line(orm.Model):
                         'original_line_id': line.id,
                         'delay': associated.associated_id.sale_delay or 0.0,
                         'tax_id': [(6, 0, tax_ids)],
+                        'agent': line.agent.id,
+                        'commission': line.commission.id
                     }
                     new_line_id = self.create(cr, uid, args_line, context)
                     new_line = self.browse(cr, uid, new_line_id, context)
-                    agent_ids = [(6, 0, [x.id]) for x in new_line.order_id.sale_agent_ids]
                     line_vals = \
-                        self.product_id_change2(cr, uid, [new_line_id],
+                        self.product_id_change(cr, uid, [new_line_id],
                                                 new_line.order_id.pricelist_id.id,
                                                 new_line.product_id.id,
                                                 new_line.product_uom_qty,
@@ -176,11 +172,8 @@ class sale_order_line(orm.Model):
                                                 False,
                                                 new_line.order_id.fiscal_position,
                                                 False,
-                                                False,
-                                                agent_ids,
                                                 context)
                     line_vals = line_vals['value']
-                    line_vals['line_agent_ids'] = [(6, 0, line_vals['line_agent_ids'])]
                     self.write(cr, uid, [new_line_id], line_vals, context)
             return res
 
