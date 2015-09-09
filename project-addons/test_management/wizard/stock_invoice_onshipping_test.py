@@ -52,13 +52,14 @@ class StockInvoiceOnShippingTests(models.TransientModel):
         res = []
         test_company_id = self.env.user.company_id.test_company_id
         if not test_company_id:
-            raise exceptions.Warning(_("Please configure tests company"))
-        journal_type = self._get_journal_type()
-        journal_ids = self.sudo().env["account.journal"].\
-            search([('company_id', '=', test_company_id.id),
-                    ('type', '=', journal_type)])
-        for journal in journal_ids:
-            res.append((journal.id, journal.name))
+            pass
+        else:
+            journal_type = self._get_journal_type()
+            journal_ids = self.sudo().env["account.journal"].\
+                search([('company_id', '=', test_company_id.id),
+                        ('type', '=', journal_type)])
+            for journal in journal_ids:
+                res.append((journal.id, journal.name))
 
         return res
 
