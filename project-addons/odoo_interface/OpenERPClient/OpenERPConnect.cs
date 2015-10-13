@@ -406,6 +406,23 @@ namespace OpenERPClient
 			this.Close();
 			return res;
 		}
+
+		public Object Print(string model, string report_name, long[] ids)
+		{
+			/* 
+			 It allows to execute any OpenERP's method with typical signature (cr, uid, ids, context={})
+			 :param model : _name of model where method is defined
+			 :param method : name of method to execute
+			 :param ids : ids of registries whose you can update
+			 :param context : Odoo's context
+             
+             :return : Object (depends on method)
+			*/
+			this.Open(OpenERPClient.OpenERPService.Object);
+			Object res = this.rpcclient.Print(this.dbname, this.UserId, this.password, model, "print_document", ids, report_name);
+			this.Close();
+			return res;
+		}
 		
 		public bool ActionProduce(int id, double qty, string consumeMethod)
 		{

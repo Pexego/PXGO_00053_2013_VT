@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="report_picking_with_attachments">
+            <t t-call="stock.report_picking"></t>
+        </template>
+
+        <report
+            string="Picking with attachments"
+            id="action_report_picking_attachments"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            name="stock_custom.report_picking_with_attachments"
+            file="stock_custom.report_picking_with_attachments"
+        />
+
+    </data>
+</openerp>

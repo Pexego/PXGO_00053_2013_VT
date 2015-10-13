@@ -56,5 +56,19 @@
             </field>
         </record>
 
+        <record id="product_normal_form_view_rev_name" model="ir.ui.view">
+            <field name="name">product.product.form.rev_name</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="replace">
+                    <field name="name"/>
+                </field>
+                <field name="product_tmpl_id" position="replace">
+                    <field name="product_tmpl_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

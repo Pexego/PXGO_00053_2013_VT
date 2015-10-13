@@ -69,7 +69,10 @@ namespace OpenERPClient
 		
 		[XmlRpcMethod("execute")]
         Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct context);
-		
+
+		[XmlRpcMethod("execute")]
+		Object Print(string dbName, int userId, string pwd, string model, string method, long[] ids, string report_name);
+
 		[XmlRpcMethod("execute")]
         bool ActionProduce(string dbName, int userId, string pwd, string model, string method, int id, double qty, string consumeMethod);
 		
@@ -153,6 +156,11 @@ namespace OpenERPClient
 		public Object Execute(string dbName, int userId, string pwd, string model, string method, long[] ids, XmlRpcStruct context)
 		{
 			return rpcclient.Execute(dbName, userId, pwd, model, method, ids, context);
+		}
+
+		public Object Print(string dbName, int userId, string pwd, string model, string method, long[] ids, string report_name)
+		{
+			return rpcclient.Print(dbName, userId, pwd, model, method, ids, report_name);
 		}
 		
 		public bool ActionProduce(string dbName, int userId, string pwd, string model, string method, int id, double qty, string consumeMethod)
