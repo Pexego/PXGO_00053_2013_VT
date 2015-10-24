@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class StockReserve(models.Model):
@@ -27,3 +27,22 @@ class StockReserve(models.Model):
     _inherit = 'stock.reservation'
 
     mrp_id = fields.Many2one('mrp.production', 'Production')
+
+
+class StockPicking(models.Model):
+
+    _inherit = "stock.picking"
+
+    @api.one
+    def _get_if_productions(self):
+        with_prods = False
+        for line in self.move_lines:
+            if line.procurement_id and line.procurement_id.sale_line_id \
+                    and line.procurement_id.sale_line_id.mrp_production_ids:
+                with_prods = True
+                break
+        self.with_productions = with_prods
+
+    with_productions = fields.Boolean("With productions", readonly=True,
+                                      compute='_get_if_productions')
+

@@ -26,7 +26,7 @@ class SaleOrderLine(models.Model):
 
     _inherit = 'sale.order.line'
 
-    can_mount = fields.Many2one('product.product', 'Mount')
+    can_mount_id = fields.Many2one('product.product.mount', 'Mount')
     mrp_production_ids = fields.One2many('mrp.production', 'sale_line_id',
                                          'Productions')
     customization_types = fields.Many2many(
@@ -46,9 +46,9 @@ class SaleOrderLine(models.Model):
             fiscal_position, flag, context)
         prod = self.pool.get('product.product').browse(cr, uid, product,
                                                        context)
-        if prod.can_mount_ids:
-            res['domain']['can_mount'] = [('id', 'in',
-                                           [x.id for x in prod.can_mount_ids])]
+        #if prod.can_mount_ids:
+        #    res['domain']['can_mount_id'] = [('id', 'in',
+         #                                  [x.id for x in prod.can_mount_ids])]
         return res
 
     @api.multi
@@ -83,12 +83,13 @@ class SaleOrder(models.Model):
                         mount += custom
                 customizations = line.customization_types
                 if mount:
-                    if not line.can_mount.default_code:
+                    if not line.can_mount_id.product_id.default_code:
                         raise exceptions.except_orm(
                             _('Error'),
                             _('One of the products not have default code'))
                     customizations = customizations - mount
-                    product_code += '#' + line.can_mount.default_code
+                    product_code += '#' + line.can_mount_id.product_id.\
+                        default_code
                 if not self.partner_id.ref:
                     raise exceptions.Warning(
                         _('Partner reference'),
@@ -97,14 +98,15 @@ class SaleOrder(models.Model):
                 product_code += '|' + str(self.partner_id.ref)
                 for custom in customizations:
                     product_code += '|' + str(custom.code)
-                product = prod_obj.get_product_customized(product_code)
+                product = prod_obj.get_product_customized(product_code,
+                                                          line.can_mount_id)
 
                 final_line_dict = {
                     'product_id': product.id,
                     'order_id': self.id,
                     'customization_types': [(6, 0, [x.id for x in
                                              line.customization_types])],
-                    'price_unit': product.list_price2,
+                    'price_unit': line.price_unit,
                     'purchase_price': product.standard_price,
                     'delay': max([product.sale_delay, line.delay]),
                     'product_uom_qty': line.product_uom_qty,

@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_mrp_customize_type,access_mrp_customize_type,model_mrp_customize_type,,1,1,1,1
+access_product_product_mount,access_product_product_mount,model_product_product_mount,,1,1,1,1

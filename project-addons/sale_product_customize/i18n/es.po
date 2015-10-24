@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-04 08:42+0000\n"
-"PO-Revision-Date: 2015-06-04 08:42+0000\n"
+"POT-Creation-Date: 2015-10-24 12:38+0000\n"
+"PO-Revision-Date: 2015-10-24 12:38+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -40,7 +40,7 @@ msgstr "Código"
 #: code:addons/sale_product_customize/wizard/mrp_create_prod.py:37
 #, python-format
 msgid "Code error"
-msgstr "Código error"
+msgstr "Código erróneo"
 
 #. module: sale_product_customize
 #: model:ir.model,name:sale_product_customize.model_stock_move_consume
@@ -61,12 +61,14 @@ msgstr "Crear producto montado"
 #. module: sale_product_customize
 #: field:mrp.customization.wizard,create_uid:0
 #: field:mrp.customize.type,create_uid:0
+#: field:product.product.mount,create_uid:0
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: sale_product_customize
 #: field:mrp.customization.wizard,create_date:0
 #: field:mrp.customize.type,create_date:0
+#: field:product.product.mount,create_date:0
 msgid "Created on"
 msgstr "Creado el"
 
@@ -94,8 +96,13 @@ msgid "Customize type"
 msgstr "Tipo personalización"
 
 #. module: sale_product_customize
-#: code:addons/sale_product_customize/model/sale.py:76
-#: code:addons/sale_product_customize/model/sale.py:87
+#: field:product.product.mount,name:0
+msgid "Description"
+msgstr "Descripción"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/model/sale.py:77
+#: code:addons/sale_product_customize/model/sale.py:88
 #, python-format
 msgid "Error"
 msgstr "Error"
@@ -103,23 +110,26 @@ msgstr "Error"
 #. module: sale_product_customize
 #: field:mrp.production,final_prod_lot:0
 msgid "Final lot"
-msgstr "Lote final"
+msgstr "Nº serie final"
 
 #. module: sale_product_customize
 #: field:mrp.customization.wizard,id:0
 #: field:mrp.customize.type,id:0
+#: field:product.product.mount,id:0
 msgid "ID"
 msgstr "ID"
 
 #. module: sale_product_customize
 #: field:mrp.customization.wizard,write_uid:0
 #: field:mrp.customize.type,write_uid:0
+#: field:product.product.mount,write_uid:0
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
 
 #. module: sale_product_customize
 #: field:mrp.customization.wizard,write_date:0
 #: field:mrp.customize.type,write_date:0
+#: field:product.product.mount,write_date:0
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
 
@@ -131,7 +141,7 @@ msgstr "Crear"
 #. module: sale_product_customize
 #: view:mrp.customization.wizard:sale_product_customize.mrp_customization_form
 msgid "Make customization"
-msgstr "Hacer modificación"
+msgstr "Crear personalización"
 
 #. module: sale_product_customize
 #: model:ir.actions.act_window,name:sale_product_customize.action_customization_wizard
@@ -145,19 +155,14 @@ msgid "Manufacturing Order"
 msgstr "Órden de producción"
 
 #. module: sale_product_customize
-#: field:sale.order.line,can_mount:0
+#: field:sale.order.line,can_mount_id:0
 msgid "Mount"
-msgstr "Montaje"
+msgstr "Monta"
 
 #. module: sale_product_customize
 #: field:mrp.mounted.product.create.wizard,mount_product:0
 msgid "Mount product"
 msgstr "Producto que monta"
-
-#. module: sale_product_customize
-#: field:product.product,mounted_in_ids:0
-msgid "Mounted in"
-msgstr "Montado en"
 
 #. module: sale_product_customize
 #: field:mrp.customize.type,name:0
@@ -170,8 +175,8 @@ msgid "Needs another product"
 msgstr "Necesita otro producto"
 
 #. module: sale_product_customize
-#: code:addons/sale_product_customize/model/sale.py:77
-#: code:addons/sale_product_customize/model/sale.py:88
+#: code:addons/sale_product_customize/model/sale.py:78
+#: code:addons/sale_product_customize/model/sale.py:89
 #, python-format
 msgid "One of the products not have default code"
 msgstr "Uno de los productos no tiene referencia interna"
@@ -180,17 +185,24 @@ msgstr "Uno de los productos no tiene referencia interna"
 #: code:addons/sale_product_customize/wizard/mrp_create_prod.py:38
 #, python-format
 msgid "One of the products not have ref."
-msgstr "Uno de los productos no tiene referencia"
+msgstr "Uno de los productos no tiene referencia interna."
 
 #. module: sale_product_customize
-#: code:addons/sale_product_customize/model/sale.py:93
+#: code:addons/sale_product_customize/model/sale.py:95
 #, python-format
 msgid "Partner reference"
-msgstr "Reeferencia del partner"
+msgstr "Referencia del cliente"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_stock_picking
+msgid "Picking List"
+msgstr "Albarán"
 
 #. module: sale_product_customize
 #: model:ir.model,name:sale_product_customize.model_product_product
 #: field:mrp.customization.wizard,product_id:0
+#: field:product.product.mount,head_product_id:0
+#: field:product.product.mount,product_id:0
 msgid "Product"
 msgstr "Producto"
 
@@ -221,6 +233,11 @@ msgid "Productions"
 msgstr "Producciones"
 
 #. module: sale_product_customize
+#: field:product.product.mount,qty:0
+msgid "Qty."
+msgstr "Cant."
+
+#. module: sale_product_customize
 #: field:mrp.customization.wizard,qty:0
 msgid "Quantity"
 msgstr "Cantidad"
@@ -238,12 +255,12 @@ msgstr "Pedido de venta"
 #. module: sale_product_customize
 #: model:ir.model,name:sale_product_customize.model_sale_order_line
 msgid "Sales Order Line"
-msgstr "Linea pedido de venta"
+msgstr "Línea pedido de venta"
 
 #. module: sale_product_customize
 #: field:mrp.bom.line,final_lot:0
 msgid "Same final product lot"
-msgstr "Mismo lote final"
+msgstr "Mismo nº serie final"
 
 #. module: sale_product_customize
 #: model:ir.model,name:sale_product_customize.model_stock_reservation
@@ -257,7 +274,7 @@ msgid "The mounted product alredery exists"
 msgstr "El producto montado ya existe"
 
 #. module: sale_product_customize
-#: code:addons/sale_product_customize/model/sale.py:94
+#: code:addons/sale_product_customize/model/sale.py:96
 #, python-format
 msgid "The partner %s not have reference"
 msgstr "El cliente %s no tiene referencia"
@@ -275,7 +292,7 @@ msgstr "UdM"
 #. module: sale_product_customize
 #: field:stock.move.consume,final_lot:0
 msgid "final lot"
-msgstr "Lote final"
+msgstr "Nº serie final"
 
 #. module: sale_product_customize
 #: field:mrp.mounted.product.create.wizard,mounted_product:0

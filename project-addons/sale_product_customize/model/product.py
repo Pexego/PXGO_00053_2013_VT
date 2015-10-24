@@ -22,33 +22,36 @@
 from openerp import models, fields
 
 
+class ProductProductMount(models.Model):
+
+    _name = "product.product.mount"
+
+    product_id = fields.Many2one("product.product", "Product", required=True)
+    qty = fields.Float("Qty.", required=1, default=1.0)
+    name = fields.Char("Description", size=128, required=True)
+    head_product_id = fields.Many2one("product.product", "Product",
+                                      required=True)
+
+
 class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
-    can_mount_ids = fields.Many2many(
-        'product.product',
-        'mount_products_rel',
-        'product_id',
-        'mounted_product_id',
+    can_mount_ids = fields.One2many(
+        'product.product.mount',
+        'head_product_id',
         'Can mount')
-    mounted_in_ids = fields.Many2many(
-        'product.product',
-        'mount_products_rel',
-        'mounted_product_id',
-        'product_id',
-        'Mounted in')
     custom = fields.Boolean("Custom", readonly=True)
 
-    def get_product_customized(self, prod_code):
+    def get_product_customized(self, prod_code, product_mount):
         product = self.search([('default_code', '=', prod_code)])
         if not product:
             prod_dict = {
                 'type': 'product',
                 'default_code': prod_code,
-                'route_ids':
-                    [(6, 0,
-                      [self.env.ref('mrp.route_warehouse0_manufacture').id])],
+                'route_ids': [(6, 0,
+                               [self.env.
+                                ref('mrp.route_warehouse0_manufacture').id])],
                 'sale_ok': False,
                 'purchase_ok': False,
                 'state2': 'published',
@@ -64,13 +67,13 @@ class ProductProduct(models.Model):
                                          code[1][:code[1].index('|')])])
                 prod_dict['name'] = first_prod.name + ' - ' + sec_prod.name
                 prod_dict['standard_price'] = first_prod.standard_price + \
-                    sec_prod.standard_price
+                    (sec_prod.standard_price * product_mount.qty)
                 prod_dict['list_price'] = first_prod.list_price + \
-                    sec_prod.list_price
+                    (sec_prod.list_price * product_mount.qty)
                 prod_dict['list_price2'] = first_prod.list_price2 + \
-                    sec_prod.list_price2
+                    (sec_prod.list_price2 * product_mount.qty)
                 prod_dict['list_price3'] = first_prod.list_price3 + \
-                    sec_prod.list_price3
+                    (sec_prod.list_price3 * product_mount.qty)
                 bom_lines = \
                     [(0, 0,
                       {'product_id': first_prod.id,
@@ -78,7 +81,7 @@ class ProductProduct(models.Model):
                        'final_lot': True}),
                      (0, 0,
                       {'product_id': sec_prod.id,
-                       'product_qty': 1,
+                       'product_qty':  product_mount.qty,
                        'final_lot': False})]
             else:
                 first_prod = self.search([('default_code', '=',

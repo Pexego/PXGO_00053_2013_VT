@@ -102,8 +102,20 @@ class PartnerAdapter(GenericAdapter):
 
 
 @on_record_create(model_names='product.product')
+def delay_export_product1(session, model_name, record_id, vals):
+    product = session.env[model_name].browse(record_id)
+    up_fields = ["name", "default_code", "list_price", "list_price2",
+                 "list_price3"]
+    if vals.get("web", False) and vals.get("web", False) == "published":
+        export_product.delay(session, model_name, record_id)
+    elif product.web == "published":
+        for field in up_fields:
+            if field in vals:
+                update_product.delay(session, model_name, record_id)
+                break
+
 @on_record_write(model_names='product.product')
-def delay_export_product(session, model_name, record_id, vals):
+def delay_export_product2(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
     up_fields = ["name", "default_code", "list_price", "list_price2",
                  "list_price3"]
@@ -119,8 +131,23 @@ def delay_export_product(session, model_name, record_id, vals):
 
 
 @on_record_create(model_names='res.partner')
+def delay_export_partner1(session, model_name, record_id, vals):
+    partner = session.env[model_name].browse(record_id)
+    up_fields = ["name", "comercial", "vat", "city", "street", "zip",
+                 "country_id", "state_id", "email"]
+    if vals.get("web", False) and (vals.get('active', False) or
+                                   partner.active):
+        export_partner.delay(session, model_name, record_id)
+    elif vals.get("active", False) and partner.web:
+        export_partner.delay(session, model_name, record_id)
+    elif partner.web:
+        for field in up_fields:
+            if field in vals:
+                update_partner.delay(session, model_name, record_id)
+                break
+
 @on_record_write(model_names='res.partner')
-def delay_export_partner(session, model_name, record_id, vals):
+def delay_export_partner2(session, model_name, record_id, vals):
     partner = session.env[model_name].browse(record_id)
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email"]
@@ -138,7 +165,6 @@ def delay_export_partner(session, model_name, record_id, vals):
             if field in vals:
                 update_partner.delay(session, model_name, record_id)
                 break
-
 
 @on_record_unlink(model_names='product.product')
 def delay_unlink_product(session, model_name, record_id):
