@@ -36,3 +36,13 @@ class StockMove(models.Model):
 #    _inherit = 'stock.invoice.onshipping'
 #    attach_picking = fields.Boolean ('Attach Picking', default= lambda self:
 #         self.env['stock.picking'].browse(self.env.context.get('active_ids', False))[0].partner_id.attach_picking)
+
+
+class ProductProduct(models.Model):
+
+    _inherit = "product.product"
+
+    def _check_ean_key(self, cr, uid, ids, context=None):
+        return True
+
+    _constraints = [(_check_ean_key, 'You provided an invalid "EAN13 Barcode" reference. You may use the "Internal Reference" field instead.', ['ean13'])]

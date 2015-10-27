@@ -7,7 +7,7 @@
             <field name="inherit_id" ref="product.product_product_tree_view"/>
             <field eval="1" name="priority"/>
             <field name="arch" type="xml">
-                <field name="lst_price" position="replace">
+                <field name="lst_price" position="after">
                     <field name="list_price2"/>
                     <field name="list_price3"/>
                 </field>
@@ -22,13 +22,14 @@
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//page[@string='Procurements']/group/group" position="replace"/>
-                
+
                 <field name="lst_price" position="replace"/>
                 <xpath expr="//page[@string='Information']/group" position="after">
-                    
+
                     <group colspan="8" col="8" string="Prices">
+                     <field name="lst_price"/>
                      <field name="list_price2"/>
-                     
+
                      <label for="cmargin_price2"/><div name="margins2"><field name="cmargin_price2" class="oe_inline"/> %% </div>
                      <label for="smargin_price2"/><div name="margins3"><field name="smargin_price2" class="oe_inline"/> %% </div>
                      <newline/>
@@ -39,12 +40,12 @@
                         <field name="standard_price" />
                         <newline/>
                             <field name="commercial_cost"/>
-                        
+
                     </group>
-                   
-                    
+
+
                 </xpath>
-                
+
             </field>
         </record>
 
@@ -55,18 +56,18 @@
             <field eval="1" name="priority"/>
             <field name="inherit_id" ref="product.product_kanban_view"/>
             <field name="arch" type="xml">
-                <field name="lst_price" position="replace">
+                <field name="lst_price" position="after">
                     <field name="list_price2"/>
                     <field name="list_price3"/>
                 </field>
             </field>
         </record>
-        
+
     </data>
 </openerp>
 
 
 
 
-        
-       
+
+
