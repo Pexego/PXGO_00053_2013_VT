@@ -34,6 +34,7 @@ class MrpCustomizationWizard(models.TransientModel):
                                               'wzd_id', 'ctype_id',
                                               'Customization types')
     product_uom = fields.Many2one('product.uom', 'UoM', readonly=True)
+    name = fields.Char("Production name", required=True)
 
     @api.one
     @api.onchange('product_id')
@@ -69,7 +70,8 @@ class MrpCustomizationWizard(models.TransientModel):
                 'product_id': self.product_id.id,
                 'bom_id': bom_id,
                 'product_uom': self.product_id.uom_id.id,
-                'product_qty': 1
+                'product_qty': 1,
+                'production_name': self.name
             }
             production = self.env['mrp.production'].create(mrp_args)
             production.signal_workflow('button_confirm')

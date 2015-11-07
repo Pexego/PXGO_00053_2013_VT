@@ -10,6 +10,7 @@
             <field name="arch" type="xml">
                 <form string="Make customization">
                     <group>
+                        <field name="name" colspan="4"/>
                         <group>
                             <field name="product_id" domain="[('custom','=',False),('type','!=','service')]"/>
                             <field name="qty"/>

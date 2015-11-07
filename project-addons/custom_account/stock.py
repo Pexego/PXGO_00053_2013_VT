@@ -46,3 +46,17 @@ class ProductProduct(models.Model):
         return True
 
     _constraints = [(_check_ean_key, 'You provided an invalid "EAN13 Barcode" reference. You may use the "Internal Reference" field instead.', ['ean13'])]
+
+
+class SaleOrder(models.Model):
+
+    _inherit = "sale.order"
+
+    state = fields.Selection(selection_add=[("history", "History")])
+
+
+class SaleOrderLine(models.Model):
+
+    _inherit = "sale.order.line"
+
+    state = fields.Selection(selection_add=[("history", "History")])

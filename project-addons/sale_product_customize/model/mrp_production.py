@@ -30,6 +30,10 @@ class MrpProduction(models.Model):
         'mrp.customize.type', 'mrp_customizations_rel',
         'production_id', 'customization_id', 'Type')
     sale_line_id = fields.Many2one('sale.order.line', 'order line')
+    sale_id = fields.Many2one(related="sale_line_id.order_id",
+                              relation="sale.order", string="Sale",
+                              readonly=True)
+    production_name = fields.Char("Production ref", readonly=True)
 
     @api.one
     def action_assign(self):
@@ -44,6 +48,29 @@ class MrpProduction(models.Model):
                 }
                 reservation = self.env['stock.reservation'].create(reserv_dict)
                 reservation.reserve()
+
+    @api.multi
+    def action_production_end(self):
+        produce_wzd = self.env["mrp.product.produce"]
+        pline_wzd = self.env["mrp.product.produce.line"]
+        for prod in self:
+            for fmove in prod.move_created_ids:
+                wzd = produce_wzd.create({"product_id": fmove.product_id.id,
+                                          "product_qty": fmove.product_uom_qty,
+                                          "mode": "consume_produce",
+                                          "lot_id": fmove.restrict_lot_id and
+                                          fmove.restrict_lot_id.id or False})
+                for line in prod.move_lines:
+                    pline_wzd.create({"product_id": line.product_id.id,
+                                      "product_qty": line.product_uom_qty,
+                                      "lot_id": line.restrict_lot_id and
+                                      line.restrict_lot_id.id or False,
+                                      "produce_id": wzd.id})
+                wzd.with_context(active_id=prod.id).do_produce()
+            if prod.test_production_done():
+                prod.state = "done"
+
+        return True
 
 
 class MrpBomLine(models.Model):
