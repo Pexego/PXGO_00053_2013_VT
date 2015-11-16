@@ -10,6 +10,12 @@
                 <field name="email_from" position="after">
                     <field name="agent_id"/>
                 </field>
+                <page string="Product Return" position="attributes">
+                    <attribute name="string">Product Returns</attribute>
+                </page>
+                <separator string="Product Return" position="attributes">
+                    <attribute name="string">Product Returns</attribute>
+                </separator>
             </field>
         </record>
 

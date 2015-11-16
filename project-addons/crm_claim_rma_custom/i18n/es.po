@@ -24,3 +24,8 @@ msgstr "Comercial"
 #: model:ir.model,name:crm_claim_rma_custom.model_crm_claim
 msgid "Claim"
 msgstr "Reclamación"
+
+#. module: crm_claim_rma_custom
+#: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view
+msgid "Product Returns"
+msgstr "Entrada de producto"

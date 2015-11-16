@@ -6,11 +6,13 @@ from openerp import models, fields
 class CrmClaimRma(models.Model):
 
     _inherit = "crm.claim"
+    _order = "number desc"
 
     agent_id = fields.Many2one('sale.agent', 'Agent')
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
                             required=True, default='rma')
+    priority = fields.Selection(default=0)
 
     def onchange_partner_id(self, cr, uid, ids, partner_id, email=False,
                             context=None):
