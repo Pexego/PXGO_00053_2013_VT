@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright 2015 Vauxoo
+#    Author : Osval Reyes <osval@vauxoo.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,5 +19,26 @@
 #
 ##############################################################################
 
-from . import crm_claim
-from . import partner
+{
+    'name': 'CRM Claim Summary Report',
+    'category': 'Customer Relationship Management',
+    'author': 'Vauxoo, Odoo Community Association (OCA),',
+    'website': 'www.vauxoo.com',
+    'license': 'AGPL-3',
+    'version': '8.0.1.0.0',
+    'depends': [
+        'crm_claim_rma',
+        'report',
+        'crm_claim_rma_custom'
+    ],
+    'demo': [
+        'demo/res_company.xml',
+    ],
+    'data': [
+        'views/res_company.xml',
+        'reports/claim_summary_report_layouts.xml',
+        'reports/claim_summary_report.xml',
+    ],
+    'installable': True,
+    'auto_install': False,
+}

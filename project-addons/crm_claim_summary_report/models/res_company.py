@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright 2015 Vauxoo
+#    Author : Osval Reyes <osval@vauxoo.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,5 +19,10 @@
 #
 ##############################################################################
 
-from . import crm_claim
-from . import partner
+from openerp import fields, models
+
+
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+
+    rma_footer_note = fields.Text('RMA Note', translate=True)

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-26 18:33+0000\n"
-"PO-Revision-Date: 2015-10-26 18:33+0000\n"
+"POT-Creation-Date: 2015-11-19 19:12+0000\n"
+"PO-Revision-Date: 2015-11-19 19:12+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: crm_claim_rma_custom
-#: field:crm.claim,agent_id:0
+#: field:crm.claim,agent:0
 msgid "Agent"
 msgstr "Comercial"
 
@@ -26,6 +26,31 @@ msgid "Claim"
 msgstr "Reclamación"
 
 #. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
+msgid "Create repair"
+msgstr "Crear reparación"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_claim_line
+msgid "List of product to return"
+msgstr "Listado de productos a devolver"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_res_partner
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: crm_claim_rma_custom
+#: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view
+msgid "Product Return"
+msgstr "Devolución de producto"
+
+#. module: crm_claim_rma_custom
 #: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view
 msgid "Product Returns"
 msgstr "Entrada de producto"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
+msgid "Split"
+msgstr "Desglosar"

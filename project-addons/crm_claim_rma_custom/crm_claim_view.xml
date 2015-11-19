@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
             <field name="arch" type="xml">
                 <field name="email_from" position="after">
-                    <field name="agent_id"/>
+                    <field name="agent"/>
                 </field>
                 <page string="Product Return" position="attributes">
                     <attribute name="string">Product Returns</attribute>
@@ -16,6 +16,33 @@
                 <separator string="Product Return" position="attributes">
                     <attribute name="string">Product Returns</attribute>
                 </separator>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="crm_claim_line_tree_view_invisible_states">
+            <field name="name">CRM - Claims Tree invisible states</field>
+            <field name="model">claim.line</field>
+            <field name="inherit_id" ref="crm_claim_rma.crm_claim_line_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="state" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="substate_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="supplier_id" position="attributes">
+                    <attribute name="context">{'search_product_id': product_id}</attribute>
+                </field>
+                <field name="supplier_id" position="after">
+                    <field name="write_date"/>
+                </field>
+                <field name="product_returned_quantity" position="after">
+                    <button name="action_split" type="object" string="Split" icon="STOCK_CUT"
+                        attrs="{'invisible': ['|','|','|',('move_in_customer_state','!=',False),('move_out_customer_state','!=',False),('repair_id','!=',False),('product_returned_quantity','&lt;=',1.0)]}"/>
+                </field>
+                <button name="%(crm_claim_rma.action_claim_make_repair)d" position="replace">
+                    <button name="create_repair" type="object" icon="gtk-execute" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
+                </button>
             </field>
         </record>
 
