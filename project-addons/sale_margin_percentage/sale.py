@@ -42,8 +42,8 @@ class sale_order_line(orm.Model):
                                    (line.purchase_price *
                                     line.product_uos_qty), 2)
                     res[line.id]['margin_perc'] = round((margin * 100) /
-                                                        (line.purchase_price *
-                                                         line.product_uos_qty),
+                                                        ((line.purchase_price *
+                                                         line.product_uos_qty) or 1.0),
                                                         2)
                 elif line.product_id.standard_price:
                     margin = round((line.price_unit * line.product_uos_qty *
@@ -51,8 +51,8 @@ class sale_order_line(orm.Model):
                                    (line.product_id.standard_price *
                                     line.product_uos_qty), 2)
                     res[line.id]['margin_perc'] = round((margin * 100) /
-                                                        (line.product_id.standard_price *
-                                                         line.product_uos_qty),
+                                                        ((line.product_id.standard_price *
+                                                         line.product_uos_qty) or 1.0),
                                                         2)
                 res[line.id]['margin'] = margin
         return res
