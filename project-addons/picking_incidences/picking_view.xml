@@ -10,11 +10,8 @@
                 <button name="action_cancel" position="after">
                     <button name="action_accept_ready_qty" attrs="{'invisible': ['|',('state', '!=', 'assigned'),('with_incidences','=',False)]}" string="Accept ready qtys." groups="base.group_user" type="object"/>
                 </button>
-                <button name="do_unreserve" position="replace">
-                    <button name="do_unreserve" string="Unreserve" groups="base.group_user" type="object" attrs="{'invisible': ['|',('quant_reserved_exist', '=', False),('with_incidences','=',True)]}"/>
-                </button>
                 <field name="origin" position="after">
-                    <field name="with_incidences"/>
+                    <field name="with_incidences" readonly="0"/>
                 </field>
             </field>
         </record>

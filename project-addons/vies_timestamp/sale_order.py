@@ -55,10 +55,11 @@ class sale_order(osv.osv):
             try:
                 client = Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl", proxy=getproxies())
                 res = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
+                result = res["valid"]
             except:
-                raise osv.except_osv(_('VIES Error'), _('General Error: connection timeout for "%s"') % vat)
+                result = False
             check = bool(res["valid"])
-            if check :
+            if check:
                 vals = {'vies_validation_check': check, 'vies_validation_timestamp': date_now}
                 from reportlab.pdfgen import canvas
                 sale = self.browse(cr, uid, ids)
