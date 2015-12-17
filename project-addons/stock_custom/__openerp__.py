@@ -28,6 +28,7 @@
     'website': '',
     "depends" : ["base", "stock_valued_picking", "base_report_to_printer"],
     "data" : ["ir_attachment_view.xml",
-              "stock_custom_report.xml"],
+              "stock_custom_report.xml",
+              "stock_view.xml"],
     "installable": True
 }

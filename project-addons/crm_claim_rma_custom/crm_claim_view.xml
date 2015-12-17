@@ -46,29 +46,6 @@
             </field>
         </record>
 
-        <!-- <record model="ir.ui.view" id="inherit_crm_case_claims_form_view">
-            <field name="name">CRM - Claims Form</field>
-            <field name="model">crm.claim</field>
-            <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
-            <field name="arch" type="xml">
-              <xpath expr="//field[@name='claim_type']" position="attributes">
-                <attribute name="invisible">True</attribute>
-              </xpath>
-              <xpath expr="//field[@name='date_action_next']" position="attributes">
-                <attribute name="invisible">True</attribute>
-              </xpath>
-              <xpath expr="//field[@name='action_next']" position="attributes">
-                <attribute name="invisible">True</attribute>
-              </xpath>
-              <xpath expr="//field[@name='section_id']" position="attributes">
-                <attribute name="invisible">True</attribute>
-              </xpath>
-              <xpath expr="//separator[@string='Actions']" position="attributes">
-                <attribute name="invisible">True</attribute>
-              </xpath>
-            </field>
-        </record> -->
-
         <record model="ir.ui.view" id="inherit2_crm_case_claims_tree_view">
           <field name="name">CRM - Claims Tree</field>
           <field name="model">crm.claim</field>
@@ -76,6 +53,9 @@
           <field name="arch" type="xml">
             <xpath expr="//field[@name='section_id']" position="replace">
               <field name="section_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='claim_type']" position="replace">
+              <field name="claim_type" invisible="1"/>
             </xpath>
           </field>
         </record>
@@ -99,6 +79,19 @@
               </xpath>
               <xpath expr="//field[@name='categ_id']" position="replace">
                 <field name="categ_id" invisible="1"/>
+              </xpath>
+
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="inherit_crm_case_claims_form_view">
+            <field name="name">CRM - Claims Form</field>
+            <field name="model">crm.claim</field>
+            <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
+            <field name="arch" type="xml">
+              <xpath expr="//group/field[@name='name']" position="replace">
+                <field name="name" on_change="onchange_name(name)"/>
+                <!-- <attributes name="on_change">onchange_name(name)</attributes> -->
               </xpath>
             </field>
         </record>

@@ -47,6 +47,14 @@ class CrmClaimRma(models.Model):
 
         return res
 
+    def onchange_name(self, cr, uid, ids, name, context=None):
+        if name == 'return':
+            return {'value': {'invoice_type': 'refund'}}
+        elif name == 'rma':
+            return {'value': {'invoice_type': 'invoice'}}
+
+
+
 
 class CrmClaimLine(models.Model):
 
