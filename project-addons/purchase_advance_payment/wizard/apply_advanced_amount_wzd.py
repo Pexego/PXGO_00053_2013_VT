@@ -31,7 +31,6 @@ class ApplyOnAccountPurchaseAmount(models.TransientModel):
     @api.multi
     def apply_amount(self):
         invoice_obj = self.env["account.invoice"]
-        import ipdb; ipdb.set_trace()
         invoice = invoice_obj.browse(self.env.context["active_ids"][0])
         if invoice.on_account_purchase < self[0].amount:
             raise exceptions.Warning(_("Cannot apply more amount that current"

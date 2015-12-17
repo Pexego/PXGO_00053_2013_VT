@@ -34,7 +34,13 @@ class AccountInvoice(models.Model):
             move_line_obj = self.env['account.move.line']
             lines_to_unreconcile = self.env['account.move.line']
             for inv in self:
-                for picking in inv.pick_ids:
+                pick_ids = []
+                for line in inv.invoice_line:
+                    if line.move_id and line.move_id.picking_id and \
+                            line.move_id.picking_id not in pick_ids:
+                        pick_ids.append(line.move_id.picking_id)
+
+                for picking in pick_ids:
                     if picking.pending_invoice_move_id:
                         if picking.pending_invoice_move_id.reversal_id:
                             move_line_ids = move_line_obj.\
@@ -67,7 +73,13 @@ class AccountInvoice(models.Model):
             move_obj = self.env['account.move']
 
             for inv in self:
-                for picking in inv.pick_ids:
+                pick_ids = []
+                for line in inv.invoice_line:
+                    if line.move_id and line.move_id.picking_id and \
+                            line.move_id.picking_id not in pick_ids:
+                        pick_ids.append(line.move_id.picking_id)
+
+                for picking in pick_ids:
                     lines_to_reconcile = self.env['account.move.line']
                     if picking.pending_invoice_move_id:
                         date = inv.date_invoice or time.strftime('%Y-%m-%d')
