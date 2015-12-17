@@ -8,10 +8,7 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <button name="action_cancel" position="after">
-                    <button name="action_accept_ready_qty" attrs="{'invisible': ['|',('state', '!=', 'assigned'),('with_incidences','=',False)]}" string="Accept ready qtys." groups="base.group_user" type="object"/>
-                </button>
-                <button name="do_unreserve" position="replace">
-                    <button name="do_unreserve" string="Unreserve" groups="base.group_user" type="object" attrs="{'invisible': ['|',('quant_reserved_exist', '=', False),('with_incidences','=',True)]}"/>
+                    <button name="action_accept_ready_qty" attrs="{'invisible': ['|',('state', 'not in', ['assigned','partially_available']),('with_incidences','=',False)]}" string="Accept ready qtys." groups="base.group_user" type="object"/>
                 </button>
                 <field name="origin" position="after">
                     <field name="with_incidences"/>

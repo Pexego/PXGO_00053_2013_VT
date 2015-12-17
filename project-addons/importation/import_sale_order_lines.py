@@ -14,7 +14,7 @@ class import_sale_order_lines(object):
         try:
             self.url_template = "http://%s:%s/xmlrpc/%s"
             self.server = "localhost"
-            self.port = 5069
+            self.port = 9069
             self.dbname = dbname
             self.user_name = user
             self.user_passwd = passwd
@@ -160,7 +160,7 @@ class import_sale_order_lines(object):
             record = sh.row_values(rownum)
             try:
                 product_ids = self.search("product.product", [('default_code', '=', record[1])])
-                order_ids = self.search("sale.order", [('name', '=', str(int(record[7])))])
+                order_ids = self.search("sale.order", [('name', '=', str(record[7]).strip())])
                 if order_ids:
                     lines_vals = {
                         "product_id": product_ids and product_ids[0] or False,
@@ -177,7 +177,7 @@ class import_sale_order_lines(object):
                 print "%s de %s" % (cont, all_lines)
                 cont += 1
             except Exception, e:
-                print "EXCEPTION: REC: %" % (record), e
+                print "EXCEPTION: REC: ",record, e
 
         return True
 

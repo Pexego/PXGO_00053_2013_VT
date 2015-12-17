@@ -8,8 +8,8 @@
             <field name="model">account.invoice</field>
             <field name="arch" type="xml">
                 <field name="residual" position="after">
-                    <field name="advance_amount" groups="account.group_account_user" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-                    <group colspan="2" col="3">
+                    <field name="advance_amount" groups="account.group_account_user" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'invisible': [('type', '!=', 'out_invoice')]}"/>
+                    <group colspan="2" col="3" attrs="{'invisible': [('type', '!=', 'out_invoice')]}">
                         <field name="on_account_amount" groups="account.group_account_user" widget="monetary" options="{'currency_field': 'currency_id'}"/>
                         <button name="%(action_apply_on_acocunt_wizard)d" type="action" string="Apply" states="open"/>
                     </group>
