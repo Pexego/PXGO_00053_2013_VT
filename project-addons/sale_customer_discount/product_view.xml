@@ -38,6 +38,8 @@
                      <label for="smargin_price3"/><div name="margins5"><field name="smargin_price3" class="oe_inline"/> %% </div>
                         <newline/>
                         <field name="standard_price" />
+                        <field name="standard_price_cost"/>
+                        <field name="cost_method"/>
                         <newline/>
                             <field name="commercial_cost"/>
 

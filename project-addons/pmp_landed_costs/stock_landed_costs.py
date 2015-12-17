@@ -74,7 +74,7 @@ class StockLandedCost(models.Model):
                     else:
                         quant_dict[quant.id] += diff
                 for key, value in quant_dict.items():
-                    quant_obj.write(cr, uid, key, {'cost': value}, context=context)
+                    quant_obj.write(cr, 1, key, {'cost': value}, context=context)
                 qty_out = 0
                 for quant in line.move_id.quant_ids:
                     if quant.location_id.usage != 'internal':
