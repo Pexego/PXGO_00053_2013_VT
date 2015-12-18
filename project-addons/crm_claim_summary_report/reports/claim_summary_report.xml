@@ -150,6 +150,7 @@
                             <th>Type</th>
                             <th>Serial/Lot</th>
                             <th>Description</th>
+                            <th>Internal Description</th>
                         </tr>
                     </thead>
                     <tbody class="body-product-info">
@@ -160,6 +161,7 @@
                             <td class="col-xs-2"><span t-field="line_id.claim_origine"/></td>
                             <td class="col-xs-1"><span t-field="line_id.prodlot_id.ref"/></td>
                             <td class="col-xs-2"><span t-field="line_id.name"/></td>
+                            <td class="col-xs-2"><span t-field="line_id.internal_description"/></td>
                         </tr>
                     </tbody>
                 </table>

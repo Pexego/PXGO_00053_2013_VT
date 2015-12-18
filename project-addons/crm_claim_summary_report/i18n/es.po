@@ -1,19 +1,24 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#       * crm_claim_summary_report
+#	* crm_claim_summary_report
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-19 19:14+0000\n"
-"PO-Revision-Date: 2015-11-19 19:14+0000\n"
+"POT-Creation-Date: 2015-12-18 11:05+0000\n"
+"PO-Revision-Date: 2015-12-18 11:05+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: crm_claim_summary_report
+#: view:website:crm_claim_summary_report.minimal_layout
+msgid "<!DOCTYPE html>"
+msgstr "<!DOCTYPE html>"
 
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.template_page_copy_title
@@ -28,17 +33,17 @@ msgstr "COPIA DEL CLIENTE"
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.page_summary_report
 msgid "Claim Date"
-msgstr "Fecha de Reclamación"
+msgstr "Fecha de Reclamo"
 
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.page_summary_report
 msgid "Claim No."
-msgstr "No. de Reclamación"
+msgstr "No. de Reclamo"
 
 #. module: crm_claim_summary_report
 #: model:ir.actions.report.xml,name:crm_claim_summary_report.claim_summary_report
 msgid "Claim Summary Report"
-msgstr "Resumen de Reclamación"
+msgstr "Reporte Resumen de Reclamo"
 
 #. module: crm_claim_summary_report
 #: model:ir.model,name:crm_claim_summary_report.model_res_company
@@ -92,14 +97,19 @@ msgid "Internal Code"
 msgstr "Código"
 
 #. module: crm_claim_summary_report
+#: view:website:crm_claim_summary_report.page_summary_report
+msgid "Internal Description"
+msgstr "Descripción interna"
+
+#. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.external_layout_header
 msgid "Phone"
-msgstr "Telef."
+msgstr "Telef"
 
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.page_summary_report
 msgid "Phone Number"
-msgstr "No. Telf."
+msgstr "No. Telf"
 
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.page_summary_report
@@ -125,7 +135,7 @@ msgstr "Cantidad"
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.product_on_claim
 msgid "RMA No."
-msgstr "RMA Nº"
+msgstr "Reclamo No."
 
 #. module: crm_claim_summary_report
 #: field:res.company,rma_footer_note:0
@@ -135,7 +145,7 @@ msgstr "Nota de RMA"
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.external_layout_header
 msgid "RMA Receipt"
-msgstr "Recepción de Reclamación"
+msgstr "Recepción de Reclamo"
 
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.page_summary_report
@@ -146,12 +156,12 @@ msgstr "Responsable"
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.page_summary_report
 msgid "Serial/Lot"
-msgstr "Lote/Nº Serie"
+msgstr "Lote/No. Serial"
 
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.product_on_claim
 msgid "Serial/Lot Number"
-msgstr "Nº de Serie"
+msgstr "No. de Serial"
 
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.external_layout_header
@@ -167,3 +177,24 @@ msgstr "Tipo"
 #: view:website:crm_claim_summary_report.external_layout_header
 msgid "Website"
 msgstr "Sitio web"
+
+#. module: crm_claim_summary_report
+#: view:website:crm_claim_summary_report.layout
+msgid "crm_claim_summary_report.layout"
+msgstr "crm_claim_summary_report.layout"
+
+#. module: crm_claim_summary_report
+#: view:website:crm_claim_summary_report.layout
+msgid "data_report_dpi if data_report_dpi else None"
+msgstr "data_report_dpi if data_report_dpi else None"
+
+#. module: crm_claim_summary_report
+#: view:website:crm_claim_summary_report.layout
+msgid "data_report_header_spacing if data_report_header_spacing else None"
+msgstr "data_report_header_spacing if data_report_header_spacing else None"
+
+#. module: crm_claim_summary_report
+#: view:website:crm_claim_summary_report.layout
+msgid "data_report_margin_top if data_report_margin_top else None"
+msgstr "data_report_margin_top if data_report_margin_top else None"
+
