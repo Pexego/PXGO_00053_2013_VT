@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    $Carlos Lombardía <carlos@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,6 +19,24 @@
 #
 ##############################################################################
 
-from . import crm_claim
-from . import partner
-from . import mrp_repair
+from openerp import models, fields, api
+
+class mrp_repair(models.Model):
+    _inherit = "mrp.repair"
+
+    @api.multi
+    def action_repair_end(self):
+        res = super(mrp_repair, self).action_repair_end()
+        order_obj = self.browse(self.id)
+        claim_line_obj = self.env['claim.line'].browse(self.claim_id.id)
+        claim_obj = self.env['crm.claim'].browse(claim_line_obj.id)
+
+        if claim_obj.claim_type == u'customer':
+            for operation in order_obj.operations.ids:
+                operation_obj = order_obj.operations.browse(operation)
+                if operation_obj.type == u'add':
+                    if operation_obj.to_invoice == False:
+                        product_obj = self.env['product.product'].browse(operation_obj.product_id.id)
+                        claim_obj.rma_cost += product_obj.standard_price
+
+        return True
