@@ -49,6 +49,9 @@
                     <field name="production_name"/>
                     <field name="type_ids" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                 </field>
+                <form position="attributes">
+                    <attribute name="create">0</attribute>
+                </form>
             </field>
         </record>
 
@@ -60,6 +63,9 @@
                 <field name="origin" position="after">
                     <field name="type_ids" widget="many2many_tags"/>
                 </field>
+                <tree position="attributes">
+                    <attribute name="create">0</attribute>
+                </tree>
             </field>
         </record>
 
