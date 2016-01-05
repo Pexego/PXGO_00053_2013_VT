@@ -49,18 +49,18 @@ class sale_order(osv.osv):
             except:
                 raise osv.except_osv(_('Error'), _('import module "suds" failed - check VIES needs this module'))
 
-            check = False
             country_code = '%s'%(vat[:2])
             vat_number = '%s'%(vat[2:])
+            res = {}
             try:
                 client = Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl", proxy=getproxies())
                 res = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
-                result = res["valid"]
+                result = bool(res["valid"])
             except:
                 result = False
-            check = bool(res["valid"])
-            if check:
-                vals = {'vies_validation_check': check, 'vies_validation_timestamp': date_now}
+
+            if result:
+                vals = {'vies_validation_check': result, 'vies_validation_timestamp': date_now}
                 from reportlab.pdfgen import canvas
                 sale = self.browse(cr, uid, ids)
                 name = '%s.pdf' % sale.name.replace(" ","").replace("\\","").replace("/","").replace("-","_")
