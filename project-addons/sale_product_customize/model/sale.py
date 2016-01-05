@@ -34,23 +34,6 @@ class SaleOrderLine(models.Model):
         'sale_order_line_id', 'customization_id', 'Customizations')
     requires_mount = fields.Boolean('Requires mount')
 
-    def product_id_change(self, cr, uid, ids, pricelist, product, qty=0,
-                          uom=False, qty_uos=0, uos=False, name='',
-                          partner_id=False, lang=False, update_tax=True,
-                          date_order=False, packaging=False,
-                          fiscal_position=False, flag=False, context=None):
-
-        res = super(SaleOrderLine, self).product_id_change(
-            cr, uid, ids, pricelist, product, qty, uom, qty_uos, uos, name,
-            partner_id, lang, update_tax, date_order, packaging,
-            fiscal_position, flag, context)
-        prod = self.pool.get('product.product').browse(cr, uid, product,
-                                                       context)
-        #if prod.can_mount_ids:
-        #    res['domain']['can_mount_id'] = [('id', 'in',
-         #                                  [x.id for x in prod.can_mount_ids])]
-        return res
-
     @api.multi
     @api.onchange('customization_types')
     def onchange_customization_types(self):
@@ -73,7 +56,7 @@ class SaleOrder(models.Model):
             new_line = False
             if line.customization_types and not line.product_id.custom:
                 if not line.product_id.default_code:
-                    raise exceptions.except_orm(
+                    raise exceptions.Warning(
                         _('Error'),
                         _('One of the products not have default code'))
                 product_code = line.product_id.default_code
@@ -84,7 +67,7 @@ class SaleOrder(models.Model):
                 customizations = line.customization_types
                 if mount:
                     if not line.can_mount_id.product_id.default_code:
-                        raise exceptions.except_orm(
+                        raise exceptions.Warning(
                             _('Error'),
                             _('One of the products not have default code'))
                     customizations = customizations - mount

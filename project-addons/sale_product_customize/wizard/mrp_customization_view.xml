@@ -12,12 +12,16 @@
                     <group>
                         <field name="name" colspan="4"/>
                         <group>
-                            <field name="product_id" domain="[('custom','=',False),('type','!=','service')]"/>
+                            <field name="product_id"/>
                             <field name="qty"/>
                             <field name="product_uom"/>
                         </group>
                         <group>
-                            <field name="customization_type_ids" widget="many2many_tags" domain="[('aux_product', '=', False)]"/>
+                            <field name="customization_type_ids" widget="many2many_tags"/>
+                            <field name="requires_mount" invisible="1"/>
+                            <field name="requires_partner" invisible="1"/>
+                            <field name="partner_id" attrs="{'invisible': [('requires_partner', '=',False)], 'required': [('requires_partner', '=', True)]}"/>
+                            <field name="can_mount_id" attrs="{'invisible': [('requires_mount', '=',False)], 'required': [('requires_mount', '=', True)]}" widget="selection" domain="[('head_product_id', '=', product_id)]"/>
                         </group>
                     </group>
                     <button string="Make" name="create_customization" type="object" icon="gtk-ok"/>

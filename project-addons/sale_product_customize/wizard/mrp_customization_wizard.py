@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import models, fields, api, exceptions, _
 
 
 class MrpCustomizationWizard(models.TransientModel):
@@ -27,14 +27,34 @@ class MrpCustomizationWizard(models.TransientModel):
     _name = "mrp.customization.wizard"
 
     product_id = fields.Many2one('product.product', 'Product', required=True,
-                                 domain=[('type', '=', 'product')])
+                                 domain=[('type', '=', 'product'),
+                                         ('custom', '=', False)])
     qty = fields.Float('Quantity', required=True)
     customization_type_ids = fields.Many2many('mrp.customize.type',
                                               'customization_wzd_ctype_rel',
                                               'wzd_id', 'ctype_id',
-                                              'Customization types')
+                                              'Customization types',
+                                              required=True)
     product_uom = fields.Many2one('product.uom', 'UoM', readonly=True)
     name = fields.Char("Production name", required=True)
+    can_mount_id = fields.Many2one('product.product.mount', 'Mount')
+    requires_mount = fields.Boolean('Requires mount')
+    requires_partner = fields.Boolean('Requires partner')
+    partner_id = fields.Many2one('res.partner', 'Related partner',
+                                 domain=[('customer', '=', True)])
+
+    @api.one
+    @api.onchange('customization_type_ids')
+    def onchange_customization_types(self):
+        requires_mount = False
+        requires_partner = False
+        for custom in self.customization_type_ids:
+            if custom.aux_product:
+                requires_mount = True
+            else:
+                requires_partner = True
+        self.requires_mount = requires_mount
+        self.requires_partner = requires_partner
 
     @api.one
     @api.onchange('product_id')
@@ -46,20 +66,38 @@ class MrpCustomizationWizard(models.TransientModel):
 
     @api.one
     def create_customization(self):
-        bom = self.env['mrp.bom'].search([('product_id', '=',
-                                           self.product_id.id)])
-        bom_id = bom and bom[0].id or False
-        if not bom_id:
-            bom_list_dict = {
-                'name': self.product_id.name,
-                'product_tmpl_id': self.product_id.product_tmpl_id.id,
-                'product_id': self.product_id.id,
-                'bom_line_ids':
-                [(0, 0, {'product_id': self.product_id.id,
-                         'product_qty': 1,
-                         'final_lot': True})]
-            }
-            bom_id = self.env['mrp.bom'].create(bom_list_dict).id
+        require_mount = False
+        require_partner = False
+        prod_obj = self.env["product.product"]
+        for custom in self.customization_type_ids:
+            if custom.aux_product:
+                require_mount = True
+            else:
+                require_partner = True
+
+        if not self.product_id.default_code:
+            raise exceptions.Warning(
+                _('This product not have default code'))
+        product_code = self.product_id.default_code
+        if require_mount:
+            if not self.can_mount_id.product_id.default_code:
+                raise exceptions.Warning(
+                    _('The product to mount not have default code'))
+            product_code += '#' + self.can_mount_id.product_id.\
+                default_code
+        if require_partner:
+            if not self.partner_id.ref:
+                raise exceptions.Warning(
+                    _('The partner %s not have reference') %
+                    self.partner_id.name)
+            product_code += '|' + str(self.partner_id.ref)
+
+        for custom in self.customization_type_ids:
+            if not custom.aux_product:
+                product_code += '|' + str(custom.code)
+
+        product = prod_obj.get_product_customized(product_code,
+                                                  self.can_mount_id)
         if self.customization_type_ids:
             type_ids = [(6, 0, [x.id for x in self.customization_type_ids])]
         else:
@@ -67,9 +105,9 @@ class MrpCustomizationWizard(models.TransientModel):
         for x in range(int(self.qty)):
             mrp_args = {
                 'type_ids': type_ids,
-                'product_id': self.product_id.id,
-                'bom_id': bom_id,
-                'product_uom': self.product_id.uom_id.id,
+                'product_id': product.id,
+                'bom_id': product.bom_ids[0].id,
+                'product_uom': product.uom_id.id,
                 'product_qty': 1,
                 'production_name': self.name
             }
