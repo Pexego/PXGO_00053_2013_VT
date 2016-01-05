@@ -60,3 +60,16 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     state = fields.Selection(selection_add=[("history", "History")])
+
+
+class PurchaseOrder(models.Model):
+
+    _inherit = "purchase.order"
+
+    state = fields.Selection(selection_add=[("history", "History")])
+
+class PurchaseOrderLine(models.Model):
+
+    _inherit = "purchase.order.line"
+
+    state = fields.Selection(selection_add=[("history", "History")])
