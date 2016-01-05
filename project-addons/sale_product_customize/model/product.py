@@ -63,8 +63,7 @@ class ProductProduct(models.Model):
                 # hay varios productos
                 code = prod_code.split('#')
                 first_prod = self.search([('default_code', '=', code[0])])
-                sec_prod = self.search([('default_code', '=',
-                                         code[1][:code[1].index('|')])])
+                sec_prod = self.search([('default_code', '=', code[1])])
                 prod_dict['name'] = first_prod.name + ' - ' + sec_prod.name
                 prod_dict['standard_price'] = first_prod.standard_price + \
                     (sec_prod.standard_price * product_mount.qty)
@@ -78,11 +77,14 @@ class ProductProduct(models.Model):
                     [(0, 0,
                       {'product_id': first_prod.id,
                        'product_qty': 1,
-                       'final_lot': True}),
-                     (0, 0,
-                      {'product_id': sec_prod.id,
-                       'product_qty':  product_mount.qty,
-                       'final_lot': False})]
+                       'final_lot': True})]
+                qty = product_mount.qty
+                while qty > 0:
+                    bom_lines.append((0, 0,
+                                      {'product_id': sec_prod.id,
+                                       'product_qty': 1,
+                                       'final_lot': False}))
+                    qty -= 1
             else:
                 first_prod = self.search([('default_code', '=',
                                            prod_code.split('|')[0])])

@@ -95,7 +95,8 @@ class SaleOrder(models.Model):
                         _('Partner reference'),
                         _('The partner %s not have reference') %
                         self.partner_id.name)
-                product_code += '|' + str(self.partner_id.ref)
+                if customizations:
+                    product_code += '|' + str(self.partner_id.ref)
                 for custom in customizations:
                     product_code += '|' + str(custom.code)
                 product = prod_obj.get_product_customized(product_code,
