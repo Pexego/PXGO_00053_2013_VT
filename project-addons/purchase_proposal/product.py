@@ -31,6 +31,7 @@ class ProductProduct(models.Model):
     order_cycle = fields.Integer('Order cycle')
     transport_time = fields.Integer('Transport time')
     security_margin = fields.Integer('Security margin')
+    newsletter = fields.Boolean('Newsletter')
 
     @api.model
     def compute_last_sixty_days_sales(self):
