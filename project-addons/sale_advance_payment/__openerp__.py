@@ -33,6 +33,7 @@
              "sale_view.xml",
              "wizard/apply_on_account_amount_view.xml",
              "invoice_view.xml",
-             "partner_view.xml"],
+             "partner_view.xml",
+             "security/ir.model.access.csv"],
     "installable": True,
 }

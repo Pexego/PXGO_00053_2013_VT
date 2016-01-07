@@ -24,5 +24,7 @@
             </field>
         </record>
 
+        <menuitem id="account.menu_finance_reporting" name="Accounting" parent="base.menu_reporting" sequence="35" groups="account.group_account_manager"/>
+
     </data>
 </openerp>

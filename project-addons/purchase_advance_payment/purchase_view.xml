@@ -10,10 +10,10 @@
             <field name="arch" type="xml">
                 <button name="action_cancel_draft" position="before">
                     <button name="%(action_view_account_purchase_voucher_wizard)d" string="Pay purchase advanced"
-                        type="action" icon="gtk-execute" states="draft,sent,confirmed,approved"/>
+                        type="action" icon="gtk-execute" states="draft,sent,confirmed,approved" groups="account.group_account_invoice"/>
                 </button>
                 <page string="Deliveries &amp; Invoices" position="after">
-                    <page string="Payment advances">
+                    <page string="Payment advances" groups="account.group_account_invoice">
                         <field name="account_voucher_ids" nolabel="1" colspan="4"/>
                     </page>
                 </page>

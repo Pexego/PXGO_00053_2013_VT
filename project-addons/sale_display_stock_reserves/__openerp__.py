@@ -34,6 +34,7 @@ Sales display stock reserves
     "depends": ["base", "sale", "product", "stock_reserve"],
     "data": [
         "sale_view.xml",
+        'security/ir.model.access.csv'
     ],
     "demo": [],
     'auto_install': False,

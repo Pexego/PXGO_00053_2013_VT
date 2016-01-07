@@ -30,12 +30,14 @@
     """,
     'author': 'Pexego',
     'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock',
-                'stock_account', 'sale_stock', 'account_payment_partner',
+    "depends": ['email_template', 'report', 'account', 'stock', 'product_brand',
+                'stock_account', 'sale_stock', 'account_payment_partner', 'crm',
                 'account_payment', 'sale', 'purchase', 'nan_partner_risk'],
     "data": ['account_view.xml',
              'partner_view.xml',
              'report/account_invoice_report_view.xml',
-             'report_custom_view.xml'],
+             'report_custom_view.xml',
+             'security/ir.model.access.csv',
+             'crm_view.xml'],
     "installable": True
 }
