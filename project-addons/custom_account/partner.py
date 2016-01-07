@@ -41,5 +41,6 @@ class Partner(models.Model):
         self.pending_orders_amount = total
 
     attach_picking = fields.Boolean("Attach picking")
+    newsletter = fields.Boolean('Newsletter')
     pending_orders_amount = fields.Float(compute="_pending_orders_amount",
                                          string='Uninvoiced Orders')
