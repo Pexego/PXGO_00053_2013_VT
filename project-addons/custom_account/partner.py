@@ -23,10 +23,23 @@
 
 from openerp import fields, models, api
 
-from openerp.exceptions import ValidationError
 
 class Partner(models.Model):
 
     _inherit = "res.partner"
-    attach_picking= fields.Boolean("Attach picking")
 
+    @api.one
+    def _pending_orders_amount(self):
+        sales = self.env['sale.order'].\
+            search([('partner_id', 'child_of', [self.id]),
+                    ('state', 'not in', ['draft', 'cancel', 'wait_risk',
+                                         'history'])])
+        total = 0.0
+        for order in sales:
+            total += order.amount_total - order.amount_invoiced
+
+        self.pending_orders_amount = total
+
+    attach_picking = fields.Boolean("Attach picking")
+    pending_orders_amount = fields.Float(compute="_pending_orders_amount",
+                                         string='Uninvoiced Orders')
