@@ -19,5 +19,4 @@
 #
 ##############################################################################
 
-from . import mrp_create_prod
 from . import mrp_customization_wizard

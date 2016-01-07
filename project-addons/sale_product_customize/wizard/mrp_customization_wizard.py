@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego All Rights Reserved
+#    Copyright (C) 2014 Pexego
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -64,54 +66,61 @@ class MrpCustomizationWizard(models.TransientModel):
         else:
             self.product_uom = False
 
-    @api.one
+    @api.multi
     def create_customization(self):
         require_mount = False
         require_partner = False
         prod_obj = self.env["product.product"]
-        for custom in self.customization_type_ids:
+        for custom in self[0].customization_type_ids:
             if custom.aux_product:
                 require_mount = True
             else:
                 require_partner = True
 
-        if not self.product_id.default_code:
+        if not self[0].product_id.default_code:
             raise exceptions.Warning(
                 _('This product not have default code'))
-        product_code = self.product_id.default_code
+        product_code = self[0].product_id.default_code
         if require_mount:
-            if not self.can_mount_id.product_id.default_code:
+            if not self[0].can_mount_id.product_id.default_code:
                 raise exceptions.Warning(
                     _('The product to mount not have default code'))
-            product_code += '#' + self.can_mount_id.product_id.\
+            product_code += '#' + self[0].can_mount_id.product_id.\
                 default_code
         if require_partner:
-            if not self.partner_id.ref:
+            if not self[0].partner_id.ref:
                 raise exceptions.Warning(
                     _('The partner %s not have reference') %
-                    self.partner_id.name)
+                    self[0].partner_id.name)
             product_code += '|' + str(self.partner_id.ref)
 
-        for custom in self.customization_type_ids:
+        for custom in self[0].customization_type_ids:
             if not custom.aux_product:
                 product_code += '|' + str(custom.code)
 
         product = prod_obj.get_product_customized(product_code,
-                                                  self.can_mount_id)
-        if self.customization_type_ids:
-            type_ids = [(6, 0, [x.id for x in self.customization_type_ids])]
+                                                  self[0].can_mount_id)
+        if self[0].customization_type_ids:
+            type_ids = [(6, 0, [x.id for x in self[0].customization_type_ids])]
         else:
             type_ids = False
-        for x in range(int(self.qty)):
+        production_ids = []
+        for x in range(int(self[0].qty)):
             mrp_args = {
                 'type_ids': type_ids,
                 'product_id': product.id,
                 'bom_id': product.bom_ids[0].id,
                 'product_uom': product.uom_id.id,
                 'product_qty': 1,
-                'production_name': self.name
+                'production_name': self[0].name
             }
             production = self.env['mrp.production'].create(mrp_args)
             production.signal_workflow('button_confirm')
+            production_ids.append(production.id)
 
-        return True
+        action = self.env.ref('mrp.mrp_production_action')
+        data = action.read()[0]
+        data['domain'] = [('id', 'in', production_ids)]
+        data['target'] = "parent"
+
+        return data

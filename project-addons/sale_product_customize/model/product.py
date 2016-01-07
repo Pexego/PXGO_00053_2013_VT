@@ -33,6 +33,13 @@ class ProductProductMount(models.Model):
                                       required=True)
 
 
+class ProductTemplate(models.Model):
+
+    _inherit = "product.template"
+
+    custom = fields.Boolean("Custom", readonly=True)
+
+
 class ProductProduct(models.Model):
 
     _inherit = 'product.product'
@@ -41,7 +48,6 @@ class ProductProduct(models.Model):
         'product.product.mount',
         'head_product_id',
         'Can mount')
-    custom = fields.Boolean("Custom", readonly=True)
 
     def get_product_customized(self, prod_code, product_mount):
         product = self.search([('default_code', '=', prod_code)])

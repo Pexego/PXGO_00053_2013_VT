@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
         <record id="sale_line_add_mounted_in_tree" model="ir.ui.view">
             <field name="name">sale.order.line.add.mounted</field>
             <field name="model">sale.order</field>
@@ -16,7 +17,14 @@
                     <field name="requires_mount"  invisible="1"/>
                     <field name="can_mount_id"  widget="selection" domain="[('head_product_id', '=', product_id)]" attrs="{'readonly': [('requires_mount', '=', False)], 'required': [('requires_mount', '=', True)]}"/>
                 </xpath>
+                <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="attributes">
+                    <attribute name="domain">[('custom', '=', False)]</attribute>
+                </xpath>
+                <xpath expr="//field[@name='order_line']/form//field[@name='product_id']" position="attributes">
+                    <attribute name="domain">[('custom', '=', False)]</attribute>
+                </xpath>
             </field>
         </record>
+
     </data>
 </openerp>
