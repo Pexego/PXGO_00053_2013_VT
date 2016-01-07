@@ -71,7 +71,7 @@ class SaleOrder(models.Model):
                             _('Error'),
                             _('One of the products not have default code'))
                     customizations = customizations - mount
-                    product_code += '#' + line.can_mount_id.product_id.\
+                    product_code += u'#' + line.can_mount_id.product_id.\
                         default_code
                 if not self.partner_id.ref:
                     raise exceptions.Warning(
@@ -79,9 +79,9 @@ class SaleOrder(models.Model):
                         _('The partner %s not have reference') %
                         self.partner_id.name)
                 if customizations:
-                    product_code += '|' + str(self.partner_id.ref)
+                    product_code += u'|' + str(self.partner_id.ref)
                 for custom in customizations:
-                    product_code += '|' + str(custom.code)
+                    product_code += u'|' + str(custom.code)
                 product = prod_obj.get_product_customized(product_code,
                                                           line.can_mount_id)
 

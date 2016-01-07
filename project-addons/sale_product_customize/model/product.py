@@ -69,8 +69,12 @@ class ProductProduct(models.Model):
                 # hay varios productos
                 code = prod_code.split('#')
                 first_prod = self.search([('default_code', '=', code[0])])
-                sec_prod = self.search([('default_code', '=', code[1])])
-                prod_dict['name'] = first_prod.name + ' - ' + sec_prod.name
+                if '|' in code[1]:
+                    sec_prod = self.search([('default_code', '=',
+                                             code[1][:code[1].index('|')])])
+                else:
+                    sec_prod = self.search([('default_code', '=', code[1])])
+                prod_dict['name'] = first_prod.name + u' - ' + sec_prod.name
                 prod_dict['standard_price'] = first_prod.standard_price + \
                     (sec_prod.standard_price * product_mount.qty)
                 prod_dict['list_price'] = first_prod.list_price + \
