@@ -32,11 +32,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="CookComputing.XmlRpcV2">
-      <HintPath>..\..\..\CookComputing.XmlRpcV2.dll</HintPath>
-    </Reference>
     <Reference Include="OpenERPClient">
       <HintPath>..\..\bin\Debug\OpenERPClient.dll</HintPath>
+    </Reference>
+    <Reference Include="CookComputing.XmlRpcV2">
+      <HintPath>..\..\..\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
