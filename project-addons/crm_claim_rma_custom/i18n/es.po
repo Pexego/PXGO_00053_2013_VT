@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#       * crm_claim_rma_custom
+#	* crm_claim_rma_custom
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-19 19:12+0000\n"
-"PO-Revision-Date: 2015-11-19 19:12+0000\n"
+"POT-Creation-Date: 2016-01-14 16:35+0000\n"
+"PO-Revision-Date: 2016-01-14 16:35+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -26,9 +26,19 @@ msgid "Claim"
 msgstr "Reclamación"
 
 #. module: crm_claim_rma_custom
+#: field:crm.claim,comercial:0
+msgid "Comercial"
+msgstr "Comercial"
+
+#. module: crm_claim_rma_custom
 #: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
 msgid "Create repair"
 msgstr "Crear reparación"
+
+#. module: crm_claim_rma_custom
+#: field:claim.line,internal_description:0
+msgid "Internal Description"
+msgstr "Internal Description"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_line
@@ -51,6 +61,22 @@ msgid "Product Returns"
 msgstr "Entrada de producto"
 
 #. module: crm_claim_rma_custom
+#: field:crm.claim,date_received:0
+msgid "Received Date"
+msgstr "Fecha recepción"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_mrp_repair
+msgid "Repair Order"
+msgstr "Orden reparación"
+
+#. module: crm_claim_rma_custom
 #: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
 msgid "Split"
 msgstr "Desglosar"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
+msgid "{'search_product_id': product_id}"
+msgstr "{'search_product_id': product_id}"
+

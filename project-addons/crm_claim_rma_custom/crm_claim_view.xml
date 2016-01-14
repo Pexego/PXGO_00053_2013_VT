@@ -7,8 +7,11 @@
             <field name="model">crm.claim</field>
             <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view2"/>
             <field name="arch" type="xml">
+                <field name="rma_cost" position="after">
+                    <field name="date_received"/>
+                </field>
                 <field name="email_from" position="after">
-                    <field name="agent"/>
+                    <field name="comercial"/>
                 </field>
                 <field name="claim_type" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -59,6 +62,9 @@
             </xpath>
             <xpath expr="//field[@name='claim_type']" position="replace">
               <field name="claim_type" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='date']" position="after">
+              <field name="date_received" readonly="True"/>
             </xpath>
           </field>
         </record>

@@ -33,6 +33,8 @@ class CrmClaimRma(models.Model):
                              ('rma', 'RMA')], 'Claim Subject',
                             required=True, default='rma')
     priority = fields.Selection(default=0)
+    comercial = fields.Many2one("res.users",string="Comercial")
+    date_received = fields.Datetime('Received Date', default = fields.datetime.now())
 
     def onchange_partner_id(self, cr, uid, ids, partner_id, email=False,
                             context=None):
@@ -44,6 +46,8 @@ class CrmClaimRma(models.Model):
             partner = self.pool["res.partner"].browse(cr, uid, partner_id)
             if partner.agents:
                 res['value']['agent'] = partner.agents[0].id
+            if partner.user_id:
+                res['value']['comercial'] = partner.user_id.id
 
         return res
 
