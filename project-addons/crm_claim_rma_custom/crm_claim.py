@@ -25,14 +25,17 @@ from openerp import models, fields, api
 class CrmClaimRma(models.Model):
 
     _inherit = "crm.claim"
-    _order = "number desc"
+    _order = "id desc"
 
     agent = fields.Many2one('res.partner', 'Agent',
                                domain="[('agent', '=', True)]")
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
                             required=True, default='rma')
-    priority = fields.Selection(default=0)
+    # priority = fields.Selection(default=0)
+    priority = fields.Selection(default=0,
+        selection=[('1', 'High'),
+                   ('2', 'Critical')])
     comercial = fields.Many2one("res.users",string="Comercial")
     date_received = fields.Datetime('Received Date', default = fields.datetime.now())
 

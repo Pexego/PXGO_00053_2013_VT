@@ -48,6 +48,7 @@
                             <thead>
                                 <tr>
                                     <th><strong>Order (Origin)</strong></th>
+                                    <th><strong>Order (Destination)</strong></th>
                                     <th><strong>State</strong></th>
                                     <th><strong>Commitment Date</strong></th>
                                     <th name="td_sched_date_h"><strong>Scheduled Date</strong></th>
@@ -57,6 +58,9 @@
                                 <tr>
                                     <td>
                                         <span t-field="o.origin"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.location_dest_id"/>
                                     </td>
                                     <td>
                                         <span t-field="o.state"/>
@@ -216,6 +220,7 @@
                             <thead>
                                 <tr>
                                     <th><strong>Order (Origin)</strong></th>
+                                    <th><strong>Order (Destination)</strong></th>
                                     <th><strong>State</strong></th>
                                     <th><strong>Commitment Date</strong></th>
                                     <th name="td_sched_date_h"><strong>Scheduled Date</strong></th>
@@ -225,6 +230,9 @@
                                 <tr>
                                     <td>
                                         <span t-field="o.origin"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.location_dest_id"/>
                                     </td>
                                     <td>
                                         <span t-field="o.state"/>

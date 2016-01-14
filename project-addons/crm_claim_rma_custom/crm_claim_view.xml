@@ -105,5 +105,16 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="crm_case_claims_form_view_inherit">
+            <field name="name">CRM - Claims Form</field>
+            <field name="model">crm.claim</field>
+            <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
+            <field name="arch" type="xml">
+              <field name="priority" position="replace">
+                <field name="priority"/>
+              </field>
+            </field>
+        </record>
+
     </data>
 </openerp>
