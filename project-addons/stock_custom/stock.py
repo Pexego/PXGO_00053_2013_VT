@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    $Carlos Lombardía Rodríguez <carlos@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,7 +18,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models
 
-from . import ir_attachment
-from . import report
-from . import stock
+class stock_picking(models.Model):
+    _inherit = "stock.picking"
+
+    def action_assign(self, cr, uid, ids, context=None):
+        res = super(stock_picking, self).action_assign(cr, uid, ids,
+                                                       context=context)
+        for id in ids:
+            obj = self.browse(cr, uid, id)
+            if obj.claim_id:
+                obj.force_assign()
+
+        return True
