@@ -56,10 +56,24 @@ class ResPartner(models.Model):
         """
         Redefine the search to search by company name.
         """
-        if context.get('search_product_id', False):
-            ids = self.search(cr, uid, args, context=context)
-            args = [('id', 'in', ids)]
-        res = super(ResPartner, self).name_search(cr, uid, name, args=args,
-                                                  operator=operator,
-                                                  limit=limit)
-        return res
+        # if context.get('search_product_id', False):
+        #     ids = self.search(cr, uid, args, context=context)
+        #     args = [('id', 'in', ids)]
+        # res = super(ResPartner, self).name_search(cr, uid, name, args=args,
+        #                                           operator=operator,
+        #                                           limit=limit)
+        # return res
+        if not args:
+            args = []
+        domain = args + [ '|', ('name', operator, name),
+                         ('comercial', operator, name)]
+        ids = self.search(cr, uid, domain + args,
+                              limit=limit, context=context)
+        if name and len(ids) == 0:
+            partners = super(ResPartner, self).name_search(cr, uid, name, args,
+                                                            operator, context,
+                                                            limit)
+            if partners:
+                ids = [x[0] for x in partners]
+
+        return self.name_get(cr, uid, ids, context=context)
