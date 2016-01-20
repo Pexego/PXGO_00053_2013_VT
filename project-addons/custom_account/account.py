@@ -38,6 +38,7 @@ class AccountInvoice(models.Model):
     country_id = fields.Many2one('res.country', 'Country',
                                  related="partner_id.country_id",
                                  readonly=True, store=True)
+    internal_notes = fields.Text("Internal Notes")
 
     @api.model
     def create(self, vals):

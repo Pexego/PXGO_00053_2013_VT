@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-15 12:51+0000\n"
-"PO-Revision-Date: 2016-01-15 12:51+0000\n"
+"POT-Creation-Date: 2016-01-20 11:54+0000\n"
+"PO-Revision-Date: 2016-01-20 11:54+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,11 @@ msgid "Incoming:"
 msgstr "Entrante:"
 
 #. module: stock_custom
+#: field:stock.picking,internal_notes:0
+msgid "Internal Notes"
+msgstr "Notas internas"
+
+#. module: stock_custom
 #: model:ir.model,name:stock_custom.model_stock_picking
 msgid "Picking List"
 msgstr "Albarán"
@@ -28,12 +33,17 @@ msgstr "Albarán"
 #. module: stock_custom
 #: model:ir.actions.report.xml,name:stock_custom.action_report_picking_attachments
 msgid "Picking with attachments"
-msgstr "Picking with attachments"
+msgstr "Albarán con adjuntos"
 
 #. module: stock_custom
 #: model:ir.model,name:stock_custom.model_report
 msgid "Report"
 msgstr "Informe"
+
+#. module: stock_custom
+#: model:ir.model,name:stock_custom.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
 
 #. module: stock_custom
 #: field:ir.attachment,to_print:0

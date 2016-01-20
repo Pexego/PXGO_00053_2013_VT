@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+      <record id="view_order_form_inherit" model="ir.ui.view">
+          <field name="name">sale.order.form</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_order_form"/>
+          <field name="arch" type="xml">
+            <field name="note" position="replace">
+              <group colspan="4">
+                  <group col="2">
+                      <field name="note" class="oe_inline" placeholder="Terms and conditions..." nolabel="1"/>
+                  </group>
+                  <group col="2">
+                      <field name="internal_notes" class="oe_inline" placeholder="Internal Notes" nolabel="1"/>
+                  </group>
+                </group>
+            </field>
+          </field>
+      </record>
+
+      <record id="view_picking_form_modify_note" model="ir.ui.view">
+          <field name="name">stock.picking.form</field>
+          <field name="model">stock.picking</field>
+          <field name="inherit_id" ref="stock.view_picking_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//notebook/page[@string='Products']/field[@name='note']" position="replace">
+                  <field name="note" placeholder="Terms and conditions..." class="oe_inline"/>
+              </xpath>
+              <xpath expr="//notebook/page[@string='Products']/field[@name='note']" position="after">
+                  <field name="internal_notes" placeholder="Internal Notess..." class="oe_inline"/>
+              </xpath>
+          </field>
+      </record>
+
+
+
+    </data>
+</openerp>

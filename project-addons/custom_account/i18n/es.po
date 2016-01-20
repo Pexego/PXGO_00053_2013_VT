@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * custom_account
+#	* custom_account
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 10:30+0000\n"
-"PO-Revision-Date: 2015-02-16 10:30+0000\n"
+"POT-Creation-Date: 2016-01-20 11:55+0000\n"
+"PO-Revision-Date: 2016-01-20 11:55+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,23 +17,9 @@ msgstr ""
 
 #. module: custom_account
 #: field:account.invoice,attach_picking:0
-msgid "Attach picking"
-msgstr "Enviar albarán"
-
-#. module: custom_account
 #: field:res.partner,attach_picking:0
 msgid "Attach picking"
 msgstr "Enviar albarán"
-
-#. module: sale
-#: field:sale.order.line,tax_id:0
-msgid "Taxes"
-msgstr "Imp."
-
-#. module: sale
-#: field:sale.order.line,discount:0
-msgid "Discount (%)"
-msgstr "Desc. (%)"
 
 #. module: custom_account
 #: view:account.invoice:custom_account.view_account_invoice_filter_add_country_grp
@@ -45,6 +31,19 @@ msgstr "País"
 #: model:ir.model,name:custom_account.model_email_template
 msgid "Email Templates"
 msgstr "Plantillas email"
+
+#. module: custom_account
+#: view:account.invoice:custom_account.account_invoice_add_picking_attach
+#: field:account.invoice,internal_notes:0
+#: view:sale.order:custom_account.view_order_form_inherit
+#: field:sale.order,internal_notes:0
+msgid "Internal Notes"
+msgstr "Notas internas"
+
+#. module: custom_account
+#: view:stock.picking:custom_account.view_picking_form_modify_note
+msgid "Internal Notess..."
+msgstr "Notas internas..."
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_invoice
@@ -67,7 +66,13 @@ msgid "Move"
 msgstr "Movimiento"
 
 #. module: custom_account
+#: field:res.partner,newsletter:0
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#. module: custom_account
 #: view:account.invoice.report:custom_account.account_invoice_report_add_filters
+#: model:ir.model,name:custom_account.model_res_partner
 msgid "Partner"
 msgstr "Empresa"
 
@@ -78,9 +83,56 @@ msgid "Payment mode"
 msgstr "Modo de pago"
 
 #. module: custom_account
+#: model:ir.model,name:custom_account.model_product_product
+msgid "Product"
+msgstr "Producto"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_purchase_order
+msgid "Purchase Order"
+msgstr "Pedido de compra"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Línea pedido de compra"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_sale_order
+msgid "Sales Order"
+msgstr "Pedido de venta"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea pedido de venta"
+
+#. module: custom_account
+#: view:account.invoice:custom_account.view_account_invoice_filter_add_country_grp
+msgid "Salesperson"
+msgstr "Comercial"
+
+#. module: custom_account
 #: model:ir.model,name:custom_account.model_stock_move
 msgid "Stock Move"
 msgstr "Movimiento de existencias"
+
+#. module: custom_account
+#: view:account.invoice:custom_account.account_invoice_add_picking_attach
+#: view:sale.order:custom_account.view_order_form_inherit
+#: view:stock.picking:custom_account.view_picking_form_modify_note
+msgid "Terms and conditions..."
+msgstr "Términos y condiciones..."
+
+#. module: custom_account
+#: constraint:product.product:0
+msgid "You provided an invalid \"EAN13 Barcode\" reference. You may use the \"Internal Reference\" field instead."
+msgstr "Ha introducido un código EAN13 no válido. Debe usar el campo \"Referencia interna\" en su lugar."
+
+#. module: custom_account
+#: view:website:report.external_layout_header
+msgid "col-xs-12"
+msgstr "col-xs-12"
 
 #. module: custom_account
 #: view:account.invoice.report:custom_account.account_invoice_report_add_filters

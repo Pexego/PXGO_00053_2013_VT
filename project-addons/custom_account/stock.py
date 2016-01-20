@@ -53,7 +53,7 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     state = fields.Selection(selection_add=[("history", "History")])
-
+    internal_notes = fields.Text("Internal Notes")
 
 class SaleOrderLine(models.Model):
 
