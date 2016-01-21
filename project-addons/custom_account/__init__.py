@@ -23,3 +23,4 @@ from . import account
 from . import email_template
 from . import report
 from . import partner
+from . import sale_report
