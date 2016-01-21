@@ -5,7 +5,7 @@
         <record model="ir.ui.view" id="crm_claim_rma_form_view3">
             <field name="name">CRM - Claim product return Form</field>
             <field name="model">crm.claim</field>
-            <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view2"/>
+            <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
             <field name="arch" type="xml">
                 <field name="rma_cost" position="after">
                     <field name="date_received"/>
