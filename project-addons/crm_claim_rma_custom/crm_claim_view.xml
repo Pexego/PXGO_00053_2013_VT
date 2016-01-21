@@ -16,12 +16,6 @@
                 <field name="claim_type" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
-                <page string="Product Return" position="attributes">
-                    <attribute name="string">Product Returns</attribute>
-                </page>
-                <separator string="Product Return" position="attributes">
-                    <attribute name="string">Product Returns</attribute>
-                </separator>
             </field>
         </record>
 

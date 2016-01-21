@@ -13,6 +13,18 @@
             </field>
         </record>
 
+        <record id="view_res_partner_filter_add_comercial" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="replace">
+                   <field name="name"
+                       filter_domain="['|','|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self),('comercial', 'ilike', self)]"/>
+                </field>
+            </field>
+        </record>
+
         <record id="action_view_web_customers" model="ir.actions.act_window">
             <field name="name">Web customers</field>
             <field name="type">ir.actions.act_window</field>

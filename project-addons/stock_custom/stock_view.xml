@@ -17,10 +17,37 @@
             <field name="model">product.template</field>
             <field name="inherit_id" ref="stock.product_template_kanban_stock_view"/>
             <field name="arch" type="xml">
-                <xpath expr="//ul/li[3]" position="replace">
+                <xpath expr="//ul/li[3]" position="after">
                     <li t-if="record.type.raw_value != 'service'">Incoming: <field name="incoming_qty"/> <field name="uom_id"/></li>
                 </xpath>
             </field>
         </record>
+
+        <record id="view_move_picking_tree_add_loc_id" model="ir.ui.view">
+            <field name="name">stock.move.tree.add_loc_id</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
+            <field name="arch" type="xml">
+                <field name="location_id" groups="stock.group_locations" position="replace"/>
+                <field name="location_dest_id" position="before">
+                    <field name="location_id" groups="stock.group_locations"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_picking_form_modify_note" model="ir.ui.view">
+          <field name="name">stock.picking.form</field>
+          <field name="model">stock.picking</field>
+          <field name="inherit_id" ref="stock.view_picking_form"/>
+          <field name="arch" type="xml">
+              <xpath expr="//notebook/page[@string='Products']/field[@name='note']" position="replace">
+                  <field name="note" placeholder="Terms and conditions..." class="oe_inline"/>
+              </xpath>
+              <xpath expr="//notebook/page[@string='Products']/field[@name='note']" position="after">
+                  <field name="internal_notes" placeholder="Internal Notess..." class="oe_inline"/>
+              </xpath>
+          </field>
+      </record>
+
     </data>
 </openerp>

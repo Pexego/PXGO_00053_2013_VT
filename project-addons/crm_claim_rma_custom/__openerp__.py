@@ -28,7 +28,7 @@
     """,
     'author': 'Comunitea',
     'website': '',
-    "depends": ['crm_claim_rma', 'sale_commission'],
+    "depends": ['crm_claim_rma'],
     "data": ['crm_claim_view.xml', 'mrp_repair_wkf.xml'],
     "installable": True
 }

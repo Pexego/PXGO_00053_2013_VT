@@ -22,3 +22,4 @@
 from . import crm_claim
 from . import partner
 from . import mrp_repair
+from . import stock

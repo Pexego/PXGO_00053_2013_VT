@@ -27,8 +27,6 @@ class CrmClaimRma(models.Model):
     _inherit = "crm.claim"
     _order = "id desc"
 
-    agent = fields.Many2one('res.partner', 'Agent',
-                               domain="[('agent', '=', True)]")
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
                             required=True, default='rma')
@@ -47,8 +45,6 @@ class CrmClaimRma(models.Model):
                                                            context=context)
         if partner_id:
             partner = self.pool["res.partner"].browse(cr, uid, partner_id)
-            if partner.agents:
-                res['value']['agent'] = partner.agents[0].id
             if partner.user_id:
                 res['value']['comercial'] = partner.user_id.id
 

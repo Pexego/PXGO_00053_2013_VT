@@ -20,20 +20,16 @@
 ##############################################################################
 from openerp import models, fields
 
-
 class stock_picking(models.Model):
     _inherit = "stock.picking"
 
     internal_notes = fields.Text("Internal Notes")
 
+    def action_assign(self, cr, uid, ids, context=None):
+        res = super(stock_picking, self).action_assign(cr, uid, ids,
+                                                       context=context)
+        for obj in self.browse(cr, uid, ids):
+            if obj.claim_id and obj.picking_type_code == "incoming":
+                obj.force_assign()
 
-class stock_move(models.Model):
-    _inherit = "stock.move"
-
-    def _prepare_picking_assign(self, cr, uid, move, context=None):
-        res = super(stock_move, self)._prepare_picking_assign(cr, uid, move,
-                                                              context=context)
-        res['internal_notes'] = (move.procurement_id and
-                                 move.procurement_id.sale_line_id) and \
-            move.procurement_id.sale_line_id.order_id.internal_notes or ""
-        return res
+        return True
