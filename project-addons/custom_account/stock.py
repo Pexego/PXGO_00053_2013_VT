@@ -42,6 +42,15 @@ class ProductProduct(models.Model):
 
     _inherit = "product.product"
 
+    default_code = fields.Char(required=True)
+
+    @api.multi
+    def name_get(self):
+        result = []
+        for record in self:
+            result.append((record.id, "%s" % record.default_code))
+        return result
+
     def _check_ean_key(self, cr, uid, ids, context=None):
         return True
 
