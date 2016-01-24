@@ -26,26 +26,31 @@
                 <field name="lst_price" position="replace"/>
                 <xpath expr="//page[@string='Information']/group" position="after">
 
-                    <group colspan="8" col="8" string="Prices">
+                    <group colspan="6" col="6" string="Prices">
                      <field name="lst_price"/>
-                     <field name="list_price2"/>
+                     <field name="pvd1_relation"/>
+                     <label for="margin_pvd1"/><div><field name="margin_pvd1" class="oe_inline"/> %% </div>
 
-                     <label for="cmargin_price2"/><div name="margins2"><field name="cmargin_price2" class="oe_inline"/> %% </div>
-                     <label for="smargin_price2"/><div name="margins3"><field name="smargin_price2" class="oe_inline"/> %% </div>
-                     <newline/>
-                    <field name="list_price3"/>
-                     <label for="cmargin_price3"/><div name="margins4"><field name="cmargin_price3" class="oe_inline"/> %% </div>
-                     <label for="smargin_price3"/><div name="margins5"><field name="smargin_price3" class="oe_inline"/> %% </div>
-                        <newline/>
-                        <field name="standard_price" />
+                     <field name="list_price2"/>
+                     <field name="pvd2_relation"/>
+                     <label for="margin_pvd2"/><div><field name="margin_pvd2" class="oe_inline"/> %% </div>
+
+                     <field name="list_price3"/>
+                     <field name="pvd3_relation"/>
+                     <label for="margin_pvd3"/><div><field name="margin_pvd3" class="oe_inline"/> %% </div>
+                     </group>
+                     <group colspan="4" col="4">
+                        <field name="pvi1_price"/>
+                        <label for="margin_pvi1"/><div><field name="margin_pvi1" class="oe_inline"/> %% </div>
+                        <field name="pvi2_price"/>
+                        <label for="margin_pvi2"/><div><field name="margin_pvi2" class="oe_inline"/> %% </div>
+                        <field name="pvi3_price"/>
+                        <label for="margin_pvi3"/><div><field name="margin_pvi3" class="oe_inline"/> %% </div>
+                        <field name="standard_price"/>
                         <field name="standard_price_cost"/>
                         <field name="cost_method"/>
-                        <newline/>
-                            <field name="commercial_cost"/>
-
-                    </group>
-
-
+                        <field name="commercial_cost"/>
+                     </group>
                 </xpath>
 
             </field>

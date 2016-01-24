@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra$ <omar@comunitea.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
+
 from openerp.osv import osv, fields
 import openerp.addons.decimal_precision as dp
 
@@ -31,23 +31,34 @@ class product_product(osv.osv):
         res = dict.fromkeys(ids, 0.0)
         for product in self.browse(cr, uid, ids, context=context):
             res[product.id] = {
-                'cmargin_price2': 0.0,
-                'smargin_price2': 0.0,
-                'cmargin_price3': 0.0,
-                'smargin_price3': 0.0
+                'margin_pvd1': 0.0,
+                'margin_pvd2': 0.0,
+                'margin_pvd3': 0.0,
+                'margin_pvi1': 0.0,
+                'margin_pvi2': 0.0,
+                'margin_pvi3': 0.0
             }
-            cmargin2 = product.list_price2 - product.commercial_cost
-            smargin2 = product.list_price2 - product.standard_price
-            cmargin3 = product.list_price3 - product.commercial_cost
-            smargin3 = product.list_price3 - product.standard_price
-            lst_price2 = product.list_price2
-            lst_price3 = product.list_price3
-            if lst_price2 != 0:
-                res[product.id]['cmargin_price2'] = (cmargin2 * 100.0) / lst_price2
-                res[product.id]['smargin_price2'] = (smargin2 * 100.0) / lst_price2
-            if lst_price3 != 0:
-                res[product.id]['cmargin_price3'] = (cmargin3 * 100.0) / lst_price3
-                res[product.id]['smargin_price3'] = (smargin3 * 100.0) / lst_price3
+            if product.list_price and product.pvd1_relation:
+                res[product.id]['margin_pvd1'] = \
+                    1 - (product.standard_price /
+                         (product.list_price * product.pvd1_relation))
+            if product.list_price2 and product.pvd2_relation:
+                res[product.id]['margin_pvd2'] = \
+                    1 - (product.standard_price /
+                         (product.list_price2 * product.pvd2_relation))
+            if product.list_price3 and product.pvd3_relation:
+                res[product.id]['margin_pvd3'] = \
+                    1 - (product.standard_price /
+                         (product.list_price3 * product.pvd3_relation))
+            if product.pvi1_price:
+                res[product.id]['margin_pvi1'] = \
+                    1 - (product.standard_price / product.pvi1_price)
+            if product.pvi2_price:
+                res[product.id]['margin_pvi2'] = \
+                    1 - (product.standard_price / product.pvi2_price)
+            if product.pvi3_price:
+                res[product.id]['margin_pvi3'] = \
+                    1 - (product.standard_price / product.pvi3_price)
         return res
 
     _columns = {
@@ -60,48 +71,70 @@ class product_product(osv.osv):
         'commercial_cost': fields.float('Commercial Cost',
                                         digits_compute=
                                         dp.get_precision('Product Price')),
-        'cmargin_price2': fields.function(_get_margins,
-                                          string="Commercial margin",
-                                          type="float",
-                                          multi="_get_margins",
-                                          digits_compute=
-                                          dp.get_precision('Product Price'),
-                                          store={'product.product':
-                                                 (lambda self, cr, uid, ids,
-                                                  c={}: ids,
-                                                  ['list_price2',
-                                                   'commercial_cost'], 10), }),
-        'smargin_price2': fields.function(_get_margins,
-                                          string="Cost margin",
-                                          type="float",
-                                          multi="_get_margins",
-                                          digits_compute=
-                                          dp.get_precision('Product Price'),
-                                          store={'product.product':
-                                                 (lambda self, cr, uid, ids,
-                                                  c={}: ids,
-                                                  ['list_price2',
-                                                   'standard_price'], 10), }),
-        'cmargin_price3': fields.function(_get_margins,
-                                          string="Commercial margin",
-                                          type="float",
-                                          multi="_get_margins",
-                                          digits_compute=
-                                          dp.get_precision('Product Price'),
-                                          store={'product.product':
-                                                 (lambda self, cr, uid, ids,
-                                                  c={}: ids,
-                                                  ['list_price3',
-                                                   'commercial_cost'], 10), }),
-        'smargin_price3': fields.function(_get_margins,
-                                          string="Cost margin",
-                                          type="float",
-                                          multi="_get_margins",
-                                          digits_compute=
-                                          dp.get_precision('Product Price'),
-                                          store={'product.product':
-                                                 (lambda self, cr, uid, ids,
-                                                  c={}: ids,
-                                                  ['list_price3',
-                                                   'standard_price'], 10), }),
+        'pvd1_relation': fields.float('PVP/PVD 1 relation', digits=(4, 2),
+                                      default=0.5),
+        'pvd2_relation': fields.float('PVP 2 / PVD 2 relation', digits=(4, 2),
+                                      default=0.5),
+        'pvd3_relation': fields.float('PVP 3 / PVD 3 relation', digits=(4, 2),
+                                      default=0.5),
+        'pvi1_price': fields.float('PVI 1 price', digits_compute =
+                                   dp.get_precision('Product Price')),
+        'pvi2_price': fields.float('PVI 2 price', digits_compute =
+                                   dp.get_precision('Product Price')),
+        'pvi3_price': fields.float('PVI 3 price', digits_compute =
+                                   dp.get_precision('Product Price')),
+        'margin_pvd1': fields.function(_get_margins,
+                                       string="PVD 1 Margin",
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['list_price', 'pvd1_relation',
+                                                'standard_price'], 10), }),
+        'margin_pvd2': fields.function(_get_margins,
+                                       string="PVD 2 Margin",
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['list_price2', 'pvd2_relation',
+                                                'standard_price'], 10), }),
+        'margin_pvd3': fields.function(_get_margins,
+                                       string="PVD 3 Margin",
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['list_price3', 'pvd3_relation',
+                                                'standard_price'], 10), }),
+        'margin_pvi1': fields.function(_get_margins,
+                                       string="PVI 1 Margin",
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['pvi1_price',
+                                                'standard_price'], 10), }),
+        'margin_pvi2': fields.function(_get_margins,
+                                       string="PVI 2 Margin",
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['pvi2_price',
+                                                'standard_price'], 10), }),
+        'margin_pvi3': fields.function(_get_margins,
+                                       string="PVI 3 Margin",
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['pvi3_price',
+                                                'standard_price'], 10), }),
     }
