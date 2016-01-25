@@ -88,7 +88,7 @@ class SaleOrder(models.Model):
                     for prodmount in line.product_id.can_mount_ids:
                         if line.can_mount_id == prodmount:
                             line.price_unit += \
-                             prodmount.product_id.standard_price * prodmount.qty
+                             prodmount.product_id.lst_price * prodmount.qty
 
                 final_line_dict = {
                     'product_id': product.id,
