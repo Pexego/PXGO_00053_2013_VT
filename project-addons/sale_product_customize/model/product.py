@@ -83,7 +83,13 @@ class ProductProduct(models.Model):
                     (sec_prod.list_price2 * product_mount.qty)
                 prod_dict['list_price3'] = first_prod.list_price3 + \
                     (sec_prod.list_price3 * product_mount.qty)
-                bom_lines = \
+                prod_dict['pvi1_price'] = first_prod.pvi1_price + \
+                    (sec_prod.pvi1_price * product_mount.qty)
+                prod_dict['pvi2_price'] = first_prod.pvi2_price + \
+                    (sec_prod.pvi2_price * product_mount.qty)
+                prod_dict['pvi3_price'] = first_prod.pvi3_price + \
+                    (sec_prod.pvi3_price * product_mount.qty)
+                om_lines = \
                     [(0, 0,
                       {'product_id': first_prod.id,
                        'product_qty': 1,

@@ -82,8 +82,13 @@ class SaleOrder(models.Model):
                     product_code += u'|' + str(self.partner_id.ref)
                 for custom in customizations:
                     product_code += u'|' + str(custom.code)
-                product = prod_obj.get_product_customized(product_code,
+                product = prod_obj.sudo().get_product_customized(product_code,
                                                           line.can_mount_id)
+                if product.custom == True:
+                    for prodmount in line.product_id.can_mount_ids:
+                        if line.can_mount_id == prodmount:
+                            line.price_unit += \
+                             prodmount.product_id.standard_price * prodmount.qty
 
                 final_line_dict = {
                     'product_id': product.id,
