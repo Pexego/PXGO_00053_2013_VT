@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields
+from openerp import models, fields, exceptions, api, _
 
 
 class stock_picking(models.Model):
@@ -26,9 +26,55 @@ class stock_picking(models.Model):
 
     internal_notes = fields.Text("Internal Notes")
 
+    @api.multi
+    def action_done(self):
+        packop = self.env["stock.pack.operation"]
+        lot_obj = self.env["stock.production.lot"]
+        link_obj = self.env["stock.move.operation.link"]
+        for pick in self:
+            for move in pick.move_lines:
+                if move.lots_text:
+                    if move.linked_move_operation_ids:
+                        move.linked_move_operation_ids.unlink()
+                        move.refresh()
+                    txlots = move.lots_text.split(',')
+                    if len(txlots) != (move.qty_ready or move.product_uom_qty):
+                        raise exceptions.Warning(_("The number of lots defined"
+                                                   " are not equal to move"
+                                                   " product quantity"))
+                    while (txlots):
+                        lot_name = txlots.pop()
+                        lots = lot_obj.search([("name", "=", lot_name),
+                                               ("product_id", "=",
+                                                move.product_id.id)])
+                        if lots:
+                            lot = lots[0]
+                        else:
+                            lot = lot_obj.create({'name': lot_name,
+                                                  'product_id':
+                                                  move.product_id.id})
+                        op = packop.with_context(no_recompute=True).\
+                            create({'picking_id': move.picking_id.id,
+                                    'product_id': move.product_id.id,
+                                    'product_uom_id': move.product_uom.id,
+                                    'product_qty': 1.0,
+                                    'lot_id': lot.id,
+                                    'location_id': move.location_id.id,
+                                    'location_dest_id': move.
+                                    location_dest_id.id
+                                    })
+                        link_obj.create({'qty': 1.0,
+                                         'operation_id': op.id,
+                                         'move_id': move.id})
+                        move.refresh()
+
+        return super(stock_picking, self).action_done()
+
 
 class stock_move(models.Model):
     _inherit = "stock.move"
+
+    lots_text = fields.Text('Lots', help="Value must be separated by commas")
 
     def _prepare_picking_assign(self, cr, uid, move, context=None):
         res = super(stock_move, self)._prepare_picking_assign(cr, uid, move,

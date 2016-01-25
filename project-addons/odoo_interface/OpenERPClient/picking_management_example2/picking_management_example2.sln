@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "picking_management_example2", "picking_management_example2\picking_management_example2.csproj", "{D0232C8F-B6C8-4CA9-BE5E-A73871070464}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D0232C8F-B6C8-4CA9-BE5E-A73871070464}.Debug|x86.ActiveCfg = Debug|x86
+		{D0232C8F-B6C8-4CA9-BE5E-A73871070464}.Debug|x86.Build.0 = Debug|x86
+		{D0232C8F-B6C8-4CA9-BE5E-A73871070464}.Release|x86.ActiveCfg = Release|x86
+		{D0232C8F-B6C8-4CA9-BE5E-A73871070464}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = picking_management_example2\picking_management_example2.csproj
+	EndGlobalSection
+EndGlobal
