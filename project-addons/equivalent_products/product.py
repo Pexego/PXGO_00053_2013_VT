@@ -47,9 +47,9 @@ class product_tag(orm.Model):
         res = []
         for record in reads:
             name = record['name']
-            if record['parent_id']:
-                name = record['parent_id'][1]+' / '+name
-            res.append((record['id'], name))
+            if record['parent_id'] and record['parent_id'][1]:
+                name = record['parent_id'][1] + u' / ' + (name or "")
+            res.append((record['id'], (name or "")))
         return res
 
     def name_search(self, cr, uid, name, args=None, operator='ilike',
