@@ -6,11 +6,10 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
-                <notebook position="before">
-                    <group colspan="4" string="Tags">
-                        <!--<label for="tag_ids" class="oe_edit_only"/>-->
+                <notebook position="inside">
+                    <page string="Tags">
                         <field name="tag_ids" widget="many2many_tags" colspan="4" nolabel="1"/>
-                    </group>
+                    </page>
                     <separator/>
                 </notebook>
             </field>
