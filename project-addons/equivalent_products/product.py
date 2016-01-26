@@ -48,7 +48,7 @@ class product_tag(orm.Model):
         for record in reads:
             name = record['name']
             if record['parent_id']:
-                name = record['parent_id'][1]+' / '+name
+                name = record['parent_id'][1] + u' / ' + name
             res.append((record['id'], name))
         return res
 
