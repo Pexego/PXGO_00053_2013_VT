@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+      <record id="purchase_order_form_inherit" model="ir.ui.view">
+          <field name="name">purchase.order.form</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.purchase_order_form"/>
+          <field name="arch" type="xml">
+            <xpath expr="//page[@string='Deliveries &amp; Invoices']/group/group" position="replace">
+                <field name="location_id" groups="stock.group_locations"/>
+                <field name="shipped" groups="base.group_no_one"/>
+            </xpath>
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="minimum_planned_date"/>
+            </xpath>
+            <xpath expr="//notebook/page[@string='Products']/field[@name='order_line']/tree[@string='Purchase Order Lines']/field[@name='product_id']" position="attributes">
+                <attribute name="on_change">onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)</attribute>
+            </xpath>
+          </field>
+      </record>
+
+    </data>
+</openerp>

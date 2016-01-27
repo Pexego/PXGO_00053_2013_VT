@@ -40,6 +40,7 @@
              'security/ir.model.access.csv',
              'stock_view.xml',
              'crm_view.xml',
-             'sale_report_view.xml'],
+             'sale_report_view.xml',
+             'purchase_view.xml'],
     "installable": True
 }
