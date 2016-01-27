@@ -102,3 +102,17 @@ class purchase_order(models.Model):
                         context=context):
                     move = stock_move.create(cr, uid, vals, context=context)
                     todo_moves.append(move)
+
+class purchase_order_line(models.Model):
+    _inherit = 'purchase.order.line'
+
+    @api.multi
+    def write(self, vals):
+        res = super(purchase_order_line, self).write(vals)
+        import ipdb; ipdb.set_trace()
+        if self.move_ids and vals.get('date_planned', False):
+            for move in self.move_ids:
+                if not (self.move_ids.state == u'cancel'
+                        or self.move_ids.state == u'done'):
+                    move.date_expected = vals['date_planned']
+        return res
