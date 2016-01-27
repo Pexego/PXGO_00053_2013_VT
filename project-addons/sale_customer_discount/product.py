@@ -40,25 +40,25 @@ class product_product(osv.osv):
             }
             if product.list_price and product.pvd1_relation:
                 res[product.id]['margin_pvd1'] = \
-                    1 - (product.standard_price /
+                    1 - (product.standard_price_cost /
                          (product.list_price * product.pvd1_relation))
             if product.list_price2 and product.pvd2_relation:
                 res[product.id]['margin_pvd2'] = \
-                    1 - (product.standard_price /
+                    1 - (product.standard_price_cost /
                          (product.list_price2 * product.pvd2_relation))
             if product.list_price3 and product.pvd3_relation:
                 res[product.id]['margin_pvd3'] = \
-                    1 - (product.standard_price /
+                    1 - (product.standard_price_cost /
                          (product.list_price3 * product.pvd3_relation))
             if product.pvi1_price:
                 res[product.id]['margin_pvi1'] = \
-                    1 - (product.standard_price / product.pvi1_price)
+                    1 - (product.standard_price_cost / product.pvi1_price)
             if product.pvi2_price:
                 res[product.id]['margin_pvi2'] = \
-                    1 - (product.standard_price / product.pvi2_price)
+                    1 - (product.standard_price_cost / product.pvi2_price)
             if product.pvi3_price:
                 res[product.id]['margin_pvi3'] = \
-                    1 - (product.standard_price / product.pvi3_price)
+                    1 - (product.standard_price_cost / product.pvi3_price)
         return res
 
     _columns = {

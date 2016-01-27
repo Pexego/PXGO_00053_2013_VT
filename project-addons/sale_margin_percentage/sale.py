@@ -3,6 +3,8 @@
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,117 +21,78 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
+from openerp import models, fields, api
 
 
-class sale_order_line(orm.Model):
+class sale_order_line(models.Model):
 
     _inherit = "sale.order.line"
 
-    def _product_margin(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            res[line.id] = {
-                'margin': 0.0,
-                'margin_perc': 0.0,
-            }
+    @api.one
+    @api.depends("product_uom_qty", "price_unit", "discount", "product_id")
+    def _product_margin(self):
+        self.margin = 0.0
+        self.margin_perc = 0.0
+        self.purchase_price = 0.0
 
-            margin = 0.0
-            if line.product_id:
-                if line.purchase_price:
-                    margin = round((line.price_unit * line.product_uos_qty *
-                                   (100.0 - line.discount) / 100.0) -
-                                   (line.purchase_price *
-                                    line.product_uos_qty), 2)
-                    res[line.id]['margin_perc'] = round((margin * 100) /
-                                                        ((line.purchase_price *
-                                                         line.product_uos_qty) or 1.0),
-                                                        2)
-                elif line.product_id.standard_price:
-                    margin = round((line.price_unit * line.product_uos_qty *
-                                    (100.0 - line.discount) / 100.0) -
-                                   (line.product_id.standard_price *
-                                    line.product_uos_qty), 2)
-                    res[line.id]['margin_perc'] = round((margin * 100) /
-                                                        ((line.product_id.standard_price *
-                                                         line.product_uos_qty) or 1.0),
-                                                        2)
-                res[line.id]['margin'] = margin
-        return res
+        if self.product_id and (self.product_id.standard_price or
+                                self.product_id.standard_price_cost):
+            self.purchase_price = (self.product_id.standard_price_cost or
+                                   self.product_id.standard_price)
+            margin = round((self.price_unit * self.product_uom_qty *
+                            (100.0 - self.discount) / 100.0) -
+                           (self.purchase_price * self.product_uom_qty), 2)
+            self.margin_perc = round((margin * 100) /
+                                     ((self.purchase_price *
+                                       self.product_uom_qty)
+                                      or 1.0), 2)
+            self.margin = margin
 
-    _columns = {
-        'margin': fields.function(_product_margin, string='Margin',
-                                  store=True, multi='marg'),
-        'margin_perc': fields.function(_product_margin, string='Margin',
-                                       store=True, multi='marg'),
-    }
+    margin = fields.Float(compute="_product_margin", string='Margin',
+                          store=True, multi='marg', readonly=True)
+    margin_perc = fields.Float(compute="_product_margin", string='Margin %',
+                               store=True, multi='marg', readonly=True)
+    purchase_price = fields.Float(compute="_product_margin", readonly=True,
+                                  string="Purchase price", store=True,
+                                  multi='marg')
 
 
-class sale_order(orm.Model):
+class sale_order(models.Model):
 
     _inherit = "sale.order"
 
-    def _product_margin(self, cr, uid, ids, field_name, arg, context=None):
-        result = {}
-        for sale in self.browse(cr, uid, ids, context=context):
-            total_purchase = sale.total_purchase or \
-                self._get_total_price_purchase(cr, uid, ids, 'total_purchase',
-                                               arg, context)[sale.id]
+    @api.one
+    @api.depends("order_line.margin", "order_line.deposit")
+    def _product_margin(self):
+        total_purchase = self.total_purchase
 
-            result[sale.id] = 0.0
-            if total_purchase != 0:
-                for line in sale.order_line:
-                    if not line.deposit:
-                        result[sale.id] += line.margin or 0.0
-                result[sale.id] = round((result[sale.id] * 100) /
-                                        total_purchase, 2)
-        return result
-
-    def _get_total_price_purchase(self, cr, uid, ids, field_name, arg,
-                                  context=None):
-        result = {}
-        for sale in self.browse(cr, uid, ids, context=context):
-            result[sale.id] = 0.0
-            for line in sale.order_line:
-                #ADDED for dependency with stock_deposit for not count deposit in total margin
+        self.margin = 0.0
+        margin = 0.0
+        if total_purchase != 0:
+            for line in self.order_line:
                 if not line.deposit:
-                    if line.product_id:
-                        if line.purchase_price:
-                            result[sale.id] += line.purchase_price * \
-                                line.product_uos_qty
-                        else:
-                            result[sale.id] += line.product_id.standard_price * \
-                                line.product_uos_qty
-        return result
+                    margin += line.margin or 0.0
+            self.margin = round((margin * 100) / total_purchase, 2)
 
-    def _get_order(self, cr, uid, ids, context=None):
-        result = {}
-        sale_obj = self.pool.get('sale.order.line')
-        for line in sale_obj.browse(cr, uid, ids, context=context):
-            result[line.order_id.id] = True
-        return result.keys()
+    @api.one
+    def _get_total_price_purchase(self):
+        self.total_purchase = 0.0
+        for line in self.order_line:
+            # ADDED for dependency with stock_deposit for not count
+            # deposit in total margin
+            if not line.deposit:
+                if line.purchase_price:
+                    self.total_purchase += line.purchase_price * \
+                        line.product_uom_qty
+                elif line.product_id:
+                    cost_price = \
+                        (line.product_id.standard_price_cost or
+                         line.product_id.standard_price)
+                    self.total_purchase += cost_price * \
+                        line.product_uom_qty
 
-    _columns = {
-        'total_purchase': fields.function(_get_total_price_purchase,
-                                          string='Price purchase',
-                                          store={
-                                              'sale.order.line': (_get_order,
-                                                                  ['margin', 'deposit'],
-                                                                  20),
-                                              'sale.order': (lambda self, cr,
-                                                             uid, ids, c={}:
-                                                             ids,
-                                                             ['order_line'],
-                                                             20),
-                                          }),
-        'margin': fields.function(_product_margin, string='Margin',
-                                  help="It gives profitability by calculating \
-                                        percentage.",
-                                  store={
-                                      'sale.order.line':
-                                          (_get_order, ['margin', 'deposit'], 20),
-                                      'sale.order':
-                                          (lambda self, cr, uid, ids, c={}:
-                                           ids, ['order_line'], 20),
-                                  }),
-    }
+    total_purchase = fields.Float(compute="_get_total_price_purchase",
+                                  string='Price purchase', readonly=True)
+    margin = fields.Float(compute="_product_margin", string='Margin',
+                          help="It gives profitability by calculating "
+                               "percentage.", store=True, readonly=True)
