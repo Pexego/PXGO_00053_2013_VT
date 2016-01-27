@@ -109,7 +109,6 @@ class purchase_order_line(models.Model):
     @api.multi
     def write(self, vals):
         res = super(purchase_order_line, self).write(vals)
-        import ipdb; ipdb.set_trace()
         if self.move_ids and vals.get('date_planned', False):
             for move in self.move_ids:
                 if not (self.move_ids.state == u'cancel'
