@@ -36,23 +36,23 @@ class purchase_order(osv.osv):
                 for line in purchase.order_line:
                     if line.state == 'cancel':
                         continue
-                        if line.date_planned < min_date:
-                            min_date=line.date_planned
-                            res[purchase.id]=min_date
+                    if line.date_planned < min_date:
+                        min_date=line.date_planned
+                res[purchase.id]=min_date
         return res
 
     def _set_minimum_planned_date(self, cr, uid, ids, name, value, arg, context=None):
         if not value: return False
         if type(ids)!=type([]):
             ids=[ids]
-            pol_obj = self.pool.get('purchase.order.line')
-            for po in self.browse(cr, uid, ids, context=context):
-                if po.order_line:
-                    pol_ids = pol_obj.search(cr, uid, [
+        pol_obj = self.pool.get('purchase.order.line')
+        for po in self.browse(cr, uid, ids, context=context):
+            if po.order_line:
+                pol_ids = pol_obj.search(cr, uid, [
                     ('order_id', '=', po.id), '|', ('date_planned', '=', po.minimum_planned_date), ('date_planned', '<', value)
-                    ], context=context)
-                    pol_obj.write(cr, uid, pol_ids, {'date_planned': value}, context=context)
-                    self.invalidate_cache(cr, uid, context=context)
+                ], context=context)
+                pol_obj.write(cr, uid, pol_ids, {'date_planned': value}, context=context)
+        self.invalidate_cache(cr, uid, context=context)
         return True
 
     def _get_order(self, cr, uid, ids, context=None):
