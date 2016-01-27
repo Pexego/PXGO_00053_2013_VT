@@ -109,9 +109,10 @@ class purchase_order_line(models.Model):
     @api.multi
     def write(self, vals):
         res = super(purchase_order_line, self).write(vals)
-        if self.move_ids and vals.get('date_planned', False):
-            for move in self.move_ids:
-                if not (self.move_ids.state == u'cancel'
-                        or self.move_ids.state == u'done'):
-                    move.date_expected = vals['date_planned']
+        for line in self:
+            if line.move_ids and vals.get('date_planned', False):
+                for move in line.move_ids:
+                    if not (line.move_ids.state == u'cancel'
+                            or line.move_ids.state == u'done'):
+                        move.date_expected = vals['date_planned']
         return res
