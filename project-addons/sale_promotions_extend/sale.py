@@ -32,7 +32,6 @@ class sale_order_line(osv.osv):
 
         for t in self.pool.get('product.tag').browse(cr, uid, ids, context):
             tagsb.append(t.id)
-            print t
             if t.parent_id:
                 tagsa = self._get_tag_recursivity(cr, uid, [t.parent_id.id],
                                              context)
@@ -56,7 +55,6 @@ class sale_order_line(osv.osv):
                 tags = self._get_tag_recursivity(cr, uid,
                                                  tag_ids,
                                                  context)
-                print tags
                 if tags:
                     for tag in tag_obj.browse(cr, uid, tags):
                         stream.append(tag.name)
@@ -67,5 +65,5 @@ class sale_order_line(osv.osv):
     _columns = {
         'product_tags': fields.function(_get_tags_product, string='Tags',
                                         type='char',
-                                        size=255, store=True)
+                                        size=255)
     }

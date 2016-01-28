@@ -294,7 +294,6 @@ class PromotionsRulesConditionsExprs(orm.Model):
                 products.append(product_code)
                 prod_lines[product_code] = line.product_id
                 prod_tag = line.product_tags
-                print prod_tag
                 prod_qty[product_code] = prod_qty.get(
                                             product_code, 0.00
                                                     ) + line.product_uom_qty
