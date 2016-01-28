@@ -110,13 +110,13 @@ class SaleOrder(models.Model):
             else:
                 final_line = False
 
-            if final_line and product.qty_available <= \
+            if final_line and product.virtual_available <= \
                     final_line.product_uom_qty:
                 bom_id = product.bom_ids[0]
                 productions = []
                 needed = final_line.product_uom_qty
-                if product.qty_available > 0:
-                    needed -= product.qty_available
+                if product.virtual_available > 0:
+                    needed -= product.virtual_available
                 needed = int(needed)
                 if final_line.mrp_production_ids:
                     needed -= len(final_line.mrp_production_ids)
