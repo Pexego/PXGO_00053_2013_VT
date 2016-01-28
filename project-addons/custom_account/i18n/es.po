@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-21 17:24+0000\n"
-"PO-Revision-Date: 2016-01-21 17:24+0000\n"
+"POT-Creation-Date: 2016-01-28 16:49+0000\n"
+"PO-Revision-Date: 2016-01-28 16:49+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -38,22 +38,35 @@ msgid "Country"
 msgstr "País"
 
 #. module: custom_account
+#: help:purchase.order,manufacture_date:0
+msgid "Date when it was manufactured"
+msgstr "Fecha en la que fue fabricado"
+
+#. module: custom_account
+#: help:purchase.order,prepared_merchandise_date:0
+msgid "Date when the merchandise was prepared"
+msgstr "Fecha en la mercandía fue preparada"
+
+#. module: custom_account
+#: help:purchase.order,estimated_arrival_date:0
+msgid "Date when the merchandise will arrive approximately"
+msgstr "Fecha en la que la mercancía llegará aproximadamente."
+
+#. module: custom_account
 #: model:ir.model,name:custom_account.model_email_template
 msgid "Email Templates"
 msgstr "Plantillas email"
 
 #. module: custom_account
-#: view:account.invoice:custom_account.account_invoice_add_picking_attach
-#: field:account.invoice,internal_notes:0
+#: field:purchase.order,estimated_arrival_date:0
+msgid "Estimated Arrival Date"
+msgstr "Fecha estimada de llegada"
+
+#. module: custom_account
 #: view:sale.order:custom_account.view_order_form_inherit
 #: field:sale.order,internal_notes:0
 msgid "Internal Notes"
 msgstr "Notas internas"
-
-#. module: custom_account
-#: view:stock.picking:custom_account.view_picking_form_modify_note
-msgid "Internal Notess..."
-msgstr "Notas internas..."
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_invoice
@@ -69,6 +82,11 @@ msgstr "Línea de factura"
 #: model:ir.model,name:custom_account.model_account_invoice_report
 msgid "Invoices Statistics"
 msgstr "Estadísticas de facturas"
+
+#. module: custom_account
+#: field:purchase.order,manufacture_date:0
+msgid "Manufacture Date"
+msgstr "Fecha fabricación"
 
 #. module: custom_account
 #: field:account.invoice.line,move_id:0
@@ -91,6 +109,11 @@ msgstr "Empresa"
 #: field:account.invoice.report,payment_mode_id:0
 msgid "Payment mode"
 msgstr "Modo de pago"
+
+#. module: custom_account
+#: field:purchase.order,prepared_merchandise_date:0
+msgid "Prepared Merchandise Date"
+msgstr "Fecha mercancía lista"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_product_product
@@ -138,9 +161,7 @@ msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: custom_account
-#: view:account.invoice:custom_account.account_invoice_add_picking_attach
 #: view:sale.order:custom_account.view_order_form_inherit
-#: view:stock.picking:custom_account.view_picking_form_modify_note
 msgid "Terms and conditions..."
 msgstr "Términos y condiciones..."
 
@@ -158,4 +179,9 @@ msgstr "col-xs-12"
 #: view:account.invoice.report:custom_account.account_invoice_report_add_filters
 msgid "country"
 msgstr "País"
+
+#. module: custom_account
+#: view:purchase.order:custom_account.purchase_order_form_inherit
+msgid "onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)"
+msgstr "onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)"
 

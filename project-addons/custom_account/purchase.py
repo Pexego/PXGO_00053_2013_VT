@@ -72,6 +72,8 @@ class purchase_order(osv.osv):
             store = {
                 'purchase.order.line': (_get_order, ['date_planned'], 10),
                 'purchase.order': (_get_purchase_order, ['order_line'], 10),
-            }
-        )
+            }),
+        'manufacture_date': fields.date("Manufacture Date", help="Date when it was manufactured"),
+        'prepared_merchandise_date': fields.date("Prepared Merchandise Date", help="Date when the merchandise was prepared"),
+        'estimated_arrival_date': fields.date("Estimated Arrival Date", help="Date when the merchandise will arrive approximately")
     }
