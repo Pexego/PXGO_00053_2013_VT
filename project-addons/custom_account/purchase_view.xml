@@ -20,5 +20,16 @@
           </field>
       </record>
 
+      <record id="view_purchase_order_filter_inherit_search" model="ir.ui.view">
+          <field name="name">purchase.order.list.select</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+          <field name="arch" type="xml">
+              <xpath expr="//search[@string='Search Purchase Order']/field[@name='partner_id']" position="after">
+                <field name="partner_ref"/>
+              </xpath>
+          </field>
+      </record>
+
     </data>
 </openerp>
