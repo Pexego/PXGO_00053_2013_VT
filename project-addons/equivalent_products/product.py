@@ -82,7 +82,7 @@ class product_tag(orm.Model):
     _order = 'parent_left'
 
     _columns = {
-        'name': fields.char('Name', size=64),
+        'name': fields.char('Name', size=64, required=True),
         'complete_name': fields.function(_name_get_fnc, type="char",
                                          string='Name'),
         'product_ids': fields.many2many(
