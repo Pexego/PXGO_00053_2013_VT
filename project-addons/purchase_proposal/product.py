@@ -31,9 +31,11 @@ class ProductProduct(models.Model):
     order_cycle = fields.Integer('Order cycle')
     transport_time = fields.Integer('Transport time')
     security_margin = fields.Integer('Security margin')
+    average_margin = fields.Float("Average Margin Last Sales", readonly=True)
 
     @api.model
     def compute_last_sixty_days_sales(self):
+        self.average_margin_last_sales()
         positive_days_obj = self.env['stock.days.positive']
         move_obj = self.env['stock.move']
         for product in self.search([('type', '!=', 'service')]):
@@ -52,3 +54,28 @@ class ProductProduct(models.Model):
                  if x.procurement_id.sale_line_id])
             product.joking_index = product.last_sixty_days_sales * \
                 product.standard_price
+
+    @api.model
+    def average_margin_last_sales(self):
+        sql_sentence = """
+            SELECT DISTINCT product_id
+                FROM sale_order_line
+                WHERE state not in ('draft', 'cancel', 'exception')
+                AND product_id IS NOT NULL
+        """
+        self.env.cr.execute(sql_sentence)
+        res = self.env.cr.fetchall()
+        product_ids = [x[0] for x in res]
+        for product in product_ids:
+            product_id = self.browse(product)
+            sale_order_line_obj = self.env['sale.order.line']
+            domain = [('product_id', '=', product)]
+            sales_obj = sale_order_line_obj.search(domain, limit=100,
+                                                   order='id desc')
+            margin_perc_sum = 0
+            qty_sum = 0
+            for line in sales_obj:
+                margin_perc_sum += line.margin_perc
+                qty_sum += line.product_uom_qty
+            if qty_sum:
+                product_id.average_margin = margin_perc_sum / qty_sum

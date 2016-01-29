@@ -26,5 +26,16 @@
             </field>
         </record>
 
+        <record id="product_add_proposal_data2" model="ir.ui.view">
+          <field name="name">product.product.form2</field>
+          <field name="model">product.product</field>
+          <field name="inherit_id" ref="sale_customer_discount.product_normal_form_view_add_discount"/>
+          <field name="arch" type="xml">
+            <xpath expr="//group[@colspan='4']/field[@name='commercial_cost']" position="after">
+                <field name="average_margin"/>
+                <button name="average_margin_last_sales" string="Calculate Average Margin Last Sales" type="object"/>
+            </xpath>
+          </field>
+        </record>
     </data>
 </openerp>
