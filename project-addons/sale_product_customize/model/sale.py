@@ -88,7 +88,13 @@ class SaleOrder(models.Model):
                     for prodmount in line.product_id.can_mount_ids:
                         if line.can_mount_id == prodmount:
                             line.price_unit += \
-                             prodmount.product_id.lst_price * prodmount.qty
+                                  prodmount.product_id.lst_price * prodmount.qty
+                            product.standard_price = \
+                                  line.product_id.standard_price + \
+                                  prodmount.product_id.standard_price
+                            product.standard_price_cost = \
+                                  line.product_id.standard_price_cost + \
+                                  prodmount.product_id.standard_price_cost
 
                 final_line_dict = {
                     'product_id': product.id,
@@ -96,7 +102,7 @@ class SaleOrder(models.Model):
                     'customization_types': [(6, 0, [x.id for x in
                                              line.customization_types])],
                     'price_unit': line.price_unit,
-                    'purchase_price': product.standard_price,
+                    'purchase_price': product.standard_price_cost,
                     'delay': max([product.sale_delay, line.delay]),
                     'product_uom_qty': line.product_uom_qty,
                     'product_uom': product.uom_id.id
