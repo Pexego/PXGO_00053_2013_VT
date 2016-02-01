@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-28 16:49+0000\n"
-"PO-Revision-Date: 2016-01-28 16:49+0000\n"
+"POT-Creation-Date: 2016-02-01 16:00+0000\n"
+"PO-Revision-Date: 2016-02-01 16:00+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -58,6 +58,11 @@ msgid "Email Templates"
 msgstr "Plantillas email"
 
 #. module: custom_account
+#: field:sale.order,end_manufacture:0
+msgid "End Manufacture Date"
+msgstr "Fecha fin fabricación"
+
+#. module: custom_account
 #: field:purchase.order,estimated_arrival_date:0
 msgid "Estimated Arrival Date"
 msgstr "Fecha estimada de llegada"
@@ -82,6 +87,11 @@ msgstr "Línea de factura"
 #: model:ir.model,name:custom_account.model_account_invoice_report
 msgid "Invoices Statistics"
 msgstr "Estadísticas de facturas"
+
+#. module: custom_account
+#: help:sale.order,telex_release:0
+msgid "It indicates that                                    Telex release is necessary"
+msgstr "Indica que 'Telex release' es necesario"
 
 #. module: custom_account
 #: field:purchase.order,manufacture_date:0
@@ -161,6 +171,11 @@ msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: custom_account
+#: field:sale.order,telex_release:0
+msgid "Telex Release"
+msgstr "Telex Release"
+
+#. module: custom_account
 #: view:sale.order:custom_account.view_order_form_inherit
 msgid "Terms and conditions..."
 msgstr "Términos y condiciones..."
@@ -184,4 +199,3 @@ msgstr "País"
 #: view:purchase.order:custom_account.purchase_order_form_inherit
 msgid "onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)"
 msgstr "onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)"
-
