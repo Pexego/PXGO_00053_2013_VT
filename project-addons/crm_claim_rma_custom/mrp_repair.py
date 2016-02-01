@@ -24,6 +24,8 @@ from openerp import models, fields, api
 class mrp_repair(models.Model):
     _inherit = "mrp.repair"
 
+    _order = "id desc"
+
     @api.multi
     def action_repair_end(self):
         res = super(mrp_repair, self).action_repair_end()
