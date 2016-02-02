@@ -82,19 +82,19 @@ class SaleOrder(models.Model):
                     product_code += u'|' + str(self.partner_id.ref)
                 for custom in customizations:
                     product_code += u'|' + str(custom.code)
-                product = prod_obj.sudo().get_product_customized(product_code,
-                                                          line.can_mount_id)
-                if product.custom == True:
+                product = prod_obj.sudo().\
+                    get_product_customized(product_code, line.can_mount_id)
+                if product.custom:
                     for prodmount in line.product_id.can_mount_ids:
                         if line.can_mount_id == prodmount:
                             line.price_unit += \
-                                  prodmount.product_id.lst_price * prodmount.qty
+                                prodmount.product_id.lst_price * prodmount.qty
                             product.standard_price = \
-                                  line.product_id.standard_price + \
-                                  prodmount.product_id.standard_price
+                                line.product_id.standard_price + \
+                                prodmount.product_id.standard_price
                             product.standard_price_cost = \
-                                  line.product_id.standard_price_cost + \
-                                  prodmount.product_id.standard_price_cost
+                                line.product_id.standard_price_cost + \
+                                prodmount.product_id.standard_price_cost
 
                 final_line_dict = {
                     'product_id': product.id,
@@ -102,7 +102,8 @@ class SaleOrder(models.Model):
                     'customization_types': [(6, 0, [x.id for x in
                                              line.customization_types])],
                     'price_unit': line.price_unit,
-                    'purchase_price': product.standard_price_cost,
+                    'purchase_price': product.standard_price_cost or
+                    product.standard_price,
                     'delay': max([product.sale_delay, line.delay]),
                     'product_uom_qty': line.product_uom_qty,
                     'product_uom': product.uom_id.id
