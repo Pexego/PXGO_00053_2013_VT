@@ -36,7 +36,8 @@ class CrmClaimRma(models.Model):
         selection=[('1', 'High'),
                    ('2', 'Critical')])
     comercial = fields.Many2one("res.users",string="Comercial")
-    date_received = fields.Datetime('Received Date', default=lambda *a:datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    # date_received = fields.Datetime('Received Date', default=lambda *a:datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    date_received = fields.Datetime('Received Date')
 
     def onchange_partner_id(self, cr, uid, ids, partner_id, email=False,
                             context=None):
