@@ -66,16 +66,15 @@ class ProductProduct(models.Model):
         self.env.cr.execute(sql_sentence)
         res = self.env.cr.fetchall()
         product_ids = [x[0] for x in res]
-        for product in product_ids:
-            product_id = self.browse(product)
+        for product_id in self.browse(product_ids):
             sale_order_line_obj = self.env['sale.order.line']
-            domain = [('product_id', '=', product)]
+            domain = [('product_id', '=', product_id.id)]
             sales_obj = sale_order_line_obj.search(domain, limit=100,
                                                    order='id desc')
             margin_perc_sum = 0
             qty_sum = 0
             for line in sales_obj:
-                margin_perc_sum += line.margin_perc
+                margin_perc_sum += (line.margin_perc * line.product_uom_qty)
                 qty_sum += line.product_uom_qty
             if qty_sum:
                 product_id.average_margin = margin_perc_sum / qty_sum
