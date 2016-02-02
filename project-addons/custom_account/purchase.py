@@ -75,5 +75,7 @@ class purchase_order(osv.osv):
             }),
         'manufacture_date': fields.date("Manufacture Date", help="Date when it was manufactured"),
         'prepared_merchandise_date': fields.date("Prepared Merchandise Date", help="Date when the merchandise was prepared"),
-        'estimated_arrival_date': fields.date("Estimated Arrival Date", help="Date when the merchandise will arrive approximately")
+        'estimated_arrival_date': fields.date("Estimated Arrival Date", help="Date when the merchandise will arrive approximately"),
+        'telex_release': fields.boolean("Telex Release", help="It indicates that Telex release is necessary"),
+        'end_manufacture': fields.date("Ending Date Of Manufacture")
     }
