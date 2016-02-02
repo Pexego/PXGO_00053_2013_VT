@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* custom_account
+#       * custom_account
 #
 msgid ""
 msgstr ""
@@ -58,7 +58,7 @@ msgid "Email Templates"
 msgstr "Plantillas email"
 
 #. module: custom_account
-#: field:sale.order,end_manufacture:0
+#: field:purchase.order,end_manufacture:0
 msgid "End Manufacture Date"
 msgstr "Fecha fin fabricación"
 
@@ -89,8 +89,8 @@ msgid "Invoices Statistics"
 msgstr "Estadísticas de facturas"
 
 #. module: custom_account
-#: help:sale.order,telex_release:0
-msgid "It indicates that                                    Telex release is necessary"
+#: help:purchase.order,telex_release:0
+msgid "It indicates that Telex release is necessary"
 msgstr "Indica que 'Telex release' es necesario"
 
 #. module: custom_account
@@ -171,7 +171,7 @@ msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: custom_account
-#: field:sale.order,telex_release:0
+#: field:purchase.order,telex_release:0
 msgid "Telex Release"
 msgstr "Telex Release"
 
