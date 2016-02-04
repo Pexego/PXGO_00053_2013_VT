@@ -16,6 +16,17 @@
                 <field name="claim_type" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
+                <group name="Product Return" position="replace">
+                  <group name="Product Return">
+                      <separator string="Product Return" colspan="4"/>
+                      <field name="claim_line_ids" nolabel="1" colspan="4" editable="top"/>
+                      <group colspan="4">
+                        <group col="2">
+                          <field name="aditional_notes" class="oe_inline" placeholder="Aditional Notes" nolabel="1"/>
+                        </group>
+                      </group>
+                  </group>
+                </group>
             </field>
         </record>
 
