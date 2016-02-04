@@ -16,7 +16,7 @@
                 <field name="claim_type" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
-                <group name="Product Return" position="replace">
+                <!-- <group name="Product Return" position="replace">
                   <group name="Product Return">
                       <separator string="Product Return" colspan="4"/>
                       <field name="claim_line_ids" nolabel="1" colspan="4" editable="top"/>
@@ -26,8 +26,17 @@
                         </group>
                       </group>
                   </group>
-                </group>
+                </group> -->
             </field>
+        </record>
+
+        <record model="ir.ui.view" id="crm_claim_rma_form_view_invoice_method">
+          <field name="name">CRM - Claim product return Form</field>
+          <field name="model">crm.claim</field>
+          <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
+          <field name="arch" type="xml">
+              <field name="invoice_id" position="replace"/>
+          </field>
         </record>
 
         <record model="ir.ui.view" id="crm_claim_line_tree_view_invisible_states">
@@ -54,6 +63,11 @@
                 <button name="%(crm_claim_rma.action_claim_make_repair)d" position="replace">
                     <button name="create_repair" type="object" icon="gtk-execute" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
                 </button>
+                <field name="claim_origine" position="after">
+                    <!-- <field name="invoice_id"/> -->
+                    <field name="partner_id" invisible="1"/>
+                    <field name="invoice_id" domain="[('partner_id', '=', parent.partner_id),('state', '!=', 'draft')]"/>
+                </field>
             </field>
         </record>
 

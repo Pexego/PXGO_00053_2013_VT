@@ -67,6 +67,7 @@ class CrmClaimLine(models.Model):
     _inherit = "claim.line"
 
     name = fields.Char(required=False)
+    invoice_id = fields.Many2one("account.invoice", string="Invoice")
 
     @api.multi
     def action_split(self):
