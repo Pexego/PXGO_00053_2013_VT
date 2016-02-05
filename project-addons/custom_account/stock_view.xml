@@ -19,17 +19,5 @@
           </field>
       </record>
 
-      <record id="view_order_form_telex" model="ir.ui.view">
-        <field name="name">sale.order.form</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale_stock.view_order_form_inherit"/>
-        <field name="arch" type="xml">
-            <field name="shipped" position="after">
-              <field name="end_manufacture"/>
-              <field name="telex_release"/>
-            </field>
-        </field>
-      </record>
-
     </data>
 </openerp>

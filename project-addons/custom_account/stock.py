@@ -63,9 +63,6 @@ class SaleOrder(models.Model):
 
     state = fields.Selection(selection_add=[("history", "History")])
     internal_notes = fields.Text("Internal Notes")
-    telex_release = fields.Boolean("Telex Release", help="It indicates that\
-                                    Telex release is necessary")
-    end_manufacture = fields.Date("Ending Date Of Manufacture")
 
 class SaleOrderLine(models.Model):
 

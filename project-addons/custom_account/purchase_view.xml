@@ -11,7 +11,9 @@
                 <group>
                   <field name="location_id" groups="stock.group_locations"/>
                   <field name="shipped" groups="base.group_no_one"/>
+                  <field name="telex_release"/>
                   <field name="manufacture_date"/>
+                  <field name="end_manufacture"/>
                   <field name="prepared_merchandise_date"/>
                   <field name="estimated_arrival_date"/>
                 </group>
