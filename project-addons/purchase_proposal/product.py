@@ -56,16 +56,19 @@ class ProductProduct(models.Model):
                 product.standard_price
 
     @api.model
-    def average_margin_last_sales(self):
-        sql_sentence = """
-            SELECT DISTINCT product_id
-                FROM sale_order_line
-                WHERE state not in ('draft', 'cancel', 'exception')
-                AND product_id IS NOT NULL
-        """
-        self.env.cr.execute(sql_sentence)
-        res = self.env.cr.fetchall()
-        product_ids = [x[0] for x in res]
+    def average_margin_last_sales(self, ids = False):
+        if not ids:
+            sql_sentence = """
+                SELECT DISTINCT product_id
+                    FROM sale_order_line
+                    WHERE state not in ('draft', 'cancel', 'exception')
+                    AND product_id IS NOT NULL
+            """
+            self.env.cr.execute(sql_sentence)
+            res = self.env.cr.fetchall()
+            product_ids = [x[0] for x in res]
+        else:
+            product_ids = ids
         for product_id in self.browse(product_ids):
             sale_order_line_obj = self.env['sale.order.line']
             domain = [('product_id', '=', product_id.id)]
@@ -78,3 +81,6 @@ class ProductProduct(models.Model):
                 qty_sum += line.product_uom_qty
             if qty_sum:
                 product_id.average_margin = margin_perc_sum / qty_sum
+    @api.multi
+    def average_margin_compute(self):
+        self.average_margin_last_sales(ids=[x.id for x in self.ids])
