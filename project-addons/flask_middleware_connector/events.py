@@ -26,6 +26,7 @@ from .connector import get_environment
 from .backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from .unit.backend_adapter import GenericAdapter
+from .rma_events import export_rma, export_rmaproduct
 from openerp.addons.connector.event import Event
 
 on_stock_move_change = Event()
@@ -107,12 +108,19 @@ def delay_export_product1(session, model_name, record_id, vals):
     up_fields = ["name", "default_code", "list_price", "list_price2",
                  "list_price3"]
     if vals.get("web", False) and vals.get("web", False) == "published":
-        export_product.delay(session, model_name, record_id)
+        export_product.delay(session, model_name, record_id, priority=1)
+        claim_lines = session.env['claim.line'].search(
+            [('product_id', '=', product.id),
+             ('claim_id.partner_id.web', '=', True)])
+        for line in claim_lines:
+            export_rmaproduct.delay(session, 'claim.line', line.id,
+                                    priority=10, eta=120)
     elif product.web == "published":
         for field in up_fields:
             if field in vals:
                 update_product.delay(session, model_name, record_id)
                 break
+
 
 @on_record_write(model_names='product.product')
 def delay_export_product2(session, model_name, record_id, vals):
@@ -120,7 +128,13 @@ def delay_export_product2(session, model_name, record_id, vals):
     up_fields = ["name", "default_code", "list_price", "list_price2",
                  "list_price3"]
     if vals.get("web", False) and vals.get("web", False) == "published":
-        export_product.delay(session, model_name, record_id)
+        export_product.delay(session, model_name, record_id, priority=1)
+        claim_lines = session.env['claim.line'].search(
+            [('product_id', '=', product.id),
+             ('claim_id.partner_id.web', '=', True)])
+        for line in claim_lines:
+            export_rmaproduct.delay(session, 'claim.line', line.id,
+                                    priority=10, eta=120)
     elif vals.get("web", False) and vals.get("web", False) != "published":
         unlink_product(session, model_name, record_id)
     elif product.web == "published":
@@ -137,14 +151,31 @@ def delay_export_partner1(session, model_name, record_id, vals):
                  "country_id", "state_id", "email"]
     if vals.get("web", False) and (vals.get('active', False) or
                                    partner.active):
-        export_partner.delay(session, model_name, record_id)
+        export_partner.delay(session, model_name, record_id, priority=1)
+        rmas = session.env['crm.claim'].search(
+            [('partner_id', '=', partner.id)])
+        for rma in rmas:
+            export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
+            for line in rma.claim_line_ids:
+                if line.product_id.web == 'published':
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=240)
     elif vals.get("active", False) and partner.web:
-        export_partner.delay(session, model_name, record_id)
+        export_partner.delay(session, model_name, record_id, priority=1)
+        rmas = session.env['crm.claim'].search(
+            [('partner_id', '=', partner.id)])
+        for rma in rmas:
+            export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
+            for line in rma.claim_line_ids:
+                if line.product_id.web == 'published':
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=240)
     elif partner.web:
         for field in up_fields:
             if field in vals:
                 update_partner.delay(session, model_name, record_id)
                 break
+
 
 @on_record_write(model_names='res.partner')
 def delay_export_partner2(session, model_name, record_id, vals):
@@ -153,11 +184,27 @@ def delay_export_partner2(session, model_name, record_id, vals):
                  "country_id", "state_id", "email"]
     if vals.get("web", False) and (vals.get('active', False) or
                                    partner.active):
-        export_partner.delay(session, model_name, record_id)
+        export_partner.delay(session, model_name, record_id, priority=1)
+        rmas = session.env['crm.claim'].search(
+            [('partner_id', '=', partner.id)])
+        for rma in rmas:
+            export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
+            for line in rma.claim_line_ids:
+                if line.product_id.web == 'published':
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=240)
     elif "web" in vals and not vals["web"]:
         unlink_partner(session, model_name, record_id)
     elif vals.get("active", False) and partner.web:
-        export_partner.delay(session, model_name, record_id)
+        export_partner(session, model_name, record_id, priority=1)
+        rmas = session.delay.env['crm.claim'].search(
+            [('partner_id', '=', partner.id)])
+        for rma in rmas:
+            export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
+            for line in rma.claim_line_ids:
+                if line.product_id.web == 'published':
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=240)
     elif "active" in vals and not vals["active"] and partner.web:
         unlink_partner(session, model_name, record_id)
     elif partner.web:
@@ -165,6 +212,7 @@ def delay_export_partner2(session, model_name, record_id, vals):
             if field in vals:
                 update_partner.delay(session, model_name, record_id)
                 break
+
 
 @on_record_unlink(model_names='product.product')
 def delay_unlink_product(session, model_name, record_id):
@@ -188,7 +236,8 @@ def update_stock_quantity(session, model_name, record_id):
         update_product.delay(session, "product.product", move.product_id.id)
 
 
-@job
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
 def export_product(session, model_name, record_id):
     backend = session.env["middleware.backend"].search([])[0]
     env = get_environment(session, model_name, backend.id)
@@ -196,7 +245,8 @@ def export_product(session, model_name, record_id):
     return product_exporter.update(record_id, "insert")
 
 
-@job
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
 def export_partner(session, model_name, record_id):
     backend = session.env["middleware.backend"].search([])[0]
     env = get_environment(session, model_name, backend.id)
@@ -204,7 +254,8 @@ def export_partner(session, model_name, record_id):
     return partner_exporter.update(record_id, "insert")
 
 
-@job
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
 def update_product(session, model_name, record_id):
     backend = session.env["middleware.backend"].search([])[0]
     env = get_environment(session, model_name, backend.id)
@@ -212,7 +263,8 @@ def update_product(session, model_name, record_id):
     return product_exporter.update(record_id, "update")
 
 
-@job
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
 def update_partner(session, model_name, record_id):
     backend = session.env["middleware.backend"].search([])[0]
     env = get_environment(session, model_name, backend.id)
@@ -220,7 +272,8 @@ def update_partner(session, model_name, record_id):
     return partner_exporter.update(record_id, "update")
 
 
-@job
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
 def unlink_product(session, model_name, record_id):
     backend = session.env["middleware.backend"].search([])[0]
     env = get_environment(session, model_name, backend.id)
@@ -228,7 +281,8 @@ def unlink_product(session, model_name, record_id):
     return product_exporter.delete(record_id)
 
 
-@job
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
 def unlink_partner(session, model_name, record_id):
     backend = session.env["middleware.backend"].search([])[0]
     env = get_environment(session, model_name, backend.id)

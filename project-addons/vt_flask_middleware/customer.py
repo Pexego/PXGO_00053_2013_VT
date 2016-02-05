@@ -31,6 +31,7 @@ class Customer(BaseModel):
     def __unicode__(self):
         return self.fiscal_name
 
+
 def init_db():
     if not Customer.table_exists():
         Customer.create_table()

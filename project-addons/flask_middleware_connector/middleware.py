@@ -27,6 +27,7 @@ from openerp.addons.connector.connector import ConnectorUnit
 from openerp.addons.connector.unit.mapper import mapping, ImportMapper
 from .unit.backend_adapter import GenericAdapter
 from .events import export_partner, export_product
+from .rma_events import export_rma, export_rmaproduct
 
 from .backend import middleware
 
@@ -126,5 +127,10 @@ class MiddlewareBackend(models.Model):
             partners = self.env["res.partner"].search([('web', '=', True)])
             for partner in partners:
                 export_partner(session, "res.partner", partner.id)
-
+            rmas = self.env['crm.claim'].search([('partner_id.web', '=', True)])
+            for rma in rmas:
+                export_rma(session, 'crm.claim', rma.id)
+                for line in rma.claim_line_ids:
+                    if line.product_id.web == 'published':
+                        export_rmaproduct(session, 'claim.line', line.id)
         return True

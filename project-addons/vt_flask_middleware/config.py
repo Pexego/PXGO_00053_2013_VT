@@ -1,5 +1,5 @@
 class Config(object):
-    DEBUG = True
+    DEBUG = False
     TESTING = False
     SECRET_KEY = 'A0Zr18h/3yX R~XHH!jmN]LWX/,?RT'
     DATABASE_URI = 'sqlite://:memory:'

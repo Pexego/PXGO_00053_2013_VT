@@ -11,6 +11,7 @@ from auth import auth
 from user import User
 from product import Product
 from customer import Customer
+from rma import Rma, RmaProduct
 
 #
 # Setup the admin interface.
@@ -24,6 +25,8 @@ auth.register_admin(admin)
 admin.register(User)
 admin.register(Customer)
 admin.register(Product)
+admin.register(Rma)
+admin.register(RmaProduct)
 
 # Enable the admin interface.
 admin.setup()

@@ -3,6 +3,7 @@ from flask_peewee.rest import RestAPI, RestResource, UserAuthentication
 from app import app
 from customer import Customer
 from product import Product
+from rma import Rma, RmaProduct
 from auth import auth
 
 user_auth = UserAuthentication(auth, protected_methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -20,5 +21,7 @@ class ApiResource(RestResource):
 
 api.register(Customer, ApiResource)
 api.register(Product, ApiResource)
+api.register(Rma, ApiResource)
+api.register(RmaProduct, ApiResource)
 
 api.setup()
