@@ -26,7 +26,8 @@
     'description': """""",
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
-    "depends": ['base','product','purchase'],
-    "data": ['hs_codes_view.xml'],
+    "depends": ['base', 'product', 'purchase', 'account', 'stock'],
+    "data": ['hs_codes_view.xml',
+             'security/ir.model.access.csv'],
     "installable": True
 }
