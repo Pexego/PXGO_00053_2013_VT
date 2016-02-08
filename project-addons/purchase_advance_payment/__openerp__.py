@@ -30,6 +30,7 @@
     "depends": ["purchase", "account_voucher"],
     "data": ['wizard/purchase_advance_payment_wzd_view.xml',
              'wizard/apply_advanced_amount_wzd_view.xml',
-             'partner_view.xml', 'invoice_view.xml', 'purchase_view.xml'],
+             'partner_view.xml', 'invoice_view.xml', 'purchase_view.xml',
+             'security/ir.model.access.csv'],
     "installable": True,
 }

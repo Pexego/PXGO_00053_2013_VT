@@ -10,11 +10,11 @@
             <field name="arch" type="xml">
                 <button name="copy_quotation" position="before">
                     <button name="%(action_view_account_voucher_wizard)d" string="Pay sale advanced"
-                        type="action" icon="gtk-execute" states="draft,sent,reserve,manual" groups="account.group_account_invoice"/>
+                        type="action" icon="gtk-execute" groups="account.group_account_invoice" attrs="{'invisible': ['|',('state', 'in', ['done','cancel','history']),('invoice_exists', '=', True)]}"/>
                 </button>
                 <page string="Other Information" position="after">
                     <page string="Payment advances" groups="account.group_account_invoice">
-                        <field name="account_voucher_ids" nolabel="1" colspan="4"/>
+                        <field name="account_voucher_ids" nolabel="1" colspan="4" context="{'form_view_ref': 'account_voucher.view_voucher_form'}"/>
                     </page>
                 </page>
 

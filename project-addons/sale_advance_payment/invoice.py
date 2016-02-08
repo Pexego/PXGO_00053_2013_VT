@@ -37,6 +37,8 @@ class AccountInvoice(models.Model):
                 if sale not in orders:
                     orders.append(sale)
                     for vline in sale.account_voucher_ids:
+                        if vline.state != 'posted':
+                            continue
                         for move in vline.move_ids:
                             if move.account_id.type in ('receivable',
                                                         'payable'):
@@ -79,6 +81,8 @@ class AccountInvoice(models.Model):
 
                 for sale_order in orders:
                     for payment in sale_order.account_voucher_ids:
+                        if payment.state != 'posted':
+                            continue
                         payment.move_id.post()
                         for line in payment.move_ids:
                             if line.account_id.id == invoice.account_id.id:
