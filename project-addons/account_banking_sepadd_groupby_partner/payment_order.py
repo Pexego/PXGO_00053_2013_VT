@@ -22,16 +22,39 @@
 #
 ##############################################################################
 
-from openerp import models, api
+from openerp import models, api, fields
 
 
 class PaymentOrder(models.Model):
 
     _inherit = "payment.order"
 
+    charge_financed = fields.Boolean('Financed Charge',
+                                     states={'sent': [('readonly', True)],
+                                             'rejected': [('readonly', True)],
+                                             'done': [('readonly', True)]})
+
+    @api.model
+    def create(self, vals):
+        res = super(PaymentOrder, self).create(vals)
+        if vals.get('charge_financed', False):
+            res.reference = u"FSDD" + res.reference
+        return res
+
     @api.multi
-    def action_done(self):
-        res = super(PaymentOrder, self).action_done()
+    def write(self, vals):
+        res = super(PaymentOrder, self).write(vals)
+        if 'charge_financed' in vals:
+            for po in self:
+                if not vals['charge_financed'] and 'FSDD' in po.reference:
+                    po.reference = po.reference.replace("FSDD", "")
+                elif vals['charge_financed'] and 'FSDD' not in po.reference:
+                    po.reference = u"FSDD" + res.reference
+        return res
+
+    @api.multi
+    def action_sent(self):
+        res = super(PaymentOrder, self).action_sent()
         mail_pool = self.env['mail.mail']
         mail_ids = self.env['mail.mail']
         for order in self:
