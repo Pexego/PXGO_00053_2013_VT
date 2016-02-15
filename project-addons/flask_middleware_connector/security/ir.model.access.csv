@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_middleware_backend_manager,middleware_backend_manager,model_middleware_backend,connector.group_connector_manager,1,1,1,1
 access_middleware_backend_all,middleware_backend_all,model_middleware_backend,,1,0,0,0
+access_brand_country_rel,access_brand_country_rel,model_brand_country_rel,base.group_user,1,1,1,1

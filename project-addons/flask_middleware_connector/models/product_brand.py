@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2016 Comunitea All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,8 +18,26 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, exceptions, _
 
-from . import connector
-from . import backend
-from . import events
-from . import models
+
+class ProductBrand(models.Model):
+
+    _inherit = 'product.brand'
+
+    '''country_ids = fields.One2Many(
+        'res.country',
+        'brand_country_rel',
+        'brand_id',
+        'country_id',
+        'Countries')'''
+
+    country_ids = fields.One2many('brand.country.rel', 'brand_id', 'Countries')
+
+
+class BrandCountryRel(models.Model):
+
+    _name = 'brand.country.rel'
+
+    brand_id = fields.Many2one('product.brand', 'Brand')
+    country_id = fields.Many2one('res.country', 'Country')
