@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego S.I. (<http://www.pexego.es>).
+#    Copyright (C) 2015 Pexego (<http://www.pexego.es>).
 #
 #    All other contributions are (C) by their respective contributors
 #
@@ -23,22 +23,16 @@
 ##############################################################################
 
 {
-    'name': 'Account Banking - Export sepa direct debit grouping by partner',
+    'name': 'Invoice bank usability',
     'version': '0.1',
     'license': 'AGPL-3',
     'author': 'Banking addons community',
-    'website': 'https://launchpad.net/banking-addons',
+    'website': 'https://github.com/OCA/banking',
     'category': 'Banking addons',
-    'depends': ['account_banking_sepa_direct_debit',
-                'account_banking_payment_export',
-                'account_payment',
-                'account_banking_payment_transfer'],
-    'data': ['wizard/export_sdd_view.xml',
-             'payment_order_data.xml',
-             'payment_order_view.xml'],
-    'demo': [],
-    'description': '''
-Allow to export sepa direct debit files grouped by partner.
-Send email to partners when payment order is done''',
+    'depends': ['account'],
+    'data': ['views/account_invoice_view.xml'],
+    'description': '''Allow to select customer bank accounts on customer
+    invoices.''',
+    'auto_install': False,
     'installable': True,
 }
