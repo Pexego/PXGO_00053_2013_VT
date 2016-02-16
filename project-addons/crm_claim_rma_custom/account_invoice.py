@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2016 Comunitea All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,17 +18,23 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, exceptions, _
 
-{
-    'name': 'Crm Claim custom',
-    'version': '1.0',
-    'category': 'crm',
-    'description': """
-        Crm claim customizations:
-    """,
-    'author': 'Comunitea',
-    'website': '',
-    "depends": ['crm_claim_rma'],
-    "data": ['crm_claim_view.xml', 'mrp_repair_wkf.xml', 'data/substate_data.xml'],
-    "installable": True
-}
+
+class AccountInvoice(models.Model):
+
+    _inherit = 'account.invoice'
+
+    @api.multi
+    def write(self, vals):
+        res = super(AccountInvoice, self).write(vals)
+        if 'state' in vals.keys():
+            if vals['state'] == 'paid':
+                for invoice in self:
+                    invoice_line_ids = [x.id for x in invoice.invoice_line]
+                    substate_id = self.env.ref(
+                        'crm_claim_rma_custom.substate_refund').id
+                    claim_lines = self.env['claim.line'].search(
+                        [('refund_line_id', 'in', invoice_line_ids)])
+                    claim_lines.write({'substate_id': substate_id})
+        return res

@@ -56,7 +56,7 @@ class RmaAdapter(GenericAdapter):
 def delay_create_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
     if rma.partner_id and rma.partner_id.web:
-        export_rma(session, model_name, record_id)
+        export_rma.delay(session, model_name, record_id, priority=0)
 
 
 @on_record_write(model_names='crm.claim')
@@ -64,9 +64,9 @@ def delay_write_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
     up_fields = ["partner_id"]
     if vals.get("partner_id", False) and rma.partner_id.web:
-        export_rma(session, model_name, record_id)
+        export_rma.delay(session, model_name, record_id, priority=0)
     elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
-        unlink_rma(session, model_name, record_id)
+        unlink_rma.delay(session, model_name, record_id, priority=1)
     elif rma.partner_id.web:
         for field in up_fields:
             if field in vals:

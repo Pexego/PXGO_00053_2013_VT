@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="substate_due_receive" model="substate.substate">
+            <field name="name">Pte. de Recibir</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_received" model="substate.substate">
+            <field name="name">Recibido</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_process" model="substate.substate">
+            <field name="name">En Proceso</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_pending_shipping" model="substate.substate">
+            <field name="name">Pte. de Envío</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_pending_default" model="substate.substate">
+            <field name="name">Pte. por Impago</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_replaced" model="substate.substate">
+            <field name="name">Sustituido</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_checked" model="substate.substate">
+            <field name="name">Comprobado</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_returned" model="substate.substate">
+            <field name="name">Devuelto</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_repaired" model="substate.substate">
+            <field name="name">Reparado</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="substate_refund" model="substate.substate">
+            <field name="name">Abonado</field>
+            <field name="active" eval="True"/>
+        </record>
+
+    </data>
+</openerp>

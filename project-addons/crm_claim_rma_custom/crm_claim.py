@@ -59,7 +59,11 @@ class CrmClaimRma(models.Model):
         elif name == 'rma':
             return {'value': {'invoice_type': 'invoice'}}
 
-
+    @api.model
+    def create(self, vals):
+        if vals.get('name', False):
+            vals['name'] = vals['name'].split(' ')[0]
+        return super(CrmClaimRma, self).create(vals)
 
 
 class CrmClaimLine(models.Model):
@@ -68,6 +72,20 @@ class CrmClaimLine(models.Model):
 
     name = fields.Char(required=False)
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
+
+    @api.model
+    def create(self, vals):
+        if 'substate_id' not in vals.keys():
+            vals['substate_id'] = self.env.ref(
+                'crm_claim_rma_custom.substate_due_receive').id
+        return super(CrmClaimLine, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        if 'repair_id' in vals.keys():
+            vals['substate_id'] = self.env.ref(
+                'crm_claim_rma_custom.substate_repaired').id
+        return super(CrmClaimLine, self).write(vals)
 
     @api.multi
     def action_split(self):
