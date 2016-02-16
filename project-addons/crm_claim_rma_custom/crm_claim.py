@@ -69,6 +69,7 @@ class CrmClaimRma(models.Model):
                             'invoice_id': inv_line.invoice_id.id,
                             'claim_id': claim_line.claim_id.id,
                             'claim_number': claim_line.claim_id.number,
+                            'claim_line_id': claim_line.id,
                             'product_id': inv_line.product_id.id,
                             'product_description': inv_line.product_id.name,
                             'discount': inv_line.discount,
@@ -84,7 +85,6 @@ class CrmClaimRma(models.Model):
             else:
                 product = claim_line.product_id.id
                 pricelist = claim_obj.partner_id.property_product_pricelist.id
-                import ipdb; ipdb.set_trace()
                 quantity = claim_line.product_returned_quantity
                 price = self.pool.get('product.pricelist').price_get(cr, uid,
                         [pricelist],product, quantity or 1.0,
@@ -111,6 +111,7 @@ class CrmClaimRma(models.Model):
                     'claim_id': claim_line.claim_id.id,
                     'claim_number': claim_line.claim_id.number,
                     'product_id': product,
+                    'claim_line_id': claim_line.id,
                     'product_description': claim_line.product_id.name,
                     'qty': quantity,
                     'price_unit': price,
@@ -185,21 +186,21 @@ class CrmClaimRma(models.Model):
                 fiscal_position = claim_obj.partner_id.property_account_position
                 account_id = fp_obj.map_account(cr, uid,
                                                 fiscal_position, account_id)
-                if line.tax_ids:
-                    taxes_ids = \
-                       [tax.id for tax in line.tax_ids]
                 vals = {
                     'invoice_id': inv_id,
                     'name': line.claim_number,
                     'product_id': line.product_id.id,
                     'account_id': account_id,
                     'quantity': line.qty,
+                    'claim_line_id': line.claim_line_id.id,
                     'price_unit': line.price_unit,
                     'uos_id': line.product_id.uos_id.id,
                     'discount': line.discount,
-                    'invoice_line_tax_id': [(6, 0, taxes_ids)],
                     'account_analytic_id': False
                 }
+                if line.tax_ids:
+                    taxes_ids = [tax.id for tax in line.tax_ids]
+                    vals['invoice_line_tax_id'] = [(6, 0, taxes_ids)],
                 line_obj = self.pool.get('account.invoice.line')
                 line_id = line_obj.create(cr, uid, vals, context=context)
             invoice_id.write({
@@ -211,9 +212,9 @@ class ClaimInvoiceLine(models.Model):
 
     _name = "claim.invoice.line"
 
-    claim_id = fields.Integer("Claim ID")
+    claim_id = fields.Many2one('crm.claim', 'Claim')
     claim_number = fields.Char("Claim Number")
-    # claim_line = fields.
+    claim_line_id = fields.Many2one('claim.line', 'Claim lne')
     product_id = fields.Many2one("product.product", "Product Code")
     product_description = fields.Char("Product Description")
     invoice_id = fields.Many2one("account.invoice", "Invoice")
