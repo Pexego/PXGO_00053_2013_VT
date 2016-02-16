@@ -72,7 +72,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                  "country_id", "state_id", "email", "ref", 'user_id']
     if vals.get("web", False) and (vals.get('active', False) or
                                    partner.active):
-        export_partner.delay(session, model_name, record_id, priority=2)
+        export_partner.delay(session, model_name, record_id, priority=2, eta=60)
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -82,7 +82,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                     export_rmaproduct.delay(session, 'claim.line', line.id,
                                             priority=10, eta=240)
     elif vals.get("active", False) and partner.web:
-        export_partner.delay(session, model_name, record_id, priority=1)
+        export_partner.delay(session, model_name, record_id, priority=1, eta=60)
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -105,7 +105,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                  "country_id", "state_id", "email", "ref"]
     if vals.get("web", False) and (vals.get('active', False) or
                                    partner.active):
-        export_partner.delay(session, model_name, record_id, priority=2)
+        export_partner.delay(session, model_name, record_id, priority=2, eta=60)
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -117,7 +117,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     elif "web" in vals and not vals["web"]:
         unlink_partner.delay(session, model_name, record_id, priority=100)
     elif vals.get("active", False) and partner.web:
-        export_partner(session, model_name, record_id, priority=2)
+        export_partner(session, model_name, record_id, priority=2, eta=60)
         rmas = session.delay.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:

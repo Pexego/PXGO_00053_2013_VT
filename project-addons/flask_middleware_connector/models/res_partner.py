@@ -53,7 +53,7 @@ class ResPartner(models.Model):
     @api.model
     def create(self, vals):
         if vals.get('user_id', False) and 'web' in vals.keys() and vals['web']:
-            user =  self.env['res_users'].browse(vals['user_id'])
+            user =  self.env['res.users'].browse(vals['user_id'])
             if not user.web:
                 user.web = True
         return super(ResPartner, self).create(vals)
