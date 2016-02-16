@@ -6,12 +6,13 @@ It will try to automatically create the user table and admin user
 if they don't exist.
 """
 
-from peewee import CharField, IntegerField
+from peewee import CharField, IntegerField, FloatField, ForeignKeyField
+from commercial import Commercial
 from app import app
-from database import BaseModel
+from database import SyncModel
 
 
-class Customer(BaseModel):
+class Customer(SyncModel):
     """
     User model.
 
@@ -19,6 +20,8 @@ class Customer(BaseModel):
     """
     fiscal_name = CharField(max_length=150)
     commercial_name = CharField(max_length=150, null=True)
+    ref = CharField(max_length=150, null=True)
+    discount = FloatField(default=0.0)
     vat = CharField(max_length=18, null=True)
     street = CharField(max_length=250, null=True)
     city = CharField(max_length=150, null=True)
@@ -26,13 +29,10 @@ class Customer(BaseModel):
     country = CharField(max_length=100, null=True)
     state = CharField(max_length=100, null=True)
     email = CharField(max_length=70, null=True)
-    odoo_id = IntegerField()
+    commercial_id = ForeignKeyField(Commercial, on_delete='CASCADE', null=True)
+    odoo_id = IntegerField(unique=True)
+
+    MOD_NAME = 'customer'
 
     def __unicode__(self):
         return self.fiscal_name
-
-def init_db():
-    if not Customer.table_exists():
-        Customer.create_table()
-
-init_db()

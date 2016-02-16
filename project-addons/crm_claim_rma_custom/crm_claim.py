@@ -41,6 +41,12 @@ class CrmClaimRma(models.Model):
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
 
+    @api.model
+    def create(self, vals):
+        if vals.get('name', False):
+            vals['name'] = vals['name'].split(' ')[0]
+        return super(CrmClaimRma, self).create(vals)
+
     def calculate_invoices(self, cr, uid, ids, context=None):
         """
         Calculate invoices using data "Product Return of SAT"
@@ -286,6 +292,20 @@ class CrmClaimLine(models.Model):
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
     res = {}
 
+
+    @api.model
+    def create(self, vals):
+        if 'substate_id' not in vals.keys():
+            vals['substate_id'] = self.env.ref(
+                'crm_claim_rma_custom.substate_due_receive').id
+        return super(CrmClaimLine, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        if 'repair_id' in vals.keys():
+            vals['substate_id'] = self.env.ref(
+                'crm_claim_rma_custom.substate_repaired').id
+        return super(CrmClaimLine, self).write(vals)
 
     @api.multi
     def action_split(self):

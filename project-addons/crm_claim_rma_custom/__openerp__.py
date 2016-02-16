@@ -29,7 +29,6 @@
     'author': 'Comunitea',
     'website': '',
     "depends": ['crm_claim_rma','account'],
-    "data": ['crm_claim_view.xml',
-             'mrp_repair_wkf.xml'],
+    "data": ['crm_claim_view.xml', 'mrp_repair_wkf.xml', 'data/substate_data.xml'],
     "installable": True
 }

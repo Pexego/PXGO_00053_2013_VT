@@ -18,7 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields
+from openerp import models, fields, api
+
 
 class stock_picking(models.Model):
     _inherit = "stock.picking"
@@ -33,3 +34,21 @@ class stock_picking(models.Model):
                 obj.force_assign()
 
         return True
+
+    @api.model
+    def do_transfer(self):
+        for picking in self:
+            if picking.claim_id:
+                for move in picking.move_lines:
+                    if move.claim_line_id:
+                        if picking.picking_type_code == 'incoming':
+                            move.claim_line_id.substate_id = self.env.ref(
+                                'crm_claim_rma_custom.substate_received')
+                        elif picking.picking_type_code == 'outgoing':
+                            if move.claim_line_id.equivalent_product_id:
+                                move.claim_line_id.substate_id = self.env.ref(
+                                    'crm_claim_rma_custom.substate_replaced')
+                            else:
+                                move.claim_line_id.substate_id = self.env.ref(
+                                    'crm_claim_rma_custom.substate_returned')
+        return super(stock_picking, self).do_transfer()

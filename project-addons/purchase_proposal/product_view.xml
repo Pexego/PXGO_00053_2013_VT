@@ -33,7 +33,7 @@
           <field name="arch" type="xml">
             <xpath expr="//group[@colspan='4']/field[@name='commercial_cost']" position="after">
                 <field name="average_margin"/>
-                <button name="average_margin_last_sales" string="Calculate Average Margin Last Sales" type="object"/>
+                <button name="average_margin_compute" string="Calculate Average Margin Last Sales" type="object"/>
             </xpath>
           </field>
         </record>

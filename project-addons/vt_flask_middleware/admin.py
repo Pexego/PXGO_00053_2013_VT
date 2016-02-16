@@ -9,8 +9,9 @@ from flask_peewee.admin import Admin
 from app import app
 from auth import auth
 from user import User
-from product import Product
-from customer import Customer
+from sync_log import SyncLog
+from implemented_models import MODELS_CLASS
+from flask_peewee.utils import make_password
 
 #
 # Setup the admin interface.
@@ -21,9 +22,27 @@ auth.register_admin(admin)
 #
 # Register the models available in the admin interface.
 #
+
+
+def init_db():
+    if not SyncLog.table_exists():
+        SyncLog.create_table()
+    if not User.table_exists():
+        User.create_table()
+        User.create(username='admin',
+                    password=make_password('admin'),
+                    admin=True)
+    for mod_class in MODELS_CLASS.keys():
+        if not MODELS_CLASS[mod_class].table_exists():
+            MODELS_CLASS[mod_class].create_table()
+
+init_db()
+
+
+for mod_class in MODELS_CLASS.keys():
+    admin.register(MODELS_CLASS[mod_class])
+
 admin.register(User)
-admin.register(Customer)
-admin.register(Product)
 
 # Enable the admin interface.
 admin.setup()

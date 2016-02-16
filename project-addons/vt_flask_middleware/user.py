@@ -8,7 +8,6 @@ if they don't exist.
 
 from peewee import CharField, BooleanField
 from flask_peewee.auth import BaseUser
-from flask_peewee.utils import make_password
 from app import app
 from database import BaseModel
 
@@ -26,14 +25,3 @@ class User(BaseModel, BaseUser):
 
     def __unicode__(self):
         return self.username
-
-#
-# Create the table and initial data if needed.
-#
-def init_db():
-    if not User.table_exists():
-        User.create_table()
-        User.create(username='admin',
-                    password=make_password('admin'),
-                    admin=True)
-init_db()

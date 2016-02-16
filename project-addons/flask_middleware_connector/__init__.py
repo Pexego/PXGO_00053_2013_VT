@@ -21,9 +21,5 @@
 
 from . import connector
 from . import backend
-
-from . import middleware
 from . import events
-
-from . import product
-from . import stock
+from . import models

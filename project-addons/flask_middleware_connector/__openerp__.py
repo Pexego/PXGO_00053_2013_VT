@@ -26,8 +26,8 @@
     'description': """Connect to Visiotech flask middleware using Odoo connector""",
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
-    "depends": ['base', 'product', 'connector', 'stock', 'custom_partner'],
-    "data": ["middleware_view.xml", "product_view.xml",
-             "security/ir.model.access.csv"],
+    "depends": ['base', 'product', 'connector', 'stock', 'custom_partner', 'crm_claim_rma'],
+    "data": ["views/middleware_view.xml", "views/product_view.xml", 'views/res_users.xml',
+             "views/product_brand.xml", "security/ir.model.access.csv"],
     "installable": True
 }

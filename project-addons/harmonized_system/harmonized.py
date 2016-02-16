@@ -30,4 +30,5 @@ class HarmonizedSystem(models.Model):
 class product_template(models.Model):
     _inherit = "product.template"
 
-    hs_codes = fields.Many2one("harmonyzed.codes", "Harmonyzed Codes")
+    hs_codes = fields.Many2one("harmonyzed.codes", "HS Code",
+                               help="Harmonized System Code")

@@ -16,7 +16,7 @@
                         <field name="warehouse_id"/>
                         <field name="default_lang_id"/>
                         <field name="product_stock_field_id"/>
-                        <field name="price_unit_field_id"/>
+                        <!--field name="price_unit_field_id"/-->
                         <button name="export_current_web_data" type="object" string="Export current data" icon="gtk-execute"/>
                     </group>
                 </form>

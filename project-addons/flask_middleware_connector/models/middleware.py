@@ -25,10 +25,14 @@ from openerp import models, fields, api, _
 from openerp.addons.connector.session import ConnectorSession
 from openerp.addons.connector.connector import ConnectorUnit
 from openerp.addons.connector.unit.mapper import mapping, ImportMapper
-from .unit.backend_adapter import GenericAdapter
-from .events import export_partner, export_product
+from ..unit.backend_adapter import GenericAdapter
+from ..events.partner_events import export_partner
+from ..events.country_events import export_country
+from ..events.commercial_events import export_commercial
+from ..events.product_events import export_product, export_product_category, export_product_brand, export_product_brand_rel
+from ..events.rma_events import export_rma, export_rmaproduct, export_rma_status
 
-from .backend import middleware
+from ..backend import middleware
 
 _logger = logging.getLogger(__name__)
 
@@ -103,7 +107,7 @@ class MiddlewareBackend(models.Model):
         help="Choose the field of the product which will be used for "
              "stock inventory updates.", required=True
     )
-    price_unit_field_id = fields.Many2one(
+    '''price_unit_field_id = fields.Many2one(
         comodel_name='ir.model.fields',
         string='Price Field',
         default=_get_price_field_id,
@@ -111,20 +115,42 @@ class MiddlewareBackend(models.Model):
                " ('ttype', '=', 'float')]",
         help="Choose the field of the product which will be used for "
              "sale price unit updates.", required=True
-    )
+    )'''
 
     @api.multi
     def export_current_web_data(self):
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
         for midd in self:
+            countries = self.env['res.country'].search([])
+            for country in countries:
+                export_country(session, 'res.country', country.id)
+            brands = self.env['product.brand'].search([])
+            for brand in brands:
+                export_product_brand(session, 'product.brand', brand.id)
+            brand_country_rels = self.env['brand.country.rel'].search([])
+            for rel in brand_country_rels:
+                export_product_brand_rel(session, 'brand.country.rel', rel.id)
+            categories = self.env['product.category'].search([])
+            for category in categories:
+                export_product_category(session, 'product.category', category.id)
             products = self.env["product.product"].\
                 search([('web', '=', 'published')])
             for product in products:
                 export_product(session, "product.product", product.id)
-
+            users = self.env['res.users'].search([('web', '=', True)])
+            for user in users:
+                export_commercial(session, 'res.users', user.id)
             partners = self.env["res.partner"].search([('web', '=', True)])
             for partner in partners:
                 export_partner(session, "res.partner", partner.id)
-
+            substates = self.env['substate.substate'].search([])
+            for substate in substates:
+                export_rma_status(session, 'substate.substate', substate.id)
+            rmas = self.env['crm.claim'].search([('partner_id.web', '=', True)])
+            for rma in rmas:
+                export_rma(session, 'crm.claim', rma.id)
+                for line in rma.claim_line_ids:
+                    if line.product_id.web == 'published':
+                        export_rmaproduct(session, 'claim.line', line.id)
         return True
