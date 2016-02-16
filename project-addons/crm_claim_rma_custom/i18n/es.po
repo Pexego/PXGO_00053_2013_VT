@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-14 16:35+0000\n"
-"PO-Revision-Date: 2016-01-14 16:35+0000\n"
+"POT-Creation-Date: 2016-02-05 14:05+0000\n"
+"PO-Revision-Date: 2016-02-05 14:05+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,14 +16,29 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: crm_claim_rma_custom
-#: field:crm.claim,agent:0
-msgid "Agent"
-msgstr "Comercial"
+#: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
+msgid "Calculate"
+msgstr "Calcular"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_crm_claim
 msgid "Claim"
 msgstr "Reclamación"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,claim_id:0
+msgid "Claim ID"
+msgstr "ID reclamación"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,claim_number:0
+msgid "Claim Number"
+msgstr "Número reclamación"
+
+#. module: crm_claim_rma_custom
+#: field:crm.claim,claim_inv_line_ids:0
+msgid "Claim inv line ids"
+msgstr "Claim inv line ids"
 
 #. module: crm_claim_rma_custom
 #: field:crm.claim,comercial:0
@@ -36,9 +51,50 @@ msgid "Create repair"
 msgstr "Crear reparación"
 
 #. module: crm_claim_rma_custom
-#: field:claim.line,internal_description:0
-msgid "Internal Description"
-msgstr "Internal Description"
+#: field:claim.invoice.line,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,discount:0
+msgid "Discount"
+msgstr "Descuento"
+
+#. module: crm_claim_rma_custom
+#: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
+msgid "Follow Up"
+msgstr "Seguimiento"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,invoice_id:0
+#: field:claim.line,invoice_id:0
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: crm_claim_rma_custom
+#: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
+msgid "Invoicing"
+msgstr "Facturación"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_line
@@ -51,14 +107,29 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: crm_claim_rma_custom
-#: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view
-msgid "Product Return"
-msgstr "Devolución de producto"
+#: model:ir.model,name:crm_claim_rma_custom.model_stock_picking
+msgid "Picking List"
+msgstr "Albarán"
 
 #. module: crm_claim_rma_custom
-#: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view
-msgid "Product Returns"
-msgstr "Entrada de producto"
+#: field:claim.invoice.line,price_subtotal:0
+msgid "Price Subtotal"
+msgstr "Precio subtotal"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,product_id:0
+msgid "Product Code"
+msgstr "Cód. producto"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,product_description:0
+msgid "Product Description"
+msgstr "Descripción de producto"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,qty:0
+msgid "Quantity"
+msgstr "Cantidad"
 
 #. module: crm_claim_rma_custom
 #: field:crm.claim,date_received:0
@@ -74,6 +145,17 @@ msgstr "Orden reparación"
 #: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
 msgid "Split"
 msgstr "Desglosar"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,tax_name:0
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:68
+#, python-format
+msgid "There is at least one line of the claim with                                an incorrect invoice"
+msgstr "Hay al menos una línea de la reclamación con factura incorrecta"
 
 #. module: crm_claim_rma_custom
 #: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states

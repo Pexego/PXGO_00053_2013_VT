@@ -2,6 +2,15 @@
 <openerp>
     <data>
 
+        <record model="ir.ui.view" id="crm_claim_rma_form_view_inherit_new_refund">
+            <field name="name">CRM - Claim product return Form</field>
+            <field name="model">crm.claim</field>
+            <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
+            <field name="arch" type="xml">
+                <button name="%(account.action_account_invoice_refund)d" position="replace"/>
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="crm_claim_rma_form_view3">
             <field name="name">CRM - Claim product return Form</field>
             <field name="model">crm.claim</field>
@@ -16,17 +25,28 @@
                 <field name="claim_type" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
-                <!-- <group name="Product Return" position="replace">
-                  <group name="Product Return">
-                      <separator string="Product Return" colspan="4"/>
-                      <field name="claim_line_ids" nolabel="1" colspan="4" editable="top"/>
-                      <group colspan="4">
-                        <group col="2">
-                          <field name="aditional_notes" class="oe_inline" placeholder="Aditional Notes" nolabel="1"/>
+                <page string="Follow Up" position="after">
+                    <page string="Invoicing">
+                        <field name="claim_inv_line_ids" nolabel="1" colspan="4" editable="bottom">
+                            <tree editable="bottom">
+                              <field name="invoice_id"/>
+                              <field name="product_id" on_change="onchange_product_id(product_id,invoice_id)"/>
+                              <field name="product_description"/>
+                              <field name="qty" on_change="onchange_values(qty, price_unit, discount)"/>
+                              <field name="price_unit" on_change="onchange_values(qty, price_unit, discount)"/>
+                              <field name="discount" on_change="onchange_values(qty, price_unit, discount)"/>
+                              <field name="tax_ids"/>
+                              <field name="price_subtotal"/>
+                            </tree>
+                        </field>
+                        <group>
+                          <group>
+                              <button name="calculate_invoices" type="object" string="Calculate"/>
+                          </group>
+                              <button name="make_refund_invoice" type="object" string="New Refund"/>
                         </group>
-                      </group>
-                  </group>
-                </group> -->
+                    </page>
+                </page>
             </field>
         </record>
 

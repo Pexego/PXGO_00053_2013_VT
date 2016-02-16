@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from . import crm_claim
-from . import partner
-from . import mrp_repair
-from . import stock
+import crm_claim
+import partner
+import mrp_repair
+import stock
