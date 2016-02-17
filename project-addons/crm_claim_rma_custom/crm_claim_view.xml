@@ -44,8 +44,7 @@
                               <button name="calculate_invoices" type="object" string="Calculate"/>
                           </group>
                               <button name="make_refund_invoice"
-                                  attrs="{'invisible': ['|','|',
-                                              ('invoice_type', '!=', 'refund'),
+                                  attrs="{'invisible': ['|',
                                               ('claim_inv_line_ids', '=', []),
                                               ('invoice_ids', '!=', [])]}"
                                   type="object" string="New Refund"/>
