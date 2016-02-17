@@ -121,6 +121,7 @@ class CrmClaimRma(models.Model):
                                                            context=context)
         if partner_id:
             partner = self.pool["res.partner"].browse(cr, uid, partner_id)
+            res['value']['delivery_address_id'] = partner_id
             if partner.user_id:
                 res['value']['comercial'] = partner.user_id.id
 
