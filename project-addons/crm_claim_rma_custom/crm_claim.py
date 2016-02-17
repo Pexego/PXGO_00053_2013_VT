@@ -54,7 +54,8 @@ class CrmClaimRma(models.Model):
         claim_obj = self.browse(cr, uid, ids)
         claim_inv_line_obj = self.pool.get('claim.invoice.line')
         claim_inv_lines = claim_inv_line_obj.search(cr, uid,
-                                         [('claim_id', '=', claim_obj.id)])
+                                                    [('claim_id', '=',
+                                                      claim_obj.id)])
         claim_inv_line_obj.unlink(cr, uid, claim_inv_lines)
         for claim_line in claim_obj.claim_line_ids:
             vals = {}
@@ -90,14 +91,13 @@ class CrmClaimRma(models.Model):
                         [pricelist],product, quantity or 1.0,
                         claim_obj.partner_id, {
                             'uom': claim_line.product_id.uom_id.id or \
-                                                    result.get('product_uom'),
+                                result.get('product_uom'),
                             'date': claim_obj.date,
                             })[pricelist]
                 account_tax = self.pool.get('account.tax')
                 account_fiscal_position = \
-                                       self.pool.get('account.fiscal.position')
+                    self.pool.get('account.fiscal.position')
                 fiscal_position = claim_obj.partner_id.property_account_position
-
                 taxes_ids = account_fiscal_position.\
                     map_tax(cr, uid, fiscal_position,
                             claim_line.product_id.taxes_id)
@@ -238,10 +238,9 @@ class ClaimInvoiceLine(models.Model):
     price_subtotal = fields.Float("Price Subtotal", compute="_get_subtotal",
                                   readonly=True)
     tax_ids = fields.Many2many("account.tax","claim_line_tax","claimline_id",
-                               "tax_id", string="Taxes ID")
-    tax_name = fields.Char("Tax")
+                               "tax_id", string="Taxes")
     discount = fields.Float("Discount")
-    qty = fields.Float("Quantity")
+    qty = fields.Float("Quantity", default="1")
 
     @api.one
     def _get_subtotal(self):
@@ -252,40 +251,43 @@ class ClaimInvoiceLine(models.Model):
 
     @api.onchange("product_id", "invoice_id")
     def onchange_product_id(self):
-        if self.product_id:
-            # res = {'value': {}}
-            taxes_ids = []
-            if self.invoice_id:
-                # res['value'] = {'invoice_id': self.invoice_id.id}
-                any_line = False
-                for line in self.invoice_id.invoice_line:
-                    if not self.product_id == line.product_id:
-                        any_line = False
-                    else:
-                        any_line = True
-                        price = line.price_unit
-                        taxes_ids = line.invoice_line_tax_id
-                        break
-                if any_line == False:
-                    raise exceptions.Warning(_('Selected product is not \
-                                                in the invoice'))
+        if self.claim_id.partner_id:
+            if self.product_id:
+                domain_taxes = [('type_tax_use', '=', 'sale')]
+                taxes_ids = [1,]
+                if self.invoice_id:
+                    # res['value'] = {'invoice_id': self.invoice_id.id}
+                    any_line = False
+                    for line in self.invoice_id.invoice_line:
+                        if not self.product_id == line.product_id:
+                            any_line = False
+                        else:
+                            any_line = True
+                            price = line.price_unit
+                            taxes_ids = line.invoice_line_tax_id
+                            break
+                    if any_line == False:
+                        raise exceptions.Warning(_('Selected product is not \
+                                                    in the invoice'))
+                else:
+                    pricelist_obj = \
+                        self.claim_id.partner_id.property_product_pricelist
+                    price = pricelist_obj.price_get(self.product_id.id, 1.0)
+                    if price:
+                        price = price[pricelist_obj.id]
+                self.product_description = self.product_id.name
+                self.qty = 1.0
+                self.price_unit = price
+                self.price_subtotal = price
+                self.discount = 0.0
+                self.tax_ids = taxes_ids
             else:
-                pricelist_obj = \
-                            self.claim_id.partner_id.property_product_pricelist
-                price = pricelist_obj.price_get(self.product_id.id, 1.0)
-                if price:
-                    price = price[pricelist_obj.id]
-            self.product_description = self.product_id.name
-            self.qty = 1.0
-            self.price_unit = price
-            self.price_subtotal = price
-            self.discount = 0.0
-            self.tax_ids = taxes_ids
+                self.price_subtotal = self.discount and \
+                    self.qty * self.price_unit - (self.discount *
+                                                  self.price_unit/100) or \
+                    self.qty * self.price_unit
         else:
-            self.price_subtotal = self.discount and \
-                self.qty * self.price_unit - (self.discount *
-                                              self.price_unit/100) or \
-                self.qty * self.price_unit
+            raise exceptions.Warning(_('Partner not selected'))
 
     def onchange_values(self, cr, uid, ids, qty, price_unit, discount,
                         context=None):

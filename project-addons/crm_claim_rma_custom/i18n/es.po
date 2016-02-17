@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-17 11:20+0000\n"
-"PO-Revision-Date: 2016-02-17 11:20+0000\n"
+"POT-Creation-Date: 2016-02-17 17:10+0000\n"
+"PO-Revision-Date: 2016-02-17 17:10+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -119,14 +119,15 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:290
+#, python-format
+msgid "Partner not selected"
+msgstr "Cliente no seleccionado"
+
+#. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_stock_picking
 msgid "Picking List"
 msgstr "Albarán"
-
-#. module: crm_claim_rma_custom
-#: field:claim.invoice.line,price_subtotal:0
-msgid "Price Subtotal"
-msgstr "Precio subtotal"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,price_unit:0
@@ -159,9 +160,9 @@ msgid "Repair Order"
 msgstr "Orden reparación"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:255
+#: code:addons/crm_claim_rma_custom/crm_claim.py:270
 #, python-format
-msgid "Selected product is not                                                 in the invoice"
+msgid "Selected product is not                                                     in the invoice"
 msgstr "El producto seleccionado no está en la factura"
 
 #. module: crm_claim_rma_custom
@@ -170,23 +171,18 @@ msgid "Split"
 msgstr "Desglosar"
 
 #. module: crm_claim_rma_custom
-#: field:claim.invoice.line,tax_name:0
-msgid "Tax"
-msgstr "Impuesto"
-
-#. module: crm_claim_rma_custom
 #: field:claim.invoice.line,tax_ids:0
-msgid "Taxes ID"
-msgstr "Impuestos ID"
+msgid "Taxes"
+msgstr "Impuestos"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:151
+#: code:addons/crm_claim_rma_custom/crm_claim.py:146
 #, python-format
 msgid "There is already an invoice                                                 with this claim"
 msgstr "Ya hay una factura con esta reclamación"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:83
+#: code:addons/crm_claim_rma_custom/crm_claim.py:84
 #, python-format
 msgid "There is at least one line of the claim with                                an incorrect invoice"
 msgstr "Hay al menos una línea de la reclamación con factura incorrecta"
