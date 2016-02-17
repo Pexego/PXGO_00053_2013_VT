@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-05 14:05+0000\n"
-"PO-Revision-Date: 2016-02-05 14:05+0000\n"
+"POT-Creation-Date: 2016-02-17 11:20+0000\n"
+"PO-Revision-Date: 2016-02-17 11:20+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,14 +21,10 @@ msgid "Calculate"
 msgstr "Calcular"
 
 #. module: crm_claim_rma_custom
+#: field:claim.invoice.line,claim_id:0
 #: model:ir.model,name:crm_claim_rma_custom.model_crm_claim
 msgid "Claim"
 msgstr "Reclamación"
-
-#. module: crm_claim_rma_custom
-#: field:claim.invoice.line,claim_id:0
-msgid "Claim ID"
-msgstr "ID reclamación"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,claim_number:0
@@ -39,6 +35,11 @@ msgstr "Número reclamación"
 #: field:crm.claim,claim_inv_line_ids:0
 msgid "Claim inv line ids"
 msgstr "Claim inv line ids"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,claim_line_id:0
+msgid "Claim lne"
+msgstr "Claim lne"
 
 #. module: crm_claim_rma_custom
 #: field:crm.claim,comercial:0
@@ -78,8 +79,14 @@ msgstr "ID"
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,invoice_id:0
 #: field:claim.line,invoice_id:0
+#: model:ir.model,name:crm_claim_rma_custom.model_account_invoice
 msgid "Invoice"
 msgstr "Factura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_account_invoice_refund
+msgid "Invoice Refund"
+msgstr "Abono factura"
 
 #. module: crm_claim_rma_custom
 #: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
@@ -102,6 +109,11 @@ msgid "List of product to return"
 msgstr "Listado de productos a devolver"
 
 #. module: crm_claim_rma_custom
+#: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
+msgid "New Refund"
+msgstr "Nuevo abono"
+
+#. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_res_partner
 msgid "Partner"
 msgstr "Empresa"
@@ -115,6 +127,11 @@ msgstr "Albarán"
 #: field:claim.invoice.line,price_subtotal:0
 msgid "Price Subtotal"
 msgstr "Precio subtotal"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,price_unit:0
+msgid "Price Unit"
+msgstr "Precio unidad"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,product_id:0
@@ -142,6 +159,12 @@ msgid "Repair Order"
 msgstr "Orden reparación"
 
 #. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:255
+#, python-format
+msgid "Selected product is not                                                 in the invoice"
+msgstr "El producto seleccionado no está en la factura"
+
+#. module: crm_claim_rma_custom
 #: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
 msgid "Split"
 msgstr "Desglosar"
@@ -152,7 +175,18 @@ msgid "Tax"
 msgstr "Impuesto"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:68
+#: field:claim.invoice.line,tax_ids:0
+msgid "Taxes ID"
+msgstr "Impuestos ID"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:151
+#, python-format
+msgid "There is already an invoice                                                 with this claim"
+msgstr "Ya hay una factura con esta reclamación"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:83
 #, python-format
 msgid "There is at least one line of the claim with                                an incorrect invoice"
 msgstr "Hay al menos una línea de la reclamación con factura incorrecta"

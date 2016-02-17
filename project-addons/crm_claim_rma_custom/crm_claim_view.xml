@@ -30,12 +30,12 @@
                         <field name="claim_inv_line_ids" nolabel="1" colspan="4" editable="bottom">
                             <tree editable="bottom">
                               <field name="invoice_id"/>
-                              <field name="product_id" on_change="onchange_product_id(product_id,invoice_id)"/>
+                              <field name="product_id"/>
                               <field name="product_description"/>
                               <field name="qty" on_change="onchange_values(qty, price_unit, discount)"/>
                               <field name="price_unit" on_change="onchange_values(qty, price_unit, discount)"/>
                               <field name="discount" on_change="onchange_values(qty, price_unit, discount)"/>
-                              <field name="tax_ids"/>
+                              <field name="tax_ids" widget="many2many_tags"/>
                               <field name="price_subtotal"/>
                             </tree>
                         </field>
