@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2016 Comunitea All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,8 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from . import connector
-from . import backend
-from . import events
-from . import models
+from . import claim
+from . import product
+from . import res_partner
+from . import res_users
+from . import stock
+from . import middleware
+from . import product_brand

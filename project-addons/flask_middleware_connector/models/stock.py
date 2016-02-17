@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import models, api
-from .events import on_stock_move_change
+from ..events.product_events import on_stock_move_change
 from openerp.addons.connector.session import ConnectorSession
 
 

@@ -21,10 +21,10 @@
 from openerp.addons.connector.event import on_record_create, on_record_write, \
     on_record_unlink
 from openerp.addons.connector.queue.job import job
-from .connector import get_environment
-from .backend import middleware
+from .utils import _get_exporter
+from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
-from .unit.backend_adapter import GenericAdapter
+from ..unit.backend_adapter import GenericAdapter
 from openerp.addons.connector.event import Event
 
 
@@ -84,27 +84,21 @@ def delay_unlink_rma(session, model_name, record_id):
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def export_rma(session, model_name, record_id):
-    backend = session.env["middleware.backend"].search([])[0]
-    env = get_environment(session, model_name, backend.id)
-    rma_exporter = env.get_connector_unit(RmaExporter)
+    rma_exporter = _get_exporter(session, model_name, record_id, RmaExporter)
     return rma_exporter.update(record_id, "insert")
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def update_rma(session, model_name, record_id):
-    backend = session.env["middleware.backend"].search([])[0]
-    env = get_environment(session, model_name, backend.id)
-    rma_exporter = env.get_connector_unit(RmaExporter)
+    rma_exporter = _get_exporter(session, model_name, record_id, RmaExporter)
     return rma_exporter.update(record_id, "update")
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def unlink_rma(session, model_name, record_id):
-    backend = session.env["middleware.backend"].search([])[0]
-    env = get_environment(session, model_name, backend.id)
-    rma_exporter = env.get_connector_unit(RmaExporter)
+    rma_exporter = _get_exporter(session, model_name, record_id, RmaExporter)
     return rma_exporter.delete(record_id)
 
 
@@ -124,6 +118,7 @@ class RmaProductExporter(Exporter):
             "product_id": line.product_id.id,
             "entrance_date": line.date_in,
             "end_date": line.date_out,
+            "substate_id": line.substate_id.id,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
@@ -152,7 +147,7 @@ def delay_create_rma_line(session, model_name, record_id, vals):
 def delay_write_rma_line(session, model_name, record_id, vals):
 
     claim_line = session.env[model_name].browse(record_id)
-    up_fields = ["product_id", "date_in", "date_out"]
+    up_fields = ["product_id", "date_in", "date_out", "substate_id"]
     if claim_line.claim_id.partner_id.web and \
             claim_line.product_id.web == 'published':
         for field in up_fields:
@@ -172,25 +167,96 @@ def delay_unlink_rma_line(session, model_name, record_id):
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def export_rmaproduct(session, model_name, record_id):
-    backend = session.env["middleware.backend"].search([])[0]
-    env = get_environment(session, model_name, backend.id)
-    rmaproduct_exporter = env.get_connector_unit(RmaProductExporter)
+    rmaproduct_exporter = _get_exporter(session, model_name, record_id,
+                                        RmaProductExporter)
     return rmaproduct_exporter.update(record_id, "insert")
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def update_rmaproduct(session, model_name, record_id):
-    backend = session.env["middleware.backend"].search([])[0]
-    env = get_environment(session, model_name, backend.id)
-    rmaproduct_exporter = env.get_connector_unit(RmaProductExporter)
+    rmaproduct_exporter = _get_exporter(session, model_name, record_id,
+                                        RmaProductExporter)
     return rmaproduct_exporter.update(record_id, "update")
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def unlink_rmaproduct(session, model_name, record_id):
-    backend = session.env["middleware.backend"].search([])[0]
-    env = get_environment(session, model_name, backend.id)
-    rmaproduct_exporter = env.get_connector_unit(RmaProductExporter)
+    rmaproduct_exporter = _get_exporter(session, model_name, record_id,
+                                        RmaProductExporter)
     return rmaproduct_exporter.delete(record_id)
+
+
+
+@middleware
+class RmaStatusExporter(Exporter):
+
+    _model_name = ['substate.substate']
+
+    def update(self, binding_id, mode):
+        line = self.model.browse(binding_id)
+        vals = {
+            "odoo_id": line.id,
+            "name": line.name
+        }
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(binding_id, vals)
+
+    def delete(self, binding_id):
+        return self.backend_adapter.remove(binding_id)
+
+
+@middleware
+class RmaStatusAdapter(GenericAdapter):
+    _model_name = 'substate.substate'
+    _middleware_model = 'rmastatus'
+
+
+@on_record_create(model_names='substate.substate')
+def delay_create_rmastatus(session, model_name, record_id, vals):
+    substate = session.env[model_name].browse(record_id)
+    export_rma_status.delay(session, model_name, record_id, priority=1)
+
+
+@on_record_write(model_names='substate.substate')
+def delay_write_rmastatus(session, model_name, record_id, vals):
+
+    substate = session.env[model_name].browse(record_id)
+    up_fields = ["name"]
+    for field in up_fields:
+        if field in vals:
+            update_rma_status.delay(session, model_name, record_id, priority=2)
+            break
+
+
+@on_record_unlink(model_names='substate.substate')
+def delay_unlink_rmastatus(session, model_name, record_id):
+    substate = session.env[model_name].browse(record_id)
+    unlink_rma_status.delay(session, model_name, record_id, priority=100)
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def export_rma_status(session, model_name, record_id):
+    rma_status_exporter = _get_exporter(session, model_name, record_id,
+                                        RmaStatusExporter)
+    return rma_status_exporter.update(record_id, "insert")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def update_rma_status(session, model_name, record_id):
+    rma_status_exporter = _get_exporter(session, model_name, record_id,
+                                        RmaStatusExporter)
+    return rma_status_exporter.update(record_id, "update")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def unlink_rma_status(session, model_name, record_id):
+    rma_status_exporter = _get_exporter(session, model_name, record_id,
+                                        RmaStatusExporter)
+    return rma_status_exporter.delete(record_id)

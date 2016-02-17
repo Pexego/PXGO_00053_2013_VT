@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="res_users_simple_form_add_web" model="ir.ui.view">
+            <field name="name">res.users.simple.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_simple_form"/>
+            <field name="arch" type="xml">
+                <field name="fax" position="after">
+                    <field name="web"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="res_users_form_add_web" model="ir.ui.view">
+            <field name="name">res.users.form</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <field name="signature" position="before">
+                    <field name="web"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
