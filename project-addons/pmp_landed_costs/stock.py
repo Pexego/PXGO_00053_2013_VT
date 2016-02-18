@@ -33,6 +33,7 @@ class stock_move(models.Model):
                 product_avail = product.qty_available
                 if product.qty_available <= 0:
                     new_std_price = move.price_unit
+                    new_std_price_cost = move.price_unit
                 else:
                     # Get the standard price
                     amount_unit = product.standard_price
