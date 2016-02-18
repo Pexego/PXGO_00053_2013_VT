@@ -47,6 +47,14 @@ class CrmClaimRma(models.Model):
             vals['name'] = vals['name'].split(' ')[0]
         return super(CrmClaimRma, self).create(vals)
 
+    def _get_sequence_number(self, cr, uid, context=None):
+        seq_obj = self.pool.get('ir.sequence')
+        res = seq_obj.get(cr, uid, 'crm.claim.rma', context=context) or '/'
+        if context['claim_type'] == 'supplier' and not res == '/':
+            seq = res.split('-')[1]
+            res = u'RMP' + '-' + seq
+        return res
+
     def calculate_invoices(self, cr, uid, ids, context=None):
         """
         Calculate invoices using data "Product Return of SAT"
