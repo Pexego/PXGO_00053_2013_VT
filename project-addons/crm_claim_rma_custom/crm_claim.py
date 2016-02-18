@@ -74,9 +74,8 @@ class CrmClaimRma(models.Model):
                             'product_id': inv_line.product_id.id,
                             'product_description': inv_line.product_id.name,
                             'discount': inv_line.discount,
-                            'qty': inv_line.quantity,
+                            'qty': claim_line.product_returned_quantity,
                             'price_unit': inv_line.price_unit,
-                            'price_subtotal': inv_line.price_subtotal,
                             'tax_ids': [(6, 0, taxes_ids)]
                         }
                     else:
@@ -110,7 +109,6 @@ class CrmClaimRma(models.Model):
                     'product_description': claim_line.product_id.name,
                     'qty': quantity,
                     'price_unit': price,
-                    'price_subtotal': price_subtotal,
                     'tax_ids': [(6, 0, taxes_ids)]
                 }
             claim_inv_line_obj.create(cr, uid, vals, context)
@@ -123,6 +121,7 @@ class CrmClaimRma(models.Model):
                                                            context=context)
         if partner_id:
             partner = self.pool["res.partner"].browse(cr, uid, partner_id)
+            res['value']['delivery_address_id'] = partner_id
             if partner.user_id:
                 res['value']['comercial'] = partner.user_id.id
 
