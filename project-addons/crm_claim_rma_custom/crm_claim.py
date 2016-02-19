@@ -41,6 +41,13 @@ class CrmClaimRma(models.Model):
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
 
+    @api.onchange('claim_type')
+    def onchange_claim_type(self):
+        if self.claim_type == 'customer':
+            return {'domain': {'partner_id': [('customer', '=', True),('is_company', '=', 't')]}}
+        else:
+            return {'domain': {'partner_id': [('supplier', '=', True),('is_company', '=', 't')]}}
+
     @api.model
     def create(self, vals):
         if vals.get('name', False):
