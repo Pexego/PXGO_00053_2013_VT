@@ -41,6 +41,13 @@ class CrmClaimRma(models.Model):
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
 
+    @api.onchange('claim_type')
+    def onchange_claim_type(self):
+        if self.claim_type == 'customer':
+            return {'domain': {'partner_id': [('customer', '=', True),('is_company', '=', 't')]}}
+        else:
+            return {'domain': {'partner_id': [('supplier', '=', True),('is_company', '=', 't')]}}
+
     @api.model
     def create(self, vals):
         if vals.get('name', False):
@@ -49,10 +56,12 @@ class CrmClaimRma(models.Model):
 
     def _get_sequence_number(self, cr, uid, context=None):
         seq_obj = self.pool.get('ir.sequence')
-        res = seq_obj.get(cr, uid, 'crm.claim.rma', context=context) or '/'
-        if context['claim_type'] == 'supplier' and not res == '/':
-            seq = res.split('-')[1]
-            res = u'RMP' + '-' + seq
+        if context['claim_type'] == 'supplier':
+            res = seq_obj.get(cr, uid, 'crm.claim.rma.supplier',
+                context=context) or '/'
+        else:
+            res = seq_obj.get(cr, uid, 'crm.claim.rma',
+                context=context) or '/'
         return res
 
     def calculate_invoices(self, cr, uid, ids, context=None):
