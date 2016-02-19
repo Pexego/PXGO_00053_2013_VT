@@ -7,7 +7,7 @@ develop-eggs/
 downloads/
 /data/
 etc/
-bin/
+/bin/
 sandbox/
 openerp_*
 openerp-*
