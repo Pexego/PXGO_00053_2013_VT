@@ -44,9 +44,9 @@ class CrmClaimRma(models.Model):
     @api.onchange('claim_type')
     def onchange_claim_type(self):
         if self.claim_type == 'customer':
-            return {'domain': {'partner_id': [('customer', '=', True),('is_company', '=', 't')]}}
+            return {'domain': {'partner_id': [('customer', '=', True),('is_company', '=', True)]}}
         else:
-            return {'domain': {'partner_id': [('supplier', '=', True),('is_company', '=', 't')]}}
+            return {'domain': {'partner_id': [('supplier', '=', True),('is_company', '=', True)]}}
 
     @api.model
     def create(self, vals):
