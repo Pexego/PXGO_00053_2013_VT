@@ -26,7 +26,7 @@
     'description': """Adds shipping balance""",
     'author': 'Comunitea Servicios Tecnologicos',
     'website': 'www.comunitea.com',
-    "depends" : ["base", "product", "mrp_repair", "sale", "account"],
+    "depends" : ["base", "product", "mrp_repair", "sale", "account", "stock_reserve_sale"],
 
     "data" : ["shipping_balance_view.xml",
               "wizard/shipping_balance_wizard.xml",

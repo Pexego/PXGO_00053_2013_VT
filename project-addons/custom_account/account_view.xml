@@ -10,6 +10,9 @@
                 <field name="move_id" position="after">
                     <field name="attach_picking"/>
                 </field>
+                <field name="fiscal_position" position="after">
+                    <field name="reference"/>
+                </field>
             </field>
         </record>
 

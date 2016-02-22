@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea All Rights Reserved
-#    @author Alberto Luengo Cabanillas
+#    Copyright (C) 2016 Comunitea All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,15 +18,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, exceptions, _
 
-{
-    'name': "Block Invoices",
-    'version': '1.0',
-    'category': 'visiotech',
-    'description': """Bloqueo de ventas a clientes configurable. Incluye un cron diario nocturno.""",
-    'author': 'Alberto Luengo para Comunitea',
-    'website': 'luengocabanillas.com',
-    "depends": ['sale','stock_account'],
-    "data": ['res_company_view.xml','res_partner_view.xml', 'sale_view.xml', 'account_invoice_view.xml', 'data/ir_cron.xml'],
-    "installable": True
-}
+
+class StockPicking(models.Model):
+
+    _inherit = 'stock.picking'
+
+    invoice_type_id = fields.Many2one('res.partner.invoice.type', 'Invoice type')
+
+    @api.model
+    def create(self, args):
+        res = super(StockPicking, self).create(args)
+        if res.picking_type_code == 'outgoing' and res.partner_id:
+            res.invoice_type_id = res.partner_id.invoice_type_id.id
+        return res
+
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        if self.picking_type_id == 'outgoing' and self.partner_id:
+            self.invoice_type_id = self.partner_id.invoice_type_id.id
+
