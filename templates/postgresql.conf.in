@@ -376,20 +376,20 @@ log_line_prefix = '%m %p %q<%u@%d> '            # special values:
 
 # - Query/Index Statistics Collector -
 
-#track_activities = on
-#track_counts = on
+track_activities = on
+track_counts = on
 #track_functions = none            # none, pl, all
 #track_activity_query_size = 1024
-#update_process_title = on
+update_process_title = on
 #stats_temp_directory = 'pg_stat_tmp'
 
 
 # - Statistics Monitoring -
 
-#log_parser_stats = off
-#log_planner_stats = off
-#log_executor_stats = off
-#log_statement_stats = off
+log_parser_stats = on
+log_planner_stats = on
+log_executor_stats = on
+log_statement_stats = off
 
 
 #------------------------------------------------------------------------------
@@ -511,3 +511,12 @@ log_line_prefix = '%m %p %q<%u@%d> '            # special values:
 #------------------------------------------------------------------------------
 
 #custom_variable_classes = ''        # list of custom variable class names
+default_statistics_target = 50 # pgtune wizard 2016-02-19
+maintenance_work_mem = 1GB # pgtune wizard 2016-02-19
+constraint_exclusion = on # pgtune wizard 2016-02-19
+checkpoint_completion_target = 0.9 # pgtune wizard 2016-02-19
+effective_cache_size = 64GB # pgtune wizard 2016-02-19
+work_mem = 160MB # pgtune wizard 2016-02-19
+wal_buffers = 8MB # pgtune wizard 2016-02-19
+checkpoint_segments = 16 # pgtune wizard 2016-02-19
+shared_buffers = 22GB # pgtune wizard 2016-02-19

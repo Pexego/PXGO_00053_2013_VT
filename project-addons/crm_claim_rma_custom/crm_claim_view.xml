@@ -148,6 +148,9 @@
                 <field name="name" on_change="onchange_name(name)"/>
                 <!-- <attributes name="on_change">onchange_name(name)</attributes> -->
               </xpath>
+              <xpath expr="//field[@name='delivery_address_id']" position="attributes">
+                  <attribute name="domain">[('id', 'child_of', [partner_id])]</attribute>
+              </xpath>
             </field>
         </record>
 
