@@ -52,6 +52,19 @@ msgid "Web"
 msgstr "Web"
 
 #. module: custom_partner
+#: field:res.partner,invoice_type_id:0
+#: view:stock.picking:custom_partner.stock_picking_search_add_invoice_type
+#: field:stock.picking,invoice_type_id:0
+msgid "Invoice type"
+msgstr "Tipo de facturación"
+
+#. module: custom_partner
+#: field:res.partner.invoice.type,name:0
+msgid "name"
+msgstr "Nombre"
+
+
+#. module: custom_partner
 #: model:ir.actions.act_window,name:custom_partner.action_view_web_customers
 #: model:ir.ui.menu,name:custom_partner.res_partner_web
 msgid "Web customers"

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2016 Comunitea All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,16 +18,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, exceptions, _
 
-{
-    'name': 'Percentage of margins in Sales Orders',
-    'version':'1.0',
-    'category' : 'Sales Management',
-    'description': """
-    """,
-    'author':'Pexego',
-    'depends':['sale', 'sale_margin', 'stock_deposit', 'pmp_landed_costs'],
-    'data':["sale_view.xml"],
-    'auto_install': False,
-    'installable': True,
-}
+
+class StockPicking(models.Model):
+
+    _inherit = 'stock.picking'
+
+    invoice_type_id = fields.Many2one('res.partner.invoice.type', 'Invoice type')
+
+    @api.model
+    def create(self, args):
+        res = super(StockPicking, self).create(args)
+        if res.picking_type_code == 'outgoing' and res.partner_id:
+            res.invoice_type_id = res.partner_id.invoice_type_id.id
+        return res
+
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        if self.picking_type_id == 'outgoing' and self.partner_id:
+            self.invoice_type_id = self.partner_id.invoice_type_id.id
+
