@@ -19,19 +19,22 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm, osv
+from openerp.osv import orm, osv
+from openerp import fields
 from openerp.tools.translate import _
 
 class account_invoice(osv.osv):
     """
-    
+
     """
     _inherit = 'account.invoice'
-    
-    
+    blocked = fields.Boolean(related='partner_id.blocked_sales')
+    allow_confirm_blocked = fields.Boolean('Allow confirm')
+
+
     def invoice_validate(self, cr, uid, ids, context=None):
         """
-        Herencia de uno de los métodos de la actividad 'open' del workflow
+        Herencia de uno de los mÃ©todos de la actividad 'open' del workflow
         de facturas para controlar el bloqueo de ventas a clientes
         """
         for invoice in self.browse(cr, uid, ids, context):
@@ -40,12 +43,12 @@ class account_invoice(osv.osv):
             unique_partner_ids_to_check = filter(lambda a: a != False,[x for i,x in enumerate(partner_ids_to_check)if x not in partner_ids_to_check[i+1:]])
             for part_id in unique_partner_ids_to_check:
                 partner_fields_dict = self.pool.get('res.partner').read(cr, uid, part_id, ['blocked_sales','name'])
-                if partner_fields_dict['blocked_sales']:
+                if partner_fields_dict['blocked_sales'] and not invoice.allow_confirm_blocked:
                     title = _("Warning for %s") % partner_fields_dict['name']
                     message = _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.')
                     raise osv.except_osv(title, message)
         return super(account_invoice, self).invoice_validate(cr, uid, ids, context=context)
-    
+
     def onchange_partner_id(self, cr, uid, ids, type, partner_id,
                             date_invoice=False, payment_term=False,
                             partner_bank_id=False, company_id=False,
@@ -72,7 +75,7 @@ class account_invoice(osv.osv):
                     'title': title,
                     'message': message
                     }
-                return {'value': {'partner_id': False}, 'warning': warning}
+                #return {'value': {'partner_id': False}, 'warning': warning}
 
         result =  super(account_invoice, self).onchange_partner_id(cr, uid, ids, type, partner_id,date_invoice=date_invoice, payment_term=payment_term, partner_bank_id=partner_bank_id, company_id=company_id, context=context)
         if result.get('warning',False):

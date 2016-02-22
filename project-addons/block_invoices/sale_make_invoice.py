@@ -24,16 +24,16 @@ from openerp.tools.translate import _
 
 class sale_make_invoice(osv.osv_memory):
     """
-    
+
     """
     _inherit = 'sale.make.invoice'
-    
+
     def view_init(self, cr, uid, fields_list, context=None):
         """
-        
+
         """
         """
-        Herencia del metodo que carga la vista del formulario para añadir control 
+        Herencia del metodo que carga la vista del formulario para aÃ±adir control
         sobre la facturacion a clientes bloqueados
         """
         sale_facade = self.pool.get('sale.order')
@@ -44,7 +44,7 @@ class sale_make_invoice(osv.osv_memory):
             unique_partner_ids_to_check = filter(lambda a: a != False,[x for i,x in enumerate(partner_ids_to_check)if x not in partner_ids_to_check[i+1:]])
             for partner_id in unique_partner_ids_to_check:
                 partner_fields_dict = self.pool.get('res.partner').read(cr, uid, partner_id, ['blocked_sales','name'])
-                if partner_fields_dict['blocked_sales']:
+                if partner_fields_dict['blocked_sales'] and not order.allow_confirm_blocked:
                     title = _("Warning for %s") % partner_fields_dict['name']
                     message = _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.')
                     raise osv.except_osv(title, message)
