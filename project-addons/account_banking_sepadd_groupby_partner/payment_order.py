@@ -29,28 +29,9 @@ class PaymentOrder(models.Model):
 
     _inherit = "payment.order"
 
-    charge_financed = fields.Boolean('Financed Charge',
-                                     states={'sent': [('readonly', True)],
+    charge_financed = fields.Boolean(states={'sent': [('readonly', True)],
                                              'rejected': [('readonly', True)],
                                              'done': [('readonly', True)]})
-
-    @api.model
-    def create(self, vals):
-        res = super(PaymentOrder, self).create(vals)
-        if vals.get('charge_financed', False):
-            res.reference = u"FSDD" + res.reference
-        return res
-
-    @api.multi
-    def write(self, vals):
-        res = super(PaymentOrder, self).write(vals)
-        if 'charge_financed' in vals:
-            for po in self:
-                if not vals['charge_financed'] and 'FSDD' in po.reference:
-                    po.reference = po.reference.replace("FSDD", "")
-                elif vals['charge_financed'] and 'FSDD' not in po.reference:
-                    po.reference = u"FSDD" + po.reference
-        return res
 
     @api.multi
     def action_sent(self):

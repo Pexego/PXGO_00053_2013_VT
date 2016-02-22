@@ -32,10 +32,10 @@
     'depends': ['account_banking_sepa_direct_debit',
                 'account_banking_payment_export',
                 'account_payment',
-                'account_banking_payment_transfer'],
+                'account_banking_payment_transfer',
+                'account_banking_sepa_bank_suffix'],
     'data': ['wizard/export_sdd_view.xml',
-             'payment_order_data.xml',
-             'payment_order_view.xml'],
+             'payment_order_data.xml'],
     'demo': [],
     'description': '''
 Allow to export sepa direct debit files grouped by partner.
