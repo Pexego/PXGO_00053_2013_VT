@@ -18,8 +18,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
 from openerp import models, fields, api
+
+
+class ResPartnerInvoiceType(models.Model):
+
+    _name = 'res.partner.invoice.type'
+
+    name = fields.Char('Name')
 
 
 class ResPartner(models.Model):
@@ -38,3 +44,4 @@ class ResPartner(models.Model):
     sale_product_count = fields.Integer(compute=_get_products_sold,
                                         string="# Products sold",
                                         readonly=True)
+    invoice_type_id = fields.Many2one('res.partner.invoice.type', 'Invoice type')

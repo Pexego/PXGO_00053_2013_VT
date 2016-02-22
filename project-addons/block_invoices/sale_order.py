@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, exceptions, api
+from openerp import models, fields, exceptions, api
 from openerp.tools.translate import _
 
 class sale_order(models.Model):
@@ -27,10 +27,12 @@ class sale_order(models.Model):
 
     """
     _inherit = 'sale.order'
+    blocked = fields.Boolean(related='partner_id.blocked_sales')
+    allow_confirm_blocked = fields.Boolean('Allow confirm')
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
         """
-        Comprueba si el cliente del pedido de venta est· bloqueado antes de efectuar ninguna venta
+        Comprueba si el cliente del pedido de venta est√° bloqueado antes de efectuar ninguna venta
         """
         if not part:
             return {'value':{'partner_invoice_id': False, 'partner_shipping_id':False, 'payment_term' : False}}
@@ -50,7 +52,7 @@ class sale_order(models.Model):
                         'title': title,
                         'message': message,
                 }
-                return {'value': {'partner_id': False}, 'warning': warning}
+                #return {'value': {'partner_id': False}, 'warning': warning}
 
         result =  super(sale_order, self).onchange_partner_id(cr, uid, ids, part, context=context)
 
@@ -67,7 +69,7 @@ class sale_order(models.Model):
                                 order.partner_id.id]
         partner_ids_to_check = list(set(partner_ids_to_check))
         for partner in self.env['res.partner'].browse(partner_ids_to_check):
-            if partner.blocked_sales:
+            if partner.blocked_sales and not order.allow_confirm_blocked:
                 message = _('Customer %s blocked by lack of payment. Check '
                             'the maturity dates of their account move '
                             'lines.') % partner.name

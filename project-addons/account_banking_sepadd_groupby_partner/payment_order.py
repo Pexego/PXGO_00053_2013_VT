@@ -49,7 +49,7 @@ class PaymentOrder(models.Model):
                 if not vals['charge_financed'] and 'FSDD' in po.reference:
                     po.reference = po.reference.replace("FSDD", "")
                 elif vals['charge_financed'] and 'FSDD' not in po.reference:
-                    po.reference = u"FSDD" + res.reference
+                    po.reference = u"FSDD" + po.reference
         return res
 
     @api.multi

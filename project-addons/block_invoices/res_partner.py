@@ -30,8 +30,8 @@ class ResPartner(osv.osv):
 
     def check_customer_blocked_sales(self, cr, uid, automatic=False,use_new_cursor=False, context=None):
         """
-        Buscamos todos los asientos contables de aquellas facturas de cliente que no estén pagadas que posean una fecha de vencimiento
-        anterior a la fecha actual+periodo de gracia configurable en la compañia...
+        Buscamos todos los asientos contables de aquellas facturas de cliente que no estÃ©n pagadas que posean una fecha de vencimiento
+        anterior a la fecha actual+periodo de gracia configurable en la compaÃ±ia...
         """
         move_line_facade = self.pool.get('account.move.line')
         account_facade = self.pool.get('account.account')
