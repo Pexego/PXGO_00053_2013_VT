@@ -31,6 +31,13 @@ class AccountMoveLine(models.Model):
                               related='invoice.mandate_id.scheme', store=True)
 
 
+class AccountBankingMandate(models.Model):
+
+    _inherit = 'account.banking.mandate'
+
+    default = fields.Boolean('Set default')
+
+
 class AccountInvoiceLine(models.Model):
 
     _inherit = 'account.invoice.line'
@@ -55,18 +62,41 @@ class AccountInvoice(models.Model):
             partner = self.env["res.partner"].browse(vals["partner_id"])
             if partner.attach_picking:
                 vals["attach_picking"] = partner.attach_picking
-
+        if 'type' in vals and 'partner_bank_id' in vals:
+            if vals['type'] == 'out_invoice':
+                partner_bank = self.env['res.partner.bank'].browse(vals['partner_bank_id'])
+                mandate_ids = partner_bank.mandate_ids
+                default_mandate = mandate_ids.filtered(
+                    lambda r: r.default and r.state == "valid")
+                if not default_mandate:
+                    default_mandate = mandate_ids.filtered(
+                        lambda r: r.state == "valid")
+                vals['mandate_id'] = default_mandate and default_mandate[0].id or False
         return super(AccountInvoice, self).create(vals)
+
+    @api.multi
+    def onchange_partner_bank_cust(self, partner_bank_id=False):
+        mandate_id = False
+        if partner_bank_id:
+            partner_bank = self.env['res.partner.bank'].browse(partner_bank_id)
+            mandate_ids = partner_bank.mandate_ids
+            default_mandate = mandate_ids.filtered(
+                lambda r: r.default and r.state == "valid")
+            if not default_mandate:
+                default_mandate = mandate_ids.filtered(
+                    lambda r: r.state == "valid")
+            mandate_id = default_mandate and default_mandate[0] or False
+        return {'value': {'mandate_id': mandate_id and mandate_id.id or False}}
+
 
     @api.multi
     def onchange_partner_id(self, type, partner_id, date_invoice=False,
                             payment_term=False, partner_bank_id=False,
                             company_id=False):
-        result = super(AccountInvoice, self).\
-            onchange_partner_id(type, partner_id, date_invoice=date_invoice,
-                                payment_term=payment_term,
-                                partner_bank_id=partner_bank_id,
-                                company_id=company_id)
+        result = super(AccountInvoice, self).onchange_partner_id(
+            type, partner_id, date_invoice=date_invoice,
+            payment_term=payment_term, partner_bank_id=partner_bank_id,
+            company_id=company_id)
         if partner_id:
             partner = self.env["res.partner"].browse(partner_id)
             result['value']['attach_picking'] = partner.attach_picking
