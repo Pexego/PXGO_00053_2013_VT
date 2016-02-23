@@ -28,6 +28,6 @@
     'website': 'www.pexego.es',
     "depends": ['stock_landed_costs',
                 'stock_account'],
-    "data": [],
+    "data": ['stock_landed_costs_view.xml'],
     "installable": True
 }

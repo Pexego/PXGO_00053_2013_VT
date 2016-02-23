@@ -2,15 +2,15 @@
 <openerp>
     <data>
 
-        <record id="stock_landed_cost_remove_account" model="ir.ui.view">
+        <record id="stock_landed_cost_add_standard_price" model="ir.ui.view">
             <field name="name">stock.landed.cost.form</field>
             <field name="model">stock.landed.cost</field>
             <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
             <field name="arch" type="xml">
-<!--
-                <field name="account_journal_id" position="replace"/>
-               <field name="account_move_id" position="replace"/>
--->
+                <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='former_cost']" position="after">
+                    <field name="standard_price" readonly="1"/>
+                    <field name="new_standard_price" readonly="1"/>
+                </xpath>
             </field>
         </record>
 

@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, api, exceptions, _
+from openerp import models, api, exceptions, _, fields as fields_n
 from openerp.osv import fields
 
 class StockLandedCost(models.Model):
@@ -83,3 +83,22 @@ class StockLandedCost(models.Model):
                 self._create_accounting_entries(cr, uid, line, move_id, qty_out, context=context)
             self.write(cr, uid, cost.id, {'state': 'done', 'account_move_id': move_id}, context=context)
         return True
+
+class StockValuationAdjustmentLines(models.Model):
+
+    _inherit = 'stock.valuation.adjustment.lines'
+
+    standard_price = fields_n.Float('Standard price', compute='_get_new_standard_price', store=True)
+    new_standard_price = fields_n.Float('New standard price', compute='_get_new_standard_price', store=True)
+
+    @api.one
+    @api.depends('product_id.standard_price', 'additional_landed_cost')
+    def _get_new_standard_price(self):
+        if not self.product_id or self.cost_id.state == 'done':
+            return
+        average_price = (self.product_id.qty_available *
+                         self.product_id.standard_price +
+                         self.additional_landed_cost) / \
+            self.product_id.qty_available
+        self.new_standard_price = average_price
+        self.standard_price = self.product_id.standard_price
