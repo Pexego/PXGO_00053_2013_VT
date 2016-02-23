@@ -89,7 +89,8 @@ class AccountVoucherWizard(models.TransientModel):
                            'amount': self[0].amount_advance,
                            'period_id': period_id.id,
                            'purchase_id': purchase_ref,
-                           'name': _("Advance Payment")
+                           'name': _("Advance Payment"),
+                           'reference': purchase.name
                            }
             voucher = voucher_obj.create(voucher_res)
             voucher.action_move_line_create()
