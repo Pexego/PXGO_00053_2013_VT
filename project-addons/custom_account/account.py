@@ -21,6 +21,16 @@
 from openerp import models, fields, api
 
 
+class AccountMoveLine(models.Model):
+
+    _inherit = 'account.move.line'
+
+    scheme = fields.Selection([('CORE', 'Basic (CORE)'),
+                               ('B2B', 'Enterprise (B2B)')],
+                              string='Scheme',
+                              related='invoice.mandate_id.scheme', store=True)
+
+
 class AccountInvoiceLine(models.Model):
 
     _inherit = 'account.invoice.line'

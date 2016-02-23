@@ -29,5 +29,27 @@
 
         <menuitem id="account.menu_finance_reporting" name="Accounting" parent="base.menu_reporting" sequence="35" groups="account.group_account_manager"/>
 
+        <record id="payment_order_populate_account_move_line_add_scheme_tree" model="ir.ui.view">
+            <field name="name">payment.order.populate.account.move.line.tree</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account_banking_payment_export.payment_order_populate_view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="account_id" position="after">
+                    <field name="scheme"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_move_line_add_scheme_filter" model="ir.ui.view">
+            <field name="name">account.move.line.search</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="scheme"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

@@ -33,7 +33,7 @@
     "depends": ['email_template', 'report', 'account', 'stock', 'product_brand',
                 'stock_account', 'sale_stock', 'account_payment_partner', 'crm',
                 'account_payment', 'sale', 'purchase', 'nan_partner_risk',
-                'sale_margin_percentage'],
+                'sale_margin_percentage', 'account_banking_sepa_direct_debit', 'account_banking_payment_export'],
     "data": ['account_view.xml',
              'partner_view.xml',
              'report/account_invoice_report_view.xml',
