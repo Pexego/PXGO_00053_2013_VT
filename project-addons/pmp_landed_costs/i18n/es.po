@@ -27,11 +27,6 @@ msgid "Product Template"
 msgstr "Plantilla de producto"
 
 #. module: pmp_landed_costs
-#: field:product.template,standard_price_cost:0
-msgid "Standard price with landed cost"
-msgstr "Precio estandar con costes de destino"
-
-#. module: pmp_landed_costs
 #: model:ir.model,name:pmp_landed_costs.model_stock_landed_cost
 msgid "Stock Landed Cost"
 msgstr "Coste en destino"

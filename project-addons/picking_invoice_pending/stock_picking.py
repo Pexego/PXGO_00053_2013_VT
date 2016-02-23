@@ -78,6 +78,9 @@ class StockPicking(models.Model):
             price_line = price_line * move_line.product_qty
             amount_line = round(price_line, obj_precision.
                                 precision_get('Account'))
+            from_currency = move_line.purchase_line_id.order_id.currency_id
+            to_currency = move_line.company_id.currency_id
+            amount_line = from_currency.compute(amount_line, to_currency)
             amount += amount_line
             vals = {
                 'name': name,

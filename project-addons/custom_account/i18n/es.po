@@ -27,6 +27,11 @@ msgid "Benefit"
 msgstr "Beneficio"
 
 #. module: custom_account
+#: field:account.move.line,scheme:0
+msgid "Scheme"
+msgstr "Esquema"
+
+#. module: custom_account
 #: field:sale.report,cost_price:0
 msgid "Cost Price"
 msgstr "Precio coste"

@@ -13,6 +13,9 @@
                 <field name="fiscal_position" position="after">
                     <field name="reference"/>
                 </field>
+                <field name="partner_bank_id" position="attributes">
+                    <attribute name="on_change">onchange_partner_bank_cust(partner_bank_id)</attribute>
+                </field>
             </field>
         </record>
 
@@ -28,6 +31,50 @@
         </record>
 
         <menuitem id="account.menu_finance_reporting" name="Accounting" parent="base.menu_reporting" sequence="35" groups="account.group_account_manager"/>
+
+        <record id="payment_order_populate_account_move_line_add_scheme_tree" model="ir.ui.view">
+            <field name="name">payment.order.populate.account.move.line.tree</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account_banking_payment_export.payment_order_populate_view_move_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="account_id" position="after">
+                    <field name="scheme"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_move_line_add_scheme_filter" model="ir.ui.view">
+            <field name="name">account.move.line.search</field>
+            <field name="model">account.move.line</field>
+            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="scheme"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_mandate_add_default_tree" model="ir.ui.view">
+            <field name="name">view.mandate.tree</field>
+            <field name="model">account.banking.mandate</field>
+            <field name="inherit_id" ref="account_banking_mandate.view_mandate_tree"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="default"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_mandate_add_default_form" model="ir.ui.view">
+            <field name="name">view.mandate.form</field>
+            <field name="model">account.banking.mandate</field>
+            <field name="inherit_id" ref="account_banking_mandate.view_mandate_form"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="after">
+                    <field name="default"/>
+                </field>
+            </field>
+        </record>
 
     </data>
 </openerp>

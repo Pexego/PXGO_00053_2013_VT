@@ -38,6 +38,7 @@ as children of the pack product.
     "author": "Agile Business Group & NaN·tic",
     "website": "http://www.agilebg.com",
     "depends": [
+        'product',
         'sale',
         'purchase',
     ],

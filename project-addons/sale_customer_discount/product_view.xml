@@ -47,7 +47,6 @@
                         <field name="pvi3_price"/>
                         <label for="margin_pvi3"/><div><field name="margin_pvi3" class="oe_inline"/> %% </div>
                         <field name="standard_price"/>
-                        <field name="standard_price_cost"/>
                         <field name="cost_method"/>
                         <field name="commercial_cost"/>
                      </group>

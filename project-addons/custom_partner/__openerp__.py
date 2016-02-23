@@ -27,6 +27,6 @@
     'author': 'Comunitea Servicios Tecnológicos',
     'website': 'www.comunitea.com',
     "depends": ['base', 'sale', 'l10n_es_partner'],
-    "data": ["partner_view.xml", "stock_view.xml"],
+    "data": ["partner_view.xml", "stock_view.xml", "security/ir.model.access.csv"],
     "installable": True
 }
