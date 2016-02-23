@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP - Account balance reporting engine
+#    OpenERP - Account banking sepa bank suffix
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos.
 #    Omar Castiñeira Saavedra - omar@comunitea.com
 #
