@@ -155,11 +155,6 @@ msgid "Export SEPA Direct Debit File"
 msgstr "Exportar archivo de adeudo directo SEPA"
 
 #. module: account_banking_sepadd_groupby_partner
-#: field:payment.order,charge_financed:0
-msgid "Financed Charge"
-msgstr "Cobro financiado"
-
-#. module: account_banking_sepadd_groupby_partner
 #: field:banking.export.sdd.wizard,group_by_partner:0
 msgid "Group by partner"
 msgstr "Agrupar por empresa"
