@@ -20,7 +20,16 @@
 ##############################################################################
 
 from openerp import models, fields, api, exceptions, _
+from openerp.osv import fields as fields2, orm
 from datetime import datetime
+
+class equivalent_products_wizard(orm.TransientModel):
+
+    _inherit = "equivalent.products.wizard"
+
+    _columns = {
+        'tag_ids': fields2.many2many('equivalent.tag.wizard', 'equivalent_products_tag', 'tag_id', 'prod_id', 'Tags'),
+    }
 
 
 class CrmClaimRma(models.Model):
