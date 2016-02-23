@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <field name="origin" position="after">
                     <field name="blocked" invisible="1"/>
-                    <field name="allow_confirm_blocked" attrs="{'invisible': [('blocked', '!=', True)]}"/>
+                    <field name="allow_confirm_blocked" attrs="{'invisible': [('blocked', '!=', True)]}" groups="account.group_account_manager"/>
                 </field>
             </field>
         </record>

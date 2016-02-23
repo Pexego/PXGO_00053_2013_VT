@@ -31,11 +31,23 @@ class StockPicking(models.Model):
     def create(self, args):
         res = super(StockPicking, self).create(args)
         if res.picking_type_code == 'outgoing' and res.partner_id:
-            res.invoice_type_id = res.partner_id.invoice_type_id.id
+            res.invoice_type_id = res.partner_id.commercial_partner_id.\
+                invoice_type_id.id
         return res
 
-    @api.onchange('partner_id')
-    def onchange_partner_id(self):
-        if self.picking_type_id == 'outgoing' and self.partner_id:
-            self.invoice_type_id = self.partner_id.invoice_type_id.id
+    def onchange_partner_in(self, cr, uid, ids, partner_id=None, context=None):
+        res = super(StockPicking, self).onchange_partner_in(cr, uid, ids,
+                                                            partner_id,
+                                                            context)
+        if partner_id:
+            part = self.pool.get('res.partner').browse(cr, uid, partner_id)
+            if part.invoice_type_id or \
+                    part.commercial_partner_id.invoice_type_id:
+                value = part.invoice_type_id.id or \
+                    part.commercial_partner_id.invoice_type_id.id
+                if res.get('value', False):
+                    res['value']['invoice_type_id'] = value
+                else:
+                    res['value'] = {'invoice_type_id': value}
+        return res
 
