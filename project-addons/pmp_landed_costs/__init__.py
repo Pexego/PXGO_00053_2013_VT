@@ -20,5 +20,4 @@
 ##############################################################################
 
 import stock_landed_costs
-import product
 import stock

@@ -35,10 +35,8 @@ class sale_order_line(models.Model):
         self.margin_perc = 0.0
         self.purchase_price = 0.0
 
-        if self.product_id and (self.product_id.standard_price or
-                                self.product_id.standard_price_cost):
-            self.purchase_price = (self.product_id.standard_price_cost or
-                                   self.product_id.standard_price)
+        if self.product_id and self.product_id.standard_price:
+            self.purchase_price = self.product_id.standard_price
             margin = round((self.price_unit * self.product_uom_qty *
                             (100.0 - self.discount) / 100.0) -
                            (self.purchase_price * self.product_uom_qty), 2)
@@ -85,9 +83,7 @@ class sale_order(models.Model):
                     self.total_purchase += line.purchase_price * \
                         line.product_uom_qty
                 elif line.product_id:
-                    cost_price = \
-                        (line.product_id.standard_price_cost or
-                         line.product_id.standard_price)
+                    cost_price = line.product_id.standard_price
                     self.total_purchase += cost_price * \
                         line.product_uom_qty
 

@@ -92,9 +92,6 @@ class SaleOrder(models.Model):
                             product.standard_price = \
                                 line.product_id.standard_price + \
                                 prodmount.product_id.standard_price
-                            product.standard_price_cost = \
-                                line.product_id.standard_price_cost + \
-                                prodmount.product_id.standard_price_cost
 
                 final_line_dict = {
                     'product_id': product.id,
@@ -102,8 +99,7 @@ class SaleOrder(models.Model):
                     'customization_types': [(6, 0, [x.id for x in
                                              line.customization_types])],
                     'price_unit': line.price_unit,
-                    'purchase_price': product.standard_price_cost or
-                    product.standard_price,
+                    'purchase_price': product.standard_price,
                     'delay': max([product.sale_delay, line.delay]),
                     'product_uom_qty': line.product_uom_qty,
                     'product_uom': product.uom_id.id
