@@ -26,9 +26,9 @@ class StockLandedCost(models.Model):
 
     _inherit = 'stock.landed.cost'
 
-    _columns = {
+    '''_columns = {
         'account_journal_id': fields.many2one('account.journal', 'Account Journal', required=False),
-    }
+    }'''
 
     def get_valuation_lines(self, cr, uid, ids, picking_ids=None, context=None):
         picking_obj = self.pool.get('stock.picking')
@@ -56,6 +56,7 @@ class StockLandedCost(models.Model):
         for cost in self.browse(cr, uid, ids, context=context):
             if not cost.valuation_adjustment_lines or not self._check_sum(cr, uid, cost, context=context):
                 raise exceptions.except_orm(_('Error!'), _('You cannot validate a landed cost which has no valid valuation lines.'))
+            move_id = self._create_account_move(cr, uid, cost, context=context)
             quant_dict = {}
             for line in cost.valuation_adjustment_lines:
                 if not line.move_id:
@@ -64,7 +65,7 @@ class StockLandedCost(models.Model):
                     # (((ctdad_total - ctdad_move) * precio_coste_antes_mov) + (ctdad_move * precio_coste + costes)) / ctdad_total
                     # average_price = (((line.product_id.qty_available - line.move_id.product_qty) * line.product_id.standard_price) + (line.move_id.product_qty * (line.product_id.standard_price + line.additional_landed_cost))) / line.product_id.qty_available
                     average_price = (line.product_id.qty_available * line.product_id.standard_price + line.additional_landed_cost) / line.product_id.qty_available
-                    product_obj.write(cr, uid, [line.product_id.id], {'standard_price_cost': average_price}, context)
+                    product_obj.write(cr, uid, [line.product_id.id], {'standard_price': average_price}, context)
                 per_unit = line.final_cost / line.quantity
                 diff = per_unit - line.former_cost_per_unit
                 quants = [quant for quant in line.move_id.quant_ids]
@@ -79,5 +80,6 @@ class StockLandedCost(models.Model):
                 for quant in line.move_id.quant_ids:
                     if quant.location_id.usage != 'internal':
                         qty_out += quant.qty
-            self.write(cr, uid, cost.id, {'state': 'done'}, context=context)
+                self._create_accounting_entries(cr, uid, line, move_id, qty_out, context=context)
+            self.write(cr, uid, cost.id, {'state': 'done', 'account_move_id': move_id}, context=context)
         return True

@@ -38,6 +38,6 @@ class stock_move(models.Model):
                     # Get the standard price
                     amount_unit = product.standard_price
                     new_std_price = ((amount_unit * product_avail) + (move.price_unit * move.product_qty)) / (product_avail + move.product_qty)
-                    new_std_price_cost = ((product.standard_price_cost * product_avail) + (move.price_unit * move.product_qty)) / (product_avail + move.product_qty)
+                    #new_std_price_cost = ((product.standard_price_cost * product_avail) + (move.price_unit * move.product_qty)) / (product_avail + move.product_qty)
                 # Write the standard price, as SUPERUSER_ID because a warehouse manager may not have the right to write on products
-                product_obj.write(cr, SUPERUSER_ID, [product.id], {'standard_price': new_std_price, 'standard_price_cost': new_std_price_cost}, context=context)
+                product_obj.write(cr, SUPERUSER_ID, [product.id], {'standard_price': new_std_price}, context=context)
