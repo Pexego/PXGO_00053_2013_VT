@@ -25,7 +25,7 @@ class ResPartnerInvoiceType(models.Model):
 
     _name = 'res.partner.invoice.type'
 
-    name = fields.Char('Name')
+    name = fields.Char('Name', required=True)
 
 
 class ResPartner(models.Model):
