@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* block_invoices
+#       * block_invoices
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-06 18:02+0000\n"
-"PO-Revision-Date: 2015-07-06 18:02+0000\n"
+"POT-Creation-Date: 2016-02-23 19:37+0000\n"
+"PO-Revision-Date: 2016-02-23 19:37+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,15 +16,32 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: block_invoices
+#: field:account.invoice,allow_confirm_blocked:0
+#: field:sale.order,allow_confirm_blocked:0
+msgid "Allow confirm"
+msgstr "Permitir confirmar"
+
+#. module: block_invoices
+#: view:res.partner:block_invoices.view_partner_form_add_block_sales_field
+msgid "Check"
+msgstr "Comprobar"
+
+#. module: block_invoices
 #: model:ir.model,name:block_invoices.model_res_company
 msgid "Companies"
 msgstr "Compañías"
 
 #. module: block_invoices
-#: code:addons/block_invoices/account_invoice.py:45
-#: code:addons/block_invoices/account_invoice.py:70
+#: code:addons/block_invoices/sale_order.py:73
+#, python-format
+msgid "Customer %s blocked by lack of payment. Check the maturity dates of their account move lines."
+msgstr "Cliente %s bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
+
+#. module: block_invoices
+#: code:addons/block_invoices/account_invoice.py:48
+#: code:addons/block_invoices/account_invoice.py:73
 #: code:addons/block_invoices/sale_make_invoice.py:49
-#: code:addons/block_invoices/sale_order.py:48
+#: code:addons/block_invoices/sale_order.py:50
 #: code:addons/block_invoices/stock_invoice_onshipping.py:47
 #, python-format
 msgid "Customer blocked by lack of payment. Check the maturity dates of their account move lines."
@@ -66,12 +83,11 @@ msgid "Stock Invoice Onshipping"
 msgstr "Factura en el envío de existencias"
 
 #. module: block_invoices
-#: code:addons/block_invoices/account_invoice.py:44
-#: code:addons/block_invoices/account_invoice.py:69
+#: code:addons/block_invoices/account_invoice.py:47
+#: code:addons/block_invoices/account_invoice.py:72
 #: code:addons/block_invoices/sale_make_invoice.py:48
-#: code:addons/block_invoices/sale_order.py:47
+#: code:addons/block_invoices/sale_order.py:49
 #: code:addons/block_invoices/stock_invoice_onshipping.py:46
 #, python-format
 msgid "Warning for %s"
 msgstr "Aviso para %s"
-

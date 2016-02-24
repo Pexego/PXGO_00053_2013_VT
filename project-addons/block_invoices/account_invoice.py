@@ -28,7 +28,7 @@ class account_invoice(osv.osv):
 
     """
     _inherit = 'account.invoice'
-    blocked = fields.Boolean(related='partner_id.blocked_sales')
+    blocked = fields.Boolean(related='partner_id.blocked_sales', copy=False)
     allow_confirm_blocked = fields.Boolean('Allow confirm')
 
 
