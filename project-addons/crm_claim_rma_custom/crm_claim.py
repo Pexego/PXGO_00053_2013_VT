@@ -27,10 +27,35 @@ class equivalent_products_wizard(orm.TransientModel):
 
     _inherit = "equivalent.products.wizard"
 
-    _columns = {
-        'tag_ids': fields2.many2many('equivalent.tag.wizard', 'equivalent_products_tag', 'tag_id', 'prod_id', 'Tags'),
-    }
+    tag_ids = fields.Many2many('product.tag',
+                               'equivalent_products_tag_rel2',
+                               'prod_id', 'tag_id',
+                               'Tags')
 
+    def _get_products(self, cr, uid, ids, field_name, arg, context=None,
+                      tag_ids=None, onchange=None):
+        res = {}
+        product_obj = self.pool.get('product.product')
+        tag_obj = self.pool.get('product.tag')
+        tag_wiz_obj = self.pool.get('equivalent.tag.wizard')
+        for wiz in self.browse(cr, uid, ids, context):
+            if not onchange:
+                tag_ids = [x.id for x in wiz.tag_ids]
+            product_ids = set(product_obj.search(cr, uid,
+                                                 [('type', '!=', "service")],
+                                                 context=context))
+            # se buscan todos los product.tag que coincidan con los del wiz
+            for tag in tag_obj.browse(cr, uid, tag_ids, context):
+                tag_ids = tag_obj.search(cr, uid,
+                                         [('name', '=', tag.name)],
+                                         context=context)
+                products = product_obj.search(cr, uid,
+                                              [('tag_ids', 'in', tag_ids),
+                                               ('type', '!=', "service")],
+                                              context=context)
+                product_ids = product_ids & set(products)
+            res[wiz.id] = list(product_ids)
+        return res
 
 class CrmClaimRma(models.Model):
 
