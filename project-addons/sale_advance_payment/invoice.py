@@ -43,12 +43,13 @@ class AccountInvoice(models.Model):
                             if move.account_id.type in ('receivable',
                                                         'payable'):
                                 if move.reconcile_partial_id:
-                                    amount += move.amount_residual > 0 and \
-                                        move.amount_residual or 0.0
+                                    amount += move.amount_residual_currency > \
+                                    0 and move.amount_residual_currency or 0.0
                                 elif move.reconcile_id:
                                     continue
                                 else:
-                                    amount += move.credit
+                                    amount += abs(move.amount_currency) or \
+                                        move.credit
         self.advance_amount = amount
 
     @api.one

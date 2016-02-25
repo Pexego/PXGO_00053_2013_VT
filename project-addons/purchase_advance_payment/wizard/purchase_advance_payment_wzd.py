@@ -71,7 +71,9 @@ class AccountVoucherWizard(models.TransientModel):
             purchase = purchase_obj.browse(purchase_id)
 
             partner_id = purchase.partner_id.id
-            currency_id = purchase.pricelist_id.currency_id.id
+            currency_id = self[0].journal_id.currency and \
+                self[0].journal_id.currency.id or \
+                self[0].journal_id.company_id.currency_id.id
             date = self[0].date
             company_id = purchase.company_id.id
             purchase_ref = purchase.id
@@ -84,7 +86,9 @@ class AccountVoucherWizard(models.TransientModel):
                            'account_id':
                            self[0].journal_id.default_credit_account_id.id,
                            'company_id': company_id,
-                           'currency_id': currency_id,
+                           'payment_rate_currency_id': currency_id,
+                           'currency_id': self[0].journal_id.company_id.
+                           currency_id.id,
                            'date': date,
                            'amount': self[0].amount_advance,
                            'period_id': period_id.id,

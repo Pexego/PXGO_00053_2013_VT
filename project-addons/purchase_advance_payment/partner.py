@@ -42,10 +42,10 @@ class ResPartner(models.Model):
                         not move.reconcile_id:
                     move_ids.append(move.id)
                     if move.reconcile_partial_id:
-                        amount += move.amount_residual > 0 and \
-                            move.amount_residual or 0.0
+                        amount += move.amount_residual_currency > 0 and \
+                            move.amount_residual_currency or 0.0
                     else:
-                        amount += move.debit
+                        amount += move.amount_currency or move.debit
 
         moves = move_line_obj.search([('id', 'not in', move_ids),
                                       ('partner_id', '=', self.id),
@@ -58,10 +58,10 @@ class ResPartner(models.Model):
                                            ('purchase_id', '!=', False)])
             if not vouchers:
                 if move.reconcile_partial_id:
-                    amount += move.amount_residual > 0 and \
-                        move.amount_residual or 0.0
+                    amount += move.amount_residual_currency > 0 and \
+                        move.amount_residual_currency or 0.0
                 else:
-                    amount += move.debit
+                    amount += move.amount_currency or move.debit
 
         self.on_account_purchase = amount
 

@@ -52,7 +52,7 @@ class ApplyOnAccountPurchaseAmount(models.TransientModel):
                 if move.account_id.type in ('receivable', 'payable') and \
                         not move.reconcile_id and \
                         (not move.reconcile_partial_id or
-                         move.amount_residual > 0):
+                         move.amount_residual_currency > 0):
                     moves += move
 
         moves2 = move_line_obj.search([('id', 'not in',
@@ -77,20 +77,20 @@ class ApplyOnAccountPurchaseAmount(models.TransientModel):
         amount = self[0].amount
         last_move = False
         for move in complete_moves:
-            if move.debit <= amount:
+            if (move.amount_currency or move.debit) <= amount:
                 select_moves += move
-                amount -= move.debit
+                amount -= move.amount_currency or move.debit
             else:
                 last_move = move
 
         if amount > 0 and last_move:
             select_moves += last_move
         elif amount > 0:
-            partial_moves.sorted(key=lambda x: x.amount_residual)
+            partial_moves.sorted(key=lambda x: x.amount_residual_currency)
             for move in partial_moves:
-                if move.amount_residual <= amount:
+                if move.amount_residual_currency <= amount:
                     select_moves += move
-                    amount -= move.amount_residual
+                    amount -= move.amount_residual_currency
                 else:
                     last_move = move
 
