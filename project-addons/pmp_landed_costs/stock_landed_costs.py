@@ -19,8 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, api, exceptions, _, fields as fields_n
-from openerp.osv import fields
+from openerp import models, api, exceptions, _, fields
 
 class StockLandedCost(models.Model):
 
@@ -88,8 +87,8 @@ class StockValuationAdjustmentLines(models.Model):
 
     _inherit = 'stock.valuation.adjustment.lines'
 
-    standard_price = fields_n.Float('Standard price', compute='_get_new_standard_price', store=True)
-    new_standard_price = fields_n.Float('New standard price', compute='_get_new_standard_price', store=True)
+    standard_price = fields.Float('Standard price', compute='_get_new_standard_price', store=True)
+    new_standard_price = fields.Float('New standard price', compute='_get_new_standard_price', store=True)
 
     @api.one
     @api.depends('product_id.standard_price', 'additional_landed_cost')
@@ -102,3 +101,26 @@ class StockValuationAdjustmentLines(models.Model):
             self.product_id.qty_available
         self.new_standard_price = average_price
         self.standard_price = self.product_id.standard_price
+
+
+class StockLandedCostLines(models.Model):
+    _inherit = 'stock.landed.cost.lines'
+
+    def onchange_product_id(self, cr, uid, ids, product_id=False,
+                            context=None):
+        result = super(StockLandedCostLines, self).\
+            onchange_product_id(cr, uid, ids, product_id, context)
+
+        if product_id and result.get('value', False):
+            product = self.pool.get('product.product').\
+                browse(cr, uid, product_id, context=context)
+            stock_input_acc = product.property_stock_account_input and \
+                product.property_stock_account_input.id or False
+            if not stock_input_acc:
+                stock_input_acc = \
+                    product.categ_id.property_stock_account_input_categ and \
+                    product.categ_id.property_stock_account_input_categ.id or \
+                    False
+            result['value']['account_id'] = stock_input_acc
+
+        return result
