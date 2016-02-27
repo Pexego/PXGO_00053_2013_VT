@@ -21,10 +21,27 @@
 ##############################################################################
 from openerp.osv import fields, osv
 from datetime import datetime
+from operator import attrgetter
 
 class purchase_order(osv.osv):
 
     _inherit = "purchase.order"
+
+    def action_cancel(self, cr, uid, ids, context=None):
+        move_obj = self.pool.get('stock.move')
+        for purchase in self.browse(cr, uid, ids, context=context):
+            move_ids = move_obj.search(cr, uid, [('purchase_line_id', 'in', purchase.order_line.ids)], context=context)
+            for move in move_obj.browse(cr, uid, move_ids):
+                if move.state == 'done':
+                    raise osv.except_osv(
+                        _('Unable to cancel the purchase order %s.') % (purchase.name),
+                        _('You have already received some goods for it.  '))
+                else:
+                    move.state = 'cancel'
+
+        res = super(purchase_order, self).action_cancel(cr, uid, ids, context=context)
+        
+        return res
 
     def _minimum_planned_date(self, cr, uid, ids, field_name, arg, context=None):
         res={}

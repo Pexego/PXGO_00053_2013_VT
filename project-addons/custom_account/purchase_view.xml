@@ -24,6 +24,10 @@
             <xpath expr="//notebook/page[@string='Products']/field[@name='order_line']/tree[@string='Purchase Order Lines']/field[@name='product_id']" position="attributes">
                 <attribute name="on_change">onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)</attribute>
             </xpath>
+            <xpath expr="//group/field[@name='company_id']" position="replace"/>
+            <xpath expr="//page[@string='Deliveries &amp; Invoices']/group/group/field[@name='location_id']" position="before">
+              <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+            </xpath>
           </field>
       </record>
 
@@ -37,6 +41,7 @@
                   <field name="prepared_merchandise_date"/>
                   <field name="estimated_arrival_date"/>
               </xpath>
+              <xpath expr="//tree/field[@name='company_id']" position="replace"/>
           </field>
       </record>
 

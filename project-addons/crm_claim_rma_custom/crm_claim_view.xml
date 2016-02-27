@@ -8,8 +8,9 @@
           <field name="type">form</field>
           <field name="inherit_id" ref="crm_claim_rma.equivalent_products_wizard"/>
           <field name="arch" type="xml">
-              <xpath expr="//form/group/field[@name='tag_ids']" position="replace">
-                <field name="tag_ids" domain="[('wiz_id', '=', active_id)]" on_change="onchange_tags(tag_ids)" />
+              <xpath expr="//form[@string='Equivalent products']/group/field[@name='tag_ids']" position="replace">
+                <field name="tag_ids" on_change="onchange_tags(tag_ids)" >
+                </field>
               </xpath>
           </field>
       </record>

@@ -42,7 +42,7 @@ class AccountInvoiceLine(models.Model):
 
     _inherit = 'account.invoice.line'
 
-    move_id = fields.Many2one('stock.move', 'Move')
+    move_id = fields.Many2one('stock.move', 'Move', copy=False)
 
 
 class AccountInvoice(models.Model):

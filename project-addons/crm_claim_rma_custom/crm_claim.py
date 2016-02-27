@@ -27,9 +27,10 @@ class equivalent_products_wizard(orm.TransientModel):
 
     _inherit = "equivalent.products.wizard"
 
-    _columns = {
-        'tag_ids': fields2.many2many('equivalent.tag.wizard', 'equivalent_products_tag', 'tag_id', 'prod_id', 'Tags'),
-    }
+    tag_ids = fields.Many2many('product.tag',
+                               'equivalent_products_tag_rel2',
+                               'prod_id', 'tag_id',
+                               'Tags')
 
 
 class CrmClaimRma(models.Model):

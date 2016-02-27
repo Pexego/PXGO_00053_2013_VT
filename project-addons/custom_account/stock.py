@@ -64,6 +64,7 @@ class SaleOrder(models.Model):
     state = fields.Selection(selection_add=[("history", "History")])
     internal_notes = fields.Text("Internal Notes")
 
+
 class SaleOrderLine(models.Model):
 
     _inherit = "sale.order.line"
@@ -77,8 +78,17 @@ class PurchaseOrder(models.Model):
 
     state = fields.Selection(selection_add=[("history", "History")])
 
+
 class PurchaseOrderLine(models.Model):
 
     _inherit = "purchase.order.line"
 
     state = fields.Selection(selection_add=[("history", "History")])
+
+
+class AccountInvoice(models.Model):
+
+    _inherit = "account.invoice"
+
+    state = fields.Selection(selection_add=[("history", "History")])
+
