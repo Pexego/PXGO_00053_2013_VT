@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, api
+from lxml import etree
 
 
 class StockMove(models.Model):
@@ -63,6 +64,22 @@ class SaleOrder(models.Model):
 
     state = fields.Selection(selection_add=[("history", "History")])
     internal_notes = fields.Text("Internal Notes")
+
+    def fields_view_get(self, cr, uid, view_id=None, view_type='form',
+                        context=None, toolbar=False, submenu=False):
+        res = super(SaleOrder, self).\
+            fields_view_get(cr, uid, view_id=view_id, view_type=view_type,
+                            context=context, toolbar=toolbar, submenu=submenu)
+        no_create = context.get('no_create', False)
+        update = (no_create and view_type in ['form', 'tree']) or False
+        if update:
+            doc = etree.XML(res['arch'])
+            if no_create:
+                for t in doc.xpath("//"+view_type):
+                    t.attrib['create'] = 'false'
+            res['arch'] = etree.tostring(doc)
+
+        return res
 
 
 class SaleOrderLine(models.Model):

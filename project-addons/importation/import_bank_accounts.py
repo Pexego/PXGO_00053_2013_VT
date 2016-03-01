@@ -215,6 +215,7 @@ class import_banks(object):
                         self.create("account.banking.mandate",
                                     {'type': 'recurrent',
                                      'recurrent_sequence_type': 'recurring',
+                                     'default': record[8] and True or False,
                                      'signature_date':
                                      datetime.
                                      datetime(*xlrd.
