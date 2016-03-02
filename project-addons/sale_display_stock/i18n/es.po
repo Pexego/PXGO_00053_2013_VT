@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* sale_display_stock
+#       * sale_display_stock
 #
 msgid ""
 msgstr ""
@@ -20,3 +20,8 @@ msgstr ""
 msgid "Sales Order Line"
 msgstr "Línea pedido de venta"
 
+#. module: sale_display_stock
+#: field:product.product,qty_available_wo_wh:0
+#: field:sale.order.line,qty_available_wo_wh:0
+msgid "Qty. on kitchen"
+msgstr "Stock cocina"

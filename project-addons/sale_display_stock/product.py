@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra$ <omar@comunitea.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,19 +18,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
-from openerp import models, fields
+
+from openerp import models, fields, api
 import openerp.addons.decimal_precision as dp
 
 
-class sale_order_line(models.Model):
-    _inherit = 'sale.order.line'
+class product_product(models.Model):
+    _inherit = "product.product"
 
-    qty_available = fields.\
-        Float('Qty available', readonly=True,
-              related='product_id.qty_available',
-              digits_compute=dp.get_precision('Product Unit of Measure'))
+    @api.one
+    def _get_no_wh_internal_stock(self):
+        warehouse_obj = self.env["stock.warehouse"]
+        loc_obj = self.env["stock.location"]
+        warehouses = warehouse_obj.search([])
+        view_loc_ids = [x.view_location_id.id for x in warehouses]
+        locs = loc_obj.search([('usage', '=', 'internal'), '!',
+                               ('id', 'child_of', view_loc_ids)])
+        qty = self.with_context(location=[x.id for x in locs]).qty_available
+        self.qty_available_wo_wh = qty
+
     qty_available_wo_wh = fields.\
-        Float('Qty. on kitchen', readonly=True,
-              related='product_id.qty_available_wo_wh',
-              digits_compute=dp.get_precision('Product Unit of Measure'))
+        Float(string="Qty. on kitchen", compute="_get_no_wh_internal_stock",
+              readonly=True,
+              digits=dp.get_precision('Product Unit of Measure'))
+
