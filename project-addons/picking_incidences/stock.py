@@ -125,6 +125,15 @@ class StockPicking(models.Model):
                 line.qty_confirmed = 0.0
 
     @api.multi
+    def action_cancel(self):
+        for pick in self:
+            if pick.with_incidences and pick.picking_type_code == 'incoming':
+                raise exceptions.\
+                    Warning(_("Cannot cancel an incoming picking with "
+                              "incidences. You can only process it."))
+        return super(StockPicking, self).action_cancel()
+
+    @api.multi
     def action_accept_confirmed_qty(self):
         for pick in self:
             #check move lines confirmed qtys
