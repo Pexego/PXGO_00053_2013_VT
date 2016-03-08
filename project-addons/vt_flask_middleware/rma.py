@@ -13,6 +13,9 @@ class RmaStatus(SyncModel):
     odoo_id = IntegerField(unique=True)
     name = CharField(max_length=150)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Rma(SyncModel):
     odoo_id = IntegerField(unique=True)

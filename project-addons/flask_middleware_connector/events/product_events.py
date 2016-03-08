@@ -46,6 +46,7 @@ class ProductExporter(Exporter):
                 'pvi_2': product.pvi2_price,
                 'pvi_3': product.pvi3_price,
                 'uom_name': product.uom_id.name,
+                'last_sixty_days_sales': product.last_sixty_days_sales,
                 'brand_id': product.product_brand_id.id}
         vals['pvd_1'] = product.lst_price - (product.pvd1_relation *
                                              product.lst_price)
@@ -82,7 +83,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
     up_fields = ["name", "default_code", "pvi1_price", "pvi2_price",
                  "pvi3_price", "lst_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
-                 "product_brand_id"]
+                 "product_brand_id", "last_sixty_days_sales"]
     if vals.get("web", False) and vals.get("web", False) == "published":
         export_product.delay(session, model_name, record_id, priority=2, eta=60)
         claim_lines = session.env['claim.line'].search(
@@ -104,7 +105,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
     up_fields = ["name", "default_code", "pvi1_price", "pvi2_price",
                  "pvi3_price", "lst_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
-                 "product_brand_id"]
+                 "product_brand_id", "last_sixty_days_sales"]
     if vals.get("web", False) and vals.get("web", False) == "published":
         export_product.delay(session, model_name, record_id, priority=2, eta=60)
         claim_lines = session.env['claim.line'].search(
