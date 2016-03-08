@@ -236,7 +236,7 @@ class CrmClaimRma(models.Model):
                 line_obj = self.pool.get('account.invoice.line')
                 line_id = line_obj.create(cr, uid, vals, context=context)
             invoice_id.write({
-                         'origin_invoices_ids': [(6, 0, rectified_invoice_ids)]
+                         'origin_invoices_ids': [(6, 0, list(set(rectified_invoice_ids)))]
                          })
             invoice_id.button_reset_taxes()
 
