@@ -105,10 +105,11 @@ class CrmClaimRma(models.Model):
                             'price_unit': inv_line.price_unit,
                             'tax_ids': [(6, 0, taxes_ids)]
                         }
-                    else:
-                        raise exceptions.Warning(
-                            _("There is at least one line of the claim with \
-                               an incorrect invoice"))
+                        break
+                if not vals:
+                    raise exceptions.Warning(
+                        _("There is at least one line of the claim with \
+                           an incorrect invoice"))
             else:
                 product = claim_line.product_id.id
                 pricelist = claim_obj.partner_id.property_product_pricelist.id

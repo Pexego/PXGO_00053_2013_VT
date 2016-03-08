@@ -103,6 +103,18 @@ class AccountInvoice(models.Model):
 
         return result
 
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        res = super(AccountInvoice, self).name_search(name, args=args,
+                                                      operator=operator,
+                                                      limit=limit)
+        args = args or []
+        recs = self.browse()
+        if not res:
+            recs = self.search([('invoice_number', operator, name)] + args, limit=limit)
+            res = recs.name_get()
+        return res
+
     @api.multi
     @api.depends('invoice_line')
     def _get_picking_ids(self):
