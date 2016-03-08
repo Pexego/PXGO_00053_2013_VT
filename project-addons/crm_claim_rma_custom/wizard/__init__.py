@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos
 #    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,9 +18,5 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import account_invoice
-import crm_claim
-import partner
-import mrp_repair
-import stock
-from . import wizard
+
+from . import claim_make_picking

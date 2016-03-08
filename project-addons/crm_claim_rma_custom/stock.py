@@ -25,6 +25,7 @@ class stock_picking(models.Model):
     _inherit = "stock.picking"
 
     internal_notes = fields.Text("Internal Notes")
+    odoo_management = fields.Boolean("Odoo management", readonly=True)
 
     def action_assign(self, cr, uid, ids, context=None):
         res = super(stock_picking, self).action_assign(cr, uid, ids,
@@ -52,3 +53,10 @@ class stock_picking(models.Model):
                                 move.claim_line_id.substate_id = self.env.ref(
                                     'crm_claim_rma_custom.substate_returned')
         return super(stock_picking, self).do_transfer()
+
+
+class StockLocation(models.Model):
+
+    _inherit = "stock.location"
+
+    odoo_management = fields.Boolean('Management in Odoo')
