@@ -151,7 +151,7 @@ class import_sale_order_lines(object):
     def import_lines(self):
         cwb = xlrd.open_workbook(self.customers_file, encoding_override="utf-8")
         sh = cwb.sheet_by_index(0)
-
+        visited_orders = []
         cont = 1
         all_lines = sh.nrows - 1
         print "lines no: ", all_lines
@@ -162,6 +162,11 @@ class import_sale_order_lines(object):
                 product_ids = self.search("product.product", [('default_code', '=', record[1])])
                 order_ids = self.search("sale.order", [('name', '=', str(record[7]).strip())])
                 if order_ids:
+                    if order_ids[0] not in visited_orders:
+                        visited_orders.append(order_ids[0])
+                        lines_ids = self.search('sale.order.line', [('order_id','=',order_ids[0])])
+                        if lines_ids:
+                            self.unlink("sale.order.line", lines_ids) 
                     lines_vals = {
                         "product_id": product_ids and product_ids[0] or False,
                         "name": record[2],
