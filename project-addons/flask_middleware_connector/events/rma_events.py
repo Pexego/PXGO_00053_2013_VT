@@ -118,7 +118,7 @@ class RmaProductExporter(Exporter):
             "product_id": line.product_id.id,
             "entrance_date": line.date_in,
             "end_date": line.date_out,
-            "substate_id": line.substate_id.id,
+            "status_id": line.substate_id.id,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
