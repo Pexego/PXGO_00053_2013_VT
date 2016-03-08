@@ -28,16 +28,20 @@ class StockMove(models.Model):
 
     _inherit = "stock.move"
 
-    qty_ready = fields.Float('Qty ready', readonly=True,
-                             digits=dp.get_precision('Product Unit of'
-                                                     ' Measure'))
+    qty_ready = fields.\
+        Float('Qty ready', readonly=True, copy=False,
+              digits=dp.get_precision('Product Unit of Measure'))
+    qty_confirmed = fields.\
+        Float('Qty confirmed', copy=False,
+              digits=dp.get_precision('Product Unit of Measure'))
 
 
 class StockPicking(models.Model):
 
     _inherit = "stock.picking"
 
-    with_incidences = fields.Boolean('With incidences', readonly=True)
+    with_incidences = fields.Boolean('With incidences', readonly=True,
+                                     copy=False)
 
     @api.multi
     def write(self, vals):
@@ -46,7 +50,8 @@ class StockPicking(models.Model):
             for pick in self:
                 no_incidence = True
                 for move in pick.move_lines:
-                    if not move.qty_ready or move.qty_ready > move.reserved_availability:
+                    if not move.qty_ready or move.qty_ready > \
+                            move.reserved_availability:
                         no_incidence = False
                         break
                 if no_incidence:
@@ -65,8 +70,10 @@ class StockPicking(models.Model):
             remaining_qty = move.product_uom_qty - move.qty_ready
             remaining_qty = float_round(remaining_qty,
                                         precision_rounding=precision)
-            if float_compare(remaining_qty, 0,
-                             precision_rounding=precision) > 0 and \
+            if not move.qty_ready:
+                new_moves.append(move.id)
+            elif float_compare(remaining_qty, 0,
+                               precision_rounding=precision) > 0 and \
                 float_compare(remaining_qty, move.product_qty,
                               precision_rounding=precision) < 0:
                 new_move = move.split(move, remaining_qty)
@@ -107,3 +114,48 @@ class StockPicking(models.Model):
                                            "incidences. Please fix or "
                                            "ignore it."))
         return super(StockPicking, self).action_done()
+
+    @api.onchange('move_type')
+    def onchange_move_type(self):
+        if self.move_type == "direct":
+            for line in self.move_lines:
+                line.qty_confirmed = line.reserved_availability
+        else:
+            for line in self.move_lines:
+                line.qty_confirmed = 0.0
+
+    @api.multi
+    def action_accept_confirmed_qty(self):
+        for pick in self:
+            #check move lines confirmed qtys
+            for move in pick.move_lines:
+                if move.qty_confirmed > move.reserved_availability:
+                    raise exceptions.\
+                        Warning(_("Cannot assign more qty that reserved "
+                                  "availability."))
+            new_moves = []
+            for move in pick.move_lines:
+                if move.state in ('done', 'cancel'):
+                    # ignore stock moves cancelled or already done
+                    continue
+                precision = move.product_uom.rounding
+                remaining_qty = move.product_uom_qty - move.qty_confirmed
+                remaining_qty = float_round(remaining_qty,
+                                            precision_rounding=precision)
+                if not move.qty_confirmed:
+                    new_moves.append(move.id)
+                elif float_compare(remaining_qty, 0,
+                                   precision_rounding=precision) > 0 and \
+                    float_compare(remaining_qty, move.product_qty,
+                                  precision_rounding=precision) < 0:
+                    new_move = move.split(move, remaining_qty)
+                    new_moves.append(new_move)
+            if new_moves:
+                new_moves = self.env['stock.move'].browse(new_moves)
+                bckid = self._create_backorder(self, backorder_moves=new_moves)
+                bck = self.browse(bckid)
+                bck.write({'move_type': 'one'})
+                self.do_unreserve()
+                self.recheck_availability()
+            self.message_post(body=_("User %s accepted confirmed qties.") %
+                              (self.env.user.name))
