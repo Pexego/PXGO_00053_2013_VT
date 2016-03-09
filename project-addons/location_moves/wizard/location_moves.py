@@ -40,7 +40,6 @@ class location_moves(models.TransientModel):
          ('nursing_damaged', 'Nursing -> Damaged'),
          ('nursing_cooked', 'Nursing -> Cooked'),
          ('quality_cooked', 'Quality -> Cooked'),
-         ('cooked_nursing', 'Cooked -> Nursing'),
          ('cooked_damaged', 'Cooked -> Damaged')],
         'Move type', required=True)
 
@@ -54,7 +53,6 @@ class location_moves(models.TransientModel):
             'nursing_damaged': loc_obj.move_nursing_damaged,
             'nursing_cooked': loc_obj.move_nursing_cooked,
             'quality_cooked': loc_obj.move_quality_cooked,
-            'cooked_nursing': loc_obj.move_cooked_nursing,
             'cooked_damaged': loc_obj.move_cooked_damaged
         }
         types[self.move_type](self.product_id.id, self.qty, self.check_qty)
