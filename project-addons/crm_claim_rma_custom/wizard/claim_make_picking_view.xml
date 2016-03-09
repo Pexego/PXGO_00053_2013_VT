@@ -10,6 +10,7 @@
                 <field name="claim_line_dest_location" position="after">
                     <group>
                         <field name="odoo_management"/>
+                        <field name="not_sync"/>
                     </group>
                 </field>
             </field>

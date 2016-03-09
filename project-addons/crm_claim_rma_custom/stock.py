@@ -26,6 +26,8 @@ class stock_picking(models.Model):
 
     internal_notes = fields.Text("Internal Notes")
     odoo_management = fields.Boolean("Odoo management", readonly=True)
+    not_sync = fields.Boolean("Not sync", help="This picking not will be "
+                                               "synced with Vstock")
 
     def action_assign(self, cr, uid, ids, context=None):
         res = super(stock_picking, self).action_assign(cr, uid, ids,
@@ -59,4 +61,10 @@ class StockLocation(models.Model):
 
     _inherit = "stock.location"
 
-    odoo_management = fields.Boolean('Management in Odoo')
+    odoo_management = fields.Boolean('Management in Odoo',
+                                     help="The outputs of this location are "
+                                          "managed in Odoo, Vstock only will "
+                                          "print shipping labels")
+    not_sync = fields.Boolean("Not sync",
+                              help="The incomimg pickings to this location "
+                                   "not will be synced with vstock")
