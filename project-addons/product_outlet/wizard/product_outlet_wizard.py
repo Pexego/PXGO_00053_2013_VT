@@ -97,15 +97,18 @@ class product_outlet_wizard(models.TransientModel):
                 new_product = product.copy(
                     {'categ_id': int(self.categ_id),
                      'name': product.name + u' ' +
-                        categ_obj.browse(int(self.categ_id)).name,
+                     categ_obj.browse(int(self.categ_id)).name,
+                     'default_code': product.default_code +
+                     categ_obj.browse(int(self.categ_id)).name,
                      'image_medium': product.image_medium})
                 categ = self.env['product.category'].browse(int(self.categ_id))
-                tag = self.env['product.tag'].search([('name', '=', categ.name)])
+                tag = self.env['product.tag'].search([('name', '=',
+                                                       categ.name)])
                 if not tag:
                     outlet_tag = self.env.ref('product_outlet.tag_outlet')
                     tag = self.env['product.tag'].create(
                         {'name': categ.name, 'parent_id': outlet_tag.id})
-                new_product.write({'tag_ids': [(4,tag.id)]})
+                new_product.write({'tag_ids': [(4, tag.id)]})
                 new_product.normal_product_id = self.product_id
             else:
                 new_product = outlet_product

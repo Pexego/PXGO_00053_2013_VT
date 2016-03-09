@@ -48,7 +48,7 @@ msgstr "Año Actual"
 #. module: product_outlet_loss
 #: field:product.outlet.wizard,percent:0
 msgid "Default Outlet Price in %"
-msgstr "% Devaluaciñon Outlet por defecto"
+msgstr "% Devaluación Outlet por defecto"
 
 #. module: product_outlet_loss
 #: view:outlet.loss:product_outlet_loss.view_outlet_loss_search
