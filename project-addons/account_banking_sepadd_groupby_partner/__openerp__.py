@@ -33,8 +33,7 @@
                 'account_banking_payment_export',
                 'account_payment',
                 'account_banking_payment_transfer'],
-    'data': ['wizard/export_sdd_view.xml',
-             'payment_order_data.xml'],
+    'data': ['payment_order_data.xml'],
     'demo': [],
     'description': '''
 Allow to export sepa direct debit files grouped by partner.

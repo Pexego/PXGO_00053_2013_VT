@@ -29,10 +29,6 @@ class PaymentOrder(models.Model):
 
     _inherit = "payment.order"
 
-    charge_financed = fields.Boolean(states={'sent': [('readonly', True)],
-                                             'rejected': [('readonly', True)],
-                                             'done': [('readonly', True)]})
-
     @api.multi
     def action_sent(self):
         res = super(PaymentOrder, self).action_sent()
