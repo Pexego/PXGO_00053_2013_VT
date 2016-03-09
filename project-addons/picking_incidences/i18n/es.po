@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * picking_incidences
+#       * picking_incidences
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-25 18:59+0000\n"
-"PO-Revision-Date: 2015-02-25 18:59+0000\n"
+"POT-Creation-Date: 2016-03-09 14:09+0000\n"
+"PO-Revision-Date: 2016-03-09 14:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,16 +21,43 @@ msgid "Accept ready qtys."
 msgstr "Aceptar cantidad preparada"
 
 #. module: picking_incidences
-#: code:addons/picking_incidences/stock.py:81
-#: code:addons/picking_incidences/stock.py:92
+#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+msgid "Are you sure? Backorder will be created with remaining quantities"
+msgstr "¿Está seguro? Un albarán con las cantidades pendientes será creado."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:143
+#, python-format
+msgid "Cannot assign more qty that reserved availability."
+msgstr "No puede asignar más cantidad de las reservada."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:132
+#, python-format
+msgid "Cannot cancel an incoming picking with incidences. You can only process it."
+msgstr "No puede cancelar un albarán de entrada con incidencias. Sólo puede procearlo."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:102
+#: code:addons/picking_incidences/stock.py:113
 #, python-format
 msgid "Cannot process picking with incidences. Please fix or ignore it."
 msgstr "No puede procesar un albarán con incidencias. Por favor arréglelo o ignórelo."
 
 #. module: picking_incidences
+#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+msgid "Confirm assignation"
+msgstr "Confirmar asignación"
+
+#. module: picking_incidences
 #: model:ir.model,name:picking_incidences.model_stock_picking
 msgid "Picking List"
 msgstr "Albarán"
+
+#. module: picking_incidences
+#: field:stock.move,qty_confirmed:0
+msgid "Qty confirmed"
+msgstr "Cant. confirmada"
 
 #. module: picking_incidences
 #: field:stock.move,qty_ready:0
@@ -43,12 +70,13 @@ msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: picking_incidences
-#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
-msgid "Unreserve"
-msgstr "Anular reserva"
+#: code:addons/picking_incidences/stock.py:169
+#, python-format
+msgid "User %s accepted confirmed qties."
+msgstr "El usuario %s ha aceptado las cantidades confirmadas."
 
 #. module: picking_incidences
-#: code:addons/picking_incidences/stock.py:66
+#: code:addons/picking_incidences/stock.py:87
 #, python-format
 msgid "User %s accepted ready quantities."
 msgstr "El usuario %s ha aceptado las cantidades preparadas."
@@ -57,4 +85,3 @@ msgstr "El usuario %s ha aceptado las cantidades preparadas."
 #: field:stock.picking,with_incidences:0
 msgid "With incidences"
 msgstr "Con incidencias"
-
