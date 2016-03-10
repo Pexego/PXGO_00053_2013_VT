@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
+from openerp import models, fields, api, _
 from lxml import etree
 
 
@@ -44,6 +44,18 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     default_code = fields.Char(required=True)
+
+    _sql_constraints = [
+        ('default_code_uniq', 'unique(default_code, active)', 'The code of product must be unique.')
+    ]
+
+    def copy(self, cr, uid, id, default=None, context=None):
+        if default is None: default = {}
+        if not default.get('default_code', False):
+            prod = self.browse(cr, uid, id, context=context)
+            default['default_code'] = _("%s (copy)") % (prod.default_code)
+        return super(ProductProduct, self).copy(cr, uid, id, default=default,
+                                                context=context)
 
     @api.multi
     def name_get(self):
