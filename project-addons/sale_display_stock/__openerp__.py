@@ -31,10 +31,12 @@ Sales display stock
 
     * Displays the real stock of product at each sale order line.
 """,
-    "depends": ["base", "sale", "stock"],
+    "depends": ["base", "sale", "stock", "account"],
     "data": [
         "sale_view.xml",
-        "report/sale_order_line_report.xml"
+        "report/sale_order_line_report.xml",
+        "security/ir.model.access.csv",
+        "security/sale_display_stock_security.xml"
     ],
     "demo": [],
     'auto_install': False,

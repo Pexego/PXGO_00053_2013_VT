@@ -26,18 +26,20 @@ class sale_order_line_report(models.Model):
     _name = 'sale.order.line.report'
     _auto = False
 
-    name = fields.Char('Name')
-    partner_id = fields.Many2one('res.partner', 'Partner')
-    product_qty = fields.Float('Quantity')
-    uom = fields.Many2one('product.uom', 'UoM')
-    price_unit =  fields.Float('Price unit')
-    discount = fields.Float('Discount')
-    salesman_id = fields.Many2one('res.users', 'Salesperson')
-    state = fields.Char('State')
-    product_id = fields.Many2one('product.product', 'Product')
-    order_id = fields.Many2one('sale.order', 'Order')
-    qty_kitchen = fields.Float('Qty in kitchen', group_operator="avg")
-    qty_stock = fields.Float('Stock qty', group_operator="avg")
+    name = fields.Char('Name', readonly=True)
+    partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
+    product_qty = fields.Float('Quantity', readonly=True)
+    uom = fields.Many2one('product.uom', 'UoM', readonly=True)
+    price_unit =  fields.Float('Price unit', readonly=True)
+    discount = fields.Float('Discount', readonly=True)
+    salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
+    state = fields.Char('State', readonly=True)
+    product_id = fields.Many2one('product.product', 'Product', readonly=True)
+    order_id = fields.Many2one('sale.order', 'Order', readonly=True)
+    qty_kitchen = fields.Float('Qty in kitchen', group_operator="avg",
+                               readonly=True)
+    qty_stock = fields.Float('Stock qty', group_operator="avg", readonly=True)
+    company_id = fields.Many2one("res.company", "Company", readonly=True)
 
     def init(self, cr):
         tools.drop_view_if_exists(cr, self._table)
@@ -52,6 +54,7 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.salesman_id as salesman_id,
        sol.state as state,
        sol.order_id as order_id,
+       sol.company_id as company_id,
        q_kt.product_id,
        q_kt.qty AS qty_kitchen,
        stck.qty AS qty_stock
@@ -84,6 +87,6 @@ FROM   sale_order_line sol
                ON sol.product_id = stck.product_id
 WHERE  q_kt.qty > 0 and sol.id in (select sale_line_id from procurement_order po where po.state not in ('done', 'cancel'))
 GROUP BY sol.id, sol.name, sol.order_partner_id, sol.product_uom_qty,
-         sol.product_uom, sol.price_unit, sol.discount,
+         sol.product_uom, sol.price_unit, sol.discount, sol.company_id,
          sol.salesman_id, sol.state, sol.order_id, q_kt.product_id, q_kt.qty, stck.qty)
 """)

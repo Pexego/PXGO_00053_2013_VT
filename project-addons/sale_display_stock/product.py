@@ -28,13 +28,10 @@ class product_product(models.Model):
 
     @api.one
     def _get_no_wh_internal_stock(self):
-        warehouse_obj = self.env["stock.warehouse"]
-        loc_obj = self.env["stock.location"]
-        warehouses = warehouse_obj.search([])
-        view_loc_ids = [x.view_location_id.id for x in warehouses]
-        locs = loc_obj.search([('usage', '=', 'internal'), '!',
-                               ('id', 'child_of', view_loc_ids)])
-        qty = self.with_context(location=[x.id for x in locs]).qty_available
+        locs = []
+        locs.append(self.env.ref('location_moves.stock_location_kitchen').id)
+        locs.append(self.env.ref('location_moves.stock_location_pantry').id)
+        qty = self.with_context(location=locs).qty_available
         self.qty_available_wo_wh = qty
 
     qty_available_wo_wh = fields.\
