@@ -83,4 +83,4 @@ class ProductProduct(models.Model):
                 product_id.average_margin = margin_perc_sum / qty_sum
     @api.multi
     def average_margin_compute(self):
-        self.average_margin_last_sales(ids=[x.id for x in self.ids])
+        self.average_margin_last_sales(ids=self.ids)
