@@ -20,3 +20,4 @@
 ##############################################################################
 
 from . import claim_make_picking
+from . import equivalent_products_wizard

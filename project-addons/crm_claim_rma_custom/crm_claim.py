@@ -273,8 +273,7 @@ class ClaimInvoiceLine(models.Model):
     @api.one
     def _get_subtotal(self):
         self.price_subtotal = self.discount and \
-            self.qty * self.price_unit - (self.discount *
-                                          self.price_unit/100) or \
+            self.qty * self.price_unit * ((100.0 - self.discount) / 100.0) or \
             self.qty * self.price_unit
 
     @api.onchange("product_id", "invoice_id")

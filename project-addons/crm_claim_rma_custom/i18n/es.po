@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-09 13:59+0000\n"
-"PO-Revision-Date: 2016-03-09 13:59+0000\n"
+"POT-Creation-Date: 2016-03-10 12:50+0000\n"
+"PO-Revision-Date: 2016-03-10 12:50+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -39,7 +39,7 @@ msgstr "Número reclamación"
 #. module: crm_claim_rma_custom
 #: field:crm.claim,claim_inv_line_ids:0
 msgid "Claim inv line ids"
-msgstr "Lineas de abono"
+msgstr "Lineas abono reclamación"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,claim_line_id:0
@@ -64,7 +64,7 @@ msgstr "Creado por"
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,create_date:0
 msgid "Created on"
-msgstr "Creado en"
+msgstr "Creado el"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,discount:0
@@ -89,7 +89,7 @@ msgstr "Notas internas"
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_stock_location
 msgid "Inventory Locations"
-msgstr "Ubicaciones de inventario"
+msgstr "Ubicaciones de stock"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,invoice_id:0
@@ -104,6 +104,11 @@ msgid "Invoicing"
 msgstr "Facturación"
 
 #. module: crm_claim_rma_custom
+#: field:equivalent.products.wizard,kitchen_stock:0
+msgid "Kitchen Stock"
+msgstr "Stock cocina"
+
+#. module: crm_claim_rma_custom
 #: field:claim.invoice.line,write_uid:0
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
@@ -111,7 +116,7 @@ msgstr "Últ. actualización por"
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,write_date:0
 msgid "Last Updated on"
-msgstr "Últ. actualización en"
+msgstr "Últ. actualización el"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_line
@@ -147,7 +152,7 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:317
+#: code:addons/crm_claim_rma_custom/crm_claim.py:318
 #, python-format
 msgid "Partner not selected"
 msgstr "Cliente no seleccionado"
@@ -188,7 +193,7 @@ msgid "Repair Order"
 msgstr "Orden reparación"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:297
+#: code:addons/crm_claim_rma_custom/crm_claim.py:298
 #, python-format
 msgid "Selected product is not                                                     in the invoice"
 msgstr "El producto seleccionado no está en la factura"
@@ -220,7 +225,7 @@ msgid "The outputs of this location are managed in Odoo, Vstock only will print 
 msgstr "Las salidas de esta ubicación se gestionan en Odoo, Vstock sólo imprimirá las etiquetas de envío."
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:173
+#: code:addons/crm_claim_rma_custom/crm_claim.py:174
 #, python-format
 msgid "There is already an invoice                                                 with this claim"
 msgstr "Ya hay una factura con esta reclamación"
@@ -240,10 +245,9 @@ msgstr "Este albarán no se sincronizará con Vstock"
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_equivalent_products_wizard
 msgid "Wizard for change products in claim."
-msgstr "Asistente para cambiar los productos de las reclamaciones."
+msgstr "Assistente para cambiar productos en reclamaciones."
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_wizard
 msgid "Wizard to create pickings from claim lines"
 msgstr "Asistente para crear envíos desde la línea de reclamación"
-
