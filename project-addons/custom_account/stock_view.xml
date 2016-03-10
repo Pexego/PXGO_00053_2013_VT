@@ -43,5 +43,15 @@
             </field>
         </record>
 
+        <record id="stock_account.action_history_tree" model="ir.actions.act_window">
+            <field name="name">Current Inventory Valuation</field>
+            <field name="res_model">stock.history</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="domain">[('date','&lt;=',time.strftime('%Y-%m-%d %H:%M:%S'))]</field>
+            <field name="context">{'history_date': time.strftime('%Y-%m-%d %H:%M:%S')}</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,graph</field>
+    </record>
+
     </data>
 </openerp>
