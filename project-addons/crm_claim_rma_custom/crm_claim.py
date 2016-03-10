@@ -110,36 +110,37 @@ class CrmClaimRma(models.Model):
                     raise exceptions.Warning(
                         _("There is at least one line of the claim with \
                            an incorrect invoice"))
-            else:
-                product = claim_line.product_id.id
-                pricelist = claim_obj.partner_id.property_product_pricelist.id
-                quantity = claim_line.product_returned_quantity
-                price = self.pool.get('product.pricelist').price_get(cr, uid,
-                        [pricelist],product, quantity or 1.0,
-                        claim_obj.partner_id, {
-                            'uom': claim_line.product_id.uom_id.id or \
-                                result.get('product_uom'),
-                            'date': claim_obj.date,
-                            })[pricelist]
-                account_tax = self.pool.get('account.tax')
-                account_fiscal_position = \
-                    self.pool.get('account.fiscal.position')
-                fiscal_position = claim_obj.partner_id.property_account_position
-                taxes_ids = account_fiscal_position.\
-                    map_tax(cr, uid, fiscal_position,
-                            claim_line.product_id.taxes_id)
-                price_subtotal = quantity * price
-                vals = {
-                    'claim_id': claim_line.claim_id.id,
-                    'claim_number': claim_line.claim_id.number,
-                    'product_id': product,
-                    'claim_line_id': claim_line.id,
-                    'product_description': claim_line.product_id.name,
-                    'qty': quantity,
-                    'price_unit': price,
-                    'tax_ids': [(6, 0, taxes_ids)]
-                }
-            claim_inv_line_obj.create(cr, uid, vals, context)
+            #~ else:
+                #~ product = claim_line.product_id.id
+                #~ pricelist = claim_obj.partner_id.property_product_pricelist.id
+                #~ quantity = claim_line.product_returned_quantity
+                #~ price = self.pool.get('product.pricelist').price_get(cr, uid,
+                        #~ [pricelist],product, quantity or 1.0,
+                        #~ claim_obj.partner_id, {
+                            #~ 'uom': claim_line.product_id.uom_id.id or \
+                                #~ result.get('product_uom'),
+                            #~ 'date': claim_obj.date,
+                            #~ })[pricelist]
+                #~ account_tax = self.pool.get('account.tax')
+                #~ account_fiscal_position = \
+                    #~ self.pool.get('account.fiscal.position')
+                #~ fiscal_position = claim_obj.partner_id.property_account_position
+                #~ taxes_ids = account_fiscal_position.\
+                    #~ map_tax(cr, uid, fiscal_position,
+                            #~ claim_line.product_id.taxes_id)
+                #~ price_subtotal = quantity * price
+                #~ vals = {
+                    #~ 'claim_id': claim_line.claim_id.id,
+                    #~ 'claim_number': claim_line.claim_id.number,
+                    #~ 'product_id': product,
+                    #~ 'claim_line_id': claim_line.id,
+                    #~ 'product_description': claim_line.product_id.name,
+                    #~ 'qty': quantity,
+                    #~ 'price_unit': price,
+                    #~ 'tax_ids': [(6, 0, taxes_ids)]
+                #~ }
+            if vals:
+                claim_inv_line_obj.create(cr, uid, vals, context)
 
     def onchange_partner_id(self, cr, uid, ids, partner_id, email=False,
                             context=None):
