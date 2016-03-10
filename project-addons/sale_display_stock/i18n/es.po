@@ -25,3 +25,96 @@ msgstr "Línea pedido de venta"
 #: field:sale.order.line,qty_available_wo_wh:0
 msgid "Qty. on kitchen"
 msgstr "Stock cocina"
+
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,discount:0
+msgid "Discount"
+msgstr "Descuento"
+
+#. module: sale_display_stock
+#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: sale_display_stock
+#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
+#: field:sale.order.line.report,order_id:0
+msgid "Order"
+msgstr "Pedido"
+
+#. module: sale_display_stock
+#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
+#: field:sale.order.line.report,partner_id:0
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,price_unit:0
+msgid "Price unit"
+msgstr "Precio unidad"
+
+#. module: sale_display_stock
+#: model:ir.model,name:sale_display_stock.model_product_product
+#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
+#: field:sale.order.line.report,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,qty_kitchen:0
+msgid "Qty in kitchen"
+msgstr "Stock cocina"
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,product_qty:0
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: sale_display_stock
+#: view:sale.order.line.report:sale_display_stock.sale_order_line_report_tree
+msgid "Sale line report"
+msgstr "Informe de lineas de venta"
+
+#. module: sale_display_stock
+#: model:ir.actions.act_window,name:sale_display_stock.action_sale_order_line_report
+#: model:ir.ui.menu,name:sale_display_stock.sale_order_line_report_menu
+msgid "Sale lines report"
+msgstr "Informe de lineas de venta"
+
+#. module: sale_display_stock
+#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
+#: field:sale.order.line.report,salesman_id:0
+msgid "Salesperson"
+msgstr "Comercial"
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,state:0
+msgid "State"
+msgstr "Estado"
+
+#. module: sale_display_stock
+#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
+msgid "Status"
+msgstr "Estado"
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,qty_stock:0
+msgid "Stock qty"
+msgstr "Stock"
+
+#. module: sale_display_stock
+#: field:sale.order.line.report,uom:0
+msgid "UoM"
+msgstr "UdM"
+

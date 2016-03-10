@@ -34,6 +34,7 @@ Sales display stock
     "depends": ["base", "sale", "stock"],
     "data": [
         "sale_view.xml",
+        "report/sale_order_line_report.xml"
     ],
     "demo": [],
     'auto_install': False,
