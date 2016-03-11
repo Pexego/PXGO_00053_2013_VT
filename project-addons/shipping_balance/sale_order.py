@@ -82,20 +82,3 @@ class sale_order_line(models.Model):
         if line2:
             line2.unlink()
         return True
-
-    @api.constrains('price_unit')
-    def _check_description(self):
-        old_value = self.env['shipping.balance'].search([('sale_id', '=', self.order_id.id)]).amount
-        old_line_value = self.env['sale.order.line'].search([('id', '=', self.id)]).price_unit
-
-        amount_untaxed = self.order_id.amount_untaxed - old_line_value + self.price_unit
-        if amount_untaxed <0:
-            raise ValidationError("Total amount must be > 0")
-        if self.product_id.shipping_balance:
-            if self.price_unit > 0:
-                raise ValidationError("Price unit must be < 0. (Discount)")
-
-            if (self.order_id.amount_shipping_balance - old_value + self.price_unit) < 0:
-                raise ValidationError("Not enough Shipping Balance.")
-
-            self.env['shipping.balance'].search([('sale_id', '=', self.order_id.id)]).write({'amount': self.price_unit})
