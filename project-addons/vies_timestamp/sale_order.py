@@ -57,13 +57,13 @@ class sale_order(osv.osv):
                 res = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
                 result = bool(res["valid"])
             except:
-                result = False
+                result = None
 
-            if result:
+            if result is not None:
                 vals = {'vies_validation_check': result, 'vies_validation_timestamp': date_now}
                 from reportlab.pdfgen import canvas
                 sale = self.browse(cr, uid, ids)
-                name = '%s.pdf' % sale.name.replace(" ","").replace("\\","").replace("/","").replace("-","_")
+                name = '%s_VIES.pdf' % sale.name.replace(" ","").replace("\\","").replace("/","").replace("-","_")
                 c = canvas.Canvas(name)
                 height= 700
                 for key in dict(res):

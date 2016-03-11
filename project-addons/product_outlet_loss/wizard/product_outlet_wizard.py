@@ -65,9 +65,7 @@ class product_outlet_wizard(models.TransientModel):
     commercial_cost = fields.Float(
         'Commercial Cost',
         default=lambda self:
-        self.env['product.product'].browse(self.env.context.get('active_id', False)).commercial_cost *
-        (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
-        / 100)
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).commercial_cost)
 
     percent = fields.Char('Default Outlet Price in %', default=lambda self: self.env['product.product'].browse(
         self.env.context.get('active_id', False)).company_id.outlet_per_cent, Readonly=True)
