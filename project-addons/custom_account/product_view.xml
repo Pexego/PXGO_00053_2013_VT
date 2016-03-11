@@ -7,7 +7,7 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
             <field name="arch" type="xml">
-                <button name= "%(stock.act_product_stock_move_open)d" >
+                <button name= "%(stock.act_product_stock_move_open)d" position="replace">
                     <button class="oe_inline oe_stat_button" string="Moves" name= "%(stock.act_product_stock_move_open)d" type="action" attrs="{'invisible':[('type', '=', 'service')]}" icon="fa-arrows-v"/>
                 </button>
                 <page string="Sales" position="attributes">
