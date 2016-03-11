@@ -38,13 +38,16 @@ as children of the pack product.
     "author": "Agile Business Group & NaN·tic",
     "website": "http://www.agilebg.com",
     "depends": [
-        'product',
+        'account',
         'sale',
+        'sale_stock',
+        'stock_account',
         'purchase',
     ],
     "data": [
         'security/ir.model.access.csv',
-        'pack_view.xml'
+        'pack_view.xml',
+        'views/report_saleorder.xml'
     ],
     "installable": True
 }

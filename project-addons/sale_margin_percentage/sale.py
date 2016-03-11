@@ -35,7 +35,8 @@ class sale_order_line(models.Model):
         self.margin_perc = 0.0
         self.purchase_price = 0.0
 
-        if self.product_id and self.product_id.standard_price:
+        if self.product_id and self.product_id.standard_price and \
+                not self.pack_depth:
             self.purchase_price = self.product_id.standard_price
             margin = round((self.price_unit * self.product_uom_qty *
                             ((100.0 - self.discount) / 100.0)) -
@@ -68,7 +69,7 @@ class sale_order(models.Model):
         margin = 0.0
         if total_purchase != 0:
             for line in self.order_line:
-                if not line.deposit:
+                if not line.deposit and not line.pack_depth:
                     margin += line.margin or 0.0
             self.margin = round((margin * 100) / total_purchase, 2)
 
@@ -78,7 +79,7 @@ class sale_order(models.Model):
         for line in self.order_line:
             # ADDED for dependency with stock_deposit for not count
             # deposit in total margin
-            if not line.deposit:
+            if not line.deposit and not line.pack_depth:
                 if line.purchase_price:
                     self.total_purchase += line.purchase_price * \
                         line.product_uom_qty

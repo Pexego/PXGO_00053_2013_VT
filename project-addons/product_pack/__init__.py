@@ -20,4 +20,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-import pack
+from . import product
+from . import sale
+from . import purchase
+from . import stock

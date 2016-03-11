@@ -26,7 +26,7 @@
     'description': """""",
     'author': 'Pexego',
     'website': '',
-    "depends": ['sale', 'stock', 'sale_stock'],
+    "depends": ['sale', 'stock', 'sale_stock', 'product_pack'],
     "data": [
         'views/valued_picking_report.xml',
         # 'stock_report.xml',

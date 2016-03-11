@@ -26,8 +26,8 @@
     'description': """
     """,
     'author':'Pexego',
-    'depends':['sale', 'stock_deposit', 'pmp_landed_costs'],
-    'data':["sale_view.xml"],
+    'depends':['sale', 'stock_deposit', 'pmp_landed_costs', 'product_pack'],
+    'data':["sale_view.xml", "sale_report_view.xml"],
     'auto_install': False,
     'installable': True,
 }
