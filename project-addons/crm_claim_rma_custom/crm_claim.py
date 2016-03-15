@@ -314,6 +314,10 @@ class CrmClaimLine(models.Model):
 
     name = fields.Char(required=False)
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
+    substate_id = fields.\
+        Many2one(default=lambda self:
+                 self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
+
     res = {}
 
     @api.model

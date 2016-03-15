@@ -51,7 +51,7 @@ class stock_picking(models.Model):
                             if move.claim_line_id.equivalent_product_id:
                                 move.claim_line_id.substate_id = self.env.ref(
                                     'crm_claim_rma_custom.substate_replaced')
-                            else:
+                            elif not move.claim_line_id.repair_id:
                                 move.claim_line_id.substate_id = self.env.ref(
                                     'crm_claim_rma_custom.substate_returned')
         return super(stock_picking, self).do_transfer()
