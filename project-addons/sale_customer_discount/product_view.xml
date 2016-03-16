@@ -7,9 +7,17 @@
             <field name="inherit_id" ref="product.product_product_tree_view"/>
             <field eval="1" name="priority"/>
             <field name="arch" type="xml">
-                <field name="lst_price" position="after">
-                    <field name="list_price2"/>
-                    <field name="list_price3"/>
+                <field name="lst_price" position="replace">
+                    <field name="lst_price" string="PVP A"/>
+                    <field name="list_price2" string="PVP B"/>
+                    <field name="list_price3" string="PVP C"/>
+                </field>
+                <field name="uom_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="attribute_value_ids" position="replace"/>
+                <field name="ean13" position="after">
+                    <field name="categ_id"/>
                 </field>
             </field>
         </record>
