@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    Copyright (C) 2015-2016 Comunitea Servicios Tecnológicos
 #    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
+#    $Omar Castiñeira saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -37,11 +38,32 @@ class product_pack(orm.Model):
         ),
     }
 
+    def update_pack_products(self, cr, uid, ids, context=None):
+        for update_line in self.browse(cr, uid, ids):
+            cost_price = 0.0
+            for pack_line in update_line.parent_product_id.pack_line_ids:
+                cost_price += (pack_line.product_id.standard_price *
+                               pack_line.quantity)
+            update_line.parent_product_id.write({'standard_price': cost_price})
+        return True
+
+    def create(self, cr, uid, vals, context=None):
+        res = super(product_pack, self).create(cr, uid, vals, context=context)
+        self.update_pack_products(cr, uid, [res], context=context)
+        return res
+
+    def write(self, cr, uid, ids, vals, context):
+        res = super(product_pack, self).write(cr, uid, ids, vals,
+                                              context=context)
+        self.update_pack_products(cr, uid, ids, context=context)
+        return res
+
 
 class product_product(orm.Model):
     _inherit = 'product.product'
 
-    def _product_available(self, cr, uid, ids, field_names=None, arg=False, context=None):
+    def _product_available(self, cr, uid, ids, field_names=None, arg=False,
+                           context=None):
         res = {}
         for product in self.browse(cr, uid, ids, context=context):
             stock = super(product_product, self)._product_available(
@@ -65,7 +87,12 @@ class product_product(orm.Model):
                         continue
                     if first_subproduct:
                         subproduct_quantity = subproduct.quantity
-                        subproduct_stock = self._product_available(cr, uid, [subproduct.product_id.id], field_names, arg, context)[subproduct.product_id.id]['qty_available']
+                        result = self.\
+                            _product_available(cr, uid,
+                                               [subproduct.product_id.id],
+                                               field_names, arg, context)
+                        subproduct_stock = result[subproduct.product_id.id]
+                        subproduct_stock = subproduct_stock['qty_available']
                         if subproduct_quantity == 0:
                             continue
 
@@ -78,7 +105,11 @@ class product_product(orm.Model):
 
                     # Take the info of the next subproduct
                     subproduct_quantity_next = subproduct.quantity
-                    subproduct_stock_next = self._product_available(cr, uid, [subproduct.product_id.id], field_names, arg, context)[subproduct.product_id.id]['qty_available']
+                    result2 = self.\
+                        _product_available(cr, uid, [subproduct.product_id.id],
+                                           field_names, arg,
+                                           context)[subproduct.product_id.id]
+                    subproduct_stock_next = result2['qty_available']
 
                     if (
                         subproduct_quantity_next == 0
@@ -105,7 +136,8 @@ class product_product(orm.Model):
         return res
 
     def _search_product_quantity(self, cr, uid, obj, name, domain, context):
-        return super(product_product, self)._search_product_quantity(cr, uid, obj, name, domain, context)
+        return super(product_product, self).\
+            _search_product_quantity(cr, uid, obj, name, domain, context)
 
     _columns = {
         'stock_depends': fields.boolean(
@@ -124,38 +156,42 @@ class product_product(orm.Model):
             'product.pack.line', 'parent_product_id', 'Pack Products',
             help='List of products that are part of this pack.'
         ),
-        'qty_available': fields.function(_product_available, multi='qty_available',
-            type='float', digits_compute=dp.get_precision('Product Unit of Measure'),
-            string='Quantity On Hand',
-            fnct_search=_search_product_quantity,
-            help="Current quantity of products.\n"
-                 "In a context with a single Stock Location, this includes "
-                 "goods stored at this Location, or any of its children.\n"
-                 "In a context with a single Warehouse, this includes "
-                 "goods stored in the Stock Location of this Warehouse, or any "
-                 "of its children.\n"
-                 "stored in the Stock Location of the Warehouse of this Shop, "
-                 "or any of its children.\n"
-                 "Otherwise, this includes goods stored in any Stock Location "
-                 "with 'internal' type."),
-        'virtual_available': fields.function(_product_available, multi='qty_available',
-            type='float', digits_compute=dp.get_precision('Product Unit of Measure'),
-            string='Forecast Quantity',
-            fnct_search=_search_product_quantity,
-            help="Forecast quantity (computed as Quantity On Hand "
+        'qty_available': fields.
+        function(_product_available, multi='qty_available',
+                 type='float',
+                 digits_compute=
+                 dp.get_precision('Product Unit of Measure'),
+                 string='Quantity On Hand',
+                 fnct_search=_search_product_quantity,
+                 help="Current quantity of products.\n"
+                      "In a context with a single Stock Location, this "
+                      "includes goods stored at this Location, or any of its "
+                      "children.\nIn a context with a single Warehouse, this "
+                      "includes goods stored in the Stock Location of this "
+                      "Warehouse, or any of its children.\n"
+                      "Stored in the Stock Location of the Warehouse of this "
+                      "Shop, or any of its children.\n"
+                      "Otherwise, this includes goods stored in any Stock "
+                      "Location with 'internal' type."),
+        'virtual_available': fields.
+        function(_product_available, multi='qty_available', type='float',
+                 digits_compute=dp.get_precision('Product Unit of Measure'),
+                 string='Forecast Quantity',
+                 fnct_search=_search_product_quantity,
+                 help="Forecast quantity (computed as Quantity On Hand "
                  "- Outgoing + Incoming)\n"
                  "In a context with a single Stock Location, this includes "
                  "goods stored in this location, or any of its children.\n"
                  "In a context with a single Warehouse, this includes "
-                 "goods stored in the Stock Location of this Warehouse, or any "
-                 "of its children.\n"
+                 "goods stored in the Stock Location of this Warehouse, or "
+                 "any of its children.\n"
                  "Otherwise, this includes goods stored in any Stock Location "
                  "with 'internal' type."),
-        'incoming_qty': fields.function(_product_available, multi='qty_available',
-            type='float', digits_compute=dp.get_precision('Product Unit of Measure'),
-            string='Incoming',
-            fnct_search=_search_product_quantity,
-            help="Quantity of products that are planned to arrive.\n"
+        'incoming_qty': fields.
+        function(_product_available, multi='qty_available', type='float',
+                 digits_compute=dp.get_precision('Product Unit of Measure'),
+                 string='Incoming', fnct_search=_search_product_quantity,
+                 help="Quantity of products that are planned to arrive.\n"
                  "In a context with a single Stock Location, this includes "
                  "goods arriving to this Location, or any of its children.\n"
                  "In a context with a single Warehouse, this includes "
@@ -163,11 +199,11 @@ class product_product(orm.Model):
                  "any of its children.\n"
                  "Otherwise, this includes goods arriving to any Stock "
                  "Location with 'internal' type."),
-        'outgoing_qty': fields.function(_product_available, multi='qty_available',
-            type='float', digits_compute=dp.get_precision('Product Unit of Measure'),
-            string='Outgoing',
-            fnct_search=_search_product_quantity,
-            help="Quantity of products that are planned to leave.\n"
+        'outgoing_qty': fields.
+        function(_product_available, multi='qty_available', type='float',
+                 digits_compute=dp.get_precision('Product Unit of Measure'),
+                 string='Outgoing', fnct_search=_search_product_quantity,
+                 help="Quantity of products that are planned to leave.\n"
                  "In a context with a single Stock Location, this includes "
                  "goods leaving this Location, or any of its children.\n"
                  "In a context with a single Warehouse, this includes "
@@ -180,3 +216,20 @@ class product_product(orm.Model):
     _defaults = {
         'pack_fixed_price': True,
     }
+
+    def write(self, cr, uid, ids, vals, context=None):
+        pack_lines_to_update = []
+        if 'standard_price' in vals:
+            for prod in self.browse(cr, uid, ids, context=context):
+                if vals['standard_price'] != prod.standard_price:
+                    pline_ids = self.pool.get('product.pack.line').\
+                        search(cr, uid, [('product_id', '=', prod.id)])
+                    if pline_ids:
+                        pack_lines_to_update.extend(pline_ids)
+        res = super(product_product, self).write(cr, uid, ids, vals,
+                                                 context=context)
+        if pack_lines_to_update:
+            self.pool.get('product.pack.line').\
+                update_pack_products(cr, uid, pack_lines_to_update,
+                                     context=context)
+        return res
