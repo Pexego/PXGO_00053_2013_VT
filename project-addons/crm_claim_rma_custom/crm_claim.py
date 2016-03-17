@@ -45,7 +45,7 @@ class CrmClaimRma(models.Model):
     priority = fields.Selection(default=0, selection=[('1', 'High'),
                                                       ('2', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
-    date = fields.Date('Claim Date', select=True)
+    date = fields.Date('Claim Date', select=True, default=fields.Date.today())
     date_received = fields.Date('Received Date')
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
