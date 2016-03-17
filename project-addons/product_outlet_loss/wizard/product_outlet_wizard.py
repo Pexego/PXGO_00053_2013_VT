@@ -86,10 +86,6 @@ class product_outlet_wizard(models.TransientModel):
         create_loss=False
         if self.state == "first":
             res = super(product_outlet_wizard, self).make_move()
-            if self.all_product:
-                #Nuevos precios. En este caso el product.id es el mismo
-                act_prod = True
-                create_loss = True
         else:
             if self.qty_available < self.qty:
                 raise ValidationError(_("Qty to outlet must be <= qty available"))

@@ -13,7 +13,6 @@
                         <field invisible="1" name="state" />
                         <field name="warehouse_id"/>
                         <group states="first">
-                            <field name="all_product"/>
                         </group>
                         <group states="last">
                             <field name="qty"/>

@@ -39,7 +39,6 @@ class product_outlet_wizard(models.TransientModel):
     product_id = fields.Many2one('product.product', 'Product',
                                  default=lambda self:
                                  self.env.context.get('active_id', False))
-    all_product = fields.Boolean('Move all to outlet.')
     # categ_id = fields.Many2one('product.category', 'Category')
     categ_id = fields.Selection(selection='_get_outlet_categories',
                                 string='category')
@@ -54,7 +53,7 @@ class product_outlet_wizard(models.TransientModel):
     def onchange_warehouse(self):
         if self.warehouse_id:
             product = self.env['product.product'].\
-                with_context(warehouse_id = self.warehouse_id.id).\
+                with_context(warehouse_id=self.warehouse_id.id).\
                 browse(self.env.context['active_id'])
             self.qty = product.qty_available
         else:
@@ -63,7 +62,8 @@ class product_outlet_wizard(models.TransientModel):
     @api.model
     def _get_outlet_categories(self):
         res = []
-        outlet_categ_id = self.env.ref('product_outlet.product_category_outlet')
+        outlet_categ_id = self.env.\
+            ref('product_outlet.product_category_outlet')
         for categ in outlet_categ_id.child_id:
             res.append((categ.id, categ.name))
         return res
@@ -77,87 +77,83 @@ class product_outlet_wizard(models.TransientModel):
         move_obj = self.env['stock.move']
         categ_obj = self.env['product.category']
         outlet_tag = self.env.ref('product_outlet.tag_outlet')
-        # mover toda la cantidad
-        if self.all_product:
-            self.product_id.categ_id = outlet_categ_id
-            new_product = self.product_id
-            new_product.write({'tag_ids': [(4,outlet_tag.id)]})
 
+        ctx = dict(self.env.context)
+        ctx['warehouse_id'] = self.warehouse_id.id
+        product = self.env['product.product'].\
+            with_context(ctx).browse(self.product_id.id)
+        if self.state == 'first':
+            self.qty = product.qty_available
+            self.state = 'last'
+            return {
+                'type': 'ir.actions.act_window',
+                'res_model': 'product.outlet.wizard',
+                'view_mode': 'form',
+                'view_type': 'form',
+                'res_id': self.id,
+                'views': [(False, 'form')],
+                'target': 'new',
+            }
+
+        if self.qty > product.qty_available:
+            raise exceptions.except_orm(
+                _('Quantity error'),
+                _('the amount entered is greater than the quantity '
+                  'available in stock.'))
+        if product.categ_id == outlet_categ_id or \
+                product.categ_id.parent_id == outlet_categ_id:
+            raise exceptions.except_orm(
+                _('product error'),
+                _('This product is already in outlet category.'))
+
+        # crear nuevo producto
+        outlet_product = self.env['product.product'].search(
+            [('normal_product_id', '=', product.id),
+             ('categ_id', '=', int(self.categ_id))])
+        if not outlet_product:
+            new_product = product.copy(
+                {'categ_id': int(self.categ_id),
+                 'name': product.name + u' ' +
+                 categ_obj.browse(int(self.categ_id)).name,
+                 'default_code': product.default_code +
+                 categ_obj.browse(int(self.categ_id)).name,
+                 'image_medium': product.image_medium,
+                 'ean13': self.ean13 or False})
+            categ = self.env['product.category'].browse(int(self.categ_id))
+            tag = self.env['product.tag'].search([('name', '=',
+                                                   categ.name)])
+            if not tag:
+                outlet_tag = self.env.ref('product_outlet.tag_outlet')
+                tag = self.env['product.tag'].create(
+                    {'name': categ.name, 'parent_id': outlet_tag.id})
+            new_product.write({'tag_ids': [(4, tag.id)]})
+            new_product.normal_product_id = self.product_id
         else:
-            ctx = dict(self.env.context)
-            ctx['warehouse_id'] = self.warehouse_id.id
-            product = self.env['product.product'].\
-                with_context(ctx).browse(self.product_id.id)
-            if self.state == 'first':
-                self.qty = product.qty_available
-                self.state = 'last'
-                return {
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'product.outlet.wizard',
-                    'view_mode': 'form',
-                    'view_type': 'form',
-                    'res_id': self.id,
-                    'views': [(False, 'form')],
-                    'target': 'new',
-                }
+            new_product = outlet_product
 
-            if self.qty > product.qty_available:
-                raise exceptions.except_orm(
-                    _('Quantity error'),
-                    _('the amount entered is greater than the quantity '
-                      'available in stock.'))
-            if product.categ_id == outlet_categ_id or \
-                    product.categ_id.parent_id == outlet_categ_id:
-                raise exceptions.except_orm(
-                    _('product error'),
-                    _('This product is already in outlet category.'))
+        move_in = move_obj.create({'product_id': new_product.id,
+                                   'product_uom_qty': self.qty,
+                                   'location_id':
+                                   new_product.property_stock_inventory.id,
+                                   'location_dest_id': outlet_location.id,
+                                   'product_uom': new_product.uom_id.id,
+                                   'picking_type_id':
+                                   self.warehouse_id.in_type_id.id,
+                                   'partner_id':
+                                   self.env.user.company_id.partner_id.id,
+                                   'name': "OUTLET"})
+        move_out = move_obj.create({'product_id': product.id,
+                                    'product_uom_qty': self.qty,
+                                    'location_id': stock_location.id,
+                                    'location_dest_id':
+                                    product.property_stock_inventory.id,
+                                    'product_uom': product.uom_id.id,
+                                    'picking_type_id':
+                                    self.warehouse_id.out_type_id.id,
+                                    'move_dest_id': move_in.id,
+                                    'name': "OUTLET"})
 
-            # crear nuevo producto
-            outlet_product = self.env['product.product'].search(
-                [('normal_product_id', '=', product.id),
-                 ('categ_id', '=', int(self.categ_id))])
-            if not outlet_product:
-                new_product = product.copy(
-                    {'categ_id': int(self.categ_id),
-                     'name': product.name + u' ' +
-                     categ_obj.browse(int(self.categ_id)).name,
-                     'default_code': product.default_code +
-                     categ_obj.browse(int(self.categ_id)).name,
-                     'image_medium': product.image_medium,
-                     'ean13': self.ean13 or False})
-                categ = self.env['product.category'].browse(int(self.categ_id))
-                tag = self.env['product.tag'].search([('name', '=',
-                                                       categ.name)])
-                if not tag:
-                    outlet_tag = self.env.ref('product_outlet.tag_outlet')
-                    tag = self.env['product.tag'].create(
-                        {'name': categ.name, 'parent_id': outlet_tag.id})
-                new_product.write({'tag_ids': [(4, tag.id)]})
-                new_product.normal_product_id = self.product_id
-            else:
-                new_product = outlet_product
-
-            move_in = move_obj.create({'product_id': new_product.id,
-                                       'product_uom_qty': self.qty,
-                                       'location_id':
-                                       new_product.property_stock_inventory.id,
-                                       'location_dest_id': outlet_location.id,
-                                       'product_uom': new_product.uom_id.id,
-                                       'picking_type_id':
-                                       self.warehouse_id.in_type_id.id,
-                                       'name': "OUTLET"})
-            move_out = move_obj.create({'product_id': product.id,
-                                        'product_uom_qty': self.qty,
-                                        'location_id': stock_location.id,
-                                        'location_dest_id':
-                                        product.property_stock_inventory.id,
-                                        'product_uom': product.uom_id.id,
-                                        'picking_type_id':
-                                        self.warehouse_id.out_type_id.id,
-                                        'move_dest_id': move_in.id,
-                                        'name': "OUTLET"})
-
-            move_out.action_confirm()
-            move_out.action_assign()
-            move_in.action_confirm()
+        move_out.action_confirm()
+        move_out.action_assign()
+        move_in.action_confirm()
         return {'type': 'ir.actions.act_window_close'}
