@@ -39,6 +39,7 @@ class product_outlet_wizard(models.TransientModel):
                                 string='category')
     state = fields.Selection([('first', 'First'), ('last', 'Last')],
                              default='first')
+    ean13 = fields.Char('EAN13', size=13)
 
     @api.model
     def _get_outlet_categories(self):
@@ -100,7 +101,8 @@ class product_outlet_wizard(models.TransientModel):
                      categ_obj.browse(int(self.categ_id)).name,
                      'default_code': product.default_code +
                      categ_obj.browse(int(self.categ_id)).name,
-                     'image_medium': product.image_medium})
+                     'image_medium': product.image_medium,
+                     'ean13': self.ean13 or False})
                 categ = self.env['product.category'].browse(int(self.categ_id))
                 tag = self.env['product.tag'].search([('name', '=',
                                                        categ.name)])
