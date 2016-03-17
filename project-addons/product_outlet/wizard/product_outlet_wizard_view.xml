@@ -9,14 +9,17 @@
             <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Send product to wizard">
-                    <field invisible="1" name="state" />
-                    <group states="first">
-                        <field name="all_product"/>
-                    </group>
-                    <group states="last">
-                        <field name="qty"/>
-                        <field name="categ_id" attrs="{'required': [('state', '=', 'last')]}"/>
-                        <field name="ean13"/>
+                    <group>
+                        <field invisible="1" name="state" />
+                        <field name="warehouse_id"/>
+                        <group states="first">
+                            <field name="all_product"/>
+                        </group>
+                        <group states="last">
+                            <field name="qty"/>
+                            <field name="categ_id" attrs="{'required': [('state', '=', 'last')]}"/>
+                            <field name="ean13"/>
+                        </group>
                     </group>
                     <footer>
                         <button string="Send outlet" name="make_move" type="object" icon="gtk-ok"/>

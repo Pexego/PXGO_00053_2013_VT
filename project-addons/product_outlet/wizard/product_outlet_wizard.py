@@ -26,10 +26,16 @@ class product_outlet_wizard(models.TransientModel):
 
     _name = "product.outlet.wizard"
 
-    qty = fields.Float(
-        'Quantity',
-        default=lambda self: self.env['product.product'].browse(
-            self.env.context.get('active_id', False)).qty_available)
+    @api.model
+    def _get_default_warehouse(self):
+        company_id = self.env.user.company_id.id
+        warehouse_ids = self.env['stock.warehouse'].\
+            search([('company_id', '=', company_id)])
+        if not warehouse_ids:
+            return False
+        return warehouse_ids[0]
+
+    qty = fields.Float('Quantity')
     product_id = fields.Many2one('product.product', 'Product',
                                  default=lambda self:
                                  self.env.context.get('active_id', False))
@@ -40,6 +46,19 @@ class product_outlet_wizard(models.TransientModel):
     state = fields.Selection([('first', 'First'), ('last', 'Last')],
                              default='first')
     ean13 = fields.Char('EAN13', size=13)
+    warehouse_id = fields.Many2one('stock.warehouse', 'Warehouse',
+                                   required=True,
+                                   default=_get_default_warehouse)
+
+    @api.onchange('warehouse_id')
+    def onchange_warehouse(self):
+        if self.warehouse_id:
+            product = self.env['product.product'].\
+                with_context(warehouse_id = self.warehouse_id.id).\
+                browse(self.env.context['active_id'])
+            self.qty = product.qty_available
+        else:
+            self.qty = 0.0
 
     @api.model
     def _get_outlet_categories(self):
@@ -51,10 +70,11 @@ class product_outlet_wizard(models.TransientModel):
 
     @api.multi
     def make_move(self):
-        outlet_categ_id = self.env.ref('product_outlet.product_category_outlet')
-        stock_location = self.env.ref('stock.stock_location_stock')
+        outlet_categ_id = \
+            self.env.ref('product_outlet.product_category_outlet')
+        stock_location = self.warehouse_id.lot_stock_id
         outlet_location = self.env.ref('product_outlet.stock_location_outlet')
-        stock_change_qty_obj = self.env['stock.change.product.qty']
+        move_obj = self.env['stock.move']
         categ_obj = self.env['product.category']
         outlet_tag = self.env.ref('product_outlet.tag_outlet')
         # mover toda la cantidad
@@ -64,7 +84,12 @@ class product_outlet_wizard(models.TransientModel):
             new_product.write({'tag_ids': [(4,outlet_tag.id)]})
 
         else:
+            ctx = dict(self.env.context)
+            ctx['warehouse_id'] = self.warehouse_id.id
+            product = self.env['product.product'].\
+                with_context(ctx).browse(self.product_id.id)
             if self.state == 'first':
+                self.qty = product.qty_available
                 self.state = 'last'
                 return {
                     'type': 'ir.actions.act_window',
@@ -75,10 +100,7 @@ class product_outlet_wizard(models.TransientModel):
                     'views': [(False, 'form')],
                     'target': 'new',
                 }
-            ctx = dict(self.env.context)
-            ctx['location'] = stock_location.id
-            product = self.env['product.product'].\
-                with_context(ctx).browse(self.product_id.id)
+
             if self.qty > product.qty_available:
                 raise exceptions.except_orm(
                     _('Quantity error'),
@@ -114,14 +136,28 @@ class product_outlet_wizard(models.TransientModel):
                 new_product.normal_product_id = self.product_id
             else:
                 new_product = outlet_product
-            new_product = self.env['product.product'].\
-                with_context(ctx).browse(new_product.id)
-            stock_change_qty_obj.create(
-                {'product_id': product.id,
-                 'new_quantity': product.qty_available - self.qty,
-                 'location_id': stock_location.id}).change_product_qty()
 
-            stock_change_qty_obj.create({'product_id': new_product.id,
-                                         'new_quantity': new_product.qty_available + self.qty,
-                                         'location_id': outlet_location.id}).change_product_qty()
+            move_in = move_obj.create({'product_id': new_product.id,
+                                       'product_uom_qty': self.qty,
+                                       'location_id':
+                                       new_product.property_stock_inventory.id,
+                                       'location_dest_id': outlet_location.id,
+                                       'product_uom': new_product.uom_id.id,
+                                       'picking_type_id':
+                                       self.warehouse_id.in_type_id.id,
+                                       'name': "OUTLET"})
+            move_out = move_obj.create({'product_id': product.id,
+                                        'product_uom_qty': self.qty,
+                                        'location_id': stock_location.id,
+                                        'location_dest_id':
+                                        product.property_stock_inventory.id,
+                                        'product_uom': product.uom_id.id,
+                                        'picking_type_id':
+                                        self.warehouse_id.out_type_id.id,
+                                        'move_dest_id': move_in.id,
+                                        'name': "OUTLET"})
+
+            move_out.action_confirm()
+            move_out.action_assign()
+            move_in.action_confirm()
         return {'type': 'ir.actions.act_window_close'}
