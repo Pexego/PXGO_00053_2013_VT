@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_claim_picking_from_picking_add_sync_fields" model="ir.ui.view">
+            <field name="name">claim_picking_add_sync_fields</field>
+            <field name="model">claim_make_picking_from_picking.wizard</field>
+            <field name="inherit_id" ref="crm_rma_advance_location.view_claim_picking_from_picking"/>
+            <field name="arch" type="xml">
+                <field name="picking_line_dest_location" position="after">
+                    <group>
+                        <field name="odoo_management"/>
+                        <field name="not_sync"/>
+                    </group>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

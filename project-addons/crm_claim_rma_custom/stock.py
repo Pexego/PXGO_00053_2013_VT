@@ -24,10 +24,12 @@ from openerp import models, fields, api
 class stock_picking(models.Model):
     _inherit = "stock.picking"
 
-    internal_notes = fields.Text("Internal Notes")
-    odoo_management = fields.Boolean("Odoo management", readonly=True)
+    internal_notes = fields.Text("Internal Notes", copy=False)
+    odoo_management = fields.Boolean("Odoo management", readonly=True,
+                                     copy=False)
     not_sync = fields.Boolean("Not sync", help="This picking not will be "
-                                               "synced with Vstock")
+                                               "synced with Vstock",
+                              copy=False)
 
     def action_assign(self, cr, uid, ids, context=None):
         res = super(stock_picking, self).action_assign(cr, uid, ids,
