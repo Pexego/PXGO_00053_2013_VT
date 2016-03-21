@@ -35,7 +35,8 @@ Features:
     "depends": ["base",
                 "openerp_sale_promotions",
                 "equivalent_products",
-                 "stock_reserve_sale"],
+                "stock_reserve_sale",
+                "sale_product_customize"],
     "data": [
         "sale_view.xml",
         "rules_view.xml"

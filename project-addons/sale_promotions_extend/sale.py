@@ -64,6 +64,17 @@ class sale_order_line(osv.osv):
 
     _columns = {
         'product_tags': fields.function(_get_tags_product, string='Tags',
-                                        type='char',
-                                        size=255)
+                                        type='char', size=255)
     }
+
+
+class SaleOrder(osv.osv):
+
+    _inherit = "sale.order"
+
+    def apply_promotions(self, cursor, user, ids, context=None):
+        self._prepare_custom_line(cursor, user, ids, moves=False, context=context)
+        res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
+                                                      context=context)
+
+        return res

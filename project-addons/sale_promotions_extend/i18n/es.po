@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* sale_promotions_extend
+#       * sale_promotions_extend
 #
 msgid ""
 msgstr ""
@@ -17,49 +17,49 @@ msgstr ""
 
 #. module: sale_promotions_extend
 #: view:sale.order:sale_promotions_extend.view_sale_promo_form2_remove_button
-msgid "Apply Promotions"
-msgstr "Aplicar promociones"
+msgid "Compute final price"
+msgstr "Calcular precio final"
 
 #. module: sale_promotions_extend
 #: code:addons/sale_promotions_extend/rule.py:58
 #, python-format
 msgid "Buy X get Y free"
-msgstr "Buy X get Y free"
+msgstr "Compra X lleva Y gratis"
 
 #. module: sale_promotions_extend
 #: code:addons/sale_promotions_extend/rule.py:53
 #, python-format
 msgid "Discount % on Product"
-msgstr "Discount % on Product"
+msgstr "Descuento % en Producto"
 
 #. module: sale_promotions_extend
 #: code:addons/sale_promotions_extend/rule.py:56
 #, python-format
 msgid "Discount % on Sub Total"
-msgstr "Discount % on Sub Total"
+msgstr "Descuento % en Subtotal"
 
 #. module: sale_promotions_extend
 #: code:addons/sale_promotions_extend/rule.py:54
 #, python-format
 msgid "Discount % on Tag"
-msgstr "Discount % on Tag"
+msgstr "Descuento % en Tag"
 
 #. module: sale_promotions_extend
 #: model:ir.model,name:sale_promotions_extend.model_promos_rules_conditions_exps
 msgid "Expressions for conditions"
-msgstr "Expressions for conditions"
+msgstr "Expresiones para condiciones"
 
 #. module: sale_promotions_extend
 #: code:addons/sale_promotions_extend/rule.py:55
 #, python-format
 msgid "Fixed amount on Product"
-msgstr "Fixed amount on Product"
+msgstr "Importe fijo en producto"
 
 #. module: sale_promotions_extend
 #: code:addons/sale_promotions_extend/rule.py:57
 #, python-format
 msgid "Fixed amount on Sub Total"
-msgstr "Fixed amount on Sub Total"
+msgstr "Importe fijo en subtotal"
 
 #. module: sale_promotions_extend
 #: field:promos.rules.actions,product_tag:0
@@ -69,7 +69,7 @@ msgstr "Etiqueta producto"
 #. module: sale_promotions_extend
 #: model:ir.model,name:sale_promotions_extend.model_promos_rules_actions
 msgid "Promotions actions"
-msgstr "Promotions actions"
+msgstr "Acciones promociones"
 
 #. module: sale_promotions_extend
 #: model:ir.model,name:sale_promotions_extend.model_sale_order_line
@@ -85,5 +85,5 @@ msgstr "Etiquetas"
 #: code:addons/sale_promotions_extend/rule.py:37
 #, python-format
 msgid "Untaxed Total"
-msgstr "Untaxed Total"
+msgstr "Base imponible"
 

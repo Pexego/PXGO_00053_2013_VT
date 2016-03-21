@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="openerp_sale_promotions.view_sale_promo_form2" />
             <field name="arch" type="xml">
                 <button name="apply_promotions" position="replace">
-                    <button name="apply_promotions" type="object" states="draft,reserve" string="Apply Promotions" />
+                    <button name="apply_promotions" type="object" states="draft,reserve" string="Compute final price" />
                 </button>
             </field>
         </record>

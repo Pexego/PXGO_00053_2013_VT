@@ -50,7 +50,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.one
-    def _prepare_custom_line(self):
+    def _prepare_custom_line(self, moves=True):
         prod_obj = self.env['product.product']
         for line in self.order_line:
             new_line = False
@@ -84,26 +84,35 @@ class SaleOrder(models.Model):
                     product_code += u'|' + str(custom.code)
                 product = prod_obj.sudo().\
                     get_product_customized(product_code, line.can_mount_id)
-                if product.custom:
-                    for prodmount in line.product_id.can_mount_ids:
-                        if line.can_mount_id == prodmount:
-                            line.price_unit += \
-                                prodmount.product_id.lst_price * prodmount.qty
-                            product.standard_price = \
-                                line.product_id.standard_price + \
-                                prodmount.product_id.standard_price
 
-                final_line_dict = {
+                new_vals = self.env['sale.order.line'].\
+                    product_id_change(line.order_id.pricelist_id.id,
+                                      product.id, qty=line.product_uom_qty,
+                                      uom=product.uom_id.id, qty_uos=0,
+                                      uos=False, name=product.default_code,
+                                      partner_id=line.order_id.partner_id.id,
+                                      lang=line.order_id.partner_id.lang,
+                                      update_tax=True,
+                                      date_order=line.order_id.date_order,
+                                      packaging=False,
+                                      fiscal_position=
+                                      line.order_id.fiscal_position.id,
+                                      flag=False)
+
+                final_line_dict = new_vals['value']
+
+                final_line_dict.update({
                     'product_id': product.id,
                     'order_id': self.id,
                     'customization_types': [(6, 0, [x.id for x in
                                              line.customization_types])],
-                    'price_unit': line.price_unit,
                     'purchase_price': product.standard_price,
                     'delay': max([product.sale_delay, line.delay]),
                     'product_uom_qty': line.product_uom_qty,
-                    'product_uom': product.uom_id.id
-                }
+                    'product_uom': product.uom_id.id,
+                    'reservation_ids':
+                    [(6, 0, [x.id for x in line.reservation_ids])]
+                })
                 final_line = self.env['sale.order.line'].create(
                     final_line_dict)
                 new_line = True
@@ -114,7 +123,7 @@ class SaleOrder(models.Model):
                 final_line = False
 
             if final_line and product.virtual_available <= \
-                    final_line.product_uom_qty:
+                    final_line.product_uom_qty and moves:
                 bom_id = product.bom_ids[0]
                 productions = []
                 needed = final_line.product_uom_qty
@@ -147,13 +156,13 @@ class SaleOrder(models.Model):
 
     @api.one
     def order_reserve(self):
-        self._prepare_custom_line()
+        #self._prepare_custom_line()
         super(SaleOrder, self).order_reserve()
 
     @api.one
     def action_button_confirm(self):
         self._prepare_custom_line()
-        self.order_reserve()
+        #self.order_reserve()
         super(SaleOrder, self).action_button_confirm()
         for line in self.order_line:
             for production in line.mrp_production_ids:

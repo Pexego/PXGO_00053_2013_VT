@@ -26,8 +26,8 @@ class sale_order_line(models.Model):
 
     _inherit = 'sale.order.line'
 
-    unique_js_id = fields.Char('', size=64)
-    temp_unique_js_id = fields.Char('', size=64)
+    unique_js_id = fields.Char('', size=64, copy=False)
+    temp_unique_js_id = fields.Char('', size=64, copy=False)
 
     @api.multi
     def write(self, vals):
