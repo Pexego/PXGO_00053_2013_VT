@@ -26,7 +26,7 @@
     'description': """Possibility of check pickings as under incidence""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    "depends": ['stock'],
+    "depends": ['stock', 'crm_claim_rma_custom'],
     "data": ['picking_view.xml'],
     "installable": True
 }

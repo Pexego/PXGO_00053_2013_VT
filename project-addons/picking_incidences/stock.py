@@ -80,12 +80,21 @@ class StockPicking(models.Model):
                 new_moves.append(new_move)
         if new_moves:
             new_moves = self.env['stock.move'].browse(new_moves)
-            self._create_backorder(self, backorder_moves=new_moves)
+            bcko_id = self._create_backorder(self, backorder_moves=new_moves)
+            bck = self.browse(bcko_id)
+            if bck.picking_type_code == 'incoming':
+                bck.not_sync = True
+                if bck.picking_type_id.warehouse_id.lot_carrier_loss_id:
+                    loss_loc_id = bck.picking_type_id.warehouse_id.\
+                        lot_carrier_loss_id.id
+                    for move in bck.move_lines:
+                        move.location_dest_id = loss_loc_id
             new_moves.write({'qty_ready': 0.0})
             self.do_unreserve()
             self.recheck_availability()
         self.message_post(body=_("User %s accepted ready quantities.") %
                           (self.env.user.name))
+        self.action_done()
 
     @api.multi
     def action_assign(self):
