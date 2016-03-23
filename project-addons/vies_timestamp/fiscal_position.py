@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea All Rights Reserved
-#    @author Alberto Luengo Cabanillas
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos <www.comunitea.com>
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,15 +19,11 @@
 #
 ##############################################################################
 
-{
-    'name': "VIES timestamp",
-    'version': '1.0',
-    'category': 'visiotech',
-    'description': """Adds a VIES validation timestamp when confirming sale orders. Needs installed 'suds' library before.""",
-    'author': 'Alberto Luengo para Comunitea',
-    'website': 'luengocabanillas.com',
-    "depends": ['sale', 'partner_risk__stock_reserve__rel'],
-    "data": ['sale_order_view.xml', 'fiscal_position_view.xml',
-             'sale_workflow.xml'],
-    "installable": True
-}
+from openerp import fields, models
+
+
+class AccountFiscalPosition(models.Model):
+
+    _inherit = "account.fiscal.position"
+
+    require_vies_validation = fields.Boolean("Require vies validation")

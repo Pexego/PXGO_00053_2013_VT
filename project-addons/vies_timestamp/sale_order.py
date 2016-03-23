@@ -19,60 +19,76 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
-from openerp.tools.translate import _
-from openerp import tools
+from openerp import fields, models, _, tools, api, exceptions
 import time
 from urllib import getproxies
 
-class sale_order(osv.osv):
+
+class SaleOrder(models.Model):
     """
     Ejemplos de CIFS/NIFs que sí validan:
     BE0897290877
     RO19386256
     """
     _inherit = 'sale.order'
-    _columns = {
-        'vies_validation_check': fields.boolean('VAT Validated through VIES?', copy=False),
-        'vies_validation_timestamp': fields.datetime('Date when VAT validated through VIES', copy=False)
-    }
 
-    def check_vat_ext(self, cr, uid, ids, partner_vat, context):
+    vies_validation_check = fields.Boolean('VAT Validated through VIES?',
+                                           copy=False)
+    vies_validation_timestamp = fields.\
+        Datetime('Date when VAT validated through VIES', copy=False)
+    waiting_vies_validation = fields.Boolean('Waiting for vies validation',
+                                             copy=False, readonly=True)
+    force_vies_validation = fields.Boolean('Vies validation forced',
+                                           copy=False, readonly=True)
+
+    @api.multi
+    def check_vat_ext(self):
         """
         """
-        vat = partner_vat.replace(" ","")
         date_now = time.strftime('%Y-%m-%d %H:%M:%S')
-        if vat:
-            vat = vat.replace(' ','')
+        result = True
+        sale = self[0]
+        partner_vat = sale.partner_id.vat
+        url = "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
+        if partner_vat and not sale.force_vies_validation:
+            vat = partner_vat.replace(" ", "")
             try:
                 from suds.client import Client
             except:
-                raise osv.except_osv(_('Error'), _('import module "suds" failed - check VIES needs this module'))
+                raise exceptions.\
+                    Warning(_('import module "suds" failed - check VIES '
+                              'needs this module'))
 
-            country_code = '%s'%(vat[:2])
-            vat_number = '%s'%(vat[2:])
+            country_code = '%s' % (vat[:2])
+            vat_number = '%s' % (vat[2:])
             res = {}
             try:
-                client = Client("http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl", proxy=getproxies())
-                res = client.service.checkVat(countryCode=country_code, vatNumber=vat_number)
+                client = Client(url, proxy=getproxies())
+                res = client.service.\
+                    checkVat(countryCode=country_code, vatNumber=vat_number)
                 result = bool(res["valid"])
             except:
                 result = None
 
             if result is not None:
-                vals = {'vies_validation_check': result, 'vies_validation_timestamp': date_now}
+                vals = {'vies_validation_check': result,
+                        'vies_validation_timestamp': date_now,
+                        'waiting_vies_validation': False}
                 from reportlab.pdfgen import canvas
-                sale = self.browse(cr, uid, ids)
-                name = '%s_VIES.pdf' % sale.name.replace(" ","").replace("\\","").replace("/","").replace("-","_")
+                name = '%s_VIES.pdf' % sale.\
+                    name.replace(" ", "").replace("\\", "").replace("/", "").\
+                    replace("-", "_")
                 c = canvas.Canvas(name)
-                height= 700
+                height = 700
                 for key in dict(res):
-                    c.drawString(100, height, key + u": " + tools.ustr(res[key]).replace('\n',' '))
+                    c.drawString(100, height,
+                                 key + u": " + tools.ustr(res[key]).
+                                 replace('\n', ' '))
                     height = height - 25
                 c.showPage()
                 c.save()
                 a = open(name, "rb").read().encode("base64")
-                self.write(cr, uid, ids, vals)
+                sale.write(vals)
                 attach_vals = {
                     'name': name,
                     'datas_fname': name,
@@ -80,16 +96,31 @@ class sale_order(osv.osv):
                     'res_id': sale.id,
                     'res_model': 'sale.order',
                 }
-                self.pool.get('ir.attachment').create(cr, uid, attach_vals)
+                self.env['ir.attachment'].create(attach_vals)
+
+            if result is None or not result:
+                if sale.partner_id.property_account_position and \
+                        sale.partner_id.property_account_position.\
+                        require_vies_validation:
+                    result = False
+                    sale.write({'waiting_vies_validation': True})
+                else:
+                    result=True
+        return result
+
+    @api.multi
+    def action_force_vies_validation(self):
+        self.write({'force_vies_validation': True,
+                    'waiting_vies_validation': False})
+        for order in self:
+            followers = order.message_follower_ids
+            order.message_post(body=_("The user %s forced vies validation.") %
+                               self.env.user.name,
+                               subtype='mt_comment',
+                               partner_ids=followers)
         return True
 
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        """
-        Herencia del metodo de confirmar presupuesto para añadir una validación de CIF via el webservice de VIES
-        """
-        if context is None:
-            context = {}
-        for order in self.browse(cr, uid, ids, context=context):
-            if order.partner_id.vat:
-                self.check_vat_ext(cr, uid, ids, order.partner_id.vat, context)
-        return super(sale_order,self).action_button_confirm(cr, uid, ids, context)
+    @api.multi
+    def action_risk_approval(self):
+        self.check_vat_ext()
+        return super(SaleOrder, self).action_risk_approval()

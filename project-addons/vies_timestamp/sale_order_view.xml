@@ -4,12 +4,16 @@
         <record id="sale_order_form_add_vies_fields" model="ir.ui.view">
             <field name="name">sale.order.form.add.vies.fields</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="inherit_id" ref="nan_partner_risk.sale_order_form_risk"/>
             <field name="arch" type="xml">
                 <xpath expr="/form/sheet/notebook/page[@string='Other Information']" position="inside">
                     <group colspan="4" col="4" string="VIES validation results">
                         <field name="vies_validation_check" readonly="1"/>
                         <field name="vies_validation_timestamp" readonly="1"/>
+                        <field name="waiting_vies_validation"/>
+                        <button name="check_vat_ext" type="object" string="Check vies validation" attrs="{'invisible': [('waiting_vies_validation', '=', False)]}"/>
+                        <button name="action_force_vies_validation" type="object" string="Force vies validation" attrs="{'invisible': [('waiting_vies_validation', '=', False)]}" groups="base.group_sale_manager"/>
+                        <field name="force_vies_validation"/>
                     </group>
                 </xpath>
             </field>

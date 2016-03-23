@@ -33,7 +33,7 @@ class sale_order(orm.Model):
             ('reserve', 'Reserved'),
             ('waiting_date', 'Waiting Schedule'),
             ('wait_risk', 'Waiting Risk Approval'),
-            ('risk_approval', 'Risk approval'),
+            ('risk_approval', 'Risk & VIES approval'),
             ('progress', 'Sales Order'),
             ('manual', 'Sale to Invoice'),
             ('shipping_except', 'Shipping Exception'),
