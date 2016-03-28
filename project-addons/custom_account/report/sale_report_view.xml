@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_order_product_search_add_brand" model="ir.ui.view">
+            <field name="name">sale.report.search.add_brand</field>
+            <field name="model">sale.report</field>
+            <field name="inherit_id" ref="sale.view_order_product_search"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="after">
+                    <field name="brand_id"/>
+                </field>
+                <filter name="Category" position="after">
+                    <filter string="Brand of Product" name="Brand" context="{'group_by':'brand_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+    </data>
+</openerp>

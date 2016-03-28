@@ -6,14 +6,25 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-01 16:00+0000\n"
-"PO-Revision-Date: 2016-02-01 16:00+0000\n"
+"POT-Creation-Date: 2016-03-28 10:22+0000\n"
+"PO-Revision-Date: 2016-03-28 10:22+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: custom_account
+#: code:addons/custom_account/stock.py:56
+#, python-format
+msgid "%s (copy)"
+msgstr "%s (copia)"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_account_banking_mandate
+msgid "A generic banking mandate"
+msgstr "Un mandato bancario genérico"
 
 #. module: custom_account
 #: field:account.invoice,attach_picking:0
@@ -27,9 +38,14 @@ msgid "Benefit"
 msgstr "Beneficio"
 
 #. module: custom_account
-#: field:account.move.line,scheme:0
-msgid "Scheme"
-msgstr "Esquema"
+#: field:sale.report,brand_id:0
+msgid "Brand"
+msgstr "Marca"
+
+#. module: custom_account
+#: view:sale.report:custom_account.view_order_product_search_add_brand
+msgid "Brand of Product"
+msgstr "Marca del producto"
 
 #. module: custom_account
 #: field:sale.report,cost_price:0
@@ -64,8 +80,8 @@ msgstr "Plantillas email"
 
 #. module: custom_account
 #: field:purchase.order,end_manufacture:0
-msgid "End Manufacture Date"
-msgstr "Fecha fin fabricación"
+msgid "Ending Date Of Manufacture"
+msgstr "Fecha fin producción"
 
 #. module: custom_account
 #: field:purchase.order,estimated_arrival_date:0
@@ -99,6 +115,11 @@ msgid "It indicates that Telex release is necessary"
 msgstr "Indica que 'Telex release' es necesario"
 
 #. module: custom_account
+#: model:ir.model,name:custom_account.model_account_move_line
+msgid "Journal Items"
+msgstr "Apuntes contables"
+
+#. module: custom_account
 #: field:purchase.order,manufacture_date:0
 msgid "Manufacture Date"
 msgstr "Fecha fabricación"
@@ -107,6 +128,11 @@ msgstr "Fecha fabricación"
 #: field:account.invoice.line,move_id:0
 msgid "Move"
 msgstr "Movimiento"
+
+#. module: custom_account
+#: view:product.product:custom_account.product_form_view_procurement_button
+msgid "Moves"
+msgstr "Movimientos"
 
 #. module: custom_account
 #: field:res.partner,newsletter:0
@@ -146,9 +172,9 @@ msgid "Purchase Order Line"
 msgstr "Línea pedido de compra"
 
 #. module: custom_account
-#: view:sale.report:custom_account.view_order_product_graph2
-msgid "Sales Analysis"
-msgstr "Análisis de ventas"
+#: view:product.product:custom_account.product_form_view_procurement_button
+msgid "Sales"
+msgstr "Ventas"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_sale_order
@@ -171,6 +197,16 @@ msgid "Salesperson"
 msgstr "Comercial"
 
 #. module: custom_account
+#: field:account.move.line,scheme:0
+msgid "Scheme"
+msgstr "Esquema"
+
+#. module: custom_account
+#: field:account.banking.mandate,default:0
+msgid "Set default"
+msgstr "Por defecto"
+
+#. module: custom_account
 #: model:ir.model,name:custom_account.model_stock_move
 msgid "Stock Move"
 msgstr "Movimiento de existencias"
@@ -186,21 +222,28 @@ msgid "Terms and conditions..."
 msgstr "Términos y condiciones..."
 
 #. module: custom_account
+#: sql_constraint:product.product:0
+msgid "The code of product must be unique."
+msgstr "El código del producto debe ser único."
+
+#. module: custom_account
+#: code:addons/custom_account/purchase.py:37
+#, python-format
+msgid "Unable to cancel the purchase order %s."
+msgstr "No se puede cancelar el pedido de compra %s."
+
+#. module: custom_account
+#: code:addons/custom_account/purchase.py:38
+#, python-format
+msgid "You have already received some goods for it.  "
+msgstr "Ya se ha recibido alguna mercancía de él."
+
+#. module: custom_account
 #: constraint:product.product:0
 msgid "You provided an invalid \"EAN13 Barcode\" reference. You may use the \"Internal Reference\" field instead."
 msgstr "Ha introducido un código EAN13 no válido. Debe usar el campo \"Referencia interna\" en su lugar."
 
 #. module: custom_account
-#: view:website:report.external_layout_header
-msgid "col-xs-12"
-msgstr "col-xs-12"
-
-#. module: custom_account
 #: view:account.invoice.report:custom_account.account_invoice_report_add_filters
 msgid "country"
 msgstr "País"
-
-#. module: custom_account
-#: view:purchase.order:custom_account.purchase_order_form_inherit
-msgid "onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)"
-msgstr "onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)"

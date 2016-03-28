@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos, S.L.
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,5 +18,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import account_invoice_report
-from . import sale_report
+
+from openerp import models, fields
+
+
+class SaleReport(models.Model):
+    _inherit = 'sale.report'
+
+    brand_id = fields.Many2one('product.brand', 'Brand')
+
+    def _select(self):
+        select_str = """, t.product_brand_id as brand_id"""
+        return super(SaleReport, self)._select() + select_str
+
+    def _group_by(self):
+        group_by_str = """, t.product_brand_id"""
+        return super(SaleReport, self)._group_by() + group_by_str
