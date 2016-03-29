@@ -18,6 +18,7 @@
                 <field name="title" position="after">
                     <field name="ref"/>
                     <field name="user_id"/>
+                    <field name="dropship" attrs="{'invisible': [('type', '!=', 'delivery')]}"/>
                 </field>
             </field>
         </record>

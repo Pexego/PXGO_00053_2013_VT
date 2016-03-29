@@ -44,4 +44,18 @@ class ResPartner(models.Model):
     sale_product_count = fields.Integer(compute=_get_products_sold,
                                         string="# Products sold",
                                         readonly=True)
-    invoice_type_id = fields.Many2one('res.partner.invoice.type', 'Invoice type')
+    invoice_type_id = fields.Many2one('res.partner.invoice.type',
+                                      'Invoice type')
+    dropship = fields.Boolean("Dropship")
+
+    @api.model
+    def create(self, vals):
+        if vals.get('dropship', False):
+            vals['active'] = False
+        return super(ResPartner, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        if vals.get('dropship', False):
+            vals['active'] = False
+        return super(ResPartner, self).write(vals)
