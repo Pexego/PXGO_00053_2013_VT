@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="midban_view_partner_form_not_print" model="ir.ui.view">
+            <field name="name">midban.view.partner.form.not_print</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="stock_valued_picking.midban_view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="valued_picking" position="after">
+                    <field name="not_print_picking"/>
+                </field>
+            </field>
+        </record>
+
+
+    </data>
+</openerp>

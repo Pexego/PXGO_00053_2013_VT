@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* stock_custom
+#       * stock_custom
 #
 msgid ""
 msgstr ""
@@ -26,6 +26,21 @@ msgid "Internal Notes"
 msgstr "Notas internas"
 
 #. module: stock_custom
+#: field:stock.move,lots_text:0
+msgid "Lots"
+msgstr "Lotes"
+
+#. module: stock_custom
+#: field:res.partner,not_print_picking:0
+msgid "Not print picking"
+msgstr "No imprimir albarán"
+
+#. module: stock_custom
+#: help:res.partner,not_print_picking:0
+msgid "Only print attachments on picking with attachs. report"
+msgstr "Sólo imprime los adjuntos en el informe de albaran con adjuntos"
+
+#. module: stock_custom
 #: model:ir.model,name:stock_custom.model_stock_picking
 msgid "Picking List"
 msgstr "Albarán"
@@ -46,7 +61,18 @@ msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: stock_custom
+#: code:addons/stock_custom/stock.py:42
+#, python-format
+msgid "The number of lots defined are not equal to move product quantity"
+msgstr "El número de lotes definidos no es igual a la cantidad del producto en el movimiento"
+
+#. module: stock_custom
 #: field:ir.attachment,to_print:0
 msgid "To print"
-msgstr "To print"
+msgstr "A imprimir"
+
+#. module: stock_custom
+#: help:stock.move,lots_text:0
+msgid "Value must be separated by commas"
+msgstr "El valor debe estar separado por comas"
 

@@ -35,6 +35,7 @@ class Report(models.Model):
 
     def get_pdf(self, cr, uid, ids, report_name, html=None, data=None,
                 context=None):
+        print "IDS: ", ids
         res = super(Report, self).get_pdf(cr, uid, ids, report_name, html=html,
                                           data=data, context=context)
         if report_name == "stock_custom.report_picking_with_attachments":
@@ -43,7 +44,13 @@ class Report(models.Model):
                                  ("res_id", "in", ids),
                                  ("to_print", "=", True)])
             if attachments:
-                pdfdatas = [res]
+                pick = self.pool.get('stock.picking').browse(cr, uid, ids[0])
+                if pick.partner_id and (pick.partner_id.not_print_picking or
+                                        pick.partner_id.commercial_partner_id.
+                                        not_print_picking):
+                    pdfdatas = []
+                else:
+                    pdfdatas = [res]
                 temporary_files = []
                 for attach in self.pool["ir.attachment"].browse(cr, uid,
                                                                 attachments):

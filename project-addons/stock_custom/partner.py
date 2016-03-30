@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos
 #    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,17 +19,13 @@
 #
 ##############################################################################
 
-{
-    'name': "Stock customization to print",
-    'version': '1.0',
-    'category': 'Customization',
-    'description': """This module adds associated products""",
-    'author': 'Comunitea',
-    'website': '',
-    "depends" : ["base", "stock_valued_picking", "base_report_to_printer",
-                 "custom_account", "picking_incidences"],
-    "data" : ["ir_attachment_view.xml",
-              "stock_custom_report.xml",
-              "stock_view.xml", "partner_view.xml"],
-    "installable": True
-}
+from openerp import models, fields
+
+
+class ResPartner(models.Model):
+
+    _inherit = "res.partner"
+
+    not_print_picking = fields.\
+        Boolean("Not print picking",
+                help="Only print attachments on picking with attachs. report")
