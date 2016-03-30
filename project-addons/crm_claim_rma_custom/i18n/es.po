@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-21 19:48+0000\n"
-"PO-Revision-Date: 2016-03-21 19:48+0000\n"
+"POT-Creation-Date: 2016-03-30 17:00+0000\n"
+"PO-Revision-Date: 2016-03-30 17:00+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -19,6 +19,11 @@ msgstr ""
 #: field:crm.claim,aditional_notes:0
 msgid "Aditional Notes"
 msgstr "Notas adicionales"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_crm_claim_cost_report
+msgid "CRM Claim cost Report"
+msgstr "Informe de costes de reclamación"
 
 #. module: crm_claim_rma_custom
 #: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
@@ -39,7 +44,7 @@ msgstr "Número reclamación"
 #. module: crm_claim_rma_custom
 #: field:crm.claim,claim_inv_line_ids:0
 msgid "Claim inv line ids"
-msgstr "Lineas factura reclamación"
+msgstr "Lineas de abono"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,claim_line_id:0
@@ -47,7 +52,13 @@ msgid "Claim lne"
 msgstr "Linea reclamación"
 
 #. module: crm_claim_rma_custom
+#: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Claim type"
+msgstr "Tipo reclamación"
+
+#. module: crm_claim_rma_custom
 #: field:crm.claim,comercial:0
+#: field:crm.claim.cost.report,comercial_id:0
 msgid "Comercial"
 msgstr "Comercial"
 
@@ -116,7 +127,7 @@ msgstr "Últ. actualización por"
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,write_date:0
 msgid "Last Updated on"
-msgstr "Últ. actualización en"
+msgstr "Últ. actualización el"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_line
@@ -129,6 +140,11 @@ msgstr "Listado de productos a devolver"
 #: field:stock.location,odoo_management:0
 msgid "Management in Odoo"
 msgstr "Gestionado en Odoo"
+
+#. module: crm_claim_rma_custom
+#: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "My Case(s)"
+msgstr "Mi(s) Caso(s)"
 
 #. module: crm_claim_rma_custom
 #: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
@@ -170,6 +186,11 @@ msgid "Price Unit"
 msgstr "Precio unidad"
 
 #. module: crm_claim_rma_custom
+#: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Priority"
+msgstr "Prioridad"
+
+#. module: crm_claim_rma_custom
 #: field:claim.invoice.line,product_id:0
 msgid "Product Code"
 msgstr "Cód. producto"
@@ -195,6 +216,11 @@ msgid "Repair Order"
 msgstr "Orden reparación"
 
 #. module: crm_claim_rma_custom
+#: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Responsible"
+msgstr "Responsable"
+
+#. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/crm_claim.py:280
 #, python-format
 msgid "Selected product is not                                                     in the invoice"
@@ -204,6 +230,11 @@ msgstr "El producto seleccionado no está en la factura"
 #: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
 msgid "Split"
 msgstr "Desglosar"
+
+#. module: crm_claim_rma_custom
+#: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Stage"
+msgstr "Etapa"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,tax_ids:0
@@ -247,9 +278,14 @@ msgid "This picking not will be synced with Vstock"
 msgstr "Este albarán no se sincronizará con Vstock"
 
 #. module: crm_claim_rma_custom
+#: view:stock.picking:crm_claim_rma_custom.view_picking_form_add_custom_fields
+msgid "Transfer"
+msgstr "Transferir"
+
+#. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_equivalent_products_wizard
 msgid "Wizard for change products in claim."
-msgstr "Asistente para cambiar productos en la reclamación."
+msgstr "Asistente para cambiar los productos de una reclamación."
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_wizard

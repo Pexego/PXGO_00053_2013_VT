@@ -24,3 +24,4 @@ import partner
 import mrp_repair
 import stock
 from . import wizard
+from . import report
