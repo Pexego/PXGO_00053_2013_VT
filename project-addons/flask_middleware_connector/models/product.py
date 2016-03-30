@@ -38,7 +38,8 @@ class ProductTemplate(models.Model):
                                 "in public web service")
     show_stock_outside = fields.Boolean("Show stock outside", copy=False,
                                         help="Allow to publish stock info "
-                                             "in public web service")
+                                             "in public web service",
+                                        default=True)
     virtual_stock_conservative = fields.Float(compute=_stock_conservative,
                                               string='Virtual Stock '
                                                      'Conservative',
