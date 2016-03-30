@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <field name="partner_shipping_id" position="attributes">
-                    <attribute name="context">{'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True}</attribute>
+                    <attribute name="context">{'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
                 </field>
             </field>
         </record>

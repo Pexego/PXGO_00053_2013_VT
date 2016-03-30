@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
+from openerp import models, fields, api, exceptions, _
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -48,9 +48,36 @@ class ResPartner(models.Model):
                                       'Invoice type')
     dropship = fields.Boolean("Dropship")
 
-    _sql_constraints = [
-        ('ref_uniq', 'unique(ref,is_company,active)', 'Partner ref must be unique')
-    ]
+    @api.constrains('ref', 'is_company', 'active')
+    def check_unique_ref(self):
+        if self.is_company and self.active:
+            ids = self.search([('ref', '=', self.ref),
+                               ('is_company', '=', True),
+                               ('id', '!=', self.id)])
+            if ids:
+                raise exceptions.\
+                    ValidationError(_('Partner ref must be unique'))
+
+    def name_get(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        if isinstance(ids, (int, long)):
+            ids = [ids]
+        res = []
+        for record in self.browse(cr, uid, ids, context=context):
+            name = record.name
+            if record.parent_id and not record.is_company and not record.dropship:
+                name = "%s, %s" % (record.parent_name, name)
+            if context.get('show_address_only'):
+                name = self._display_address(cr, uid, record, without_company=True, context=context)
+            if context.get('show_address'):
+                name = name + "\n" + self._display_address(cr, uid, record, without_company=True, context=context)
+            name = name.replace('\n\n','\n')
+            name = name.replace('\n\n','\n')
+            if context.get('show_email') and record.email:
+                name = "%s <%s>" % (name, record.email)
+            res.append((record.id, name))
+        return res
 
     @api.model
     def create(self, vals):
