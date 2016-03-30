@@ -26,7 +26,8 @@
     'description': """Several little customizations in partners""",
     'author': 'Comunitea Servicios Tecnológicos',
     'website': 'www.comunitea.com',
-    "depends": ['base', 'sale', 'l10n_es_partner', 'warning', 'account'],
+    "depends": ['base', 'sale', 'l10n_es_partner', 'warning', 'account',
+                'base_partner_sequence'],
     "data": ["partner_view.xml", "stock_view.xml",
              "security/ir.model.access.csv", "sale_view.xml"],
     "installable": True

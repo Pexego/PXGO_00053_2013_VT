@@ -48,6 +48,10 @@ class ResPartner(models.Model):
                                       'Invoice type')
     dropship = fields.Boolean("Dropship")
 
+    _sql_constraints = [
+        ('ref_uniq', 'unique(ref,is_company,active)', 'Partner ref must be unique')
+    ]
+
     @api.model
     def create(self, vals):
         if vals.get('dropship', False):
