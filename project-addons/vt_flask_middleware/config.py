@@ -1,4 +1,15 @@
 import os
+import time
+import hmac
+import hashlib
+
+
+def _get_signature():
+        key = r"Z%z^Q%\*v165a"
+        key += time.strftime("%d-%m-%y")
+        key += r"p2s69\aNz-u}"
+        b = bytes(key)
+        return hmac.new(b, "Hola, soy Odoo", hashlib.sha256).hexdigest()
 
 
 class Config(object):
@@ -13,3 +24,4 @@ class Config(object):
     NOTIFY_URL = os.environ.get('NOTIFY_URL')
     NOTIFY_USER = os.environ.get('NOTIFY_USER')
     NOTIFY_PASSWORD = os.environ.get('NOTIFY_PASSWORD')
+    NOTIFY_SIGNATURE = _get_signature()
