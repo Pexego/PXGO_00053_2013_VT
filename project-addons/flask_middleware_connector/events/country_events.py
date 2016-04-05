@@ -37,6 +37,7 @@ class CountryExporter(Exporter):
     def update(self, binding_id, mode):
         country = self.model.browse(binding_id)
         vals = {"name": country.name,
+                "code": country.code,
                 "odoo_id": country.id}
         if mode == "insert":
             return self.backend_adapter.insert(vals)
@@ -60,7 +61,7 @@ def delay_export_country_create(session, model_name, record_id, vals):
 
 @on_record_write(model_names='res.country')
 def delay_export_country_write(session, model_name, record_id, vals):
-    up_fields = ["name"]
+    up_fields = ["name", "code"]
     for field in up_fields:
         if field in vals:
             update_country.delay(session, model_name, record_id, priority=3)

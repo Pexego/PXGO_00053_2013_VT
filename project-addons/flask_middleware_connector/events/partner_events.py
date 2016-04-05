@@ -43,7 +43,7 @@ class PartnerExporter(Exporter):
                 "street": partner.street or "",
                 "city": partner.city or "",
                 "zipcode": partner.zip,
-                "country": partner.country_id and partner.country_id.name or
+                "country": partner.country_id and partner.country_id.code or
                 "",
                 "commercial_id": partner.user_id.id,
                 "ref": partner.ref,

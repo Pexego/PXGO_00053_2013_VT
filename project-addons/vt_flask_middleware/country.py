@@ -7,6 +7,7 @@ from database import SyncModel
 class Country(SyncModel):
     odoo_id = IntegerField(unique=True)
     name = CharField(max_length=150)
+    code = CharField(max_length=5)
 
     MOD_NAME = 'country'
 
