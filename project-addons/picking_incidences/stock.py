@@ -43,20 +43,20 @@ class StockPicking(models.Model):
     with_incidences = fields.Boolean('With incidences', readonly=True,
                                      copy=False)
 
-    @api.multi
-    def write(self, vals):
-        res = super(StockPicking, self).write(vals)
-        if vals.get('with_incidences', False):
-            for pick in self:
-                no_incidence = True
-                for move in pick.move_lines:
-                    if not move.qty_ready or move.qty_ready > \
-                            move.reserved_availability:
-                        no_incidence = False
-                        break
-                if no_incidence:
-                    pick.with_incidences = False
-        return res
+    #~ @api.multi
+    #~ def write(self, vals):
+        #~ res = super(StockPicking, self).write(vals)
+        #~ if vals.get('with_incidences', False):
+            #~ for pick in self:
+                #~ no_incidence = True
+                #~ for move in pick.move_lines:
+                    #~ if not move.qty_ready or move.qty_ready > \
+                            #~ move.reserved_availability:
+                        #~ no_incidence = False
+                        #~ break
+                #~ if no_incidence:
+                    #~ pick.with_incidences = False
+        #~ return res
 
     @api.one
     def action_accept_ready_qty(self):
