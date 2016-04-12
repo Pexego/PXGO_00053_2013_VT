@@ -32,11 +32,12 @@ class StockMove(models.Model):
         res['move_id'] = move.id
         return res
 
-#class stock_invoice_onshipping(models.Model):custom
-
-#    _inherit = 'stock.invoice.onshipping'
-#    attach_picking = fields.Boolean ('Attach Picking', default= lambda self:
-#         self.env['stock.picking'].browse(self.env.context.get('active_ids', False))[0].partner_id.attach_picking)
+    @api.multi
+    def unlink(self):
+        for move in self:
+            if move.state == "confirmed":
+                move.state = "draft"
+        return super(StockMove, self).unlink()
 
 
 class ProductProduct(models.Model):
@@ -46,7 +47,8 @@ class ProductProduct(models.Model):
     default_code = fields.Char(required=True)
 
     _sql_constraints = [
-        ('default_code_uniq', 'unique(default_code, active)', 'The code of product must be unique.')
+        ('default_code_uniq', 'unique(default_code, active)',
+         'The code of product must be unique.')
     ]
 
     def copy(self, cr, uid, id, default=None, context=None):
