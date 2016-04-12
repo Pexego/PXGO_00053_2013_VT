@@ -31,6 +31,10 @@
                 <field name="name" position="replace">
                    <field name="name"
                        filter_domain="['|','|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self),('comercial', 'ilike', self)]"/>
+                    <field name="vat"/>
+                    <field name="email"/>
+                    <field name="zip"/>
+                    <field name="phone"/>
                 </field>
             </field>
         </record>
