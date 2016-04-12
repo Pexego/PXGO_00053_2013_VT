@@ -98,5 +98,5 @@ class ResPartner(osv.osv):
 
     _inherit = "res.partner"
     _columns = {
-        'blocked_sales': fields.boolean('Sales blocked?')
+        'blocked_sales': fields.boolean('Sales blocked?', copy=False)
     }
