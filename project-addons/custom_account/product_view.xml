@@ -16,5 +16,35 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="product_template_form_view_sale_order_button_add_quotations">
+            <field name="name">product.template.sale.order.button.add_quotations</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="sale.product_template_form_view_sale_order_button"/>
+            <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <button class="oe_inline oe_stat_button" name="action_view_quotations"
+                        type="object" icon="fa-strikethrough">
+                        <field string="Quotations" name="quotations_count" widget="statinfo" />
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_form_view_sale_order_button_add_quotations">
+            <field name="name">product.product.sale.order.add_quotations</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="sale.product_form_view_sale_order_button"/>
+            <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <button class="oe_inline oe_stat_button" name="action_view_quotations"
+                        type="object" icon="fa-strikethrough">
+                        <field string="Quotations" name="quotations_count" widget="statinfo" />
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </openerp>
