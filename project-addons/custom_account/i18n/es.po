@@ -172,6 +172,12 @@ msgid "Purchase Order Line"
 msgstr "Línea pedido de compra"
 
 #. module: custom_account
+#: view:product.product:custom_account.product_form_view_sale_order_button_add_quotations
+#: view:product.template:custom_account.product_template_form_view_sale_order_button_add_quotations
+msgid "Quotations"
+msgstr "Presupuestos"
+
+#. module: custom_account
 #: view:product.product:custom_account.product_form_view_procurement_button
 msgid "Sales"
 msgstr "Ventas"
