@@ -25,10 +25,15 @@ class AccountMoveLine(models.Model):
 
     _inherit = 'account.move.line'
 
-    scheme = fields.Selection([('CORE', 'Basic (CORE)'),
-                               ('B2B', 'Enterprise (B2B)')],
+    @api.one
+    def get_mandate_scheme(self):
+        if self.invoice and self.invoice.mandate_id:
+            self.scheme = self.invoice.mandate_id.scheme
+
+    scheme = fields.Selection(selection=[('CORE', 'Basic (CORE)'),
+                                         ('B2B', 'Enterprise (B2B)')],
                               string='Scheme',
-                              related='invoice.mandate_id.scheme', store=True)
+                              compute='get_mandate_scheme')
 
 
 class AccountBankingMandate(models.Model):
