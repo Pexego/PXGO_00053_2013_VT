@@ -41,6 +41,18 @@ class SyncModel(database.Model):
             log.launch_sync()
         return res
 
+    @classmethod
+    def update(cls, __data=None, **update):
+        from sync_log import SyncLog
+        from implemented_models import MODELS_CLASS
+        res = super(SyncModel, cls).update(__data, **update)
+        if cls.MOD_NAME in MODELS_CLASS.keys():
+            sync_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            log = SyncLog.create(odoo_id=update['odoo_id'], model=cls.MOD_NAME,
+                                 operation='update', sync_date=sync_date)
+            log.launch_sync()
+        return res
+
     def delete_instance(self, *args, **kwargs):
         from sync_log import SyncLog
         from implemented_models import MODELS_CLASS
@@ -53,14 +65,3 @@ class SyncModel(database.Model):
             log.launch_sync()
         return res
 
-    def save(self, force_insert=False, only=None, is_update=False):
-        from sync_log import SyncLog
-        from implemented_models import MODELS_CLASS
-        if is_update and self.MOD_NAME in MODELS_CLASS.keys():
-            sync_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            log = SyncLog.create(odoo_id=self.odoo_id, model=self.MOD_NAME,
-                                 operation='update', sync_date=sync_date)
-        res = super(SyncModel, self).save(force_insert, only)
-        if is_update and self.MOD_NAME in MODELS_CLASS.keys():
-            log.launch_sync()
-        return res

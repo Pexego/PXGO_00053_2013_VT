@@ -60,12 +60,7 @@ def write(user_id, password, model, odoo_id, vals):
     except mod_class.DoesNotExist:
         raise Fault("unknown_registry", "%s not found!" % model)
     parse_many2one_vals(mod_class, vals)
-    for field_name in vals.keys():
-        value = vals[field_name]
-        if isinstance(value, basestring):
-            value = '"%s"' % value
-        exec('reg.%s = %s' % (field_name, value))
-    reg.save(is_update=True)
+    mod_class.update(**vals)
     return True
 
 

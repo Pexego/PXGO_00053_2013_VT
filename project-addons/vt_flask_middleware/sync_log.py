@@ -5,6 +5,16 @@ from database import BaseModel
 import requests
 import json
 import thread
+import hmac
+import time
+import hashlib
+ 
+def _get_signature():
+        key = r"Z%z^Q%\*v165a"
+        key += time.strftime("%d-%m-%y")
+        key += r"p2s69\aNz-u}"
+        b = bytes(key)
+        return hmac.new(b, "Hola, soy Odoo", hashlib.sha256).hexdigest()
 
 
 class SyncLog(BaseModel):
@@ -28,7 +38,7 @@ class SyncLog(BaseModel):
         url = app.config['NOTIFY_URL']
         user = app.config['NOTIFY_USER']
         password = app.config['NOTIFY_PASSWORD']
-        signature = app.config['NOTIFY_SIGNATURE']
+        signature = _get_signature() 
         data = {'model': self.model, 'operation': self.operation,
                 'odoo_id': self.odoo_id,
                 'signature': signature}
