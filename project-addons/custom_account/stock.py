@@ -52,8 +52,12 @@ class ProductProduct(models.Model):
         ]
         group = self.env['sale.report'].\
             read_group(domain, ['product_id', 'product_uom_qty'],
-                       ['product_id'])[0]
-        self.sales_count = group['product_uom_qty']
+                       ['product_id'])
+        if group:
+            group = group[0]
+            self.sales_count = group['product_uom_qty']
+        else:
+            self.sales_count = 0
 
     @api.one
     def _quotations_count(self):
@@ -63,8 +67,12 @@ class ProductProduct(models.Model):
         ]
         group = self.env['sale.report'].\
             read_group(domain, ['product_id', 'product_uom_qty'],
-                       ['product_id'])[0]
-        self.quotations_count = group['product_uom_qty']
+                       ['product_id'])
+        if group:
+            group = group[0]
+            self.quotations_count = group['product_uom_qty']
+        else:
+            self.quotations_count = 0
 
     @api.multi
     def action_view_sales(self):
