@@ -44,36 +44,6 @@ class ProductProduct(models.Model):
 
     _inherit = "product.product"
 
-    @api.one
-    def _sales_count(self):
-        domain = [
-            ('state', 'not in', ['cancel', 'draft']),
-            ('product_id', '=', self.id),
-        ]
-        group = self.env['sale.report'].\
-            read_group(domain, ['product_id', 'product_uom_qty'],
-                       ['product_id'])
-        if group:
-            group = group[0]
-            self.sales_count = group['product_uom_qty']
-        else:
-            self.sales_count = 0
-
-    @api.one
-    def _quotations_count(self):
-        domain = [
-            ('state', '=', 'draft'),
-            ('product_id', '=', self.id),
-        ]
-        group = self.env['sale.report'].\
-            read_group(domain, ['product_id', 'product_uom_qty'],
-                       ['product_id'])
-        if group:
-            group = group[0]
-            self.quotations_count = group['product_uom_qty']
-        else:
-            self.quotations_count = 0
-
     @api.multi
     def action_view_sales(self):
         res = super(ProductProduct, self).action_view_sales()
@@ -91,9 +61,6 @@ class ProductProduct(models.Model):
         return res
 
     default_code = fields.Char(required=True)
-    sales_count = fields.Integer(compute="_sales_count", string='# Sales')
-    quotations_count = fields.Integer(compute="_quotations_count",
-                                      string='# Quotations')
 
     _sql_constraints = [
         ('default_code_uniq', 'unique(default_code, active)',
@@ -124,15 +91,6 @@ class ProductProduct(models.Model):
 class ProductTemplate(models.Model):
 
     _inherit = "product.template"
-
-    @api.multi
-    def _quotations_count(self):
-        for template in self:
-            template.quotations_count = \
-                sum([p.sales_count for p in template.product_variant_ids])
-
-    quotations_count = fields.Integer(compute="_quotations_count",
-                                      string='# Sales')
 
     @api.multi
     def action_view_sales(self):

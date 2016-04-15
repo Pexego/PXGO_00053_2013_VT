@@ -24,10 +24,12 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='buttons']" position="inside">
                     <button class="oe_inline oe_stat_button" name="action_view_quotations"
-                        type="object" icon="fa-strikethrough">
-                        <field string="Quotations" name="quotations_count" widget="statinfo" />
-                    </button>
+                        type="object" icon="fa-strikethrough" string="Quotations"/>
                 </xpath>
+                <button name="action_view_sales" position="replace">
+                    <button class="oe_inline oe_stat_button" name="action_view_sales"
+                        type="object" icon="fa-strikethrough" string="Sales"/>
+                </button>
             </field>
         </record>
 
@@ -39,10 +41,12 @@
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='buttons']" position="inside">
                     <button class="oe_inline oe_stat_button" name="action_view_quotations"
-                        type="object" icon="fa-strikethrough">
-                        <field string="Quotations" name="quotations_count" widget="statinfo" />
-                    </button>
+                        type="object" icon="fa-strikethrough" string="Quotations"/>
                 </xpath>
+                <button name="action_view_sales" position="replace">
+                    <button class="oe_inline oe_stat_button" name="action_view_sales"
+                        type="object" icon="fa-strikethrough" string="Sales"/>
+                </button>
             </field>
         </record>
 
