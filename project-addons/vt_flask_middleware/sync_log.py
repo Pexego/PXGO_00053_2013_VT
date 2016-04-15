@@ -26,15 +26,16 @@ class SyncLog(BaseModel):
     to_sync = BooleanField(default=False)
 
     def sync_client(self, recurrent=False):
-        if not recurrent:
-            to_sync_objs = SyncLog.select().where(SyncLog.id != self.id,
-                                                  SyncLog.to_sync == True)
-            for obj in to_sync_objs:
-                resp = obj.sync_client(recurrent=True)
-                if resp:
-                    obj.sync = True
-                    obj.to_sync = False
-                    obj.save()
+        #if not recurrent:
+            #to_sync_objs = SyncLog.select().where(SyncLog.id != self.id,
+            #                                      SyncLog.to_sync == True)
+            #for obj in to_sync_objs:
+            #    resp = obj.sync_client(recurrent=True)
+                #if resp:
+                #    obj.sync = True
+                #    print "SYNC"
+                #    obj.to_sync = False
+                #    obj.save()
         url = app.config['NOTIFY_URL']
         user = app.config['NOTIFY_USER']
         password = app.config['NOTIFY_PASSWORD']
@@ -42,17 +43,25 @@ class SyncLog(BaseModel):
         data = {'model': self.model, 'operation': self.operation,
                 'odoo_id': self.odoo_id,
                 'signature': signature}
-        resp = requests.post(url, data=json.dumps(data))
-        if resp.status_code == 200:
-            self.sync = True
-            self.save()
-            res = True
-        else:
+        try:
+            resp = requests.post(url, data=json.dumps(data), timeout=2)
+            if resp.status_code == 200:
+                self.sync = True
+                self.to_sync = False
+                self.save()
+                res = True
+            else:
+                self.to_sync = True
+                self.sync = False
+                self.save()
+                res = False
+        except Exception:
+            res=False
             self.to_sync = True
+            self.sync = False
             self.save()
-            res = False
-
         return res
 
     def launch_sync(self):
-        thread.start_new_thread(SyncLog.sync_client, (self,))
+        #thread.start_new_thread(SyncLog.sync_client, (self,))
+        self.sync_client()

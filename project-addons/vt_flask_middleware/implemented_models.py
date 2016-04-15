@@ -10,3 +10,11 @@ MODELS_CLASS = {
     'rmaproduct': RmaProduct, 'country': Country, 'commercial': Commercial,
     'productbrand': ProductBrand, 'productbrandcountryrel':
     ProductBrandCountryRel}
+
+MASTER_CLASSES = {'commercial': Commercial,'productcategory': ProductCategory,
+                  'rmastatus': RmaStatus,'country': Country,
+                  'productbrand': ProductBrand}
+
+DEPENDENT_CLASSES = {'customer': Customer,'product': Product,
+                     'rma': Rma, 'rmaproduct': RmaProduct,
+                     'productbrandcountryrel': ProductBrandCountryRel}
