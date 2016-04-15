@@ -32,8 +32,8 @@ class RmaProduct(SyncModel):
     odoo_id = IntegerField(unique=True)
     id_rma = ForeignKeyField(Rma, on_delete='CASCADE')
     reference = CharField(max_length=45)
-    entrance_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
-    end_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
+    entrance_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'], null=True)
+    end_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'], null=True)
     product_id = ForeignKeyField(Product, on_delete='CASCADE', null=True)
     status_id = ForeignKeyField(RmaStatus, on_delete='CASCADE', null=True)
 

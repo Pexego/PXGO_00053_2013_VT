@@ -24,7 +24,7 @@ db = database.database
 
 class BaseModel(database.Model):
     """Base model for the selected database backend."""
-    pass
+    pass 
 
 
 class SyncModel(database.Model):

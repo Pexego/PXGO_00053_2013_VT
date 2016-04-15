@@ -45,7 +45,7 @@ class ProductBrandCountryRel(SyncModel):
 class Product(SyncModel):
     MOD_NAME = 'product'
     name = CharField(max_length=150)
-    code = CharField(max_length=20)
+    code = CharField(max_length=50)
     stock = FloatField(default=0.0)
     odoo_id = IntegerField(unique=True)
     uom_name = CharField(max_length=80)
