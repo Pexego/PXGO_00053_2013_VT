@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, api
+from time import time
 
 
 class ProductProduct(models.Model):
@@ -38,20 +39,23 @@ class ProductProduct(models.Model):
         self.average_margin_last_sales()
         positive_days_obj = self.env['stock.days.positive']
         move_obj = self.env['stock.move']
-        for product in self.search([('type', '!=', 'service')]):
+        product_ids = self.search([('type', '!=', 'service')])
+        for product in product_ids:
             days = positive_days_obj.search([('product_id', '=', product.id)],
-                                            limit=60, order='datum desc')
+                                            limit=1, order='datum asc')
             if not days:
                 product.last_sixty_days_sales = 0
+                product.joking_index = 0
                 continue
-            moves = move_obj.search([('date', '>=', days[-1].datum),
+            moves = move_obj.search([('date', '>=', days[0].datum),
                                      ('state', '=', 'done'),
                                      ('product_id', '=', product.id),
                                      ('picking_type_id.code', '=',
-                                      'outgoing')])
+                                      'outgoing'),
+                                     ('procurement_id.sale_line_id', '!=',
+                                      False)])
             product.last_sixty_days_sales = sum(
-                [x.product_uom_qty for x in moves
-                 if x.procurement_id.sale_line_id])
+                [x.product_uom_qty for x in moves])
             product.joking_index = product.last_sixty_days_sales * \
                 product.standard_price
 
@@ -73,7 +77,7 @@ class ProductProduct(models.Model):
             sale_order_line_obj = self.env['sale.order.line']
             domain = [('product_id', '=', product_id.id)]
             sales_obj = sale_order_line_obj.search(domain, limit=100,
-                                                   order='id desc')
+                                                   order='date_order desc')
             margin_perc_sum = 0
             qty_sum = 0
             for line in sales_obj:
