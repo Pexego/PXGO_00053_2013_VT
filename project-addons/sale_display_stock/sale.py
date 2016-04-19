@@ -34,3 +34,7 @@ class sale_order_line(models.Model):
         Float('Qty. on kitchen', readonly=True,
               related='product_id.qty_available_wo_wh',
               digits_compute=dp.get_precision('Product Unit of Measure'))
+    incoming_qty = fields.\
+        Float('Incoming qty.', readonly=True,
+              related='product_id.incoming_qty',
+              digits_compute=dp.get_precision('Product Unit of Measure'))

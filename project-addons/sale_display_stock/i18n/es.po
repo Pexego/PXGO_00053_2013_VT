@@ -26,6 +26,10 @@ msgstr "Línea pedido de venta"
 msgid "Qty. on kitchen"
 msgstr "Stock cocina"
 
+#. module: sale_display_stock
+#: field:sale.order.line,incoming_qty:0
+msgid "Incoming qty."
+msgstr "Stock ent."
 
 #. module: sale_display_stock
 #: field:sale.order.line.report,discount:0
