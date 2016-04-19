@@ -44,7 +44,7 @@ class SyncLog(BaseModel):
                 'odoo_id': self.odoo_id,
                 'signature': signature}
         try:
-            resp = requests.post(url, data=json.dumps(data), timeout=2)
+            resp = requests.post(url, data=json.dumps(data), timeout=6)
             if resp.status_code == 200:
                 self.sync = True
                 self.to_sync = False
