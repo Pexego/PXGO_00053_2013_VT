@@ -109,11 +109,10 @@ class ProductProduct(models.Model):
                 prod_dict['list_price'] = first_prod.list_price
                 prod_dict['list_price2'] = first_prod.list_price2
                 prod_dict['list_price3'] = first_prod.list_price3
-                bom_lines = \
-                    [(0, 0,
-                      {'product_id': first_prod.id,
-                       'product_qty': 1,
-                       'final_lot': True})]
+            bom_lines.append((0, 0,
+                              {'product_id': first_prod.id,
+                               'product_qty': 1,
+                               'final_lot': True}))
             product = self.create(prod_dict)
             bom_list_dict = {
                 'name': product.name,
