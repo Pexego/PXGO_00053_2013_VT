@@ -73,8 +73,16 @@ class SaleOrder(osv.osv):
     _inherit = "sale.order"
 
     def apply_promotions(self, cursor, user, ids, context=None):
-        self._prepare_custom_line(cursor, user, ids, moves=False, context=context)
+        if context is None:
+            context = {}
+        context2 = dict(context)
+        context2.pop('default_state', False)
+        self._prepare_custom_line(cursor, user, ids, moves=False,
+                                  context=context2)
         res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
-                                                      context=context)
+                                                      context=context2)
+        order = self.browse(cursor, user, ids[0], context=context2)
+        if order.state == 'reserve':
+            order.order_reserve()
 
         return res
