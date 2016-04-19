@@ -40,10 +40,20 @@ class ResPartner(models.Model):
                                                        groupby="product_id")
         self.sale_product_count = len(lines)
 
+    @api.one
+    def _sale_order_count(self):
+        self.sale_order_count = len(self.env["sale.order"].
+                                    search([('partner_id', 'child_of',
+                                             [self.id]),
+                                            ('state', 'not in',
+                                             ['draft', 'cancel'])]))
+
     web = fields.Boolean("Web", help="Created from web", copy=False)
     sale_product_count = fields.Integer(compute=_get_products_sold,
                                         string="# Products sold",
                                         readonly=True)
+    sale_order_count = fields.Integer(compute="_sale_order_count",
+                                      string='# of Sales Order')
     invoice_type_id = fields.Many2one('res.partner.invoice.type',
                                       'Invoice type')
     dropship = fields.Boolean("Dropship")

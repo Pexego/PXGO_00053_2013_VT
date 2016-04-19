@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-11 10:13+0000\n"
-"PO-Revision-Date: 2015-08-11 10:13+0000\n"
+"POT-Creation-Date: 2016-04-19 12:01+0000\n"
+"PO-Revision-Date: 2016-04-19 12:01+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -27,9 +27,78 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "            "
 
 #. module: custom_partner
+#: model:ir.actions.act_window,help:custom_partner.act_res_partner_2_sale_quotations
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                Click to create a quotation or sales order for this customer.\n"
+"              </p><p>\n"
+"                Odoo will help you efficiently handle the complete sale flow:\n"
+"                quotation, sales order, delivery, invoicing and\n"
+"                payment.\n"
+"              </p><p>\n"
+"                The social feature helps you organize discussions on each sales\n"
+"                order, and allow your customer to keep track of the evolution\n"
+"                of the sales order.\n"
+"              </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                Click para crear un presupuesto o pedido de venta para este cliente.\n"
+"              </p><p>\n"
+"                Odoo le ayudará eficientemente a manejar el flujo de ventas completo:\n"
+"                presupuesto, pedido de venta, entrega, facturación y\n"
+"                pago.\n"
+"              </p><p>\n"
+"                La característica social le ayuda a organizar las conversaciones de cada pedido\n"
+"                de venta, y le permite a su cliente mantener el registro de la evolución del\n"
+"                pedido de venta.\n"
+"              </p>\n"
+"            "
+
+#. module: custom_partner
+#: field:res.partner.invoice.type,create_uid:0
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: custom_partner
 #: help:res.partner,web:0
 msgid "Created from web"
 msgstr "Creado desde la web"
+
+#. module: custom_partner
+#: field:res.partner.invoice.type,create_date:0
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: custom_partner
+#: field:res.partner,dropship:0
+msgid "Dropship"
+msgstr "Dropship"
+
+#. module: custom_partner
+#: field:res.partner.invoice.type,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: custom_partner
+#: field:res.partner,invoice_type_id:0
+#: view:stock.picking:custom_partner.stock_picking_search_add_invoice_type
+#: field:stock.picking,invoice_type_id:0
+msgid "Invoice type"
+msgstr "Tipo de facturación"
+
+#. module: custom_partner
+#: field:res.partner.invoice.type,write_uid:0
+msgid "Last Updated by"
+msgstr "Últ. actualización por"
+
+#. module: custom_partner
+#: field:res.partner.invoice.type,write_date:0
+msgid "Last Updated on"
+msgstr "Últ. actualización el"
+
+#. module: custom_partner
+#: field:res.partner.invoice.type,name:0
+msgid "Name"
+msgstr "Nombre"
 
 #. module: custom_partner
 #: model:ir.model,name:custom_partner.model_res_partner
@@ -37,9 +106,31 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: custom_partner
+#: code:addons/custom_partner/partner.py:69
+#, python-format
+msgid "Partner ref must be unique"
+msgstr "La referencia de empresa debe ser única"
+
+#. module: custom_partner
+#: model:ir.model,name:custom_partner.model_stock_picking
+msgid "Picking List"
+msgstr "Albarán"
+
+#. module: custom_partner
+#: view:stock.picking:custom_partner.stock_picking_search_add_invoice_type
+msgid "Procurement Group"
+msgstr "Grupo de abastecimiento"
+
+#. module: custom_partner
 #: view:res.partner:custom_partner.res_partner_view_buttons_add_products_no
 msgid "Products sold"
 msgstr "Prod. vendidos"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_sale_quotations
+#: view:res.partner:custom_partner.res_partner_view_buttons_add_quotations
+msgid "Quotations"
+msgstr "Presupuestos"
 
 #. module: custom_partner
 #: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_sale_order_line
@@ -50,19 +141,6 @@ msgstr "Presupuestos y lineas de venta"
 #: field:res.partner,web:0
 msgid "Web"
 msgstr "Web"
-
-#. module: custom_partner
-#: field:res.partner,invoice_type_id:0
-#: view:stock.picking:custom_partner.stock_picking_search_add_invoice_type
-#: field:stock.picking,invoice_type_id:0
-msgid "Invoice type"
-msgstr "Tipo de facturación"
-
-#. module: custom_partner
-#: field:res.partner.invoice.type,name:0
-msgid "name"
-msgstr "Nombre"
-
 
 #. module: custom_partner
 #: model:ir.actions.act_window,name:custom_partner.action_view_web_customers
