@@ -83,3 +83,19 @@ class stock_move(models.Model):
                                  move.procurement_id.sale_line_id) and \
             move.procurement_id.sale_line_id.order_id.internal_notes or ""
         return res
+
+    @api.multi
+    def action_done(self):
+        res = super(stock_move, self).action_done()
+        for move in self:
+            if move.picking_type_code == "incoming":
+                confirmed_ids = self.\
+                    search([('state', '=', 'confirmed'),
+                            ('picking_type_code', '=', 'outgoing'),
+                            ('product_id', '=', move.product_id.id)],
+                           limit=None,
+                           order='priority desc, date_expected asc')
+                if confirmed_ids:
+                    confirmed_ids.action_assign()
+
+        return res

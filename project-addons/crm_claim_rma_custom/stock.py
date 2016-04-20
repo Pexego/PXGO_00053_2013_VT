@@ -38,7 +38,7 @@ class stock_picking(models.Model):
             if obj.claim_id and obj.picking_type_code == "incoming":
                 obj.force_assign()
 
-        return True
+        return res
 
     @api.model
     def do_transfer(self):
