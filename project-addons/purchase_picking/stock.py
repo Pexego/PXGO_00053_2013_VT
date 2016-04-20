@@ -28,6 +28,7 @@ class stock_picking(models.Model):
 
     shipping_identifier = fields.Char('Shipping identifier', size=64)
 
+
 class stock_move(models.Model):
 
     _inherit = 'stock.move'
@@ -48,6 +49,24 @@ class stock_move(models.Model):
                 if vals.get('date_expected', False):
                     self.env['stock.reservation'].\
                         reassign_reservation_dates(move.product_id)
+            if vals.get('state', False) == 'assigned':
+                reserv_ids = self.env["stock.reservation"].\
+                    search([('move_id', '=', move.id),
+                            ('sale_line_id', '!=', False)])
+                if reserv_ids:
+                    notify = True
+                    for line in reserv_ids[0].sale_line_id.\
+                            order_id.order_line:
+                        if line.id != reserv_ids[0].sale_line_id.id:
+                            for reserv in line.reservation_ids:
+                                if reserv.state != 'assigned':
+                                    notify = False
+                    if notify:
+                        sale = reserv_ids[0].sale_line_id.order_id
+                        followers = sale.message_follower_ids
+                        sale.message_post(body=_("The sale order is already assigned."),
+                                          subtype='mt_comment',
+                                          partner_ids=followers)
         return res
 
     @api.model

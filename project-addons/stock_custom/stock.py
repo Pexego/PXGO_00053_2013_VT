@@ -89,11 +89,22 @@ class stock_move(models.Model):
         res = super(stock_move, self).action_done()
         for move in self:
             if move.picking_type_code == "incoming":
+                domain = [('state', '=', 'confirmed'),
+                          ('picking_type_code', '=', 'outgoing'),
+                          ('product_id', '=', move.product_id.id)]
+                reserve_ids = self.env["stock.reservation"].\
+                    search([('product_id', '=', move.product_id.id),
+                            ('state', '=', 'confirmed'),
+                            ('sale_line_id', '!=', False)])
+                if reserve_ids:
+                    reserve_move_ids = [x.move_id.id for x in reserve_ids]
+                    domain = [('state', '=', 'confirmed'),
+                              ('product_id', '=', move.product_id.id),
+                              '|',('picking_type_code', '=', 'outgoing'),
+                              ('id', 'in', reserve_move_ids)]
+
                 confirmed_ids = self.\
-                    search([('state', '=', 'confirmed'),
-                            ('picking_type_code', '=', 'outgoing'),
-                            ('product_id', '=', move.product_id.id)],
-                           limit=None,
+                    search(domain, limit=None,
                            order='priority desc, date_expected asc')
                 if confirmed_ids:
                     confirmed_ids.action_assign()

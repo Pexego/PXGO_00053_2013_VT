@@ -95,7 +95,7 @@ msgstr "Error en albarán"
 #. module: purchase_picking
 #: field:picking.wizard.move.details,product_id:0
 msgid "Product"
-msgstr "Product"
+msgstr "Producto"
 
 #. module: purchase_picking
 #: model:ir.model,name:purchase_picking.model_purchase_order
@@ -139,13 +139,13 @@ msgid "Stock Reservation"
 msgstr "Reserva de stock"
 
 #. module: purchase_picking
-#: code:addons/purchase_picking/stock.py:105
+#: code:addons/purchase_picking/stock.py:120
 #, python-format
 msgid "The date planned of the reservation was changed."
-msgstr "La fecha planeada de la reserva ha sido cambiada."
+msgstr "La fecha planificada de la reserva ha cambiado."
 
 #. module: purchase_picking
-#: code:addons/purchase_picking/wizard/create_picking_move.py:92
+#: code:addons/purchase_picking/wizard/create_picking_move.py:88
 #, python-format
 msgid "The quantity is greater than the original."
 msgstr "La cantidad es mayor a la original."
