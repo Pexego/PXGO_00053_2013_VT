@@ -151,6 +151,12 @@ msgid "The quantity is greater than the original."
 msgstr "La cantidad es mayor a la original."
 
 #. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:67
+#, python-format
+msgid "The sale order is already assigned."
+msgstr "El pedido de venta ya está asignado."
+
+#. module: purchase_picking
 #: code:addons/purchase_picking/wizard/create_picking_move.py:76
 #, python-format
 msgid "Type not found"
