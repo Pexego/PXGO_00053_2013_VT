@@ -87,8 +87,9 @@ class stock_move(models.Model):
     @api.multi
     def action_done(self):
         res = super(stock_move, self).action_done()
+        stock_loc = self.env.ref("stock.stock_location_stock")
         for move in self:
-            if move.picking_type_code == "incoming":
+            if move.location_dest_id == stock_loc:
                 domain = [('state', '=', 'confirmed'),
                           ('picking_type_code', '=', 'outgoing'),
                           ('product_id', '=', move.product_id.id)]

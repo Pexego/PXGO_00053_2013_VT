@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-03 17:02+0000\n"
-"PO-Revision-Date: 2015-06-03 17:02+0000\n"
+"POT-Creation-Date: 2016-04-21 13:08+0000\n"
+"PO-Revision-Date: 2016-04-21 13:08+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,14 +21,56 @@ msgid "Averiados"
 msgstr "Averiados"
 
 #. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Beach -> Kitchen"
+msgstr "Playa -> Cocina"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Beach -> Pantry"
+msgstr "Playa -> Despensa"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Beach -> Stock"
+msgstr "Playa -> Existencias"
+
+#. module: location_moves
+#: model:stock.location,name:location_moves.stock_location_quality
+msgid "Calidad"
+msgstr "Calidad"
+
+#. module: location_moves
 #: view:location.moves:location_moves.location_moves_form
+#: view:quality.move.wzd:location_moves.quality_move_wzd_form
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: location_moves
+#: code:addons/location_moves/wizard/quality_move.py:37
+#, python-format
+msgid "Cannot move more than origin move qty."
+msgstr "No puede mover más de la cantidad original del movimiento."
+
+#. module: location_moves
+#: field:location.moves,check_qty:0
+msgid "Check Qty"
+msgstr "Comprobar disponibilidad"
 
 #. module: location_moves
 #: model:stock.location,name:location_moves.stock_location_kitchen
 msgid "Cocina"
 msgstr "Cocina"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Cooked -> Damaged"
+msgstr "Cocinado -> Averiado"
+
+#. module: location_moves
+#: view:quality.move.wzd:location_moves.quality_move_wzd_form
+msgid "Create move"
+msgstr "Crear movimiento"
 
 #. module: location_moves
 #: model:ir.ui.menu,name:location_moves.menucreatemoves
@@ -59,6 +101,7 @@ msgstr "Enfermería"
 
 #. module: location_moves
 #: field:location.moves,id:0
+#: field:quality.move.wzd,id:0
 msgid "ID"
 msgstr "ID"
 
@@ -66,6 +109,16 @@ msgstr "ID"
 #: model:ir.model,name:location_moves.model_stock_location
 msgid "Inventory Locations"
 msgstr "Ubicaciones inventario"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Kitchen -> Cooked"
+msgstr "Cocina -> Cocinado"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Kitchen -> Nursing"
+msgstr "Cocina -> Enfermería"
 
 #. module: location_moves
 #: field:location.moves,write_uid:0
@@ -82,55 +135,12 @@ msgstr "Últ. actualización el"
 #. module: location_moves
 #: view:location.moves:location_moves.location_moves_form
 msgid "Location moves"
-msgstr "Movimientos de ubicación"
+msgstr "Movimientos de localizacion"
 
 #. module: location_moves
 #: field:location.moves,move_type:0
 msgid "Move type"
 msgstr "Tipo de movimiento"
-
-#. module: location_moves
-#: field:location.moves,product_id:0
-msgid "Product"
-msgstr "Producto"
-
-#. module: location_moves
-#: field:location.moves,qty:0
-msgid "Qty"
-msgstr "Cantidad"
-
-#. module: location_moves
-#: field:location.moves,check_qty:0
-msgid "Check Qty"
-msgstr "Comprobar disponibilidad"
-
-#. module: location_moves
-#: code:addons/location_moves/stock.py:88
-#, python-format
-msgid "Check qty in source location"
-msgstr "No hay disponibilidad en la localización de origen."
-
-#. module: location_moves
-#: code:addons/location_moves/stock.py:117
-#, python-format
-msgid "The date planned of the reservation was                                    changed."
-msgstr "La fecha planificada de la reserva ha cambiado."
-
-#. module: location_moves
-#: model:ir.actions.act_window,name:location_moves.act_location_moves
-#: view:location.moves:location_moves.location_moves_form
-msgid "create moves"
-msgstr "Crear movimientos"
-
-#. module: location_moves
-#: selection:location.moves,move_type:0
-msgid "Kitchen -> Cooked"
-msgstr "Cocina -> Cocinado"
-
-#. module: location_moves
-#: selection:location.moves,move_type:0
-msgid "Kitchen -> Nursing"
-msgstr "Cocina -> Enfermería"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
@@ -139,39 +149,8 @@ msgstr "Enfermería -> Cocinado"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
-msgid "Quality -> Cooked"
-msgstr "Calidad -> Cocinado"
-
-#. module: location_moves
-#: selection:location.moves,move_type:0
 msgid "Nursing -> Damaged"
-msgstr "Enfermería -> Averiado"
-
-#. module: location_moves
-#: selection:location.moves,move_type:0
-msgid "Pantry -> Kitchen"
-msgstr "Despensa -> Cocina"
-
-#. module: location_moves
-#: selection:location.moves,move_type:0
-msgid "Cooked -> Nursing"
-msgstr "Cocinado -> Enfermería"
-
-#. module: location_moves
-#: selection:location.moves,move_type:0
-msgid "Cooked -> Damaged"
-msgstr "Cocinado -> Averiado"
-
-#. module: location_moves
-#: code:addons/location_moves/wizard/quality_move.py:37
-#, python-format
-msgid "Cannot move more than origin move qty."
-msgstr "No puede mover más de la cantidad original del movimiento."
-
-#. module: location_moves
-#: view:quality.move.wzd:location_moves.quality_move_wzd_form
-msgid "Create move"
-msgstr "Crear movimiento"
+msgstr "Enfermería -> Averiados"
 
 #. module: location_moves
 #: code:addons/location_moves/wizard/quality_move.py:43
@@ -187,9 +166,29 @@ msgid "Only can do this operation with picked moves"
 msgstr "Sólo puede hacer esta operación con movimientos albaranados"
 
 #. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Pantry -> Kitchen"
+msgstr "Despensa -> Cocina"
+
+#. module: location_moves
+#: field:location.moves,product_id:0
+msgid "Product"
+msgstr "Producto"
+
+#. module: location_moves
+#: field:location.moves,qty:0
+msgid "Qty"
+msgstr "Cantidad"
+
+#. module: location_moves
 #: field:quality.move.wzd,qty:0
 msgid "Qty. to move"
 msgstr "Cant. a mover"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Quality -> Cooked"
+msgstr "Calidad -> Cocinado"
 
 #. module: location_moves
 #: model:ir.actions.act_window,name:location_moves.act_quality_move_wzd
@@ -199,3 +198,30 @@ msgstr "Cant. a mover"
 #: view:stock.move:location_moves.view_move_tree_receipt_picking_add_quality_btn
 msgid "Quality move"
 msgstr "Movimiento calidad"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Stock -> Kitchen"
+msgstr "Existencias -> Cocina"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Stock -> Pantry"
+msgstr "Existencias -> Despensa"
+
+#. module: location_moves
+#: model:ir.model,name:location_moves.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: location_moves
+#: code:addons/location_moves/stock.py:164
+#, python-format
+msgid "The date planned of the reservation was                                    changed."
+msgstr "La fecha planificada de la reserva ha cambiado."
+
+#. module: location_moves
+#: model:ir.actions.act_window,name:location_moves.act_location_moves
+#: view:location.moves:location_moves.location_moves_form
+msgid "create moves"
+msgstr "Crear movimientos"

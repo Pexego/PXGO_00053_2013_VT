@@ -28,7 +28,6 @@ class StockLotacion(models.Model):
     _inherit = 'stock.location'
 
     def get_quantity_source_location(self,location_id,product_id):
-        #import ipdb; ipdb.set_trace()
         ctx = dict(self.env.context)
         ctx.update({'location' : location_id.id})
         product = self.env['product.product'].with_context(ctx).browse(product_id)
@@ -63,6 +62,26 @@ class StockLotacion(models.Model):
     def move_cooked_damaged(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
                            'stock_location_damaged',False, check_qty)
+
+    def move_beach_stock(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_company', qty,
+                           'stock.stock_location_stock',True, check_qty)
+
+    def move_beach_kitchen(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_company', qty,
+                           'stock_location_kitchen',False, check_qty)
+
+    def move_beach_pantry(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_company', qty,
+                           'stock_location_pantry',False, check_qty)
+
+    def move_stock_kitchen(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_kitchen',False, check_qty)
+
+    def move_stock_pantry(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_pantry',False, check_qty)
 
 
 

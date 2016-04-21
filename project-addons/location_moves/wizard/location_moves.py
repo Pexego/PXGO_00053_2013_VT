@@ -34,7 +34,12 @@ class location_moves(models.TransientModel):
                                get('manual', False))
 
     move_type = fields.Selection(
-        [('pantry_kitchen', 'Pantry -> Kitchen'),
+        [('beach_stock', 'Beach -> Stock'),
+         ('beach_kitchen', 'Beach -> Kitchen'),
+         ('beach_pantry', 'Beach -> Pantry'),
+         ('stock_kitchen', 'Stock -> Kitchen'),
+         ('stock_pantry', 'Stock -> Pantry'),
+         ('pantry_kitchen', 'Pantry -> Kitchen'),
          ('kitchen_cooked', 'Kitchen -> Cooked'),
          ('kitchen_nursing', 'Kitchen -> Nursing'),
          ('nursing_damaged', 'Nursing -> Damaged'),
@@ -47,6 +52,11 @@ class location_moves(models.TransientModel):
     def create_moves(self):
         loc_obj = self.env['stock.location']
         types = {
+            'beach_stock': loc_obj.move_beach_stock,
+            'beach_kitchen': loc_obj.move_beach_kitchen,
+            'beach_pantry': loc_obj.move_beach_pantry,
+            'stock_kitchen': loc_obj.move_stock_kitchen,
+            'stock_pantry': loc_obj.move_stock_pantry,
             'pantry_kitchen': loc_obj.move_pantry_kitchen,
             'kitchen_cooked': loc_obj.move_kitchen_cooked,
             'kitchen_nursing': loc_obj.move_kitchen_nursing,
