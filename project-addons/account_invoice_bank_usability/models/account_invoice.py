@@ -51,3 +51,101 @@ class account_invoice(models.Model):
 
         res['arch'] = etree.tostring(doc)
         return res
+
+    @api.multi
+    def onchange_partner_id(
+            self, type, partner_id, date_invoice=False,
+            payment_term=False, partner_bank_id=False, company_id=False):
+        res = super(account_invoice, self).onchange_partner_id(
+            type, partner_id, date_invoice=date_invoice,
+            payment_term=payment_term, partner_bank_id=partner_bank_id,
+            company_id=company_id)
+        if partner_id:
+            partner = self.env['res.partner'].browse(partner_id)
+            if type == 'out_invoice' and partner.customer_payment_mode and \
+                    partner.customer_payment_mode.\
+                    payment_order_type == "debit" and partner.bank_ids:
+                mandate_obj = self.env["account.banking.mandate"]
+                mandates = mandate_obj.\
+                    search([('partner_bank_id', 'in', partner.bank_ids.ids),
+                            ('default', '=', True),('state', '=', 'valid')])
+                mandate_sel = False
+                if mandates:
+                    mandate_sel = mandates[0]
+                else:
+                    mandates = mandate_obj.\
+                        search([('partner_bank_id', 'in',
+                                 partner.bank_ids.ids),
+                                ('state', '=', 'valid')])
+                    if mandates:
+                        mandate_sel = mandates[0]
+                if mandate_sel:
+                    res['value'].\
+                        update({'mandate_id': mandate_sel.id,
+                                'partner_bank_id':
+                                mandate_sel.partner_bank_id.id})
+                else:
+                    res['value'].\
+                        update({'partner_bank_id':
+                                partner.bank_ids[0].id})
+        return res
+
+    @api.model
+    def create(self, vals):
+        if vals.get('partner_bank_id', False) and \
+                vals.get('payment_mode_id', False) and not \
+                vals.get('sdd_mandate_id', False):
+            pmode = self.env["payment.mode"].\
+                browse(vals['payment_mode_id'])
+            if pmode.payment_order_type == "debit":
+                mandate_obj = self.env["account.banking.mandate"]
+                mandates = mandate_obj.\
+                    search([('partner_bank_id', '=', vals['partner_bank_id']),
+                            ('default', '=', True),('state', '=', 'valid')])
+                mandate_sel = False
+                if mandates:
+                    mandate_sel = mandates[0]
+                else:
+                    mandates = mandate_obj.\
+                        search([('partner_bank_id', '=',
+                                 vals['partner_bank_id']),
+                                ('state', '=', 'valid')])
+                    if mandates:
+                        mandate_sel = mandates[0]
+                if mandate_sel:
+                    vals['mandate_id'] = mandate_sel.id
+
+        return super(account_invoice, self).create(vals)
+
+    @api.multi
+    def write(self, vals):
+        if vals.get('partner_bank_id', False) and not \
+                vals.get('sdd_mandate_id', False):
+            if vals.get("payment_mode_id", False):
+                pmode_id = vals['payment_mode_id']
+            else:
+                pmode_id = self[0].payment_mode_id.id
+            if pmode_id:
+                pmode = self.env["payment.mode"].\
+                    browse(pmode_id)
+                if pmode.payment_order_type == "debit":
+                    mandate_obj = self.env["account.banking.mandate"]
+                    mandates = mandate_obj.\
+                        search([('partner_bank_id', '=',
+                                 vals['partner_bank_id']),
+                                ('default', '=', True),
+                                ('state', '=', 'valid')])
+                    mandate_sel = False
+                    if mandates:
+                        mandate_sel = mandates[0]
+                    else:
+                        mandates = mandate_obj.\
+                            search([('partner_bank_id', '=',
+                                     vals['partner_bank_id']),
+                                    ('state', '=', 'valid')])
+                        if mandates:
+                            mandate_sel = mandates[0]
+                    if mandate_sel:
+                        vals['mandate_id'] = mandate_sel.id
+
+        return super(account_invoice, self).write(vals)
