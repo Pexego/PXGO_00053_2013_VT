@@ -34,6 +34,11 @@ class AccountVoucherWizard(models.TransientModel):
                                   dp.get_precision('Sale Price'))
     date = fields.Date("Date", required=True,
                        default=fields.Date.context_today)
+    exchange_rate = fields.Float("Exchange rate", digits=(16, 6), default=1.0,
+                                 required=True)
+    currency_id = fields.Many2one("res.currency", "Currency", readonly=True)
+    currency_amount = fields.Float("Curr. amount", digits=(16, 2),
+                                   readonly=True)
 
     @api.constrains('amount_advance')
     def check_amount(self):
@@ -54,9 +59,29 @@ class AccountVoucherWizard(models.TransientModel):
         amount_total = purchase.amount_total
 
         if 'amount_total' in fields:
-            res.update({'amount_total': amount_total})
+            res.update({'amount_total': amount_total,
+                        'currency_id': purchase.currency_id.id})
 
         return res
+
+    @api.onchange('journal_id','date')
+    def onchange_date(self):
+        if self.currency_id:
+            self.exchange_rate = 1.0 / \
+                (self.env["res.currency"].with_context(date=self.date).
+                 _get_conversion_rate(self.currency_id,
+                                      (self.journal_id.currency or
+                                      self.env.user.company_id.
+                                      currency_id))
+                 or 1.0)
+            self.currency_amount = self.amount_advance * \
+                (1.0 / self.exchange_rate)
+        else:
+            self.exchange_rate = 1.0
+
+    @api.onchange('exchange_rate', 'amount_advance')
+    def onchange_amount(self):
+        self.currency_amount = self.amount_advance * (1.0 / self.exchange_rate)
 
     @api.multi
     def make_advance_payment(self):
@@ -71,14 +96,20 @@ class AccountVoucherWizard(models.TransientModel):
             purchase = purchase_obj.browse(purchase_id)
 
             partner_id = purchase.partner_id.id
-            currency_id = self[0].journal_id.currency and \
-                self[0].journal_id.currency.id or \
-                self[0].journal_id.company_id.currency_id.id
             date = self[0].date
             company_id = purchase.company_id.id
             purchase_ref = purchase.id
             period_ids = period_obj.find(date)
             period_id = period_ids[0]
+            if purchase.currency_id.id != self[0].journal_id.currency.id and \
+                    purchase.currency_id.id != \
+                    self[0].journal_id.company_id.currency_id.id:
+                multicurrency = True
+                currency_amount = self[0].amount_advance * \
+                    1.0 / (self[0].exchange_rate or 1.0)
+            else:
+                multicurrency = False
+                currency_amount = self[0].amount_advance
 
             voucher_res = {'type': 'payment',
                            'partner_id': partner_id,
@@ -86,11 +117,12 @@ class AccountVoucherWizard(models.TransientModel):
                            'account_id':
                            self[0].journal_id.default_credit_account_id.id,
                            'company_id': company_id,
-                           'payment_rate_currency_id': currency_id,
-                           'currency_id': self[0].journal_id.company_id.
-                           currency_id.id,
+                           'payment_rate_currency_id': purchase.currency_id.id,
+                           'payment_rate': multicurrency and
+                           self[0].exchange_rate or 1.0,
                            'date': date,
-                           'amount': self[0].amount_advance,
+                           'amount': currency_amount,
+                           'is_multi_currency': multicurrency,
                            'period_id': period_id.id,
                            'purchase_id': purchase_ref,
                            'name': _("Advance Payment"),
@@ -98,6 +130,14 @@ class AccountVoucherWizard(models.TransientModel):
                            }
             voucher = voucher_obj.create(voucher_res)
             voucher.action_move_line_create()
+            voucher.refresh()
+            if multicurrency:
+                for line in voucher.move_ids:
+                    line.currency_id = self[0].currency_id.id
+                    if line.credit:
+                        line.amount_currency = -self[0].amount_advance
+                    else:
+                        line.amount_currency = self[0].amount_advance
 
             return {
                 'type': 'ir.actions.act_window_close',

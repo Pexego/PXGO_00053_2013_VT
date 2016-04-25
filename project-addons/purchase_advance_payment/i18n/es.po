@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-16 19:34+0000\n"
-"PO-Revision-Date: 2015-12-16 19:34+0000\n"
+"POT-Creation-Date: 2016-04-25 15:56+0000\n"
+"PO-Revision-Date: 2016-04-25 15:56+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "Comprobantes contables"
 
 #. module: purchase_advance_payment
 #: view:account.purchase.voucher.wizard:purchase_advance_payment.view_account_purchase_voucher_wizard
-#: code:addons/purchase_advance_payment/wizard/purchase_advance_payment_wzd.py:92
+#: code:addons/purchase_advance_payment/wizard/purchase_advance_payment_wzd.py:128
 #: model:ir.actions.act_window,name:purchase_advance_payment.action_view_account_purchase_voucher_wizard
 #, python-format
 msgid "Advance Payment"
@@ -34,7 +34,7 @@ msgid "Amount advanced"
 msgstr "Importe anticipado"
 
 #. module: purchase_advance_payment
-#: code:addons/purchase_advance_payment/wizard/purchase_advance_payment_wzd.py:41
+#: code:addons/purchase_advance_payment/wizard/purchase_advance_payment_wzd.py:46
 #, python-format
 msgid "Amount of advance must be positive."
 msgstr "El importe anticipado debe ser positivo."
@@ -72,13 +72,13 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: purchase_advance_payment
-#: code:addons/purchase_advance_payment/wizard/apply_advanced_amount_wzd.py:40
+#: code:addons/purchase_advance_payment/wizard/apply_advanced_amount_wzd.py:39
 #, python-format
 msgid "Cannot apply a negative amount"
 msgstr "No puede aplicar un importe en negativo"
 
 #. module: purchase_advance_payment
-#: code:addons/purchase_advance_payment/wizard/apply_advanced_amount_wzd.py:37
+#: code:addons/purchase_advance_payment/wizard/apply_advanced_amount_wzd.py:36
 #, python-format
 msgid "Cannot apply more amount that current on account amount"
 msgstr "No puede aplicar más importe del que dispone actualmente como entrega a cuenta"
@@ -96,6 +96,16 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: purchase_advance_payment
+#: field:account.purchase.voucher.wizard,currency_amount:0
+msgid "Curr. amount"
+msgstr "Importe divisa"
+
+#. module: purchase_advance_payment
+#: field:account.purchase.voucher.wizard,currency_id:0
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: purchase_advance_payment
 #: field:account.purchase.voucher.wizard,date:0
 msgid "Date"
 msgstr "Fecha"
@@ -104,6 +114,11 @@ msgstr "Fecha"
 #: view:purchase.order:purchase_advance_payment.purchase_order_form_change_button
 msgid "Deliveries & Invoices"
 msgstr "Entregas y facturas"
+
+#. module: purchase_advance_payment
+#: field:account.purchase.voucher.wizard,exchange_rate:0
+msgid "Exchange rate"
+msgstr "Tasa cambio"
 
 #. module: purchase_advance_payment
 #: field:account.purchase.voucher.wizard,id:0
@@ -139,17 +154,18 @@ msgid "Make advance payment"
 msgstr "Crear anticipo"
 
 #. module: purchase_advance_payment
+#: view:account.purchase.voucher.wizard:purchase_advance_payment.view_account_purchase_voucher_wizard
+msgid "Operation"
+msgstr "Operación"
+
+#. module: purchase_advance_payment
 #: model:ir.model,name:purchase_advance_payment.model_res_partner
 msgid "Partner"
 msgstr "Empresa"
 
 #. module: purchase_advance_payment
-#: field:purchase.order,account_voucher_ids:0
-msgid "Pay purchase advanced"
-msgstr "Anticipos pagados"
-
-#. module: purchase_advance_payment
 #: view:purchase.order:purchase_advance_payment.purchase_order_form_change_button
+#: field:purchase.order,account_voucher_ids:0
 msgid "Pay purchase advanced"
 msgstr "Crear anticipo"
 
@@ -172,14 +188,3 @@ msgstr "Compra"
 #: model:ir.model,name:purchase_advance_payment.model_purchase_order
 msgid "Purchase Order"
 msgstr "Pedido de compra"
-
-#. module: purchase_advance_payment
-#: field:account.invoice,purchase_advance_amount:0
-msgid "Advance amount"
-msgstr "Importe anticipado"
-
-#. module: purchase_advance_payment
-#: field:account.invoice,on_account_purchase:0
-#: field:res.partner,on_account_purchase:0
-msgid "On account amount"
-msgstr "Entregas a cuenta"
