@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-03 15:50+0000\n"
-"PO-Revision-Date: 2015-07-03 15:50+0000\n"
+"POT-Creation-Date: 2016-04-25 17:22+0000\n"
+"PO-Revision-Date: 2016-04-25 17:22+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgstr "Comprobantes contables"
 
 #. module: sale_advance_payment
 #: view:account.voucher.wizard:sale_advance_payment.view_account_voucher_wizard
-#: code:addons/sale_advance_payment/wizard/sale_advance_payment_wzd.py:91
+#: code:addons/sale_advance_payment/wizard/sale_advance_payment_wzd.py:131
 #: model:ir.actions.act_window,name:sale_advance_payment.action_view_account_voucher_wizard
 #, python-format
 msgid "Advance Payment"
@@ -34,7 +34,7 @@ msgid "Amount advanced"
 msgstr "Importe anticipado"
 
 #. module: sale_advance_payment
-#: code:addons/sale_advance_payment/wizard/sale_advance_payment_wzd.py:40
+#: code:addons/sale_advance_payment/wizard/sale_advance_payment_wzd.py:46
 #, python-format
 msgid "Amount of advance must be positive."
 msgstr "El importe anticipado debe ser positivo."
@@ -96,9 +96,24 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: sale_advance_payment
+#: field:account.voucher.wizard,currency_amount:0
+msgid "Curr. amount"
+msgstr "Importe divisa"
+
+#. module: sale_advance_payment
+#: field:account.voucher.wizard,currency_id:0
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: sale_advance_payment
 #: field:account.voucher.wizard,date:0
 msgid "Date"
 msgstr "Fecha"
+
+#. module: sale_advance_payment
+#: field:account.voucher.wizard,exchange_rate:0
+msgid "Exchange rate"
+msgstr "Tasa cambio"
 
 #. module: sale_advance_payment
 #: field:account.voucher.wizard,id:0
@@ -134,9 +149,19 @@ msgid "Make advance payment"
 msgstr "Crear anticipo"
 
 #. module: sale_advance_payment
+#: view:account.voucher.wizard:sale_advance_payment.view_account_voucher_wizard
+msgid "Operation"
+msgstr "Operación"
+
+#. module: sale_advance_payment
 #: view:sale.order:sale_advance_payment.view_order_form_change_button
 msgid "Other Information"
 msgstr "Otra información"
+
+#. module: sale_advance_payment
+#: model:ir.model,name:sale_advance_payment.model_res_partner
+msgid "Partner"
+msgstr "Empresa"
 
 #. module: sale_advance_payment
 #: view:sale.order:sale_advance_payment.view_order_form_change_button
@@ -160,18 +185,6 @@ msgid "Sale"
 msgstr "Venta"
 
 #. module: sale_advance_payment
-#: field:account.invoice,advance_amount:0
-msgid "Advance amount"
-msgstr "Importe anticipado"
-
-#. module: sale_advance_payment
-#: field:account.invoice,on_account_amount:0
-#: field:res.partner,on_account_amount:0
-msgid "On account amount"
-msgstr "Entregas a cuenta"
-
-#. module: sale_advance_payment
 #: model:ir.model,name:sale_advance_payment.model_sale_order
 msgid "Sales Order"
 msgstr "Pedido de venta"
-

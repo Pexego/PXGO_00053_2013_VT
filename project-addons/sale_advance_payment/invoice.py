@@ -36,20 +36,28 @@ class AccountInvoice(models.Model):
                 sale = line.move_id.procurement_id.sale_line_id.order_id
                 if sale not in orders:
                     orders.append(sale)
-                    for vline in sale.account_voucher_ids:
-                        if vline.state != 'posted':
-                            continue
-                        for move in vline.move_ids:
-                            if move.account_id.type in ('receivable',
-                                                        'payable'):
-                                if move.reconcile_partial_id:
-                                    amount += move.amount_residual_currency > \
+            else:
+                sale_lines = self.env["sale.order.line"].\
+                    search([('invoice_lines', 'in', [line.id])])
+                if sale_lines:
+                    if sale_lines[0].order_id not in orders:
+                        orders.append(sale_lines[0].order_id)
+            for sale in orders:
+                for vline in sale.account_voucher_ids:
+                    if vline.state != 'posted':
+                        continue
+                    for move in vline.move_ids:
+                        if move.account_id.type in ('receivable',
+                                                    'payable'):
+                            if move.reconcile_partial_id:
+                                amount += move.amount_residual_currency > \
                                     0 and move.amount_residual_currency or 0.0
-                                elif move.reconcile_id:
-                                    continue
-                                else:
-                                    amount += abs(move.amount_currency) or \
-                                        move.credit
+                            elif move.reconcile_id:
+                                continue
+                            else:
+                                amount += abs(move.amount_currency) or \
+                                    move.credit
+
         self.advance_amount = amount
 
     @api.one
@@ -75,6 +83,12 @@ class AccountInvoice(models.Model):
                     if sale not in orders:
                         if sale.account_voucher_ids:
                             orders.append(sale)
+                else:
+                    sale_lines = self.env["sale.order.line"].\
+                        search([('invoice_lines', 'in', [line.id])])
+                    if sale_lines:
+                        if sale_lines[0].order_id not in orders:
+                            orders.append(sale_lines[0].order_id)
             if orders:
                 move_lines = move_line_obj.\
                     search([('move_id', '=', invoice.move_id.id),
