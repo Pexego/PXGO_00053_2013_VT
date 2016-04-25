@@ -35,21 +35,29 @@ class AccountInvoice(models.Model):
                 purchase = line.move_id.purchase_line_id.order_id
                 if purchase not in orders:
                     orders.append(purchase)
-                    for vline in purchase.account_voucher_ids:
-                        if vline.state != 'posted':
+            else:
+                purchase_lines = self.env["purchase.order.line"].\
+                    search([('invoice_lines', 'in', [line.id])])
+                if purchase_lines:
+                    if purchase_lines[0].order_id not in orders:
+                        orders.append(purchase_lines[0].order_id)
+
+        for purchase in orders:
+            for vline in purchase.account_voucher_ids:
+                if vline.state != 'posted':
+                    continue
+                for move in vline.move_ids:
+                    if move.account_id.type in ('receivable',
+                                                'payable'):
+                        if move.reconcile_partial_id:
+                            amount += move.amount_residual_currency > \
+                                0 and move.amount_residual_currency \
+                                or 0.0
+                        elif move.reconcile_id:
                             continue
-                        for move in vline.move_ids:
-                            if move.account_id.type in ('receivable',
-                                                        'payable'):
-                                if move.reconcile_partial_id:
-                                    amount += move.amount_residual_currency > \
-                                        0 and move.amount_residual_currency \
-                                        or 0.0
-                                elif move.reconcile_id:
-                                    continue
-                                else:
-                                    amount += move.amount_currency or \
-                                        move.debit
+                        else:
+                            amount += move.amount_currency or \
+                                move.debit
         self.purchase_advance_amount = amount
 
     @api.one
@@ -74,6 +82,12 @@ class AccountInvoice(models.Model):
                     if purchase not in orders:
                         if purchase.account_voucher_ids:
                             orders.append(purchase)
+                else:
+                    purchase_lines = self.env["purchase.order.line"].\
+                        search([('invoice_lines', 'in', [line.id])])
+                    if purchase_lines:
+                        if purchase_lines[0].order_id not in orders:
+                            orders.append(purchase_lines[0].order_id)
             if orders:
                 move_lines = move_line_obj.\
                     search([('move_id', '=', invoice.move_id.id),
