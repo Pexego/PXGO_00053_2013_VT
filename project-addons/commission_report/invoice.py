@@ -42,7 +42,7 @@ class AccountInvoice(models.Model):
     @api.multi
     def unlink(self):
         for invoic in self:
-            if self.state == 'draft':
+            if invoic.state == 'draft':
                 settlements = self.env['sale.commission.settlement'].search(
                     [('invoice', '=', invoic.id)])
                 if settlements:
