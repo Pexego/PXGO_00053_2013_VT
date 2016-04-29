@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
+    <data noupdate="1">
 
         <!-- <record id="sequence_crm_claim_rma_supplier" model="ir.sequence">
           <field name="code">crm.claim.rma.supplier2</field>
