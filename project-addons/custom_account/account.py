@@ -30,10 +30,19 @@ class AccountMoveLine(models.Model):
         if self.invoice and self.invoice.mandate_id:
             self.scheme = self.invoice.mandate_id.scheme
 
+    @api.model
+    def _mandate_scheme_search(self, operator, operand):
+        invoice_obj = self.env['account.invoice']
+        invoices = invoice_obj.search([('mandate_id.scheme', operator,
+                                        operand),('move_id', '!=', False)])
+        moves = [x.move_id.id for x in invoices]
+        return [('move_id', 'in', moves)]
+
     scheme = fields.Selection(selection=[('CORE', 'Basic (CORE)'),
                                          ('B2B', 'Enterprise (B2B)')],
                               string='Scheme',
-                              compute='get_mandate_scheme')
+                              compute='get_mandate_scheme',
+                              search='_mandate_scheme_search')
 
 
 class AccountBankingMandate(models.Model):
