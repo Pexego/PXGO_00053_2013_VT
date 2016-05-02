@@ -14,6 +14,10 @@ from auth import auth
 from admin import admin
 import rest_interface
 import xmlrpc_interface
+import atexit
+import cron
+from apscheduler.schedulers.background import BackgroundScheduler
+
 
 ###############################################################################
 # Main script body
@@ -22,4 +26,10 @@ import xmlrpc_interface
 if __name__ == "__main__":
     # This code is only executed if the cowlab.py file is directly called from
     # python and not imported from another python file / console.
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(cron.check_sync_data, 'interval', minutes=2)
+    # Explicitly kick off the background thread
+    scheduler.start()
+
+    atexit.register(lambda: scheduler.shutdown(wait=False))
     app.run(host="0.0.0.0")

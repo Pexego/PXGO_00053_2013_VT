@@ -4,11 +4,10 @@ from app import app
 from database import BaseModel
 import requests
 import json
-import thread
 import hmac
 import time
 import hashlib
- 
+
 def _get_signature():
         key = r"Z%z^Q%\*v165a"
         key += time.strftime("%d-%m-%y")
@@ -25,7 +24,7 @@ class SyncLog(BaseModel):
     sync = BooleanField(default=False)
     to_sync = BooleanField(default=False)
 
-    def sync_client(self, recurrent=False):
+    def sync_client(self):
         #if not recurrent:
             #to_sync_objs = SyncLog.select().where(SyncLog.id != self.id,
             #                                      SyncLog.to_sync == True)
@@ -37,9 +36,8 @@ class SyncLog(BaseModel):
                 #    obj.to_sync = False
                 #    obj.save()
         url = app.config['NOTIFY_URL']
-        user = app.config['NOTIFY_USER']
-        password = app.config['NOTIFY_PASSWORD']
-        signature = _get_signature() 
+
+        signature = _get_signature()
         data = {'model': self.model, 'operation': self.operation,
                 'odoo_id': self.odoo_id,
                 'signature': signature}
@@ -56,7 +54,7 @@ class SyncLog(BaseModel):
                 self.save()
                 res = False
         except Exception:
-            res=False
+            res = False
             self.to_sync = True
             self.sync = False
             self.save()

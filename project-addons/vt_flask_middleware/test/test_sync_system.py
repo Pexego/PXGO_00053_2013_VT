@@ -32,7 +32,6 @@ def requires_auth(f):
 
 
 @app.route('/api', methods=['POST'])
-@requires_auth
 def index():
     content = request.get_json(force=True, silent=True)
     print datetime.now().strftime('%H:%M:%S') + " --- " + str(content)
