@@ -1,11 +1,14 @@
 from sync_log import SyncLog
 
 def check_sync_data():
+    print "DENTRO"
     to_sync_objs = SyncLog.select().where(SyncLog.to_sync == True).\
         order_by(SyncLog.sync_date.desc()).limit(100)
+    print "LEN: ", len(to_sync_objs)
     for sync_obj in to_sync_objs:
         if sync_obj.to_sync:
             res = sync_obj.sync_client()
+            print "RES: ", res
             if res:
                 other_sync_objs = SyncLog.select().\
                     where(SyncLog.to_sync == True,

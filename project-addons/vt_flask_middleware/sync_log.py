@@ -38,11 +38,17 @@ class SyncLog(BaseModel):
         url = app.config['NOTIFY_URL']
 
         signature = _get_signature()
-        data = {'model': self.model, 'operation': self.operation,
-                'odoo_id': self.odoo_id,
-                'signature': signature}
+        #data = {'model': self.model, 'operation': self.operation,
+        #        'odoo_id': self.odoo_id,
+        #        'signature': signature}
+        data = {'signature': signature, 
+                'data': [{'model': self.model,  
+                         'operation': self.operation,
+                         'odoo_id': self.odoo_id}]}
         try:
+            print "DATA: ", data 
             resp = requests.post(url, data=json.dumps(data), timeout=6)
+            print "RESP: ", resp
             if resp.status_code == 200:
                 self.sync = True
                 self.to_sync = False
