@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_stock_config_settings_custom" model="ir.ui.view">
+            <field name="name">stock settings custom</field>
+            <field name="model">stock.config.settings</field>
+            <field name="inherit_id" ref="stock.view_stock_config_settings"/>
+            <field name="arch" type="xml">
+                <separator string="Traceability" position="before">
+                    <group string="Stock">
+                        <label for="id" string="Calculation Stock Days"/>
+                        <div>
+                          <div>
+                              <label for= "consult_period"/>
+                              <field name="consult_period" class="oe_inline"/>
+
+                          </div>
+                          <div>
+                              <label for= "adjustement_period"/>
+                              <field name="adjustement_period" class="oe_inline"/>
+                          </div>
+                        </div>
+                    </group>
+                </separator>
+            </field>
+         </record>
+    </data>
+</openerp>

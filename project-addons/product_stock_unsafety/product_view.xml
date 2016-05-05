@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="product_add_remaining_days" model="ir.ui.view">
+            <field name="name">product.product.form.add_remaining_days</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="purchase_proposal.product_add_proposal_data"/>
+            <field name="arch" type="xml">
+                <field name="last_sixty_days_sales" position="after">
+                    <field name="remaining_days_sale"/>
+                    <field name="replacement_id"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

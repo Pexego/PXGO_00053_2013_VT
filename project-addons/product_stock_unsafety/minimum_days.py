@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,20 +18,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp.osv import osv, fields
 
-from openerp import models, fields
 
-
-class ProductTemplate(models.Model):
-
-    _inherit = "product.template"
-
-    web = fields.Selection([('not_published', 'Not published'),
-                            ('published', 'Published')], "Web",
-                           default="not_published", copy=False,
-                           help="Allow to publish product description "
-                                "in public web service")
-    show_stock_outside = fields.Boolean("Show stock outside", copy=False,
-                                        help="Allow to publish stock info "
-                                             "in public web service",
-                                        default=True)
+class minimum_day(osv.Model):
+    _name = 'minimum.day'
+    _description = 'Setting minimum stock days'
+    _columns = {
+        'name': fields.char('Name', size=255, required=True),
+        'days_sale': fields.float('Security Days', required=True),
+        'default': fields.boolean('Default')
+    }
+    _defaults = {
+        'default': True
+    }
