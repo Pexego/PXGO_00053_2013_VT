@@ -48,6 +48,7 @@ class PartnerExporter(Exporter):
                 "commercial_id": partner.user_id.id,
                 "ref": partner.ref,
                 "discount": partner.discount,
+                "pricelist_name": partner.property_product_pricelist and partner.property_product_pricelist.name or "",
                 "state": partner.state_id and partner.state_id.name or "",
                 "email": partner.email or ""}
         if mode == "insert":
@@ -69,7 +70,8 @@ class PartnerAdapter(GenericAdapter):
 def delay_export_partner_create(session, model_name, record_id, vals):
     partner = session.env[model_name].browse(record_id)
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
-                 "country_id", "state_id", "email", "ref", 'user_id']
+                 "country_id", "state_id", "email", "ref", 'user_id',
+                 "property_product_pricelist"]
     if vals.get("web", False) and (vals.get('active', False) or
                                    partner.active):
         export_partner.delay(session, model_name, record_id, priority=2, eta=60)
