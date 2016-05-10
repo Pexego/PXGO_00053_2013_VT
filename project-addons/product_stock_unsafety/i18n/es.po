@@ -1,32 +1,19 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* product_stock_unsafety
+#       * product_stock_unsafety
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 16:58+0000\n"
-"PO-Revision-Date: 2015-09-24 16:58+0000\n"
+"POT-Creation-Date: 2016-05-10 19:20+0000\n"
+"PO-Revision-Date: 2016-05-10 19:20+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: product_stock_unsafety
-#: model:ir.actions.act_window,help:product_stock_unsafety.action_product_stock_unsafety_form
-msgid "<p class=\"oe_view_nocontent_create\">\n"
-"                Click to start a new Product Stock Unsafety.\n"
-"              </p>\n"
-"\n"
-"            "
-msgstr "<p class=\"oe_view_nocontent_create\">\n"
-"                Pincha para crear un bajo mínimos.\n"
-"              </p>\n"
-"\n"
-"            "
 
 #. module: product_stock_unsafety
 #: model:ir.actions.act_window,help:product_stock_unsafety.action_minimum_day_form
@@ -45,10 +32,31 @@ msgid "Additional Information"
 msgstr "Información adicional"
 
 #. module: product_stock_unsafety
-#: field:product.template,specific_adjustement_period:0
 #: field:stock.config.settings,adjustement_period:0
 msgid "Adjustement Period Stock Days"
 msgstr "Período de ajuste días stock"
+
+#. module: product_stock_unsafety
+#: view:assign.purchase.order.wzd:product_stock_unsafety.assign_purchase_order_wzd_form
+msgid "Assign purchase"
+msgstr "Asignar compra"
+
+#. module: product_stock_unsafety
+#: view:assign.purchase.order.wzd:product_stock_unsafety.assign_purchase_order_wzd_form
+#: model:ir.actions.act_window,name:product_stock_unsafety.assign_purchase_order_wzd_form_action
+msgid "Assign purchase order"
+msgstr "Asignar compra"
+
+#. module: product_stock_unsafety
+#: field:product.stock.unsafety,bom_id:0
+msgid "Bill of material"
+msgstr "Lista de material"
+
+#. module: product_stock_unsafety
+#: view:product.stock.unsafety:product_stock_unsafety.view_product_stock_unsafety_filter
+#: field:product.stock.unsafety,brand_id:0
+msgid "Brand"
+msgstr "Marca"
 
 #. module: product_stock_unsafety
 #: view:stock.config.settings:product_stock_unsafety.view_stock_config_settings_custom
@@ -56,6 +64,8 @@ msgid "Calculation Stock Days"
 msgstr "Cálculo de los días de stock"
 
 #. module: product_stock_unsafety
+#: view:assign.purchase.order.wzd:product_stock_unsafety.assign_purchase_order_wzd_form
+#: view:create.purchase.from.unsafety.wzd:product_stock_unsafety.create_purchase_from_unsafety_wzd_form
 #: view:product.stock.unsafety:product_stock_unsafety.view_product_stock_unsafety_form
 #: view:product.stock.unsafety:product_stock_unsafety.view_product_stock_unsafety_tree
 msgid "Cancel"
@@ -67,18 +77,32 @@ msgid "Cancelled"
 msgstr "Cancelado"
 
 #. module: product_stock_unsafety
-#: field:product.template,specific_consult_period:0
 #: field:stock.config.settings,consult_period:0
 msgid "Consult Period Stock Days"
 msgstr "Período consulta días de stock"
 
 #. module: product_stock_unsafety
+#: view:create.purchase.from.unsafety.wzd:product_stock_unsafety.create_purchase_from_unsafety_wzd_form
+msgid "Create purchase"
+msgstr "Crear compra"
+
+#. module: product_stock_unsafety
+#: view:create.purchase.from.unsafety.wzd:product_stock_unsafety.create_purchase_from_unsafety_wzd_form
+#: model:ir.actions.act_window,name:product_stock_unsafety.create_purchase_from_unsafety_wzd_action
+msgid "Create purchase order"
+msgstr "Crear compra"
+
+#. module: product_stock_unsafety
+#: field:assign.purchase.order.wzd,create_uid:0
+#: field:create.purchase.from.unsafety.wzd,create_uid:0
 #: field:minimum.day,create_uid:0
 #: field:product.stock.unsafety,create_uid:0
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: product_stock_unsafety
+#: field:assign.purchase.order.wzd,create_date:0
+#: field:create.purchase.from.unsafety.wzd,create_date:0
 #: field:minimum.day,create_date:0
 #: field:product.stock.unsafety,create_date:0
 msgid "Created on"
@@ -94,6 +118,14 @@ msgstr "Fecha"
 #: field:minimum.day,default:0
 msgid "Default"
 msgstr "Por defecto"
+
+#. module: product_stock_unsafety
+#: field:assign.purchase.order.wzd,display_name:0
+#: field:create.purchase.from.unsafety.wzd,display_name:0
+#: field:minimum.day,display_name:0
+#: field:product.stock.unsafety,display_name:0
+msgid "Display Name"
+msgstr "Nombre"
 
 #. module: product_stock_unsafety
 #: view:minimum.day:product_stock_unsafety.view_minimum_day_form
@@ -137,15 +169,17 @@ msgid "Group By"
 msgstr "Agrupar por"
 
 #. module: product_stock_unsafety
+#: field:assign.purchase.order.wzd,id:0
+#: field:create.purchase.from.unsafety.wzd,id:0
 #: field:minimum.day,id:0
 #: field:product.stock.unsafety,id:0
 msgid "ID"
 msgstr "ID"
 
 #. module: product_stock_unsafety
-#: help:product.template,specific_periods:0
-msgid "If checked we can specify the periods to calculate the remaining stock days else we use the general configuration of consult and ajust periods"
-msgstr "Si está marcado podremos especificar los períodos para calcular los restantes días de stock, sino usaremos la configuración general para obtener los períodos de consulta y de ajuste"
+#: selection:product.stock.unsafety,state:0
+msgid "In Action"
+msgstr "En acción"
 
 #. module: product_stock_unsafety
 #: view:product.stock.unsafety:product_stock_unsafety.view_product_stock_unsafety_filter
@@ -154,26 +188,43 @@ msgid "In Progress"
 msgstr "En curso"
 
 #. module: product_stock_unsafety
-#: selection:product.stock.unsafety,state:0
-msgid "In Purchase"
-msgstr "En compra"
-
-#. module: product_stock_unsafety
 #: field:product.stock.unsafety,incoming_qty:0
 msgid "Incoming qty."
 msgstr "Entradas pendientes"
 
 #. module: product_stock_unsafety
+#: field:assign.purchase.order.wzd,__last_update:0
+#: field:create.purchase.from.unsafety.wzd,__last_update:0
+#: field:minimum.day,__last_update:0
+#: field:product.stock.unsafety,__last_update:0
+msgid "Last Modified on"
+msgstr "Últ. actualización en"
+
+#. module: product_stock_unsafety
+#: field:assign.purchase.order.wzd,write_uid:0
+#: field:create.purchase.from.unsafety.wzd,write_uid:0
 #: field:minimum.day,write_uid:0
 #: field:product.stock.unsafety,write_uid:0
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: product_stock_unsafety
+#: field:assign.purchase.order.wzd,write_date:0
+#: field:create.purchase.from.unsafety.wzd,write_date:0
 #: field:minimum.day,write_date:0
 #: field:product.stock.unsafety,write_date:0
 msgid "Last Updated on"
 msgstr "Última actualización en"
+
+#. module: product_stock_unsafety
+#: view:stock.warehouse.orderpoint:product_stock_unsafety.warehouse_orderpoint_search_add_min_days
+msgid "Location"
+msgstr "Ubicación"
+
+#. module: product_stock_unsafety
+#: view:stock.warehouse.orderpoint:product_stock_unsafety.warehouse_orderpoint_search_add_min_days
+msgid "Min days"
+msgstr "Días mínimos"
 
 #. module: product_stock_unsafety
 #: field:product.stock.unsafety,minimum_proposal:0
@@ -183,10 +234,10 @@ msgstr "Mín. propuesto"
 #. module: product_stock_unsafety
 #: model:ir.model,name:product_stock_unsafety.model_stock_warehouse_orderpoint
 msgid "Minimum Inventory Rule"
-msgstr "Regla de inventario mínimo"
+msgstr "Reglas stock mínimo"
 
 #. module: product_stock_unsafety
-#: code:addons/product_stock_unsafety/schedulers.py:98
+#: code:addons/product_stock_unsafety/schedulers.py:131
 #, python-format
 msgid "Minimum Stock Days"
 msgstr "Días stock mínimos"
@@ -207,16 +258,12 @@ msgid "Order"
 msgstr "Pedido"
 
 #. module: product_stock_unsafety
-#: field:product.stock.unsafety,preorder_id:0
-msgid "Preorder"
-msgstr "Preorder"
-
-#. module: product_stock_unsafety
 #: model:ir.model,name:product_stock_unsafety.model_procurement_order
 msgid "Procurement"
 msgstr "Abastecimiento"
 
 #. module: product_stock_unsafety
+#: model:ir.model,name:product_stock_unsafety.model_product_product
 #: view:product.stock.unsafety:product_stock_unsafety.view_product_stock_unsafety_filter
 #: field:product.stock.unsafety,product_id:0
 msgid "Product"
@@ -240,12 +287,27 @@ msgid "Product stock unsafety"
 msgstr "Alerta bajo mínimos"
 
 #. module: product_stock_unsafety
+#: view:product.stock.unsafety:product_stock_unsafety.view_product_stock_unsafety_filter
+#: field:product.stock.unsafety,product_type:0
+msgid "Product type"
+msgstr "Tipo producto"
+
+#. module: product_stock_unsafety
 #: model:ir.model,name:product_stock_unsafety.model_product_stock_unsafety
 msgid "Products that have stock under minimum"
 msgstr "Productos que tienen el stock bajo mínimos."
 
 #. module: product_stock_unsafety
+#: field:assign.purchase.order.wzd,purchase_id:0
+#: field:product.stock.unsafety,purchase_id:0
+msgid "Purchase"
+msgstr "Compra"
+
+#. module: product_stock_unsafety
+#: code:addons/product_stock_unsafety/wizard/assign_purchase_order.py:57
+#: code:addons/product_stock_unsafety/wizard/create_purchase_order.py:81
 #: model:ir.model,name:product_stock_unsafety.model_purchase_order
+#, python-format
 msgid "Purchase Order"
 msgstr "Pedido de compra"
 
@@ -276,13 +338,8 @@ msgstr "Cantidad en stock"
 
 #. module: product_stock_unsafety
 #: help:product.stock.unsafety,minimum_proposal:0
-msgid "Quantity necessary to reach the minimum days of preorder"
-msgstr "Cantidad necesaria para llegar a los días mínimos del reabastecimiento"
-
-#. module: product_stock_unsafety
-#: help:product.stock.unsafety,product_qty:0
-msgid "Quantity ordered in preorder"
-msgstr "Cantidad pedida en el pre pedido"
+msgid "Quantity necessary to reach the minimum days of purchase"
+msgstr "Cantidad necesaria para alcanzar los días mínimos de compra"
 
 #. module: product_stock_unsafety
 #: help:product.stock.unsafety,incoming_qty:0
@@ -313,6 +370,16 @@ msgstr "Motivo"
 #: field:product.stock.unsafety,remaining_days_sale:0
 msgid "Remaining Days of Sale"
 msgstr "Días restantes de venta"
+
+#. module: product_stock_unsafety
+#: field:product.product,remaining_days_sale:0
+msgid "Remaining Stock Days"
+msgstr "Días de stock restantes"
+
+#. module: product_stock_unsafety
+#: field:product.product,replacement_id:0
+msgid "Replaced by"
+msgstr "Reemplazado por"
 
 #. module: product_stock_unsafety
 #: field:product.stock.unsafety,orderpoint_id:0
@@ -348,13 +415,8 @@ msgstr "Días stock de seguridad"
 
 #. module: product_stock_unsafety
 #: model:ir.model,name:product_stock_unsafety.model_minimum_day
-msgid "Setting minimum days"
-msgstr "Configurar días stock de seguridad"
-
-#. module: product_stock_unsafety
-#: field:product.template,specific_periods:0
-msgid "Specific Periods"
-msgstr "Períodos específicos"
+msgid "Setting minimum stock days"
+msgstr "Días de stock mínimos"
 
 #. module: product_stock_unsafety
 #: field:product.stock.unsafety,state:0
@@ -377,6 +439,13 @@ msgid "Stock Mínimum Days"
 msgstr "Días mínimos"
 
 #. module: product_stock_unsafety
+#: help:product.product,remaining_days_sale:0
+msgid "Stock measure in days of sale computed consulting sales in sixty days with stock."
+msgstr "Stock medido en días de venta calculados consultando las ventas en los últimos 60 días con stock."
+
+#. module: product_stock_unsafety
+#: field:create.purchase.from.unsafety.wzd,supplier_id:0
+#: view:product.stock.unsafety:product_stock_unsafety.view_product_stock_unsafety_filter
 #: field:product.stock.unsafety,supplier_id:0
 msgid "Supplier"
 msgstr "Proveedor"
@@ -385,6 +454,16 @@ msgstr "Proveedor"
 #: help:product.stock.unsafety,orderpoint_id:0
 msgid "The replenishement rule that launch this under minimum alert."
 msgstr "La regla de reabastecimiento que lanza este en alerta mínima."
+
+#. module: product_stock_unsafety
+#: selection:product.stock.unsafety,product_type:0
+msgid "To buy"
+msgstr "Comprar"
+
+#. module: product_stock_unsafety
+#: selection:product.stock.unsafety,product_type:0
+msgid "To manufacture"
+msgstr "Producir"
 
 #. module: product_stock_unsafety
 #: view:stock.config.settings:product_stock_unsafety.view_stock_config_settings_custom
@@ -397,23 +476,12 @@ msgid "True"
 msgstr "Verdadero"
 
 #. module: product_stock_unsafety
-#: help:product.template,specific_adjustement_period:0
-msgid "Used to calculate remaining stock days. It will check a period from today back to this days, of the last and the current year to get the diferent trend in sales"
-msgstr "Usado para calcular los días de stock restantes. Comprobará un período desde hoy y hacia atrás hastos días indicados, del pasado y del presente año para calcular la diferencia en la tendencia de ventas "
-
-#. module: product_stock_unsafety
-#: help:product.template,specific_consult_period:0
-msgid "Used to calculate remaining stock days. It will check from today to X period days of the last year the quantity sold. if not sales in last year we check the period going back this days since today"
-msgstr "Usado para calcular los días de stock restantes. Comprobará desde hoy hasta los X días configurado el pasado año la cantidad vendida. Si no hubo ventas en ese período del año anterior se comprueba ese período mirando hacia atrás en el año actual."
-
-#. module: product_stock_unsafety
 #: view:product.stock.unsafety:product_stock_unsafety.view_product_stock_unsafety_tree
 #: field:product.stock.unsafety,virtual_stock:0
 msgid "Virtual Stock Conservative"
 msgstr "Stock virtual conservativo"
 
 #. module: product_stock_unsafety
-#: view:product.template:product_stock_unsafety.view_product_form_remaining_days
-msgid "days"
-msgstr "días"
-
+#: field:create.purchase.from.unsafety.wzd,warehouse_id:0
+msgid "Warehouse"
+msgstr "Almacén"

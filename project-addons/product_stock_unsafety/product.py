@@ -26,7 +26,7 @@ from dateutil.relativedelta import relativedelta
 class product_product(models.Model):
     _inherit = 'product.product'
 
-    @api.one
+    @api.model
     def get_daily_sales(self):
         stock_per_day = 0
         virtual_stock = self.virtual_available
@@ -44,8 +44,9 @@ class product_product(models.Model):
     def _calc_remaining_days(self):
         stock_days = 0.00
         stock_per_day = self.get_daily_sales()
-        if stock_per_day > 0:
-            stock_days = round(virtual_stock / stock_per_day)
+        virtual_available = self.virtual_available
+        if stock_per_day > 0 and virtual_available:
+            stock_days = round(virtual_available / stock_per_day)
 
         self.remaining_days_sale = stock_days
 

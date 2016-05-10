@@ -39,14 +39,17 @@ Module that adds the management to the products under minimal.
                 "stock",
                 "procurement",
                 "product_virtual_stock_conservative",
-                "purchase_proposal"
+                "purchase_proposal",
+                "product_brand"
                 ],
     "data": ["minimum_days_view.xml",
              "product_view.xml",
              "under_minimum_view.xml",
              "stock_warehouse_orderpoint_view.xml",
              "stock_view.xml",
-             "security/ir.model.access.csv"],
+             "security/ir.model.access.csv",
+             "wizard/create_purchase_order_view.xml",
+             "wizard/assign_purchase_order_view.xml"],
     "installable": True,
     "application": True,
 }

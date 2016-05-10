@@ -71,7 +71,6 @@ class procurement_order(osv.Model):
         if use_new_cursor:
             cr = openerp.registry(cr.dbname).cursor()
         orderpoint_obj = self.pool.get('stock.warehouse.orderpoint')
-        prod_tmp_obj = self.pool.get('product.template')
         pull_obj = self.pool.get('procurement.rule')
         bom_obj = self.pool.get('mrp.bom')
 
@@ -85,8 +84,12 @@ class procurement_order(osv.Model):
                 prod = op.product_id
                 if not prod.active or prod.replacement_id:
                     continue
+                domain = ['|', ('warehouse_id', '=', op.warehouse_id.id),
+                          ('warehouse_id', '=', False),
+                          ('location_id', '=', op.location_id.id)]
                 product_route_ids = \
-                    [x.id for x in prod.route_ids + prod.categ_id.total_route_ids]
+                    [x.id for x in
+                     prod.route_ids + prod.categ_id.total_route_ids]
                 rule_ids = pull_obj.search(cr, uid,
                                            domain + [('route_id', 'in',
                                                       product_route_ids)],
@@ -131,12 +134,13 @@ class procurement_order(osv.Model):
                             'responsible': uid,
                             'state': state,
                             'bom_id': bom_id,
-                            'product_type': product_type}
-                    prod_tmpl_id = prod.product_tmpl_id.id
+                            'product_type': product_type,
+                            'brand_id': prod.product_brand_id.id}
                     daylysales = prod.get_daily_sales()
                     remaining_days = real_minimum - days_sale
                     if daylysales and remaining_days:
-                        vals['minimum_proposal'] = daylysales * remaining_days
+                        vals['minimum_proposal'] = \
+                            round(daylysales * remaining_days)
 
                     # Creating or updating existing under minimum
                     self.update_under_minimum(cr, uid, ids, vals,

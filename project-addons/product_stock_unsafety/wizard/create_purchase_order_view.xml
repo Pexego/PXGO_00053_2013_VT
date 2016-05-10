@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="create_purchase_from_unsafety_wzd_form" model="ir.ui.view">
+            <field name="name">create.purchase.from.unsafety.wzd.form</field>
+            <field name="model">create.purchase.from.unsafety.wzd</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Create purchase order">
+                    <group>
+                        <field name="warehouse_id"/>
+                        <field name="supplier_id"/>
+                    </group>
+                    <button string="Create purchase" name="create_purchase_order" type="object" icon="gtk-ok"/>
+                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Create purchase order"
+            res_model="create.purchase.from.unsafety.wzd"
+            src_model="product.stock.unsafety"
+            view_id="create_purchase_from_unsafety_wzd_form"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"
+            id="create_purchase_from_unsafety_wzd_action"/>
+
+    </data>
+</openerp>
