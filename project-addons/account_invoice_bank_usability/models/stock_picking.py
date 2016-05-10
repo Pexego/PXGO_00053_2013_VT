@@ -54,7 +54,7 @@ class StockPicking(models.Model):
                     invoice.mandate_id = mandate_sel.id,
                     invoice.partner_bank_id = \
                         mandate_sel.partner_bank_id.id
-                else:
+                elif invoice.partner_id.bank_ids:
                     invoice.partner_bank_id = \
                         invoice.partner_id.bank_ids[0].id
         return invoice_id
