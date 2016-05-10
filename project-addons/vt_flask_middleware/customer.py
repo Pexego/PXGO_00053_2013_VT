@@ -20,6 +20,7 @@ class Customer(SyncModel):
     """
     fiscal_name = CharField(max_length=150)
     commercial_name = CharField(max_length=150, null=True)
+    pricelist_name = CharField(max_length=150, null=True)
     ref = CharField(max_length=150, null=True)
     discount = FloatField(default=0.0)
     vat = CharField(max_length=18, null=True)
