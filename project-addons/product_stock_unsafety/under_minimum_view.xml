@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<openerp>
+    <data>
+        <record id="view_product_stock_unsafety_filter" model="ir.ui.view">
+            <field name="name">product.stock.unsafety.filter</field>
+            <field name="model">product.stock.unsafety</field>
+            <field name="arch" type="xml">
+                <search string="Search Product Stock Unsafety">
+                    <field name="product_id"/>
+                    <field name="supplier_id"/>
+                    <field name="orderpoint_id"/>
+                    <field name="state"/>
+                    <field name="date"/>
+                    <filter icon="terp-emblem-important" string="Exceptions" name="exceptions" domain="[('state','=','exception')]"/>
+                    <filter icon="terp-emblem-important" string="In Progress" name="in_progress" domain="[('state','=','in_progress')]"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter string="Date" domain="[]" context="{'group_by':'date'}"/>
+                        <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                        <filter string="Product type" domain="[]" context="{'group_by': 'product_type'}"/>
+                        <filter string="Brand" domain="[]" context="{'group_by': 'brand_id'}"/>
+                        <filter string="Supplier" domain="[]" context="{'group_by': 'supplier_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="view_product_stock_unsafety_tree" model="ir.ui.view">
+            <field name="name">product.stock.unsafety.tree</field>
+            <field name="model">product.stock.unsafety</field>
+            <field name="arch" type="xml">
+                <tree string="Product stock unsafety" colors="red:state=='exception';blue:state=='in_progress'" create="0">
+                    <field name="date"/>
+                    <field name="product_id"/>
+                    <field name="brand_id"/>
+                    <field name="product_type"/>
+                    <field name="supplier_id"/>
+                    <field name="incoming_qty" />
+                    <field name="real_stock"/>
+                    <field name="virtual_stock" string="Virtual Stock Conservative"/>
+                    <field name="remaining_days_sale"/>
+                    <field name="minimum_proposal"/>
+                    <field name="product_qty"/>
+                    <button name="cancel" type="object" string="Cancel" states='exception,in_progress' icon="STOCK_CANCEL"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+        <record id="view_product_stock_unsafety_form" model="ir.ui.view">
+            <field name="name">product.stock.unsafety.form</field>
+            <field name="model">product.stock.unsafety</field>
+            <field name="arch" type="xml">
+                <form string="Product Stock Unsafety" create="0">
+                <header>
+                    <button name="cancel" type="object" string="Cancel" states='exception,in_progress' icon="STOCK_CANCEL"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="General Information">
+                            <field name="date"/>
+                            <field name="name"/>
+                            <field name="product_id"/>
+                            <field name="supplier_id"/>
+                            <field name="bom_id"/>
+                        </group>
+                        <group string="Quantities">
+                            <field name="real_stock"/>
+                            <field name="incoming_qty"/>
+                            <field name="virtual_available"/>
+                            <field name="virtual_stock"/>
+                            <field name="minimum_proposal"/>
+                            <field name="product_qty"/>
+                        </group>
+                        <group string="Order">
+                            <field name="purchase_id"/>
+                        </group>
+                        <group string="Additional Information">
+                            <field name="responsible"/>
+                            <field name="orderpoint_id"/>
+                        </group>
+                    </group>
+                </sheet>
+                </form>
+            </field>
+        </record>
+        <record id="action_product_stock_unsafety_form" model="ir.actions.act_window">
+            <field name="name">Product Stock Unsafety</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.stock.unsafety</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_product_stock_unsafety_tree"/>
+            <field name="search_view_id" ref="view_product_stock_unsafety_filter"/>
+            <field name="context">{'search_default_exceptions':1,'search_default_in_progress':1}</field>
+        </record>
+        <menuitem
+            action="action_product_stock_unsafety_form"
+            id="menu_action_product_stock_unsafety"
+            parent="stock.menu_stock_inventory_control"
+            sequence="3"
+        />
+
+        <menuitem action="stock.action_orderpoint_form" id="stock.menu_stock_order_points" parent="stock.menu_stock_inventory_control" sequence="2"/>
+
+    </data>
+</openerp>

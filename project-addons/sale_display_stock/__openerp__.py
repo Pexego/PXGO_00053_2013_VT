@@ -32,7 +32,7 @@ Sales display stock
     * Displays the real stock of product at each sale order line.
 """,
     "depends": ["base", "sale", "stock", "account",
-                "flask_middleware_connector"],
+                "product_virtual_stock_conservative"],
     "data": [
         "sale_view.xml",
         "report/sale_order_line_report.xml",
