@@ -59,7 +59,7 @@
         <field name="res_model">sale.order.line</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('reservation_ids','=', False),('order_id.state','=','reserve'),('type', '!=', 'service')]</field>
+        <field name="domain">[('reservation_ids','=', False),('order_id.state','=','reserve'),('product_id', '!=', False),('product_id.type', '!=', 'service')]</field>
     </record>
 
     <menuitem
