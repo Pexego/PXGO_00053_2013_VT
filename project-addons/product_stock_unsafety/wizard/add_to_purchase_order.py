@@ -22,33 +22,29 @@
 from openerp import models, fields, api, _
 
 
-class AssignPurchaseOrderWzd(models.TransientModel):
+class AddToPurchaseOrderWzd(models.TransientModel):
 
-    _name = "assign.purchase.order.wzd"
+    _name = "add.to.purchase.order.wzd"
 
     purchase_id = fields.Many2one("purchase.order", "Purchase",
                                   required=True, domain=[('state', '=',
                                                           'draft')])
-
+    purchase_qty = fields.Float("Qty. to purchase", required=True)
 
     @api.multi
     def assign_purchase_order(self):
         obj = self[0]
-        unsafety_obj = self.env["product.stock.unsafety"]
+        product_obj = self.env["product.product"]
         view_obj = self.env["ir.ui.view"]
         purchase_line_obj = self.env["purchase.order.line"]
-        for line in unsafety_obj.browse(self.env.context['active_ids']):
-            line.purchase_id = obj.purchase_id
-            line.state = "in_action"
-            line.supplier_id = obj.purchase_id.partner_id.id
+        for product in product_obj.browse(self.env.context['active_ids']):
             purchase = obj.purchase_id
             line_vals = {'order_id': purchase.id,
-                         'product_id': line.product_id.id}
+                         'product_id': product.id}
             line_vals.update(purchase_line_obj.
                              onchange_product_id(purchase.pricelist_id.id,
-                                                 line.product_id.id,
-                                                 line.product_qty,
-                                                 line.product_id.uom_id.id,
+                                                 product.id, obj.purchase_qty,
+                                                 product.uom_id.id,
                                                  purchase.partner_id.id)
                              ['value'])
             purchase_line_obj.create(line_vals)

@@ -34,13 +34,14 @@ class product_product(models.Model):
         if replacements:
             virtual_stock += replacements[0].virtual_available
         if virtual_stock:
-            last_sity_days_sales = self.last_sixty_days_sales
+            last_sixty_days_sales = self.last_sixty_days_sales
             if replacements:
-                last_sity_days_sales += replacements[0].last_sixty_days_sales
-            stock_per_day = last_sity_days_sales / 60.0
+                last_sixty_days_sales += replacements[0].last_sixty_days_sales
+            stock_per_day = last_sixty_days_sales / 60.0
         return stock_per_day
 
     @api.one
+    @api.depends("last_sixty_days_sales")
     def _calc_remaining_days(self):
         stock_days = 0.00
         stock_per_day = self.get_daily_sales()
@@ -54,5 +55,5 @@ class product_product(models.Model):
                                        compute='_calc_remaining_days',
                                        help="Stock measure in days of sale "
                                        "computed consulting sales in sixty "
-                                       "days with stock.")
+                                       "days with stock.", store=True)
     replacement_id = fields.Many2one("product.product", "Replaced by")

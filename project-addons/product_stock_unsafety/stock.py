@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Javier Colmenero Fernández$ <javier@pexego.es>
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra$ <omar@comunitea.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,48 +18,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+
 from openerp import api, models, fields
 
 
-class stock_config_settings(models.TransientModel):
-    _inherit = 'stock.config.settings'
+class StockMove(models.Model):
 
-    consult_period = \
-        fields.Integer('Consult Period Stock Days',
-                       help='General hystoric period for calculating '
-                       'stock days of a product. It will check from today '
-                       'to X period days of the last year the quantity sold. '
-                       'if not sales in last year we check the period going '
-                       'back since today in the current year')
-    adjustement_period = \
-        fields.Integer('Adjustement Period Stock Days',
-                       help='General Adjustement period to calculate the '
-                       'stock days of a product. It will check a period from '
-                       'today back to this days, of the last and the '
-                       'current year, to get the diferent trend in sales')
+    _inherit = "stock.move"
+
+    @api.model
+    def create(self, vals):
+        move = super(StockMove, self).create(vals)
+        if vals.get('state', False) != "draft":
+            move.product_id._calc_remaining_days()
+        return move
 
     @api.multi
-    def get_default_consult_period(self, fields):
-        domain = [('key', '=', 'configured.consult.period')]
-        param_obj = self.env['ir.config_parameter'].search(domain)
-        value = int(param_obj.value)
-        return {'consult_period': value}
-
-    @api.multi
-    def set_consult_period(self):
-        domain = [('key', '=', 'configured.consult.period')]
-        param_obj = self.env['ir.config_parameter'].search(domain)
-        param_obj.value = str(self.consult_period)
-
-    @api.multi
-    def get_default_adjustement_period(self, fields):
-        domain = [('key', '=', 'configured.adjustement.period')]
-        param_obj = self.env['ir.config_parameter'].search(domain)
-        value = int(param_obj.value)
-        return {'adjustement_period': value}
-
-    @api.multi
-    def set_adjustement_period(self):
-        domain = [('key', '=', 'configured.adjustement.period')]
-        param_obj = self.env['ir.config_parameter'].search(domain)
-        param_obj.value = str(self.adjustement_period)
+    def write(self, vals):
+        res = super(StockMove, self).write(vals)
+        if vals.get('state', False):
+            for move in self:
+                move.product_id._calc_remaining_days()
+        return res

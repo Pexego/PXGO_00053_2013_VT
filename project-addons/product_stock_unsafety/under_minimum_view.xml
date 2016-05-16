@@ -74,6 +74,7 @@
                         </group>
                         <group string="Order">
                             <field name="purchase_id"/>
+                            <field name="production_id"/>
                         </group>
                         <group string="Additional Information">
                             <field name="responsible"/>

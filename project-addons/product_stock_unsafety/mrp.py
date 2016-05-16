@@ -22,51 +22,31 @@
 from openerp import models, api
 
 
-class PurchaseOrder(models.Model):
-    _inherit = 'purchase.order'
+class MrpProduction(models.Model):
+    _inherit = 'mrp.production'
 
     @api.multi
-    def wkf_confirm_order(self):
-        """
-        When confirm a purchase order, if purchase order was created from a
-        pre order, we try to find under minimum alerts with the same pre orders
-        (That means really that purchase was created from a under minimum) in
-        'In purchase' state and we finish it
-        """
-        res = super(PurchaseOrder, self).wkf_confirm_order()
+    def action_production_end(self):
+        res = super(MrpProduction, self).action_production_end()
         under_min = self.env['product.stock.unsafety']
-        for po in self:
+        for production in self:
             domain = [
                 ('state', '=', 'in_action'),
-                ('purchase_id', '=', po.id)
+                ('production_id', '=', production.id)
             ]
             under_min_objs = under_min.search(domain)
             if under_min_objs:
                 under_min_objs.write({'state': 'finalized'})
+
         return res
 
     @api.multi
     def unlink(self):
         under_min_obj = self.env['product.stock.unsafety']
-        for order in self:
-            under_mins = under_min_obj.search([('purchase_id', '=', order.id)])
+        for production in self:
+            under_mins = under_min_obj.search([('production_id', '=',
+                                                production.id)])
             if under_mins:
                 under_mins.write({"state": "in_progress",
-                                  "purchase_id": False})
-        return super(PurchaseOrder, self).unlink()
-
-
-class PurchaseOrderLine(models.Model):
-
-    _inherit = "purchase.order.line"
-
-    @api.multi
-    def unlink(self):
-        under_min_obj = self.env['product.stock.unsafety']
-        for line in self:
-            under_mins = under_min_obj.search([('purchase_id', '=',
-                                                line.order_id.id)])
-            if under_mins:
-                under_mins.write({"state": "in_progress",
-                                  "purchase_id": False})
-        return super(PurchaseOrderLine, self).unlink()
+                                  "production_id": False})
+        return super(MrpProduction, self).unlink()
