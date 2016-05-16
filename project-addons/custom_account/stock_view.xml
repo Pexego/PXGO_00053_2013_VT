@@ -53,5 +53,29 @@
             <field name="view_mode">tree,graph</field>
     </record>
 
+    <record id="action_order_line_wo_reserve" model="ir.actions.act_window">
+        <field name="name">Sale lines without reserve</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('reservation_ids','=', False),('order_id.state','=','reserve')]</field>
+    </record>
+
+    <menuitem
+            action="action_order_line_wo_reserve" id="menu_order_line_wo_reserve"
+            parent="purchase.menu_procurement_management_product" sequence="101" groups="stock.group_stock_user"/>
+
+    <record id="view_order_line_tree_invisible_state" model="ir.ui.view">
+            <field name="name">sale.order.line.tree.invisible_state</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_order_line_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>
