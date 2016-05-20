@@ -25,28 +25,15 @@ class SyncLog(BaseModel):
     to_sync = BooleanField(default=False)
 
     def sync_client(self):
-        #if not recurrent:
-            #to_sync_objs = SyncLog.select().where(SyncLog.id != self.id,
-            #                                      SyncLog.to_sync == True)
-            #for obj in to_sync_objs:
-            #    resp = obj.sync_client(recurrent=True)
-                #if resp:
-                #    obj.sync = True
-                #    print "SYNC"
-                #    obj.to_sync = False
-                #    obj.save()
         url = app.config['NOTIFY_URL']
 
         signature = _get_signature()
-        #data = {'model': self.model, 'operation': self.operation,
-        #        'odoo_id': self.odoo_id,
-        #        'signature': signature}
-        data = {'signature': signature, 
-                'data': [{'model': self.model,  
-                         'operation': self.operation,
-                         'odoo_id': self.odoo_id}]}
+        data = {'signature': signature,
+                'data': [{'model': self.model,
+                          'operation': self.operation,
+                          'odoo_id': self.odoo_id}]}
         try:
-            print "DATA: ", data 
+            print "DATA: ", data
             resp = requests.post(url, data=json.dumps(data), timeout=6)
             print "RESP: ", resp
             if resp.status_code == 200:
@@ -64,6 +51,37 @@ class SyncLog(BaseModel):
             self.to_sync = True
             self.sync = False
             self.save()
+        return res
+
+    def multisync_client(self, objs):
+        url = app.config['NOTIFY_URL']
+        signature = _get_signature()
+        to_sync = True
+        sync = False
+        res = False
+        data = {'signature': signature,
+                'data': []}
+        for record in objs:
+            data['data'].append({'model': record.model,
+                                 'operation': record.operation,
+                                 'odoo_id': record.odoo_id})
+        try:
+            print "DATA: ", data
+            resp = requests.post(url, data=json.dumps(data),
+                                 timeout=6*len(objs))
+            print "RESP: ", resp
+            if resp.status_code == 200:
+                sync = True
+                to_sync = False
+                res = True
+        except Exception:
+            pass
+
+        for record in objs:
+            record.sync = sync
+            record.to_sync = to_sync
+            record.save()
+
         return res
 
     def launch_sync(self):

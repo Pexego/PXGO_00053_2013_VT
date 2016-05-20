@@ -24,7 +24,7 @@ db = database.database
 
 class BaseModel(database.Model):
     """Base model for the selected database backend."""
-    pass 
+    pass
 
 
 class SyncModel(database.Model):
@@ -38,7 +38,7 @@ class SyncModel(database.Model):
             sync_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             log = SyncLog.create(odoo_id=query['odoo_id'], model=cls.MOD_NAME,
                                  operation='create', sync_date=sync_date)
-            log.launch_sync()
+            #log.launch_sync()
         return res
 
     def save(self, force_insert=False, only=None, is_update=False):
@@ -49,8 +49,8 @@ class SyncModel(database.Model):
             log = SyncLog.create(odoo_id=self.odoo_id, model=self.MOD_NAME,
                                  operation='update', sync_date=sync_date)
         res = super(SyncModel, self).save(force_insert, only)
-        if is_update and self.MOD_NAME in MODELS_CLASS.keys():
-            log.launch_sync()
+        #if is_update and self.MOD_NAME in MODELS_CLASS.keys():
+        #    log.launch_sync()
         return res
 
     def delete_instance(self, *args, **kwargs):
@@ -61,7 +61,7 @@ class SyncModel(database.Model):
             log = SyncLog.create(odoo_id=self.odoo_id, model=self.MOD_NAME,
                                  operation='delete', sync_date=sync_date)
         res = super(SyncModel, self).delete_instance(*args, **kwargs)
-        if self.MOD_NAME in MODELS_CLASS.keys():
-            log.launch_sync()
+        #if self.MOD_NAME in MODELS_CLASS.keys():
+        #    log.launch_sync()
         return res
 
