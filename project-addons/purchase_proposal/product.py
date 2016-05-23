@@ -19,7 +19,6 @@
 #
 ##############################################################################
 from openerp import models, fields, api
-from time import time
 
 
 class ProductProduct(models.Model):
@@ -28,6 +27,10 @@ class ProductProduct(models.Model):
 
     last_sixty_days_sales = fields.Float('Sales in last 60 days with stock',
                                          readonly=True)
+    biggest_sale_qty = fields.Float("Biggest sale qty", readonly=True,
+                                    digits=(16, 2))
+    biggest_sale_id = fields.Many2one("sale.order", "Biggest order",
+                                      readonly=True)
     joking_index = fields.Float("Joking index", readonly=True)
     order_cycle = fields.Integer('Order cycle')
     transport_time = fields.Integer('Transport time')
@@ -50,17 +53,27 @@ class ProductProduct(models.Model):
             moves = move_obj.search([('date', '>=', days[0].datum),
                                      ('state', '=', 'done'),
                                      ('product_id', '=', product.id),
-                                     ('picking_type_id.code', '=',
+                                     ('picking_type_code', '=',
                                       'outgoing'),
                                      ('procurement_id.sale_line_id', '!=',
                                       False)])
-            product.last_sixty_days_sales = sum(
-                [x.product_uom_qty for x in moves])
+            biggest_move_qty = 0.0
+            biggest_order = False
+            qty = 0.0
+            for move in moves:
+                qty += move.product_uom_qty
+                if move.product_uom_qty > biggest_move_qty:
+                    biggest_move_qty = move.product_uom_qty
+                    biggest_order = \
+                        move.procurement_id.sale_line_id.order_id.id
+            product.last_sixty_days_sales = qty
+            product.biggest_sale_qty = biggest_move_qty
+            product.biggest_sale_id = biggest_order
             product.joking_index = product.last_sixty_days_sales * \
                 product.standard_price
 
     @api.model
-    def average_margin_last_sales(self, ids = False):
+    def average_margin_last_sales(self, ids=False):
         if not ids:
             sql_sentence = """
                 SELECT DISTINCT product_id
@@ -85,6 +98,23 @@ class ProductProduct(models.Model):
                 qty_sum += line.product_uom_qty
             if qty_sum:
                 product_id.average_margin = margin_perc_sum / qty_sum
+
     @api.multi
     def average_margin_compute(self):
         self.average_margin_last_sales(ids=self.ids)
+
+
+class SaleOrderLine(models.Model):
+
+    _inherit = "sale.order.line"
+
+    @api.one
+    @api.depends('order_id', 'order_id.date_order')
+    def _get_order_date(self):
+        if self.order_id:
+            self.date_order = self.order_id.date_order
+        else:
+            self.date_order = False
+
+    date_order = fields.Date("Date", readonly=True, store=True,
+                             compute="_get_order_date")

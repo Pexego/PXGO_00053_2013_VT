@@ -22,6 +22,8 @@
                     </div>
                     <field name="last_sixty_days_sales"/>
                     <field name="joking_index"/>
+                    <field name="biggest_sale_id" group="base.group_sale_salesman"/>
+                    <field name="biggest_sale_qty"/>
                 </group>
             </field>
         </record>
@@ -33,7 +35,7 @@
           <field name="arch" type="xml">
             <xpath expr="//group[@colspan='4']/field[@name='commercial_cost']" position="after">
                 <field name="average_margin"/>
-                <button name="average_margin_compute" string="Calculate Average Margin Last Sales" type="object"/>
+                <button name="average_margin_compute" string="Calculate Average Margin Last Sales" type="object" group="base.group_sale_salesman"/>
             </xpath>
           </field>
         </record>

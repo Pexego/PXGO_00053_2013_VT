@@ -1,13 +1,13 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* purchase_proposal
+#       * purchase_proposal
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-29 16:14+0000\n"
-"PO-Revision-Date: 2016-01-29 16:14+0000\n"
+"POT-Creation-Date: 2016-05-23 15:32+0000\n"
+"PO-Revision-Date: 2016-05-23 15:32+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,14 +21,30 @@ msgid "Average Margin Last Sales"
 msgstr "Media de margen de últimas ventas"
 
 #. module: purchase_proposal
+#: field:product.product,biggest_sale_id:0
+msgid "Biggest order"
+msgstr "Pedido más grande"
+
+#. module: purchase_proposal
+#: field:product.product,biggest_sale_qty:0
+msgid "Biggest sale qty"
+msgstr "Cant. pedido más grande"
+
+#. module: purchase_proposal
 #: view:product.product:purchase_proposal.product_add_proposal_data2
 msgid "Calculate Average Margin Last Sales"
 msgstr "Calcular media de margen de últimas ventas"
 
 #. module: purchase_proposal
+#: field:sale.order.line,date_order:0
 #: field:stock.days.positive,datum:0
 msgid "Date"
 msgstr "Fecha"
+
+#. module: purchase_proposal
+#: field:stock.days.positive,display_name:0
+msgid "Display Name"
+msgstr "Descripción"
 
 #. module: purchase_proposal
 #: field:stock.days.positive,id:0
@@ -39,6 +55,11 @@ msgstr "ID"
 #: field:product.product,joking_index:0
 msgid "Joking index"
 msgstr "Índice de puteamiento"
+
+#. module: purchase_proposal
+#: field:stock.days.positive,__last_update:0
+msgid "Last Modified on"
+msgstr "Últ. actualización el"
 
 #. module: purchase_proposal
 #: field:product.product,order_cycle:0
@@ -55,6 +76,11 @@ msgstr "Producto"
 #: field:stock.days.positive,qty:0
 msgid "Quantity"
 msgstr "Cantidad"
+
+#. module: purchase_proposal
+#: model:ir.model,name:purchase_proposal.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea pedido de venta"
 
 #. module: purchase_proposal
 #: field:product.product,last_sixty_days_sales:0
@@ -75,4 +101,3 @@ msgstr "Tiempo de transporte"
 #: view:product.product:purchase_proposal.product_add_proposal_data
 msgid "days"
 msgstr "días"
-
