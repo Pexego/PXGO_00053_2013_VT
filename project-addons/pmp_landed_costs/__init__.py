@@ -19,5 +19,6 @@
 #
 ##############################################################################
 
-import stock_landed_costs
-import stock
+from . import stock_landed_costs
+from . import stock
+from . import product

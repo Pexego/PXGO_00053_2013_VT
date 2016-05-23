@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra <omar@comunita.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,16 +19,19 @@
 #
 ##############################################################################
 
-{
-    'name': "Stock landed costs with PMP",
-    'version': '1.0',
-    'category': 'stock',
-    'description': """""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['stock_landed_costs',
-                'stock_account'],
-    "data": ['stock_landed_costs_view.xml',
-             'product_view.xml'],
-    "installable": True
-}
+from openerp import fields, models, api
+
+
+class ProductProduct(models.Model):
+
+    _inherit = "product.product"
+
+    tariff = fields.Float('Tariff', digits=(16,2))
+
+
+class ProductTemplate(models.Model):
+
+    _inherit = "product.template"
+
+    split_method = fields.Selection(selection_add=[('by_tariff',
+                                                    'By tariff')])

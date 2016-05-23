@@ -20,14 +20,80 @@
 ##############################################################################
 
 from openerp import models, api, exceptions, _, fields
+import openerp.addons.decimal_precision as dp
+from openerp.tools import float_compare, float_round
 
 class StockLandedCost(models.Model):
 
     _inherit = 'stock.landed.cost'
 
-    '''_columns = {
-        'account_journal_id': fields.many2one('account.journal', 'Account Journal', required=False),
-    }'''
+    def compute_landed_cost(self, cr, uid, ids, context=None):
+        line_obj = self.pool.get('stock.valuation.adjustment.lines')
+        unlink_ids = line_obj.search(cr, uid, [('cost_id', 'in', ids)], context=context)
+        line_obj.unlink(cr, uid, unlink_ids, context=context)
+        digits = dp.get_precision('Product Price')(cr)
+        towrite_dict = {}
+        for cost in self.browse(cr, uid, ids, context=None):
+            if not cost.picking_ids:
+                continue
+            picking_ids = [p.id for p in cost.picking_ids]
+            total_qty = 0.0
+            total_cost = 0.0
+            total_weight = 0.0
+            total_volume = 0.0
+            total_line = 0.0
+            total_tariff = 0.0
+            vals = self.get_valuation_lines(cr, uid, [cost.id], picking_ids=picking_ids, context=context)
+            for v in vals:
+                for line in cost.cost_lines:
+                    v.update({'cost_id': cost.id, 'cost_line_id': line.id})
+                    self.pool.get('stock.valuation.adjustment.lines').create(cr, uid, v, context=context)
+                total_qty += v.get('quantity', 0.0)
+                total_cost += v.get('former_cost', 0.0)
+                total_weight += v.get('weight', 0.0)
+                total_volume += v.get('volume', 0.0)
+                total_tariff += v.get('tariff', 0.0)
+                total_line += 1
+
+            for line in cost.cost_lines:
+                value_split = 0.0
+                for valuation in cost.valuation_adjustment_lines:
+                    value = 0.0
+                    if valuation.cost_line_id and valuation.cost_line_id.id == line.id:
+                        if line.split_method == 'by_quantity' and total_qty:
+                            per_unit = (line.price_unit / total_qty)
+                            value = valuation.quantity * per_unit
+                        elif line.split_method == 'by_weight' and total_weight:
+                            per_unit = (line.price_unit / total_weight)
+                            value = valuation.weight * per_unit
+                        elif line.split_method == 'by_volume' and total_volume:
+                            per_unit = (line.price_unit / total_volume)
+                            value = valuation.volume * per_unit
+                        elif line.split_method == 'equal':
+                            value = (line.price_unit / total_line)
+                        elif line.split_method == 'by_current_cost_price' and total_cost:
+                            per_unit = (line.price_unit / total_cost)
+                            value = valuation.former_cost * per_unit
+                        elif line.split_method == 'by_tariff' and total_tariff:
+                            per_unit = (line.price_unit / total_tariff)
+                            value = valuation.tariff * per_unit
+                        else:
+                            value = (line.price_unit / total_line)
+
+                        if digits:
+                            value = float_round(value, precision_digits=digits[1], rounding_method='UP')
+                            fnc = min if line.price_unit > 0 else max
+                            value = fnc(value, line.price_unit - value_split)
+                            value_split += value
+
+                        if valuation.id not in towrite_dict:
+                            towrite_dict[valuation.id] = value
+                        else:
+                            towrite_dict[valuation.id] += value
+        if towrite_dict:
+            for key, value in towrite_dict.items():
+                line_obj.write(cr, uid, key, {'additional_landed_cost': value}, context=context)
+        return True
 
     def get_valuation_lines(self, cr, uid, ids, picking_ids=None, context=None):
         picking_obj = self.pool.get('stock.picking')
@@ -44,7 +110,8 @@ class StockLandedCost(models.Model):
                 volume = move.product_id and move.product_id.volume * move.product_qty
                 for quant in move.quant_ids:
                     total_cost += quant.cost
-                vals = dict(product_id=move.product_id.id, move_id=move.id, quantity=move.product_uom_qty, former_cost=total_cost * total_qty, weight=weight, volume=volume)
+                tariff = move.product_id and move.product_id.tariff * move.product_qty
+                vals = dict(product_id=move.product_id.id, move_id=move.id, quantity=move.product_uom_qty, former_cost=total_cost * total_qty, weight=weight, volume=volume, tariff=tariff)
                 lines.append(vals)
         return lines
 
@@ -89,6 +156,7 @@ class StockValuationAdjustmentLines(models.Model):
 
     standard_price = fields.Float('Standard price', compute='_get_new_standard_price', store=True)
     new_standard_price = fields.Float('New standard price', compute='_get_new_standard_price', store=True)
+    tariff = fields.Float("Tariff", digits=(16,2))
 
     @api.one
     @api.depends('product_id.standard_price', 'additional_landed_cost')
@@ -105,6 +173,9 @@ class StockValuationAdjustmentLines(models.Model):
 
 class StockLandedCostLines(models.Model):
     _inherit = 'stock.landed.cost.lines'
+
+    split_method = fields.Selection(selection_add=[('by_tariff',
+                                                    'By tariff')])
 
     def onchange_product_id(self, cr, uid, ids, product_id=False,
                             context=None):
