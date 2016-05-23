@@ -116,6 +116,7 @@ class MrpCustomizationWizard(models.TransientModel):
             }
             production = self.env['mrp.production'].create(mrp_args)
             production.signal_workflow('button_confirm')
+            production.action_assign()
             production_ids.append(production.id)
 
         action = self.env.ref('mrp.mrp_production_action')

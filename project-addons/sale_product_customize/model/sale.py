@@ -167,10 +167,12 @@ class SaleOrder(models.Model):
         for line in self.order_line:
             for production in line.mrp_production_ids:
                 production.signal_workflow('button_confirm')
+                production.action_assign()
 
     @api.one
     def action_cancel(self):
         for line in self.order_line:
             for production in line.mrp_production_ids:
                 production.signal_workflow('button_cancel')
+                production.unlink()
         return super(SaleOrder, self).action_cancel()
