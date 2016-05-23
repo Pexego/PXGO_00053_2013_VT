@@ -133,6 +133,7 @@ class procurement_order(osv.Model):
                             'orderpoint_id': op.id,
                             'responsible': uid,
                             'state': state,
+                            'min_days_id': op.min_days_id.id,
                             'bom_id': bom_id,
                             'product_type': product_type,
                             'brand_id': prod.product_brand_id.id}

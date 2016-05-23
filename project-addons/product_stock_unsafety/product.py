@@ -57,3 +57,6 @@ class product_product(models.Model):
                                        "computed consulting sales in sixty "
                                        "days with stock.", store=True)
     replacement_id = fields.Many2one("product.product", "Replaced by")
+    min_days_id = fields.Many2one("minimum.day", "Stock Minimum Days",
+                                  related="orderpoint_ids.min_days_id",
+                                  readonly=True)

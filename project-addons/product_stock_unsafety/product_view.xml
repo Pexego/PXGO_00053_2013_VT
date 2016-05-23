@@ -26,6 +26,7 @@
                     <field name="categ_id"/>
                     <field name="incoming_qty"/>
                     <field name="virtual_stock_conservative"/>
+                    <field name="min_days_id"/>
                     <field name="remaining_days_sale"/>
                     <button name="%(action_add_to_purchase_order_wzd)d" type="action" string="Add to purchase order" icon="gtk-execute"/>
                 </tree>

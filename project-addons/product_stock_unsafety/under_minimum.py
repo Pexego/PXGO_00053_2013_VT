@@ -95,7 +95,10 @@ class product_stock_unsafety(osv.Model):
         'bom_id': fields.many2one("mrp.bom", "Bill of material",
                                   readonly=True),
         'production_id': fields.many2one("mrp.production", "Production",
-                                         readonly=True)
+                                         readonly=True),
+        'min_days_id': fields.many2one('minimum.day',
+                                       'Stock Minimum Days',
+                                       readonly=True)
     }
     _defaults = {
         'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)

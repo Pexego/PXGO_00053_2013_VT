@@ -38,6 +38,7 @@
                     <field name="incoming_qty" />
                     <field name="real_stock"/>
                     <field name="virtual_stock" string="Virtual Stock Conservative"/>
+                    <field name="min_days_id"/>
                     <field name="remaining_days_sale"/>
                     <field name="minimum_proposal"/>
                     <field name="product_qty"/>
@@ -71,6 +72,8 @@
                             <field name="virtual_stock"/>
                             <field name="minimum_proposal"/>
                             <field name="product_qty"/>
+                            <field name="min_days_id"/>
+                            <field name="remaining_days_sale"/>
                         </group>
                         <group string="Order">
                             <field name="purchase_id"/>
