@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* partner_sale_graphic
+#       * partner_sale_graphic
 #
 msgid ""
 msgstr ""
@@ -31,6 +31,11 @@ msgstr "Fecha"
 #: model:ir.model,name:partner_sale_graphic.model_res_partner
 msgid "Partner"
 msgstr "Empresa"
+
+#. module: partner_sale_graphic
+#: view:res.partner:partner_sale_graphic.res_parnter_add_sale_graphic_form
+msgid "Refresh graph"
+msgstr "Refrescar gráfica"
 
 #. module: partner_sale_graphic
 #: field:res.partner,sale_graphic:0

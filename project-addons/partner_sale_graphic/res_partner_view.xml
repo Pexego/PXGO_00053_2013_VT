@@ -8,6 +8,7 @@
             <field name="arch" type="xml">
                 <notebook position="inside">
                     <page string="Sales graphic" attrs="{'invisible': ['|',('customer','=',False), ('parent_id', '!=', False)]}">
+                        <button name="action_create_graph" type="object" string="Refresh graph"/>
                         <field name="sale_graphic" widget='image' readonly="1"/>
                     </page>
                 </notebook>

@@ -36,6 +36,11 @@ msgid "Calculate Average Margin Last Sales"
 msgstr "Calcular media de margen de últimas ventas"
 
 #. module: purchase_proposal
+#: view:product.product:purchase_proposal.product_add_proposal_data
+msgid "Compute sale in last sixty days with stock"
+msgstr "Calcular ventas en últm. 60 días con stock"
+
+#. module: purchase_proposal
 #: field:sale.order.line,date_order:0
 #: field:stock.days.positive,datum:0
 msgid "Date"

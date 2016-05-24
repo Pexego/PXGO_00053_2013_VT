@@ -27,7 +27,9 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import time
 import base64
-from pychart import *
+import matplotlib
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
 
 
 class res_partner(orm.Model):
@@ -92,6 +94,11 @@ class res_partner(orm.Model):
                     data.append([end_month_seconds, total])
         return data
 
+    def action_create_graph(self, cr, uid, ids, context=None):
+        if context is None: context = {}
+        context['partner_id'] = ids[0]
+        self.run_scheduler_grpahic(cr, uid, context=context)
+
     def run_scheduler_grpahic(self, cr, uid, automatic=False,
                               use_new_cursor=False, context=None):
         """
@@ -100,36 +107,41 @@ class res_partner(orm.Model):
         partner_obj = self.pool.get('res.partner')
         if context is None:
             context = {}
-        int_to_date = lambda x: '/a60{}' + \
+        int_to_date = lambda x: \
             datetime(time.localtime(x).tm_year, time.localtime(x).tm_mon,
                      time.localtime(x).tm_mday).strftime('%m-%y')
-        partner_ids = partner_obj.search(cr, uid, [('customer', '=', True), ('parent_id', '=', False)],
-                                         context=context)
+        if context.get('partner_id', False):
+            partner_ids = [context['partner_id']]
+        else:
+            partner_ids = partner_obj.search(cr, uid,
+                                             [('customer', '=', True),
+                                              ('parent_id', '=', False)],
+                                             context=context)
+
         for partner_id in partner_ids:
+            fig, ax = plt.subplots(figsize=(10, 6))
             data = self._get_partner_data(cr, uid, partner_id, context)
             if data:
+                x_pos = range(len(data))
+                rects1 = ax.bar(x_pos, [x[1] for x in data], 0.25, color='r')
+                ax.set_ylabel(_("Amount total"))
+                ax.set_xlabel(_("Date"))
+                ax.margins(0.04)
+                plt.xticks(x_pos, [int_to_date(x[0]) for x in data])
+                for rect in rects1:
+                    height = rect.get_height()
+                    ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,
+                            '%d' % int(height),
+                            ha='center', va='bottom')
+
+                fig = plt.gcf()
+
                 # Create the graphic with the data
                 io = StringIO.StringIO()
-                canv = canvas.init(fname=io, format='png')
-                #max_total = data[0][1]
-                #min_total = data[0][1]
-                #for tup in data[1:]:
-                #    if tup[1] > max_total:
-                #        max_total = tup[1]
-                #    elif tup[1] < min_total:
-                #        min_total = tup[1]
-                #min_total = min_total / 2
-                ar = area.T(x_coord=category_coord.T(data, 0),
-                            x_axis=axis.X(label=_("Date"), format=int_to_date),
-                            y_axis=axis.Y(label=_("Amount total")),
-                            legend=None,
-                            size=(680, 450))
-
-                ar.add_plot(bar_plot.T(data=data, fill_style=fill_style.red, width=15))
-
-                ar.draw(canv)
-                canv.close()
+                fig.savefig(io, format='png')
+                io.seek(0)
                 img_data = base64.b64encode(io.getvalue())
+                plt.close()
                 partner_obj.write(cr, uid, [partner_id],
                                   {'sale_graphic': img_data}, context)
         return
