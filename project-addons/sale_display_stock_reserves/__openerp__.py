@@ -31,7 +31,7 @@ Sales display stock reserves
 
     * Displays the reserved stock of product at each sale order line.
 """,
-    "depends": ["base", "sale", "product", "stock_reserve"],
+    "depends": ["base", "sale", "product", "stock_reserve", "sale_display_stock"],
     "data": [
         "sale_view.xml",
         'security/ir.model.access.csv'

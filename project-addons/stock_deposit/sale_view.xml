@@ -11,7 +11,7 @@
                 <xpath expr="//field[@name='order_line']/form//field[@name='state']" position="before">
                     <field name="deposit" />
                 </xpath>
-                <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="before">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="after">
                      <field name="deposit"/>
                      <field name="deposit_date" invisible="1"/>
                 </xpath>
