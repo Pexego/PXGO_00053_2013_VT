@@ -20,7 +20,10 @@
                     <div>
                         <field name="security_margin" class="oe_inline"/> days
                     </div>
-                    <field name="last_sixty_days_sales"/>
+                    <group colspan="4" col="4">
+                        <field name="last_sixty_days_sales"/>
+                        <button name="action_compute_last_sixty_days_sales" string="Compute sale in last sixty days with stock" type="object" group="base.group_sale_salesman"/>
+                    </group>
                     <field name="joking_index"/>
                     <field name="biggest_sale_id" group="base.group_sale_salesman"/>
                     <field name="biggest_sale_qty"/>

@@ -38,19 +38,23 @@ class ProductProduct(models.Model):
     average_margin = fields.Float("Average Margin Last Sales", readonly=True)
 
     @api.model
-    def compute_last_sixty_days_sales(self):
-        self.average_margin_last_sales()
-        positive_days_obj = self.env['stock.days.positive']
+    def compute_last_sixty_days_sales(self, records=False):
+        if not records:
+            self.average_margin_last_sales()
+            products = self.search([('type', '!=', 'service')])
+            product_ids_str = ",".join([str(x.id) for x in products])
+        else:
+            product_ids_str = ",".join([str(x) for x in records])
         move_obj = self.env['stock.move']
-        product_ids = self.search([('type', '!=', 'service')])
-        for product in product_ids:
-            days = positive_days_obj.search([('product_id', '=', product.id)],
-                                            limit=1, order='datum asc')
-            if not days:
-                product.last_sixty_days_sales = 0
-                product.joking_index = 0
-                continue
-            moves = move_obj.search([('date', '>=', days[0].datum),
+        self.env.cr.execute("select product_id,min(datum) from "
+                            "stock_days_positive where product_id in (%s) "
+                            "group by product_id" %
+                            (product_ids_str))
+        days_data = self.env.cr.fetchall()
+        for data in days_data:
+            product = self.browse(data[0])
+
+            moves = move_obj.search([('date', '>=', data[1]),
                                      ('state', '=', 'done'),
                                      ('product_id', '=', product.id),
                                      ('picking_type_code', '=',
@@ -66,11 +70,12 @@ class ProductProduct(models.Model):
                     biggest_move_qty = move.product_uom_qty
                     biggest_order = \
                         move.procurement_id.sale_line_id.order_id.id
-            product.last_sixty_days_sales = qty
-            product.biggest_sale_qty = biggest_move_qty
-            product.biggest_sale_id = biggest_order
-            product.joking_index = product.last_sixty_days_sales * \
-                product.standard_price
+            vals = {'last_sixty_days_sales': qty,
+                    'biggest_sale_qty': biggest_move_qty,
+                    'biggest_sale_id': biggest_order,
+                    'joking_index': qty * product.standard_price}
+
+            product.write(vals)
 
     @api.model
     def average_margin_last_sales(self, ids=False):
@@ -102,6 +107,10 @@ class ProductProduct(models.Model):
     @api.multi
     def average_margin_compute(self):
         self.average_margin_last_sales(ids=self.ids)
+
+    @api.multi
+    def action_compute_last_sixty_days_sales(self):
+        self.compute_last_sixty_days_sales(records=self.ids)
 
 
 class SaleOrderLine(models.Model):
