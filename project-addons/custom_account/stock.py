@@ -114,6 +114,25 @@ class ProductTemplate(models.Model):
             "]),('state', '=', 'draft')]"
         return res
 
+    @api.multi
+    def action_view_stock_moves(self):
+        res = super(ProductTemplate, self).action_view_stock_moves()
+        product_ids = []
+        for template in self:
+            product_ids += [x.id for x in template.product_variant_ids]
+        res['domain'] = "[('product_id','in',[" + \
+            ','.join(map(str, product_ids)) + \
+            "]),('picking_type_code', '=', 'incoming')]"
+
+        if len(product_ids) == 1:
+            ctx = "{'tree_view_ref':'stock.view_move_tree', \
+                  'default_product_id': %s, 'search_default_product_id': %s, 'search_default_ready': 1,'search_default_future': 1}" \
+                  % (product_ids[0], product_ids[0])
+            res['context'] = ctx
+        else:
+            res['context'] = "{'tree_view_ref':'stock.view_move_tree', 'search_default_ready': 1,'search_default_future': 1}"
+        return res
+
 
 class SaleOrder(models.Model):
 

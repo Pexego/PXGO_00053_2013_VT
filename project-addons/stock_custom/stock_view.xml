@@ -49,12 +49,5 @@
           </field>
       </record>
 
-      <record id="stock.act_product_stock_move_open" model="ir.actions.act_window">
-            <field name="context">{'search_default_done': 1,'search_default_product_id': active_id, 'default_product_id': active_id}</field>
-            <field name="name">Moves</field>
-            <field name="res_model">stock.move</field>
-            <field name="view_id" ref="stock.view_move_tree"/>
-      </record>
-
     </data>
 </openerp>
