@@ -46,7 +46,7 @@ class ResPartner(models.Model):
                                     search([('partner_id', 'child_of',
                                              [self.id]),
                                             ('state', 'not in',
-                                             ['draft', 'cancel'])]))
+                                             ['draft', 'cancel', 'sent'])]))
 
     web = fields.Boolean("Web", help="Created from web", copy=False)
     sale_product_count = fields.Integer(compute=_get_products_sold,

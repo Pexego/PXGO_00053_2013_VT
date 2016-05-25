@@ -16,6 +16,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_partner
+#: field:res.partner,sale_product_count:0
+msgid "# Products sold"
+msgstr "# Prod. vendidos"
+
+#. module: custom_partner
 #: model:ir.actions.act_window,help:custom_partner.action_view_web_customers
 msgid "<p class=\"oe_view_nocontent_create\">\n"
 "                Click to add a web customer in your address book.\n"
@@ -115,6 +120,12 @@ msgstr "La referencia de empresa debe ser única"
 #: model:ir.model,name:custom_partner.model_stock_picking
 msgid "Picking List"
 msgstr "Albarán"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_stock_picking
+#: view:res.partner:custom_partner.res_partner_view_buttons_add_quotations
+msgid "Pickings"
+msgstr "Albaranes"
 
 #. module: custom_partner
 #: view:stock.picking:custom_partner.stock_picking_search_add_invoice_type
