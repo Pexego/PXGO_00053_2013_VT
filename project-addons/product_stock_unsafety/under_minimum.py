@@ -71,6 +71,18 @@ class product_stock_unsafety(osv.Model):
                                             readonly=True,
                                             help='Real stock + incomings - '
                                             'outgongs'),
+        'last_sixty_days_sales': fields.\
+            related('product_id', 'last_sixty_days_sales',
+                    type='float', readonly=True, digits=(16, 2),
+                    string="Sales in last 60 days with stock"),
+        'biggest_sale_qty': fields.related('product_id', 'biggest_sale_qty',
+                                           type='float', digits=(16, 2),
+                                           readonly=True,
+                                           string="Biggest sale qty"),
+        'biggest_sale_id': fields.related("product_id", "biggest_sale_id",
+                                          type="many2one", readonly=True,
+                                          relation="sale.order",
+                                          string="Biggest order"),
         'purchase_id': fields.many2one('purchase.order',
                                        'Purchase', readonly=True),
         'product_qty': fields.float('Qty ordered'),

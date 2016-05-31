@@ -393,6 +393,21 @@ msgid "Quantities"
 msgstr "Cantidades"
 
 #. module: product_stock_unsafety
+#: field:product.stock.unsafety,last_sixty_days_sales:0
+msgid "Sales in last 60 days with stock"
+msgstr "Ventas últ. 60 días con stock"
+
+#. module: product_stock_unsafety
+#: field:product.stock.unsafety,biggest_sale_qty:0
+msgid "Biggest sale qty"
+msgstr "Cant. venta mayor"
+
+#. module: product_stock_unsafety
+#: field:product.stock.unsafety,biggest_sale_id:0
+msgid "Biggest order"
+msgstr "Venta mayor"
+
+#. module: product_stock_unsafety
 #: field:product.stock.unsafety,virtual_available:0
 msgid "Quantity available"
 msgstr "Cantidad disponible"
