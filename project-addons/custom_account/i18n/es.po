@@ -16,7 +16,13 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_account
-#: code:addons/custom_account/stock.py:56
+#: code:addons/custom_account/stock.py:167
+#, python-format
+msgid " (copy)"
+msgstr " (copia)"
+
+#. module: custom_account
+#: code:addons/custom_account/stock.py:74
 #, python-format
 msgid "%s (copy)"
 msgstr "%s (copia)"
@@ -31,6 +37,11 @@ msgstr "Un mandato bancario genérico"
 #: field:res.partner,attach_picking:0
 msgid "Attach picking"
 msgstr "Enviar albarán"
+
+#. module: custom_account
+#: selection:account.move.line,scheme:0
+msgid "Basic (CORE)"
+msgstr "Básico (CORE)"
 
 #. module: custom_account
 #: field:sale.report,benefit:0
@@ -59,6 +70,11 @@ msgid "Country"
 msgstr "País"
 
 #. module: custom_account
+#: sql_constraint:sale.order:0
+msgid "Customer ref must be unique by partner"
+msgstr "La referencia de cliente debe ser única por empresa"
+
+#. module: custom_account
 #: help:purchase.order,manufacture_date:0
 msgid "Date when it was manufactured"
 msgstr "Fecha en la que fue fabricado"
@@ -82,6 +98,11 @@ msgstr "Plantillas email"
 #: field:purchase.order,end_manufacture:0
 msgid "Ending Date Of Manufacture"
 msgstr "Fecha fin producción"
+
+#. module: custom_account
+#: selection:account.move.line,scheme:0
+msgid "Enterprise (B2B)"
+msgstr "Empresas (B2B)"
 
 #. module: custom_account
 #: field:purchase.order,estimated_arrival_date:0
@@ -183,9 +204,15 @@ msgid "Quotations"
 msgstr "Presupuestos"
 
 #. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.action_order_line_wo_reserve
+#: model:ir.ui.menu,name:custom_account.menu_order_line_wo_reserve
+msgid "Sale lines without reserve"
+msgstr "Lineas venta sin reserva"
+
+#. module: custom_account
 #: view:product.product:custom_account.product_form_view_procurement_button
 msgid "Sales"
-msgstr "Ventas"
+msgstr "Pedidos"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_sale_order
@@ -258,3 +285,8 @@ msgstr "Ha introducido un código EAN13 no válido. Debe usar el campo \"Referen
 #: view:account.invoice.report:custom_account.account_invoice_report_add_filters
 msgid "country"
 msgstr "País"
+
+#. module: custom_account
+#: field:account.invoice,picking_ids:0
+msgid "pickings"
+msgstr "albaranes"

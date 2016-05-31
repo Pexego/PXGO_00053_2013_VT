@@ -157,6 +157,18 @@ class SaleOrder(models.Model):
 
         return res
 
+    _sql_constraints = [('customer_ref_uniq',
+                         'unique(partner_id, client_order_ref)',
+                         'Customer ref must be unique by partner')]
+
+    def copy(self, cr, uid, id, default={}, context=None):
+        sale = self.browse(cr, uid, id, context)
+        if sale.client_order_ref:
+            default['client_order_ref'] = sale.client_order_ref + _(" (copy)")
+        result = super(SaleOrder, self).copy(cr, uid, id, default, context)
+
+        return result
+
 
 class SaleOrderLine(models.Model):
 
