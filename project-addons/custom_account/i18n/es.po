@@ -130,6 +130,11 @@ msgid "Move"
 msgstr "Movimiento"
 
 #. module: custom_account
+#: field:account.invoice.line,picking_id:0
+msgid "Picking"
+msgstr "Albarán"
+
+#. module: custom_account
 #: view:product.product:custom_account.product_form_view_procurement_button
 msgid "Moves"
 msgstr "Movimientos"

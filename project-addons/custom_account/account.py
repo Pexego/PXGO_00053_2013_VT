@@ -57,6 +57,9 @@ class AccountInvoiceLine(models.Model):
     _inherit = 'account.invoice.line'
 
     move_id = fields.Many2one('stock.move', 'Move', copy=False)
+    picking_id = fields.Many2one("stock.picking", "Picking",
+                                 related="move_id.picking_id",
+                                 readonly=True)
 
 
 class AccountInvoice(models.Model):
