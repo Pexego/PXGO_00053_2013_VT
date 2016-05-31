@@ -43,6 +43,8 @@ class AccountMoveLine(models.Model):
                               string='Scheme',
                               compute='get_mandate_scheme',
                               search='_mandate_scheme_search')
+    partner_vat = fields.Char("Vat", related="partner_id.vat",
+                              readonly=True)
 
 
 class AccountBankingMandate(models.Model):

@@ -30,6 +30,7 @@
     "data": [
         'views/valued_picking_report.xml',
         # 'stock_report.xml',
+        'stock_view.xml',
         'partner_view.xml'],
     "installable": True
 }

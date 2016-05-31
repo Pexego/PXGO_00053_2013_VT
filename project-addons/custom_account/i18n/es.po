@@ -240,6 +240,11 @@ msgid "Scheme"
 msgstr "Esquema"
 
 #. module: custom_account
+#: field:account.move.line,partner_vat:0
+msgid "Vat"
+msgstr "Nif"
+
+#. module: custom_account
 #: field:account.banking.mandate,default:0
 msgid "Set default"
 msgstr "Por defecto"
