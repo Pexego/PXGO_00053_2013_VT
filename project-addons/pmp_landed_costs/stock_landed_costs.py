@@ -122,12 +122,12 @@ class StockLandedCost(models.Model):
                 volume = move.product_id and move.product_id.volume * \
                     move.product_qty
                 for quant in move.quant_ids:
-                    total_cost += quant.cost
+                    total_cost += (quant.cost * quant.qty)
                 tariff = move.product_id and move.product_id.tariff * \
                     move.product_qty
                 vals = dict(product_id=move.product_id.id, move_id=move.id,
                             quantity=move.product_uom_qty,
-                            former_cost=total_cost * total_qty, weight=weight,
+                            former_cost=total_cost, weight=weight,
                             volume=volume, tariff=tariff)
                 lines.append(vals)
         return lines
