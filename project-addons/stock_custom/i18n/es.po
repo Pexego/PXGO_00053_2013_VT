@@ -33,7 +33,7 @@ msgstr "Lotes"
 #. module: stock_custom
 #: field:res.partner,not_print_picking:0
 msgid "Not print picking"
-msgstr "No imprimir albarán"
+msgstr "No adjuntar albarán impreso"
 
 #. module: stock_custom
 #: help:res.partner,not_print_picking:0

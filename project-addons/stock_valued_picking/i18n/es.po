@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* stock_valued_picking
+#       * stock_valued_picking
 #
 msgid ""
 msgstr ""
@@ -58,7 +58,7 @@ msgstr "Precio unitario"
 #. module: stock_valued_picking
 #: field:res.partner,valued_picking:0
 msgid "Print valued picking"
-msgstr "Imprimir albarán valorado"
+msgstr "Albarán valorado"
 
 #. module: stock_valued_picking
 #: field:stock.picking,amount_discounted:0

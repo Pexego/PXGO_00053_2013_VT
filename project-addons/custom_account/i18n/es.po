@@ -36,7 +36,7 @@ msgstr "Un mandato bancario genérico"
 #: field:account.invoice,attach_picking:0
 #: field:res.partner,attach_picking:0
 msgid "Attach picking"
-msgstr "Enviar albarán"
+msgstr "Enviar albarán por email"
 
 #. module: custom_account
 #: selection:account.move.line,scheme:0
