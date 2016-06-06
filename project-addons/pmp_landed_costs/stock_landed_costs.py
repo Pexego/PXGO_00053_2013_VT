@@ -147,15 +147,9 @@ class StockLandedCost(models.Model):
                 if line.product_id.cost_method == 'average':
                     # (((ctdad_total - ctdad_move) * precio_coste_antes_mov) + (ctdad_move * precio_coste + costes)) / ctdad_total
                     # average_price = (((line.product_id.qty_available - line.move_id.product_qty) * line.product_id.standard_price) + (line.move_id.product_qty * (line.product_id.standard_price + line.additional_landed_cost))) / line.product_id.qty_available
-                    if line.product_id.qty_available > 0:
-                        average_price = ((line.product_id.qty_available *
-                                         line.product_id.standard_price) +
-                                         line.additional_landed_cost) / \
-                            line.product_id.qty_available
-                    else:
-                        average_price = line.product_id.standard_price + \
-                            (line.additional_landed_cost /
-                             line.move_id.product_qty)
+                    average_price = line.product_id.standard_price + \
+                        (line.additional_landed_cost /
+                         line.move_id.product_qty)
                     product_obj.write(cr, uid, [line.product_id.id],
                                       {'standard_price': average_price},
                                       context)
@@ -199,14 +193,8 @@ class StockValuationAdjustmentLines(models.Model):
     def _get_new_standard_price(self):
         if not self.product_id or self.cost_id.state == 'done':
             return
-        if self.product_id.qty_available > 0:
-            average_price = ((self.product_id.qty_available *
-                             self.product_id.standard_price) +
-                             self.additional_landed_cost) / \
-                self.product_id.qty_available
-        else:
-            average_price = self.product_id.standard_price + \
-                (self.additional_landed_cost / self.move_id.product_qty)
+        average_price = self.product_id.standard_price + \
+            (self.additional_landed_cost / self.move_id.product_qty)
         self.new_standard_price = average_price
         self.standard_price = self.product_id.standard_price
 
