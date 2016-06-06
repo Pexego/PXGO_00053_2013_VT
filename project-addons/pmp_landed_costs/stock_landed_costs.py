@@ -21,7 +21,8 @@
 
 from openerp import models, api, exceptions, _, fields
 import openerp.addons.decimal_precision as dp
-from openerp.tools import float_compare, float_round
+from openerp.tools import float_round
+
 
 class StockLandedCost(models.Model):
 
@@ -29,7 +30,8 @@ class StockLandedCost(models.Model):
 
     def compute_landed_cost(self, cr, uid, ids, context=None):
         line_obj = self.pool.get('stock.valuation.adjustment.lines')
-        unlink_ids = line_obj.search(cr, uid, [('cost_id', 'in', ids)], context=context)
+        unlink_ids = line_obj.search(cr, uid, [('cost_id', 'in', ids)],
+                                     context=context)
         line_obj.unlink(cr, uid, unlink_ids, context=context)
         digits = dp.get_precision('Product Price')(cr)
         towrite_dict = {}
@@ -43,11 +45,14 @@ class StockLandedCost(models.Model):
             total_volume = 0.0
             total_line = 0.0
             total_tariff = 0.0
-            vals = self.get_valuation_lines(cr, uid, [cost.id], picking_ids=picking_ids, context=context)
+            vals = self.get_valuation_lines(cr, uid, [cost.id],
+                                            picking_ids=picking_ids,
+                                            context=context)
             for v in vals:
                 for line in cost.cost_lines:
                     v.update({'cost_id': cost.id, 'cost_line_id': line.id})
-                    self.pool.get('stock.valuation.adjustment.lines').create(cr, uid, v, context=context)
+                    self.pool.get('stock.valuation.adjustment.lines').\
+                        create(cr, uid, v, context=context)
                 total_qty += v.get('quantity', 0.0)
                 total_cost += v.get('former_cost', 0.0)
                 total_weight += v.get('weight', 0.0)
@@ -59,7 +64,8 @@ class StockLandedCost(models.Model):
                 value_split = 0.0
                 for valuation in cost.valuation_adjustment_lines:
                     value = 0.0
-                    if valuation.cost_line_id and valuation.cost_line_id.id == line.id:
+                    if valuation.cost_line_id and \
+                            valuation.cost_line_id.id == line.id:
                         if line.split_method == 'by_quantity' and total_qty:
                             per_unit = (line.price_unit / total_qty)
                             value = valuation.quantity * per_unit
@@ -71,7 +77,8 @@ class StockLandedCost(models.Model):
                             value = valuation.volume * per_unit
                         elif line.split_method == 'equal':
                             value = (line.price_unit / total_line)
-                        elif line.split_method == 'by_current_cost_price' and total_cost:
+                        elif line.split_method == 'by_current_cost_price' and \
+                                total_cost:
                             per_unit = (line.price_unit / total_cost)
                             value = valuation.former_cost * per_unit
                         elif line.split_method == 'by_tariff' and total_tariff:
@@ -81,7 +88,9 @@ class StockLandedCost(models.Model):
                             value = (line.price_unit / total_line)
 
                         if digits:
-                            value = float_round(value, precision_digits=digits[1], rounding_method='UP')
+                            value = float_round(value,
+                                                precision_digits=digits[1],
+                                                rounding_method='UP')
                             fnc = min if line.price_unit > 0 else max
                             value = fnc(value, line.price_unit - value_split)
                             value_split += value
@@ -92,10 +101,12 @@ class StockLandedCost(models.Model):
                             towrite_dict[valuation.id] += value
         if towrite_dict:
             for key, value in towrite_dict.items():
-                line_obj.write(cr, uid, key, {'additional_landed_cost': value}, context=context)
+                line_obj.write(cr, uid, key, {'additional_landed_cost': value},
+                               context=context)
         return True
 
-    def get_valuation_lines(self, cr, uid, ids, picking_ids=None, context=None):
+    def get_valuation_lines(self, cr, uid, ids, picking_ids=None,
+                            context=None):
         picking_obj = self.pool.get('stock.picking')
         lines = []
         if not picking_ids:
@@ -106,12 +117,18 @@ class StockLandedCost(models.Model):
                 #it doesn't make sense to make a landed cost for a product that isn't set as being valuated in real time at real cost
                 total_cost = 0.0
                 total_qty = move.product_qty
-                weight = move.product_id and move.product_id.weight * move.product_qty
-                volume = move.product_id and move.product_id.volume * move.product_qty
+                weight = move.product_id and move.product_id.weight * \
+                    move.product_qty
+                volume = move.product_id and move.product_id.volume * \
+                    move.product_qty
                 for quant in move.quant_ids:
                     total_cost += quant.cost
-                tariff = move.product_id and move.product_id.tariff * move.product_qty
-                vals = dict(product_id=move.product_id.id, move_id=move.id, quantity=move.product_uom_qty, former_cost=total_cost * total_qty, weight=weight, volume=volume, tariff=tariff)
+                tariff = move.product_id and move.product_id.tariff * \
+                    move.product_qty
+                vals = dict(product_id=move.product_id.id, move_id=move.id,
+                            quantity=move.product_uom_qty,
+                            former_cost=total_cost * total_qty, weight=weight,
+                            volume=volume, tariff=tariff)
                 lines.append(vals)
         return lines
 
@@ -130,8 +147,17 @@ class StockLandedCost(models.Model):
                 if line.product_id.cost_method == 'average':
                     # (((ctdad_total - ctdad_move) * precio_coste_antes_mov) + (ctdad_move * precio_coste + costes)) / ctdad_total
                     # average_price = (((line.product_id.qty_available - line.move_id.product_qty) * line.product_id.standard_price) + (line.move_id.product_qty * (line.product_id.standard_price + line.additional_landed_cost))) / line.product_id.qty_available
-                    average_price = (line.product_id.qty_available * line.product_id.standard_price + line.additional_landed_cost) / line.product_id.qty_available
-                    product_obj.write(cr, uid, [line.product_id.id], {'standard_price': average_price}, context)
+                    if line.product_id.qty_available > 0:
+                        average_price = (line.product_id.qty_available *
+                                         line.product_id.standard_price +
+                                         line.additional_landed_cost) / \
+                            line.product_id.qty_available
+                    else:
+                        average_price = line.product_id.standard_price + \
+                            line.additional_landed_cost
+                    product_obj.write(cr, uid, [line.product_id.id],
+                                      {'standard_price': average_price},
+                                      context)
                 per_unit = line.final_cost / line.quantity
                 diff = per_unit - line.former_cost_per_unit
                 quants = [quant for quant in line.move_id.quant_ids]
@@ -141,32 +167,45 @@ class StockLandedCost(models.Model):
                     else:
                         quant_dict[quant.id] += diff
                 for key, value in quant_dict.items():
-                    quant_obj.write(cr, 1, key, {'cost': value}, context=context)
+                    quant_obj.write(cr, 1, key, {'cost': value},
+                                    context=context)
                 qty_out = 0
                 for quant in line.move_id.quant_ids:
                     if quant.location_id.usage != 'internal':
                         qty_out += quant.qty
-                self._create_accounting_entries(cr, uid, line, move_id, qty_out, context=context)
-            self.write(cr, uid, cost.id, {'state': 'done', 'account_move_id': move_id}, context=context)
+                self._create_accounting_entries(cr, uid, line, move_id,
+                                                qty_out, context=context)
+            self.write(cr, uid, cost.id, {'state': 'done',
+                                          'account_move_id': move_id},
+                       context=context)
         return True
+
 
 class StockValuationAdjustmentLines(models.Model):
 
     _inherit = 'stock.valuation.adjustment.lines'
 
-    standard_price = fields.Float('Standard price', compute='_get_new_standard_price', store=True)
-    new_standard_price = fields.Float('New standard price', compute='_get_new_standard_price', store=True)
-    tariff = fields.Float("Tariff", digits=(16,2))
+    standard_price = fields.Float('Standard price',
+                                  compute='_get_new_standard_price',
+                                  store=True)
+    new_standard_price = fields.Float('New standard price',
+                                      compute='_get_new_standard_price',
+                                      store=True)
+    tariff = fields.Float("Tariff", digits=(16, 2))
 
     @api.one
     @api.depends('product_id.standard_price', 'additional_landed_cost')
     def _get_new_standard_price(self):
         if not self.product_id or self.cost_id.state == 'done':
             return
-        average_price = (self.product_id.qty_available *
-                         self.product_id.standard_price +
-                         self.additional_landed_cost) / \
-            self.product_id.qty_available
+        if self.product_id.qty_available > 0:
+            average_price = (self.product_id.qty_available *
+                             self.product_id.standard_price +
+                             self.additional_landed_cost) / \
+                self.product_id.qty_available
+        else:
+            average_price = self.product_id.standard_price + \
+                self.additional_landed_cost
         self.new_standard_price = average_price
         self.standard_price = self.product_id.standard_price
 
