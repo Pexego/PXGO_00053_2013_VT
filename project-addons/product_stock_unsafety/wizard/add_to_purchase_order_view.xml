@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <form string="Add to purchase order">
                     <group>
-                        <field name="purchase_id"/>
+                        <field name="purchase_id" required="True"/>
                         <field name="purchase_qty"/>
                     </group>
                     <button string="Add to purchase" name="assign_purchase_order" type="object" icon="gtk-ok"/>

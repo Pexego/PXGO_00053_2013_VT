@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <form string="Assign purchase order">
                     <group>
-                        <field name="purchase_id"/>
+                        <field name="purchase_id" required="True"/>
                     </group>
                     <button string="Assign purchase" name="assign_purchase_order" type="object" icon="gtk-ok"/>
                     <button string="Cancel" special="cancel" icon="gtk-cancel"/>

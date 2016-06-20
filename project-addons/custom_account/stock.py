@@ -77,9 +77,14 @@ class ProductProduct(models.Model):
 
     @api.multi
     def name_get(self):
+        partner_id = self.env.context.get('partner_id', False)
         result = []
         for record in self:
-            result.append((record.id, "%s" % record.default_code))
+            sellers = [x.name.id for x in record.seller_ids]
+            if partner_id and partner_id in sellers:
+                result.extend(super(ProductProduct, self).name_get())
+            else:
+                result.append((record.id, "%s" % record.default_code))
         return result
 
     def _check_ean_key(self, cr, uid, ids, context=None):

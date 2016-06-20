@@ -23,6 +23,7 @@
                     <field name="default_code"/>
                     <field name="product_brand_id"/>
                     <field name="seller_id"/>
+                    <field name="manufacturer_pref"/>
                     <field name="categ_id"/>
                     <field name="incoming_qty"/>
                     <field name="virtual_stock_conservative"/>

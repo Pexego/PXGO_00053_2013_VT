@@ -37,5 +37,16 @@
             </field>
         </record>
 
+        <record id="vpicktree_add_shipping_id" model="ir.ui.view">
+            <field name="name">stock.picking.tree.add_shipping_id</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.vpicktree"/>
+            <field name="arch" type="xml">
+                <field name="origin" position="after">
+                    <field name="shipping_identifier"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

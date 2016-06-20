@@ -27,8 +27,7 @@ class AssignPurchaseOrderWzd(models.TransientModel):
     _name = "assign.purchase.order.wzd"
 
     purchase_id = fields.Many2one("purchase.order", "Purchase",
-                                  required=True, domain=[('state', '=',
-                                                          'draft')])
+                                  domain=[('state', '=', 'draft')])
 
 
     @api.multi
@@ -43,14 +42,20 @@ class AssignPurchaseOrderWzd(models.TransientModel):
             line.supplier_id = obj.purchase_id.partner_id.id
             purchase = obj.purchase_id
             line_vals = {'order_id': purchase.id,
-                         'product_id': line.product_id.id}
+                         'product_id': line.product_id.id,
+                         'price_unit': 0.0}
             line_vals.update(purchase_line_obj.
                              onchange_product_id(purchase.pricelist_id.id,
                                                  line.product_id.id,
                                                  line.product_qty,
                                                  line.product_id.uom_id.id,
-                                                 purchase.partner_id.id)
+                                                 purchase.partner_id.id,
+                                                 purchase.date_order,
+                                                 purchase.fiscal_position.id,
+                                                 purchase.minimum_planned_date)
                              ['value'])
+            if line_vals.get('taxes_id', False):
+                line_vals['taxes_id'] = [(6, 0, line_vals['taxes_id'])]
             purchase_line_obj.create(line_vals)
 
         view = view_obj.search([('model', '=', "purchase.order"),

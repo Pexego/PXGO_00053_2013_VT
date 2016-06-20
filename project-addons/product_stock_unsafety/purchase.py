@@ -65,7 +65,9 @@ class PurchaseOrderLine(models.Model):
         under_min_obj = self.env['product.stock.unsafety']
         for line in self:
             under_mins = under_min_obj.search([('purchase_id', '=',
-                                                line.order_id.id)])
+                                                line.order_id.id),
+                                               ('product_id', '=',
+                                                line.product_id.id)])
             if under_mins:
                 under_mins.write({"state": "in_progress",
                                   "purchase_id": False})

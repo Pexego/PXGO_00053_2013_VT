@@ -63,14 +63,20 @@ class CreatePurchaseFromUnsafetyWzd(models.TransientModel):
         purchase = purchase_obj.create(purchase_vals)
         for line in unsafety_obj.browse(self.env.context['active_ids']):
             line_vals = {'order_id': purchase.id,
-                         'product_id': line.product_id.id}
+                         'product_id': line.product_id.id,
+                         'price_unit': 0.0}
             line_vals.update(purchase_line_obj.
                              onchange_product_id(purchase.pricelist_id.id,
                                                  line.product_id.id,
                                                  line.product_qty,
                                                  line.product_id.uom_id.id,
-                                                 purchase.partner_id.id)
+                                                 purchase.partner_id.id,
+                                                 purchase.date_order,
+                                                 purchase.fiscal_position.id,
+                                                 purchase.minimum_planned_date)
                              ['value'])
+            if line_vals.get('taxes_id', False):
+                line_vals['taxes_id'] = [(6, 0, line_vals['taxes_id'])]
             purchase_line_obj.create(line_vals)
             line.purchase_id = purchase.id
             line.state = "in_action"
