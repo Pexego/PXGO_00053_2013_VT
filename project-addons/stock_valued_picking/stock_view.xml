@@ -8,7 +8,7 @@
             <field name="inherit_id" ref="stock.vpicktree"/>
             <field name="arch" type="xml">
                 <field name="picking_type_id" position="after">
-                    <field name="amount_untaxed"/>
+                    <field name="amount_total"/>
                 </field>
             </field>
         </record>
