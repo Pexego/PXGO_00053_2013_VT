@@ -27,8 +27,10 @@
                    "export",
     'author': 'Comunitea',
     'website': '',
-    "depends": ['account', 'account_payment_partner', 'customer_area'],
+    "depends": ['account', 'account_payment_partner', 'customer_area',
+                'account_followup'],
     "data": ['account_invoice_cyc_view.xml',
-             'security/ir.model.access.csv'],
+             'security/ir.model.access.csv',
+             'account_view.xml'],
     "installable": True
 }

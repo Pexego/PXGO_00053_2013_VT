@@ -26,6 +26,16 @@ msgid "August"
 msgstr "Agosto"
 
 #. module: cyc_view
+#: field:account.move.line,cyc_limit_date_insolvency:0
+msgid "C&C limit date insolvency"
+msgstr "Fecha límite C&C insolvencia"
+
+#. module: cyc_view
+#: field:account.move.line,cyc_notify_date:0
+msgid "C&C notify date"
+msgstr "Fecha notificación C&C"
+
+#. module: cyc_view
 #: field:account.invoice.cyc,cash:0
 msgid "Cash"
 msgstr "Contado"
