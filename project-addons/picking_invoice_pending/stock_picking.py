@@ -47,6 +47,7 @@ class StockPicking(models.Model):
         period_obj = self.env['account.period']
         move_obj = self.env['account.move']
         move_line_obj = self.env['account.move.line']
+        lines = []
 
         amount = 0
         date = self.min_date and self.min_date[:10] or \
@@ -80,8 +81,9 @@ class StockPicking(models.Model):
                 unit_price_line = move_line.purchase_line_id.price_unit
                 discount_line = move_line.purchase_line_id.discount or 0.0
             else:
-                raise Warning("There is no purchase line related. Can not "
-                              "calculate price for accounting pending invoice")
+                continue
+                #raise Warning("There is no purchase line related. Can not "
+                #              "calculate price for accounting pending invoice")
 
             price_line = unit_price_line * (1 - (discount_line or 0.0) / 100.0)
             price_line = price_line * move_line.product_qty
@@ -104,26 +106,31 @@ class StockPicking(models.Model):
                 'journal_id': stock_journal_id,
                 'period_id': period_id.id,
             }
+            line_id = move_line_obj.create(vals)
+            lines.append(lines)
+
+        if lines:
+            account_id = self.company_id.\
+                property_pending_supplier_invoice_account.id
+            vals = {
+                'name': name,
+                'ref': origin,
+                'partner_id': self.partner_id.commercial_partner_id.id,
+                'account_id': account_id,
+                'debit': 0,
+                'credit': amount,
+                'move_id': move_id.id,
+                'journal_id': stock_journal_id,
+                'period_id': period_id.id,
+            }
+
             move_line_obj.create(vals)
+            move_id.post()
 
-        account_id = self.company_id.\
-            property_pending_supplier_invoice_account.id
-        vals = {
-            'name': name,
-            'ref': origin,
-            'partner_id': self.partner_id.commercial_partner_id.id,
-            'account_id': account_id,
-            'debit': 0,
-            'credit': amount,
-            'move_id': move_id.id,
-            'journal_id': stock_journal_id,
-            'period_id': period_id.id,
-        }
-
-        move_line_obj.create(vals)
-        move_id.post()
-
-        self.pending_invoice_move_id = move_id
+            self.pending_invoice_move_id = move_id
+        else:
+            move_id.unlink()
+            move_id = False
 
         return move_id
 
