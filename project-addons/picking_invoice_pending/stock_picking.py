@@ -21,6 +21,7 @@
 
 from openerp import models, fields, api, _
 from openerp.exceptions import Warning
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
 
@@ -32,6 +33,14 @@ class StockPicking(models.Model):
                                               'Account pending move',
                                               readonly=True,
                                               copy=False)
+
+    @api.multi
+    def action_done(self):
+        res = super(StockPicking, self).action_done()
+        for pick in self:
+            if not pick.date_done:
+                pick.date_done = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        return res
 
     @api.one
     def account_pending_invoice(self):
