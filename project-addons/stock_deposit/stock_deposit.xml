@@ -91,7 +91,7 @@
                 <search string="Deposits" version="7.0">
                     <field name="product_id" />
                     <field name="user_id" />
-                    <field name="partner_id" />
+                    <field name="partner_id" filter_domain="[('partner_id','child_of',self)]"/>
                     <field name="picking_id" />
                     <field name="sale_id" />
                     <filter name="draft" string="Deposits"

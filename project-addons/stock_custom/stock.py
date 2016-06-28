@@ -23,6 +23,7 @@ from openerp import models, fields, exceptions, api, _
 
 class stock_picking(models.Model):
     _inherit = "stock.picking"
+    _order = "priority desc, date desc, id desc"
 
     internal_notes = fields.Text("Internal Notes")
 
