@@ -16,6 +16,9 @@
                   </group>
                 </group>
             </field>
+            <field name="user_id" position="after">
+                <field name="date_confirm"/>
+            </field>
           </field>
       </record>
 
@@ -40,6 +43,17 @@
                     Odoo will help you efficiently handle the complete sales flow:
                     quotation, sales order, delivery, invoicing and payment.
                 </p>
+            </field>
+        </record>
+
+        <record id="view_order_tree_add_date_confirm" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="after">
+                    <field name="date_confirm"/>
+                </field>
             </field>
         </record>
 

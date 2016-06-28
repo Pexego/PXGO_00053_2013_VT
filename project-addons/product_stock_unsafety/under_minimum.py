@@ -19,8 +19,7 @@
 #
 ##############################################################################
 from openerp.osv import osv, fields
-import time
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+
 STATES = [('in_progress', 'In Progress'),
           ('in_action', 'In Action'),
           ('finalized', 'Finalized'),
@@ -71,10 +70,10 @@ class product_stock_unsafety(osv.Model):
                                             readonly=True,
                                             help='Real stock + incomings - '
                                             'outgongs'),
-        'last_sixty_days_sales': fields.\
-            related('product_id', 'last_sixty_days_sales',
-                    type='float', readonly=True, digits=(16, 2),
-                    string="Sales in last 60 days with stock"),
+        'last_sixty_days_sales': fields.
+        related('product_id', 'last_sixty_days_sales',
+                type='float', readonly=True, digits=(16, 2),
+                string="Sales in last 60 days with stock"),
         'biggest_sale_qty': fields.related('product_id', 'biggest_sale_qty',
                                            type='float', digits=(16, 2),
                                            readonly=True,
@@ -113,7 +112,7 @@ class product_stock_unsafety(osv.Model):
                                        readonly=True)
     }
     _defaults = {
-        'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
+        'date': fields.date.context_today
     }
 
     def create(self, cr, uid, vals, context=None):
