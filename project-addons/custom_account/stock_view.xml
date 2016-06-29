@@ -19,6 +19,9 @@
             <field name="user_id" position="after">
                 <field name="date_confirm"/>
             </field>
+            <field name="partner_id" position="after">
+                <field name="partner_tags" widget="many2many_tags"/>
+            </field>
           </field>
       </record>
 
