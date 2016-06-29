@@ -63,6 +63,9 @@ class stock_deposit(models.Model):
                              readonly=True, required=True)
     sale_move_id = fields.Many2one('stock.move', 'Sale Move', required=False,
                                    readonly=True, ondelete='cascade', select=1)
+    sale_picking_id = fields.Many2one(related='sale_move_id.picking_id',
+                                      string='Sale picking',
+                                      readonly=True)
     return_picking_id = fields.Many2one('stock.picking', 'Return Picking',
                                         required=False, readonly=True,
                                         ondelete='cascade', select=1)
@@ -72,7 +75,12 @@ class stock_deposit(models.Model):
     @api.multi
     def sale(self):
         move_obj = self.env['stock.move']
+        picking_type_id = self.env.ref('stock.picking_type_out')
         for deposit in self:
+            picking = self.env['stock.picking'].create(
+                {'picking_type_id': picking_type_id.id,
+                 'partner_id': deposit.partner_id.id,
+                 'invoice_state': '2binvoiced'})
             values = {
                 'product_id': deposit.product_id.id,
                 'product_uom_qty': deposit.product_uom_qty,
@@ -81,10 +89,13 @@ class stock_deposit(models.Model):
                 'name': 'Sale Deposit: ' + deposit.move_id.name,
                 'location_id': deposit.move_id.location_dest_id.id,
                 'location_dest_id': deposit.partner_id.property_stock_customer.id,
-                'invoice_state': 'none',
+                'invoice_state': '2binvoiced',
+                'picking_id': picking.id,
+                'procurement_id': deposit.move_id.procurement_id.id
             }
             move = move_obj.create(values)
-            move.action_assign()
+            move.action_confirm()
+            move.force_assign()
             move.action_done()
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
 

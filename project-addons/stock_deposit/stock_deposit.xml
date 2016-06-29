@@ -15,10 +15,10 @@
                             string="Sale"
                             class="oe_highlight"
                             states="draft"/>
-                        <button name="%(stock_deposit.stock_invoice_deposit_action)d" type="action"
+                        <!--<button name="%(stock_deposit.stock_invoice_deposit_action)d" type="action"
                             string="Invoice"
                             class="oe_highlight"
-                            states="sale"/>
+                            states="sale"/>-->
 
                         <field name="state" widget="statusbar"
                         />
@@ -41,6 +41,7 @@
                                     <field name="invoice_id" />
                                     <field name="move_id" />
                                     <field name="sale_move_id" />
+                                    <field name="sale_picking_id"/>
                                     <field name="return_picking_id" />
                                  </group>
                                 <group name="dates_grp" string="Dates">

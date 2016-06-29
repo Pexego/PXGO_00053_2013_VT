@@ -60,7 +60,8 @@ class stock_picking(models.Model):
     def _invoice_create_line(self, moves, journal_id, inv_type='out_invoice'):
         moves_invoice = self.env['stock.move']
         for move in moves:
-            if move.procurement_id.sale_line_id.deposit:
+            if move.procurement_id.sale_line_id.deposit and \
+                    move.location_id.usage == 'internal':
                 move.invoice_state = 'invoiced'
                 continue
             moves_invoice += move
