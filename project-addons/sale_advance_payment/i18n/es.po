@@ -34,6 +34,12 @@ msgid "Amount advanced"
 msgstr "Importe anticipado"
 
 #. module: sale_advance_payment
+#: code:addons/sale_advance_payment/wizard/sale_advance_payment_wzd.py:52
+#, python-format
+msgid "Amount of advance is greater than residual amount on sale"
+msgstr "El importe anticipado es mayor que el importe pendiente en la venta"
+
+#. module: sale_advance_payment
 #: code:addons/sale_advance_payment/wizard/sale_advance_payment_wzd.py:46
 #, python-format
 msgid "Amount of advance must be positive."
@@ -178,6 +184,11 @@ msgstr "Forma de pago"
 #: view:sale.order:sale_advance_payment.view_order_form_change_button
 msgid "Payment advances"
 msgstr "Anticipos"
+
+#. module: sale_advance_payment
+#: field:sale.order,amount_resisual:0
+msgid "Residual amount"
+msgstr "Importe pendiente"
 
 #. module: sale_advance_payment
 #: field:account.voucher,sale_id:0
