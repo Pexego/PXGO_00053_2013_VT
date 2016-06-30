@@ -48,5 +48,16 @@
             </field>
         </record>
 
+        <record id="view_move_tree_receipt_picking_no_create" model="ir.ui.view">
+            <field name="name">stock.move.tree2.no_create</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_tree_receipt_picking"/>
+            <field name="arch" type="xml">
+                <tree position="attributes">
+                    <attribute name="create">0</attribute>
+                </tree>
+            </field>
+        </record>
+
     </data>
 </openerp>
