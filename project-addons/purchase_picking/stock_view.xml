@@ -45,6 +45,9 @@
                 <field name="origin" position="after">
                     <field name="shipping_identifier"/>
                 </field>
+                <field name="date" position="after">
+                    <field name="min_date"/>
+                </field>
             </field>
         </record>
 
@@ -56,6 +59,9 @@
                 <tree position="attributes">
                     <attribute name="create">0</attribute>
                 </tree>
+                <field name="origin" position="before">
+                    <field name="partner_id"/>
+                </field>
             </field>
         </record>
 
