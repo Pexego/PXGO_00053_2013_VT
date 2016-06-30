@@ -12,6 +12,8 @@
                 <group>
                     <group>
                         <field name="carrier_tracking_ref"/>
+                        <field name="carrier_name"/>
+                        <field name="carrier_service"/>
                     </group>
                     <group>
                         <label for="weight" string="Weight"/>
