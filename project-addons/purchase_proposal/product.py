@@ -46,6 +46,7 @@ class ProductProduct(models.Model):
         else:
             product_ids_str = ",".join([str(x) for x in records])
         move_obj = self.env['stock.move']
+        sline_obj = self.env['sale.order.line']
         self.env.cr.execute("select product_id,min(datum) from "
                             "stock_days_positive where product_id in (%s) "
                             "group by product_id" %
@@ -70,6 +71,18 @@ class ProductProduct(models.Model):
                     biggest_move_qty = move.product_uom_qty
                     biggest_order = \
                         move.procurement_id.sale_line_id.order_id.id
+
+            sale_lines = sline_obj.search([('date_order', '>=', data[1]),
+                                           ('order_id.state', '=', 'history'),
+                                           ('product_id', '=', product.id)])
+            for line in sale_lines:
+                qty += line.product_uom_qty
+                if line.product_uom_qty > biggest_move_qty:
+                    biggest_move_qty = line.product_uom_qty
+                    biggest_order = \
+                        line.order_id.id
+
+
             vals = {'last_sixty_days_sales': qty,
                     'biggest_sale_qty': biggest_move_qty,
                     'biggest_sale_id': biggest_order,

@@ -19,13 +19,23 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class PurchaseOrder(models.Model):
 
     _inherit = "purchase.order"
 
+    @api.one
+    def _get_amount_residual(self):
+        advance_amount = 0.0
+        for line in self.account_voucher_ids:
+            if line.state == 'posted':
+                advance_amount += round(line.amount * line.payment_rate, 2)
+        self.amount_resisual = self.amount_total - advance_amount
+
     account_voucher_ids = fields.One2many('account.voucher', 'purchase_id',
                                           string="Pay purchase advanced",
                                           readonly=True)
+    amount_resisual = fields.Float('Residual amount', readonly=True,
+                                   compute="_get_amount_residual")

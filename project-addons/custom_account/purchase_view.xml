@@ -53,6 +53,9 @@
               <field name="partner_id" position="after">
                 <field name="partner_ref"/>
               </field>
+              <field name="amount_total" position="after">
+                <field name="currency_id"/>
+              </field>
           </field>
       </record>
 

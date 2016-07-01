@@ -55,6 +55,8 @@ class purchase_order(models.Model):
             move_dict.pop('product_uos_qty', None)
             move_dict.pop('product_uos', None)
             move_dict['partner_id'] = order.partner_id.id
+            if order.partner_ref:
+                move_dict['origin'] += ":" + order.partner_ref
         return res
 
     def action_picking_create(self, cr, uid, ids, context=None):

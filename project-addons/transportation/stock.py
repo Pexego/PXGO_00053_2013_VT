@@ -61,6 +61,8 @@ class StockPicking(models.Model):
                                     required=True, readonly="1",
                                     help="Unit of measurement for Weight",
                                     default=_get_default_uom)
+    carrier_name = fields.Char("Carrier name")
+    carrier_service = fields.Char("Carrier service")
 
 
 class StockMove(models.Model):

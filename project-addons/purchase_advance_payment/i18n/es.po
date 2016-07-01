@@ -34,6 +34,12 @@ msgid "Amount advanced"
 msgstr "Importe anticipado"
 
 #. module: purchase_advance_payment
+#: code:addons/purchase_advance_payment/wizard/purchase_advance_payment_wzd.py:52
+#, python-format
+msgid "Amount of advance is greater than residual amount on purchase"
+msgstr "El importe anticipado es mayor que el importe pendiente en la compra"
+
+#. module: purchase_advance_payment
 #: code:addons/purchase_advance_payment/wizard/purchase_advance_payment_wzd.py:46
 #, python-format
 msgid "Amount of advance must be positive."
@@ -188,3 +194,8 @@ msgstr "Compra"
 #: model:ir.model,name:purchase_advance_payment.model_purchase_order
 msgid "Purchase Order"
 msgstr "Pedido de compra"
+
+#. module: purchase_advance_payment
+#: field:res.partner,on_account_purchase:0
+msgid "Purchase on account amount"
+msgstr "Importe de compras anticipado"

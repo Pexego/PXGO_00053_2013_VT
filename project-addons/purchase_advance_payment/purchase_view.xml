@@ -10,7 +10,7 @@
             <field name="arch" type="xml">
                 <button name="action_cancel_draft" position="before">
                     <button name="%(action_view_account_purchase_voucher_wizard)d" string="Pay purchase advanced"
-                        type="action" icon="gtk-execute" groups="account.group_account_invoice" attrs="{'invisible': ['|',('state', 'in', ['done','cancel','history']),('invoiced', '=', True)]}"/>
+                        type="action" icon="gtk-execute" groups="account.group_account_invoice" attrs="{'invisible': ['|',('state', 'in', ['done','cancel','history','draft','sent']),('invoiced', '=', True)]}"/>
                 </button>
                 <page string="Deliveries &amp; Invoices" position="after">
                     <page string="Payment advances" groups="account.group_account_invoice">

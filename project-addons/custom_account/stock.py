@@ -147,6 +147,8 @@ class SaleOrder(models.Model):
 
     state = fields.Selection(selection_add=[("history", "History")])
     internal_notes = fields.Text("Internal Notes")
+    partner_tags = fields.Many2many('res.partner.category', id1='sale_id',
+                                    id2='category_id', string='Tags')
 
     def fields_view_get(self, cr, uid, view_id=None, view_type='form',
                         context=None, toolbar=False, submenu=False):
@@ -167,6 +169,15 @@ class SaleOrder(models.Model):
     _sql_constraints = [('customer_ref_uniq',
                          'unique(partner_id, client_order_ref)',
                          'Customer ref must be unique by partner')]
+
+    def onchange_partner_id(self, cr, uid, ids, part, context=None):
+        res = super(SaleOrder, self).onchange_partner_id(cr, uid, ids, part,
+                                                         context=context)
+        if part and res.get('value', False):
+            partner = self.pool['res.partner'].browse(cr, uid, part)
+            res['value']['partner_tags'] = [x.id for x in partner.category_id]
+
+        return res
 
     def copy(self, cr, uid, id, default={}, context=None):
         sale = self.browse(cr, uid, id, context)

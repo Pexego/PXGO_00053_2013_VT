@@ -40,7 +40,7 @@ class purchase_order(osv.osv):
                     move.state = 'cancel'
 
         res = super(purchase_order, self).action_cancel(cr, uid, ids, context=context)
-        
+
         return res
 
     def _minimum_planned_date(self, cr, uid, ids, field_name, arg, context=None):
@@ -65,10 +65,7 @@ class purchase_order(osv.osv):
         pol_obj = self.pool.get('purchase.order.line')
         for po in self.browse(cr, uid, ids, context=context):
             if po.order_line:
-                pol_ids = pol_obj.search(cr, uid, [
-                    ('order_id', '=', po.id), '|', ('date_planned', '=', po.minimum_planned_date), ('date_planned', '<', value)
-                ], context=context)
-                pol_obj.write(cr, uid, pol_ids, {'date_planned': value}, context=context)
+                pol_obj.write(cr, uid, [x.id for x in po.order_line], {'date_planned': value}, context=context)
         self.invalidate_cache(cr, uid, context=context)
         return True
 
