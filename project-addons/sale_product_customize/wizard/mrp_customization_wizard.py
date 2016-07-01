@@ -85,7 +85,7 @@ class MrpCustomizationWizard(models.TransientModel):
             if not self[0].can_mount_id.product_id.default_code:
                 raise exceptions.Warning(
                     _('The product to mount not have default code'))
-            product_code += '#' + str(self[0].can_mount_id.qty) + '?' + \
+            product_code += '#' + str(int(self[0].can_mount_id.qty)) + '?' + \
                 self[0].can_mount_id.product_id.default_code
         if require_partner:
             if not self[0].partner_id.ref:
