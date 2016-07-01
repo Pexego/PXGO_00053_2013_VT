@@ -39,3 +39,15 @@ class product_product(models.Model):
               readonly=True,
               digits=dp.get_precision('Product Unit of Measure'))
 
+    outgoing_picking_reserved_qty = fields.Float(
+        compute='_get_outgoing_picking_qty', readonly=True,
+        digits=dp.get_precision('Product Unit of Measure'))
+
+    @api.one
+    def _get_outgoing_picking_qty(self):
+        moves = self.env['stock.move'].search(
+            [('product_id', '=', self.id),
+             ('state', 'in', ('confirmed', 'assigned')),
+             ('picking_id.picking_type_code', '=', 'outgoing')])
+        self.outgoing_picking_reserved_qty = sum(moves.mapped(
+            'reserved_availability'))

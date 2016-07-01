@@ -115,6 +115,8 @@ class StockLandedCost(models.Model):
         for picking in picking_obj.browse(cr, uid, picking_ids):
             for move in picking.move_lines:
                 #it doesn't make sense to make a landed cost for a product that isn't set as being valuated in real time at real cost
+                if move.product_id.cost_method != 'real':
+                    continue
                 total_cost = 0.0
                 total_qty = move.product_qty
                 weight = move.product_id and move.product_id.weight * \
@@ -133,7 +135,13 @@ class StockLandedCost(models.Model):
         return lines
 
     def button_validate(self, cr, uid, ids, context=None):
-        quant_obj = self.pool.get('stock.quant')
+        res = super(StockLandedCost, self).button_validate(cr, uid, ids, context)
+        for cost in self.browse(cr, uid, ids, context=context):
+            for line in cost.valuation_adjustment_lines:
+                if line.product_id.cost_method == 'real':
+                    self.pool.get('product.product').update_real_cost(cr, uid, line.product_id.id, context)
+        return res
+        '''quant_obj = self.pool.get('stock.quant')
         product_obj = self.pool.get('product.product')
 
         for cost in self.browse(cr, uid, ids, context=context):
@@ -173,7 +181,7 @@ class StockLandedCost(models.Model):
             self.write(cr, uid, cost.id, {'state': 'done',
                                           'account_move_id': move_id},
                        context=context)
-        return True
+        return True'''
 
 
 class StockValuationAdjustmentLines(models.Model):

@@ -31,6 +31,6 @@
                  "reserve_without_save_sale"],
     "data" : ["ir_attachment_view.xml",
               "stock_custom_report.xml",
-              "stock_view.xml", "partner_view.xml"],
+              "stock_view.xml", "partner_view.xml", 'product_view.xml', 'data/ir_cron.xml'],
     "installable": True
 }

@@ -36,6 +36,13 @@ msgid "Not print picking"
 msgstr "No adjuntar albarán impreso"
 
 #. module: stock_custom
+#: code:addons/stock_custom/product.py:16
+#: view:product.product:stock_custom.product_form_view_move_button
+#, python-format
+msgid "Stock moves"
+msgstr "Movimientos de existencias"
+
+#. module: stock_custom
 #: help:res.partner,not_print_picking:0
 msgid "Only print attachments on picking with attachs. report"
 msgstr "Sólo imprime los adjuntos en el informe de albaran con adjuntos"
@@ -75,4 +82,3 @@ msgstr "A imprimir"
 #: help:stock.move,lots_text:0
 msgid "Value must be separated by commas"
 msgstr "El valor debe estar separado por comas"
-
