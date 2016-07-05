@@ -39,6 +39,7 @@ class AccountVoucherWizard(models.TransientModel):
     currency_id = fields.Many2one("res.currency", "Currency", readonly=True)
     currency_amount = fields.Float("Curr. amount", digits=(16, 2),
                                    readonly=True)
+    payment_ref = fields.Char("Ref.")
 
     @api.constrains('amount_advance')
     def check_amount(self):
@@ -133,7 +134,7 @@ class AccountVoucherWizard(models.TransientModel):
                            'period_id': period_id.id,
                            'purchase_id': purchase_ref,
                            'name': _("Advance Payment"),
-                           'reference': purchase.name
+                           'reference': self[0].payment_ref or purchase.name
                            }
             voucher = voucher_obj.create(voucher_res)
             voucher.action_move_line_create()

@@ -194,7 +194,7 @@ class StockValuationAdjustmentLines(models.Model):
         if not self.product_id or self.cost_id.state == 'done':
             return
         average_price = self.product_id.standard_price + \
-            (self.additional_landed_cost / self.move_id.product_qty)
+            (self.additional_landed_cost / (self.move_id.product_qty or 1.0))
         self.new_standard_price = average_price
         self.standard_price = self.product_id.standard_price
 

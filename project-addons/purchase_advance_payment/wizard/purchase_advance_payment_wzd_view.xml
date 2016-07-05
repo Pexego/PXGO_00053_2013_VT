@@ -14,6 +14,7 @@
                                 widget="selection" select="1"
                                 colspan="4"
                                 string="Payment Method"/>
+                        <field name="payment_ref"/>
                         <group colspan="4" col="4">
                             <field name="date"/>
                             <field name="amount_total"/>
