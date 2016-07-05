@@ -21,5 +21,23 @@
             </field>
         </record>
 
+        <record id="account_voucher.action_vendor_payment" model="ir.actions.act_window">
+            <field name="name">Supplier Payments</field>
+            <field name="res_model">account.voucher</field>
+            <field name="view_type">form</field>
+            <field name="domain">[('type','=','payment')]</field>
+            <field name="context">{'type':'payment'}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="account_voucher.view_voucher_filter_vendor_pay"/>
+            <field name="target">current</field>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a new supplier payment.
+              </p><p>
+                Odoo helps you easily track payments you make and the remaining balances you need to pay your suppliers.
+              </p>
+            </field>
+        </record>
+
     </data>
 </openerp>
