@@ -71,8 +71,8 @@ class SaleOrder(models.Model):
                             _('Error'),
                             _('One of the products not have default code'))
                     customizations = customizations - mount
-                    product_code += u'#' + line.can_mount_id.product_id.\
-                        default_code
+                    product_code += u'#' + str(int(line.can_mount_id.qty)) + '?' + \
+                        line.can_mount_id.product_id.default_code
                 if not self.partner_id.ref:
                     raise exceptions.Warning(
                         _('Partner reference'),

@@ -88,10 +88,13 @@ class ProductProduct(models.Model):
                 code = prod_code.split('#')
                 first_prod = self.search([('default_code', '=', code[0])])
                 if '|' in code[1]:
-                    sec_prod = self.search([('default_code', '=',
-                                             code[1][:code[1].index('|')])])
+                    sec_prod = self.search(
+                        [('default_code', '=',
+                          code[1][code[1].index('?')+1:code[1].index('|')])])
                 else:
-                    sec_prod = self.search([('default_code', '=', code[1])])
+                    sec_prod = self.search(
+                        [('default_code', '=',
+                          code[1][code[1].index('?')+1:])])
                 prod_dict['name'] = first_prod.name + u' - ' + sec_prod.name
                 prod_dict.update(self._update_product_prices(first_prod,
                                                              sec_prod,

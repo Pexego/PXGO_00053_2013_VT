@@ -11,11 +11,13 @@
                     <field name="qty_available"/>
                     <field name="incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
+                    <field name="outgoing_picking_reserved_qty"/>
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
                     <field name="qty_available"/>
                     <field name="incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
+                    <field name="outgoing_picking_reserved_qty"/>
                 </xpath>
             </field>
         </record>
@@ -29,6 +31,7 @@
                     <field name="qty_available"/>
                     <field name="incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
+                    <field name="outgoing_picking_reserved_qty"/>
                 </field>
             </field>
         </record>
@@ -42,6 +45,7 @@
                     <field name="qty_available"/>
                     <field name="incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
+                    <field name="outgoing_picking_reserved_qty"/>
                 </field>
             </field>
         </record>
