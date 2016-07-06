@@ -188,23 +188,20 @@ class StockValuationAdjustmentLines(models.Model):
 
     _inherit = 'stock.valuation.adjustment.lines'
 
-    standard_price = fields.Float('Standard price',
-                                  compute='_get_new_standard_price',
-                                  store=True)
-    new_standard_price = fields.Float('New standard price',
-                                      compute='_get_new_standard_price',
-                                      store=True)
+    standard_price = fields.Float('Standard price')
+    new_standard_price = fields.Float('New standard price')
     tariff = fields.Float("Tariff", digits=(16, 2))
 
-    @api.one
-    @api.depends('product_id.standard_price', 'additional_landed_cost')
-    def _get_new_standard_price(self):
-        if not self.product_id or self.cost_id.state == 'done':
-            return
-        average_price = self.product_id.standard_price + \
-            (self.additional_landed_cost / (self.move_id.product_qty or 1.0))
-        self.new_standard_price = average_price
-        self.standard_price = self.product_id.standard_price
+    @api.multi
+    def write(self, vals):
+        if vals.get('additional_landed_cost', False):
+            vals['standard_price'] = \
+                sum(self.move_id.mapped('quant_ids.inventory_value')) / \
+                sum(self.move_id.mapped('quant_ids.qty'))
+            vals['new_standard_price'] = (
+                sum(self.move_id.mapped('quant_ids.inventory_value')) +
+                vals['additional_landed_cost']) / sum(self.move_id.mapped('quant_ids.qty'))
+        return super(StockValuationAdjustmentLines, self).write(vals)
 
 
 class StockLandedCostLines(models.Model):

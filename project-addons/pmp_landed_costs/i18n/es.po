@@ -24,7 +24,7 @@ msgstr "¡Error!"
 #. module: pmp_landed_costs
 #: field:stock.valuation.adjustment.lines,new_standard_price:0
 msgid "New standard price"
-msgstr "Nuevo precio de coste de producto"
+msgstr "Nuevo precio de coste de quant"
 
 #. module: pmp_landed_costs
 #: model:ir.model,name:pmp_landed_costs.model_product_product
@@ -39,7 +39,7 @@ msgstr "Plantilla de producto"
 #. module: pmp_landed_costs
 #: field:stock.valuation.adjustment.lines,standard_price:0
 msgid "Standard price"
-msgstr "Precio de coste de producto"
+msgstr "Precio de coste de quant"
 
 #. module: pmp_landed_costs
 #: model:ir.model,name:pmp_landed_costs.model_stock_landed_cost
