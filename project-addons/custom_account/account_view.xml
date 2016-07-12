@@ -106,5 +106,19 @@
             </field>
         </record>
 
+        <record id="invoice_tree_add_invoice_type" model="ir.ui.view">
+            <field name="name">account.invoice.tree.add_invoice_type</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="company_id" position="after">
+                    <field name="invoice_type_id"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

@@ -241,8 +241,8 @@ msgstr "Esquema"
 
 #. module: custom_account
 #: field:account.move.line,partner_vat:0
-msgid "Vat"
-msgstr "Nif"
+msgid "CIF/NIF/VAT"
+msgstr "CIF/NIF/VAT"
 
 #. module: custom_account
 #: field:account.banking.mandate,default:0

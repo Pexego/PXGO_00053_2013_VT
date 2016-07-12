@@ -74,6 +74,11 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: custom_partner
+#: field:res.partner.invoice.type,display_name:0
+msgid "Display Name"
+msgstr "Nombre"
+
+#. module: custom_partner
 #: field:res.partner,dropship:0
 msgid "Dropship"
 msgstr "Dropship"
@@ -147,6 +152,11 @@ msgstr "Presupuestos"
 #: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_sale_order_line
 msgid "Quotations and Sales Lines"
 msgstr "Presupuestos y lineas de venta"
+
+#. module: custom_partner
+#: field:res.partner,send_followup_to_user:0
+msgid "Send followup to sales agent"
+msgstr "Enviar seguimiento al comercial"
 
 #. module: custom_partner
 #: field:res.partner,web:0

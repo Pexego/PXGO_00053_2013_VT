@@ -43,7 +43,7 @@ class AccountMoveLine(models.Model):
                               string='Scheme',
                               compute='get_mandate_scheme',
                               search='_mandate_scheme_search')
-    partner_vat = fields.Char("Vat", related="partner_id.vat",
+    partner_vat = fields.Char("CIF/NIF/VAT", related="partner_id.vat",
                               readonly=True)
 
 
@@ -74,6 +74,9 @@ class AccountInvoice(models.Model):
     country_id = fields.Many2one('res.country', 'Country',
                                  related="partner_id.country_id",
                                  readonly=True, store=True)
+    invoice_type_id = fields.\
+        Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
+                 related="invoice_line.picking_id.invoice_type_id")
 
     @api.model
     def create(self, vals):

@@ -156,6 +156,16 @@
             </field>
         </record>
 
+        <record id="view_partner_inherit_followup_form_add_send_email" model="ir.ui.view">
+            <field name="name">res.partner.followup.form.inherit.add_send_email</field>
+            <field name="inherit_id" ref="account_followup.view_partner_inherit_followup_form"/>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml" >
+                <field name="payment_responsible_id" position="after">
+                    <field name="send_followup_to_user"/>
+                </field>
+            </field>
+        </record>
 
     </data>
 </openerp>
