@@ -39,6 +39,18 @@ class StockMove(models.Model):
                 move.state = "draft"
         return super(StockMove, self).unlink()
 
+    @api.multi
+    def action_done(self):
+        res = super(StockMove, self).action_done()
+        for move in self:
+            if move.location_id.usage == "customer" and \
+                    move.location_dest_id.usage == "internal":
+                for quant in move.quant_ids:
+                    quantS = self.sudo().env["stock.quant"].browse(quant.id)
+                    quantS.cost = quant.product_id.standard_price
+
+        return res
+
 
 class ProductProduct(models.Model):
 
@@ -215,3 +227,33 @@ class AccountInvoice(models.Model):
 
     state = fields.Selection(selection_add=[("history", "History")])
 
+
+class StockQuant(models.Model):
+
+    _inherit = "stock.quant"
+
+    @api.model
+    def _prepare_account_move_line(self, move, qty, cost, credit_account_id,
+                                   debit_account_id):
+        res = super(StockQuant, self).\
+            _prepare_account_move_line(move, qty, cost, credit_account_id,
+                                       debit_account_id)
+        currency_obj = self.pool.get('res.currency')
+        if not self.env.context.get('force_valuation_amount', False) and \
+                move.product_id.cost_method == 'real' and \
+                move.location_id.usage == "customer" and \
+                move.location_dest_id.usage == "internal":
+            valuation_amount = \
+                currency_obj.round(self._cr, self._uid,
+                                   move.company_id.currency_id,
+                                   move.product_id.standard_price * qty)
+            res[0][2]['debit'] = valuation_amount > 0 and valuation_amount \
+                or 0
+            res[0][2]['credit'] = valuation_amount < 0 and -valuation_amount \
+                or 0
+            res[1][2]['debit'] = valuation_amount < 0 and -valuation_amount \
+                or 0
+            res[1][2]['credit'] = valuation_amount > 0 and valuation_amount \
+                or 0
+
+        return res
