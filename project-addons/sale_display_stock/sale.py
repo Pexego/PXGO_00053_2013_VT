@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
+
 from openerp import models, fields
 import openerp.addons.decimal_precision as dp
 

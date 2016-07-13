@@ -40,6 +40,12 @@ class SaleOrder(models.Model):
                                              copy=False, readonly=True)
     force_vies_validation = fields.Boolean('Vies validation forced',
                                            copy=False, readonly=True)
+    fiscal_position = fields.Many2one('account.fiscal.position',
+                                      'Fiscal Position', readonly=True,
+                                      states={'draft': [('readonly', False)],
+                                              'sent': [('readonly', False)],
+                                              'reserve': [('readonly',
+                                                           False)]})
 
     @api.multi
     def check_vat_ext(self):
@@ -99,13 +105,12 @@ class SaleOrder(models.Model):
                 self.env['ir.attachment'].create(attach_vals)
 
             if result is None or not result:
-                if sale.partner_id.property_account_position and \
-                        sale.partner_id.property_account_position.\
-                        require_vies_validation:
+                if sale.fiscal_position and \
+                        sale.fiscal_position.require_vies_validation:
                     result = False
                     sale.write({'waiting_vies_validation': True})
                 else:
-                    result=True
+                    result = True
         return result
 
     @api.multi
@@ -124,3 +129,10 @@ class SaleOrder(models.Model):
     def action_risk_approval(self):
         self.check_vat_ext()
         return super(SaleOrder, self).action_risk_approval()
+
+    @api.multi
+    def action_cancel(self):
+        res = super(SaleOrder, self).action_cancel()
+        for order in self:
+            order.waiting_vies_validation = False
+        return res
