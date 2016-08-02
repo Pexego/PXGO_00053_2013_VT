@@ -69,41 +69,41 @@ class AccountInvoice(models.Model):
     on_account_purchase = fields.Float("On account amount", readonly=True,
                                        compute="_get_pur_on_account_amount")
 
-    @api.multi
-    def action_move_create(self):
-        res = super(AccountInvoice, self).action_move_create()
-        move_line_obj = self.env["account.move.line"]
-        move_lines = self.env["account.move.line"]
-        for invoice in self:
-            orders = []
-            for line in invoice.invoice_line:
-                if line.move_id and line.move_id.purchase_line_id:
-                    purchase = line.move_id.purchase_line_id.order_id
-                    if purchase not in orders:
-                        if purchase.account_voucher_ids:
-                            orders.append(purchase)
-                else:
-                    purchase_lines = self.env["purchase.order.line"].\
-                        search([('invoice_lines', 'in', [line.id])])
-                    if purchase_lines:
-                        if purchase_lines[0].order_id not in orders:
-                            orders.append(purchase_lines[0].order_id)
-            if orders:
-                move_lines = move_line_obj.\
-                    search([('move_id', '=', invoice.move_id.id),
-                            ('account_id', '=', invoice.account_id.id)])
-
-                for purchase_order in orders:
-                    for payment in purchase_order.account_voucher_ids:
-                        if payment.state != 'posted':
-                            continue
-                        payment.move_id.post()
-                        for line in payment.move_ids:
-                            if line.account_id.id == invoice.account_id.id:
-                                move_lines += line
-                try:
-                    if move_lines:
-                        move_lines.reconcile_partial(type='manual')
-                except Exception:
-                    pass
-        return res
+    #~ @api.multi
+    #~ def action_move_create(self):
+        #~ res = super(AccountInvoice, self).action_move_create()
+        #~ move_line_obj = self.env["account.move.line"]
+        #~ move_lines = self.env["account.move.line"]
+        #~ for invoice in self:
+            #~ orders = []
+            #~ for line in invoice.invoice_line:
+                #~ if line.move_id and line.move_id.purchase_line_id:
+                    #~ purchase = line.move_id.purchase_line_id.order_id
+                    #~ if purchase not in orders:
+                        #~ if purchase.account_voucher_ids:
+                            #~ orders.append(purchase)
+                #~ else:
+                    #~ purchase_lines = self.env["purchase.order.line"].\
+                        #~ search([('invoice_lines', 'in', [line.id])])
+                    #~ if purchase_lines:
+                        #~ if purchase_lines[0].order_id not in orders:
+                            #~ orders.append(purchase_lines[0].order_id)
+            #~ if orders:
+                #~ move_lines = move_line_obj.\
+                    #~ search([('move_id', '=', invoice.move_id.id),
+                            #~ ('account_id', '=', invoice.account_id.id)])
+#~
+                #~ for purchase_order in orders:
+                    #~ for payment in purchase_order.account_voucher_ids:
+                        #~ if payment.state != 'posted':
+                            #~ continue
+                        #~ payment.move_id.post()
+                        #~ for line in payment.move_ids:
+                            #~ if line.account_id.id == invoice.account_id.id:
+                                #~ move_lines += line
+                #~ try:
+                    #~ if move_lines:
+                        #~ move_lines.reconcile_partial(type='manual')
+                #~ except Exception:
+                    #~ pass
+        #~ return res

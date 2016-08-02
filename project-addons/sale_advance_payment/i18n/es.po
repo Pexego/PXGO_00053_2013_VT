@@ -196,6 +196,12 @@ msgid "Sale"
 msgstr "Venta"
 
 #. module: sale_advance_payment
+#: field:account.config.settings,sale_advance_payment_account:0
+#: field:res.company,sale_advance_payment_account:0
+msgid "Sale advance payment account"
+msgstr "Cuenta anticipos venta"
+
+#. module: sale_advance_payment
 #: model:ir.model,name:sale_advance_payment.model_sale_order
 msgid "Sales Order"
 msgstr "Pedido de venta"

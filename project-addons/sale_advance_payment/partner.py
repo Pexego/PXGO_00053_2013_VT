@@ -68,3 +68,25 @@ class ResPartner(models.Model):
 
     on_account_amount = fields.Float("On account amount", readonly=True,
                                      compute="_get_on_account_amount")
+
+
+class ResCompany(models.Model):
+
+    _inherit = "res.company"
+
+    sale_advance_payment_account = \
+        fields.Many2one('account.account',
+                        string="Sale advance payment account",
+                        domain="[('type', '=', 'receivable')]")
+
+
+class AccountConfigSettings(models.TransientModel):
+
+    _inherit = 'account.config.settings'
+
+    sale_advance_payment_account = fields.\
+        Many2one('account.account',
+                 related='company_id.sale_advance_payment_account',
+                 string="Sale advance payment account",
+                 domain="[('type', '=', 'receivable'),"
+                        "('company_id', '=', company_id)]")
