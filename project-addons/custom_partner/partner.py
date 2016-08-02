@@ -58,6 +58,7 @@ class ResPartner(models.Model):
                                       'Invoice type')
     dropship = fields.Boolean("Dropship")
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
+    eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
 
     @api.constrains('ref', 'is_company', 'active')
     def check_unique_ref(self):

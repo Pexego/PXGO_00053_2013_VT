@@ -20,6 +20,17 @@
                     <field name="user_id"/>
                     <field name="dropship" attrs="{'invisible': [('type', '!=', 'delivery')]}"/>
                 </field>
+                <field name="debit" position="before">
+                    <field name="eur_currency" invisible="1"/>
+                </field>
+                <field name="debit" position="attributes">
+                    <attribute name="widget">monetary</attribute>
+                    <attribute name="options">{'currency_field': 'eur_currency'}</attribute>
+                </field>
+                <field name="credit" position="attributes">
+                    <attribute name="widget">monetary</attribute>
+                    <attribute name="options">{'currency_field': 'eur_currency'}</attribute>
+                </field>
             </field>
         </record>
 
