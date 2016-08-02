@@ -172,3 +172,9 @@ msgstr "Lineas"
 msgid "wizard"
 msgstr "Asistente"
 
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:78
+#, python-format
+msgid "Set the partner in the created moves"
+msgstr "Establezca el proveedor en el movimiento"

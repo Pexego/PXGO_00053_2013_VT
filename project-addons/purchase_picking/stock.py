@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _
+from openerp import models, fields, api, _, exceptions
 
 
 class stock_picking(models.Model):
@@ -34,11 +34,6 @@ class stock_move(models.Model):
     _inherit = 'stock.move'
 
     partner_id = fields.Many2one('res.partner', 'Partner')
-
-    def _get_master_data(self, cr, uid, move, company, context=None):
-        ''' returns a tuple (browse_record(res.partner), ID(res.users),
-            ID(res.currency)'''
-        return move.partner_id, uid, company.currency_id.id
 
     @api.multi
     def write(self, vals):
@@ -77,12 +72,19 @@ class stock_move(models.Model):
             if 'date_expected' in vals.keys():
                 self.env['stock.reservation'].\
                     reassign_reservation_dates(res.product_id)
+        if not res.partner_id and res.picking_id.partner_id == \
+                self.env.ref('purchase_picking.partner_multisupplier'):
+            raise exceptions.Warning(
+                _('Partner error'), _('Set the partner in the created moves'))
         return res
 
     def _get_master_data(self, cr, uid, move, company, context=None):
         partner, uid, currency = super(stock_move, self)._get_master_data(
             cr, uid, move, company, context)
-        partner = move.partner_id
+        if move.partner_id:
+            partner = move.partner_id
+        else:
+            partner = move.picking_id.partner_id
         return partner, uid, currency
 
 
