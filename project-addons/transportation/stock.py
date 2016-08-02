@@ -38,7 +38,10 @@ class StockPicking(models.Model):
                 if move.state != 'cancel':
                     total_weight += move.weight
                     total_weight_net += move.weight_net
-
+            if picking.weight_st:
+                total_weight = picking.weight_st
+            if picking.weight_net_st:
+                total_weight_net = picking.weight_net_st
             picking.weight = total_weight
             picking.weight_net = total_weight_net
 
@@ -49,10 +52,21 @@ class StockPicking(models.Model):
                                                 uom_categ_id.id),
                                                ('factor', '=', 1)])[0]
 
+    @api.multi
+    def write(self, vals):
+        if 'weight' in vals:
+            vals['weight_st'] = vals.get('weight')
+        if 'weight_net' in vals:
+            vals['weight_net_st'] = vals.get('weight_net')
+        return super(StockPicking, self).write(vals)
+
     volume = fields.Float('Volume', copy=False)
-    weight = fields.Float('Weight', compute='_cal_weight', multi=True,
+    total_cbm = fields.Float('Total CBM')
+    weight_st = fields.Float()
+    weight_net_st = fields.Float()
+    weight = fields.Float('Weight', compute='_cal_weight', multi=True, readonly=False,
                           digits_compute=dp.get_precision('Stock Weight'))
-    weight_net = fields.Float('Net Weight', compute="_cal_weight",
+    weight_net = fields.Float('Net Weight', compute="_cal_weight", readonly=False,
                               digits_compute=dp.get_precision('Stock Weight'),
                               multi=True)
     carrier_tracking_ref = fields.Char('Carrier Tracking Ref', copy=False)

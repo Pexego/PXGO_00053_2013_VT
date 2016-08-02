@@ -23,6 +23,7 @@
                         </div>
                         <field name="weight_net" groups="base.group_no_one"/>
                         <field name="number_of_packages"/>
+                        <field name="total_cbm"/>
                     </group>
                 </group>
                 </xpath>
