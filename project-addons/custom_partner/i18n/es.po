@@ -168,3 +168,8 @@ msgstr "Web"
 #: model:ir.ui.menu,name:custom_partner.res_partner_web
 msgid "Web customers"
 msgstr "Clientes desde web"
+
+#. module: custom_partner
+#: field:res.partner,purchase_quantity:0
+msgid "Purchase quantity"
+msgstr "Cantidad comprada pendiente de factura"

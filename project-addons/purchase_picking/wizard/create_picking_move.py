@@ -82,7 +82,7 @@ class create_picking_move(models.TransientModel):
             if not move.move_id.picking_type_id:
                 move.move_id.picking_type_id = type_id
             if move.move_id.picking_type_id.id not in picking_types.keys():
-                picking_types[move.move_id.picking_type_id.id] = {'inv': [], 'not_inv': []}
+                picking_types[move.move_id.picking_type_id.id] = {'inv': self.env['stock.move'], 'not_inv': self.env['stock.move']}
             if move.qty != move.move_id.product_uom_qty:
                 if move.qty > move.move_id.product_uom_qty:
                     raise exceptions.except_orm(_('Quantity error'), _('The quantity is greater than the original.'))
@@ -92,14 +92,14 @@ class create_picking_move(models.TransientModel):
                     key = 'not_inv'
                 else:
                     key = 'inv'
-                picking_types[move.move_id.picking_type_id.id][key].append(new_move)
+                picking_types[move.move_id.picking_type_id.id][key] += new_move
                 move.move_id.product_uom_qty = move.move_id.product_uom_qty - move.qty
             else:
                 if move.move_id.invoice_state == 'none':
                     key = 'not_inv'
                 else:
                     key = 'inv'
-                picking_types[move.move_id.picking_type_id.id][key].append(move.move_id)
+                picking_types[move.move_id.picking_type_id.id][key] += move.move_id
                 move.move_id.date_expected = self.date_picking
                 all_moves += move.move_id
         picking_ids = []
@@ -120,16 +120,10 @@ class create_picking_move(models.TransientModel):
                     'partner_id': partner,
                     'picking_type_id': pick_type,
                     'move_lines': [(6, 0, [x.id for x in moves_type])],
-                    'origin': '',
+                    'origin': ', '.join(moves_type.mapped('purchase_line_id.order_id.name')),
                     'min_date': self.date_picking,
                     'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none'
                 }
-
-                for move in moves_type:
-                    if move.purchase_line_id:
-                        picking_vals['origin'] += move.purchase_line_id.order_id.name + ", "
-                if picking_vals['origin']:
-                    picking_vals['origin'] = picking_vals['origin'][:-2]
                 picking_ids.append(self.env['stock.picking'].create(picking_vals).id)
         all_moves = all_moves.action_confirm()
 
