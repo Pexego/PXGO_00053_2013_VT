@@ -59,6 +59,18 @@ class ResPartner(models.Model):
     dropship = fields.Boolean("Dropship")
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
+    purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
+
+    @api.multi
+    def _get_purchased_quantity(self):
+        for partner in self:
+            lines = self.env['purchase.order.line'].search(
+                [('order_id.state', '=', 'approved'),
+                 ('invoiced', '=', False),
+                 ('order_id.partner_id', '=', partner.id)])
+            purchases = self.env['purchase.order'].search([('id', 'in', lines.mapped('order_id.id'))])
+            total = sum(purchases.mapped('amount_total'))
+            partner.purchase_quantity = total
 
     @api.constrains('ref', 'is_company', 'active')
     def check_unique_ref(self):
