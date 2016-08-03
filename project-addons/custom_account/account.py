@@ -62,6 +62,9 @@ class AccountInvoiceLine(models.Model):
     picking_id = fields.Many2one("stock.picking", "Picking",
                                  related="move_id.picking_id",
                                  readonly=True)
+    purchase_supplier_reference = fields.Char(
+        'Supplier reference', related='purchase_line_id.order_id.partner_ref',
+        readonly=True)
 
 
 class AccountInvoice(models.Model):

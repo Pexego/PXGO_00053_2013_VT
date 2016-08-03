@@ -90,6 +90,7 @@
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='invoice_line']/tree/field[@name='price_subtotal']" position="after">
+                    <field name="purchase_supplier_reference"/>
                     <field name="picking_id"/>
                 </xpath>
             </field>
