@@ -68,3 +68,6 @@ class ResPartner(models.Model):
 
     on_account_amount = fields.Float("On account amount", readonly=True,
                                      compute="_get_on_account_amount")
+    customer_currency = fields.Many2one(
+        'res.currency',
+        related='property_product_pricelist.currency_id', readonly=True)
