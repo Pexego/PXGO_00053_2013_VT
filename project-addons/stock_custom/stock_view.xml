@@ -46,6 +46,23 @@
                 <xpath expr="//notebook/page[@string='Products']/field[@name='note']" position="after">
                     <field name="internal_notes" placeholder="Internal Notess..." class="oe_inline"/>
                 </xpath>
+                <button name="do_partial_open_barcode" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <button name="open_barcode_interface" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
+            </field>
+      </record>
+
+      <record id="picking_type_disable_barcode_button" model="ir.ui.view">
+            <field name="name">stock.picking.type.kanban</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.stock_picking_type_kanban"/>
+            <field name="arch" type="xml">
+                <xpath expr="//a[@name='open_barcode_interface']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
             </field>
       </record>
 
