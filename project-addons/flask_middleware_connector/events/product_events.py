@@ -106,7 +106,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
                  "pvi3_price", "lst_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
                  "product_brand_id", "last_sixty_days_sales"]
-    if vals.get("web", False) and vals.get("web", False) == "published":
+    if vals.get("web", False) and vals.get("web", False) == "published"  and vals.get("web", False) != product.web:
         export_product.delay(session, model_name, record_id, priority=2, eta=60)
         claim_lines = session.env['claim.line'].search(
             [('product_id', '=', product.id),
@@ -114,7 +114,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
         for line in claim_lines:
             export_rmaproduct.delay(session, 'claim.line', line.id,
                                     priority=10, eta=120)
-    elif vals.get("web", False) and vals.get("web", False) != "published":
+    elif vals.get("web", False) and vals.get("web", False) != "published" and vals.get("web", False) != product.web:
         unlink_product.delay(session, model_name, record_id, priority=1)
     elif product.web == "published":
         for field in up_fields:
