@@ -15,5 +15,27 @@
             </field>
         </record>
 
+        <record id="view_account_config_settings_add_advance_payment_acc" model="ir.ui.view">
+            <field name="name">account settings add advance payment acc</field>
+            <field name="model">account.config.settings</field>
+            <field name="inherit_id" ref="account.view_account_config_settings"/>
+            <field name="arch" type="xml">
+                <field name="expense_currency_exchange_account_id" position="after">
+                    <field name="purchase_advance_payment_account"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_company_form_add_advance_payment_acc" model="ir.ui.view">
+            <field name="name">res.company.form.add_advance_payment_acc</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="arch" type="xml">
+                <field name="currency_id" position="after">
+                    <field name="purchase_advance_payment_account"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

@@ -84,6 +84,12 @@ msgid "Cannot apply a negative amount"
 msgstr "No puede aplicar un importe en negativo"
 
 #. module: purchase_advance_payment
+#: code:addons/purchase_advance_payment/wizard/apply_advanced_amount_wzd.py:84
+#, python-format
+msgid "Cannot apply more amount than residual on invoice."
+msgstr "No puede aplicar más importe del pendiente en la factura"
+
+#. module: purchase_advance_payment
 #: code:addons/purchase_advance_payment/wizard/apply_advanced_amount_wzd.py:36
 #, python-format
 msgid "Cannot apply more amount that current on account amount"
@@ -160,6 +166,12 @@ msgid "Make advance payment"
 msgstr "Crear anticipo"
 
 #. module: purchase_advance_payment
+#: code:addons/purchase_advance_payment/wizard/apply_advanced_amount_wzd.py:198
+#, python-format
+msgid "On account Payment"
+msgstr "Pago en cuenta"
+
+#. module: purchase_advance_payment
 #: view:account.purchase.voucher.wizard:purchase_advance_payment.view_account_purchase_voucher_wizard
 msgid "Operation"
 msgstr "Operación"
@@ -195,7 +207,24 @@ msgstr "Compra"
 msgid "Purchase Order"
 msgstr "Pedido de compra"
 
+
+#. module: purchase_advance_payment
+#: field:account.config.settings,purchase_advance_payment_account:0
+#: field:res.company,purchase_advance_payment_account:0
+msgid "Purchase advance payment account"
+msgstr "Cuenta anticipos compra"
+
 #. module: purchase_advance_payment
 #: field:res.partner,on_account_purchase:0
 msgid "Purchase on account amount"
 msgstr "Importe de compras anticipado"
+
+#. module: purchase_advance_payment
+#: field:account.purchase.voucher.wizard,payment_ref:0
+msgid "Ref."
+msgstr "Ref."
+
+#. module: purchase_advance_payment
+#: field:purchase.order,amount_resisual:0
+msgid "Residual amount"
+msgstr "Importe pendiente"

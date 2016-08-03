@@ -106,7 +106,7 @@ class AccountVoucherWizard(models.TransientModel):
 
             partner_id = sale.partner_id.id
             date = self[0].date
-            company_id = sale.company_id.id
+            company_id = sale.company_id
             sale_ref = sale.id
             period_ids = period_obj.find(date)
             period_id = period_ids[0]
@@ -126,7 +126,7 @@ class AccountVoucherWizard(models.TransientModel):
                            'journal_id': self[0].journal_id.id,
                            'account_id':
                            self[0].journal_id.default_debit_account_id.id,
-                           'company_id': company_id,
+                           'company_id': company_id.id,
                            'payment_rate_currency_id':
                            sale.pricelist_id.currency_id.id,
                            'payment_rate': multicurrency and
@@ -142,12 +142,17 @@ class AccountVoucherWizard(models.TransientModel):
             voucher = voucher_obj.create(voucher_res)
             voucher.action_move_line_create()
             voucher.refresh()
-            if multicurrency:
-                for line in voucher.move_ids:
+            for line in voucher.move_ids:
+                if multicurrency:
                     line.currency_id = self[0].currency_id.id
-                    if line.credit:
+                if line.credit:
+                    if multicurrency:
                         line.amount_currency = -self[0].amount_advance
-                    else:
+                    if company_id.sale_advance_payment_account:
+                        line.account_id = \
+                            company_id.sale_advance_payment_account.id
+                else:
+                    if multicurrency:
                         line.amount_currency = self[0].amount_advance
 
             return {

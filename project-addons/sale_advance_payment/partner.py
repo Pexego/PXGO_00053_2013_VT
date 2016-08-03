@@ -71,3 +71,25 @@ class ResPartner(models.Model):
     customer_currency = fields.Many2one(
         'res.currency',
         related='property_product_pricelist.currency_id', readonly=True)
+
+
+class ResCompany(models.Model):
+
+    _inherit = "res.company"
+
+    sale_advance_payment_account = \
+        fields.Many2one('account.account',
+                        string="Sale advance payment account",
+                        domain="[('type', '=', 'receivable')]")
+
+
+class AccountConfigSettings(models.TransientModel):
+
+    _inherit = 'account.config.settings'
+
+    sale_advance_payment_account = fields.\
+        Many2one('account.account',
+                 related='company_id.sale_advance_payment_account',
+                 string="Sale advance payment account",
+                 domain="[('type', '=', 'receivable'),"
+                        "('company_id', '=', company_id)]")
