@@ -119,8 +119,8 @@ class StockLandedCost(models.Model):
                     continue
                 total_cost = 0.0
                 total_qty = move.product_qty
-                weight = move.product_id and move.product_id.weight * \
-                    move.product_qty
+                weight = move.weight or (move.product_id and \
+                    move.product_id.weight * move.product_qty)
                 volume = move.product_id and move.product_id.volume * \
                     move.product_qty
                 for quant in move.quant_ids:
