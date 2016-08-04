@@ -22,7 +22,7 @@
                 </field>
                 <field name="debit" position="before">
                     <field name="eur_currency" invisible="1"/>
-                    <field name="purchase_quantity"/>
+                    <field name="purchase_quantity" groups="purchase.group_purchase_user"/>
                 </field>
                 <field name="debit" position="attributes">
                     <attribute name="widget">monetary</attribute>
