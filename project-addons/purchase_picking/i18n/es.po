@@ -21,6 +21,11 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: purchase_picking
+#: field:stock.reservation,consumed_for:0
+msgid "Consumed for"
+msgstr "Consumido para"
+
+#. module: purchase_picking
 #: view:picking.from.moves.wizard:purchase_picking.create_picking_move_view
 msgid "Create"
 msgstr "Crear"
@@ -87,10 +92,31 @@ msgid "Picking List"
 msgstr "Albarán"
 
 #. module: purchase_picking
+#: view:stock.move:purchase_picking.view_move_picking_form_add_partner
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:78
+#, python-format
+msgid "Partner error"
+msgstr "Error empresa"
+
+#. module: purchase_picking
 #: code:addons/purchase_picking/wizard/create_picking_move.py:76
 #, python-format
 msgid "Picking error"
 msgstr "Error en albarán"
+
+#. module: purchase_picking
+#: field:stock.reservation,production_id:0
+msgid "Production Order for Produced Products"
+msgstr "Orden de producción para productos producidos"
+
+#. module: purchase_picking
+#: field:stock.reservation,raw_material_production_id:0
+msgid "Production Order for Raw Materials"
+msgstr "Orden de producción para materias primas"
 
 #. module: purchase_picking
 #: field:picking.wizard.move.details,product_id:0
@@ -139,7 +165,12 @@ msgid "Stock Reservation"
 msgstr "Reserva de stock"
 
 #. module: purchase_picking
-#: code:addons/purchase_picking/stock.py:120
+#: help:stock.reservation,consumed_for:0
+msgid "Technical field used to make the traceability of produced products"
+msgstr "Campo técnico usado para hacer la trazabilidad entre productos producidos"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:122
 #, python-format
 msgid "The date planned of the reservation was changed."
 msgstr "La fecha planificada de la reserva ha cambiado."
@@ -151,7 +182,7 @@ msgid "The quantity is greater than the original."
 msgstr "La cantidad es mayor a la original."
 
 #. module: purchase_picking
-#: code:addons/purchase_picking/stock.py:67
+#: code:addons/purchase_picking/stock.py:62
 #, python-format
 msgid "The sale order is already assigned."
 msgstr "El pedido de venta ya está asignado."

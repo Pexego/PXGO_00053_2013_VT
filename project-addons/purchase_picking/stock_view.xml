@@ -73,7 +73,7 @@
                 <field name="reserved_quant_ids" position="after">
                     <newline/>
                     <group>
-                        <field name="partner_id"/>
+                        <field name="partner_id" string="Partner"/>
                     </group>
                 </field>
             </field>
