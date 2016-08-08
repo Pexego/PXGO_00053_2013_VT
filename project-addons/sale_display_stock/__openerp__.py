@@ -35,6 +35,7 @@ Sales display stock
                 "product_virtual_stock_conservative"],
     "data": [
         "sale_view.xml",
+        "product_view.xml",
         "report/sale_order_line_report.xml",
         "security/ir.model.access.csv",
         "security/sale_display_stock_security.xml"

@@ -31,6 +31,9 @@
             <xpath expr="//page[@string='Deliveries &amp; Invoices']/group/group/field[@name='location_id']" position="before">
               <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
             </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_qty']" position="attributes">
+                <attribute name="on_change"></attribute>
+            </xpath>
           </field>
       </record>
 

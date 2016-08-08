@@ -38,6 +38,3 @@ class sale_order_line(models.Model):
         Float('Incoming qty.', readonly=True,
               related='product_id.incoming_qty',
               digits_compute=dp.get_precision('Product Unit of Measure'))
-    outgoing_picking_reserved_qty = fields.Float(
-        'Picking stock', related='product_id.outgoing_picking_reserved_qty',
-        digits_compute=dp.get_precision('Product Unit of Measure'))

@@ -23,8 +23,8 @@ from openerp import models, fields, api
 import openerp.addons.decimal_precision as dp
 
 
-class product_product(models.Model):
-    _inherit = "product.product"
+class ProductTemplate(models.Model):
+    _inherit = "product.template"
 
     @api.one
     def _get_no_wh_internal_stock(self):
@@ -46,7 +46,7 @@ class product_product(models.Model):
     @api.one
     def _get_outgoing_picking_qty(self):
         moves = self.env['stock.move'].search(
-            [('product_id', '=', self.id),
+            [('product_id', 'in', self.product_variant_ids.ids),
              ('state', 'in', ('confirmed', 'assigned')),
              ('picking_id.picking_type_code', '=', 'outgoing')])
         self.outgoing_picking_reserved_qty = sum(moves.mapped(
