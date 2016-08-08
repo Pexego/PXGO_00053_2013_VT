@@ -105,7 +105,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
     up_fields = ["name", "default_code", "pvi1_price", "pvi2_price",
                  "pvi3_price", "lst_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
-                 "product_brand_id", "last_sixty_days_sales"]
+                 "product_brand_id", "last_sixty_days_sales", "web"]
     if vals.get("web", False) and vals.get("web", False) == "published"  and vals.get("web", False) != product.web:
         export_product.delay(session, model_name, record_id, priority=2, eta=60)
         claim_lines = session.env['claim.line'].search(
