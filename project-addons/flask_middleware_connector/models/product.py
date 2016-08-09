@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class ProductTemplate(models.Model):
@@ -35,3 +35,16 @@ class ProductTemplate(models.Model):
                                         help="Allow to publish stock info "
                                              "in public web service",
                                         default=True)
+
+    @api.multi
+    def write(self, vals):
+        delete = True
+        if vals.get('web', False):
+            for record in self:
+                if record.web != vals['web']:
+                    delete = False
+                    break;
+        if delete:
+            del vals['web']
+
+        return super(ProductTemplate, self).write(vals)

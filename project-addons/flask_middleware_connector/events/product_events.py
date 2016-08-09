@@ -70,6 +70,32 @@ class ProductExporter(Exporter):
     def delete(self, binding_id):
         return self.backend_adapter.remove(binding_id)
 
+@middleware
+class ProductTemplateAdapter(GenericAdapter):
+    _model_name = 'product.template'
+    _middleware_model = 'product'
+
+    @on_record_write(model_names='product.template')
+    def delay_export_product_write(session, model_name, record_id, vals):
+        product = session.env[model_name].browse(record_id)
+        up_fields = ["name", "list_price", "categ_id", "product_brand_id",
+                     "web", "show_stock_outside"]
+        if vals.get("web", False) and vals.get("web", False) == "published":
+            export_product.delay(session, model_name, record_id, priority=2, eta=60)
+            claim_lines = session.env['claim.line'].search(
+                [('product_id', '=', product.id),
+                 ('claim_id.partner_id.web', '=', True)])
+            for line in claim_lines:
+                export_rmaproduct.delay(session, 'claim.line', line.id,
+                                        priority=10, eta=120)
+        elif vals.get("web", False) and vals.get("web", False) != "published":
+            unlink_product.delay(session, model_name, record_id, priority=1)
+        elif product.web == "published":
+            for field in up_fields:
+                if field in vals:
+                    update_product.delay(session, model_name, record_id)
+                    break
+
 
 @middleware
 class ProductAdapter(GenericAdapter):
@@ -81,7 +107,7 @@ class ProductAdapter(GenericAdapter):
 def delay_export_product_create(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
     up_fields = ["name", "default_code", "pvi1_price", "pvi2_price",
-                 "pvi3_price", "lst_price", "list_price2", "list_price3",
+                 "pvi3_price", "list_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
                  "product_brand_id", "last_sixty_days_sales"]
     if vals.get("web", False) and vals.get("web", False) == "published":
@@ -102,21 +128,11 @@ def delay_export_product_create(session, model_name, record_id, vals):
 @on_record_write(model_names='product.product')
 def delay_export_product_write(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
-    up_fields = ["name", "default_code", "pvi1_price", "pvi2_price",
-                 "pvi3_price", "lst_price", "list_price2", "list_price3",
-                 "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
-                 "product_brand_id", "last_sixty_days_sales", "web"]
-    if vals.get("web", False) and vals.get("web", False) == "published"  and vals.get("web", False) != product.web:
-        export_product.delay(session, model_name, record_id, priority=2, eta=60)
-        claim_lines = session.env['claim.line'].search(
-            [('product_id', '=', product.id),
-             ('claim_id.partner_id.web', '=', True)])
-        for line in claim_lines:
-            export_rmaproduct.delay(session, 'claim.line', line.id,
-                                    priority=10, eta=120)
-    elif vals.get("web", False) and vals.get("web", False) != "published" and vals.get("web", False) != product.web:
-        unlink_product.delay(session, model_name, record_id, priority=1)
-    elif product.web == "published":
+    up_fields = ["default_code", "pvi1_price", "pvi2_price",
+                 "pvi3_price", "list_price2", "list_price3",
+                 "pvd1_relation", "pvd2_relation", "pvd3_relation",
+                 "last_sixty_days_sales"]
+    if product.web == "published":
         for field in up_fields:
             if field in vals:
                 update_product.delay(session, model_name, record_id)
