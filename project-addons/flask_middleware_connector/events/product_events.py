@@ -80,20 +80,28 @@ class ProductTemplateAdapter(GenericAdapter):
         product = session.env[model_name].browse(record_id)
         up_fields = ["name", "list_price", "categ_id", "product_brand_id",
                      "web", "show_stock_outside"]
+        record_ids = session.env['product.product'].search([('product_tmpl_id', '=',
+							     record_id)])
         if vals.get("web", False) and vals.get("web", False) == "published":
-            export_product.delay(session, model_name, record_id, priority=2, eta=60)
-            claim_lines = session.env['claim.line'].search(
-                [('product_id', '=', product.id),
-                 ('claim_id.partner_id.web', '=', True)])
-            for line in claim_lines:
-                export_rmaproduct.delay(session, 'claim.line', line.id,
+            for prod in record_ids:
+                export_product.delay(session, "product.product", prod, priority=2, eta=60)
+                claim_lines = session.env['claim.line'].search(
+                    [('product_id', '=', prod),
+                     ('claim_id.partner_id.web', '=', True)])
+                for line in claim_lines:
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
                                         priority=10, eta=120)
         elif vals.get("web", False) and vals.get("web", False) != "published":
-            unlink_product.delay(session, model_name, record_id, priority=1)
+            for prod in record_ids:
+                unlink_product.delay(session, "product.product", prod, priority=1)
         elif product.web == "published":
+            update = False
             for field in up_fields:
                 if field in vals:
-                    update_product.delay(session, model_name, record_id)
+                    update = True 
+            if update:
+                for prod in record_ids:
+                    update_product.delay(session, "product.product", prod)
                     break
 
 
