@@ -44,7 +44,7 @@ class ProductTemplate(models.Model):
                 if record.web != vals['web']:
                     delete = False
                     break;
-        if delete:
-            del vals['web']
+            if delete:
+                del vals['web']
 
         return super(ProductTemplate, self).write(vals)

@@ -70,7 +70,7 @@ class ProductExporter(Exporter):
             if mode == "insert":
                 self.backend_adapter.insert(vals)
             else:
-                self.backend_adapter.update(binding_id, vals)
+                self.backend_adapter.update(product.id, vals)
         return True
 
     def delete(self, binding_id):
