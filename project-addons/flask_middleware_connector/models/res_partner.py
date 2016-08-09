@@ -61,6 +61,7 @@ class ResPartner(models.Model):
     @api.multi
     def write(self, vals):
         delete = True
+        deletea = True
         for partner in self:
             if 'web' in vals.keys() and vals['web']:
                 user_id = vals.get('user_id', False)
@@ -70,9 +71,15 @@ class ResPartner(models.Model):
                     user = partner.user_id
                 if user and not user.web:
                     user.web = True
+            if 'web' in vals.keys():
                 if partner.web != vals['web']:
                     delete = False
                 if delete:
                     del vals['web']
+            if 'active' in vals.keys():
+                if partner.active != vals['active']:
+                    deletea = False
+                if deletea:
+                    del vals['active']
 
         return super(ResPartner, self).write(vals)
