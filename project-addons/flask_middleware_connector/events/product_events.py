@@ -34,81 +34,101 @@ on_stock_move_change = Event()
 @middleware
 class ProductExporter(Exporter):
 
-    _model_name = ['product.product']
+    _model_name = ['product.product', 'product.template']
 
     def update(self, binding_id, mode):
-        product = self.model.browse(binding_id)
-        vals = {'name': product.name,
-                'code': product.default_code,
-                'odoo_id': product.id,
-                'categ_id': product.categ_id.id,
-                'pvi_1': product.pvi1_price,
-                'pvi_2': product.pvi2_price,
-                'pvi_3': product.pvi3_price,
-                'uom_name': product.uom_id.name,
-                'last_sixty_days_sales': product.last_sixty_days_sales,
-                'brand_id': product.product_brand_id.id}
-        vals['pvd_1'] = product.lst_price - (product.pvd1_relation *
-                                             product.lst_price)
-        vals['pvd_2'] = product.list_price2 - (product.pvd2_relation *
-                                               product.list_price2)
-        vals['pvd_3'] = product.list_price3 - (product.pvd3_relation *
-                                               product.list_price3)
-        if product.show_stock_outside:
-            stock_qty = eval("product." + self.backend_record.
-                             product_stock_field_id.name,
-                             {'product': product})
-            if stock_qty <= 0.0:
-                vals["stock"] = 0.0
-            else:
-                vals["stock"] = stock_qty
-        if mode == "insert":
-            return self.backend_adapter.insert(vals)
+        if self.model == self.env["product.template"]:
+            products = self.env["product.product"].\
+                search([('product_tmpl_id', '=', binding_id)])
         else:
-            return self.backend_adapter.update(binding_id, vals)
+            products = [self.model.browse(binding_id)]
+        for product in products:
+            vals = {'name': product.name,
+                    'code': product.default_code,
+                    'odoo_id': product.id,
+                    'categ_id': product.categ_id.id,
+                    'pvi_1': product.pvi1_price,
+                    'pvi_2': product.pvi2_price,
+                    'pvi_3': product.pvi3_price,
+                    'uom_name': product.uom_id.name,
+                    'last_sixty_days_sales': product.last_sixty_days_sales,
+                    'brand_id': product.product_brand_id.id}
+            vals['pvd_1'] = product.lst_price - (product.pvd1_relation *
+                                                 product.lst_price)
+            vals['pvd_2'] = product.list_price2 - (product.pvd2_relation *
+                                                   product.list_price2)
+            vals['pvd_3'] = product.list_price3 - (product.pvd3_relation *
+                                                   product.list_price3)
+            if product.show_stock_outside:
+                stock_qty = eval("product." + self.backend_record.
+                                 product_stock_field_id.name,
+                                 {'product': product})
+                if stock_qty <= 0.0:
+                    vals["stock"] = 0.0
+                else:
+                    vals["stock"] = stock_qty
+            if mode == "insert":
+                self.backend_adapter.insert(vals)
+            else:
+                self.backend_adapter.update(binding_id, vals)
+        return True
 
     def delete(self, binding_id):
-        return self.backend_adapter.remove(binding_id)
+        if self.model == "product.template":
+            products = self.env["product.product"].\
+                search([('product_tmpl_id', '=', binding_id)])
+        else:
+            products = [self.model.browse(binding_id)]
+        for product in products:
+            self.backend_adapter.remove(binding_id)
+        return True
 
 @middleware
 class ProductTemplateAdapter(GenericAdapter):
     _model_name = 'product.template'
     _middleware_model = 'product'
 
-    @on_record_write(model_names='product.template')
-    def delay_export_product_write(session, model_name, record_id, vals):
-        product = session.env[model_name].browse(record_id)
-        up_fields = ["name", "list_price", "categ_id", "product_brand_id",
-                     "web", "show_stock_outside"]
-        record_ids = session.env['product.product'].search([('product_tmpl_id', '=',
-							     record_id)])
-        if vals.get("web", False) and vals.get("web", False) == "published":
-            for prod in record_ids:
-                export_product.delay(session, "product.product", prod, priority=2, eta=60)
-                claim_lines = session.env['claim.line'].search(
-                    [('product_id', '=', prod),
-                     ('claim_id.partner_id.web', '=', True)])
-                for line in claim_lines:
-                    export_rmaproduct.delay(session, 'claim.line', line.id,
-                                        priority=10, eta=120)
-        elif vals.get("web", False) and vals.get("web", False) != "published":
-            for prod in record_ids:
-                unlink_product.delay(session, "product.product", prod, priority=1)
-        elif product.web == "published":
-            update = False
-            for field in up_fields:
-                if field in vals:
-                    update = True 
-            if update:
-                for prod in record_ids:
-                    update_product.delay(session, "product.product", prod)
-                    break
-
 
 @middleware
 class ProductAdapter(GenericAdapter):
     _model_name = 'product.product'
     _middleware_model = 'product'
+
+
+@on_record_write(model_names='product.template')
+def delay_export_product_template_write(session, model_name, record_id, vals):
+    print "model_name: ", model_name
+    print "record_id: ", record_id
+    product = session.env[model_name].browse(record_id)
+    up_fields = ["name", "list_price", "categ_id", "product_brand_id",
+                 "web", "show_stock_outside"]
+    record_ids = session.env['product.product'].\
+        search([('product_tmpl_id', '=',  record_id)])
+    #~ print "record_ids: ", record_ids
+    if vals.get("web", False) and vals.get("web", False) == "published":
+        #~ for prod in record_ids:
+        export_product.delay(session, model_name, record_id,
+                             priority=2, eta=60)
+        for prod in record_ids:
+            claim_lines = session.env['claim.line'].search(
+                [('product_id', '=', prod.id),
+                 ('claim_id.partner_id.web', '=', True)])
+            for line in claim_lines:
+                export_rmaproduct.delay(session, 'claim.line', line.id,
+                                        priority=10, eta=120)
+    elif vals.get("web", False) and vals.get("web", False) != "published":
+        #~ for prod in record_ids:
+        unlink_product.delay(session, model_name, record_id,
+                             priority=1)
+    elif product.web == "published":
+        update = False
+        for field in up_fields:
+            if field in vals:
+                update = True
+        if update:
+            #~ for prod in record_ids:
+            update_product.delay(session, model_name, record_id)
+                #~ break
 
 
 @on_record_create(model_names='product.product')
