@@ -18,7 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, _
+from openerp import models, fields, api
 import time
 
 
@@ -53,15 +53,16 @@ class ResPartner(models.Model):
     @api.model
     def create(self, vals):
         if vals.get('user_id', False) and 'web' in vals.keys() and vals['web']:
-            user =  self.env['res.users'].browse(vals['user_id'])
+            user = self.env['res.users'].browse(vals['user_id'])
             if not user.web:
                 user.web = True
         return super(ResPartner, self).create(vals)
 
     @api.multi
     def write(self, vals):
+        delete = True
         for partner in self:
-            if 'web' in vals.keys() and vals['web'] or partner.web:
+            if 'web' in vals.keys() and vals['web']:
                 user_id = vals.get('user_id', False)
                 if user_id:
                     user = self.env['res.users'].browse(user_id)
@@ -69,4 +70,9 @@ class ResPartner(models.Model):
                     user = partner.user_id
                 if user and not user.web:
                     user.web = True
+                if partner.web != vals['web']:
+                    delete = False
+                if delete:
+                    del vals['web']
+
         return super(ResPartner, self).write(vals)
