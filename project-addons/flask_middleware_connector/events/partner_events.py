@@ -119,7 +119,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     elif "web" in vals and not vals["web"]:
         unlink_partner.delay(session, model_name, record_id, priority=100)
     elif vals.get("active", False) and partner.web:
-        export_partner(session, model_name, record_id, priority=2, eta=60)
+        export_partner(session, model_name, record_id)
         rmas = session.delay.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
