@@ -32,7 +32,8 @@ Sales display stock
     * Displays the real stock of product at each sale order line.
 """,
     "depends": ["base", "sale", "stock", "account",
-                "product_virtual_stock_conservative"],
+                "product_virtual_stock_conservative",
+                "stock_reserve"],
     "data": [
         "sale_view.xml",
         "product_view.xml",
