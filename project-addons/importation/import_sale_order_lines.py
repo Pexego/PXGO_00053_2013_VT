@@ -166,7 +166,8 @@ class import_sale_order_lines(object):
                         visited_orders.append(order_ids[0])
                         lines_ids = self.search('sale.order.line', [('order_id','=',order_ids[0])])
                         if lines_ids:
-                            self.unlink("sale.order.line", lines_ids) 
+                            for line_id in lines_ids:
+                                self.unlink("sale.order.line", line_id) 
                     lines_vals = {
                         "product_id": product_ids and product_ids[0] or False,
                         "name": record[2],
