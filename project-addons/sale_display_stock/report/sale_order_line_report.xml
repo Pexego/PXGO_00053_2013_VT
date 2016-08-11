@@ -26,7 +26,7 @@
 
         <record id="sale_order_line_report_filter" model="ir.ui.view">
             <field name="name">sale.order.line.report</field>
-            <field name="model">sale.order.line</field>
+            <field name="model">sale.order.line.report</field>
             <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="">
