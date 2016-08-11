@@ -56,7 +56,7 @@
             <field name="res_model">sale.order</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,graph</field>
-            <field name="context">{'search_default_partner_id': active_id}</field>
+            <field name="context">{'search_default_partner_id': active_id, 'default_state': 'reserve'}</field>
             <field name="domain">[('state', 'not in', ['cancel', 'draft', 'sent'])]</field>
             <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
             <field name="help" type="html">
