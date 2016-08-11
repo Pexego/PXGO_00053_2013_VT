@@ -11,6 +11,15 @@
                     <field name="standard_price" readonly="1"/>
                     <field name="new_standard_price" readonly="1"/>
                 </xpath>
+                <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='weight']" position="attributes">
+                    <attribute name="sum">Weight</attribute>
+                </xpath>
+                <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='volume']" position="attributes">
+                    <attribute name="sum">Volume</attribute>
+                </xpath>
+                <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='quantity']" position="attributes">
+                    <attribute name="sum">Qty.</attribute>
+                </xpath>
                 <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='volume']" position="after">
                     <field name="tariff" readonly="1"/>
                 </xpath>

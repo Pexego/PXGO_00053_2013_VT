@@ -5,7 +5,7 @@
         <record id="view_partner_form_add_web_field" model="ir.ui.view">
             <field name="name">res.partner.form.add_web_field</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="inherit_id" ref="purchase_advance_payment.view_partner_property_form_add_on_account"/>
             <field name="arch" type="xml">
                 <field name="active" position="after">
                     <field name="web"/>
@@ -22,7 +22,7 @@
                 </field>
                 <field name="debit" position="before">
                     <field name="eur_currency" invisible="1"/>
-                    <field name="purchase_quantity" groups="purchase.group_purchase_user"/>
+                    <field name="purchase_quantity" groups="purchase.group_purchase_user" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
                 </field>
                 <field name="debit" position="attributes">
                     <attribute name="widget">monetary</attribute>

@@ -28,7 +28,7 @@
     'website': 'www.comunitea.com',
     "depends": ['base', 'sale', 'l10n_es_partner', 'warning', 'account',
                 'base_partner_sequence', 'stock', 'account_followup',
-                'purchase'],
+                'purchase', 'purchase_advance_payment'],
     "data": ["partner_view.xml", "stock_view.xml",
              "security/ir.model.access.csv", "sale_view.xml"],
     "installable": True
