@@ -86,6 +86,8 @@ class SaleOrder(models.Model):
                     replace("-", "_")
                 c = canvas.Canvas(name)
                 height = 700
+                c.drawString(100, height, url)
+                height = height - 25
                 for key in dict(res):
                     c.drawString(100, height,
                                  key + u": " + tools.ustr(res[key]).
