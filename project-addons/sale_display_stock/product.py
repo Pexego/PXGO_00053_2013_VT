@@ -50,4 +50,4 @@ class ProductTemplate(models.Model):
              ('state', 'in', ('confirmed', 'assigned')),
              ('picking_id.picking_type_code', '=', 'outgoing')])
         self.outgoing_picking_reserved_qty = sum(moves.mapped(
-            'reserved_availability'))
+            'product_uom_qty'))
