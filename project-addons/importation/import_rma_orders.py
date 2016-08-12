@@ -5,7 +5,6 @@ import sys
 import xmlrpclib
 import socket
 import xlrd
-import datetime
 
 class import_rma_order(object):
     def __init__(self, dbname, user, passwd, rmas_file):
@@ -156,11 +155,15 @@ class import_rma_order(object):
         all_lines = sh.nrows - 1
         print "lines no: ", all_lines
         context = {'lang': 'es_ES'}
+        last_number = False
         for rownum in range(1, all_lines):
             record = sh.row_values(rownum)
+            if not last_number:
+                last_number = str(int(record[0]))
             try:
                 rma_ids = self.search("crm.claim", [('number', '=', str(int(record[0])))])
                 if not rma_ids:
+                    last_number = str(int(record[0]))
                     partner_ids = self.search("res.partner", [('name', 'ilike', record[5]),('is_company', '=', True),('customer', '=', True)], context=context)
 
                     if record[4]:
@@ -186,7 +189,9 @@ class import_rma_order(object):
                         'stage_id': self.search("crm.claim.stage", [('name', "=", record[14])], context=context)[0]
                     }
                     rma_id = self.create("crm.claim", vals)
+                    rma_ids = [rma_id]
 
+                if last_number == str(int(record[0])):
                     if record[10] or record[11] or record[13]:
                         substate_ids = self.search("substate.substate", [('name', '=', record[15])], context=context)
                         if record[10]:
@@ -195,7 +200,7 @@ class import_rma_order(object):
                             product_ids = []
                         line_vals = {
                             'substate_id': substate_ids and substate_ids[0] or False,
-                            'claim_id': rma_id,
+                            'claim_id': rma_ids[0],
                             'internal_description': record[13],
                             'name': record[11],
                             'product_id': product_ids and product_ids[0] or False
