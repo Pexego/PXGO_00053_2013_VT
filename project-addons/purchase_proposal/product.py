@@ -72,7 +72,7 @@ class ProductProduct(models.Model):
                     biggest_order = \
                         move.procurement_id.sale_line_id.order_id.id
 
-            sale_lines = sline_obj.search([('date_order', '>=', data[1]),
+            sale_lines = sline_obj.search([('order_id.date_order', '>=', data[1]),
                                            ('order_id.state', '=', 'history'),
                                            ('product_id', '=', product.id)])
             for line in sale_lines:

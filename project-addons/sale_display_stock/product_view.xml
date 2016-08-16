@@ -25,12 +25,13 @@
                     <label for="incoming_qty"/>
                     <div>
                         <field name="incoming_qty" class="oe_inline"/>
-                        <button string="⇒ Request Procurement" name="%(stock.act_make_procurement)d" type="action" class="oe_link"/>
+                        <!--<button string="⇒ Request Procurement" name="%(stock.act_make_procurement)d" type="action" class="oe_link"/>-->
                     </div>
                 </field>
                 <field name="virtual_available" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
+                <button name="%(stock.action_view_change_product_quantity)d" position="replace"/>
             </field>
         </record>
 
