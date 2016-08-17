@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, api
+import datetime
 
 
 class ProductProduct(models.Model):
@@ -39,56 +40,65 @@ class ProductProduct(models.Model):
 
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
+        base = datetime.datetime.today()
+        sixty_date = (base - datetime.timedelta(days=60)).\
+            strftime("%Y-%m-%d %H:%M:%S")
         if not records:
             self.average_margin_last_sales()
             products = self.search([('type', '!=', 'service')])
-            product_ids_str = ",".join([str(x.id) for x in products])
+            product_ids = products.ids
         else:
-            product_ids_str = ",".join([str(x) for x in records])
+            product_ids = records
         move_obj = self.env['stock.move']
         sline_obj = self.env['sale.order.line']
-        self.env.cr.execute("select product_id,min(datum) from "
-                            "stock_days_positive where product_id in (%s) "
-                            "group by product_id" %
-                            (product_ids_str))
-        days_data = self.env.cr.fetchall()
-        for data in days_data:
-            product = self.browse(data[0])
+        for product_id in product_ids:
+            self.env.cr.execute("select min(t.datum) from (select product_id,"
+                                "datum from stock_days_positive where "
+                                "product_id = %s order by datum desc "
+                                "limit 60) as t" % (product_id))
+            days_data = self.env.cr.fetchone()
+            if days_data:
+                product = self.browse(product_id)
 
-            moves = move_obj.search([('date', '>=', data[1]),
-                                     ('state', '=', 'done'),
-                                     ('product_id', '=', product.id),
-                                     ('picking_type_code', '=',
-                                      'outgoing'),
-                                     ('procurement_id.sale_line_id', '!=',
-                                      False)])
-            biggest_move_qty = 0.0
-            biggest_order = False
-            qty = 0.0
-            for move in moves:
-                qty += move.product_uom_qty
-                if move.product_uom_qty > biggest_move_qty:
-                    biggest_move_qty = move.product_uom_qty
-                    biggest_order = \
-                        move.procurement_id.sale_line_id.order_id.id
-
-            sale_lines = sline_obj.search([('order_id.date_order', '>=', data[1]),
-                                           ('order_id.state', '=', 'history'),
-                                           ('product_id', '=', product.id)])
-            for line in sale_lines:
-                qty += line.product_uom_qty
-                if line.product_uom_qty > biggest_move_qty:
-                    biggest_move_qty = line.product_uom_qty
-                    biggest_order = \
-                        line.order_id.id
+                moves = move_obj.search([('date', '>=', days_data[0]),
+                                         ('state', '=', 'done'),
+                                         ('product_id', '=', product.id),
+                                         ('picking_type_code', '=',
+                                          'outgoing'),
+                                         ('procurement_id.sale_line_id', '!=',
+                                          False)])
+                biggest_move_qty = 0.0
+                biggest_order = False
+                qty = 0.0
+                for move in moves:
+                    qty += move.product_uom_qty
+                    if move.product_uom_qty > biggest_move_qty:
+                        biggest_move_qty = move.product_uom_qty
+                        biggest_order = \
+                            move.procurement_id.sale_line_id.order_id.id
 
 
-            vals = {'last_sixty_days_sales': qty,
-                    'biggest_sale_qty': biggest_move_qty,
-                    'biggest_sale_id': biggest_order,
-                    'joking_index': qty * product.standard_price}
 
-            product.write(vals)
+                sale_lines = sline_obj.search([('date_order', '>=',
+                                                sixty_date),
+                                               ('order_id.state', '=',
+                                                'history'),
+                                               ('product_id', '=',
+                                                product_id)])
+                for line in sale_lines:
+                    qty += line.product_uom_qty
+                    if line.product_uom_qty > biggest_move_qty:
+                        biggest_move_qty = line.product_uom_qty
+                        biggest_order = \
+                            line.order_id.id
+
+
+                vals = {'last_sixty_days_sales': qty,
+                        'biggest_sale_qty': biggest_move_qty,
+                        'biggest_sale_id': biggest_order,
+                        'joking_index': qty * product.standard_price}
+
+                product.write(vals)
 
     @api.model
     def average_margin_last_sales(self, ids=False):
