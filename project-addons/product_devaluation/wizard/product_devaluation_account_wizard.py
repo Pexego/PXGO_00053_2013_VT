@@ -36,7 +36,8 @@ class product_devaluation_account_wizard(models.TransientModel):
     journal_id = fields.Many2one('account.journal', 'Journal', default=lambda self:
         self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].
         product_id.categ_id.devaluation_journal_id or self.env.user.company_id.devaluation_journal_id, required=True)
-    date = fields.Date("Date", required=True, default=fields.Date.today)
+    date = fields.Date("Date", required=True,
+                       default=fields.Date.context_today)
 
     @api.multi
     def create_dev_account(self):

@@ -46,7 +46,8 @@ class product_devaluation_wizard(models.TransientModel):
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).standard_price)
 
-    date_dev = fields.Date('Date', default=fields.Date.today, required=True)
+    date_dev = fields.Date('Date', default=fields.Date.context_today,
+                           required=True)
 
 
 
