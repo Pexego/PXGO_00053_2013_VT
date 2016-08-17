@@ -23,6 +23,9 @@
                 <field name="name" position="after">
                    <field name="tag_ids" string="Tags"/>
                 </field>
+                <field name="categ_id" position="attributes">
+                    <attribute name="filter_domain"></attribute>
+                </field>
             </field>
         </record>
 
