@@ -31,9 +31,10 @@ Sales delivery type
 
     * Add the delivery type field to sales.
 """,
-    "depends": ["base", "sale"],
+    "depends": ["base", "sale", "crm_claim_rma_custom"],
     "data": [
         "sale_view.xml",
+        "claim_view.xml"
     ],
     "demo": [],
     'auto_install': False,

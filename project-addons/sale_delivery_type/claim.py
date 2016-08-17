@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra$ <omar@comunitea.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,5 +18,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import sale
-import claim
+import openerp
+from openerp.osv import osv, fields
+
+
+class crm_claim(osv.osv):
+    _inherit = 'crm.claim'
+    _columns = {
+        'delivery_type': fields.selection([
+            ('shipping', 'Shipping'),
+            ('carrier', 'Carrier - Customer'),
+            ('installations', 'Pickup in installations'), ],
+            'Delivery type', required=True)
+    }
+    _defaults = {
+        'delivery_type': 'shipping'
+    }

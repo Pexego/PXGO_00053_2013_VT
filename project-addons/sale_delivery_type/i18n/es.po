@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* sale_delivery_type
+#       * sale_delivery_type
 #
 msgid ""
 msgstr ""
@@ -17,16 +17,19 @@ msgstr ""
 
 #. module: sale_delivery_type
 #: selection:sale.order,delivery_type:0
+#: selection:crm.claim,delivery_type:0
 msgid "Carrier - Customer"
 msgstr "Transportista -  Cliente"
 
 #. module: sale_delivery_type
 #: field:sale.order,delivery_type:0
+#: field:crm.claim,delivery_type:0
 msgid "Delivery type"
 msgstr "Tipo de envío"
 
 #. module: sale_delivery_type
 #: selection:sale.order,delivery_type:0
+#: selection:crm.claim,delivery_type:0
 msgid "Pickup in installations"
 msgstr "Recogida en instalaciones"
 
@@ -37,6 +40,7 @@ msgstr "Pedido de venta"
 
 #. module: sale_delivery_type
 #: selection:sale.order,delivery_type:0
+#: selection:crm.claim,delivery_type:0
 msgid "Shipping"
 msgstr "Envío"
 
