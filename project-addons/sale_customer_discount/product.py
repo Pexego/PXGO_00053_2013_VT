@@ -40,25 +40,27 @@ class product_product(osv.osv):
             }
             if product.list_price and product.pvd1_relation:
                 res[product.id]['margin_pvd1'] = \
-                    1 - (product.standard_price /
-                         (product.list_price * product.pvd1_relation))
+                    (1 - (product.standard_price /
+                         (product.list_price * product.pvd1_relation))) * 100.0
             if product.list_price2 and product.pvd2_relation:
                 res[product.id]['margin_pvd2'] = \
-                    1 - (product.standard_price /
-                         (product.list_price2 * product.pvd2_relation))
+                    (1 - (product.standard_price /
+                         (product.list_price2 * product.pvd2_relation))) * \
+                    100.0
             if product.list_price3 and product.pvd3_relation:
                 res[product.id]['margin_pvd3'] = \
-                    1 - (product.standard_price /
-                         (product.list_price3 * product.pvd3_relation))
+                    (1 - (product.standard_price /
+                         (product.list_price3 * product.pvd3_relation))) * \
+                    100.0
             if product.pvi1_price:
                 res[product.id]['margin_pvi1'] = \
-                    1 - (product.standard_price / product.pvi1_price)
+                    (1 - (product.standard_price / product.pvi1_price)) * 100.0
             if product.pvi2_price:
                 res[product.id]['margin_pvi2'] = \
-                    1 - (product.standard_price / product.pvi2_price)
+                    (1 - (product.standard_price / product.pvi2_price)) * 100.0
             if product.pvi3_price:
                 res[product.id]['margin_pvi3'] = \
-                    1 - (product.standard_price / product.pvi3_price)
+                    (1 - (product.standard_price / product.pvi3_price)) * 100.0
         return res
 
     _columns = {
