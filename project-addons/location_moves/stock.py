@@ -107,11 +107,11 @@ class StockLotacion(models.Model):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
                            'stock_location_development',False, check_qty)
                            
-    def sat_stock(self, product_id, qty, check_qty):
+    def move_sat_stock(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock_location_sat', qty,
                            'stock.stock_location_stock',False, check_qty)
                            
-    def stock_sat(self, product_id, qty, check_qty):
+    def move_stock_sat(self, product_id, qty, check_qty):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
                            'stock_location_sat',False, check_qty)
 
