@@ -45,7 +45,15 @@ class location_moves(models.TransientModel):
          ('nursing_damaged', 'Nursing -> Damaged'),
          ('nursing_cooked', 'Nursing -> Cooked'),
          ('quality_cooked', 'Quality -> Cooked'),
-         ('cooked_damaged', 'Cooked -> Damaged')],
+         ('cooked_damaged', 'Cooked -> Damaged'),
+         ('marketing_stock', 'Marketing -> Stock'),
+         ('stock_marketing', 'Stock -> Marketing'),
+         ('product_stock', 'Product -> Stock'),
+         ('stock_product', 'Stock -> Product'),
+         ('development_stock', 'Development -> Stock'),
+         ('stock_development', 'Stock -> Development'),
+         ('sat_stock', 'SAT -> Stock'),
+         ('stock_sat', 'Stock -> SAT'),],
         'Move type', required=True)
 
     @api.one
@@ -63,7 +71,15 @@ class location_moves(models.TransientModel):
             'nursing_damaged': loc_obj.move_nursing_damaged,
             'nursing_cooked': loc_obj.move_nursing_cooked,
             'quality_cooked': loc_obj.move_quality_cooked,
-            'cooked_damaged': loc_obj.move_cooked_damaged
+            'cooked_damaged': loc_obj.move_cooked_damaged,
+            'marketing_stock': loc_obj.move_marketing_stock,
+            'stock_marketing': loc_obj.move_stock_marketing,
+            'product_stock': loc_obj.move_product_stock,
+            'stock_product': loc_obj.move_stock_product,
+            'development_stock': loc_obj.move_development_stock,
+            'stock_development': loc_obj.move_stock_development,
+            'sat_stock': loc_obj.move_sat_stock,
+            'stock_sat': loc_obj.move_stock_sat
         }
         types[self.move_type](self.product_id.id, self.qty, self.check_qty)
         return True

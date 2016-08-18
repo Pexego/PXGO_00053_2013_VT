@@ -44,6 +44,34 @@
             <field name="active" eval="True"/>
         </record>
 
+        <record id="stock_location_marketing" model="stock.location">
+            <field name="name">Marketing</field>
+            <field name="location_id" ref="stock.stock_location_locations" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="stock_location_product" model="stock.location">
+            <field name="name">Producto</field>
+            <field name="location_id" ref="stock.stock_location_locations" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="stock_location_development" model="stock.location">
+            <field name="name">Desarrollo</field>
+            <field name="location_id" ref="stock.stock_location_locations" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
+        <record id="stock_location_sat" model="stock.location">
+            <field name="name">SAT</field>
+            <field name="location_id" ref="stock.stock_location_locations" />
+            <field name="usage">internal</field>
+            <field name="active" eval="True"/>
+        </record>
+
     </data>
 </openerp>
 
