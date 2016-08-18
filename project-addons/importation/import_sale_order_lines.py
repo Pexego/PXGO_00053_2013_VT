@@ -155,26 +155,31 @@ class import_sale_order_lines(object):
         cont = 1
         all_lines = sh.nrows - 1
         print "lines no: ", all_lines
-        tax_id = self.search("account.tax", [("name", "=", "IVA 21% (Bienes)"),('company_id', '=', 1)])
         for rownum in range(1, all_lines):
             record = sh.row_values(rownum)
             try:
-                product_ids = self.search("product.product", [('default_code', '=', record[1])])
-                order_ids = self.search("sale.order", [('name', '=', str(record[7]).strip())])
+                product_ids = self.search("product.product", [('default_code', '=', record[0])])
+                print "ORDER: ", str(record[6]).strip()
+                order_ids = self.search("sale.order", [('name', '=', str(record[6]).strip())])
                 if order_ids:
+                    tax_id = self.search("account.tax", [("name", "=", record[7]),('company_id', '=', 1)])
                     if order_ids[0] not in visited_orders:
                         visited_orders.append(order_ids[0])
                         lines_ids = self.search('sale.order.line', [('order_id','=',order_ids[0])])
                         if lines_ids:
+                            self.write("sale.order.line", lines_ids, {'state': 'draft'})
                             for line_id in lines_ids:
-                                self.unlink("sale.order.line", line_id) 
+                                try:
+                                    self.unlink("sale.order.line", line_id) 
+                                except Exception, e:
+                                    print "Exception: ", e
                     lines_vals = {
                         "product_id": product_ids and product_ids[0] or False,
-                        "name": record[2],
-                        "product_uom_qty": record[3] and float(record[3]) or 0.0,
+                        "name": record[1],
+                        "product_uom_qty": record[2] and float(record[2]) or 0.0,
                         "product_uom": 1,
-                        "price_unit": record[5] and float(record[5]) or 0.0,
-                        "discount": record[6] and float(record[6]) or 0.0,
+                        "price_unit": record[4] and float(record[4]) or 0.0,
+                        "discount": record[5] and float(record[5]) or 0.0,
                         "order_id": order_ids[0],
                         "tax_id": [(6,0,tax_id)],
                     }

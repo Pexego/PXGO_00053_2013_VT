@@ -137,8 +137,8 @@ class approve_sale_orders(object):
     def exec_workflow(self, model, signal, ids):
         """ejecuta un workflow por xml rpc"""
         try:
-            res = self.object_facade.exec_workflow(self.dbname, self.user_id, self.user_passwd, model, signal, ids)
-            return res
+            self.object_facade.exec_workflow(self.dbname, self.user_id, self.user_passwd, model, signal, ids)
+            #return res
         except socket.error, err:
             raise Exception(u'Conexión rechazada: %s!' % err)
         except xmlrpclib.Fault, err:
@@ -151,6 +151,25 @@ class approve_sale_orders(object):
         all_lines = len(sale_ids)
         for sale_id in sale_ids:
             try:
+                self.execute("sale.order", "order_reserve", [sale_id])
+
+                print "%s de %s" % (cont, all_lines)
+                cont += 1
+            except Exception, e:
+                print "EXCEPTION: ", e
+
+        cont = 1
+        sale_ids = self.search('sale.order', [('order_line', '!=', False),('state', '=', 'reserve')])
+        all_lines = len(sale_ids)
+        for sale_id in sale_ids:
+            try:
+                reserve_ids = self.search("stock.reservation", [('sale_id', '=', sale_id)])
+                if reserve_ids:
+                    print "%s de %s" % (cont, all_lines)
+                    cont += 1
+                    continue
+                self.exec_workflow("sale.order", "cancel", sale_id)
+                self.execute("sale.order", "button_draft", [sale_id])
                 self.execute("sale.order", "order_reserve", [sale_id])
 
                 print "%s de %s" % (cont, all_lines)
