@@ -95,6 +95,11 @@ msgid "Despensa"
 msgstr "Despensa"
 
 #. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Development -> Stock"
+msgstr "Desarrollo -> Existencias"
+
+#. module: location_moves
 #: model:stock.location,name:location_moves.stock_location_nursing
 msgid "Enfermeria"
 msgstr "Enfermería"
@@ -138,6 +143,16 @@ msgid "Location moves"
 msgstr "Movimientos de localizacion"
 
 #. module: location_moves
+#: model:stock.location,name:location_moves.stock_location_marketing
+msgid "Marketing"
+msgstr "Marketing"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Marketing -> Stock"
+msgstr "Marketing -> Existencias"
+
+#. module: location_moves
 #: field:location.moves,move_type:0
 msgid "Move type"
 msgstr "Tipo de movimiento"
@@ -176,6 +191,16 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Product -> Stock"
+msgstr "Producto -> Existencias"
+
+#. module: location_moves
+#: model:stock.location,name:location_moves.stock_location_product
+msgid "Producto"
+msgstr "Producto"
+
+#. module: location_moves
 #: field:location.moves,qty:0
 msgid "Qty"
 msgstr "Cantidad"
@@ -200,9 +225,29 @@ msgid "Quality move"
 msgstr "Movimiento calidad"
 
 #. module: location_moves
+#: model:stock.location,name:location_moves.stock_location_sat
+msgid "SAT"
+msgstr "SAT"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "SAT -> Stock"
+msgstr "SAT -> Existencias"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Stock -> Development"
+msgstr "Existencias -> Desarrollo"
+
+#. module: location_moves
 #: selection:location.moves,move_type:0
 msgid "Stock -> Kitchen"
 msgstr "Existencias -> Cocina"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Stock -> Marketing"
+msgstr "Existencias -> Marketing"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
@@ -210,12 +255,22 @@ msgid "Stock -> Pantry"
 msgstr "Existencias -> Despensa"
 
 #. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Stock -> Product"
+msgstr "Existencias -> Producto"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Stock -> SAT"
+msgstr "Existencias -> SAT"
+
+#. module: location_moves
 #: model:ir.model,name:location_moves.model_stock_move
 msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: location_moves
-#: code:addons/location_moves/stock.py:164
+#: code:addons/location_moves/stock.py:193
 #, python-format
 msgid "The date planned of the reservation was                                    changed."
 msgstr "La fecha planificada de la reserva ha cambiado."
