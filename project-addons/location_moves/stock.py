@@ -83,8 +83,37 @@ class StockLotacion(models.Model):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
                            'stock_location_pantry',False, check_qty)
 
-
-
+    def move_marketing_stock(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock_location_marketing', qty,
+                           'stock.stock_location_stock',False, check_qty)
+                           
+    def move_stock_marketing(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_marketing',False, check_qty)
+                           
+    def move_product_stock(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock_location_product', qty,
+                           'stock.stock_location_stock',False, check_qty)
+                           
+    def move_stock_product(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_product',False, check_qty)
+                           
+    def move_development_stock(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock_location_development', qty,
+                           'stock.stock_location_stock',False, check_qty)
+                           
+    def move_stock_development(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_development',False, check_qty)
+                           
+    def sat_stock(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock_location_sat', qty,
+                           'stock.stock_location_stock',False, check_qty)
+                           
+    def stock_sat(self, product_id, qty, check_qty):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_sat',False, check_qty)
 
     def location_move(self, product_id, source_location, qty, dest_location,
                       send_message=False, check_qty=False):
