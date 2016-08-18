@@ -182,6 +182,7 @@ class import_account_entries(object):
         all_lines = sh.nrows - 1
         invoices = {}
         last_invoice_id = False
+        eur_amount = 0.0
         counterpart_acc_id = self.search("account.account",
                                          [("code", "=", "11300000")])
 
@@ -251,7 +252,8 @@ class import_account_entries(object):
                         'period_id': period_id[0],
                         'commercial_partner_id': partner_ids[0],
                         'payment_mode_id': pmode_id,
-                        'allow_confirm_blocked': True
+                        'allow_confirm_blocked': True,
+                        'reference': record[2] or ""
                     }
 
                     if pmode_id:
@@ -309,8 +311,30 @@ class import_account_entries(object):
                                            last_invoice_id)
                         self.write("account.invoice", [last_invoice_id],
                                    {'state': 'history'})
+                        if eur_amount:
+                            invoice_data = self.read("account.invoice",
+                                                     last_invoice_id,
+                                                     ["move_id"])
+                            self.execute("account.move", "button_cancel",
+                                         [invoice_data['move_id'][0]])
+                            move_data = self.read("account.move",
+                                                  invoice_data['move_id'][0],
+                                                  ['line_id'])
+                            for line in move_data['line_id']:
+                                line_data = self.read("account.move.line",
+                                                      line,
+                                                      ['debit', 'credit'])
+                                if line_data['debit']:
+                                    self.write("account.move.line", line,
+                                               {'debit': eur_amount})
+                                else:
+                                    self.write("account.move.line", line,
+                                               {'credit': eur_amount})
+                            self.execute("account.move", "button_validate",
+                                         [invoice_data['move_id'][0]])
 
                     last_invoice_id = invoice_id
+                    eur_amount = 0.0
                 else:
                     invoice_id = invoices[record[0]]
 
@@ -328,6 +352,7 @@ class import_account_entries(object):
                 if self.file_type == 1:
                     if record[16]:
                         line_vals['price_unit'] = abs(record[16])
+                        eur_amount += abs(record[14])
                 self.create("account.invoice.line", line_vals)
 
                 print "%s de %s" % (cont, all_lines)
