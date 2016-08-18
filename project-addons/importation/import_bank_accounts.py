@@ -186,11 +186,11 @@ class import_banks(object):
             try:
                 partner_ids = self.search("res.partner",
                                           [('ref', '=', str(int(record[2])))])
-                if partner_ids:
+                if partner_ids and record[4] and record[4].strip() and len(record[4].strip()) > 20:
                     partner_bank_ids = self.\
                         search("res.partner.bank",
                                [('partner_id', '=', partner_ids[0]),
-                                ('acc_number', '=', record[4])])
+                                ('acc_number', '=', record[4].strip())])
                     if not partner_bank_ids:
                         bank_ids = self.search("res.bank",
                                                [('code', '=',

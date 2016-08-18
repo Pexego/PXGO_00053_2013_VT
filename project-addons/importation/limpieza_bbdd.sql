@@ -73,3 +73,6 @@ delete from stock_deposit;
 delete from mrp_repair;
 -- Borramos los proveedores de los productos
 delete from product_supplierinfo;
+-- Borramos las cuentas bancarias y mandatos
+delete from res_partner_bank where partner_id != 1;
+delete from account_banking_mandate;
