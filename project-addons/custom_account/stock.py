@@ -155,7 +155,7 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
-    _order = "date_confirm desc, date_order desc, id desc"
+    _order = "date_order desc, id desc"
 
     state = fields.Selection(selection_add=[("history", "History")])
     internal_notes = fields.Text("Internal Notes")
