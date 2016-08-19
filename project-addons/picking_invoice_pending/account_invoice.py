@@ -92,6 +92,8 @@ class AccountInvoice(models.Model):
                         lines_to_reconcile += line_ids[0]
                         move_rev = picking.pending_invoice_move_id.\
                             create_reversals(date)
+                        if not move_rev:
+                            continue
                         move_rev = move_obj.browse(move_rev[0])
                         move_rev.post()
                         # Reconcile
