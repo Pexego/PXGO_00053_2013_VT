@@ -48,6 +48,7 @@ class ProductTemplate(models.Model):
         moves = self.env['stock.move'].search(
             [('product_id', 'in', self.product_variant_ids.ids),
              ('state', 'in', ('confirmed', 'assigned')),
-             ('picking_id.picking_type_code', '=', 'outgoing')])
+             ('picking_id.picking_type_code', '=', 'outgoing'),
+             ('procurement_id.sale_line_id', '!=', False)])
         self.outgoing_picking_reserved_qty = sum(moves.mapped(
             'product_uom_qty'))
