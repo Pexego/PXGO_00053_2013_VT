@@ -65,6 +65,7 @@ class AccountInvoiceLine(models.Model):
     purchase_supplier_reference = fields.Char(
         'Supplier reference', related='purchase_line_id.order_id.partner_ref',
         readonly=True)
+    active = fields.Boolean(default=True)
 
 
 class AccountInvoice(models.Model):
@@ -80,6 +81,7 @@ class AccountInvoice(models.Model):
     invoice_type_id = fields.\
         Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
                  related="invoice_line.picking_id.invoice_type_id")
+    active = fields.Boolean(default=True)
 
     @api.model
     def create(self, vals):
