@@ -35,6 +35,15 @@ class product_outlet_wizard(models.TransientModel):
             return False
         return warehouse_ids[0]
 
+    @api.model
+    def _get_default_location(self):
+        company_id = self.env.user.company_id.id
+        warehouse_ids = self.env['stock.warehouse'].\
+            search([('company_id', '=', company_id)])
+        if not warehouse_ids:
+            return False
+        return warehouse_ids[0].lot_stock_id
+
     qty = fields.Float('Quantity')
     product_id = fields.Many2one('product.product', 'Product',
                                  default=lambda self:
@@ -48,6 +57,9 @@ class product_outlet_wizard(models.TransientModel):
     warehouse_id = fields.Many2one('stock.warehouse', 'Warehouse',
                                    required=True,
                                    default=_get_default_warehouse)
+    location_orig_id = fields.Many2one("stock.location", "Orig. location",
+                                       required=True,
+                                       default=_get_default_location)
 
     @api.onchange('warehouse_id')
     def onchange_warehouse(self):
@@ -72,7 +84,7 @@ class product_outlet_wizard(models.TransientModel):
     def make_move(self):
         outlet_categ_id = \
             self.env.ref('product_outlet.product_category_outlet')
-        stock_location = self.warehouse_id.lot_stock_id
+        stock_location = self.location_orig_id
         outlet_location = self.env.ref('product_outlet.stock_location_outlet')
         move_obj = self.env['stock.move']
         categ_obj = self.env['product.category']

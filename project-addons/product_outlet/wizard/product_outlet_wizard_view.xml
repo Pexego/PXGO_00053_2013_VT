@@ -12,6 +12,7 @@
                     <group>
                         <field invisible="1" name="state" />
                         <field name="warehouse_id"/>
+                        <field name="location_orig_id"/>
                         <group states="first">
                         </group>
                         <group states="last">

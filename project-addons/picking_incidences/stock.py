@@ -143,6 +143,12 @@ class StockPicking(models.Model):
         return super(StockPicking, self).action_cancel()
 
     @api.multi
+    def action_copy_reserv_qty(self):
+        for pick in self:
+            for move in pick.move_lines:
+                move.qty_confirmed = move.reserved_availability
+
+    @api.multi
     def action_accept_confirmed_qty(self):
         for pick in self:
             #check move lines confirmed qtys

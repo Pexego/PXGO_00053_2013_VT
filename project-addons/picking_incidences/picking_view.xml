@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <button name="action_cancel" position="after">
                     <button name="action_accept_ready_qty" attrs="{'invisible': ['|',('state', 'not in', ['assigned']),('with_incidences','=',False)]}" string="Accept ready qtys." groups="base.group_user" type="object" confirm="Are you sure? Backorder will be created with remaining quantities"/>
+                    <button name="action_copy_reserv_qty" attrs="{'invisible': ['|','|',('state', 'not in', ['confirmed','partially_available']),('with_incidences','=',True),('move_type', '!=' , 'direct')]}" string="Copy reserved qty. to confirmed qty." groups="base.group_user" type="object"/>
                     <button name="action_accept_confirmed_qty" attrs="{'invisible': ['|','|',('state', 'not in', ['confirmed','partially_available']),('with_incidences','=',True),('move_type', '!=' , 'direct')]}" string="Confirm assignation" groups="base.group_user" type="object" confirm="Are you sure? Backorder will be created with remaining quantities"/>
                 </button>
                 <field name="origin" position="after">

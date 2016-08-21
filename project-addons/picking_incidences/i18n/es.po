@@ -50,6 +50,11 @@ msgid "Confirm assignation"
 msgstr "Confirmar asignación"
 
 #. module: picking_incidences
+#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+msgid "Copy reserved qty. to confirmed qty."
+msgstr "Copiar cant. reservada a cant. confirmada"
+
+#. module: picking_incidences
 #: model:ir.model,name:picking_incidences.model_stock_picking
 msgid "Picking List"
 msgstr "Albarán"

@@ -50,7 +50,7 @@
                     <attribute name="domain">[('invoice_state', '=', '2binvoiced'),('tests', '=', False)]</attribute>
                 </filter>
                 <filter name="to_invoice" position="after">
-                    <filter string="To Invoice Tests" name="to_invoice_tests" icon="terp-dolar" domain="[('invoice_state', '=', '2binvoiced'),('tests', '=', True)]"/>
+                    <filter string="To Invoice Tests" name="to_invoice_tests" icon="terp-dolar" domain="[('invoice_state', '=', '2binvoiced'),('tests', '=', True)]" groups="test_management.group_test_manager"/>
                 </filter>
             </field>
         </record>

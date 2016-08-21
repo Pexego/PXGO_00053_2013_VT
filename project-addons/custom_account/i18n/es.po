@@ -214,6 +214,16 @@ msgid "Reference of the sales order or bid sent by your supplier. It's mainly us
 msgstr "Referencia de las ventas enviadas por su proveedor. Es usado principalmente para reconocer los productos al recibirlos, esta referencia es escrita habitualmente en el albarán enviado por su proveedor."
 
 #. module: custom_account
+#: view:sale.order:custom_account.view_order_form_inherit
+msgid "Sale Order Internal Notes"
+msgstr "Notas internas pedido"
+
+#. module: custom_account
+#: field:sale.order,sale_notes:0
+msgid "Sale internal notes"
+msgstr "Notas internas pedido"
+
+#. module: custom_account
 #: model:ir.actions.act_window,name:custom_account.action_order_line_wo_reserve
 #: model:ir.ui.menu,name:custom_account.menu_order_line_wo_reserve
 msgid "Sale lines without reserve"

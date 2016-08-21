@@ -29,7 +29,8 @@
             view_mode="form"
             view_type="form"
             target="new"
-            id="action_stock_invoice_onshipping_test"/>
+            id="action_stock_invoice_onshipping_test"
+            groups="test_management.group_test_manager"/>
 
     </data>
 </openerp>

@@ -159,6 +159,7 @@ class SaleOrder(models.Model):
 
     state = fields.Selection(selection_add=[("history", "History")])
     internal_notes = fields.Text("Internal Notes")
+    sale_notes = fields.Text("Sale internal notes")
     partner_tags = fields.Many2many('res.partner.category', id1='sale_id',
                                     id2='category_id', string='Tags')
 
