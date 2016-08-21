@@ -41,6 +41,11 @@ msgid "ID"
 msgstr "ID"
 
 #. module: product_outlet
+#: field:product.product,is_outlet:0
+msgid "Is outlet"
+msgstr "Es outlet"
+
+#. module: product_outlet
 #: selection:product.outlet.wizard,state:0
 msgid "Last"
 msgstr "Last"
@@ -69,6 +74,11 @@ msgstr "O1"
 #: model:product.category,name:product_outlet.product_category_o2
 msgid "O2"
 msgstr "O2"
+
+#. module: product_outlet
+#: field:product.outlet.wizard,location_orig_id:0
+msgid "Orig. location"
+msgstr "Ubicación origen"
 
 #. module: product_outlet
 #: model:product.category,name:product_outlet.product_category_outlet
@@ -119,10 +129,15 @@ msgid "State"
 msgstr "State"
 
 #. module: product_outlet
-#: code:addons/product_outlet/wizard/product_outlet_wizard.py:85
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:119
 #, python-format
-msgid "This product is in outlet category."
+msgid "This product is already in outlet category."
 msgstr "Este producto está en la categoría outlet."
+
+#. module: product_outlet
+#: field:product.outlet.wizard,warehouse_id:0
+msgid "Warehouse"
+msgstr "Almacén"
 
 #. module: product_outlet
 #: field:product.outlet.wizard,categ_id:0
@@ -132,17 +147,17 @@ msgstr "Categoría"
 #. module: product_outlet
 #: field:product.product,normal_product_id:0
 msgid "normal product"
-msgstr "producto normal"
+msgstr "Producto normal"
 
 #. module: product_outlet
-#: code:addons/product_outlet/wizard/product_outlet_wizard.py:84
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:118
 #, python-format
 msgid "product error"
 msgstr "Error de producto"
 
 #. module: product_outlet
-#: code:addons/product_outlet/wizard/product_outlet_wizard.py:80
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:113
 #, python-format
-msgid "the amount entered is greater than the quantity available."
+msgid "the amount entered is greater than the quantity available in stock."
 msgstr "La cantidad introducida es mayor que la cantidad disponible."
 
