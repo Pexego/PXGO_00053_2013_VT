@@ -33,7 +33,7 @@ class Partner(models.Model):
         sales = self.env['sale.order'].\
             search([('partner_id', 'child_of', [self.id]),
                     ('state', 'not in', ['draft', 'cancel', 'wait_risk',
-                                         'history'])])
+                                         'history', 'reserve'])])
         total = 0.0
         for order in sales:
             total += order.amount_total - order.amount_invoiced
