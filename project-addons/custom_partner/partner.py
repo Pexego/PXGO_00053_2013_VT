@@ -60,6 +60,7 @@ class ResPartner(models.Model):
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
+    att = fields.Char("A/A")
 
     @api.multi
     def _get_purchased_quantity(self):

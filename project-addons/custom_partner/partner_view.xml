@@ -194,5 +194,19 @@
             </field>
         </record>
 
+        <record id="view_partner_form_add_att" model="ir.ui.view">
+            <field name="name">res.partner.form.add_att</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="website" position="after">
+                    <field name="att"  attrs="{'readonly': [('use_parent_address','=',True)]}"/>
+                </field>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='street2']" position="after">
+                    <field name="att" placeholder="A/A"/>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </openerp>
