@@ -26,7 +26,8 @@
     'description': """Customized report links""",
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
-    "depends": ['sale', 'purchase', 'account', 'stock'],
+    "depends": ['sale', 'purchase', 'account', 'stock',
+                'stock_reserve_sale'],
     "data": [],
     "installable": True
 }
