@@ -82,6 +82,7 @@ class AccountInvoice(models.Model):
         Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
                  related="invoice_line.picking_id.invoice_type_id")
     active = fields.Boolean(default=True)
+    not_send_email = fields.Boolean("Not send email"))
 
     @api.model
     def create(self, vals):
