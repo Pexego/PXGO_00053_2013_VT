@@ -147,30 +147,13 @@ class approve_sale_orders(object):
 
     def approve_lines(self):
         cont = 1
-        sale_ids = self.search('sale.order', [('order_line', '!=', False),('state', '=', 'reserve')])
-        all_lines = len(sale_ids)
-        for sale_id in sale_ids:
+        purchase_ids = self.search('purchase.order', [('order_line', '!=', False),('state', '=', 'draft')])
+        all_lines = len(purchase_ids)
+        for purchase_id in purchase_ids:
             try:
-                reserve_ids = self.search("stock.reservation", [('sale_id', '=', sale_id)])
-                if reserve_ids:
-                    print "%s de %s" % (cont, all_lines)
-                    cont += 1
-                    continue
-                self.exec_workflow("sale.order", "cancel", sale_id)
-                self.execute("sale.order", "button_draft", [sale_id])
-                self.execute("sale.order", "order_reserve", [sale_id])
-
-                print "%s de %s" % (cont, all_lines)
-                cont += 1    
-            except Exception, e:
-                print "EXCEPTION: ", e
-
-        cont = 1
-        sale_ids = self.search('sale.order', [('order_line', '!=', False),('state', '=', 'draft')])
-        all_lines = len(sale_ids)
-        for sale_id in sale_ids:
-            try:
-                self.execute("sale.order", "order_reserve", [sale_id])
+                purchase_data = self.read("purchase.order", purchase_id, ["name"])
+                print "Purchase: ", purchase_data['name']
+                self.exec_workflow("purchase.order", "purchase_confirm", purchase_id)
 
                 print "%s de %s" % (cont, all_lines)
                 cont += 1

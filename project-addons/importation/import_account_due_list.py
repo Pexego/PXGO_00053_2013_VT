@@ -187,30 +187,21 @@ class import_account_entries(object):
                                          [("code", "=", "11300000")])
 
         print "entries no: ", all_lines
-        history = True
         for rownum in range(1, all_lines):
             record = sh.row_values(rownum)
-            if history:
-                invoice_ids = self.search("account.invoice", [('number', '=',
-                                                               record[0])])
-                if invoice_ids:
-                    print "%s de %s" % (cont, all_lines)
-                    cont += 1
-                    continue
-                else:
-                    history = False
+            number = record[0] + "_ef" + str(rownum)
             try:
-                if record[0] not in invoices:
-                    if record[12]:
-                        pterm_ids = self.search("account.payment.term",
-                                                [('name', '=', record[12])])
-                        if not pterm_ids:
-                            raise Exception(u'Plazo de pago no encontrado %s' %
-                                            record[12])
-                        else:
-                            pterm_id = pterm_ids[0]
-                    else:
-                        pterm_id = False
+                if number not in invoices:
+                    #if record[12]:
+                    #    pterm_ids = self.search("account.payment.term",
+                    #                            [('name', '=', record[12])])
+                    #    if not pterm_ids:
+                    #        raise Exception(u'Plazo de pago no encontrado %s' %
+                    #                        record[12])
+                    #    else:
+                    #        pterm_id = pterm_ids[0]
+                    #else:
+                    #    pterm_id = False
 
                     if record[13]:
                         pmode_ids = self.search("payment.mode",
@@ -236,24 +227,30 @@ class import_account_entries(object):
                         datetime(*xlrd.xldate_as_tuple(record[4],
                                                        cwb.datemode)).\
                         strftime("%Y-%m-%d")
+                    due_date = datetime.\
+                        datetime(*xlrd.xldate_as_tuple(record[15],
+                                                       cwb.datemode)).\
+                        strftime("%Y-%m-%d")
 
                     period_id = self.execute("account.period", "find",
                                              invoice_date)
 
                     invoice_vals = {
-                        'number': record[0],
-                        'invoice_number': record[0],
+                        'number': number,
+                        'invoice_number': number,
                         'supplier_invoice_number': record[2] or "",
                         'account_id': account_id,
                         'currency_id': 1,
                         'partner_id': partner_ids[0],
-                        'payment_term': pterm_id,
+                        #'payment_term': pterm_id,
                         'date_invoice': invoice_date,
                         'period_id': period_id[0],
                         'commercial_partner_id': partner_ids[0],
                         'payment_mode_id': pmode_id,
+                        'date_due': due_date,
                         'allow_confirm_blocked': True,
-                        'reference': record[2] or ""
+                        'reference': record[2] or "",
+                        'active': False 
                     }
 
                     if pmode_id:
@@ -302,7 +299,7 @@ class import_account_entries(object):
                     invoice_vals["type"] = inv_type
 
                     invoice_id = self.create("account.invoice", invoice_vals)
-                    invoices[record[0]] = invoice_id
+                    invoices[number] = invoice_id
 
                     if last_invoice_id:
                         self.execute("account.invoice", "button_reset_taxes",
@@ -336,18 +333,14 @@ class import_account_entries(object):
                     last_invoice_id = invoice_id
                     eur_amount = 0.0
                 else:
-                    invoice_id = invoices[record[0]]
+                    invoice_id = invoices[number]
 
-                due_date = datetime.\
-                    datetime(*xlrd.xldate_as_tuple(record[15],
-                                                   cwb.datemode)).\
-                    strftime("%Y-%m-%d")
                 line_vals = {'account_id': counterpart_acc_id[0],
                              'uos_id': 1,
                              'name': record[12] + u" " + due_date,
                              'invoice_id': invoice_id,
                              'price_unit': abs(record[14]),
-                             'quantity': 1.0
+                             'quantity': 1.0,
                              }
                 if self.file_type == 1:
                     if record[16]:

@@ -6,6 +6,7 @@ import xmlrpclib
 import socket
 import traceback
 import xlrd
+import datetime
 
 class import_sale_order_lines(object):
     def __init__(self, dbname, user, passwd, customers_file):
@@ -155,6 +156,7 @@ class import_sale_order_lines(object):
         cont = 1
         all_lines = sh.nrows - 1
         print "lines no: ", all_lines
+        import pdb; pdb.set_trace()
         for rownum in range(1, all_lines):
             record = sh.row_values(rownum)
             try:
@@ -181,8 +183,15 @@ class import_sale_order_lines(object):
                         "price_unit": record[4] and float(record[4]) or 0.0,
                         "discount": record[5] and float(record[5]) or 0.0,
                         "order_id": order_ids[0],
-                        "tax_id": [(6,0,tax_id)],
-                    }
+                        "tax_id": [(6,0,tax_id)],}           
+
+                    if len(record) > 8 and record[8] and record[9]:
+                        lines_vals.update({
+                        'deposit': record[8],
+                        'deposit_date': datetime.
+                            datetime(*xlrd.xldate_as_tuple(record[9],
+                                                           cwb.datemode)).
+                            strftime("%Y-%m-%d")})
                     self.create("sale.order.line", lines_vals)
 
                 print "%s de %s" % (cont, all_lines)
