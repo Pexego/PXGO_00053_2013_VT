@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <field name="partner_shipping_id" position="attributes">
                     <attribute name="context">{'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
-                    <attribute name="domain">[('id', 'child_of', [partner_id])]</attribute>
+                    <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
                 </field>
                 <field name="partner_invoice_id" position="attributes">
                     <attribute name="domain">[('id', 'child_of', [partner_id])]</attribute>
