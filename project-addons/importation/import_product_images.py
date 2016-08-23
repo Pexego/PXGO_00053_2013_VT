@@ -8,10 +8,6 @@ import base64
 from os import listdir
 from os.path import isfile, join
 
-def ustr(text):
-    """convierte las cadenas de sql server en iso-8859-1 a utf-8 que es la cofificaciï¿œn de postgresql"""
-    return unicode(text.strip(), 'iso-8859-15').encode('utf-8')
-
 class DatabaseImport:
     """
     Importa a OpenERP datos de una base de datos SqlServer para Calor Color.
@@ -30,7 +26,7 @@ class DatabaseImport:
 
         self.url_template = "http://%s:%s/xmlrpc/%s"
         self.server = "localhost"
-        self.port = 8069
+        self.port = 9069
         self.dbname = dbname
         self.user_name = user
         self.user_passwd = passwd

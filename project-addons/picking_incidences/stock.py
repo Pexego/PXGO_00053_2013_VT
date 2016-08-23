@@ -42,6 +42,7 @@ class StockPicking(models.Model):
 
     with_incidences = fields.Boolean('With incidences', readonly=True,
                                      copy=False)
+    block_picking = fields.Boolean('Albarán procesado Vstock')
 
     #~ @api.multi
     #~ def write(self, vals):
@@ -140,6 +141,10 @@ class StockPicking(models.Model):
                 raise exceptions.\
                     Warning(_("Cannot cancel an incoming picking with "
                               "incidences. You can only process it."))
+            if pick.block_picking:
+                raise exceptions.\
+                    Warning(_("Cannot cancel this picking because it is being "
+                              "processed in Vstock."))
         return super(StockPicking, self).action_cancel()
 
     @api.multi

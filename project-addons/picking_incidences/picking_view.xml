@@ -14,7 +14,11 @@
                 </button>
                 <field name="origin" position="after">
                     <field name="with_incidences"/>
+                    <field name="block_picking" readonly="1"/>
                 </field>
+                <button name="do_unreserve" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|',('quant_reserved_exist', '=', False),('block_picking', '=', True)]}</attribute>
+                </button>
             </field>
         </record>
 

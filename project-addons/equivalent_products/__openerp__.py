@@ -34,7 +34,7 @@
     "data" : ["security/ir.model.access.csv",
               "sale_view.xml",
               "product_view.xml",
-              "wizard/sale_equivalent_products_wizard_view.xml",
-              "report/sale_report_view.xml"],
+              "wizard/sale_equivalent_products_wizard_view.xml",],
+              #"report/sale_report_view.xml"],
     "installable": True
 }

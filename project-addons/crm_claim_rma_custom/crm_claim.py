@@ -146,7 +146,7 @@ class CrmClaimRma(models.Model):
                 if ai.claim_id == claim_obj:
                     raise exceptions.Warning(_("There is already an invoice \
                                                 with this claim"))
-            domain_journal = [('name', 'like', 'Sales Refund')]
+            domain_journal = [('type', '=', 'sale_refund')]
             acc_journal_obj = self.pool.get('account.journal')
             acc_journal_ids = acc_journal_obj.search(cr, uid, domain_journal)
             header_vals = {
