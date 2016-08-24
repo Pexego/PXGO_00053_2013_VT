@@ -179,7 +179,7 @@ class import_account_entries(object):
                                  encoding_override="utf-8")
         sh = cwb.sheet_by_index(0)
         cont = 1
-        all_lines = sh.nrows - 1
+        all_lines = sh.nrows
         invoices = {}
         last_invoice_id = False
         eur_amount = 0.0
@@ -189,7 +189,7 @@ class import_account_entries(object):
         print "entries no: ", all_lines
         for rownum in range(1, all_lines):
             record = sh.row_values(rownum)
-            number = record[0] + "_ef" + str(rownum)
+            number = record[0] + "_eff" + str(rownum)
             try:
                 if number not in invoices:
                     #if record[12]:
@@ -243,6 +243,7 @@ class import_account_entries(object):
                         'currency_id': 1,
                         'partner_id': partner_ids[0],
                         #'payment_term': pterm_id,
+                        'not_send_email': True,
                         'date_invoice': invoice_date,
                         'period_id': period_id[0],
                         'commercial_partner_id': partner_ids[0],
@@ -250,7 +251,6 @@ class import_account_entries(object):
                         'date_due': due_date,
                         'allow_confirm_blocked': True,
                         'reference': record[2] or "",
-                        'active': False 
                     }
 
                     if pmode_id:
