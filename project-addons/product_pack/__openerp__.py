@@ -43,7 +43,7 @@ as children of the pack product.
         'sale_stock',
         'stock_account',
         'purchase',
-        'picking_invoice_rel'
+        'custom_account'
     ],
     "data": [
         'security/ir.model.access.csv',

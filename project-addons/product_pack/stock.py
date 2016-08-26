@@ -79,7 +79,7 @@ class stock_pciking(orm.Model):
                                                       journal_id, type,
                                                       context=context)
                 search_vals = [('invoice_id', 'in', invoices),
-                               ('stock_move_id', 'in',
+                               ('move_id', 'in',
                                 [x.id for x  in pack_moves])]
                 to_delete = inv_line_obj.search(cr, uid, search_vals,
                                                 context=context)
