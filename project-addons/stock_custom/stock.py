@@ -102,7 +102,7 @@ class stock_move(models.Model):
                     reserve_move_ids = [x.move_id.id for x in reserve_ids]
                     domain = [('state', '=', 'confirmed'),
                               ('product_id', '=', move.product_id.id),
-                              '|',('picking_type_code', '=', 'outgoing'),
+                              '|', ('picking_type_code', '=', 'outgoing'),
                               ('id', 'in', reserve_move_ids)]
 
                 confirmed_ids = self.\
@@ -112,3 +112,21 @@ class stock_move(models.Model):
                     confirmed_ids.action_assign()
 
         return res
+
+
+class StockReturnPicking(models.TransientModel):
+    _inherit = 'stock.return.picking'
+
+    @api.multi
+    def _create_returns(self):
+        new_picking, pick_type_id = super(StockReturnPicking, self).\
+            _create_returns()
+        pick_type_obj = self.env["stock.picking.type"].browse(pick_type_id)
+        if pick_type_obj.code == "incoming":
+            pick_obj = self.env["stock.picking"].browse(new_picking)
+            for move in pick_obj.move_lines:
+                if move.warehouse_id.lot_stock_id == move.location_dest_id:
+                    move.location_dest_id = \
+                        move.warehouse_id.wh_input_stock_loc_id.id
+
+        return new_picking, pick_type_id
