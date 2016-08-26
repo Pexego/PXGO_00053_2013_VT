@@ -114,7 +114,7 @@ class purchase_order_line(models.Model):
         for line in self:
             if line.move_ids and vals.get('date_planned', False):
                 for move in line.move_ids:
-                    if not (line.move_ids.state == u'cancel'
-                            or line.move_ids.state == u'done'):
+                    if not (move.state == u'cancel'
+                            or move.state == u'done'):
                         move.date_expected = vals['date_planned']
         return res
