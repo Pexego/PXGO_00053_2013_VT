@@ -25,5 +25,5 @@ import res_company
 import res_partner
 import sale_order
 #import account_invoice
-import stock_invoice_onshipping
-import sale_make_invoice
+#import stock_invoice_onshipping
+#import sale_make_invoice

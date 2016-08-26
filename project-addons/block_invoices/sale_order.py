@@ -29,7 +29,7 @@ class sale_order(models.Model):
 
     """
     _inherit = 'sale.order'
-    blocked = fields.Boolean(related='partner_id.blocked_sales')
+    blocked = fields.Boolean(related='partner_id.commercial_partner_id.blocked_sales')
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
