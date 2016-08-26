@@ -51,7 +51,7 @@ class ResPartner(osv.osv):
         if len(move_line_ids)>0:
             moves_to_search_dict = move_line_facade.read(cr, uid, move_line_ids,['partner_id'])
             for dict in moves_to_search_dict:
-                partner = self.browse(dict['partner_id'][0])
+                partner = self.browse(cr, uid, dict['partner_id'][0])
                 if dict['partner_id'][0] not in blocked_partner_ids and partner.credit > 0:
                     blocked_partner_ids.append(dict['partner_id'][0])
 
