@@ -84,7 +84,9 @@ class sale_order_line(models.Model):
                 line_data = self._cr.fetchone()
                 if line_data and line_data[0] == "reserve" and line_data[1]:
                     reserves = reserv_obj.search([('unique_js_id', '=',
-                                                   line_data[1])])
+                                                   line_data[1]),
+                                                  ('state', '!=',
+                                                   'cancel')])
                     if reserves and not reserves[0].sale_line_id:
                         reserves[0].sale_line_id = line.id
 
