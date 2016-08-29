@@ -75,6 +75,11 @@ class AccountInvoice(models.Model):
     attach_picking = fields.Boolean('Attach picking')
     picking_ids = fields.One2many('stock.picking', string='pickings',
                                   compute='_get_picking_ids')
+    sale_order_ids = fields.Many2many('sale.order', 'sale_order_invoice_rel',
+                                      'invoice_id', 'order_id', 'Sale Orders',
+                                      readonly=True,
+                                      help="This is the list of sale orders "
+                                           "linked to this invoice. ")
     country_id = fields.Many2one('res.country', 'Country',
                                  related="partner_id.country_id",
                                  readonly=True, store=True)
@@ -83,6 +88,14 @@ class AccountInvoice(models.Model):
                  related="invoice_line.picking_id.invoice_type_id")
     active = fields.Boolean(default=True)
     not_send_email = fields.Boolean("Not send email")
+
+    @api.multi
+    def copy(self, default=None):
+        default = default or {}
+        default.update({
+            'sale_order_ids':[],
+            })
+        return super(AccountInvoice, self).copy(default)
 
     @api.model
     def create(self, vals):
