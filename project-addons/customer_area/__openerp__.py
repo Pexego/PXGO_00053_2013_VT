@@ -33,6 +33,7 @@
               'partner_area_view.xml',
               'report/sale_report_view.xml',
               'sale_view.xml',
-              'security/ir.model.access.csv'],
+              'security/ir.model.access.csv',
+              'res_users_view.xml'],
     "installable": True
 }

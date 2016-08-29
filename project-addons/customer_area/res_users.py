@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,7 +19,12 @@
 #
 ##############################################################################
 
-import res_partner
-import sale
-import report
-import res_users
+from openerp import models, fields
+
+
+class ResUsers(models.Model):
+
+    _inherit = 'res.users'
+
+    area_ids = fields.Many2many('res.partner.area', 'res_users_area_rel',
+                                'user_ud', 'area_id', 'Areas')
