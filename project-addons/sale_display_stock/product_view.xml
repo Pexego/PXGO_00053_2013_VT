@@ -22,6 +22,7 @@
                 <label for="incoming_qty" position="replace"/>
                 <field name="virtual_stock_conservative" position="after">
                     <field name="qty_available_wo_wh"/>
+                    <field name="qty_available_input_loc"/>
                     <label for="incoming_qty"/>
                     <div>
                         <field name="incoming_qty" class="oe_inline"/>

@@ -34,6 +34,19 @@ class ProductTemplate(models.Model):
         qty = self.with_context(location=locs).qty_available
         self.qty_available_wo_wh = qty
 
+    @api.one
+    def _get_input_loc_stock(self):
+        locs = []
+        for wh in self.env["stock.warehouse"].search([]):
+            locs.append(wh.wh_input_stock_loc_id.id)
+            qty = self.with_context(location=locs).qty_available
+            self.qty_available_input_loc = qty
+
+    @api.one
+    def _get_total_incoming_qty(self):
+        self.total_incoming_qty = self.qty_available_input_loc + \
+            self.incoming_qty
+
     qty_available_wo_wh = fields.\
         Float(string="Qty. on kitchen", compute="_get_no_wh_internal_stock",
               readonly=True,
@@ -42,6 +55,14 @@ class ProductTemplate(models.Model):
     outgoing_picking_reserved_qty = fields.Float(
         compute='_get_outgoing_picking_qty', readonly=True,
         digits=dp.get_precision('Product Unit of Measure'))
+    qty_available_input_loc = fields.\
+        Float(string="Qty. on input", compute="_get_input_loc_stock",
+              readonly=True,
+              digits=dp.get_precision('Product Unit of Measure'))
+    total_incoming_qty = fields.\
+        Float(string="Incoming qty.", compute="_get_total_incoming_qty",
+              readonly=True,
+              digits=dp.get_precision('Product Unit of Measure'))
 
     @api.one
     def _get_outgoing_picking_qty(self):

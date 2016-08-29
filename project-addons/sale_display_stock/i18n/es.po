@@ -26,6 +26,11 @@ msgid "Qty. on kitchen"
 msgstr "Stock cocina"
 
 #. module: sale_display_stock
+#: field:product.template,qty_available_input_loc:0
+msgid "Qty. on input"
+msgstr "Stock en playa"
+
+#. module: sale_display_stock
 #: field:sale.order.line,incoming_qty:0
 msgid "Incoming qty."
 msgstr "Stock ent."

@@ -36,5 +36,5 @@ class sale_order_line(models.Model):
               digits_compute=dp.get_precision('Product Unit of Measure'))
     incoming_qty = fields.\
         Float('Incoming qty.', readonly=True,
-              related='product_id.incoming_qty',
+              related='product_id.total_incoming_qty',
               digits_compute=dp.get_precision('Product Unit of Measure'))
