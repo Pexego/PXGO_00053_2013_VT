@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,15 +19,23 @@
 #
 ##############################################################################
 
-{
-    'name': "Stock location moves",
-    'version': '1.0',
-    'category': 'stock',
-    'description': """""",
-    'author': 'Pexego',
-    'website': 'www.pexego.es',
-    "depends": ['stock', 'purchase_picking', 'procurement'],
-    "data": ['stock_data.xml', 'wizard/location_moves_view.xml',
-             'wizard/quality_move_view.xml', "stock_view.xml"],
-    "installable": True
-}
+from openerp import models, api
+
+class ProcurementOrder(models.Model):
+
+    _inherit = "procurement.order"
+
+    @api.model
+    def run_scheduler(self, use_new_cursor=False, company_id = False):
+        res = super(ProcurementOrder, self).\
+            run_scheduler(use_new_cursor=use_new_cursor,
+                          company_id=company_id)
+        pick_ids = self.env["stock.picking"].\
+            search([("picking_type_code", "=", "internal"),
+                    ("state", "=", "assigned")])
+        for pick in pick_ids:
+            pick.action_done()
+        if use_new_cursor:
+            self.env.cr.commit()
+
+        return res
