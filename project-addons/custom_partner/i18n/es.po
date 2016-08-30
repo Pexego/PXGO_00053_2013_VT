@@ -59,6 +59,24 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "            "
 
 #. module: custom_partner
+#: view:res.partner:custom_partner.view_partner_form_add_att
+#: field:res.partner,att:0
+msgid "A/A"
+msgstr "A/A"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:174
+#, python-format
+msgid "Amount"
+msgstr "Importe"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:192
+#, python-format
+msgid "Amount not due"
+msgstr "Importe no vencido"
+
+#. module: custom_partner
 #: field:res.partner.invoice.type,create_uid:0
 msgid "Created by"
 msgstr "Creado por"
@@ -74,6 +92,12 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: custom_partner
+#: code:addons/custom_partner/partner.py:171
+#, python-format
+msgid "Description"
+msgstr "Descripción"
+
+#. module: custom_partner
 #: field:res.partner.invoice.type,display_name:0
 msgid "Display Name"
 msgstr "Nombre"
@@ -84,9 +108,26 @@ msgid "Dropship"
 msgstr "Dropship"
 
 #. module: custom_partner
+#: code:addons/custom_partner/partner.py:173
+#, python-format
+msgid "Due Date"
+msgstr "Fecha vencimiento"
+
+#. module: custom_partner
+#: field:res.partner,eur_currency:0
+msgid "Eur currency"
+msgstr "Importe (€)"
+
+#. module: custom_partner
 #: field:res.partner.invoice.type,id:0
 msgid "ID"
 msgstr "ID"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:170
+#, python-format
+msgid "Invoice Date"
+msgstr "Fecha factura"
 
 #. module: custom_partner
 #: field:res.partner,invoice_type_id:0
@@ -104,6 +145,12 @@ msgstr "Últ. actualización por"
 #: field:res.partner.invoice.type,write_date:0
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:175
+#, python-format
+msgid "Lit."
+msgstr "Litigio"
 
 #. module: custom_partner
 #: field:res.partner.invoice.type,name:0
@@ -154,9 +201,20 @@ msgid "Quotations and Sales Lines"
 msgstr "Presupuestos y lineas de venta"
 
 #. module: custom_partner
+#: code:addons/custom_partner/partner.py:172
+#, python-format
+msgid "Reference"
+msgstr "Referencia"
+
+#. module: custom_partner
 #: field:res.partner,send_followup_to_user:0
 msgid "Send followup to sales agent"
 msgstr "Enviar seguimiento al comercial"
+
+#. module: custom_partner
+#: view:sale.order:custom_partner.view_order_tree_add_amount_untaxed
+msgid "Untaxed"
+msgstr "Base imponible"
 
 #. module: custom_partner
 #: field:res.partner,web:0

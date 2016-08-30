@@ -19,6 +19,9 @@
 #
 ##############################################################################
 from openerp import models, fields, api, exceptions, _
+from openerp.addons.account_followup.report import account_followup_print
+from openerp.osv import fields as fields2
+from collections import defaultdict
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -115,3 +118,76 @@ class ResPartner(models.Model):
         if vals.get('dropship', False):
             vals['active'] = False
         return super(ResPartner, self).write(vals)
+
+    def _all_lines_get_with_partner(self, cr, uid, partner, company_id):
+        moveline_obj = self.pool['account.move.line']
+        moveline_ids = moveline_obj.search(cr, uid, [
+                            ('partner_id', '=', partner.id),
+                            ('account_id.type', '=', 'receivable'),
+                            ('reconcile_id', '=', False),
+                            ('state', '!=', 'draft'),
+                            ('company_id', '=', company_id),
+                            ('date_maturity', '>', fields2.date.context_today(self, cr, uid))
+                        ])
+
+        # lines_per_currency = {currency: [line data, ...], ...}
+        lines_per_currency = defaultdict(list)
+        for line in moveline_obj.browse(cr, uid, moveline_ids):
+            currency = line.currency_id or line.company_id.currency_id
+            line_data = {
+                'name': line.move_id.name,
+                'ref': line.ref,
+                'date': line.date,
+                'date_maturity': line.date_maturity,
+                'balance': line.amount_currency if currency != line.company_id.currency_id else line.debit - line.credit,
+                'blocked': line.blocked,
+                'currency_id': currency,
+            }
+            lines_per_currency[currency].append(line_data)
+
+        return [{'line': lines, 'currency': currency} for currency, lines in lines_per_currency.items()]
+
+    def get_not_followup_table_html(self, cr, uid, ids, context=None):
+        assert len(ids) == 1
+        if context is None:
+            context = {}
+        partner = self.browse(cr, uid, ids[0], context=context).commercial_partner_id
+        #copy the context to not change global context. Overwrite it because _() looks for the lang in local variable 'context'.
+        #Set the language to use = the partner language
+        context = dict(context, lang=partner.lang)
+        followup_table = ''
+        if partner.unreconciled_aml_ids:
+            company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
+            current_date = fields2.date.context_today(self, cr, uid, context=context)
+            rml_parse = account_followup_print.report_rappel(cr, uid, "followup_rml_parser")
+            final_res = self._all_lines_get_with_partner(cr, uid, partner, company.id)
+
+            for currency_dict in final_res:
+                currency = currency_dict.get('line', [{'currency_id': company.currency_id}])[0]['currency_id']
+                followup_table += '''
+                <table border="2" width=100%%>
+                <tr>
+                    <td>''' + _("Invoice Date") + '''</td>
+                    <td>''' + _("Description") + '''</td>
+                    <td>''' + _("Reference") + '''</td>
+                    <td>''' + _("Due Date") + '''</td>
+                    <td>''' + _("Amount") + " (%s)" % (currency.symbol) + '''</td>
+                    <td>''' + _("Lit.") + '''</td>
+                </tr>
+                '''
+                total = 0
+                for aml in currency_dict['line']:
+                    block = aml['blocked'] and 'X' or ' '
+                    total += aml['balance']
+                    strbegin = "<TD>"
+                    strend = "</TD>"
+                    date = aml['date_maturity'] or aml['date']
+                    followup_table +="<TR>" + strbegin + str(aml['date']) + strend + strbegin + aml['name'] + strend + strbegin + (aml['ref'] or '') + strend + strbegin + str(date) + strend + strbegin + str(aml['balance']) + strend + strbegin + block + strend + "</TR>"
+
+                total = reduce(lambda x, y: x+y['balance'], currency_dict['line'], 0.00)
+
+                total = rml_parse.formatLang(total, dp='Account', currency_obj=currency)
+                followup_table += '''<tr> </tr>
+                                </table>
+                                <center>''' + _("Amount not due") + ''' : %s </center>''' % (total)
+        return followup_table
