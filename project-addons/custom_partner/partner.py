@@ -22,6 +22,8 @@ from openerp import models, fields, api, exceptions, _
 from openerp.addons.account_followup.report import account_followup_print
 from openerp.osv import fields as fields2
 from collections import defaultdict
+import time
+from datetime import datetime, timedelta
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -119,16 +121,23 @@ class ResPartner(models.Model):
             vals['active'] = False
         return super(ResPartner, self).write(vals)
 
-    def _all_lines_get_with_partner(self, cr, uid, partner, company_id):
+    def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
+        today = time.strftime('%Y-%m-%d')
         moveline_obj = self.pool['account.move.line']
-        moveline_ids = moveline_obj.search(cr, uid, [
-                            ('partner_id', '=', partner.id),
-                            ('account_id.type', '=', 'receivable'),
-                            ('reconcile_id', '=', False),
-                            ('state', '!=', 'draft'),
-                            ('company_id', '=', company_id),
-                            ('date_maturity', '>', fields2.date.context_today(self, cr, uid))
-                        ])
+
+        domain = [('partner_id', '=', partner.id),
+                  ('account_id.type', '=', 'receivable'),
+                  ('reconcile_id', '=', False),
+                  ('state', '!=', 'draft'),
+                  ('company_id', '=', company_id),
+                  ('date_maturity', '>', today)]
+        if days:
+            formatted_date = datetime.strptime(today, "%Y-%m-%d")
+            due_date = datetime.\
+                strftime(formatted_date + timedelta(days=days), "%Y-%m-%d")
+            domain.append(('date_maturity', '<=', due_date))
+
+        moveline_ids = moveline_obj.search(cr, uid, domain)
 
         # lines_per_currency = {currency: [line data, ...], ...}
         lines_per_currency = defaultdict(list)
@@ -147,7 +156,7 @@ class ResPartner(models.Model):
 
         return [{'line': lines, 'currency': currency} for currency, lines in lines_per_currency.items()]
 
-    def get_not_followup_table_html(self, cr, uid, ids, context=None):
+    def get_not_followup_table_html(self, cr, uid, ids, days=0, context=None):
         assert len(ids) == 1
         if context is None:
             context = {}
@@ -160,7 +169,7 @@ class ResPartner(models.Model):
             company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
             current_date = fields2.date.context_today(self, cr, uid, context=context)
             rml_parse = account_followup_print.report_rappel(cr, uid, "followup_rml_parser")
-            final_res = self._all_lines_get_with_partner(cr, uid, partner, company.id)
+            final_res = self._all_lines_get_with_partner(cr, uid, partner, company.id, days=days)
 
             for currency_dict in final_res:
                 currency = currency_dict.get('line', [{'currency_id': company.currency_id}])[0]['currency_id']
