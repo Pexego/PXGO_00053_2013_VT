@@ -33,6 +33,12 @@ msgid "A generic banking mandate"
 msgstr "Un mandato bancario genérico"
 
 #. module: custom_account
+#: field:account.invoice,active:0
+#: field:account.invoice.line,active:0
+msgid "Active"
+msgstr "Activo"
+
+#. module: custom_account
 #: field:account.invoice,attach_picking:0
 #: field:res.partner,attach_picking:0
 msgid "Attach picking"
@@ -171,6 +177,11 @@ msgid "Newsletter"
 msgstr "Newsletter"
 
 #. module: custom_account
+#: field:account.invoice,not_send_email:0
+msgid "Not send email"
+msgstr "No enviar email"
+
+#. module: custom_account
 #: view:account.invoice.report:custom_account.account_invoice_report_add_filters
 #: model:ir.model,name:custom_account.model_res_partner
 msgid "Partner"
@@ -214,9 +225,23 @@ msgid "Reference of the sales order or bid sent by your supplier. It's mainly us
 msgstr "Referencia de las ventas enviadas por su proveedor. Es usado principalmente para reconocer los productos al recibirlos, esta referencia es escrita habitualmente en el albarán enviado por su proveedor."
 
 #. module: custom_account
+#: field:account.invoice.line,sale_order_id:0
+msgid "Sale"
+msgstr "Venta"
+
+#: field:account.invoice.line,sale_order_line_ids:0
+msgid "Sale Lines"
+msgstr "Lineas venta"
+
+#. module: custom_account
 #: view:sale.order:custom_account.view_order_form_inherit
 msgid "Sale Order Internal Notes"
 msgstr "Notas internas pedido"
+
+#. module: custom_account
+#: field:account.invoice,sale_order_ids:0
+msgid "Sale Orders"
+msgstr "Pedidos de venta"
 
 #. module: custom_account
 #: field:sale.order,sale_notes:0

@@ -66,6 +66,12 @@ class AccountInvoiceLine(models.Model):
         'Supplier reference', related='purchase_line_id.order_id.partner_ref',
         readonly=True)
     active = fields.Boolean(default=True)
+    sale_order_line_ids = fields.\
+        Many2many('sale.order.line', 'sale_order_line_invoice_rel',
+                  'invoice_id', 'order_line_id', 'Sale Lines', readonly=True,
+                  copy=False)
+    sale_order_id = fields.Many2one("sale.order", "Sale", readonly=True,
+                                    related="sale_order_line_ids.order_id")
 
 
 class AccountInvoice(models.Model):
@@ -77,7 +83,7 @@ class AccountInvoice(models.Model):
                                   compute='_get_picking_ids')
     sale_order_ids = fields.Many2many('sale.order', 'sale_order_invoice_rel',
                                       'invoice_id', 'order_id', 'Sale Orders',
-                                      readonly=True,
+                                      readonly=True, copy=False,
                                       help="This is the list of sale orders "
                                            "linked to this invoice. ")
     country_id = fields.Many2one('res.country', 'Country',
@@ -88,14 +94,6 @@ class AccountInvoice(models.Model):
                  related="invoice_line.picking_id.invoice_type_id")
     active = fields.Boolean(default=True)
     not_send_email = fields.Boolean("Not send email")
-
-    @api.multi
-    def copy(self, default=None):
-        default = default or {}
-        default.update({
-            'sale_order_ids':[],
-            })
-        return super(AccountInvoice, self).copy(default)
 
     @api.model
     def create(self, vals):
