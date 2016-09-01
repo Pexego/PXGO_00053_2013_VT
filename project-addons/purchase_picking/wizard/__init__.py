@@ -20,3 +20,4 @@
 ##############################################################################
 
 import create_picking_move
+import assign_container

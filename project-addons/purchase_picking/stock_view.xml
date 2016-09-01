@@ -10,6 +10,12 @@
                 <filter name="ready" position="before">
                     <filter name="New" domain="[('state', '=', 'draft')]"/>
                 </filter>
+                <field name="origin" position="after">
+                    <field name="container_id"/>
+                </field>
+                <filter string="Picking" position="after">
+                    <filter string="Container" name="groupby_container_id" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'container_id'}"/>
+                </filter>
             </field>
         </record>
 
@@ -21,6 +27,7 @@
             <field name="arch" type="xml">
                 <field name="date" position="after">
                     <field name="date_expected" widget="date"/>
+                    <field name="container_id"/>
                 </field>
             </field>
         </record>
@@ -78,6 +85,70 @@
                 </field>
             </field>
         </record>
+
+        <record id="view_move_form_add_container" model="ir.ui.view">
+            <field name="name">stock.move.form.add_container</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                <field name="date_expected" position="after">
+                    <field name="container_id" attrs="{'invisible': ['|',('picking_id', '!=', False),('state', 'in', ['cancel','done'])]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_stock_container_form" model="ir.ui.view">
+            <field name="name">stock.container.form</field>
+            <field name="model">stock.container</field>
+            <field name="arch" type="xml">
+                <form string="Container">
+                    <group colspan="4">
+                        <group col="2" colspan="2">
+                            <field name="name"/>
+                        </group>
+                        <group col="2" colspan="2">
+                            <field name="date_expected"/>
+                        </group>
+                        <separator string="Related Moves" colspan="4"/>
+                        <field name="move_ids" nolabel="1" colspan="4"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_stock_container_tree" model="ir.ui.view">
+            <field name="name">stock.container.tree</field>
+            <field name="model">stock.container</field>
+            <field name="arch" type="xml">
+                <tree string="Containers">
+                    <field name="name"/>
+                    <field name="date_expected"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_stock_container_filter" model="ir.ui.view">
+            <field name="name">stock.container.search</field>
+            <field name="model">stock.container</field>
+            <field name="type">search</field>
+            <field name="arch" type="xml">
+                <search string="Containers">
+                   <field name="name"/>
+               </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_stock_container">
+            <field name="name">Containers</field>
+            <field name="res_model">stock.container</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_stock_container_tree"/>
+            <field name="search_view_id" ref="view_stock_container_filter"/>
+        </record>
+
+        <menuitem name="Containers" parent="purchase.menu_procurement_management_inventory"
+            action="action_stock_container" id="stock_container_menu"/>
 
     </data>
 </openerp>

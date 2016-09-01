@@ -91,7 +91,7 @@ class product_stock_unsafety(osv.Model):
         'date': fields.date('Date', readonly=True),
         'name': fields.char('Reason', size=64, readonly=True),
         'incoming_qty': fields.related('product_id',
-                                       'incoming_qty',
+                                       'total_incoming_qty',
                                        type='float',
                                        string='Incoming qty.',
                                        readonly=True,

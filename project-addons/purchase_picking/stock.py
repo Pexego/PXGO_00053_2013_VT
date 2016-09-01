@@ -22,11 +22,51 @@
 from openerp import models, fields, api, _, exceptions
 
 
+class StockContainer(models.Model):
+
+    _name = "stock.container"
+
+    name = fields.Char("Container Ref.", required=True)
+    date_expected = fields.Date("Date expected")
+    move_ids = fields.One2many("stock.move", "container_id", "Moves",
+                               readonly=True, copy=False)
+    company_id = fields.\
+        Many2one("res.company", "Company", required=True,
+                 default=lambda self:
+                 self.env['res.company'].
+                 _company_default_get('stock.container'))
+
+    _sql_constraints = [
+        ('name_uniq', 'unique(name)', 'Container name must be unique')
+    ]
+
+    @api.multi
+    def write(self, vals):
+        if vals.get('date_expected', False):
+            for container in self:
+                if vals['date_expected'] != container.date_expected:
+                    for move in container.move_ids:
+                        move.date_expected = vals['date_expected']
+        return super(StockContainer, self).write(vals)
+
+
 class stock_picking(models.Model):
 
     _inherit = 'stock.picking'
 
     shipping_identifier = fields.Char('Shipping identifier', size=64)
+    temp = fields.Boolean("Temp.")
+
+    @api.multi
+    def action_cancel(self):
+        for pick in self:
+            if pick.temp:
+                for move in pick.move_lines:
+                    if move.state == "assigned":
+                        move.do_unreserve()
+                    move.state = "draft"
+                    move.picking_id = False
+        return super(stock_picking, self).action_cancel()
 
 
 class stock_move(models.Model):
@@ -34,6 +74,7 @@ class stock_move(models.Model):
     _inherit = 'stock.move'
 
     partner_id = fields.Many2one('res.partner', 'Partner')
+    container_id = fields.Many2one('stock.container', "Container")
 
     @api.multi
     def write(self, vals):
@@ -62,6 +103,10 @@ class stock_move(models.Model):
                         sale.message_post(body=_("The sale order is already assigned."),
                                           subtype='mt_comment',
                                           partner_ids=followers)
+            if vals.get('container_id', False):
+                container = self.env["stock.container"].\
+                    browse(vals['container_id'])
+                move.date_expected = container.date_expected
         return res
 
     @api.model

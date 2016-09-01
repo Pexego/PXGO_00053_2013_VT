@@ -18,7 +18,7 @@
             <field name="inherit_id" ref="stock.product_template_kanban_stock_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//ul/li[3]" position="after">
-                    <li t-if="record.type.raw_value != 'service'">Incoming: <field name="incoming_qty"/> <field name="uom_id"/></li>
+                    <li t-if="record.type.raw_value != 'service'">Incoming: <field name="total_incoming_qty"/> <field name="uom_id"/></li>
                 </xpath>
             </field>
         </record>

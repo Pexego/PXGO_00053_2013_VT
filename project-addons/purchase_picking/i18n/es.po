@@ -16,14 +16,58 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: purchase_picking
+#: view:assign.container.wzd:purchase_picking.assign_container_wzd_view
+msgid "Assign"
+msgstr "Asignar"
+
+#. module: purchase_picking
+#: view:assign.container.wzd:purchase_picking.assign_container_wzd_view
+#: model:ir.actions.act_window,name:purchase_picking.action_assign_container
+msgid "Assign container"
+msgstr "Asignar contenedor"
+
+#. module: purchase_picking
 #: view:picking.from.moves.wizard:purchase_picking.create_picking_move_view
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: purchase_picking
+#: field:stock.container,company_id:0
+msgid "Company"
+msgstr "Compañía"
+
+#. module: purchase_picking
 #: field:stock.reservation,consumed_for:0
 msgid "Consumed for"
 msgstr "Consumido para"
+
+#. module: purchase_picking
+#: field:assign.container.wzd,container_id:0
+#: field:picking.from.moves.wizard,container_id:0
+#: view:stock.container:purchase_picking.view_stock_container_form
+#: view:stock.move:purchase_picking.stock_move_search_add_new_state
+#: field:stock.move,container_id:0
+#: field:stock.reservation,container_id:0
+msgid "Container"
+msgstr "Contenedor"
+
+#. module: purchase_picking
+#: field:stock.container,name:0
+msgid "Container Ref."
+msgstr "Ref. contenedor"
+
+#. module: purchase_picking
+#: sql_constraint:stock.container:0
+msgid "Container name must be unique"
+msgstr "La referencia de contenedor debe ser única"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container
+#: model:ir.ui.menu,name:purchase_picking.stock_container_menu
+#: view:stock.container:purchase_picking.view_stock_container_filter
+#: view:stock.container:purchase_picking.view_stock_container_tree
+msgid "Containers"
+msgstr "Contenedores"
 
 #. module: purchase_picking
 #: view:picking.from.moves.wizard:purchase_picking.create_picking_move_view
@@ -41,16 +85,25 @@ msgid "Create picking"
 msgstr "Crear albarán"
 
 #. module: purchase_picking
+#: field:assign.container.wzd,create_uid:0
 #: field:picking.from.moves.wizard,create_uid:0
 #: field:picking.wizard.move.details,create_uid:0
+#: field:stock.container,create_uid:0
 msgid "Created by"
 msgstr "Created by"
 
 #. module: purchase_picking
+#: field:assign.container.wzd,create_date:0
 #: field:picking.from.moves.wizard,create_date:0
 #: field:picking.wizard.move.details,create_date:0
+#: field:stock.container,create_date:0
 msgid "Created on"
 msgstr "Created on"
+
+#. module: purchase_picking
+#: field:stock.container,date_expected:0
+msgid "Date expected"
+msgstr "Fecha estimada"
 
 #. module: purchase_picking
 #: field:picking.from.moves.wizard,date_picking:0
@@ -70,14 +123,18 @@ msgid "ID"
 msgstr "ID"
 
 #. module: purchase_picking
+#: field:assign.container.wzd,write_uid:0
 #: field:picking.from.moves.wizard,write_uid:0
 #: field:picking.wizard.move.details,write_uid:0
+#: field:stock.container,write_uid:0
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
 #. module: purchase_picking
+#: field:assign.container.wzd,write_date:0
 #: field:picking.from.moves.wizard,write_date:0
 #: field:picking.wizard.move.details,write_date:0
+#: field:stock.container,write_date:0
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
@@ -85,6 +142,11 @@ msgstr "Last Updated on"
 #: field:picking.wizard.move.details,move_id:0
 msgid "Move"
 msgstr "Movimiento"
+
+#. module: purchase_picking
+#: field:stock.container,move_ids:0
+msgid "Moves"
+msgstr "Movimientos"
 
 #. module: purchase_picking
 #: model:ir.model,name:purchase_picking.model_stock_picking
@@ -119,6 +181,17 @@ msgid "Production Order for Raw Materials"
 msgstr "Orden de producción para materias primas"
 
 #. module: purchase_picking
+#: field:purchase.order,picking_created:0
+msgid "Picking created"
+msgstr "Albarán creado"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/wizard/create_picking_move.py:77
+#, python-format
+msgid "Picking error"
+msgstr "Error en albaranes"
+
+#. module: purchase_picking
 #: field:picking.wizard.move.details,product_id:0
 msgid "Product"
 msgstr "Producto"
@@ -150,6 +223,11 @@ msgid "Receive Products"
 msgstr "Recibir productos"
 
 #. module: purchase_picking
+#: view:stock.container:purchase_picking.view_stock_container_form
+msgid "Related Moves"
+msgstr "Movimientos relacionados"
+
+#. module: purchase_picking
 #: field:stock.picking,shipping_identifier:0
 msgid "Shipping identifier"
 msgstr "Identificador de envío"
@@ -170,25 +248,30 @@ msgid "Technical field used to make the traceability of produced products"
 msgstr "Campo técnico usado para hacer la trazabilidad entre productos producidos"
 
 #. module: purchase_picking
-#: code:addons/purchase_picking/stock.py:122
+#: field:stock.picking,temp:0
+msgid "Temp."
+msgstr "Temp."
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:167
 #, python-format
 msgid "The date planned of the reservation was changed."
 msgstr "La fecha planificada de la reserva ha cambiado."
 
 #. module: purchase_picking
-#: code:addons/purchase_picking/wizard/create_picking_move.py:88
+#: code:addons/purchase_picking/wizard/create_picking_move.py:93
 #, python-format
 msgid "The quantity is greater than the original."
 msgstr "La cantidad es mayor a la original."
 
 #. module: purchase_picking
-#: code:addons/purchase_picking/stock.py:62
+#: code:addons/purchase_picking/stock.py:103
 #, python-format
 msgid "The sale order is already assigned."
 msgstr "El pedido de venta ya está asignado."
 
 #. module: purchase_picking
-#: code:addons/purchase_picking/wizard/create_picking_move.py:76
+#: code:addons/purchase_picking/wizard/create_picking_move.py:77
 #, python-format
 msgid "Type not found"
 msgstr "Tipo no encontrado"
@@ -202,7 +285,6 @@ msgstr "Lineas"
 #: field:picking.wizard.move.details,wizard_id:0
 msgid "wizard"
 msgstr "Asistente"
-
 
 #. module: purchase_picking
 #: code:addons/purchase_picking/stock.py:78

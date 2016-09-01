@@ -16,29 +16,48 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_display_stock
+#: field:sale.order.line.report,company_id:0
+msgid "Company"
+msgstr "Compañía"
+
+#. module: sale_display_stock
 #: model:ir.model,name:sale_display_stock.model_sale_order_line
 msgid "Sales Order Line"
 msgstr "Línea pedido de venta"
 
 #. module: sale_display_stock
+#: field:product.product,outgoing_picking_reserved_qty:0
+#: field:product.template,outgoing_picking_reserved_qty:0
+msgid "Outgoing picking reserved qty"
+msgstr "Stock en albaranes"
+
+#. module: sale_display_stock
+#: field:product.product,property_account_creditor_price_difference:0
+msgid "Price Difference Account"
+msgstr "Cuenta diferencias precios"
+
+#. module: sale_display_stock
+#: field:product.product,qty_available_wo_wh:0
 #: field:product.template,qty_available_wo_wh:0
+#: field:sale.order.line,qty_available_wo_wh:0
 msgid "Qty. on kitchen"
 msgstr "Stock cocina"
 
 #. module: sale_display_stock
-#: field:product.template,qty_available_input_loc:0
-msgid "Qty. on input"
-msgstr "Stock en playa"
+#: field:product.template,qty_in_production:0
+msgid "Qty. in production"
+msgstr "Fabricando"
 
 #. module: sale_display_stock
+#: field:product.template,qty_available_input_loc:0
+msgid "Qty. on input"
+msgstr "Stock playa"
+
+#. module: sale_display_stock
+#: field:product.template,total_incoming_qty:0
 #: field:sale.order.line,incoming_qty:0
 msgid "Incoming qty."
 msgstr "Stock ent."
-
-#. module: sale_display_stock
-#: field:product.template,outgoing_picking_reserved_qty:0
-msgid "Picking stock"
-msgstr "Stock en albaranes"
 
 #. module: sale_display_stock
 #: field:sale.order.line.report,discount:0

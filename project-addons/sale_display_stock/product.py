@@ -37,15 +37,34 @@ class ProductTemplate(models.Model):
     @api.one
     def _get_input_loc_stock(self):
         locs = []
+        qty = 0.0
         for wh in self.env["stock.warehouse"].search([]):
             locs.append(wh.wh_input_stock_loc_id.id)
-            qty = self.with_context(location=locs).qty_available
-            self.qty_available_input_loc = qty
+            qty += self.with_context(location=locs).qty_available
+        self.qty_available_input_loc = qty
+
+    @api.one
+    def _get_in_production_stock(self):
+        moves = self.env["stock.move"].search([('product_id', '=',
+                                                self.product_variant_ids[0].id),
+                                               ('purchase_line_id', '!=',
+                                                False),
+                                               ('picking_id', '=', False),
+                                               ('state', '!=', 'cancel')])
+        qty = 0.0
+        for move in moves:
+            qty += move.product_uom_qty
+        self.qty_in_production = qty
 
     @api.one
     def _get_total_incoming_qty(self):
-        self.total_incoming_qty = self.qty_available_input_loc + \
-            self.incoming_qty
+        locs = []
+        qty = 0.0
+        for wh in self.env["stock.warehouse"].search([]):
+            locs.append(wh.wh_input_stock_loc_id.id)
+            qty += self.with_context(location=locs).incoming_qty
+
+        self.total_incoming_qty = qty + self.incoming_qty
 
     qty_available_wo_wh = fields.\
         Float(string="Qty. on kitchen", compute="_get_no_wh_internal_stock",
@@ -61,6 +80,10 @@ class ProductTemplate(models.Model):
               digits=dp.get_precision('Product Unit of Measure'))
     total_incoming_qty = fields.\
         Float(string="Incoming qty.", compute="_get_total_incoming_qty",
+              readonly=True,
+              digits=dp.get_precision('Product Unit of Measure'))
+    qty_in_production = fields.\
+        Float("Qty. in production",compute="_get_in_production_stock",
               readonly=True,
               digits=dp.get_precision('Product Unit of Measure'))
 

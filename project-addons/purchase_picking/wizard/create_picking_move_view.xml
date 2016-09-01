@@ -11,6 +11,7 @@
                 <form string="Create Picking">
                     <group>
                         <field name="date_picking"/>
+                        <field name="container_id" context="{'default_date_expected': date_picking}"/>
                         <field name="move_detail_ids" colspan="4" nolabel="1">
                             <tree create="false" delete="false" editable="top">
                                 <field name="product_id" readonly="1"/>

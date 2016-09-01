@@ -51,6 +51,7 @@ class create_picking_move(models.TransientModel):
     date_picking = fields.Datetime('Date planned', required=True)
     move_detail_ids = fields.One2many('picking.wizard.move.details',
                                       'wizard_id', 'lines', default=_get_lines)
+    container_id = fields.Many2one("stock.container", "Container")
 
     def _view_picking(self):
         action = self.env.ref('stock.action_picking_tree').read()[0]
@@ -79,11 +80,15 @@ class create_picking_move(models.TransientModel):
         all_moves = self.env['stock.move']
         # se recorren los movimientos para agruparlos por tipo
         for move in self.move_detail_ids:
+            if self.container_id:
+                move.move_id.container_id = False
             if not move.move_id.picking_type_id:
                 move.move_id.picking_type_id = type_id
             if move.move_id.picking_type_id.id not in picking_types.keys():
                 picking_types[move.move_id.picking_type_id.id] = {'inv': self.env['stock.move'], 'not_inv': self.env['stock.move']}
             if move.qty != move.move_id.product_uom_qty:
+                if not move.qty:
+                    continue
                 if move.qty > move.move_id.product_uom_qty:
                     raise exceptions.except_orm(_('Quantity error'), _('The quantity is greater than the original.'))
                 new_move = move.move_id.copy({'product_uom_qty': move.qty})
@@ -94,13 +99,21 @@ class create_picking_move(models.TransientModel):
                     key = 'inv'
                 picking_types[move.move_id.picking_type_id.id][key] += new_move
                 move.move_id.product_uom_qty = move.move_id.product_uom_qty - move.qty
+                all_moves += new_move
+                if self.container_id:
+                    new_move.container_id = self.container_id.id
+                else:
+                    new_move.date_expected = self.date_picking
             else:
                 if move.move_id.invoice_state == 'none':
                     key = 'not_inv'
                 else:
                     key = 'inv'
                 picking_types[move.move_id.picking_type_id.id][key] += move.move_id
-                move.move_id.date_expected = self.date_picking
+                if self.container_id:
+                    move.move_id.container_id = self.container_id.id
+                else:
+                    move.move_id.date_expected = self.date_picking
                 all_moves += move.move_id
         picking_ids = []
 
@@ -122,7 +135,8 @@ class create_picking_move(models.TransientModel):
                     'move_lines': [(6, 0, [x.id for x in moves_type])],
                     'origin': ', '.join(moves_type.mapped('purchase_line_id.order_id.name')),
                     'min_date': self.date_picking,
-                    'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none'
+                    'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none',
+                    'temp': True
                 }
                 picking_ids.append(self.env['stock.picking'].create(picking_vals).id)
         all_moves = all_moves.action_confirm()

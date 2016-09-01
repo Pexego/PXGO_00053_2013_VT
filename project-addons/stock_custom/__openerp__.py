@@ -28,7 +28,7 @@
     'website': '',
     "depends" : ["base", "stock_valued_picking", "base_report_to_printer",
                  "custom_account", "picking_incidences",
-                 "reserve_without_save_sale"],
+                 "reserve_without_save_sale", "sale_display_stock"],
     "data" : ["ir_attachment_view.xml",
               "stock_custom_report.xml",
               "stock_view.xml", "partner_view.xml", 'product_view.xml'],

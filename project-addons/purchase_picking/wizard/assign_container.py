@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,23 +19,19 @@
 #
 ##############################################################################
 
-{
-    'name': "Purchase picking",
-    'version': '1.0',
-    'category': 'purchase',
-    'description': """When a purchase order is confirmed, creates the associated moves without picking.""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['base',
-                'purchase',
-                'stock',
-                'stock_reserve'],
-    "data": ['purchase_view.xml',
-             'data/res_partner_data.xml',
-             'wizard/create_picking_move_view.xml',
-             'stock_view.xml',
-             'security/ir.model.access.csv',
-             'security/purchase_picking_security.xml',
-             'wizard/assign_container_view.xml'],
-    "installable": True
-}
+
+from openerp import models, fields, api
+
+class AssignContainerWzd(models.TransientModel):
+
+    _name = "assign.container.wzd"
+
+    container_id = fields.Many2one("stock.container", "Container",
+                                   required=True)
+
+    @api.multi
+    def action_assign(self):
+        move_obj = self.env["stock.move"]
+        for move in move_obj.browse(self.env.context["active_ids"]):
+            move.container_id = self[0].container_id.id
+        return {}

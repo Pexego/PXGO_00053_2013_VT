@@ -25,9 +25,11 @@
                     <field name="seller_id"/>
                     <field name="manufacturer_pref"/>
                     <field name="categ_id"/>
-                    <field name="incoming_qty"/>
+                    <field name="qty_in_production"/>
+                    <field name="total_incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
                     <field name="virtual_stock_conservative"/>
+                    <field name="qty_available"/>
                     <field name="min_days_id"/>
                     <field name="last_sixty_days_sales"/>
                     <field name="biggest_sale_id"/>
