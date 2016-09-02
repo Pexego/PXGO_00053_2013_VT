@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-      <record id="equivalent_products_wizard_inherit" model="ir.ui.view">
+      <!--<record id="equivalent_products_wizard_inherit" model="ir.ui.view">
           <field name="name">equivalent.products.wizard</field>
           <field name="model">equivalent.products.wizard</field>
           <field name="type">form</field>
@@ -13,7 +13,7 @@
                 </field>
               </xpath>
           </field>
-      </record>
+      </record>-->
 
         <record model="ir.ui.view" id="crm_claim_rma_form_view_inherit_new_refund">
             <field name="name">CRM - Claim product return Form</field>

@@ -37,11 +37,14 @@ class EquivalentProductsWizard(models.TransientModel):
             res['kitchen_stock'] = claim_line_id.product_id.qty_available_wo_wh
         return res
 
-    def onchange_product_id(self, cr, uid, ids, product_id, product_ids=[],
-                            context=None):
+    #def onchange_product_id(self, cr, uid, ids, product_id, product_ids=[],
+    #                        context=None):
+    def onchange_product_id(self, cr, uid, ids, product_id, context=None):
+        #~ res = super(EquivalentProductsWizard, self).\
+            #~ onchange_product_id(cr, uid, ids, product_id, product_ids,
+                                #~ context)
         res = super(EquivalentProductsWizard, self).\
-            onchange_product_id(cr, uid, ids, product_id, product_ids,
-                                context)
+            onchange_product_id(cr, uid, ids, product_id, context)
         if res.get('value', False) and product_id:
             prod_obj = self.pool.get('product.product')
             prod = prod_obj.browse(cr, uid, product_id)

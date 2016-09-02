@@ -10,9 +10,9 @@
                 <field name="virtual_stock" position="after">
                     <field name="kitchen_stock"/>
                 </field>
-                <field name="virtual_available" position="after">
+                <!--<field name="virtual_available" position="after">
                     <field name="qty_available_wo_wh"/>
-                </field>
+                </field>-->
             </field>
         </record>
 
