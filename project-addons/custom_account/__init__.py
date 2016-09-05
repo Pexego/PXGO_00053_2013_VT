@@ -24,3 +24,4 @@ from . import email_template
 from . import report
 from . import partner
 from . import purchase
+from . import voucher
