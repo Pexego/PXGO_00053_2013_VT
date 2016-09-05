@@ -51,6 +51,7 @@ class sale_order_line(models.Model):
                     [('unique_js_id', '=', temp_unique_js_id)])
                 if new_reserv:
                     new_reserv.sale_line_id = line.id
+                    new_reserv.origin = line.order_id.name
                 else:
                     ctx['later'] = True
                 vals['unique_js_id'] = temp_unique_js_id
@@ -67,6 +68,7 @@ class sale_order_line(models.Model):
                 [('unique_js_id', '=', res.unique_js_id)])
             if reserve:
                 reserve.sale_line_id = res.id
+                reserve.origin = res.order_id.name
         else:
             res = super(sale_order_line, self).create(vals)
         return res
@@ -89,6 +91,7 @@ class sale_order_line(models.Model):
                                                    'cancel')])
                     if reserves and not reserves[0].sale_line_id:
                         reserves[0].sale_line_id = line.id
+                        reserves[0].origin = line.order_id.name
 
         return super(sale_order_line, self).read(fields=fields, load=load)
 
