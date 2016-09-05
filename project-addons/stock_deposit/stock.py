@@ -33,7 +33,8 @@ class stock_move(models.Model):
         res = super(stock_move, self).action_done()
         deposit_obj = self.env['stock.deposit']
         for move in self:
-            if move.procurement_id.sale_line_id.deposit:
+            if move.procurement_id.sale_line_id.deposit and \
+                    move.picking_type_id.code == "outgoing":
                 formatted_date = datetime.strptime(time.strftime('%Y-%m-%d'),
                                                    "%Y-%m-%d")
                 return_date = datetime.\

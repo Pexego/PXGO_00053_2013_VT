@@ -57,7 +57,7 @@ class WebsiteReservation(http.Controller):
                                                        post['unique_js_id'])])
             if line_ids:
                 reserv_obj.write(cr, uid, new_reservation,
-                                 {'sale_line_id': line_ids[0].id})
+                                 {'sale_line_id': line_ids[0]})
         return json.dumps(True)
 
     @http.route(['/reservations/unlink'],
