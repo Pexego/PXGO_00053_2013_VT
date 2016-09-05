@@ -83,13 +83,13 @@ class res_partner(orm.Model):
                                                start_month),
                                               ('date_order', '<=',
                                                end_month_str)],
-                                             ['amount_total', 'partner_id'],
+                                             ['amount_untaxed', 'partner_id'],
                                              ['partner_id'],
                                              context=context)
             if total_sale:
                 total = 0.0
                 for total_partner in total_sale:
-                    total += total_partner['amount_total']
+                    total += total_partner['amount_untaxed']
                 if total != 0:
                     data.append([end_month_seconds, total])
         return data
