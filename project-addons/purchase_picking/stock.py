@@ -27,7 +27,7 @@ class StockContainer(models.Model):
     _name = "stock.container"
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected")
+    date_expected = fields.Date("Date expected", required=True)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
     company_id = fields.\
