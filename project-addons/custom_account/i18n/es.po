@@ -188,6 +188,11 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: custom_account
+#: field:account.journal,payment_method_ids:0
+msgid "Payment methods related"
+msgstr "Métodos de pago relacionados"
+
+#. module: custom_account
 #: view:account.invoice.report:custom_account.account_invoice_report_add_filters
 #: field:account.invoice.report,payment_mode_id:0
 msgid "Payment mode"
@@ -355,3 +360,60 @@ msgstr "País"
 #: field:account.invoice,picking_ids:0
 msgid "pickings"
 msgstr "albaranes"
+
+#. module: sale_quick_payment
+#: field:pay.sale.order,amount:0
+msgid "Amount"
+msgstr "Importe"
+
+#. module: sale_quick_payment
+#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
+msgid "Date"
+msgstr "Fecha"
+
+#. module: sale_quick_payment
+#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
+#: field:pay.sale.order,description:0
+msgid "Description"
+msgstr "Descripción"
+
+#. module: sale_quick_payment
+#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
+msgid "Paid Amount"
+msgstr "Importe pagado"
+
+#. module: sale_quick_payment
+#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
+msgid "Pay"
+msgstr "Pagar"
+
+#. module: sale_quick_payment
+#: model:ir.actions.act_window,name:sale_quick_payment.open_pay_sale_order
+#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
+msgid "Pay Sale Order"
+msgstr "Pagar pedido venta"
+
+#. module: sale_quick_payment
+#: field:pay.sale.order,date:0
+msgid "Payment Date"
+msgstr "Fecha de pago"
+
+#. module: sale_quick_payment
+#: view:sale.order:sale_quick_payment.sale_order_view_form
+msgid "Register Payments"
+msgstr "Registrar pagos"
+
+#. module: sale_quick_payment
+#: model:sale.exception,name:sale_quick_payment.must_be_paid
+msgid "Sale order must be paid before validation"
+msgstr "La venta debe ser pagada antes de la validación"
+
+#. module: sale_quick_payment
+#: model:sale.exception,description:sale_quick_payment.must_be_paid
+msgid "The sale order must be paid before the validation. Please fix it"
+msgstr "La venta debe ser pagada antes de la validación."
+
+#. module: sale_quick_payment
+#: model:ir.model,name:sale_quick_payment.model_pay_sale_order
+msgid "Wizard to generate a payment from the sale order"
+msgstr "Asistente para generar un pago desde el pedido"

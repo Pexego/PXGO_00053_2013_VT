@@ -34,7 +34,7 @@ class AccountMoveLine(models.Model):
     def _mandate_scheme_search(self, operator, operand):
         invoice_obj = self.env['account.invoice']
         invoices = invoice_obj.search([('mandate_id.scheme', operator,
-                                        operand),('move_id', '!=', False)])
+                                        operand), ('move_id', '!=', False)])
         moves = [x.move_id.id for x in invoices]
         return [('move_id', 'in', moves)]
 
@@ -103,14 +103,16 @@ class AccountInvoice(models.Model):
                 vals["attach_picking"] = partner.attach_picking
         if 'type' in vals and 'partner_bank_id' in vals:
             if vals['type'] == 'out_invoice':
-                partner_bank = self.env['res.partner.bank'].browse(vals['partner_bank_id'])
+                partner_bank = self.env['res.partner.bank'].\
+                    browse(vals['partner_bank_id'])
                 mandate_ids = partner_bank.mandate_ids
                 default_mandate = mandate_ids.filtered(
                     lambda r: r.default and r.state == "valid")
                 if not default_mandate:
                     default_mandate = mandate_ids.filtered(
                         lambda r: r.state == "valid")
-                vals['mandate_id'] = default_mandate and default_mandate[0].id or False
+                vals['mandate_id'] = default_mandate and \
+                    default_mandate[0].id or False
         return super(AccountInvoice, self).create(vals)
 
     @api.multi
@@ -126,7 +128,6 @@ class AccountInvoice(models.Model):
                     lambda r: r.state == "valid")
             mandate_id = default_mandate and default_mandate[0] or False
         return {'value': {'mandate_id': mandate_id and mandate_id.id or False}}
-
 
     @api.multi
     def onchange_partner_id(self, type, partner_id, date_invoice=False,
@@ -150,7 +151,8 @@ class AccountInvoice(models.Model):
         args = args or []
         recs = self.browse()
         if not res:
-            recs = self.search([('invoice_number', operator, name)] + args, limit=limit)
+            recs = self.search([('invoice_number', operator, name)] + args,
+                               limit=limit)
             res = recs.name_get()
         return res
 
@@ -160,3 +162,142 @@ class AccountInvoice(models.Model):
         for invoice in self:
             invoice.picking_ids = invoice.\
                 mapped('invoice_line.move_id.picking_id').sorted()
+
+    @api.multi
+    @api.returns('account.move.line')
+    def _get_payment(self):
+        self.ensure_one()
+        payments = self.env['account.move.line'].browse()
+        if self.type == "out_invoice" and self.sale_order_ids:
+            for sale in self.sale_order_ids:
+                payments += sale.payment_ids
+        return payments
+
+    @api.multi
+    def _can_be_reconciled(self):
+        self.ensure_one()
+        payments = self._get_payment()
+        if not (payments and self.move_id):
+            return False
+        # Check currency
+        company_currency = self.company_id.currency_id
+        for payment in payments:
+            currency = payment.currency_id or company_currency
+            if currency != self.currency_id:
+                return False
+        return True
+
+    @api.model
+    def _get_sum_move_line(self, move_lines, line_type):
+        res = {
+            'max_date': False,
+            'lines': self.env['account.move.line'].browse(),
+            'total_amount': 0,
+            'total_amount_currency': 0,
+        }
+        for move_line in move_lines:
+            if move_line[line_type] > 0 and not move_line.reconcile_id:
+                if move_line.date > res['max_date']:
+                    res['max_date'] = move_line.date
+                res['lines'] += move_line
+                res['total_amount'] += move_line[line_type]
+                res['total_amount_currency'] += move_line.amount_currency
+        return res
+
+    @api.model
+    def _get_sum_invoice_move_line(self, move_lines, invoice_type):
+        if invoice_type in ['in_refund', 'out_invoice']:
+            line_type = 'debit'
+        else:
+            line_type = 'credit'
+        return self._get_sum_move_line(move_lines, line_type)
+
+    @api.model
+    def _get_sum_payment_move_line(self, move_lines, invoice_type):
+        if invoice_type in ['in_refund', 'out_invoice']:
+            line_type = 'credit'
+        else:
+            line_type = 'debit'
+        return self._get_sum_move_line(move_lines, line_type)
+
+    @api.multi
+    def _lines_can_be_reconciled(self, lines):
+        self.ensure_one()
+        if not lines:
+            return False
+        # Check that all partners and accounts are the same
+        first_partner = lines[0].partner_id
+        first_account = lines[0].account_id
+        for line in lines:
+            if (line.account_id.type in ('receivable', 'payable') and
+                    line.partner_id != first_partner):
+                return False
+            if line.account_id != first_account:
+                return False
+        return True
+
+    @api.multi
+    def _prepare_write_off(self, res_invoice, res_payment):
+        self.ensure_one()
+        if res_invoice['total_amount'] - res_payment['total_amount'] > 0:
+            writeoff_type = 'expense'
+        else:
+            writeoff_type = 'income'
+        writeoff_info = self.company_id.get_write_off_information
+        account_id, journal_id = writeoff_info('exchange', writeoff_type)
+        max_date = max(res_invoice['max_date'], res_payment['max_date'])
+        ctx_vals = {'p_date': max_date}
+        period_model = self.env['account.period'].with_context(**ctx_vals)
+        period = period_model.find(max_date)[0]
+        return {
+            'type': 'auto',
+            'writeoff_acc_id': account_id,
+            'writeoff_period_id': period.id,
+            'writeoff_journal_id': journal_id,
+            'context_vals': ctx_vals,
+        }
+
+    @api.multi
+    def _reconcile_invoice(self):
+        self.ensure_one()
+        company_currency = self.company_id.currency_id
+        currency = self.currency_id
+        use_currency = currency != company_currency
+        if self._can_be_reconciled():
+            payment_move_lines = self._get_payment()
+            res_payment = self._get_sum_payment_move_line(payment_move_lines,
+                                                          self.type)
+            res_invoice = self._get_sum_invoice_move_line(self.move_id.line_id,
+                                                          self.type)
+            lines = res_invoice['lines'] + res_payment['lines']
+            if not self._lines_can_be_reconciled(lines):
+                return
+            if not use_currency:
+                balance = abs(res_invoice['total_amount'] -
+                              res_payment['total_amount'])
+                if lines and currency.is_zero(balance):
+                    lines.reconcile()
+            else:
+                balance = abs(res_invoice['total_amount_currency'] -
+                              res_payment['total_amount_currency'])
+                if lines and currency.is_zero(balance):
+                    kwargs = self._prepare_write_off(res_invoice, res_payment)
+                    ctx_vals = kwargs.pop('context_vals')
+                    lines.with_context(**ctx_vals).reconcile(**kwargs)
+
+    @api.multi
+    def action_move_create(self):
+        res = super(AccountInvoice, self).action_move_create()
+        for inv in self:
+            inv._reconcile_invoice()
+
+        return res
+
+
+class AccountJournal(models.Model):
+
+    _inherit = "account.journal"
+
+    payment_method_ids = fields.One2many("payment.method", "journal_id",
+                                         "Payment methods related",
+                                         readonly=True)

@@ -35,7 +35,7 @@
                 'account_payment', 'sale', 'purchase', 'nan_partner_risk',
                 'sale_margin_percentage', 'account_banking_sepa_direct_debit',
                 'account_banking_payment_export', 'stock_reserve_sale',
-                'custom_partner'],
+                'custom_partner', 'sale_quick_payment'],
     "data": ['account_view.xml',
              'partner_view.xml',
              'report/account_invoice_report_view.xml',

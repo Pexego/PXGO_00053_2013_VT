@@ -28,6 +28,37 @@
           </field>
       </record>
 
+      <record id="sale_order_view_form" model="ir.ui.view">
+            <field name="name">sale_quick_payment.sale_order.view_form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale_quick_payment.sale_order_view_form" />
+            <field name="arch" type="xml">
+                <button name="%(sale_quick_payment.open_pay_sale_order)d" position="attributes">
+                  <attribute name="states">draft,sent,reserve</attribute>
+                </button>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="sale_quick_payment.pay_sale_order_view">
+            <field name="name">pay.sale.order.view</field>
+            <field name="model">pay.sale.order</field>
+            <field name="arch" type="xml">
+                <form string="Pay Sale Order" version="7.0">
+                    <group>
+                        <field name="description" string="Description"/>
+                        <field name="journal_id" string="Journal" domain="[('payment_method_ids', '!=', [])]"/>
+                        <field name="amount" string="Paid Amount"/>
+                        <field name="date" string="Date"/>
+                    </group>
+                    <footer>
+                        <button string="Pay" name="pay_sale_order" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
         <record id="sale.action_orders" model="ir.actions.act_window">
             <field name="name">Sales Orders</field>
             <field name="type">ir.actions.act_window</field>
