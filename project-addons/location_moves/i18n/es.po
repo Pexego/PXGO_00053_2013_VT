@@ -68,6 +68,11 @@ msgid "Cooked -> Damaged"
 msgstr "Cocinado -> Averiado"
 
 #. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Cooked -> Quality"
+msgstr "Cocinado -> Calidad"
+
+#. module: location_moves
 #: view:quality.move.wzd:location_moves.quality_move_wzd_form
 msgid "Create move"
 msgstr "Crear movimiento"
@@ -146,6 +151,11 @@ msgstr "Movimientos de localizacion"
 #: model:stock.location,name:location_moves.stock_location_marketing
 msgid "Marketing"
 msgstr "Marketing"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Marketing -> Product"
+msgstr "Marketing -> Producto"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0

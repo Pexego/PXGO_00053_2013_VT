@@ -101,6 +101,11 @@ class StockLotacion(models.Model):
                            'stock.stock_location_stock',False, check_qty,
                            assign)
 
+    def move_marketing_product(self, product_id, qty, check_qty, assign=True):
+        self.location_move(product_id, 'stock_location_marketing', qty,
+                           'stock_location_product',False, check_qty,
+                           assign)
+
     def move_stock_product(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
                            'stock_location_product',False, check_qty, assign)
@@ -113,6 +118,11 @@ class StockLotacion(models.Model):
     def move_stock_development(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
                            'stock_location_development',False, check_qty,
+                           assign)
+
+    def move_cooked_quality(self, product_id, qty, check_qty, assign=True):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_quality',False, check_qty,
                            assign)
 
     def move_sat_stock(self, product_id, qty, check_qty, assign=True):
