@@ -75,6 +75,8 @@ class stock_picking(models.Model):
 class stock_move(models.Model):
     _inherit = "stock.move"
 
+    _order = 'date_expected asc, id'
+
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
 
     def _prepare_picking_assign(self, cr, uid, move, context=None):
@@ -106,8 +108,7 @@ class stock_move(models.Model):
                               ('id', 'in', reserve_move_ids)]
 
                 confirmed_ids = self.\
-                    search(domain, limit=None,
-                           order='priority desc, date_expected asc')
+                    search(domain, limit=None)
                 if confirmed_ids:
                     confirmed_ids.action_assign()
 
