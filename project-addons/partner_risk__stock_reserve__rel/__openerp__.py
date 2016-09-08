@@ -30,7 +30,8 @@
                 'sale_stock',
                 'nan_partner_risk',
                 'stock_reserve',
-                'stock_reserve_sale'],
+                'stock_reserve_sale',
+                'sale_quick_payment'],
     "data": ['sale_workflow.xml',
              'sale_view.xml'],
     "installable": True
