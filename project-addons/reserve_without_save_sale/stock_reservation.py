@@ -23,6 +23,14 @@ from openerp import fields, models, api, registry
 from datetime import datetime, timedelta
 
 
+class StockMove(models.Model):
+
+    _inherit = "stock.move"
+
+    reservation_ids = fields.One2many("stock.reservation", "move_id",
+                                      "Reservations", readonly=True)
+
+
 class stock_reservation(models.Model):
 
     _inherit = 'stock.reservation'
@@ -44,6 +52,15 @@ class stock_reservation(models.Model):
 
         if reserves:
             reserves.unlink()
+
+        reserves_loc = self.env.ref("stock_reserve.stock_location_reservation")
+        moves = self.env["stock.move"].search([('location_dest_id', '=',
+                                                reserves_loc.id),
+                                               ('state', '!=', "cancel"),
+                                               ('reservation_ids', '=',
+                                                False)])
+        if moves:
+            moves.action_cancel()
 
         return True
 
