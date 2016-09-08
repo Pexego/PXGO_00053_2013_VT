@@ -24,6 +24,7 @@ from openerp.tools.translate import _
 
 import StringIO
 from datetime import datetime
+import calendar
 from dateutil.relativedelta import relativedelta
 import time
 import base64
@@ -41,8 +42,8 @@ class res_partner(orm.Model):
     }
 
     def _last_day_of_month(self, _date):
-        return (datetime(_date.year, _date.month, 1) + relativedelta(months=1)) + \
-            relativedelta(days=-1)
+        return (datetime(_date.year, _date.month, 1) +
+                relativedelta(months=1)) + relativedelta(days=-1)
 
     def _get_year_periods(self):
         """
@@ -74,7 +75,8 @@ class res_partner(orm.Model):
             end_month_str = end_month.strftime('%Y-%m-%d')
             end_month_seconds = time.mktime(end_month.timetuple())
             total_sale = sale_obj.read_group(cr, uid,
-                                             [('partner_id', 'child_of', partner_id),
+                                             [('partner_id', 'child_of',
+                                               partner_id),
                                               ('state', 'not in',
                                                ['draft', 'sent', 'cancel',
                                                 'reserve', 'waiting_date',
@@ -95,7 +97,8 @@ class res_partner(orm.Model):
         return data
 
     def action_create_graph(self, cr, uid, ids, context=None):
-        if context is None: context = {}
+        if context is None:
+            context = {}
         context['partner_id'] = ids[0]
         self.run_scheduler_grpahic(cr, uid, context=context)
 
@@ -105,6 +108,7 @@ class res_partner(orm.Model):
             Generate the graphs of sales and link it to the partner
         """
         partner_obj = self.pool.get('res.partner')
+        sale_obj = self.pool.get('sale.order')
         if context is None:
             context = {}
         int_to_date = lambda x: \
@@ -113,10 +117,32 @@ class res_partner(orm.Model):
         if context.get('partner_id', False):
             partner_ids = [context['partner_id']]
         else:
-            partner_ids = partner_obj.search(cr, uid,
-                                             [('customer', '=', True),
-                                              ('parent_id', '=', False)],
-                                             context=context)
+            today = datetime.today()
+            curr_month = today.month - 1
+            curr_year = today.year
+            if not curr_month:
+                curr_month = 12
+                curr_year -= 1
+            last_day_in_month = calendar.monthrange(curr_year, curr_month)
+            first_date = datetime(curr_year, curr_month, 1).\
+                strftime("%Y-%m-%d")
+            last_date = datetime(curr_year, curr_month,
+                                 last_day_in_month[1]).strftime("%Y-%m-%d")
+            partners = sale_obj.read_group(cr, uid,
+                                           [('date_order', '>=', first_date),
+                                            ('date_order', '<=', last_date),
+                                            ('state', 'not in',
+                                             ['draft', 'sent', 'cancel',
+                                              'reserve', 'waiting_date',
+                                              'wait_risk', 'risk_approval'])],
+                                           ["partner_id"],
+                                           groupby="partner_id")
+            partner_ids = \
+                [partner_obj.browse(cr, uid, x["partner_id"][0]).
+                 commercial_partner_id.id
+                 for x in partners]
+            partner_ids = list(set(partner_ids))
+            partner_len =  len(partner_ids)
 
         for partner_id in partner_ids:
             fig, ax = plt.subplots(figsize=(10, 6))
