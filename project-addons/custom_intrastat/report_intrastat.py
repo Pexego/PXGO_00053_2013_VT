@@ -40,6 +40,7 @@ class report_intrastat(models.Model):
                     inv.partner_id as partner_id,
                     min(inv_line.id) as id,
                     intrastat.id as intrastat_id,
+                    upper(inv_country.code) as code,
                     inv_country.id as country_id,
                     sum(case when inv_line.price_unit is not null
                             then inv_line.price_subtotal
@@ -76,5 +77,5 @@ class report_intrastat(models.Model):
                     inv.state in ('open','paid')
                     and inv_line.product_id is not null
                     and inv_country.intrastat=true
-                group by to_char(inv.date_invoice, 'YYYY'), to_char(inv.date_invoice, 'MM'),inv.partner_id,intrastat.id,inv.type,pt.intrastat_id, inv_country.id,inv.number,  inv.currency_id)""")
+                group by to_char(inv.date_invoice, 'YYYY'), to_char(inv.date_invoice, 'MM'),inv.partner_id,intrastat.id,inv.type,pt.intrastat_id, inv_country.id, inv_country.code, inv.number,  inv.currency_id)""")
 
