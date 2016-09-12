@@ -179,12 +179,14 @@ class StockPicking(models.Model):
                                   precision_rounding=precision) < 0:
                     new_move = move.split(move, remaining_qty)
                     new_moves.append(new_move)
+                if not move.product_uom_qty:
+                    move.state = 'draft'
+                    move.unlink()
             if new_moves:
                 new_moves = self.env['stock.move'].browse(new_moves)
                 bckid = self._create_backorder(self, backorder_moves=new_moves)
                 bck = self.browse(bckid)
                 bck.write({'move_type': 'one'})
-                self.do_unreserve()
-                self.recheck_availability()
+                self.action_assign()
             self.message_post(body=_("User %s accepted confirmed qties.") %
                               (self.env.user.name))
