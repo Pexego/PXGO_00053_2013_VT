@@ -26,7 +26,9 @@
     'description': """""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    "depends": ['base', 'sale', 'stock', 'sale_stock', 'stock_account', 'sale_margin_percentage'],
-    "data": ['product_view.xml', 'data/ir.cron.xml', 'security/ir.model.access.csv'],
+    "depends": ['base', 'sale', 'stock', 'sale_stock', 'stock_account',
+                'sale_margin_percentage', 'purchase_last_price_info'],
+    "data": ['product_view.xml', 'data/ir.cron.xml',
+             'security/ir.model.access.csv'],
     "installable": True
 }

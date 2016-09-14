@@ -31,6 +31,28 @@
             </field>
         </record>
 
+        <record id="product_template_form_view_groups" model="ir.ui.view">
+            <field name="name">product.template.common.form.groups</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <page string="Procurements" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_user</attribute>
+                </page>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="product_last_purchase_info_form_view_group">
+            <field name="name">product.last.purchase.info.form.group</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="purchase_last_price_info.product_last_purchase_info_form_view" />
+            <field name="arch" type="xml">
+                <page string="Last Price Info" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_user</attribute>
+                </page>
+            </field>
+        </record>
+
         <record id="product_add_proposal_data2" model="ir.ui.view">
           <field name="name">product.product.form2</field>
           <field name="model">product.product</field>
