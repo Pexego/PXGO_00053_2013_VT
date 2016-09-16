@@ -54,7 +54,6 @@ msgid "Qty. on input"
 msgstr "Stock playa"
 
 #. module: sale_display_stock
-#: field:product.template,total_incoming_qty:0
 #: field:sale.order.line,incoming_qty:0
 msgid "Incoming qty."
 msgstr "Stock ent."

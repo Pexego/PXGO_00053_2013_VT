@@ -57,14 +57,10 @@ class ProductTemplate(models.Model):
         self.qty_in_production = qty
 
     @api.one
-    def _get_total_incoming_qty(self):
-        locs = []
-        qty = 0.0
-        for wh in self.env["stock.warehouse"].search([]):
-            locs.append(wh.wh_input_stock_loc_id.id)
-            qty += self.with_context(location=locs).incoming_qty
-
-        self.total_incoming_qty = qty + self.incoming_qty
+    def _stock_conservative(self):
+        self.virtual_stock_conservative = self.qty_available - \
+            self.outgoing_qty - self.qty_available_wo_wh - \
+            self.qty_available_input_loc
 
     qty_available_wo_wh = fields.\
         Float(string="Qty. on kitchen", compute="_get_no_wh_internal_stock",
@@ -76,10 +72,6 @@ class ProductTemplate(models.Model):
         digits=dp.get_precision('Product Unit of Measure'))
     qty_available_input_loc = fields.\
         Float(string="Qty. on input", compute="_get_input_loc_stock",
-              readonly=True,
-              digits=dp.get_precision('Product Unit of Measure'))
-    total_incoming_qty = fields.\
-        Float(string="Incoming qty.", compute="_get_total_incoming_qty",
               readonly=True,
               digits=dp.get_precision('Product Unit of Measure'))
     qty_in_production = fields.\
@@ -96,3 +88,14 @@ class ProductTemplate(models.Model):
              ('procurement_id.sale_line_id', '!=', False)])
         self.outgoing_picking_reserved_qty = sum(moves.mapped(
             'product_uom_qty'))
+
+
+class ProductProduct(models.Model):
+
+    _inherit = "product.product"
+
+    @api.one
+    def _stock_conservative(self):
+        self.virtual_stock_conservative = self.qty_available - \
+            self.outgoing_qty - self.qty_available_wo_wh - \
+            self.qty_available_input_loc
