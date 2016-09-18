@@ -181,7 +181,7 @@ pg_stat_statements.max = 10000
 
 # - Checkpoints -
 
-checkpoint_segments = 15        # in logfile segments, min 1, 16MB each
+#checkpoint_segments = 15        # in logfile segments, min 1, 16MB each
 #checkpoint_timeout = 5min        # range 30s-1h
 #checkpoint_completion_target = 0.5    # checkpoint target duration, 0.0 - 1.0
 #checkpoint_warning = 30s        # 0 disables
@@ -520,5 +520,5 @@ checkpoint_completion_target = 0.9 # pgtune wizard 2016-02-19
 effective_cache_size = 64GB # pgtune wizard 2016-02-19
 work_mem = 160MB # pgtune wizard 2016-02-19
 wal_buffers = 8MB # pgtune wizard 2016-02-19
-checkpoint_segments = 16 # pgtune wizard 2016-02-19
+#checkpoint_segments = 16 # pgtune wizard 2016-02-19
 shared_buffers = 22GB # pgtune wizard 2016-02-19
