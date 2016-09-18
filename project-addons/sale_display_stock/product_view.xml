@@ -23,7 +23,7 @@
                 <field name="virtual_stock_conservative" position="after">
                     <field name="qty_available_wo_wh"/>
                     <field name="qty_available_input_loc"/>
-                    <field name="total_incoming_qty"/>
+                    <field name="incoming_qty"/>
                     <field name="qty_in_production"/>
                 </field>
                 <field name="virtual_available" position="attributes">

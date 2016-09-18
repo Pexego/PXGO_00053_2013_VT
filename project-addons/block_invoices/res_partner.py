@@ -92,7 +92,13 @@ class ResPartner(osv.osv):
                                                       False),
                                                      ('partner_id', '=',
                                                       partner.id)])
-            if move_line_ids and partner.credit > 0:
+            balance = 0
+            for line in move_line_facade.browse(cr, uid, move_line_ids):
+                balance += line.credit
+                balance -= line.debit
+
+            if move_line_ids and balance < 0 and \
+                    partner.payment_amount_due > 0:
                 partner.write({'blocked_sales': True})
             else:
                 partner.write({'blocked_sales': False})

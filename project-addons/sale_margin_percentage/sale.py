@@ -67,7 +67,10 @@ class sale_order(models.Model):
         sale_price = 0.0
         for line in self.order_line:
             if not line.deposit and not line.pack_depth:
-                margin += line.margin or 0.0
+                if line.price_unit > 0:
+                    margin += line.margin or 0.0
+                else:
+                    margin += line.price_unit
                 sale_price += line.price_subtotal or 0.0
         if sale_price:
             self.margin = round((margin * 100) / sale_price, 2)

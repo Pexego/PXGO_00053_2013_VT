@@ -26,7 +26,7 @@
                     <field name="manufacturer_pref"/>
                     <field name="categ_id"/>
                     <field name="qty_in_production"/>
-                    <field name="total_incoming_qty"/>
+                    <field name="incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
                     <field name="virtual_stock_conservative"/>
                     <field name="qty_available"/>
