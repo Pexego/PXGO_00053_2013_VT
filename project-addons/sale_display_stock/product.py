@@ -62,6 +62,11 @@ class ProductTemplate(models.Model):
             self.outgoing_qty - self.qty_available_wo_wh - \
             self.qty_available_input_loc
 
+    @api.one
+    def _get_avail_conservative(self):
+        self.virtual_available_wo_incoming = self.qty_available - \
+            self.outgoing_qty
+
     qty_available_wo_wh = fields.\
         Float(string="Qty. on kitchen", compute="_get_no_wh_internal_stock",
               readonly=True,
@@ -76,6 +81,10 @@ class ProductTemplate(models.Model):
               digits=dp.get_precision('Product Unit of Measure'))
     qty_in_production = fields.\
         Float("Qty. in production",compute="_get_in_production_stock",
+              readonly=True,
+              digits=dp.get_precision('Product Unit of Measure'))
+    virtual_available_wo_incoming = fields.\
+        Float("Virtual avail. conservative",compute="_get_avail_conservative",
               readonly=True,
               digits=dp.get_precision('Product Unit of Measure'))
 
