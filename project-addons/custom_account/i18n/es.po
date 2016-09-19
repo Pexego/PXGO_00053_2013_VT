@@ -16,13 +16,13 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_account
-#: code:addons/custom_account/stock.py:167
+#: code:addons/custom_account/stock.py:198
 #, python-format
 msgid " (copy)"
 msgstr " (copia)"
 
 #. module: custom_account
-#: code:addons/custom_account/stock.py:74
+#: code:addons/custom_account/stock.py:86
 #, python-format
 msgid "%s (copy)"
 msgstr "%s (copia)"
@@ -182,10 +182,30 @@ msgid "Not send email"
 msgstr "No enviar email"
 
 #. module: custom_account
+#: view:sale.report:custom_account.view_order_product_search_add_brand
+msgid "Parent Category"
+msgstr "Categoría padre"
+
+#. module: custom_account
+#: field:sale.report,parent_category_id:0
+msgid "Parent categ."
+msgstr "Categ. padre"
+
+#. module: custom_account
 #: view:account.invoice.report:custom_account.account_invoice_report_add_filters
 #: model:ir.model,name:custom_account.model_res_partner
 msgid "Partner"
 msgstr "Empresa"
+
+#. module: custom_account
+#: field:sale.report,partner_ref:0
+msgid "Partner ref"
+msgstr "Ref. empresa"
+
+#. module: custom_account
+#: view:sale.report:custom_account.view_order_product_search_add_brand
+msgid "Partner ref."
+msgstr "Ref. empresa"
 
 #. module: custom_account
 #: field:account.journal,payment_method_ids:0
