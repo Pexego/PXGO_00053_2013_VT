@@ -74,13 +74,13 @@ class ProductExporter(Exporter):
         return True
 
     def delete(self, binding_id):
-        if self.model == "product.template":
+        if self.model._name == "product.template":
             products = self.env["product.product"].\
                 search([('product_tmpl_id', '=', binding_id)])
         else:
             products = [self.model.browse(binding_id)]
         for product in products:
-            self.backend_adapter.remove(binding_id)
+            self.backend_adapter.remove(product.id)
         return True
 
 @middleware
