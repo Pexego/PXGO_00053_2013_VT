@@ -140,7 +140,7 @@ def delay_create_rma_line(session, model_name, record_id, vals):
     claim_line = session.env[model_name].browse(record_id)
     if claim_line.claim_id.partner_id.web and \
             claim_line.product_id.web == 'published':
-        export_rmaproduct.delay(session, model_name, record_id)
+        export_rmaproduct.delay(session, model_name, record_id, priority=1)
 
 
 @on_record_write(model_names='claim.line')
@@ -152,7 +152,8 @@ def delay_write_rma_line(session, model_name, record_id, vals):
             claim_line.product_id.web == 'published':
         for field in up_fields:
             if field in vals:
-                update_rmaproduct.delay(session, model_name, record_id)
+                update_rmaproduct.delay(session, model_name, record_id,
+                                        priority=10, eta=120)
                 break
 
 
