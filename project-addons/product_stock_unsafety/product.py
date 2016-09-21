@@ -41,7 +41,6 @@ class product_product(models.Model):
         return stock_per_day
 
     @api.one
-    @api.depends("last_sixty_days_sales")
     def _calc_remaining_days(self):
         stock_days = 0.00
         stock_per_day = self.get_daily_sales()
@@ -55,7 +54,7 @@ class product_product(models.Model):
                                        compute='_calc_remaining_days',
                                        help="Stock measure in days of sale "
                                        "computed consulting sales in sixty "
-                                       "days with stock.", store=True)
+                                       "days with stock.")
     replacement_id = fields.Many2one("product.product", "Replaced by")
     min_days_id = fields.Many2one("minimum.day", "Stock Minimum Days",
                                   related="orderpoint_ids.min_days_id",
