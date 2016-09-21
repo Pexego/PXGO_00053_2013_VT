@@ -56,7 +56,9 @@ class SaleOrder(models.Model):
         sale = self[0]
         partner_vat = sale.partner_id.vat
         url = "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
-        if partner_vat and not sale.force_vies_validation:
+        if partner_vat and not sale.force_vies_validation and \
+                sale.fiscal_position and \
+                sale.fiscal_position.require_vies_validation:
             vat = partner_vat.replace(" ", "")
             try:
                 from suds.client import Client
@@ -77,9 +79,6 @@ class SaleOrder(models.Model):
                 result = None
 
             if result is not None:
-                vals = {'vies_validation_check': result,
-                        'vies_validation_timestamp': date_now,
-                        'waiting_vies_validation': False}
                 from reportlab.pdfgen import canvas
                 name = '%s_VIES.pdf' % sale.\
                     name.replace(" ", "").replace("\\", "").replace("/", "").\
@@ -96,7 +95,6 @@ class SaleOrder(models.Model):
                 c.showPage()
                 c.save()
                 a = open(name, "rb").read().encode("base64")
-                sale.write(vals)
                 attach_vals = {
                     'name': name,
                     'datas_fname': name,
@@ -105,14 +103,13 @@ class SaleOrder(models.Model):
                     'res_model': 'sale.order',
                 }
                 self.env['ir.attachment'].create(attach_vals)
+            else:
+                result = False
+            vals = {'vies_validation_check': result,
+                    'vies_validation_timestamp': date_now,
+                    'waiting_vies_validation': not result}
+            sale.write(vals)
 
-            if result is None or not result:
-                if sale.fiscal_position and \
-                        sale.fiscal_position.require_vies_validation:
-                    result = False
-                    sale.write({'waiting_vies_validation': True})
-                else:
-                    result = True
         return result
 
     @api.multi
