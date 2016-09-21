@@ -21,6 +21,11 @@ msgid "Accept ready qtys."
 msgstr "Aceptar cantidad preparada"
 
 #. module: picking_incidences
+#: field:stock.picking,block_picking:0
+msgid "Albarán procesado Vstock"
+msgstr "Albarán procesado Vstock"
+
+#. module: picking_incidences
 #: view:stock.picking:picking_incidences.view_picking_form_add_incidences
 msgid "Are you sure? Backorder will be created with remaining quantities"
 msgstr "¿Está seguro? Un albarán con las cantidades pendientes será creado."
@@ -36,6 +41,18 @@ msgstr "No puede asignar más cantidad de las reservada."
 #, python-format
 msgid "Cannot cancel an incoming picking with incidences. You can only process it."
 msgstr "No puede cancelar un albarán de entrada con incidencias. Sólo puede procearlo."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:42
+#, python-format
+msgid "Cannot cancel this move because it is being processed in Vstock."
+msgstr "No puede cancelar este movimiento porque está siendo procesado en Vstock."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:154
+#, python-format
+msgid "Cannot cancel this picking because it is being processed in Vstock."
+msgstr "No puede cancelar este albarán porque está siendo procesado en Vstock."
 
 #. module: picking_incidences
 #: code:addons/picking_incidences/stock.py:102

@@ -35,6 +35,14 @@ class StockMove(models.Model):
         Float('Qty confirmed', copy=False,
               digits=dp.get_precision('Product Unit of Measure'))
 
+    @api.multi
+    def action_cancel(self):
+        if self.picking_id and self.picking_id.block_picking:
+            raise exceptions.\
+                Warning(_("Cannot cancel this move because it is being "
+                          "processed in Vstock."))
+        return super(StockMove, self).action_cancel()
+
 
 class StockPicking(models.Model):
 
