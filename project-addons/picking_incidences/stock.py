@@ -37,10 +37,11 @@ class StockMove(models.Model):
 
     @api.multi
     def action_cancel(self):
-        if self.picking_id and self.picking_id.block_picking:
-            raise exceptions.\
-                Warning(_("Cannot cancel this move because it is being "
-                          "processed in Vstock."))
+        for move in self:
+            if move.picking_id and move.picking_id.block_picking:
+                raise exceptions.\
+                    Warning(_("Cannot cancel this move because it is being "
+                              "processed in Vstock."))
         return super(StockMove, self).action_cancel()
 
 
