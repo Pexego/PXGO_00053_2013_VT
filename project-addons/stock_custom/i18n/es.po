@@ -15,6 +15,12 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+
+#. module: stock_custom
+#: field:sale.order,is_all_reserved:0
+msgid "Is all reserved"
+msgstr "Todo reservado"
+
 #. module: stock_custom
 #: view:product.template:stock_custom.product_template_kanban_stock_view_inherit
 msgid "Incoming:"
@@ -82,3 +88,16 @@ msgstr "A imprimir"
 #: help:stock.move,lots_text:0
 msgid "Value must be separated by commas"
 msgstr "El valor debe estar separado por comas"
+
+
+#. module: stock_custom
+#: view:stock.picking:stock_custom.view_picking_search
+#: field:stock.picking,commercial:0
+msgid "Commercial"
+msgstr "Comercial"
+
+
+#. module: stock_custom
+#: view:sale.order:stock_custom.view_sale_order_search
+msgid "all reservations assigned"
+msgstr "Todas las reservas asignadas"

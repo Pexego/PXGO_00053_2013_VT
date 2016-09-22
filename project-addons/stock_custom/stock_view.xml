@@ -49,6 +49,9 @@
                 <xpath expr="//notebook/page[@string='Products']/field[@name='note']" position="after">
                     <field name="internal_notes" placeholder="Internal Notess..." class="oe_inline"/>
                 </xpath>
+                <field name="company_id" position="after">
+                    <field name="commercial"/>
+                </field>
                 <button name="do_partial_open_barcode" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </button>
@@ -110,6 +113,20 @@
                <button name="%(stock.move_scrap)d" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </button>
+            </field>
+        </record>
+
+        <record id="view_picking_search" model="ir.ui.view">
+            <field name="name">stock.picking.search</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_internal_search"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@string='Status']" position="after">
+                    <filter string="Commercial" domain="[]" context="{'group_by':'commercial'}"/>
+                </xpath>
+                <field name="product_id" position="after">
+                    <field name="commercial"/>
+                </field>
             </field>
         </record>
 

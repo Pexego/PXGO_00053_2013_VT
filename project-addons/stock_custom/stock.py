@@ -26,6 +26,7 @@ class stock_picking(models.Model):
     _order = "priority desc, date desc, id desc"
 
     internal_notes = fields.Text("Internal Notes")
+    commercial = fields.Many2one('res.users')
 
     @api.multi
     def action_done(self):

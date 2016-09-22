@@ -24,3 +24,4 @@ from . import report
 from . import stock
 from . import partner
 from . import product
+from . import sale
