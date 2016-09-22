@@ -82,3 +82,10 @@ msgstr "A imprimir"
 #: help:stock.move,lots_text:0
 msgid "Value must be separated by commas"
 msgstr "El valor debe estar separado por comas"
+
+
+#. module: stock_custom
+#: view:stock.picking:stock_custom.view_picking_search
+#: field:stock.picking,commercial:0
+msgid "Commercial"
+msgstr "Comercial"
