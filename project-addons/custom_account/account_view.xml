@@ -60,6 +60,9 @@
                 <field name="account_id" position="after">
                     <field name="scheme"/>
                 </field>
+                <field name="amount_residual" position="attributes">
+                    <attribute name="sum">Total Residual</attribute>
+                </field>
             </field>
         </record>
 
