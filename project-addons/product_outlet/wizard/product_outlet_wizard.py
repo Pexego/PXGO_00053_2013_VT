@@ -147,7 +147,8 @@ class product_outlet_wizard(models.TransientModel):
                                    'product_uom_qty': self.qty,
                                    'location_id':
                                    new_product.property_stock_inventory.id,
-                                   'location_dest_id': outlet_location.id,
+                                   'location_dest_id':
+                                   self.warehouse_id.wh_input_stock_loc_id.id,
                                    'product_uom': new_product.uom_id.id,
                                    'picking_type_id':
                                    self.warehouse_id.in_type_id.id,
