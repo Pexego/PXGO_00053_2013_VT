@@ -42,6 +42,7 @@
              'report_custom_view.xml',
              'security/ir.model.access.csv',
              'stock_view.xml',
+             'account_payment.xml',
              'crm_view.xml',
              'purchase_view.xml',
              'product_view.xml',
