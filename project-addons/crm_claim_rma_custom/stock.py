@@ -29,7 +29,7 @@ class stock_picking(models.Model):
                                      copy=False)
     not_sync = fields.Boolean("Not sync", help="This picking not will be "
                                                "synced with Vstock",
-                              copy=False)
+                              copy=True)
 
     def action_assign(self, cr, uid, ids, context=None):
         res = super(stock_picking, self).action_assign(cr, uid, ids,
