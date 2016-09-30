@@ -10,11 +10,13 @@
             <field name="model">payment.order</field>
             <field name="inherit_id" ref="account_payment.view_payment_order_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='line_ids']/tree" position="inside">
+                <xpath expr="//field[@name='line_ids']/tree/field[@name='date']" position="after">
+                    <field name="not_change_date"/>
                     <field name="is_refund" invisible="1"/>
                 </xpath>
                 <xpath expr="//field[@name='line_ids']/tree" position="attributes">
                     <attribute name="colors">red:is_refund==True</attribute>
+                    <attribute name="editable">bottom</attribute>
                 </xpath>
             </field>
         </record>
