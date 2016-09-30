@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api
 import openerp.addons.decimal_precision as dp
 
 
@@ -38,3 +38,15 @@ class sale_order_line(models.Model):
         Float('Incoming qty.', readonly=True,
               related='product_id.incoming_qty',
               digits_compute=dp.get_precision('Product Unit of Measure'))
+
+    @api.cr_uid_ids_context
+    def message_post(
+        self, cr, uid, thread_id, body='', subject=None, type='notification',
+        subtype=None, parent_id=False, attachments=None, context=None,
+        content_subtype='html', **kwargs):
+        context = dict(context)
+        context.pop('mail_post_autofollow', False)
+        return super(SaleOrder, self).message_post(
+            cr, uid, thread_id, body, subject, type,
+            subtype, parent_id, attachments, context, content_subtype,
+            **kwargs)
