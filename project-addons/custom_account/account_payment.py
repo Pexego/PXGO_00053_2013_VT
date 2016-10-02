@@ -14,4 +14,4 @@ class PaymentLine(models.Model):
     @api.multi
     def _get_is_refund(self):
         for line in self:
-            line.is_refund = 'refund' in line.ml_inv_ref.type and True or False
+            line.is_refund = line.amount_currency < 0 and True or False
