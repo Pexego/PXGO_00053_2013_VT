@@ -39,6 +39,11 @@ class sale_order_line(models.Model):
               related='product_id.incoming_qty',
               digits_compute=dp.get_precision('Product Unit of Measure'))
 
+
+class SaleOrder(models.Model):
+
+    _inherit = 'sale.order'
+
     @api.cr_uid_ids_context
     def message_post(
         self, cr, uid, thread_id, body='', subject=None, type='notification',
