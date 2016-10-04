@@ -59,6 +59,14 @@ class sale_order(models.Model):
 
     _inherit = "sale.order"
 
+    @api.multi
+    def fix_sale_margin(self):
+        """Funcion para recalcular margenes incorrectos"""
+        for sale in self:
+            sale.order_line._product_margin()
+            sale._product_margin()
+
+
     @api.one
     @api.depends("order_line.margin", "order_line.deposit")
     def _product_margin(self):
