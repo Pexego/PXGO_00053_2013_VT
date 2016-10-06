@@ -31,8 +31,11 @@ class StockPicking(models.Model):
     def create(self, args):
         res = super(StockPicking, self).create(args)
         if res.picking_type_code == 'outgoing' and res.partner_id:
-            res.invoice_type_id = res.partner_id.commercial_partner_id.\
-                invoice_type_id.id
+            current_partner = res.partner_id
+            if not current_partner.commercial_partner_id.invoice_type_id:
+                while current_partner.parent_id:
+                    current_partner = current_partner.parent_id
+            res.invoice_type_id = current_partner.invoice_type_id.id
         return res
 
     def onchange_partner_in(self, cr, uid, ids, partner_id=None, context=None):
@@ -50,4 +53,3 @@ class StockPicking(models.Model):
                 else:
                     res['value'] = {'invoice_type_id': value}
         return res
-
