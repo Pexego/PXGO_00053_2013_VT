@@ -25,3 +25,5 @@ devel_*
 project-addons/asperience_edi/data_import
 project-addons/asperience_edi/data_export
 *.db
+.mr.developer.cfg
+eggs-custom
