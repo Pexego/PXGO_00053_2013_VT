@@ -31,6 +31,14 @@ class stock_picking(models.Model):
                                                "synced with Vstock",
                               copy=True)
 
+    @api.multi
+    def copy(self, default=None):
+        default = default and default or {}
+        if self.env.context.get('picking_type', '') == 'picking_input':
+            default['not_sync'] = False
+        return super(stock_picking, self).copy(default)
+
+
     def action_assign(self, cr, uid, ids, context=None):
         res = super(stock_picking, self).action_assign(cr, uid, ids,
                                                        context=context)
