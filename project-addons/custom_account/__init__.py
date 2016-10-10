@@ -26,3 +26,4 @@ from . import partner
 from . import purchase
 from . import voucher
 from . import account_payment
+from . import payment

@@ -289,8 +289,15 @@ class AccountInvoice(models.Model):
     def action_move_create(self):
         res = super(AccountInvoice, self).action_move_create()
         for inv in self:
+            inv.move_id.line_id.write({'blocked': inv.payment_mode_id.blocked})
             inv._reconcile_invoice()
+        return res
 
+    @api.multi
+    def write(self, vals):
+        res = super(AccountInvoice, self).write(vals)
+        for inv in self:
+            inv.move_id.line_id.write({'blocked': inv.payment_mode_id.blocked})
         return res
 
 
@@ -301,3 +308,10 @@ class AccountJournal(models.Model):
     payment_method_ids = fields.One2many("payment.method", "journal_id",
                                          "Payment methods related",
                                          readonly=True)
+
+
+class PaymentMode(models.Model):
+
+    _inherit = 'payment.mode'
+
+    blocked = fields.Boolean('No Follow-up')

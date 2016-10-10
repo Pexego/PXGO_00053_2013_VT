@@ -20,7 +20,7 @@
 #
 ##############################################################################
 
-
+from datetime import date
 from openerp import fields, models, api
 
 
@@ -39,6 +39,29 @@ class Partner(models.Model):
             total += order.amount_total - order.amount_invoiced
 
         self.pending_orders_amount = total
+
+    @api.multi
+    def _get_valid_followup_partners(self):
+        partners = self.env['res.partner']
+        period = self.env['account.period']
+        ctx2 = dict(self.env.context)
+        ctx2['periods'] = [period.find(date.today())[:1].id]
+        for partner in self:
+            if partner.credit + partner.debit > 0 and partner.with_context(ctx2).credit + partner.with_context(ctx2).debit >=0:
+                partners += partner
+        return partners
+
+    @api.multi
+    def do_partner_mail(self):
+        partners = self._get_valid_followup_partners()
+        return super(Partner, partners).do_partner_mail()
+
+    @api.multi
+    def do_button_print(self):
+        partners = self._get_valid_followup_partners()
+        if partners:
+            return super(Partner, partners).do_button_print()
+
 
     attach_picking = fields.Boolean("Attach picking")
     newsletter = fields.Boolean('Newsletter')

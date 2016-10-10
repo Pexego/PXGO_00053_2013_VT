@@ -22,6 +22,11 @@ msgid " (copy)"
 msgstr " (copia)"
 
 #. module: custom_account
+#: field:payment.mode,blocked:0
+msgid "No Follow-up"
+msgstr "Sin seguimiento"
+
+#. module: custom_account
 #: code:addons/custom_account/stock.py:86
 #, python-format
 msgid "%s (copy)"
