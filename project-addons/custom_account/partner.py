@@ -21,7 +21,7 @@
 ##############################################################################
 
 from datetime import date
-from openerp import fields, models, api
+from openerp import fields, models, api, exceptions, _
 
 
 class Partner(models.Model):
@@ -42,13 +42,26 @@ class Partner(models.Model):
 
     @api.multi
     def _get_valid_followup_partners(self):
+        company_id = self.env.user.company_id.id
         partners = self.env['res.partner']
         period = self.env['account.period']
         ctx2 = dict(self.env.context)
         ctx2['periods'] = [period.find(date.today())[:1].id]
         for partner in self:
             if partner.credit + partner.debit > 0 and partner.with_context(ctx2).credit + partner.with_context(ctx2).debit >=0:
-                partners += partner
+                if self.env['account.move.line'].search(
+                    [('partner_id', '=', partner.id),
+                     ('account_id.type', '=', 'receivable'),
+                     ('reconcile_id', '=', False),
+                     ('state', '!=', 'draft'),
+                     ('company_id', '=', company_id),
+                     ('blocked', '!=', True),
+                     '|', ('date_maturity', '=', False),
+                     ('date_maturity', '<=', fields.Date.context_today(self))]):
+                    '''raise exceptions.Warning(
+                        _('Error!'),
+                        _("The partner does not have any accounting entries to print in the overdue report for the current company."))'''
+                    partners += partner
         return partners
 
     @api.multi
