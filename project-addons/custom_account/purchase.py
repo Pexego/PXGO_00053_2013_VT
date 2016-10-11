@@ -22,6 +22,7 @@
 from openerp.osv import fields, osv
 from datetime import datetime
 from operator import attrgetter
+from openerp import _
 
 class purchase_order(osv.osv):
 
