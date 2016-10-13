@@ -7,12 +7,10 @@
             <field name="model">equivalent.products.wizard</field>
             <field name="inherit_id" ref="crm_claim_rma.equivalent_products_wizard"/>
             <field name="arch" type="xml">
-                <field name="virtual_stock" position="after">
+                <field name="real_stock" position="after">
+                    <field name="virtual_stock_conservative"/>
                     <field name="kitchen_stock"/>
                 </field>
-                <!--<field name="virtual_available" position="after">
-                    <field name="qty_available_wo_wh"/>
-                </field>-->
             </field>
         </record>
 
