@@ -27,6 +27,7 @@ class EquivalentProductsWizard(models.TransientModel):
     _inherit = "equivalent.products.wizard"
 
     kitchen_stock = fields.Float("Kitchen Stock", readonly=True)
+    virtual_stock_conservative = fields.Float("Available Stock", readonly=True)
 
     def default_get(self, cr, uid, fields, context=None):
         res = super(EquivalentProductsWizard, self).\
@@ -35,6 +36,8 @@ class EquivalentProductsWizard(models.TransientModel):
             claim_line_id = self.pool.get('claim.line').\
                 browse(cr, uid, context['line_id'])
             res['kitchen_stock'] = claim_line_id.product_id.qty_available_wo_wh
+            res['virtual_stock_conservative'] = claim_line_id.product_id.virtual_stock_conservative
+
         return res
 
     #def onchange_product_id(self, cr, uid, ids, product_id, product_ids=[],
@@ -49,5 +52,6 @@ class EquivalentProductsWizard(models.TransientModel):
             prod_obj = self.pool.get('product.product')
             prod = prod_obj.browse(cr, uid, product_id)
             res['value']['kitchen_stock'] =  prod.qty_available_wo_wh
+            res['value']['virtual_stock_conservative'] = prod.virtual_stock_conservative
 
         return res

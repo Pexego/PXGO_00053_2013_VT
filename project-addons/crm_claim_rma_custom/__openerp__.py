@@ -28,7 +28,7 @@
     """,
     'author': 'Comunitea',
     'website': '',
-    "depends": ['crm_claim_rma','account','account_refund_original',
+    "depends": ['crm_claim_rma','account','account_refund_original',"product_virtual_stock_conservative",
                 'sale_display_stock', 'crm_rma_advance_location',
                 'custom_partner'],
     "data": ['crm_claim_view.xml', 'mrp_repair_wkf.xml',
