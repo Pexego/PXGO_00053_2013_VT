@@ -33,8 +33,11 @@ class StockPicking(models.Model):
         if res.picking_type_code == 'outgoing' and res.partner_id:
             current_partner = res.partner_id
             if not current_partner.commercial_partner_id.invoice_type_id:
-                while current_partner.parent_id:
+                while current_partner.parent_id and \
+                        not current_partner.invoice_type_id:
                     current_partner = current_partner.parent_id
+            else:
+                current_partner = current_partner.commercial_partner_id
             res.invoice_type_id = current_partner.invoice_type_id.id
         return res
 
