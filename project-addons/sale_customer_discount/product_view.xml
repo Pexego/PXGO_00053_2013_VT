@@ -36,15 +36,15 @@
 
                     <group colspan="6" col="6" string="Prices">
                      <field name="lst_price"/>
-                     <field name="pvd1_relation"/>
+                     <field name="pvd1_relation" attrs="{'readonly':'true'}"/>
                      <label for="margin_pvd1"/><div><field name="margin_pvd1" class="oe_inline"/> %% </div>
 
                      <field name="list_price2"/>
-                     <field name="pvd2_relation"/>
+                     <field name="pvd2_relation" attrs="{'readonly':'true'}"/>
                      <label for="margin_pvd2"/><div><field name="margin_pvd2" class="oe_inline"/> %% </div>
 
                      <field name="list_price3"/>
-                     <field name="pvd3_relation"/>
+                     <field name="pvd3_relation" attrs="{'readonly':'true'}"/>
                      <label for="margin_pvd3"/><div><field name="margin_pvd3" class="oe_inline"/> %% </div>
                      </group>
                      <group colspan="4" col="4">
