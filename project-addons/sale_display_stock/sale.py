@@ -35,9 +35,18 @@ class sale_order_line(models.Model):
               related='product_id.qty_available_wo_wh',
               digits_compute=dp.get_precision('Product Unit of Measure'))
     incoming_qty = fields.\
-        Float('Incoming qty.', readonly=True,
-              related='product_id.incoming_qty',
+        Float('Incoming qty.', readonly=True, compute='_get_incoming_qty',
               digits_compute=dp.get_precision('Product Unit of Measure'))
+
+    @api.multi
+    def _get_incoming_qty(self):
+        for sol in self:
+            incoming_qty = 0
+            if sol.product_id:
+                product = sol.product_id
+                incoming_qty = product.incoming_qty + \
+                    product.qty_available_input_loc + product.qty_in_production
+            sol.incoming_qty = incoming_qty
 
 
 class SaleOrder(models.Model):

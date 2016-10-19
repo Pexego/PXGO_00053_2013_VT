@@ -50,6 +50,7 @@ class CrmClaimRma(models.Model):
     date_received = fields.Date('Received Date')
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
+    allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
 
     @api.onchange('claim_type')
     def onchange_claim_type(self):

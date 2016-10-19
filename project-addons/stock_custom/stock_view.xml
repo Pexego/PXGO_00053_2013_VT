@@ -133,5 +133,27 @@
             </field>
         </record>
 
+        <record id="stock_reserve_in_tree" model="ir.ui.view">
+            <field name="name">stock.reservation.tree</field>
+            <field name="model">stock.reservation</field>
+            <field name="inherit_id" ref="stock_reserve.view_stock_reservation_tree"/>
+            <field name="arch" type="xml">
+                <field name="date_planned" position="after">
+                    <field name="next_reception_date"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="stock_reserve_in_form" model="ir.ui.view">
+            <field name="name">stock.reservation.form</field>
+            <field name="model">stock.reservation</field>
+            <field name="inherit_id" ref="stock_reserve.view_stock_reservation_form"/>
+            <field name="arch" type="xml">
+                <field name="date_planned" position="after">
+                    <field name="next_reception_date"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

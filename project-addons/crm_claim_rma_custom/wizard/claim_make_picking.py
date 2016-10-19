@@ -63,3 +63,19 @@ class ClaimMakePicking(models.TransientModel):
                     self.claim_line_dest_location.not_sync
 
         return res
+
+    @api.model
+    def default_get(self, vals):
+        if self.env.context.get('type', False) == 'customer' and \
+                self.env.context.get('picking_type', False) == 'out' and \
+                self.env.context.get('partner_id', False):
+            partner_id = self.env.context.get('partner_id')
+            partner = self.env['res.partner'].browse(partner_id)
+            claim = self.env['crm.claim'].browse(
+                self.env.context.get('active_id', False))
+            if partner.commercial_partner_id.blocked_sales and not \
+                    claim.allow_confirm_blocked:
+                raise exceptions.Warning(
+                    _("Warning for %s") % partner.commercial_partner_id.name,
+                     _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.'))
+        return super(ClaimMakePicking, self).default_get(vals)
