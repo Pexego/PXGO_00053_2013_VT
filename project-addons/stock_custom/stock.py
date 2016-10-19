@@ -70,7 +70,13 @@ class stock_picking(models.Model):
                                          'move_id': move.id})
                         move.refresh()
 
-        return super(stock_picking, self).action_done()
+        res =  super(stock_picking, self).action_done()
+        for picking in self:
+            if picking.state == 'done' and picking.sale_id:
+                picking_template = self.env.ref('stock_custom.picking_done_template')
+                picking_template.with_context(
+                    lang=picking.partner_id.lang).send_mail(picking.id)
+        return res
 
 
 class stock_move(models.Model):

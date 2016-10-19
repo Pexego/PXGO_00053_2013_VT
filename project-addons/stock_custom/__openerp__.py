@@ -32,6 +32,7 @@
                  "stock_reserve_sale"],
     "data" : ["ir_attachment_view.xml",
               "stock_custom_report.xml",
+              "data/email_template.xml",
               "stock_view.xml", "partner_view.xml", 'product_view.xml',
               'sale_view.xml'],
     "installable": True
