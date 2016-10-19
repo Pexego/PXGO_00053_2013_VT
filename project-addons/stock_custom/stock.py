@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, exceptions, api, _
+from openerp.osv import fields as fields2
 
 
 class stock_picking(models.Model):
@@ -132,3 +133,40 @@ class StockReturnPicking(models.TransientModel):
                         move.warehouse_id.wh_input_stock_loc_id.id
 
         return new_picking, pick_type_id
+
+
+class StockReservation(models.Model):
+    _inherit = 'stock.reservation'
+
+    def _get_next_reception(self, cr, uid, ids, name, args, context=None):
+        result = dict.fromkeys(ids, False)
+        for res in self.browse(cr, uid, ids, context=context):
+            moves = self.pool.get('stock.move').search(
+                cr, uid,
+                [('state', 'in', ('draft', 'waiting', 'confirmed')),
+                 ('product_id', '=', res.product_id.id),
+                 ('location_id', '=',
+                  res.sale_id.warehouse_id.wh_input_stock_loc_id.id)],
+                order='date_expected asc', context=context)
+            if not moves:
+                ir_model_data_obj = self.pool.get('ir.model.data')
+                mdid = ir_model_data_obj._get_id(cr, 1, 'stock',
+                                                 'stock_location_suppliers')
+                supp_id = ir_model_data_obj.read(cr, 1, [mdid],
+                                                 ['res_id'])[0]['res_id']
+                moves = self.pool.get('stock.move').search(
+                    cr, uid,
+                    [('state', 'in', ('draft', 'waiting', 'confirmed')),
+                     ('product_id', '=', res.product_id.id),
+                     ('location_id', '=', supp_id)], order='date_expected asc',
+                    context=context)
+            if moves:
+                move = self.pool.get('stock.move').browse(cr, uid, moves[0],
+                                                          context)
+                result[res.id] = move.date_expected
+        return result
+
+    _columns = {
+        'date_planned': fields2.function(_get_next_reception,
+                                         string='Date planned', type='date')
+    }
