@@ -296,3 +296,8 @@ msgstr "Asistente para crear envíos desde la línea de reclamación"
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_from_picking_wizard
 msgid "Wizard to create pickings from picking lines"
 msgstr "Asistente para crear albaranes desde lineas de albarán"
+
+#. module: crm_claim_rma_custom
+#: field:crm.claim,allow_confirm_blocked:0
+msgid "Allow confirm"
+msgstr "Permitir envío"

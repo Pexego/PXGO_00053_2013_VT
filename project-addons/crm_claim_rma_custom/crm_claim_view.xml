@@ -31,6 +31,7 @@
             <field name="arch" type="xml">
                 <field name="rma_cost" position="after">
                     <field name="date_received"/>
+                    <field name="allow_confirm_blocked" attrs="{'invisible': [('claim_type', '!=', 'customer')]}"/>
                 </field>
                 <field name="email_from" position="after">
                     <field name="comercial"/>
