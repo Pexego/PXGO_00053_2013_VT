@@ -30,7 +30,7 @@
     'website': '',
     "depends": ['crm_claim_rma','account','account_refund_original',"product_virtual_stock_conservative",
                 'sale_display_stock', 'crm_rma_advance_location',
-                'custom_partner'],
+                'custom_partner', 'block_invoices'],
     "data": ['crm_claim_view.xml', 'mrp_repair_wkf.xml',
              'data/substate_data.xml', 'security/ir.model.access.csv',
              'wizard/claim_make_picking_view.xml', 'stock_view.xml',
