@@ -101,3 +101,8 @@ msgstr "Comercial"
 #: view:sale.order:stock_custom.view_sale_order_search
 msgid "all reservations assigned"
 msgstr "Todas las reservas asignadas"
+
+#. module: stock_custom
+#: field:stock.reservation,next_reception_date:0
+msgid "Next reception date"
+msgstr "Fecha de próxima recepción"
