@@ -128,6 +128,11 @@ msgid "Deliveries & Invoices"
 msgstr "Entregas y facturas"
 
 #. module: purchase_advance_payment
+#: field:account.purchase.voucher.wizard,due_date:0
+msgid "Due date"
+msgstr "Fecha vencimiento"
+
+#. module: purchase_advance_payment
 #: field:account.purchase.voucher.wizard,exchange_rate:0
 msgid "Exchange rate"
 msgstr "Tasa cambio"
@@ -137,6 +142,11 @@ msgstr "Tasa cambio"
 #: field:apply.on.account.purchase.amount,id:0
 msgid "ID"
 msgstr "ID"
+
+#. module: purchase_advance_payment
+#: help:account.purchase.voucher.wizard,due_date:0
+msgid "If this date is set, will be written on bank entry"
+msgstr "Si este campo tiene valor, este se escribirá en el apunte del banco"
 
 #. module: purchase_advance_payment
 #: model:ir.model,name:purchase_advance_payment.model_account_invoice
