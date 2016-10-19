@@ -71,7 +71,9 @@ class res_partner(models.Model):
             return
         min_sale_date = date.today() + relativedelta(months=-months_min_sale)
         max_sale_date = date.today() + relativedelta(months=-months_max_sale)
-        partner_ids = self.search(cr, uid, [('customer', '=', True)], context=context)
+        partner_ids = self.search(cr, uid, [('customer', '=', True),
+                                            ('is_company', '=', True)],
+                                  context=context)
         for partner in self.browse(cr, uid, partner_ids, context):
             last_sale_id = sale_obj.search(cr, uid,
                                            [('partner_id', '=', partner.id),
@@ -80,7 +82,7 @@ class res_partner(models.Model):
                                                              'shipping_except',
                                                              'invoice_except',
                                                              'done'])],
-                                           limit=1, order='date_order',
+                                           limit=1, order='date_order desc',
                                            context=context)
             if last_sale_id:
                 last_sale_str = sale_obj.browse(cr, uid, last_sale_id[0],
