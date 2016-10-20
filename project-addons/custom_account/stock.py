@@ -189,6 +189,8 @@ class SaleOrder(models.Model):
         if part and res.get('value', False):
             partner = self.pool['res.partner'].browse(cr, uid, part)
             res['value']['partner_tags'] = [x.id for x in partner.category_id]
+            if partner.section_id:
+                res['value']['section_id'] = partner.section_id.id
 
         return res
 

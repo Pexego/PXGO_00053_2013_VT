@@ -40,6 +40,8 @@ class AccountVoucherWizard(models.TransientModel):
     currency_amount = fields.Float("Curr. amount", digits=(16, 2),
                                    readonly=True)
     payment_ref = fields.Char("Ref.")
+    due_date = fields.Date("Due date", help="If this date is set, will be "
+                                            "written on bank entry")
 
     @api.constrains('amount_advance')
     def check_amount(self):
@@ -144,6 +146,8 @@ class AccountVoucherWizard(models.TransientModel):
                 if multicurrency:
                     line.currency_id = self[0].currency_id.id
                 if line.credit:
+                    if self[0].due_date:
+                        line.date_maturity = self[0].due_date
                     if multicurrency:
                         line.amount_currency = -self[0].amount_advance
                 else:
