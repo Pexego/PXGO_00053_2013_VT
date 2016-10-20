@@ -40,6 +40,7 @@ msgstr "Descuento % en Subtotal"
 
 #. module: sale_promotions_extend
 #: code:addons/sale_promotions_extend/rule.py:54
+#: selection:promos.rules.actions,action_type:0
 #, python-format
 msgid "Discount % on Tag"
 msgstr "Descuento % en Tag"
@@ -87,3 +88,23 @@ msgstr "Etiquetas"
 msgid "Untaxed Total"
 msgstr "Base imponible"
 
+
+#. module: sale_promotions_extend
+#: code:addons/sale_promotions_extend/rule.py:56
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Discount % on Brand"
+msgstr "Descuento % en marca"
+
+#. module: sale_promotions_extend
+#: code:addons/sale_promotions_extend/rule.py:55
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Discount % on Category"
+msgstr "Descuento % en categoría"
+
+#. module: sale_promotions_extend
+#: field:product.brand,code:0
+#: field:product.category,code:0
+msgid "Internal code"
+msgstr "Código interno"

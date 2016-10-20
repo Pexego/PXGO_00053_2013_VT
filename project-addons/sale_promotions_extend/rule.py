@@ -52,6 +52,8 @@ ATTRIBUTES = [
 ACTION_TYPES = [
     ('prod_disc_perc', _('Discount % on Product')),
     ('tag_disc_perc', _('Discount % on Tag')),
+    ('categ_disc_perc', _('Discount % on Category')),
+    ('brand_disc_perc', _('Discount % on Brand')),
     ('prod_disc_fix', _('Fixed amount on Product')),
     ('cart_disc_perc', _('Discount % on Sub Total')),
     ('cart_disc_fix', _('Fixed amount on Sub Total')),
@@ -210,7 +212,7 @@ class PromotionsRulesConditionsExprs(orm.Model):
                 raise Exception(
                         "Value for computed subtotal combination is invalid\n"
                         "Eg for right format is `['code1,code2',..]|120.50`")
-        #After all validations say True
+        # After all validations say True
         return True
 
     def serialise(self, attribute, comparator, value):
@@ -318,12 +320,28 @@ class PromotionsRulesConditionsExprs(orm.Model):
 class PromotionsRulesActions(orm.Model):
     _inherit = 'promos.rules.actions'
     _columns = {
-        'action_type':fields.selection(ACTION_TYPES, 'Action', required=True),
-        'product_tag':fields.char('Product Tag', size=100)
+        'action_type': fields.selection(ACTION_TYPES, 'Action', required=True)
     }
 
-    def action_tag_disc_perc(self, cursor, user,
-                               action, order, context=None):
+    def apply_perc_discount(self, cursor, user, action, order_line,
+                            context=None):
+        order_line_obj = self.pool.get('sale.order.line')
+        final_discount = eval(action.arguments)
+        if order_line.discount:
+            price_discounted = order_line_obj._calc_line_base_price(
+                cursor, user, order_line, context=context)
+            new_price_unit = price_discounted * \
+                (1 - (eval(action.arguments) / 100.0))
+            final_discount = 100.0 - (new_price_unit * 100.0 /
+                                      order_line.price_unit)
+        order_line_obj.write(cursor, user, order_line.id,
+                             {
+                              'discount': final_discount,
+                              'old_discount': order_line.discount,
+                              },
+                             context)
+
+    def action_tag_disc_perc(self, cursor, user, action, order, context=None):
         """
         Action for 'Discount % on Product'
         @param cursor: Database Cursor
@@ -332,17 +350,31 @@ class PromotionsRulesActions(orm.Model):
         @param order: sale order
         @param context: Context(no direct use).
         """
-
-        order_line_obj = self.pool.get('sale.order.line')
         for order_line in order.order_line:
-
-            if eval(action.product_tag) in order_line.product_tags:
-                order_line_obj.write(cursor,
-                                     user,
-                                     order_line.id,
-                                     {
-                                      'discount':eval(action.arguments),
-                                      },
-                                     context
-                                     )
+            if eval(action.product_code) in order_line.product_tags:
+                self.apply_perc_discount(cursor, user, action, order_line,
+                                         context)
         return {}
+
+    def action_categ_disc_perc(self, cursor, user, action, order,
+                               context=None):
+        for order_line in order.order_line:
+            if eval(action.product_code) == order_line.product_id.categ_id.code:
+                self.apply_perc_discount(cursor, user, action, order_line,
+                                         context)
+        return {}
+
+    def action_brand_disc_perc(self, cursor, user, action, order,
+                               context=None):
+        for order_line in order.order_line:
+            if eval(action.product_code) == \
+                    order_line.product_id.product_brand_id.code:
+                self.apply_perc_discount(cursor, user, action, order_line,
+                                         context)
+        return {}
+
+    def action_prod_disc_perc(self, cursor, user, action, order, context=None):
+        for order_line in order.order_line:
+            if order_line.product_id.code == eval(action.product_code):
+                self.apply_perc_discount(cursor, user, action, order_line,
+                                         context)
