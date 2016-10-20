@@ -72,8 +72,10 @@ class stock_picking(models.Model):
 
         res =  super(stock_picking, self).action_done()
         for picking in self:
-            if picking.state == 'done' and picking.sale_id:
-                picking_template = self.env.ref('stock_custom.picking_done_template')
+            if picking.state == 'done' and picking.sale_id and \
+                    picking.picking_type_code == 'outgoing':
+                picking_template = self.env.\
+                    ref('stock_custom.picking_done_template')
                 picking_template.with_context(
                     lang=picking.partner_id.lang).send_mail(picking.id)
         return res
