@@ -19,14 +19,23 @@
 #
 ##############################################################################
 
-from openerp import models
+from openerp import models, fields, api
 
 
 class AccountVoucher(models.Model):
 
     _inherit = "account.voucher"
 
-    def recompute_voucher_lines(self, cr, uid, ids, partner_id, journal_id, price, currency_id, ttype, date, context=None):
+    @api.one
+    def _get_amount_with_rate(self):
+        self.amount_with_currency_rate = self.amount * \
+            self.payment_rate
+
+    amount_with_currency_rate = fields.Float("Rate amount",
+                                             compute="_get_amount_with_rate")
+
+    def recompute_voucher_lines(self, cr, uid, ids, partner_id, journal_id,
+                                price, currency_id, ttype, date, context=None):
         res = super(AccountVoucher, self).\
             recompute_voucher_lines(cr, uid, ids, partner_id, journal_id,
                                     price, currency_id, ttype, date,

@@ -23,6 +23,7 @@
             <field name="inherit_id" ref="account_voucher.view_voucher_tree"/>
             <field name="arch" type="xml">
                 <field name="journal_id" position="before">
+                    <field name="amount_with_currency_rate"/>
                     <field name="payment_rate_currency_id"/>
                 </field>
             </field>

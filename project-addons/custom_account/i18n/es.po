@@ -250,6 +250,11 @@ msgid "Quotations"
 msgstr "Presupuestos"
 
 #. module: custom_account
+#: field:account.voucher,amount_with_currency_rate:0
+msgid "Rate amount"
+msgstr "Importe en tasa"
+
+#. module: custom_account
 #: help:account.invoice.line,purchase_supplier_reference:0
 msgid "Reference of the sales order or bid sent by your supplier. It's mainly used to do the matching when you receive the products as this reference is usually written on the delivery order sent by your supplier."
 msgstr "Referencia de las ventas enviadas por su proveedor. Es usado principalmente para reconocer los productos al recibirlos, esta referencia es escrita habitualmente en el albarán enviado por su proveedor."
