@@ -36,10 +36,11 @@ Features:
                 "openerp_sale_promotions",
                 "equivalent_products",
                 "stock_reserve_sale",
+                "product_brand",
                 "sale_product_customize"],
     "data": [
         "sale_view.xml",
-        "rules_view.xml"
+        "product_view.xml"
 
     ],
     "demo": [],
