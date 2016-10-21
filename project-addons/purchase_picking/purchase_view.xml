@@ -21,5 +21,16 @@
             <field name="context">{'product_receive': True, 'search_default_New': True}</field>
     </record>
 
+    <record id="purchase_order_line_tree_custom" model="ir.ui.view">
+        <field name="name">purchase.order.line.tree.custom</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+        </field>
+    </record>
+
 </data>
 </openerp>
