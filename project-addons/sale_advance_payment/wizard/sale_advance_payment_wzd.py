@@ -136,7 +136,7 @@ class AccountVoucherWizard(models.TransientModel):
                            'is_multi_currency': multicurrency,
                            'period_id': period_id.id,
                            'sale_id': sale_ref,
-                           'name': _("Advance Payment"),
+                           'name': _("Advance Payment") + " - " + sale.name,
                            'reference': self[0].payment_ref or sale.name
                            }
             voucher = voucher_obj.create(voucher_res)
