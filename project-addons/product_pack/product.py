@@ -22,6 +22,8 @@
 import math
 from openerp.osv import fields, orm
 import openerp.addons.decimal_precision as dp
+from openerp import api
+from collections import Counter
 
 
 class product_pack(orm.Model):
@@ -233,3 +235,16 @@ class product_product(orm.Model):
                 update_pack_products(cr, uid, pack_lines_to_update,
                                      context=context)
         return res
+
+    @api.multi
+    def get_pack(self):
+        pack = Counter({})
+        if not self.pack_line_ids:
+            return {}
+        for line in self.pack_line_ids:
+            if line.product_id.pack_line_ids:
+                line_pack = line.product_id.get_pack()
+                pack += Counter({x: line_pack[x] * line.quantity for x in line_pack})
+            else:
+                pack[line.product_id.id] = line.quantity
+        return dict(pack)
