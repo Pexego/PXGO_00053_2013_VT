@@ -13,6 +13,9 @@
                 <filter string="Company" position="after">
                     <filter name="area_id" string="Area" context="{'group_by':'area_id'}"/>
                 </filter>
+                <filter string="Company" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </filter>
             </field>
         </record>
 
