@@ -156,14 +156,19 @@ class StockReservation(models.Model):
                 [('state', 'in', ('draft', 'waiting', 'confirmed')),
                  ('product_id', '=', res.product_id.id),
                  ('location_id', '=',
-                  res.sale_id.warehouse_id.wh_input_stock_loc_id.id)],
+                  res.sale_id.warehouse_id.wh_input_stock_loc_id.id),
+                 ('location_dest_id', 'child_of',
+                  [res.sale_id.warehouse_id.view_location_id.id])],
                 order='date_expected asc')
             if not moves:
                 supp_id = self.env.ref('stock.stock_location_suppliers').id
                 moves = self.env['stock.move'].search(
                     [('state', 'in', ('draft', 'waiting', 'confirmed')),
                      ('product_id', '=', res.product_id.id),
-                     ('location_id', '=', supp_id)], order='date_expected asc')
+                     ('location_id', '=', supp_id),
+                     ('location_dest_id', 'child_of',
+                      [res.sale_id.warehouse_id.view_location_id.id])],
+                    order='date_expected asc')
             if moves:
                 date_expected = moves[0].date_expected
             res.next_reception_date = date_expected
