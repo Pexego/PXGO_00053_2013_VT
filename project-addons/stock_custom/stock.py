@@ -164,7 +164,8 @@ class StockReservation(models.Model):
             if not moves:
                 supp_id = self.env.ref('stock.stock_location_suppliers').id
                 moves = self.env['stock.move'].search(
-                    [('state', 'in', ('draft', 'waiting', 'confirmed')),
+                    [('state', 'in',
+                      ('draft', 'waiting', 'confirmed', 'assigned')),
                      ('product_id', '=', res.product_id.id),
                      ('location_id', '=', supp_id),
                      ('location_dest_id', 'child_of',
