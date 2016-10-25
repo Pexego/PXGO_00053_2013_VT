@@ -153,7 +153,8 @@ class StockReservation(models.Model):
         for res in self:
             date_expected = False
             moves = self.env['stock.move'].search(
-                [('state', 'in', ('draft', 'waiting', 'confirmed')),
+                [('state', 'in',
+                  ('draft', 'waiting', 'confirmed', 'assigned')),
                  ('product_id', '=', res.product_id.id),
                  ('location_id', '=',
                   res.sale_id.warehouse_id.wh_input_stock_loc_id.id),
