@@ -32,5 +32,38 @@
         </field>
     </record>
 
+    <record id="view_purchase_order_filter" model="ir.ui.view">
+        <field name="name">purchase.order.list.select</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <filter name="message_unread" position="after">
+                <filter name="not_cancelled" string="Not Cancelled" domain="[('state','!=','cancel')]"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state','=','cancel')]"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="purchase.purchase_rfq" model="ir.actions.act_window">
+        <field name="name">Request for Quotation ov</field>
+        <field name="context">{'search_default_not_cancelled': 1}</field>
+    </record>
+
+    <!--<record id="purchase_form_action" model="ir.actions.act_window">
+        <field name="name">Request for Quotations</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="inherit_id" ref="purchase.purchase_rfq"/>
+        <field name="context">{'search_default_not_cancelled': 1}</field>
+    </record>-->
+
+    <!--<record id="purchase_rfq" model="ir.actions.act_window">
+        <field name="type">ir.actions.act</field>
+        <field name="res_model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_rfq"/>
+        <field name="view_id" ref="view_purchase_order_filter_ov"/>
+        <field name="search_view_id" ref="view_purchase_order_filter_ov"/>
+        <field name="context">{'search_default_not_cancelled': 1}</field>
+    </record>-->
+
 </data>
 </openerp>
