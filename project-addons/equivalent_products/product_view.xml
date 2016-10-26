@@ -15,20 +15,6 @@
             </field>
         </record>
 
-        <record id="product_add_tags_search" model="ir.ui.view">
-            <field name="name">product.add.tags.search</field>
-            <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_search_form_view"/>
-            <field name="arch" type="xml">
-                <field name="name" position="after">
-                   <field name="tag_ids" string="Tags"/>
-                </field>
-                <field name="categ_id" position="attributes">
-                    <attribute name="filter_domain"></attribute>
-                </field>
-            </field>
-        </record>
-
         <!-- product.tag views-->
         <record id="product_tag_form" model="ir.ui.view">
             <field name="name">product.tag.form</field>
