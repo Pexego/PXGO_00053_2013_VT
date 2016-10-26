@@ -34,7 +34,7 @@ class SyncLog(BaseModel):
                           'odoo_id': self.odoo_id}]}
         try:
             print "DATA: ", data
-            resp = requests.post(url, data=json.dumps(data), timeout=6)
+            resp = requests.post(url, data=json.dumps(data), timeout=180)
             print "RESP: ", resp
             if resp.status_code == 200:
                 self.sync = True
