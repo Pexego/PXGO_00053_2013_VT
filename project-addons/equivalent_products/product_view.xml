@@ -15,35 +15,6 @@
             </field>
         </record>
 
-        <record id="product_search_form_view" model="ir.ui.view">
-            <field name="name">product.search.form</field>
-            <field name="model">product.product</field>
-            <field name="priority">16</field>
-            <field name="inherit_id" ref="product_brand.product_search_form_view"/>
-            <field name="arch" type="xml">
-                <group string="Group by..." position="replace">
-                    <filter string="Brand" name="groupby_brand" domain="[]" context="{'group_by' : 'product_brand_id'}" position="replace"/>
-                </group>
-            </field>
-        </record>
-
-        <record id="product_add_tags_search" model="ir.ui.view">
-            <field name="name">product.add.tags.search</field>
-            <field name="model">product.product</field>
-            <field name="priority">16</field>
-            <field name="inherit_id" ref="product.product_search_form_view"/>
-            <field name="arch" type="xml">
-                <field name="name" position="after">
-                   <field name="tag_ids" string="Tags"/>
-                   <field name="seller_id" string="Main Supplier"/>
-                </field>
-                <field name="categ_id" position="attributes">
-                    <attribute name="filter_domain"></attribute>
-                </field>
-                <field name="product_brand_id" position="replace"/>
-            </field>
-        </record>
-
         <!-- product.tag views-->
         <record id="product_tag_form" model="ir.ui.view">
             <field name="name">product.tag.form</field>
