@@ -28,5 +28,22 @@
             </field>
         </record>
 
+        <delete model="ir.ui.view" id="product_brand.product_search_form_view"/>
+
+        <record id="product_add_tags_search" model="ir.ui.view">
+            <field name="name">product.add.tags.search</field>
+            <field name="model">product.product</field>
+            <field name="priority">16</field>
+            <field name="inherit_id" ref="product.product_search_form_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                   <field name="seller_id" string="Main Supplier"/>
+                </field>
+                <field name="categ_id" position="attributes">
+                    <attribute name="filter_domain"></attribute>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

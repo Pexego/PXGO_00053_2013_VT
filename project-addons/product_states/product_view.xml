@@ -28,12 +28,8 @@
             <field name="priority">16</field>
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
-                <label for="categ_id" position="attributes">
-                    <attribute name="invisible">True</attribute>
-                </label>
-                <field name="categ_id" colspan="3" nolabel="1" position="attributes">
-                    <attribute name="invisible">True</attribute>
-                </field>
+                <label for="categ_id" position="replace"/>
+                <field name="categ_id" colspan="3" nolabel="1" position="replace"/>
                 <group name="sale_condition" position="before">
                     <group>
                         <label for="categ_id" string="Internal Category"/>
