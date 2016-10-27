@@ -45,9 +45,12 @@ class SyncModel(database.Model):
         from sync_log import SyncLog
         from implemented_models import MODELS_CLASS
         if is_update and self.MOD_NAME in MODELS_CLASS.keys():
-            sync_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            log = SyncLog.create(odoo_id=self.odoo_id, model=self.MOD_NAME,
-                                 operation='update', sync_date=sync_date, to_sync=True)
+            exist_id = SyncLog.select().where(SyncLog.to_sync == True, SyncLog.operation == "update",
+                                              SyncLog.odoo_id == self.odoo_id, SyncLog.model == self.MOD_NAME).limit(1)
+            if not exist_id: 
+                sync_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                log = SyncLog.create(odoo_id=self.odoo_id, model=self.MOD_NAME,
+                                     operation='update', sync_date=sync_date, to_sync=True)
         res = super(SyncModel, self).save(force_insert, only)
         #if is_update and self.MOD_NAME in MODELS_CLASS.keys():
         #    log.launch_sync()
