@@ -33,7 +33,7 @@
                 <group name="sale_condition" position="before">
                     <group>
                         <label for="categ_id" string="Internal Category"/>
-                        <div><field name="categ_id" class="oe_inline"/></div>
+                        <div><field name="categ_id" colspan="3" nolabel="1"/></div>
                     </group>
                 </group>
             </field>
