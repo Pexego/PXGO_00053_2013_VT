@@ -113,7 +113,7 @@ class StockInvoiceOnShippingTests(models.TransientModel):
         inv_type = journal2type.get(journal.type) or 'out_invoice'
         context['inv_type'] = inv_type
 
-        pick_ids = picking_pool.sudo().browse(pick_ids)
+        pick_ids = picking_pool.sudo().with_context(context).browse(pick_ids)
         res = pick_ids.action_invoice_create(journal_id=int(data.journal_id),
                                              group=data.group,
                                              type=inv_type)
