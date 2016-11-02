@@ -37,6 +37,7 @@
             <field name="inherit_id" ref="product.product_search_form_view"/>
             <field name="arch" type="xml">
                 <field name="name" position="after">
+                    <field name="tag_ids" string="Tag"/>
                    <field name="seller_id" string="Main Supplier"/>
                 </field>
                 <field name="categ_id" position="attributes">
