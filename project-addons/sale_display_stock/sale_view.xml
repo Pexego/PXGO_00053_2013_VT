@@ -12,7 +12,7 @@
                     <field name="incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
                 </xpath>
-                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="after">
+                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="after">
                     <field name="qty_available"/>
                     <field name="incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
