@@ -24,7 +24,7 @@ openerp.reserve_without_save_sale = function(instance) {
                     'qty': data.product_uom_qty,
                     'uom': data.product_uom,
                     'price_unit': data.price_unit,
-                    'name': data.name
+                    'name': options.readonly_fields.name
                 }
                 if (this.parent_view.datarecord.warehouse_id instanceof Array) {
                     dat['warehouse'] = this.parent_view.datarecord.warehouse_id[0]
