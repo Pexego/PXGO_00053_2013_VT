@@ -36,5 +36,18 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">sale.order.search</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@string='Send by Email']" position="attributes">
+                    <attribute name="states">draft,reserve</attribute>
+                     <!--<button name="action_quotation_send" string="Send by Email" type="object" states="sent,progress,manual,reserve" class="oe_highlight" groups="base.group_user"/>-->
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </openerp>
