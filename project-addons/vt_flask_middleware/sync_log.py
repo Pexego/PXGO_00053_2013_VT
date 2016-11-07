@@ -2,7 +2,8 @@
 from peewee import CharField, IntegerField, DateTimeField, BooleanField
 from app import app
 from database import BaseModel
-import requests
+import requests, requests.utils
+import pickle
 import json
 import hmac
 import time
@@ -67,8 +68,15 @@ class SyncLog(BaseModel):
                                  'odoo_id': record.odoo_id})
         try:
             print "DATA: ", data
+            cookies_file = open('cookies.data', 'w+b')
+            try:
+                cookies = requests.utils.cookiejar_from_dict(pickle.load(cookies_file))
+            except EOFError:
+                cookies = {}
             resp = requests.post(url, data=json.dumps(data),
-                                 timeout=6*len(objs))
+                                 timeout=6*len(objs), cookies=cookies)
+            pickle.dump(requests.utils.dict_from_cookiejar(resp.cookies), cookies_file)
+            cookies_file.close()
             print "RESP: ", resp
             if resp.status_code == 200:
                 sync = True
