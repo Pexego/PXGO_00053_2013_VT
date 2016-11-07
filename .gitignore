@@ -27,3 +27,4 @@ project-addons/asperience_edi/data_export
 *.db
 .mr.developer.cfg
 eggs-custom
+cookies.data
