@@ -36,5 +36,17 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="view_order_form" model="ir.ui.view">
+            <field name="name">sale.order.search</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <button string="Send by Email" position="before">
+                    <button name="action_quotation_send_reserve" string="Send by Email" type="object" states="reserve" class="oe_highlight" groups="base.group_user"/>
+                </button>
+            </field>
+        </record>
+
     </data>
 </openerp>

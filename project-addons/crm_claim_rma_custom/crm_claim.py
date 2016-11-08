@@ -45,6 +45,7 @@ class CrmClaimRma(models.Model):
     priority = fields.Selection(default=0, selection=[('1', 'High'),
                                                       ('2', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
+    country = fields.Many2one("res.country", string="Country", related='partner_id.country_id')
     date = fields.Date('Claim Date', select=True,
                        default=fields.Date.context_today)
     date_received = fields.Date('Received Date')

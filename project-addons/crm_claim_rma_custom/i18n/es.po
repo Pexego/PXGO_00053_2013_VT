@@ -63,6 +63,18 @@ msgid "Comercial"
 msgstr "Comercial"
 
 #. module: crm_claim_rma_custom
+#: field:crm.claim,country:0
+#: field:crm.claim.cost.report,country_id:0
+msgid "Country"
+msgstr "País"
+
+#. module: crm_claim_rma_custom
+#: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Country"
+msgstr "País"
+
+
+#. module: crm_claim_rma_custom
 #: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
 msgid "Create repair"
 msgstr "Crear reparación"
