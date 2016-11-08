@@ -42,10 +42,9 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//button[@string='Send by Email']" position="attributes">
-                    <attribute name="states">draft,reserve</attribute>
-                     <!--<button name="action_quotation_send" string="Send by Email" type="object" states="sent,progress,manual,reserve" class="oe_highlight" groups="base.group_user"/>-->
-                </xpath>
+                <button string="Send by Email" position="before">
+                    <button name="action_quotation_send_reserve" string="Send by Email" type="object" states="reserve" class="oe_highlight" groups="base.group_user"/>
+                </button>
             </field>
         </record>
 
