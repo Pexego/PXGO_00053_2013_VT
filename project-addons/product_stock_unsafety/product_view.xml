@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <field name="last_sixty_days_sales" position="after">
                     <field name="remaining_days_sale"/>
+                    <field name="joking_index"/>
                     <field name="replacement_id"/>
                 </field>
             </field>

@@ -57,11 +57,6 @@ msgid "ID"
 msgstr "ID"
 
 #. module: purchase_proposal
-#: field:product.product,joking_index:0
-msgid "Joking index"
-msgstr "Índice de puteamiento"
-
-#. module: purchase_proposal
 #: field:stock.days.positive,__last_update:0
 msgid "Last Modified on"
 msgstr "Últ. actualización el"

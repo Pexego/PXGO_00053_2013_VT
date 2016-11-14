@@ -49,12 +49,16 @@ class product_product(models.Model):
             stock_days = round(virtual_available / stock_per_day)
 
         self.remaining_days_sale = stock_days
+        self.joking_index = stock_days * self.standard_price
 
     remaining_days_sale = fields.Float('Remaining Stock Days', readonly=True,
                                        compute='_calc_remaining_days',
                                        help="Stock measure in days of sale "
                                        "computed consulting sales in sixty "
-                                       "days with stock.")
+                                       "days with stock.", multi=True)
+    joking_index = fields.Float("Joking index", readonly=True,
+                                compute='_calc_remaining_days',
+                                multi=True)
     replacement_id = fields.Many2one("product.product", "Replaced by")
     min_days_id = fields.Many2one("minimum.day", "Stock Minimum Days",
                                   related="orderpoint_ids.min_days_id",

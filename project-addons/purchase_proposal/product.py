@@ -32,7 +32,6 @@ class ProductProduct(models.Model):
                                     digits=(16, 2))
     biggest_sale_id = fields.Many2one("sale.order", "Biggest order",
                                       readonly=True)
-    joking_index = fields.Float("Joking index", readonly=True)
     order_cycle = fields.Integer('Order cycle')
     transport_time = fields.Integer('Transport time')
     security_margin = fields.Integer('Security margin')
@@ -95,8 +94,7 @@ class ProductProduct(models.Model):
 
                 vals = {'last_sixty_days_sales': qty,
                         'biggest_sale_qty': biggest_move_qty,
-                        'biggest_sale_id': biggest_order,
-                        'joking_index': qty * product.standard_price}
+                        'biggest_sale_id': biggest_order}
 
                 product.write(vals)
 
