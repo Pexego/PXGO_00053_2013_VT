@@ -88,6 +88,18 @@ class ResPartner(models.Model):
                 raise exceptions.\
                     ValidationError(_('Partner ref must be unique'))
 
+    @api.constrains('vat', 'is_company', 'supplier', 'customer', 'active')
+    def check_unique_vat(self):
+        if self.is_company and self.active:
+            ids = self.search([('vat', '=', self.vat),
+                               ('is_company', '=', True),
+                               ('id', '!=', self.id),
+                               ('supplier', '=', self.supplier),
+                               ('customer', '=', self.customer)])
+            if ids:
+                raise exceptions.\
+                    ValidationError(_('VAT must be unique'))
+
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
