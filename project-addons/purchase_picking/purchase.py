@@ -19,18 +19,20 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _
+from openerp import models, fields, api
 
 
 class purchase_order(models.Model):
 
     _inherit = 'purchase.order'
 
-    picking_created = fields.Boolean('Picking created', compute='is_picking_created')
+    picking_created = fields.Boolean('Picking created',
+                                     compute='is_picking_created')
 
     @api.multi
     def test_moves_done(self):
-        '''PO is done at the delivery side if all the incoming shipments are done'''
+        '''PO is done at the delivery side if all the incoming shipments
+           are done'''
         for purchase in self:
             for line in purchase.order_line:
                 for move in line.move_ids:
@@ -48,6 +50,7 @@ class purchase_order(models.Model):
             This function returns a list of dictionary ready to be used in
             stock.move's create()
         """
+        purchase_line_obj = self.pool['purchase.order.line']
         res = super(purchase_order, self)._prepare_order_line_move(
             cr, uid, order, order_line, picking_id, group_id, context)
         for move_dict in res:
@@ -57,6 +60,29 @@ class purchase_order(models.Model):
             move_dict['partner_id'] = order.partner_id.id
             if order.partner_ref:
                 move_dict['origin'] += ":" + order.partner_ref
+            if move_dict.get('purchase_line_id', False):
+                purchase_line = purchase_line_obj.\
+                    browse(cr, uid, move_dict['purchase_line_id'])
+                if purchase_line.discount:
+                    price_unit = order_line.price_unit * \
+                        (1 - order_line.discount / 100.0)
+                    if order_line.taxes_id:
+                        taxes = self.pool['account.tax'].\
+                            compute_all(cr, uid, order_line.taxes_id,
+                                        price_unit, 1.0,
+                                        order_line.product_id,
+                                        order.partner_id)
+                        price_unit = taxes['total']
+                    if order_line.product_uom.id != \
+                            order_line.product_id.uom_id.id:
+                        price_unit *= order_line.product_uom.factor / \
+                            order_line.product_id.uom_id.factor
+                    if order.currency_id.id != order.company_id.currency_id.id:
+                        price_unit = self.pool.get('res.currency').\
+                            compute(cr, uid, order.currency_id.id,
+                                    order.company_id.currency_id.id,
+                                    price_unit, round=False, context=context)
+                    move_dict['price_unit'] = price_unit
         return res
 
     def action_picking_create(self, cr, uid, ids, context=None):
@@ -67,25 +93,9 @@ class purchase_order(models.Model):
             self._create_stock_moves(cr, uid, order, order.order_line,
                                      False, context=context)
 
-    def _create_stock_moves(self, cr, uid, order, order_lines, picking_id=False, context=None):
-        """Creates appropriate stock moves for given order lines, whose can optionally create a
-        picking if none is given or no suitable is found, then confirms the moves, makes them
-        available, and confirms the pickings.
-
-        If ``picking_id`` is provided, the stock moves will be added to it, otherwise a standard
-        incoming picking will be created to wrap the stock moves (default behavior of the stock.move)
-
-        Modules that wish to customize the procurements or partition the stock moves over
-        multiple stock pickings may override this method and call ``super()`` with
-        different subsets of ``order_lines`` and/or preset ``picking_id`` values.
-
-        :param browse_record order: purchase order to which the order lines belong
-        :param list(browse_record) order_lines: purchase order line records for which picking
-                                                and moves should be created.
-        :param int picking_id: optional ID of a stock picking to which the created stock moves
-                               will be added. A new picking will be created if omitted.
-        :return: None
-
+    def _create_stock_moves(self, cr, uid, order, order_lines,
+                            picking_id=False, context=None):
+        """
         MOD: Se sobreescribe la función para no confirmar los movimientos.
         """
         stock_move = self.pool.get('stock.move')
@@ -104,6 +114,7 @@ class purchase_order(models.Model):
                         context=context):
                     move = stock_move.create(cr, uid, vals, context=context)
                     todo_moves.append(move)
+
 
 class purchase_order_line(models.Model):
     _inherit = 'purchase.order.line'

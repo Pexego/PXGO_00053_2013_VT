@@ -27,7 +27,7 @@
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
     "depends": ['base',
-                'purchase',
+                'purchase_discount',
                 'stock',
                 'stock_reserve'],
     "data": ['purchase_view.xml',
