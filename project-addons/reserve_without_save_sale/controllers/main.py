@@ -102,7 +102,7 @@ class WebsiteReservation(http.Controller):
                                       post['old_unique_js_id'])],
                            context=context)
                 new_data = {
-                    'name': post['name'],
+                    'name': post.get('name', product.default_code),
                     'product_id': post['product_id'],
                     'unique_js_id': post['unique_js_id']
                 }
