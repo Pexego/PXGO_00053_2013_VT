@@ -19,12 +19,12 @@
 #
 ##############################################################################
 
-from openerp import fields, models
-
+from openerp import fields, api, models, _
 
 class stock_picking(models.Model):
 
     _inherit = 'stock.picking'
+
 
     document_ids = fields.Many2many(
         'stock.document',
@@ -32,3 +32,10 @@ class stock_picking(models.Model):
         'document_id',
         'picking_id',
         'Documents')
+
+    qty = fields.Integer('qty', compute='_calculate_qty')
+
+    @api.one
+    def _calculate_qty(self):
+        picking_name = self.name
+        self.qty = sum(move_lines.product_uom_qty for move_lines in self.move_lines)
