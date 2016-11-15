@@ -79,6 +79,12 @@ class product_product(osv.osv):
                                       default=0.5),
         'pvd3_relation': fields.float('PVP 3 / PVD 3 relation', digits=(4, 2),
                                       default=0.5),
+        'pvd1_price': fields.float('PVD 1 price', digits_compute=
+                                   dp.get_precision('Product Price')),
+        'pvd2_price': fields.float('PVD 2 price', digits_compute=
+                                   dp.get_precision('Product Price')),
+        'pvd3_price': fields.float('PVD 3 price', digits_compute=
+                                   dp.get_precision('Product Price')),
         'pvi1_price': fields.float('PVI 1 price', digits_compute =
                                    dp.get_precision('Product Price')),
         'pvi2_price': fields.float('PVI 2 price', digits_compute =
@@ -140,3 +146,15 @@ class product_product(osv.osv):
                                                ['pvi3_price',
                                                 'standard_price'], 10), }),
     }
+
+    def pvd1_price_change(self, cr, uid, ids, pvd1_price, pvd1_relation=0.5):
+        res = {'value': {'lst_price': (1.0 / pvd1_relation) * pvd1_price}}
+        return res
+
+    def pvd2_price_change(self, cr, uid, ids, pvd2_price, pvd2_relation=0.5):
+        res = {'value': {'list_price2': (1.0 / pvd2_relation) * pvd2_price}}
+        return res
+
+    def pvd3_price_change(self, cr, uid, ids, pvd3_price, pvd3_relation=0.5):
+        res = {'value': {'list_price3': (1.0 / pvd3_relation) * pvd3_price}}
+        return res

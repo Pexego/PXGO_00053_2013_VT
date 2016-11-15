@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-24 19:55+0000\n"
-"PO-Revision-Date: 2016-01-24 19:55+0000\n"
+"POT-Creation-Date: 2016-11-15 12:42+0000\n"
+"PO-Revision-Date: 2016-11-15 12:42+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,62 +23,92 @@ msgstr "Coste Comercial"
 #. module: sale_customer_discount
 #: field:product.product,margin_pvd1:0
 msgid "PVD 1 Margin"
-msgstr "Margen PVD 1"
+msgstr "Margen PVD_A"
+
+#. module: sale_customer_discount
+#: field:product.product,pvd1_price:0
+msgid "PVD 1 price"
+msgstr "PVD_A"
 
 #. module: sale_customer_discount
 #: field:product.product,margin_pvd2:0
 msgid "PVD 2 Margin"
-msgstr "Margen PVD 2"
+msgstr "Margen PVD_B"
+
+#. module: sale_customer_discount
+#: field:product.product,pvd2_price:0
+msgid "PVD 2 price"
+msgstr "PVD_B"
 
 #. module: sale_customer_discount
 #: field:product.product,margin_pvd3:0
 msgid "PVD 3 Margin"
-msgstr "Margen PVD 3"
+msgstr "Margen PVD_C"
+
+#. module: sale_customer_discount
+#: field:product.product,pvd3_price:0
+msgid "PVD 3 price"
+msgstr "PVD_C"
 
 #. module: sale_customer_discount
 #: field:product.product,margin_pvi1:0
 msgid "PVI 1 Margin"
-msgstr "Margen PVI 1"
+msgstr "Margen PVI_A"
 
 #. module: sale_customer_discount
 #: field:product.product,pvi1_price:0
 msgid "PVI 1 price"
-msgstr "Precio PVI 1"
+msgstr "PVI_A"
 
 #. module: sale_customer_discount
 #: field:product.product,margin_pvi2:0
 msgid "PVI 2 Margin"
-msgstr "Margen PVI 2"
+msgstr "Margen PVI_B"
 
 #. module: sale_customer_discount
 #: field:product.product,pvi2_price:0
 msgid "PVI 2 price"
-msgstr "Precio PVI 2"
+msgstr "PVI_B"
 
 #. module: sale_customer_discount
 #: field:product.product,margin_pvi3:0
 msgid "PVI 3 Margin"
-msgstr "Margen PVI 3"
+msgstr "Margen PVI_C"
 
 #. module: sale_customer_discount
 #: field:product.product,pvi3_price:0
 msgid "PVI 3 price"
-msgstr "Precio PVI 3"
+msgstr "PVI_C"
 
 #. module: sale_customer_discount
 #: field:product.product,pvd2_relation:0
 msgid "PVP 2 / PVD 2 relation"
-msgstr "Relación PVP 2 / PVD 2"
+msgstr "Relación PVP_B / PVD_B"
 
 #. module: sale_customer_discount
 #: field:product.product,pvd3_relation:0
 msgid "PVP 3 / PVD 3 relation"
-msgstr "Relación PVP 3 / PVD 3"
+msgstr "Relación PVP_C / PVD_C"
+
+#. module: sale_customer_discount
+#: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP A"
+msgstr "PVP A"
+
+#. module: sale_customer_discount
+#: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP B"
+msgstr "PVP B"
+
+#. module: sale_customer_discount
+#: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP C"
+msgstr "PVP C"
 
 #. module: sale_customer_discount
 #: field:product.product,pvd1_relation:0
 msgid "PVP/PVD 1 relation"
-msgstr "Relación PVP/PVD 1"
+msgstr "Relación PVP_A / PVD_A"
 
 #. module: sale_customer_discount
 #: view:product.product:sale_customer_discount.product_normal_form_view_add_discount
@@ -93,9 +123,9 @@ msgstr "Producto"
 #. module: sale_customer_discount
 #: field:product.product,list_price2:0
 msgid "Sale Price"
-msgstr "Precio al público 2"
+msgstr "PVP_B"
 
 #. module: sale_customer_discount
 #: field:product.product,list_price3:0
 msgid "Sale Price 2"
-msgstr "Precio al público 3"
+msgstr "PVP_C"

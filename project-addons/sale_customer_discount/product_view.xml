@@ -34,17 +34,20 @@
                 <field name="lst_price" position="replace"/>
                 <xpath expr="//page[@string='Information']/group" position="after">
 
-                    <group colspan="6" col="6" string="Prices">
-                     <field name="lst_price"/>
-                     <field name="pvd1_relation" attrs="{'readonly':'true'}"/>
+                    <group colspan="8" col="8" string="Prices">
+                     <field name="pvd1_price" on_change="pvd1_price_change(pvd1_price, pvd1_relation)"/>
+                     <field name="pvd1_relation" readonly="1"/>
+                     <field name="lst_price" readonly="1"/>
                      <label for="margin_pvd1"/><div><field name="margin_pvd1" class="oe_inline"/> %% </div>
 
-                     <field name="list_price2"/>
-                     <field name="pvd2_relation" attrs="{'readonly':'true'}"/>
+                     <field name="pvd2_price" on_change="pvd2_price_change(pvd2_price, pvd2_relation)"/>
+                     <field name="pvd2_relation" readonly="1"/>
+                     <field name="list_price2" readonly="1"/>
                      <label for="margin_pvd2"/><div><field name="margin_pvd2" class="oe_inline"/> %% </div>
 
-                     <field name="list_price3"/>
-                     <field name="pvd3_relation" attrs="{'readonly':'true'}"/>
+                     <field name="pvd3_price" on_change="pvd3_price_change(pvd3_price, pvd3_relation)"/>
+                     <field name="pvd3_relation" readonly="1"/>
+                     <field name="list_price3" readonly="1"/>
                      <label for="margin_pvd3"/><div><field name="margin_pvd3" class="oe_inline"/> %% </div>
                      </group>
                      <group colspan="4" col="4">
@@ -74,6 +77,40 @@
                     <field name="list_price2"/>
                     <field name="list_price3"/>
                 </field>
+            </field>
+        </record>
+
+        <record id="product.product_template_action" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="product.product_product_tree_view"/>
+            <field name="context">{"search_default_filter_to_sell":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3']}</field>
+        </record>
+
+        <record id="purchase.product_normal_action_puchased" model="ir.actions.act_window">
+            <field name="name">Products</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{"search_default_filter_to_purchase":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3']}</field>
+            <field name="search_view_id" eval="False"/> <!-- Force empty -->
+            <field name="view_id" eval="False"/> <!-- Force empty -->
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to define a new product.
+              </p><p>
+                You must define a product for everything you purchase, whether
+                it's a physical product, a consumable or services you buy to
+                subcontractants.
+              </p><p>
+                The product form contains detailed information to improve the
+                purchase process: prices, procurement logistics, accounting data,
+                available suppliers, etc.
+              </p>
             </field>
         </record>
 

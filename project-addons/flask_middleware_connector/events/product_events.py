@@ -52,13 +52,10 @@ class ProductExporter(Exporter):
                     'pvi_3': product.pvi3_price,
                     'uom_name': product.uom_id.name,
                     'last_sixty_days_sales': product.last_sixty_days_sales,
-                    'brand_id': product.product_brand_id.id}
-            vals['pvd_1'] = product.lst_price - (product.pvd1_relation *
-                                                 product.lst_price)
-            vals['pvd_2'] = product.list_price2 - (product.pvd2_relation *
-                                                   product.list_price2)
-            vals['pvd_3'] = product.list_price3 - (product.pvd3_relation *
-                                                   product.list_price3)
+                    'brand_id': product.product_brand_id.id,
+                    'pvd_1' = product.pvd1_price,
+                    'pvd_2' = product.pvd2_price,
+                    'pvd_3' = product.pvd3_price}
             if product.show_stock_outside:
                 stock_qty = eval("product." + self.backend_record.
                                  product_stock_field_id.name,
