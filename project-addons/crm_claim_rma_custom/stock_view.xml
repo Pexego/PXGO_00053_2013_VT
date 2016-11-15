@@ -21,7 +21,7 @@
             <field name="arch" type="xml">
                 <field name="priority" position="after">
                     <field name="odoo_management"/>
-                    <field name="not_sync" groups="base.group_no_one"/>
+                    <field name="not_sync"/>
                 </field>
                 <button name="do_enter_transfer_details" position="replace">
                     <button name="do_enter_transfer_details" attrs="{'invisible': ['|',('state','not in',['assigned','partially_available']),('not_sync', '=',False)]}" string="Transfer" groups="stock.group_stock_user" type="object" class="oe_highlight"/>
