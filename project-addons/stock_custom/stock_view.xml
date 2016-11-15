@@ -116,6 +116,9 @@
                <button name="%(stock.move_scrap)d" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </button>
+                <field name="product_uom_qty" position="attributes">
+                    <attribute name="sum">Qty.</attribute>
+                </field>
             </field>
         </record>
 
