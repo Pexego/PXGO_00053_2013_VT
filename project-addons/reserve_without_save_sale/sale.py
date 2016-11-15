@@ -89,6 +89,9 @@ class sale_order_line(models.Model):
                                                    line_data[1]),
                                                   ('state', '!=',
                                                    'cancel')])
+                    while len(reserves) > 1:
+                        reserv = reserves.pop()
+                        reserv_obj.unlink(reserv)
                     if reserves and not reserves[0].sale_line_id:
                         reserves[0].sale_line_id = line.id
                         reserves[0].origin = line.order_id.name

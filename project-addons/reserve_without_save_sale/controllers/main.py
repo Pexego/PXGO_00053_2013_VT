@@ -46,7 +46,7 @@ class WebsiteReservation(http.Controller):
                 'product_uom': int(post['uom']),
                 'product_uom_qty': float(post['qty']),
                 'date_validity': False,
-                'name': post['name'],
+                'name': post.get('name', product.default_code),
                 'location_id': warehouse.lot_stock_id.id,
                 'price_unit': float(post['price_unit']),
                 'unique_js_id': post['unique_js_id']
