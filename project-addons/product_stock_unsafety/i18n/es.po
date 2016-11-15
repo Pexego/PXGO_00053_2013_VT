@@ -67,6 +67,11 @@ msgid "Assign purchase"
 msgstr "Asignar compra"
 
 #. module: product_stock_unsafety
+#: field:product.product,joking_index:0
+msgid "Joking index"
+msgstr "Índice de puteamiento"
+
+#. module: product_stock_unsafety
 #: view:assign.purchase.order.wzd:product_stock_unsafety.assign_purchase_order_wzd_form
 #: model:ir.actions.act_window,name:product_stock_unsafety.assign_purchase_order_wzd_form_action
 msgid "Assign purchase order"

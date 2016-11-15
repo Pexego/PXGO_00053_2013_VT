@@ -217,6 +217,12 @@ msgid "Untaxed"
 msgstr "Base imponible"
 
 #. module: custom_partner
+#: code:addons/custom_partner/partner.py:101
+#, python-format
+msgid "VAT must be unique"
+msgstr "El NIF debe ser único"
+
+#. module: custom_partner
 #: field:res.partner,web:0
 msgid "Web"
 msgstr "Web"
