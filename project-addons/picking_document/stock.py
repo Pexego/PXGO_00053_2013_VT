@@ -20,7 +20,6 @@
 ##############################################################################
 
 from openerp import fields, api, models, _
-import openerp.addons.decimal_precision as dp
 
 class stock_picking(models.Model):
 
@@ -34,20 +33,9 @@ class stock_picking(models.Model):
         'picking_id',
         'Documents')
 
-    name = fields.Char('name')
-    qty =fields.Integer('qty', compute='_calculate_qty')
+    qty = fields.Integer('qty', compute='_calculate_qty')
 
     @api.one
-    @api.depends('name')
     def _calculate_qty(self):
         picking_name = self.name
-        qty_mid = self.env.cr.execute(
-            """
-SELECT sum(product_uom_qty)
-FROM stock_move
-    INNER JOIN stock_picking ON stock_move.picking_id = stock_picking.id
-WHERE stock_picking.name = '"""+ picking_name + """'"""
-        )
-        qty_mid = self.env.cr.fetchall()
-        qty123 = int(qty_mid[0][0])
-        self.qty = qty123
+        self.qty = sum(move_lines.product_uom_qty for move_lines in self.move_lines)
