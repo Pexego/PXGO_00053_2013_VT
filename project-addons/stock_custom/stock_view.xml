@@ -116,6 +116,22 @@
                <button name="%(stock.move_scrap)d" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </button>
+                <field name="product_uom_qty" position="attributes">
+                    <attribute name="sum">amount_qty</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_move_tree_total_qty" model="ir.ui.view">
+            <field name="name">stock.move.form.totalqty</field>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_form"/>
+            <field name="arch" type="xml">
+                <group name="main_grp_col1" position="after">
+                    <group class="oe_right">
+                        <field name="amount_qty"/>
+                    </group>
+                </group>
             </field>
         </record>
 

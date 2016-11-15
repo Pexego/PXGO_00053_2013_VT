@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, exceptions, api, _
+import openerp.addons.decimal_precision as dp
 
 
 class stock_picking(models.Model):
@@ -87,6 +88,8 @@ class stock_move(models.Model):
     _order = 'date_expected asc, id'
 
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
+    amount_qty = fields.Float(string='Total Qty', digits=dp.get_precision('Account'),
+        readonly=True, compute='_compute_qty')
 
     def _prepare_picking_assign(self, cr, uid, move, context=None):
         res = super(stock_move, self)._prepare_picking_assign(cr, uid, move,
@@ -122,6 +125,11 @@ class stock_move(models.Model):
                     confirmed_ids.action_assign()
 
         return res
+
+    @api.one
+    #@api.depends('move_line.product_uom_qty')
+    def _compute_qty(self):
+        self.product_uom_qty = sum(line.product_uom_qty for line in self.product_uom_qty)
 
 
 class StockReturnPicking(models.TransientModel):
