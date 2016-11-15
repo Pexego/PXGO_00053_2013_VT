@@ -60,29 +60,6 @@ class purchase_order(models.Model):
             move_dict['partner_id'] = order.partner_id.id
             if order.partner_ref:
                 move_dict['origin'] += ":" + order.partner_ref
-            if move_dict.get('purchase_line_id', False):
-                purchase_line = purchase_line_obj.\
-                    browse(cr, uid, move_dict['purchase_line_id'])
-                if purchase_line.discount:
-                    price_unit = order_line.price_unit * \
-                        (1 - order_line.discount / 100.0)
-                    if order_line.taxes_id:
-                        taxes = self.pool['account.tax'].\
-                            compute_all(cr, uid, order_line.taxes_id,
-                                        price_unit, 1.0,
-                                        order_line.product_id,
-                                        order.partner_id)
-                        price_unit = taxes['total']
-                    if order_line.product_uom.id != \
-                            order_line.product_id.uom_id.id:
-                        price_unit *= order_line.product_uom.factor / \
-                            order_line.product_id.uom_id.factor
-                    if order.currency_id.id != order.company_id.currency_id.id:
-                        price_unit = self.pool.get('res.currency').\
-                            compute(cr, uid, order.currency_id.id,
-                                    order.company_id.currency_id.id,
-                                    price_unit, round=False, context=context)
-                    move_dict['price_unit'] = price_unit
         return res
 
     def action_picking_create(self, cr, uid, ids, context=None):
