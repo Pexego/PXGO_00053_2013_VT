@@ -30,7 +30,8 @@ class SaleOrderLine(models.Model):
     def _default_agent(self):
         agent = self.env['res.partner']
         if self.env.context.get('partner_id'):
-            partner = self.env['res.partner'].browse(self.env.context['partner_id'])
+            partner = self.env['res.partner'].\
+                browse(self.env.context['partner_id'])
             if partner.agents:
                 agent = partner.agents[0]
         return agent
