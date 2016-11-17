@@ -163,6 +163,9 @@ class SaleOrder(models.Model):
     partner_tags = fields.Many2many('res.partner.category', id1='sale_id',
                                     id2='category_id', string='Tags')
 
+    def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
+        return fields.Datetime.now()
+
     def fields_view_get(self, cr, uid, view_id=None, view_type='form',
                         context=None, toolbar=False, submenu=False):
         res = super(SaleOrder, self).\
