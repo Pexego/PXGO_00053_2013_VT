@@ -36,7 +36,7 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <page string="Procurements" position="attributes">
-                    <attribute name="groups">purchase.group_purchase_user</attribute>
+                    <attribute name="groups">purchase.group_purchase_user,mrp.group_mrp_user</attribute>
                 </page>
             </field>
         </record>
