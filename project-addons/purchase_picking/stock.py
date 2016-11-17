@@ -126,10 +126,11 @@ class stock_move(models.Model):
     def _get_master_data(self, cr, uid, move, company, context=None):
         partner, uid, currency = super(stock_move, self)._get_master_data(
             cr, uid, move, company, context)
-        if move.partner_id:
-            partner = move.partner_id
-        else:
-            partner = move.picking_id.partner_id
+        if move.picking_type_code == "incoming":
+            if move.partner_id:
+                partner = move.partner_id
+            else:
+                partner = move.picking_id.partner_id
         return partner, uid, currency
 
 

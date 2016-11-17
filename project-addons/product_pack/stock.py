@@ -53,7 +53,9 @@ class stock_pciking(orm.Model):
         inv_line_obj = self.pool.get('account.invoice.line')
         todo = {}
         for picking in self.browse(cr, uid, ids, context=context):
-            partner = self._get_partner_to_invoice(cr, uid, picking, context)
+            partner = self._get_partner_to_invoice(cr, uid, picking,
+                                                   dict(context,
+                                                        inv_type=type))
             #grouping is based on the invoiced partner
             if group:
                 key = partner
@@ -80,7 +82,7 @@ class stock_pciking(orm.Model):
                                                       context=context)
                 search_vals = [('invoice_id', 'in', invoices),
                                ('move_id', 'in',
-                                [x.id for x  in pack_moves])]
+                                [x.id for x in pack_moves])]
                 to_delete = inv_line_obj.search(cr, uid, search_vals,
                                                 context=context)
                 inv_line_obj.unlink(cr, uid, to_delete, context)
@@ -101,37 +103,6 @@ class stock_pciking(orm.Model):
                     write(cr, uid, [x.id for x in pack_moves],
                           {'invoice_state': 'invoiced'}, context)
         return invoices
-
-    #~ def _create_invoice_from_picking(self, cr, uid, picking, vals,
-                                     #~ context=None):
-        #~ sale_obj = self.pool.get('sale.order')
-        #~ sale_line_obj = self.pool.get('sale.order.line')
-        #~ invoice_line_obj = self.pool.get('account.invoice.line')
-        #~ invoice_id = super(stock_pciking, self)._create_invoice_from_picking(
-            #~ cr, uid, picking, vals, context=context)
-        #~ picking_product_ids = [x.product_id.id for x in picking.move_lines]
-        #~ if picking.group_id:
-            #~ search_vals = [('procurement_group_id', '=', picking.group_id.id)]
-            #~ sale_ids = sale_obj.search(cr, uid, search_vals, context=context)
-            #~ if sale_ids:
-                #~ sale_line_ids = sale_line_obj.search(
-                    #~ cr, uid, [('order_id', 'in', sale_ids),
-                              #~ ('product_id.type', '=', 'service')],
-                    #~ context=context)
-                #~ if sale_line_ids:
-                    #~ for line in sale_line_obj.browse(cr, uid, sale_line_ids,
-                                                     #~ context):
-                        #~ if line.pack_child_line_ids and not \
-                                #~ line.pack_parent_line_id and line.invoiced:
-                            #~ if not line.pack_in_moves(picking_product_ids):
-                                #~ invoice_line_obj.unlink(
-                                    #~ cr, uid, [x.id for x in
-                                              #~ line.invoice_lines],
-                                    #~ context)
-                                #~ sale_line_obj.write(cr, uid, line.id,
-                                                    #~ {'invoice_lines': False},
-                                                    #~ context)
-        #~ return invoice_id
 
 
 class stock_move(orm.Model):
