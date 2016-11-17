@@ -19,7 +19,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import models, api
+
 
 class mrp_repair(models.Model):
     _inherit = "mrp.repair"
@@ -37,8 +38,26 @@ class mrp_repair(models.Model):
             for operation in order_obj.operations.ids:
                 operation_obj = order_obj.operations.browse(operation)
                 if operation_obj.type == u'add':
-                    if operation_obj.to_invoice == False:
-                        product_obj = self.env['product.product'].browse(operation_obj.product_id.id)
+                    if not operation_obj.to_invoice:
+                        product_obj = self.env['product.product'].\
+                            browse(operation_obj.product_id.id)
                         claim_obj.rma_cost += product_obj.standard_price
 
-        return True
+        return res
+
+    @api.multi
+    def action_invoice_create(self, group=False):
+        res = super(mrp_repair, self).action_invoice_create(group=group)
+        for repair_id in res:
+            invoice = self.env['account.invoice'].browse(res[repair_id])
+            repair = self.browse(repair_id)
+            partner = repair.partner_id
+            inv_vals = {
+                'payment_term': partner.property_payment_term.id,
+                'payment_mode_id': partner.customer_payment_mode.id,
+                'partner_bank_id': partner.bank_ids and
+                partner.bank_ids[0].id or False
+            }
+            invoice.write(inv_vals)
+
+        return res
