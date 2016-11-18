@@ -27,7 +27,7 @@
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
     "depends": ['sale', 'purchase', 'account', 'stock',
-                'stock_reserve_sale'],
-    "data": [],
+                'stock_reserve_sale', 'stock_custom'],
+    "data": ["stock_custom_report.xml"],
     "installable": True
 }
