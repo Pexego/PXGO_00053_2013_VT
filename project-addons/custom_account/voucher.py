@@ -33,20 +33,3 @@ class AccountVoucher(models.Model):
 
     amount_with_currency_rate = fields.Float("Rate amount",
                                              compute="_get_amount_with_rate")
-
-    def recompute_voucher_lines(self, cr, uid, ids, partner_id, journal_id,
-                                price, currency_id, ttype, date, context=None):
-        res = super(AccountVoucher, self).\
-            recompute_voucher_lines(cr, uid, ids, partner_id, journal_id,
-                                    price, currency_id, ttype, date,
-                                    context=context)
-        if res.get('value', False) and 'line_cr_ids' in res['value']:
-            for line_rec in res['value']['line_cr_ids']:
-                line_rec['amount'] = 0.0
-                line_rec['reconcile'] = False
-        if res.get('value', False) and 'line_dr_ids' in res['value']:
-            for line_rec in res['value']['line_dr_ids']:
-                line_rec['amount'] = 0.0
-                line_rec['reconcile'] = False
-
-        return res
