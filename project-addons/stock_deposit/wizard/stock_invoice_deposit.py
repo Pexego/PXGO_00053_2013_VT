@@ -29,13 +29,15 @@ class StockInvoiceDeposit(models.TransientModel):
         journals = journal_obj.search([('type', '=', 'sale')])
         return journals and journals[0] or False
 
-    journal_id = fields.Many2one('account.journal', 'Destination Journal', required=True, default=_get_journal)
+    journal_id = fields.Many2one('account.journal', 'Destination Journal',
+                                 required=True, default=_get_journal)
 
     @api.multi
     def create_invoice(self):
         deposit_obj = self.env['stock.deposit']
         deposit_ids = self.env.context.get('active_ids', [])
-        deposits = deposit_obj.search([('id', 'in', deposit_ids), ('state', '=', 'sale')])
+        deposits = deposit_obj.search([('id', 'in', deposit_ids),
+                                       ('state', '=', 'sale')])
         invoice_ids = []
         if not deposits:
             raise exceptions.Warning(_('No deposit'), _('No deposit selected'))
@@ -52,10 +54,20 @@ class StockInvoiceDeposit(models.TransientModel):
             lines = sale_lines.with_context(my_context).invoice_line_create()
             inv_vals = self.env['sale.order']._prepare_invoice(sale, lines)
             inv_vals['journal_id'] = self.journal_id.id
+            if not inv_vals.get("payment_term", False):
+                inv_vals['payment_term'] = \
+                    sale.partner_id.property_payment_term.id
+            if not inv_vals.get("payment_mode_id", False):
+                inv_vals['payment_mode_id'] = \
+                    sale.partner_id.customer_payment_mode.id
+            if not inv_vals.get("partner_bank_id", False):
+                inv_vals['payment_mode_id'] = sale.partner_id.bank_ids \
+                    and sale.partner_id.bank_ids[0].id or False
             invoice = self.env['account.invoice'].create(inv_vals)
             invoice_ids.append(invoice.id)
             sale_deposit.write({'invoice_id': invoice.id})
         deposits.write({'state': 'invoiced'})
         action = self.env.ref('account.action_invoice_tree1').read()[0]
-        action['domain'] = "[('id','in', ["+','.join(map(str,invoice_ids))+"])]"
+        action['domain'] = \
+            "[('id','in', [" + ','.join(map(str, invoice_ids)) + "])]"
         return action
