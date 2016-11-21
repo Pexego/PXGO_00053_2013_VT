@@ -102,7 +102,7 @@ class purchase_order_line(models.Model):
         for line in self:
             if line.move_ids and vals.get('date_planned', False):
                 for move in line.move_ids:
-                    if not (move.state == u'cancel'
-                            or move.state == u'done'):
+                    if move.state not in ['cancel',u'done'] and \
+                            not move.container_id:
                         move.date_expected = vals['date_planned']
         return res
