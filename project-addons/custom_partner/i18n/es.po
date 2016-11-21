@@ -130,6 +130,12 @@ msgid "Invoice Date"
 msgstr "Fecha factura"
 
 #. module: custom_partner
+#: code:addons/custom_partner/partner.py:192
+#, python-format
+msgid "Invoice No."
+msgstr "Nº factura"
+
+#. module: custom_partner
 #: field:res.partner,invoice_type_id:0
 #: view:stock.picking:custom_partner.stock_picking_search_add_invoice_type
 #: field:stock.picking,invoice_type_id:0

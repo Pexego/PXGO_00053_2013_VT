@@ -189,8 +189,7 @@ class ResPartner(models.Model):
                 <table border="2" width=100%%>
                 <tr>
                     <td>''' + _("Invoice Date") + '''</td>
-                    <td>''' + _("Description") + '''</td>
-                    <td>''' + _("Reference") + '''</td>
+                    <td>''' + _("Invoice No.") + '''</td>
                     <td>''' + _("Due Date") + '''</td>
                     <td>''' + _("Amount") + " (%s)" % (currency.symbol) + '''</td>
                     <td>''' + _("Lit.") + '''</td>
@@ -203,7 +202,7 @@ class ResPartner(models.Model):
                     strbegin = "<TD>"
                     strend = "</TD>"
                     date = aml['date_maturity'] or aml['date']
-                    followup_table +="<TR>" + strbegin + str(aml['date']) + strend + strbegin + aml['name'] + strend + strbegin + (aml['ref'] or '') + strend + strbegin + str(date) + strend + strbegin + str(aml['balance']) + strend + strbegin + block + strend + "</TR>"
+                    followup_table +="<TR>" + strbegin + str(aml['date']) + strend + strbegin + (aml['ref'] or '') + strend + strbegin + str(date) + strend + strbegin + str(aml['balance']) + strend + strbegin + block + strend + "</TR>"
 
                 total = reduce(lambda x, y: x+y['balance'], currency_dict['line'], 0.00)
 
