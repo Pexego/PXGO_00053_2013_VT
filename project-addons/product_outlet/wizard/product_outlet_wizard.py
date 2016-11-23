@@ -130,7 +130,7 @@ class product_outlet_wizard(models.TransientModel):
         if not outlet_product:
             new_product = product.copy(
                 {'categ_id': int(self.categ_id),
-                 'name': product.name + u' ' +
+                 'name': product.name +
                  categ_obj.browse(int(self.categ_id)).name,
                  'default_code': product.default_code +
                  categ_obj.browse(int(self.categ_id)).name,

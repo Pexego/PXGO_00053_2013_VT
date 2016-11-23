@@ -11,7 +11,7 @@
                     <field name="web"/>
                 </field>
                 <field name="property_account_position" position="after">
-                    <field name="invoice_type_id" />
+                    <field name="invoice_type_id" attrs="{'required':True}"/>
                 </field>
                 <field name="user_id" position="replace"/>
                 <field name="ref" position="replace"/>
@@ -109,10 +109,13 @@
         <record id="res_partner_view_buttons_add_quotations" model="ir.ui.view">
             <field name="name">res.partner.view.buttons.add_quotations</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="priority" eval="20"/>
             <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
             <field name="arch" type="xml">
+                <field name="ref" position="attributes">
+                    <attribute name="readonly">True</attribute>
+                </field>
                 <field name="date" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
@@ -133,7 +136,7 @@
             <field name="res_model">res.partner</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,kanban</field>
-            <field name="context">{"search_default_customer":1, 'default_customer': 1, 'default_supplier': 0}</field>
+            <field name="context">{"search_default_customer":1, 'default_customer': 1, 'default_supplier': 0, 'default_is_company': 1, 'default_lang': 0, 'default_property_product_pricelist': 0}</field>
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
@@ -265,6 +268,130 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="view_partner_form_add_require" model="ir.ui.view">
+            <field name="name">res.partner.form.add_require</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="category_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="street" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                 <field name="zip" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="city" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="state_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="country_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="email" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="phone" position="attributes">
+                    <attribute name="string">Phone/Mobile 1</attribute>
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="mobile" position="attributes">
+                    <attribute name="string">Phone/Mobile 2</attribute>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="child_ids" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="lang" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="transporter_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="service_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="property_account_position" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+
+            </field>
+        </record>
+        <record id="view_partner_form_add_required_payment_mode" model="ir.ui.view">
+            <field name="name">res.partner.form.add_invisible_agents</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account_payment_partner.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="customer_payment_mode" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_required_payment_term" model="ir.ui.view">
+            <field name="name">res.partner.form.add_invisible_agents</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_payment_term" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_invisible_agents" model="ir.ui.view">
+            <field name="name">res.partner.form.add_invisible_agents</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="sale_commission.view_partner_form_agent"/>
+            <field name="arch" type="xml">
+                <field name="agents" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_require_pricelist" model="ir.ui.view">
+            <field name="name">res.partner.form.add_require_pricelist</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="product.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_product_pricelist" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_require_area" model="ir.ui.view">
+            <field name="name">res.partner.form.add_require_area</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="customer_area.res_partner_view_area_form"/>
+            <field name="arch" type="xml">
+                <field name="area_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_require_comercial" model="ir.ui.view">
+            <field name="name">res.partner.form.add_require_comercial</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="l10n_es_partner.view_partner_form_comercial"/>
+            <field name="arch" type="xml">
+                <field name="comercial" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
 
     </data>
 </openerp>

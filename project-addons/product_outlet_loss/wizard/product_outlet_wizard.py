@@ -24,9 +24,7 @@ from datetime import datetime, time
 from openerp.exceptions import ValidationError
 
 
-
 class product_outlet_wizard(models.TransientModel):
-
     _inherit = 'product.outlet.wizard'
 
     price_unit = fields.Float(
@@ -43,24 +41,21 @@ class product_outlet_wizard(models.TransientModel):
 
     list_price2 = fields.Float(
         'Price PVP 2',
+        readonly=True,
         default=lambda self:
-        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price2 *
-        (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
-        / 100)
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price2)
 
     list_price = fields.Float(
         'Price PVP',
+        readonly=True,
         default=lambda self:
-        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price *
-        (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
-        / 100)
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price)
 
     list_price3 = fields.Float(
         'Price PVP 3',
+        readonly=True,
         default=lambda self:
-        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price3 *
-        (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
-        / 100)
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price3)
 
     commercial_cost = fields.Float(
         'Commercial Cost',
@@ -75,15 +70,24 @@ class product_outlet_wizard(models.TransientModel):
         default=lambda self: self.env['product.product'].browse(
             self.env.context.get('active_id', False)).qty_available, Readonly=True)
 
-    date_move = fields.Date('Move to outlet on', default = fields.datetime.now())
-
+    date_move = fields.Date('Move to outlet on', default=fields.datetime.now())
 
     @api.multi
     def make_move(self):
         product = self.product_id
         outlet_id = product.id
-        act_prod=False
-        create_loss=False
+        act_prod = False
+        create_loss = False
+        categ_id = self.categ_id
+        if categ_id == "392":
+            outlet_product_aux = self.env['product.product'].search(
+                [('name', '=', self.product_id.name + 'O1'), ('categ_id', '=', int(self.categ_id))])
+        else:
+            outlet_product_aux = self.env['product.product'].search(
+                [('name', '=', self.product_id.name + 'O2'), ('categ_id', '=', int(self.categ_id))])
+        price_outlet = 0
+        price_outlet2 = 0
+        price_outlet3 = 0
         if self.state == "first":
             res = super(product_outlet_wizard, self).make_move()
         else:
@@ -95,33 +99,50 @@ class product_outlet_wizard(models.TransientModel):
             res = super(product_outlet_wizard, self).make_move()
 
             if self.state == "last":
-                act_prod=True
-                create_loss=True
+                act_prod = True
+                create_loss = True
+                if categ_id == "392":
+                    price_outlet = self.list_price - (self.list_price * 0.2)
+                    price_outlet2 = self.list_price2 - (self.list_price2 * 0.2)
+                    price_outlet3 = self.list_price3 - (self.list_price3 * 0.2)
+
+                else:
+                    price_outlet = self.list_price - (self.list_price * 0.3)
+                    price_outlet2 = self.list_price2 - (self.list_price2 * 0.3)
+                    price_outlet3 = self.list_price3 - (self.list_price3 * 0.3)
 
         outlet_product = self.env['product.product'].search(
-            [('normal_product_id', '=', self.product_id.id),('categ_id', '=', int(self.categ_id))])
-
+            [('normal_product_id', '=', self.product_id.id), ('categ_id', '=', int(self.categ_id))])
 
         if create_loss:
-            values = {
+            if not outlet_product_aux:
+                values = {
                     'qty': self.qty,
-                    'price_outlet': self.price_outlet,
-                    'price_unit': self.price_unit,
+                    'price_outlet': price_outlet,
+                    'price_unit': price_outlet,
                     'product_id': outlet_product.id,
                     'date_move': self.date_move,
                     'outlet_ok': True
                 }
-            self.env['outlet.loss'].create(values)
+                self.env['outlet.loss'].create(values)
+            else:
+                values = {
+                    'qty': self.qty,
+                    'product_id': outlet_product.id,
+                    'date_move': self.date_move,
+                    'outlet_ok': True
+                }
+                self.env['outlet.loss'].create(values)
 
         if act_prod:
-            values = {
-                        'standard_price' : self.price_outlet,
-                        'list_price2': self.list_price2,
-                        'list_price3': self.list_price3,
-                        'commercial_cost': self.commercial_cost,
-                        'list_price': self.list_price
-                    }
-            outlet_product.write(values)
+            if not outlet_product_aux:
+                values = {
+                    'standard_price': price_outlet,
+                    'list_price2': price_outlet2,
+                    'list_price3': price_outlet3,
+                    'commercial_cost': self.commercial_cost,
+                    'list_price': price_outlet
+                }
+                outlet_product.write(values)
 
         return res
-
