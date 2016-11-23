@@ -42,7 +42,7 @@
             <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <field name="website" position="after">
-                    <field name="gln" invisible="1"/>
+                    <field name="gln"/>
                 </field>
             </field>
         </record>

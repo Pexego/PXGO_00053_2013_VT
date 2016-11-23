@@ -314,20 +314,15 @@
                 <field name="lang" position="attributes">
                     <attribute name="required">True</attribute>
                 </field>
-                <field name="transporter_id" position="attributes">
-                    <attribute name="required">True</attribute>
-                </field>
-                <field name="service_id" position="attributes">
-                    <attribute name="required">True</attribute>
-                </field>
                 <field name="property_account_position" position="attributes">
                     <attribute name="required">True</attribute>
                 </field>
 
             </field>
         </record>
+
         <record id="view_partner_form_add_required_payment_mode" model="ir.ui.view">
-            <field name="name">res.partner.form.add_invisible_agents</field>
+            <field name="name">res.partner.form.add_required_payment_mode</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="account_payment_partner.view_partner_property_form"/>
             <field name="arch" type="xml">
@@ -338,23 +333,12 @@
         </record>
 
         <record id="view_partner_form_add_required_payment_term" model="ir.ui.view">
-            <field name="name">res.partner.form.add_invisible_agents</field>
+            <field name="name">res.partner.form.add_required_payment_term</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="account.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <field name="property_payment_term" position="attributes">
                     <attribute name="required">True</attribute>
-                </field>
-            </field>
-        </record>
-
-        <record id="view_partner_form_add_invisible_agents" model="ir.ui.view">
-            <field name="name">res.partner.form.add_invisible_agents</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="sale_commission.view_partner_form_agent"/>
-            <field name="arch" type="xml">
-                <field name="agents" position="attributes">
-                    <attribute name="invisible">True</attribute>
                 </field>
             </field>
         </record>

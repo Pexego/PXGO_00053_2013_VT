@@ -46,8 +46,8 @@ class ProductTemplate(models.Model):
     @api.one
     def _get_in_production_stock(self):
         if self.product_variant_ids:
-            moves = self.env["stock.move"].search([('product_id', '=',
-                                                    self.product_variant_ids.id),
+            moves = self.env["stock.move"].search([('product_id', 'in',
+                                                    self.product_variant_ids.ids),
                                                     ('purchase_line_id', '!=',
                                                     False),
                                                     ('picking_id', '=', False),
