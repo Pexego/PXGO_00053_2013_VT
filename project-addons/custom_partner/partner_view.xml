@@ -249,6 +249,10 @@
                 <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name='move_id']" position="after">
                     <field name="stored_invoice_id"/>
                 </xpath>
+                <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name='result']" position="after">
+                    <field name="amount_currency"/>
+                    <field name="currency_id"/>
+                </xpath>
             </field>
         </record>
 

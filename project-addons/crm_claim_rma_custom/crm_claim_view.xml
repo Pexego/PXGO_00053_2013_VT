@@ -51,16 +51,17 @@
                               <field name="discount" on_change="onchange_values(qty, price_unit, discount)"/>
                               <field name="tax_ids" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','=','sale')]"/>
                               <field name="price_subtotal"/>
+                              <field name="invoiced"/>
                             </tree>
                         </field>
                         <group>
                           <group>
-                              <button name="calculate_invoices" type="object" string="Calculate"/>
+                              <button name="calculate_invoices" type="object"
+                                string="Calculate"
+                                attrs="{'invisible': [('invoice_ids', '!=', [])]}"/>
                           </group>
                               <button name="make_refund_invoice"
-                                  attrs="{'invisible': ['|',
-                                              ('claim_inv_line_ids', '=', []),
-                                              ('invoice_ids', '!=', [])]}"
+                                  attrs="{'invisible': [('claim_inv_line_ids', '=', [])]}"
                                   type="object" string="New Refund"/>
                         </group>
                     </page>

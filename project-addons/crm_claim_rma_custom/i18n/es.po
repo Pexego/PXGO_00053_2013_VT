@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-30 17:00+0000\n"
-"PO-Revision-Date: 2016-03-30 17:00+0000\n"
+"POT-Creation-Date: 2016-11-23 19:52+0000\n"
+"PO-Revision-Date: 2016-11-23 19:52+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,6 +21,22 @@ msgid "Aditional Notes"
 msgstr "Notas adicionales"
 
 #. module: crm_claim_rma_custom
+#: field:crm.claim,allow_confirm_blocked:0
+msgid "Allow confirm"
+msgstr "Permitir envío"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:156
+#, python-format
+msgid "Any line to invoice"
+msgstr "No hay ninguna linea para facturar"
+
+#. module: crm_claim_rma_custom
+#: field:equivalent.products.wizard,virtual_stock_conservative:0
+msgid "Available Stock"
+msgstr "Cant. disponible"
+
+#. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_crm_claim_cost_report
 msgid "CRM Claim cost Report"
 msgstr "Informe de costes de reclamación"
@@ -29,6 +45,12 @@ msgstr "Informe de costes de reclamación"
 #: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
 msgid "Calculate"
 msgstr "Calcular"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:330
+#, python-format
+msgid "Cannot delete an invoiced line"
+msgstr "No puede borrar una linea facturada."
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,claim_id:0
@@ -44,12 +66,12 @@ msgstr "Número reclamación"
 #. module: crm_claim_rma_custom
 #: field:crm.claim,claim_inv_line_ids:0
 msgid "Claim inv line ids"
-msgstr "Lineas de abono"
+msgstr "Lineas a facturar"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,claim_line_id:0
 msgid "Claim lne"
-msgstr "Linea reclamación"
+msgstr "Linea de reclamación"
 
 #. module: crm_claim_rma_custom
 #: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
@@ -64,15 +86,8 @@ msgstr "Comercial"
 
 #. module: crm_claim_rma_custom
 #: field:crm.claim,country:0
-#: field:crm.claim.cost.report,country_id:0
 msgid "Country"
 msgstr "País"
-
-#. module: crm_claim_rma_custom
-#: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
-msgid "Country"
-msgstr "País"
-
 
 #. module: crm_claim_rma_custom
 #: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
@@ -87,12 +102,23 @@ msgstr "Creado por"
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,create_date:0
 msgid "Created on"
-msgstr "Creado en"
+msgstr "Creado el"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:130
+#, python-format
+msgid "Customer blocked by lack of payment. Check the maturity dates of their account move lines."
+msgstr "El cliente está bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,discount:0
 msgid "Discount"
 msgstr "Descuento"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,display_name:0
+msgid "Display Name"
+msgstr "Nombre a mostrar"
 
 #. module: crm_claim_rma_custom
 #: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
@@ -112,7 +138,7 @@ msgstr "Notas internas"
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_stock_location
 msgid "Inventory Locations"
-msgstr "Ubicaciones inventario"
+msgstr "Ubicaciones de inventario"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,invoice_id:0
@@ -120,6 +146,11 @@ msgstr "Ubicaciones inventario"
 #: model:ir.model,name:crm_claim_rma_custom.model_account_invoice
 msgid "Invoice"
 msgstr "Factura"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,invoiced:0
+msgid "Invoiced"
+msgstr "Facturado"
 
 #. module: crm_claim_rma_custom
 #: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
@@ -132,14 +163,19 @@ msgid "Kitchen Stock"
 msgstr "Stock cocina"
 
 #. module: crm_claim_rma_custom
+#: field:claim.invoice.line,__last_update:0
+msgid "Last Modified on"
+msgstr "Últ. modificación el"
+
+#. module: crm_claim_rma_custom
 #: field:claim.invoice.line,write_uid:0
 msgid "Last Updated by"
-msgstr "Últ. actualización por"
+msgstr "Últ. modificación por"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,write_date:0
 msgid "Last Updated on"
-msgstr "Últ. actualización el"
+msgstr "Últ. modificación el"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_line
@@ -156,7 +192,7 @@ msgstr "Gestionado en Odoo"
 #. module: crm_claim_rma_custom
 #: view:crm.claim.cost.report:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
 msgid "My Case(s)"
-msgstr "Mi(s) Caso(s)"
+msgstr "Mis casos"
 
 #. module: crm_claim_rma_custom
 #: view:crm.claim:crm_claim_rma_custom.crm_claim_rma_form_view3
@@ -182,7 +218,7 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:300
+#: code:addons/crm_claim_rma_custom/crm_claim.py:316
 #, python-format
 msgid "Partner not selected"
 msgstr "Cliente no seleccionado"
@@ -191,6 +227,11 @@ msgstr "Cliente no seleccionado"
 #: model:ir.model,name:crm_claim_rma_custom.model_stock_picking
 msgid "Picking List"
 msgstr "Albarán"
+
+#. module: crm_claim_rma_custom
+#: field:claim.invoice.line,price_subtotal:0
+msgid "Price Subtotal"
+msgstr "Subtotal"
 
 #. module: crm_claim_rma_custom
 #: field:claim.invoice.line,price_unit:0
@@ -233,7 +274,7 @@ msgid "Responsible"
 msgstr "Responsable"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:280
+#: code:addons/crm_claim_rma_custom/crm_claim.py:296
 #, python-format
 msgid "Selected product is not                                                     in the invoice"
 msgstr "El producto seleccionado no está en la factura"
@@ -259,7 +300,7 @@ msgid "The incomimg pickings to this location not will be synced with vstock"
 msgstr "Los albaranes de entrada a esta ubicación no serán sincronizados con vstock"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:57
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:107
 #: code:addons/crm_claim_rma_custom/wizard/claim_make_picking_from_picking.py:57
 #, python-format
 msgid "The origin location is not managed by Odoo."
@@ -271,13 +312,7 @@ msgid "The outputs of this location are managed in Odoo, Vstock only will print 
 msgstr "Las salidas de esta ubicación se gestionan en Odoo, Vstock sólo imprimirá las etiquetas de envío."
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:146
-#, python-format
-msgid "There is already an invoice                                                 with this claim"
-msgstr "Ya hay una factura con esta reclamación"
-
-#. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:112
+#: code:addons/crm_claim_rma_custom/crm_claim.py:117
 #, python-format
 msgid "There is at least one line of the claim with                            an incorrect invoice"
 msgstr "Hay al menos una linea de la reclamación con una factura incorrecta"
@@ -295,9 +330,15 @@ msgid "Transfer"
 msgstr "Transferir"
 
 #. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:129
+#, python-format
+msgid "Warning for %s"
+msgstr "Aviso para %s"
+
+#. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_equivalent_products_wizard
 msgid "Wizard for change products in claim."
-msgstr "Asistente para cambiar los productos de una reclamación."
+msgstr "Asistente para cambiar productos en la reclamación."
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_wizard
@@ -308,8 +349,3 @@ msgstr "Asistente para crear envíos desde la línea de reclamación"
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_from_picking_wizard
 msgid "Wizard to create pickings from picking lines"
 msgstr "Asistente para crear albaranes desde lineas de albarán"
-
-#. module: crm_claim_rma_custom
-#: field:crm.claim,allow_confirm_blocked:0
-msgid "Allow confirm"
-msgstr "Permitir envío"

@@ -84,14 +84,18 @@ class CrmClaimRma(models.Model):
         """
         claim_obj = self.browse(cr, uid, ids)
         claim_inv_line_obj = self.pool.get('claim.invoice.line')
-        claim_inv_lines = claim_inv_line_obj.search(cr, uid,
-                                                    [('claim_id', '=',
-                                                      claim_obj.id)])
-        claim_inv_line_obj.unlink(cr, uid, claim_inv_lines)
+        for invoice_line in claim_obj.claim_inv_line_ids:
+            if not invoice_line.invoiced:
+                invoice_line.unlink()
         for claim_line in claim_obj.claim_line_ids:
             vals = {}
             taxes_ids = []
             if claim_line.invoice_id:
+                claim_inv_lines = claim_inv_line_obj.search(cr, uid,
+                                                    [('claim_line_id', '=',
+                                                      claim_line.id)])
+                if claim_inv_lines:
+                    continue
                 for inv_line in claim_line.invoice_id.invoice_line:
                     if inv_line.product_id == claim_line.product_id:
                         if inv_line.invoice_line_tax_id:
@@ -144,10 +148,15 @@ class CrmClaimRma(models.Model):
             accinv_refund_obj = self.pool.get('account.invoice')
             accinv_refund_ids = accinv_refund_obj.search(cr, uid,
                                                          domain_acc_inv)
-            for ai in accinv_refund_obj.browse(cr, uid, accinv_refund_ids):
-                if ai.claim_id == claim_obj:
-                    raise exceptions.Warning(_("There is already an invoice \
-                                                with this claim"))
+
+            invoice = False
+            for line in claim_obj.claim_inv_line_ids:
+                if not line.invoiced:
+                    invoice = True
+
+            if not invoice:
+                raise exceptions.Warning(_("Any line to invoice"))
+
             domain_journal = [('type', '=', 'sale_refund')]
             acc_journal_obj = self.pool.get('account.journal')
             acc_journal_ids = acc_journal_obj.search(cr, uid, domain_journal)
@@ -177,6 +186,8 @@ class CrmClaimRma(models.Model):
             rectified_invoice_ids = []
             fp_obj = self.pool.get('account.fiscal.position')
             for line in claim_obj.claim_inv_line_ids:
+                if line.invoiced:
+                    continue
                 if line.invoice_id:
                     rectified_invoice_ids.append(line.invoice_id.id)
                 if line.product_id:
@@ -222,6 +233,9 @@ class CrmClaimRma(models.Model):
                     vals['invoice_line_tax_id'] = [(6, 0, taxes_ids)]
                 line_obj = self.pool.get('account.invoice.line')
                 line_obj.create(cr, uid, vals, context=context)
+
+                line.invoiced = True
+
             invoice_id.\
                 write({'origin_invoices_ids':
                        [(6, 0, list(set(rectified_invoice_ids)))]})
@@ -256,6 +270,7 @@ class ClaimInvoiceLine(models.Model):
                                "claimline_id", "tax_id", string="Taxes")
     discount = fields.Float("Discount")
     qty = fields.Float("Quantity", default="1")
+    invoiced = fields.Boolean("Invoiced")
 
     @api.one
     def _get_subtotal(self):
@@ -309,6 +324,13 @@ class ClaimInvoiceLine(models.Model):
             qty * price_unit
         res = {'value': {'price_subtotal': price_subtotal}}
         return res
+
+    @api.multi
+    def unlink(self):
+        for line in self:
+            if line.invoiced:
+                raise exceptions.Warning(_("Cannot delete an invoiced line"))
+        return super(ClaimInvoiceLine, self).unlink()
 
 
 class CrmClaimLine(models.Model):
