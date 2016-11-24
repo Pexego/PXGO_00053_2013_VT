@@ -113,9 +113,6 @@
             <field name="priority" eval="20"/>
             <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
             <field name="arch" type="xml">
-                <field name="ref" position="attributes">
-                    <attribute name="readonly">True</attribute>
-                </field>
                 <field name="date" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
@@ -274,6 +271,9 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+                <field name="ref" position="attributes">
+                    <attribute name="readonly">True</attribute>
+                </field>
                 <field name="name" position="attributes">
                     <attribute name="required">True</attribute>
                 </field>
@@ -306,9 +306,6 @@
                     <attribute name="string">Phone/Mobile 2</attribute>
                 </field>
                 <field name="user_id" position="attributes">
-                    <attribute name="required">True</attribute>
-                </field>
-                <field name="child_ids" position="attributes">
                     <attribute name="required">True</attribute>
                 </field>
                 <field name="lang" position="attributes">
