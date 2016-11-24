@@ -67,16 +67,17 @@
             </field>
         </record>
 
-        <!--<record id="view_account_move_line_add_scheme_filter" model="ir.ui.view">
-            <field name="name">account.move.line.search</field>
+        <record id="view_move_line_tree_add_curr_date" model="ir.ui.view">
+            <field name="name">account.move.line.tree.add_curr_date</field>
             <field name="model">account.move.line</field>
-            <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+            <field name="inherit_id" ref="account.view_move_line_tree"/>
             <field name="arch" type="xml">
-                <field name="name" position="after">
-                    <field name="scheme"/>
+                <field name="credit" position="after">
+                    <field name="amount_currency"/>
+                    <field name="currency_id"/>
                 </field>
             </field>
-        </record>-->
+        </record>
 
         <record id="view_mandate_add_default_tree" model="ir.ui.view">
             <field name="name">view.mandate.tree</field>
