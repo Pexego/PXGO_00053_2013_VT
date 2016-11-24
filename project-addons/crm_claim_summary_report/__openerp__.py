@@ -36,6 +36,7 @@
     ],
     'data': [
         'views/res_company.xml',
+        'views/crm_claim_view.xml',
         'reports/claim_summary_report_layouts.xml',
         'reports/claim_summary_report.xml',
     ],

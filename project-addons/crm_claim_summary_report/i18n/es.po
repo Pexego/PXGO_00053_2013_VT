@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* crm_claim_summary_report
+#       * crm_claim_summary_report
 #
 msgid ""
 msgstr ""
@@ -115,6 +115,11 @@ msgstr "No. Telf"
 #: view:website:crm_claim_summary_report.page_summary_report
 msgid "Print Date"
 msgstr "Fecha de Impresión"
+
+#. module: crm_claim_summary_report
+#: field:claim.line,printable:0
+msgid "Printable"
+msgstr "Imprimible"
 
 #. module: crm_claim_summary_report
 #: view:website:crm_claim_summary_report.product_on_claim
