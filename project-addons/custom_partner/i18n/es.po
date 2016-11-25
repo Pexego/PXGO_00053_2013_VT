@@ -82,6 +82,11 @@ msgid "Created by"
 msgstr "Creado por"
 
 #. module: custom_partner
+#: view:res.partner:custom_partner.view_partner_form_add_web_field
+msgid "Created date"
+msgstr "Fecha de alta"
+
+#. module: custom_partner
 #: help:res.partner,web:0
 msgid "Created from web"
 msgstr "Creado desde la web"

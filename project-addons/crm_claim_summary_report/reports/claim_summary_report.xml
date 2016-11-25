@@ -154,7 +154,7 @@
                         </tr>
                     </thead>
                     <tbody class="body-product-info">
-                        <tr t-foreach="claim.claim_line_ids" t-as="line_id">
+                        <tr t-foreach="[x for x in claim.claim_line_ids if x.printable]" t-as="line_id">
                             <td class="col-xs-3"><t t-if="line_id.product_id.default_code"> <span t-field="line_id.product_id.default_code"></span> - </t>
                             <span t-field="line_id.product_id.name"/></td>
                             <td class="col-xs-1"><span t-field="line_id.product_returned_quantity"/></td>

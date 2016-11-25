@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright 2015 Vauxoo
-#    Author : Osval Reyes <osval@vauxoo.com>
+#    Copyright 2016 Comunitea Servicios Tecnológicos S.L.
+#    Author : Omar Castiñeira Saavedra <omar@comunitea.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,5 +19,11 @@
 #
 ##############################################################################
 
-from . import res_company
-from . import claim_line
+from openerp import models, fields
+
+
+class ClaimLine(models.Model):
+
+    _inherit = "claim.line"
+
+    printable = fields.Boolean("Printable", default=True)

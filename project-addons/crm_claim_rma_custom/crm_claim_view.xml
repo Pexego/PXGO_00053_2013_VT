@@ -89,13 +89,12 @@
                 <field name="state" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
-                <!-- <field name="substate_id" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </field> -->
+                <field name="substate_id" position="reaplace"/>
                 <field name="supplier_id" position="attributes">
                     <attribute name="context">{'search_product_id': product_id}</attribute>
                 </field>
-                <field name="supplier_id" position="after">
+                <field name="internal_description" position="after">
+                    <field name="substate_id"/>
                     <field name="write_date"/>
                 </field>
                 <field name="product_returned_quantity" position="after">

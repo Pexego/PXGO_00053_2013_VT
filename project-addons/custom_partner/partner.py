@@ -133,6 +133,7 @@ class ResPartner(models.Model):
     def create(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False
+        vals['date'] = fields.Date.today()
         return super(ResPartner, self).create(vals)
 
     @api.multi
