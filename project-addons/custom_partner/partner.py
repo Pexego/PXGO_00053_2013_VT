@@ -105,6 +105,9 @@ class ResPartner(models.Model):
                 raise exceptions. \
                     ValidationError(_('VAT must be unique'))
 
+    #def change_sales_team(self):
+    #   self.
+
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
