@@ -34,3 +34,4 @@ class res_partner_area(models.Model):
 
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15)
+    sales_team = fields.Many2one('crm.case.section','Sales Team')

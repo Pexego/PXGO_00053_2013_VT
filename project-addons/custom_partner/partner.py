@@ -65,6 +65,7 @@ class ResPartner(models.Model):
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
     att = fields.Char("A/A")
 
+
     @api.multi
     def _get_purchased_quantity(self):
         for partner in self:
@@ -105,9 +106,6 @@ class ResPartner(models.Model):
                 raise exceptions. \
                     ValidationError(_('VAT must be unique'))
 
-    #def change_sales_team(self):
-    #   self.
-
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
@@ -129,11 +127,16 @@ class ResPartner(models.Model):
             res.append((record.id, name))
         return res
 
+    @api.multi
+    def change_sales_team(self, area_id):
+        area = self.env['res.partner.area'].search([('id', '=', area_id)])
+
+        return {'value': {'section_id': area.sales_team}}
+
     @api.model
     def create(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False
-        vals['date'] = fields.Date.today()
         return super(ResPartner, self).create(vals)
 
     @api.multi
