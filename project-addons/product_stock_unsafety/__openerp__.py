@@ -52,7 +52,8 @@ Module that adds the management to the products under minimal.
              "security/ir.model.access.csv",
              "wizard/create_purchase_order_view.xml",
              "wizard/assign_purchase_order_view.xml",
-             "wizard/create_production_order_view.xml"],
+             "wizard/create_production_order_view.xml",
+             "data/product_stock_unsafety_data.xml"],
     "installable": True,
     "application": True,
 }

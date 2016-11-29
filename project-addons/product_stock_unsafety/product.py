@@ -49,16 +49,42 @@ class product_product(models.Model):
             stock_days = round(virtual_available / stock_per_day)
 
         self.remaining_days_sale = stock_days
-        self.joking_index = stock_days * self.standard_price
+        self.joking = stock_days * self.standard_price
+
+    @api.model
+    def calc_joking_index(self):
+        search_date = (date.today() - relativedelta(days=60)).\
+            strftime("%Y-%m-%d")
+        product_obj = self.env["product.product"]
+        self.env.cr.\
+            execute("select product_id from stock_days_positive where "
+                    "datum >= '%s' group by product_id "
+                    "having count(*) >= 60" % search_date)
+        res = self.env.cr.fetchall()
+        joking_tot = 0
+        cont = len(res)
+        product_ids = [x[0] for x in res]
+        for stock_product_id in product_obj.browse(product_ids):
+            joking_tot += stock_product_id.joking
+        avg = joking_tot / cont
+        for product in product_obj.search([]):
+            if product.type != 'product' or product.id not in product_ids:
+                if product.joking_index != 0:
+                    product.joking_index = 0
+            else:
+                joking_index = (product.joking - avg) / avg
+                if product.joking_index != joking_index:
+                    product.joking_index = joking_index
 
     remaining_days_sale = fields.Float('Remaining Stock Days', readonly=True,
                                        compute='_calc_remaining_days',
                                        help="Stock measure in days of sale "
                                        "computed consulting sales in sixty "
                                        "days with stock.", multi=True)
-    joking_index = fields.Float("Joking index", readonly=True,
-                                compute='_calc_remaining_days',
-                                multi=True)
+    joking = fields.Float("Joking", readonly=True,
+                          compute='_calc_remaining_days',
+                          multi=True)
+    joking_index = fields.Float("Joking Index", readonly=True)
     replacement_id = fields.Many2one("product.product", "Replaced by")
     min_days_id = fields.Many2one("minimum.day", "Stock Minimum Days",
                                   related="orderpoint_ids.min_days_id",

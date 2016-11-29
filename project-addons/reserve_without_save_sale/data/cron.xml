@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data noupdate="0">
+    <data noupdate="1">
 
         <record forcecreate="True" id="ir_cron_delete_orphan_reserves" model="ir.cron">
             <field name="name">Delete orphan reserves</field>

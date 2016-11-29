@@ -31,6 +31,11 @@ class stock_days_positive(models.Model):
     datum = fields.Date('Date')
 
     def init(self, cr):
+        warehouse_obj = self.pool["stock.warehouse"]
+        location_ids = []
+        warehouse_ids = warehouse_obj.search(cr, 1, [])
+        for warehouse in warehouse_obj.browse(cr, 1, warehouse_ids):
+            location_ids.append(warehouse.view_location_id.id)
         tools.drop_view_if_exists(cr, 'stock_days_positive')
         cr.execute(
             """
@@ -41,8 +46,8 @@ class stock_days_positive(models.Model):
                  FROM generate_series(0,200) AS sequence(day)
                  GROUP BY sequence.day
                  ORDER BY datum desc) as dates
-            WHERE location_id IN (SELECT id FROM stock_location WHERE usage = 'internal')
+            WHERE location_id IN (SELECT id FROM stock_location WHERE usage = 'internal' and location_id in (%s))
                 AND stock_history.date::DATE <= (dates.datum || ' 23:59:59')::DATE
             GROUP BY product_id,datum
             HAVING sum(quantity) > 0)
-            """)
+            """ % tuple(location_ids))
