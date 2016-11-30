@@ -129,7 +129,7 @@ class ResPartner(models.Model):
 
     @api.multi
     def change_sales_team(self, area_id):
-        area = self.env['res.partner.area'].search([('id', '=', area_id)])
+        area = self.env['res.partner.area'].browse(int(area_id))
 
         return {'value': {'section_id': area.sales_team}}
 
@@ -137,6 +137,7 @@ class ResPartner(models.Model):
     def create(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False
+        vals['date'] = fields.Date.today()
         return super(ResPartner, self).create(vals)
 
     @api.multi
