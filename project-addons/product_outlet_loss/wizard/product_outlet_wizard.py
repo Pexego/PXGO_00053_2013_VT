@@ -78,16 +78,14 @@ class product_outlet_wizard(models.TransientModel):
         outlet_id = product.id
         act_prod = False
         create_loss = False
-        categ_id = self.categ_id
-        if categ_id == "392":
-            outlet_product_aux = self.env['product.product'].search(
-                [('name', '=', self.product_id.name + 'O1'), ('categ_id', '=', int(self.categ_id))])
-        else:
-            outlet_product_aux = self.env['product.product'].search(
-                [('name', '=', self.product_id.name + 'O2'), ('categ_id', '=', int(self.categ_id))])
-        price_outlet = 0
-        price_outlet2 = 0
-        price_outlet3 = 0
+        outlet_product_selected = []
+        # outlet_products_category = []
+        # outlet_categ_ids = self.env.\
+        #    ref('product_outlet.product_category_outlet')
+        # for category in outlet_categ_ids.child_id:
+        #    outlet_products_category.append(self.env['product.product'].search(
+        #        [('name', '=', self.product_id.name + category.name)])
+        #    )
         if self.state == "first":
             res = super(product_outlet_wizard, self).make_move()
         else:
@@ -96,26 +94,33 @@ class product_outlet_wizard(models.TransientModel):
             if self.qty <= 0:
                 raise ValidationError(_("Qty to outlet must be >=0"))
 
+            category_selected = self.env['product.category'].browse(int(self.categ_id))
+
+            outlet_product_selected = self.env['product.product'].search(
+                [('default_code', '=', self.product_id.name + category_selected.name)]
+            )
+
             res = super(product_outlet_wizard, self).make_move()
 
             if self.state == "last":
                 act_prod = True
                 create_loss = True
-                if categ_id == "392":
-                    price_outlet = self.list_price - (self.list_price * 0.2)
-                    price_outlet2 = self.list_price2 - (self.list_price2 * 0.2)
-                    price_outlet3 = self.list_price3 - (self.list_price3 * 0.2)
 
-                else:
-                    price_outlet = self.list_price - (self.list_price * 0.3)
-                    price_outlet2 = self.list_price2 - (self.list_price2 * 0.3)
-                    price_outlet3 = self.list_price3 - (self.list_price3 * 0.3)
+                price_outlet = self.list_price - (self.list_price *
+                                                  (float(self._get_percent(int(self.categ_id))) / 100))
+
+                price_outlet2 = self.list_price2 - (self.list_price2 *
+                                                    (float(self._get_percent(int(self.categ_id))) / 100))
+
+                price_outlet3 = self.list_price3 - (self.list_price3 *
+                                                    (float(self._get_percent(int(self.categ_id))) / 100))
 
         outlet_product = self.env['product.product'].search(
             [('normal_product_id', '=', self.product_id.id), ('categ_id', '=', int(self.categ_id))])
 
         if create_loss:
-            if not outlet_product_aux:
+            price_outlet = self.list_price - (self.list_price * (float(self._get_percent(int(self.categ_id))) / 100))
+            if not outlet_product_selected:
                 values = {
                     'qty': self.qty,
                     'price_outlet': price_outlet,
@@ -135,7 +140,8 @@ class product_outlet_wizard(models.TransientModel):
                 self.env['outlet.loss'].create(values)
 
         if act_prod:
-            if not outlet_product_aux:
+
+            if not outlet_product_selected:
                 values = {
                     'standard_price': price_outlet,
                     'list_price2': price_outlet2,

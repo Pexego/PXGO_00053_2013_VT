@@ -32,7 +32,6 @@
                 </field>
                 <group states='first' position="inside">
                         <group>
-                            <field name="percent" readonly="1"/>
                             <field name="price_unit" invisible="1"/>
                             <field name="qty_available" invisible="1"/>
                         </group>

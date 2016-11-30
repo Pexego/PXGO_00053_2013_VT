@@ -17,8 +17,9 @@
                         </group>
                         <group states="last">
                             <field name="qty"/>
-                            <field name="categ_id" attrs="{'required': [('state', '=', 'last')]}"/>
+                            <field name="categ_id" on_change="onchange_percent(categ_id)" attrs="{'required': [('state', '=', 'last')]}"/>
                             <field name="ean13"/>
+                            <group><field name="percent" readonly="1"/></group>
                         </group>
                     </group>
                     <footer>
