@@ -21,7 +21,6 @@
 
 from openerp import models, fields, api, exceptions, _
 
-
 class product_outlet_wizard(models.TransientModel):
     _name = "product.outlet.wizard"
 
@@ -47,7 +46,6 @@ class product_outlet_wizard(models.TransientModel):
     product_id = fields.Many2one('product.product', 'Product',
                                  default=lambda self:
                                  self.env.context.get('active_id', False))
-    # categ_id = fields.Many2one('product.category', 'Category')
     categ_id = fields.Selection(selection='_get_outlet_categories',
                                 string='category')
     state = fields.Selection([('first', 'First'), ('last', 'Last')],
@@ -60,19 +58,13 @@ class product_outlet_wizard(models.TransientModel):
                                        required=True,
                                        default=_get_default_location)
     percent = fields.Float(string="Percent",
-                           help="This percent will be used when a product moves to an outlet category",
-                           compute="onchange_percent")
-
-    @api.multi
-    def _get_percent(self, category_id):
-        category = self.env['product.category'].search([('id', '=', category_id)])
-        return category.percent
+                           help="This percent will be used when a product moves to an outlet category")
 
     @api.multi
     def onchange_percent(self, category_id):
-        percent = self._get_percent(category_id)
-        return {'value': {'percent': percent}}
-
+        if self.state == 'last':
+            percent = self.env['product.category'].browse(category_id).percent
+            return {'value': {'percent': percent}}
 
     @api.onchange('warehouse_id')
     def onchange_warehouse(self):

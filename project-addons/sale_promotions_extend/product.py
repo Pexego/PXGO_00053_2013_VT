@@ -17,8 +17,8 @@ class ProductCategory(models.Model):
     _inherit = 'product.category'
 
     code = fields.Char('Internal code')
-    percent = fields.Integer(string="Percent",
-                             help="This percent will be used when a product moves to an outlet category")
+    percent = fields.Float(string="Percent",
+                           help="This percent will be used when a product moves to an outlet category")
 
     # ean13 = fields.Char('EAN13', size=13)
 

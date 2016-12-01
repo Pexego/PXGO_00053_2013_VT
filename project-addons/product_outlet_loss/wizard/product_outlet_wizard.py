@@ -22,7 +22,7 @@
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime, time
 from openerp.exceptions import ValidationError
-
+import ipdb
 
 class product_outlet_wizard(models.TransientModel):
     _inherit = 'product.outlet.wizard'
@@ -79,13 +79,7 @@ class product_outlet_wizard(models.TransientModel):
         act_prod = False
         create_loss = False
         outlet_product_selected = []
-        # outlet_products_category = []
-        # outlet_categ_ids = self.env.\
-        #    ref('product_outlet.product_category_outlet')
-        # for category in outlet_categ_ids.child_id:
-        #    outlet_products_category.append(self.env['product.product'].search(
-        #        [('name', '=', self.product_id.name + category.name)])
-        #    )
+
         if self.state == "first":
             res = super(product_outlet_wizard, self).make_move()
         else:
@@ -95,7 +89,7 @@ class product_outlet_wizard(models.TransientModel):
                 raise ValidationError(_("Qty to outlet must be >=0"))
 
             category_selected = self.env['product.category'].browse(int(self.categ_id))
-
+            ipdb.set_trace()
             outlet_product_selected = self.env['product.product'].search(
                 [('default_code', '=', self.product_id.name + category_selected.name)]
             )
@@ -107,19 +101,19 @@ class product_outlet_wizard(models.TransientModel):
                 create_loss = True
 
                 price_outlet = self.list_price - (self.list_price *
-                                                  (float(self._get_percent(int(self.categ_id))) / 100))
+                                                  (category_selected.percent / 100))
 
                 price_outlet2 = self.list_price2 - (self.list_price2 *
-                                                    (float(self._get_percent(int(self.categ_id))) / 100))
+                                                    (category_selected.percent / 100))
 
                 price_outlet3 = self.list_price3 - (self.list_price3 *
-                                                    (float(self._get_percent(int(self.categ_id))) / 100))
+                                                    (category_selected.percent / 100))
 
         outlet_product = self.env['product.product'].search(
             [('normal_product_id', '=', self.product_id.id), ('categ_id', '=', int(self.categ_id))])
 
         if create_loss:
-            price_outlet = self.list_price - (self.list_price * (float(self._get_percent(int(self.categ_id))) / 100))
+            ipdb.set_trace()
             if not outlet_product_selected:
                 values = {
                     'qty': self.qty,
@@ -129,6 +123,7 @@ class product_outlet_wizard(models.TransientModel):
                     'date_move': self.date_move,
                     'outlet_ok': True
                 }
+                ipdb.set_trace()
                 self.env['outlet.loss'].create(values)
             else:
                 values = {
@@ -137,10 +132,10 @@ class product_outlet_wizard(models.TransientModel):
                     'date_move': self.date_move,
                     'outlet_ok': True
                 }
+                ipdb.set_trace()
                 self.env['outlet.loss'].create(values)
 
         if act_prod:
-
             if not outlet_product_selected:
                 values = {
                     'standard_price': price_outlet,
@@ -149,6 +144,7 @@ class product_outlet_wizard(models.TransientModel):
                     'commercial_cost': self.commercial_cost,
                     'list_price': price_outlet
                 }
+                ipdb.set_trace()
                 outlet_product.write(values)
 
         return res
