@@ -22,7 +22,6 @@
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime, time
 from openerp.exceptions import ValidationError
-import ipdb
 
 class product_outlet_wizard(models.TransientModel):
     _inherit = 'product.outlet.wizard'
@@ -89,7 +88,6 @@ class product_outlet_wizard(models.TransientModel):
                 raise ValidationError(_("Qty to outlet must be >=0"))
 
             category_selected = self.env['product.category'].browse(int(self.categ_id))
-            ipdb.set_trace()
             outlet_product_selected = self.env['product.product'].search(
                 [('default_code', '=', self.product_id.name + category_selected.name)]
             )
@@ -113,7 +111,6 @@ class product_outlet_wizard(models.TransientModel):
             [('normal_product_id', '=', self.product_id.id), ('categ_id', '=', int(self.categ_id))])
 
         if create_loss:
-            ipdb.set_trace()
             if not outlet_product_selected:
                 values = {
                     'qty': self.qty,
@@ -123,7 +120,6 @@ class product_outlet_wizard(models.TransientModel):
                     'date_move': self.date_move,
                     'outlet_ok': True
                 }
-                ipdb.set_trace()
                 self.env['outlet.loss'].create(values)
             else:
                 values = {
@@ -132,7 +128,6 @@ class product_outlet_wizard(models.TransientModel):
                     'date_move': self.date_move,
                     'outlet_ok': True
                 }
-                ipdb.set_trace()
                 self.env['outlet.loss'].create(values)
 
         if act_prod:
@@ -144,7 +139,6 @@ class product_outlet_wizard(models.TransientModel):
                     'commercial_cost': self.commercial_cost,
                     'list_price': price_outlet
                 }
-                ipdb.set_trace()
                 outlet_product.write(values)
 
         return res
