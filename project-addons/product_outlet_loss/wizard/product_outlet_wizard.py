@@ -22,7 +22,6 @@
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime, time
 from openerp.exceptions import ValidationError
-import ipdb
 
 class product_outlet_wizard(models.TransientModel):
     _inherit = 'product.outlet.wizard'
@@ -87,7 +86,6 @@ class product_outlet_wizard(models.TransientModel):
                 raise ValidationError(_("Qty to outlet must be <= qty available"))
             if self.qty <= 0:
                 raise ValidationError(_("Qty to outlet must be >=0"))
-            ipdb.set_trace()
             category_selected = self.env['product.category'].browse(int(self.categ_id))
             outlet_product_selected = self.env['product.product'].search(
                 [('default_code', '=', self.product_id.name + category_selected.name)]
@@ -98,7 +96,6 @@ class product_outlet_wizard(models.TransientModel):
             if self.state == "last":
                 act_prod = True
                 create_loss = True
-                ipdb.set_trace()
                 price_outlet = self.list_price - (self.list_price *
                                                   (category_selected.percent / 100))
 
