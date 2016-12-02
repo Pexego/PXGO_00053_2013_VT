@@ -382,18 +382,6 @@
             </field>
         </record>
 
-        <record id="view_partner_form_add_require_area" model="ir.ui.view">
-            <field name="name">res.partner.form.add_require_area</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="customer_area.res_partner_view_area_form"/>
-            <field name="arch" type="xml">
-                <field name="area_id" position="attributes">
-                    <attribute name="on_change">change_sales_team(area_id)</attribute>
-                    <attribute name="required">True</attribute>
-                </field>
-            </field>
-        </record>
-
         <record id="view_partner_form_add_require_comercial" model="ir.ui.view">
             <field name="name">res.partner.form.add_require_comercial</field>
             <field name="model">res.partner</field>

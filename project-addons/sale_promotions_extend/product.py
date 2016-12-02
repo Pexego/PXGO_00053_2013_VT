@@ -17,16 +17,3 @@ class ProductCategory(models.Model):
     _inherit = 'product.category'
 
     code = fields.Char('Internal code')
-    percent = fields.Float(string="Percent",
-                           help="This percent will be used when a product moves to an outlet category")
-
-    # ean13 = fields.Char('EAN13', size=13)
-
-    @api.one
-    @api.constrains('percent')
-    def check_length(self):
-        percent = self.percent
-        if (percent > 100) | (percent < 0):
-            raise exceptions. \
-                ValidationError(_('Error ! The percent values must be between 0 and 100'))
-        return True

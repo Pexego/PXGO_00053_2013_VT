@@ -127,12 +127,6 @@ class ResPartner(models.Model):
             res.append((record.id, name))
         return res
 
-    @api.multi
-    def change_sales_team(self, area_id):
-        area = self.env['res.partner.area'].browse(int(area_id))
-
-        return {'value': {'section_id': area.sales_team}}
-
     @api.model
     def create(self, vals):
         if vals.get('dropship', False):

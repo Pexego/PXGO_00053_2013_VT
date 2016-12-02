@@ -12,7 +12,6 @@
             <field name="arch" type="xml">
                 <field name="type" position="after">
                     <field name="code"/>
-                    <field name="percent"/>
                 </field>
             </field>
         </record>
