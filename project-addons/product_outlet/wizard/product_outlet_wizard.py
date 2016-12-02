@@ -21,15 +21,29 @@
 
 from openerp import models, fields, api, exceptions, _
 
+class ProductCategory(models.Model):
+
+    _inherit = 'product.category'
+
+    percent = fields.Float(string="Percent",
+                           help="This percent will be used when a product moves to an outlet category")
+
+    @api.one
+    @api.constrains('percent')
+    def check_length(self):
+        percent = self.percent
+        if (percent > 100) | (percent < 0):
+            raise exceptions. \
+                ValidationError(_('Error ! The percent values must be between 0 and 100'))
+        return True
 
 class product_outlet_wizard(models.TransientModel):
-
     _name = "product.outlet.wizard"
 
     @api.model
     def _get_default_warehouse(self):
         company_id = self.env.user.company_id.id
-        warehouse_ids = self.env['stock.warehouse'].\
+        warehouse_ids = self.env['stock.warehouse']. \
             search([('company_id', '=', company_id)])
         if not warehouse_ids:
             return False
@@ -38,7 +52,7 @@ class product_outlet_wizard(models.TransientModel):
     @api.model
     def _get_default_location(self):
         company_id = self.env.user.company_id.id
-        warehouse_ids = self.env['stock.warehouse'].\
+        warehouse_ids = self.env['stock.warehouse']. \
             search([('company_id', '=', company_id)])
         if not warehouse_ids:
             return False
@@ -48,7 +62,6 @@ class product_outlet_wizard(models.TransientModel):
     product_id = fields.Many2one('product.product', 'Product',
                                  default=lambda self:
                                  self.env.context.get('active_id', False))
-    # categ_id = fields.Many2one('product.category', 'Category')
     categ_id = fields.Selection(selection='_get_outlet_categories',
                                 string='category')
     state = fields.Selection([('first', 'First'), ('last', 'Last')],
@@ -60,12 +73,20 @@ class product_outlet_wizard(models.TransientModel):
     location_orig_id = fields.Many2one("stock.location", "Orig. location",
                                        required=True,
                                        default=_get_default_location)
+    percent = fields.Float(string="Percent",
+                           help="This percent will be used when a product moves to an outlet category")
+
+    @api.multi
+    def onchange_percent(self, category_id):
+        if self.state == 'last':
+            percent = self.env['product.category'].browse(category_id).percent
+            return {'value': {'percent': percent}}
 
     @api.onchange('warehouse_id')
     def onchange_warehouse(self):
         if self.warehouse_id:
-            product = self.env['product.product'].\
-                with_context(warehouse_id=self.warehouse_id.id).\
+            product = self.env['product.product']. \
+                with_context(warehouse_id=self.warehouse_id.id). \
                 browse(self.env.context['active_id'])
             self.qty = product.qty_available
         else:
@@ -74,7 +95,7 @@ class product_outlet_wizard(models.TransientModel):
     @api.model
     def _get_outlet_categories(self):
         res = []
-        outlet_categ_id = self.env.\
+        outlet_categ_id = self.env. \
             ref('product_outlet.product_category_outlet')
         for categ in outlet_categ_id.child_id:
             res.append((categ.id, categ.name))
@@ -92,7 +113,7 @@ class product_outlet_wizard(models.TransientModel):
 
         ctx = dict(self.env.context)
         ctx['warehouse_id'] = self.warehouse_id.id
-        product = self.env['product.product'].\
+        product = self.env['product.product']. \
             with_context(ctx).browse(self.product_id.id)
         if self.state == 'first':
             self.qty = product.qty_available
@@ -113,7 +134,7 @@ class product_outlet_wizard(models.TransientModel):
                 _('the amount entered is greater than the quantity '
                   'available in stock.'))
         if product.categ_id == outlet_categ_id or \
-                product.categ_id.parent_id == outlet_categ_id:
+                        product.categ_id.parent_id == outlet_categ_id:
             raise exceptions.except_orm(
                 _('product error'),
                 _('This product is already in outlet category.'))
@@ -125,15 +146,15 @@ class product_outlet_wizard(models.TransientModel):
 
         if not outlet_product:
             outlet_product = self.env['product.product'].search(
-            [('default_code', '=', product.default_code + categ_obj.browse(int(self.categ_id)).name),
-             ('categ_id', '=', int(self.categ_id))])
+                [('default_code', '=', product.default_code + categ_obj.browse(int(self.categ_id)).name),
+                 ('categ_id', '=', int(self.categ_id))])
         if not outlet_product:
             new_product = product.copy(
                 {'categ_id': int(self.categ_id),
-                 'name': product.name + u' ' +
-                 categ_obj.browse(int(self.categ_id)).name,
+                 'name': product.name +
+                         categ_obj.browse(int(self.categ_id)).name,
                  'default_code': product.default_code +
-                 categ_obj.browse(int(self.categ_id)).name,
+                                 categ_obj.browse(int(self.categ_id)).name,
                  'image_medium': product.image_medium,
                  'ean13': self.ean13 or False})
             categ = self.env['product.category'].browse(int(self.categ_id))
@@ -152,26 +173,26 @@ class product_outlet_wizard(models.TransientModel):
         move_in = move_obj.create({'product_id': new_product.id,
                                    'product_uom_qty': self.qty,
                                    'location_id':
-                                   new_product.property_stock_inventory.id,
+                                       new_product.property_stock_inventory.id,
                                    'location_dest_id':
-                                   self.warehouse_id.wh_input_stock_loc_id.id,
+                                       self.warehouse_id.wh_input_stock_loc_id.id,
                                    'product_uom': new_product.uom_id.id,
                                    'picking_type_id':
-                                   self.warehouse_id.in_type_id.id,
+                                       self.warehouse_id.in_type_id.id,
                                    'partner_id':
-                                   self.env.user.company_id.partner_id.id,
+                                       self.env.user.company_id.partner_id.id,
                                    'name': "OUTLET"})
         move_out = move_obj.create({'product_id': product.id,
                                     'product_uom_qty': self.qty,
                                     'location_id': stock_location.id,
                                     'location_dest_id':
-                                    product.property_stock_inventory.id,
+                                        product.property_stock_inventory.id,
                                     'product_uom': product.uom_id.id,
                                     'picking_type_id':
-                                    self.warehouse_id.out_type_id.id,
+                                        self.warehouse_id.out_type_id.id,
                                     'move_dest_id': move_in.id,
                                     'partner_id':
-                                    self.env.user.company_id.partner_id.id,
+                                        self.env.user.company_id.partner_id.id,
                                     'name': "OUTLET"})
 
         move_out.action_confirm()

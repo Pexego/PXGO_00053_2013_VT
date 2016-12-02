@@ -23,14 +23,20 @@ from openerp import models, fields, api
 
 
 class res_partner(models.Model):
-
     _inherit = 'res.partner'
 
     area_id = fields.Many2one('res.partner.area', 'Area')
 
-class res_partner_area(models.Model):
 
-    _name="res.partner.area"
+class res_partner_area(models.Model):
+    _name = "res.partner.area"
 
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15)
+    sales_team = fields.Many2one('crm.case.section', 'Sales Team')
+
+    @api.multi
+    def change_sales_team(self, area_id):
+        area = self.env['res.partner.area'].browse(int(area_id))
+
+        return {'value': {'section_id': area.sales_team}}

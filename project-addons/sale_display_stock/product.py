@@ -45,16 +45,20 @@ class ProductTemplate(models.Model):
 
     @api.one
     def _get_in_production_stock(self):
-        moves = self.env["stock.move"].search([('product_id', '=',
-                                                self.product_variant_ids[0].id),
-                                               ('purchase_line_id', '!=',
-                                                False),
-                                               ('picking_id', '=', False),
-                                               ('state', '!=', 'cancel')])
-        qty = 0.0
-        for move in moves:
-            qty += move.product_uom_qty
-        self.qty_in_production = qty
+        if self.product_variant_ids:
+            moves = self.env["stock.move"].search([('product_id', 'in',
+                                                    self.product_variant_ids.ids),
+                                                    ('purchase_line_id', '!=',
+                                                    False),
+                                                    ('picking_id', '=', False),
+                                                    ('state', '!=', 'cancel')])
+
+            qty = 0.0
+            for move in moves:
+                qty += move.product_uom_qty
+            self.qty_in_production = qty
+        else:
+            self.qty_in_production = 0.0
 
     @api.one
     def _stock_conservative(self):

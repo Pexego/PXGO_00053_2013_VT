@@ -17,8 +17,9 @@
                         </group>
                         <group states="last">
                             <field name="qty"/>
-                            <field name="categ_id" attrs="{'required': [('state', '=', 'last')]}"/>
+                            <field name="categ_id" on_change="onchange_percent(categ_id)" attrs="{'required': [('state', '=', 'last')]}"/>
                             <field name="ean13"/>
+                            <group><field name="percent" readonly="1"/></group>
                         </group>
                     </group>
                     <footer>
@@ -37,6 +38,18 @@
         view_id="product_outlet_wizard_form"
         view_mode="form"
         target="new"/>
+
+        <record id="product_category_add_percent_form" model="ir.ui.view">
+            <field name="name">product.category.form.percent</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <field name="type" position="after">
+                    <field name="percent"/>
+                </field>
+            </field>
+        </record>
+
 
     </data>
 </openerp>

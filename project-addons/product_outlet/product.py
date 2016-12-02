@@ -40,3 +40,5 @@ class product_product(models.Model):
             self.is_outlet = True
         else:
             self.is_outlet = False
+
+

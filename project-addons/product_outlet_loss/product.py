@@ -31,8 +31,6 @@ class outlet_loss(models.Model):
     def _get_outlet_loss(self):
         self.total_lost=self.qty*(self.price_outlet-self.price_unit)
 
-
-    qty = fields.Float('Quantity')
     product_id = fields.Many2one('product.product', 'Product')
     price_unit = fields.Float('Price')
     price_outlet = fields.Float('Outlet Price')
@@ -41,6 +39,8 @@ class outlet_loss(models.Model):
     date_move = fields.Date('Move to outlet on', default = fields.datetime.now())
     outlet_ok = fields.Boolean('Outlet')
     order_line_id = fields.Many2one('sale.order.line', 'Order Line')
+    qty = fields.Float('Quantity')
+    percent = fields.Float('Percent')
 
 
 

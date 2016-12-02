@@ -8,8 +8,8 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <field name="company_id" position="after">
-                    <field name="transporter_id"/>
-                    <field name="service_id"/>
+                    <field name="transporter_id" required="True"/>
+                    <field name="service_id" required="True"/>
                 </field>
             </field>
         </record>

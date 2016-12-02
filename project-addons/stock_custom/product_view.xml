@@ -24,6 +24,9 @@
             <field name="arch" type="xml">
                 <field name="price" position="after">
                     <field name="virtual_stock_conservative"/>
+                    <field name="incoming_qty"/>
+                    <field name="qty_in_production"/>
+                    <field name="joking_index"/>
                 </field>
             </field>
         </record>
@@ -38,7 +41,7 @@
             <field name="arch" type="xml">
                 <field name="name" position="after">
                     <field name="tag_ids" string="Tag"/>
-                   <field name="seller_id" string="Main Supplier"/>
+                    <field name="seller_id" string="Main Supplier"/>
                 </field>
                 <field name="categ_id" position="attributes">
                     <attribute name="filter_domain"></attribute>

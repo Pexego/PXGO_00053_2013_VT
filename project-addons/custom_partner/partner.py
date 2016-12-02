@@ -27,14 +27,12 @@ from datetime import datetime, timedelta
 
 
 class ResPartnerInvoiceType(models.Model):
-
     _name = 'res.partner.invoice.type'
 
     name = fields.Char('Name', required=True)
 
 
 class ResPartner(models.Model):
-
     _inherit = "res.partner"
 
     @api.one
@@ -67,6 +65,7 @@ class ResPartner(models.Model):
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
     att = fields.Char("A/A")
 
+
     @api.multi
     def _get_purchased_quantity(self):
         for partner in self:
@@ -85,8 +84,15 @@ class ResPartner(models.Model):
                                ('is_company', '=', True),
                                ('id', '!=', self.id)])
             if ids:
-                raise exceptions.\
+                raise exceptions. \
                     ValidationError(_('Partner ref must be unique'))
+
+    @api.constrains('child_ids', 'is_company', 'active')
+    def check_unique_child_ids(self):
+        if self.is_company and self.active:
+            if not self.child_ids:
+                raise exceptions. \
+                    ValidationError(_('At least, a contact must be added'))
 
     @api.constrains('vat', 'is_company', 'supplier', 'customer', 'active')
     def check_unique_vat(self):
@@ -97,7 +103,7 @@ class ResPartner(models.Model):
                                ('supplier', '=', self.supplier),
                                ('customer', '=', self.customer)])
             if ids:
-                raise exceptions.\
+                raise exceptions. \
                     ValidationError(_('VAT must be unique'))
 
     def name_get(self, cr, uid, ids, context=None):
@@ -114,8 +120,8 @@ class ResPartner(models.Model):
                 name = self._display_address(cr, uid, record, without_company=True, context=context)
             if context.get('show_address'):
                 name = name + "\n" + self._display_address(cr, uid, record, without_company=True, context=context)
-            name = name.replace('\n\n','\n')
-            name = name.replace('\n\n','\n')
+            name = name.replace('\n\n', '\n')
+            name = name.replace('\n\n', '\n')
             if context.get('show_email') and record.email:
                 name = "%s <%s>" % (name, record.email)
             res.append((record.id, name))
@@ -146,7 +152,7 @@ class ResPartner(models.Model):
                   ('date_maturity', '>', today)]
         if days:
             formatted_date = datetime.strptime(today, "%Y-%m-%d")
-            due_date = datetime.\
+            due_date = datetime. \
                 strftime(formatted_date + timedelta(days=days), "%Y-%m-%d")
             domain.append(('date_maturity', '<=', due_date))
 
@@ -174,8 +180,8 @@ class ResPartner(models.Model):
         if context is None:
             context = {}
         partner = self.browse(cr, uid, ids[0], context=context).commercial_partner_id
-        #copy the context to not change global context. Overwrite it because _() looks for the lang in local variable 'context'.
-        #Set the language to use = the partner language
+        # copy the context to not change global context. Overwrite it because _() looks for the lang in local variable 'context'.
+        # Set the language to use = the partner language
         context = dict(context, lang=partner.lang)
         followup_table = ''
         if partner.unreconciled_aml_ids:
@@ -203,9 +209,11 @@ class ResPartner(models.Model):
                     strbegin = "<TD>"
                     strend = "</TD>"
                     date = aml['date_maturity'] or aml['date']
-                    followup_table +="<TR>" + strbegin + str(aml['date']) + strend + strbegin + (aml['ref'] or '') + strend + strbegin + str(date) + strend + strbegin + str(aml['balance']) + strend + strbegin + block + strend + "</TR>"
+                    followup_table += "<TR>" + strbegin + str(aml['date']) + strend + strbegin + (
+                    aml['ref'] or '') + strend + strbegin + str(date) + strend + strbegin + str(
+                        aml['balance']) + strend + strbegin + block + strend + "</TR>"
 
-                total = reduce(lambda x, y: x+y['balance'], currency_dict['line'], 0.00)
+                total = reduce(lambda x, y: x + y['balance'], currency_dict['line'], 0.00)
 
                 total = rml_parse.formatLang(total, dp='Account', currency_obj=currency)
                 followup_table += '''<tr> </tr>

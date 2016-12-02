@@ -7,7 +7,7 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="purchase_advance_payment.view_partner_property_form_add_on_account"/>
             <field name="arch" type="xml">
-                <field name="date" position="attributes">
+                 <field name="date" position="attributes">
                     <attribute name="readonly">1</attribute>
                     <attribute name="string">Created date</attribute>
                 </field>
@@ -15,7 +15,7 @@
                     <field name="web"/>
                 </field>
                 <field name="property_account_position" position="after">
-                    <field name="invoice_type_id" />
+                    <field name="invoice_type_id" attrs="{'required':True}"/>
                 </field>
                 <field name="user_id" position="replace"/>
                 <field name="ref" position="replace"/>
@@ -113,7 +113,7 @@
         <record id="res_partner_view_buttons_add_quotations" model="ir.ui.view">
             <field name="name">res.partner.view.buttons.add_quotations</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="priority" eval="20"/>
             <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
             <field name="arch" type="xml">
@@ -134,7 +134,7 @@
             <field name="res_model">res.partner</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,kanban</field>
-            <field name="context">{"search_default_customer":1, 'default_customer': 1, 'default_supplier': 0}</field>
+            <field name="context">{"search_default_customer":1, 'default_customer': 1, 'default_supplier': 0, 'default_is_company': 1, 'default_lang': 0, 'default_property_product_pricelist': 0}</field>
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
@@ -253,6 +253,25 @@
             </field>
         </record>
 
+        <record id="view_partner_tree_custom" model="ir.ui.view">
+            <field name="name">res.partner.tree.custom</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after">
+                    <field name="property_product_pricelist"/>
+                    <field name="area_id"/>
+                    <field name="section_id"/>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </field>
+                <field name="user_id" position="after">
+                    <field name="category_id"></field>
+                </field>
+            </field>
+        </record>
+
         <record id="view_partner_form_add_att" model="ir.ui.view">
             <field name="name">res.partner.form.add_att</field>
             <field name="model">res.partner</field>
@@ -266,6 +285,114 @@
                 </xpath>
             </field>
         </record>
+
+        <record id="view_partner_form_add_require" model="ir.ui.view">
+            <field name="name">res.partner.form.add_require</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="ref" position="attributes">
+                    <attribute name="readonly">True</attribute>
+                </field>
+                <field name="name" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="category_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="street" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                 <field name="zip" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="city" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="state_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="country_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="email" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="phone" position="attributes">
+                    <attribute name="string">Phone/Mobile 1</attribute>
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="mobile" position="attributes">
+                    <attribute name="string">Phone/Mobile 2</attribute>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="lang" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_readonly_setion" model="ir.ui.view">
+            <field name="name">res.partner.form.add_readonly_section</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="crm.view_partners_form_crm1"/>
+            <field name="arch" type="xml">
+                <field name="section_id" position="attributes">
+                    <attribute name="readonly">True</attribute>
+                </field>
+            </field>
+        </record>
+
+
+        <record id="view_partner_form_add_required_payment_mode" model="ir.ui.view">
+            <field name="name">res.partner.form.add_required_payment_mode</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account_payment_partner.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="customer_payment_mode" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_required_payment_term" model="ir.ui.view">
+            <field name="name">res.partner.form.add_required_payment_term</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_payment_term" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="property_account_position" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_require_pricelist" model="ir.ui.view">
+            <field name="name">res.partner.form.add_require_pricelist</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="product.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_product_pricelist" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_require_comercial" model="ir.ui.view">
+            <field name="name">res.partner.form.add_require_comercial</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="l10n_es_partner.view_partner_form_comercial"/>
+            <field name="arch" type="xml">
+                <field name="comercial" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+            </field>
+        </record>
+
 
     </data>
 </openerp>
