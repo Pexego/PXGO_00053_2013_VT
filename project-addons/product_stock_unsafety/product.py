@@ -55,11 +55,15 @@ class product_product(models.Model):
     def calc_joking_index(self):
         search_date = (date.today() - relativedelta(days=60)).\
             strftime("%Y-%m-%d")
+        warehouses = self.env["stock.warehouse"].search([])
+        stock_location_ids = [x.lot_stock_id.id for x in warehouses]
         product_obj = self.env["product.product"]
         self.env.cr.\
-            execute("select product_id from stock_days_positive where "
-                    "datum >= '%s' group by product_id "
-                    "having count(*) >= 60" % search_date)
+            execute("select distinct product_id from stock_move where "
+                    "date <= %s and location_dest_id in (%s) and "
+                    "state = 'done' and company_id = %s",
+                    (search_date, tuple(stock_location_ids),
+                     self.env.user.company_id.id))
         res = self.env.cr.fetchall()
         joking_tot = 0
         cont = len(res)
