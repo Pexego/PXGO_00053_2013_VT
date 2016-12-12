@@ -27,6 +27,12 @@ class res_partner(models.Model):
 
     area_id = fields.Many2one('res.partner.area', 'Area')
 
+    @api.multi
+    def change_sales_team(self, area_id):
+        area = self.env['res.partner.area'].browse(int(area_id))
+
+        return {'value': {'section_id': area.sales_team.id}}
+
 
 class res_partner_area(models.Model):
     _name = "res.partner.area"
@@ -34,9 +40,3 @@ class res_partner_area(models.Model):
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15)
     sales_team = fields.Many2one('crm.case.section', 'Sales Team')
-
-    @api.multi
-    def change_sales_team(self, area_id):
-        area = self.env['res.partner.area'].browse(int(area_id))
-
-        return {'value': {'section_id': area.sales_team}}
