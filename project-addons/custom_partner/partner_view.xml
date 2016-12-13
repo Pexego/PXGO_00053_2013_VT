@@ -15,7 +15,7 @@
                     <field name="web"/>
                 </field>
                 <field name="property_account_position" position="after">
-                    <field name="invoice_type_id" attrs="{'required':True}"/>
+                    <field name="invoice_type_id" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}"/>
                 </field>
                 <field name="user_id" position="replace"/>
                 <field name="ref" position="replace"/>
@@ -294,42 +294,39 @@
                 <field name="ref" position="attributes">
                     <attribute name="readonly">True</attribute>
                 </field>
-                <field name="name" position="attributes">
-                    <attribute name="required">True</attribute>
-                </field>
                 <field name="category_id" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="street" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                  <field name="zip" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="city" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="state_id" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="country_id" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="email" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="phone" position="attributes">
                     <attribute name="string">Phone/Mobile 1</attribute>
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="mobile" position="attributes">
                     <attribute name="string">Phone/Mobile 2</attribute>
                 </field>
                 <field name="user_id" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="lang" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
             </field>
         </record>
@@ -352,7 +349,7 @@
             <field name="inherit_id" ref="account_payment_partner.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <field name="customer_payment_mode" position="attributes">
-                    <attribute name="required">True</attribute>
+                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
             </field>
         </record>
@@ -363,10 +360,10 @@
             <field name="inherit_id" ref="account.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <field name="property_payment_term" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="property_account_position" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
             </field>
         </record>
@@ -377,7 +374,7 @@
             <field name="inherit_id" ref="product.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <field name="property_product_pricelist" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
             </field>
         </record>
@@ -388,7 +385,7 @@
             <field name="inherit_id" ref="l10n_es_partner.view_partner_form_comercial"/>
             <field name="arch" type="xml">
                 <field name="comercial" position="attributes">
-                    <attribute name="required">True</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
             </field>
         </record>
