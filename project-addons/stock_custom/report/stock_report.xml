@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_stock_product_search" model="ir.ui.view">
+            <field name="name">stock.report.search</field>
+            <field name="model">stock.picking.report</field>
+            <field name="arch" type="xml">
+                <search string="Sales Analysis">
+                    <field name="name"/>
+                    <field name="date"/>
+                    <field name="date_done"/>
+                    <field name="commercial"/>
+                    <filter string="This Year" name="year" invisible="1" domain="[('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                    <filter name="Quotations" string="Quotations" domain="[('state','=','draft')]"/>
+                    <filter name="Sales" string="Sales" domain="[('state','not in',('draft', 'cancel'))]"/>
+                    <separator/>
+                    <filter string="My Picking" help="My Picking" domain="[('commercial','=',uid)]"/>
+                    <field name="partner_id"/>
+                    <field name="product_id"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Name" name="name" context="{'group_by':'name'}"/>
+                        <filter string="Product" name="product_id" context="{'group_by':'product_id'}"/>
+                        <filter string="# of Lines" name="nbr" context="{'group_by':'nbr'}"/>
+                        <filter string="Salesperson" name="User" context="{'group_by':'commercial'}"/>
+                        <filter string="Customer" name="Customer" context="{'group_by':'partner_id'}"/>
+                        <filter string="Category of Product" name="Category" context="{'group_by':'categ_id'}"/>
+                        <filter string="Status" context="{'group_by':'state'}"/>
+                        <separator/>
+                        <filter string="Order Month" context="{'group_by':'date:month'}" help="Ordered date of the sales order"/>
+                        <filter string="Order Done Month" context="{'group_by':'date_done:month'}" help="Ordered date of the sales order"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="view_picking_graph" model="ir.ui.view">
+            <field name="name">stock.report.graph</field>
+            <field name="model">stock.picking.report</field>
+            <field name="arch" type="xml">
+                <graph string="Sales Analysis" type="pivot" stacked="True">
+                    <field name="commercial" type="row"/>
+                    <field name="price_total" type="measure"/>
+                </graph>
+            </field>
+        </record>
+
+        <record id="action_order_report_all_picking" model="ir.actions.act_window">
+            <field name="name">Sales Picking Analysis</field>
+            <field name="res_model">stock.picking.report</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="search_view_id" ref="view_stock_product_search"/>
+            <field name="view_id" ref="view_picking_graph"/>
+            <field name="context">{'search_default_Sales':1, 'group_by_no_leaf':1,'group_by':[]}</field>
+            <field name="help">This report performs analysis on your quotations and sales orders. Analysis check your sales revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the Invoice Analysis report in the Accounting application.</field>
+        </record>
+
+        <menuitem action="action_order_report_all_picking" id="menu_report_product_all_picking" parent="base.next_id_64" sequence="11"/>
+     </data>
+</openerp>
