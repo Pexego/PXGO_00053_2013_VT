@@ -31,13 +31,13 @@
                     <attribute name="attrs">{'readonly':[('state','!=','last')]}</attribute>
                 </field>
                 <group states='first' position="inside">
-                        <group>
+                        <!--<group>
                             <field name="price_unit" invisible="1"/>
                             <field name="qty_available" invisible="1"/>
-                        </group>
+                        </group>-->
 
                         <group>
-                            <field name="price_outlet"/>
+                            <!--<field name="price_outlet"/>-->
                             <field name="commercial_cost"/>
                         </group>
                         <group>

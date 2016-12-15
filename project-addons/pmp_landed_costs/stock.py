@@ -43,9 +43,9 @@ class stock_move(models.Model):
                 product_obj.write(cr, SUPERUSER_ID, [product.id], {'standard_price': new_std_price}, context=context)
 
     def product_price_update_after_done(self, cr, uid, ids, context=None):
-        res = super(stock_move, self).product_price_update_after_done(cr, uid, ids, context)
+        #res = super(stock_move, self).product_price_update_after_done(cr, uid, ids, context)
         product_obj = self.pool.get('product.product')
         for move in self.browse(cr, uid, ids, context=context):
             if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
                 product_obj.update_real_cost(cr, uid, move.product_id.id, context)
-        return res
+        #return res

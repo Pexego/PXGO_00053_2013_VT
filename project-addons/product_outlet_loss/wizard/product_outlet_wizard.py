@@ -26,17 +26,17 @@ from openerp.exceptions import ValidationError
 class product_outlet_wizard(models.TransientModel):
     _inherit = 'product.outlet.wizard'
 
-    price_unit = fields.Float(
-        'Price Before',
-        default=lambda self: self.env['product.product'].browse(
-            self.env.context.get('active_id', False)).standard_price, Readonly=True)
-
-    price_outlet = fields.Float(
-        'Price After',
-        default=lambda self:
-        self.env['product.product'].browse(self.env.context.get('active_id', False)).standard_price *
-        (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
-        / 100)
+    #~ price_unit = fields.Float(
+        #~ 'Price Before',
+        #~ default=lambda self: self.env['product.product'].browse(
+            #~ self.env.context.get('active_id', False)).standard_price, Readonly=True)
+#~
+    #~ price_outlet = fields.Float(
+        #~ 'Price After',
+        #~ default=lambda self:
+        #~ self.env['product.product'].browse(self.env.context.get('active_id', False)).standard_price *
+        #~ (100 - self.env['product.product'].browse(self.env.context.get('active_id', False)).company_id.outlet_per_cent)
+        #~ / 100)
 
     list_price2 = fields.Float(
         'Price PVP 2',

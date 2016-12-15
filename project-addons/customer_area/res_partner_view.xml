@@ -19,7 +19,7 @@
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
                 <field name="website" position="before">
-                    <field name="area_id" on_change="change_sales_team(area_id)" attrs="{'required':True, 'invisible':[('customer', '=', False)]}"/>
+                    <field name="area_id" on_change="change_sales_team(area_id)" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)], 'invisible':[('customer', '=', False)]}"/>
                 </field>
             </field>
         </record>
