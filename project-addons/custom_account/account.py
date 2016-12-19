@@ -88,7 +88,7 @@ class AccountInvoice(models.Model):
                                            "linked to this invoice. ")
     country_id = fields.Many2one('res.country', 'Country',
                                  related="partner_id.country_id",
-                                 readonly=True, store=True)
+                                 readonly=True, store=False)
     invoice_type_id = fields.\
         Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
                  related="invoice_line.picking_id.invoice_type_id")
