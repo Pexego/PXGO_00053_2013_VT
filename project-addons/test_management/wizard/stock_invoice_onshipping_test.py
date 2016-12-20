@@ -146,6 +146,7 @@ class StockInvoiceOnShippingTests(models.TransientModel):
                         ('company_id', '=', self.env.user.company_id.
                          test_company_id.id)])
                 line.account_id = accounts[0].id
+                line.account_analytic_id = False
 
             invoice.button_reset_taxes()
         return res
