@@ -183,6 +183,17 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="crm_claim_line_tree_view2_add_commercial">
+            <field name="name">CRM - Claims Tree - Add Commercial</field>
+            <field name="model">claim.line</field>
+            <field name="inherit_id" ref="crm_claim_rma.crm_claim_line_tree_view2"/>
+            <field name="arch" type="xml">
+                <field name="claim_id" position="after">
+                    <field name="comercial"/>
+                </field>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="crm_claim_rma.crm_case_categ_claim_supplier">
             <field name="name">Claims</field>
             <field name="res_model">crm.claim</field>

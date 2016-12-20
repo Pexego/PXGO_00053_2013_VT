@@ -98,28 +98,11 @@ class AccountInvoice(models.Model):
     last_payment = fields.Date("Last Payment", compute="last_payment_date")
     partner_commercial = fields.Char("Commercial", compute="get_comercial")
 
-
     @api.multi
     def get_comercial(self):
         for invoice in self:
             invoice.partner_commercial = invoice.partner_id.user_id.name
 
-    """"@api.one
-    @api.depends('invoice_line.price_subtotal', 'tax_line.amount')
-    def _compute_amount(self):
-        super(AccountInvoice, self)._compute_amount()
-        refund = ['out_refound','in_invoice']
-        amount_untaxed = 0
-        for line in self.invoice_line:
-            invoice = self.env["account.invoice"].search([('id', '=',[self.invoice_id])])
-            if invoice.type in refund:
-                amount_untaxed -= line.price_subtotal
-            else:
-                amount_untaxed += line.price_subtotal
-
-        self.amount_untaxed = amount_untaxed
-        self.amount_total = self.amount_untaxed + self.amount_tax
-"""
     @api.multi
     def total_paid(self):
         for invoice in self:
