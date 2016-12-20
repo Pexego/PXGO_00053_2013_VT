@@ -89,7 +89,7 @@ class AccountInvoice(models.Model):
     country_id = fields.Many2one('res.country', 'Country',
                                  related="partner_id.country_id",
                                  readonly=True, store=False)
-    invoice_type_id = fields.\
+    invoice_type_id = fields. \
         Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
                  related="invoice_line.picking_id.invoice_type_id")
     active = fields.Boolean(default=True)
@@ -97,6 +97,18 @@ class AccountInvoice(models.Model):
     total = fields.Float("Total Paid", compute="total_paid")
     last_payment = fields.Date("Last Payment", compute="last_payment_date")
     partner_commercial = fields.Char("Commercial", compute="get_comercial")
+    subtotal_wt_rect = fields.Float("Real Subtotal", compute="get_subtotal_wt_rect")
+
+    @api.multi
+    def get_subtotal_wt_rect(self):
+        for invoice in self:
+            invoice_wt_rect = 0
+            if "R" in invoice.number:
+                invoice_wt_rect -= invoice.amount_untaxed
+            else:
+                invoice_wt_rect += invoice.amount_untaxed
+
+            invoice.subtotal_wt_rect = invoice_wt_rect
 
     @api.multi
     def get_comercial(self):
@@ -130,7 +142,7 @@ class AccountInvoice(models.Model):
                 vals["attach_picking"] = partner.attach_picking
         if 'type' in vals and 'partner_bank_id' in vals:
             if vals['type'] == 'out_invoice':
-                partner_bank = self.env['res.partner.bank'].\
+                partner_bank = self.env['res.partner.bank']. \
                     browse(vals['partner_bank_id'])
                 mandate_ids = partner_bank.mandate_ids
                 default_mandate = mandate_ids.filtered(
@@ -139,7 +151,7 @@ class AccountInvoice(models.Model):
                     default_mandate = mandate_ids.filtered(
                         lambda r: r.state == "valid")
                 vals['mandate_id'] = default_mandate and \
-                    default_mandate[0].id or False
+                                     default_mandate[0].id or False
         return super(AccountInvoice, self).create(vals)
 
     @api.multi
@@ -187,7 +199,7 @@ class AccountInvoice(models.Model):
     @api.depends('invoice_line')
     def _get_picking_ids(self):
         for invoice in self:
-            invoice.picking_ids = invoice.\
+            invoice.picking_ids = invoice. \
                 mapped('invoice_line.move_id.picking_id').sorted()
 
     @api.multi
@@ -257,7 +269,7 @@ class AccountInvoice(models.Model):
         first_account = lines[0].account_id
         for line in lines:
             if (line.account_id.type in ('receivable', 'payable') and
-                    line.partner_id != first_partner):
+                        line.partner_id != first_partner):
                 return False
             if line.account_id != first_account:
                 return False

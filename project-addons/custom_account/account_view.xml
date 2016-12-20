@@ -129,6 +129,9 @@
                     <field name="payment_mode_id"/>
                     <field name="payment_term"/>
                 </field>
+                <field name="amount_total" position="after">
+                    <field name="subtotal_wt_rect" sum="Real Subtotal"/>
+                </field>
                 <field name="state" position="after">
                     <field name="total"/>
                     <field name="last_payment"/>
@@ -143,6 +146,21 @@
                     <attribute name="invisible">True</attribute>
                 </field>
             </field>
+        </record>
+
+        <record id="view_account_invoice_filter_ef" model="ir.ui.view">
+            <field name="name">account.invoice.select.no.ef</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <filter name="unpaid" position="after">
+                    <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
+                </filter>
+            </field>
+        </record>
+
+        <record id="account.action_invoice_refund_out_tree" model="ir.actions.act_window">
+            <field name="context">{'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale', 'search_default_without_ef':1}</field>
         </record>
 
         <record id="invoice_tree_invisible_section" model="ir.ui.view">
