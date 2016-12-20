@@ -136,9 +136,36 @@
                 <field name="company_id" position="after">
                     <field name="invoice_type_id"/>
                 </field>
+                <field name="residual" position="before">
+                    <field name="payment_mode_id"/>
+                    <field name="payment_term"/>
+                </field>
+                <field name="state" position="after">
+                    <field name="total"/>
+                    <field name="last_payment"/>
+                </field>
+                <field name="number" position="after">
+                    <field name="partner_commercial"/>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="origin" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
             </field>
         </record>
 
+        <record id="invoice_tree_invisible_section" model="ir.ui.view">
+            <field name="name">account.invoice.tree.invisible.section</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="sale.account_invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="section_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
         <record id="payment_mode_add_blocked_form" model="ir.ui.view">
             <field name="name">payment.mode.form</field>
             <field name="model">payment.mode</field>
