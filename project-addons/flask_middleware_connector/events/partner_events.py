@@ -26,7 +26,6 @@ from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
 from .rma_events import export_rma, export_rmaproduct
-from openerp.addons.connector.event import Event
 
 
 @middleware
@@ -48,7 +47,8 @@ class PartnerExporter(Exporter):
                 "commercial_id": partner.user_id.id,
                 "ref": partner.ref,
                 "discount": partner.discount,
-                "pricelist_name": partner.property_product_pricelist and partner.property_product_pricelist.name or "",
+                "pricelist_name": partner.property_product_pricelist and
+                partner.property_product_pricelist.name or "",
                 "state": partner.state_id and partner.state_id.name or "",
                 "email": partner.email or ""}
         if mode == "insert":
@@ -74,7 +74,8 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                  "property_product_pricelist"]
     if vals.get("web", False) and (vals.get('active', False) or
                                    partner.active):
-        export_partner.delay(session, model_name, record_id, priority=2, eta=60)
+        export_partner.delay(session, model_name, record_id, priority=2,
+                             eta=60)
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -84,7 +85,8 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                     export_rmaproduct.delay(session, 'claim.line', line.id,
                                             priority=10, eta=240)
     elif vals.get("active", False) and partner.web:
-        export_partner.delay(session, model_name, record_id, priority=1, eta=60)
+        export_partner.delay(session, model_name, record_id, priority=1,
+                             eta=60)
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -106,9 +108,9 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email", "ref", "user_id",
                  "property_product_pricelist"]
-    if vals.get("web", False) and (vals.get('active', False) or
-                                   partner.active):
-        export_partner.delay(session, model_name, record_id, priority=2, eta=60)
+    if vals.get("web", False) and (vals.get('active', False) or partner.active) and (vals.get('is_company', False) or partner.is_company):
+        export_partner.delay(session, model_name, record_id, priority=2,
+                             eta=60)
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -119,7 +121,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                                             priority=10, eta=240)
     elif "web" in vals and not vals["web"]:
         unlink_partner.delay(session, model_name, record_id, priority=100)
-    elif vals.get("active", False) and partner.web:
+    elif vals.get("active", False) and partner.web and (vals.get('is_company', False) or partner.is_company):
         export_partner(session, model_name, record_id)
         rmas = session.delay.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
@@ -131,7 +133,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                                             priority=10, eta=240)
     elif "active" in vals and not vals["active"] and partner.web:
         unlink_partner(session, model_name, record_id)
-    elif partner.web:
+    elif partner.web and (vals.get('is_company', False) or partner.is_company):
         for field in up_fields:
             if field in vals:
                 update_partner.delay(session, model_name, record_id, priority=5)
