@@ -334,18 +334,6 @@
             </field>
         </record>
 
-        <record id="view_partner_form_add_readonly_setion" model="ir.ui.view">
-            <field name="name">res.partner.form.add_readonly_section</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="crm.view_partners_form_crm1"/>
-            <field name="arch" type="xml">
-                <field name="section_id" position="attributes">
-                    <attribute name="readonly">True</attribute>
-                </field>
-            </field>
-        </record>
-
-
         <record id="view_partner_form_add_required_payment_mode" model="ir.ui.view">
             <field name="name">res.partner.form.add_required_payment_mode</field>
             <field name="model">res.partner</field>
