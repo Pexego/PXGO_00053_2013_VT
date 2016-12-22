@@ -52,6 +52,7 @@ class ResPartner(models.Model):
                                              ['draft', 'cancel', 'sent'])]))
 
     web = fields.Boolean("Web", help="Created from web", copy=False)
+    email_web = fields.Char("Email Web")
     sale_product_count = fields.Integer(compute=_get_products_sold,
                                         string="# Products sold",
                                         readonly=True)

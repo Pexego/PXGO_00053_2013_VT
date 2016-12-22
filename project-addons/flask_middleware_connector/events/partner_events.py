@@ -50,7 +50,7 @@ class PartnerExporter(Exporter):
                 "pricelist_name": partner.property_product_pricelist and
                 partner.property_product_pricelist.name or "",
                 "state": partner.state_id and partner.state_id.name or "",
-                "email": partner.email or ""}
+                "email": partner.email_web or ""}
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
@@ -70,7 +70,7 @@ class PartnerAdapter(GenericAdapter):
 def delay_export_partner_create(session, model_name, record_id, vals):
     partner = session.env[model_name].browse(record_id)
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
-                 "country_id", "state_id", "email", "ref", 'user_id',
+                 "country_id", "state_id", "email_web", "ref", 'user_id',
                  "property_product_pricelist"]
     if vals.get("web", False) and (vals.get('active', False) or
                                    partner.active):
@@ -106,7 +106,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
 def delay_export_partner_write(session, model_name, record_id, vals):
     partner = session.env[model_name].browse(record_id)
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
-                 "country_id", "state_id", "email", "ref", "user_id",
+                 "country_id", "state_id", "email_web", "ref", "user_id",
                  "property_product_pricelist"]
     if vals.get("web", False) and (vals.get('active', False) or partner.active) and (vals.get('is_company', False) or partner.is_company):
         export_partner.delay(session, model_name, record_id, priority=2,
