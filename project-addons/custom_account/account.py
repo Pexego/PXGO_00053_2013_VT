@@ -97,7 +97,7 @@ class AccountInvoice(models.Model):
     total = fields.Float("Total Paid", compute="total_paid")
     last_payment = fields.Date("Last Payment", compute="last_payment_date")
     partner_commercial = fields.Char("Commercial", compute="get_comercial")
-    subtotal_wt_rect = fields.Float("Real Subtotal", compute="get_subtotal_wt_rect")
+    subtotal_wt_rect = fields.Float("Real Subtotal", compute="get_subtotal_wt_rect", store=True)
 
     @api.multi
     def get_subtotal_wt_rect(self):
@@ -109,6 +109,11 @@ class AccountInvoice(models.Model):
                 invoice_wt_rect += invoice.amount_untaxed
 
             invoice.subtotal_wt_rect = invoice_wt_rect
+
+    @api.one
+    @api.depends('invoice.amount_untaxed')
+    def _get_subtotal_wt_rect(self):
+        self.subtotal_wt_rect = 10
 
     @api.multi
     def get_comercial(self):
