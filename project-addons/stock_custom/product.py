@@ -2,12 +2,19 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, _
-
+from openerp import models, api, _, fields
 
 class ProductProduct(models.Model):
 
     _inherit = 'product.product'
+
+    virtual_stock_cooked = fields.Float('Stock Available Cooking', compute="_get_virtual_stock_cooked")
+
+    @api.multi
+    def _get_virtual_stock_cooked(self):
+        for product in self:
+            product.virtual_stock_cooked = product.qty_available_wo_wh +\
+                                            product.virtual_stock_conservative
 
     @api.multi
     def action_view_moves(self):
