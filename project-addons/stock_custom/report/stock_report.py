@@ -9,14 +9,14 @@ class stock_picking_report(osv.osv):
     _rec_name = 'date'
 
     _columns = {
-        'name': fields.char('Picking name', readonly=True),
+        'name': fields.char('Picking Name', readonly=True),
         'date': fields.datetime('Date Order', readonly=True),
         'date_done': fields.datetime('Date Done', readonly=True),
         'product_id': fields.many2one('product.product', 'Product', readonly=True),
         'product_uom_qty': fields.float('# of Qty', readonly=True),
 
-        'partner_id': fields.many2one('res.partner', 'Partner', readonly=True),
-        'commercial': fields.many2one('res.users', 'Salesperson', readonly=True),
+        'partner_id': fields.many2one('res.partner', 'Customer', readonly=True),
+        'commercial': fields.many2one('res.users', 'Commercial', readonly=True),
         'price_total': fields.float('Total Price', readonly=True),
         'categ_id': fields.many2one('product.category','Category of Product', readonly=True),
         'nbr': fields.integer('# of Lines', readonly=True),
@@ -25,7 +25,7 @@ class stock_picking_report(osv.osv):
             ('draft', 'Draft'),
             ('confirmed', 'Confirmed'),
             ('exception', 'Exception'),
-            ('done', 'Done')], 'Order Status', readonly=True)
+            ('done', 'Done')], 'Pciking Status', readonly=True)
     }
     _order = 'date desc'
 

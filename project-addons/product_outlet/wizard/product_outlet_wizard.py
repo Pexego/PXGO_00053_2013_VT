@@ -25,8 +25,8 @@ class ProductCategory(models.Model):
 
     _inherit = 'product.category'
 
-    percent = fields.Float(string="Percent",
-                           help="This percent will be used when a product moves to an outlet category")
+    percent = fields.Float(string="Outlet Percent",
+                           help="This outlet percent will be used when a product moves to an outlet category")
 
     @api.one
     @api.constrains('percent')
@@ -34,7 +34,7 @@ class ProductCategory(models.Model):
         percent = self.percent
         if (percent > 100) | (percent < 0):
             raise exceptions. \
-                ValidationError(_('Error ! The percent values must be between 0 and 100'))
+                ValidationError(_('Error ! The outlet percent values must be between 0 and 100'))
         return True
 
 class product_outlet_wizard(models.TransientModel):

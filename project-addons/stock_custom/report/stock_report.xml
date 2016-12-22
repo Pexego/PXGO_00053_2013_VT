@@ -18,13 +18,13 @@
                     <field name="partner_id"/>
                     <field name="product_id"/>
                     <group expand="1" string="Group By">
-                        <filter string="Name" name="name" context="{'group_by':'name'}"/>
+                        <filter string="Picking Name" name="name" context="{'group_by':'name'}"/>
                         <filter string="Product" name="product_id" context="{'group_by':'product_id'}"/>
                         <filter string="# of Lines" name="nbr" context="{'group_by':'nbr'}"/>
-                        <filter string="Salesperson" name="User" context="{'group_by':'commercial'}"/>
+                        <filter string="Commercial" name="User" context="{'group_by':'commercial'}"/>
                         <filter string="Customer" name="Customer" context="{'group_by':'partner_id'}"/>
                         <filter string="Category of Product" name="Category" context="{'group_by':'categ_id'}"/>
-                        <filter string="Status" context="{'group_by':'state'}"/>
+                        <filter string="Picking Status" context="{'group_by':'state'}"/>
                         <separator/>
                         <filter string="Order Month" context="{'group_by':'date:month'}" help="Ordered date of the sales order"/>
                         <filter string="Order Done Month" context="{'group_by':'date_done:month'}" help="Ordered date of the sales order"/>

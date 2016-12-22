@@ -106,3 +106,102 @@ msgstr "Todas las reservas asignadas"
 #: field:stock.reservation,next_reception_date:0
 msgid "Next reception date"
 msgstr "Fecha de próxima recepción"
+
+#. module: stock_custom
+#: view:product.product:stock_custom.view_stock_product_tree
+#: field:product.product,virtual_stock_cooked:0
+msgid "Stock Available Cooking"
+msgstr "Stock Disponible"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,name:0
+msgid "Picking Name"
+msgstr "Nombre del Albarán"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,date:0
+msgid "Date Order"
+msgstr "Fecha de Albarán"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,date_done:0
+msgid "Date Done"
+msgstr "Fecha de Transferencia"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,product:0
+msgid "Product"
+msgstr "Nombre de Producto"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,product_uom_qty:0
+msgid "# of Qty"
+msgstr "Número de Unidades"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,partner_id:0
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,commercial:0
+msgid "Commercial"
+msgstr "Comercial"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,price_total:0
+msgid "Total Price"
+msgstr "Precio Total"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,categ_id:0
+msgid "Category of Product"
+msgstr "Categoria del Producto"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,nbr:0
+msgid "# of Lines"
+msgstr "Número de Líneas"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+#: field:stock.picking.report,state:0
+msgid "Picking Status"
+msgstr "Estado del Albarán"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+msgid "Order Month"
+msgstr "Ordenar por Mes"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+msgid "Order Done Month"
+msgstr "Ordenar por Mes Transferido"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+msgid "Quotations"
+msgstr "Borradores"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+msgid "Sales"
+msgstr "Ventas"
+
+#. module: stock_custom
+#: view:stock.picking.report:stock_custom.view_stock_product_search
+msgid "My Picking"
+msgstr "Mis Albaranes"
+
+

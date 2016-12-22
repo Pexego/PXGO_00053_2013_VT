@@ -391,6 +391,26 @@ msgstr "País"
 msgid "pickings"
 msgstr "albaranes"
 
+#. module: custom_account
+#: field:account.invoice,last_payment:0
+msgid "Last Payment"
+msgstr "Último Pago"
+
+#. module: custom_account
+#: field:account.invoice,total:0
+msgid "Total Paid"
+msgstr "Total Pagado"
+
+#. module: custom_account
+#: field:account.invoice,partner_commercial:0
+msgid "Commercial"
+msgstr "Comercial"
+
+#. module: custom_account
+#: field:account.invoice,subtotal_wt_rect:0
+msgid "Real Subtotal"
+msgstr "Subtotal Real"
+
 #. module: sale_quick_payment
 #: field:pay.sale.order,amount:0
 msgid "Amount"

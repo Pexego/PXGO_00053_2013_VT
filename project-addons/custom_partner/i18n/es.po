@@ -248,3 +248,13 @@ msgstr "Clientes desde web"
 #: field:res.partner,purchase_quantity:0
 msgid "Purchase quantity"
 msgstr "Cantidad comprada pendiente de factura"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_partner_form_add_require
+msgid "Phone/Mobile 1"
+msgstr "Telefono/Móvil 1"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_partner_form_add_require
+msgid "Phone/Mobile 2"
+msgstr "Telefono/Móvil 2"
