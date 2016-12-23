@@ -348,3 +348,28 @@ class PaymentMode(models.Model):
     _inherit = 'payment.mode'
 
     blocked = fields.Boolean('No Follow-up')
+
+class AccountInvoiceRefund(models.TransientModel):
+
+    _inherit = "account.invoice.refund"
+
+    @api.multi
+    def compute_refund(self, mode='refund'):
+        res = super(AccountInvoiceRefund, self).compute_refund(mode=mode)
+        if mode == "modify":
+            new_invoices = []
+            inv_obj = self.env['account.invoice']
+            orig_invoice = inv_obj.browse(self.env.context['active_ids'][0])
+            for tup in res['domain']:
+                if tup[0] == "id":
+                    new_invoices = inv_obj.browse(tup[2])
+                    break
+            for new_invoice in new_invoices:
+                new_invoice.user_id = orig_invoice.user_id.id or False
+                new_invoice.section_id = orig_invoice.section_id.id or False
+                new_invoice.partner_bank_id = \
+                    orig_invoice.partner_bank_id.id or False
+                new_invoice.mandate_id = orig_invoice.mandate_id.id or False
+                new_invoice.payment_mode_id = \
+                    orig_invoice.payment_mode_id.id or False
+        return res
