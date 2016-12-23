@@ -60,19 +60,17 @@ class stock_picking_report(osv.osv):
                     left join res_partner r on (r.id = s.partner_id)
                     left join product_product p on (l.product_id = p.id)
                         left join product_template t on (p.product_tmpl_id = t.id)
-                    left join stock_picking_type spt on (spt.id = s.picking_type_id)
-                        left join ir_sequence i on (i.id = spt.sequence_id)
-                        left join stock_location sl on (sl.id = spt.default_location_dest_id)
+                    left join stock_picking_type as pt on (pt.id = s.picking_type_id)
+                left join stock_location sl on (sl.id = l.location_dest_id)
                 left join product_uom u on (u.id = l.product_uom)
                 left join product_uom u2 on (u2.id = t.uom_id)
-
         """
 
         return from_str
 
     def _where(self):
         where = """
-            i.prefix = 'VT\\OUT\\' AND sl.name = 'Customers'
+            pt.code = 'outgoing' and sl.usage = 'customer'
         """
         return where
 

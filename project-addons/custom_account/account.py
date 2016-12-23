@@ -103,11 +103,10 @@ class AccountInvoice(models.Model):
     @api.depends('type', 'amount_untaxed')
     def get_subtotal_wt_rect(self):
         for invoice in self:
-            invoice_wt_rect = 0
             if 'refund' in invoice.type:
-                invoice_wt_rect = invoice.amount_untaxed
+                invoice_wt_rect = -invoice.amount_untaxed
             else:
-                invoice_wt_rect += invoice.amount_untaxed
+                invoice_wt_rect = invoice.amount_untaxed
 
             invoice.subtotal_wt_rect = invoice_wt_rect
 
