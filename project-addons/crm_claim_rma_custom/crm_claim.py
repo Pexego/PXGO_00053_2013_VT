@@ -337,7 +337,7 @@ class CrmClaimLine(models.Model):
 
     _inherit = "claim.line"
 
-    comercial = fields.Many2one("res.users", String="Comercial", compute="get_comercial")
+    comercial = fields.Many2one("res.users", String="Comercial", related="claim_id.comercial")
     name = fields.Char(required=False)
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
     substate_id = fields.\
@@ -376,8 +376,3 @@ class CrmClaimLine(models.Model):
         wzd = self.env["claim.make.repair"].create({'line_id': self.id})
         res = wzd.make()
         return res
-
-    @api.multi
-    def get_comercial(self):
-        for line in self:
-            line.comercial = line.claim_id.comercial

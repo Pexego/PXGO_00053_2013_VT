@@ -96,15 +96,16 @@ class AccountInvoice(models.Model):
     not_send_email = fields.Boolean("Not send email")
     total = fields.Float("Total Paid", compute="total_paid")
     last_payment = fields.Date("Last Payment", compute="last_payment_date")
-    partner_commercial = fields.Char("Commercial", compute="get_comercial")
+    partner_commercial = fields.Many2one("res.users", String="Commercial", related="partner_id.user_id")
     subtotal_wt_rect = fields.Float("Real Subtotal", compute="get_subtotal_wt_rect", store=True)
 
     @api.multi
+    @api.depends('type', 'amount_untaxed')
     def get_subtotal_wt_rect(self):
         for invoice in self:
             invoice_wt_rect = 0
-            if "R" in invoice.number:
-                invoice_wt_rect -= invoice.amount_untaxed
+            if 'refund' in invoice.type:
+                invoice_wt_rect = invoice.amount_untaxed
             else:
                 invoice_wt_rect += invoice.amount_untaxed
 
@@ -116,21 +117,9 @@ class AccountInvoice(models.Model):
         self.subtotal_wt_rect = 10
 
     @api.multi
-    def get_comercial(self):
-        for invoice in self:
-            invoice.partner_commercial = invoice.partner_id.user_id.name
-
-    @api.multi
     def total_paid(self):
         for invoice in self:
-            invoice_paid = 0
-            for payment in invoice.payment_ids:
-                if "R" in invoice.number:
-                    invoice_paid += payment.debit
-                else:
-                    invoice_paid += payment.credit
-
-            invoice.total = invoice_paid
+            invoice.total = invoice.amount_total - invoice.residual
 
     @api.multi
     def last_payment_date(self):
