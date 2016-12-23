@@ -24,7 +24,6 @@ from openerp.addons.connector.queue.job import job
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
-from .rma_events import export_rma, export_rmaproduct
 from openerp.addons.connector.event import Event
 from .utils import _get_exporter
 

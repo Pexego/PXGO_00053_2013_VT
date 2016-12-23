@@ -25,7 +25,7 @@ from .utils import _get_exporter
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
-from .rma_events import export_rmaproduct
+#from .rma_events import export_rmaproduct
 from openerp.addons.connector.event import Event
 
 on_stock_move_change = Event()
