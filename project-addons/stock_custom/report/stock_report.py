@@ -30,6 +30,7 @@ class stock_picking_report(osv.osv):
     _order = 'date desc'
 
     def _select(self):
+
         select_str = """
              SELECT min(l.id) as id,
                     l.product_id as product_id,
@@ -39,7 +40,12 @@ class stock_picking_report(osv.osv):
                     count(*) as nbr,
                     s.date as date,
                     s.date_done as date_done,
-                    r.parent_id as partner_id,
+                    CASE WHEN r.parent_id IS NULL THEN
+                        r.id
+                    WHEN r.parent_id IS NOT NULL THEN
+                        r.parent_id
+                    END
+                    as partner_id,
                     s.name as name,
                     s.commercial as commercial,
                     l.state,
@@ -80,7 +86,8 @@ class stock_picking_report(osv.osv):
                     s.date_done,
                     r.parent_id,
                     s.commercial,
-                    l.state
+                    l.state,
+                    r.id
         """
         return group_by_str
 
