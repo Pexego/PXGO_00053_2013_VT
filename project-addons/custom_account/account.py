@@ -19,7 +19,6 @@
 #
 ##############################################################################
 from openerp import models, fields, api
-import ipdb
 
 class AccountMoveLine(models.Model):
 
