@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2016 Comunitea All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,23 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-{
-    'name': "Stock customization to print",
-    'version': '1.0',
-    'category': 'Customization',
-    'description': """This module adds associated products""",
-    'author': 'Comunitea',
-    'website': '',
-    "depends" : ["base", "stock_valued_picking", "base_report_to_printer",
-                 "custom_account", "picking_incidences",
-                 "reserve_without_save_sale", "sale_display_stock",
-                 "stock_reserve_sale","product_brand"],
-    "data" : ["ir_attachment_view.xml",
-              "stock_custom_report.xml",
-              "report/stock_report.xml",
-              "data/email_template.xml",
-              "stock_view.xml", "partner_view.xml", 'product_view.xml',
-              'sale_view.xml'],
-    "installable": True
-}
+from . import stock_report

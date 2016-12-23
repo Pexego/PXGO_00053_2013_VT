@@ -93,3 +93,8 @@ msgstr "Pedido de venta"
 msgid "Sales Orders Statistics"
 msgstr "Estadísticas pedidos de venta"
 
+#. module: customer_area
+#: field:res.partner.area,sales_team:0
+msgid "Sales Team"
+msgstr "Equipo de Ventas"
+

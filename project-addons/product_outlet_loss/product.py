@@ -40,7 +40,7 @@ class outlet_loss(models.Model):
     outlet_ok = fields.Boolean('Outlet')
     order_line_id = fields.Many2one('sale.order.line', 'Order Line')
     qty = fields.Float('Quantity')
-    percent = fields.Float('Percent')
+    percent = fields.Float('Outlet Percent')
 
 
 
