@@ -20,8 +20,9 @@
 ##############################################################################
 
 from . import ir_attachment
-from . import report
+from . import print_report
 from . import stock
 from . import partner
 from . import product
 from . import sale
+from . import report
