@@ -113,6 +113,7 @@ class product_outlet_wizard(models.TransientModel):
 
         ctx = dict(self.env.context)
         ctx['warehouse_id'] = self.warehouse_id.id
+        ctx['location'] = self.location_orig_id.id
         product = self.env['product.product']. \
             with_context(ctx).browse(self.product_id.id)
         if self.state == 'first':

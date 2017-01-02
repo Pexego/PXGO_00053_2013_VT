@@ -73,7 +73,11 @@ class product_outlet_wizard(models.TransientModel):
 
     @api.multi
     def make_move(self):
-        product = self.product_id
+        ctx = dict(self.env.context)
+        ctx['warehouse_id'] = self.warehouse_id.id
+        ctx['location'] = self.location_orig_id.id
+        product = self.env['product.product']. \
+            with_context(ctx).browse(self.product_id.id)
         outlet_id = product.id
         act_prod = False
         create_loss = False
@@ -82,7 +86,7 @@ class product_outlet_wizard(models.TransientModel):
         if self.state == "first":
             res = super(product_outlet_wizard, self).make_move()
         else:
-            if self.qty_available < self.qty:
+            if product.qty_available < self.qty:
                 raise ValidationError(_("Qty to outlet must be <= qty available"))
             if self.qty <= 0:
                 raise ValidationError(_("Qty to outlet must be >=0"))
