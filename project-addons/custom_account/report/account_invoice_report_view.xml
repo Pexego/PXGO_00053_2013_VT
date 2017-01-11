@@ -8,6 +8,7 @@
             <field name="inherit_id" ref="account.view_account_invoice_report_search"/>
             <field name="arch" type="xml">
                 <filter string="Partner" name="partner_id" position="after">
+                    <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
                     <filter string="country" name="country_id" context="{'group_by':'country_id'}"/>
                     <filter string="Payment mode" name="payment_mode_id" context="{'group_by':'payment_mode_id'}"/>
                 </filter>
