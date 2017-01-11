@@ -50,6 +50,7 @@
                        filter_domain="['|','|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self),('comercial', 'ilike', self)]"/>
                     <field name="vat"/>
                     <field name="email"/>
+                    <field name="email_web"/>
                     <field name="zip"/>
                     <field name="phone"/>
                 </field>
@@ -262,6 +263,9 @@
                 <field name="display_name" position="before">
                     <field name="ref"/>
                 </field>
+                <field name="email" position="before">
+                    <field name="state_id"/>
+                </field>
                 <field name="email" position="after">
                     <field name="property_product_pricelist"/>
                     <field name="area_id"/>
@@ -382,6 +386,17 @@
             </field>
         </record>
 
+        <!-- CODIGO EN TESTEO, SIGUIENTE IMPLEMENTACION
+        <record model="ir.ui.view" id="partner_view_buttons_override">
+            <field name="name">partner.view.buttons.override</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.partner_view_buttons"/>
+            <field name="arch" type="xml">
+                <field name="total_invoiced" position="replace">
+                    <field name="total_invoiced_real" widget="monetary"/>
+                </field>
+            </field>
+        </record>-->
 
     </data>
 </openerp>
