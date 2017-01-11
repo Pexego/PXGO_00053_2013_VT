@@ -18,6 +18,12 @@
                     <button string="Print" position="after">
                         <button icon="gtk-execute" name="xls_export" string="Export" type="object" context="{'xls_export':1}" colspan="2"/>
                     </button>
+                    <field name="date_from" position="attributes">
+                        <attribute name="invisible">True</attribute>
+                    </field>
+                    <field name="filter" position="attributes">
+                        <attribute name="invisible">False</attribute>
+                    </field>
                 </data>
             </field>
         </record>

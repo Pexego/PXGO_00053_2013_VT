@@ -20,10 +20,19 @@
 #
 ###############################################################################
 
-from openerp.osv import orm
+from openerp.osv import orm, fields
 
 class aged_partner_balance_webkit_wizard(orm.TransientModel):
     _inherit = 'account.aged.trial.balance.webkit'
+
+    _columns = {
+        'filter': fields.selection(
+            [('filter_no', 'No Filters'),
+             ('filter_date', 'Date'),
+             ('filter_period', 'Periods')], "Filter by", required=True),
+        'period_to': fields.many2one('account.period', 'End Period',
+                                     required=False),
+    }
 
     def xls_export(self, cr, uid, ids, context=None):
         return self.check_report(cr, uid, ids, context=context)
