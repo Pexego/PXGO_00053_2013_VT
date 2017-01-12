@@ -20,6 +20,7 @@
 ##############################################################################
 from openerp import models, fields, api
 
+
 class AccountMoveLine(models.Model):
 
     _inherit = 'account.move.line'
@@ -95,8 +96,10 @@ class AccountInvoice(models.Model):
     not_send_email = fields.Boolean("Not send email")
     total = fields.Float("Total Paid", compute="total_paid")
     last_payment = fields.Date("Last Payment", compute="last_payment_date")
-    partner_commercial = fields.Many2one("res.users", String="Commercial", related="partner_id.user_id")
-    subtotal_wt_rect = fields.Float("Real Subtotal", compute="get_subtotal_wt_rect", store=True)
+    partner_commercial = fields.Many2one("res.users", String="Commercial",
+                                         related="partner_id.user_id")
+    subtotal_wt_rect = fields.Float("Real Subtotal",
+                                    compute="get_subtotal_wt_rect", store=True)
 
     @api.multi
     @api.depends('type', 'amount_untaxed')
@@ -119,7 +122,8 @@ class AccountInvoice(models.Model):
         for invoice in self:
             if invoice.payment_ids:
                 len_payment = len(invoice.payment_ids) - 1
-                invoice.last_payment = invoice.payment_ids[len_payment].last_rec_date
+                invoice.last_payment = \
+                    invoice.payment_ids[len_payment].last_rec_date
 
     @api.model
     def create(self, vals):
@@ -138,7 +142,7 @@ class AccountInvoice(models.Model):
                     default_mandate = mandate_ids.filtered(
                         lambda r: r.state == "valid")
                 vals['mandate_id'] = default_mandate and \
-                                     default_mandate[0].id or False
+                    default_mandate[0].id or False
         return super(AccountInvoice, self).create(vals)
 
     @api.multi
@@ -256,7 +260,7 @@ class AccountInvoice(models.Model):
         first_account = lines[0].account_id
         for line in lines:
             if (line.account_id.type in ('receivable', 'payable') and
-                        line.partner_id != first_partner):
+                    line.partner_id != first_partner):
                 return False
             if line.account_id != first_account:
                 return False
@@ -322,8 +326,11 @@ class AccountInvoice(models.Model):
     @api.multi
     def write(self, vals):
         res = super(AccountInvoice, self).write(vals)
-        for inv in self:
-            inv.move_id.line_id.write({'blocked': inv.payment_mode_id.blocked})
+        if vals.get('payment_mode_id', False):
+            for inv in self:
+                if inv.move_id:
+                    inv.move_id.line_id.\
+                        write({'blocked': inv.payment_mode_id.blocked})
         return res
 
 
@@ -341,6 +348,7 @@ class PaymentMode(models.Model):
     _inherit = 'payment.mode'
 
     blocked = fields.Boolean('No Follow-up')
+
 
 class AccountInvoiceRefund(models.TransientModel):
 
