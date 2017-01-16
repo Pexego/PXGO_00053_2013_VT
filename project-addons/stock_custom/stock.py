@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, exceptions, api, _
+import ipdb
 
 
 class stock_picking(models.Model):
@@ -87,6 +88,11 @@ class stock_move(models.Model):
     _order = 'date_expected asc, id'
 
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
+    real_stock = fields.Float('Real Stock', compute='_get_real_stock')
+
+    @api.one
+    def _get_real_stock(self):
+        self.real_stock = self.product_id.qty_available
 
     def _prepare_picking_assign(self, cr, uid, move, context=None):
         res = super(stock_move, self)._prepare_picking_assign(cr, uid, move,
