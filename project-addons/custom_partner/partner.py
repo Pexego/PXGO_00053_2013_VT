@@ -120,6 +120,9 @@ class ResPartner(models.Model):
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
     att = fields.Char("A/A")
 
+    _sql_constraints = [
+        ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
+    ]
 
     @api.multi
     def _get_purchased_quantity(self):
@@ -186,6 +189,8 @@ class ResPartner(models.Model):
     def create(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False
+        if 'web' in vals and not vals['web']:
+            vals['email_web'] = ""
         vals['date'] = fields.Date.today()
         return super(ResPartner, self).create(vals)
 
@@ -193,6 +198,8 @@ class ResPartner(models.Model):
     def write(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False
+        if 'web' in vals and not vals['web']:
+            vals['email_web'] = ""
         return super(ResPartner, self).write(vals)
 
     def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
