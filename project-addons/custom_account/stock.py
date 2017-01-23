@@ -220,6 +220,19 @@ class PurchaseOrder(models.Model):
     state = fields.Selection(selection_add=[("history", "History")])
 
 
+class PurchaseLineInvoice(models.TransientModel):
+
+    _inherit = "purchase.order.line_invoice"
+
+    @api.model
+    def _make_invoice_by_partner(self, partner, orders, lines_ids):
+        inv_id = super(PurchaseLineInvoice, self).\
+            _make_invoice_by_partner(partner, orders, lines_ids)
+        invoice = self.env["account.invoice"].browse(inv_id)
+        invoice.button_reset_taxes()
+        return inv_id
+
+
 class PurchaseOrderLine(models.Model):
 
     _inherit = "purchase.order.line"
