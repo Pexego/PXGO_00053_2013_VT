@@ -190,7 +190,7 @@ class ResPartner(models.Model):
         if vals.get('dropship', False):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
-            vals['email_web'] = ""
+            vals['email_web'] = None
         vals['date'] = fields.Date.today()
         return super(ResPartner, self).create(vals)
 
@@ -199,7 +199,7 @@ class ResPartner(models.Model):
         if vals.get('dropship', False):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
-            vals['email_web'] = ""
+            vals['email_web'] = None
         return super(ResPartner, self).write(vals)
 
     def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
