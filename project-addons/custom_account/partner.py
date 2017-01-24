@@ -30,13 +30,27 @@ class Partner(models.Model):
 
     @api.one
     def _pending_orders_amount(self):
-        sales = self.env['sale.order'].\
-            search([('partner_id', 'child_of', [self.id]),
-                    ('state', 'not in', ['draft', 'cancel', 'wait_risk',
-                                         'sent', 'history', 'reserve'])])
         total = 0.0
-        for order in sales:
-            total += order.amount_total - order.amount_invoiced
+        moves = self.env['stock.move'].\
+            search([('partner_id', 'child_of', [self.id]),
+                    ('state', 'not in', ['draft', 'cancel']),
+                    ('procurement_id.sale_line_id', '!=', False),
+                    ('invoice_state', '=', '2binvoiced')])
+
+        for move in moves:
+            line = move.procurement_id.sale_line_id
+            sign = move.picking_type_code == "outgoing" and 1 or -1
+            total += sign * (move.product_uom_qty * (line.price_unit * (1 - (line.discount or 0.0) / 100.0)))
+
+        lines = self.env['sale.order.line'].\
+            search([('order_id.partner_id', 'child_of', [self.id]),
+                    ('order_id.state', 'not in',
+                     ['draft','cancel','wait_risk','sent',
+                      'history', 'reserve']),
+                    ('invoiced', '=', False), '|', ('product_id', '=', False),
+                    ('product_id.type', '=', 'service')])
+        for sline in lines:
+            total += sline.price_subtotal
 
         self.pending_orders_amount = total
 
