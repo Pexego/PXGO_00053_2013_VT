@@ -136,6 +136,9 @@
                     <field name="total"/>
                     <field name="last_payment"/>
                 </field>
+                <field name="number" position="before">
+                    <field name="supplier_invoice_number"/>
+                </field>
                 <field name="number" position="after">
                     <field name="partner_commercial"/>
                 </field>
