@@ -95,6 +95,7 @@ class Partner(models.Model):
     pending_orders_amount = fields.Float(compute="_pending_orders_amount",
                                          string='Uninvoiced Orders')
 
+
     @api.onchange("user_id")
     def on_change_user_id(self):
         if self.user_id and self.user_id.default_section_id:
