@@ -43,7 +43,7 @@ class RiskAdviceMail(models.Model):
         acc_move_line_obj = self.env['account.move.line']
         partners = acc_move_line_obj.\
             read_group([('partner_id', '!=', False),
-                        ('reconcile_id', '!=', False)], ["partner_id"],
+                        ('reconcile_id', '=', False)], ["partner_id"],
                        groupby="partner_id")
 
         res = {}
@@ -60,6 +60,11 @@ class RiskAdviceMail(models.Model):
 
             if partner.property_account_payable:
                 accounts.append( partner.property_account_payable.id )
+
+            circualting_acc_ids = self.env["account.account"].\
+                search([('circulating', '=', True)])
+            if circualting_acc_ids:
+                accounts.extend(circualting_acc_ids.ids)
 
             line_ids = acc_move_line_obj.search([
                 ('partner_id','=',partner.id),
