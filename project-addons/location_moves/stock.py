@@ -30,7 +30,8 @@ class StockLotacion(models.Model):
     def get_quantity_source_location(self,location_id,product_id):
         ctx = dict(self.env.context)
         ctx.update({'location' : location_id.id})
-        product = self.env['product.product'].with_context(ctx).browse(product_id)
+        product = self.env['product.product'].with_context(ctx).\
+            browse(product_id)
         qty=product.qty_available
         return qty
 
@@ -127,12 +128,22 @@ class StockLotacion(models.Model):
 
     def move_sat_stock(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_sat', qty,
-                           'stock.stock_location_stock',False, check_qty,
+                           'stock.stock_location_stock',True, check_qty,
                            assign)
 
     def move_stock_sat(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
                            'stock_location_sat',False, check_qty, assign)
+
+    def move_external_stock(self, product_id, qty, check_qty, assign=True):
+        self.location_move(product_id, 'stock_location_external', qty,
+                           'stock.stock_location_stock',True, check_qty,
+                           assign)
+
+    def move_beach_external(self, product_id, qty, check_qty, assign=False):
+        self.location_move(product_id, 'stock.stock_location_company', qty,
+                           'stock_location_external',False, check_qty,
+                           assign)
 
     def location_move(self, product_id, source_location, qty, dest_location,
                       send_message=False, check_qty=False, assign=True):
@@ -146,11 +157,13 @@ class StockLotacion(models.Model):
         dest_location = self.env.ref(dest_location)
 
         if check_qty:
-            if qty > self.get_quantity_source_location(source_location,product_id):
+            if qty > self.\
+                    get_quantity_source_location(source_location,product_id):
                 raise Warning ("Check qty in source location")
 
 
-        type_id = self.env['stock.picking.type'].search([('code', '=', 'internal')])
+        type_id = self.env['stock.picking.type'].\
+            search([('code', '=', 'internal')])
         pick_vals = {
             'partner_id': self.env.user.company_id.partner_id.id,
             'picking_type_id': type_id.id,
