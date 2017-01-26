@@ -140,6 +140,11 @@ msgid "Eur currency"
 msgstr "Importe (€)"
 
 #. module: custom_partner
+#: field:res.partner,growth_rate:0
+msgid "Growth rate"
+msgstr "Crecimiento"
+
+#. module: custom_partner
 #: field:res.partner.invoice.type,id:0
 msgid "ID"
 msgstr "ID"
