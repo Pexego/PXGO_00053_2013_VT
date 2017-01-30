@@ -77,6 +77,12 @@ msgid "Amount not due"
 msgstr "Importe no vencido"
 
 #. module: custom_partner
+#: code:addons/custom_partner/partner.py:153
+#, python-format
+msgid "At least, a contact must be added"
+msgstr "Al menos, un contacto debe ser añadido"
+
+#. module: custom_partner
 #: field:res.partner.invoice.type,create_uid:0
 msgid "Created by"
 msgstr "Creado por"
@@ -119,9 +125,24 @@ msgid "Due Date"
 msgstr "Fecha vencimiento"
 
 #. module: custom_partner
+#: field:res.partner,email_web:0
+msgid "Email Web"
+msgstr "Email Web"
+
+#. module: custom_partner
+#: sql_constraint:res.partner:0
+msgid "Email web field, must be unique"
+msgstr "El campo email web, debe de ser único"
+
+#. module: custom_partner
 #: field:res.partner,eur_currency:0
 msgid "Eur currency"
 msgstr "Importe (€)"
+
+#. module: custom_partner
+#: field:res.partner,growth_rate:0
+msgid "Growth rate"
+msgstr "Crecimiento"
 
 #. module: custom_partner
 #: field:res.partner.invoice.type,id:0
@@ -221,6 +242,11 @@ msgstr "Referencia"
 #: field:res.partner,send_followup_to_user:0
 msgid "Send followup to sales agent"
 msgstr "Enviar seguimiento al comercial"
+
+#. module: custom_partner
+#: field:res.partner,total_invoiced_real:0
+msgid "Total Invoiced"
+msgstr "Total facturado"
 
 #. module: custom_partner
 #: view:sale.order:custom_partner.view_order_tree_add_amount_untaxed

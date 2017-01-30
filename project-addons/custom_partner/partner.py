@@ -18,13 +18,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from operator import itemgetter
+
 from openerp import models, fields, api, exceptions, _
 from openerp.addons.account_followup.report import account_followup_print
 from openerp.osv import fields as fields2
-from openerp.osv import osv
 from collections import defaultdict
 import time
+from datetime import date
+from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 
 
@@ -39,6 +40,8 @@ class ResPartner(models.Model):
 
     def _invoice_total_real(self, cr, uid, ids, field_name, arg, context=None):
         result = {}
+        if context is None:
+            context = {}
         account_invoice_report = self.pool.get('account.invoice.report')
         user = self.pool['res.users'].browse(cr, uid, uid, context=context)
         user_currency_id = user.company_id.currency_id.id
@@ -50,12 +53,14 @@ class ResPartner(models.Model):
             # (generates queries "id in []" forcing to build the full table).
             # In simple cases where all invoices are in the same currency than the user's company
             # access directly these elements
-
+            domain = [('partner_id', 'in', all_partner_ids),
+                      ('state', 'not in', ['draft', 'cancel']),
+                      ('number', 'not like', '%_ef%')]
+            if context.get('date_from', False):
+                domain.append(('date', '>=', context['date_from']))
             # generate where clause to include multicompany rules
-            where_query = account_invoice_report._where_calc(cr, uid, [
-                ('partner_id', 'in', all_partner_ids), ('state', 'not in', ['draft', 'cancel']),
-                ('number', 'not like', '%_ef%')
-            ], context=context)
+            where_query = account_invoice_report._where_calc(cr, uid, domain,
+                                                             context=context)
             account_invoice_report._apply_ir_rules(cr, uid, where_query, 'read', context=context)
             from_clause, where_clause, where_clause_params = where_query.get_sql()
 
@@ -105,6 +110,22 @@ class ResPartner(models.Model):
                                             ('state', 'not in',
                                              ['draft', 'cancel', 'sent'])]))
 
+    @api.one
+    def _get_growth_rate(self):
+        if self.customer:
+            search_date_180 = (date.today() - relativedelta(days=180)).\
+                strftime("%Y-%m-%d")
+            invoiced_180 = self.with_context(date_from=search_date_180).\
+                browse(self.id).total_invoiced_real
+            diary_invoice = invoiced_180 / 180.0
+            goal = diary_invoice * 15.0
+            if goal:
+                search_date_15 = (date.today() - relativedelta(days=15)).\
+                    strftime("%Y-%m-%d")
+                invoiced_15 = self.with_context(date_from=search_date_15).\
+                    browse(self.id).total_invoiced_real
+                self.growth_rate = invoiced_15 / goal
+
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
     sale_product_count = fields.Integer(compute=_get_products_sold,
@@ -119,7 +140,12 @@ class ResPartner(models.Model):
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
     att = fields.Char("A/A")
+    growth_rate = fields.Float("Growth rate", readonly=True,
+                               compute="_get_growth_rate")
 
+    _sql_constraints = [
+        ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
+    ]
 
     @api.multi
     def _get_purchased_quantity(self):
@@ -186,6 +212,8 @@ class ResPartner(models.Model):
     def create(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False
+        if 'web' in vals and not vals['web']:
+            vals['email_web'] = None
         vals['date'] = fields.Date.today()
         return super(ResPartner, self).create(vals)
 
@@ -193,6 +221,8 @@ class ResPartner(models.Model):
     def write(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False
+        if 'web' in vals and not vals['web']:
+            vals['email_web'] = None
         return super(ResPartner, self).write(vals)
 
     def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):

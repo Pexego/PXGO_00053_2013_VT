@@ -56,6 +56,8 @@ class location_moves(models.TransientModel):
          ('stock_development', 'Stock -> Development'),
          ('sat_stock', 'SAT -> Stock'),
          ('stock_sat', 'Stock -> SAT'),
+         ('external_stock', 'External -> Stock'),
+         ('beach_external', 'Beach -> External'),
          ],
         'Move type', required=True)
 
@@ -84,7 +86,9 @@ class location_moves(models.TransientModel):
             'sat_stock': loc_obj.move_sat_stock,
             'stock_sat': loc_obj.move_stock_sat,
             'cooked_quality': loc_obj.move_cooked_quality,
-            'marketing_product': loc_obj.move_marketing_product
+            'marketing_product': loc_obj.move_marketing_product,
+            'external_stock': loc_obj.move_external_stock,
+            'beach_external': loc_obj.move_beach_external
         }
         types[self.move_type](self.product_id.id, self.qty, self.check_qty)
         return True
