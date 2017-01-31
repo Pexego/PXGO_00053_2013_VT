@@ -334,14 +334,12 @@ class PromotionsRulesActions(orm.Model):
         'action_type': fields.selection(ACTION_TYPES, 'Action', required=True)
     }
 
-    def on_change(self, cr, uid, ids=None,
-                  action_type=None, product_code=None,
+    def on_change(self, cr, uid, ids=None, action_type=None, product_code=None,
                   arguments=None, context=None):
-
         res = super(PromotionsRulesActions, self).\
-            onchange(cr, uid, ids=ids, action_type=action_type,
-                     product_code=product_code, arguments=arguments,
-                     context=context)
+            on_change(cr, uid, ids, action_type=action_type,
+                      product_code=product_code, arguments=arguments,
+                      context=context)
         if action_type in ['prod_disc_perc_accumulated',
                            'tag_disc_perc',
                            'tag_disc_perc_accumulated',
