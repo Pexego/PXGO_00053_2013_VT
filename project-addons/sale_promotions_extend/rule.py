@@ -34,26 +34,31 @@ from openerp.tools.translate import _
 DEBUG = False
 PRODUCT_UOM_ID = 1
 ATTRIBUTES = [
-('amount_untaxed', _('Untaxed Total')),
-('amount_tax', 'Tax Amount'),
-('amount_total', 'Total Amount'),
-('prod_tag', 'Tag in order'),
-('product', 'Product Code in order'),
-('prod_qty', 'Product Quantity combination'),
-('prod_unit_price', 'Product UnitPrice combination'),
-('prod_sub_total', 'Product SubTotal combination'),
-('prod_discount', 'Product Discount combination'),
-('prod_weight', 'Product Weight combination'),
-('comp_sub_total', 'Compute sub total of products'),
-('comp_sub_total_x', 'Compute sub total excluding products'),
-('custom', 'Custom domain expression'),
+    ('amount_untaxed', _('Untaxed Total')),
+    ('amount_tax', 'Tax Amount'),
+    ('amount_total', 'Total Amount'),
+    ('prod_tag', 'Tag in order'),
+    ('product', 'Product Code in order'),
+    ('prod_qty', 'Product Quantity combination'),
+    ('prod_unit_price', 'Product UnitPrice combination'),
+    ('prod_sub_total', 'Product SubTotal combination'),
+    ('prod_discount', 'Product Discount combination'),
+    ('prod_weight', 'Product Weight combination'),
+    ('comp_sub_total', 'Compute sub total of products'),
+    ('comp_sub_total_x', 'Compute sub total excluding products'),
+    ('custom', 'Custom domain expression'),
+    ('order_pricelist', _('Order Pricelist'))
 ]
 
 ACTION_TYPES = [
     ('prod_disc_perc', _('Discount % on Product')),
+    ('prod_disc_perc_accumulated', _('Discount % on Product accumulated')),
     ('tag_disc_perc', _('Discount % on Tag')),
+    ('tag_disc_perc_accumulated', _('Discount % on Tag accumulated')),
     ('categ_disc_perc', _('Discount % on Category')),
+    ('categ_disc_perc_accumulated', _('Discount % on Categ accumulated')),
     ('brand_disc_perc', _('Discount % on Brand')),
+    ('brand_disc_perc_accumulated', _('Discount % on Brand accumulated')),
     ('prod_disc_fix', _('Fixed amount on Product')),
     ('cart_disc_perc', _('Discount % on Sub Total')),
     ('cart_disc_fix', _('Fixed amount on Sub Total')),
@@ -61,11 +66,11 @@ ACTION_TYPES = [
 ]
 
 
-
 class PromotionsRulesConditionsExprs(orm.Model):
     _inherit = 'promos.rules.conditions.exps'
+
     def on_change(self, cursor, user, ids=None,
-                   attribute=None, value=None, context=None):
+                  attribute=None, value=None, context=None):
         """
         Set the value field to the format if nothing is there
         @param cursor: Database Cursor
@@ -75,20 +80,19 @@ class PromotionsRulesConditionsExprs(orm.Model):
         @param value: Value sent by caller.
         @param context: Context(no direct use).
         """
-        #If attribute is not there then return.
-        #Will this case be there?
+        # If attribute is not there then return.
+        # Will this case be there?
         if not attribute:
             return {}
-        #If value is not null or one of the defaults
-        if not value in [
-                         False,
+        # If value is not null or one of the defaults
+        if value not in [False,
                          "'product_code'",
                          "'product_code',0.00",
                          "['product_code','product_code2']|0.00",
                          "0.00",
                          ]:
             return {}
-        #Case 1
+        # Case 1
         if attribute == 'product':
             return {
                     'value':{
@@ -98,7 +102,7 @@ class PromotionsRulesConditionsExprs(orm.Model):
         if attribute == 'prod_tag':
             return {'value': {'value':"'prod_tag'"}}
 
-        #Case 2
+         #Case 2
         if attribute in [
                          'prod_qty',
                          'prod_unit_price',
@@ -112,7 +116,7 @@ class PromotionsRulesConditionsExprs(orm.Model):
                              'value':"'product_code',0.00"
                              }
                     }
-        #Case 3
+        # Case 3
         if attribute in [
                          'comp_sub_total',
                          'comp_sub_total_x',
@@ -122,23 +126,28 @@ class PromotionsRulesConditionsExprs(orm.Model):
                              'value':"['product_code','product_code2']|0.00"
                              }
                     }
-        #Case 4
-        if attribute in [
-                         'amount_untaxed',
+        # Case 4
+        if attribute in ['amount_untaxed',
                          'amount_tax',
-                         'amount_total',
-                         ]:
+                         'amount_total']:
             return {
-                    'value':{
-                             'value':"0.00"
-                             }
-                    }
+                'value': {
+                    'value': "0.00"
+                }
+            }
+        if attribute in ['order_pricelist']:
+            return {
+                'value': {
+                    'value': "'pricelist_name'"
+                }
+            }
+
         return {}
     _columns = {
-        'attribute':fields.selection(ATTRIBUTES,
-                                     'Attribute',
-                                     size=50,
-                                     required=True)
+        'attribute': fields.selection(ATTRIBUTES,
+                                      'Attribute',
+                                      size=50,
+                                      required=True)
     }
 
     def validate(self, cursor, user, vals, context=None):
@@ -230,6 +239,8 @@ class PromotionsRulesConditionsExprs(orm.Model):
                                        comparator)
         if attribute == 'prod_tag':
             return '%s %s prod_tag' % (value, comparator)
+        if attribute == 'order_pricelist':
+            return """order.pricelist_id.name == %s""" % value
         if attribute in [
                          'prod_qty',
                          'prod_unit_price',
@@ -323,8 +334,28 @@ class PromotionsRulesActions(orm.Model):
         'action_type': fields.selection(ACTION_TYPES, 'Action', required=True)
     }
 
-    def apply_perc_discount(self, cursor, user, action, order_line,
-                            context=None):
+    def on_change(self, cr, uid, ids=None, action_type=None, product_code=None,
+                  arguments=None, context=None):
+        res = super(PromotionsRulesActions, self).\
+            on_change(cr, uid, ids, action_type=action_type,
+                      product_code=product_code, arguments=arguments,
+                      context=context)
+        if action_type in ['prod_disc_perc_accumulated']:
+            res = {'value': {'product_code': "'product_code'",
+                             'arguments': "0.00"}}
+        if action_type in ['tag_disc_perc', 'tag_disc_perc_accumulated']:
+            res = {'value': {'product_code': "'tag_name'",
+                             'arguments': "0.00"}}
+        if action_type in ['categ_disc_perc', 'categ_disc_perc_accumulated']:
+            res = {'value': {'product_code': "'categ_code'",
+                             'arguments': "0.00"}}
+        if action_type in ['brand_disc_perc', 'brand_disc_perc_accumulated']:
+            res = {'value': {'product_code': "'brand_code'",
+                             'arguments': "0.00"}}
+        return res
+
+    def apply_perc_discount_accumulated(self, cursor, user, action, order_line,
+                                        context=None):
         order_line_obj = self.pool.get('sale.order.line')
         final_discount = eval(action.arguments)
         if order_line.discount:
@@ -335,11 +366,58 @@ class PromotionsRulesActions(orm.Model):
             final_discount = 100.0 - (new_price_unit * 100.0 /
                                       order_line.price_unit)
         order_line_obj.write(cursor, user, order_line.id,
-                             {
-                              'discount': final_discount,
-                              'old_discount': order_line.discount,
-                              },
+                             {'discount': final_discount,
+                              'old_discount': order_line.discount},
                              context)
+
+    def action_tag_disc_perc_accumulated(self, cursor, user, action, order,
+                                         context=None):
+        """
+        Action for 'Discount % on Product'
+        @param cursor: Database Cursor
+        @param user: ID of User
+        @param action: Action to be taken on sale order
+        @param order: sale order
+        @param context: Context(no direct use).
+        """
+        for order_line in order.order_line:
+            if eval(action.product_code) in order_line.product_tags:
+                self.apply_perc_discount_accumulated(cursor, user, action,
+                                                     order_line, context)
+        return {}
+
+    def action_categ_disc_perc_accumulated(self, cursor, user, action, order,
+                                           context=None):
+        for order_line in order.order_line:
+            if eval(action.product_code) == \
+                    order_line.product_id.categ_id.code:
+                self.apply_perc_discount_accumulated(cursor, user, action,
+                                                     order_line, context)
+        return {}
+
+    def action_brand_disc_perc_accumulated(self, cursor, user, action, order,
+                                           context=None):
+        for order_line in order.order_line:
+            if eval(action.product_code) == \
+                    order_line.product_id.product_brand_id.code:
+                self.apply_perc_discount_accumulated(cursor, user, action,
+                                                     order_line, context)
+        return {}
+
+    def action_prod_disc_perc_accumulated(self, cursor, user, action, order,
+                                          context=None):
+        for order_line in order.order_line:
+            if order_line.product_id.code == eval(action.product_code):
+                self.apply_perc_discount_accumulated(cursor, user, action,
+                                                     order_line, context)
+
+    def apply_perc_discount(self, cursor, user, action, order_line,
+                            context=None):
+        vals = {
+            'discount': eval(action.arguments),
+            'old_discount': order_line.discount,
+        }
+        return order_line.write(vals)
 
     def action_tag_disc_perc(self, cursor, user, action, order, context=None):
         """
@@ -359,7 +437,8 @@ class PromotionsRulesActions(orm.Model):
     def action_categ_disc_perc(self, cursor, user, action, order,
                                context=None):
         for order_line in order.order_line:
-            if eval(action.product_code) == order_line.product_id.categ_id.code:
+            if eval(action.product_code) == \
+                    order_line.product_id.categ_id.code:
                 self.apply_perc_discount(cursor, user, action, order_line,
                                          context)
         return {}
@@ -372,9 +451,3 @@ class PromotionsRulesActions(orm.Model):
                 self.apply_perc_discount(cursor, user, action, order_line,
                                          context)
         return {}
-
-    def action_prod_disc_perc(self, cursor, user, action, order, context=None):
-        for order_line in order.order_line:
-            if order_line.product_id.code == eval(action.product_code):
-                self.apply_perc_discount(cursor, user, action, order_line,
-                                         context)
