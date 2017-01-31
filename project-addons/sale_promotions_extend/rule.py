@@ -340,15 +340,18 @@ class PromotionsRulesActions(orm.Model):
             on_change(cr, uid, ids, action_type=action_type,
                       product_code=product_code, arguments=arguments,
                       context=context)
-        if action_type in ['prod_disc_perc_accumulated',
-                           'tag_disc_perc',
-                           'tag_disc_perc_accumulated',
-                           'categ_disc_perc',
-                           'categ_disc_perc_accumulated',
-                           'brand_disc_perc',
-                           'brand_disc_perc_accumulated']:
-            res = {'value': {'product_code':"'product_code'",
-                             'arguments':"0.00"}}
+        if action_type in ['prod_disc_perc_accumulated']:
+            res = {'value': {'product_code': "'product_code'",
+                             'arguments': "0.00"}}
+        if action_type in ['tag_disc_perc', 'tag_disc_perc_accumulated']:
+            res = {'value': {'product_code': "'tag_name'",
+                             'arguments': "0.00"}}
+        if action_type in ['categ_disc_perc', 'categ_disc_perc_accumulated']:
+            res = {'value': {'product_code': "'categ_code'",
+                             'arguments': "0.00"}}
+        if action_type in ['brand_disc_perc', 'brand_disc_perc_accumulated']:
+            res = {'value': {'product_code': "'brand_code'",
+                             'arguments': "0.00"}}
         return res
 
     def apply_perc_discount_accumulated(self, cursor, user, action, order_line,
