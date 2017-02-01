@@ -59,30 +59,30 @@ class Partner(models.Model):
         res = {}
         for id in ids:
             amount = 0.0
-            move_ids = self.pool.get('account.move.line').\
-                search(cr, uid, [('partner_id', 'child_of', [id]),
-                                 ('account_id.circulating', '=', True),
-                                 ('reconcile_id','=',False)])
-
-            for line in self.pool.get('account.move.line').browse(cr, uid, move_ids, context):
-                if line.currency_id:
-                    sign = line.amount_currency < 0 and -1 or 1
-                else:
-                    sign = (line.debit - line.credit) < 0 and -1 or 1
-                if line.reconcile_partial_id:
-                     amount += line.debit - line.credit
-                else:
-                    amount += sign * line.amount_residual
-
-            bank_line_ids = self.pool.get("bank.payment.line").\
-                search(cr, uid, [('partner_id', 'child_of', [id]),
-                                 ('order_id.payment_order_type', '=',
-                                  'debit')])
-            for bank_line in self.pool.get("bank.payment.line").\
-                    browse(cr, uid, bank_line_ids):
-                move_line = bank_line.transfer_move_line_id
-                if not move_line.reconcile_id and not move_line.partner_id:
-                    amount += bank_line.amount_currency
+            #~ move_ids = self.pool.get('account.move.line').\
+                #~ search(cr, uid, [('partner_id', 'child_of', [id]),
+                                 #~ ('account_id.circulating', '=', True),
+                                 #~ ('reconcile_id','=',False)])
+#~
+            #~ for line in self.pool.get('account.move.line').browse(cr, uid, move_ids, context):
+                #~ if line.currency_id:
+                    #~ sign = line.amount_currency < 0 and -1 or 1
+                #~ else:
+                    #~ sign = (line.debit - line.credit) < 0 and -1 or 1
+                #~ if line.reconcile_partial_id:
+                     #~ amount += line.debit - line.credit
+                #~ else:
+                    #~ amount += sign * line.amount_residual
+#~
+            #~ bank_line_ids = self.pool.get("bank.payment.line").\
+                #~ search(cr, uid, [('partner_id', 'child_of', [id]),
+                                 #~ ('order_id.payment_order_type', '=',
+                                  #~ 'debit')])
+            #~ for bank_line in self.pool.get("bank.payment.line").\
+                    #~ browse(cr, uid, bank_line_ids):
+                #~ move_line = bank_line.transfer_move_line_id
+                #~ if not move_line.reconcile_id and not move_line.partner_id:
+                    #~ amount += bank_line.amount_currency
 
             res[id] = amount
 
