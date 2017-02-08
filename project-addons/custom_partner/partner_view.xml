@@ -400,7 +400,7 @@
         <record model="ir.ui.view" id="partner_view_add_growth">
             <field name="name">partner.view.add_growth</field>
             <field name="model">res.partner</field>
-            <field name="inherit_id" ref="account.partner_view_button_journal_item_count"/>
+            <field name="inherit_id" ref="account.partner_view_buttons"/>
             <field name="arch" type="xml">
                 <field name="lang" position="after">
                     <field name="growth_rate"/>
