@@ -55,7 +55,8 @@ class ProductExporter(Exporter):
                     'brand_id': product.product_brand_id.id,
                     'pvd_1': product.pvd1_price,
                     'pvd_2': product.pvd2_price,
-                    'pvd_3': product.pvd3_price}
+                    'pvd_3': product.pvd3_price,
+                    'joking_index': product.joking_index}
             if product.show_stock_outside:
                 stock_qty = eval("product." + self.backend_record.
                                  product_stock_field_id.name,
@@ -125,7 +126,8 @@ def delay_export_product_create(session, model_name, record_id, vals):
     up_fields = ["name", "default_code", "pvi1_price", "pvi2_price",
                  "pvi3_price", "list_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
-                 "product_brand_id", "last_sixty_days_sales"]
+                 "product_brand_id", "last_sixty_days_sales",
+                 "joking_index"]
     if vals.get("web", False) and vals.get("web", False) == "published":
         export_product.delay(session, model_name, record_id, priority=2, eta=60)
         #~ claim_lines = session.env['claim.line'].search(
@@ -147,7 +149,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
     up_fields = ["default_code", "pvi1_price", "pvi2_price",
                  "pvi3_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation",
-                 "last_sixty_days_sales"]
+                 "last_sixty_days_sales", "joking_index"]
     if product.web == "published":
         for field in up_fields:
             if field in vals:
