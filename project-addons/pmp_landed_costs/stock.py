@@ -24,24 +24,6 @@ class stock_move(models.Model):
 
     _inherit = 'stock.move'
 
-    def product_price_update_before_done(self, cr, uid, ids, context=None):
-        product_obj = self.pool.get('product.product')
-        for move in self.browse(cr, uid, ids, context=context):
-            #adapt standard price on incomming moves if the product cost_method is 'average'
-            if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'average'):
-                product = move.product_id
-                product_avail = product.qty_available
-                if product.qty_available <= 0:
-                    new_std_price = move.price_unit
-                    new_std_price_cost = move.price_unit
-                else:
-                    # Get the standard price
-                    amount_unit = product.standard_price
-                    new_std_price = ((amount_unit * product_avail) + (move.price_unit * move.product_qty)) / (product_avail + move.product_qty)
-                    #new_std_price_cost = ((product.standard_price_cost * product_avail) + (move.price_unit * move.product_qty)) / (product_avail + move.product_qty)
-                # Write the standard price, as SUPERUSER_ID because a warehouse manager may not have the right to write on products
-                product_obj.write(cr, SUPERUSER_ID, [product.id], {'standard_price': new_std_price}, context=context)
-
     def product_price_update_after_done(self, cr, uid, ids, context=None):
         #res = super(stock_move, self).product_price_update_after_done(cr, uid, ids, context)
         product_obj = self.pool.get('product.product')
@@ -49,3 +31,7 @@ class stock_move(models.Model):
             if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
                 product_obj.update_real_cost(cr, uid, move.product_id.id, context)
         #return res
+
+    def _store_average_cost_price(self, cr, uid, move, context=None):
+        if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
+            return super(stock_move, self)._store_average_cost_price(cr, uid, move, context=context)
