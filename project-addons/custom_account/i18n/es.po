@@ -93,7 +93,7 @@ msgstr "Fecha en la que fue fabricado"
 #. module: custom_account
 #: help:purchase.order,prepared_merchandise_date:0
 msgid "Date when the merchandise was prepared"
-msgstr "Fecha en la mercandía fue preparada"
+msgstr "Fecha en la mercancía fue preparada"
 
 #. module: custom_account
 #: help:purchase.order,estimated_arrival_date:0
@@ -147,6 +147,11 @@ msgid "Invoices Statistics"
 msgstr "Estadísticas de facturas"
 
 #. module: custom_account
+#: field:payment.line,is_refund:0
+msgid "Is refund"
+msgstr "Es abono"
+
+#. module: custom_account
 #: help:purchase.order,telex_release:0
 msgid "It indicates that Telex release is necessary"
 msgstr "Indica que 'Telex release' es necesario"
@@ -174,7 +179,12 @@ msgstr "Albarán"
 #. module: custom_account
 #: view:product.product:custom_account.product_form_view_procurement_button
 msgid "Moves"
-msgstr "Movimientos"
+msgstr "Pendiente de recibir"
+
+#. module: custom_account
+#: field:payment.line,partner_name:0
+msgid "Name"
+msgstr "Nombre"
 
 #. module: custom_account
 #: field:res.partner,newsletter:0
@@ -185,6 +195,16 @@ msgstr "Newsletter"
 #: field:account.invoice,not_send_email:0
 msgid "Not send email"
 msgstr "No enviar email"
+
+#. module: custom_account
+#: field:res.partner,not_send_following_email:0
+msgid "Not send following email"
+msgstr "No enviar email de seguimiento"
+
+#. module: custom_account
+#: field:account.invoice.report,number:0
+msgid "Number"
+msgstr "Número"
 
 #. module: custom_account
 #: view:sale.report:custom_account.view_order_product_search_add_brand
@@ -365,10 +385,21 @@ msgid "The code of product must be unique."
 msgstr "El código del producto debe ser único."
 
 #. module: custom_account
+#: help:account.invoice,partner_commercial:0
+msgid "The internal user that is in charge of communicating with this contact if any."
+msgstr "El usuario interno que está a cargo de la comunicación con este contacto si hay alguno."
+
+#. module: custom_account
 #: code:addons/custom_account/purchase.py:37
 #, python-format
 msgid "Unable to cancel the purchase order %s."
 msgstr "No se puede cancelar el pedido de compra %s."
+
+#. module: custom_account
+#: view:account.invoice:custom_account.view_account_invoice_filter_ef
+#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
+msgid "Without ef"
+msgstr "Sin ef"
 
 #. module: custom_account
 #: code:addons/custom_account/purchase.py:38

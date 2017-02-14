@@ -22,11 +22,14 @@
 
 from datetime import date
 from openerp import fields, models, api, exceptions, _
+from openerp.osv import fields as fields2
 
 
 class Partner(models.Model):
 
     _inherit = "res.partner"
+
+    not_send_following_email = fields.Boolean()
 
     @api.one
     def _pending_orders_amount(self):
@@ -62,7 +65,7 @@ class Partner(models.Model):
         ctx2 = dict(self.env.context)
         ctx2['periods'] = [period.find(date.today())[:1].id]
         for partner in self:
-            if partner.credit + partner.debit > 0 and partner.with_context(ctx2).credit + partner.with_context(ctx2).debit >=0:
+            if partner.credit + partner.debit > 0 and partner.with_context(ctx2).credit + partner.with_context(ctx2).debit >=0 and not partner.not_send_following_email:
                 if self.env['account.move.line'].search(
                     [('partner_id', '=', partner.id),
                      ('account_id.type', '=', 'receivable'),

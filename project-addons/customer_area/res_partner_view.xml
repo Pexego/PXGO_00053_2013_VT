@@ -21,20 +21,17 @@
                 <field name="website" position="before">
                     <field name="area_id" on_change="change_sales_team(area_id)" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)], 'invisible':[('customer', '=', False)]}"/>
                 </field>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='mobile']" position="after">
+                    <field name="area_id"/>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='email']" position="attributes">
+                    <attribute name="required">True</attribute>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='phone']" position="attributes">
+                    <attribute name="required">True</attribute>
+                </xpath>
             </field>
         </record>
-
-        <!--<record id="view_partner_form_add_require_area" model="ir.ui.view">
-            <field name="name">res.partner.form.add_require_area</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="customer_area.res_partner_view_area_form"/>
-            <field name="arch" type="xml">
-                <field name="area_id" position="attributes">
-                    <attribute name="on_change"></attribute>
-                    <attribute name="required">True</attribute>
-                </field>
-            </field>
-        </record>-->
 
     </data>
 </openerp>

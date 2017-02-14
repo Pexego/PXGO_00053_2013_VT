@@ -15,9 +15,6 @@
                     <field name="web" attrs="{'invisible': [('is_company', '!=', True)]}"/>
                     <field name="email_web" attrs="{'invisible': [('web', '!=', True)], 'required': [('web', '=', True)]}"/>
                 </field>
-                <field name="lang" position="after">
-                    <field name="growth_rate" groups="account.group_account_invoice"/>
-                </field>
                 <field name="property_account_position" position="after">
                     <field name="invoice_type_id" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}"/>
                 </field>
@@ -396,6 +393,17 @@
             <field name="arch" type="xml">
                 <field name="total_invoiced" position="replace">
                     <field name="total_invoiced_real" widget="monetary"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="partner_view_add_growth">
+            <field name="name">partner.view.add_growth</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="purchase.res_partner_view_purchase_account_buttons"/>
+            <field name="arch" type="xml">
+                <field name="lang" position="after">
+                    <field name="growth_rate"/>
                 </field>
             </field>
         </record>
