@@ -8,7 +8,6 @@ except ImportError:
 from datetime import datetime
 from openerp.report import report_sxw
 from openerp.tools.translate import translate, _
-import ipdb
 
 _ir_translation_name = 'account.invoice.export.xls'
 
@@ -294,9 +293,6 @@ try:
                         ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
                                                       wb)
 
-                    if l['number'] == 'FV/138416':
-                        ipdb.set_trace()
-
                     #We separate the taxes to display all in diferent columns.
                     #If the invoice is a refund, we need to display the amount
                     #in negative
@@ -338,7 +334,6 @@ try:
                         line_datas['tax_description'] = l['tax_description']
 
                         if 'R' in l['number']:
-                            # ipdb.set_trace()
                             line_datas['tax_amount'] = float(l['tax_amount'])
                             line_datas['tax_amount'] = -line_datas['tax_amount']
                             line_datas['tax_base'] = float(l['tax_base'])

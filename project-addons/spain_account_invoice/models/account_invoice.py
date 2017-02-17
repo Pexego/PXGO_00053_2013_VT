@@ -16,4 +16,4 @@ class AccountInvoice(models.Model):
         ]
 
     def _report_xls_template(self, cr, uid, context=None):
-        return {}pa 
+        return {}
