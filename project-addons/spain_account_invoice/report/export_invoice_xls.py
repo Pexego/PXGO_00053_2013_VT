@@ -94,6 +94,8 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
             "   ON (c.name = it.src)) "
             "WHERE (i.type = 'out_refund' "
             "    OR i.type = 'out_invoice') "
+            "    AND (i.state = 'paid' "
+            "    OR i.state = 'open') "
             "    AND i.number NOT LIKE '%_ef%' "
             "    AND i.company_id = 1"
             "    AND substring(pr.value_reference FROM '[a-z\.]+') = 'account.fiscal.position' "
@@ -284,12 +286,16 @@ try:
                 length = len(_p.lines(o))
                 lines = sorted(_p.lines(o), key=self.orderByNumber)
                 for l in lines:
+                    check = False
                     line_count += 1
                     if row_pos >= 65536:
                         ws_count += 1
                         new_sheet_name = "%s_%s" % (sheet_name, ws_count)
                         ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
                                                       wb)
+
+                    if l['number'] == 'FV/138416':
+                        ipdb.set_trace()
 
                     #We separate the taxes to display all in diferent columns.
                     #If the invoice is a refund, we need to display the amount
@@ -347,7 +353,7 @@ try:
                     # execution is the same
                     else:
                         if not l['tax_base']:
-                            l['tax_base'] = l['amount_total']
+                            l['tax_base'] = 0.0
 
                         # If the previous line of the xls is the same invoice and their taxes are the
                         # same, the code recalculate the tax_base
@@ -375,13 +381,54 @@ try:
 
                         if 'tax_amount_ret' not in line_datas:
                             line_datas['tax_amount_ret'] = 0.0
+                        if (length <= line_count) or ((l['number'] == lines[line_count]['number'])
+                                and l['tax_description'] != lines[line_count]['tax_description'] and
+                                lines[line_count]['tax_description'] == "IVA 21% (Bienes)"):
+
+                            if (l['tax_description'] != "IVA 21% (Bienes)") and ('R' not in l['number']):
+                                line_datas['amount_total'] = 0.0
+
+                            check = True
+                            cslt = self.col_specs_lines_template
+                            if 'tax_percent' not in line_datas:
+                                line_datas['tax_percent'] = 0
+
+                            if 'tax_amount' not in line_datas:
+                                line_datas['tax_amount'] = 0.0
+
+                            if 'tax_amount_rec' not in line_datas:
+                                line_datas['tax_amount_rec'] = 0.0
+
+                            if 'tax_amount_ret' not in line_datas:
+                                line_datas['tax_amount_ret'] = 0.0
+
+                            if 'R' in l['number']:
+                                if 'amount_total' in line_datas:
+                                    line_datas['amount_total'] = float(line_datas['amount_total'])
+                                    if line_datas['amount_total'] > 0:
+                                        line_datas['amount_total'] = -line_datas['amount_total']
+                                else:
+                                    line_datas['amount_total'] = float(l['amount_total'])
+                                    if line_datas['amount_total'] > 0:
+                                        line_datas['amount_total'] = -line_datas['amount_total']
+
+                            # Set de data in the line to write the line in the xls
+                            for tax in line_datas:
+                                l[tax] = line_datas[tax]
+
+                            c_specs = map(lambda x: self.render(x, cslt, 'lines'),
+                                          wanted_list)
+                            row_data = self.xls_row_template(c_specs,
+                                                             [x[0] for x in c_specs])
+                            row_pos = self.xls_write_row(ws, row_pos, row_data)
+                            line_datas = {}
 
                     # if the next line is a IVA 0%, then we set the amount_total to 0.0
-                    if (length <= line_count) or ((l['number'] == lines[line_count]['number'])
+                    if not check and ((length <= line_count) or ((l['number'] == lines[line_count]['number'])
                             and l['tax_description'] != lines[line_count]['tax_description'] and
                             (lines[line_count]['tax_description'] != "Retenciones a cuenta 19% (Arrendamientos)"
                             and lines[line_count]['tax_description'] != "5.2% Recargo Equivalencia Ventas")
-                            and lines[line_count]['tax_description'] != "IVA 21% (Bienes)"):
+                            and lines[line_count]['tax_description'] != "IVA 21% (Bienes)")):
                         if (l['tax_description'] != "IVA 21% (Bienes)") and ('R' not in l['number']):
                             line_datas['amount_total'] = 0.0
 
@@ -420,7 +467,7 @@ try:
                         line_datas = {}
 
                     # If the next line isn't the same invoice, we print the line
-                    elif (length <= line_count) or (l['number'] != lines[line_count]['number']):
+                    elif not check and ((length <= line_count) or (l['number'] != lines[line_count]['number'])):
                         cslt = self.col_specs_lines_template
 
                         # We leeok at the previous line to set the total of the actual line
