@@ -424,7 +424,7 @@ try:
                             (lines[line_count]['tax_description'] != "Retenciones a cuenta 19% (Arrendamientos)"
                             and lines[line_count]['tax_description'] != "5.2% Recargo Equivalencia Ventas")
                             and lines[line_count]['tax_description'] != "IVA 21% (Bienes)")):
-                        if (l['tax_description'] != "IVA 21% (Bienes)") and ('R' not in l['number']):
+                        if (l['tax_description'] != "IVA 21% (Bienes)") or ('R' in l['number']):
                             line_datas['amount_total'] = 0.0
 
                         cslt = self.col_specs_lines_template
