@@ -17,8 +17,6 @@ class XlsInvoiceReportWizard(models.TransientModel):
         #('in_invoice', 'Supplier Invoice'),
         #('in_refund', 'Supplier Refund Invoice')
     ]
-
-    period_id = fields.Many2one('account.period', 'Period')
     invoice_type = fields.Selection(INVOICE_TYPES, 'Invoice Type',
                                     required=True)
     period_ids = fields.Many2many('account.period', string='Periods', required=True)

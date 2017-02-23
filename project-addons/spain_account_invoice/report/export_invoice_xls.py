@@ -8,6 +8,7 @@ except ImportError:
 from datetime import datetime
 from openerp.report import report_sxw
 from openerp.tools.translate import translate, _
+import ipdb
 
 _ir_translation_name = 'account.invoice.export.xls'
 
@@ -58,7 +59,7 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
             additional_where += self.cr.mogrify(
                 "AND i.period_id in %s", (tuple(self.period_ids),))
         sql = (
-            "SELECT "
+            "SELECT i.id as invoice_id, "
             "i.number as number, "
             "i.date_invoice as date_invoice, "
             "p.vat as partner_vat, "
@@ -68,10 +69,9 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
             "   p2.name "
             "END "
             "as partner_name, "
-            "t.amount as tax_amount, "
-            "t.base as tax_base, "
-            "t.amount as tax_percent, "
-            "i.amount_total as amount_total, "
+            "p.id as partner_id, "
+            "t.tax_amount as tax_amount, "
+            "t.base_amount as tax_base, "
             "it.value as country_name, "
             "t.name as tax_description, "
             "afp.name as fiscal_name "
@@ -96,7 +96,7 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
             "    AND (i.state = 'paid' "
             "    OR i.state = 'open') "
             "    AND i.number NOT LIKE '%_ef%' "
-            "    AND i.company_id = 1"
+            "    AND i.company_id = " + str(self.company_id) +
             "    AND substring(pr.value_reference FROM '[a-z\.]+') = 'account.fiscal.position' "
             "    AND it.lang = 'es_ES' "
             "    AND it.module = 'base' "
@@ -267,6 +267,28 @@ try:
 
             return ws, row_pos
 
+        def _compute_amounts_in_invoice_currency(self, cr, uid, ids, user_id, invoice_id):
+            """Compute the amounts in the currency of the invoice
+            """
+            currency_obj = self.pool.get('res.currency')
+            currency_rate_obj = self.pool.get('res.currency.rate')
+            user = self.pool['res.partner'].browse(cr, uid, user_id)
+            invoice = self.pool['account.invoice'].browse(cr, uid, invoice_id)
+            invoice_currency_id = invoice.currency_id.id
+            currency_rate_id = currency_rate_obj.search(
+                cr, uid, [
+                    ('rate', '=', 1),
+                    '|',
+                    ('currency_id.company_id', '=', user.company_id.id),
+                    ('currency_id.company_id', '=', False)
+                ], limit=1)[0]
+            base_currency_id = currency_rate_obj.browse(cr, uid, currency_rate_id).currency_id.id
+            ctx = {'date': invoice.date_invoice}
+            price_total = currency_obj.compute(cr, uid, invoice_currency_id, base_currency_id, invoice.amount_total,
+                                               context=ctx)
+            amount_total = float(price_total)
+            return amount_total
+
         def generate_xls_report(self, _p, _xs, data, objects, wb):
             wanted_list = _p.wanted_list
             self.wanted_list = wanted_list
@@ -285,6 +307,9 @@ try:
                 length = len(_p.lines(o))
                 lines = sorted(_p.lines(o), key=self.orderByNumber)
                 for l in lines:
+                    amount_total = self._compute_amounts_in_invoice_currency(self.cr, self.uid, [], l['partner_id'],
+                                                                          l['invoice_id'])
+
                     check = False
                     line_count += 1
                     if row_pos >= 65536:
@@ -293,59 +318,38 @@ try:
                         ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
                                                       wb)
 
-                    #We separate the taxes to display all in diferent columns.
-                    #If the invoice is a refund, we need to display the amount
-                    #in negative
+                    # We separate the taxes to display all in diferent columns.
+                    # If the invoice is a refund, we need to display the amount
+                    # in negative
 
                     if l['tax_description'] == "5.2% Recargo Equivalencia Ventas":
                         if 'tax_percent' not in line_datas:
                             line_datas['tax_percent'] = 0
 
+                        line_datas['amount_total'] = amount_total
                         if 'R' in l['number']:
-                            line_datas['tax_amount_rec'] = float(l['tax_amount'])
-                            line_datas['tax_amount_rec'] = -line_datas['tax_amount_rec']
-                            line_datas['tax_base'] = float(l['tax_base'])
-                            line_datas['tax_base'] = -line_datas['tax_base']
-                            line_datas['amount_total'] = float(l['amount_total'])
                             line_datas['amount_total'] = -line_datas['amount_total']
-                        else:
-                            line_datas['tax_amount_rec'] = l['tax_amount']
-                            line_datas['tax_base'] = l['tax_base']
-                            line_datas['amount_total'] = l['amount_total']
+
+                        line_datas['tax_amount_rec'] = l['tax_amount']
+                        line_datas['tax_base'] = l['tax_base']
 
                     elif l['tax_description'] == "Retenciones a cuenta 19% (Arrendamientos)":
                         if 'tax_percent' not in line_datas:
                             line_datas['tax_percent'] = 0
 
+                        line_datas['amount_total'] = amount_total
                         if 'R' in l['number']:
-                            line_datas['tax_amount_ret'] = float(l['tax_amount'])
-                            line_datas['tax_amount_ret'] = -line_datas['tax_amount_ret']
-                            line_datas['tax_base'] = float(l['tax_base'])
-                            line_datas['tax_base'] = -line_datas['tax_base']
-                            line_datas['amount_total'] = float(l['amount_total'])
                             line_datas['amount_total'] = -line_datas['amount_total']
-                        else:
-                            line_datas['tax_amount_ret'] = l['tax_amount']
-                            line_datas['tax_base'] = l['tax_base']
-                            line_datas['amount_total'] = l['amount_total']
+
+                        line_datas['tax_amount_ret'] = l['tax_amount']
+                        line_datas['tax_base'] = l['tax_base']
 
                     elif l['tax_description'] == "IVA 21% (Bienes)":
                         line_datas['tax_percent'] = 21.00
                         line_datas['tax_description'] = l['tax_description']
+                        line_datas['tax_amount'] = l['tax_amount']
+                        line_datas['tax_base'] = l['tax_base']
 
-                        if 'R' in l['number']:
-                            line_datas['tax_amount'] = float(l['tax_amount'])
-                            line_datas['tax_amount'] = -line_datas['tax_amount']
-                            line_datas['tax_base'] = float(l['tax_base'])
-                            line_datas['tax_base'] = -line_datas['tax_base']
-                        else:
-                            line_datas['tax_amount'] = l['tax_amount']
-                            line_datas['tax_base'] = l['tax_base']
-
-
-                    # We have some taxes as IVA 0% and they are different
-                    # so we need a else for all of them, because their
-                    # execution is the same
                     else:
                         if not l['tax_base']:
                             l['tax_base'] = 0.0
@@ -361,9 +365,6 @@ try:
 
                         else:
                             line_datas['tax_base'] = l['tax_base']
-                            if 'R' in l['number']:
-                                line_datas['tax_base'] = float(line_datas['tax_base'])
-                                line_datas['tax_base'] = -line_datas['tax_base']
 
                         if 'tax_percent' not in line_datas:
                             line_datas['tax_percent'] = 0
@@ -403,9 +404,12 @@ try:
                                     if line_datas['amount_total'] > 0:
                                         line_datas['amount_total'] = -line_datas['amount_total']
                                 else:
-                                    line_datas['amount_total'] = float(l['amount_total'])
+                                    line_datas['amount_total'] = amount_total
                                     if line_datas['amount_total'] > 0:
                                         line_datas['amount_total'] = -line_datas['amount_total']
+
+                            elif 'amount_total' not in line_datas:
+                                line_datas['amount_total'] = amount_total
 
                             # Set de data in the line to write the line in the xls
                             for tax in line_datas:
@@ -446,9 +450,12 @@ try:
                                 if line_datas['amount_total'] > 0:
                                     line_datas['amount_total'] = -line_datas['amount_total']
                             else:
-                                line_datas['amount_total'] = float(l['amount_total'])
+                                line_datas['amount_total'] = amount_total
                                 if line_datas['amount_total'] > 0:
                                     line_datas['amount_total'] = -line_datas['amount_total']
+
+                        elif 'amount_total' not in line_datas:
+                            line_datas['amount_total'] = amount_total
 
                         # Set de data in the line to write the line in the xls
                         for tax in line_datas:
@@ -493,9 +500,12 @@ try:
                                 if line_datas['amount_total'] > 0:
                                     line_datas['amount_total'] = -line_datas['amount_total']
                             else:
-                                line_datas['amount_total'] = float(l['amount_total'])
+                                line_datas['amount_total'] = amount_total
                                 if line_datas['amount_total'] > 0:
                                     line_datas['amount_total'] = -line_datas['amount_total']
+
+                        elif 'amount_total' not in line_datas:
+                            line_datas['amount_total'] = amount_total
 
                         # Set de data in the line to write the line in the xls
                         for tax in line_datas:
