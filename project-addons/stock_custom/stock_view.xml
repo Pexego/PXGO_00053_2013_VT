@@ -92,6 +92,9 @@
                 <field name="location_dest_id" position="after">
                     <field name="string_availability_info"/>
                 </field>
+                <field name="origin" position="after">
+                    <field name="real_stock"/>
+                </field>
             </field>
         </record>
 
