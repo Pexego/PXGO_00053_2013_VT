@@ -8,7 +8,6 @@ except ImportError:
 from datetime import datetime
 from openerp.report import report_sxw
 from openerp.tools.translate import translate, _
-import ipdb
 
 _ir_translation_name = 'account.invoice.export.xls'
 
@@ -74,7 +73,8 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
             "t.base_amount as tax_base, "
             "it.value as country_name, "
             "t.name as tax_description, "
-            "afp.name as fiscal_name "
+            "afp.name as fiscal_name, "
+            "i.type as type "
             "FROM("
             "account_invoice i "
             "LEFT JOIN res_partner p "
@@ -275,14 +275,7 @@ try:
             user = self.pool['res.partner'].browse(cr, uid, user_id)
             invoice = self.pool['account.invoice'].browse(cr, uid, invoice_id)
             invoice_currency_id = invoice.currency_id.id
-            currency_rate_id = currency_rate_obj.search(
-                cr, uid, [
-                    ('rate', '=', 1),
-                    '|',
-                    ('currency_id.company_id', '=', user.company_id.id),
-                    ('currency_id.company_id', '=', False)
-                ], limit=1)[0]
-            base_currency_id = currency_rate_obj.browse(cr, uid, currency_rate_id).currency_id.id
+            base_currency_id = user.company_id.currency_id.id
             ctx = {'date': invoice.date_invoice}
             price_total = currency_obj.compute(cr, uid, invoice_currency_id, base_currency_id, invoice.amount_total,
                                                context=ctx)
@@ -327,7 +320,7 @@ try:
                             line_datas['tax_percent'] = 0
 
                         line_datas['amount_total'] = amount_total
-                        if 'R' in l['number']:
+                        if 'refund' in l['type']:
                             line_datas['amount_total'] = -line_datas['amount_total']
 
                         line_datas['tax_amount_rec'] = l['tax_amount']
@@ -338,7 +331,7 @@ try:
                             line_datas['tax_percent'] = 0
 
                         line_datas['amount_total'] = amount_total
-                        if 'R' in l['number']:
+                        if 'refund' in l['type']:
                             line_datas['amount_total'] = -line_datas['amount_total']
 
                         line_datas['tax_amount_ret'] = l['tax_amount']
@@ -359,7 +352,7 @@ try:
                         if (length <= line_count) or ((l['number'] == lines[line_count - 2]['number'])
                                 and l['tax_description'] == lines[line_count - 2]['tax_description']):
                             line_datas['tax_base'] = l['tax_base'] + lines[line_count - 2]['tax_base']
-                            if 'R' in l['number']:
+                            if 'refund' in l['type']:
                                 line_datas['tax_base'] = float(line_datas['tax_base'])
                                 line_datas['tax_base'] = -line_datas['tax_base']
 
@@ -398,7 +391,7 @@ try:
                             if 'tax_amount_ret' not in line_datas:
                                 line_datas['tax_amount_ret'] = 0.0
 
-                            if 'R' in l['number']:
+                            if 'refund' in l['type']:
                                 if 'amount_total' in line_datas:
                                     line_datas['amount_total'] = float(line_datas['amount_total'])
                                     if line_datas['amount_total'] > 0:
@@ -444,7 +437,7 @@ try:
                         if 'tax_amount_ret' not in line_datas:
                             line_datas['tax_amount_ret'] = 0.0
 
-                        if 'R' in l['number']:
+                        if 'refund' in l['type']:
                             if 'amount_total' in line_datas:
                                 line_datas['amount_total'] = float(line_datas['amount_total'])
                                 if line_datas['amount_total'] > 0:
@@ -494,7 +487,7 @@ try:
                         if 'tax_amount_ret' not in line_datas:
                             line_datas['tax_amount_ret'] = 0.0
 
-                        if 'R' in l['number']:
+                        if 'refund' in l['type']:
                             if 'amount_total' in line_datas:
                                 line_datas['amount_total'] = float(line_datas['amount_total'])
                                 if line_datas['amount_total'] > 0:
