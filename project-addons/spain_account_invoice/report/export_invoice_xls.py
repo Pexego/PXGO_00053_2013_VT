@@ -622,6 +622,7 @@ try:
                         if l['tax_description'] == 'Retenciones IRPF 15%':
                             l['tax_amount_ret'] = -float(l['tax_amount'])
                             l['tax_amount'] = 0.0
+                            l['tax_base'] = 0.0
                             l['amount_total'] = 0.0
 
                         if (length <= line_count) or (l['number'] == lines[line_count]['number']):
