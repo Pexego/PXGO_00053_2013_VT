@@ -58,6 +58,7 @@ class ProductExporter(Exporter):
                     'pvd_3': product.pvd3_price,
                     'joking_index': product.joking_index}
             if product.show_stock_outside:
+                vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
                                  product_stock_field_id.name,
                                  {'product': product})
