@@ -23,6 +23,7 @@
             <field name="arch" type="xml">
                 <field name="partner_id" position="before">
                     <field name="code"/>
+                    <field name="not_compute_joking"/>
                 </field>
             </field>
         </record>
