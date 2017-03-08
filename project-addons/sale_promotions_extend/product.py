@@ -10,6 +10,7 @@ class ProductBrand(models.Model):
     _inherit = 'product.brand'
 
     code = fields.Char('Internal code')
+    not_compute_joking = fields.Boolean('Not compute joking index')
 
 
 class ProductCategory(models.Model):

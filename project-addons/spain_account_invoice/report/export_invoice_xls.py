@@ -16,9 +16,15 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
     def set_context(self, objects, data, ids, report_type=None):
         super(AccountInvoiceExportReportXlsParser, self).set_context(
             objects, data, ids, report_type=report_type)
+        invoice_pool = self.pool['account.invoice']
+        invoice_type = data['invoice_type']
+        wanted_list = invoice_pool._report_xls_fields(self.cr, self.uid, invoice_type, self.context)
         self.invoice_type = data['invoice_type']
         self.company_id = data['company_id']
         self.period_ids = data['period_ids']
+        self.localcontext.update({
+            'wanted_list': wanted_list
+        })
 
     def __init__(self, cr, uid, name, context=None):
         if context is None:
@@ -26,12 +32,10 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
         super(AccountInvoiceExportReportXlsParser, self).__init__(
             cr, uid, name, context=context)
         invoice_pool = self.pool['account.invoice']
-        wanted_list = invoice_pool._report_xls_fields(cr, uid, context)
         template_changes = invoice_pool._report_xls_template(cr, uid, context)
         self.localcontext.update({
             'datetime': datetime,
             'title': self._title,
-            'wanted_list': wanted_list,
             'invoice_type': self._invoice_type,
             'template_changes': template_changes,
             'lines': self._lines,
@@ -54,10 +58,12 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
     # Invoices and the Customer Refund Invoices at the same time.
     def _lines(self, object):
         additional_where = ""
+        sql = ""
         if self.period_ids:
             additional_where += self.cr.mogrify(
                 "AND i.period_id in %s", (tuple(self.period_ids),))
-        sql = (
+        if self.invoice_type == 'out_invoice':
+            sql = (
             "SELECT i.id as invoice_id, "
             "i.number as number, "
             "i.date_invoice as date_invoice, "
@@ -102,6 +108,47 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
             "    AND it.module = 'base' "
             " {} "
             "ORDER BY date_invoice ASC").format(additional_where)
+
+        elif self.invoice_type == 'in_invoice':
+            sql = (
+                "SELECT i.id as invoice_id, "
+                "i.number as number, "
+                "i.date_invoice as date_invoice, "
+                "i.supplier_invoice_number as supplier_number, "
+                "p.vat as partner_vat, "
+                "CASE WHEN p.parent_id IS NULL THEN "
+                "   p.name "
+                "WHEN p.parent_id IS NOT NULL THEN "
+                "   p2.name "
+                "END "
+                "as partner_name, "
+                "p.id as partner_id, "
+                "t.tax_amount as tax_amount, "
+                "t.base_amount as tax_base, "
+                "it.value as country_name, "
+                "t.name as tax_description "
+                "FROM("
+                "account_invoice i "
+                "LEFT JOIN res_partner p "
+                "   ON (i.partner_id = p.id) "
+                "LEFT JOIN res_partner p2 "
+                "   ON (p.parent_id = p2.id) "
+                "LEFT JOIN res_country c "
+                "   ON (p.country_id = c.id) "
+                "LEFT JOIN account_invoice_tax t "
+                "   ON (i.id = t.invoice_id) "
+                "LEFT JOIN ir_translation it "
+                "   ON (c.name = it.src)) "
+                "WHERE (i.type = 'in_refund' "
+                "    OR i.type = 'in_invoice') "
+                "    AND (i.state = 'paid' "
+                "    OR i.state = 'open') "
+                "    AND i.number NOT LIKE '%_ef%' "
+                "    AND i.company_id = 1"
+                "    AND it.lang = 'es_ES' "
+                "    AND it.module = 'base' "
+                " {} "
+                "ORDER BY date_invoice ASC").format(additional_where)
 
         self.cr.execute(sql)
         lines = self.cr.dictfetchall()
@@ -155,80 +202,123 @@ try:
             user = self.pool['res.users'].browse(self.cr, self.uid, self.uid)
             context = {}
             context.update({'lang': user.lang})
+
             # XLS Template
             # [Cell columns span, cell width, content type, ??]
-            spec_lines_template = {
-                'number': {
-                    'header': [1, 15, 'text', _render("_('N de factura')")],
-                    'lines': [1, 0, 'text', _render("l['number']")],
-                    'totals': [1, 0, 'text', None]},
-                'date_invoice': {
-                    'header': [1, 20, 'text', _render("_('Fecha factura')")],
-                    'lines': [1, 0, 'text', _render("(l['date_invoice'])")],
-                    'totals': [1, 0, 'text', None]},
-                'partner_vat': {
-                    'header': [1, 20, 'text', _render("_('Empresa/NIF')")],
-                    'lines': [1, 0, 'text', _render("(l['partner_vat'])")],
-                    'totals': [1, 0, 'text', None]},
-                'partner_name': {
-                    'header': [1, 40, 'text', _render("_('Empresa/Nombre')")],
-                    'lines': [1, 0, 'text', _render("l['partner_name']")],
-                    'totals': [1, 0, 'text', None]},
-                'tax_base': {
-                    'header': [1, 20, 'text', _render("_('Base imponible')")],
-                    'lines': [1, 0, 'number', _render("l['tax_base']"),
-                              None, self.aml_cell_style_decimal],
-                    'totals': [1, 0, 'text', None]},
-                'tax_amount': {
-                    'header': [1, 20, 'text', _render("_('Cuota IVA')")],
-                    'lines': [1, 0, 'number', _render("l['tax_amount']"),
-                              None, self.aml_cell_style_decimal],
-                    'totals': [1, 0, 'text', None]},
-                'tax_percent': {
-                    'header': [1, 20, 'text', _render("_('% IVA')")],
-                    'lines': [1, 0, 'number', _render("l['tax_percent']"),
-                              None, self.aml_cell_style_decimal],
-                    'totals': [1, 0, 'text', None]},
-                'tax_amount_rec': {
-                    'header': [1, 20, 'text', _render("_('Recargo de equivalencia')")],
-                    'lines': [1, 0, 'number', _render("l['tax_amount_rec']"),
-                              None, self.aml_cell_style_decimal],
-                    'totals': [1, 0, 'text', None]},
-                'tax_amount_ret': {
-                    'header': [1, 20, 'text', _render("_('Retenciones')")],
-                    'lines': [1, 0, 'number', _render("l['tax_amount_ret']"),
-                              None, self.aml_cell_style_decimal],
-                    'totals': [1, 0, 'text', None]},
-                'amount_total': {
-                    'header': [1, 20, 'text', _render("_('Total')")],
-                    'lines': [1, 0, 'number', _render("l['amount_total']"),
-                              None, self.aml_cell_style_decimal],
-                    'totals': [1, 0, 'text', None]},
-                'country_name': {
-                    'header': [1, 20, 'text', _render("_('Empresa/País/Nombre del país')")],
-                    'lines': [1, 0, 'text', _render("l['country_name']")],
-                    'totals': [1, 0, 'text', None]},
-                'tax_description': {
-                    'header': [1, 40, 'text', _render("_('Líneas de impuestos/Descripción impuesto')")],
-                    'lines': [1, 0, 'text', _render("l['tax_description']")],
-                    'totals': [1, 0, 'text', None]},
-                'fiscal_name': {
-                    'header': [1, 40, 'text', _render("_('Empresa/Posición fiscal/Posición fiscal')")],
-                    'lines': [1, 0, 'text', _render("l['fiscal_name']")],
-                    'totals': [1, 0, 'text', None]},
+            spec_lines_template = {}
+            if invoice_type == 'out_invoice':
+                spec_lines_template = {
+                    'number': {
+                        'header': [1, 15, 'text', _render("_('N de factura')")],
+                        'lines': [1, 0, 'text', _render("l['number']")],
+                        'totals': [1, 0, 'text', None]},
+                    'date_invoice': {
+                        'header': [1, 20, 'text', _render("_('Fecha factura')")],
+                        'lines': [1, 0, 'text', _render("(l['date_invoice'])")],
+                        'totals': [1, 0, 'text', None]},
+                    'partner_vat': {
+                        'header': [1, 20, 'text', _render("_('Empresa/NIF')")],
+                        'lines': [1, 0, 'text', _render("(l['partner_vat'])")],
+                        'totals': [1, 0, 'text', None]},
+                    'partner_name': {
+                        'header': [1, 40, 'text', _render("_('Empresa/Nombre')")],
+                        'lines': [1, 0, 'text', _render("l['partner_name']")],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_base': {
+                        'header': [1, 20, 'text', _render("_('Base imponible')")],
+                        'lines': [1, 0, 'number', _render("l['tax_base']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_amount': {
+                        'header': [1, 20, 'text', _render("_('Cuota IVA')")],
+                        'lines': [1, 0, 'number', _render("l['tax_amount']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_percent': {
+                        'header': [1, 20, 'text', _render("_('% IVA')")],
+                        'lines': [1, 0, 'number', _render("l['tax_percent']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_amount_rec': {
+                        'header': [1, 20, 'text', _render("_('Recargo de equivalencia')")],
+                        'lines': [1, 0, 'number', _render("l['tax_amount_rec']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_amount_ret': {
+                        'header': [1, 20, 'text', _render("_('Retenciones')")],
+                        'lines': [1, 0, 'number', _render("l['tax_amount_ret']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'amount_total': {
+                        'header': [1, 20, 'text', _render("_('Total')")],
+                        'lines': [1, 0, 'number', _render("l['amount_total']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'country_name': {
+                        'header': [1, 20, 'text', _render("_('Empresa/País/Nombre del país')")],
+                        'lines': [1, 0, 'text', _render("l['country_name']")],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_description': {
+                        'header': [1, 40, 'text', _render("_('Líneas de impuestos/Descripción impuesto')")],
+                        'lines': [1, 0, 'text', _render("l['tax_description']")],
+                        'totals': [1, 0, 'text', None]},
+                    'fiscal_name': {
+                        'header': [1, 40, 'text', _render("_('Empresa/Posición fiscal/Posición fiscal')")],
+                        'lines': [1, 0, 'text', _render("l['fiscal_name']")],
+                        'totals': [1, 0, 'text', None]},
 
-            }
-
-            if invoice_type == 'in_invoice':
-                spec_lines_template.update({
-                    'invoice_number': {
-                        'header': [1, 13, 'text', _('Number')],
-                        'lines': [1, 0, 'text', _render(
-                            "l['supplier_invoice_number'] "
-                            "or l['invoice_number']")],
-                        'totals': [1, 0, 'text', None]
-                    }
-                })
+                }
+            elif invoice_type == 'in_invoice':
+                spec_lines_template = {
+                    'date_invoice': {
+                        'header': [1, 20, 'text', _render("_('Fecha factura')")],
+                        'lines': [1, 0, 'text', _render("(l['date_invoice'])")],
+                        'totals': [1, 0, 'text', None]},
+                    'number': {
+                        'header': [1, 15, 'text', _render("_('N de factura')")],
+                        'lines': [1, 0, 'text', _render("l['number']")],
+                        'totals': [1, 0, 'text', None]},
+                    'supplier_number': {
+                        'header': [1, 15, 'text', _render("_('N de factura del proveedor')")],
+                        'lines': [1, 0, 'text', _render("l['supplier_number']")],
+                        'totals': [1, 0, 'text', None]},
+                    'partner_vat': {
+                        'header': [1, 20, 'text', _render("_('Empresa/NIF')")],
+                        'lines': [1, 0, 'text', _render("(l['partner_vat'])")],
+                        'totals': [1, 0, 'text', None]},
+                    'partner_name': {
+                        'header': [1, 40, 'text', _render("_('Empresa/Nombre')")],
+                        'lines': [1, 0, 'text', _render("l['partner_name']")],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_base': {
+                        'header': [1, 20, 'text', _render("_('Base imponible')")],
+                        'lines': [1, 0, 'number', _render("l['tax_base']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_description': {
+                        'header': [1, 40, 'text', _render("_('Líneas de impuestos/Descripción impuesto')")],
+                        'lines': [1, 0, 'text', _render("l['tax_description']")],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_amount': {
+                        'header': [1, 20, 'text', _render("_('Cuota IVA')")],
+                        'lines': [1, 0, 'number', _render("l['tax_amount']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'tax_amount_ret': {
+                        'header': [1, 20, 'text', _render("_('Retenciones')")],
+                        'lines': [1, 0, 'number', _render("l['tax_amount_ret']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'amount_total': {
+                        'header': [1, 20, 'text', _render("_('Total')")],
+                        'lines': [1, 0, 'number', _render("l['amount_total']"),
+                                  None, self.aml_cell_style_decimal],
+                        'totals': [1, 0, 'text', None]},
+                    'country_name': {
+                        'header': [1, 20, 'text', _render("_('Empresa/País/Nombre del país')")],
+                        'lines': [1, 0, 'text', _render("l['country_name']")],
+                        'totals': [1, 0, 'text', None]},
+                }
 
             return spec_lines_template
 
@@ -296,56 +386,57 @@ try:
             ws_count = 0
             line_datas = {}
             line_count = 0
-            for o in objects:
-                length = len(_p.lines(o))
-                lines = sorted(_p.lines(o), key=self.orderByNumber)
-                for l in lines:
-                    amount_total = self._compute_amounts_in_invoice_currency(self.cr, self.uid, [], l['partner_id'],
-                                                                          l['invoice_id'])
+            if data['invoice_type'] == 'out_invoice':
+                for o in objects:
+                    length = len(_p.lines(o))
+                    lines = sorted(_p.lines(o), key=self.orderByNumber)
+                    for l in lines:
+                        amount_total = self._compute_amounts_in_invoice_currency(self.cr, self.uid, [], l['partner_id'],
+                                                                                 l['invoice_id'])
 
-                    check = False
-                    line_count += 1
-                    if row_pos >= 65536:
-                        ws_count += 1
-                        new_sheet_name = "%s_%s" % (sheet_name, ws_count)
-                        ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
-                                                      wb)
+                        check = False
+                        line_count += 1
+                        if row_pos >= 65536:
+                            ws_count += 1
+                            new_sheet_name = "%s_%s" % (sheet_name, ws_count)
+                            ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
+                                                          wb)
 
-                    # We separate the taxes to display all in diferent columns.
-                    # If the invoice is a refund, we need to display the amount
-                    # in negative
+                        # We separate the taxes to display all in diferent columns.
+                        # If the invoice is a refund, we need to display the amount
+                        # in negative
 
-                    if l['tax_description'] == "5.2% Recargo Equivalencia Ventas":
-                        if 'tax_percent' not in line_datas:
-                            line_datas['tax_percent'] = 0
-
-                        line_datas['amount_total'] = amount_total
-                        if 'refund' in l['type']:
-                            line_datas['amount_total'] = -line_datas['amount_total']
-
-                        line_datas['tax_amount_rec'] = l['tax_amount']
-                        line_datas['tax_base'] = l['tax_base']
-
-                    elif l['tax_description'] == "Retenciones a cuenta 19% (Arrendamientos)":
-                        if 'tax_percent' not in line_datas:
-                            line_datas['tax_percent'] = 0
+                        if l['tax_description'] == "5.2% Recargo Equivalencia Ventas":
+                            if 'tax_percent' not in line_datas:
+                                line_datas['tax_percent'] = 0
 
                         line_datas['amount_total'] = amount_total
                         if 'refund' in l['type']:
                             line_datas['amount_total'] = -line_datas['amount_total']
 
-                        line_datas['tax_amount_ret'] = l['tax_amount']
-                        line_datas['tax_base'] = l['tax_base']
+                            line_datas['tax_amount_rec'] = l['tax_amount']
+                            line_datas['tax_base'] = l['tax_base']
 
-                    elif l['tax_description'] == "IVA 21% (Bienes)":
-                        line_datas['tax_percent'] = 21.00
-                        line_datas['tax_description'] = l['tax_description']
-                        line_datas['tax_amount'] = l['tax_amount']
-                        line_datas['tax_base'] = l['tax_base']
+                        elif l['tax_description'] == "Retenciones a cuenta 19% (Arrendamientos)":
+                            if 'tax_percent' not in line_datas:
+                                line_datas['tax_percent'] = 0
 
-                    else:
-                        if not l['tax_base']:
-                            l['tax_base'] = 0.0
+                        line_datas['amount_total'] = amount_total
+                        if 'refund' in l['type']:
+                            line_datas['amount_total'] = -line_datas['amount_total']
+
+                            line_datas['tax_amount_ret'] = l['tax_amount']
+                            line_datas['tax_base'] = l['tax_base']
+
+                        elif l['tax_description'] == "IVA 21% (Bienes)":
+                            line_datas['tax_percent'] = 21.00
+                            line_datas['tax_description'] = l['tax_description']
+                            line_datas['tax_amount'] = l['tax_amount']
+                            line_datas['tax_base'] = l['tax_base']
+
+                        else:
+                            if not l['tax_base']:
+                                l['tax_base'] = 0.0
 
                         # If the previous line of the xls is the same invoice and their taxes are the
                         # same, the code recalculate the tax_base
@@ -356,29 +447,9 @@ try:
                                 line_datas['tax_base'] = float(line_datas['tax_base'])
                                 line_datas['tax_base'] = -line_datas['tax_base']
 
-                        else:
-                            line_datas['tax_base'] = l['tax_base']
+                            else:
+                                line_datas['tax_base'] = l['tax_base']
 
-                        if 'tax_percent' not in line_datas:
-                            line_datas['tax_percent'] = 0
-
-                        if 'tax_amount' not in line_datas:
-                            line_datas['tax_amount'] = 0.0
-
-                        if 'tax_amount_rec' not in line_datas:
-                            line_datas['tax_amount_rec'] = 0.0
-
-                        if 'tax_amount_ret' not in line_datas:
-                            line_datas['tax_amount_ret'] = 0.0
-                        if (length <= line_count) or ((l['number'] == lines[line_count]['number'])
-                                and l['tax_description'] != lines[line_count]['tax_description'] and
-                                lines[line_count]['tax_description'] == "IVA 21% (Bienes)"):
-
-                            if (l['tax_description'] != "IVA 21% (Bienes)") and ('R' not in l['number']):
-                                line_datas['amount_total'] = 0.0
-
-                            check = True
-                            cslt = self.col_specs_lines_template
                             if 'tax_percent' not in line_datas:
                                 line_datas['tax_percent'] = 0
 
@@ -390,6 +461,26 @@ try:
 
                             if 'tax_amount_ret' not in line_datas:
                                 line_datas['tax_amount_ret'] = 0.0
+                            if (length <= line_count) or ((l['number'] == lines[line_count]['number'])
+                                    and l['tax_description'] != lines[line_count]['tax_description'] and
+                                    lines[line_count]['tax_description'] == "IVA 21% (Bienes)"):
+
+                                if (l['tax_description'] != "IVA 21% (Bienes)") and ('R' not in l['number']):
+                                    line_datas['amount_total'] = 0.0
+
+                                check = True
+                                cslt = self.col_specs_lines_template
+                                if 'tax_percent' not in line_datas:
+                                    line_datas['tax_percent'] = 0
+
+                                if 'tax_amount' not in line_datas:
+                                    line_datas['tax_amount'] = 0.0
+
+                                if 'tax_amount_rec' not in line_datas:
+                                    line_datas['tax_amount_rec'] = 0.0
+
+                                if 'tax_amount_ret' not in line_datas:
+                                    line_datas['tax_amount_ret'] = 0.0
 
                             if 'refund' in l['type']:
                                 if 'amount_total' in line_datas:
@@ -404,6 +495,52 @@ try:
                             elif 'amount_total' not in line_datas:
                                 line_datas['amount_total'] = amount_total
 
+                                # Set de data in the line to write the line in the xls
+                                for tax in line_datas:
+                                    l[tax] = line_datas[tax]
+
+                                c_specs = map(lambda x: self.render(x, cslt, 'lines'),
+                                              wanted_list)
+                                row_data = self.xls_row_template(c_specs,
+                                                                 [x[0] for x in c_specs])
+                                row_pos = self.xls_write_row(ws, row_pos, row_data)
+                                line_datas = {}
+
+                        # if the next line is a IVA 0%, then we set the amount_total to 0.0
+                        if not check and ((length <= line_count) or ((l['number'] == lines[line_count]['number'])
+                                and l['tax_description'] != lines[line_count]['tax_description'] and
+                                (lines[line_count]['tax_description'] != "Retenciones a cuenta 19% (Arrendamientos)"
+                                and lines[line_count]['tax_description'] != "5.2% Recargo Equivalencia Ventas")
+                                and lines[line_count]['tax_description'] != "IVA 21% (Bienes)")):
+                            if (l['tax_description'] != "IVA 21% (Bienes)") or ('R' in l['number']):
+                                line_datas['amount_total'] = 0.0
+
+                            cslt = self.col_specs_lines_template
+                            if 'tax_percent' not in line_datas:
+                                line_datas['tax_percent'] = 0
+
+                            if 'tax_amount' not in line_datas:
+                                line_datas['tax_amount'] = 0.0
+
+                            if 'tax_amount_rec' not in line_datas:
+                                line_datas['tax_amount_rec'] = 0.0
+
+                            if 'tax_amount_ret' not in line_datas:
+                                line_datas['tax_amount_ret'] = 0.0
+
+                        if 'refund' in l['type']:
+                            if 'amount_total' in line_datas:
+                                line_datas['amount_total'] = float(line_datas['amount_total'])
+                                if line_datas['amount_total'] > 0:
+                                    line_datas['amount_total'] = -line_datas['amount_total']
+                            else:
+                                line_datas['amount_total'] = amount_total
+                                if line_datas['amount_total'] > 0:
+                                    line_datas['amount_total'] = -line_datas['amount_total']
+
+                        elif 'amount_total' not in line_datas:
+                            line_datas['amount_total'] = amount_total
+
                             # Set de data in the line to write the line in the xls
                             for tax in line_datas:
                                 l[tax] = line_datas[tax]
@@ -415,77 +552,31 @@ try:
                             row_pos = self.xls_write_row(ws, row_pos, row_data)
                             line_datas = {}
 
-                    # if the next line is a IVA 0%, then we set the amount_total to 0.0
-                    if not check and ((length <= line_count) or ((l['number'] == lines[line_count]['number'])
-                            and l['tax_description'] != lines[line_count]['tax_description'] and
-                            (lines[line_count]['tax_description'] != "Retenciones a cuenta 19% (Arrendamientos)"
-                            and lines[line_count]['tax_description'] != "5.2% Recargo Equivalencia Ventas")
-                            and lines[line_count]['tax_description'] != "IVA 21% (Bienes)")):
-                        if (l['tax_description'] != "IVA 21% (Bienes)") or ('R' in l['number']):
-                            line_datas['amount_total'] = 0.0
+                        # If the next line isn't the same invoice, we print the line
+                        elif not check and ((length <= line_count) or (l['number'] != lines[line_count]['number'])):
+                            cslt = self.col_specs_lines_template
 
-                        cslt = self.col_specs_lines_template
-                        if 'tax_percent' not in line_datas:
-                            line_datas['tax_percent'] = 0
+                            # We leeok at the previous line to set the total of the actual line
+                            if l['number'] == lines[line_count - 2]['number']:
+                                if lines[line_count - 2]['tax_description'] == "IVA 21% (Bienes)" \
+                                        and (l['tax_description'] != "Retenciones a cuenta 19% (Arrendamientos)"\
+                                        and l['tax_description'] != "5.2% Recargo Equivalencia Ventas"):
+                                    line_datas['amount_total'] = 0.0
 
-                        if 'tax_amount' not in line_datas:
-                            line_datas['tax_amount'] = 0.0
+                            if 'tax_base' not in line_datas:
+                                line_datas['tax_base'] = l['tax_base']
 
-                        if 'tax_amount_rec' not in line_datas:
-                            line_datas['tax_amount_rec'] = 0.0
+                            if 'tax_percent' not in line_datas:
+                                line_datas['tax_percent'] = 0
 
-                        if 'tax_amount_ret' not in line_datas:
-                            line_datas['tax_amount_ret'] = 0.0
+                            if 'tax_amount' not in line_datas:
+                                line_datas['tax_amount'] = 0.0
 
-                        if 'refund' in l['type']:
-                            if 'amount_total' in line_datas:
-                                line_datas['amount_total'] = float(line_datas['amount_total'])
-                                if line_datas['amount_total'] > 0:
-                                    line_datas['amount_total'] = -line_datas['amount_total']
-                            else:
-                                line_datas['amount_total'] = amount_total
-                                if line_datas['amount_total'] > 0:
-                                    line_datas['amount_total'] = -line_datas['amount_total']
+                            if 'tax_amount_rec' not in line_datas:
+                                line_datas['tax_amount_rec'] = 0.0
 
-                        elif 'amount_total' not in line_datas:
-                            line_datas['amount_total'] = amount_total
-
-                        # Set de data in the line to write the line in the xls
-                        for tax in line_datas:
-                            l[tax] = line_datas[tax]
-
-                        c_specs = map(lambda x: self.render(x, cslt, 'lines'),
-                                      wanted_list)
-                        row_data = self.xls_row_template(c_specs,
-                                                         [x[0] for x in c_specs])
-                        row_pos = self.xls_write_row(ws, row_pos, row_data)
-                        line_datas = {}
-
-                    # If the next line isn't the same invoice, we print the line
-                    elif not check and ((length <= line_count) or (l['number'] != lines[line_count]['number'])):
-                        cslt = self.col_specs_lines_template
-
-                        # We leeok at the previous line to set the total of the actual line
-                        if l['number'] == lines[line_count - 2]['number']:
-                            if lines[line_count - 2]['tax_description'] == "IVA 21% (Bienes)" \
-                                    and (l['tax_description'] != "Retenciones a cuenta 19% (Arrendamientos)"\
-                                    and l['tax_description'] != "5.2% Recargo Equivalencia Ventas"):
-                                line_datas['amount_total'] = 0.0
-
-                        if 'tax_base' not in line_datas:
-                            line_datas['tax_base'] = l['tax_base']
-
-                        if 'tax_percent' not in line_datas:
-                            line_datas['tax_percent'] = 0
-
-                        if 'tax_amount' not in line_datas:
-                            line_datas['tax_amount'] = 0.0
-
-                        if 'tax_amount_rec' not in line_datas:
-                            line_datas['tax_amount_rec'] = 0.0
-
-                        if 'tax_amount_ret' not in line_datas:
-                            line_datas['tax_amount_ret'] = 0.0
+                            if 'tax_amount_ret' not in line_datas:
+                                line_datas['tax_amount_ret'] = 0.0
 
                         if 'refund' in l['type']:
                             if 'amount_total' in line_datas:
@@ -500,16 +591,52 @@ try:
                         elif 'amount_total' not in line_datas:
                             line_datas['amount_total'] = amount_total
 
-                        # Set de data in the line to write the line in the xls
-                        for tax in line_datas:
-                            l[tax] = line_datas[tax]
+                            # Set de data in the line to write the line in the xls
+                            for tax in line_datas:
+                                l[tax] = line_datas[tax]
 
+                            c_specs = map(lambda x: self.render(x, cslt, 'lines'),
+                                          wanted_list)
+                            row_data = self.xls_row_template(c_specs,
+                                                             [x[0] for x in c_specs])
+                            row_pos = self.xls_write_row(ws, row_pos, row_data)
+                            line_datas = {}
+
+            elif data['invoice_type'] == 'in_invoice':
+                for o in objects:
+                    length = len(_p.lines(o))
+                    lines = sorted(_p.lines(o), key=self.orderByNumber)
+                    for l in lines:
+                        amount_total = self._compute_amounts_in_invoice_currency(self.cr, self.uid, [], l['partner_id'],
+                                                                                 l['invoice_id'])
+                        line_count += 1
+                        if row_pos >= 65536:
+                            ws_count += 1
+                            new_sheet_name = "%s_%s" % (sheet_name, ws_count)
+                            ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
+                                                          wb)
+
+                        l['amount_total'] = amount_total
+
+                        l['tax_amount_ret'] = 0.0
+                        if l['tax_description'] == 'Retenciones IRPF 15%':
+                            l['tax_amount_ret'] = -float(l['tax_amount'])
+                            l['tax_amount'] = 0.0
+                            l['tax_base'] = 0.0
+                            l['amount_total'] = 0.0
+
+                        if (length <= line_count) or (l['number'] == lines[line_count]['number']):
+                            if l['tax_description'] != '21% IVA soportado (operaciones corrientes)':
+                                l['amount_total'] = 0.0
+
+                        cslt = self.col_specs_lines_template
                         c_specs = map(lambda x: self.render(x, cslt, 'lines'),
                                       wanted_list)
                         row_data = self.xls_row_template(c_specs,
                                                          [x[0] for x in c_specs])
                         row_pos = self.xls_write_row(ws, row_pos, row_data)
-                        line_datas = {}
+
+
 
         def orderByNumber(self, list):
             return list['number']

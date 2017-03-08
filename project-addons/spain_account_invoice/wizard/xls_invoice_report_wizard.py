@@ -12,9 +12,9 @@ class XlsInvoiceReportWizard(models.TransientModel):
     # Only the first opcion is available because the other invoices types need
     # implementation in our code.
     INVOICE_TYPES = [
-        ('out_invoice', 'Customer Invoice')
-        #('out_refund', 'Customer Refund Invoice'),
-        #('in_invoice', 'Supplier Invoice'),
+        ('out_invoice', 'Customer Invoice'),
+        ('in_invoice', 'Supplier Invoice')
+        # ('out_refund', 'Customer Refund Invoice'),
         #('in_refund', 'Supplier Refund Invoice')
     ]
     invoice_type = fields.Selection(INVOICE_TYPES, 'Invoice Type',
