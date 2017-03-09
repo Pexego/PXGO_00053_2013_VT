@@ -79,7 +79,7 @@ class product_product(models.Model):
                 filter_ids.append(stock_product_id.id)
         avg = joking_tot / len(filter_ids)
         for product in product_obj.search([]):
-            if product.type != 'product' or product.id not in product_ids:
+            if product.type != 'product' or product.id not in filter_ids:
                 if product.joking_index != 0:
                     product.joking_index = 0
             else:
