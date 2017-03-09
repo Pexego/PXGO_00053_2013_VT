@@ -9,6 +9,8 @@ from datetime import datetime
 from openerp.report import report_sxw
 from openerp.tools.translate import translate, _
 
+import ipdb
+
 _ir_translation_name = 'account.invoice.export.xls'
 
 
@@ -64,50 +66,50 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
                 "AND i.period_id in %s", (tuple(self.period_ids),))
         if self.invoice_type == 'out_invoice':
             sql = (
-            "SELECT i.id as invoice_id, "
-            "i.number as number, "
-            "i.date_invoice as date_invoice, "
-            "p.vat as partner_vat, "
-            "CASE WHEN p.parent_id IS NULL THEN "
-            "   p.name "
-            "WHEN p.parent_id IS NOT NULL THEN "
-            "   p2.name "
-            "END "
-            "as partner_name, "
-            "p.id as partner_id, "
-            "t.tax_amount as tax_amount, "
-            "t.base_amount as tax_base, "
-            "it.value as country_name, "
-            "t.name as tax_description, "
-            "afp.name as fiscal_name, "
-            "i.type as type "
-            "FROM("
-            "account_invoice i "
-            "LEFT JOIN res_partner p "
-            "   ON (i.partner_id = p.id) "
-            "LEFT JOIN res_partner p2 "
-            "   ON (p.parent_id = p2.id) "
-            "LEFT JOIN res_country c "
-            "   ON (p.country_id = c.id) "
-            "LEFT JOIN account_invoice_tax t "
-            "   ON (i.id = t.invoice_id) "
-            "LEFT JOIN ir_property pr "
-            "   ON (pr.res_id = 'res.partner,'||i.partner_id) "
-            "LEFT JOIN account_fiscal_position afp "
-            "   ON (afp.id = cast(substring(pr.value_reference FROM '[0-9]+') as int))"
-            "LEFT JOIN ir_translation it "
-            "   ON (c.name = it.src)) "
-            "WHERE (i.type = 'out_refund' "
-            "    OR i.type = 'out_invoice') "
-            "    AND (i.state = 'paid' "
-            "    OR i.state = 'open') "
-            "    AND i.number NOT LIKE '%_ef%' "
-            "    AND i.company_id = " + str(self.company_id) +
-            "    AND substring(pr.value_reference FROM '[a-z\.]+') = 'account.fiscal.position' "
-            "    AND it.lang = 'es_ES' "
-            "    AND it.module = 'base' "
-            " {} "
-            "ORDER BY date_invoice ASC").format(additional_where)
+                "SELECT i.id as invoice_id, "
+                "i.number as number, "
+                "i.date_invoice as date_invoice, "
+                "p.vat as partner_vat, "
+                "CASE WHEN p.parent_id IS NULL THEN "
+                "   p.name "
+                "WHEN p.parent_id IS NOT NULL THEN "
+                "   p2.name "
+                "END "
+                "as partner_name, "
+                "p.id as partner_id, "
+                "t.tax_amount as tax_amount, "
+                "t.base_amount as tax_base, "
+                "it.value as country_name, "
+                "t.name as tax_description, "
+                "afp.name as fiscal_name, "
+                "i.type as type "
+                "FROM("
+                "account_invoice i "
+                "LEFT JOIN res_partner p "
+                "   ON (i.partner_id = p.id) "
+                "LEFT JOIN res_partner p2 "
+                "   ON (p.parent_id = p2.id) "
+                "LEFT JOIN res_country c "
+                "   ON (p.country_id = c.id) "
+                "LEFT JOIN account_invoice_tax t "
+                "   ON (i.id = t.invoice_id) "
+                "LEFT JOIN ir_property pr "
+                "   ON (pr.res_id = 'res.partner,'||i.partner_id) "
+                "LEFT JOIN account_fiscal_position afp "
+                "   ON (afp.id = cast(substring(pr.value_reference FROM '[0-9]+') as int))"
+                "LEFT JOIN ir_translation it "
+                "   ON (c.name = it.src)) "
+                "WHERE (i.type = 'out_refund' "
+                "    OR i.type = 'out_invoice') "
+                "    AND (i.state = 'paid' "
+                "    OR i.state = 'open') "
+                "    AND i.number NOT LIKE '%_ef%' "
+                "    AND i.company_id = " + str(self.company_id) +
+                "    AND substring(pr.value_reference FROM '[a-z\.]+') = 'account.fiscal.position' "
+                "    AND it.lang = 'es_ES' "
+                "    AND it.module = 'base' "
+                " {} "
+                "ORDER BY date_invoice ASC").format(additional_where)
 
         elif self.invoice_type == 'in_invoice':
             sql = (
@@ -390,6 +392,7 @@ try:
                 for o in objects:
                     length = len(_p.lines(o))
                     lines = sorted(_p.lines(o), key=self.orderByNumber)
+                    #ipdb.set_trace()
                     for l in lines:
                         amount_total = self._compute_amounts_in_invoice_currency(self.cr, self.uid, [], l['partner_id'],
                                                                                  l['invoice_id'])
@@ -482,20 +485,20 @@ try:
                                 if 'tax_amount_ret' not in line_datas:
                                     line_datas['tax_amount_ret'] = 0.0
 
-                            if 'refund' in l['type']:
-                                if 'amount_total' in line_datas:
-                                    line_datas['amount_total'] = float(line_datas['amount_total'])
-                                    if line_datas['amount_total'] > 0:
-                                        line_datas['amount_total'] = -line_datas['amount_total']
-                                else:
+                                if 'refund' in l['type']:
+                                    if 'amount_total' in line_datas:
+                                        line_datas['amount_total'] = float(line_datas['amount_total'])
+                                        if line_datas['amount_total'] > 0:
+                                            line_datas['amount_total'] = -line_datas['amount_total']
+                                    else:
+                                        line_datas['amount_total'] = amount_total
+                                        if line_datas['amount_total'] > 0:
+                                            line_datas['amount_total'] = -line_datas['amount_total']
+
+                                elif 'amount_total' not in line_datas:
                                     line_datas['amount_total'] = amount_total
-                                    if line_datas['amount_total'] > 0:
-                                        line_datas['amount_total'] = -line_datas['amount_total']
 
-                            elif 'amount_total' not in line_datas:
-                                line_datas['amount_total'] = amount_total
-
-                                # Set de data in the line to write the line in the xls
+                                    # Set de data in the line to write the line in the xls
                                 for tax in line_datas:
                                     l[tax] = line_datas[tax]
 
@@ -528,18 +531,18 @@ try:
                             if 'tax_amount_ret' not in line_datas:
                                 line_datas['tax_amount_ret'] = 0.0
 
-                        if 'refund' in l['type']:
-                            if 'amount_total' in line_datas:
-                                line_datas['amount_total'] = float(line_datas['amount_total'])
-                                if line_datas['amount_total'] > 0:
-                                    line_datas['amount_total'] = -line_datas['amount_total']
-                            else:
-                                line_datas['amount_total'] = amount_total
-                                if line_datas['amount_total'] > 0:
-                                    line_datas['amount_total'] = -line_datas['amount_total']
+                            if 'refund' in l['type']:
+                                if 'amount_total' in line_datas:
+                                    line_datas['amount_total'] = float(line_datas['amount_total'])
+                                    if line_datas['amount_total'] > 0:
+                                        line_datas['amount_total'] = -line_datas['amount_total']
+                                else:
+                                    line_datas['amount_total'] = amount_total
+                                    if line_datas['amount_total'] > 0:
+                                        line_datas['amount_total'] = -line_datas['amount_total']
 
-                        elif 'amount_total' not in line_datas:
-                            line_datas['amount_total'] = amount_total
+                            elif 'amount_total' not in line_datas:
+                                line_datas['amount_total'] = amount_total
 
                             # Set de data in the line to write the line in the xls
                             for tax in line_datas:
@@ -578,20 +581,20 @@ try:
                             if 'tax_amount_ret' not in line_datas:
                                 line_datas['tax_amount_ret'] = 0.0
 
-                        if 'refund' in l['type']:
-                            if 'amount_total' in line_datas:
-                                line_datas['amount_total'] = float(line_datas['amount_total'])
-                                if line_datas['amount_total'] > 0:
-                                    line_datas['amount_total'] = -line_datas['amount_total']
-                            else:
+                            if 'refund' in l['type']:
+                                if 'amount_total' in line_datas:
+                                    line_datas['amount_total'] = float(line_datas['amount_total'])
+                                    if line_datas['amount_total'] > 0:
+                                        line_datas['amount_total'] = -line_datas['amount_total']
+                                else:
+                                    line_datas['amount_total'] = amount_total
+                                    if line_datas['amount_total'] > 0:
+                                        line_datas['amount_total'] = -line_datas['amount_total']
+
+                            elif 'amount_total' not in line_datas:
                                 line_datas['amount_total'] = amount_total
-                                if line_datas['amount_total'] > 0:
-                                    line_datas['amount_total'] = -line_datas['amount_total']
 
-                        elif 'amount_total' not in line_datas:
-                            line_datas['amount_total'] = amount_total
-
-                            # Set de data in the line to write the line in the xls
+                                # Set de data in the line to write the line in the xls
                             for tax in line_datas:
                                 l[tax] = line_datas[tax]
 
