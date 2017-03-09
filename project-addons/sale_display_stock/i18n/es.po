@@ -44,6 +44,12 @@ msgid "Qty. on kitchen"
 msgstr "Stock cocina"
 
 #. module: sale_display_stock
+#: field:product.product,qty_available_external:0
+#: field:product.template,qty_available_external:0
+msgid "Qty. in external loc."
+msgstr "Stock alm. externo"
+
+#. module: sale_display_stock
 #: field:product.template,qty_in_production:0
 msgid "Qty. in production"
 msgstr "Fabricando"
@@ -148,3 +154,9 @@ msgstr "Stock"
 #: field:sale.order.line.report,uom:0
 msgid "UoM"
 msgstr "UdM"
+
+#. module: sale_display_stock
+#: field:product.product,virtual_available_wo_incoming:0
+#: field:product.template,virtual_available_wo_incoming:0
+msgid "Virtual avail. conservative"
+msgstr "Stock disponible"

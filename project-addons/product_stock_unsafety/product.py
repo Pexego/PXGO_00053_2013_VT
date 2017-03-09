@@ -44,7 +44,8 @@ class product_product(models.Model):
     def _calc_remaining_days(self):
         stock_days = 0.00
         stock_per_day = self.get_daily_sales()
-        virtual_available = self.virtual_available
+        virtual_available = self.virtual_available + \
+            self.qty_available_external
         if stock_per_day > 0 and virtual_available:
             stock_days = round(virtual_available / stock_per_day)
 
@@ -58,20 +59,25 @@ class product_product(models.Model):
             strftime("%Y-%m-%d")
         warehouses = self.env["stock.warehouse"].search([])
         stock_location_ids = [x.lot_stock_id.id for x in warehouses]
+        stock_location_ids.\
+            append(self.env.ref('location_moves.stock_location_external').id)
         product_obj = self.env["product.product"]
         self.env.cr.\
             execute("select distinct product_id from stock_move where "
-                    "date <= %s and location_dest_id in (%s) and "
+                    "date <= %s and location_dest_id in %s and "
                     "state = 'done' and company_id = %s",
                     (search_date, tuple(stock_location_ids),
                      self.env.user.company_id.id))
         res = self.env.cr.fetchall()
         joking_tot = 0
-        cont = len(res)
         product_ids = [x[0] for x in res]
+        filter_ids = []
         for stock_product_id in product_obj.browse(product_ids):
-            joking_tot += stock_product_id.joking
-        avg = joking_tot / cont
+            if not stock_product_id.product_brand_id or not \
+                    stock_product_id.product_brand_id.not_compute_joking:
+                joking_tot += stock_product_id.joking
+                filter_ids.append(stock_product_id.id)
+        avg = joking_tot / len(filter_ids)
         for product in product_obj.search([]):
             if product.type != 'product' or product.id not in product_ids \
                     or  (product.product_brand_id and product.product_brand_id.not_compute_joking or False):

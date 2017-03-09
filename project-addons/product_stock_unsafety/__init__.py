@@ -27,6 +27,5 @@ from . import under_minimum
 from . import stock_warehouse_orderpoint
 from . import schedulers
 from . import purchase
-from . import stock
 from . import wizard
 from . import mrp
