@@ -73,10 +73,8 @@ class product_product(models.Model):
             joking_tot += stock_product_id.joking
         avg = joking_tot / cont
         for product in product_obj.search([]):
-            product_tmpl = self.env['product.template'].browse(int(product.product_tmpl_id))
-            brand = self.env['product.brand'].browse(int(product_tmpl.product_brand_id))
             if product.type != 'product' or product.id not in product_ids \
-                    or brand.not_compute_joking:
+                    or  (product.product_brand_id and product.product_brand_id.not_compute_joking or False):
                 if product.joking_index != 0:
                     product.joking_index = 0
             else:
