@@ -187,5 +187,16 @@
             </field>
         </record>
 
+        <record id="view_payment_term_form_add_blocked" model="ir.ui.view">
+            <field name="name">account.payment.term.form.add_blocked</field>
+            <field name="model">account.payment.term</field>
+            <field name="inherit_id" ref="account.view_payment_term_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="blocked"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>
