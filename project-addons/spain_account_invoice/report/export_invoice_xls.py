@@ -392,7 +392,6 @@ try:
                 for o in objects:
                     length = len(_p.lines(o))
                     lines = sorted(_p.lines(o), key=self.orderByNumber)
-                    #ipdb.set_trace()
                     for l in lines:
                         amount_total = self._compute_amounts_in_invoice_currency(self.cr, self.uid, [], l['partner_id'],
                                                                                  l['invoice_id'])
@@ -413,9 +412,9 @@ try:
                             if 'tax_percent' not in line_datas:
                                 line_datas['tax_percent'] = 0
 
-                        line_datas['amount_total'] = amount_total
-                        if 'refund' in l['type']:
-                            line_datas['amount_total'] = -line_datas['amount_total']
+                            line_datas['amount_total'] = amount_total
+                            if 'refund' in l['type']:
+                                line_datas['amount_total'] = -line_datas['amount_total']
 
                             line_datas['tax_amount_rec'] = l['tax_amount']
                             line_datas['tax_base'] = l['tax_base']
@@ -424,9 +423,9 @@ try:
                             if 'tax_percent' not in line_datas:
                                 line_datas['tax_percent'] = 0
 
-                        line_datas['amount_total'] = amount_total
-                        if 'refund' in l['type']:
-                            line_datas['amount_total'] = -line_datas['amount_total']
+                            line_datas['amount_total'] = amount_total
+                            if 'refund' in l['type']:
+                                line_datas['amount_total'] = -line_datas['amount_total']
 
                             line_datas['tax_amount_ret'] = l['tax_amount']
                             line_datas['tax_base'] = l['tax_base']
@@ -443,12 +442,12 @@ try:
 
                         # If the previous line of the xls is the same invoice and their taxes are the
                         # same, the code recalculate the tax_base
-                        if (length <= line_count) or ((l['number'] == lines[line_count - 2]['number'])
-                                and l['tax_description'] == lines[line_count - 2]['tax_description']):
-                            line_datas['tax_base'] = l['tax_base'] + lines[line_count - 2]['tax_base']
-                            if 'refund' in l['type']:
-                                line_datas['tax_base'] = float(line_datas['tax_base'])
-                                line_datas['tax_base'] = -line_datas['tax_base']
+                            if (length <= line_count) or ((l['number'] == lines[line_count - 2]['number'])
+                                    and l['tax_description'] == lines[line_count - 2]['tax_description']):
+                                line_datas['tax_base'] = l['tax_base'] + lines[line_count - 2]['tax_base']
+                                if 'refund' in l['type']:
+                                    line_datas['tax_base'] = float(line_datas['tax_base'])
+                                    line_datas['tax_base'] = -line_datas['tax_base']
 
                             else:
                                 line_datas['tax_base'] = l['tax_base']
@@ -619,6 +618,10 @@ try:
                             ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
                                                           wb)
 
+
+                        if l['number'] == 'AC/2017/0009':
+                            ipdb.set_trace()
+
                         l['amount_total'] = amount_total
 
                         l['tax_amount_ret'] = 0.0
@@ -629,6 +632,9 @@ try:
                             l['amount_total'] = 0.0
 
                         if (length <= line_count) or (l['number'] == lines[line_count]['number']):
+                            if l['tax_description'] != '21% IVA soportado (operaciones corrientes)':
+                                l['amount_total'] = 0.0
+                        elif (length <= line_count) or (l['number'] == lines[line_count-2]['number']):
                             if l['tax_description'] != '21% IVA soportado (operaciones corrientes)':
                                 l['amount_total'] = 0.0
 
