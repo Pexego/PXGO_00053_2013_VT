@@ -319,7 +319,9 @@ class AccountInvoice(models.Model):
     def action_move_create(self):
         res = super(AccountInvoice, self).action_move_create()
         for inv in self:
-            inv.move_id.line_id.write({'blocked': inv.payment_mode_id.blocked})
+            inv.move_id.line_id.\
+                write({'blocked': inv.payment_mode_id.blocked or
+                       inv.payment_term.blocked})
             inv._reconcile_invoice()
         return res
 
@@ -331,6 +333,11 @@ class AccountInvoice(models.Model):
                 if inv.move_id:
                     inv.move_id.line_id.\
                         write({'blocked': inv.payment_mode_id.blocked})
+        elif vals.get('payment_term', False):
+            for inv in self:
+                if inv.move_id:
+                    inv.move_id.line_id.\
+                        write({'blocked': inv.payment_term.blocked})
         return res
 
 
@@ -346,6 +353,13 @@ class AccountJournal(models.Model):
 class PaymentMode(models.Model):
 
     _inherit = 'payment.mode'
+
+    blocked = fields.Boolean('No Follow-up')
+
+
+class AccountPaymentTerm(models.Model):
+
+    _inherit = "account.payment.term"
 
     blocked = fields.Boolean('No Follow-up')
 

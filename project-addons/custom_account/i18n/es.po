@@ -23,6 +23,7 @@ msgstr " (copia)"
 
 #. module: custom_account
 #: field:payment.mode,blocked:0
+#: field:account.payment.term,blocked:0
 msgid "No Follow-up"
 msgstr "Sin seguimiento"
 
