@@ -65,7 +65,7 @@ class Partner(models.Model):
         ctx2 = dict(self.env.context)
         ctx2['periods'] = [period.find(date.today())[:1].id]
         for partner in self:
-            if partner.credit + partner.debit > 0 and partner.with_context(ctx2).credit + partner.with_context(ctx2).debit >=0 and not partner.not_send_following_email:
+            if partner.credit + partner.debit > 5 and partner.with_context(ctx2).credit + partner.with_context(ctx2).debit >=5 and not partner.not_send_following_email:
                 if self.env['account.move.line'].search(
                     [('partner_id', '=', partner.id),
                      ('account_id.type', '=', 'receivable'),
