@@ -9,6 +9,9 @@
                 <form string="Invoice Report XLS" version="7.0">
                     <group>
                         <field name="invoice_type"/>
+                        <field name="country_group" domain="[('invoice_type', '=', 'out_invoice')]"
+                               attrs = "{'invisible': [('invoice_type', '=', 'out_invoice')],
+                                'required': [('invoice_type', '=', 'in_invoice')]}"/>
                         <field name="company_id" groups="base.group_multi_company" readonly="1"/>
                         <field name="period_ids" colspan="4"/>
                     </group>

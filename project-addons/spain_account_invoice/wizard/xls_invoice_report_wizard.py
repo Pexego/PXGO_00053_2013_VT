@@ -8,17 +8,21 @@ from openerp import api, fields, models
 class XlsInvoiceReportWizard(models.TransientModel):
     _name = 'xls.invoice.report.wizard'
 
+    _defaults = {
+        'invoice_type': 'out_invoice',
+    }
 
-    # Only the first opcion is available because the other invoices types need
-    # implementation in our code.
     INVOICE_TYPES = [
         ('out_invoice', 'Customer Invoice'),
         ('in_invoice', 'Supplier Invoice')
-        # ('out_refund', 'Customer Refund Invoice'),
-        #('in_refund', 'Supplier Refund Invoice')
     ]
-    invoice_type = fields.Selection(INVOICE_TYPES, 'Invoice Type',
-                                    required=True)
+
+    COUNTRY_GROUP_TYPE = [
+        ('1', 'Europe'),
+        ('2', 'Non Europe')
+    ]
+    invoice_type = fields.Selection(INVOICE_TYPES, 'Invoice Type', required=True)
+    country_group = fields.Selection(COUNTRY_GROUP_TYPE, 'Country Group')
     period_ids = fields.Many2many('account.period', string='Periods', required=True)
     company_id = fields.Many2one(
         'res.company', 'Company', required=True,
@@ -31,6 +35,7 @@ class XlsInvoiceReportWizard(models.TransientModel):
         datas = {
             'model': 'xls.invoice.report.wizard',
             'invoice_type': self.invoice_type,
+            'country_group': self.country_group,
             'company_id': self.company_id.id,
             'period_ids': map(lambda p: p.id, self.period_ids),
             'ids': [self.id]
