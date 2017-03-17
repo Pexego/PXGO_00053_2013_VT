@@ -9,8 +9,6 @@ from datetime import datetime
 from openerp.report import report_sxw
 from openerp.tools.translate import translate, _
 
-import ipdb
-
 _ir_translation_name = 'account.invoice.export.xls'
 
 
@@ -624,9 +622,6 @@ try:
                             new_sheet_name = "%s_%s" % (sheet_name, ws_count)
                             ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
                                                           wb)
-
-                        if l['number'] == "FC/2017/0134":
-                            ipdb.set_trace()
 
                         l['amount_total'] = amount_total
 
