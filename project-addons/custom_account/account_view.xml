@@ -99,6 +99,9 @@
                     <field name="purchase_supplier_reference"/>
                     <field name="picking_id"/>
                 </xpath>
+                <button name="invoice_open" position="after">
+                    <button name="invoice_proforma2" states="draft" string="PRO-FORMA"/>
+                </button>
             </field>
         </record>
 
