@@ -9,8 +9,6 @@ from datetime import datetime
 from openerp.report import report_sxw
 from openerp.tools.translate import translate, _
 
-import ipdb
-
 _ir_translation_name = 'account.invoice.export.xls'
 
 
@@ -22,6 +20,7 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
         invoice_type = data['invoice_type']
         wanted_list = invoice_pool._report_xls_fields(self.cr, self.uid, invoice_type, self.context)
         self.invoice_type = data['invoice_type']
+        self.country_group = data['country_group']
         self.company_id = data['company_id']
         self.period_ids = data['period_ids']
         self.localcontext.update({
@@ -64,6 +63,7 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
         if self.period_ids:
             additional_where += self.cr.mogrify(
                 "AND i.period_id in %s", (tuple(self.period_ids),))
+
         if self.invoice_type == 'out_invoice':
             sql = (
                 "SELECT i.id as invoice_id, "
@@ -112,6 +112,9 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
                 "ORDER BY date_invoice ASC").format(additional_where)
 
         elif self.invoice_type == 'in_invoice':
+            additional_where += self.cr.mogrify(
+                "AND rcr.res_country_group_id = %s", (tuple(self.country_group),))
+
             sql = (
                 "SELECT i.id as invoice_id, "
                 "i.number as number, "
@@ -141,6 +144,8 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
                 "   ON (i.id = t.invoice_id) "
                 "LEFT JOIN ir_translation it "
                 "   ON (c.name = it.src)) "
+                "LEFT JOIN res_country_res_country_group_rel rcr "
+                "   ON (rcr.res_country_id = c.id) "
                 "WHERE (i.type = 'in_refund' "
                 "    OR i.type = 'in_invoice') "
                 "    AND (i.state = 'paid' "
@@ -392,7 +397,6 @@ try:
                 for o in objects:
                     length = len(_p.lines(o))
                     lines = sorted(_p.lines(o), key=self.orderByNumber)
-                    #ipdb.set_trace()
                     for l in lines:
                         amount_total = self._compute_amounts_in_invoice_currency(self.cr, self.uid, [], l['partner_id'],
                                                                                  l['invoice_id'])
@@ -413,9 +417,9 @@ try:
                             if 'tax_percent' not in line_datas:
                                 line_datas['tax_percent'] = 0
 
-                        line_datas['amount_total'] = amount_total
-                        if 'refund' in l['type']:
-                            line_datas['amount_total'] = -line_datas['amount_total']
+                            line_datas['amount_total'] = amount_total
+                            if 'refund' in l['type']:
+                                line_datas['amount_total'] = -line_datas['amount_total']
 
                             line_datas['tax_amount_rec'] = l['tax_amount']
                             line_datas['tax_base'] = l['tax_base']
@@ -424,9 +428,9 @@ try:
                             if 'tax_percent' not in line_datas:
                                 line_datas['tax_percent'] = 0
 
-                        line_datas['amount_total'] = amount_total
-                        if 'refund' in l['type']:
-                            line_datas['amount_total'] = -line_datas['amount_total']
+                            line_datas['amount_total'] = amount_total
+                            if 'refund' in l['type']:
+                                line_datas['amount_total'] = -line_datas['amount_total']
 
                             line_datas['tax_amount_ret'] = l['tax_amount']
                             line_datas['tax_base'] = l['tax_base']
@@ -443,12 +447,12 @@ try:
 
                         # If the previous line of the xls is the same invoice and their taxes are the
                         # same, the code recalculate the tax_base
-                        if (length <= line_count) or ((l['number'] == lines[line_count - 2]['number'])
-                                and l['tax_description'] == lines[line_count - 2]['tax_description']):
-                            line_datas['tax_base'] = l['tax_base'] + lines[line_count - 2]['tax_base']
-                            if 'refund' in l['type']:
-                                line_datas['tax_base'] = float(line_datas['tax_base'])
-                                line_datas['tax_base'] = -line_datas['tax_base']
+                            if (length <= line_count) or ((l['number'] == lines[line_count - 2]['number'])
+                                    and l['tax_description'] == lines[line_count - 2]['tax_description']):
+                                line_datas['tax_base'] = l['tax_base'] + lines[line_count - 2]['tax_base']
+                                if 'refund' in l['type']:
+                                    line_datas['tax_base'] = float(line_datas['tax_base'])
+                                    line_datas['tax_base'] = -line_datas['tax_base']
 
                             else:
                                 line_datas['tax_base'] = l['tax_base']
@@ -628,7 +632,10 @@ try:
                             l['tax_base'] = 0.0
                             l['amount_total'] = 0.0
 
-                        if (length <= line_count) or (l['number'] == lines[line_count]['number']):
+                        if (length < line_count) and (l['number'] == lines[line_count]['number']):
+                            if l['tax_description'] != '21% IVA soportado (operaciones corrientes)':
+                                l['amount_total'] = 0.0
+                        elif (length < line_count) or (l['number'] == lines[line_count-2]['number']):
                             if l['tax_description'] != '21% IVA soportado (operaciones corrientes)':
                                 l['amount_total'] = 0.0
 
