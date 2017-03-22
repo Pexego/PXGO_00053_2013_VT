@@ -52,9 +52,6 @@
                 <field name="origin" position="after">
                     <field name="shipping_identifier"/>
                 </field>
-                <field name="date" position="after">
-                    <field name="min_date"/>
-                </field>
             </field>
         </record>
 

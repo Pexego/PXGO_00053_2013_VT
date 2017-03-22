@@ -13,7 +13,7 @@
                     <attribute name="invisible">1</attribute>
                 </field>
                 <field name="date" position="after">
-                    <field name="date_done"/>
+                    <field name="date_done" string="Date Final"/>
                 </field>
             </field>
         </record>
