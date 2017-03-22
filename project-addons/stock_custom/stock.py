@@ -89,6 +89,11 @@ class stock_move(models.Model):
 
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
     real_stock = fields.Float('Real Stock', compute='_get_real_stock')
+    available_stock = fields.Float('Available Stock', compute="_get_available_stock")
+
+    @api.one
+    def _get_available_stock(self):
+        self.available_stock = self.product_id.virtual_stock_conservative
 
     @api.one
     def _get_real_stock(self):
