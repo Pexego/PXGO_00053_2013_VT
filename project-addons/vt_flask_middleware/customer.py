@@ -32,6 +32,7 @@ class Customer(SyncModel):
     email = CharField(max_length=70, null=True)
     commercial_id = ForeignKeyField(Commercial, on_delete='CASCADE', null=True)
     odoo_id = IntegerField(unique=True)
+    lang = CharField(max_length=5, null=True)
 
     MOD_NAME = 'customer'
 
