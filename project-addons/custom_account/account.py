@@ -20,7 +20,6 @@
 ##############################################################################
 from openerp import models, fields, api
 
-
 class AccountMoveLine(models.Model):
 
     _inherit = 'account.move.line'
@@ -43,7 +42,7 @@ class AccountMoveLine(models.Model):
                               string='Scheme',
                               compute='get_mandate_scheme',
                               search='_mandate_scheme_search')
-    partner_vat = fields.Char("CIF/NIF/VAT", related="partner_id.vat",
+    pner_vat = fields.Char("CIF/NIF/VAT", related="partner_id.vat",
                               readonly=True)
 
 
@@ -100,6 +99,8 @@ class AccountInvoice(models.Model):
                                          related="partner_id.user_id")
     subtotal_wt_rect = fields.Float("Real Subtotal",
                                     compute="get_subtotal_wt_rect", store=True)
+    total_wt_rect = fields.Float("Real Total",
+                                 compute="get_total_wt_rect", store=True)
 
     @api.multi
     @api.depends('type', 'amount_untaxed')
@@ -111,6 +112,17 @@ class AccountInvoice(models.Model):
                 invoice_wt_rect = invoice.amount_untaxed
 
             invoice.subtotal_wt_rect = invoice_wt_rect
+
+    @api.multi
+    @api.depends('type', 'amount_tax', 'subtotal_wt_rect')
+    def get_total_wt_rect(self):
+        for invoice in self:
+            if 'refund' in invoice.type:
+                invoice_wt_rect = invoice.subtotal_wt_rect - invoice.amount_tax
+            else:
+                invoice_wt_rect = invoice.subtotal_wt_rect + invoice.amount_tax
+
+            invoice.total_wt_rect = invoice_wt_rect
 
     @api.multi
     def total_paid(self):
