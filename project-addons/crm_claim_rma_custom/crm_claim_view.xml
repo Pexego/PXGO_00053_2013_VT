@@ -188,9 +188,14 @@
             <field name="model">claim.line</field>
             <field name="inherit_id" ref="crm_claim_rma.crm_claim_line_tree_view2"/>
             <field name="arch" type="xml">
+                <tree string="Returned lines" position="attributes">
+                    <attribute name="default_order">claim_id asc</attribute>
+                </tree>
                 <field name="claim_id" position="after">
+                    <field name = "user_id"/>
                     <field name="comercial"/>
                 </field>
+                <!--/tree-->
             </field>
         </record>
 

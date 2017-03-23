@@ -35,6 +35,6 @@
               "report/stock_report.xml",
               "data/email_template.xml",
               "stock_view.xml", "partner_view.xml", 'product_view.xml',
-              'sale_view.xml', 'security/ir.model.access.csv'],
+              'sale_view.xml', 'stock_landed_costs_view.xml', 'security/ir.model.access.csv'],
     "installable": True
 }

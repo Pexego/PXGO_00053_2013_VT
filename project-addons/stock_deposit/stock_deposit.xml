@@ -114,6 +114,9 @@
                         <filter string="Delivery Date" domain="[]"
                             name="groupby_delivery_date"
                             context="{'group_by': 'delivery_date'}"/>
+                        <filter string="Picking" domain="[]"
+                            name="groupby_picking_id"
+                            context="{'group_by': 'picking_id'}"/>
                     </group>
                 </search>
             </field>

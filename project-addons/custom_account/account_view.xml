@@ -132,8 +132,15 @@
                     <field name="payment_mode_id"/>
                     <field name="payment_term"/>
                 </field>
-                <field name="amount_total" position="after">
-                    <field name="subtotal_wt_rect" sum="Real Subtotal"/>
+                <field name="state" position="before">
+                    <field name="subtotal_wt_rect" sum="Subtotal"/>
+                    <field name="total_wt_rect" sum="Total"/>
+                </field>
+                <field name="amount_untaxed" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_total" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </field>
                 <field name="state" position="after">
                     <field name="total"/>
