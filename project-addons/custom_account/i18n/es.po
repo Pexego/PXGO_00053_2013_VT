@@ -440,8 +440,13 @@ msgstr "Comercial"
 
 #. module: custom_account
 #: field:account.invoice,subtotal_wt_rect:0
-msgid "Real Subtotal"
-msgstr "Subtotal Real"
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#. module: custom_account
+#: field:account.invoice,total_wt_rect:0
+msgid "Total"
+msgstr "Total"
 
 #. module: sale_quick_payment
 #: field:pay.sale.order,amount:0

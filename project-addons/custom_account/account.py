@@ -97,9 +97,9 @@ class AccountInvoice(models.Model):
     last_payment = fields.Date("Last Payment", compute="last_payment_date")
     partner_commercial = fields.Many2one("res.users", String="Commercial",
                                          related="partner_id.user_id")
-    subtotal_wt_rect = fields.Float("Real Subtotal",
+    subtotal_wt_rect = fields.Float("Subtotal",
                                     compute="get_subtotal_wt_rect", store=True)
-    total_wt_rect = fields.Float("Real Total",
+    total_wt_rect = fields.Float("Total",
                                  compute="get_total_wt_rect", store=True)
 
     @api.multi
@@ -114,13 +114,13 @@ class AccountInvoice(models.Model):
             invoice.subtotal_wt_rect = invoice_wt_rect
 
     @api.multi
-    @api.depends('type', 'amount_tax', 'subtotal_wt_rect')
+    @api.depends('type', 'amount_total')
     def get_total_wt_rect(self):
         for invoice in self:
             if 'refund' in invoice.type:
-                invoice_wt_rect = invoice.subtotal_wt_rect - invoice.amount_tax
+                invoice_wt_rect = - invoice.amount_total
             else:
-                invoice_wt_rect = invoice.subtotal_wt_rect + invoice.amount_tax
+                invoice_wt_rect = invoice.amount_total
 
             invoice.total_wt_rect = invoice_wt_rect
 
