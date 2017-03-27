@@ -504,3 +504,5 @@ msgstr "La venta debe ser pagada antes de la validación."
 #: model:ir.model,name:sale_quick_payment.model_pay_sale_order
 msgid "Wizard to generate a payment from the sale order"
 msgstr "Asistente para generar un pago desde el pedido"
+
+
