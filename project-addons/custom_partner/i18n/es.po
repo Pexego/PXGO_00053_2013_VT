@@ -284,3 +284,15 @@ msgstr "Telefono/Móvil 1"
 #: view:res.partner:custom_partner.view_partner_form_add_require
 msgid "Phone/Mobile 2"
 msgstr "Telefono/Móvil 2"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:360
+#, python-format
+msgid "Amount Due"
+msgstr "Importe Total Adeudado"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:288,338
+#, python-format
+msgid "Client Order Ref."
+msgstr "Referencia Cliente"
