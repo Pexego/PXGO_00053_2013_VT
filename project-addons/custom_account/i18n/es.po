@@ -245,6 +245,11 @@ msgid "Payment mode"
 msgstr "Modo de pago"
 
 #. module: custom_account
+#: field:account.invoice.report,benefit:0
+msgid "Benefit"
+msgstr "Beneficio"
+
+#. module: custom_account
 #: field:purchase.order,prepared_merchandise_date:0
 msgid "Prepared Merchandise Date"
 msgstr "Fecha mercancía lista"
