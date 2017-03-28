@@ -46,6 +46,7 @@ class sale_order(orm.Model):
     }
 
     def action_risk_approval(self, cr, uid, ids, context=None):
+        self.apply_promotions(cr, uid, ids, context)
         self.write(cr, uid, ids, {'state': 'risk_approval'}, context)
 
         self.action_button_confirm(cr, uid, ids, context)

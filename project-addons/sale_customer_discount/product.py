@@ -22,7 +22,6 @@
 from openerp.osv import osv, fields
 import openerp.addons.decimal_precision as dp
 
-
 class product_product(osv.osv):
     _inherit = 'product.product'
 
@@ -147,14 +146,30 @@ class product_product(osv.osv):
                                                 'standard_price'], 10), }),
     }
 
-    def pvd1_price_change(self, cr, uid, ids, pvd1_price, pvd1_relation=0.5):
-        res = {'value': {'lst_price': (1.0 / pvd1_relation) * pvd1_price}}
+    def pvd1_price_change(self, cr, uid, ids, pvd1_price, standard_price, pvd1_relation=0.5):
+        # res = {'value': {'lst_price': (1.0 / pvd1_relation) * pvd1_price}}
+        res = {'value': {'lst_price': (1.0 / pvd1_relation) * pvd1_price,
+                         'margin_pvd1': (1 - (standard_price / pvd1_price)) * 100.0}}
         return res
 
-    def pvd2_price_change(self, cr, uid, ids, pvd2_price, pvd2_relation=0.5):
-        res = {'value': {'list_price2': (1.0 / pvd2_relation) * pvd2_price}}
+    def pvd2_price_change(self, cr, uid, ids, pvd2_price, standard_price, pvd2_relation=0.5):
+        res = {'value': {'list_price2': (1.0 / pvd2_relation) * pvd2_price,
+                         'margin_pvd2': (1 - (standard_price / pvd2_price)) * 100.0}}
         return res
 
-    def pvd3_price_change(self, cr, uid, ids, pvd3_price, pvd3_relation=0.5):
-        res = {'value': {'list_price3': (1.0 / pvd3_relation) * pvd3_price}}
+    def pvd3_price_change(self, cr, uid, ids, pvd3_price, standard_price, pvd3_relation=0.5):
+        res = {'value': {'list_price3': (1.0 / pvd3_relation) * pvd3_price,
+                         'margin_pvd3': (1 - (standard_price / pvd3_price)) * 100.0}}
+        return res
+
+    def pvi1_price_change(self, cr, uid, ids, standard_price, pvi1_price):
+        res = {'value': {'margin_pvi1': (1 - (standard_price / pvi1_price)) * 100.0}}
+        return res
+
+    def pvi2_price_change(self, cr, uid, ids, standard_price, pvi2_price):
+        res = {'value': {'margin_pvi2': (1 - (standard_price / pvi2_price)) * 100.0}}
+        return res
+
+    def pvi3_price_change(self, cr, uid, ids, standard_price, pvi3_price):
+        res = {'value': {'margin_pvi3': (1 - (standard_price / pvi3_price)) * 100.0}}
         return res
