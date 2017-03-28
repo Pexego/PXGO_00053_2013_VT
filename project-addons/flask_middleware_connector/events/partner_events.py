@@ -111,7 +111,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                  "property_product_pricelist", "lang"]
     if (vals.get("web", partner.web) and \
             vals.get('active', partner.active) and \
-            vals.get('is_company', partner.is_company):
+            vals.get('is_company', partner.is_company)):
         export_partner(session, model_name, record_id)
     elif "web" in vals and not vals["web"]:
         unlink_partner.delay(session, model_name, record_id, priority=100)
