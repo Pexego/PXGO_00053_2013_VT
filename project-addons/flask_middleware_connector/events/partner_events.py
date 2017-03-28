@@ -109,10 +109,13 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", "user_id",
                  "property_product_pricelist", "lang"]
-    if (vals.get("web", partner.web) and \
+    if (vals.get("web", False) and \
             vals.get('active', partner.active) and \
             vals.get('is_company', partner.is_company)):
-        export_partner(session, model_name, record_id)
+        export_partner.delay(session, model_name, record_id)
+    elif (vals.get("active", False) and partner.web and \
+            vals.get('is_company', partner.is_company)):
+        export_partner.delay(session, model_name, record_id)
     elif "web" in vals and not vals["web"]:
         unlink_partner.delay(session, model_name, record_id, priority=100)
     elif "active" in vals and not vals["active"] and partner.web:
