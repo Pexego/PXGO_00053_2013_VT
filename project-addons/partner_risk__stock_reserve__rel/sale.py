@@ -20,7 +20,6 @@
 ##############################################################################
 
 from openerp.osv import fields, orm
-import ipdb
 
 class sale_order(orm.Model):
 
@@ -47,7 +46,6 @@ class sale_order(orm.Model):
     }
 
     def action_risk_approval(self, cr, uid, ids, context=None):
-        ipdb.set_trace()
         self.apply_promotions(cr, uid, ids, context)
         self.write(cr, uid, ids, {'state': 'risk_approval'}, context)
 
