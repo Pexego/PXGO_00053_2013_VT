@@ -145,6 +145,11 @@ msgid "Growth rate"
 msgstr "Crecimiento"
 
 #. module: custom_partner
+#: field:res.partner,average_margin:0
+msgid "Average Margin"
+msgstr "Margen medio del último trimestre"
+
+#. module: custom_partner
 #: field:res.partner.invoice.type,id:0
 msgid "ID"
 msgstr "ID"
