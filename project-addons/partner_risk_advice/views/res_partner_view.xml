@@ -22,5 +22,20 @@
             </xpath>
         </field>
     </record>
+    <record id="view_partner_warning_form_rma" model="ir.ui.view">
+            <field name="name">res.partner.warning.form.rma.inherit</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="warning.view_partner_warning_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//separator[@string='Warning on the Invoice']/.." position="after">
+                    <group colspan="2" col="2">
+                        <separator string="Warnign on the RMA" colspan="4"/>
+                            <field name="rma_warn" nolabel="1"/>
+                            <field name="rma_warn_msg" colspan="3" nolabel="1"
+                                   attrs="{'required':[('rma_warn','!=','no-message')],'readonly':[('rma_warn','=','no-message')]}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
 </data>
 </openerp>
