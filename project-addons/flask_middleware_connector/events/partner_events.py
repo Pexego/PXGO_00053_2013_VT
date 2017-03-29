@@ -109,29 +109,15 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", "user_id",
                  "property_product_pricelist", "lang"]
-    if vals.get("web", False) and (vals.get('active', False) or partner.active) and (vals.get('is_company', False) or partner.is_company):
-        export_partner.delay(session, model_name, record_id, priority=2,
-                             eta=60)
-        #~ rmas = session.env['crm.claim'].search(
-            #~ [('partner_id', '=', partner.id)])
-        #~ for rma in rmas:
-            #~ export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
-            #~ for line in rma.claim_line_ids:
-                #~ if line.product_id.web == 'published':
-                    #~ export_rmaproduct.delay(session, 'claim.line', line.id,
-                                            #~ priority=10, eta=240)
+    if (vals.get("web", False) and \
+            vals.get('active', partner.active) and \
+            vals.get('is_company', partner.is_company)):
+        export_partner.delay(session, model_name, record_id)
+    elif (vals.get("active", False) and partner.web and \
+            vals.get('is_company', partner.is_company)):
+        export_partner.delay(session, model_name, record_id)
     elif "web" in vals and not vals["web"]:
         unlink_partner.delay(session, model_name, record_id, priority=100)
-    elif vals.get("active", False) and partner.web and (vals.get('is_company', False) or partner.is_company):
-        export_partner(session, model_name, record_id)
-        #~ rmas = session.delay.env['crm.claim'].search(
-            #~ [('partner_id', '=', partner.id)])
-        #~ for rma in rmas:
-            #~ export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
-            #~ for line in rma.claim_line_ids:
-                #~ if line.product_id.web == 'published':
-                    #~ export_rmaproduct.delay(session, 'claim.line', line.id,
-                                            #~ priority=10, eta=240)
     elif "active" in vals and not vals["active"] and partner.web:
         unlink_partner(session, model_name, record_id)
     elif partner.web and (vals.get('is_company', False) or partner.is_company):
