@@ -14,7 +14,8 @@ class XlsInvoiceReportWizard(models.TransientModel):
 
     INVOICE_TYPES = [
         ('out_invoice', 'Customer Invoice'),
-        ('in_invoice', 'Supplier Invoice')
+        ('in_invoice', 'Supplier Invoice'),
+        ('intrastat', 'Intrastat')
     ]
 
     COUNTRY_GROUP_TYPE = [

@@ -22,6 +22,7 @@
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime
 
+import ipdb
 
 class equivalent_products_wizard(models.TransientModel):
 
@@ -61,6 +62,22 @@ class CrmClaimRma(models.Model):
         else:
             return {'domain': {'partner_id': [('supplier', '=', True),
                                               ('is_company', '=', True)]}}
+
+    @api.onchange('stage_id')
+    def onchange_custom_stage_id(self):
+        ipdb.set_trace()
+        if self.stage_id == 3:
+            for line in self.claim_line_ids:
+                line_state = line.substate_id.id
+                if line_state != 3:
+                    title = 'Substate Warning'
+                    message = 'One of the products in the RMA have a not valid substate. Please check it.'
+                    warning = {
+                        'title': title,
+                        'message': message,
+                    }
+                    return {'value': {'claim_line': False}, 'warning': warning}
+        return True
 
     @api.model
     def create(self, vals):
@@ -345,6 +362,10 @@ class CrmClaimLine(models.Model):
                  self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
 
     res = {}
+
+    def check_substates(self, cr, uid, ids, vals, context=None):
+
+        return self.substate_id != 'Settled'
 
     @api.model
     def create(self, vals):
