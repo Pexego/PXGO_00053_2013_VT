@@ -23,6 +23,7 @@
 from datetime import date
 from openerp import fields, models, api, exceptions, _
 from openerp.osv import fields as fields2
+from dateutil.relativedelta import relativedelta
 
 
 class Partner(models.Model):
@@ -63,9 +64,21 @@ class Partner(models.Model):
         partners = self.env['res.partner']
         period = self.env['account.period']
         ctx2 = dict(self.env.context)
-        ctx2['periods'] = [period.find(date.today())[:1].id]
+        search_date = (date.today() + relativedelta(days=6)).\
+            strftime("%Y-%m-%d")
+        ctx2['date_to'] = search_date
+        ctx2['date_from'] = search_date[:4] + "-01-01"
+
+        ctx3 = dict(ctx2)
+        ctx3['initial_bal'] = True
         for partner in self:
-            if partner.credit + partner.debit >=5 and partner.with_context(ctx2).credit + partner.with_context(ctx2).debit >=5 and not partner.not_send_following_email:
+            global_balance = partner.credit + partner.debit
+            init_balance = partner.with_context(ctx3).credit + \
+                partner.with_context(ctx3).debit
+            balance_in_date = partner.with_context(ctx2).credit + \
+                partner.with_context(ctx2).debit
+            if global_balance >=5 and (balance_in_date + init_balance) >=5 \
+                    and not partner.not_send_following_email:
                 if self.env['account.move.line'].search(
                     [('partner_id', '=', partner.id),
                      ('account_id.type', '=', 'receivable'),
@@ -74,10 +87,7 @@ class Partner(models.Model):
                      ('company_id', '=', company_id),
                      ('blocked', '!=', True),
                      '|', ('date_maturity', '=', False),
-                     ('date_maturity', '<=', fields.Date.context_today(self))]):
-                    '''raise exceptions.Warning(
-                        _('Error!'),
-                        _("The partner does not have any accounting entries to print in the overdue report for the current company."))'''
+                     ('date_maturity', '<=', search_date)]):
                     partners += partner
         return partners
 

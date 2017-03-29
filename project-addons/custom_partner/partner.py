@@ -22,6 +22,7 @@
 from openerp import models, fields, api, exceptions, osv, _
 from openerp.addons.account_followup.report import account_followup_print
 from openerp.osv import fields as fields2
+from openerp.osv import osv
 from collections import defaultdict
 import time
 import datetime
@@ -30,10 +31,31 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 from openerp.report import report_sxw
 
+
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
 
     name = fields.Char('Name', required=True)
+
+
+class ResPartnerPrint(osv.Model):
+    _inherit = "res.partner"
+
+    @api.one
+    def _get_average_margin(self):
+        self.env.cr.execute(""" SELECT sum(sol.margin) / count(sol.id)
+                            FROM account_invoice ai
+                            JOIN account_invoice_line ail ON ail.invoice_id = ai.id
+                            LEFT JOIN sale_order_line_invoice_rel solir on solir.invoice_id = ail.id
+                            LEFT JOIN sale_order_line sol on sol.id = solir.order_line_id
+                                WHERE sol.order_partner_id = %d 
+                                AND ai.state IN ('paid', 'history')
+                                AND ai.date_invoice BETWEEN 
+                                    (CURRENT_DATE - interval '3 Month')::timestamp::date AND CURRENT_DATE """ % self.id)
+        res = self.env.cr.fetchone()[0]
+        self.average_margin = res
+
+    average_margin = fields.Float("Average Margin", readonly=True, compute="_get_average_margin")
 
 
 class ResPartner(models.Model):

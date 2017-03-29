@@ -404,6 +404,7 @@
             <field name="arch" type="xml">
                 <field name="lang" position="after">
                     <field name="growth_rate"/>
+                    <label for="average_margin"/><div><field name="average_margin" class="oe_inline"/> %% </div>
                 </field>
             </field>
         </record>
