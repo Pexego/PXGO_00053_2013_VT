@@ -36,14 +36,8 @@ class res_partner(models.Model):
     _inherit = "res.partner"
 
     risk_advice_ids = fields.One2many ("partner.risk.advice", "partner_id")
-    _columns = {
-        'rma_warn': fields2.selection(WARNING_MESSAGE, 'Invoice', help=WARNING_HELP, required=True),
-        'rma_warn_msg': fields2.text('Message for RMA'),
-    }
-
-    _defaults = {
-        'rma_warn': 'no-message',
-    }
+    rma_warn = fields2.selection(WARNING_MESSAGE, 'Invoice', help=WARNING_HELP, required=True, default='no-message')
+    rma_warn_msg = fields2.text('Message for RMA')
 
 
 class crm_claim(osv.osv):
