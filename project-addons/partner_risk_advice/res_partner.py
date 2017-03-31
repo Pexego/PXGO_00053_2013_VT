@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import fields, models, api
-from openerp.osv import osv, fields as fields2
+from openerp.osv import osv
 from openerp.tools.translate import _
 
 WARNING_MESSAGE = [
@@ -36,8 +36,8 @@ class res_partner(models.Model):
     _inherit = "res.partner"
 
     risk_advice_ids = fields.One2many ("partner.risk.advice", "partner_id")
-    rma_warn = fields2.selection(WARNING_MESSAGE, 'Invoice', help=WARNING_HELP, required=True, default='no-message')
-    rma_warn_msg = fields2.text('Message for RMA')
+    rma_warn = fields.Selection(WARNING_MESSAGE, 'Invoice', help=WARNING_HELP, required=True, default='no-message')
+    rma_warn_msg = fields.Text('Message for RMA')
 
 
 class crm_claim(osv.osv):
