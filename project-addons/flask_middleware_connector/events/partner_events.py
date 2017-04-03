@@ -108,7 +108,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     partner = session.env[model_name].browse(record_id)
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", "user_id",
-                 "property_product_pricelist", "lang"]
+                 "property_product_pricelist", "lang", "sync"]
     if (vals.get("web", False) and \
             vals.get('active', partner.active) and \
             vals.get('is_company', partner.is_company)):
