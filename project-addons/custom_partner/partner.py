@@ -22,40 +22,18 @@
 from openerp import models, fields, api, exceptions, osv, _
 from openerp.addons.account_followup.report import account_followup_print
 from openerp.osv import fields as fields2
-from openerp.osv import osv
 from collections import defaultdict
 import time
-import datetime
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-from openerp.report import report_sxw
-
+import datetime
+import dateutil.relativedelta
 
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
 
     name = fields.Char('Name', required=True)
-
-
-class ResPartnerPrint(osv.Model):
-    _inherit = "res.partner"
-
-    @api.one
-    def _get_average_margin(self):
-        self.env.cr.execute(""" SELECT sum(sol.margin) / count(sol.id)
-                            FROM account_invoice ai
-                            JOIN account_invoice_line ail ON ail.invoice_id = ai.id
-                            LEFT JOIN sale_order_line_invoice_rel solir on solir.invoice_id = ail.id
-                            LEFT JOIN sale_order_line sol on sol.id = solir.order_line_id
-                                WHERE sol.order_partner_id = %d 
-                                AND ai.state IN ('paid', 'history')
-                                AND ai.date_invoice BETWEEN 
-                                    (CURRENT_DATE - interval '3 Month')::timestamp::date AND CURRENT_DATE """ % self.id)
-        res = self.env.cr.fetchone()[0]
-        self.average_margin = res
-
-    average_margin = fields.Float("Average Margin", readonly=True, compute="_get_average_margin")
 
 
 class ResPartner(models.Model):
@@ -149,6 +127,42 @@ class ResPartner(models.Model):
                     browse(self.id).total_invoiced_real
                 self.growth_rate = invoiced_15 / goal
 
+    @api.one
+    def _get_average_margin(self):
+
+        margin_avg = 0.0
+
+        d1 = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+        finalDate = d1.strftime("%Y-%m-%d")
+        d2 = d1 - dateutil.relativedelta.relativedelta(months=3)
+        startDate = d2.strftime("%Y-%m-%d")
+
+        invoices = self.env['account.invoice'].search(
+            [('partner_id', '=', self.id),
+             ('state', 'in', ['paid', 'history']),
+              ('date_invoice', '>=', startDate),
+              ('date_invoice', '<=', finalDate)])
+
+        invoices_line = self.env['account.invoice.line'].search(
+            [('invoice_id', 'in', invoices.mapped('id'))])
+
+        invoice_ids = [x.mapped('id')[0] for x in invoices_line if x.mapped('id')]
+
+        if invoice_ids:
+            self.env.cr.execute("SELECT order_line_id from sale_order_line_invoice_rel" +
+                                " WHERE invoice_id in (" + ','.join(map(lambda x: str(x), invoice_ids)) + ')')
+            order_rel = self.env.cr.fetchall()
+        else:
+            order_rel = []
+
+        order_line = self.env['sale.order.line'].search(
+                [('id', 'in', order_rel)])
+
+        if len(order_line):
+            margin_avg = sum(order_line.mapped('margin_perc')) / len(order_line)
+
+        self.average_margin = margin_avg
+
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
     sale_product_count = fields.Integer(compute=_get_products_sold,
@@ -165,6 +179,7 @@ class ResPartner(models.Model):
     att = fields.Char("A/A")
     growth_rate = fields.Float("Growth rate", readonly=True,
                                compute="_get_growth_rate")
+    average_margin = fields.Float("Average Margin", readonly=True, compute="_get_average_margin")
 
     _sql_constraints = [
         ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
