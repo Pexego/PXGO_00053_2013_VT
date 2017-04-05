@@ -146,17 +146,14 @@ class ResPartner(models.Model):
         invoices_line = self.env['account.invoice.line'].search(
             [('invoice_id', 'in', invoices.mapped('id'))])
 
-        invoice_ids = [x.mapped('id')[0] for x in invoices_line if x.mapped('id')]
-
-        if invoice_ids:
+        if invoices_line:
             self.env.cr.execute("SELECT order_line_id from sale_order_line_invoice_rel" +
-                                " WHERE invoice_id in (" + ','.join(map(lambda x: str(x), invoice_ids)) + ')')
-            order_rel = self.env.cr.fetchall()
+                                " WHERE invoice_id in (" + ','.join(map(lambda x: str(x), invoices_line.ids)) + ')')
+            order_rel = [i for i, in self.env.cr.fetchall()]
         else:
             order_rel = []
 
-        order_line = self.env['sale.order.line'].search(
-                [('id', 'in', order_rel)])
+        order_line = self.env["sale.order.line"].browse(order_rel)
 
         if len(order_line):
             margin_avg = sum(order_line.mapped('margin_perc')) / len(order_line)
