@@ -14,16 +14,6 @@
               </xpath>
           </field>
       </record>-->
-        <record model="ir.ui.view" id="crm_case_claims_form_view_stage_onchange">
-            <field name="name">CRM - Claims Form Stage onchange</field>
-            <field name="model">crm.claim</field>
-            <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
-            <field name="arch" type="xml">
-                <field name="stage_id" position="attributes">
-                    <attribute name="on_change">onchange_custom_stage_id()</attribute>
-                </field>
-            </field>
-        </record>
         <record model="ir.ui.view" id="crm_claim_rma_form_view_inherit_new_refund">
             <field name="name">CRM - Claim product return Form</field>
             <field name="model">crm.claim</field>
