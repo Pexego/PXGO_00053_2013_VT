@@ -21,10 +21,6 @@ class AccountInvoice(models.Model):
                 'date_invoice', 'number', 'supplier_number', 'partner_vat', 'partner_name', 'tax_base',
                 'tax_description', 'tax_amount', 'tax_amount_ret', 'amount_total', 'country_name'
             ]
-        elif invoice_type == 'intrastat':
-           datas = [
-
-           ]
 
         return datas
 

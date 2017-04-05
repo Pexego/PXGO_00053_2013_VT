@@ -157,14 +157,6 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
                 " {} "
                 "ORDER BY date_invoice ASC").format(additional_where)
 
-        elif self.invoice_type == 'intrastat':
-            additional_where += self.cr.mogrify(
-                "AND rcr.res_country_group_id = %s", (tuple(self.country_group),))
-
-            sql = (
-                "SELECT "
-            )
-
         self.cr.execute(sql)
         lines = self.cr.dictfetchall()
 
@@ -332,30 +324,6 @@ try:
                     'country_name': {
                         'header': [1, 20, 'text', _render("_('Empresa/País/Nombre del país')")],
                         'lines': [1, 0, 'text', _render("l['country_name']")],
-                        'totals': [1, 0, 'text', None]},
-                }
-
-            elif invoice_type == 'intrastat':
-                spec_lines_template = {
-                    'country': {
-                        'header': [1, 20, 'text', _render("_('Estados')")],
-                        'lines': [1, 0, 'text', _render("(l['contry'])")],
-                        'totals': [1, 0, 'text', None]},
-                    'units': {
-                        'header': [1, 20, 'text', _render("_('Unidades')")],
-                        'lines': [1, 0, 'text', _render("(l['units'])")],
-                        'totals': [1, 0, 'text', None]},
-                    'amount': {
-                        'header': [1, 20, 'text', _render("_('Importe')")],
-                        'lines': [1, 0, 'text', _render("(l['amount'])")],
-                        'totals': [1, 0, 'text', None]},
-                    'total_units': {
-                        'header': [1, 20, 'text', _render("_('Total Unidades')")],
-                        'lines': [1, 0, 'text', _render("(l['total_units'])")],
-                        'totals': [1, 0, 'text', None]},
-                    'total_amount': {
-                        'header': [1, 20, 'text', _render("_('Total Importe')")],
-                        'lines': [1, 0, 'text', _render("(l['total_amount'])")],
                         'totals': [1, 0, 'text', None]},
                 }
 
