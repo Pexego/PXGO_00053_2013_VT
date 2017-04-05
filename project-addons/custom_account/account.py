@@ -182,6 +182,7 @@ class AccountInvoice(models.Model):
         if partner_id:
             partner = self.env["res.partner"].browse(partner_id)
             result['value']['attach_picking'] = partner.attach_picking
+            result['value']['section_id'] = partner.section_id.id
 
         return result
 
