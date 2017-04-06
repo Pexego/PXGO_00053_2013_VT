@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="crm_phonecall_custom_wizard_form_view" model="ir.ui.view">
+            <field name="name">crm.phonecall.custom.wizard.form</field>
+            <field name="model">crm.phonecall</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="New Call">
+                    <group>
+                        <field name="start_date"/>
+                        <field name="partner_id"/>
+                        <field name="user_id"/>
+                        <field name="call_type"/>
+                        <field name="name"/>
+                    </group>
+                    <footer>
+                        <button name="end_call" type="object"
+                            string="End Call" class="oe_highlight"/>
+                        or
+                        <button string="Cancel Call" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="crm_phonecall_custom_wizard_action" model="ir.actions.act_window">
+            <field name="name">New Call</field>
+            <field name="res_model">crm.phonecall</field>
+            <field name="context">{'readonly_by_pass': ['start_date']}</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="crm_phonecall_custom_wizard_form_view"/>
+        </record>
+
+        <menuitem id="crm_phonecall_custom_wizard_menu" action="crm_phonecall_custom_wizard_action"
+            parent="crm.menu_crm_case_phone"/>
+
+        <record id="crm_phonecall_form_add_call_type" model="ir.ui.view">
+            <field name="name">crm.phonecall.form.add.call.type</field>
+            <field name="model">crm.phonecall</field>
+            <field name="inherit_id" ref="crm.crm_case_phone_form_view"/>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <field name="priority" position="after">
+                    <field name="call_type"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
