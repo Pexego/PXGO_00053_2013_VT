@@ -21,9 +21,7 @@
 
 from openerp import models, api, fields, _
 import datetime
-from openerp.osv import fields as fields2
 from datetime import datetime
-import ipdb
 
 CALL_TYPE = [
                    ('check_stock', 'Check Stock'),
@@ -42,8 +40,8 @@ class crm_phonecall(models.Model):
     """ Wizard for CRM phonecalls"""
     _inherit = "crm.phonecall"
 
-    partner_id = fields.Many2one('res.partner', 'Contact')
-    start_date = fields.Datetime('Start Date', readonly=True, default=fields2.datetime.now)
+    partner_id = fields.Many2one('res.partner', 'Contact', required=True)
+    start_date = fields.Datetime('Start Date', readonly=True, default=fields.Datetime.now)
     name = fields.Text('Call Summary')
     user_id = fields.Many2one('res.users', 'Responsible', readonly=True)
     call_type = fields.Selection(CALL_TYPE,'Call type', required=True)
@@ -51,7 +49,6 @@ class crm_phonecall(models.Model):
     @api.multi
     def end_call(self):
         self.ensure_one()
-        ipdb.set_trace()
         duration = datetime.now() - datetime.strptime(self.start_date, '%Y-%m-%d %H:%M:%S')
 
         datas = {
@@ -60,7 +57,7 @@ class crm_phonecall(models.Model):
             'date': self.start_date,
             'partner_id': self.partner_id.id,
             'user_id': self.user_id.id,
-            'name': self.name,
+            'name': self.name or False,
             'categ_id': False,
             'section_id': False,
             'opportunity_id': False,
