@@ -129,36 +129,36 @@ class ResPartner(models.Model):
 
     @api.one
     def _get_average_margin(self):
+        if self.customer:
+            margin_avg = 0.0
 
-        margin_avg = 0.0
+            d1 = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+            final_date = d1.strftime("%Y-%m-%d")
+            d2 = d1 - dateutil.relativedelta.relativedelta(months=3)
+            start_date = d2.strftime("%Y-%m-%d")
 
-        d1 = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
-        finalDate = d1.strftime("%Y-%m-%d")
-        d2 = d1 - dateutil.relativedelta.relativedelta(months=3)
-        startDate = d2.strftime("%Y-%m-%d")
+            invoices = self.env['account.invoice'].search(
+                [('partner_id', '=', self.id),
+                 ('state', 'in', ['paid', 'history']),
+                 ('date_invoice', '>=', start_date),
+                 ('date_invoice', '<=', final_date)])
 
-        invoices = self.env['account.invoice'].search(
-            [('partner_id', '=', self.id),
-             ('state', 'in', ['paid', 'history']),
-              ('date_invoice', '>=', startDate),
-              ('date_invoice', '<=', finalDate)])
+            invoices_line = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', invoices.ids)])
 
-        invoices_line = self.env['account.invoice.line'].search(
-            [('invoice_id', 'in', invoices.mapped('id'))])
+            if invoices_line:
+                self.env.cr.execute("SELECT order_line_id from sale_order_line_invoice_rel" +
+                                    " WHERE invoice_id in (" + ','.join(map(lambda x: str(x), invoices_line.ids)) + ')')
+                order_rel = [i for i, in self.env.cr.fetchall()]
+            else:
+                order_rel = []
 
-        if invoices_line:
-            self.env.cr.execute("SELECT order_line_id from sale_order_line_invoice_rel" +
-                                " WHERE invoice_id in (" + ','.join(map(lambda x: str(x), invoices_line.ids)) + ')')
-            order_rel = [i for i, in self.env.cr.fetchall()]
-        else:
-            order_rel = []
+            order_line = self.env["sale.order.line"].browse(order_rel)
 
-        order_line = self.env["sale.order.line"].browse(order_rel)
+            if len(order_line):
+                margin_avg = sum(order_line.mapped('margin_perc')) / len(order_line)
 
-        if len(order_line):
-            margin_avg = sum(order_line.mapped('margin_perc')) / len(order_line)
-
-        self.average_margin = margin_avg
+            self.average_margin = margin_avg
 
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
