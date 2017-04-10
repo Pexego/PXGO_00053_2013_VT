@@ -7,8 +7,8 @@ class Config(object):
     DATABASE = {
                 'engine': 'playhouse.pool.PooledPostgresqlExtDatabase',
                 'name': 'middleware',
-                'user': 'odoo',
-                'port': '5432',
+                'user': 'comunitea',
+                'port': '5434',
                 'host': 'localhost',
                 'max_connections': None,
                 'autocommit': True,

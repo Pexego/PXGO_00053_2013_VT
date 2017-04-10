@@ -259,7 +259,7 @@
         <field name="act_window_id" ref="action_move_review_form"/>
         </record>
 
-        <menuitem action="action_move_review_form" id="action_move_review_form" parent="stock.menu_traceability" sequence="4" groups="stock.group_locations"/>
+        <menuitem action="action_move_review_form" id="menu_move_review" parent="stock.menu_traceability" sequence="4" groups="stock.group_locations"/>
 
     </data>
 </openerp>
