@@ -18,11 +18,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, orm
-from openerp import api
+from openerp.osv import fields
+from openerp import api, models
 
 
-class sale_order_line(orm.Model):
+class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
     _columns = {
         'pack_depth': fields.integer(
@@ -48,6 +48,18 @@ class sale_order_line(orm.Model):
         return super(sale_order_line, self).invoice_line_create(cr, uid, no_pack_ids, context)
 
     @api.multi
+    def write(self, vals):
+        res = super(sale_order_line, self).write(vals)
+        for line in self:
+            line.refresh()
+            if line.pack_child_line_ids and (not line.product_id or not line.
+                                             product_id.pack_line_ids):
+                for cline in line.pack_child_line_ids:
+                    cline.pack_depth = 0
+                    cline.pack_parent_line_id = False
+        return res
+
+    @api.multi
     def pack_in_moves(self, product_ids):
         is_in_list = True
         for child in self.pack_child_line_ids:
@@ -60,7 +72,7 @@ class sale_order_line(orm.Model):
         return is_in_list
 
 
-class sale_order(orm.Model):
+class sale_order(models.Model):
     _inherit = 'sale.order'
 
     def create(self, cr, uid, vals, context=None):
