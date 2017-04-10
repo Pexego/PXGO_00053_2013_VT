@@ -62,37 +62,38 @@ class account_invoice(models.Model):
             company_id=company_id)
         if partner_id:
             partner = self.env['res.partner'].browse(partner_id)
-            if type in ['out_invoice', 'out_refund'] and \
-                    partner.customer_payment_mode and \
-                    partner.customer_payment_mode.\
-                    payment_order_type == "debit" and partner.bank_ids:
-                mandate_obj = self.env["account.banking.mandate"]
-                mandates = mandate_obj.\
-                    search([('partner_bank_id', 'in', partner.bank_ids.ids),
-                            ('default', '=', True),('state', '=', 'valid')])
-                mandate_sel = False
-                if mandates:
-                    mandate_sel = mandates[0]
-                else:
+            if type in ['out_invoice', 'out_refund']:
+                if partner.customer_payment_mode and \
+                        partner.customer_payment_mode.\
+                        payment_order_type == "debit" and partner.bank_ids:
+                    mandate_obj = self.env["account.banking.mandate"]
                     mandates = mandate_obj.\
                         search([('partner_bank_id', 'in',
                                  partner.bank_ids.ids),
+                                ('default', '=', True),
                                 ('state', '=', 'valid')])
+                    mandate_sel = False
                     if mandates:
                         mandate_sel = mandates[0]
-                if mandate_sel:
-                    res['value'].\
-                        update({'mandate_id': mandate_sel.id,
-                                'partner_bank_id':
-                                mandate_sel.partner_bank_id.id,
-                                'payment_mode_id':
-                                partner.customer_payment_mode.id})
-                else:
-                    res['value'].\
-                        update({'partner_bank_id':
-                                partner.bank_ids[0].id,
-                                'payment_mode_id':
-                                partner.customer_payment_mode.id})
+                    else:
+                        mandates = mandate_obj.\
+                            search([('partner_bank_id', 'in',
+                                     partner.bank_ids.ids),
+                                    ('state', '=', 'valid')])
+                        if mandates:
+                            mandate_sel = mandates[0]
+                    if mandate_sel:
+                        res['value'].\
+                            update({'mandate_id': mandate_sel.id,
+                                    'partner_bank_id':
+                                    mandate_sel.partner_bank_id.id})
+                    else:
+                        res['value'].\
+                            update({'partner_bank_id':
+                                    partner.bank_ids[0].id})
+                res['value'].\
+                    update({'payment_mode_id':
+                            partner.customer_payment_mode.id})
         return res
 
     @api.model
@@ -106,7 +107,7 @@ class account_invoice(models.Model):
                 mandate_obj = self.env["account.banking.mandate"]
                 mandates = mandate_obj.\
                     search([('partner_bank_id', '=', vals['partner_bank_id']),
-                            ('default', '=', True),('state', '=', 'valid')])
+                            ('default', '=', True), ('state', '=', 'valid')])
                 mandate_sel = False
                 if mandates:
                     mandate_sel = mandates[0]
