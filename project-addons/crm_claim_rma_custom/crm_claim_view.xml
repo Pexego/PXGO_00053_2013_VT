@@ -14,7 +14,6 @@
               </xpath>
           </field>
       </record>-->
-
         <record model="ir.ui.view" id="crm_claim_rma_form_view_inherit_new_refund">
             <field name="name">CRM - Claim product return Form</field>
             <field name="model">crm.claim</field>

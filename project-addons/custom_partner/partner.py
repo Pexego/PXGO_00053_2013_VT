@@ -24,11 +24,11 @@ from openerp.addons.account_followup.report import account_followup_print
 from openerp.osv import fields as fields2
 from collections import defaultdict
 import time
-import datetime
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-from openerp.report import report_sxw
+import datetime
+import dateutil.relativedelta
 
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
@@ -127,6 +127,39 @@ class ResPartner(models.Model):
                     browse(self.id).total_invoiced_real
                 self.growth_rate = invoiced_15 / goal
 
+    @api.one
+    def _get_average_margin(self):
+        if self.customer:
+            margin_avg = 0.0
+
+            d1 = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+            final_date = d1.strftime("%Y-%m-%d")
+            d2 = d1 - dateutil.relativedelta.relativedelta(months=3)
+            start_date = d2.strftime("%Y-%m-%d")
+
+            invoices = self.env['account.invoice'].search(
+                [('partner_id', '=', self.id),
+                 ('state', 'in', ['paid', 'history']),
+                 ('date_invoice', '>=', start_date),
+                 ('date_invoice', '<=', final_date)])
+
+            invoices_line = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', invoices.ids)])
+
+            if invoices_line:
+                self.env.cr.execute("SELECT order_line_id from sale_order_line_invoice_rel" +
+                                    " WHERE invoice_id in (" + ','.join(map(lambda x: str(x), invoices_line.ids)) + ')')
+                order_rel = [i for i, in self.env.cr.fetchall()]
+            else:
+                order_rel = []
+
+            order_line = self.env["sale.order.line"].browse(order_rel)
+
+            if len(order_line):
+                margin_avg = sum(order_line.mapped('margin_perc')) / len(order_line)
+
+            self.average_margin = margin_avg
+
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
     sale_product_count = fields.Integer(compute=_get_products_sold,
@@ -143,6 +176,7 @@ class ResPartner(models.Model):
     att = fields.Char("A/A")
     growth_rate = fields.Float("Growth rate", readonly=True,
                                compute="_get_growth_rate")
+    average_margin = fields.Float("Average Margin", readonly=True, compute="_get_average_margin")
 
     _sql_constraints = [
         ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
