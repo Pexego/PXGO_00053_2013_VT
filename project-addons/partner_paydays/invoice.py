@@ -22,8 +22,7 @@
 #
 ##############################################################################
 
-from openerp import models, api
-
+from openerp import models, api, fields
 
 class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
@@ -31,10 +30,15 @@ class AccountInvoice(models.Model):
     @api.multi
     def action_date_assign(self):
         for inv in self:
-            res = inv.with_context(partner_id=inv.partner_id.
-                                   commercial_partner_id.id).\
-                onchange_payment_term_date_invoice(inv.payment_term.id,
-                                                   inv.date_invoice)
+            # In a Refund, due date is current date because it does not depend on client mode payment
+            if inv.type == 'out_refund':
+                res = {'value': {'date_due': fields.Date.context_today(self),
+                                 'payment_term': False}}
+            else:
+                res = inv.with_context(partner_id=inv.partner_id.
+                                       commercial_partner_id.id).\
+                    onchange_payment_term_date_invoice(inv.payment_term.id,
+                                                       inv.date_invoice)
             if res and res.get('value'):
                 inv.write(res['value'])
         return True
