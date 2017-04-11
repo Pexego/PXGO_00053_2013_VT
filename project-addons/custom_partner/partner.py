@@ -27,7 +27,6 @@ import time
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-import datetime
 import dateutil.relativedelta
 
 class ResPartnerInvoiceType(models.Model):
@@ -132,7 +131,7 @@ class ResPartner(models.Model):
         if self.customer:
             margin_avg = 0.0
 
-            d1 = datetime.datetime.strptime(datetime.datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+            d1 = datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
             final_date = d1.strftime("%Y-%m-%d")
             d2 = d1 - dateutil.relativedelta.relativedelta(months=3)
             start_date = d2.strftime("%Y-%m-%d")
