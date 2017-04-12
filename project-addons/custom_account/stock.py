@@ -276,3 +276,15 @@ class StockQuant(models.Model):
                 or 0
 
         return res
+
+
+class WizardValuationHistory(models.Model):
+
+    _inherit = 'wizard.valuation.history'
+
+    @api.multi
+    def open_table(self):
+        res = super(WizardValuationHistory, self).open_table()
+        data = self.read()[0]
+        res['domain'] = "[('date', '<=', '" + data['date'] + "'),('location_id', 'not in', [23,30,33])]"
+        return res
