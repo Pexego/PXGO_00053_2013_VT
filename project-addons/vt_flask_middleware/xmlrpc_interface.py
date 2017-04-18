@@ -6,7 +6,7 @@ from country import Country
 from customer import Customer
 from commercial import Commercial
 from product import Product, ProductCategory
-from rma import RmaStatus, Rma, RmaProduct
+from rma import RmaStatus, RmaStage, Rma, RmaProduct
 from auth import auth
 from sync_log import SyncLog
 from flask import session
@@ -66,7 +66,7 @@ def write(user_id, password, model, odoo_id, vals):
             value = value.replace('"','\\"')
             value = '"%s"' % value
         exec('reg.%s = %s' % (field_name, value))
-    reg.save(is_update=True) 
+    reg.save(is_update=True)
     return True
 
 
@@ -99,5 +99,9 @@ def unlink(user_id, password, model, odoo_id):
             for rma_product in RmaProduct.select().where(
                     RmaProduct.status_id == rec.id):
                 rma_product.delete_instance()
+        elif model == 'rmastage':
+            for rma in Rma.select().where(
+                    Rma.stage_id == rec.id):
+                rma.delete_instance()
         rec.delete_instance()
     return True

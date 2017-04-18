@@ -10,6 +10,9 @@
                 <field name="priority" position="after">
                     <field name="invoice_type_id" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
                 </field>
+                <field name="date_done" position="attributes">
+                    <attribute name="groups"></attribute>
+                </field>
             </field>
         </record>
 

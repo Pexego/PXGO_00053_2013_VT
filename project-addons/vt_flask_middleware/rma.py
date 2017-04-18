@@ -16,11 +16,25 @@ class RmaStatus(SyncModel):
     def __unicode__(self):
         return self.name
 
+class RmaStage(SyncModel):
+    MOD_NAME = 'rmastage'
+
+    odoo_id = IntegerField(unique=True)
+    name = CharField(max_length=150)
+
+    def __unicode__(self):
+        return self.name
+
 
 class Rma(SyncModel):
     odoo_id = IntegerField(unique=True)
     partner_id = ForeignKeyField(Customer, related_name='rmas',
                                  on_delete='CASCADE')
+    stage_id = ForeignKeyField(RmaStage, related_name='rmas',
+                               on_delete='CASCADE')
+    date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
+    date_received = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
+    delivery_type = CharField(max_length=45)
 
     MOD_NAME = 'rma'
 
@@ -32,9 +46,14 @@ class RmaProduct(SyncModel):
     odoo_id = IntegerField(unique=True)
     id_rma = ForeignKeyField(Rma, on_delete='CASCADE')
     reference = CharField(max_length=45)
+    name = CharField()
+    move_out_customer_state = CharField()
+    internal_description = CharField()
+    product_returned_quantity = FloatField(default=0.0)
     entrance_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'], null=True)
     end_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'], null=True)
     product_id = ForeignKeyField(Product, on_delete='CASCADE', null=True)
+    equivalent_product_id = ForeignKeyField(Product, on_delete='CASCADE', null=True, related_name='equivalent_product_set')
     status_id = ForeignKeyField(RmaStatus, on_delete='CASCADE', null=True)
 
     MOD_NAME = 'rmaproduct'

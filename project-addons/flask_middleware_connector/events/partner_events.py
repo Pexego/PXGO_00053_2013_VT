@@ -25,7 +25,7 @@ from .utils import _get_exporter
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
-#from .rma_events import export_rma, export_rmaproduct
+from .rma_events import export_rma, export_rmaproduct
 
 
 @middleware
@@ -77,25 +77,30 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                                    partner.active):
         export_partner.delay(session, model_name, record_id, priority=2,
                              eta=60)
-        #~ rmas = session.env['crm.claim'].search(
-            #~ [('partner_id', '=', partner.id)])
-        #~ for rma in rmas:
-            #~ export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
-            #~ for line in rma.claim_line_ids:
-                #~ if line.product_id.web == 'published':
-                    #~ export_rmaproduct.delay(session, 'claim.line', line.id,
-                                            #~ priority=10, eta=240)
+        rmas = session.env['crm.claim'].search(
+            [('partner_id', '=', partner.id)])
+        for rma in rmas:
+            export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
+            for line in rma.claim_line_ids:
+                if line.product_id.web == 'published' and \
+                        (line.equivalent_product_id and
+                         line.equivalent_product_id.web == 'published' or
+                         True):
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=240)
     elif vals.get("active", False) and partner.web:
         export_partner.delay(session, model_name, record_id, priority=1,
                              eta=60)
-        #~ rmas = session.env['crm.claim'].search(
-            #~ [('partner_id', '=', partner.id)])
-        #~ for rma in rmas:
-            #~ export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
-            #~ for line in rma.claim_line_ids:
-                #~ if line.product_id.web == 'published':
-                    #~ export_rmaproduct.delay(session, 'claim.line', line.id,
-                                            #~ priority=10, eta=240)
+        rmas = session.env['crm.claim'].search(
+            [('partner_id', '=', partner.id)])
+        for rma in rmas:
+            export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
+            for line in rma.claim_line_ids:
+                if line.product_id.web == 'published' and \
+                        (not line.equivalent_product_id or
+                         line.equivalent_product_id.web == 'published'):
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=240)
     elif partner.web:
         for field in up_fields:
             if field in vals:
@@ -108,14 +113,36 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     partner = session.env[model_name].browse(record_id)
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", "user_id",
-                 "property_product_pricelist", "lang"]
+                 "property_product_pricelist", "lang", "sync"]
     if (vals.get("web", False) and \
             vals.get('active', partner.active) and \
             vals.get('is_company', partner.is_company)):
         export_partner.delay(session, model_name, record_id)
+        rmas = session.env['crm.claim'].search(
+            [('partner_id', '=', partner.id)])
+        for rma in rmas:
+            export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
+            for line in rma.claim_line_ids:
+                if line.product_id.web == 'published' and \
+                        (not line.equivalent_product_id or
+                         line.equivalent_product_id.web == 'published'):
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=240)
+
     elif (vals.get("active", False) and partner.web and \
             vals.get('is_company', partner.is_company)):
         export_partner.delay(session, model_name, record_id)
+        rmas = session.env['crm.claim'].search(
+            [('partner_id', '=', partner.id)])
+        for rma in rmas:
+            export_rma.delay(session, 'crm.claim', rma.id, priority=5, eta=120)
+            for line in rma.claim_line_ids:
+                if line.product_id.web == 'published' and \
+                        (not line.equivalent_product_id or
+                         line.equivalent_product_id.web == 'published'):
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=240)
+
     elif "web" in vals and not vals["web"]:
         unlink_partner.delay(session, model_name, record_id, priority=100)
     elif "active" in vals and not vals["active"] and partner.web:
