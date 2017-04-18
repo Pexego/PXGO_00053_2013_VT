@@ -228,6 +228,11 @@ msgid "Related Moves"
 msgstr "Movimientos relacionados"
 
 #. module: purchase_picking
+#: view:stock.move:purchase_picking.stock_move_custom_tree
+msgid "Order"
+msgstr "Pedido"
+
+#. module: purchase_picking
 #: field:stock.picking,shipping_identifier:0
 msgid "Shipping identifier"
 msgstr "Identificador de envío"
