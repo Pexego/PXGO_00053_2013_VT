@@ -40,7 +40,8 @@ class RmaExporter(Exporter):
                 "date_received": rma.date_received,
                 "delivery_type": rma.delivery_type,
                 "stage_id": rma.stage_id.id,
-                "partner_id": rma.partner_id.id}
+                "partner_id": rma.partner_id.id,
+                "number": rma.number}
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
@@ -67,7 +68,7 @@ def delay_create_rma(session, model_name, record_id, vals):
 def delay_write_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
     up_fields = ["date", "date_received", "delivery_type", "partner_id",
-                 "stage_id"]
+                 "stage_id", "number"]
     if vals.get("partner_id", False) and rma.partner_id.web:
         export_rma.delay(session, model_name, record_id, priority=0)
     elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
@@ -161,7 +162,7 @@ def delay_write_rma_line(session, model_name, record_id, vals):
     claim_line = session.env[model_name].browse(record_id)
 
     up_fields = ["product_id", "date_in", "date_out", "substate_id",
-                 "reference", "name", "move_out_customer_state",
+                 "name", "move_out_customer_state",
                  "internal_description", "product_returned_quantity",
                  "equivalent_product_id"]
     if claim_line.claim_id.partner_id.web and \

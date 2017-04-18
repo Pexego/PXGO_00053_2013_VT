@@ -35,11 +35,12 @@ class Rma(SyncModel):
     date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     date_received = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     delivery_type = CharField(max_length=45)
+    number = CharField(max_length=45)
 
     MOD_NAME = 'rma'
 
     def __unicode__(self):
-        return u"%s - %s" % (self.odoo_id, self.partner_id)
+        return u"%s - %s" % (self.odoo_id, self.number)
 
 
 class RmaProduct(SyncModel):
