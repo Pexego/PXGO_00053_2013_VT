@@ -19,7 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields
-import ipdb
+
 
 class account_invoice_report(models.Model):
 
