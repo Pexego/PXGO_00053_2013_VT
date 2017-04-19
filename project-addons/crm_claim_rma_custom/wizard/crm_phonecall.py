@@ -44,7 +44,8 @@ class crm_phonecall(models.Model):
     local_tz = pytz.timezone('Europe/Madrid')
 
     name = fields.Char('Call Summary', readonly=True)
-    partner_id = fields.Many2one('res.partner', 'Contact', required=True, onchange="")
+    partner_id = fields.Many2one('res.partner', 'Contact', required=True,
+                                 domain="[['is_company', '=', 1], ['customer', '=', True]]")
     start_date = fields.Datetime('Start Date', readonly=True, default=fields.Datetime.now)
     user_id = fields.Many2one('res.users', 'Responsible', readonly=True)
     call_type = fields.Selection(CALL_TYPE,'Call type', required=True)
