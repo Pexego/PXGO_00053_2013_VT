@@ -40,8 +40,8 @@ class account_invoice_report(models.Model):
         select_str = super(account_invoice_report, self)._sub_select()
         select_str += ', ai.payment_mode_id,' \
                       ' ai.number ' \
-                      ', sum(sol.product_uom_qty * sol.price_unit * (100.0-sol.discount) ' \
-                      '/ 100.0) - sum(sol.purchase_price*sol.product_uom_qty) as benefit'
+                      ', sum(ail.quantity * ail.price_unit * (100.0-ail.discount) ' \
+                      '/ 100.0) - sum(sol.purchase_price*ail.quantity) as benefit'
         return select_str
 
     def _from(self):
