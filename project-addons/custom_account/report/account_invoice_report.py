@@ -41,17 +41,13 @@ class account_invoice_report(models.Model):
         select_str += ', ai.payment_mode_id,' \
                       ' ai.number ' \
                       ', sum(sol.product_uom_qty * sol.price_unit * (100.0-sol.discount) ' \
-                      '/ 100.0) - sum(coalesce(ip.value_float, 0)*sol.product_uom_qty) as benefit'
-
+                      '/ 100.0) - sum(sol.purchase_price*sol.product_uom_qty) as benefit'
         return select_str
 
     def _from(self):
         from_str = super(account_invoice_report, self)._from()
         from_str += ' LEFT JOIN sale_order_line_invoice_rel solir ON solir.invoice_id = ail.id ' \
-                    ' LEFT JOIN sale_order_line sol ON sol.id = solir.order_line_id ' \
-                    " LEFT JOIN ir_property ip ON (ip.name= 'standard_price' " \
-                    " AND ip.res_id=CONCAT('product.template,',pr.product_tmpl_id))"
-
+                    ' LEFT JOIN sale_order_line sol ON sol.id = solir.order_line_id '
         return from_str
 
     def _group_by(self):
