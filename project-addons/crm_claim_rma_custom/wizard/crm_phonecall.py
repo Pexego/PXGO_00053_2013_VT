@@ -55,20 +55,18 @@ class crm_phonecall(models.Model):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
         return self.local_tz.normalize(local_dt)
 
-    @api.onchange('partner_id')
-    def _calc_name(self):
-        if self.partner_id:
-            start_date = datetime.strptime(self.start_date, '%Y-%m-%d %H:%M:%S')
-            final_start_date = datetime.strptime(
-                self.utc_to_local(start_date).strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S'
-            )
-            format_start_date_all = datetime.strftime(final_start_date, '%Y%m%d/%H%M')
-            format_start_date = format_start_date_all.split('/')
-            self.name = self.partner_id.ref + ' - ' + format_start_date[0] + ' - ' + format_start_date[1]
-
     @api.multi
     def end_call(self):
         self.ensure_one()
+
+        start_date = datetime.strptime(self.start_date, '%Y-%m-%d %H:%M:%S')
+        final_start_date = datetime.strptime(
+            self.utc_to_local(start_date).strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S'
+        )
+        format_start_date_all = datetime.strftime(final_start_date, '%Y%m%d/%H%M')
+        format_start_date = format_start_date_all.split('/')
+        self.name = self.partner_id.ref + ' - ' + format_start_date[0] + ' - ' + format_start_date[1]
+
         duration = datetime.now() - datetime.strptime(self.start_date, '%Y-%m-%d %H:%M:%S')
 
         datas = {
