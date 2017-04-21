@@ -137,7 +137,8 @@ class ResPartner(models.Model):
             start_date = d2.strftime("%Y-%m-%d")
 
             invoices = self.env['account.invoice'].search(
-                [('partner_id', '=', self.id),
+                [('commercial_partner_id', '=', self.id),
+                 ('number', 'not like', '%_ef%'),
                  ('state', 'in', ['paid', 'history', 'open']),
                  ('date_invoice', '>=', start_date),
                  ('date_invoice', '<=', final_date)])
@@ -158,9 +159,11 @@ class ResPartner(models.Model):
                 total_price = 0.0
                 total_cost = 0.0
                 for line in order_line:
-                    total_price += line[0].product_uom_qty * line[0].price_unit *\
-                                  ((100.0 - line[0].discount) / 100)
-                    total_cost += line[0].product_uom_qty * line[0].purchase_price
+                    total_price += line.read(['product_uom_qty'])[0]['product_uom_qty'] *\
+                                   line.read(['price_unit'])[0]['price_unit'] *\
+                                   ((100.0 - line.read(['discount'])[0]['discount']) / 100)
+                    total_cost += line.read(['product_uom_qty'])[0]['product_uom_qty'] *\
+                        line.read(['purchase_price'])[0]['purchase_price']
                 if total_price:
                     margin_avg = (1 - total_cost / total_price) * 100.0
 
