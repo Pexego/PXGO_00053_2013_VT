@@ -30,7 +30,6 @@
                         <field name="partner_id"/>
                         <field name="user_id"/>
                         <field name="call_type"/>
-                        <field name="name"/>
                         <field name="description"/>
                     </group>
                     <footer>
