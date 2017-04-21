@@ -21,6 +21,7 @@
 
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime
+from openerp.exceptions import except_orm
 
 class equivalent_products_wizard(models.TransientModel):
 
@@ -31,6 +32,11 @@ class equivalent_products_wizard(models.TransientModel):
                                'prod_id', 'tag_id',
                                'Tags')
 
+class substate_substate(models.Model):
+    """ To precise a state (state=refused; substates= reason 1, 2,...) """
+    _inherit = "substate.substate"
+
+    string_id = fields.Char('String Identifier')
 
 class CrmClaimRma(models.Model):
 
@@ -40,7 +46,6 @@ class CrmClaimRma(models.Model):
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
                             required=True, default='rma')
-    # priority = fields.Selection(default=0)
     priority = fields.Selection(default=0, selection=[('1', 'High'),
                                                       ('2', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
@@ -52,6 +57,8 @@ class CrmClaimRma(models.Model):
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
 
+    check_states = ['paid', 'fixed', 'returned', 'replaced', 'checked', 'pending_unpaid']
+
     @api.onchange('claim_type')
     def onchange_claim_type(self):
         if self.claim_type == 'customer':
@@ -60,6 +67,17 @@ class CrmClaimRma(models.Model):
         else:
             return {'domain': {'partner_id': [('supplier', '=', True),
                                               ('is_company', '=', True)]}}
+
+    @api.multi
+    def write(self, vals):
+        if 'stage_id'in vals and vals['stage_id'] == 3:
+            for line in self.claim_line_ids:
+                line_state = line.substate_id.string_id
+                if line_state not in self.check_states:
+                    raise except_orm(_('Warning!'),
+                                     _("One or more products aren't review yet!"))
+
+        return super(CrmClaimRma, self).write(vals)
 
     @api.model
     def create(self, vals):
