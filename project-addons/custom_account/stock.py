@@ -278,13 +278,16 @@ class StockQuant(models.Model):
         return res
 
 
-class WizardValuationHistory(models.Model):
+class WizardValuationHistory(models.TransientModel):
 
     _inherit = 'wizard.valuation.history'
 
     @api.multi
     def open_table(self):
+        locations = []
         res = super(WizardValuationHistory, self).open_table()
         data = self.read()[0]
-        res['domain'] = "[('date', '<=', '" + data['date'] + "'),('location_id', 'not in', [23,30,33])]"
+        locations.append(self.env.ref("crm_rma_advance_location.stock_location_rma").id)
+        locations.append(self.env.ref("location_moves.stock_location_damaged").id)
+        res['domain'] = "[('date', '<=', '" + data['date'] + "'),('location_id', 'not in', " + str(locations) + ")]"
         return res
