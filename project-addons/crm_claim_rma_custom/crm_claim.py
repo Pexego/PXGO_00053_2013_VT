@@ -32,11 +32,6 @@ class equivalent_products_wizard(models.TransientModel):
                                'prod_id', 'tag_id',
                                'Tags')
 
-class substate_substate(models.Model):
-    """ To precise a state (state=refused; substates= reason 1, 2,...) """
-    _inherit = "substate.substate"
-
-    string_id = fields.Char('String Identifier')
 
 class CrmClaimRma(models.Model):
 
@@ -57,7 +52,8 @@ class CrmClaimRma(models.Model):
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
 
-    check_states = ['paid', 'fixed', 'returned', 'replaced', 'checked', 'pending_unpaid']
+    check_states = ['substate_received', 'substate_process',
+                    'substate_pending_shipping', 'substate_due_receive']
 
     @api.onchange('claim_type')
     def onchange_claim_type(self):
@@ -70,10 +66,13 @@ class CrmClaimRma(models.Model):
 
     @api.multi
     def write(self, vals):
-        if 'stage_id'in vals and vals['stage_id'] == 3:
+        stage_repaired_id = self.env.ref('crm_claim.stage_claim2').id
+        if 'stage_id' in vals and vals['stage_id'] == stage_repaired_id:
             for line in self.claim_line_ids:
-                line_state = line.substate_id.string_id
-                if line_state not in self.check_states:
+                line_state = self.env['ir.model.data'].search([('model', '=', 'substate.substate'),
+                                                               ('module', '=', 'crm_claim_rma_custom'),
+                                                               ('res_id', '=', line.substate_id.id)])
+                if line_state.name in self.check_states:
                     raise except_orm(_('Warning!'),
                                      _("One or more products aren't review yet!"))
 
