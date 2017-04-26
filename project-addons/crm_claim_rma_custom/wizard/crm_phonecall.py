@@ -22,6 +22,7 @@
 from openerp import models, api, fields, _
 import datetime
 from datetime import datetime
+import pytz
 
 CALL_TYPE = [
                    ('check_stock', 'Check Stock'),
@@ -40,15 +41,32 @@ class crm_phonecall(models.Model):
     """ Wizard for CRM phonecalls"""
     _inherit = "crm.phonecall"
 
-    partner_id = fields.Many2one('res.partner', 'Contact', required=True)
+    local_tz = pytz.timezone('Europe/Madrid')
+
+    name = fields.Char('Call Summary', readonly=True)
+    partner_id = fields.Many2one('res.partner', 'Contact', required=True,
+                                 domain="[['is_company', '=', 1], ['customer', '=', True]]")
     start_date = fields.Datetime('Start Date', readonly=True, default=fields.Datetime.now)
-    name = fields.Text('Call Summary')
     user_id = fields.Many2one('res.users', 'Responsible', readonly=True)
     call_type = fields.Selection(CALL_TYPE,'Call type', required=True)
+    description = fields.Text('Call Description')
+
+    def utc_to_local(self, utc_dt):
+        local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
+        return self.local_tz.normalize(local_dt)
 
     @api.multi
     def end_call(self):
         self.ensure_one()
+
+        start_date = datetime.strptime(self.start_date, '%Y-%m-%d %H:%M:%S')
+        final_start_date = datetime.strptime(
+            self.utc_to_local(start_date).strftime('%Y-%m-%d %H:%M:%S'), '%Y-%m-%d %H:%M:%S'
+        )
+        format_start_date_all = datetime.strftime(final_start_date, '%Y%m%d/%H%M')
+        format_start_date = format_start_date_all.split('/')
+        self.name = self.partner_id.ref + ' - ' + format_start_date[0] + ' - ' + format_start_date[1]
+
         duration = datetime.now() - datetime.strptime(self.start_date, '%Y-%m-%d %H:%M:%S')
 
         datas = {
@@ -58,6 +76,7 @@ class crm_phonecall(models.Model):
             'partner_id': self.partner_id.id,
             'user_id': self.user_id.id,
             'name': self.name or False,
+            'description': self.description or False,
             'categ_id': False,
             'section_id': False,
             'opportunity_id': False,

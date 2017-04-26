@@ -21,6 +21,18 @@ msgid "Start Date"
 msgstr "Fecha de Inicio"
 
 #. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:77
+#, python-format
+msgid "Warning!"
+msgstr "¡Advertencia!"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:78
+#, python-format
+msgid "One or more products aren't review yet!"
+msgstr "¡Algunos de los productos no se han revisado todavia!"
+
+#. module: crm_claim_rma_custom
 #: field:crm.phonecall,partner_id:0
 msgid "Contact"
 msgstr "Cliente"

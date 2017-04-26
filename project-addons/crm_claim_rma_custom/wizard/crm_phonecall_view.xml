@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+
+        <record id="crm_phonecall_custom_call_type" model="ir.ui.view">
+            <field name="name">crm.phonecall.custom.call.type</field>
+            <field name="model">crm.phonecall</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="crm.crm_case_inbound_phone_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="description"/>
+                </field>
+                <field name="name" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="user_id" position="after">
+                    <field name="call_type"/>
+                </field>
+            </field>
+        </record>
         <record id="crm_phonecall_custom_wizard_form_view" model="ir.ui.view">
             <field name="name">crm.phonecall.custom.wizard.form</field>
             <field name="model">crm.phonecall</field>
@@ -12,7 +30,7 @@
                         <field name="partner_id"/>
                         <field name="user_id"/>
                         <field name="call_type"/>
-                        <field name="name"/>
+                        <field name="description"/>
                     </group>
                     <footer>
                         <button name="end_call" type="object"
@@ -27,7 +45,7 @@
         <record id="crm_phonecall_custom_wizard_action" model="ir.actions.act_window">
             <field name="name">New Call</field>
             <field name="res_model">crm.phonecall</field>
-            <field name="context">{'readonly_by_pass': ['start_date']}</field>
+            <field name="context">{'readonly_by_pass': ['start_date', 'name']}</field>
             <field name="view_mode">form</field>
             <field name="view_type">form</field>
             <field name="target">new</field>
@@ -45,6 +63,9 @@
             <field name="arch" type="xml">
                 <field name="priority" position="after">
                     <field name="call_type"/>
+                </field>
+                <field name="opportunity_id" position="after">
+                    <field name="description"/>
                 </field>
             </field>
         </record>
