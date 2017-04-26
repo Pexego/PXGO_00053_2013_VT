@@ -217,6 +217,7 @@ class product_product(orm.Model):
 
     _defaults = {
         'pack_fixed_price': True,
+        'stock_depends': True
     }
 
     def write(self, cr, uid, ids, vals, context=None):
