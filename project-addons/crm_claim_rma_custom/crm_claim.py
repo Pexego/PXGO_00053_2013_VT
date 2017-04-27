@@ -47,6 +47,7 @@ class CrmClaimRma(models.Model):
     country = fields.Many2one("res.country", string="Country", related='partner_id.country_id')
     date = fields.Date('Claim Date', select=True,
                        default=fields.Date.context_today)
+    write_date = fields.Datetime("Update date", readonly=True)
     date_received = fields.Date('Received Date')
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")

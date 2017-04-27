@@ -36,6 +36,8 @@ class Rma(SyncModel):
     date_received = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     delivery_type = CharField(max_length=45)
     number = CharField(max_length=45)
+    type = CharField(max_length=12)
+    last_update_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
 
     MOD_NAME = 'rma'
 

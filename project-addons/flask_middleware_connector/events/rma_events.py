@@ -41,7 +41,9 @@ class RmaExporter(Exporter):
                 "delivery_type": rma.delivery_type,
                 "stage_id": rma.stage_id.id,
                 "partner_id": rma.partner_id.id,
-                "number": rma.number}
+                "number": rma.number,
+                "last_update_date": rma.write_date,
+                "type": rma.name}
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
@@ -68,7 +70,7 @@ def delay_create_rma(session, model_name, record_id, vals):
 def delay_write_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
     up_fields = ["date", "date_received", "delivery_type", "partner_id",
-                 "stage_id", "number"]
+                 "stage_id", "number", "name"]
     if vals.get("partner_id", False) and rma.partner_id.web:
         export_rma.delay(session, model_name, record_id, priority=0)
     elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
