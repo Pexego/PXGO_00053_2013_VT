@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data noupdate="1">
+        <!--Email template to internal salesperson-->
+        <record id="email_template_logged_visits" model="email.template">
+            <field name="name">Logged Visit Email</field>
+            <field name="email_from">${(object.user_id.email or '')|safe}</field>
+            <field name="subject">Visita realizada al cliente ${object.partner_id.commercial_partner_id.name}</field>
+            <field name="email_to">${object.salesperson_select.email|safe}</field>
+            <field name="model_id" ref="external_salesperson_visit.model_partner_visit"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html"><![CDATA[
+<p>Datos de la visita:</p>
+<ul>
+<li>Comercial externo: ${object.user_id.name}</li>
+<li>Cliente: ${object.partner_id.commercial_partner_id.name}</li>
+<li>Fecha: ${object.visit_date}</li>
+<li>Resumen: ${object.description}</li>
+</ul>
+]]>
+             </field>
+        </record>
+
+        <record id="email_template_scheduled_visits" model="email.template">
+            <field name="name">Scheduled Visit Email</field>
+            <field name="email_from">${(object.user_id.email or '')|safe}</field>
+            <field name="subject">Visita programada al cliente ${object.partner_id.commercial_partner_id.name}</field>
+            <field name="email_to">${object.salesperson_select.email|safe}</field>
+            <field name="model_id" ref="external_salesperson_visit.model_partner_visit"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html"><![CDATA[
+<p>Datos de la visita:</p>
+<ul>
+<li>Comercial externo: ${object.user_id.name}</li>
+<li>Cliente: ${object.partner_id.commercial_partner_id.name}</li>
+<li>Fecha: ${object.visit_date}</li>
+<li>Resumen: ${object.description}</li>
+</ul>
+]]>
+             </field>
+        </record>
+
+    </data>
+</openerp>
+
+
+<!--div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+<p>Datos de la visita:<br><br>
+    Comercial externo: ${object.user_id.name}<br>
+    Cliente: ${object.partner_id.commercial_partner_id.name}<br>
+    Fecha: ${object.visit_date}<br><br>
+Atentamente.
+</p>
+</div-->
