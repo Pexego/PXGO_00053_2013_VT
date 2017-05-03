@@ -44,7 +44,7 @@ class account_invoice_line(orm.Model):
                                        move.product_qty,
                                        move.product_id.uom_id.id)
             total_qty += qty
-            if move.product_id.cost_method == 'average' \
+            if move.product_id.cost_method in ['average', 'real'] \
                     and move.price_unit:
                 price_unit = currency_obj.compute(
                     cr, uid, line.invoice_id.currency_id.id,
