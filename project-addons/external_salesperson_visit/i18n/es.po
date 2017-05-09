@@ -109,44 +109,46 @@ msgid "Notify by email"
 msgstr "Notificar por email"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:64
-#: code:addons/external_salesperson_visit/partner_visit.py:66
+#: code:addons/external_salesperson_visit/partner_visit.py:60
+#: code:addons/external_salesperson_visit/partner_visit.py:62
 #, python-format
 msgid "Invalid date"
 msgstr "Fecha no válida"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:64
+#: code:addons/external_salesperson_visit/partner_visit.py:60
 #, python-format
 msgid "Date must be lower than current date in a logged visit"
 msgstr "La fecha debe ser menor que la actual en una visita realizada"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:66
+#: code:addons/external_salesperson_visit/partner_visit.py:62
 #, python-format
 msgid "Date must be bigger than current date in a scheduled visit"
 msgstr "La fecha debe ser mayor que la actual en una visita programada"
 
 #. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:66
 #: code:addons/external_salesperson_visit/partner_visit.py:76
 #, python-format
 msgid "Invalid Action"
 msgstr "Acción no válida"
 
 #. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:66
 #: code:addons/external_salesperson_visit/partner_visit.py:76
 #, python-format
 msgid "You cannot confirm the visit because schedule date is after current date"
 msgstr "No puede confirmar la visita porque la fecha es posterior a la actual"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:112
+#: code:addons/external_salesperson_visit/partner_visit.py:125
 #, python-format
 msgid "Email Error"
 msgstr "Error Email"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:112
+#: code:addons/external_salesperson_visit/partner_visit.py:125
 #, python-format
 msgid "Email has not been sent"
 msgstr "El email no ha sido enviado"

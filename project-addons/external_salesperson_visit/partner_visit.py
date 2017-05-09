@@ -22,7 +22,6 @@ from openerp import models, fields, api, exceptions, _
 from openerp.exceptions import except_orm
 from datetime import datetime
 
-
 class partner_visit(models.Model):
     """ Model for Partner Visits """
     _name = "partner.visit"
@@ -35,7 +34,6 @@ class partner_visit(models.Model):
     user_id = fields.Many2one('res.users', 'External salesperson', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner', required=True)
     partner_address = fields.Char('Address', readonly=True, compute='get_address')
-    company_id = fields.Many2one('res.company', 'Company')
     description = fields.Text('Summary', required=True)
     visit_state = fields.Selection([('log', 'Log'), ('schedule', 'Schedule')], string='Status', readonly=True)
     email_sent = fields.Boolean('Email sent', default=False, readonly=True)
@@ -48,41 +46,56 @@ class partner_visit(models.Model):
         'salesperson_select': False
     }
 
-    @api.multi
-    def write(self, datas):
-        self.ensure_one()
-        res = super(partner_visit, self).write(datas)
+    def validate_fields(self, self_data, changes):
         date_now = str(datetime.now())
+        res = {}
 
-        if 'visit_date' in datas:
-            visit_date = datas['visit_date']
+        if 'visit_date' in changes:
+            visit_date = changes['visit_date']
             if visit_date:
-                difference = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f') - datetime.strptime(visit_date,
-                                                                                                     '%Y-%m-%d %H:%M:%S')
+                difference = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f') - \
+                             datetime.strptime(visit_date, '%Y-%m-%d %H:%M:%S')
                 difference = difference.total_seconds() / float(60)
-                if self.visit_state == 'log' and difference < 0:
+                if self_data.visit_state == 'log' and difference < 0:
                     raise except_orm(_('Invalid date'), _('Date must be lower than current date in a logged visit'))
-                elif self.visit_state == 'schedule' and difference > 0:
+                elif self_data.visit_state == 'schedule' and difference > 0:
                     raise except_orm(_('Invalid date'), _('Date must be bigger than current date in a scheduled visit'))
+            if 'confirm_done' in changes:
+                confirm_done = changes['confirm_done']
+                if confirm_done and difference < 0:
+                    raise except_orm(_('Invalid Action'), _('You cannot confirm the visit because schedule date '
+                                                            'is after current date'))
+        else:
+            if 'confirm_done' in changes:
+                confirm_done = changes['confirm_done']
+                # Case when visit_date has not been changed -> recalculate the difference with "self.visit_date"
+                difference = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f') - \
+                    datetime.strptime(self_data.visit_date, '%Y-%m-%d %H:%M:%S')
+                difference = difference.total_seconds() / float(60)
+                if confirm_done and difference < 0:
+                    raise except_orm(_('Invalid Action'), _('You cannot confirm the visit because schedule date '
+                                                            'is after current date'))
+                elif confirm_done and difference > 0:
+                    res['visit_state'] = 'log'
+        return True
 
-        if 'confirm_done' in datas:
-            confirm_done = datas['confirm_done']
-            difference = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f') - datetime.strptime(self.visit_date,
-                                                                                                 '%Y-%m-%d %H:%M:%S')
-            difference = difference.total_seconds() / float(60)
-            if confirm_done and difference > 0:
-                self.visit_state = 'log'
-            else:
-                raise except_orm(_('Invalid Action'), _('You cannot confirm the visit because schedule date '
-                                                        'is after current date'))
+    @api.model
+    def create(self, vals):
+        res = super(partner_visit, self).create(vals)
+        self.validate_fields(res, vals)
         return res
 
+    @api.multi
+    def write(self, datas):
+        super(partner_visit, self).write(datas)
+        res = self.validate_fields(self, datas)
+        return res
+
+    @api.one
     def get_address(self):
         if self.partner_id:
-            partner_data = self.env['res.partner'].browse(self.partner_id.id)
-            partner_country = self.env['res.country'].browse(partner_data.country_id.id)
-            address_array = [partner_data.street, partner_data.city, partner_country.name]
-            self.partner_address = ", ".join([x for x in address_array if x])
+            address_array = [self.partner_id.street, self.partner_id.city, self.partner_id.country_id.name]
+            self.partner_address = u", ".join([x for x in address_array if x])
 
     @api.one
     def send_email(self):

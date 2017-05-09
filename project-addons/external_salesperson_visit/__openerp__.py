@@ -29,6 +29,9 @@
     'author': 'Nadia Ferreyra',
     'website': '',
     "depends": ['base', 'email_template'],
-    "data": ['partner_visit_view.xml', 'email_template.xml'],
+    "data": ['partner_visit_view.xml',
+             'email_template.xml',
+             'security/ir.model.access.csv',
+             'security/external_salesperson_visit_security.xml'],
     "installable": True
 }
