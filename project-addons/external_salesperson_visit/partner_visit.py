@@ -46,6 +46,7 @@ class partner_visit(models.Model):
         'salesperson_select': False
     }
 
+    @api.multi
     def validate_fields(self, self_data, changes):
         date_now = str(datetime.now())
         res = {}
@@ -77,18 +78,20 @@ class partner_visit(models.Model):
                                                             'is after current date'))
                 elif confirm_done and difference > 0:
                     res['visit_state'] = 'log'
-        return True
+        return res
 
     @api.model
     def create(self, vals):
         res = super(partner_visit, self).create(vals)
-        self.validate_fields(res, vals)
+        res_change = self.validate_fields(res, vals)
         return res
 
     @api.multi
     def write(self, datas):
-        super(partner_visit, self).write(datas)
-        res = self.validate_fields(self, datas)
+        res = super(partner_visit, self).write(datas)
+        res_change = self.validate_fields(self, datas)
+        if 'visit_state' in res_change:
+            self.visit_state = res_change['visit_state']
         return res
 
     @api.one
