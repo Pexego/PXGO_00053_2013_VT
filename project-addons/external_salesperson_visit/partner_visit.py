@@ -31,7 +31,7 @@ class partner_visit(models.Model):
 
     create_date = fields.Datetime('Creation Date', readonly=True, default=fields.Datetime.now)
     visit_date = fields.Datetime('Visit Date', required=True)
-    user_id = fields.Many2one('res.users', 'External salesperson', readonly=True)
+    user_id = fields.Many2one('res.users', 'External salesperson', readonly=True, default=lambda self: self.env.user.id)
     partner_id = fields.Many2one('res.partner', 'Partner', required=True)
     partner_address = fields.Char('Address', readonly=True, compute='get_address')
     description = fields.Text('Summary', required=True)
@@ -40,11 +40,6 @@ class partner_visit(models.Model):
     salesperson_select = fields.Many2one('res.users', 'Notify to', readonly=True,
                                          compute='get_internal_salesperson', store=True)
     confirm_done = fields.Boolean('Done', default=False)
-
-    _defaults = {
-        'create_date': fields.Datetime.now(),
-        'user_id': lambda self, cr, uid, ctx: uid
-    }
 
     @api.multi
     def validate_fields(self, self_data, changes):
