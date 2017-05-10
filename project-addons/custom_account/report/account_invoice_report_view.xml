@@ -7,8 +7,18 @@
             <field name="model">account.invoice.report</field>
             <field name="inherit_id" ref="account.view_account_invoice_report_search"/>
             <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="user_id" position="before">
+                    <field name="commercial_partner_id" string="Partner"/>
+                </field>
+                <xpath expr="//filter[@string='Partner']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
                 <filter string="Partner" name="partner_id" position="after">
                     <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
+                    <filter string="Partner" context="{'group_by':'commercial_partner_id'}"/>
                     <filter string="country" name="country_id" context="{'group_by':'country_id'}"/>
                     <filter string="Payment mode" name="payment_mode_id" context="{'group_by':'payment_mode_id'}"/>
                 </filter>

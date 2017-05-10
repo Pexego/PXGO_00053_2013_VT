@@ -172,6 +172,26 @@
             </field>
         </record>
 
+        <record id="view_account_invoice_filter_partner" model="ir.ui.view">
+            <field name="name">account.invoice.select.partner</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="user_id" position="before">
+                    <field name="commercial_partner_id" string="Partner"/>
+                </field>
+                <xpath expr="//filter[@string='Partner']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//filter[@string='Salesperson']" position="before">
+                    <filter string="Partner" context="{'group_by':'commercial_partner_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
         <record id="account.action_invoice_refund_out_tree" model="ir.actions.act_window">
             <field name="context">{'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale', 'search_default_without_ef':1}</field>
         </record>

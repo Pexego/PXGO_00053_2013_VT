@@ -1,0 +1,154 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* external_salesperson_visit
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-04-24 11:30+0000\n"
+"PO-Revision-Date: 2017-04-24 11:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: external_salesperson_visit
+#: model:ir.ui.menu,name:external_salesperson_visit.menu_partner_case_visit
+msgid "Visits"
+msgstr "Visitas"
+
+#. module: external_salesperson_visit
+#: model:ir.actions.act_window,name:external_salesperson_visit.partner_logged_visit_custom_action
+#: model:ir.ui.menu,name:external_salesperson_visit.submenu_partner_case_visit_1
+msgid "Logged Visits"
+msgstr "Visitas realizadas"
+
+#. module: external_salesperson_visit
+#: model:ir.actions.act_window,name:external_salesperson_visit.partner_schedule_visit_custom_action
+#: model:ir.ui.menu,name:external_salesperson_visit.submenu_partner_case_visit_2
+msgid "Scheduled Visits"
+msgstr "Visitas planificadas"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,create_date:0
+msgid "Creation Date"
+msgstr "Fecha de creación"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,visit_date:0
+msgid "Visit Date"
+msgstr "Fecha de visita"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,user_id:0
+msgid "External salesperson"
+msgstr "Comercial externo"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,partner_id:0
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,partner_address:0
+msgid "Address"
+msgstr "Dirección"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,company_id:0
+msgid "Company"
+msgstr "Empresa"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,description:0
+msgid "Summary"
+msgstr "Resumen"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,visit_state:0
+msgid "Status"
+msgstr "Estado"
+
+#. module: external_salesperson_visit
+#: selection:partner.visit,visit_state:0
+msgid "Log"
+msgstr "Realizada"
+
+#. module: external_salesperson_visit
+#: selection:partner.visit,visit_state:0
+msgid "Schedule"
+msgstr "Programada"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_form_view
+msgid "Visit Summary"
+msgstr "Resumen de la visita"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,confirm_done:0
+msgid "Done"
+msgstr "Realizada"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,email_sent:0
+msgid "Email sent"
+msgstr "Email enviado"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,salesperson_select:0
+msgid "Notify to"
+msgstr "Notificar a"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_form_view
+#: view:partner.visit:external_salesperson_visit.partner_visit_tree_view
+msgid "Notify by email"
+msgstr "Notificar por email"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:61
+#: code:addons/external_salesperson_visit/partner_visit.py:63
+#, python-format
+msgid "Invalid date"
+msgstr "Fecha no válida"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:61
+#, python-format
+msgid "Date must be lower than current date in a logged visit"
+msgstr "La fecha debe ser menor que la actual en una visita realizada"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:63
+#, python-format
+msgid "Date must be bigger than current date in a scheduled visit"
+msgstr "La fecha debe ser mayor que la actual en una visita programada"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:67
+#: code:addons/external_salesperson_visit/partner_visit.py:77
+#, python-format
+msgid "Invalid Action"
+msgstr "Acción no válida"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:67
+#: code:addons/external_salesperson_visit/partner_visit.py:77
+#, python-format
+msgid "You cannot confirm the visit because schedule date is after current date"
+msgstr "No puede confirmar la visita porque la fecha es posterior a la actual"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:134
+#, python-format
+msgid "Email Error"
+msgstr "Error Email"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:134
+#, python-format
+msgid "Email has not been sent"
+msgstr "El email no ha sido enviado"

@@ -130,6 +130,8 @@ class ResPartner(models.Model):
     def _get_average_margin(self):
         if self.customer:
             margin_avg = 0.0
+            total_price = 0.0
+            total_cost = 0.0
 
             d1 = datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
             final_date = d1.strftime("%Y-%m-%d")
@@ -146,25 +148,20 @@ class ResPartner(models.Model):
             invoices_line = self.env['account.invoice.line'].search(
                 [('invoice_id', 'in', invoices.ids)])
 
-            if invoices_line:
+            for i_line in invoices_line:
                 self.env.cr.execute("SELECT order_line_id from sale_order_line_invoice_rel" +
-                                    " WHERE invoice_id in (" + ','.join(map(lambda x: str(x), invoices_line.ids)) + ')')
-                order_rel = [i for i, in self.env.cr.fetchall()]
-            else:
-                order_rel = []
+                                    " WHERE invoice_id = " + str(i_line.ids[0]))
+                order_rel = self.env.cr.fetchone()
+                order_line = self.env["sale.order.line"].browse(order_rel)
 
-            order_line = self.env["sale.order.line"].browse(order_rel)
+                if order_line:
+                    o_line_data = order_line.read(['purchase_price'])[0]
+                    total_price += i_line.quantity * i_line.price_unit * \
+                                   ((100.0 - i_line.discount) / 100)
+                    total_cost += i_line.quantity * o_line_data['purchase_price']
 
-            if len(order_line):
-                total_price = 0.0
-                total_cost = 0.0
-                for line in order_line:
-                    line_data = line.read(['product_uom_qty', 'price_unit', 'discount', 'purchase_price'])[0]
-                    total_price += line_data['product_uom_qty'] * line_data['price_unit'] *\
-                        ((100.0 - line_data['discount']) / 100)
-                    total_cost += line_data['product_uom_qty'] * line_data['purchase_price']
-                if total_price:
-                    margin_avg = (1 - total_cost / total_price) * 100.0
+            if total_price:
+                margin_avg = (1 - total_cost / total_price) * 100.0
 
             self.average_margin = margin_avg
 
