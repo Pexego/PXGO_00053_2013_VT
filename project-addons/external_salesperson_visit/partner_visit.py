@@ -37,13 +37,13 @@ class partner_visit(models.Model):
     description = fields.Text('Summary', required=True)
     visit_state = fields.Selection([('log', 'Log'), ('schedule', 'Schedule')], string='Status', readonly=True)
     email_sent = fields.Boolean('Email sent', default=False, readonly=True)
-    salesperson_select = fields.Many2one('res.users', 'Salesperson to notify')
+    salesperson_select = fields.Many2one('res.users', 'Notify to', readonly=True,
+                                         compute='get_internal_salesperson', store=True)
     confirm_done = fields.Boolean('Done', default=False)
 
     _defaults = {
         'create_date': fields.Datetime.now(),
-        'user_id': lambda self, cr, uid, ctx: uid,
-        'salesperson_select': False
+        'user_id': lambda self, cr, uid, ctx: uid
     }
 
     @api.multi
@@ -99,6 +99,12 @@ class partner_visit(models.Model):
         if self.partner_id:
             address_array = [self.partner_id.street, self.partner_id.city, self.partner_id.country_id.name]
             self.partner_address = u", ".join([x for x in address_array if x])
+
+    @api.one
+    @api.depends('partner_id')
+    def get_internal_salesperson(self):
+        if self.partner_id:
+            self.salesperson_select = self.partner_id.commercial_partner_id.user_id.id
 
     @api.one
     def send_email(self):
