@@ -70,7 +70,12 @@ msgstr "Asesoramiento"
 #. module: crm_claim_rma_custom
 #: selection:crm.phonecall,call_type:0
 msgid "Shipments status"
-msgstr "Realizar pedido/ppto"
+msgstr "Estado de envíos"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Order Complain/Claim"
+msgstr "Queja/Reclamación Pedido"
 
 #. module: crm_claim_rma_custom
 #: selection:crm.phonecall,call_type:0
