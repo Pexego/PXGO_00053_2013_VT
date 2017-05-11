@@ -26,6 +26,7 @@ from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
 from openerp.addons.connector.event import Event
+import urllib2
 
 
 @middleware
@@ -125,7 +126,8 @@ class RmaProductExporter(Exporter):
             "reference": line.claim_id.number,
             "name": line.name,
             "move_out_customer_state": line.move_out_customer_state,
-            "internal_description": line.internal_description,
+            "internal_description": line.internal_description.
+            replace("\n", " "),
             "product_returned_quantity": line.product_returned_quantity,
             "product_id": line.product_id.id,
             "equivalent_product_id": line.equivalent_product_id.id,
@@ -133,6 +135,7 @@ class RmaProductExporter(Exporter):
             "end_date": line.date_out,
             "status_id": line.substate_id.id,
         }
+
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
