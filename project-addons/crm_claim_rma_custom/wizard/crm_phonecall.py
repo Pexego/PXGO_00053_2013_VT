@@ -36,7 +36,7 @@ CALL_TYPE = [('check_stock', 'Check Stock'),
              ('accounting_complain', 'Accounting Complain/Claim')]
 
 
-class crm_phonecall(models.Model):
+class CrmPhonecall(models.Model):
     """ Wizard for CRM phonecalls"""
     _inherit = "crm.phonecall"
 
@@ -89,4 +89,4 @@ class crm_phonecall(models.Model):
             'state': 'done',
             'call_type': self.call_type
         }
-        super(crm_phonecall, self).write(datas)
+        super(CrmPhonecall, self).write(datas)
