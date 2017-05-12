@@ -62,10 +62,7 @@ class ProductExporter(Exporter):
                 stock_qty = eval("product." + self.backend_record.
                                  product_stock_field_id.name,
                                  {'product': product})
-                if stock_qty <= 0.0:
-                    vals["stock"] = 0.0
-                else:
-                    vals["stock"] = stock_qty
+                vals["stock"] = stock_qty
             if mode == "insert":
                 self.backend_adapter.insert(vals)
             else:
