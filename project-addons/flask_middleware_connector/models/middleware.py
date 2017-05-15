@@ -152,5 +152,5 @@ class MiddlewareBackend(models.Model):
                 export_rma(session, 'crm.claim', rma.id)
                 for line in rma.claim_line_ids:
                     if line.product_id.web == 'published':
-                        export_rmaproduct(session, 'claim.line', line.id)
+                        export_rmaproduct.delay(session, 'claim.line', line.id)
         return True
