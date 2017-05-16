@@ -4,6 +4,7 @@ from database import db
 from user import User
 from country import Country
 from customer import Customer
+from invoice import Invoice
 from commercial import Commercial
 from product import Product, ProductCategory
 from rma import RmaStatus, RmaStage, Rma, RmaProduct
