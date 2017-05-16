@@ -456,3 +456,28 @@ msgstr "Asistente para crear envíos desde la línea de reclamación"
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_from_picking_wizard
 msgid "Wizard to create pickings from picking lines"
 msgstr "Asistente para crear albaranes desde lineas de albarán"
+
+#. module: crm_claim_rma_custom
+#: view:crm.phonecall:crm_claim_rma_custom.crm_phonecall_custom_call_type
+msgid "Duration (min)"
+msgstr "Duración (min)"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,partner_ref:0
+msgid "Ref. Contact"
+msgstr "Ref. Cliente"
+
+#. module: crm
+#: field:crm.phonecall,date:0 field:crm.phonecall2phonecall,date:0
+msgid "Date"
+msgstr "Fecha inicio"
+
+#. module: crm
+#: view:crm.phonecall:crm_claim_rma_custom.view_crm_case_phonecalls_filter_group_by
+msgid "Week"
+msgstr "Semana"
+
+#. module: crm_claim_rma_custom
+#: view:crm.phonecall:crm_claim_rma_custom.view_crm_case_phonecalls_filter_group_by
+msgid "Day"
+msgstr "Día"
