@@ -44,6 +44,7 @@ msgstr "Fecha de visita"
 
 #. module: external_salesperson_visit
 #: field:partner.visit,user_id:0
+#: view:partner.visit:external_salesperson_visit.partner_visit_search
 msgid "External salesperson"
 msgstr "Comercial externo"
 
@@ -152,3 +153,33 @@ msgstr "Error Email"
 #, python-format
 msgid "Email has not been sent"
 msgstr "El email no ha sido enviado"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_search
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_search
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_search
+msgid "Salesperson to notify"
+msgstr "Comercial a notificar"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_search
+msgid "Month"
+msgstr "Mes"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_search
+msgid "Week"
+msgstr "Semana"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_search
+msgid "Day"
+msgstr "Día"

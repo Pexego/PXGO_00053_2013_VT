@@ -36,6 +36,27 @@
                     <field name="user_id"/>
                     <field name="partner_id"/>
                     <field name="salesperson_select"/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter string="Partner" domain="[]"
+                            name="groupby_partner_id"
+                            context="{'group_by': 'partner_id'}"/>
+                        <filter string="External salesperson" domain="[]"
+                            name="groupby_user_id"
+                            context="{'group_by': 'user_id'}"/>
+                        <filter string="Salesperson to notify" domain="[]"
+                            name="groupby_salesperson_select"
+                            context="{'group_by': 'salesperson_select'}"/>
+                        <filter string="Month"
+                                name="group_month"
+                                context="{'group_by':'visit_date:month'}"/>
+                        <filter string="Week"
+                                name="group_week"
+                                context="{'group_by':'visit_date:week'}"/>
+                        <filter string="Day"
+                                name="group_day"
+                                context="{'group_by':'visit_date:day'}"/>
+                    </group>
                 </search>
             </field>
         </record>
@@ -88,7 +109,7 @@
         </record>
 
         <menuitem id="submenu_partner_case_visit_1" action="partner_logged_visit_custom_action"
-            parent="external_salesperson_visit.menu_partner_case_visit" sequence="1"/>
+            parent="external_salesperson_visit.menu_partner_case_visit" sequence="2"/>
 
         <record model="ir.actions.act_window" id="partner_schedule_visit_custom_action">
             <field name="name">Scheduled Visits</field>
@@ -102,7 +123,27 @@
         </record>
 
         <menuitem id="submenu_partner_case_visit_2" action="partner_schedule_visit_custom_action"
-            parent="external_salesperson_visit.menu_partner_case_visit" sequence="2"/>
+            parent="external_salesperson_visit.menu_partner_case_visit" sequence="1"/>
+
+        <record id="view_partners_form_visits" model="ir.ui.view">
+            <field name="name">view.res.partner.form.inherited.visits</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="groups_id" eval="[(4, ref('base.group_sale_manager')), (4, ref('base.group_partner_manager'))]"/>
+            <field eval="18" name="priority"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//div[@name='buttons']" position="inside">
+                        <button class="oe_inline oe_stat_button" type="action"
+                            name="%(external_salesperson_visit.partner_logged_visit_custom_action)d"
+                            icon="fa-calendar"
+                            context="{'search_default_partner_id': active_id}">
+                            <field string="Visits" name="visit_count" widget="statinfo"/>
+                        </button>
+                    </xpath>
+                </data>
+            </field>
+        </record>
 
     </data>
 </openerp>
