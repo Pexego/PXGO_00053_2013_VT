@@ -25,8 +25,9 @@ from .utils import _get_exporter
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
-from .invoice_events import export_invoice, export_invoiceproduct
+#from .invoice_events import export_invoice
 
+import ipdb
 
 @middleware
 class InvoiceExporter(Exporter):
@@ -41,6 +42,7 @@ class InvoiceExporter(Exporter):
                 'client_ref': invoice.name or "",
                 'date_invoice': invoice.date_invoice,
                 'date_due': invoice.date_due,
+                'state': invoice.state,
                 'subtotal_wt_rect': invoice.subtotal_wt_rect,
                 'total_wt_rect': invoice.total_wt_rect}
         if mode == 'insert':
@@ -61,7 +63,7 @@ class InvoiceAdapter(GenericAdapter):
 @on_record_create(model_names='account.invoice')
 def delay_create_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
-    if invoice.partner_id and invoice.partner_id.web:
+    if invoice.partner_id and invoice.partner_id.web and invoice.state in ['open', 'paid']:
         export_invoice.delay(session, model_name, record_id, priority=0)
 
 
@@ -70,22 +72,21 @@ def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
     up_fields = ["number", "client_ref", "date_invoice", "partner_id",
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
-    if vals.get("partner_id", False) and invoice.partner_id.web:
+    """if vals.get("partner_id", False) and invoice.partner_id.web:
         export_invoice.delay(session, model_name, record_id, priority=0)
     elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
-        unlink_invoice.delay(session, model_name, record_id, priority=1)
-    elif invoice.partner_id.web:
+        unlink_invoice.delay(session, model_name, record_id, priority=1)"""
+    ipdb.set_trace()
+    if invoice.partner_id and invoice.partner_id.web and invoice.state in ['open', 'paid']:
         for field in up_fields:
             if field in vals:
                 update_invoice.delay(session, model_name, record_id)
                 break
-
-
-@on_record_unlink(model_names='account.invoice')
-def delay_unlink_invoice(session, model_name, record_id):
-    invoice = session.env[model_name].browse(record_id)
-    if invoice.partner_id and invoice.partner_id.web:
-        unlink_invoice.delay(session, model_name, record_id)
+    else:
+        for field in up_fields:
+            if field in vals:
+                unlink_invoice(session, model_name, record_id)
+                break
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,

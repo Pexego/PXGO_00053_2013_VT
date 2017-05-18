@@ -20,6 +20,7 @@
 ##############################################################################
 from . import claim
 from . import product
+from . import invoice
 from . import res_partner
 from . import res_users
 from . import stock

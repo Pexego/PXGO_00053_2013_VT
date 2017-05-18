@@ -42,6 +42,7 @@ class Invoice(SyncModel):
     client_ref = CharField(max_length=45)
     date_invoice = DateField(formats=['%Y-%m-%d %H:%M:%S'])
     date_due = DateField(formats=['%Y-%m-%d %H:%M:%S'])
+    state = CharField(max_length=15)
     subtotal_wt_rect = FloatField()
     total_wt_rect = FloatField()
 

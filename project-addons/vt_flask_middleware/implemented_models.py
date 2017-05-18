@@ -12,10 +12,10 @@ MODELS_CLASS = {
     'country': Country, 'commercial': Commercial, 'productbrand': ProductBrand,
     'productbrandcountryrel': ProductBrandCountryRel}
 
-MASTER_CLASSES = {'invoice': Invoice, 'commercial': Commercial,'productcategory': ProductCategory,
-                  'rmastatus': RmaStatus, 'rmastage': RmaStage ,
+MASTER_CLASSES = {'commercial': Commercial,'productcategory': ProductCategory,
+                  'rmastatus': RmaStatus, 'rmastage': RmaStage,
                   'country': Country, 'productbrand': ProductBrand}
 
-DEPENDENT_CLASSES = {'customer': Customer,'product': Product,
+DEPENDENT_CLASSES = {'invoice': Invoice, 'customer': Customer, 'product': Product,
                      'rma': Rma, 'rmaproduct': RmaProduct,
                      'productbrandcountryrel': ProductBrandCountryRel}
