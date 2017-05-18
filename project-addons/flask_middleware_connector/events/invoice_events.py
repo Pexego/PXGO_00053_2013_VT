@@ -25,9 +25,6 @@ from .utils import _get_exporter
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
-#from .invoice_events import export_invoice
-
-import ipdb
 
 @middleware
 class InvoiceExporter(Exporter):
@@ -38,7 +35,7 @@ class InvoiceExporter(Exporter):
         vals = {'odoo_id': invoice.id,
                 'number': invoice.number,
                 'partner_id': invoice.partner_id.id,
-                #'partner_email_web': invoice.partner_id.email_web,
+                # 'partner_email_web': invoice.partner_id.email_web,
                 'client_ref': invoice.name or "",
                 'date_invoice': invoice.date_invoice,
                 'date_due': invoice.date_due,
@@ -72,21 +69,19 @@ def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
     up_fields = ["number", "client_ref", "date_invoice", "state", "partner_id",
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
-    """if vals.get("partner_id", False) and invoice.partner_id.web:
-        export_invoice.delay(session, model_name, record_id, priority=0)
-    elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
-        unlink_invoice.delay(session, model_name, record_id, priority=1)"""
-    ipdb.set_trace()
-    if invoice.partner_id and invoice.partner_id.web and invoice.state in ['open', 'paid']:
-        for field in up_fields:
-            if field in vals:
-                update_invoice.delay(session, model_name, record_id)
-                break
-    else:
-        for field in up_fields:
-            if field in vals:
-                unlink_invoice(session, model_name, record_id)
-                break
+
+    if invoice.partner_id and invoice.partner_id.web:
+        if vals.get('state', False) == 'open':
+            export_invoice.delay(session, model_name, record_id)
+        elif vals.get('state', False) == 'paid':
+            update_invoice.delay(session, model_name, record_id)
+        elif vals.get('state', False) == 'cancel':
+            unlink_invoice(session, model_name, record_id)
+        elif invoice.state == 'open':
+            for field in up_fields:
+                if field in vals:
+                    update_invoice.delay(session, model_name, record_id)
+                    break
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
@@ -108,4 +103,3 @@ def update_invoice(session, model_name, record_id):
 def unlink_invoice(session, model_name, record_id):
     invoice_exporter = _get_exporter(session, model_name, record_id, InvoiceExporter)
     return invoice_exporter.delete(record_id)
-

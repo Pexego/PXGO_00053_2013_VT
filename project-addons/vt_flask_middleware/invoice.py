@@ -7,31 +7,9 @@ if they don't exist.
 """
 
 from peewee import CharField, IntegerField, FloatField, ForeignKeyField, DateField
-from app import app
+
 from database import SyncModel
 from customer import Customer
-from product import Product
-
-
-"""class InvoiceStatus(SyncModel):
-    MOD_NAME = 'invoicestatus'
-
-    odoo_id = IntegerField(unique=True)
-    name = CharField(max_length=150)
-
-    def __unicode__(self):
-        return self.name
-"""
-
-"""class InvoiceStage(SyncModel):
-    MOD_NAME = 'invoice'
-
-    odoo_id = IntegerField(unique=True)
-    name = CharField(max_length=150)
-
-    def __unicode__(self):
-        return self.name"""
-
 
 class Invoice(SyncModel):
     odoo_id = IntegerField(unique=True)
@@ -51,4 +29,3 @@ class Invoice(SyncModel):
     def __unicode__(self):
         return u"%s - %s" % (self.odoo_id, self.number)
 
-#vsabater@securmax.es
