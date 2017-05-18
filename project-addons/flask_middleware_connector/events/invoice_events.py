@@ -70,7 +70,7 @@ def delay_create_invoice(session, model_name, record_id, vals):
 @on_record_write(model_names='account.invoice')
 def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
-    up_fields = ["number", "client_ref", "date_invoice", "partner_id",
+    up_fields = ["number", "client_ref", "date_invoice", "state", "partner_id",
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
     """if vals.get("partner_id", False) and invoice.partner_id.web:
         export_invoice.delay(session, model_name, record_id, priority=0)
