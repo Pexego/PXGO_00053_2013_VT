@@ -26,6 +26,7 @@ from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
 
+
 @middleware
 class InvoiceExporter(Exporter):
     _model_name = ['account.invoice']
@@ -34,7 +35,7 @@ class InvoiceExporter(Exporter):
         invoice = self.model.browse(binding_id)
         vals = {'odoo_id': invoice.id,
                 'number': invoice.number,
-                'partner_id': invoice.partner_id.id,
+                'partner_id': invoice.partner_id.commercial_partner_id.id,
                 # 'partner_email_web': invoice.partner_id.email_web,
                 'client_ref': invoice.name or "",
                 'date_invoice': invoice.date_invoice,
@@ -55,13 +56,6 @@ class InvoiceExporter(Exporter):
 class InvoiceAdapter(GenericAdapter):
     _model_name = 'account.invoice'
     _middleware_model = 'invoice'
-
-
-@on_record_create(model_names='account.invoice')
-def delay_create_invoice(session, model_name, record_id, vals):
-    invoice = session.env[model_name].browse(record_id)
-    if invoice.partner_id and invoice.partner_id.web and invoice.state in ['open', 'paid']:
-        export_invoice.delay(session, model_name, record_id, priority=0)
 
 
 @on_record_write(model_names='account.invoice')
