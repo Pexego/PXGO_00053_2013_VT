@@ -75,9 +75,8 @@ def delay_create_rma(session, model_name, record_id, vals):
 @on_record_write(model_names='crm.claim')
 def delay_write_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
-    up_fields = ["date", "date_received", "delivery_type", "delivery_address",
-                 "delivery_zip", "delivery_city", "delivery_state",
-                 "delivery_country", "partner_id", "stage_id", "number", "name"]
+    up_fields = ["date", "date_received", "delivery_type", "delivery_address_id",
+                 "partner_id", "stage_id", "number", "name"]
     if vals.get("partner_id", False) and rma.partner_id.web:
         export_rma.delay(session, model_name, record_id, priority=0)
     elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
