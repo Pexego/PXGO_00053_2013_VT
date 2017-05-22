@@ -36,12 +36,14 @@ class partner_visit(models.Model):
     visit_date = fields.Datetime('Visit Date', required=True)
     user_id = fields.Many2one('res.users', 'External salesperson', readonly=True, default=lambda self: self.env.user.id)
     partner_id = fields.Many2one('res.partner', 'Partner', required=True)
+    partner_ref = fields.Char('Ref. Contact', readonly=True, compute='get_partner_ref')
     partner_address = fields.Char('Address', readonly=True, compute='get_address')
     description = fields.Text('Summary', required=True)
     visit_state = fields.Selection([('log', 'Log'), ('schedule', 'Schedule')], string='Status', readonly=True)
     email_sent = fields.Boolean('Email sent', default=False, readonly=True)
     salesperson_select = fields.Many2one('res.users', 'Notify to', readonly=True,
                                          compute='get_internal_salesperson', store=True)
+    add_user_email = fields.Many2one('res.users', 'CC to')
     confirm_done = fields.Boolean('Done', default=False)
 
     @api.one
@@ -80,6 +82,11 @@ class partner_visit(models.Model):
                 datas['visit_state'] = 'log'
         res = super(partner_visit, self).write(datas)
         return res
+
+    @api.one
+    def get_partner_ref(self):
+        if self.partner_id:
+            self.partner_ref = self.partner_id.ref
 
     @api.one
     def get_address(self):

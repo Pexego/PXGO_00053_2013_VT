@@ -8,6 +8,7 @@
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
             <field name="subject">Done visit to ${object.partner_id.commercial_partner_id.name}</field>
             <field name="email_to">${object.salesperson_select.email|safe}</field>
+            <field name="email_cc">${object.add_user_email.email or ''|safe}</field>
             <field name="model_id" ref="external_salesperson_visit.model_partner_visit"/>
             <field name="auto_delete" eval="True"/>
             <field name="lang">${object.lang}</field>
@@ -28,6 +29,7 @@
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
             <field name="subject">Scheduled visit to ${object.partner_id.commercial_partner_id.name}</field>
             <field name="email_to">${object.salesperson_select.email|safe}</field>
+            <field name="email_cc">${object.add_user_email.email or ''|safe}</field>
             <field name="model_id" ref="external_salesperson_visit.model_partner_visit"/>
             <field name="auto_delete" eval="True"/>
             <field name="lang">${object.lang}</field>

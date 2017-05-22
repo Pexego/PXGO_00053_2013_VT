@@ -12,12 +12,14 @@
             <field name="arch" type="xml">
                 <tree string="Visits">
                     <field name="visit_date"/>
-                    <field name="description"/>
-                    <field name="partner_id"/>
-                    <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'base.group_sale_salesman_all_leads']}"/>
                     <field name="visit_state" invisible="1"/>
                     <field name="create_date" invisible="1"/>
+                    <field name="partner_ref"/>
+                    <field name="partner_id"/>
+                    <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'base.group_sale_salesman_all_leads']}"/>
+                    <field name="description"/>
                     <field name="salesperson_select"/>
+                    <field name="add_user_email"/>
                     <button string="Notify by email"
                         name="send_email"
                         icon="terp-mail-"
@@ -36,6 +38,8 @@
                     <field name="user_id"/>
                     <field name="partner_id"/>
                     <field name="salesperson_select"/>
+                    <separator/>
+                    <filter string="Email sent" name="email_sent" domain="[('email_sent','=',True)]"/>
                     <separator/>
                     <group string="Group By">
                         <filter string="Partner" domain="[]"
@@ -82,6 +86,7 @@
                                 <field name="description" string="Visit Summary"/>
                                 <field name="create_date" invisible="1"/>
                                 <field name="salesperson_select"/>
+                                <field name="add_user_email"/>
                                 <field name="confirm_done" attrs="{'invisible': [('visit_state', '=', 'log')]}"/>
                                 <field name="email_sent"/>
                             </group>
