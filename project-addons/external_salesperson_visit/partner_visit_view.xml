@@ -102,12 +102,25 @@
             </field>
         </record>
 
+        <!-- Visit Calendar View -->
+        <record model="ir.ui.view" id="view_calendar_partner_visit">
+            <field name="name">Partner Visit Calendar</field>
+            <field name="model">partner.visit</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <calendar string="Partner Visit" date_start="visit_date" color="user_id">
+                    <field name="partner_id"/>
+                    <field name="description"/>
+                </calendar>
+            </field>
+        </record>
+
         <record model="ir.actions.act_window" id="partner_logged_visit_custom_action">
             <field name="name">Logged Visits</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">partner.visit</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,calendar</field>
             <field name="domain">[('visit_state','=','log')]</field>
             <field name="context">{'default_visit_state':'log'}</field>
             <field name="search_view_id" ref="external_salesperson_visit.partner_visit_search"/>
@@ -121,7 +134,7 @@
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">partner.visit</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
+            <field name="view_mode">tree,form,calendar</field>
             <field name="domain">[('visit_state','=','schedule')]</field>
             <field name="context">{'default_visit_state':'schedule'}</field>
             <field name="search_view_id" ref="external_salesperson_visit.partner_visit_search"/>
