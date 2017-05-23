@@ -26,6 +26,7 @@ from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
 from openerp.addons.connector.event import Event
+import urllib2
 
 
 @middleware
@@ -43,6 +44,11 @@ class RmaExporter(Exporter):
                 "partner_id": rma.partner_id.id,
                 "number": rma.number,
                 "last_update_date": rma.write_date,
+                "delivery_address": rma.delivery_address_id.street,
+                "delivery_zip": rma.delivery_address_id.zip,
+                "delivery_city": rma.delivery_address_id.city,
+                "delivery_state": rma.delivery_address_id.state_id.name,
+                "delivery_country": rma.delivery_address_id.country_id.name,
                 "type": rma.name}
         if mode == "insert":
             return self.backend_adapter.insert(vals)
@@ -69,8 +75,8 @@ def delay_create_rma(session, model_name, record_id, vals):
 @on_record_write(model_names='crm.claim')
 def delay_write_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
-    up_fields = ["date", "date_received", "delivery_type", "partner_id",
-                 "stage_id", "number", "name"]
+    up_fields = ["date", "date_received", "delivery_type", "delivery_address_id",
+                 "partner_id", "stage_id", "number", "name"]
     if vals.get("partner_id", False) and rma.partner_id.web:
         export_rma.delay(session, model_name, record_id, priority=0)
     elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
@@ -125,7 +131,8 @@ class RmaProductExporter(Exporter):
             "reference": line.claim_id.number,
             "name": line.name,
             "move_out_customer_state": line.move_out_customer_state,
-            "internal_description": line.internal_description,
+            "internal_description": line.internal_description and
+            line.internal_description.replace("\n", " ") or '',
             "product_returned_quantity": line.product_returned_quantity,
             "product_id": line.product_id.id,
             "equivalent_product_id": line.equivalent_product_id.id,
@@ -133,6 +140,7 @@ class RmaProductExporter(Exporter):
             "end_date": line.date_out,
             "status_id": line.substate_id.id,
         }
+
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:

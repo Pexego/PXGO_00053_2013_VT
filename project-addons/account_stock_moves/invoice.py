@@ -47,14 +47,14 @@ class account_invoice_line(orm.Model):
             if move.product_id.cost_method in ['average', 'real'] \
                     and move.price_unit:
                 price_unit = currency_obj.compute(
-                    cr, uid, line.invoice_id.currency_id.id,
-                    company_currency, move.price_unit,
+                    cr, uid, company_currency,
+                    line.invoice_id.currency_id.id, move.price_unit,
                     round=False)
                 moves_price += price_unit * qty
             else:
                 price_unit = currency_obj.compute(
-                    cr, uid, line.invoice_id.currency_id.id,
-                    company_currency,
+                    cr, uid, company_currency,
+                    line.invoice_id.currency_id.id,
                     move.product_id.standard_price, round=False)
                 moves_price += price_unit * qty
             res['price_move'] = moves_price

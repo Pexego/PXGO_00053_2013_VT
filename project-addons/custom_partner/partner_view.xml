@@ -249,8 +249,20 @@
             <field name="model">res.partner</field>
             <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
             <field name="arch" type="xml" >
-                <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name='move_id']" position="after">
+                <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name ='move_id']" position="after">
                     <field name="stored_invoice_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_tree_custom_color" model="ir.ui.view">
+            <field name="name">res.partner.tree.custom.color</field>
+            <field name="model">res.partner</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree[@string='Contacts']" position="attributes">
+                    <attribute name="colors">blue:active==True; red:active==False</attribute>
                 </xpath>
             </field>
         </record>
@@ -270,6 +282,7 @@
                     <field name="property_product_pricelist"/>
                     <field name="area_id"/>
                     <field name="section_id"/>
+                    <field name="active" invisible="1"/>
                 </field>
                 <field name="user_id" position="attributes">
                     <attribute name="invisible">0</attribute>
