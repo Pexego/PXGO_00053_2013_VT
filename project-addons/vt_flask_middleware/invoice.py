@@ -6,7 +6,7 @@ It will try to automatically create the invoice table and admin user
 if they don't exist.
 """
 
-from peewee import CharField, IntegerField, FloatField, ForeignKeyField, DateField
+from peewee import CharField, IntegerField, FloatField, ForeignKeyField, DateField, BlobField
 
 from database import SyncModel
 from customer import Customer
@@ -23,6 +23,7 @@ class Invoice(SyncModel):
     state = CharField(max_length=15)
     subtotal_wt_rect = FloatField()
     total_wt_rect = FloatField()
+    pdf_file_data = BlobField()
 
     MOD_NAME = 'invoice'
 

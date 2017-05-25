@@ -25,24 +25,42 @@ from .utils import _get_exporter
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
+import xmlrpclib
 
+import ipdb
 
 @middleware
 class InvoiceExporter(Exporter):
     _model_name = ['account.invoice']
+
+    def _render_invoice(self, invoice_id):
+        url = "http://172.18.2.3:9069"  # vuestra ip local y el puerto de Odoo
+        db = "visiotech"  # nombre de la bae de datos de Odoo
+        username = 'importacion'  # login de mi usuario
+        password = 'importacion'  # password de mi usuario
+
+        common = xmlrpclib.ServerProxy('{}/xmlrpc/2/common'.format(url))
+
+        uid = common.authenticate(db, username, password, {})
+        report = xmlrpclib.ServerProxy('{}/xmlrpc/2/report'.format(url))
+        result = report.render_report(
+            db, uid, password, 'account.report_invoice_custom',
+            (invoice_id, ))  # invoice_ids: Ids a imprimir en formato lista. Ej:[1], "account.report_invoice_custom" es el nombre del vuestro informe de facturacaso igual es otro
+        report_data = result['result']
+        return report_data
 
     def update(self, binding_id, mode):
         invoice = self.model.browse(binding_id)
         vals = {'odoo_id': invoice.id,
                 'number': invoice.number,
                 'partner_id': invoice.partner_id.commercial_partner_id.id,
-                # 'partner_email_web': invoice.partner_id.email_web,
                 'client_ref': invoice.name or "",
                 'date_invoice': invoice.date_invoice,
                 'date_due': invoice.date_due,
                 'state': invoice.state,
                 'subtotal_wt_rect': invoice.subtotal_wt_rect,
-                'total_wt_rect': invoice.total_wt_rect}
+                'total_wt_rect': invoice.total_wt_rect,
+                'pdf_file_data': self._render_invoice(invoice.id)}
         if mode == 'insert':
             return self.backend_adapter.insert(vals)
         else:
