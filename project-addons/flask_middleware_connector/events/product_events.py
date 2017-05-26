@@ -56,7 +56,8 @@ class ProductExporter(Exporter):
                     'pvd_1': product.pvd1_price,
                     'pvd_2': product.pvd2_price,
                     'pvd_3': product.pvd3_price,
-                    'joking_index': product.joking_index}
+                    'joking_index': product.joking_index,
+                    'sale_ok': product.sale_ok}
             if product.show_stock_outside:
                 vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
@@ -95,7 +96,7 @@ class ProductAdapter(GenericAdapter):
 def delay_export_product_template_write(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
     up_fields = ["name", "list_price", "categ_id", "product_brand_id",
-                 "web", "show_stock_outside"]
+                 "web", "show_stock_outside", "sale_ok"]
     record_ids = session.env['product.product'].\
         search([('product_tmpl_id', '=',  record_id)])
     if vals.get("web", False) and vals.get("web", False) == "published":

@@ -31,6 +31,7 @@ from ..events.country_events import export_country
 from ..events.commercial_events import export_commercial
 from ..events.product_events import export_product, export_product_category, export_product_brand, export_product_brand_rel
 from ..events.rma_events import export_rma, export_rmaproduct, export_rma_status
+from ..events.invoice_events import export_invoice
 
 from ..backend import middleware
 
@@ -147,10 +148,14 @@ class MiddlewareBackend(models.Model):
             #~ substates = self.env['substate.substate'].search([])
             #~ for substate in substates:
                 #~ export_rma_status(session, 'substate.substate', substate.id)
-            rmas = self.env['crm.claim'].search([('partner_id.web', '=', True)])
-            for rma in rmas:
-                export_rma(session, 'crm.claim', rma.id)
-                for line in rma.claim_line_ids:
-                    if line.product_id.web == 'published':
-                        export_rmaproduct.delay(session, 'claim.line', line.id)
+            #~ rmas = self.env['crm.claim'].search([('partner_id.web', '=', True)])
+            #~ for rma in rmas:
+                #~ export_rma(session, 'crm.claim', rma.id)
+                #~ for line in rma.claim_line_ids:
+                    #~ if line.product_id.web == 'published':
+                        #~ export_rmaproduct(session, 'claim.line', line.id)
+            invoices = self.env['account.invoices'].search([('partner_id.web', '=', True)])
+            for invoice in invoices:
+                export_invoice(session, 'account.invoice', invoice.id)
+
         return True

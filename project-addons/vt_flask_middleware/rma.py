@@ -38,6 +38,11 @@ class Rma(SyncModel):
     number = CharField(max_length=45)
     type = CharField(max_length=12)
     last_update_date = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
+    delivery_address = CharField(max_length=150)
+    delivery_zip = CharField(max_length=12)
+    delivery_city = CharField(max_length=45)
+    delivery_state = CharField(max_length=45)
+    delivery_country = CharField(max_length=150)
 
     MOD_NAME = 'rma'
 
@@ -58,6 +63,8 @@ class RmaProduct(SyncModel):
     product_id = ForeignKeyField(Product, on_delete='CASCADE', null=True)
     equivalent_product_id = ForeignKeyField(Product, on_delete='CASCADE', null=True, related_name='equivalent_product_set')
     status_id = ForeignKeyField(RmaStatus, on_delete='CASCADE', null=True)
+    prodlot_id = CharField(max_length=45)
+    invoice_id = CharField(max_length=45)
 
     MOD_NAME = 'rmaproduct'
 

@@ -4,6 +4,7 @@ from database import db
 from user import User
 from country import Country
 from customer import Customer
+from invoice import Invoice
 from commercial import Commercial
 from product import Product, ProductCategory
 from rma import RmaStatus, RmaStage, Rma, RmaProduct
@@ -82,6 +83,8 @@ def unlink(user_id, password, model, odoo_id):
         pass
     else:
         if model == "customer":
+            for invoice in Invoice.select().where(Invoice.partner_id == rec.id):
+                invoice.delete_instance()
             for rma in Rma.select().where(Rma.partner_id == rec.id):
                 for rma_product in RmaProduct.select().where(
                         RmaProduct.id_rma == rma.id):
