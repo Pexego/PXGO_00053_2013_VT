@@ -176,7 +176,7 @@ def delay_write_rma_line(session, model_name, record_id, vals):
     up_fields = ["product_id", "date_in", "date_out", "substate_id",
                  "name", "move_out_customer_state",
                  "internal_description", "product_returned_quantity",
-                 "equivalent_product_id"]
+                 "equivalent_product_id", "prodlot_id", "invoice_id"]
     if claim_line.claim_id.partner_id.web and \
             claim_line.product_id.web == 'published':
         if vals.get('equivalent_product_id', False):
