@@ -63,6 +63,8 @@ class RmaProduct(SyncModel):
     product_id = ForeignKeyField(Product, on_delete='CASCADE', null=True)
     equivalent_product_id = ForeignKeyField(Product, on_delete='CASCADE', null=True, related_name='equivalent_product_set')
     status_id = ForeignKeyField(RmaStatus, on_delete='CASCADE', null=True)
+    prodlot_id = CharField(max_length=45)
+    invoice_id = CharField(max_length=45)
 
     MOD_NAME = 'rmaproduct'
 

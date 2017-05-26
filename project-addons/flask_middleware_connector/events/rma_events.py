@@ -139,6 +139,8 @@ class RmaProductExporter(Exporter):
             "entrance_date": line.date_in,
             "end_date": line.date_out,
             "status_id": line.substate_id.id,
+            "prodlot_id": line.prodlot_id.name,
+            "invoice_id": line.invoice_id.number,
         }
 
         if mode == "insert":
