@@ -60,6 +60,11 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 
 #. module: custom_partner
 #: view:res.partner:custom_partner.view_partner_form_add_att
+msgid "The client is innactive"
+msgstr "El cliente está inactivo"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_partner_form_add_att
 #: field:res.partner,att:0
 msgid "A/A"
 msgstr "A/A"
@@ -75,6 +80,12 @@ msgstr "Importe"
 #, python-format
 msgid "Amount not due"
 msgstr "Importe no vencido"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:46
+#, python-format
+msgid "The client is prospective. The client will not be created on the web."
+msgstr "El cliente es potencial. El cliente no se creará en la web"
 
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:153

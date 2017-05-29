@@ -21,13 +21,14 @@
 
 from openerp import models, fields, api, exceptions, osv, _
 from openerp.addons.account_followup.report import account_followup_print
-from openerp.osv import fields as fields2
+from openerp.osv import osv, fields as fields2
 from collections import defaultdict
 import time
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import dateutil.relativedelta
+
 
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
@@ -37,6 +38,27 @@ class ResPartnerInvoiceType(models.Model):
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    @api.multi
+    def onchange_web(self, web):
+        if self.prospective and web:
+            title = _("Warning for %s") % self.name
+            message = "The client is prospective. The client will not be created on the web."
+            warning = {
+                'title': title,
+                'message': message,
+            }
+            res = {'warning': warning}
+            return res
+
+    def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
+        invoice = self.pool.get('account.invoice')
+        res = {}
+        for partner_id in ids:
+            res[partner_id] = invoice.search_count(cr, uid, [
+                ('partner_id', 'child_of', partner_id),
+                '|', ('type', '=', 'in_invoice'), ('type', '=', 'in_refund')], context=context)
+        return res
 
     def _invoice_total_real(self, cr, uid, ids, field_name, arg, context=None):
         result = {}
@@ -90,7 +112,9 @@ class ResPartner(models.Model):
 
     _columns = {
         'total_invoiced_real': fields2.function(_invoice_total_real, string="Total Invoiced", type='float',
-                                         groups='account.group_account_invoice')
+                                         groups='account.group_account_invoice'),
+        'supplier_all_invoice_count': fields2.function(_purchase_invoice_count, string='# Supplier Invoices',
+                                                       type='integer'),
     }
 
 
