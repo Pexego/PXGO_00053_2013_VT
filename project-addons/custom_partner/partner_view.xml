@@ -445,7 +445,10 @@
             <field name="arch" type="xml">
                 <field name="lang" position="after">
                     <field name="growth_rate"/>
-                    <label for="average_margin"/><div><field name="average_margin" class="oe_inline"/> %% </div>
+                    <label for="average_margin" attrs="{'invisible': [('is_company', '!=', True)]}"/>
+                        <div attrs="{'invisible': [('is_company', '!=', True)]}">
+                            <field name="average_margin" class="oe_inline"/> %%
+                        </div>
                 </field>
             </field>
         </record>

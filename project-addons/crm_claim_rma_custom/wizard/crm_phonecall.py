@@ -51,10 +51,16 @@ class CrmPhonecall(models.Model):
     user_id = fields.Many2one('res.users', 'Responsible', readonly=True)
     call_type = fields.Selection(CALL_TYPE, 'Call type', required=True)
     description = fields.Text('Call Description')
+    partner_ref = fields.Char('Ref. Contact', readonly=True, compute='get_partner_ref')
 
     def utc_to_local(self, utc_dt):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
         return self.local_tz.normalize(local_dt)
+
+    @api.one
+    def get_partner_ref(self):
+        if self.partner_id:
+            self.partner_ref = self.partner_id.ref
 
     @api.multi
     def end_call(self):
@@ -79,6 +85,7 @@ class CrmPhonecall(models.Model):
             'create_date': self.start_date,
             'date': self.start_date,
             'partner_id': self.partner_id.id,
+            'partner_ref': self.partner_id.ref,
             'user_id': self.user_id.id,
             'name': self.name or False,
             'description': self.description or False,

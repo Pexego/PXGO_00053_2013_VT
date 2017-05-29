@@ -52,6 +52,7 @@ class StockPicking(models.Model):
     with_incidences = fields.Boolean('With incidences', readonly=True,
                                      copy=False)
     block_picking = fields.Boolean('Albarán procesado Vstock')
+    partial_picking = fields.Boolean("Partial picking", default=False)
 
     #~ @api.multi
     #~ def write(self, vals):
@@ -91,6 +92,8 @@ class StockPicking(models.Model):
         if new_moves:
             new_moves = self.env['stock.move'].browse(new_moves)
             bcko_id = self._create_backorder(self, backorder_moves=new_moves)
+            if bcko_id:
+                self.partial_picking = True
             bck = self.browse(bcko_id)
             new_moves.write({'qty_ready': 0.0})
             self.do_unreserve()
@@ -187,6 +190,8 @@ class StockPicking(models.Model):
             if new_moves:
                 new_moves = self.env['stock.move'].browse(new_moves)
                 bckid = self._create_backorder(self, backorder_moves=new_moves)
+                if bckid:
+                    self.partial_picking = True
                 bck = self.browse(bckid)
                 bck.write({'move_type': 'one'})
                 self.action_assign()
