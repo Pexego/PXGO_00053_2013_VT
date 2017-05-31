@@ -76,7 +76,7 @@ class partner_visit(models.Model):
                 raise ValidationError("Date must be bigger than current date in a scheduled visit")
         return True
 
-    @api.one
+    @api.multi
     def write(self, datas):
         if 'confirm_done' in datas and datas['confirm_done']:
                 datas['visit_state'] = 'log'
