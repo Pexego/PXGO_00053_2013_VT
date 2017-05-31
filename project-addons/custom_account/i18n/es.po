@@ -24,7 +24,7 @@ msgstr " (copia)"
 #. module: custom_account
 #: code:addons/custom_account/report/account_invoice_report.py:31
 #, python-format
-msgid "Branch"
+msgid "Brand name"
 msgstr "Marca"
 
 #. module: custom_account

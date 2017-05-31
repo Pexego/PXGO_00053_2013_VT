@@ -35,7 +35,7 @@ class account_invoice_report(models.Model):
         select_str += ', sub.payment_mode_id as payment_mode_id,' \
                       ' sub.number as number' \
                       ', sub.benefit as benefit' \
-                      ', sub.name as name'
+                      ', sub.name as brand_name'
         return select_str
 
     def _sub_select(self):
@@ -44,7 +44,7 @@ class account_invoice_report(models.Model):
                       ' ai.number ' \
                       ', sum(ail.quantity * ail.price_unit * (100.0-ail.discount) ' \
                       '/ 100.0) - sum(sol.purchase_price*ail.quantity) as benefit, ' \
-                      'pb.name'
+                      'pb.brand_name'
         return select_str
 
     def _from(self):
@@ -58,6 +58,6 @@ class account_invoice_report(models.Model):
         group_by_str = super(account_invoice_report, self)._group_by()
         group_by_str += ', ai.payment_mode_id,' \
                         ' ai.number,' \
-                        ' pb.name'
+                        ' pb.brand_name'
 
         return group_by_str
