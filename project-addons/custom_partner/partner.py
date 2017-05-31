@@ -28,6 +28,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import dateutil.relativedelta
+from openerp.exceptions import except_orm
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -38,18 +39,6 @@ class ResPartnerInvoiceType(models.Model):
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
-
-    @api.multi
-    def onchange_web(self, web):
-        if self.prospective and web:
-            title = _("Warning for %s") % self.name
-            message = "The client is prospective. The client will not be created on the web."
-            warning = {
-                'title': title,
-                'message': message,
-            }
-            res = {'warning': warning}
-            return res
 
     def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
         invoice = self.pool.get('account.invoice')
@@ -282,12 +271,17 @@ class ResPartner(models.Model):
         return super(ResPartner, self).create(vals)
 
     @api.multi
+    @api.constrains('web')
     def write(self, vals):
-        if vals.get('dropship', False):
-            vals['active'] = False
-        if 'web' in vals and not vals['web']:
-            vals['email_web'] = None
-        return super(ResPartner, self).write(vals)
+        if vals.get('web', False) and self.prospective:
+            raise except_orm(_('Warning!'),
+                       _("The client is prospective. The client cannot be created on the web."))
+        else:
+            if vals.get('dropship', False):
+                vals['active'] = False
+            if 'web' in vals and not vals['web']:
+                vals['email_web'] = None
+            return super(ResPartner, self).write(vals)
 
     def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
         today = time.strftime('%Y-%m-%d')
