@@ -28,7 +28,7 @@ class account_invoice_report(models.Model):
     payment_mode_id = fields.Many2one('payment.mode', 'Payment mode')
     number = fields.Char('Number')
     benefit = fields.Float('Benefit')
-    branch = fields.Char('Branch')
+    brand_name = fields.Char('Brand name')
 
     def _select(self):
         select_str = super(account_invoice_report, self)._select()
@@ -44,7 +44,7 @@ class account_invoice_report(models.Model):
                       ' ai.number ' \
                       ', sum(ail.quantity * ail.price_unit * (100.0-ail.discount) ' \
                       '/ 100.0) - sum(sol.purchase_price*ail.quantity) as benefit, ' \
-                      'pb.brand_name'
+                      'pb.name'
         return select_str
 
     def _from(self):
@@ -58,6 +58,6 @@ class account_invoice_report(models.Model):
         group_by_str = super(account_invoice_report, self)._group_by()
         group_by_str += ', ai.payment_mode_id,' \
                         ' ai.number,' \
-                        ' pb.brand_name'
+                        ' pb.name'
 
         return group_by_str
