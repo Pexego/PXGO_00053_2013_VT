@@ -69,6 +69,13 @@ class StockPicking(models.Model):
                     #~ pick.with_incidences = False
         #~ return res
 
+    def _create_backorder(self, cr, uid, picking, backorder_moves=[], context=None):
+        bck_id = super(StockPicking, self).\
+            _create_backorder(cr, uid, picking, backorder_moves=backorder_moves, context=context)
+        if bck_id:
+            picking.write({'partial_picking': True})
+        return bck_id
+
     @api.one
     def action_accept_ready_qty(self):
         self.with_incidences = False
@@ -92,8 +99,6 @@ class StockPicking(models.Model):
         if new_moves:
             new_moves = self.env['stock.move'].browse(new_moves)
             bcko_id = self._create_backorder(self, backorder_moves=new_moves)
-            if bcko_id:
-                self.partial_picking = True
             bck = self.browse(bcko_id)
             new_moves.write({'qty_ready': 0.0})
             self.do_unreserve()
@@ -190,8 +195,6 @@ class StockPicking(models.Model):
             if new_moves:
                 new_moves = self.env['stock.move'].browse(new_moves)
                 bckid = self._create_backorder(self, backorder_moves=new_moves)
-                if bckid:
-                    self.partial_picking = True
                 bck = self.browse(bckid)
                 bck.write({'move_type': 'one'})
                 self.action_assign()
