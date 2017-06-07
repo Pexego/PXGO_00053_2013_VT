@@ -28,7 +28,7 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import dateutil.relativedelta
-from openerp.exceptions import except_orm
+from openerp.exceptions import ValidationError
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -272,16 +272,15 @@ class ResPartner(models.Model):
 
     @api.multi
     @api.constrains('web')
-    def check_client_type(self, vals):
-        if vals.get('web', False) and self.prospective:
-            raise except_orm(_('Warning!'),
-                       _("The client is prospective. The client cannot be created on the web."))
+    def check_client_type(self):
+        if self.web and self.prospective:
+            raise ValidationError(_('The client is prospective. The client cannot be created on the web.'))
         else:
             return True
 
     @api.multi
     def write(self, vals):
-        self.check_client_type(vals)
+        self.check_client_type()
         if vals.get('dropship', False):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
