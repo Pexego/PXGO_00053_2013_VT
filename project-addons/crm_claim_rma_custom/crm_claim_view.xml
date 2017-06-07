@@ -23,6 +23,19 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="view_crm_case_claims_filter_custom">
+            <field name="name">CRM - Claim Filter Tree</field>
+            <field name="model">crm.claim</field>
+            <field name="inherit_id" ref="crm_claim.view_crm_case_claims_filter"/>
+            <field name="arch" type="xml">
+                <filter string="Closure" position="after">
+                    <filter string="Comercial" domain="[]" context="{'group_by':'comercial'}"/>
+                </filter>
+            </field>
+        </record>
+
+
+
         <record model="ir.ui.view" id="crm_claim_rma_form_view3">
             <field name="name">CRM - Claim product return Form</field>
             <field name="model">crm.claim</field>

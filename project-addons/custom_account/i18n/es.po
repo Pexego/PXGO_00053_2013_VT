@@ -22,6 +22,18 @@ msgid " (copy)"
 msgstr " (copia)"
 
 #. module: custom_account
+#: code:addons/custom_account/report/account_invoice_report.py:31
+#, python-format
+msgid "Brand name"
+msgstr "Marca"
+
+#. module: custom_account
+#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
+#: field:account.invoice.report,branch:0
+msgid "Branch"
+msgstr "Marca"
+
+#. module: custom_account
 #: field:payment.mode,blocked:0
 #: field:account.payment.term,blocked:0
 msgid "No Follow-up"

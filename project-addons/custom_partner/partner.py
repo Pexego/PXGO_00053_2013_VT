@@ -21,13 +21,15 @@
 
 from openerp import models, fields, api, exceptions, osv, _
 from openerp.addons.account_followup.report import account_followup_print
-from openerp.osv import fields as fields2
+from openerp.osv import osv, fields as fields2
 from collections import defaultdict
 import time
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import dateutil.relativedelta
+from openerp.exceptions import ValidationError
+
 
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
@@ -37,6 +39,15 @@ class ResPartnerInvoiceType(models.Model):
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
+        invoice = self.pool.get('account.invoice')
+        res = {}
+        for partner_id in ids:
+            res[partner_id] = invoice.search_count(cr, uid, [
+                ('partner_id', 'child_of', partner_id),
+                '|', ('type', '=', 'in_invoice'), ('type', '=', 'in_refund')], context=context)
+        return res
 
     def _invoice_total_real(self, cr, uid, ids, field_name, arg, context=None):
         result = {}
@@ -90,7 +101,9 @@ class ResPartner(models.Model):
 
     _columns = {
         'total_invoiced_real': fields2.function(_invoice_total_real, string="Total Invoiced", type='float',
-                                         groups='account.group_account_invoice')
+                                         groups='account.group_account_invoice'),
+        'supplier_all_invoice_count': fields2.function(_purchase_invoice_count, string='# Supplier Invoices',
+                                                       type='integer'),
     }
 
 
@@ -256,6 +269,14 @@ class ResPartner(models.Model):
             vals['email_web'] = None
         vals['date'] = fields.Date.today()
         return super(ResPartner, self).create(vals)
+
+    @api.multi
+    @api.constrains('web')
+    def check_client_type(self):
+        if self.web and self.prospective:
+            raise ValidationError(_('The client is prospective. The client cannot be created on the web.'))
+        else:
+            return True
 
     @api.multi
     def write(self, vals):
