@@ -272,16 +272,21 @@ class ResPartner(models.Model):
 
     @api.multi
     @api.constrains('web')
-    def write(self, vals):
+    def check_client_type(self, vals):
         if vals.get('web', False) and self.prospective:
             raise except_orm(_('Warning!'),
                        _("The client is prospective. The client cannot be created on the web."))
         else:
-            if vals.get('dropship', False):
-                vals['active'] = False
-            if 'web' in vals and not vals['web']:
-                vals['email_web'] = None
-            return super(ResPartner, self).write(vals)
+            return True
+
+    @api.multi
+    def write(self, vals):
+        self.check_client_type(vals)
+        if vals.get('dropship', False):
+            vals['active'] = False
+        if 'web' in vals and not vals['web']:
+            vals['email_web'] = None
+        return super(ResPartner, self).write(vals)
 
     def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
         today = time.strftime('%Y-%m-%d')
