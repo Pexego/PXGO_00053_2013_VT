@@ -280,7 +280,6 @@ class ResPartner(models.Model):
 
     @api.multi
     def write(self, vals):
-        self.check_client_type()
         if vals.get('dropship', False):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
