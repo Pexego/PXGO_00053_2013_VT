@@ -36,7 +36,7 @@ if __name__ == "__main__":
     # This code is only executed if the cowlab.py file is directly called from
     # python and not imported from another python file / console.
     scheduler = BackgroundScheduler()
-    scheduler.add_job(cron.check_sync_data, 'interval', minutes=10)
+    scheduler.add_job(cron.check_sync_data, 'interval', seconds=30)
     # Explicitly kick off the background thread
     scheduler.start()
 
