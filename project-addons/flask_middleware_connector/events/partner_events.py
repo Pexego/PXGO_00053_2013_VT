@@ -26,6 +26,7 @@ from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
 from .rma_events import export_rma, export_rmaproduct
+from .invoice_events import export_invoice
 
 
 @middleware
@@ -77,6 +78,12 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                                    partner.active):
         export_partner.delay(session, model_name, record_id, priority=2,
                              eta=60)
+        invoices = session.env['account.invoice'].search(
+            [('partner_id', '=', partner.id)]
+        )
+        for invoice in invoices:
+            export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
+
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -91,6 +98,12 @@ def delay_export_partner_create(session, model_name, record_id, vals):
     elif vals.get("active", False) and partner.web:
         export_partner.delay(session, model_name, record_id, priority=1,
                              eta=60)
+        invoices = session.env['account.invoice'].search(
+            [('partner_id', '=', partner.id)]
+        )
+        for invoice in invoices:
+            export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
+
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -118,6 +131,12 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             vals.get('active', partner.active) and \
             vals.get('is_company', partner.is_company)):
         export_partner.delay(session, model_name, record_id)
+        invoices = session.env['account.invoice'].search(
+            [('partner_id', '=', partner.id)]
+        )
+        for invoice in invoices:
+            export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
+
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:
@@ -132,6 +151,12 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     elif (vals.get("active", False) and partner.web and \
             vals.get('is_company', partner.is_company)):
         export_partner.delay(session, model_name, record_id)
+        invoices = session.env['account.invoice'].search(
+            [('partner_id', '=', partner.id)]
+        )
+        for invoice in invoices:
+            export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
+            
         rmas = session.env['crm.claim'].search(
             [('partner_id', '=', partner.id)])
         for rma in rmas:

@@ -21,6 +21,7 @@
                     <filter string="Partner" context="{'group_by':'commercial_partner_id'}"/>
                     <filter string="country" name="country_id" context="{'group_by':'country_id'}"/>
                     <filter string="Payment mode" name="payment_mode_id" context="{'group_by':'payment_mode_id'}"/>
+                    <filter string="Brand name" name="brand_name" context="{'group_by':'brand_name'}"/>
                 </filter>
             </field>
         </record>
