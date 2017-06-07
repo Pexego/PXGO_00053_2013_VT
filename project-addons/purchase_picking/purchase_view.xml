@@ -18,7 +18,7 @@
 
         <record id="stock.action_receipt_picking_move" model="ir.actions.act_window">
                 <field name="domain" eval="[('picking_id','=', False), ('location_id.usage','!=','internal'), ('location_dest_id.usage', '=', 'internal')]"/>
-                <field name="context">{'product_receive': True, 'search_default_New': True}</field>
+                <field name="context">{'search_default_not_cancelled': True, 'product_receive': True, 'search_default_New': False}</field>
         </record>
 
         <record id="purchase_order_line_tree_custom" model="ir.ui.view">
