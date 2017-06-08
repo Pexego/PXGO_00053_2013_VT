@@ -25,7 +25,7 @@ from .utils import _get_exporter
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
-#from .rma_events import export_rmaproduct
+from .rma_events import export_rmaproduct
 from openerp.addons.connector.event import Event
 
 on_stock_move_change = Event()
@@ -56,16 +56,14 @@ class ProductExporter(Exporter):
                     'pvd_1': product.pvd1_price,
                     'pvd_2': product.pvd2_price,
                     'pvd_3': product.pvd3_price,
-                    'joking_index': product.joking_index}
+                    'joking_index': product.joking_index,
+                    'sale_ok': product.sale_ok}
             if product.show_stock_outside:
                 vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
                                  product_stock_field_id.name,
                                  {'product': product})
-                if stock_qty <= 0.0:
-                    vals["stock"] = 0.0
-                else:
-                    vals["stock"] = stock_qty
+                vals["stock"] = stock_qty
             if mode == "insert":
                 self.backend_adapter.insert(vals)
             else:
@@ -98,19 +96,28 @@ class ProductAdapter(GenericAdapter):
 def delay_export_product_template_write(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
     up_fields = ["name", "list_price", "categ_id", "product_brand_id",
-                 "web", "show_stock_outside"]
+                 "web", "show_stock_outside", "sale_ok"]
     record_ids = session.env['product.product'].\
         search([('product_tmpl_id', '=',  record_id)])
     if vals.get("web", False) and vals.get("web", False) == "published":
         export_product.delay(session, model_name, record_id,
                              priority=2, eta=60)
-        #~ for prod in record_ids:
-            #~ claim_lines = session.env['claim.line'].search(
-                #~ [('product_id', '=', prod.id),
-                 #~ ('claim_id.partner_id.web', '=', True)])
-            #~ for line in claim_lines:
-                #~ export_rmaproduct.delay(session, 'claim.line', line.id,
-                                        #~ priority=10, eta=120)
+        for prod in record_ids:
+            claim_lines = session.env['claim.line'].search(
+                [('product_id', '=', prod.id),
+                 ('claim_id.partner_id.web', '=', True)])
+            for line in claim_lines:
+                if not line.equivalent_product_id or \
+                        line.equivalent_product_id.web == 'published' :
+                    export_rmaproduct.delay(session, 'claim.line', line.id,
+                                            priority=10, eta=120)
+            claim_lines = session.env['claim.line'].search(
+                [('equivalent_product_id', '=', prod.id),
+                 ('product_id.web', '=', 'published'),
+                 ('claim_id.partner_id.web', '=', True)])
+            for line in claim_lines:
+                export_rmaproduct.delay(session, 'claim.line', line.id,
+                                        priority=10, eta=120)
     elif vals.get("web", False) and vals.get("web", False) != "published":
         unlink_product.delay(session, model_name, record_id,
                              priority=1)
@@ -131,12 +138,21 @@ def delay_export_product_create(session, model_name, record_id, vals):
                  "joking_index"]
     if vals.get("web", False) and vals.get("web", False) == "published":
         export_product.delay(session, model_name, record_id, priority=2, eta=60)
-        #~ claim_lines = session.env['claim.line'].search(
-            #~ [('product_id', '=', product.id),
-             #~ ('claim_id.partner_id.web', '=', True)])
-        #~ for line in claim_lines:
-            #~ export_rmaproduct.delay(session, 'claim.line', line.id,
-                                    #~ priority=10, eta=120)
+        claim_lines = session.env['claim.line'].search(
+            [('product_id', '=', prod.id),
+             ('claim_id.partner_id.web', '=', True)])
+        for line in claim_lines:
+            if not line.equivalent_product_id or \
+                    line.equivalent_product_id.web == 'published':
+                export_rmaproduct.delay(session, 'claim.line', line.id,
+                                        priority=10, eta=120)
+        claim_lines = session.env['claim.line'].search(
+            [('equivalent_product_id', '=', prod.id),
+             ('product_id.web', '=', 'published'),
+             ('claim_id.partner_id.web', '=', True)])
+        for line in claim_lines:
+            export_rmaproduct.delay(session, 'claim.line', line.id,
+                                    priority=10, eta=120)
     elif product.web == "published":
         for field in up_fields:
             if field in vals:

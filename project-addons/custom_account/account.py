@@ -20,7 +20,6 @@
 ##############################################################################
 from openerp import models, fields, api
 
-
 class AccountMoveLine(models.Model):
 
     _inherit = 'account.move.line'
@@ -43,7 +42,7 @@ class AccountMoveLine(models.Model):
                               string='Scheme',
                               compute='get_mandate_scheme',
                               search='_mandate_scheme_search')
-    partner_vat = fields.Char("CIF/NIF/VAT", related="partner_id.vat",
+    pner_vat = fields.Char("CIF/NIF/VAT", related="partner_id.vat",
                               readonly=True)
 
 
@@ -98,8 +97,10 @@ class AccountInvoice(models.Model):
     last_payment = fields.Date("Last Payment", compute="last_payment_date")
     partner_commercial = fields.Many2one("res.users", String="Commercial",
                                          related="partner_id.user_id")
-    subtotal_wt_rect = fields.Float("Real Subtotal",
+    subtotal_wt_rect = fields.Float("Subtotal",
                                     compute="get_subtotal_wt_rect", store=True)
+    total_wt_rect = fields.Float("Total",
+                                 compute="get_total_wt_rect", store=True)
 
     @api.multi
     @api.depends('type', 'amount_untaxed')
@@ -111,6 +112,17 @@ class AccountInvoice(models.Model):
                 invoice_wt_rect = invoice.amount_untaxed
 
             invoice.subtotal_wt_rect = invoice_wt_rect
+
+    @api.multi
+    @api.depends('type', 'amount_total')
+    def get_total_wt_rect(self):
+        for invoice in self:
+            if 'refund' in invoice.type:
+                invoice_wt_rect = - invoice.amount_total
+            else:
+                invoice_wt_rect = invoice.amount_total
+
+            invoice.total_wt_rect = invoice_wt_rect
 
     @api.multi
     def total_paid(self):
@@ -170,6 +182,7 @@ class AccountInvoice(models.Model):
         if partner_id:
             partner = self.env["res.partner"].browse(partner_id)
             result['value']['attach_picking'] = partner.attach_picking
+            result['value']['section_id'] = partner.section_id.id
 
         return result
 

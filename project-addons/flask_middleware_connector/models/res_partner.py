@@ -27,6 +27,8 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     discount = fields.Float('Discount', compute='_get_discount')
+    sync = fields.Boolean("Sync", readonly=True,
+                          help="System field to allow resync all partners")
 
     @api.one
     def _get_discount(self):

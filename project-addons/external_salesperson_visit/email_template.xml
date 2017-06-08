@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data noupdate="1">
+        <!--Email template to internal salesperson-->
+        <record id="email_template_logged_visits" model="email.template">
+            <field name="name">Logged Visit Email</field>
+            <field name="email_from">${(object.user_id.email or '')|safe}</field>
+            <field name="subject">Done visit to ${object.partner_id.commercial_partner_id.name}</field>
+            <field name="email_to">${object.salesperson_select.email|safe}</field>
+            <field name="email_cc">${object.add_user_email.email or ''|safe}</field>
+            <field name="model_id" ref="external_salesperson_visit.model_partner_visit"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html"><![CDATA[
+<p>Visit information:</p>
+<ul>
+<li>External salesperson: ${object.user_id.name}</li>
+<li>Partner: ${object.partner_id.commercial_partner_id.name}</li>
+<li>Date: ${object.visit_date}</li>
+<li>Summary: ${object.description}</li>
+</ul>
+]]>
+             </field>
+        </record>
+
+        <record id="email_template_scheduled_visits" model="email.template">
+            <field name="name">Scheduled Visit Email</field>
+            <field name="email_from">${(object.user_id.email or '')|safe}</field>
+            <field name="subject">Scheduled visit to ${object.partner_id.commercial_partner_id.name}</field>
+            <field name="email_to">${object.salesperson_select.email|safe}</field>
+            <field name="email_cc">${object.add_user_email.email or ''|safe}</field>
+            <field name="model_id" ref="external_salesperson_visit.model_partner_visit"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${object.lang}</field>
+            <field name="body_html"><![CDATA[
+<p>Visit information:</p>
+<ul>
+<li>External salesperson: ${object.user_id.name}</li>
+<li>Partner: ${object.partner_id.commercial_partner_id.name}</li>
+<li>Date: ${object.visit_date}</li>
+<li>Summary: ${object.description}</li>
+</ul>
+]]>
+             </field>
+        </record>
+
+    </data>
+</openerp>

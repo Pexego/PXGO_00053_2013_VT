@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data noupdate="1">
+
+    <record id="external_salesperson_visit_rule_personal" model="ir.rule">
+        <field name="name">Personal Visits</field>
+        <field ref="model_partner_visit" name="model_id"/>
+        <field name="domain_force">['|',('user_id','=',user.id),('salesperson_select','=',user.id)]</field>
+        <field name="groups" eval="[(4, ref('base.group_sale_salesman'))]"/>
+    </record>
+    <record id="external_salesperson_visit_rule_personal_2" model="ir.rule">
+        <field name="name">All Visits</field>
+        <field ref="model_partner_visit" name="model_id"/>
+        <field name="domain_force">[(1,'=',1)]</field>
+        <field name="groups" eval="[(4, ref('base.group_sale_salesman_all_leads'))]"/>
+    </record>
+
+</data>
+</openerp>

@@ -22,6 +22,18 @@ msgid " (copy)"
 msgstr " (copia)"
 
 #. module: custom_account
+#: code:addons/custom_account/report/account_invoice_report.py:31
+#, python-format
+msgid "Brand name"
+msgstr "Marca"
+
+#. module: custom_account
+#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
+#: field:account.invoice.report,branch:0
+msgid "Branch"
+msgstr "Marca"
+
+#. module: custom_account
 #: field:payment.mode,blocked:0
 #: field:account.payment.term,blocked:0
 msgid "No Follow-up"
@@ -245,6 +257,11 @@ msgid "Payment mode"
 msgstr "Modo de pago"
 
 #. module: custom_account
+#: field:account.invoice.report,benefit:0
+msgid "Benefit"
+msgstr "Beneficio"
+
+#. module: custom_account
 #: field:purchase.order,prepared_merchandise_date:0
 msgid "Prepared Merchandise Date"
 msgstr "Fecha mercancía lista"
@@ -440,8 +457,13 @@ msgstr "Comercial"
 
 #. module: custom_account
 #: field:account.invoice,subtotal_wt_rect:0
-msgid "Real Subtotal"
-msgstr "Subtotal Real"
+msgid "Subtotal"
+msgstr "Subtotal"
+
+#. module: custom_account
+#: field:account.invoice,total_wt_rect:0
+msgid "Total"
+msgstr "Total"
 
 #. module: sale_quick_payment
 #: field:pay.sale.order,amount:0
@@ -499,3 +521,5 @@ msgstr "La venta debe ser pagada antes de la validación."
 #: model:ir.model,name:sale_quick_payment.model_pay_sale_order
 msgid "Wizard to generate a payment from the sale order"
 msgstr "Asistente para generar un pago desde el pedido"
+
+

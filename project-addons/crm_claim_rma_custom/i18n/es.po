@@ -16,6 +16,113 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: crm_claim_rma_custom
+#: field:crm.phonecall,start_date:0
+msgid "Start Date"
+msgstr "Fecha de Inicio"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:77
+#, python-format
+msgid "Warning!"
+msgstr "¡Advertencia!"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:78
+#, python-format
+msgid "One or more products aren't review yet!"
+msgstr "¡Algunos de los productos no se han revisado todavia!"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,partner_id:0
+msgid "Contact"
+msgstr "Cliente"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,name:0
+msgid "Call Summary"
+msgstr "Motivo de la llamada"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,call_type:0
+msgid "Call type"
+msgstr "Tipo de llamada"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Check Stock"
+msgstr "Consultar Stock/previsión"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Check Prices"
+msgstr "Consultar Precio"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Order/Budget"
+msgstr "Realizar pedido/ppto"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Counsel"
+msgstr "Asesoramiento"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Shipments status"
+msgstr "Estado de envíos"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Order Complain/Claim"
+msgstr "Queja/Reclamación Pedido"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "RMA Complain/Claim"
+msgstr "Queja/Reclamación RMA"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Tech Complain/Claim"
+msgstr "Queja/Reclamación Técnica"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Web Complain/Claim"
+msgstr "Queja/Reclamación Web"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Shipment Complain/Claim"
+msgstr "Queja/Reclamación Envío"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type:0
+msgid "Accounting Complain/Claim"
+msgstr "Queja/Reclamación Contable"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.menu,name:0
+msgid "New Call"
+msgstr "Nueva llamada"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:0
+msgid "New Call"
+msgstr "Nueva llamada"
+
+#. module: crm_claim_rma_custom
+#: view:claim.phonecall:crm_claim_rma_custom.crm_phonecall_custom_wizard_form_view
+msgid "Cancel Call"
+msgstr "Cancelar llamada"
+
+#. module: crm_claim_rma_custom
+#: view:claim.phonecall:crm_claim_rma_custom.crm_phonecall_custom_wizard_form_view
+msgid "End Call"
+msgstr "Finalizar llamada"
+
+#. module: crm_claim_rma_custom
 #: field:crm.claim,aditional_notes:0
 msgid "Aditional Notes"
 msgstr "Notas adicionales"
@@ -349,3 +456,28 @@ msgstr "Asistente para crear envíos desde la línea de reclamación"
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_from_picking_wizard
 msgid "Wizard to create pickings from picking lines"
 msgstr "Asistente para crear albaranes desde lineas de albarán"
+
+#. module: crm_claim_rma_custom
+#: view:crm.phonecall:crm_claim_rma_custom.crm_phonecall_custom_call_type
+msgid "Duration (min)"
+msgstr "Duración (min)"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,partner_ref:0
+msgid "Ref. Contact"
+msgstr "Ref. Cliente"
+
+#. module: crm
+#: field:crm.phonecall,date:0 field:crm.phonecall2phonecall,date:0
+msgid "Date"
+msgstr "Fecha inicio"
+
+#. module: crm
+#: view:crm.phonecall:crm_claim_rma_custom.view_crm_case_phonecalls_filter_group_by
+msgid "Week"
+msgstr "Semana"
+
+#. module: crm_claim_rma_custom
+#: view:crm.phonecall:crm_claim_rma_custom.view_crm_case_phonecalls_filter_group_by
+msgid "Day"
+msgstr "Día"

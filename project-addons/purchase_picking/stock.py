@@ -75,6 +75,12 @@ class stock_move(models.Model):
 
     partner_id = fields.Many2one('res.partner', 'Partner')
     container_id = fields.Many2one('stock.container', "Container")
+    subtotal_price = fields.Float('Subtotal', compute='_calc_subtotal')
+
+    @api.multi
+    def _calc_subtotal(self):
+        for move in self:
+            move.subtotal_price = move.price_unit * move.product_uom_qty
 
     @api.multi
     def write(self, vals):

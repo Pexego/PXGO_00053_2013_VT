@@ -28,7 +28,7 @@
     'website': 'www.pexego.es',
     "depends": ['base', 'sale', 'stock', 'sale_stock', 'mrp', 'product',
                 'stock_reserve_sale', 'sale_commission', 'purchase',
-                'hide_product_variants'],
+                'hide_product_variants', 'sale_customer_discount'],
     "data": ['view/sale_view.xml', 'view/product_view.xml',
              'view/stock_reserve_view.xml', 'view/mrp_production_view.xml',
              'view/mrp_customize.xml',

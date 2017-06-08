@@ -132,8 +132,15 @@
                     <field name="payment_mode_id"/>
                     <field name="payment_term"/>
                 </field>
-                <field name="amount_total" position="after">
-                    <field name="subtotal_wt_rect" sum="Real Subtotal"/>
+                <field name="state" position="before">
+                    <field name="subtotal_wt_rect" sum="Subtotal"/>
+                    <field name="total_wt_rect" sum="Total"/>
+                </field>
+                <field name="amount_untaxed" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="amount_total" position="attributes">
+                    <attribute name="invisible">1</attribute>
                 </field>
                 <field name="state" position="after">
                     <field name="total"/>
@@ -162,6 +169,26 @@
                 <filter name="unpaid" position="after">
                     <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
                 </filter>
+            </field>
+        </record>
+
+        <record id="view_account_invoice_filter_partner" model="ir.ui.view">
+            <field name="name">account.invoice.select.partner</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="user_id" position="before">
+                    <field name="commercial_partner_id" string="Partner"/>
+                </field>
+                <xpath expr="//filter[@string='Partner']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <xpath expr="//filter[@string='Salesperson']" position="before">
+                    <filter string="Partner" context="{'group_by':'commercial_partner_id'}"/>
+                </xpath>
             </field>
         </record>
 

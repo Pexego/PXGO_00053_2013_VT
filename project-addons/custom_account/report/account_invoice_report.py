@@ -27,21 +27,37 @@ class account_invoice_report(models.Model):
 
     payment_mode_id = fields.Many2one('payment.mode', 'Payment mode')
     number = fields.Char('Number')
+    benefit = fields.Float('Benefit')
+    brand_name = fields.Char('Brand name')
 
     def _select(self):
         select_str = super(account_invoice_report, self)._select()
         select_str += ', sub.payment_mode_id as payment_mode_id,' \
-                      ' sub.number as number'
+                      ' sub.number as number' \
+                      ', sub.benefit as benefit' \
+                      ', sub.name as brand_name'
         return select_str
 
     def _sub_select(self):
         select_str = super(account_invoice_report, self)._sub_select()
         select_str += ', ai.payment_mode_id,' \
-                      ' ai.number'
+                      ' ai.number ' \
+                      ', sum(ail.quantity * ail.price_unit * (100.0-ail.discount) ' \
+                      '/ 100.0) - sum(sol.purchase_price*ail.quantity) as benefit, ' \
+                      'pb.name'
         return select_str
+
+    def _from(self):
+        from_str = super(account_invoice_report, self)._from()
+        from_str += ' LEFT JOIN sale_order_line_invoice_rel solir ON solir.invoice_id = ail.id ' \
+                    ' LEFT JOIN sale_order_line sol ON sol.id = solir.order_line_id '\
+                    ' LEFT JOIN product_brand pb ON pt.product_brand_id = pb.id '
+        return from_str
 
     def _group_by(self):
         group_by_str = super(account_invoice_report, self)._group_by()
         group_by_str += ', ai.payment_mode_id,' \
-                        ' ai.number'
+                        ' ai.number,' \
+                        ' pb.name'
+
         return group_by_str

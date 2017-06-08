@@ -52,6 +52,7 @@ class StockPicking(models.Model):
     with_incidences = fields.Boolean('With incidences', readonly=True,
                                      copy=False)
     block_picking = fields.Boolean('Albarán procesado Vstock')
+    partial_picking = fields.Boolean("Partial picking", default=False)
 
     #~ @api.multi
     #~ def write(self, vals):
@@ -67,6 +68,13 @@ class StockPicking(models.Model):
                 #~ if no_incidence:
                     #~ pick.with_incidences = False
         #~ return res
+
+    def _create_backorder(self, cr, uid, picking, backorder_moves=[], context=None):
+        bck_id = super(StockPicking, self).\
+            _create_backorder(cr, uid, picking, backorder_moves=backorder_moves, context=context)
+        if bck_id:
+            picking.write({'partial_picking': True})
+        return bck_id
 
     @api.one
     def action_accept_ready_qty(self):

@@ -14,7 +14,7 @@ class Config(object):
                 'autocommit': True,
                 'autorollback': True,
                 'stale_timeout': 600}
-
-    NOTIFY_URL = os.environ.get('NOTIFY_URL') 
+    
+    NOTIFY_URL = "https://www.visiotechsecurity.com/?option=com_sync&task=sync.syncOdoo"
     NOTIFY_USER = os.environ.get('NOTIFY_USER')
     NOTIFY_PASSWORD = os.environ.get('NOTIFY_PASSWORD')

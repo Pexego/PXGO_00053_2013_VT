@@ -19,14 +19,16 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from openerp import models, fields, api, exceptions, osv, _
 from openerp.addons.account_followup.report import account_followup_print
-from openerp.osv import fields as fields2
+from openerp.osv import osv, fields as fields2
 from collections import defaultdict
 import time
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
+import dateutil.relativedelta
+from openerp.exceptions import ValidationError
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -37,6 +39,15 @@ class ResPartnerInvoiceType(models.Model):
 
 class ResPartner(models.Model):
     _inherit = "res.partner"
+
+    def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
+        invoice = self.pool.get('account.invoice')
+        res = {}
+        for partner_id in ids:
+            res[partner_id] = invoice.search_count(cr, uid, [
+                ('partner_id', 'child_of', partner_id),
+                '|', ('type', '=', 'in_invoice'), ('type', '=', 'in_refund')], context=context)
+        return res
 
     def _invoice_total_real(self, cr, uid, ids, field_name, arg, context=None):
         result = {}
@@ -90,7 +101,9 @@ class ResPartner(models.Model):
 
     _columns = {
         'total_invoiced_real': fields2.function(_invoice_total_real, string="Total Invoiced", type='float',
-                                         groups='account.group_account_invoice')
+                                         groups='account.group_account_invoice'),
+        'supplier_all_invoice_count': fields2.function(_purchase_invoice_count, string='# Supplier Invoices',
+                                                       type='integer'),
     }
 
 
@@ -126,6 +139,45 @@ class ResPartner(models.Model):
                     browse(self.id).total_invoiced_real
                 self.growth_rate = invoiced_15 / goal
 
+    @api.one
+    def _get_average_margin(self):
+        if self.customer:
+            margin_avg = 0.0
+            total_price = 0.0
+            total_cost = 0.0
+
+            d1 = datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+            final_date = d1.strftime("%Y-%m-%d")
+            d2 = d1 - dateutil.relativedelta.relativedelta(months=3)
+            start_date = d2.strftime("%Y-%m-%d")
+
+            invoices = self.env['account.invoice'].search(
+                [('commercial_partner_id', '=', self.id),
+                 ('number', 'not like', '%_ef%'),
+                 ('state', 'in', ['paid', 'history', 'open']),
+                 ('date_invoice', '>=', start_date),
+                 ('date_invoice', '<=', final_date)])
+
+            invoices_line = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', invoices.ids)])
+
+            for i_line in invoices_line:
+                self.env.cr.execute("SELECT order_line_id from sale_order_line_invoice_rel" +
+                                    " WHERE invoice_id = " + str(i_line.ids[0]))
+                order_rel = self.env.cr.fetchone()
+                order_line = self.env["sale.order.line"].browse(order_rel)
+
+                if order_line:
+                    o_line_data = order_line.read(['purchase_price'])[0]
+                    total_price += i_line.quantity * i_line.price_unit * \
+                                   ((100.0 - i_line.discount) / 100)
+                    total_cost += i_line.quantity * o_line_data['purchase_price']
+
+            if total_price:
+                margin_avg = (1 - total_cost / total_price) * 100.0
+
+            self.average_margin = margin_avg
+
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
     sale_product_count = fields.Integer(compute=_get_products_sold,
@@ -142,6 +194,7 @@ class ResPartner(models.Model):
     att = fields.Char("A/A")
     growth_rate = fields.Float("Growth rate", readonly=True,
                                compute="_get_growth_rate")
+    average_margin = fields.Float("Average Margin", readonly=True, compute="_get_average_margin")
 
     _sql_constraints = [
         ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
@@ -218,6 +271,14 @@ class ResPartner(models.Model):
         return super(ResPartner, self).create(vals)
 
     @api.multi
+    @api.constrains('web')
+    def check_client_type(self):
+        if self.web and self.prospective:
+            raise ValidationError(_('The client is prospective. The client cannot be created on the web.'))
+        else:
+            return True
+
+    @api.multi
     def write(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False
@@ -247,6 +308,15 @@ class ResPartner(models.Model):
         lines_per_currency = defaultdict(list)
         for line in moveline_obj.browse(cr, uid, moveline_ids):
             currency = line.currency_id or line.company_id.currency_id
+            invoice_obj = self.pool['account.invoice']
+            if line.stored_invoice_id:
+                invoice = invoice_obj.browse(cr, uid, line.stored_invoice_id[0].id)
+                client_order_ref = invoice.invoice_line[0].move_id.procurement_id.sale_line_id.order_id.client_order_ref
+                if not client_order_ref:
+                    client_order_ref = ""
+            else:
+                client_order_ref = ""
+
             line_data = {
                 'name': line.move_id.name,
                 'ref': line.ref,
@@ -255,6 +325,7 @@ class ResPartner(models.Model):
                 'balance': line.amount_currency if currency != line.company_id.currency_id else line.debit - line.credit,
                 'blocked': line.blocked,
                 'currency_id': currency,
+                'client_order_ref': client_order_ref,
             }
             lines_per_currency[currency].append(line_data)
 
@@ -282,9 +353,9 @@ class ResPartner(models.Model):
                 <tr>
                     <td>''' + _("Invoice Date") + '''</td>
                     <td>''' + _("Invoice No.") + '''</td>
+                    <td>''' + _("Client Order Ref.") + '''</td>
                     <td>''' + _("Due Date") + '''</td>
                     <td>''' + _("Amount") + " (%s)" % (currency.symbol) + '''</td>
-                    <td>''' + _("Lit.") + '''</td>
                 </tr>
                 '''
                 total = 0
@@ -294,15 +365,75 @@ class ResPartner(models.Model):
                     strbegin = "<TD>"
                     strend = "</TD>"
                     date = aml['date_maturity'] or aml['date']
-                    followup_table += "<TR>" + strbegin + str(aml['date']) + strend + strbegin + (
-                    aml['ref'] or '') + strend + strbegin + str(date) + strend + strbegin + str(
-                        aml['balance']) + strend + strbegin + block + strend + "</TR>"
+                    followup_table += "<TR>" + strbegin + str(aml['date']) + strend +\
+                                      strbegin + (aml['ref'] or '') + strend +\
+                                      strbegin + (aml['client_order_ref'] or '') + strend +\
+                                      strbegin + str(date) + strend + strbegin +\
+                                      str(aml['balance']) + strend + "</TR>"
 
                 total = reduce(lambda x, y: x + y['balance'], currency_dict['line'], 0.00)
 
                 total = rml_parse.formatLang(total, dp='Account', currency_obj=currency)
                 followup_table += '''<tr> </tr>
                                 </table>
-                                <center>''' + _("Amount not due") + ''' : %s </center>''' % (total)
+                                <strong><center style="font-size: 18px">''' + _("Amount not due") +\
+                                  ''' : %s </center></strong>''' % (total)
+        return followup_table
+
+    def get_custom_followup_table_html(self, cr, uid, ids, context=None):
+        """ Build the html tables to be included in emails send to partners,
+            when reminding them their overdue invoices.
+            :param ids: [id] of the partner for whom we are building the tables
+            :rtype: string
+        """
+        assert len(ids) == 1
+        if context is None:
+            context = {}
+        partner = self.browse(cr, uid, ids[0], context=context).commercial_partner_id
+        #copy the context to not change global context. Overwrite it because _() looks for the lang in local variable 'context'.
+        #Set the language to use = the partner language
+        context = dict(context, lang=partner.lang)
+        followup_table = ''
+        if partner.unreconciled_aml_ids:
+            company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
+            current_date = fields2.date.context_today(self, cr, uid, context=context)
+            rml_parse = account_followup_print.report_rappel(cr, uid, "followup_rml_parser")
+            final_res = rml_parse._lines_get_with_partner(partner, company.id)
+
+            for currency_dict in final_res:
+                currency = currency_dict.get('line', [{'currency_id': company.currency_id}])[0]['currency_id']
+                followup_table += '''
+                <table border="2" width=100%%>
+                <tr>
+                    <td>''' + _("Invoice Date") + '''</td>
+                    <td>''' + _("Invoice No.") + '''</td>
+                    <td>''' + _("Client Order Ref.") + '''</td>
+                    <td>''' + _("Due Date") + '''</td>
+                    <td>''' + _("Amount") + " (%s)" % (currency.symbol) + '''</td>
+                </tr>
+                '''
+                total = 0
+                for aml in currency_dict['line']:
+                    block = aml['blocked'] and 'X' or ' '
+                    total += aml['balance']
+                    strbegin = "<TD>"
+                    strend = "</TD>"
+                    date = aml['date_maturity'] or aml['date']
+                    if date <= current_date and aml['balance'] > 0:
+                        strbegin = "<TD><B>"
+                        strend = "</B></TD>"
+                    followup_table += "<TR>" + strbegin + str(aml['date']) + strend +\
+                                      strbegin + (aml['ref'] or '') + strend +\
+                                      strbegin + (aml['client_order_ref'] or '') + strend +\
+                                      strbegin + str(date) + strend +\
+                                      strbegin + str(aml['balance']) + strend + "</TR>"
+
+                total = reduce(lambda x, y: x+y['balance'], currency_dict['line'], 0.00)
+
+                total = rml_parse.formatLang(total, dp='Account', currency_obj=currency)
+                followup_table += '''<tr> </tr>
+                                </table>
+                                <strong> <center style="font-size: 18px">''' + _("Amount due") \
+                                  + ''' : %s </center> </strong>''' % (total)
         return followup_table
 

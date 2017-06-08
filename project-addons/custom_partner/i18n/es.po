@@ -60,6 +60,11 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 
 #. module: custom_partner
 #: view:res.partner:custom_partner.view_partner_form_add_att
+msgid "The client is innactive"
+msgstr "El cliente está inactivo"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_partner_form_add_att
 #: field:res.partner,att:0
 msgid "A/A"
 msgstr "A/A"
@@ -75,6 +80,12 @@ msgstr "Importe"
 #, python-format
 msgid "Amount not due"
 msgstr "Importe no vencido"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:277
+#, python-format
+msgid "The client is prospective. The client will not be created on the web."
+msgstr "El cliente es potencial. El cliente no se creará en la web"
 
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:153
@@ -143,6 +154,11 @@ msgstr "Importe (€)"
 #: field:res.partner,growth_rate:0
 msgid "Growth rate"
 msgstr "Crecimiento"
+
+#. module: custom_partner
+#: field:res.partner,average_margin:0
+msgid "Average Margin"
+msgstr "Margen medio del último trimestre"
 
 #. module: custom_partner
 #: field:res.partner.invoice.type,id:0
@@ -284,3 +300,15 @@ msgstr "Telefono/Móvil 1"
 #: view:res.partner:custom_partner.view_partner_form_add_require
 msgid "Phone/Mobile 2"
 msgstr "Telefono/Móvil 2"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:360
+#, python-format
+msgid "Amount Due"
+msgstr "Importe Total Adeudado"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:288,338
+#, python-format
+msgid "Client Order Ref."
+msgstr "Referencia Cliente"

@@ -20,6 +20,7 @@
 ##############################################################################
 from . import partner_events
 from . import product_events
-#from . import rma_events
+from . import invoice_events
+from . import rma_events
 from . import country_events
 from . import commercial_events

@@ -30,34 +30,27 @@ class account_invoice_line(orm.Model):
 
     def move_line_get_item(self, cr, uid, line, context=None):
         uom_obj = self.pool.get('product.uom')
-        currency_obj = self.pool.get('res.currency')
         res = super(account_invoice_line, self).move_line_get_item(
             cr, uid, line, context=context)
         moves_price = 0.0
         total_qty = 0.0
 
-        if line.move_id and line.product_id.valuation == 'real_time' and line.move_id.picking_id.picking_type_code == 'incoming':
-            # TODO Revisar el uso de esta variable (Debería obtener el currency de la compra?)
-            company_currency = line.invoice_id.company_id.currency_id.id
+        if line.move_id and line.product_id.valuation == 'real_time' and \
+                line.move_id.picking_id.picking_type_code == 'incoming':
             move = line.move_id
             qty = uom_obj._compute_qty(cr, uid, move.product_uom.id,
                                        move.product_qty,
                                        move.product_id.uom_id.id)
             total_qty += qty
-            if move.product_id.cost_method == 'average' \
+            if move.product_id.cost_method in ['average', 'real'] \
                     and move.price_unit:
-                price_unit = currency_obj.compute(
-                    cr, uid, line.invoice_id.currency_id.id,
-                    company_currency, move.price_unit,
-                    round=False)
+                price_unit = move.price_unit
                 moves_price += price_unit * qty
             else:
-                price_unit = currency_obj.compute(
-                    cr, uid, line.invoice_id.currency_id.id,
-                    company_currency,
-                    move.product_id.standard_price, round=False)
+                price_unit = move.product_id.standard_price
                 moves_price += price_unit * qty
             res['price_move'] = moves_price
+            res['create_date'] = move.create_date
             if total_qty > 0:
                 res['price_unit'] = moves_price / total_qty
             else:
@@ -69,9 +62,10 @@ class account_invoice_line(orm.Model):
             cr, uid, invoice_id, context=context)
         inv = self.pool.get('account.invoice').browse(
             cr, uid, invoice_id, context=context)
-
+        currency_obj = self.pool.get('res.currency')
         if inv.type in ('in_invoice', 'in_refund'):
             for i_line in inv.invoice_line:
+                company_currency = i_line.invoice_id.company_id.currency_id.id
                 if i_line.product_id \
                     and i_line.product_id.valuation == 'real_time' \
                         and i_line.product_id.type != 'service':
@@ -110,9 +104,20 @@ class account_invoice_line(orm.Model):
                     for line in res:
                         if i_line.product_id.id == line['product_id']:
 
-                            if 'price_move' in line and line['price_move'] != i_line.price_subtotal and acc:
+                            if 'price_move' in line and line['price_move'] != \
+                                    i_line.price_subtotal and acc:
+                                price_subtotal = currency_obj.\
+                                    compute(cr, uid,
+                                            i_line.invoice_id.currency_id.id,
+                                            company_currency,
+                                            i_line.price_subtotal,
+                                            round=True,
+                                            context={'date':
+                                                     line['create_date']})
                                 price_diff = \
-                                    i_line.price_subtotal - line['price_move']
+                                    price_subtotal - line['price_move']
+                                if not price_diff or price_diff <= 0.01:
+                                    continue
                                 diff_res.append({
                                     'type': 'sto',
                                     'name': i_line.name[:64],
@@ -123,7 +128,7 @@ class account_invoice_line(orm.Model):
                                     'product_id': line['product_id'],
                                     'uos_id': line['uos_id'],
                                     'account_analytic_id':
-                                        line['account_analytic_id'],
+                                    line['account_analytic_id'],
                                     'taxes': line.get('taxes', []),
                                     })
                                 diff_res.append({
@@ -136,10 +141,9 @@ class account_invoice_line(orm.Model):
                                     'product_id': line['product_id'],
                                     'uos_id': line['uos_id'],
                                     'account_analytic_id':
-                                        line['account_analytic_id'],
+                                    line['account_analytic_id'],
                                     'taxes': line.get('taxes', []),
                                     })
                     res += diff_res
             print res
         return res
-

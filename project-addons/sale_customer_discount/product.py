@@ -22,7 +22,6 @@
 from openerp.osv import osv, fields
 import openerp.addons.decimal_precision as dp
 
-
 class product_product(osv.osv):
     _inherit = 'product.product'
 
@@ -147,14 +146,72 @@ class product_product(osv.osv):
                                                 'standard_price'], 10), }),
     }
 
-    def pvd1_price_change(self, cr, uid, ids, pvd1_price, pvd1_relation=0.5):
-        res = {'value': {'lst_price': (1.0 / pvd1_relation) * pvd1_price}}
+    def pvd1_price_change(self, cr, uid, ids, pvd1_price, standard_price, pvd1_relation=0.5):
+        # res = {'value': {'list_price': (1.0 / pvd1_relation) * pvd1_price,
+        #                 'margin_pvd1': (1 - (standard_price / pvd1_price)) * 100.0}}
+        if pvd1_price:
+            list_price = (1.0 / pvd1_relation) * pvd1_price
+            margin_pvd = (1 - (standard_price / pvd1_price)) * 100.0
+        else:
+            list_price = 0
+            margin_pvd = 0
+
+        res = {'value': {'lst_price': list_price,
+                         'margin_pvd1': margin_pvd}}
         return res
 
-    def pvd2_price_change(self, cr, uid, ids, pvd2_price, pvd2_relation=0.5):
-        res = {'value': {'list_price2': (1.0 / pvd2_relation) * pvd2_price}}
+    def pvd2_price_change(self, cr, uid, ids, pvd2_price, standard_price, pvd2_relation=0.5):
+        if pvd2_price:
+            list_price = (1.0 / pvd2_relation) * pvd2_price
+            margin_pvd = (1 - (standard_price / pvd2_price)) * 100.0
+        else:
+            list_price = 0
+            margin_pvd = 0
+
+        res = {'value': {'list_price2': list_price,
+                         'margin_pvd2': margin_pvd}}
         return res
 
-    def pvd3_price_change(self, cr, uid, ids, pvd3_price, pvd3_relation=0.5):
-        res = {'value': {'list_price3': (1.0 / pvd3_relation) * pvd3_price}}
+    def pvd3_price_change(self, cr, uid, ids, pvd3_price, standard_price, pvd3_relation=0.5):
+        if pvd3_price:
+            list_price = (1.0 / pvd3_relation) * pvd3_price
+            margin_pvd = (1 - (standard_price / pvd3_price)) * 100.0
+        else:
+            list_price = 0
+            margin_pvd = 0
+
+        res = {'value': {'list_price3': list_price,
+                         'margin_pvd3': margin_pvd}}
         return res
+
+    def pvi1_price_change(self, cr, uid, ids, standard_price, pvi1_price):
+        # res = {'value': {'margin_pvi1': (1 - (standard_price / pvi1_price)) * 100.0}}
+        if pvi1_price:
+            margin_pvd = (1 - (standard_price / pvi1_price)) * 100.0
+        else:
+            margin_pvd = 0
+
+        res = {'value': {'margin_pvi1': margin_pvd}}
+
+        return res
+
+    def pvi2_price_change(self, cr, uid, ids, standard_price, pvi2_price):
+        if pvi2_price:
+            margin_pvd = (1 - (standard_price / pvi2_price)) * 100.0
+        else:
+            margin_pvd = 0
+
+        res = {'value': {'margin_pvi2': margin_pvd}}
+
+        return res
+
+    def pvi3_price_change(self, cr, uid, ids, standard_price, pvi3_price):
+        if pvi3_price:
+            margin_pvd = (1 - (standard_price / pvi3_price)) * 100.0
+        else:
+            margin_pvd = 0
+
+        res = {'value': {'margin_pvi3': margin_pvd}}
+
+        return res
+
