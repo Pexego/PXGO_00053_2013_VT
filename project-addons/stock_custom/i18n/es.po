@@ -103,6 +103,11 @@ msgid "all reservations assigned"
 msgstr "Todas las reservas asignadas"
 
 #. module: stock_custom
+#: view:sale.order:stock_custom.view_sale_order_search
+msgid "some reservations assigned"
+msgstr "Hay reservas pendientes"
+
+#. module: stock_custom
 #: field:stock.reservation,next_reception_date:0
 msgid "Next reception date"
 msgstr "Fecha de próxima recepción"
@@ -204,4 +209,10 @@ msgstr "Ventas"
 msgid "My Picking"
 msgstr "Mis Albaranes"
 
+#. module: stock_custom
+#: model:ir.actions.server,name:stock_custom.action_product_stock_new
+#: model:ir.ui.menu,name:stock_custom.menu_products_stock_new
+#: code:addons/stock_custom/product.py:65
+msgid "Stock New"
+msgstr "Stock Nuevo"
 

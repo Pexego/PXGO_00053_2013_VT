@@ -33,6 +33,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//filter[@string='Done']" position="after">
                     <filter string="all reservations assigned" domain="[('is_all_reserved','=',True)]"/>
+                    <filter string="some reservations assigned" domain="[('is_some_reserved','=',True)]"/>
                 </xpath>
             </field>
         </record>
