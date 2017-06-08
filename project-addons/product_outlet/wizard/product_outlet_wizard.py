@@ -56,7 +56,7 @@ class product_outlet_wizard(models.TransientModel):
             search([('company_id', '=', company_id)])
         if not warehouse_ids:
             return False
-        return warehouse_ids[0].lot_stock_id
+        return warehouse_ids[0].lot_rma_id
 
     qty = fields.Float('Quantity')
     product_id = fields.Many2one('product.product', 'Product',
@@ -198,5 +198,6 @@ class product_outlet_wizard(models.TransientModel):
 
         move_out.action_confirm()
         move_out.action_assign()
+        move_out.picking_id.not_sync = True
         move_in.action_confirm()
         return {'type': 'ir.actions.act_window_close'}
