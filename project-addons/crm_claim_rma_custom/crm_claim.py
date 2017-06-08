@@ -23,8 +23,10 @@ from openerp import models, fields, api, exceptions, _
 from datetime import datetime
 from openerp.exceptions import except_orm
 
-class equivalent_products_wizard(models.TransientModel):
+import ipdb
 
+
+class equivalent_products_wizard(models.TransientModel):
     _inherit = "equivalent.products.wizard"
 
     tag_ids = fields.Many2many('product.tag',
@@ -34,9 +36,18 @@ class equivalent_products_wizard(models.TransientModel):
 
 
 class CrmClaimRma(models.Model):
-
     _inherit = "crm.claim"
     _order = "id desc"
+
+    @api.multi
+    @api.constrains('category_id')
+    def _check_category_id(self):
+        for claim in self:
+            has_category = False
+            for category in claim.category_id:
+                if category.parent_id.id == 28:
+                    has_category = True
+            claim.bool_category_id = has_category
 
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
@@ -49,6 +60,8 @@ class CrmClaimRma(models.Model):
                        default=fields.Date.context_today)
     write_date = fields.Datetime("Update date", readonly=True)
     date_received = fields.Date('Received Date')
+    category_id = fields.Many2many(related='partner_id.category_id', readonly=True)
+    bool_category_id = fields.Boolean(string="Category", compute=_check_category_id, store=True)
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
@@ -109,8 +122,8 @@ class CrmClaimRma(models.Model):
             taxes_ids = []
             if claim_line.invoice_id:
                 claim_inv_lines = claim_inv_line_obj.search(cr, uid,
-                                                    [('claim_line_id', '=',
-                                                      claim_line.id)])
+                                                            [('claim_line_id', '=',
+                                                              claim_line.id)])
                 if claim_inv_lines:
                     continue
                 for inv_line in claim_line.invoice_id.invoice_line:
@@ -180,22 +193,22 @@ class CrmClaimRma(models.Model):
             header_vals = {
                 'partner_id': claim_obj.partner_id.id,
                 'fiscal_position':
-                claim_obj.partner_id.property_account_position.id,
+                    claim_obj.partner_id.property_account_position.id,
                 'date_invoice': datetime.now().strftime('%Y-%m-%d'),
                 'journal_id': acc_journal_ids[0],
                 'account_id':
-                claim_obj.partner_id.property_account_receivable.id,
+                    claim_obj.partner_id.property_account_receivable.id,
                 'currency_id':
-                claim_obj.partner_id.property_product_pricelist.currency_id.id,
+                    claim_obj.partner_id.property_product_pricelist.currency_id.id,
                 'company_id': claim_obj.company_id.id,
                 'user_id': uid,
                 'claim_id': claim_obj.id,
                 'type': 'out_refund',
                 'payment_term': claim_obj.partner_id.property_payment_term.id,
                 'payment_mode_id':
-                claim_obj.partner_id.customer_payment_mode.id,
+                    claim_obj.partner_id.customer_payment_mode.id,
                 'partner_bank_id': claim_obj.partner_id.bank_ids and
-                claim_obj.partner_id.bank_ids[0].id or False
+                                   claim_obj.partner_id.bank_ids[0].id or False
             }
             inv_obj = self.pool.get('account.invoice')
             inv_id = inv_obj.create(cr, uid, header_vals, context=context)
@@ -211,22 +224,22 @@ class CrmClaimRma(models.Model):
                     account_id = line.product_id.property_account_income.id
                     if not account_id:
                         account_id = \
-                            line.product_id.categ_id.\
-                            property_account_income_categ.id
+                            line.product_id.categ_id. \
+                                property_account_income_categ.id
                     else:
-                        account_id = line.product_id.\
+                        account_id = line.product_id. \
                             property_account_expense.id
                         if not account_id:
                             account_id = \
-                                line.product_id.categ_id.\
-                                property_account_expense_categ.id
+                                line.product_id.categ_id. \
+                                    property_account_expense_categ.id
                 else:
-                    prop = self.pool.get('ir.property').\
+                    prop = self.pool.get('ir.property'). \
                         get(cr, uid,
                             'property_account_income_categ',
                             'product.category', context=context)
                     account_id = prop and prop.id or False
-                fiscal_position = claim_obj.partner_id.\
+                fiscal_position = claim_obj.partner_id. \
                     property_account_position
                 account_id = fp_obj.map_account(cr, uid,
                                                 fiscal_position, account_id)
@@ -243,7 +256,7 @@ class CrmClaimRma(models.Model):
                     'account_analytic_id': False
                 }
                 if line.tax_ids:
-                    fiscal_position = claim_obj.partner_id.\
+                    fiscal_position = claim_obj.partner_id. \
                         property_account_position
                     taxes_ids = fp_obj.map_tax(cr, uid, fiscal_position,
                                                line.tax_ids)
@@ -253,13 +266,13 @@ class CrmClaimRma(models.Model):
 
                 line.invoiced = True
 
-            invoice_id.\
+            invoice_id. \
                 write({'origin_invoices_ids':
-                       [(6, 0, list(set(rectified_invoice_ids)))]})
+                           [(6, 0, list(set(rectified_invoice_ids)))]})
             invoice_id.button_reset_taxes()
 
             data_pool = self.pool.get('ir.model.data')
-            action_id = data_pool.\
+            action_id = data_pool. \
                 xmlid_to_res_id(cr, uid, 'account.action_invoice_tree3')
             if action_id:
                 action_pool = self.pool['ir.actions.act_window']
@@ -270,7 +283,6 @@ class CrmClaimRma(models.Model):
 
 
 class ClaimInvoiceLine(models.Model):
-
     _name = "claim.invoice.line"
     _rec_name = "product_description"
 
@@ -292,8 +304,8 @@ class ClaimInvoiceLine(models.Model):
     @api.one
     def _get_subtotal(self):
         self.price_subtotal = self.discount and \
-            self.qty * self.price_unit * ((100.0 - self.discount) / 100.0) or \
-            self.qty * self.price_unit
+                              self.qty * self.price_unit * ((100.0 - self.discount) / 100.0) or \
+                              self.qty * self.price_unit
 
     @api.onchange("product_id", "invoice_id")
     def onchange_product_id(self):
@@ -328,16 +340,16 @@ class ClaimInvoiceLine(models.Model):
                 self.tax_ids = taxes_ids
             else:
                 self.price_subtotal = self.discount and \
-                    self.qty * self.price_unit - (self.discount *
-                                                  self.price_unit/100) or \
-                    self.qty * self.price_unit
+                                      self.qty * self.price_unit - (self.discount *
+                                                                    self.price_unit / 100) or \
+                                      self.qty * self.price_unit
         else:
             raise exceptions.Warning(_('Partner not selected'))
 
     def onchange_values(self, cr, uid, ids, qty, price_unit, discount,
                         context=None):
         price_subtotal = \
-            discount and qty * price_unit - (discount * price_unit/100) or \
+            discount and qty * price_unit - (discount * price_unit / 100) or \
             qty * price_unit
         res = {'value': {'price_subtotal': price_subtotal}}
         return res
@@ -351,15 +363,14 @@ class ClaimInvoiceLine(models.Model):
 
 
 class CrmClaimLine(models.Model):
-
     _inherit = "claim.line"
 
     comercial = fields.Many2one("res.users", String="Comercial", related="claim_id.comercial")
     name = fields.Char(required=False)
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
-    substate_id = fields.\
+    substate_id = fields. \
         Many2one(default=lambda self:
-                 self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
+    self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
 
     res = {}
 
