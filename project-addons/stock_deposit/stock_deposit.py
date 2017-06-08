@@ -70,7 +70,7 @@ class stock_deposit(models.Model):
                                         required=False, readonly=True,
                                         ondelete='cascade', select=1)
     user_id = fields.Many2one('res.users', 'Comercial', required=False,
-                              readonly=True, ondelete='cascade', select=1)
+                              readonly=False, ondelete='cascade', select=1)
 
     @api.multi
     def sale(self):
