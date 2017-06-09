@@ -20,6 +20,7 @@
 ##############################################################################
 from openerp import models, fields, api
 
+
 class AccountMoveLine(models.Model):
 
     _inherit = 'account.move.line'
@@ -101,6 +102,11 @@ class AccountInvoice(models.Model):
                                     compute="get_subtotal_wt_rect", store=True)
     total_wt_rect = fields.Float("Total",
                                  compute="get_total_wt_rect", store=True)
+
+    @api.onchange('user_id')
+    def onchage_user_id(self):
+        section_obj = self.env['crm.case.section']
+        self.section_id = section_obj.search([('member_ids', 'in', self.user_id.id)])
 
     @api.multi
     @api.depends('type', 'amount_untaxed')
