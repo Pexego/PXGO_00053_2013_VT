@@ -57,7 +57,8 @@ class ProductExporter(Exporter):
                     'pvd_2': product.pvd2_price,
                     'pvd_3': product.pvd3_price,
                     'joking_index': product.joking_index,
-                    'sale_ok': product.sale_ok}
+                    'sale_ok': product.sale_ok,
+                    'ean13': product.ean13} #Query BBDD: ALTER TABLE product ADD COLUMN ean13 varchar;
             if product.show_stock_outside:
                 vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
