@@ -140,7 +140,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
     if vals.get("web", False) and vals.get("web", False) == "published":
         export_product.delay(session, model_name, record_id, priority=2, eta=60)
         claim_lines = session.env['claim.line'].search(
-            [('product_id', '=', prod.id),
+            [('product_id', '=', product.id),
              ('claim_id.partner_id.web', '=', True)])
         for line in claim_lines:
             if not line.equivalent_product_id or \
@@ -148,7 +148,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
                 export_rmaproduct.delay(session, 'claim.line', line.id,
                                         priority=10, eta=120)
         claim_lines = session.env['claim.line'].search(
-            [('equivalent_product_id', '=', prod.id),
+            [('equivalent_product_id', '=', product.id),
              ('product_id.web', '=', 'published'),
              ('claim_id.partner_id.web', '=', True)])
         for line in claim_lines:
