@@ -21,6 +21,11 @@ msgid "Start Date"
 msgstr "Fecha de Inicio"
 
 #. module: crm_claim_rma_custom
+#: field:crm.claim,category_id:0
+msgid "Tags"
+msgstr "Etiquetas"
+
+#. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/crm_claim.py:77
 #, python-format
 msgid "Warning!"

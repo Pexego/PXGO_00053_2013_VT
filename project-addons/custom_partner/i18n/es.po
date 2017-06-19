@@ -84,7 +84,7 @@ msgstr "Importe no vencido"
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:277
 #, python-format
-msgid "The client is prospective. The client will not be created on the web."
+msgid "The client is prospective. The client cannot be created on the web."
 msgstr "El cliente es potencial. El cliente no se creará en la web"
 
 #. module: custom_partner

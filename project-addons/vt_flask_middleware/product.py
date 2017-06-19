@@ -61,6 +61,7 @@ class Product(SyncModel):
     joking_index = FloatField(default=0.0)
     external_stock = FloatField(default=0.0)
     sale_ok = BooleanField()
+    ean13 = CharField(max_length=13)
 
     def __unicode__(self):
         return self.name

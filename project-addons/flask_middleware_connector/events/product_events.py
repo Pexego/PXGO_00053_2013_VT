@@ -57,7 +57,8 @@ class ProductExporter(Exporter):
                     'pvd_2': product.pvd2_price,
                     'pvd_3': product.pvd3_price,
                     'joking_index': product.joking_index,
-                    'sale_ok': product.sale_ok}
+                    'sale_ok': product.sale_ok,
+                    'ean13': product.ean13} #Query BBDD: ALTER TABLE product ADD COLUMN ean13 varchar;
             if product.show_stock_outside:
                 vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
@@ -139,7 +140,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
     if vals.get("web", False) and vals.get("web", False) == "published":
         export_product.delay(session, model_name, record_id, priority=2, eta=60)
         claim_lines = session.env['claim.line'].search(
-            [('product_id', '=', prod.id),
+            [('product_id', '=', product.id),
              ('claim_id.partner_id.web', '=', True)])
         for line in claim_lines:
             if not line.equivalent_product_id or \
@@ -147,7 +148,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
                 export_rmaproduct.delay(session, 'claim.line', line.id,
                                         priority=10, eta=120)
         claim_lines = session.env['claim.line'].search(
-            [('equivalent_product_id', '=', prod.id),
+            [('equivalent_product_id', '=', product.id),
              ('product_id.web', '=', 'published'),
              ('claim_id.partner_id.web', '=', True)])
         for line in claim_lines:

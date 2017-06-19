@@ -106,6 +106,7 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
                 "    AND i.number NOT LIKE '%_ef%' "
                 "    AND i.company_id = " + str(self.company_id) +
                 "    AND substring(pr.value_reference FROM '[a-z\.]+') = 'account.fiscal.position' "
+                "    AND afp.company_id = " + str(self.company_id) +
                 "    AND it.lang = 'es_ES' "
                 "    AND it.module = 'base' "
                 " {} "
