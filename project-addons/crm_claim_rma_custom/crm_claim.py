@@ -23,8 +23,6 @@ from openerp import models, fields, api, exceptions, _
 from datetime import datetime
 from openerp.exceptions import except_orm
 
-import ipdb
-
 
 class equivalent_products_wizard(models.TransientModel):
     _inherit = "equivalent.products.wizard"
@@ -39,15 +37,18 @@ class CrmClaimRma(models.Model):
     _inherit = "crm.claim"
     _order = "id desc"
 
-    @api.multi
+    @api.one
+    def _has_category(self, claim):
+        has_category = False
+        for category in claim.category_id:
+            if category.parent_id.id == self.env.ref('__export__.res_partner_category_28').id:
+                has_category = True
+        claim.bool_category_id = has_category
+
     @api.constrains('category_id')
     def _check_category_id(self):
         for claim in self:
-            has_category = False
-            for category in claim.category_id:
-                if category.parent_id.id == 28:
-                    has_category = True
-            claim.bool_category_id = has_category
+            self._has_category(claim)
 
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
@@ -208,7 +209,7 @@ class CrmClaimRma(models.Model):
                 'payment_mode_id':
                     claim_obj.partner_id.customer_payment_mode.id,
                 'partner_bank_id': claim_obj.partner_id.bank_ids and
-                                   claim_obj.partner_id.bank_ids[0].id or False
+                    claim_obj.partner_id.bank_ids[0].id or False
             }
             inv_obj = self.pool.get('account.invoice')
             inv_id = inv_obj.create(cr, uid, header_vals, context=context)
@@ -225,14 +226,14 @@ class CrmClaimRma(models.Model):
                     if not account_id:
                         account_id = \
                             line.product_id.categ_id. \
-                                property_account_income_categ.id
+                            property_account_income_categ.id
                     else:
                         account_id = line.product_id. \
                             property_account_expense.id
                         if not account_id:
                             account_id = \
                                 line.product_id.categ_id. \
-                                    property_account_expense_categ.id
+                                property_account_expense_categ.id
                 else:
                     prop = self.pool.get('ir.property'). \
                         get(cr, uid,
