@@ -22,6 +22,7 @@
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime
 from openerp.exceptions import except_orm
+import ipdb
 
 
 class equivalent_products_wizard(models.TransientModel):
@@ -38,17 +39,18 @@ class CrmClaimRma(models.Model):
     _order = "id desc"
 
     @api.one
-    def _has_category(self, claim):
+    def _has_category(self, expected_category):
         has_category = False
-        for category in claim.category_id:
-            if category.parent_id.id == self.env.ref('__export__.res_partner_category_28').id:
+        for category in self.category_id:
+            if category.parent_id.id == expected_category.id:
                 has_category = True
-        claim.bool_category_id = has_category
+        self.bool_category_id = has_category
 
-    @api.constrains('category_id')
+    @api.multi
     def _check_category_id(self):
+        expected_category = self.env['res.partner.category'].search([('name', '=', 'Certificado')])
         for claim in self:
-            self._has_category(claim)
+            self._has_category(expected_category)
 
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
@@ -62,7 +64,7 @@ class CrmClaimRma(models.Model):
     write_date = fields.Datetime("Update date", readonly=True)
     date_received = fields.Date('Received Date')
     category_id = fields.Many2many(related='partner_id.category_id', readonly=True)
-    bool_category_id = fields.Boolean(string="Category", compute=_check_category_id, store=True)
+    bool_category_id = fields.Boolean(string="Category", compute=_check_category_id)
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
