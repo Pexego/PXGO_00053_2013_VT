@@ -22,7 +22,6 @@
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime
 from openerp.exceptions import except_orm
-import ipdb
 
 
 class equivalent_products_wizard(models.TransientModel):
