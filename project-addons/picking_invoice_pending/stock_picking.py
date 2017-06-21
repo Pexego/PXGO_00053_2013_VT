@@ -33,6 +33,12 @@ class StockPicking(models.Model):
                                               'Account pending move',
                                               readonly=True,
                                               copy=False)
+    pending_stock_reverse_move_id = \
+        fields.Many2one('account.move', 'Account pending stock reverse move',
+                        readonly=True, copy=False)
+    pending_stock_move_id = \
+        fields.Many2one('account.move', 'Account pending stock move',
+                        readonly=True, copy=False)
 
     @api.multi
     def action_done(self):
@@ -42,16 +48,14 @@ class StockPicking(models.Model):
                 pick.date_done = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         return res
 
-    @api.one
-    def account_pending_invoice(self):
+    @api.multi
+    def account_pending_invoice(self, debit_account, credit_account, date):
+        self.ensure_one()
         period_obj = self.env['account.period']
         move_obj = self.env['account.move']
         move_line_obj = self.env['account.move.line']
-        lines = []
+        lines = {}
 
-        amount = 0
-        date = self.min_date and self.min_date[:10] or \
-            time.strftime('%Y-%m-%d')
         period_id = period_obj.find(date)
 
         origin = self.name
@@ -69,36 +73,17 @@ class StockPicking(models.Model):
         move_id = move_obj.create(move)
         obj_precision = self.env['decimal.precision']
         for move_line in self.move_lines:
-            # Get expense account
-            account_id = move_line.product_id.product_tmpl_id.\
-                property_account_expense.id
-            if not account_id:
-                account_id = move_line.product_id.categ_id.\
-                    property_account_expense_categ.id
-
             name = move_line.name or origin
-            if move_line.purchase_line_id:
-                unit_price_line = move_line.purchase_line_id.price_unit
-                discount_line = move_line.purchase_line_id.discount or 0.0
-            else:
-                continue
-                #raise Warning("There is no purchase line related. Can not "
-                #              "calculate price for accounting pending invoice")
 
-            price_line = unit_price_line * (1 - (discount_line or 0.0) / 100.0)
-            price_line = price_line * move_line.product_qty
-            amount_line = round(price_line, obj_precision.
-                                precision_get('Account'))
-            from_currency = move_line.purchase_line_id.order_id.currency_id
-            to_currency = move_line.company_id.currency_id
-            amount_line = from_currency.compute(amount_line, to_currency)
-            amount += amount_line
+            amount_line = round(move_line.price_unit, obj_precision.
+                                precision_get('Account')) * \
+                move_line.product_qty
             vals = {
                 'name': name,
                 'ref': origin,
-                'partner_id': self.partner_id.commercial_partner_id.id,
+                'partner_id': move_line.partner_id.commercial_partner_id.id,
                 'product_id': move_line.product_id.id,
-                'account_id': account_id,
+                'account_id': debit_account.id,
                 'debit': amount_line,
                 'credit': 0,
                 'quantity': move_line.product_qty,
@@ -106,31 +91,29 @@ class StockPicking(models.Model):
                 'journal_id': stock_journal_id,
                 'period_id': period_id.id,
             }
-            line_id = move_line_obj.create(vals)
-            lines.append(lines)
+            move_line_obj.create(vals)
+            if move_line.partner_id.commercial_partner_id.id in lines:
+                lines[move_line.partner_id.commercial_partner_id.id] += \
+                    amount_line
+            else:
+                lines[move_line.partner_id.commercial_partner_id.id] = \
+                    amount_line
 
-        if lines:
-            account_id = self.company_id.\
-                property_pending_supplier_invoice_account.id
+        for partner_id in lines:
             vals = {
                 'name': name,
                 'ref': origin,
-                'partner_id': self.partner_id.commercial_partner_id.id,
-                'account_id': account_id,
+                'partner_id': partner_id,
+                'account_id': credit_account.id,
                 'debit': 0,
-                'credit': amount,
+                'credit': round(lines[partner_id], obj_precision.
+                                precision_get('Account')),
                 'move_id': move_id.id,
                 'journal_id': stock_journal_id,
                 'period_id': period_id.id,
             }
-
             move_line_obj.create(vals)
-            move_id.post()
-
-            self.pending_invoice_move_id = move_id
-        else:
-            move_id.unlink()
-            move_id = False
+        move_id.post()
 
         return move_id
 
@@ -145,12 +128,89 @@ class StockPicking(models.Model):
                         pick.company_id.required_invoice_pending_move):
                     pick.refresh()
                     if not pick.company_id.\
-                            property_pending_supplier_invoice_account:
-                        raise Warning(_("You need to configure an account "
+                            property_pending_variation_account or not \
+                            pick.company_id.property_pending_stock_account:
+                        raise Warning(_("You need to configure the accounts "
                                         "in the company for pending invoices"))
                     if not pick.company_id.property_pending_stock_journal:
                         raise Warning(_("You need to configure an account "
                                         "journal in the company for pending "
                                         "invoices"))
-                    pick.account_pending_invoice()
+                    debit_account = pick.company_id.\
+                        property_pending_variation_account
+                    credit_account = pick.company_id.\
+                        property_pending_stock_account
+                    move_id = pick.account_pending_invoice(debit_account,
+                                                           credit_account,
+                                                           vals['date_done'])
+                    pick.pending_stock_reverse_move_id = move_id.id
+        return res
+
+    @api.multi
+    def action_confirm(self):
+        res = super(StockPicking, self).action_confirm()
+        pick = self[0]
+        if not pick.company_id.\
+                property_pending_variation_account or not \
+                pick.company_id.property_pending_stock_account or not \
+                pick.company_id.property_pending_supplier_invoice_account:
+            raise Warning(_("You need to configure the accounts "
+                            "in the company for pending invoices"))
+        if not pick.company_id.property_pending_stock_journal:
+            raise Warning(_("You need to configure an account "
+                            "journal in the company for pending "
+                            "invoices"))
+        for pick in self:
+            if pick.picking_type_id.code == "incoming" and pick.move_lines \
+                    and pick.move_lines[0].purchase_line_id and \
+                    pick.invoice_state in ['invoiced', '2binvoiced'] and \
+                    pick.company_id.required_invoice_pending_move:
+                debit_account = pick.company_id.\
+                    property_pending_expenses_account
+                credit_account = pick.company_id.\
+                    property_pending_supplier_invoice_account
+                move_id = pick.account_pending_invoice(debit_account,
+                                                       credit_account,
+                                                       pick.create_date[:10])
+                pick.pending_invoice_move_id = move_id.id
+
+                debit_account = pick.company_id.\
+                    property_pending_stock_account
+                credit_account = pick.company_id.\
+                    property_pending_variation_account
+                move_id = pick.account_pending_invoice(debit_account,
+                                                       credit_account,
+                                                       pick.create_date[:10])
+                pick.pending_stock_move_id = move_id.id
+
+        return res
+
+    @api.multi
+    def action_cancel(self):
+        res = super(StockPicking, self).action_cancel()
+        for pick in self:
+            if pick.pending_stock_move_id:
+                pick.pending_stock_move_id.button_cancel()
+                pick.pending_stock_move_id.unlink()
+            if pick.pending_invoice_move_id:
+                pick.pending_invoice_move_id.button_cancel()
+                pick.pending_invoice_move_id.unlink()
+            if pick.pending_stock_reverse_move_id:
+                pick.pending_stock_reverse_move_id.button_cancel()
+                pick.pending_stock_reverse_move_id.unlink()
+        return res
+
+    @api.multi
+    def unlink(self):
+        for pick in self:
+            if pick.pending_stock_move_id:
+                pick.pending_stock_move_id.button_cancel()
+                pick.pending_stock_move_id.unlink()
+            if pick.pending_invoice_move_id:
+                pick.pending_invoice_move_id.button_cancel()
+                pick.pending_invoice_move_id.unlink()
+            if pick.pending_stock_reverse_move_id:
+                pick.pending_stock_reverse_move_id.button_cancel()
+                pick.pending_stock_reverse_move_id.unlink()
+        res = super(StockPicking, self).unlink()
         return res

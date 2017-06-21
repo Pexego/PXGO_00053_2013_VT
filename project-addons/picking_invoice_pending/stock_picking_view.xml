@@ -9,6 +9,8 @@
             <field name="arch" type="xml">
                 <field name="picking_type_id" position="after">
                     <field name="pending_invoice_move_id" attrs="{'invisible': [('picking_type_code','!=','incoming')]}"/>
+                    <field name="pending_stock_move_id" attrs="{'invisible': [('picking_type_code','!=','incoming')]}"/>
+                    <field name="pending_stock_reverse_move_id" attrs="{'invisible': [('picking_type_code','!=','incoming')]}"/>
                 </field>
             </field>
         </record>
