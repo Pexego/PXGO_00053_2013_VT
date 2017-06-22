@@ -62,15 +62,14 @@ class mrp_repair(models.Model):
 
         return res
 
-    @api.multi
+    @api.model
     def calculate_pricelist(self, data):
-        pricelist_partner = self.pool.get('res.partner').browse(self.env.cr, self.env.uid, data['partner_id'])
-        if pricelist_partner.property_product_pricelist.id:
-            pricelist = pricelist_partner.property_product_pricelist.id
+        partner = self.env["res.partner"].browse(data['partner_id'])
+        if partner.property_product_pricelist.id:
+            pricelist = partner.property_product_pricelist.id
         else:
             # Product_pricelist default id -> Public Pricelist
-            default_pricelist = self.env.ref('product.list0').id
-            pricelist = self.pool.get('product.pricelist').browse(self.env.cr, self.env.uid, [default_pricelist]).id
+            pricelist = self.env.ref('product.list0').id
         return pricelist
 
     @api.multi

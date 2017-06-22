@@ -72,7 +72,7 @@ class AccountInvoiceLine(models.Model):
                   copy=False)
     sale_order_id = fields.Many2one("sale.order", "Sale", readonly=True,
                                     related="sale_order_line_ids.order_id")
-    cost_unit = fields.Float("Product cost price", store=True)
+    cost_unit = fields.Float("Product cost price")
 
 
 class AccountInvoice(models.Model):
@@ -364,10 +364,8 @@ class AccountInvoice(models.Model):
     def invoice_validate(self):
         res = super(AccountInvoice, self).invoice_validate()
         for inv in self:
-            invoices_line = self.env['account.invoice.line'].search(
-                [('invoice_id', '=', inv.id)])
-            for inv_line in invoices_line:
-                inv_line.write({'cost_unit': inv_line.product_id.standard_price})
+            for line in inv.invoice_line:
+                line.write({'cost_unit': line.product_id.standard_price})
         return res
 
 
