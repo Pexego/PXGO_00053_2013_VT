@@ -79,7 +79,7 @@ class mrp_repair(models.Model):
         res = super(mrp_repair, self).write(data)
         return res
 
-    @api.multi
+    @api.model
     def create(self, data):
         data['pricelist_id'] = self.calculate_pricelist(data)
         res = super(mrp_repair, self).create(data)
