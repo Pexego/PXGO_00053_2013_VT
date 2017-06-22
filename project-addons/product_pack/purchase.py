@@ -41,6 +41,7 @@ class purchase_order_line(orm.Model):
             'purchase.order.line', 'pack_parent_line_id', 'Lines in pack'
         ),
     }
+    _order = 'order_id desc, sequence, id'
     _defaults = {
         'pack_depth': 0,
     }
