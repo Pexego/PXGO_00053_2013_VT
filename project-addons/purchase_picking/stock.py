@@ -30,6 +30,8 @@ class StockContainer(models.Model):
     date_expected = fields.Date("Date expected", required=True)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
+
+    user_id = fields.Many2one('Responsible', compute='_get_responsible')
     company_id = fields.\
         Many2one("res.company", "Company", required=True,
                  default=lambda self:
@@ -39,6 +41,15 @@ class StockContainer(models.Model):
     _sql_constraints = [
         ('name_uniq', 'unique(name)', 'Container name must be unique')
     ]
+
+    @api.one
+    def _get_responsible(self):
+        responsible = ''
+        if self.picking_id:
+            responsible = self.picking_id.commercial
+        elif self.origin:
+            responsible = self.env['sale.order'].search([('name', '=', self.origin)]).user_id
+        return responsible
 
     @api.multi
     def write(self, vals):
@@ -54,7 +65,7 @@ class stock_picking(models.Model):
 
     _inherit = 'stock.picking'
 
-    shipping_identifier = fields.Char('Shipping identifier', size=64)
+    shipping_identifier = fields.Char('Shipping identifier', required=True, size=64)
     temp = fields.Boolean("Temp.")
 
     @api.multi
