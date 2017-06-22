@@ -69,7 +69,7 @@ class RmaAdapter(GenericAdapter):
 def delay_create_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
     if rma.partner_id and rma.partner_id.web:
-        export_rma.delay(session, model_name, record_id, priority=0)
+        export_rma.delay(session, model_name, record_id, priority=5)
 
 
 @on_record_write(model_names='crm.claim')
@@ -78,9 +78,9 @@ def delay_write_rma(session, model_name, record_id, vals):
     up_fields = ["date", "date_received", "delivery_type", "delivery_address_id",
                  "partner_id", "stage_id", "number", "name"]
     if vals.get("partner_id", False) and rma.partner_id.web:
-        export_rma.delay(session, model_name, record_id, priority=0)
+        export_rma.delay(session, model_name, record_id, priority=5)
     elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
-        unlink_rma.delay(session, model_name, record_id, priority=1)
+        unlink_rma.delay(session, model_name, record_id, priority=6)
     elif rma.partner_id.web:
         for field in up_fields:
             if field in vals:
@@ -165,7 +165,7 @@ def delay_create_rma_line(session, model_name, record_id, vals):
             claim_line.product_id.web == 'published' and \
             (not claim_line.equivalent_product_id or
              claim_line.equivalent_product_id.web == 'published'):
-        export_rmaproduct.delay(session, model_name, record_id, priority=1)
+        export_rmaproduct.delay(session, model_name, record_id, priority=10)
 
 
 @on_record_write(model_names='claim.line')
