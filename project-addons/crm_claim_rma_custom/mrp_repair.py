@@ -61,3 +61,27 @@ class mrp_repair(models.Model):
             invoice.write(inv_vals)
 
         return res
+
+    @api.model
+    def calculate_pricelist(self, data):
+        partner = self.env["res.partner"].browse(data['partner_id'])
+        if partner.property_product_pricelist.id:
+            pricelist = partner.property_product_pricelist.id
+        else:
+            # Product_pricelist default id -> Public Pricelist
+            pricelist = self.env.ref('product.list0').id
+        return pricelist
+
+    @api.multi
+    def write(self, data):
+        if 'partner_id' in data:
+            data['pricelist_id'] = self.calculate_pricelist(data)
+        res = super(mrp_repair, self).write(data)
+        return res
+
+    @api.model
+    def create(self, data):
+        data['pricelist_id'] = self.calculate_pricelist(data)
+        res = super(mrp_repair, self).create(data)
+        return res
+
