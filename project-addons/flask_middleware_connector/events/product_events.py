@@ -28,7 +28,6 @@ from ..unit.backend_adapter import GenericAdapter
 from .rma_events import export_rmaproduct
 from openerp.addons.connector.event import Event
 
-import ipdb
 on_stock_move_change = Event()
 
 
@@ -101,7 +100,6 @@ def delay_export_product_template_write(session, model_name, record_id, vals):
                  "web", "show_stock_outside", "sale_ok"]
     record_ids = session.env['product.product'].\
         search([('product_tmpl_id', '=',  record_id)])
-    ipdb.set_trace()
     if vals.get('image', True) or len(vals) != 1:
         for field in up_fields:
             if field in vals:
@@ -117,7 +115,6 @@ def delay_export_product_create(session, model_name, record_id, vals):
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
                  "product_brand_id", "last_sixty_days_sales",
                  "joking_index"]
-    ipdb.set_trace()
     export_product.delay(session, model_name, record_id, priority=2, eta=60)
     claim_lines = session.env['claim.line'].search(
         [('product_id', '=', product.id),
@@ -129,7 +126,6 @@ def delay_export_product_create(session, model_name, record_id, vals):
                                     priority=10, eta=120)
     claim_lines = session.env['claim.line'].search(
         [('equivalent_product_id', '=', product.id),
-         ('product_id.web', '=', 'published'),
          ('claim_id.partner_id.web', '=', True)])
     for line in claim_lines:
         export_rmaproduct.delay(session, 'claim.line', line.id,
