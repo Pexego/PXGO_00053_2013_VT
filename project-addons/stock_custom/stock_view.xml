@@ -10,7 +10,7 @@
                     <field name="location_id"/>
                 </xpath>
                 <field name="min_date" position="attributes">
-                    <attribute name="invisible">1</attribute>
+                    <attribute name="invisible">0</attribute>
                 </field>
                 <field name="date" position="after">
                     <field name="date_done" string="Date Final"/>
@@ -87,6 +87,7 @@
                     <attribute name="invisible">1</attribute>
                 </button>
                 <field name="location_dest_id" position="after">
+                    <field name="user_id"/>
                     <field name="string_availability_info"/>
                 </field>
                 <field name="origin" position="after">
