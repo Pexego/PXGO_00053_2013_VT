@@ -65,7 +65,7 @@ class stock_picking(models.Model):
 
     _inherit = 'stock.picking'
 
-    shipping_identifier = fields.Char('Shipping identifier', required=True, size=64)
+    shipping_identifier = fields.Char('Shipping identifier', size=64)
     temp = fields.Boolean("Temp.")
 
     @api.multi
