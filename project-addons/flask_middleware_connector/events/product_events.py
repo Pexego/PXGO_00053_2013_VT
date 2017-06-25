@@ -96,8 +96,7 @@ class ProductAdapter(GenericAdapter):
 @on_record_write(model_names='product.template')
 def delay_export_product_template_write(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
-    up_fields = ["name", "list_price", "categ_id", "product_brand_id",
-                 "web", "show_stock_outside", "sale_ok"]
+    up_fields = ["name", "list_price", "categ_id", "product_brand_id", "show_stock_outside", "sale_ok"]
     record_ids = session.env['product.product'].\
         search([('product_tmpl_id', '=',  record_id)])
     if vals.get('image', True) or len(vals) != 1:
@@ -120,8 +119,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
         [('product_id', '=', product.id),
          ('claim_id.partner_id.web', '=', True)])
     for line in claim_lines:
-        if not line.equivalent_product_id or \
-                line.equivalent_product_id.web == 'published':
+        if not line.equivalent_product_id:
             export_rmaproduct.delay(session, 'claim.line', line.id,
                                     priority=10, eta=120)
     claim_lines = session.env['claim.line'].search(

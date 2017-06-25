@@ -90,6 +90,16 @@ class stock_move(models.Model):
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
     real_stock = fields.Float('Real Stock', compute='_get_real_stock')
     available_stock = fields.Float('Available Stock', compute="_get_available_stock")
+    user_id = fields.Many2one('res.users', compute='_get_responsible')
+
+    @api.one
+    def _get_responsible(self):
+        responsible = None
+        if self.picking_id:
+            responsible = self.picking_id.commercial.id
+        elif self.origin:
+            responsible = self.env['sale.order'].search([('name', '=', self.origin)]).user_id.id
+        self.user_id = responsible
 
     @api.one
     def _get_available_stock(self):
