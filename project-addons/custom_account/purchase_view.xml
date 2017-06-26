@@ -34,6 +34,9 @@
             <xpath expr="//field[@name='order_line']/tree/field[@name='product_qty']" position="attributes">
                 <attribute name="on_change"></attribute>
             </xpath>
+            <field name="notes" position="after">
+                <field name="sale_notes" class="oe_inline" placeholder="Purchase Sale Notes" nolabel="1"/>
+            </field>
           </field>
       </record>
 
