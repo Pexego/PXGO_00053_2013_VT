@@ -14,9 +14,20 @@
             <button name="cancel" position="replace">
                 <button name="cancel" states="draft,sent,reserve,risk_approval" string="Cancel Quotation" groups="base.group_user"/>
             </button>
-           <xpath expr="//button[@name='draft_to_risk'][@states='sent']" position="replace">
-               <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight" groups="base.group_user" invisible="1"/>
-           </xpath>
+            <xpath expr="//button[@name='draft_to_risk'][@states='sent']" position="replace">
+                <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight" groups="base.group_user" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_line_tree_avoid_create_product" model="ir.ui.view">
+        <field name="name">view.order.line.tree.avoid.create.product</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
+            </xpath>
         </field>
     </record>
 
