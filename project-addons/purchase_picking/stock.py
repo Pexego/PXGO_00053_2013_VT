@@ -20,14 +20,29 @@
 ##############################################################################
 
 from openerp import models, fields, api, _, exceptions
+import datetime
 
 
 class StockContainer(models.Model):
 
     _name = "stock.container"
 
+    @api.multi
+    def _get_date_expected(self):
+        count = 0
+        length = len(self.move_ids)
+        min_date = None
+        while count < length:
+            if self.move_ids[count].picking_id.min_date:
+                picking_date = self.move_ids[count].picking_id.min_date
+                min_date = datetime.datetime.strptime(picking_date, '%Y-%m-%d %H:%M:%S').date()
+                break
+            count += 1
+
+        return min_date
+
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", required=True)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', required=True, store=True)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
 
@@ -87,6 +102,7 @@ class stock_move(models.Model):
     partner_id = fields.Many2one('res.partner', 'Partner')
     container_id = fields.Many2one('stock.container', "Container")
     subtotal_price = fields.Float('Subtotal', compute='_calc_subtotal')
+    partner_ref = fields.Char(related='purchase_line_id.order_id.partner_ref')
 
     @api.multi
     def _calc_subtotal(self):
