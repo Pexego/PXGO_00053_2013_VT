@@ -176,8 +176,6 @@ def delay_write_rma_line(session, model_name, record_id, vals):
                  "internal_description", "product_returned_quantity",
                  "equivalent_product_id", "prodlot_id", "invoice_id"]
     if claim_line.claim_id.partner_id.web:
-        if vals.get('equivalent_product_id', False):
-            eq_product = session.env['product.product'].browse(vals.get('equivalent_product_id'))
         for field in up_fields:
             if field in vals:
                 update_rmaproduct.delay(session, model_name, record_id,
