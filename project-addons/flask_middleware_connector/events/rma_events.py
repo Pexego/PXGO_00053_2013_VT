@@ -162,9 +162,7 @@ class RmaProductAdapter(GenericAdapter):
 def delay_create_rma_line(session, model_name, record_id, vals):
     claim_line = session.env[model_name].browse(record_id)
     if claim_line.claim_id.partner_id.web and \
-            claim_line.product_id.web == 'published' and \
-            (not claim_line.equivalent_product_id or
-             claim_line.equivalent_product_id.web == 'published'):
+            (not claim_line.equivalent_product_id):
         export_rmaproduct.delay(session, model_name, record_id, priority=10)
 
 
@@ -177,12 +175,9 @@ def delay_write_rma_line(session, model_name, record_id, vals):
                  "name", "move_out_customer_state",
                  "internal_description", "product_returned_quantity",
                  "equivalent_product_id", "prodlot_id", "invoice_id"]
-    if claim_line.claim_id.partner_id.web and \
-            claim_line.product_id.web == 'published':
+    if claim_line.claim_id.partner_id.web:
         if vals.get('equivalent_product_id', False):
             eq_product = session.env['product.product'].browse(vals.get('equivalent_product_id'))
-            if eq_product.web != 'published':
-                vals.pop('equivalent_product_id')
         for field in up_fields:
             if field in vals:
                 update_rmaproduct.delay(session, model_name, record_id,
@@ -193,8 +188,7 @@ def delay_write_rma_line(session, model_name, record_id, vals):
 @on_record_unlink(model_names='claim.line')
 def delay_unlink_rma_line(session, model_name, record_id):
     claim_line = session.env[model_name].browse(record_id)
-    if claim_line.claim_id.partner_id.web and \
-            claim_line.product_id.web == 'published':
+    if claim_line.claim_id.partner_id.web:
         unlink_rmaproduct.delay(session, model_name, record_id)
 
 
