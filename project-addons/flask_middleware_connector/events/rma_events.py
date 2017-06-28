@@ -179,7 +179,7 @@ def delay_write_rma_line(session, model_name, record_id, vals):
         for field in up_fields:
             if field in vals:
                 update_rmaproduct.delay(session, model_name, record_id,
-                                        priority=10, eta=120)
+                                        priority=15, eta=120)
                 break
 
 
