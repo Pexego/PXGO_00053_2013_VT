@@ -39,7 +39,7 @@
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="after">
-                    <field name="shipping_identifier" required="True" attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
+                    <field name="shipping_identifier" attrs="{'required':[('picking_type_code', '=', 'incoming')], 'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
                 </field>
             </field>
         </record>
