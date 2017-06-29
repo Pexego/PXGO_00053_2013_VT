@@ -28,6 +28,7 @@ class StockContainer(models.Model):
     _name = "stock.container"
 
     @api.multi
+    @api.depends('move_ids')
     def _get_date_expected(self):
         count = 0
         length = len(self.move_ids)
@@ -65,16 +66,6 @@ class StockContainer(models.Model):
         elif self.origin:
             responsible = self.env['sale.order'].search([('name', '=', self.origin)]).user_id
         return responsible
-
-    @api.multi
-    def write(self, vals):
-        if vals.get('date_expected', False):
-            for container in self:
-                if vals['date_expected'] != container.date_expected:
-                    for move in container.move_ids:
-                        move.date_expected = vals['date_expected']
-        return super(StockContainer, self).write(vals)
-
 
 class stock_picking(models.Model):
 
