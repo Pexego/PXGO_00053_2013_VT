@@ -199,5 +199,6 @@ class product_outlet_wizard(models.TransientModel):
         move_out.action_confirm()
         move_out.action_assign()
         move_out.picking_id.not_sync = True
+        move_out.picking_id.odoo_management = True
         move_in.action_confirm()
         return {'type': 'ir.actions.act_window_close'}

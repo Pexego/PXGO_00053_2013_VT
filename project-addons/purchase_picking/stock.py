@@ -20,14 +20,27 @@
 ##############################################################################
 
 from openerp import models, fields, api, _, exceptions
+import datetime
 
 
 class StockContainer(models.Model):
 
     _name = "stock.container"
 
+    @api.multi
+    @api.depends('move_ids')
+    def _get_date_expected(self):
+        for container in self:
+            min_date = False
+            for move in container.moves_ids:
+                if move.picking_id:
+                    if not min_date or min_date > move.picking_id.min_date:
+                        min_date = move.picking_id.min_date
+            if min_date:
+                container.date_expected = min_date
+
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", required=True)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', required=True, store=True)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
 
@@ -50,16 +63,6 @@ class StockContainer(models.Model):
         elif self.origin:
             responsible = self.env['sale.order'].search([('name', '=', self.origin)]).user_id
         return responsible
-
-    @api.multi
-    def write(self, vals):
-        if vals.get('date_expected', False):
-            for container in self:
-                if vals['date_expected'] != container.date_expected:
-                    for move in container.move_ids:
-                        move.date_expected = vals['date_expected']
-        return super(StockContainer, self).write(vals)
-
 
 class stock_picking(models.Model):
 
@@ -87,6 +90,7 @@ class stock_move(models.Model):
     partner_id = fields.Many2one('res.partner', 'Partner')
     container_id = fields.Many2one('stock.container', "Container")
     subtotal_price = fields.Float('Subtotal', compute='_calc_subtotal')
+    partner_ref = fields.Char(related='purchase_line_id.order_id.partner_ref')
 
     @api.multi
     def _calc_subtotal(self):

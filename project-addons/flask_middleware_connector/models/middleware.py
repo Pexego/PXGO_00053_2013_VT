@@ -154,13 +154,13 @@ class MiddlewareBackend(models.Model):
                 #~ for line in rma.claim_line_ids:
                     #~ if line.product_id.web == 'published':
                         #~ export_rmaproduct(session, 'claim.line', line.id)
-            #~ invoices = self.env['account.invoice'].search([('partner_id.web', '=', True),('state', 'in', ['open','paid'])])
-            #~ for invoice in invoices:
-                #~ export_invoice.delay(session, 'account.invoice', invoice.id)
-            products = self.env["product.product"]. \
-                search([('web', '=', 'not_published')])
-            for product in products:
-                export_product.delay(session, "product.product", product.id)
-                product.web = 'published'
+            invoices = self.env['account.invoice'].search([('partner_id.web', '=', True),('state', 'in', ['open','paid'])])
+            for invoice in invoices:
+                export_invoice.delay(session, 'account.invoice', invoice.id)
+            #~ products = self.env["product.product"]. \
+                #~ search([('web', '=', 'not_published')])
+            #~ for product in products:
+                #~ export_product.delay(session, "product.product", product.id)
+                #~ product.web = 'published'
 
         return True

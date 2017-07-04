@@ -196,6 +196,10 @@ class ResPartner(models.Model):
                                compute="_get_growth_rate")
     average_margin = fields.Float("Average Margin", readonly=True, compute="_get_average_margin")
 
+    unreconciled_purchase_aml_ids = fields.One2many('account.move.line', 'partner_id',
+                                           domain=['&', ('reconcile_id', '=', False), '&',
+                                                   ('account_id.active', '=', True), '&',
+                                                   ('account_id.type', '=', 'payable'), ('state', '!=', 'draft')])
     _sql_constraints = [
         ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
     ]

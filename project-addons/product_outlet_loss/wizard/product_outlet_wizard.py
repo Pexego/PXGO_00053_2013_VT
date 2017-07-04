@@ -56,6 +56,42 @@ class product_outlet_wizard(models.TransientModel):
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price3)
 
+    pvd1_price = fields.Float(
+        'Price PVD 1',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).pvd1_price)
+
+    pvd2_price = fields.Float(
+        'Price PVD 2',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).pvd2_price)
+
+    pvd3_price = fields.Float(
+        'Price PVD 3',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).pvd3_price)
+
+    pvi1_price = fields.Float(
+        'Price PVI 1',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).pvi1_price)
+
+    pvi2_price = fields.Float(
+        'Price PVI 2',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).pvi2_price)
+
+    pvi3_price = fields.Float(
+        'Price PVI 3',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).pvi3_price)
+
     commercial_cost = fields.Float(
         'Commercial Cost',
         default=lambda self:
@@ -109,6 +145,24 @@ class product_outlet_wizard(models.TransientModel):
                 price_outlet3 = self.list_price3 - (self.list_price3 *
                                                     (category_selected.percent / 100))
 
+                price_outlet_pvd = self.pvd1_price - (self.pvd1_price *
+                                                      (category_selected.percent / 100))
+
+                price_outlet_pvd2 = self.pvd2_price - (self.pvd2_price *
+                                                       (category_selected.percent / 100))
+
+                price_outlet_pvd3 = self.pvd3_price - (self.pvd3_price *
+                                                       (category_selected.percent / 100))
+
+                price_outlet_pvi = self.pvi1_price - (self.pvi1_price *
+                                                      (category_selected.percent / 100))
+
+                price_outlet_pvi2 = self.pvi2_price - (self.pvi2_price *
+                                                       (category_selected.percent / 100))
+
+                price_outlet_pvi3 = self.pvi3_price - (self.pvi3_price *
+                                                       (category_selected.percent / 100))
+
         outlet_product = self.env['product.product'].search(
             [('normal_product_id', '=', self.product_id.id), ('categ_id', '=', int(self.categ_id))])
 
@@ -139,7 +193,13 @@ class product_outlet_wizard(models.TransientModel):
                     'list_price2': price_outlet2,
                     'list_price3': price_outlet3,
                     'commercial_cost': self.commercial_cost,
-                    'list_price': price_outlet
+                    'list_price': price_outlet,
+                    'pvd1_price': price_outlet_pvd,
+                    'pvd2_price': price_outlet_pvd2,
+                    'pvd3_price': price_outlet_pvd3,
+                    'pvi1_price': price_outlet_pvi,
+                    'pvi2_price': price_outlet_pvi2,
+                    'pvi3_price': price_outlet_pvi3
                 }
                 outlet_product.write(values)
 
