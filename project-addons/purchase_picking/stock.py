@@ -30,17 +30,14 @@ class StockContainer(models.Model):
     @api.multi
     @api.depends('move_ids')
     def _get_date_expected(self):
-        count = 0
-        length = len(self.move_ids)
-        min_date = None
-        while count < length:
-            if self.move_ids[count].picking_id.min_date:
-                picking_date = self.move_ids[count].picking_id.min_date
-                min_date = datetime.datetime.strptime(picking_date, '%Y-%m-%d %H:%M:%S').date()
-                break
-            count += 1
-
-        return min_date
+        for container in self:
+            min_date = False
+            for move in container.moves_ids:
+                if move.picking_id:
+                    if not min_date or min_date > move.picking_id.min_date:
+                        min_date = move.picking_id.min_date
+            if min_date:
+                container.date_expected = min_date
 
     name = fields.Char("Container Ref.", required=True)
     date_expected = fields.Date("Date expected", compute='_get_date_expected', required=True, store=True)
