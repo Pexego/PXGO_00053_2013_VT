@@ -30,6 +30,7 @@ class move_details(models.TransientModel):
     qty = fields.Float('Quantity')
     move_id = fields.Many2one('stock.move', 'Move')
     wizard_id = fields.Many2one('picking.from.moves.wizard', 'wizard')
+    wizard_purchase_id = fields.Many2one('picking.from.purchase.wizard', 'wizard')
 
 
 class create_picking_move(models.TransientModel):
@@ -147,3 +148,122 @@ class create_picking_move(models.TransientModel):
         context2 = dict(context)
         context2['picking_ids'] = picking_ids
         return self.with_context(context2)._view_picking()
+
+
+class create_picking_purchase(models.TransientModel):
+
+    @api.model
+    def _get_lines_purchase(self):
+        wiz_lines = []
+        purchase_id = self.env.context.get('active_ids', [])
+        origin = self.env['purchase.order'].browse(purchase_id).name
+        for move in self.env['stock.move'].search([('origin', 'like', origin + '%')]):
+            if move.state != u'draft' or move.picking_id:
+                continue
+            wiz_lines.append({'product_id': move.product_id.id,
+                              'qty': move.product_uom_qty,
+                              'move_id': move.id})
+        return wiz_lines
+
+    _name = "picking.from.purchase.wizard"
+
+    date_picking = fields.Datetime('Date planned', required=True)
+    container_id = fields.Many2one("stock.container", "Container")
+    move_detail_ids = fields.One2many('picking.wizard.move.details',
+                                      'wizard_purchase_id', 'lines', default=_get_lines_purchase)
+
+    def _view_picking(self):
+        action = self.env.ref('stock.action_picking_tree').read()[0]
+        pick_ids = self.env.context.get('picking_ids', [])
+        # override the context to get rid of the default filtering on picking type
+        action['context'] = {}
+        # choose the view_mode accordingly
+        if len(pick_ids) > 1:
+            action['domain'] = "[('id','in',[" + ','.join(map(str, pick_ids)) + "])]"
+        else:
+            res = self.env.ref('stock.view_picking_form').id
+            action['views'] = [(res, 'form')]
+            action['res_id'] = pick_ids and pick_ids[0] or False
+        return action
+
+    @api.multi
+    def action_purchase_create_picking(self):
+        context = self.env.context
+        if not context.get('active_ids', False):
+            return
+        type_ids = self.env['stock.picking.type'].search([('code', '=', 'incoming')])
+        if not type_ids:
+            raise exceptions.except_orm(_('Picking error'), _('Type not found'))
+        type_id = type_ids[0]
+        picking_types = {}
+        all_moves = self.env['stock.move']
+        # se recorren los movimientos para agruparlos por tipo
+        for move in self.move_detail_ids:
+            if self.container_id:
+                move.move_id.container_id = False
+            if not move.move_id.picking_type_id:
+                move.move_id.picking_type_id = type_id
+            if move.move_id.picking_type_id.id not in picking_types.keys():
+                picking_types[move.move_id.picking_type_id.id] = {'inv': self.env['stock.move'], 'not_inv': self.env['stock.move']}
+            if move.qty != move.move_id.product_uom_qty:
+                if not move.qty:
+                    continue
+                if move.qty > move.move_id.product_uom_qty:
+                    raise exceptions.except_orm(_('Quantity error'), _('The quantity is greater than the original.'))
+                new_move = move.move_id.copy({'product_uom_qty': move.qty})
+                new_move.purchase_line_id = move.move_id.purchase_line_id
+                if move.move_id.invoice_state == 'none':
+                    key = 'not_inv'
+                else:
+                    key = 'inv'
+                picking_types[move.move_id.picking_type_id.id][key] += new_move
+                move.move_id.product_uom_qty = move.move_id.product_uom_qty - move.qty
+                all_moves += new_move
+                if self.container_id:
+                    new_move.container_id = self.container_id.id
+                else:
+                    new_move.date_expected = self.date_picking
+            else:
+                if move.move_id.invoice_state == 'none':
+                    key = 'not_inv'
+                else:
+                    key = 'inv'
+                picking_types[move.move_id.picking_type_id.id][key] += move.move_id
+                if self.container_id:
+                    move.move_id.container_id = self.container_id.id
+                else:
+                    move.move_id.date_expected = self.date_picking
+                all_moves += move.move_id
+        picking_ids = []
+
+        # se crea un albarán por cada tipo
+        for pick_type in picking_types.keys():
+            for inv_type in picking_types[pick_type].keys():
+                moves_type = picking_types[pick_type][inv_type]
+                if not moves_type:
+                    continue
+                partner = moves_type[0].partner_id.id
+                for move in moves_type[1:]:
+                    if move.partner_id.id != partner:
+                        partner = self.env.ref('purchase_picking.partner_multisupplier').id
+                        break
+
+                picking_vals = {
+                    'partner_id': partner,
+                    'picking_type_id': pick_type,
+                    'move_lines': [(6, 0, [x.id for x in moves_type])],
+                    'origin': ', '.join(moves_type.mapped('purchase_line_id.order_id.name')),
+                    'min_date': self.date_picking,
+                    'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none',
+                    'temp': True
+                }
+                picking_ids.append(self.env['stock.picking'].create(picking_vals).id)
+        all_moves = all_moves.action_confirm()
+
+        all_moves = self.env['stock.move'].browse(all_moves)
+
+        all_moves.force_assign()
+        context2 = dict(context)
+        context2['picking_ids'] = picking_ids
+        return self.with_context(context2)._view_picking()
+

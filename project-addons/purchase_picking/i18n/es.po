@@ -296,3 +296,13 @@ msgstr "Asistente"
 #, python-format
 msgid "Set the partner in the created moves"
 msgstr "Establezca el proveedor en el movimiento"
+
+#. module: purchase_picking
+#: view:purchase.order:purchase_picking.purchase_order_form_change_view_picking
+msgid "View pickings"
+msgstr "Ver albaranes"
+
+#. module: purchase_picking
+#: view:purchase.order:purchase_picking.purchase_order_form_change_view_picking
+msgid "Create picking"
+msgstr "Crear albarán"
