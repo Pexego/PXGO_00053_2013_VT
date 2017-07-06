@@ -416,3 +416,23 @@ class AccountInvoiceRefund(models.TransientModel):
                 new_invoice.payment_mode_id = \
                     orig_invoice.payment_mode_id.id or False
         return res
+
+
+class AccountInvoiceConfirm(models.TransientModel):
+    """
+    This wizard will confirm the all the selected draft invoices
+    """
+
+    _inherit = "account.invoice.confirm"
+
+    @api.multi
+    def invoice_confirm(self):
+        res = super(AccountInvoiceConfirm, self).invoice_confirm()
+        context = self.env.context
+        if context is None:
+            context = {}
+        active_ids = context.get('active_ids', []) or []
+        proxy = self.env['account.invoice']
+        for record in proxy.browse(active_ids):
+            record.invoice_validate()
+        return res

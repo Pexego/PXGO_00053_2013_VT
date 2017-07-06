@@ -9,9 +9,14 @@
             <field name="arch" type="xml">
                 <button name="view_picking" position="replace">
                     <field name="picking_created" invisible="1"/>
-                    <button name="view_picking" string="Receive Products" type="object"
-                        invisible="1"
-                        class="oe_highlight"/>
+                    <button name="view_picking" string="View picking" type="object"
+                            attrs="{'invisible': [('picking_created', '=', False)]}"
+                            class="oe_highlight"/>
+                </button>
+                <button name="view_picking" position="after">
+                    <button name="%(action_create_picking_purchase_view)d" string="Create picking" type="action"
+                            attrs="{'invisible': ['|', ('picking_created', '=', True), ('state','in',('draft', 'cancel'))]}"
+                            class="oe_highlight"/>
                 </button>
             </field>
         </record>
