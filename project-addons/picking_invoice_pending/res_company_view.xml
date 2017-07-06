@@ -10,6 +10,9 @@
                 <field name="currency_id" position="after">
                     <field name="required_invoice_pending_move"/>
                     <field name="property_pending_supplier_invoice_account" attrs="{'invisible': [('required_invoice_pending_move','=',False)]}"/>
+                    <field name="property_pending_expenses_account" attrs="{'invisible': [('required_invoice_pending_move','=',False)]}"/>
+                    <field name="property_pending_stock_account" attrs="{'invisible': [('required_invoice_pending_move','=',False)]}"/>
+                    <field name="property_pending_variation_account" attrs="{'invisible': [('required_invoice_pending_move','=',False)]}"/>
                     <field name="property_pending_stock_journal" attrs="{'invisible': [('required_invoice_pending_move','=',False)]}"/>
                 </field>
             </field>

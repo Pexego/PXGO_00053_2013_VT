@@ -28,7 +28,6 @@ from ..unit.backend_adapter import GenericAdapter
 from .rma_events import export_rma, export_rmaproduct
 from .invoice_events import export_invoice
 
-
 @middleware
 class PartnerExporter(Exporter):
 
@@ -76,7 +75,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                  "property_product_pricelist", "lang"]
     if vals.get("web", False) and (vals.get('active', False) or
                                    partner.active):
-        export_partner.delay(session, model_name, record_id, priority=2,
+        export_partner.delay(session, model_name, record_id, priority=1,
                              eta=60)
         invoices = session.env['account.invoice'].search(
             [('partner_id', '=', partner.id)]
@@ -130,7 +129,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     if (vals.get("web", False) and \
             vals.get('active', partner.active) and \
             vals.get('is_company', partner.is_company)):
-        export_partner.delay(session, model_name, record_id)
+        export_partner.delay(session, model_name, record_id, priority=1, eta=60)
         invoices = session.env['account.invoice'].search(
             [('partner_id', '=', partner.id)]
         )
@@ -175,7 +174,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     elif partner.web and (vals.get('is_company', False) or partner.is_company):
         for field in up_fields:
             if field in vals:
-                update_partner.delay(session, model_name, record_id, priority=5)
+                update_partner.delay(session, model_name, record_id, priority=2)
                 break
 
 

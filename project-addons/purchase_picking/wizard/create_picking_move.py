@@ -116,7 +116,7 @@ class create_picking_move(models.TransientModel):
                 else:
                     move.move_id.date_expected = self.date_picking
                 all_moves += move.move_id
-        picking_ids = []
+        picking_ids = self.env['stock.picking']
 
         # se crea un albarán por cada tipo
         for pick_type in picking_types.keys():
@@ -139,14 +139,12 @@ class create_picking_move(models.TransientModel):
                     'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none',
                     'temp': True
                 }
-                picking_ids.append(self.env['stock.picking'].create(picking_vals).id)
-        all_moves = all_moves.action_confirm()
-
-        all_moves = self.env['stock.move'].browse(all_moves)
+                picking_ids += self.env['stock.picking'].create(picking_vals)
+        picking_ids.action_confirm()
 
         all_moves.force_assign()
         context2 = dict(context)
-        context2['picking_ids'] = picking_ids
+        context2['picking_ids'] = picking_ids.ids
         return self.with_context(context2)._view_picking()
 
 

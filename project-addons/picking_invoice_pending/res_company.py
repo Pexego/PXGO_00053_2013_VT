@@ -31,6 +31,18 @@ class ResCompany(models.Model):
                         domain=[('type', '=', 'payable')],
                         help="This account is used for accounting in pending "
                              "supplier invoices.", company_dependent=True)
+    property_pending_expenses_account = \
+        fields.Many2one("account.account", "Pending invoice expenses account",
+                        help="This account is used for accounting in pending "
+                             "supplier invoices.", company_dependent=True)
+    property_pending_stock_account = \
+        fields.Many2one("account.account", "Pending invoice stock account",
+                        help="This account is used for accounting in pending "
+                             "supplier invoices.", company_dependent=True)
+    property_pending_variation_account = \
+        fields.Many2one("account.account", "Pending invoice variation account",
+                        help="This account is used for accounting in pending "
+                             "supplier invoices.", company_dependent=True)
     property_pending_stock_journal = \
         fields.Many2one("account.journal", "Pending supplier invoice journal",
                         help="This journal is used for accounting in pending "

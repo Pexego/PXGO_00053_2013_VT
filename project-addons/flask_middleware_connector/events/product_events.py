@@ -96,33 +96,10 @@ class ProductAdapter(GenericAdapter):
 @on_record_write(model_names='product.template')
 def delay_export_product_template_write(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
-    up_fields = ["name", "list_price", "categ_id", "product_brand_id",
-                 "web", "show_stock_outside", "sale_ok"]
+    up_fields = ["name", "list_price", "categ_id", "product_brand_id", "show_stock_outside", "sale_ok"]
     record_ids = session.env['product.product'].\
         search([('product_tmpl_id', '=',  record_id)])
-    if vals.get("web", False) and vals.get("web", False) == "published":
-        export_product.delay(session, model_name, record_id,
-                             priority=2, eta=60)
-        for prod in record_ids:
-            claim_lines = session.env['claim.line'].search(
-                [('product_id', '=', prod.id),
-                 ('claim_id.partner_id.web', '=', True)])
-            for line in claim_lines:
-                if not line.equivalent_product_id or \
-                        line.equivalent_product_id.web == 'published' :
-                    export_rmaproduct.delay(session, 'claim.line', line.id,
-                                            priority=10, eta=120)
-            claim_lines = session.env['claim.line'].search(
-                [('equivalent_product_id', '=', prod.id),
-                 ('product_id.web', '=', 'published'),
-                 ('claim_id.partner_id.web', '=', True)])
-            for line in claim_lines:
-                export_rmaproduct.delay(session, 'claim.line', line.id,
-                                        priority=10, eta=120)
-    elif vals.get("web", False) and vals.get("web", False) != "published":
-        unlink_product.delay(session, model_name, record_id,
-                             priority=1)
-    elif product.web == "published":
+    if vals.get('image', True) or len(vals) != 1:
         for field in up_fields:
             if field in vals:
                 update_product.delay(session, model_name, record_id)
@@ -137,28 +114,20 @@ def delay_export_product_create(session, model_name, record_id, vals):
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
                  "product_brand_id", "last_sixty_days_sales",
                  "joking_index"]
-    if vals.get("web", False) and vals.get("web", False) == "published":
-        export_product.delay(session, model_name, record_id, priority=2, eta=60)
-        claim_lines = session.env['claim.line'].search(
-            [('product_id', '=', product.id),
-             ('claim_id.partner_id.web', '=', True)])
-        for line in claim_lines:
-            if not line.equivalent_product_id or \
-                    line.equivalent_product_id.web == 'published':
-                export_rmaproduct.delay(session, 'claim.line', line.id,
-                                        priority=10, eta=120)
-        claim_lines = session.env['claim.line'].search(
-            [('equivalent_product_id', '=', product.id),
-             ('product_id.web', '=', 'published'),
-             ('claim_id.partner_id.web', '=', True)])
-        for line in claim_lines:
+    export_product.delay(session, model_name, record_id, priority=2, eta=60)
+    claim_lines = session.env['claim.line'].search(
+        [('product_id', '=', product.id),
+         ('claim_id.partner_id.web', '=', True)])
+    for line in claim_lines:
+        if not line.equivalent_product_id:
             export_rmaproduct.delay(session, 'claim.line', line.id,
                                     priority=10, eta=120)
-    elif product.web == "published":
-        for field in up_fields:
-            if field in vals:
-                update_product.delay(session, model_name, record_id)
-                break
+    claim_lines = session.env['claim.line'].search(
+        [('equivalent_product_id', '=', product.id),
+         ('claim_id.partner_id.web', '=', True)])
+    for line in claim_lines:
+        export_rmaproduct.delay(session, 'claim.line', line.id,
+                                priority=10, eta=120)
 
 
 @on_record_write(model_names='product.product')
@@ -168,25 +137,21 @@ def delay_export_product_write(session, model_name, record_id, vals):
                  "pvi3_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation",
                  "last_sixty_days_sales", "joking_index"]
-    if product.web == "published":
-        for field in up_fields:
-            if field in vals:
-                update_product.delay(session, model_name, record_id)
-                break
+    for field in up_fields:
+        if field in vals:
+            update_product.delay(session, model_name, record_id)
+            break
 
 
 @on_record_unlink(model_names='product.product')
 def delay_unlink_product(session, model_name, record_id):
-    product = session.env[model_name].browse(record_id)
-    if product.web == "published":
-        unlink_product.delay(session, model_name, record_id)
+    unlink_product.delay(session, model_name, record_id)
 
 
 @on_stock_move_change
 def update_stock_quantity(session, model_name, record_id):
     move = session.env[model_name].browse(record_id)
-    if move.product_id.web == "published" and \
-            move.product_id.show_stock_outside:
+    if move.product_id.show_stock_outside:
         update_product.delay(session, "product.product", move.product_id.id)
 
 

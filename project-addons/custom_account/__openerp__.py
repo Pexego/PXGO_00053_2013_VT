@@ -35,7 +35,7 @@
                 'account_payment', 'sale', 'purchase', 'nan_partner_risk',
                 'sale_margin_percentage', 'account_banking_sepa_direct_debit',
                 'account_banking_payment_export', 'stock_reserve_sale',
-                'custom_partner', 'sale_quick_payment',
+                'custom_partner', 'sale_quick_payment', "web_readonly_bypass",
                 'account_direct_debit_with_refunds', 'account_followup'],
     "data": ['account_view.xml',
              'partner_view.xml',
