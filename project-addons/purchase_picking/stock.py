@@ -32,7 +32,7 @@ class StockContainer(models.Model):
     def _get_date_expected(self):
         for container in self:
             min_date = False
-            for move in container.moves_ids:
+            for move in container.move_ids:
                 if move.picking_id:
                     if not min_date or min_date > move.picking_id.min_date:
                         min_date = move.picking_id.min_date
