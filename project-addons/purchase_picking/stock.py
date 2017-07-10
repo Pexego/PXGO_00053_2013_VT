@@ -27,20 +27,8 @@ class StockContainer(models.Model):
 
     _name = "stock.container"
 
-    @api.multi
-    @api.depends('move_ids')
-    def _get_date_expected(self):
-        for container in self:
-            min_date = False
-            for move in container.move_ids:
-                if move.picking_id:
-                    if not min_date or min_date > move.picking_id.min_date:
-                        min_date = move.picking_id.min_date
-            if min_date:
-                container.date_expected = min_date
-
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", compute='_get_date_expected', required=True, store=True)
+    date_expected = fields.Date("Date expected", required=True)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
 
