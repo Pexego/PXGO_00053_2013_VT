@@ -100,6 +100,18 @@ class partner_visit(models.Model):
         if self.partner_id:
             self.salesperson_select = self.partner_id.commercial_partner_id.user_id.id
 
+    @api.multi
+    @api.onchange('add_user_email')
+    def onchange_user_cc(self):
+        if self.add_user_email:
+            res = {'warning': {
+                'title': _('Warning'),
+                'message': _('CC user has been changed. Remember that it is necessary to click on "Notify by email" '
+                             'button to send email')
+            }}
+            if res:
+                return res
+
     @api.one
     def send_email(self):
         mail_pool = self.env['mail.mail']

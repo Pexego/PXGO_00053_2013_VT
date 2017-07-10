@@ -200,3 +200,15 @@ msgstr "Visitas"
 #: field:partner.visit,partner_ref:0
 msgid "Ref. Contact"
 msgstr "Ref. Cliente"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:108
+#, python-format
+msgid "Warning"
+msgstr "Aviso"
+
+#. module: external_salesperson_visit
+#: code:addons/external_salesperson_visit/partner_visit.py:109
+#, python-format
+msgid "CC user has been changed. Remember that it is necessary to click on \"Notify by email\" button to send email"
+msgstr "Se ha modificado el usuario CC. Recuerde que para que reciba el correo debe presionar el botón \"Notificar por email\""
