@@ -19,7 +19,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import models, fields, api, _
+from openerp.exceptions import except_orm
 
 
 class purchase_order(models.Model):
@@ -91,6 +92,30 @@ class purchase_order(models.Model):
                         context=context):
                     move = stock_move.create(cr, uid, vals, context=context)
                     todo_moves.append(move)
+
+    def move_lines_create_picking(self, cr, uid, ids, context=None):
+        mod_obj = self.pool.get('ir.model.data')
+        act_obj = self.pool.get('ir.actions.act_window')
+        moves = self.pool('stock.move')
+
+        result = mod_obj.get_object_reference(cr, uid, 'stock', 'action_receive_move')
+        id = result and result[1] or False
+        result = act_obj.read(cr, uid, [id], context=context)[0]
+
+        self_purchase = self.browse(cr, uid, ids)
+        move_lines = moves.search(cr, uid,
+                                  [('origin', 'like', self_purchase.name + '%'),
+                                   ('picking_id', '=', False)],
+                                  context=context)
+        if len(move_lines) < 1:
+            raise except_orm(_('Warning'), _('There is any move line without associated picking'))
+
+        result['context'] = []
+        if len(move_lines) > 1:
+            result['domain'] = "[('id','in',[" + ','.join(map(str, move_lines)) + "])]"
+        else:
+            result['domain'] = "[('id','='," + str(move_lines[0]) + ")]"
+        return result
 
 
 class purchase_order_line(models.Model):

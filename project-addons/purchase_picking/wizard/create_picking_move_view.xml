@@ -26,28 +26,6 @@
             </field>
         </record>
 
-        <record id="create_picking_purchase_view" model="ir.ui.view">
-            <field name="name">create.picking.form.purchase</field>
-            <field name="model">picking.from.purchase.wizard</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Create Picking">
-                    <group>
-                        <field name="date_picking"/>
-                        <field name="container_id" context="{'default_date_expected': date_picking}"/>
-                        <field name="move_detail_ids" colspan="4" nolabel="1">
-                            <tree create="false" delete="false" editable="top">
-                                <field name="product_id" readonly="1"/>
-                                <field name="qty"/>
-                            </tree>
-                        </field>
-                        <button string="Create" name="action_purchase_create_picking" type="object" icon="gtk-ok"/>
-                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                    </group>
-                </form>
-            </field>
-        </record>
-
         <act_window name="Create picking"
             res_model="picking.from.moves.wizard"
             src_model="stock.move"
@@ -56,16 +34,6 @@
             target="new"
             key2="client_action_multi"
             id="action_create_picking"/>
-
-        <record id="action_create_picking_purchase_view" model="ir.actions.act_window">
-            <field name="name">Create Picking</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">picking.from.purchase.wizard</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="create_picking_purchase_view"/>
-            <field name="target">new</field>
-        </record>
 
     </data>
 </openerp>

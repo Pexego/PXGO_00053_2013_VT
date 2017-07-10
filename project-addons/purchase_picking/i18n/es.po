@@ -306,3 +306,15 @@ msgstr "Ver albaranes"
 #: view:purchase.order:purchase_picking.purchase_order_form_change_view_picking
 msgid "Create picking"
 msgstr "Crear albarán"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/purchase.py:112
+#, python-format
+msgid "Warning"
+msgstr "Aviso"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/purchase.py:112
+#, python-format
+msgid "There is any move line without associated picking"
+msgstr "No hay ninguna línea de movimiento sin albarán asociado"

@@ -14,8 +14,8 @@
                             class="oe_highlight"/>
                 </button>
                 <button name="view_picking" position="after">
-                    <button name="%(action_create_picking_purchase_view)d" string="Create picking" type="action"
-                            attrs="{'invisible': ['|', ('picking_created', '=', True), ('state','in',('draft', 'cancel'))]}"
+                    <button name="move_lines_create_picking" string="Create picking" type="object"
+                            attrs="{'invisible': [('state','in',('draft', 'cancel'))]}"
                             class="oe_highlight"/>
                 </button>
             </field>
