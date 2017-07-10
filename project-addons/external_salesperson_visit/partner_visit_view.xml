@@ -86,7 +86,7 @@
                                 <field name="description" string="Visit Summary"/>
                                 <field name="create_date" invisible="1"/>
                                 <field name="salesperson_select"/>
-                                <field name="add_user_email" on_change="onchange_user_cc(add_user_email)"/>
+                                <field name="add_user_email"/>
                                 <field name="confirm_done" attrs="{'invisible': [('visit_state', '=', 'log')]}"/>
                                 <field name="email_sent"/>
                             </group>

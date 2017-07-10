@@ -102,8 +102,8 @@ class partner_visit(models.Model):
 
     @api.multi
     @api.onchange('add_user_email')
-    def onchange_user_cc(self, user_cc):
-        if user_cc:
+    def onchange_user_cc(self):
+        if self.add_user_email:
             res = {'warning': {
                 'title': _('Warning'),
                 'message': _('CC user has been changed. Remember that it is necessary to click on "Notify by email" '
