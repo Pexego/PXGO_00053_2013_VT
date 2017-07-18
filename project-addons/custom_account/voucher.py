@@ -21,7 +21,6 @@
 
 from openerp import models, fields, api, osv
 
-import ipdb
 
 class AccountVoucher(models.Model):
 
@@ -65,7 +64,6 @@ class AccountVoucher(models.Model):
 
     @api.multi
     def onchange_journal(self, journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None):
-        ipdb.set_trace()
         res = super(AccountVoucher, self).onchange_journal(journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None)
         voucher_line_pool = self.pool.get('account.voucher.line')
         length_cr = len(res['value']['line_cr_ids'])
