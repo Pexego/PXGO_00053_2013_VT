@@ -120,7 +120,7 @@ addons = git https://github.com/OCA/reporting-engine.git odoo-repos/reporting-en
         git https://github.com/odoomrp/odoomrp-wip odoo-repos/odoomrp-wip 8.0
         local parts/odoo/addons/
 merges = git origin odoo-repos/spain pull/528/head ; account_entry_date
-
+         git origin odoo-repos/spain pull/555/head ; sii fix supplier_invoice_number 
 eggs = unidecode
        ipdb
        pyPdf
@@ -173,6 +173,8 @@ programs =
     20 openerp ${buildout:directory}/bin/start_openerp [ --load=web,connector --workers=${settings:openerp_workers}]
     40 flask ${buildout:directory}/bin/start_flask_app.sh
     30 openerp_connector_worker "${buildout:directory}/bin/python_openerp" [ "${buildout:directory}/odoo-repos/connector/connector/openerp-connector-worker" --config="${buildout:directory}/etc/openerp.cfg"  --logfile "${:logfile_openerp_connector}" --workers=${:connector_workers} --limit-time-real=10800] ${buildout:directory}/bin true
+    50 openerp_connector_worker_sii_temp "${buildout:directory}/bin/python_openerp" [ "${buildout:directory}/odoo-repos/connector/connector/openerp-connector-worker" --config="${buildout:directory}/etc/openerp.cfg"  --logfile "${:logfile_openerp_connector}" --workers=${:connector_workers} --database=visiotech_pruebas_sii --limit-time-real=10801] ${buildout:directory}/bin true
+    60 openerp_cron_db ${buildout:directory}/bin/start_openerp [ --xmlrpc-port=9269 --workers=${:connector_workers} --database=visiotech_pruebas_sii --load=web,connector]
 
 [py]
 recipe = zc.recipe.egg
