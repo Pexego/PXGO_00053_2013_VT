@@ -48,3 +48,19 @@ class ProductProduct(models.Model):
     def cron_update_product_real_cost(self):
         products = self.env['product.product'].search([('cost_method', '=', 'real')])
         products.update_real_cost()
+
+    @api.multi
+    def get_stock_new(self):
+        product_object = self.env['product.product']
+        products = product_object.search([('categ_id', '=', 567), ('qty_available', '>', 0)])
+        ids_products = [x.id for x in products]
+        return {
+            'domain': "[('id','in', " + str(ids_products) + ")]",
+            'name': _('Stock New'),
+            'view_mode': 'tree,form',
+            'view_type': 'form',
+            'context': {'tree_view_ref': 'product.product_product_tree_view'},
+            'res_model': 'product.product',
+            'type': 'ir.actions.act_window',
+        }
+
