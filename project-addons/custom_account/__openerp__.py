@@ -47,6 +47,7 @@
              'crm_view.xml',
              'purchase_view.xml',
              'product_view.xml',
-             'report/sale_report_view.xml'],
+             'report/sale_report_view.xml',
+             'voucher_view.xml'],
     "installable": True
 }
