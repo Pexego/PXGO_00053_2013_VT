@@ -22,7 +22,6 @@
 from openerp import models, fields, api, _, exceptions
 from datetime import date
 
-import ipdb
 
 class StockContainer(models.Model):
 
@@ -41,10 +40,9 @@ class StockContainer(models.Model):
                 self.date_expected = min_date
 
         if not self.date_expected:
-            self.date_expected = date.today()
+            self.date_expected = fields.Date.today()
 
     @api.one
-    @api.depends('move_ids')
     def _get_picking_ids(self):
         res = []
         for line in self.move_ids:
@@ -78,6 +76,7 @@ class StockContainer(models.Model):
         elif self.origin:
             responsible = self.env['sale.order'].search([('name', '=', self.origin)]).user_id
         return responsible
+
 
 class stock_picking(models.Model):
 

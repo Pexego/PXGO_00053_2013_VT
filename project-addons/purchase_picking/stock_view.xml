@@ -113,7 +113,7 @@
                             <field name="picking_ids" widget="one2many_tags"/>
                         </group>
                         <separator string="Related Moves" colspan="4"/>
-                        <field name="move_ids" on_change="_get_date_expected" context="{'tree_view_ref':'purchase_picking.stock_move_custom_tree'}" nolabel="1" colspan="4"/>
+                        <field name="move_ids" context="{'tree_view_ref':'purchase_picking.stock_move_custom_tree'}" nolabel="1" colspan="4"/>
                     </group>
                 </form>
             </field>
