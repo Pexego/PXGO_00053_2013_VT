@@ -28,6 +28,25 @@ class StockLandedCost(models.Model):
 
     _inherit = 'stock.landed.cost'
 
+    account_journal_id = fields.Many2one('account.journal', 'Account Journal', required=True,
+                                          states={'done': [('readonly', True)]},
+                                         default=lambda self: self.env['account.journal'].search([('code', '=', 'APUR')]))
+
+    container_ids = fields.Many2many('stock.container',string='Containers', states={'done': [('readonly', True)]},
+                                     copy=False, compute='_get_container')
+
+    @api.one
+    def _get_container(self):
+        move_obj = self.env['stock.move']
+        container_obj = self.env['stock.container']
+        res = []
+        for picking_id in self.picking_ids:
+            move_id = move_obj.search([('picking_id', '=', picking_id.id), ('container_id', '!=', False)], limit=1)
+            container_id = container_obj.browse(move_id.container_id.id)
+            res.append(container_id.id)
+
+        self.container_ids = res
+
     def compute_landed_cost(self, cr, uid, ids, context=None):
         line_obj = self.pool.get('stock.valuation.adjustment.lines')
         unlink_ids = line_obj.search(cr, uid, [('cost_id', 'in', ids)],

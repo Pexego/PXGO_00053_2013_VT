@@ -20,29 +20,42 @@
 ##############################################################################
 
 from openerp import models, fields, api, _, exceptions
-import datetime
+from datetime import date
 
 
 class StockContainer(models.Model):
 
     _name = "stock.container"
 
-    @api.multi
+    @api.one
     @api.depends('move_ids')
     def _get_date_expected(self):
-        for container in self:
-            min_date = False
-            for move in container.move_ids:
+        min_date = False
+        if self.move_ids:
+            for move in self.move_ids:
                 if move.picking_id:
                     if not min_date or min_date > move.picking_id.min_date:
                         min_date = move.picking_id.min_date
             if min_date:
-                container.date_expected = min_date
+                self.date_expected = min_date
+
+        if not self.date_expected:
+            self.date_expected = fields.Date.today()
+
+    @api.one
+    def _get_picking_ids(self):
+        res = []
+        for line in self.move_ids:
+            if line.picking_id.id not in res:
+                res.append(line.picking_id.id)
+
+        self.picking_ids = res
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", compute='_get_date_expected', required=True, store=True)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', readonly=True, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
+    picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
 
     user_id = fields.Many2one('Responsible', compute='_get_responsible')
     company_id = fields.\
@@ -63,6 +76,7 @@ class StockContainer(models.Model):
         elif self.origin:
             responsible = self.env['sale.order'].search([('name', '=', self.origin)]).user_id
         return responsible
+
 
 class stock_picking(models.Model):
 

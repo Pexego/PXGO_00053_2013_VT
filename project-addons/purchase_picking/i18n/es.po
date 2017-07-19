@@ -106,6 +106,11 @@ msgid "Date expected"
 msgstr "Fecha estimada"
 
 #. module: purchase_picking
+#: field:stock.container,picking_ids:0
+msgid "Pickings"
+msgstr "Albaranes"
+
+#. module: purchase_picking
 #: field:picking.from.moves.wizard,date_picking:0
 msgid "Date planned"
 msgstr "Fecha planificada"
