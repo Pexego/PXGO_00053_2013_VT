@@ -36,7 +36,6 @@ class StockLandedCost(models.Model):
                                      copy=False, compute='_get_container')
 
     @api.one
-    @api.depends('picking_ids')
     def _get_container(self):
         move_obj = self.env['stock.move']
         container_obj = self.env['stock.container']
