@@ -77,9 +77,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                                    partner.active):
         export_partner.delay(session, model_name, record_id, priority=1,
                              eta=60)
-        invoices = session.env['account.invoice'].search(
-            ['|', ('partner_id', '=', partner.id), ('partner_id.parent_id', '=', partner.id)]
-        )
+        invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id)])
         for invoice in invoices:
             export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
 
@@ -97,9 +95,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
     elif vals.get("active", False) and partner.web:
         export_partner.delay(session, model_name, record_id, priority=1,
                              eta=60)
-        invoices = session.env['account.invoice'].search(
-            ['|', ('partner_id', '=', partner.id), ('partner_id.parent_id', '=', partner.id)]
-         )
+        invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id)])
         for invoice in invoices:
             export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
 
@@ -131,9 +127,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             vals.get('is_company', partner.is_company)):
         export_partner.delay(session, model_name, record_id, priority=1, eta=60)
         partner_ids = session.env['res.partner'].search([('id', '=', partner.id)])
-        invoices = session.env['account.invoice'].search(
-            ['|', ('partner_id', '=', partner.id), ('partner_id.parent_id', '=', partner.id)]
-        )
+        invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id)])
         for invoice in invoices:
             export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
 
@@ -151,9 +145,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     elif (vals.get("active", False) and partner.web and \
             vals.get('is_company', partner.is_company)):
         export_partner.delay(session, model_name, record_id)
-        invoices = session.env['account.invoice'].search(
-            ['|', ('partner_id', '=', partner.id), ('partner_id.parent_id', '=', partner.id)]
-        )
+        invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id)])
         for invoice in invoices:
             export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
             

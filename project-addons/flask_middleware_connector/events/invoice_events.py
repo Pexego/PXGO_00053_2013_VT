@@ -28,7 +28,6 @@ from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
 import xmlrpclib
 
-import ipdb
 import base64
 
 @middleware
@@ -42,7 +41,7 @@ class InvoiceExporter(Exporter):
         result_encode = base64.b64encode(result)
         vals = {'odoo_id': invoice.id,
                 'number': invoice.number,
-                'partner_id': invoice.partner_id.commercial_partner_id.id or invoice.partner_id.parent_id.commercial_partner_id.id,
+                'partner_id': invoice.partner_id.commercial_partner_id.id,
                 'client_ref': invoice.name or "",
                 'date_invoice': invoice.date_invoice,
                 'date_due': invoice.date_due,
@@ -71,7 +70,7 @@ def delay_write_invoice(session, model_name, record_id, vals):
     up_fields = ["number", "client_ref", "date_invoice", "state", "partner_id",
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
 
-    if invoice.partner_id and (invoice.partner_id.web or invoice.partner_id.parent_id.web):
+    if invoice.partner_id and invoice.commercial_partner_id.web:
         if vals.get('state', False) == 'open':
             export_invoice.delay(session, model_name, record_id, priority=5)
         elif vals.get('state', False) == 'paid':
