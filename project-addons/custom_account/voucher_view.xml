@@ -13,9 +13,6 @@
                     <button name="concile_all" context="{'select':'invoices'}" type="object" string="Concile All Invoices" states="draft"/>
                     <button name="clear_all" context="{'select':'invoices'}" type="object" string="Clear All Invoices" states="draft"/>
                 </field>
-                <field name="journal_id" position="attributes">
-                    <attribute name="on_change">onchange_journal(journal_id, line_dr_ids, False, partner_id, date, amount, type, company_id, context)</attribute>
-                </field>
             </field>
         </record>
 

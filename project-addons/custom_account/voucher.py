@@ -21,51 +21,43 @@
 
 from openerp import models, fields, api, osv
 
-import ipdb
 
 class AccountVoucher(models.Model):
 
     _inherit = "account.voucher"
 
     @api.one
-    def concile_all(self, context=None):
-        if context['select'] == 'invoices':
-            for line in self.line_cr_ids:
-                res = {}
-                line.reconcile = True
-                amount_unreconciled = line.amount_unreconciled
-                res = line.onchange_reconcile(line.reconcile, line.amount, amount_unreconciled)
-                line.amount = res['value']['amount']
+    def concile_all(self):
+        objs = None
+        if self.env.context['select'] == 'invoices':
+            objs = self.line_cr_ids
+        elif self.env.context['select'] == 'debit':
+            objs = self.line_dr_ids
 
-        elif context['select'] == 'debit':
-            for line in self.line_dr_ids:
-                res = {}
-                line.reconcile = True
-                amount_unreconciled = line.amount_unreconciled
-                res = line.onchange_reconcile(line.reconcile, line.amount, amount_unreconciled)
-                line.amount = res['value']['amount']
+        for line in objs:
+            res = {}
+            line.reconcile = True
+            amount_unreconciled = line.amount_unreconciled
+            res = line.onchange_reconcile(line.reconcile, line.amount, amount_unreconciled)
+            line.amount = res['value']['amount']
 
     @api.one
-    def clear_all(self, context=None):
-        if context['select'] == 'invoices':
-            for line in self.line_cr_ids:
-                res = {}
-                line.reconcile = False
-                amount_unreconciled = line.amount_unreconciled
-                res = line.onchange_reconcile(line.reconcile, line.amount, amount_unreconciled)
-                line.amount = res['value']['amount']
+    def clear_all(self):
+        objs = None
+        if self.env.context['select'] == 'invoices':
+            objs = self.line_cr_ids
+        elif self.env.context['select'] == 'debit':
+            objs = self.line_dr_ids
 
-        elif context['select'] == 'debit':
-            for line in self.line_dr_ids:
-                res = {}
-                line.reconcile = False
-                amount_unreconciled = line.amount_unreconciled
-                res = line.onchange_reconcile(line.reconcile, line.amount, amount_unreconciled)
-                line.amount = res['value']['amount']
+        for line in objs:
+            res = {}
+            line.reconcile = False
+            amount_unreconciled = line.amount_unreconciled
+            res = line.onchange_reconcile(line.reconcile, line.amount, amount_unreconciled)
+            line.amount = res['value']['amount']
 
     @api.multi
     def onchange_journal(self, journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None):
-        ipdb.set_trace()
         res = super(AccountVoucher, self).onchange_journal(journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None)
         voucher_line_pool = self.pool.get('account.voucher.line')
         length_cr = len(res['value']['line_cr_ids'])
@@ -111,7 +103,7 @@ class AccountVoucher(models.Model):
                                                                              'amount': voucher_line.amount})
 
         return res
-    
+
     @api.one
     def _get_amount_with_rate(self):
         self.amount_with_currency_rate = self.amount * \
