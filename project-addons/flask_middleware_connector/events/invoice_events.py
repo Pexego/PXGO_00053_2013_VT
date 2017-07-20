@@ -71,7 +71,9 @@ def delay_write_invoice(session, model_name, record_id, vals):
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
 
     if invoice.partner_id and invoice.commercial_partner_id.web:
-        job = session.env['queue.job'].search(['&', ('func_string', 'like', '%' + str(invoice.id) + '%'), ('model_name', '=', model_name)])
+        job = session.env['queue.job'].search([('func_string', 'not like', '%confirm_one_invoice%'),
+                                               ('func_string', 'like', '%, ' + str(invoice.id) + ')%'),
+                                               ('model_name', '=', model_name)], order='date_created desc', limit=1)
         if job:
             if vals.get('state', False) == 'open' and 'unlink_invoice' in job[0].func_string:
                 export_invoice.delay(session, model_name, record_id, priority=5)
