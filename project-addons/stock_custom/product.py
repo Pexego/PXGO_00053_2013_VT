@@ -52,7 +52,9 @@ class ProductProduct(models.Model):
     @api.multi
     def get_stock_new(self):
         product_object = self.env['product.product']
-        products = product_object.search([('categ_id', '=', 567), ('qty_available', '>', 0)])
+        category_object = self.env['product.category']
+        category_id = category_object.search([('name', '=', 'NUEVOS')])
+        products = product_object.search([('categ_id', '=', category_id.id), ('qty_available', '>', 0)])
         ids_products = [x.id for x in products]
         return {
             'domain': "[('id','in', " + str(ids_products) + ")]",
