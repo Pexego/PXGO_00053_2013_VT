@@ -71,11 +71,11 @@ def delay_write_invoice(session, model_name, record_id, vals):
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
 
     if invoice.partner_id and invoice.commercial_partner_id.web:
-        if vals.get('state', False) == 'open':
+        if vals.get('state', False) == 'open' and invoice.state != 'open':
             export_invoice.delay(session, model_name, record_id, priority=5)
         elif vals.get('state', False) == 'paid':
             update_invoice.delay(session, model_name, record_id, priority=10)
-        elif vals.get('state', False) == 'cancel':
+        elif vals.get('state', False) == 'cancel' and invoice.state != 'draft':
             unlink_invoice(session, model_name, record_id, priority=15)
         elif invoice.state == 'open':
             for field in up_fields:
