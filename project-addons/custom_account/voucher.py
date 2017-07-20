@@ -59,9 +59,11 @@ class AccountVoucher(models.Model):
     @api.multi
     def onchange_journal(self, journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None):
         res = super(AccountVoucher, self).onchange_journal(journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None)
+        if not res or not res.get('value'):
+            return res
         voucher_line_pool = self.pool.get('account.voucher.line')
-        length_cr = len(res['value']['line_cr_ids'])
-        length_dr = len(res['value']['line_dr_ids'])
+        length_cr = len(res['value'].get('line_cr_ids', []))
+        length_dr = len(res['value'].get('line_dr_ids', []))
         cont = 0
         for voucher_line in self.line_cr_ids:
             res_id = 0
