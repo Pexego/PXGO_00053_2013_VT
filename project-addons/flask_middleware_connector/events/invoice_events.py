@@ -70,8 +70,6 @@ def delay_write_invoice(session, model_name, record_id, vals):
     up_fields = ["number", "client_ref", "date_invoice", "state", "partner_id",
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
 
-    import ipdb
-    ipdb.set_trace()
     if invoice.partner_id and invoice.commercial_partner_id.web:
         job = session.env['queue.job'].search(['&', ('func_string', 'like', '%' + str(invoice.id) + '%'), ('model_name', '=', model_name)])
         if job:
