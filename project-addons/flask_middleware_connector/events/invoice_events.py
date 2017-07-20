@@ -70,18 +70,24 @@ def delay_write_invoice(session, model_name, record_id, vals):
     up_fields = ["number", "client_ref", "date_invoice", "state", "partner_id",
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
 
+    import ipdb
+    ipdb.set_trace()
     if invoice.partner_id and invoice.commercial_partner_id.web:
-        if vals.get('state', False) == 'open' and invoice.state != 'open':
-            export_invoice.delay(session, model_name, record_id, priority=5)
-        elif vals.get('state', False) == 'paid':
-            update_invoice.delay(session, model_name, record_id, priority=10)
-        elif vals.get('state', False) == 'cancel' and invoice.state != 'draft':
-            unlink_invoice(session, model_name, record_id, priority=15)
+        job = session.env['queue.job'].search(['&', ('func_string', 'like', '%' + str(invoice.id) + '%'), ('model_name', '=', model_name)])
+        if job:
+            if vals.get('state', False) == 'open' and 'unlink_invoice' in job[0].func_string:
+                export_invoice.delay(session, model_name, record_id, priority=5)
+            elif vals.get('state', False) == 'paid':
+                update_invoice.delay(session, model_name, record_id, priority=10)
+            elif vals.get('state', False) == 'cancel' and 'unlink_invoice' not in job[0].func_string:
+                unlink_invoice(session, model_name, record_id, priority=15)
+            elif invoice.state == 'open':
+                for field in up_fields:
+                    if field in vals:
+                        update_invoice.delay(session, model_name, record_id, priority=10)
+                        break
         elif invoice.state == 'open':
-            for field in up_fields:
-                if field in vals:
-                    update_invoice.delay(session, model_name, record_id, priority=10)
-                    break
+            export_invoice.delay(session, model_name, record_id, priority=5)
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
