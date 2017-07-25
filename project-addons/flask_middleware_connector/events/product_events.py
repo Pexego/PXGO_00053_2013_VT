@@ -102,7 +102,7 @@ def delay_export_product_template_write(session, model_name, record_id, vals):
     if vals.get('image', True) or len(vals) != 1:
         for field in up_fields:
             if field in vals:
-                update_product.delay(session, model_name, record_id)
+                update_product.delay(session, model_name, record_id, priority=3, eta=60)
                 break
 
 
@@ -114,7 +114,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
                  "product_brand_id", "last_sixty_days_sales",
                  "joking_index"]
-    export_product.delay(session, model_name, record_id, priority=2, eta=60)
+    export_product.delay(session, model_name, record_id)
     claim_lines = session.env['claim.line'].search(
         [('product_id', '=', product.id),
          ('claim_id.partner_id.web', '=', True)])
@@ -139,7 +139,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
                  "last_sixty_days_sales", "joking_index"]
     for field in up_fields:
         if field in vals:
-            update_product.delay(session, model_name, record_id)
+            update_product.delay(session, model_name, record_id,  priority=2, eta=30)
             break
 
 
