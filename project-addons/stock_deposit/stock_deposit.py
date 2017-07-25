@@ -77,10 +77,13 @@ class stock_deposit(models.Model):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_out')
         for deposit in self:
+            procurement_id = self.env['procurement.group'].search([('name', '=', deposit.sale_id.name)])
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
-                 'invoice_state': '2binvoiced'})
+                 'invoice_state': '2binvoiced',
+                 'commercial': deposit.user_id.id,
+                 'group_id': procurement_id.id})
             values = {
                 'product_id': deposit.product_id.id,
                 'product_uom_qty': deposit.product_uom_qty,
@@ -91,7 +94,9 @@ class stock_deposit(models.Model):
                 'location_dest_id': deposit.partner_id.property_stock_customer.id,
                 'invoice_state': '2binvoiced',
                 'picking_id': picking.id,
-                'procurement_id': deposit.move_id.procurement_id.id
+                'procurement_id': deposit.move_id.procurement_id.id,
+                'commercial': deposit.user_id.id,
+                'group_id': procurement_id.id
             }
             move = move_obj.create(values)
             move.action_confirm()
