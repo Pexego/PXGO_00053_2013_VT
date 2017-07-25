@@ -13,6 +13,12 @@
                 <field name="user_id" position="before">
                     <field name="commercial_partner_id" string="Partner"/>
                 </field>
+                <xpath expr="//filter[@string='Invoice']" position="attributes">
+                    <attribute name="domain">[('type','=',('out_invoice','in_invoice')),('state', '!=', 'cancel')]</attribute>
+                </xpath>
+                <xpath expr="//filter[@string='Refund']" position="attributes">
+                    <attribute name="domain">[('type','in',('out_refund','in_refund')),('state', '!=', 'cancel')]</attribute>
+                </xpath>
                 <xpath expr="//filter[@string='Partner']" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </xpath>
@@ -24,6 +30,10 @@
                     <filter string="Brand name" name="brand_name" context="{'group_by':'brand_name'}"/>
                 </filter>
             </field>
+        </record>
+
+        <record id="account.action_account_invoice_report_all" model="ir.actions.act_window">
+            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'group_by':['partner_id'], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
         </record>
 
     </data>
