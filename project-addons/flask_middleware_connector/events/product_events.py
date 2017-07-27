@@ -139,7 +139,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
                  "last_sixty_days_sales", "joking_index"]
     for field in up_fields:
         if field in vals:
-            update_product.delay(session, model_name, record_id,  priority=2, eta=30)
+            update_product.delay(session, model_name, record_id, priority=2, eta=30)
             break
 
 
@@ -152,7 +152,7 @@ def delay_unlink_product(session, model_name, record_id):
 def update_stock_quantity(session, model_name, record_id):
     move = session.env[model_name].browse(record_id)
     if move.product_id.show_stock_outside:
-        update_product.delay(session, "product.product", move.product_id.id)
+        update_product.delay(session, "product.product", move.product_id.id, priority=2, eta=30)
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
