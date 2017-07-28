@@ -77,7 +77,7 @@ class stock_deposit(models.Model):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_out')
         for deposit in self:
-            procurement_id = self.env['procurement.group'].search([('name', '=', deposit.sale_id.name)])
+            procurement_id = deposit.sale_id.procurement_group_id
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
