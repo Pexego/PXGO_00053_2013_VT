@@ -58,7 +58,8 @@ class ProductExporter(Exporter):
                     'pvd_3': product.pvd3_price,
                     'joking_index': product.joking_index,
                     'sale_ok': product.sale_ok,
-                    'ean13': product.ean13} #Query BBDD: ALTER TABLE product ADD COLUMN ean13 varchar;
+                    'ean13': product.ean13,
+                    'description_sale': product.description_sale} #Query BBDD: ALTER TABLE product ADD COLUMN description_sale text;
             if product.show_stock_outside:
                 vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
@@ -102,7 +103,7 @@ def delay_export_product_template_write(session, model_name, record_id, vals):
     if vals.get('image', True) or len(vals) != 1:
         for field in up_fields:
             if field in vals:
-                update_product.delay(session, model_name, record_id)
+                update_product.delay(session, model_name, record_id, priority=3, eta=60)
                 break
 
 
@@ -113,8 +114,8 @@ def delay_export_product_create(session, model_name, record_id, vals):
                  "pvi3_price", "list_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
                  "product_brand_id", "last_sixty_days_sales",
-                 "joking_index"]
-    export_product.delay(session, model_name, record_id, priority=2, eta=60)
+                 "joking_index", "sale_ok", "ean13", "description_sale"]
+    export_product.delay(session, model_name, record_id)
     claim_lines = session.env['claim.line'].search(
         [('product_id', '=', product.id),
          ('claim_id.partner_id.web', '=', True)])
@@ -136,10 +137,11 @@ def delay_export_product_write(session, model_name, record_id, vals):
     up_fields = ["default_code", "pvi1_price", "pvi2_price",
                  "pvi3_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation",
-                 "last_sixty_days_sales", "joking_index"]
+                 "last_sixty_days_sales", "joking_index", "sale_ok",
+                 "ean13", "description_sale"]
     for field in up_fields:
         if field in vals:
-            update_product.delay(session, model_name, record_id)
+            update_product.delay(session, model_name, record_id, priority=2, eta=30)
             break
 
 
@@ -152,7 +154,7 @@ def delay_unlink_product(session, model_name, record_id):
 def update_stock_quantity(session, model_name, record_id):
     move = session.env[model_name].browse(record_id)
     if move.product_id.show_stock_outside:
-        update_product.delay(session, "product.product", move.product_id.id)
+        update_product.delay(session, "product.product", move.product_id.id, priority=2, eta=30)
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
