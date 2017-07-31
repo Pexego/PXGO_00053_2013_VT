@@ -14,6 +14,9 @@
                     <field name="lst_price" string="PVP A"/>
                     <field name="list_price2" string="PVP B"/>
                     <field name="list_price3" string="PVP C"/>
+                    <field name="pvi1_price" string="PVI A"/>
+                    <field name="pvi2_price" string="PVI B"/>
+                    <field name="pvi3_price" string="PVI C"/>
                 </field>
                 <field name="uom_id" position="attributes">
                     <attribute name="invisible">1</attribute>
