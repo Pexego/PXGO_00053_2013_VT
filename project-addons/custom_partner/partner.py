@@ -441,3 +441,36 @@ class ResPartner(models.Model):
                                   + ''' : %s </center> </strong>''' % (total)
         return followup_table
 
+class ResPartnerRappelRel(models.Model):
+
+    _inherit = "res.partner.rappel.rel"
+
+    @api.multi
+    def _get_invoices(self, period, products):
+        res = super(ResPartnerRappelRel, self)._get_invoices(period, products)
+
+        self.ensure_one()
+        invoices = self.env['account.invoice'].search(
+            [('type', '=', 'out_invoice'),
+             ('date_invoice', '>=', period[0]),
+             ('date_invoice', '<=', period[1]),
+             ('state', 'in', ['open', 'paid']),
+             ('commercial_partner_id', '=', self.partner_id.id)])
+        refunds = self.env['account.invoice'].search(
+            [('type', '=', 'out_refund'),
+             ('date_invoice', '>=', period[0]),
+             ('date_invoice', '<=', period[1]),
+             ('state', 'in', ['open', 'paid']),
+             ('commercial_partner_id', '=', self.partner_id.id)])
+
+        # se buscan las rectificativas
+        refund_lines = self.env['account.invoice.line'].search(
+            [('invoice_id', 'in', [x.id for x in refunds]),
+             ('product_id', 'in', products),
+             ('no_rappel', '=', False)])
+        invoice_lines = self.env['account.invoice.line'].search(
+            [('invoice_id', 'in', [x.id for x in invoices]),
+             ('product_id', 'in', products),
+             ('no_rappel', '=', False)])
+
+        return invoice_lines, refund_lines
