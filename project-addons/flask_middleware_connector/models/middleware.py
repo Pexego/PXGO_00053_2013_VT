@@ -154,7 +154,10 @@ class MiddlewareBackend(models.Model):
                 #~ for line in rma.claim_line_ids:
                     #~ if line.product_id.web == 'published':
                         #~ export_rmaproduct(session, 'claim.line', line.id)
-            invoices = self.env['account.invoice'].search([('partner_id.web', '=', True),('state', 'in', ['open','paid'])])
+            invoices = self.env['account.invoice'].\
+                search([('commercial_partner_id.web', '=', True),
+                        ('state', 'in', ['open', 'paid']),
+                        ('number', 'not like', '%ef%')])
             for invoice in invoices:
                 export_invoice.delay(session, 'account.invoice', invoice.id)
             #~ products = self.env["product.product"]. \
