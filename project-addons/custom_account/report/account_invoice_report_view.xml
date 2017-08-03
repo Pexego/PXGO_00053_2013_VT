@@ -33,7 +33,7 @@
         </record>
 
         <record id="account.action_account_invoice_report_all" model="ir.actions.act_window">
-            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'group_by':['partner_id'], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
+            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'group_by':['categ_id'], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
         </record>
 
     </data>
