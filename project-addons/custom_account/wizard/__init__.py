@@ -18,13 +18,5 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import stock
-from . import account
-from . import email_template
-from . import report
-from . import partner
-from . import purchase
-from . import voucher
-from . import account_payment
-from . import payment
-from . import wizard
+
+from . import account_followup_print

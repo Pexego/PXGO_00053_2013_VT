@@ -18,13 +18,19 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import stock
-from . import account
-from . import email_template
-from . import report
-from . import partner
-from . import purchase
-from . import voucher
-from . import account_payment
-from . import payment
-from . import wizard
+from openerp import models, fields, api, _
+
+
+class AccountFollowupPrint(models.Model):
+    _inherit = 'account_followup.print'
+
+    """
+    Funcion para automatizar el envio de correos cada dia.
+    Es la misma funcion que do_process de account_followup.print
+    pero modificando la fecha por la fecha de hoy
+    """
+
+    @api.multi
+    def automatice_process(self):
+        wzd = self.create({'date': fields.Date.today()})
+        wzd.do_process()
