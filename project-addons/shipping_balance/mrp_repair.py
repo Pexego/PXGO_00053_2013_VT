@@ -37,7 +37,7 @@ class mrp_repair_fees(models.Model):
 
     @api.multi
     def order_repair(self, data):
-        product_id = self.env['product.product'].search([('name', '=', 'REPARACION')])
+        product_id = self.env['product.product'].search([('is_repair', '=', True)])
         if 'product_id' in data and data['product_id'] in product_id.ids:
             if self.id:
                 rma_number = self.repair_id.claim_id.number

@@ -28,4 +28,5 @@ class Product(models.Model):
 
     _inherit = "product.product"
     shipping_balance = fields.Boolean("Shipping Balance", default=False)
+    is_repair = fields.Boolean("Is Repair", default=False)
 
