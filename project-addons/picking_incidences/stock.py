@@ -22,6 +22,8 @@
 from openerp import fields, models, api, _, exceptions
 import openerp.addons.decimal_precision as dp
 from openerp.tools.float_utils import float_compare, float_round
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+import time
 
 
 class StockMove(models.Model):
@@ -106,6 +108,7 @@ class StockPicking(models.Model):
         self.message_post(body=_("User %s accepted ready quantities.") %
                           (self.env.user.name))
         self.action_done()
+        self.date_done = time.strftime(DEFAULT_SERVER_DATETIME_FORMAT)
 
     @api.multi
     def action_assign(self):

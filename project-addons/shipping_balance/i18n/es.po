@@ -179,3 +179,7 @@ msgstr "or"
 msgid "shipping_balance"
 msgstr "shipping_balance"
 
+#. module: shipping_balance
+#: field:product.product,is_repair:0
+msgid "Is Repair"
+msgstr "Es reparación"

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Kiko Sanchez <kiko@comunitea.com>$
+#    Copyright (C) 2015 Pexego All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -14,19 +14,9 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
 #
-#
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
 
-
-from openerp import fields, models
-
-
-class Product(models.Model):
-
-    _inherit = "product.product"
-    shipping_balance = fields.Boolean("Shipping Balance", default=False)
-    is_repair = fields.Boolean("Is Repair", default=False)
-
+from . import account_followup_print

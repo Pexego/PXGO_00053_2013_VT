@@ -40,6 +40,12 @@
                     <field name="salesperson_select"/>
                     <separator/>
                     <filter string="Email sent" name="email_sent" domain="[('email_sent','=',True)]"/>
+                    <field name="partner_id">
+                        <filter domain="[('partner_id.active', '=', False)]" string="Prospective Customs"/>
+                    </field>
+                    <field name="partner_id">
+                        <filter domain="[('partner_id.active','=',True)]" string="Active Customs"/>
+                    </field>
                     <separator/>
                     <group string="Group By">
                         <filter string="Partner" domain="[]"

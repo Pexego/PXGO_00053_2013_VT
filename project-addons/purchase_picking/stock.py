@@ -82,6 +82,7 @@ class stock_picking(models.Model):
 
     _inherit = 'stock.picking'
 
+    usage = fields.Selection(related='location_id.usage')
     shipping_identifier = fields.Char('Shipping identifier', size=64)
     temp = fields.Boolean("Temp.")
 

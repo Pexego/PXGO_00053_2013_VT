@@ -13,7 +13,9 @@
     "installable": True,
     "depends": [
         "base",
-        "sale"
+        "sale",
+        "sale_display_stock",
+        "sale_margin_percentage"
     ],
     "data": [
         'views/sale_view.xml'

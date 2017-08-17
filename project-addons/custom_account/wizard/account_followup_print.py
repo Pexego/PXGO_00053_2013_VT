@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Kiko Sanchez <kiko@comunitea.com>$
+#    Copyright (C) 2015 Pexego All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -14,19 +14,23 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
 #
-#
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, _
 
 
-from openerp import fields, models
+class AccountFollowupPrint(models.Model):
+    _inherit = 'account_followup.print'
 
+    """
+    Funcion para automatizar el envio de correos cada dia.
+    Es la misma funcion que do_process de account_followup.print
+    pero modificando la fecha por la fecha de hoy
+    """
 
-class Product(models.Model):
-
-    _inherit = "product.product"
-    shipping_balance = fields.Boolean("Shipping Balance", default=False)
-    is_repair = fields.Boolean("Is Repair", default=False)
-
+    @api.multi
+    def automatice_process(self):
+        wzd = self.create({'date': fields.Date.today()})
+        wzd.do_process()
