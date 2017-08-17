@@ -8,7 +8,7 @@
         <record id="sale_order_line_tree_reorganize" model="ir.ui.view">
             <field name="name">sale.order.form</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="inherit_id" ref="sale_margin_percentage.sale_margin_percentage_sale_order"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
                     <attribute name="readonly">1</attribute>

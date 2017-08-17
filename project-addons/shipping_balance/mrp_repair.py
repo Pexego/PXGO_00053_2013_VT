@@ -47,7 +47,7 @@ class mrp_repair_fees(models.Model):
                 rma_number = order_repair.claim_id.number
                 product_name = order_repair.product_id.name
             if rma_number:
-                data['name'] += ', ' + rma_number + ' \n Prod.: ' + product_name
+                data['name'] += u', ' + rma_number + u' \n Prod.: ' + product_name
         return data
 
     @api.multi
