@@ -12,9 +12,6 @@
                     <field name="incoming_qty"/>
                     <field name="qty_available_wo_wh"/>
                 </xpath>
-                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="attributes">
-                    <attribute name="required">1</attribute>
-                </xpath>
                 <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="after">
                     <field name="qty_available"/>
                     <field name="incoming_qty"/>
