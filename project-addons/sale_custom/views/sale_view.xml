@@ -16,7 +16,7 @@
                 <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="replace">
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
-                    <field name="tax_id" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
+                    <field name="tax_id" widget="many2many_tags" required="1" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
                 </xpath>
             </field>
         </record>
