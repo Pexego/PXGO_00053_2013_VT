@@ -62,7 +62,6 @@ class ProductProduct(models.Model):
             'view_mode': 'tree,form',
             'view_type': 'form',
             'context': {'tree_view_ref': 'product.product_product_tree_view',
-                        'search_default_filter_to_sell': 1,
                         'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3']},
             'res_model': 'product.product',
             'type': 'ir.actions.act_window',
