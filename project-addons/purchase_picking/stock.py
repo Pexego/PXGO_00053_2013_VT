@@ -89,7 +89,7 @@ class stock_picking(models.Model):
     @api.one
     def _get_usage(self):
         if not self.location_id:
-            self.usage = self.  picking_type_id.default_location_src_id
+            self.usage = self.picking_type_id.default_location_src_id
         else:
             self.usage = self.location_id.usage
 
