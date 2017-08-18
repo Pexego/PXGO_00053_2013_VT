@@ -82,9 +82,16 @@ class stock_picking(models.Model):
 
     _inherit = 'stock.picking'
 
-    usage = fields.Selection(related='location_id.usage')
+    usage = fields.Selection(related='location_id.usage', compute='_get_usage')
     shipping_identifier = fields.Char('Shipping identifier', size=64)
     temp = fields.Boolean("Temp.")
+
+    @api.one
+    def _get_usage(self):
+        if not location_id:
+            self.usage = picking_type_id.default_location_src_id
+        else:
+            self.usage = location_id.usage
 
     @api.multi
     def action_cancel(self):
