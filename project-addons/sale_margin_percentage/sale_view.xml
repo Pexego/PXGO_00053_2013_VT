@@ -26,10 +26,6 @@
                     <field name="margin_perc" readonly="1"/>
                     <field name="tax_id" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
                 </xpath>
-                <xpath expr="//field[@name='order_line']/tree//button[@name='stock_reserve']" position="before">
-                    <field name="deposit"/>
-                    <field name="deposit_date" invisible="1"/>
-                </xpath>
                 <field name="amount_untaxed" position="after">
                     <label for="margin"/>
                     <div>
