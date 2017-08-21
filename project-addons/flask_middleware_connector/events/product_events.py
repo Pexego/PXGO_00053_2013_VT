@@ -143,6 +143,16 @@ def delay_export_product_write(session, model_name, record_id, vals):
         if field in vals:
             update_product.delay(session, model_name, record_id, priority=2, eta=30)
             break
+    is_pack = session.env['product.pack.line'].search([('product_id', '=', record_id)])
+    if is_pack:
+        for pack in is_pack:
+            min_stock = False
+            for product in pack.parent_product_id.pack_line_ids:
+                product_stock_qty = product.product_id.virtual_available_wo_incoming
+                if not min_stock or min_stock > product_stock_qty:
+                    min_stock = product_stock_qty
+            if min_stock:
+                update_product.delay(session, model_name, pack.parent_product_id.id, priority=2, eta=30)
 
 
 @on_record_unlink(model_names='product.product')
