@@ -30,8 +30,6 @@ class StockSaleDeposit(models.TransientModel):
         deposit_ids = self.env.context.get('active_ids', [])
         deposits = deposit_obj.search([('id', 'in', deposit_ids),
                                        ('state', '=', 'draft')])
-        import ipdb
-        ipdb.set_trace()
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_out')
         picking = self.env['stock.picking'].create({
@@ -39,7 +37,8 @@ class StockSaleDeposit(models.TransientModel):
             'invoice_state': '2binvoiced'})
 
         procurement_id = None
-        for deposit in deposits:
+        sorted_deposits = sorted(deposits, key=lambda deposit: deposit.sale_id.procurement_group_id)
+        for deposit in sorted_deposits:
             if not picking['partner_id']:
                 procurement_id = deposit.sale_id.procurement_group_id
                 partner_id = deposit.partner_id.id
