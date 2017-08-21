@@ -284,9 +284,10 @@ class ResPartner(models.Model):
 
     @api.multi
     def write(self, vals):
-        if self.parent_id.id:
-            if not vals.get('lang', False):
-                vals['lang'] = self.parent_id.lang
+        for partner in self:
+            if partner.parent_id.id:
+                if not vals.get('lang', False):
+                    vals['lang'] = partner.parent_id.lang
         if vals.get('dropship', False):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
