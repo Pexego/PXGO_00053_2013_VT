@@ -94,6 +94,7 @@ class stock_deposit(models.Model):
                 'location_dest_id': deposit.partner_id.property_stock_customer.id,
                 'invoice_state': '2binvoiced',
                 'picking_id': picking.id,
+                'picking_type_id': picking_type_id.id, 
                 'procurement_id': deposit.move_id.procurement_id.id,
                 'commercial': deposit.user_id.id,
                 'group_id': procurement_id.id

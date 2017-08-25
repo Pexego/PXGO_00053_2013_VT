@@ -284,14 +284,16 @@ class ResPartner(models.Model):
 
     @api.multi
     def write(self, vals):
-        if self.parent_id.id:
-            if not vals.get('lang', False):
-                vals['lang'] = self.parent_id.lang
         if vals.get('dropship', False):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
             vals['email_web'] = None
-        return super(ResPartner, self).write(vals)
+        res = super(ResPartner, self).write(vals)
+        if not vals.get('lang'):
+            for partner in self:
+                if partner.parent_id and partner.lang != partner.parent_id.lang:
+                    partner.lang = partner.parent_id.lang
+        return res
 
     def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
         today = time.strftime('%Y-%m-%d')

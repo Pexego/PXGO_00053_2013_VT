@@ -54,7 +54,7 @@
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="account_invoice_cyc_tree"/>
             <field name="search_view_id" ref="account_invoice_cyc_filter"/>
-            <field name="context">{'search_default_thismonth':1,'group_by':['country_id']}</field>
+            <field name="context">{'search_default_thisyear':1,'search_default_month':1,'group_by':['country_id']}</field>
         </record>
 
         <menuitem name="Cyc report" parent="account.menu_finance_reporting"

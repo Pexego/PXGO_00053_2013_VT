@@ -44,7 +44,7 @@ class product_product(models.Model):
     def _calc_remaining_days(self):
         stock_days = 0.00
         stock_per_day = self.get_daily_sales()
-        virtual_available = self.virtual_available + \
+        virtual_available = self.virtual_available - self.incoming_qty + \
             self.qty_available_external
         if stock_per_day > 0 and virtual_available:
             stock_days = round(virtual_available / stock_per_day)
