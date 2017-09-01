@@ -28,7 +28,7 @@
     'website': 'www.pexego.es',
     'depends' : ['base', 'sale', 'sale_stock', 'stock_reserve_sale',
                  'email_template_followers'],
-    'data' : ['wizard/stock_invoice_deposit.xml',
+    'data' : ['wizard/stock_invoice_deposit.xml', 'wizard/stock_sale_deposit.xml',
               'stock_data.xml', 'stock_deposit.xml', 'res_partner_view.xml',
               'security/ir.model.access.csv', 'sale_view.xml',
               'data/stock_deposit_data.xml'],

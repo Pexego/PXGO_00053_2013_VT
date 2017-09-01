@@ -92,5 +92,6 @@ class purchase_order(osv.osv):
         'prepared_merchandise_date': fields.date("Prepared Merchandise Date", help="Date when the merchandise was prepared"),
         'estimated_arrival_date': fields.date("Estimated Arrival Date", help="Date when the merchandise will arrive approximately"),
         'telex_release': fields.boolean("Telex Release", help="It indicates that Telex release is necessary"),
-        'end_manufacture': fields.date("Ending Date Of Manufacture")
+        'end_manufacture': fields.date("Ending Date Of Manufacture"),
+        'sale_notes': fields.text("Purchase Sale Notes")
     }

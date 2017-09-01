@@ -35,6 +35,34 @@ class mrp_repair_fees(models.Model):
         if len(line2) > 1:
             raise ValidationError("Shipping Balance must be unique")
 
+    @api.multi
+    def order_repair(self, data):
+        product_id = self.env['product.product'].search([('is_repair', '=', True)])
+        if 'product_id' in data and data['product_id'] in product_id.ids:
+            if self.id:
+                rma_number = self.repair_id.claim_id.number
+                product_name = self.repair_id.product_id.name
+            else:
+                order_repair = self.env['mrp.repair'].browse(data['repair_id'])
+                rma_number = order_repair.claim_id.number
+                product_name = order_repair.product_id.name
+            if rma_number:
+                data['name'] += u', ' + rma_number + u' \n Prod.: ' + product_name
+        return data
+
+    @api.multi
+    def write(self, data):
+        data_mod = self.order_repair(data)
+        res = super(mrp_repair_fees, self).write(data_mod)
+        return res
+
+    @api.model
+    def create(self, data):
+        data_mod = self.order_repair(data)
+        res = super(mrp_repair_fees, self).create(data_mod)
+        return res
+
+
 class mrp_repair(models.Model):
 
     _inherit = "mrp.repair"

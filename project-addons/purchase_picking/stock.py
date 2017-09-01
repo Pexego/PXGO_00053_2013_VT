@@ -20,16 +20,42 @@
 ##############################################################################
 
 from openerp import models, fields, api, _, exceptions
+from datetime import date
 
 
 class StockContainer(models.Model):
 
     _name = "stock.container"
 
+    @api.one
+    @api.depends('move_ids')
+    def _get_date_expected(self):
+        min_date = False
+        if self.move_ids:
+            for move in self.move_ids:
+                if move.picking_id:
+                    if not min_date or min_date > move.picking_id.min_date:
+                        min_date = move.picking_id.min_date
+            if min_date:
+                self.date_expected = min_date
+
+        if not self.date_expected:
+            self.date_expected = fields.Date.today()
+
+    @api.one
+    def _get_picking_ids(self):
+        res = []
+        for line in self.move_ids:
+            if line.picking_id.id not in res:
+                res.append(line.picking_id.id)
+
+        self.picking_ids = res
+
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", required=True)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', readonly=True, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
+    picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
 
     user_id = fields.Many2one('Responsible', compute='_get_responsible')
     company_id = fields.\
@@ -51,22 +77,21 @@ class StockContainer(models.Model):
             responsible = self.env['sale.order'].search([('name', '=', self.origin)]).user_id
         return responsible
 
-    @api.multi
-    def write(self, vals):
-        if vals.get('date_expected', False):
-            for container in self:
-                if vals['date_expected'] != container.date_expected:
-                    for move in container.move_ids:
-                        move.date_expected = vals['date_expected']
-        return super(StockContainer, self).write(vals)
-
 
 class stock_picking(models.Model):
 
     _inherit = 'stock.picking'
 
+    usage = fields.Char(compute='_get_usage')
     shipping_identifier = fields.Char('Shipping identifier', size=64)
     temp = fields.Boolean("Temp.")
+
+    @api.one
+    def _get_usage(self):
+        if not self.location_id:
+            self.usage = self.picking_type_id.default_location_src_id
+        else:
+            self.usage = self.location_id.usage
 
     @api.multi
     def action_cancel(self):
@@ -87,6 +112,7 @@ class stock_move(models.Model):
     partner_id = fields.Many2one('res.partner', 'Partner')
     container_id = fields.Many2one('stock.container', "Container")
     subtotal_price = fields.Float('Subtotal', compute='_calc_subtotal')
+    partner_ref = fields.Char(related='purchase_line_id.order_id.partner_ref')
 
     @api.multi
     def _calc_subtotal(self):

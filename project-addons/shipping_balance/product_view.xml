@@ -13,6 +13,10 @@
                         <field name="shipping_balance"/>
                         <label for="shipping_balance"/>
                     </div>
+                     <div>
+                        <field name="is_repair"/>
+                        <label for="is_repair"/>
+                    </div>
                 </xpath>
 
 

@@ -40,6 +40,12 @@
                     <field name="salesperson_select"/>
                     <separator/>
                     <filter string="Email sent" name="email_sent" domain="[('email_sent','=',True)]"/>
+                    <field name="partner_id">
+                        <filter domain="[('partner_id.active', '=', False)]" string="Prospective Customs"/>
+                    </field>
+                    <field name="partner_id">
+                        <filter domain="[('partner_id.active','=',True)]" string="Active Customs"/>
+                    </field>
                     <separator/>
                     <group string="Group By">
                         <filter string="Partner" domain="[]"
@@ -64,7 +70,6 @@
                 </search>
             </field>
         </record>
-
          <!--Visit Form View -->
         <record model="ir.ui.view" id="partner_visit_form_view">
             <field name="name">Visit Form</field>
@@ -74,7 +79,8 @@
                     <sheet>
                         <div>
                             <h2>
-                                <field name="partner_id" string="Partner" domain="['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]"/>
+                                <field name="partner_id" string="Partner"
+                                       domain="['&amp;', '|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True), ('is_company', '=', True)]"/>
                             </h2>
                         </div>
                         <div>

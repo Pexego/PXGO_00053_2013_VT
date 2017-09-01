@@ -145,3 +145,4 @@ class create_picking_move(models.TransientModel):
         context2 = dict(context)
         context2['picking_ids'] = picking_ids.ids
         return self.with_context(context2)._view_picking()
+

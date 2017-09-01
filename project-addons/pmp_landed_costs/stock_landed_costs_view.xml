@@ -20,11 +20,17 @@
                 <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='quantity']" position="attributes">
                     <attribute name="sum">Qty.</attribute>
                 </xpath>
+                <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='additional_landed_cost']" position="attributes">
+                    <attribute name="sum">Total.</attribute>
+                </xpath>
                 <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='volume']" position="after">
                     <field name="tariff" readonly="1"/>
                 </xpath>
                 <field name="picking_ids" position="attributes">
                     <attribute name="domain">[('state', '=', 'done'),('picking_type_code', '=', 'incoming')]</attribute>
+                </field>
+                <field name="picking_ids" position="after">
+                    <field name="container_ids"  widget="many2many_tags" domain="[('state', '=', 'done')]"/>
                 </field>
             </field>
         </record>

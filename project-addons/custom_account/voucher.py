@@ -19,12 +19,92 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from openerp import models, fields, api, osv
 
 
 class AccountVoucher(models.Model):
 
     _inherit = "account.voucher"
+
+    @api.one
+    def concile_all(self):
+        objs = None
+        if self.env.context['select'] == 'invoices':
+            objs = self.line_cr_ids
+        elif self.env.context['select'] == 'debit':
+            objs = self.line_dr_ids
+
+        for line in objs:
+            res = {}
+            line.reconcile = True
+            amount_unreconciled = line.amount_unreconciled
+            res = line.onchange_reconcile(line.reconcile, line.amount, amount_unreconciled)
+            line.amount = res['value']['amount']
+
+    @api.one
+    def clear_all(self):
+        objs = None
+        if self.env.context['select'] == 'invoices':
+            objs = self.line_cr_ids
+        elif self.env.context['select'] == 'debit':
+            objs = self.line_dr_ids
+
+        for line in objs:
+            res = {}
+            line.reconcile = False
+            amount_unreconciled = line.amount_unreconciled
+            res = line.onchange_reconcile(line.reconcile, line.amount, amount_unreconciled)
+            line.amount = res['value']['amount']
+
+    @api.multi
+    def onchange_journal(self, journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None):
+        res = super(AccountVoucher, self).onchange_journal(journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None)
+        if not res or not res.get('value'):
+            return res
+        voucher_line_pool = self.pool.get('account.voucher.line')
+        length_cr = len(res['value'].get('line_cr_ids', []))
+        length_dr = len(res['value'].get('line_dr_ids', []))
+        cont = 0
+        for voucher_line in self.line_cr_ids:
+            res_id = 0
+            cont_cr = length_cr / 2 - 1
+            while res_id != voucher_line.id:
+                res_id = res['value']['line_cr_ids'][cont][1]
+                cont += 1
+            cont_cr += cont
+            if 'reconcile' in res['value']['line_cr_ids'][cont_cr] and not voucher_line.reconcile:
+                voucher_line.reconcile = False
+                voucher_line.amount = 0.0
+            elif 'reconcile' not in res['value']['line_cr_ids'][cont_cr] and voucher_line.reconcile:
+                voucher_line.reconcile = True
+                voucher_line.amount = voucher_line.amount_unreconciled
+
+            res['value']['line_cr_ids'][cont_cr]['amount'] = voucher_line.amount
+            res['value']['line_cr_ids'][cont_cr]['reconcile'] = voucher_line.reconcile
+            voucher_line_pool.write(self._cr, self._uid, [voucher_line.id], {'reconcile': voucher_line.reconcile,
+                                                                             'amount': voucher_line.amount})
+
+        cont = 0
+        for voucher_line in self.line_dr_ids:
+            res_id = 0
+            cont_dr = length_dr / 2 - 1
+            while res_id != voucher_line.id:
+                res_id = res['value']['line_dr_ids'][cont][1]
+                cont += 1
+            cont_dr += cont
+            if 'reconcile' in res['value']['line_dr_ids'][cont_dr] and not voucher_line.reconcile:
+                voucher_line.reconcile = False
+                voucher_line.amount = 0.0
+            elif 'reconcile' not in res['value']['line_dr_ids'][cont_dr] and voucher_line.reconcile:
+                voucher_line.reconcile = True
+                voucher_line.amount = voucher_line.amount_unreconciled
+
+            res['value']['line_dr_ids'][cont_dr]['amount'] = voucher_line.amount
+            res['value']['line_dr_ids'][cont_dr]['reconcile'] = voucher_line.reconcile
+            voucher_line_pool.write(self._cr, self._uid, [voucher_line.id], {'reconcile': voucher_line.reconcile,
+                                                                             'amount': voucher_line.amount})
+
+        return res
 
     @api.one
     def _get_amount_with_rate(self):

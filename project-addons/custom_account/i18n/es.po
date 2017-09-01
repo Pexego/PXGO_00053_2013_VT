@@ -522,4 +522,7 @@ msgstr "La venta debe ser pagada antes de la validación."
 msgid "Wizard to generate a payment from the sale order"
 msgstr "Asistente para generar un pago desde el pedido"
 
-
+#. module: custom_account
+#: field:purchase.order,sale_notes:0
+msgid "Purchase Order Notes"
+msgstr "Notas pedido de compra"
