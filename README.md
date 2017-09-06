@@ -28,6 +28,7 @@ $ sudo apt-get install openerp-server-system-build-deps
 ```
 $ sudo apt-get install libreadline-dev
 $ sudo apt-get install libcups2-dev
+$ sudo apt-get install gfortran
 ```
 - Descargar el  repositorio de buildouts :
 ```
