@@ -43,8 +43,14 @@ class ProductTemplate(models.Model):
             for record in self:
                 if record.web != vals['web']:
                     delete = False
-                    break;
+                    break
             if delete:
                 del vals['web']
+
+        if vals.get('description_sale', False):
+            description_sale = vals['description_sale']
+            if description_sale[-1] == '\n':
+                description_sale = description_sale[0:(len(description_sale) - 2)]
+                vals['description_sale'] = description_sale
 
         return super(ProductTemplate, self).write(vals)

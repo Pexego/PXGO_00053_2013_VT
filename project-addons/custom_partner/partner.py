@@ -99,13 +99,45 @@ class ResPartner(models.Model):
 
         return result
 
+    def _get_amounts_and_date(self, cr, uid, ids, name, arg, context=None):
+        '''
+        Function that computes values for the followup functional fields. Note that 'payment_amount_due'
+        is similar to 'credit' field on res.partner except it filters on user's company.
+        '''
+        res = super(ResPartner, self)._get_amounts_and_date(cr, uid, ids, name, arg, context=context)
+        company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
+        current_date = fields2.date.context_today(self, cr, uid, context=context)
+        for partner in self.browse(cr, uid, ids, context=context):
+            if partner.supplier:
+                worst_due_date = False
+                amount_due = amount_overdue = 0.0
+                for aml in partner.unreconciled_purchase_aml_ids:
+                    if (aml.company_id == company):
+                        date_maturity = aml.date_maturity or aml.date
+                        if not worst_due_date or date_maturity < worst_due_date:
+                            worst_due_date = date_maturity
+                        amount_due += aml.result
+                        if (date_maturity <= current_date):
+                            amount_overdue += aml.result
+                res[partner.id] = {'payment_amount_due': amount_due,
+                                   'payment_amount_overdue': amount_overdue,
+                                   'payment_earliest_due_date': worst_due_date}
+        return res
+
+    def _payment_due_search(self, cr, uid, obj, name, args, context=None):
+        res = super(ResPartner, self)._payment_due_search(cr, uid, obj, name, args, context=context)
+        return res
+
     _columns = {
         'total_invoiced_real': fields2.function(_invoice_total_real, string="Total Invoiced", type='float',
                                          groups='account.group_account_invoice'),
         'supplier_all_invoice_count': fields2.function(_purchase_invoice_count, string='# Supplier Invoices',
                                                        type='integer'),
+        'payment_amount_due': fields2.function(_get_amounts_and_date,
+                                              type='float', string="Amount Due",
+                                              store=False, multi="followup",
+                                              fnct_search=_payment_due_search),
     }
-
 
     @api.one
     def _get_products_sold(self):

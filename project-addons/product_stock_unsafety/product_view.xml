@@ -28,6 +28,7 @@
                     <field name="categ_id"/>
                     <field name="qty_in_production"/>
                     <field name="incoming_qty"/>
+                    <field name="next_incoming_date"/>
                     <field name="qty_available_wo_wh"/>
                     <field name="virtual_stock_conservative"/>
                     <field name="qty_available"/>

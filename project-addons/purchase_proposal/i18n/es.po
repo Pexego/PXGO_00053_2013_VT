@@ -16,6 +16,11 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: purchase_proposal
+#: field:product.product,ref_manufacturer:0
+msgid "Manufacturer Product Code"
+msgstr "Código del fabricante"
+
+#. module: purchase_proposal
 #: field:product.product,average_margin:0
 msgid "Average Margin Last Sales"
 msgstr "Media de margen de últimas ventas"

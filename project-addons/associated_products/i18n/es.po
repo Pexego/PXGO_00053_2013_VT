@@ -97,3 +97,7 @@ msgstr "productos asociados."
 msgid "UoM"
 msgstr "UdM"
 
+#. module: associated_products
+#: field:product.associated,discount:0
+msgid "Discount (%)"
+msgstr "Descuento (%)"

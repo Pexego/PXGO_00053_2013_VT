@@ -27,3 +27,17 @@ class ClaimLine(models.Model):
 
     date_in = fields.Datetime('')
     date_out = fields.Datetime('')
+    web = fields.Boolean('Web', default=True)
+
+    @api.multi
+    def write(self, vals):
+        delete = True
+        if vals.get('web', False):
+            for record in self:
+                if record.web != vals['web']:
+                    delete = False
+                    break
+            if delete:
+                del vals['web']
+
+        return super(ClaimLine, self).write(vals)

@@ -572,3 +572,8 @@ msgstr "Stock virtual conservativo"
 #: field:create.purchase.from.unsafety.wzd,warehouse_id:0
 msgid "Warehouse"
 msgstr "Almacén"
+
+#. module: product_stock_unsafety
+#: field:product.product,next_incoming_date:0
+msgid "Next incoming date"
+msgstr "Próxima fecha de llegada"

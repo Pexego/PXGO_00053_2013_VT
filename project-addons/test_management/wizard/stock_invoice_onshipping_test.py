@@ -126,7 +126,6 @@ class StockInvoiceOnShippingTests(models.TransientModel):
             invoice.payment_mode_id = False
             invoice.partner_bank_id = False
             invoice.mandate_id = False
-            invoice.user_id = False
             accounts = self.env["account.account"].\
                 search([('code', 'like', invoice.account_id.code),
                         ('company_id', '=', self.env.user.company_id.

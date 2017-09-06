@@ -29,7 +29,7 @@
                             </group>
                             <group>
                                 <field name="quantity"/>
-                                <field name="uom_id"/>
+                                <field name="discount"/>
                             </group>
                         </group>
                     </sheet>
@@ -45,7 +45,7 @@
                 <tree toolbar="True" string="Products Associated">
                     <field name="associated_id"/>
                     <field name="quantity"/>
-                    <field name="uom_id"/>
+                    <field name="discount"/>
                 </tree>
             </field>
         </record>

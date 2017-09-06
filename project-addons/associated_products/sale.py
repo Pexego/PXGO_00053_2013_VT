@@ -71,6 +71,7 @@ class sale_order_line(orm.Model):
                                                     line.order_id.date_order,
                                                 }
                                                 )[pricelist]
+                price *= (1 - associated.discount / 100)
                 args_line = {
                     'order_id': line.order_id.id,
                     'price_unit': price,
@@ -101,6 +102,7 @@ class sale_order_line(orm.Model):
                                             new_line.order_id.fiscal_position.id,
                                             False,
                                             context)
+                line_vals['value']['price_unit'] = price
                 line_vals = line_vals['value']
                 self.write(cr, uid, [new_line_id], line_vals, context)
         return line_id
@@ -143,6 +145,7 @@ class sale_order_line(orm.Model):
                                                         line.order_id.date_order,
                                                     }
                                                     )[pricelist]
+                    price *= (1-associated.discount/100)
                     args_line = {
                         'order_id': line.order_id.id,
                         'price_unit': price,
@@ -170,9 +173,10 @@ class sale_order_line(orm.Model):
                                                 False, True,
                                                 new_line.order_id.date_order,
                                                 False,
-                                                new_line.order_id.fiscal_position,
+                                                new_line.order_id.fiscal_position.id,
                                                 False,
                                                 context)
+                    line_vals['value']['price_unit'] = price
                     line_vals = line_vals['value']
                     self.write(cr, uid, [new_line_id], line_vals, context)
             return res

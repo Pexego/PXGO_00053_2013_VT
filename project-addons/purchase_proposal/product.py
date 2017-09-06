@@ -36,6 +36,7 @@ class ProductProduct(models.Model):
     transport_time = fields.Integer('Transport time')
     security_margin = fields.Integer('Security margin')
     average_margin = fields.Float("Average Margin Last Sales", readonly=True)
+    ref_manufacturer = fields.Char(related='manufacturer_pref', readonly=True)
 
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
@@ -58,12 +59,14 @@ class ProductProduct(models.Model):
             days_data = self.env.cr.fetchone()
             if days_data:
                 product = self.browse(product_id)
+                picking_type_obj = self.env['stock.picking.type']
+                picking_type_ids = picking_type_obj.search([('code', '=', 'outgoing')])
 
                 moves = move_obj.search([('date', '>=', days_data[0]),
                                          ('state', '=', 'done'),
                                          ('product_id', '=', product.id),
-                                         ('picking_type_code', '=',
-                                          'outgoing'),
+                                         ('picking_type_id', 'in',
+                                          picking_type_ids.ids),
                                          ('procurement_id.sale_line_id', '!=',
                                           False)])
                 biggest_move_qty = 0.0

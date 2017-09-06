@@ -39,11 +39,15 @@ class associated_products(orm.Model):
     _description = "This model provides the association between a \
         product and their associated products"
 
+    def _get_default_uom_id(self):
+        return self.env.ref('product.product_uom_unit').id
+
     _columns = {
         'product_id': fields.many2one('product.product', 'Product',
                                       required=True),
         'associated_id': fields.many2one('product.product',
                                          'Associated product', required=True),
         'quantity': fields.float('Quantity', required=True),
-        'uom_id': fields.many2one('product.uom', 'UoM', required=True),
+        'uom_id': fields.many2one('product.uom', 'UoM', required=True, default=_get_default_uom_id),
+        'discount': fields.float('Discount (%)', required=True, default=0)
     }

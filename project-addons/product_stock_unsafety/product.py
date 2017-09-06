@@ -87,6 +87,21 @@ class product_product(models.Model):
                 if product.joking_index != joking_index:
                     product.joking_index = joking_index
 
+    @api.one
+    def _get_next_incoming_date(self):
+        """ Get next incoming date """
+        for product in self:
+            next_move = self.env['stock.move'].search(
+                [('product_id', '=', product.id),
+                 ('picking_type_id', '=', self.env.ref("stock.picking_type_in").id),
+                 ('location_id', '=', self.env.ref("stock.stock_location_suppliers").id),
+                 ('state', '=', 'assigned')],
+                limit=1,
+                order='date_expected ASC')
+
+            if next_move:
+                product.next_incoming_date = next_move.date_expected
+
     remaining_days_sale = fields.Float('Remaining Stock Days', readonly=True,
                                        compute='_calc_remaining_days',
                                        help="Stock measure in days of sale "
@@ -100,3 +115,5 @@ class product_product(models.Model):
     min_days_id = fields.Many2one("minimum.day", "Stock Minimum Days",
                                   related="orderpoint_ids.min_days_id",
                                   readonly=True)
+    next_incoming_date = fields.Date('Next incoming date', compute='_get_next_incoming_date')
+
