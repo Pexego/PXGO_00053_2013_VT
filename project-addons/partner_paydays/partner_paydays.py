@@ -132,16 +132,29 @@ class AccountPaymentTerm(models.Model):
                 date = self.next_day(date, days[0])
         return date.strftime('%Y-%m-%d')
 
+    def _avoid_sunday(self, result):
+        new_result = []
+        for line in result:
+            date = datetime.strptime(line[0], '%Y-%m-%d')
+            day = date.weekday()
+            if day == 6:  # Sunday
+                date = date + timedelta(days=1)
+                new_date = date.strftime('%Y-%m-%d')
+                new_result.append((new_date, line[1]))
+            else:
+                new_result.append(line)
+        return new_result
+
     def compute(self, cr, uid, id, value, date_ref=False, context=None):
         if context is None: context= {}
         result = super(AccountPaymentTerm, self).compute(cr, uid, id, value,
                                                          date_ref, context)
         if not context.get('partner_id'):
-            return result
+            return self._avoid_sunday(result)
         partner = self.pool.get('res.partner').\
             browse(cr, uid, context.get('partner_id'), context)
         if not partner.payment_days:
-            return result
+            return self._avoid_sunday(result)
 
         days = self._decode_payment_days(partner.payment_days)
 
@@ -167,4 +180,4 @@ class AccountPaymentTerm(models.Model):
 
             new_result.append((date, line[1]))
 
-        return new_result
+        return self._avoid_sunday(new_result)

@@ -53,25 +53,3 @@ class AccountInvoice(models.Model):
                                commercial_partner_id.id)).\
                 action_move_create()
         return True
-
-
-class AccountPaymentTerm(models.Model):
-
-    _inherit = "account.payment.term"
-
-    def compute(self, cr, uid, id, value, date_ref=False, context=None):
-        result = super(AccountPaymentTerm, self).compute(
-            cr, uid, id, value=value, date_ref=date_ref, context=context)
-
-        new_result = []
-        for line in result:
-            date = datetime.strptime(line[0], '%Y-%m-%d')
-            day = date.strftime('%A')
-            if day == 'Sunday':
-                date = date + timedelta(days=1)
-                new_date = date.strftime('%Y-%m-%d')
-                new_result.append((new_date, line[1]))
-            else:
-                new_result.append(line)
-
-        return new_result
