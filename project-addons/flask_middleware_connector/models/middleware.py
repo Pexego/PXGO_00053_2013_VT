@@ -20,7 +20,7 @@
 ##############################################################################
 
 import logging
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 from openerp import models, fields, api, _
 from openerp.addons.connector.session import ConnectorSession
 from openerp.addons.connector.connector import ConnectorUnit
@@ -32,6 +32,9 @@ from ..events.commercial_events import export_commercial
 from ..events.product_events import export_product, export_product_category, export_product_brand, export_product_brand_rel
 from ..events.rma_events import export_rma, export_rmaproduct, export_rma_status
 from ..events.invoice_events import export_invoice
+from ..connector import get_environment
+import ast
+import xmlrpclib
 
 from ..backend import middleware
 
@@ -142,9 +145,14 @@ class MiddlewareBackend(models.Model):
             #~ users = self.env['res.users'].search([('web', '=', True)])
             #~ for user in users:
                 #~ export_commercial(session, 'res.users', user.id)
-            #~ partners = self.env["res.partner"].search([('web', '=', True)])
-            #~ for partner in partners:
-                #~ export_partner(session, "res.partner", partner.id)
+            partners = self.env["res.partner"].search([('web', '=', True)])
+            #partner = self.env["res.partner"].browse(196823)
+            #for partner in partners:
+            #    export_partner(session, "res.partner", partner.id)
+            contacts = self.env["res.partner"].search([('active', '=', True), ('prospective','=', False),
+                                                       ('customer', '=', True), ('parent_id', 'in', partners.ids)])
+            for contact in contacts:
+                export_partner(session, "res.partner", contact.id)
             #~ substates = self.env['substate.substate'].search([])
             #~ for substate in substates:
                 #~ export_rma_status(session, 'substate.substate', substate.id)
@@ -154,12 +162,12 @@ class MiddlewareBackend(models.Model):
                 #~ for line in rma.claim_line_ids:
                     #~ if line.product_id.web == 'published':
                         #~ export_rmaproduct(session, 'claim.line', line.id)
-            invoices = self.env['account.invoice'].\
-                search([('commercial_partner_id.web', '=', True),
-                        ('state', 'in', ['open', 'paid']),
-                        ('number', 'not like', '%ef%')])
-            for invoice in invoices:
-                export_invoice.delay(session, 'account.invoice', invoice.id)
+            #~ invoices = self.env['account.invoice'].\
+                #~ search([('commercial_partner_id.web', '=', True),
+                        #~ ('state', 'in', ['open', 'paid']),
+                        #~ ('number', 'not like', '%ef%')])
+            #~ for invoice in invoices:
+                #~ export_invoice.delay(session, 'account.invoice', invoice.id)
             #~ products = self.env["product.product"]. \
                 #~ search([('web', '=', 'not_published')])
             #~ for product in products:

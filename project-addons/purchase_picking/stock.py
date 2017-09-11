@@ -36,9 +36,9 @@ class StockContainer(models.Model):
                     if move.picking_id:
                         if move.picking_id not in picking_ids:
                             picking_ids.append(move.picking_id)
-            for picking in picking_ids:
-                new_vals = {'min_date': self.date_expected}
-                picking.write(new_vals)
+                for picking in picking_ids:
+                    new_vals = {'min_date': container.date_expected}
+                    picking.write(new_vals)
 
         return True
 
@@ -49,7 +49,7 @@ class StockContainer(models.Model):
         if self.move_ids:
             for move in self.move_ids:
                 if move.picking_id:
-                    if not min_date or min_date > move.picking_id.min_date:
+                    if not min_date or min_date < move.picking_id.min_date:
                         min_date = move.picking_id.min_date
             if min_date:
                 self.date_expected = min_date

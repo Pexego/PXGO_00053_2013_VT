@@ -40,6 +40,81 @@ class ResPartnerInvoiceType(models.Model):
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    annual_invoiced = fields.Float('Annual invoiced', readonly=True, store=True)
+    month_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True)
+
+    @api.model
+    def _calculate_annual_invoiced(self):
+        partner_obj = self.env['res.partner']
+        invoice_obj = self.env['account.invoice']
+        picking_obj = self.env['stock.picking']
+        partner_ids = partner_obj.search([('is_company', '=', True), ('child_ids', '!=', False)])
+        actual_year = datetime.now().year
+        actual_month = datetime.now().month
+        actual_day = datetime.now().day
+        start_year = str(actual_year) + '-01-01'
+        start_month = str(actual_year) + '-' + str(actual_month) + '-01'
+        end_year = str(actual_year) + '-12-31'
+        end_month = str(actual_year) + '-' + str(actual_month) + '-' + str(actual_day)
+        for partner in partner_ids:
+            invoice_ids_year = invoice_obj.search([('date_invoice', '>=', start_year),
+                                              ('date_invoice', '<=', end_year),
+                                              '|',
+                                              ('state', '=', 'open'),
+                                              ('state', '=', 'paid'),
+                                              '|',
+                                              ('partner_id', '=', partner.id),
+                                              ('partner_id.parent_id', '=', partner.id)])
+
+            invoice_ids_month = invoice_obj.search([('date_invoice', '>=', start_month),
+                                              ('date_invoice', '<=', end_month),
+                                              '|',
+                                              ('state', '=', 'open'),
+                                              ('state', '=', 'paid'),
+                                              '|',
+                                              ('partner_id', '=', partner.id),
+                                              ('partner_id.parent_id', '=', partner.id)])
+
+            picking_ids_year = picking_obj.search([('date_done', '>=', start_year),
+                                              ('date_done', '<=', end_year),
+                                              ('state', '=', 'done'),
+                                              ('invoice_state', '=', '2binvoiced'),
+                                              '|',
+                                              ('partner_id', '=', partner.id),
+                                              ('partner_id.parent_id', '=', partner.id)])
+
+            picking_ids_month = picking_obj.search([('date_done', '>=', start_month),
+                                              ('date_done', '<=', end_month),
+                                              ('state', '=', 'done'),
+                                              ('invoice_state', '=', '2binvoiced'),
+                                              '|',
+                                              ('partner_id', '=', partner.id),
+                                              ('partner_id.parent_id', '=', partner.id)])
+
+            annual_invoiced = 0.0
+            month_invoiced = 0.0
+            for invoice in invoice_ids_year:
+                annual_invoiced += invoice.amount_total
+
+            for invoice in invoice_ids_month:
+                month_invoiced += invoice.amount_total
+
+            for picking in picking_ids_year:
+                move_ids = self.env['stock.move'].search([('picking_id', '=', picking.id)])
+                for move in move_ids:
+                    if move.procurement_id.sale_line_id.order_id:
+                        annual_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
+                        break
+
+            for picking in picking_ids_month:
+                move_ids = self.env['stock.move'].search([('picking_id', '=', picking.id)])
+                for move in move_ids:
+                    if move.procurement_id.sale_line_id.order_id:
+                        month_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
+                        break
+            vals = {'annual_invoiced': annual_invoiced, 'month_invoiced': month_invoiced}
+            partner.write(vals)
+
     def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
         invoice = self.pool.get('account.invoice')
         res = {}
@@ -321,7 +396,7 @@ class ResPartner(models.Model):
         if 'web' in vals and not vals['web']:
             vals['email_web'] = None
         res = super(ResPartner, self).write(vals)
-        if not vals.get('lang'):
+        if 'lang' in vals and not vals.get('lang', False):
             for partner in self:
                 if partner.parent_id and partner.lang != partner.parent_id.lang:
                     partner.lang = partner.parent_id.lang
@@ -478,6 +553,14 @@ class ResPartner(models.Model):
                                   + ''' : %s </center> </strong>''' % (total)
         return followup_table
 
+
+class rappel_calculated(models.Model):
+
+    _inherit = 'rappel.calculated'
+
+    goal_percentage = fields.Float("Goal Percentage")
+
+
 class ResPartnerRappelRel(models.Model):
 
     _inherit = "res.partner.rappel.rel"
@@ -511,3 +594,89 @@ class ResPartnerRappelRel(models.Model):
              ('no_rappel', '=', False)])
 
         return invoice_lines, refund_lines
+
+    @api.model
+    def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
+        goal_percentage = 0
+        for rappel in self:
+            rappel_info = {'rappel_id': rappel.rappel_id.id,
+                           'partner_id': rappel.partner_id.id,
+                           'date_start': period[0],
+                           'amount': 0.0,
+                           'date_end': period[1]}
+            total_rappel = 0.0
+            if rappel.rappel_id.calc_mode == 'fixed':
+                if rappel.rappel_id.calc_amount == 'qty':
+                    total_rappel = rappel.rappel_id.fix_qty
+                else:
+                    total = sum([x.price_subtotal for x in invoice_lines]) - \
+                        sum([x.price_subtotal for x in refund_lines])
+                    if total:
+                        total_rappel = total * rappel.rappel_id.fix_qty / 100.0
+                    rappel_info["curr_qty"] = total
+
+                rappel_info['amount'] = total_rappel
+            else:
+                field = ''
+                if rappel.rappel_id.qty_type == 'value':
+                    field = 'price_subtotal'
+                else:
+                    field = 'quantity'
+                total = sum([x[field] for x in invoice_lines]) - \
+                    sum([x[field] for x in refund_lines])
+                rappel_info["curr_qty"] = total
+                if total:
+                    section = self.env['rappel.section'].search(
+                        [('rappel_id', '=', rappel.rappel_id.id),
+                         ('rappel_from', '<=', total),
+                         ('rappel_until', '>=', total)])
+                    if not section:
+                        section = self.env['rappel.section'].search(
+                            [('rappel_id', '=', rappel.rappel_id.id),
+                             ('rappel_from', '<=', total),
+                             ('rappel_until', '=', False)],
+                            order='rappel_from desc', limit=1)
+                    if section:
+                        goal_percentage = 100
+                    else:
+                        # Check if goal percentage is more than 80% to get the rappel
+                        section = self.env['rappel.section'].search(
+                            [('rappel_id', '=', rappel.rappel_id.id),
+                             ('rappel_from', '<=', total/0.8),
+                             ('rappel_from', '>', total)])
+                        if section.rappel_from:
+                            goal_percentage = (total / section.rappel_from) * 100
+                        else:
+                            goal_percentage = 0
+
+                    if not section:
+                        rappel_info['amount'] = 0.0
+                    else:
+                        rappel_info['section_id'] = section.id
+                        section = section[0]
+                        if rappel.rappel_id.calc_amount == 'qty':
+                            total_rappel = section.percent
+                        else:
+                            total_rappel = total * \
+                                section.percent / 100.0
+                            rappel_info['amount'] = total_rappel
+                else:
+                    rappel_info['amount'] = 0.0
+
+            if period[1] <= fields.Date.from_string(fields.Date.today()):
+                if total_rappel:
+                    self.env['rappel.calculated'].create({
+                        'partner_id': rappel.partner_id.id,
+                        'date_start': period[0],
+                        'date_end': period[1],
+                        'quantity': total_rappel,
+                        'rappel_id': rappel.rappel_id.id,
+                        'goal_percentage': goal_percentage
+                    })
+                rappel.last_settlement_date = period[1]
+            else:
+                if tmp_model and rappel_info:
+                    self.env['rappel.current.info'].create(rappel_info)
+
+        return True
+

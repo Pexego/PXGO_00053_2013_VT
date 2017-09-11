@@ -113,7 +113,7 @@ class AccountVoucher(models.Model):
 
         return res
 
-    @api.multi
+    """@api.multi
     def onchange_date(self, date, currency_id, payment_rate_currency_id, amount, company_id, context=None):
         res = super(AccountVoucher, self).onchange_date(date, currency_id, payment_rate_currency_id,
                                                            amount, company_id, context=None)
@@ -123,7 +123,7 @@ class AccountVoucher(models.Model):
         cont_ids = len(self.line_ids) / 2 - 1
         cont_data = len(self.line_ids) / 2
         iterator = 0
-        """for line in self.line_ids:
+        for line in self.line_ids:
             if line.reconcile:
                 pos_ids = cont_ids - iterator
                 pos_data = cont_data + iterator
@@ -148,7 +148,7 @@ class AccountVoucher(models.Model):
                     voucher_line_pool.write(self._cr, self._uid, [line.id],
                                             {'reconcile': line.reconcile,
                                              'amount': line.amount})
-        """
+
         period_ids = self.pool['account.period'].find(self.env.cr, self.env.uid, dt=date, context=dict(context, company_id=company_id))
         currency_id = False
         if self.journal_id.currency:
@@ -207,16 +207,16 @@ class AccountVoucher(models.Model):
             voucher_line_pool.write(self._cr, self._uid, [voucher_line.id], {'reconcile': voucher_line.reconcile,
                                                                              'amount': voucher_line.amount})
 
-        """currency_id = False
+        currency_id = False
         if self.journal_id.currency:
             currency_id = self.journal_id.currency.id
         else:
             currency_id = self.journal_id.company_id.currency_id.id
 
         res['value']['currency_id'] = currency_id
-        res['value']['pre_line'] = 1"""
+        res['value']['pre_line'] = 1
         return res
-
+    """
 
 
     @api.one

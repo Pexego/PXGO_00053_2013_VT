@@ -59,6 +59,16 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "            "
 
 #. module: custom_partner
+#: field:res.partner,annual_invoiced:0
+msgid "Annual invoiced"
+msgstr "Facturación anual"
+
+#. module: custom_partner
+#: field:res.partner,month_invoiced:0
+msgid "Monthly invoiced"
+msgstr "Facturación mensual"
+
+#. module: custom_partner
 #: view:res.partner:custom_partner.view_partner_form_add_att
 msgid "The client is innactive"
 msgstr "El cliente está inactivo"
@@ -312,3 +322,8 @@ msgstr "Importe Total Adeudado"
 #, python-format
 msgid "Client Order Ref."
 msgstr "Referencia Cliente"
+
+#. module: custom_partner
+#: field:rappel.calculated,goal_percentage:0
+msgid "Goal Percentage"
+msgstr "Porcentaje de cumplimiento"

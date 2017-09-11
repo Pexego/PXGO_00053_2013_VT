@@ -11,6 +11,10 @@
                     <attribute name="readonly">1</attribute>
                     <attribute name="string">Created date</attribute>
                 </field>
+                <field name="date" position="after">
+                    <field name="annual_invoiced"/>
+                    <field name="month_invoiced"/>
+                </field>
                 <field name="active" position="after">
                     <field name="web" attrs="{'invisible': [('is_company', '!=', True)]}"/>
                     <field name="email_web" attrs="{'invisible': [('web', '!=', True)], 'required': [('web', '=', True)]}"/>
@@ -334,6 +338,8 @@
                 </field>
                 <field name="user_id" position="after">
                     <field name="category_id"/>
+                    <field name="annual_invoiced"/>
+                    <field name="last_sale_date"/>
                 </field>
             </field>
         </record>
@@ -373,7 +379,7 @@
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="state_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
                 <field name="country_id" position="attributes">
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
@@ -466,6 +472,17 @@
                         <div attrs="{'invisible': [('is_company', '!=', True)]}">
                             <field name="average_margin" class="oe_inline"/> %%
                         </div>
+                </field>
+            </field>
+        </record>
+
+        <record id="rappel_calculated_tree_add_percentage" model="ir.ui.view">
+            <field name="name">rappel.calculated.tree.add.percentage</field>
+            <field name="model">rappel.calculated</field>
+            <field name="inherit_id" ref="rappel.rappel_calculated_tree"/>
+            <field name="arch" type="xml">
+                <field name="invoice_id" position="after">
+                    <field name="goal_percentage"/>
                 </field>
             </field>
         </record>

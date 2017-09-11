@@ -6,7 +6,7 @@ It will try to automatically create the user table and admin user
 if they don't exist.
 """
 
-from peewee import CharField, IntegerField, FloatField, ForeignKeyField
+from peewee import CharField, IntegerField, FloatField, ForeignKeyField, BooleanField
 from commercial import Commercial
 from app import app
 from database import SyncModel
@@ -33,6 +33,9 @@ class Customer(SyncModel):
     commercial_id = ForeignKeyField(Commercial, on_delete='CASCADE', null=True)
     odoo_id = IntegerField(unique=True)
     lang = CharField(max_length=5, null=True)
+    type = CharField(max_length=30, null=True)
+    parent_id = IntegerField(null=True)
+    is_company = BooleanField(default=True)
 
     MOD_NAME = 'customer'
 

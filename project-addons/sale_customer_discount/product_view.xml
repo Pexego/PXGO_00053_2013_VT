@@ -67,13 +67,19 @@
                      <field name="list_price3" readonly="1"/>
                      <label for="margin_pvd3"/><div><field name="margin_pvd3" class="oe_inline"/> %% </div>
                      </group>
-                     <group colspan="4" col="4">
+                     <group colspan="4" col="6">
                         <field name="pvi1_price" on_change="pvi1_price_change(standard_price, pvi1_price)"/>
+                        <label for="margin_pvd_pvi_1"/><div><field name="margin_pvd_pvi_1" class="oe_inline"/> %% </div>
                         <label for="margin_pvi1"/><div><field name="margin_pvi1" class="oe_inline"/> %% </div>
+
                         <field name="pvi2_price" on_change="pvi2_price_change(standard_price, pvi2_price)"/>
+                        <label for="margin_pvd_pvi_2"/><div><field name="margin_pvd_pvi_2" class="oe_inline"/> %% </div>
                         <label for="margin_pvi2"/><div><field name="margin_pvi2" class="oe_inline"/> %% </div>
+
                         <field name="pvi3_price" on_change="pvi3_price_change(standard_price, pvi3_price)"/>
+                        <label for="margin_pvd_pvi_3"/><div><field name="margin_pvd_pvi_3" class="oe_inline"/> %% </div>
                         <label for="margin_pvi3"/><div><field name="margin_pvi3" class="oe_inline"/> %% </div>
+
                         <field name="standard_price"/>
                         <field name="cost_method"/>
                         <field name="commercial_cost"/>

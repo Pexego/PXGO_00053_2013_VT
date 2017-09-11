@@ -35,7 +35,8 @@ class PartnerExporter(Exporter):
 
     def update(self, binding_id, mode):
         partner = self.model.browse(binding_id)
-        vals = {"fiscal_name": partner.name,
+        vals = {"is_company": partner.is_company,
+                "fiscal_name": partner.name,
                 "commercial_name": partner.comercial or "",
                 "odoo_id": partner.id,
                 "vat": partner.vat or "",
@@ -52,6 +53,8 @@ class PartnerExporter(Exporter):
                 "state": partner.state_id and partner.state_id.name or "",
                 "email": partner.email_web or "",
                 "lang": partner.lang and partner.lang.split("_")[0] or 'es'}
+        if not vals['is_company']:
+            vals.update({"type": partner.type, "parent_id": partner.parent_id.id, "email": partner.email})
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:

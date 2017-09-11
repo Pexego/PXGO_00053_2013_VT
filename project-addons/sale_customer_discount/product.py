@@ -35,7 +35,10 @@ class product_product(osv.osv):
                 'margin_pvd3': 0.0,
                 'margin_pvi1': 0.0,
                 'margin_pvi2': 0.0,
-                'margin_pvi3': 0.0
+                'margin_pvi3': 0.0,
+                'margin_pvd_pvi_1': 0.0,
+                'margin_pvd_pvi_2': 0.0,
+                'margin_pvd_pvi_3': 0.0
             }
             if product.list_price and product.pvd1_relation:
                 res[product.id]['margin_pvd1'] = \
@@ -52,13 +55,25 @@ class product_product(osv.osv):
                          (product.list_price3 * product.pvd3_relation))) * \
                     100.0
             if product.pvi1_price:
-                res[product.id]['margin_pvi1'] = \
+                if product.pvd1_price:
+                    res[product.id]['margin_pvd_pvi_1'] = \
+                        ((product.pvd1_price - product.pvi1_price) / product.pvd1_price) * 100
+                else:
+                    res[product.id]['margin_pvi1'] = \
                     (1 - (product.standard_price / product.pvi1_price)) * 100.0
             if product.pvi2_price:
-                res[product.id]['margin_pvi2'] = \
+                if product.pvd2_price:
+                    res[product.id]['margin_pvd_pvi_2'] = \
+                        ((product.pvd2_price - product.pvi2_price) / product.pvd2_price) * 100
+                else:
+                    res[product.id]['margin_pvi2'] = \
                     (1 - (product.standard_price / product.pvi2_price)) * 100.0
             if product.pvi3_price:
-                res[product.id]['margin_pvi3'] = \
+                if product.pvd3_price:
+                    res[product.id]['margin_pvd_pvi_3'] = \
+                        ((product.pvd3_price - product.pvi3_price) / product.pvd3_price) * 100
+                else:
+                    res[product.id]['margin_pvi3'] = \
                     (1 - (product.standard_price / product.pvi3_price)) * 100.0
         return res
 
@@ -144,6 +159,33 @@ class product_product(osv.osv):
                                                c={}: ids,
                                                ['pvi3_price',
                                                 'standard_price'], 10), }),
+        'margin_pvd_pvi_1': fields.function(_get_margins,
+                                       string='PVD/PVI 1 margin',
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['pvi1_price',
+                                                'pvd1_price'], 10), }),
+        'margin_pvd_pvi_2': fields.function(_get_margins,
+                                       string='PVD/PVI 2 margin',
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['pvi2_price',
+                                                'pvd2_price'], 10), }),
+        'margin_pvd_pvi_3': fields.function(_get_margins,
+                                       string='PVD/PVI 3 margin',
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                              (lambda self, cr, uid, ids,
+                                               c={}: ids,
+                                               ['pvi3_price',
+                                                'pvd3_price'], 10), }),
     }
 
     def pvd1_price_change(self, cr, uid, ids, pvd1_price, standard_price, pvd1_relation=0.5):

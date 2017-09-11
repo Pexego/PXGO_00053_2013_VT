@@ -36,10 +36,14 @@
             <field eval="8" name="priority"/>
             <field name="arch" type="xml">
                 <tree string="Contacts">
+                    <field name="ref"/>
                     <field name="display_name"/>
-                    <field name="customer_lost"/>
-                    <field name="customer_win"/>
-                    <field name="last_sale_date"/>
+                    <field name="phone"/>
+                    <field name="state_id"/>
+                    <field name="area_id"/>
+                    <field name="section_id"/>
+                    <field name="email"/>
+                    <field name="website"/>
                     <field name="function" invisible="1"/>
                     <field name="user_id" invisible="1"/>
                     <field name="is_company" invisible="1"/>

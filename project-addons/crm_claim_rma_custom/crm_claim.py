@@ -102,7 +102,7 @@ class CrmClaimRma(models.Model):
 
     def _get_sequence_number(self, cr, uid, context=None):
         seq_obj = self.pool.get('ir.sequence')
-        if context['claim_type'] == 'supplier':
+        if 'claim_type' in context and context['claim_type'] == 'supplier':
             res = seq_obj.get(cr, uid, 'crm.claim.rma.supplier',
                               context=context) or '/'
         else:
