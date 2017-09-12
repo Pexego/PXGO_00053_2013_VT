@@ -178,6 +178,7 @@ class AccountPaymentTerm(models.Model):
             if not partner.pays_during_holidays:
                 date = self._after_holidays(cr, uid, partner, date, days)
 
+            date = datetime.strftime(date, '%Y-%m-%d')
             new_result.append((date, line[1]))
 
         return self._avoid_sunday(new_result)
