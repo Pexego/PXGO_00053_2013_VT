@@ -46,6 +46,21 @@ msgid "PVD 3 Margin"
 msgstr "Margen PVD_C"
 
 #. module: sale_customer_discount
+#: field:product.product,margin_pvd_pvi_1:0
+msgid "PVD/PVI 1 margin"
+msgstr "Relación PVD/PVI 1"
+
+#. module: sale_customer_discount
+#: field:product.product,margin_pvd_pvi_2:0
+msgid "PVD/PVI 2 margin"
+msgstr "Relación PVD/PVI 2"
+
+#. module: sale_customer_discount
+#: field:product.product,margin_pvd_pvi_3:0
+msgid "PVD/PVI 3 margin"
+msgstr "Relación PVD/PVI 3"
+
+#. module: sale_customer_discount
 #: field:product.product,pvd3_price:0
 msgid "PVD 3 price"
 msgstr "PVD_C"

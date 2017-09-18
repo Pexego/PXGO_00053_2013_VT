@@ -52,31 +52,31 @@
                 <xpath expr="//page[@string='Information']/group" position="after">
 
                     <group colspan="8" col="8" string="Prices">
-                     <field name="pvd1_price" on_change="pvd1_price_change(pvd1_price, standard_price, pvd1_relation)"/>
+                     <field name="pvd1_price" on_change="pvd1_price_change(pvd1_price, standard_price, pvi1_price, pvd1_relation)"/>
                      <field name="pvd1_relation" readonly="1"/>
                      <field name="lst_price" readonly="1"/>
                      <label for="margin_pvd1"/><div><field name="margin_pvd1" class="oe_inline"/> %% </div>
 
-                     <field name="pvd2_price" on_change="pvd2_price_change(pvd2_price, standard_price, pvd2_relation)"/>
+                     <field name="pvd2_price" on_change="pvd2_price_change(pvd2_price, standard_price, pvi2_price, pvd2_relation)"/>
                      <field name="pvd2_relation" readonly="1"/>
                      <field name="list_price2" readonly="1"/>
                      <label for="margin_pvd2"/><div><field name="margin_pvd2" class="oe_inline"/> %% </div>
 
-                     <field name="pvd3_price" on_change="pvd3_price_change(pvd3_price, standard_price, pvd3_relation)"/>
+                     <field name="pvd3_price" on_change="pvd3_price_change(pvd3_price, standard_price, pvi3_price, pvd3_relation)"/>
                      <field name="pvd3_relation" readonly="1"/>
                      <field name="list_price3" readonly="1"/>
                      <label for="margin_pvd3"/><div><field name="margin_pvd3" class="oe_inline"/> %% </div>
                      </group>
                      <group colspan="4" col="6">
-                        <field name="pvi1_price" on_change="pvi1_price_change(standard_price, pvi1_price)"/>
+                        <field name="pvi1_price" on_change="pvi1_price_change(standard_price, pvi1_price, pvd1_price)"/>
                         <label for="margin_pvd_pvi_1"/><div><field name="margin_pvd_pvi_1" class="oe_inline"/> %% </div>
                         <label for="margin_pvi1"/><div><field name="margin_pvi1" class="oe_inline"/> %% </div>
 
-                        <field name="pvi2_price" on_change="pvi2_price_change(standard_price, pvi2_price)"/>
+                        <field name="pvi2_price" on_change="pvi2_price_change(standard_price, pvi2_price, pvd2_price)"/>
                         <label for="margin_pvd_pvi_2"/><div><field name="margin_pvd_pvi_2" class="oe_inline"/> %% </div>
                         <label for="margin_pvi2"/><div><field name="margin_pvi2" class="oe_inline"/> %% </div>
 
-                        <field name="pvi3_price" on_change="pvi3_price_change(standard_price, pvi3_price)"/>
+                        <field name="pvi3_price" on_change="pvi3_price_change(standard_price, pvi3_price, pvd3_price)"/>
                         <label for="margin_pvd_pvi_3"/><div><field name="margin_pvd_pvi_3" class="oe_inline"/> %% </div>
                         <label for="margin_pvi3"/><div><field name="margin_pvi3" class="oe_inline"/> %% </div>
 

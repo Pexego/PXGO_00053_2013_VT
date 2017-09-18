@@ -53,3 +53,4 @@ class AccountInvoice(models.Model):
                                commercial_partner_id.id)).\
                 action_move_create()
         return True
+

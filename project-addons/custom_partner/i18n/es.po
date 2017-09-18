@@ -64,9 +64,20 @@ msgid "Annual invoiced"
 msgstr "Facturación anual"
 
 #. module: custom_partner
-#: field:res.partner,month_invoiced:0
+#: field:res.partner,monthly_invoiced:0
 msgid "Monthly invoiced"
 msgstr "Facturación mensual"
+
+#. module: custom_partner
+#: field:res.partner,past_year_invoiced:0
+msgid "Past year invoiced"
+msgstr "Facturación año anterior"
+
+#. module: custom_partner
+#: field:res.partner,past_month_invoiced:0
+msgid "Past Month invoiced"
+msgstr "Facturación mes anterior"
+
 
 #. module: custom_partner
 #: view:res.partner:custom_partner.view_partner_form_add_att

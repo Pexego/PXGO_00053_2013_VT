@@ -339,7 +339,11 @@ class ClaimInvoiceLine(models.Model):
                 self.price_unit = price
                 self.price_subtotal = price
                 self.discount = 0.0
-                self.tax_ids = taxes_ids
+                if taxes_ids:
+                    self.tax_ids = taxes_ids
+                else:
+                    fpos = self.claim_id.partner_id.property_account_position
+                    self.tax_ids = fpos.map_tax(self.product_id.product_tmpl_id.taxes_id)
             else:
                 self.price_subtotal = self.discount and \
                                       self.qty * self.price_unit - (self.discount *

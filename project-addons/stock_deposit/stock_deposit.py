@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, api
+from datetime import datetime
 
 
 class stock_deposit(models.Model):
@@ -81,6 +82,8 @@ class stock_deposit(models.Model):
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
+                 'origin': deposit.sale_id.name,
+                 'date_done': datetime.now(),
                  'invoice_state': '2binvoiced',
                  'commercial': deposit.user_id.id,
                  'group_id': procurement_id.id})
@@ -94,7 +97,6 @@ class stock_deposit(models.Model):
                 'location_dest_id': deposit.partner_id.property_stock_customer.id,
                 'invoice_state': '2binvoiced',
                 'picking_id': picking.id,
-                'picking_type_id': picking_type_id.id, 
                 'procurement_id': deposit.move_id.procurement_id.id,
                 'commercial': deposit.user_id.id,
                 'group_id': procurement_id.id

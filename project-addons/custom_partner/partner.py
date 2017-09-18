@@ -29,6 +29,7 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import dateutil.relativedelta
 from openerp.exceptions import ValidationError
+from calendar import monthrange
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -41,78 +42,146 @@ class ResPartner(models.Model):
     _inherit = "res.partner"
 
     annual_invoiced = fields.Float('Annual invoiced', readonly=True, store=True)
-    month_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True)
+    past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True)
+    monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True)
+    past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True)
 
     @api.model
     def _calculate_annual_invoiced(self):
         partner_obj = self.env['res.partner']
         invoice_obj = self.env['account.invoice']
         picking_obj = self.env['stock.picking']
-        partner_ids = partner_obj.search([('is_company', '=', True), ('child_ids', '!=', False)])
+        partner_ids = partner_obj.search([('is_company', '=', True),
+                                          ('child_ids', '!=', False),
+                                          ('customer', '=', True)])
         actual_year = datetime.now().year
         actual_month = datetime.now().month
+        past_month = actual_month - 1
         actual_day = datetime.now().day
         start_year = str(actual_year) + '-01-01'
+        start_past_year = str(actual_year - 1) + '-01-01'
         start_month = str(actual_year) + '-' + str(actual_month) + '-01'
+        start_past_month = str(actual_year) + '-' + str(past_month) + '-01'
         end_year = str(actual_year) + '-12-31'
+        end_past_year = str(actual_year - 1) + '-12-31'
         end_month = str(actual_year) + '-' + str(actual_month) + '-' + str(actual_day)
+        end_day_past_month = monthrange(actual_year, past_month)
+        end_past_month = str(actual_year) + '-' + str(past_month) + '-' + str(end_day_past_month[1])
         for partner in partner_ids:
             invoice_ids_year = invoice_obj.search([('date_invoice', '>=', start_year),
-                                              ('date_invoice', '<=', end_year),
-                                              '|',
-                                              ('state', '=', 'open'),
-                                              ('state', '=', 'paid'),
-                                              '|',
-                                              ('partner_id', '=', partner.id),
-                                              ('partner_id.parent_id', '=', partner.id)])
+                                                   ('date_invoice', '<=', end_year),
+                                                   ('partner_id', 'child_of', [partner.id]),
+                                                   ('type', 'in', ['out_invoice', 'out_refund']),
+                                                   '|',
+                                                   ('state', '=', 'open'),
+                                                   ('state', '=', 'paid')])
+
+            invoice_ids_past_year = invoice_obj.search([('date_invoice', '>=', start_past_year),
+                                                        ('date_invoice', '<=', end_past_year),
+                                                        ('partner_id', 'child_of', [partner.id]),
+                                                        ('type', 'in', ['out_invoice', 'out_refund']),
+                                                        '|',
+                                                        ('state', '=', 'open'),
+                                                        ('state', '=', 'paid')])
 
             invoice_ids_month = invoice_obj.search([('date_invoice', '>=', start_month),
-                                              ('date_invoice', '<=', end_month),
-                                              '|',
-                                              ('state', '=', 'open'),
-                                              ('state', '=', 'paid'),
-                                              '|',
-                                              ('partner_id', '=', partner.id),
-                                              ('partner_id.parent_id', '=', partner.id)])
+                                                    ('date_invoice', '<=', end_month),
+                                                    ('partner_id', 'child_of', [partner.id]),
+                                                    ('type', 'in', ['out_invoice', 'out_refund']),
+                                                    '|',
+                                                    ('state', '=', 'open'),
+                                                    ('state', '=', 'paid')])
+
+            invoice_ids_past_month = invoice_obj.search([('date_invoice', '>=', start_past_month),
+                                                         ('date_invoice', '<=', end_past_month),
+                                                         ('partner_id', 'child_of', [partner.id]),
+                                                         ('type', 'in', ['out_invoice', 'out_refund']),
+                                                         '|',
+                                                         ('state', '=', 'open'),
+                                                         ('state', '=', 'paid')])
 
             picking_ids_year = picking_obj.search([('date_done', '>=', start_year),
-                                              ('date_done', '<=', end_year),
-                                              ('state', '=', 'done'),
-                                              ('invoice_state', '=', '2binvoiced'),
-                                              '|',
-                                              ('partner_id', '=', partner.id),
-                                              ('partner_id.parent_id', '=', partner.id)])
+                                                   ('date_done', '<=', end_year),
+                                                   ('state', '=', 'done'),
+                                                   ('invoice_state', '=', '2binvoiced'),
+                                                   ('partner_id', 'child_of', [partner.id])])
+
+            picking_ids_past_year = picking_obj.search([('date_done', '>=', start_past_year),
+                                                        ('date_done', '<=', end_past_year),
+                                                        ('state', '=', 'done'),
+                                                        ('invoice_state', '=', '2binvoiced'),
+                                                        ('partner_id', 'child_of', [partner.id])])
 
             picking_ids_month = picking_obj.search([('date_done', '>=', start_month),
-                                              ('date_done', '<=', end_month),
-                                              ('state', '=', 'done'),
-                                              ('invoice_state', '=', '2binvoiced'),
-                                              '|',
-                                              ('partner_id', '=', partner.id),
-                                              ('partner_id.parent_id', '=', partner.id)])
+                                                    ('date_done', '<=', end_month),
+                                                    ('state', '=', 'done'),
+                                                    ('invoice_state', '=', '2binvoiced'),
+                                                    ('partner_id', 'child_of', [partner.id])])
+
+            picking_ids_past_month = picking_obj.search([('date_done', '>=', start_past_month),
+                                                         ('date_done', '<=', end_past_month),
+                                                         ('state', '=', 'done'),
+                                                         ('invoice_state', '=', '2binvoiced'),
+                                                         ('partner_id', 'child_of', [partner.id])])
 
             annual_invoiced = 0.0
-            month_invoiced = 0.0
+            past_year_invoiced = 0.0
+            monthly_invoiced = 0.0
+            past_month_invoiced = 0.0
             for invoice in invoice_ids_year:
-                annual_invoiced += invoice.amount_total
+                if invoice.type == 'out_refund':
+                    annual_invoiced -= invoice.amount_total
+                else:
+                    annual_invoiced += invoice.amount_total
 
             for invoice in invoice_ids_month:
-                month_invoiced += invoice.amount_total
+                if invoice.type == 'out_refund':
+                    monthly_invoiced -= invoice.amount_total
+                else:
+                    monthly_invoiced += invoice.amount_total
+
+            for invoice in invoice_ids_past_year:
+                if invoice.type == 'out_refund':
+                    past_year_invoiced -= invoice.amount_total
+                else:
+                    past_year_invoiced += invoice.amount_total
+
+            for invoice in invoice_ids_past_month:
+                if invoice.type == 'out_refund':
+                    past_month_invoiced -= invoice.amount_total
+                else:
+                    past_month_invoiced += invoice.amount_total
 
             for picking in picking_ids_year:
-                move_ids = self.env['stock.move'].search([('picking_id', '=', picking.id)])
+                move_ids = picking.move_lines
                 for move in move_ids:
                     if move.procurement_id.sale_line_id.order_id:
                         annual_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
                         break
 
             for picking in picking_ids_month:
-                move_ids = self.env['stock.move'].search([('picking_id', '=', picking.id)])
+                move_ids = picking.move_lines
                 for move in move_ids:
                     if move.procurement_id.sale_line_id.order_id:
-                        month_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
+                        monthly_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
                         break
-            vals = {'annual_invoiced': annual_invoiced, 'month_invoiced': month_invoiced}
+
+            for picking in picking_ids_past_year:
+                move_ids = picking.move_lines
+                for move in move_ids:
+                    if move.procurement_id.sale_line_id.order_id:
+                        past_year_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
+                        break
+
+            for picking in picking_ids_past_month:
+                move_ids = picking.move_lines
+                for move in move_ids:
+                    if move.procurement_id.sale_line_id.order_id:
+                        past_month_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
+                        break
+
+            vals = {'annual_invoiced': annual_invoiced, 'past_year_invoiced': past_year_invoiced,
+                    'monthly_invoiced': monthly_invoiced, 'past_month_invoiced': past_month_invoiced}
             partner.write(vals)
 
     def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):

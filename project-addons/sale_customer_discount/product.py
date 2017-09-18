@@ -55,26 +55,23 @@ class product_product(osv.osv):
                          (product.list_price3 * product.pvd3_relation))) * \
                     100.0
             if product.pvi1_price:
+                res[product.id]['margin_pvi1'] = \
+                    (1 - (product.standard_price / product.pvi1_price)) * 100.0
                 if product.pvd1_price:
                     res[product.id]['margin_pvd_pvi_1'] = \
                         ((product.pvd1_price - product.pvi1_price) / product.pvd1_price) * 100
-                else:
-                    res[product.id]['margin_pvi1'] = \
-                    (1 - (product.standard_price / product.pvi1_price)) * 100.0
             if product.pvi2_price:
+                res[product.id]['margin_pvi2'] = \
+                    (1 - (product.standard_price / product.pvi2_price)) * 100.0
                 if product.pvd2_price:
                     res[product.id]['margin_pvd_pvi_2'] = \
                         ((product.pvd2_price - product.pvi2_price) / product.pvd2_price) * 100
-                else:
-                    res[product.id]['margin_pvi2'] = \
-                    (1 - (product.standard_price / product.pvi2_price)) * 100.0
             if product.pvi3_price:
+                res[product.id]['margin_pvi3'] = \
+                    (1 - (product.standard_price / product.pvi3_price)) * 100.0
                 if product.pvd3_price:
                     res[product.id]['margin_pvd_pvi_3'] = \
                         ((product.pvd3_price - product.pvi3_price) / product.pvd3_price) * 100
-                else:
-                    res[product.id]['margin_pvi3'] = \
-                    (1 - (product.standard_price / product.pvi3_price)) * 100.0
         return res
 
     _columns = {
@@ -188,72 +185,99 @@ class product_product(osv.osv):
                                                 'pvd3_price'], 10), }),
     }
 
-    def pvd1_price_change(self, cr, uid, ids, pvd1_price, standard_price, pvd1_relation=0.5):
+    def pvd1_price_change(self, cr, uid, ids, pvd1_price, standard_price, pvi1_price, pvd1_relation=0.5):
         # res = {'value': {'list_price': (1.0 / pvd1_relation) * pvd1_price,
         #                 'margin_pvd1': (1 - (standard_price / pvd1_price)) * 100.0}}
         if pvd1_price:
             list_price = (1.0 / pvd1_relation) * pvd1_price
             margin_pvd = (1 - (standard_price / pvd1_price)) * 100.0
+            margin_pvd_pvi_1 = ((pvd1_price - pvi1_price) / pvd1_price) * 100
         else:
             list_price = 0
             margin_pvd = 0
+            margin_pvd_pvi_1 = 0
 
         res = {'value': {'lst_price': list_price,
-                         'margin_pvd1': margin_pvd}}
+                         'margin_pvd1': margin_pvd,
+                         'margin_pvd_pvi_1': margin_pvd_pvi_1}}
         return res
 
-    def pvd2_price_change(self, cr, uid, ids, pvd2_price, standard_price, pvd2_relation=0.5):
+    def pvd2_price_change(self, cr, uid, ids, pvd2_price, standard_price, pvi2_price, pvd2_relation=0.5):
         if pvd2_price:
             list_price = (1.0 / pvd2_relation) * pvd2_price
             margin_pvd = (1 - (standard_price / pvd2_price)) * 100.0
+            margin_pvd_pvi_2 = ((pvd2_price - pvi2_price) / pvd2_price) * 100
         else:
             list_price = 0
             margin_pvd = 0
+            margin_pvd_pvi_2 = 0
 
         res = {'value': {'list_price2': list_price,
-                         'margin_pvd2': margin_pvd}}
+                         'margin_pvd2': margin_pvd,
+                         'margin_pvd_pvi_2': margin_pvd_pvi_2}}
         return res
 
-    def pvd3_price_change(self, cr, uid, ids, pvd3_price, standard_price, pvd3_relation=0.5):
+    def pvd3_price_change(self, cr, uid, ids, pvd3_price, standard_price, pvi3_price, pvd3_relation=0.5):
         if pvd3_price:
             list_price = (1.0 / pvd3_relation) * pvd3_price
             margin_pvd = (1 - (standard_price / pvd3_price)) * 100.0
+            margin_pvd_pvi_3 = ((pvd3_price - pvi3_price) / pvd3_price) * 100
         else:
             list_price = 0
             margin_pvd = 0
+            margin_pvd_pvi_3 = 0
 
         res = {'value': {'list_price3': list_price,
-                         'margin_pvd3': margin_pvd}}
+                         'margin_pvd3': margin_pvd,
+                         'margin_pvd_pvi_3': margin_pvd_pvi_3}}
         return res
 
-    def pvi1_price_change(self, cr, uid, ids, standard_price, pvi1_price):
+    def pvi1_price_change(self, cr, uid, ids, standard_price, pvi1_price, pvd1_price):
         # res = {'value': {'margin_pvi1': (1 - (standard_price / pvi1_price)) * 100.0}}
+        if pvd1_price:
+            margin_pvd_pvi_1 = ((pvd1_price - pvi1_price) / pvd1_price) * 100
+        else:
+            margin_pvd_pvi_1 = 0
+
         if pvi1_price:
-            margin_pvd = (1 - (standard_price / pvi1_price)) * 100.0
+            margin_pvi1 = (1 - (standard_price / pvi1_price)) * 100.0
         else:
-            margin_pvd = 0
+            margin_pvi1 = 0
 
-        res = {'value': {'margin_pvi1': margin_pvd}}
+        res = {'value': {'margin_pvi1': margin_pvi1,
+                         'margin_pvd_pvi_1': margin_pvd_pvi_1}}
 
         return res
 
-    def pvi2_price_change(self, cr, uid, ids, standard_price, pvi2_price):
+    def pvi2_price_change(self, cr, uid, ids, standard_price, pvi2_price, pvd2_price):
+        if pvd2_price:
+            margin_pvd_pvi_2 = ((pvd2_price - pvi2_price) / pvd2_price) * 100
+        else:
+            margin_pvd_pvi_2 = 0
+
         if pvi2_price:
-            margin_pvd = (1 - (standard_price / pvi2_price)) * 100.0
+            margin_pvi2 = (1 - (standard_price / pvi2_price)) * 100.0
         else:
-            margin_pvd = 0
+            margin_pvi2 = 0
 
-        res = {'value': {'margin_pvi2': margin_pvd}}
+        res = {'value': {'margin_pvi2': margin_pvi2,
+                         'margin_pvd_pvi_2': margin_pvd_pvi_2}}
 
         return res
 
-    def pvi3_price_change(self, cr, uid, ids, standard_price, pvi3_price):
-        if pvi3_price:
-            margin_pvd = (1 - (standard_price / pvi3_price)) * 100.0
+    def pvi3_price_change(self, cr, uid, ids, standard_price, pvi3_price, pvd3_price):
+        if pvd3_price:
+            margin_pvd_pvi_3 = ((pvd3_price - pvi3_price) / pvd3_price) * 100
         else:
-            margin_pvd = 0
+            margin_pvd_pvi_3 = 0
 
-        res = {'value': {'margin_pvi3': margin_pvd}}
+        if pvi3_price:
+            margin_pvi3 = (1 - (standard_price / pvi3_price)) * 100.0
+        else:
+            margin_pvi3 = 0
+
+        res = {'value': {'margin_pvi3': margin_pvi3,
+                         'margin_pvd_pvi_3': margin_pvd_pvi_3}}
 
         return res
 

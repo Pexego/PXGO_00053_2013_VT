@@ -13,7 +13,9 @@
                 </field>
                 <field name="date" position="after">
                     <field name="annual_invoiced"/>
-                    <field name="month_invoiced"/>
+                    <field name="monthly_invoiced"/>
+                    <field name="past_year_invoiced"/>
+                    <field name="past_month_invoiced"/>
                 </field>
                 <field name="active" position="after">
                     <field name="web" attrs="{'invisible': [('is_company', '!=', True)]}"/>
