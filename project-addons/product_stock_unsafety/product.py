@@ -80,8 +80,8 @@ class product_product(models.Model):
         avg = joking_tot / len(filter_ids)
         for product in product_obj.search([]):
             if product.type != 'product' or product.id not in filter_ids:
-                if product.joking_index != 0:
-                    product.joking_index = 0
+                if product.joking_index != -1:
+                    product.joking_index = -1
             else:
                 joking_index = (product.joking - avg) / avg
                 if product.joking_index != joking_index:
