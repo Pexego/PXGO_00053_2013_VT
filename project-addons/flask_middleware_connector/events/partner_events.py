@@ -195,17 +195,17 @@ def delay_export_partner_write(session, model_name, record_id, vals):
 
         elif "web" in vals and not vals["web"]:
             for contact in contacts:
-                unlink_partner.delay(session, model_name, contact.id, priority=100,
-                                     eta=120)
+                unlink_partner.delay(session, model_name, contact.id, priority=1,
+                                     eta=60)
 
-            unlink_partner.delay(session, model_name, record_id, priority=100, eta=300)
+            unlink_partner.delay(session, model_name, record_id, priority=1, eta=60)
 
         elif "active" in vals and not vals["active"] and partner.web:
             for contact in contacts:
-                unlink_partner.delay(session, model_name, contact.id, priority=100,
-                                     eta=120)
+                unlink_partner.delay(session, model_name, contact.id, priority=1,
+                                     eta=60)
 
-            unlink_partner.delay(session, model_name, record_id, priority=100, eta=300)
+            unlink_partner.delay(session, model_name, record_id, priority=1, eta=60)
 
         elif 'child_ids' in vals:
                 for child in vals['child_ids']:
@@ -232,7 +232,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                                          eta=60)
                     break
         elif partner.commercial_partner_id.web and not vals.get('active', False):
-            unlink_partner.delay(session, model_name, record_id, priority=5,
+            unlink_partner.delay(session, model_name, record_id, priority=1,
                                  eta=60)
 
 
@@ -244,13 +244,13 @@ def delay_unlink_partner(session, model_name, record_id):
 
     if partner.web:
         for contact in contacts:
-            unlink_partner.delay(session, model_name, contact.id, eta=120)
-        unlink_partner.delay(session, model_name, record_id, eta= 180)
+            unlink_partner.delay(session, model_name, contact.id, eta=60)
+        unlink_partner.delay(session, model_name, record_id, eta= 60)
 
     elif partner.commercial_partner_id.web:
         for contact in contacts:
-            unlink_partner.delay(session, model_name, contact.id, eta=120)
-        unlink_partner.delay(session, model_name, record_id, eta=180)
+            unlink_partner.delay(session, model_name, contact.id, eta=60)
+        unlink_partner.delay(session, model_name, record_id, eta=60)
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
