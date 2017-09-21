@@ -118,8 +118,7 @@ class ProductProduct(orm.Model):
                     total_stock += total
 
                 if total_stock:
-                    data.append([end_period_seconds, total_stock])
-
+                    data.append([end_period_seconds, round(total_stock)])
             else:
                 for loc in locations:
                     stock_data = stock_inventory.read_group(
@@ -177,15 +176,13 @@ class ProductProduct(orm.Model):
 
             min_stock = min(df['Stock'])
             max_stock = max(df['Stock'])
-
             if min_stock != max_stock:
-                margin_y = (max_stock - min_stock) / 15
-                margin_x = (len(data)) / 40.0
+                margin_y = (max_stock - min_stock) / 30
                 offset_axis = (max_stock - min_stock) / 10
             else:
                 margin_y = max_stock / 100
-                margin_x = 0
                 offset_axis = max_stock / 10
+            margin_x = 0
 
             # Create plot with points
             sns.despine()
@@ -197,7 +194,7 @@ class ProductProduct(orm.Model):
             # Draw a line plot to join all points
             sns_plot.map(plt.plot, "Date", "Stock", marker="o", ms=4, color='#A61D34')
             plt.xticks(range(len(data)), [int_to_date(x[0]) for x in data])
-            [sns_plot.ax.text(p[0] - margin_x, p[1] + margin_y, '%d' % int(p[1]), color='grey', fontsize=9)
+            [sns_plot.ax.text(p[0] - margin_x, p[1] + margin_y, '%d' % int(p[1]), color='grey', fontsize=9, ha="center")
              for p in zip(sns_plot.ax.get_xticks(), df['Stock'])]
 
             # Set axis config
