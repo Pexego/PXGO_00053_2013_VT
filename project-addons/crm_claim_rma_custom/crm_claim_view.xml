@@ -186,9 +186,6 @@
                     <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
                     <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
                 </xpath>
-                <xpath expr="//field[@name='claim_line_ids']/tree//field[@name='product_id']" position="attributes">
-                    <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
-                </xpath>
             </field>
         </record>
 
