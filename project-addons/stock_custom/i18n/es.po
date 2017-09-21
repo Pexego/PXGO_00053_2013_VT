@@ -297,5 +297,5 @@ msgstr "Tiene que rellenar todos los filtros"
 #: code:addons/stock_custom/stock_graphic.py:148
 #, python-format
 msgid "End date cannot be smaller than start date"
-msgstr "La fecha fin no puede ser menos que la fecha inicio"
+msgstr "La fecha fin no puede ser menor que la fecha inicio"
 

@@ -60,9 +60,9 @@ class ProductProduct(orm.Model):
         if self.period == 'week':
             period_end = (datetime(_date.year, _date.month, _date.day) + relativedelta(weeks=1))
         elif self.period == 'year':
-            period_end = (datetime(_date.year, _date.month, _date.day) + relativedelta(years=1))
+            period_end = (datetime(_date.year, 01, 01) + relativedelta(years=1))
         else:
-            period_end = (datetime(_date.year, _date.month, _date.day) + relativedelta(months=1))
+            period_end = (datetime(_date.year, _date.month, 01) + relativedelta(months=1))
         return period_end + relativedelta(days=-1)
 
     @api.multi
