@@ -216,3 +216,86 @@ msgstr "Mis Albaranes"
 msgid "Stock New"
 msgstr "Stock Nuevo"
 
+#. module: stock_custom
+#: view:product.product:stock_custom.product_add_stock_graphic_form
+msgid "Refresh graph"
+msgstr "Refrescar gráfica"
+
+#. module: stock_custom
+#: field:product.template,stock_graphic:0
+msgid "Graph"
+msgstr "Gráfica"
+
+#. module: stock_custom
+#: field:product.template,date_start:0
+msgid "Start date"
+msgstr "Fecha inicio"
+
+#. module: stock_custom
+#: field:product.template,date_end:0
+msgid "End Date"
+msgstr "Fecha fin"
+
+#. module: stock_custom
+#: field:product.template,period:0
+msgid "Time Period"
+msgstr "Periodo de tiempo"
+
+#. module: stock_custom
+#: selection:product.template,period:0
+msgid "Week"
+msgstr "Semana"
+
+#. module: stock_custom
+#: selection:product.template,period:0
+msgid "Month"
+msgstr "Mes"
+
+#. module: stock_custom
+#: selection:product.template,period:0
+msgid "Year"
+msgstr "Año"
+
+#. module: stock_custom
+#: field:product.template,analysis_type:0
+msgid "Type of analysis"
+msgstr "Tipo de análisis"
+
+#. module: stock_custom
+#: selection:product.template,analysis_type:0
+msgid "Average"
+msgstr "Media de stock al día"
+
+#. module: stock_custom
+#: selection:product.template,analysis_type:0
+msgid "End of period"
+msgstr "Final de periodo"
+
+#. module: stock_custom
+#: view:product.product:stock_custom.product_add_stock_graphic_form
+msgid "Stock graphic"
+msgstr "Evolución stock"
+
+#. module: stock_custom
+#: view:product.product:stock_custom.product_add_stock_graphic_form
+msgid "Filters"
+msgstr "Filtros"
+
+#. module: stock_custom
+#: code:addons/stock_custom/stock_graphic.py:225
+#, python-format
+msgid "Date"
+msgstr "Fecha"
+
+#. module: stock_custom
+#: code:addons/stock_custom/stock_graphic.py:145
+#, python-format
+msgid "You must set all filter values"
+msgstr "Tiene que rellenar todos los filtros"
+
+#. module: stock_custom
+#: code:addons/stock_custom/stock_graphic.py:148
+#, python-format
+msgid "End date cannot be smaller than start date"
+msgstr "La fecha fin no puede ser menos que la fecha inicio"
+
