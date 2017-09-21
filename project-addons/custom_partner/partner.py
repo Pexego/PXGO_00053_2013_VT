@@ -72,6 +72,7 @@ class ResPartner(models.Model):
                                                    ('date_invoice', '<=', end_year),
                                                    ('partner_id', 'child_of', [partner.id]),
                                                    ('type', 'in', ['out_invoice', 'out_refund']),
+                                                   ('number', 'not like', '%_ef%'),
                                                    '|',
                                                    ('state', '=', 'open'),
                                                    ('state', '=', 'paid')])
@@ -80,6 +81,7 @@ class ResPartner(models.Model):
                                                         ('date_invoice', '<=', end_past_year),
                                                         ('partner_id', 'child_of', [partner.id]),
                                                         ('type', 'in', ['out_invoice', 'out_refund']),
+                                                        ('number', 'not like', '%_ef%'),
                                                         '|',
                                                         ('state', '=', 'open'),
                                                         ('state', '=', 'paid')])
@@ -88,6 +90,7 @@ class ResPartner(models.Model):
                                                     ('date_invoice', '<=', end_month),
                                                     ('partner_id', 'child_of', [partner.id]),
                                                     ('type', 'in', ['out_invoice', 'out_refund']),
+                                                    ('number', 'not like', '%_ef%'),
                                                     '|',
                                                     ('state', '=', 'open'),
                                                     ('state', '=', 'paid')])
@@ -96,6 +99,7 @@ class ResPartner(models.Model):
                                                          ('date_invoice', '<=', end_past_month),
                                                          ('partner_id', 'child_of', [partner.id]),
                                                          ('type', 'in', ['out_invoice', 'out_refund']),
+                                                         ('number', 'not like', '%_ef%'),
                                                          '|',
                                                          ('state', '=', 'open'),
                                                          ('state', '=', 'paid')])
