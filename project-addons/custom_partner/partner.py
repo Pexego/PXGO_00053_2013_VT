@@ -72,6 +72,7 @@ class ResPartner(models.Model):
                                                    ('date_invoice', '<=', end_year),
                                                    ('partner_id', 'child_of', [partner.id]),
                                                    ('type', 'in', ['out_invoice', 'out_refund']),
+                                                   ('number', 'not like', '%_ef%'),
                                                    '|',
                                                    ('state', '=', 'open'),
                                                    ('state', '=', 'paid')])
@@ -80,6 +81,7 @@ class ResPartner(models.Model):
                                                         ('date_invoice', '<=', end_past_year),
                                                         ('partner_id', 'child_of', [partner.id]),
                                                         ('type', 'in', ['out_invoice', 'out_refund']),
+                                                        ('number', 'not like', '%_ef%'),
                                                         '|',
                                                         ('state', '=', 'open'),
                                                         ('state', '=', 'paid')])
@@ -88,6 +90,7 @@ class ResPartner(models.Model):
                                                     ('date_invoice', '<=', end_month),
                                                     ('partner_id', 'child_of', [partner.id]),
                                                     ('type', 'in', ['out_invoice', 'out_refund']),
+                                                    ('number', 'not like', '%_ef%'),
                                                     '|',
                                                     ('state', '=', 'open'),
                                                     ('state', '=', 'paid')])
@@ -96,6 +99,7 @@ class ResPartner(models.Model):
                                                          ('date_invoice', '<=', end_past_month),
                                                          ('partner_id', 'child_of', [partner.id]),
                                                          ('type', 'in', ['out_invoice', 'out_refund']),
+                                                         ('number', 'not like', '%_ef%'),
                                                          '|',
                                                          ('state', '=', 'open'),
                                                          ('state', '=', 'paid')])
@@ -130,55 +134,39 @@ class ResPartner(models.Model):
             past_month_invoiced = 0.0
             for invoice in invoice_ids_year:
                 if invoice.type == 'out_refund':
-                    annual_invoiced -= invoice.amount_total
+                    annual_invoiced -= invoice.amount_untaxed
                 else:
-                    annual_invoiced += invoice.amount_total
+                    annual_invoiced += invoice.amount_untaxed
 
             for invoice in invoice_ids_month:
                 if invoice.type == 'out_refund':
-                    monthly_invoiced -= invoice.amount_total
+                    monthly_invoiced -= invoice.amount_untaxed
                 else:
-                    monthly_invoiced += invoice.amount_total
+                    monthly_invoiced += invoice.amount_untaxed
 
             for invoice in invoice_ids_past_year:
                 if invoice.type == 'out_refund':
-                    past_year_invoiced -= invoice.amount_total
+                    past_year_invoiced -= invoice.amount_untaxed
                 else:
-                    past_year_invoiced += invoice.amount_total
+                    past_year_invoiced += invoice.amount_untaxed
 
             for invoice in invoice_ids_past_month:
                 if invoice.type == 'out_refund':
-                    past_month_invoiced -= invoice.amount_total
+                    past_month_invoiced -= invoice.amount_untaxed
                 else:
-                    past_month_invoiced += invoice.amount_total
+                    past_month_invoiced += invoice.amount_untaxed
 
             for picking in picking_ids_year:
-                move_ids = picking.move_lines
-                for move in move_ids:
-                    if move.procurement_id.sale_line_id.order_id:
-                        annual_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
-                        break
+                annual_invoiced += picking.amount_untaxed
 
             for picking in picking_ids_month:
-                move_ids = picking.move_lines
-                for move in move_ids:
-                    if move.procurement_id.sale_line_id.order_id:
-                        monthly_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
-                        break
+                annual_invoiced += picking.amount_untaxed
 
             for picking in picking_ids_past_year:
-                move_ids = picking.move_lines
-                for move in move_ids:
-                    if move.procurement_id.sale_line_id.order_id:
-                        past_year_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
-                        break
+                annual_invoiced += picking.amount_untaxed
 
             for picking in picking_ids_past_month:
-                move_ids = picking.move_lines
-                for move in move_ids:
-                    if move.procurement_id.sale_line_id.order_id:
-                        past_month_invoiced += move.procurement_id.sale_line_id.order_id.amount_total
-                        break
+                annual_invoiced += picking.amount_untaxed
 
             vals = {'annual_invoiced': annual_invoiced, 'past_year_invoiced': past_year_invoiced,
                     'monthly_invoiced': monthly_invoiced, 'past_month_invoiced': past_month_invoiced}

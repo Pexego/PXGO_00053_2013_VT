@@ -36,7 +36,7 @@ class ProductProduct(models.Model):
     transport_time = fields.Integer('Transport time')
     security_margin = fields.Integer('Security margin')
     average_margin = fields.Float("Average Margin Last Sales", readonly=True)
-    ref_manufacturer = fields.Char(related='seller_ids.product_code', readonly=True)
+    ref_manufacturer = fields.Char(related='manufacturer_pref', readonly=True)
 
     @api.model
     def compute_last_sixty_days_sales(self, records=False):

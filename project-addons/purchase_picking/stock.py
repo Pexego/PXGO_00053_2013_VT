@@ -36,8 +36,9 @@ class StockContainer(models.Model):
                     if move.picking_id:
                         if move.picking_id not in picking_ids:
                             picking_ids.append(move.picking_id)
+                date_expected = container.date_expected
                 for picking in picking_ids:
-                    new_vals = {'min_date': container.date_expected}
+                    new_vals = {'min_date': date_expected}
                     picking.write(new_vals)
 
         return True
