@@ -63,6 +63,7 @@ class Product(SyncModel):
     sale_ok = BooleanField()
     ean13 = CharField(max_length=13)
     description_sale = TextField()
+    manufacturer_ref = CharField(max_length=30)
 
     def __unicode__(self):
         return self.name
