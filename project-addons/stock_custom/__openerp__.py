@@ -29,12 +29,12 @@
     "depends" : ["base", "stock_valued_picking", "base_report_to_printer",
                  "custom_account", "picking_incidences",
                  "reserve_without_save_sale", "sale_display_stock",
-                 "stock_reserve_sale","product_brand"],
+                 "stock_reserve_sale", "product_brand", "product_pack"],
     "data" : ["ir_attachment_view.xml",
               "stock_custom_report.xml",
               "report/stock_report.xml",
               "data/email_template.xml",
               "stock_view.xml", "partner_view.xml", 'product_view.xml',
-              'sale_view.xml', 'stock_landed_costs_view.xml', 'security/ir.model.access.csv'],
+              'sale_view.xml', 'stock_landed_costs_view.xml', 'stock_graphic_view.xml', 'security/ir.model.access.csv'],
     "installable": True
 }
