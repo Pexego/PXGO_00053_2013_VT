@@ -299,3 +299,8 @@ msgstr "Tiene que rellenar todos los filtros"
 msgid "End date cannot be smaller than start date"
 msgstr "La fecha fin no puede ser menor que la fecha inicio"
 
+#. module: stock_custom
+#: view:product.product:stock_custom.product_add_stock_graphic_form
+msgid "(By default, the graph shows the analysis per month of the daily stock average of the last 6 months)"
+msgstr "(Por defecto, la gráfica muestra el análisis por mes de la media de stock diario de los últimos 6 meses)"
+
