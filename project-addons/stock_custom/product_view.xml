@@ -39,6 +39,9 @@
             <field name="priority">16</field>
             <field name="inherit_id" ref="product.product_search_form_view"/>
             <field name="arch" type="xml">
+                <field name="name" position="attributes">
+                    <attribute name="filter_domain">['|',('name','ilike',self),('ref_manufacturer','ilike',self)]</attribute>
+                </field>
                 <field name="name" position="after">
                     <field name="tag_ids" string="Tag"/>
                     <field name="seller_id" string="Main Supplier"/>
