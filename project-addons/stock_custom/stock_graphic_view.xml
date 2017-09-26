@@ -14,6 +14,7 @@
                             <field name="period"/>
                             <field name="analysis_type"/>
                             <button name="action_create_graph" type="object" string="Refresh graph"/>
+                            <label colspan="4" string="(By default, the graph shows the analysis per month of the daily stock average of the last 6 months)"/>
                         </group>
                         <group string="Stock graphic">
                             <field name="stock_graphic" widget='image' readonly="1"/>

@@ -154,7 +154,7 @@ class MiddlewareBackend(models.Model):
                                                   ('active', '=', True),
                                                   ('customer', '=', True)])
                 for contact in contact_ids:
-                    export_partner(session, "res.partner", contact.id)
+                    export_partner.delay(session, "res.partner", contact.id)
             #~ substates = self.env['substate.substate'].search([])
             #~ for substate in substates:
                 #~ export_rma_status(session, 'substate.substate', substate.id)
