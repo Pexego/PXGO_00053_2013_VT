@@ -51,6 +51,14 @@ class ProductTemplate(orm.Model):
         'stock_graphic': fields.binary("Graph")
     }
 
+    _defaults = {
+        'date_start': lambda *a: (datetime.now() - relativedelta(months=6)).strftime('%Y-%m-%d'),
+        'date_end': lambda *a: datetime.now().strftime('%Y-%m-%d'),
+        'period': 'month',
+        'analysis_type': 'average'
+    }
+
+
 class ProductProduct(orm.Model):
 
     _inherit = 'product.product'
@@ -60,9 +68,9 @@ class ProductProduct(orm.Model):
         if self.period == 'week':
             period_end = (datetime(_date.year, _date.month, _date.day) + relativedelta(weeks=1))
         elif self.period == 'year':
-            period_end = (datetime(_date.year, 01, 01) + relativedelta(years=1))
+            period_end = (datetime(_date.year, 1, 1) + relativedelta(years=1))
         else:
-            period_end = (datetime(_date.year, _date.month, 01) + relativedelta(months=1))
+            period_end = (datetime(_date.year, _date.month, 1) + relativedelta(months=1))
         return period_end + relativedelta(days=-1)
 
     @api.multi
@@ -107,6 +115,7 @@ class ProductProduct(orm.Model):
                         [('product_id', '=', self.id),
                          ('create_date', '>=', start_period),
                          ('create_date', '<=', end_period),
+                         ('inventory_id.name', 'like', 'VSTOCK Diario%'),
                          ('location_id', '=', loc)],
                         ['inventory_id', 'product_qty'],
                         ['inventory_id'])
@@ -118,14 +127,14 @@ class ProductProduct(orm.Model):
                     total_stock += total
 
                 if total_stock:
-                    data.append([end_period_seconds, total_stock])
-
+                    data.append([end_period_seconds, round(total_stock)])
             else:
                 for loc in locations:
                     stock_data = stock_inventory.read_group(
                         [('product_id', '=', self.id),
                          ('create_date', '>=', start_period),
                          ('create_date', '<=', end_period),
+                         ('inventory_id.name', 'like', 'VSTOCK Diario%'),
                          ('location_id', '=', loc)],
                         ['inventory_id', 'product_qty'],
                         ['inventory_id'], limit=1, orderby='inventory_id DESC')
@@ -139,16 +148,15 @@ class ProductProduct(orm.Model):
 
     @api.multi
     def action_create_graph(self):
-
-        if not self.date_start \
-                or not self.date_end \
-                or not self.period \
-                or not self.analysis_type:
-            raise except_orm(_('Error'), _(
-                'You must set all filter values'))
+        if not self.date_start and not self.date_end and not self.period and not self.analysis_type:
+            self.date_start = (datetime.now() - relativedelta(months=6)).strftime('%Y-%m-%d')
+            self.date_end = datetime.now()
+            self.period = 'month'
+            self.analysis_type = 'average'
+        elif not self.date_start or not self.date_end or not self.period or not self.analysis_type:
+            raise except_orm(_('Error'), _('You must set all filter values'))
         elif self.date_end < self.date_start:
-            raise except_orm(_('Error'), _(
-                'End date cannot be smaller than start date'))
+            raise except_orm(_('Error'), _('End date cannot be smaller than start date'))
 
         self.run_scheduler_graphic()
 
@@ -177,15 +185,13 @@ class ProductProduct(orm.Model):
 
             min_stock = min(df['Stock'])
             max_stock = max(df['Stock'])
-
             if min_stock != max_stock:
-                margin_y = (max_stock - min_stock) / 15
-                margin_x = (len(data)) / 40.0
+                margin_y = (max_stock - min_stock) / 30
                 offset_axis = (max_stock - min_stock) / 10
             else:
                 margin_y = max_stock / 100
-                margin_x = 0
                 offset_axis = max_stock / 10
+            margin_x = 0
 
             # Create plot with points
             sns.despine()
@@ -197,7 +203,7 @@ class ProductProduct(orm.Model):
             # Draw a line plot to join all points
             sns_plot.map(plt.plot, "Date", "Stock", marker="o", ms=4, color='#A61D34')
             plt.xticks(range(len(data)), [int_to_date(x[0]) for x in data])
-            [sns_plot.ax.text(p[0] - margin_x, p[1] + margin_y, '%d' % int(p[1]), color='grey', fontsize=9)
+            [sns_plot.ax.text(p[0] - margin_x, p[1] + margin_y, '%d' % int(p[1]), color='grey', fontsize=9, ha="center")
              for p in zip(sns_plot.ax.get_xticks(), df['Stock'])]
 
             # Set axis config
