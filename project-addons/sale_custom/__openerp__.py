@@ -15,7 +15,8 @@
         "base",
         "sale",
         "sale_display_stock",
-        "sale_margin_percentage"
+        "sale_margin_percentage",
+        "stock_reserve_sale"
     ],
     "data": [
         'views/sale_view.xml'
