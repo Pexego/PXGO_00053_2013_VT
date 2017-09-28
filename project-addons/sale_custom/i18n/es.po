@@ -27,3 +27,9 @@ msgstr "Error"
 msgid "Product quantity cannot be negative or zero"
 msgstr "La cantidad de un producto no puede ser negativo o cero"
 
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_sales_partner
+msgid "Partner Orders"
+msgstr "Pedidos Cliente"
+
+
