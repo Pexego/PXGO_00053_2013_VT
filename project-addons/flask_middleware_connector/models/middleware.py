@@ -173,7 +173,7 @@ class MiddlewareBackend(models.Model):
             products = self.env["product.product"]. \
                 search(['manufacturer_ref', '!=', False])
             for product in products:
-                update_product.delay(session, "product.template", product_tmpl_id.id)
+                update_product.delay(session, "product.template", product.product_tmpl_id.id)
                 #~ product.web = 'published'
 
         return True
