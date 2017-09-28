@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2017 Comunitea (<http://comunitea.com>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -18,6 +18,20 @@
 #
 ##############################################################################
 
-from . import product
-from . import invoice
-from . import stock
+from openerp import models, api
+
+class StockMove(models.Model):
+
+    _inherit = "stock.move"
+
+    @api.multi
+    def _get_origin_create_date(self):
+        self.ensure_one()
+        if self.purchase_line_id:
+            all_moves = self.env["stock.move"].\
+                search([('purchase_line_id', '=',
+                         self.purchase_line_id.id)],
+                       order="create_date asc", limit=1)
+            return all_moves.create_date
+        else:
+            return self.create_date
