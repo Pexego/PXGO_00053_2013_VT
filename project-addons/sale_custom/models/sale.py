@@ -45,7 +45,7 @@ class SaleOrder(models.Model):
         partner_id = self.partner_id.commercial_partner_id.id
         order_view_id = self.env.ref('sale.act_res_partner_2_sale_order').id
         last_order = self.env['sale.order'].search([('id', '!=', self.id),
-                                                    ('partner_id', '=', partner_id),
+                                                    ('partner_id', 'child_of', [partner_id]),
                                                     ('state', 'not in', ['cancel', 'draft', 'sent'])],
                                                    limit=1, order='date_order DESC').id
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
