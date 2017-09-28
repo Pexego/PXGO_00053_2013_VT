@@ -140,9 +140,12 @@ class StockPicking(models.Model):
                         property_pending_variation_account
                     credit_account = pick.company_id.\
                         property_pending_stock_account
+                    change_date = vals['date_done']
+                    if pick.backorder_id:
+                        change_date = pick.backorder_id.date_done
                     move_id = pick.account_pending_invoice(debit_account,
                                                            credit_account,
-                                                           vals['date_done'])
+                                                           change_date)
                     pick.pending_stock_reverse_move_id = move_id.id
         return res
 
@@ -164,7 +167,8 @@ class StockPicking(models.Model):
             if pick.picking_type_id.code == "incoming" and pick.move_lines \
                     and pick.move_lines[0].purchase_line_id and \
                     pick.invoice_state in ['invoiced', '2binvoiced'] and \
-                    pick.company_id.required_invoice_pending_move:
+                    pick.company_id.required_invoice_pending_move and \
+                    not pick.backorder_id:
                 debit_account = pick.company_id.\
                     property_pending_expenses_account
                 credit_account = pick.company_id.\

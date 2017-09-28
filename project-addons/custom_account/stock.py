@@ -254,7 +254,13 @@ class StockQuant(models.Model):
     @api.model
     def _prepare_account_move_line(self, move, qty, cost, credit_account_id,
                                    debit_account_id):
-        res = super(StockQuant, self).\
+        ctx = dict(self.env.context)
+        if move.picking_id and \
+                move.picking_id.picking_type_id.code == "incoming" and \
+                move.picking_id.backorder_id:
+            ctx['date'] = move.picking_id.backorder_id.date_done
+
+        res = super(StockQuant, self.with_context(ctx)).\
             _prepare_account_move_line(move, qty, cost, credit_account_id,
                                        debit_account_id)
         currency_obj = self.pool.get('res.currency')

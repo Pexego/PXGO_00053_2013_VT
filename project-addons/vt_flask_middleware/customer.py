@@ -23,7 +23,7 @@ class Customer(SyncModel):
     pricelist_name = CharField(max_length=150, null=True)
     ref = CharField(max_length=150, null=True)
     discount = FloatField(default=0.0)
-    vat = CharField(max_length=18, null=True)
+    vat = CharField(max_length=25, null=True)
     street = CharField(max_length=250, null=True)
     city = CharField(max_length=150, null=True)
     zipcode = CharField(max_length=8, null=True)
