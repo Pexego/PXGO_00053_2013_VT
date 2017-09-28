@@ -22,6 +22,11 @@ msgid " (copy)"
 msgstr " (copia)"
 
 #. module: custom_account
+#: field:res.partner,email2:0
+msgid "Second Email"
+msgstr "Segundo Email"
+
+#. module: custom_account
 #: code:addons/custom_account/report/account_invoice_report.py:31
 #, python-format
 msgid "Brand name"
