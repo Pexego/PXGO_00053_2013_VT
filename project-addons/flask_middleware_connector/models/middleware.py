@@ -29,7 +29,7 @@ from ..unit.backend_adapter import GenericAdapter
 from ..events.partner_events import export_partner
 from ..events.country_events import export_country
 from ..events.commercial_events import export_commercial
-from ..events.product_events import export_product, export_product_category, export_product_brand, export_product_brand_rel
+from ..events.product_events import update_product, export_product, export_product_category, export_product_brand, export_product_brand_rel
 from ..events.rma_events import export_rma, export_rmaproduct, export_rma_status
 from ..events.invoice_events import export_invoice
 from ..connector import get_environment
@@ -145,16 +145,16 @@ class MiddlewareBackend(models.Model):
             #~ users = self.env['res.users'].search([('web', '=', True)])
             #~ for user in users:
                 #~ export_commercial(session, 'res.users', user.id)
-            partner_obj = self.env['res.partner']
-            partner_ids = partner_obj.search([('is_company', '=', True),
-                                              ('web', '=', True),
-                                              ('customer', '=', True)])
-            for partner in partner_ids:
-                contact_ids = partner_obj.search([('parent_id', '=', partner.id),
-                                                  ('active', '=', True),
-                                                  ('customer', '=', True)])
-                for contact in contact_ids:
-                    export_partner.delay(session, "res.partner", contact.id)
+            #~ partner_obj = self.env['res.partner']
+            #~ partner_ids = partner_obj.search([('is_company', '=', True),
+            #~                                ('web', '=', True),
+            #~                                ('customer', '=', True)])
+            #~ for partner in partner_ids:
+            #~  contact_ids = partner_obj.search([('parent_id', '=', partner.id),
+            #~                                    ('active', '=', True),
+            #~                                    ('customer', '=', True)])
+            #~  for contact in contact_ids:
+            #~      export_partner.delay(session, "res.partner", contact.id)
             #~ substates = self.env['substate.substate'].search([])
             #~ for substate in substates:
                 #~ export_rma_status(session, 'substate.substate', substate.id)
@@ -170,10 +170,10 @@ class MiddlewareBackend(models.Model):
                         #~ ('number', 'not like', '%ef%')])
             #~ for invoice in invoices:
                 #~ export_invoice.delay(session, 'account.invoice', invoice.id)
-            #~ products = self.env["product.product"]. \
-                #~ search([('web', '=', 'not_published')])
-            #~ for product in products:
-                #~ export_product.delay(session, "product.product", product.id)
+            products = self.env["product.product"]. \
+                search(['manufacturer_ref', '!=', False])
+            for product in products:
+                update_product.delay(session, "product.template", product.product_tmpl_id.id)
                 #~ product.web = 'published'
 
         return True
