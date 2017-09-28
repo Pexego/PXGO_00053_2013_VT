@@ -117,7 +117,7 @@ class ProductProduct(models.Model):
             product_ids = ids
         for product_id in self.browse(product_ids):
             sale_order_line_obj = self.env['sale.order.line']
-            domain = [('product_id', '=', product_id.id)]
+            domain = [('product_id', '=', product_id.id), ('state', 'not in', ('draft', 'cancel', 'exception'))]
             sales_obj = sale_order_line_obj.search(domain, limit=100,
                                                    order='date_order desc')
             margin_perc_sum = 0
