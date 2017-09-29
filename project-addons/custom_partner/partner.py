@@ -67,7 +67,6 @@ class ResPartner(models.Model):
         end_month = str(actual_year) + '-' + str(actual_month) + '-' + str(actual_day)
         end_day_past_month = monthrange(actual_year, past_month)
         end_past_month = str(actual_year) + '-' + str(past_month) + '-' + str(end_day_past_month[1])
-        partner_ids = self.env['res.partner'].browse(23006)
         for partner in partner_ids:
             invoice_ids_year = invoice_obj.search([('date_invoice', '>=', start_year),
                                                    ('date_invoice', '<=', end_year),
