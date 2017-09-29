@@ -67,6 +67,7 @@ class ResPartner(models.Model):
         end_month = str(actual_year) + '-' + str(actual_month) + '-' + str(actual_day)
         end_day_past_month = monthrange(actual_year, past_month)
         end_past_month = str(actual_year) + '-' + str(past_month) + '-' + str(end_day_past_month[1])
+        partner_ids = self.env['res.partner'].browse(23006)
         for partner in partner_ids:
             invoice_ids_year = invoice_obj.search([('date_invoice', '>=', start_year),
                                                    ('date_invoice', '<=', end_year),
@@ -83,8 +84,10 @@ class ResPartner(models.Model):
                                                         ('type', 'in', ['out_invoice', 'out_refund']),
                                                         ('number', 'not like', '%_ef%'),
                                                         '|',
+                                                        '|',
                                                         ('state', '=', 'open'),
-                                                        ('state', '=', 'paid')])
+                                                        ('state', '=', 'paid'),
+                                                        ('state', '=', 'history')])
 
             invoice_ids_month = invoice_obj.search([('date_invoice', '>=', start_month),
                                                     ('date_invoice', '<=', end_month),
@@ -112,9 +115,11 @@ class ResPartner(models.Model):
 
             picking_ids_past_year = picking_obj.search([('date_done', '>=', start_past_year),
                                                         ('date_done', '<=', end_past_year),
-                                                        ('state', '=', 'done'),
                                                         ('invoice_state', '=', '2binvoiced'),
-                                                        ('partner_id', 'child_of', [partner.id])])
+                                                        ('partner_id', 'child_of', [partner.id]),
+                                                        '|',
+                                                        ('state', '=', 'done'),
+                                                        ('state', '=', 'done')])
 
             picking_ids_month = picking_obj.search([('date_done', '>=', start_month),
                                                     ('date_done', '<=', end_month),
@@ -160,13 +165,13 @@ class ResPartner(models.Model):
                 annual_invoiced += picking.amount_untaxed
 
             for picking in picking_ids_month:
-                annual_invoiced += picking.amount_untaxed
+                monthly_invoiced += picking.amount_untaxed
 
             for picking in picking_ids_past_year:
-                annual_invoiced += picking.amount_untaxed
+                past_year_invoiced += picking.amount_untaxed
 
             for picking in picking_ids_past_month:
-                annual_invoiced += picking.amount_untaxed
+                past_month_invoiced += picking.amount_untaxed
 
             vals = {'annual_invoiced': annual_invoiced, 'past_year_invoiced': past_year_invoiced,
                     'monthly_invoiced': monthly_invoiced, 'past_month_invoiced': past_month_invoiced}
