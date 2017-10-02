@@ -116,8 +116,6 @@ class ResPartner(models.Model):
                                                         ('date_done', '<=', end_past_year),
                                                         ('invoice_state', '=', '2binvoiced'),
                                                         ('partner_id', 'child_of', [partner.id]),
-                                                        '|',
-                                                        ('state', '=', 'done'),
                                                         ('state', '=', 'done')])
 
             picking_ids_month = picking_obj.search([('date_done', '>=', start_month),
