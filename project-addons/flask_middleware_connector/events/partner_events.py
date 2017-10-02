@@ -130,12 +130,12 @@ def delay_export_partner_create(session, model_name, record_id, vals):
         elif partner.web:
             for field in up_fields:
                 if field in vals:
-                    update_partner.delay(session, model_name, record_id)
+                    update_partner.delay(session, model_name, record_id, priority=5, eta=120)
                     break
     else:
         if partner.commercial_partner_id.web and vals.get('active', False):
             export_partner.delay(session, model_name, record_id, priority=1,
-                                 eta=60)
+                                 eta=120)
 
 
 @on_record_write(model_names='res.partner')
@@ -224,14 +224,14 @@ def delay_export_partner_write(session, model_name, record_id, vals):
         elif partner.web and (vals.get('is_company', False) or partner.is_company):
             for field in up_fields:
                 if field in vals:
-                    update_partner.delay(session, model_name, record_id, priority=2)
+                    update_partner.delay(session, model_name, record_id, priority=2, eta=120)
                     break
     else:
         if partner.commercial_partner_id.web and partner.active:
             for field in up_fields:
                 if field in vals:
                     update_partner.delay(session, model_name, record_id, priority=3,
-                                         eta=60)
+                                         eta=120)
                     break
         elif partner.commercial_partner_id.web and not vals.get('active', False):
             unlink_partner.delay(session, model_name, record_id, priority=1,
