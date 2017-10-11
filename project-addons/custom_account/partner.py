@@ -66,28 +66,22 @@ class Partner(models.Model):
         ctx2 = dict(self.env.context)
         search_date = (date.today() + relativedelta(days=6)).\
             strftime("%Y-%m-%d")
-        ctx2['date_to'] = search_date
-        ctx2['date_from'] = search_date[:4] + "-01-01"
-
-        ctx3 = dict(ctx2)
-        ctx3['initial_bal'] = True
         for partner in self:
-            global_balance = partner.credit + partner.debit
-            init_balance = partner.with_context(ctx3).credit + \
-                partner.with_context(ctx3).debit
-            balance_in_date = partner.with_context(ctx2).credit + \
-                partner.with_context(ctx2).debit
-            if global_balance >=5 and (balance_in_date + init_balance) >=5 \
-                    and not partner.not_send_following_email:
-                if self.env['account.move.line'].search(
-                    [('partner_id', '=', partner.id),
-                     ('account_id.type', '=', 'receivable'),
-                     ('reconcile_id', '=', False),
-                     ('state', '!=', 'draft'),
-                     ('company_id', '=', company_id),
-                     ('blocked', '!=', True),
-                     '|', ('date_maturity', '=', False),
-                     ('date_maturity', '<=', search_date)]):
+            global_balance = partner.credit - partner.debit
+            balance = 0.0
+            if global_balance >=5 and not partner.not_send_following_email:
+                line_ids = self.env['account.move.line'].\
+                    search([('partner_id', '=', partner.id),
+                            ('account_id.type', '=', 'receivable'),
+                            ('reconcile_id', '=', False),
+                            ('state', '!=', 'draft'),
+                            ('company_id', '=', company_id),
+                            ('blocked', '!=', True),
+                            '|', ('date_maturity', '=', False),
+                            ('date_maturity', '<=', search_date)])
+                for line in line_ids:
+                    balance += (line.debit - line.credit)
+                if balance >= 5:
                     partners += partner
         return partners
 
