@@ -28,6 +28,10 @@
             <field name="model">crm.claim</field>
             <field name="inherit_id" ref="crm_claim.view_crm_case_claims_filter"/>
             <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="operator">child_of</attribute>
+                    <attribute name="filter_domain"/>
+                </field>
                 <filter string="Closure" position="after">
                     <filter string="Comercial" domain="[]" context="{'group_by':'comercial'}"/>
                 </filter>
@@ -231,6 +235,13 @@
                 </p>
             </field>
         </record>
+
+        <!--<record model="ir.actions.act_window" id="crm_claim.crm_case_categ_claim0">
+            <field name="domain">[('claim_type', '=', 'customer')]</field>
+            <field name="context">{"search_default_partner_id": active_id, "stage_type":'claim', "claim_type": 'customer', "default_claim_type": 'customer'}</field>
+        </record>-->
+
+
 
     </data>
 </openerp>
