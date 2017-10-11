@@ -45,6 +45,7 @@ class partner_visit(models.Model):
                                          compute='get_internal_salesperson', store=True)
     add_user_email = fields.Many2one('res.users', 'CC to')
     confirm_done = fields.Boolean('Done', default=False)
+    area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
 
     @api.one
     @api.constrains('confirm_done')
@@ -111,6 +112,12 @@ class partner_visit(models.Model):
             }}
             if res:
                 return res
+
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        if self.partner_id:
+            self.area_id = self.partner_id.area_id.id
 
     @api.one
     def send_email(self):
