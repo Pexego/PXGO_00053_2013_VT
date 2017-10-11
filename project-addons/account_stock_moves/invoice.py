@@ -50,7 +50,11 @@ class account_invoice_line(orm.Model):
                 price_unit = move.product_id.standard_price
                 moves_price += price_unit * qty
             res['price_move'] = moves_price
-            res['create_date'] = move.create_date
+            if move.purchase_line_id and move.picking_id and \
+                    move.picking_id.backorder_id:
+                res['create_date'] = move._get_origin_create_date()
+            else:
+                res['create_date'] = move.create_date
             if total_qty > 0:
                 res['price_unit'] = moves_price / total_qty
             else:
