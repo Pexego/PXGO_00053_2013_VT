@@ -30,6 +30,7 @@ class Partner(models.Model):
 
     _inherit = "res.partner"
 
+    email2 = fields.Char('Second Email')
     not_send_following_email = fields.Boolean()
 
     @api.one

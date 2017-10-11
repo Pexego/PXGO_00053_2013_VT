@@ -75,7 +75,8 @@ def delay_export_partner_create(session, model_name, record_id, vals):
     partner = session.env[model_name].browse(record_id)
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", 'user_id',
-                 "property_product_pricelist", "lang"]
+                 "property_product_pricelist", "lang", "type",
+                 "parent_id", "is_company", "email"]
     if vals.get('is_company', False) or partner.is_company:
         contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
                                                    ('is_company', '=', False)])
@@ -129,12 +130,12 @@ def delay_export_partner_create(session, model_name, record_id, vals):
         elif partner.web:
             for field in up_fields:
                 if field in vals:
-                    update_partner.delay(session, model_name, record_id)
+                    update_partner.delay(session, model_name, record_id, priority=5, eta=120)
                     break
     else:
-        if partner.commercial_partner_id.web and vals.get('active', False):
+        if partner.commercial_partner_id.web and 'active' in vals and vals.get('active', False):
             export_partner.delay(session, model_name, record_id, priority=1,
-                                 eta=60)
+                                 eta=120)
 
 
 @on_record_write(model_names='res.partner')
@@ -142,7 +143,8 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     partner = session.env[model_name].browse(record_id)
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", "user_id",
-                 "property_product_pricelist", "lang", "sync"]
+                 "property_product_pricelist", "lang", "sync", "type",
+                 "parent_id", "is_company", "email"]
     if vals.get('is_company', False) or partner.is_company:
         contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
                                                    ('is_company', '=', False)])
@@ -222,18 +224,21 @@ def delay_export_partner_write(session, model_name, record_id, vals):
         elif partner.web and (vals.get('is_company', False) or partner.is_company):
             for field in up_fields:
                 if field in vals:
-                    update_partner.delay(session, model_name, record_id, priority=2)
+                    update_partner.delay(session, model_name, record_id, priority=2, eta=120)
                     break
     else:
-        if partner.commercial_partner_id.web and partner.active:
+        if partner.commercial_partner_id.web and 'active' in vals and vals.get('active', False):
+            export_partner.delay(session, model_name, record_id, priority=1,
+                                 eta=120)
+        elif partner.commercial_partner_id.web and 'active' in vals and not vals.get('active', False):
+            unlink_partner.delay(session, model_name, record_id, priority=1,
+                                 eta=60)
+        else:
             for field in up_fields:
                 if field in vals:
                     update_partner.delay(session, model_name, record_id, priority=3,
-                                         eta=60)
+                                         eta=120)
                     break
-        elif partner.commercial_partner_id.web and not vals.get('active', False):
-            unlink_partner.delay(session, model_name, record_id, priority=1,
-                                 eta=60)
 
 
 @on_record_unlink(model_names='res.partner')

@@ -12,7 +12,18 @@ class SaleOrderLine(models.Model):
 
     @api.multi
     def write(self, vals):
+        data = {}
         for line in self:
+            if vals.get('product_uom_qty', False) and line.product_id.pack_line_ids:
+                for subline in line.product_id.pack_line_ids:
+                    subproduct = subline.product_id
+                    quantity = subline.quantity * vals['product_uom_qty']
+                    subproduct_id = self.env['sale.order.line'].search([('product_id', '=', subproduct.id),
+                                                                        ('order_id', '=', line.order_id.id),
+                                                                        ('pack_parent_line_id', '=', line.id)])
+                    if subproduct_id:
+                        data = {'product_uom_qty': quantity}
+                        subproduct_id.write(data)
             if vals.get('product_id', False):
                 product = self.env['product.product'].browse(vals['product_id'])
                 vals['name'] = product.name_get()[0][1]
