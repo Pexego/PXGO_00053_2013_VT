@@ -28,7 +28,7 @@
     """,
     'author': 'Nadia Ferreyra',
     'website': '',
-    "depends": ['base', 'email_template'],
+    "depends": ['base', 'email_template', 'custom_partner'],
     "data": ['partner_visit_view.xml',
              'email_template.xml',
              'security/ir.model.access.csv',
