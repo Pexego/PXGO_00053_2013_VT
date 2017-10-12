@@ -16,6 +16,11 @@
                     <field name="create_date" invisible="1"/>
                     <field name="partner_ref"/>
                     <field name="partner_id"/>
+                    <field name="partner_pricelist"/>
+                    <field name="partner_annual_invoiced"/>
+                    <field name="partner_monthly_invoiced"/>
+                    <field name="partner_past_year_invoiced"/>
+                    <field name="partner_past_month_invoiced"/>
                     <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'base.group_sale_salesman_all_leads']}"/>
                     <field name="description"/>
                     <field name="salesperson_select"/>

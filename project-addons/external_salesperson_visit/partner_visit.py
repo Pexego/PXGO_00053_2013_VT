@@ -45,6 +45,12 @@ class partner_visit(models.Model):
                                          compute='get_internal_salesperson', store=True)
     add_user_email = fields.Many2one('res.users', 'CC to')
     confirm_done = fields.Boolean('Done', default=False)
+    partner_pricelist = fields.Many2one(related='partner_id.property_product_pricelist')
+    partner_annual_invoiced = fields.Float(related='partner_id.annual_invoiced')
+    partner_past_year_invoiced = fields.Float(related='partner_id.past_year_invoiced')
+    partner_monthly_invoiced = fields.Float(related='partner_id.monthly_invoiced')
+    partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced')
+
 
     @api.one
     @api.constrains('confirm_done')
