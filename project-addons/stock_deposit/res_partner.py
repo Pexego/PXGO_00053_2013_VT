@@ -26,9 +26,13 @@ class res_partner(models.Model):
 
     deposit_count = fields.Integer(string='# of Deposits',
                                    compute='_deposit_count')
-    deposit_ids = fields.One2many('stock.deposit', 'partner_id', 'Deposits')
 
     @api.one
-    @api.depends('deposit_ids')
     def _deposit_count(self):
-        self.deposit_count = len(self.deposit_ids)
+        if self.active:
+            deposit_ids = self.env['stock.deposit'].search([('partner_id', 'child_of', [self.id])])
+        else:
+            deposit_ids = []
+
+        self.deposit_count = len(deposit_ids)
+
