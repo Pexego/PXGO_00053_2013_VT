@@ -531,3 +531,34 @@ msgstr "Asistente para generar un pago desde el pedido"
 #: field:purchase.order,sale_notes:0
 msgid "Purchase Order Notes"
 msgstr "Notas pedido de compra"
+
+#. module: custom_account
+#: code:addons/custom_account/account.py:490
+#, python-format
+msgid "Not all invoices have the same payment term!"
+msgstr "¡No todas las facturas tienen el mismo plazo de pago!"
+
+#. module: custom_account
+#: code:addons/custom_account/account.py:493
+#, python-format
+msgid "Not all invoices use the same payment mode!"
+msgstr "¡No todas las facturas tienen el mismo modo de pago!"
+
+#. module: custom_account
+#: code:addons/custom_account/account.py:496
+#, python-format
+msgid "Not all invoices are at the same salesperson!"
+msgstr "¡No todas las facturas tienen el mismo comercial asignado!"
+
+#. module: custom_account
+#: code:addons/custom_account/account.py:499
+#, python-format
+msgid "Not all invoices are at the same sales team!"
+msgstr "¡No todas las facturas pertenecen al mismo equipo de ventas!"
+
+#. module: custom_account
+#: code:addons/custom_account/account.py:502
+#, python-format
+msgid "Not all invoices are of the same invoice type!"
+msgstr "¡No todas las facturas son del mismo tipo de facturación!"
+
