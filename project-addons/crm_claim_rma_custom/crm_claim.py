@@ -204,6 +204,7 @@ class CrmClaimRma(models.Model):
                     claim_obj.partner_id.property_product_pricelist.currency_id.id,
                 'company_id': claim_obj.company_id.id,
                 'user_id': uid,
+                'section_id': claim_obj.partner_id.section_id.id,
                 'claim_id': claim_obj.id,
                 'type': 'out_refund',
                 'payment_term': claim_obj.partner_id.property_payment_term.id,

@@ -30,7 +30,7 @@ class res_partner(models.Model):
     @api.one
     def _deposit_count(self):
         if self.active:
-            deposit_ids = self.env['stock.deposit'].search([('partner_id', 'child_of', self.id)])
+            deposit_ids = self.env['stock.deposit'].search([('partner_id', 'child_of', [self.id])])
         else:
             deposit_ids = []
 

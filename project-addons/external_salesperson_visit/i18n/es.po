@@ -222,3 +222,8 @@ msgstr "Clientes potenciales"
 #: view:partner.visit:external_salesperson_visit.partner_visit_search
 msgid "Active Customs"
 msgstr "Clientes activos"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,area_id:0
+msgid "Area"
+msgstr "Zona"
