@@ -174,6 +174,23 @@ class ResPartner(models.Model):
                     'monthly_invoiced': monthly_invoiced, 'past_month_invoiced': past_month_invoiced}
             partner.write(vals)
 
+    @api.model
+    def _unblock_invoices(self):
+        date_limit = date.today() - timedelta(days=7)
+        payment_term_ids = self.env['account.payment.term'].search([('blocked', '=', 'True')])
+        partner_ids = self.env['res.partner'].search([('property_payment_term', 'in', payment_term_ids.ids)])
+        invoice_ids = self.env['account.invoice'].search([('date_due', '<=', date_limit),
+                                                          ('state', '=', 'open'),
+                                                          ('partner_id', 'in', partner_ids.ids),
+                                                          ('number', 'not like', '%_ef%'),
+                                                          ('number', 'not like', 'VEN%')])
+        move_line_obj = self.env['account.move.line']
+        for invoice in invoice_ids:
+            move_line = move_line_obj.search([('stored_invoice_id', '=', invoice.id),
+                                              ('debit', '!=', '0')])
+            val = {'blocked': False}
+            move_line.write(val)
+
     def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
         invoice = self.pool.get('account.invoice')
         res = {}
