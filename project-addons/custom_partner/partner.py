@@ -756,3 +756,26 @@ class ResPartnerRappelRel(models.Model):
 
         return True
 
+
+class RappelInvoice(models.TransientModel):
+
+    _inherit = "rappel.invoice.wzd"
+
+    @api.multi
+    def action_invoice(self):
+        res = super(RappelInvoice, self).action_invoice()
+        compute_rappel_obj = self.env["rappel.calculated"]
+        for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
+            if rappel.quantity <= 0:
+                continue
+            if rappel.invoice_id:
+                invoice = rappel.invoice_id
+                if not invoice.payment_mode_id \
+                        or not invoice.partner_bank_id \
+                        or not invoice.section_id:
+                    rappel.invoice_id.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
+                                             'partner_bank_id': rappel.partner_id.bank_ids and
+                                                                    rappel.partner_id.bank_ids[0].id or False,
+                                             'section_id': rappel.partner_id.section_id.id})
+        return res
+
