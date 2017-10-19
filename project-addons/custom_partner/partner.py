@@ -181,15 +181,14 @@ class ResPartner(models.Model):
         partner_ids = self.env['res.partner'].search([('property_payment_term', 'in', payment_term_ids.ids)])
         invoice_ids = self.env['account.invoice'].search([('date_due', '<=', date_limit),
                                                           ('state', '=', 'open'),
-                                                          ('partner_id', 'in', partner_ids.ids),
+                                                          ('partner_id', 'child_of', partner_ids.ids),
                                                           ('number', 'not like', '%_ef%'),
                                                           ('number', 'not like', 'VEN%')])
         move_line_obj = self.env['account.move.line']
-        for invoice in invoice_ids:
-            move_line = move_line_obj.search([('stored_invoice_id', '=', invoice.id),
-                                              ('debit', '!=', '0')])
-            val = {'blocked': False}
-            move_line.write(val)
+        move_ids = move_line_obj.search([('stored_invoice_id', 'in', invoice_ids.ids),
+                                         ('debit', '!=', '0')])
+        val = {'blocked': False}
+        move_ids.write(val)
 
     def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
         invoice = self.pool.get('account.invoice')
