@@ -16,6 +16,31 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: external_salesperson_visit
+#: field:partner.visit,partner_pricelist:0
+msgid "Sale Pricelist"
+msgstr "Tarifa de venta"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,partner_annual_invoiced:0
+msgid "Annual invoiced"
+msgstr "Facturación anual"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,partner_monthly_invoiced:0
+msgid "Monthly invoiced"
+msgstr "Facturación mensual"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,partner_past_year_invoiced:0
+msgid "Past year invoiced"
+msgstr "Facturación año anterior"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,partner_past_month_invoiced:0
+msgid "Past Month invoiced"
+msgstr "Facturación mes anterior"
+
+#. module: external_salesperson_visit
 #: model:ir.ui.menu,name:external_salesperson_visit.menu_partner_case_visit
 msgid "Visits"
 msgstr "Visitas"

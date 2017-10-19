@@ -16,6 +16,21 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:0
+msgid "Received Claims"
+msgstr "RMAs Recividos"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.menu,name:0
+msgid "Received Claims"
+msgstr "RMAs Recividos"
+
+#. module: crm_claim_rma_custom
+#: field:crm.claim,bool_category_id:0
+msgid "Category"
+msgstr "Certificado"
+
+#. module: crm_claim_rma_custom
 #: field:crm.phonecall,start_date:0
 msgid "Start Date"
 msgstr "Fecha de Inicio"

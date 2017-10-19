@@ -54,7 +54,8 @@ class CrmClaimRma(models.Model):
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
                             required=True, default='rma')
-    priority = fields.Selection(default=0, selection=[('1', 'High'),
+    priority = fields.Selection(default=-1, required=True, selection=[('-1', 'No priority'),
+                                                      ('1', 'High'),
                                                       ('2', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
     country = fields.Many2one("res.country", string="Country", related='partner_id.country_id')

@@ -41,10 +41,10 @@ class ResPartnerInvoiceType(models.Model):
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    annual_invoiced = fields.Float('Annual invoiced', readonly=True, store=True)
-    past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True)
-    monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True)
-    past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True)
+    annual_invoiced = fields.Float('Annual invoiced', readonly=True, store=True, default=0.0)
+    past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True, default=0.0)
+    monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True, default=0.0)
+    past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True, default=0.0)
 
     @api.model
     def _calculate_annual_invoiced(self):
@@ -173,6 +173,22 @@ class ResPartner(models.Model):
             vals = {'annual_invoiced': annual_invoiced, 'past_year_invoiced': past_year_invoiced,
                     'monthly_invoiced': monthly_invoiced, 'past_month_invoiced': past_month_invoiced}
             partner.write(vals)
+
+    @api.model
+    def _unblock_invoices(self):
+        date_limit = date.today() - timedelta(days=7)
+        payment_term_ids = self.env['account.payment.term'].search([('blocked', '=', 'True')])
+        partner_ids = self.env['res.partner'].search([('property_payment_term', 'in', payment_term_ids.ids)])
+        invoice_ids = self.env['account.invoice'].search([('date_due', '<=', date_limit),
+                                                          ('state', '=', 'open'),
+                                                          ('partner_id', 'child_of', partner_ids.ids),
+                                                          ('number', 'not like', '%_ef%'),
+                                                          ('number', 'not like', 'VEN%')])
+        move_line_obj = self.env['account.move.line']
+        move_ids = move_line_obj.search([('stored_invoice_id', 'in', invoice_ids.ids),
+                                         ('debit', '!=', '0')])
+        val = {'blocked': False}
+        move_ids.write(val)
 
     def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
         invoice = self.pool.get('account.invoice')

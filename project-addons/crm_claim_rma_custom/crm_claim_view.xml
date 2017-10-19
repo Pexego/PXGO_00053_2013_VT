@@ -32,13 +32,36 @@
                     <attribute name="operator">child_of</attribute>
                     <attribute name="filter_domain"/>
                 </field>
+                <field name="user_id" position="after">
+                    <field name="stage_id"/>
+                </field>
                 <filter string="Closure" position="after">
                     <filter string="Comercial" domain="[]" context="{'group_by':'comercial'}"/>
                 </filter>
             </field>
         </record>
 
-
+        <record model="ir.ui.view" id="crm_case_claims_tree_view_received">
+            <field name="name">CRM - Claims Tree</field>
+            <field name="model">crm.claim</field>
+            <field name="arch" type="xml">
+                <tree default_order="priority desc, date_received asc">
+                    <field name="number"/>
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="country"/>
+                    <field name="comercial"/>
+                    <field name="user_id"/>
+                    <field name="date"/>
+                    <field name="date_received"/>
+                    <field name="stage_id"/>
+                    <field name="rma_cost"/>
+                    <field name="priority"/>
+                    <field name="bool_category_id"/>
+                    <field name="date_deadline"/>
+                </tree>
+            </field>
+        </record>
 
         <record model="ir.ui.view" id="crm_claim_rma_form_view3">
             <field name="name">CRM - Claim product return Form</field>
@@ -235,6 +258,25 @@
                 </p>
             </field>
         </record>
+
+        <record model="ir.actions.act_window" id="crm_case_categ_claim_sort">
+            <field name="name">Received Claims</field>
+            <field name="res_model">crm.claim</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,calendar,form</field>
+            <field name="view_id" ref="crm_case_claims_tree_view_received"/>
+            <field name="domain">[('claim_type', '=', 'customer')]</field>
+            <field name="context">{"stage_type":'claim', "claim_type": 'customer'}</field>
+            <field name="search_view_id" ref="crm_claim.view_crm_case_claims_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Record and track your customers' claims. Claims may be linked to a sales order or a lot.You can send emails with attachments and keep the full history for a claim (emails sent, intervention type and so on).Claims may automatically be linked to an email address using the mail gateway module.
+                </p>
+            </field>
+        </record>
+
+        <menuitem name="Received Claims" id="menu_crm_case_claims"
+            parent="base.menu_aftersale" action="crm_case_categ_claim_sort" sequence="1"/>
 
         <!--<record model="ir.actions.act_window" id="crm_claim.crm_case_categ_claim0">
             <field name="domain">[('claim_type', '=', 'customer')]</field>
