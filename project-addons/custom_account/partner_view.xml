@@ -10,7 +10,7 @@
                     <field name="attach_picking"/>
                 </field>
                 <field name="email" position="after">
-                    <field name="email2" widget="email"/>
+                    <field name="email2" widget="email" attrs="{'invisible': [('dropship', '=', True)]}"/>
                     <field name="newsletter"/>
                 </field>
                 <xpath expr="//field[@name='child_ids']/form//field[@name='email']" position="after">
