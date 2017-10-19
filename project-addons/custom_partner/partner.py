@@ -41,10 +41,10 @@ class ResPartnerInvoiceType(models.Model):
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    annual_invoiced = fields.Float('Annual invoiced', readonly=True, store=True)
-    past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True)
-    monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True)
-    past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True)
+    annual_invoiced = fields.Float('Annual invoiced', readonly=True, store=True, default=0.0)
+    past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True, default=0.0)
+    monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True, default=0.0)
+    past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True, default=0.0)
 
     @api.model
     def _calculate_annual_invoiced(self):
