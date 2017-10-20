@@ -91,9 +91,6 @@ class account_invoice(models.Model):
                         res['value'].\
                             update({'partner_bank_id':
                                     partner.bank_ids[0].id})
-                elif not partner.bank_ids:
-                    res['value'].\
-                        update({'partner_bank_id': False})
                 res['value'].\
                     update({'payment_mode_id':
                             partner.customer_payment_mode.id})
@@ -101,13 +98,6 @@ class account_invoice(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals.get('partner_id', False):
-            partner = self.env["res.partner"].browse(vals["partner_id"])
-            if partner.bank_ids:
-                vals["partner_bank_id"] = partner.bank_ids[0].id
-            else:
-                if 'partner_bank_id' in vals:
-                    vals.pop('partner_bank_id')
         if vals.get('partner_bank_id', False) and \
                 vals.get('payment_mode_id', False) and not \
                 vals.get('sdd_mandate_id', False):
