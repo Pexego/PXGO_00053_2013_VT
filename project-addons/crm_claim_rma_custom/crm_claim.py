@@ -54,7 +54,7 @@ class CrmClaimRma(models.Model):
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
                             required=True, default='rma')
-    priority = fields.Selection(default=0, selection=[('-1', 'No priority'),
+    priority = fields.Selection(default='-1', required=True, selection=[('-1', 'No priority'),
                                                       ('1', 'High'),
                                                       ('2', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
@@ -92,8 +92,6 @@ class CrmClaimRma(models.Model):
                 if line_state.name in self.check_states:
                     raise except_orm(_('Warning!'),
                                      _("One or more products aren't review yet!"))
-        if 'priority' in vals and vals['priority'] is False:
-            vals['priority'] = '-1'
 
         return super(CrmClaimRma, self).write(vals)
 

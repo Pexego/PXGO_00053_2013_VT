@@ -37,7 +37,6 @@
                 </field>
                 <filter string="Closure" position="after">
                     <filter string="Comercial" domain="[]" context="{'group_by':'comercial'}"/>
-                    <filter string="Recibidos" name="received" domain="[('stage_id', '=', 'Recibido'), ('date_received', '!=', None)]"/>
                 </filter>
             </field>
         </record>
@@ -267,7 +266,7 @@
             <field name="view_mode">tree,calendar,form</field>
             <field name="view_id" ref="crm_case_claims_tree_view_received"/>
             <field name="domain">[('claim_type', '=', 'customer')]</field>
-            <field name="context">{"stage_type":'claim', "claim_type": 'customer', 'search_default_received': 1}</field>
+            <field name="context">{"stage_type":'claim', "claim_type": 'customer'}</field>
             <field name="search_view_id" ref="crm_claim.view_crm_case_claims_filter"/>
             <field name="help" type="html">
                 <p class="oe_view_nocontent_create">
