@@ -252,3 +252,13 @@ msgstr "Clientes activos"
 #: field:partner.visit,area_id:0
 msgid "Area"
 msgstr "Zona"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,region_ids:0
+msgid "Commercial Regions"
+msgstr "Regiones comercial"
+
+#. module: external_salesperson_visit
+#: view:partner.visit:external_salesperson_visit.partner_visit_search
+msgid "Commercial region"
+msgstr "Región comercial"
