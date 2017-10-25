@@ -30,7 +30,7 @@
     'website': 'https://github.com/OCA/banking',
     'category': 'Banking addons',
     'depends': ['account', 'account_banking_mandate', 'stock_account',
-                'account_payment_sale_stock'],
+                'account_payment_sale_stock', 'account_payment_sale'],
     'data': ['views/account_invoice_view.xml'],
     'description': '''Allow to select customer bank accounts on customer
     invoices.''',
