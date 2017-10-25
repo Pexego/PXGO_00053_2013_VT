@@ -641,6 +641,14 @@ class ResPartnerRappelRel(models.Model):
     _inherit = "res.partner.rappel.rel"
 
     @api.multi
+    def _get_next_period(self):
+        period = super(ResPartnerRappelRel, self)._get_next_period()
+        if period and str(period[0]) == self.last_settlement_date:
+            period[0] += relativedelta(days=1)
+            period[1] += relativedelta(days=1)
+        return period
+
+    @api.multi
     def _get_invoices(self, period, products):
         res = super(ResPartnerRappelRel, self)._get_invoices(period, products)
 

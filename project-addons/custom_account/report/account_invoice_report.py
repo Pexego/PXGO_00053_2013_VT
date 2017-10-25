@@ -29,6 +29,8 @@ class account_invoice_report(models.Model):
     number = fields.Char('Number')
     benefit = fields.Float('Benefit')
     brand_name = fields.Char('Brand name')
+    area_id = fields.Many2one('res.partner.area', 'Area')
+    commercial_region_ids = fields.Many2many(related='area_id.commercial_region_ids')
 
     def _select(self):
         select_str = super(account_invoice_report, self)._select()
@@ -37,7 +39,7 @@ class account_invoice_report(models.Model):
                       ", CASE WHEN sub.type IN ('out_refund') THEN -sub.benefit " \
                       " WHEN sub.type IN ('out_invoice') THEN sub.benefit " \
                       " ELSE 0 END as benefit" \
-                      ', sub.name as brand_name'
+                      ', sub.name as brand_name, sub.area_id'
         return select_str
 
     def _sub_select(self):
@@ -46,18 +48,20 @@ class account_invoice_report(models.Model):
                       ' ai.number ' \
                       ', sum(ail.quantity * ail.price_unit * (100.0-ail.discount) ' \
                       '/ 100.0) - sum(coalesce(ail.cost_unit, 0)*ail.quantity) as benefit, ' \
-                      'pb.name'
+                      'pb.name, rpa.id as area_id'
         return select_str
 
     def _from(self):
         from_str = super(account_invoice_report, self)._from()
-        from_str += ' LEFT JOIN product_brand pb ON pt.product_brand_id = pb.id '
+        from_str += ' LEFT JOIN product_brand pb ON pt.product_brand_id = pb.id ' \
+                    ' LEFT JOIN res_partner_area rpa ON rpa.id = partner.area_id '
         return from_str
 
     def _group_by(self):
         group_by_str = super(account_invoice_report, self)._group_by()
         group_by_str += ', ai.payment_mode_id,' \
                         ' ai.number,' \
-                        ' pb.name'
+                        ' pb.name, ' \
+                        ' rpa.id'
 
         return group_by_str

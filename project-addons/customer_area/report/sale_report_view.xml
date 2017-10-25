@@ -9,9 +9,13 @@
             <field name="arch" type="xml">
                 <field name="date_confirm" position="after">
                     <field name="area_id"/>
+                    <field name="commercial_region_ids" string="Commercial Region"
+                           filter_domain="['|', ('commercial_region_ids.code','ilike',self), ('commercial_region_ids','ilike',self)]"/>
                 </field>
                 <filter string="Company" position="after">
                     <filter name="area_id" string="Area" context="{'group_by':'area_id'}"/>
+                    <filter name="commercial_region_ids" string="Commercial Region"
+                            filter_domain="['|', ('commercial_region_ids.code','ilike',self), ('commercial_region_ids','ilike',self)]"/>
                 </filter>
                 <filter string="Company" position="attributes">
                     <attribute name="invisible">True</attribute>

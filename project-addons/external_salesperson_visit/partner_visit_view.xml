@@ -43,6 +43,7 @@
                     <field name="user_id"/>
                     <field name="partner_id"/>
                     <field name="salesperson_select"/>
+                    <field name="region_ids" string="Commercial region" filter_domain="['|', ('region_ids.code','ilike',self), ('region_ids','ilike',self)]"/>
                     <separator/>
                     <filter string="Email sent" name="email_sent" domain="[('email_sent','=',True)]"/>
                     <field name="partner_id">

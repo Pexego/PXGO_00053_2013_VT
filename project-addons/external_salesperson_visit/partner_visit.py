@@ -52,6 +52,7 @@ class partner_visit(models.Model):
     partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced')
 
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
+    region_ids = fields.Many2many(related='area_id.commercial_region_ids')
 
     @api.one
     @api.constrains('confirm_done')
