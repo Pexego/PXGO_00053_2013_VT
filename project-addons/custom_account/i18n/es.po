@@ -562,3 +562,13 @@ msgstr "¡No todas las facturas pertenecen al mismo equipo de ventas!"
 msgid "Not all invoices are of the same invoice type!"
 msgstr "¡No todas las facturas son del mismo tipo de facturación!"
 
+#. module: custom_account
+#: field:account.invoice.report,area_id:0
+msgid "Area"
+msgstr "Zona"
+
+#. module: custom_account
+#: field:account.invoice.report,commercial_region_ids:0
+msgid "Commercial Regions"
+msgstr "Regiones comerciales"
+
