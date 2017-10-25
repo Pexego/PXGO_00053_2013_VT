@@ -26,6 +26,7 @@ class sale_report(models.Model):
     _inherit = 'sale.report'
 
     area_id = fields.Many2one('res.partner.area','Area')
+    commercial_region_ids = fields.Many2many(related='area_id.commercial_region_ids')
 
     def _select(self):
         select_str = super(sale_report,self)._select()

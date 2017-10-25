@@ -52,7 +52,61 @@
         <field name="search_view_id" ref="res_partner_area_filter"/>
     </record>
 
-    <menuitem name="Areas" parent="base.menu_base_config" action="action_res_partner_area" id="res_partner_area_menu"/>
+    <menuitem name="Areas" parent="base.menu_base_config" action="action_res_partner_area"
+              id="res_partner_area_menu" sequence="9"/>
+
+     <record id="res_partner_area_region_tree" model="ir.ui.view">
+        <field name="name">res.partner.area.region.tree</field>
+        <field name="model">res.partner.area.region</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Commercial Regions">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="res_partner_area_region_form" model="ir.ui.view">
+        <field name="name">res.partner.area.region.form</field>
+        <field name="model">res.partner.area.region</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Commercial Region">
+                <sheet>
+                    <group>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="area_ids"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="res_partner_area_region_filter" model="ir.ui.view">
+        <field name="name">res.partner.area.region.filter</field>
+        <field name="model">res.partner.area.region</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Commercial Regions">
+               <field name="name"/>
+                <field name="code"/>
+           </search>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_res_partner_area_region">
+        <field name="name">Commercial Regions</field>
+        <field name="res_model">res.partner.area.region</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="res_partner_area_region_tree"/>
+        <field name="search_view_id" ref="res_partner_area_region_filter"/>
+    </record>
+
+    <menuitem name="Commercial Regions" parent="base.menu_base_config" action="action_res_partner_area_region"
+              id="res_partner_area_region_menu" sequence="9"/>
 
 </data>
 </openerp>
