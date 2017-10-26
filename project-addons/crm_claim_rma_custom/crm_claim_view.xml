@@ -45,7 +45,7 @@
             <field name="name">CRM - Claims Tree</field>
             <field name="model">crm.claim</field>
             <field name="arch" type="xml">
-                <tree default_order="priority desc, date_received asc">
+                <tree default_order="priority desc, date_received asc, number asc">
                     <field name="number"/>
                     <field name="name"/>
                     <field name="partner_id"/>
@@ -236,7 +236,7 @@
                     <attribute name="default_order">claim_id asc</attribute>
                 </tree>
                 <field name="claim_id" position="after">
-                    <field name = "user_id"/>
+                    <field name="user_id"/>
                     <field name="comercial"/>
                 </field>
                 <!--/tree-->
