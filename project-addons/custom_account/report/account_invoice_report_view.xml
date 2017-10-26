@@ -28,8 +28,6 @@
                     <filter string="country" name="country_id" context="{'group_by':'country_id'}"/>
                     <filter string="Payment mode" name="payment_mode_id" context="{'group_by':'payment_mode_id'}"/>
                     <filter string="Brand name" name="brand_name" context="{'group_by':'brand_name'}"/>
-                    <filter name="commercial_region_ids"
-                            filter_domain="['|', ('commercial_region_ids.code','ilike',self), ('commercial_region_ids','ilike',self)]"/>
                 </filter>
             </field>
         </record>
