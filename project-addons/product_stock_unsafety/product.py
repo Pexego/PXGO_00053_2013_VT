@@ -45,7 +45,7 @@ class product_product(models.Model):
         stock_days = 0.00
         stock_per_day = self.get_daily_sales()
         virtual_available = self.virtual_available - self.incoming_qty + \
-            self.qty_available_external
+                            self.qty_available_external
         if stock_per_day > 0 and virtual_available:
             stock_days = round(virtual_available / stock_per_day)
 
@@ -55,11 +55,11 @@ class product_product(models.Model):
     @api.model
     def calc_joking_index(self):
 
-        search_date = (date.today() - relativedelta(days=60)).\
+        search_date = (date.today() - relativedelta(days=60)). \
             strftime("%Y-%m-%d")
         warehouses = self.env["stock.warehouse"].search([])
         stock_location_ids = [x.lot_stock_id.id for x in warehouses]
-        stock_location_ids.\
+        stock_location_ids. \
             append(self.env.ref('location_moves.stock_location_external').id)
         product_obj = self.env["product.product"]
         self.env.cr.\
@@ -72,6 +72,7 @@ class product_product(models.Model):
         joking_tot = 0
         product_ids = [x[0] for x in res]
         filter_ids = []
+        max_joking = 0.0
         for stock_product_id in product_obj.browse(product_ids):
             if not stock_product_id.product_brand_id or not \
                     stock_product_id.product_brand_id.not_compute_joking:
@@ -84,8 +85,15 @@ class product_product(models.Model):
                     product.joking_index = -1
             else:
                 joking_index = (product.joking - avg) / avg
+                if product.joking_index > joking_index and product.joking_index > max_joking:
+                    max_joking = product.joking_index
+                elif product.joking_index < joking_index and joking_index > max_joking:
+                    max_joking = joking_index
                 if product.joking_index != joking_index:
                     product.joking_index = joking_index
+        for product in product_obj.browse(product_ids):
+            if product.joking_index == -1:
+                product.joking_index = max_joking
 
     @api.one
     def _get_next_incoming_date(self):
@@ -105,8 +113,8 @@ class product_product(models.Model):
     remaining_days_sale = fields.Float('Remaining Stock Days', readonly=True,
                                        compute='_calc_remaining_days',
                                        help="Stock measure in days of sale "
-                                       "computed consulting sales in sixty "
-                                       "days with stock.", multi=True)
+                                            "computed consulting sales in sixty "
+                                            "days with stock.", multi=True)
     joking = fields.Float("Joking", readonly=True,
                           compute='_calc_remaining_days',
                           multi=True)
