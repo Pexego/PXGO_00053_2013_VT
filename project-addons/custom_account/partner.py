@@ -106,5 +106,6 @@ class Partner(models.Model):
 
     @api.onchange("user_id")
     def on_change_user_id(self):
+        self.payment_responsible_id = self.user_id.id
         if self.user_id and self.user_id.default_section_id:
             self.section_id = self.user_id.default_section_id.id
