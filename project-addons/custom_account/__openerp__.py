@@ -37,7 +37,7 @@
                 'account_banking_payment_export', 'stock_reserve_sale',
                 'custom_partner', 'sale_quick_payment', "web_readonly_bypass",
                 'account_direct_debit_with_refunds', 'account_followup',
-                'account_invoice_merge'],
+                'account_invoice_merge', 'customer_area'],
     "data": ['account_view.xml',
              'partner_view.xml',
              'report/account_invoice_report_view.xml',

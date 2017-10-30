@@ -98,3 +98,34 @@ msgstr "Estadísticas pedidos de venta"
 msgid "Sales Team"
 msgstr "Equipo de Ventas"
 
+#. module: customer_area
+#: model:ir.actions.act_window,name:customer_area.action_res_partner_area_region
+#: model:ir.ui.menu,name:customer_area.res_partner_area_region_menu
+#: view:res.partner.area.region:customer_area.res_partner_area_region_tree
+#: view:res.partner.area.region:customer_area.res_partner_area_region_filter
+#: field:res.partner.area,commercial_region_ids:0
+msgid "Commercial Regions"
+msgstr "Regiones comerciales"
+
+#. module: customer_area
+#: field:res.partner.area.region,name:0
+msgid "Name"
+msgstr "Nombre"
+
+#. module: customer_area
+#: field:res.partner.area.region,code:0
+msgid "Code"
+msgstr "Código"
+
+#. module: customer_area
+#: field:res.partner.area.region,area_ids:0
+msgid "Areas"
+msgstr "Áreas"
+
+#. module: customer_area
+#: view:res.partner.area.region:customer_area.res_partner_area_region_form
+#: view:res.partner:customer_area.res_partner_view_area_search
+#: view:sale.report:customer_area.search_sale_report_add_area
+msgid "Commercial Region"
+msgstr "Región Comercial"
+

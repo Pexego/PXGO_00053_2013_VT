@@ -26,6 +26,7 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     area_id = fields.Many2one('res.partner.area', 'Area')
+    region_ids = fields.Many2many(related='area_id.commercial_region_ids')
 
     @api.multi
     def change_sales_team(self, area_id):
@@ -40,3 +41,17 @@ class res_partner_area(models.Model):
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15)
     sales_team = fields.Many2one('crm.case.section', 'Sales Team')
+    commercial_region_ids = fields.Many2many('res.partner.area.region', 'res_partner_area_region_rel',
+                                             'area_id', 'commercial_region_id', 'Commercial Regions')
+
+
+class res_partner_area_region(models.Model):
+    _name = "res.partner.area.region"
+    _description = "Commercial Region"
+
+    name = fields.Char('Name', size=64, required=True)
+    code = fields.Char('Code', size=15)
+    area_ids = fields.Many2many('res.partner.area', 'res_partner_area_region_rel',
+                                'commercial_region_id', 'area_id', 'Areas')
+
+
