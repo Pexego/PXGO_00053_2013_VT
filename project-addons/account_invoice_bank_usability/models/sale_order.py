@@ -51,5 +51,7 @@ class SaleOrder(models.Model):
                 vals['partner_bank_id'] = mandate_sel.partner_bank_id.id
             elif invoice_partner.bank_ids:
                 vals['partner_bank_id'] = invoice_partner.bank_ids[0].id
+        if 'comment' in vals:
+            vals.pop('comment', None)
         return vals
 
