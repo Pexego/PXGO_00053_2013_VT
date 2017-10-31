@@ -764,6 +764,38 @@ class ResPartnerRappelRel(models.Model):
         return True
 
 
+class rappel(models.Model):
+
+    _inherit = 'rappel'
+    brand_ids = fields.Many2many('product.brand', 'rappel_product_brand_rel',
+                                 'rappel_id', 'product_brand_id', 'Brand')
+
+    @api.multi
+    def get_products(self):
+        product_obj = self.env['product.product']
+        product_ids = self.env['product.product']
+        for rappel in self:
+            if not rappel.global_application:
+                if rappel.product_id:
+                    product_ids += rappel.product_id
+                elif rappel.brand_ids:
+                    product_ids += product_obj.search(
+                        [('product_brand_id', 'in', rappel.brand_ids.ids)])
+                elif rappel.product_categ_id:
+                    product_ids += product_obj.search(
+                        [('categ_id', '=', rappel.product_categ_id.id)])
+            else:
+                product_ids += product_obj.search([])
+        return [x.id for x in product_ids]
+
+    @api.constrains('global_application', 'product_id', 'brand_ids', 'product_categ_id')
+    def _check_application(self):
+        if not self.global_application and not self.product_id \
+                and not self.product_categ_id and not self.brand_ids:
+            raise exceptions. \
+                ValidationError(_('Product, brand and category are empty'))
+
+
 class RappelInvoice(models.TransientModel):
 
     _inherit = "rappel.invoice.wzd"
