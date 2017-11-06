@@ -72,6 +72,7 @@ class product_product(models.Model):
         joking_tot = 0
         product_ids = [x[0] for x in res]
         filter_ids = []
+        max_joking = 0.0
         for stock_product_id in product_obj.browse(product_ids):
             if not stock_product_id.product_brand_id or not \
                     stock_product_id.product_brand_id.not_compute_joking:
@@ -84,8 +85,18 @@ class product_product(models.Model):
                     product.joking_index = -1
             else:
                 joking_index = (product.joking - avg) / avg
+                if product.joking_index > joking_index and product.joking_index > max_joking:
+                    max_joking = product.joking_index
+                elif product.joking_index < joking_index and joking_index > max_joking:
+                    max_joking = joking_index
                 if product.joking_index != joking_index:
                     product.joking_index = joking_index
+        for product in product_obj.browse(filter_ids):
+            if product.joking_index == -1 \
+                    and product.last_sixty_days_sales == 0\
+                    and product.type == 'product'\
+                    and product.categ_id.parent_id.name != 'Outlet':
+                product.joking_index = max_joking
 
     @api.one
     def _get_next_incoming_date(self):
