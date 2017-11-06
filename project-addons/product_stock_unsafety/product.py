@@ -91,8 +91,11 @@ class product_product(models.Model):
                     max_joking = joking_index
                 if product.joking_index != joking_index:
                     product.joking_index = joking_index
-        for product in product_obj.browse(product_ids):
-            if product.joking_index == -1:
+        for product in product_obj.browse(filter_ids):
+            if product.joking_index == -1 \
+                    and product.last_sixty_days_sales == 0\
+                    and product.type == 'product'\
+                    and product.categ_id.parent_id.name != 'Outlet':
                 product.joking_index = max_joking
 
     @api.one
