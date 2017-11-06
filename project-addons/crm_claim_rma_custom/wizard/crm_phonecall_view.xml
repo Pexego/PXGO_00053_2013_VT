@@ -2,6 +2,8 @@
 <openerp>
     <data>
 
+        <menuitem id="crm_phonecall_menu_sat" name="Phone Calls" parent="crm_claim_rma.menu_sat" sequence="10"/>
+
         <record id="crm_phonecall_custom_call_type" model="ir.ui.view">
             <field name="name">crm.phonecall.custom.call.type</field>
             <field name="model">crm.phonecall</field>
@@ -51,7 +53,7 @@
         <record id="crm_phonecall_custom_wizard_action" model="ir.actions.act_window">
             <field name="name">New Call</field>
             <field name="res_model">crm.phonecall</field>
-            <field name="context">{'readonly_by_pass': ['start_date', 'name']}</field>
+            <field name="context">{'readonly_by_pass': ['start_date', 'name'], 'default_scope': 'sales'}</field>
             <field name="view_mode">form</field>
             <field name="view_type">form</field>
             <field name="target">new</field>
@@ -89,5 +91,85 @@
             </field>
         </record>
 
+        <!--New Phonecalls Wizard SAT-->
+        <record id="crm_phonecall_custom_wizard_form_view_sat" model="ir.ui.view">
+            <field name="name">crm.phonecall.custom.wizard.sat</field>
+            <field name="model">crm.phonecall</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="New Call">
+                    <group>
+                        <field name="start_date"/>
+                        <field name="partner_id" string="Partner"/>
+                        <field name="partner_country"/>
+                        <field name="user_id"/>
+                        <field name="call_type_sat"/>
+                        <field name="brand_id"/>
+                        <field name="description"/>
+                    </group>
+                    <footer>
+                        <button name="end_call" type="object"
+                            string="End Call" class="oe_highlight"/>
+                        or
+                        <button string="Cancel Call" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="crm_phonecall_custom_wizard_action_sat" model="ir.actions.act_window">
+            <field name="name">New Call</field>
+            <field name="res_model">crm.phonecall</field>
+            <field name="context">{'readonly_by_pass': ['start_date', 'name'], 'default_scope': 'sat'}</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="crm_phonecall_custom_wizard_form_view_sat"/>
+        </record>
+
+        <menuitem id="crm_phonecall_custom_wizard_menu_sat" action="crm_phonecall_custom_wizard_action_sat"
+                  parent="crm_phonecall_menu_sat" sequence="1"/>
+
+        <!--Logged Phonecalls Tree View SAT-->
+        <record model="ir.ui.view" id="crm_case_inbound_phone_tree_view_sat">
+            <field name="name">CRM - Logged Phone Calls Tree SAT</field>
+            <field name="model">crm.phonecall</field>
+            <field name="arch" type="xml">
+                <tree string="Phone Calls" editable="top">
+                    <field name="date"/>
+                    <field name="partner_id" string="Partner"/>
+                    <field name="partner_country"/>
+                    <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'base.group_sale_salesman_all_leads']}"/>
+                    <field name="call_type_sat"/>
+                    <field name="brand_id"/>
+                    <field name="description"/>
+                    <field name="duration" string="Duration (min)" widget="float_time" class="oe_inline" style="vertical-align:baseline"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="crm_case_categ_phone_incoming0_sat">
+            <field name="name">Logged Calls</field>
+            <field name="res_model">crm.phonecall</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,calendar</field>
+            <field name="view_id" ref="crm_case_inbound_phone_tree_view_sat"/>
+            <field name="domain">[('scope', '=', 'sat')]</field>
+            <field name="context">{'search_default_state': 'done', 'default_state': 'done', 'search_default_user_id': uid,
+                                   'default_scope': 'sat'}</field>
+            <field name="search_view_id" ref="crm.view_crm_case_phonecalls_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to log the summary of a phone call.
+              </p><p>
+                Odoo allows you to log inbound calls on the fly to track the
+                history of the communication with a customer or to inform another
+                team member.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="crm_phonecall_custom_logged_call_menu_sat" action="crm_case_categ_phone_incoming0_sat"
+                  parent="crm_phonecall_menu_sat" sequence="2"/>
     </data>
 </openerp>
