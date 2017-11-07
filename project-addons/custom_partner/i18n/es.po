@@ -349,3 +349,8 @@ msgstr "Marca"
 #, python-format
 msgid "Product, brand and category are empty"
 msgstr "El producto, la marca y la categoría están vacíos"
+
+#. module: custom_partner
+#: view:rappel:custom_partner.rappel_form_add_brand
+msgid "You must fill in only one of the following fields to define the validity area of rappel:"
+msgstr "Debe rellenar solamente uno de los siguientes datos para definir el ámbito de validez del rappel:"
