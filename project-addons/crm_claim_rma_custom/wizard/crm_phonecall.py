@@ -112,6 +112,6 @@ class CrmPhonecall(models.Model):
             'state': 'done',
             'call_type': self.call_type,
             'call_type_sat': self.call_type_sat,
-            'brand_id': self.brand_id
+            'brand_id': self.brand_id.id
         }
         super(CrmPhonecall, self).write(datas)
