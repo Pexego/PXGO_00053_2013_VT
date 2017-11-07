@@ -1,0 +1,22 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * custom_partner
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-19 12:01+0000\n"
+"PO-Revision-Date: 2016-04-19 12:01+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:170
+#, python-format
+msgid "We would also like to inform you of the following invoices which will become due in the next 6 days"
+msgstr "Aussi, nous vous prions de prendre note des factures qui arrivent à échéance dans les 6  prochains jours"
