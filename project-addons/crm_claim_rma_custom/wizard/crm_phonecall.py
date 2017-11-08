@@ -33,7 +33,8 @@ CALL_TYPE = [('check_stock', 'Check Stock'),
              ('tech_complain', 'Tech Complain/Claim'),
              ('web_complain', 'Web Complain/Claim'),
              ('shipment_complain', 'Shipment Complain/Claim'),
-             ('accounting_complain', 'Accounting Complain/Claim')]
+             ('accounting_complain', 'Accounting Complain/Claim'),
+             ('none', 'N/A')]
 
 CALL_TYPE_SAT = [('check_status_rma', 'Check RMA status'),
                  ('incidence_product', 'Incidence with product'),
@@ -42,7 +43,8 @@ CALL_TYPE_SAT = [('check_status_rma', 'Check RMA status'),
                  ('sat_complain', 'SAT Complaint/claim'),
                  ('ddns_registration', 'DDNS request for registration'),
                  ('check_courses', 'Enquiry about courses/certificates'),
-                 ('others', 'Others')]
+                 ('others', 'Others'),
+                 ('none', 'N/A')]
 
 SCOPE = [('sales', 'Sales'),
          ('sat', 'SAT')]
@@ -78,6 +80,22 @@ class CrmPhonecall(models.Model):
         if self.partner_id:
             self.partner_ref = self.partner_id.ref
 
+    @api.model
+    def create(self, datas):
+        if 'call_type' not in datas:
+            datas['call_type'] = 'none'
+        if 'call_type_sat' not in datas:
+            datas['call_type_sat'] = 'none'
+        return super(CrmPhonecall, self).create(datas)
+
+    @api.multi
+    def write(self, datas):
+        if not self.call_type and 'call_type' not in datas:
+            datas['call_type'] = 'none'
+        if not self.call_type_sat and 'call_type_sat' not in datas:
+            datas['call_type_sat'] = 'none'
+        return super(CrmPhonecall, self).write(datas)
+
     @api.multi
     def end_call(self):
         self.ensure_one()
@@ -110,8 +128,6 @@ class CrmPhonecall(models.Model):
             'opportunity_id': False,
             'duration': (duration.seconds / float(60)),
             'state': 'done',
-            'call_type': self.call_type,
-            'call_type_sat': self.call_type_sat,
             'brand_id': self.brand_id.id
         }
-        super(CrmPhonecall, self).write(datas)
+        self.write(datas)
