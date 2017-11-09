@@ -31,6 +31,7 @@
                 'purchase', 'purchase_advance_payment',
                 'account_due_list', 'rappel'],
     "data": ["partner_view.xml", "stock_view.xml",
-             "security/ir.model.access.csv", "sale_view.xml"],
+             "security/ir.model.access.csv", "sale_view.xml",
+             "data/custom_partner_data.xml"],
     "installable": True
 }
