@@ -145,16 +145,16 @@ class MiddlewareBackend(models.Model):
             #~ users = self.env['res.users'].search([('web', '=', True)])
             #~ for user in users:
                 #~ export_commercial(session, 'res.users', user.id)
-            #~ partner_obj = self.env['res.partner']
-            #~ partner_ids = partner_obj.search([('is_company', '=', True),
-            #~                                ('web', '=', True),
-            #~                                ('customer', '=', True)])
+            partner_obj = self.env['res.partner']
+            partner_ids = partner_obj.search([('is_company', '=', True),
+                                              ('web', '=', True),
+                                              ('customer', '=', True)])
             #~ for partner in partner_ids:
-            #~  contact_ids = partner_obj.search([('parent_id', '=', partner.id),
-            #~                                    ('active', '=', True),
-            #~                                    ('customer', '=', True)])
-            #~  for contact in contact_ids:
-            #~      export_partner.delay(session, "res.partner", contact.id)
+            contact_ids = partner_obj.search([('parent_id', 'in', partner_ids.ids),
+                                              ('active', '=', True),
+                                              ('customer', '=', True)])
+            for contact in contact_ids:
+                export_partner.delay(session, "res.partner", contact.id)
             #~ substates = self.env['substate.substate'].search([])
             #~ for substate in substates:
                 #~ export_rma_status(session, 'substate.substate', substate.id)
@@ -165,15 +165,16 @@ class MiddlewareBackend(models.Model):
                     #~ if line.product_id.web == 'published':
                         #~ export_rmaproduct(session, 'claim.line', line.id)
             #~ invoices = self.env['account.invoice'].\
-                #~ search([('commercial_partner_id.web', '=', True),
+                #~ search([('commercial_partner_id.web',
+                # '=', True),
                         #~ ('state', 'in', ['open', 'paid']),
                         #~ ('number', 'not like', '%ef%')])
             #~ for invoice in invoices:
                 #~ export_invoice.delay(session, 'account.invoice', invoice.id)
-            products = self.env["product.product"]. \
-                search(['manufacturer_ref', '!=', False])
-            for product in products:
-                update_product.delay(session, "product.template", product.product_tmpl_id.id)
+            #~ products = self.env["product.product"]. \
+            #~     search(['manufacturer_ref', '!=', False])
+            #~ for product in products:
+            #~     update_product.delay(session, "product.template", product.product_tmpl_id.id)
                 #~ product.web = 'published'
 
         return True

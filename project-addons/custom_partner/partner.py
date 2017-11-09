@@ -68,16 +68,16 @@ class ResPartner(models.Model):
         end_day_past_month = monthrange(actual_year, past_month)
         end_past_month = str(actual_year) + '-' + str(past_month) + '-' + str(end_day_past_month[1])
         for partner in partner_ids:
-            invoice_ids_year = invoice_obj.search([('date_invoice', '>=', start_year),
+            invoice_ids_year = invoice_obj.search_read([('date_invoice', '>=', start_year),
                                                    ('date_invoice', '<=', end_year),
                                                    ('partner_id', 'child_of', [partner.id]),
                                                    ('type', 'in', ['out_invoice', 'out_refund']),
                                                    ('number', 'not like', '%_ef%'),
                                                    '|',
                                                    ('state', '=', 'open'),
-                                                   ('state', '=', 'paid')])
+                                                   ('state', '=', 'paid')], ['type', 'amount_untaxed'])
 
-            invoice_ids_past_year = invoice_obj.search([('date_invoice', '>=', start_past_year),
+            invoice_ids_past_year = invoice_obj.search_read([('date_invoice', '>=', start_past_year),
                                                         ('date_invoice', '<=', end_past_year),
                                                         ('partner_id', 'child_of', [partner.id]),
                                                         ('type', 'in', ['out_invoice', 'out_refund']),
@@ -86,89 +86,89 @@ class ResPartner(models.Model):
                                                         '|',
                                                         ('state', '=', 'open'),
                                                         ('state', '=', 'paid'),
-                                                        ('state', '=', 'history')])
+                                                        ('state', '=', 'history')], ['type', 'amount_untaxed'])
 
-            invoice_ids_month = invoice_obj.search([('date_invoice', '>=', start_month),
+            invoice_ids_month = invoice_obj.search_read([('date_invoice', '>=', start_month),
                                                     ('date_invoice', '<=', end_month),
                                                     ('partner_id', 'child_of', [partner.id]),
                                                     ('type', 'in', ['out_invoice', 'out_refund']),
                                                     ('number', 'not like', '%_ef%'),
                                                     '|',
                                                     ('state', '=', 'open'),
-                                                    ('state', '=', 'paid')])
+                                                    ('state', '=', 'paid')], ['type', 'amount_untaxed'])
 
-            invoice_ids_past_month = invoice_obj.search([('date_invoice', '>=', start_past_month),
+            invoice_ids_past_month = invoice_obj.search_read([('date_invoice', '>=', start_past_month),
                                                          ('date_invoice', '<=', end_past_month),
                                                          ('partner_id', 'child_of', [partner.id]),
                                                          ('type', 'in', ['out_invoice', 'out_refund']),
                                                          ('number', 'not like', '%_ef%'),
                                                          '|',
                                                          ('state', '=', 'open'),
-                                                         ('state', '=', 'paid')])
+                                                         ('state', '=', 'paid')], ['type', 'amount_untaxed'])
 
-            picking_ids_year = picking_obj.search([('date_done', '>=', start_year),
+            picking_ids_year = picking_obj.search_read([('date_done', '>=', start_year),
                                                    ('date_done', '<=', end_year),
                                                    ('state', '=', 'done'),
                                                    ('invoice_state', '=', '2binvoiced'),
-                                                   ('partner_id', 'child_of', [partner.id])])
+                                                   ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
 
-            picking_ids_past_year = picking_obj.search([('date_done', '>=', start_past_year),
+            picking_ids_past_year = picking_obj.search_read([('date_done', '>=', start_past_year),
                                                         ('date_done', '<=', end_past_year),
                                                         ('invoice_state', '=', '2binvoiced'),
                                                         ('partner_id', 'child_of', [partner.id]),
-                                                        ('state', '=', 'done')])
+                                                        ('state', '=', 'done')], ['amount_untaxed'])
 
-            picking_ids_month = picking_obj.search([('date_done', '>=', start_month),
+            picking_ids_month = picking_obj.search_read([('date_done', '>=', start_month),
                                                     ('date_done', '<=', end_month),
                                                     ('state', '=', 'done'),
                                                     ('invoice_state', '=', '2binvoiced'),
-                                                    ('partner_id', 'child_of', [partner.id])])
+                                                    ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
 
-            picking_ids_past_month = picking_obj.search([('date_done', '>=', start_past_month),
+            picking_ids_past_month = picking_obj.search_read([('date_done', '>=', start_past_month),
                                                          ('date_done', '<=', end_past_month),
                                                          ('state', '=', 'done'),
                                                          ('invoice_state', '=', '2binvoiced'),
-                                                         ('partner_id', 'child_of', [partner.id])])
+                                                         ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
 
             annual_invoiced = 0.0
             past_year_invoiced = 0.0
             monthly_invoiced = 0.0
             past_month_invoiced = 0.0
             for invoice in invoice_ids_year:
-                if invoice.type == 'out_refund':
-                    annual_invoiced -= invoice.amount_untaxed
+                if invoice['type'] == 'out_refund':
+                    annual_invoiced -= invoice['amount_untaxed']
                 else:
-                    annual_invoiced += invoice.amount_untaxed
+                    annual_invoiced += invoice['amount_untaxed']
 
             for invoice in invoice_ids_month:
-                if invoice.type == 'out_refund':
-                    monthly_invoiced -= invoice.amount_untaxed
+                if invoice['type'] == 'out_refund':
+                    monthly_invoiced -= invoice['amount_untaxed']
                 else:
-                    monthly_invoiced += invoice.amount_untaxed
+                    monthly_invoiced += invoice['amount_untaxed']
 
             for invoice in invoice_ids_past_year:
-                if invoice.type == 'out_refund':
-                    past_year_invoiced -= invoice.amount_untaxed
+                if invoice['type'] == 'out_refund':
+                    past_year_invoiced -= invoice['amount_untaxed']
                 else:
-                    past_year_invoiced += invoice.amount_untaxed
+                    past_year_invoiced += invoice['amount_untaxed']
 
             for invoice in invoice_ids_past_month:
-                if invoice.type == 'out_refund':
-                    past_month_invoiced -= invoice.amount_untaxed
+                if invoice['type'] == 'out_refund':
+                    past_month_invoiced -= invoice['amount_untaxed']
                 else:
-                    past_month_invoiced += invoice.amount_untaxed
+                    past_month_invoiced += invoice['amount_untaxed']
 
             for picking in picking_ids_year:
-                annual_invoiced += picking.amount_untaxed
+                annual_invoiced += picking['amount_untaxed']
 
             for picking in picking_ids_month:
-                monthly_invoiced += picking.amount_untaxed
+                monthly_invoiced += picking['amount_untaxed']
 
             for picking in picking_ids_past_year:
-                past_year_invoiced += picking.amount_untaxed
+                past_year_invoiced += picking['amount_untaxed']
 
             for picking in picking_ids_past_month:
-                past_month_invoiced += picking.amount_untaxed
+                past_month_invoiced += picking['amount_untaxed']
 
             vals = {'annual_invoiced': annual_invoiced, 'past_year_invoiced': past_year_invoiced,
                     'monthly_invoiced': monthly_invoiced, 'past_month_invoiced': past_month_invoiced}
