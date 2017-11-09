@@ -80,6 +80,12 @@ class stock_picking(models.Model):
                 picking.invoice_state = 'invoiced'
         return super(stock_picking, self).action_assign()
 
+    @api.model
+    def _get_invoice_vals(self, key, inv_type, journal_id, move):
+        res = super(stock_picking, self)._get_invoice_vals(key, inv_type, journal_id, move)
+        if 'comment' in res:
+            res.pop('comment', None)
+        return res
 
 '''class stock_invoice_onshipping(models.TransientModel):
 

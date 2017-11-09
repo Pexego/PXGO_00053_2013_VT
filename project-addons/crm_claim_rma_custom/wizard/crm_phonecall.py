@@ -33,7 +33,21 @@ CALL_TYPE = [('check_stock', 'Check Stock'),
              ('tech_complain', 'Tech Complain/Claim'),
              ('web_complain', 'Web Complain/Claim'),
              ('shipment_complain', 'Shipment Complain/Claim'),
-             ('accounting_complain', 'Accounting Complain/Claim')]
+             ('accounting_complain', 'Accounting Complain/Claim'),
+             ('none', 'N/A')]
+
+CALL_TYPE_SAT = [('check_status_rma', 'Check RMA status'),
+                 ('incidence_product', 'Incidence with product'),
+                 ('check_working', 'Post-sale question on operation'),
+                 ('counsel', 'Pre-sale query/advice'),
+                 ('sat_complain', 'SAT Complaint/claim'),
+                 ('ddns_registration', 'DDNS request for registration'),
+                 ('check_courses', 'Enquiry about courses/certificates'),
+                 ('others', 'Others'),
+                 ('none', 'N/A')]
+
+SCOPE = [('sales', 'Sales'),
+         ('sat', 'SAT')]
 
 
 class CrmPhonecall(models.Model):
@@ -52,6 +66,10 @@ class CrmPhonecall(models.Model):
     call_type = fields.Selection(CALL_TYPE, 'Call type', required=True)
     description = fields.Text('Call Description')
     partner_ref = fields.Char('Ref. Contact', readonly=True, compute='get_partner_ref')
+    scope = fields.Selection(SCOPE, 'Scope call')
+    call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type', required=True)
+    partner_country = fields.Many2one(related='partner_id.country_id', string='Country', readonly=True)
+    brand_id = fields.Many2one('product.brand', 'Brand')
 
     def utc_to_local(self, utc_dt):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
@@ -61,6 +79,22 @@ class CrmPhonecall(models.Model):
     def get_partner_ref(self):
         if self.partner_id:
             self.partner_ref = self.partner_id.ref
+
+    @api.model
+    def create(self, datas):
+        if 'call_type' not in datas:
+            datas['call_type'] = 'none'
+        if 'call_type_sat' not in datas:
+            datas['call_type_sat'] = 'none'
+        return super(CrmPhonecall, self).create(datas)
+
+    @api.multi
+    def write(self, datas):
+        if not self.call_type and 'call_type' not in datas:
+            datas['call_type'] = 'none'
+        if not self.call_type_sat and 'call_type_sat' not in datas:
+            datas['call_type_sat'] = 'none'
+        return super(CrmPhonecall, self).write(datas)
 
     @api.multi
     def end_call(self):
@@ -94,6 +128,6 @@ class CrmPhonecall(models.Model):
             'opportunity_id': False,
             'duration': (duration.seconds / float(60)),
             'state': 'done',
-            'call_type': self.call_type
+            'brand_id': self.brand_id.id
         }
-        super(CrmPhonecall, self).write(datas)
+        self.write(datas)

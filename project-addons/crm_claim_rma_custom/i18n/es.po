@@ -506,3 +506,73 @@ msgstr "Semana"
 #: view:crm.phonecall:crm_claim_rma_custom.view_crm_case_phonecalls_filter_group_by
 msgid "Day"
 msgstr "Día"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_phonecall_menu_sat
+msgid "Phone calls"
+msgstr "Llamadas telefónicas"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_phonecall_custom_wizard_action_sat
+msgid "New Call"
+msgstr "Nueva llamada"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_case_categ_phone_incoming0_sat
+msgid "Logged Calls"
+msgstr "Llamadas registradas"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,partner_country:0
+msgid "Country"
+msgstr "País"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,brand_id:0
+msgid "Brand"
+msgstr "Marca"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,call_type_sat:0
+msgid "Call type"
+msgstr "Tipo de llamada"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Check RMA status"
+msgstr "Consulta de estado de RMA"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Incidence with product"
+msgstr "Incidencia con producto"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Post-sale question on operation"
+msgstr "Consulta post-venta sobre funcionamiento"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Pre-sale query/advice"
+msgstr "Consulta pre-venta/asesoramiento"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type_sat:0
+msgid "SAT Complaint/claim"
+msgstr "Queja/reclamación SAT"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type_sat:0
+msgid "DDNS request for registration"
+msgstr "Petición de alta en DDNS"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Enquiry about courses/certificates"
+msgstr "Consulta sobre cursos/certificados"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Others"
+msgstr "Otros"
