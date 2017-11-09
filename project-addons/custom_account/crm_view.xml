@@ -8,8 +8,9 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,calendar</field>
         <field name="view_id" ref="crm.crm_case_inbound_phone_tree_view"/>
-        <field name="domain">[]</field>
-        <field name="context">{'search_default_state': 'done', 'default_state': 'done', 'search_default_user_id': uid}</field>
+        <field name="domain"> [('scope', '=', 'sales')]</field>
+        <field name="context">{'search_default_state': 'done', 'default_state': 'done', 'search_default_user_id': uid,
+                               'default_scope': 'sales'}</field>
         <field name="search_view_id" ref="crm.view_crm_case_phonecalls_filter"/>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
