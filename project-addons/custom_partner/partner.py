@@ -786,7 +786,7 @@ class rappel(models.Model):
                         [('categ_id', '=', rappel.product_categ_id.id)])
             else:
                 product_ids += product_obj.search([])
-        return [x.id for x in product_ids]
+        return product_ids.ids
 
     @api.constrains('global_application', 'product_id', 'brand_ids', 'product_categ_id')
     def _check_application(self):
