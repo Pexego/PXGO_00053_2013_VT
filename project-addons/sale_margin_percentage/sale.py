@@ -40,10 +40,13 @@ class sale_order_line(models.Model):
             self.purchase_price = self.product_id.standard_price
             sale_price = self.price_unit * self.product_uom_qty * \
                 ((100.0 - self.discount) / 100.0)
-            margin = round(sale_price -
-                           (self.purchase_price * self.product_uom_qty), 2)
+            purchase_price = self.purchase_price * self.product_uom_qty
+            margin = round(sale_price - purchase_price, 2)
             if sale_price:
-                self.margin_perc = round((margin * 100) / sale_price, 2)
+                if sale_price < purchase_price:
+                    self.margin_perc = round((margin * 100) / purchase_price, 2)
+                else:
+                    self.margin_perc = round((margin * 100) / sale_price, 2)
             self.margin = margin
 
     margin = fields.Float(compute="_product_margin", string='Margin',
