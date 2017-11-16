@@ -30,7 +30,7 @@ class AccountFollowupPrint(models.Model):
     pero modificando la fecha por la fecha de hoy
     """
 
-    @api.multi
+    @api.model
     def automatice_process(self):
         wzd = self.create({'date': fields.Date.today()})
         wzd.do_process()

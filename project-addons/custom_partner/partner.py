@@ -344,10 +344,9 @@ class ResPartner(models.Model):
                 [('invoice_id', 'in', invoices.ids)])
 
             for i_line in invoices_line:
-                self.env.cr.execute("SELECT order_line_id from sale_order_line_invoice_rel" +
-                                    " WHERE invoice_id = " + str(i_line.ids[0]))
-                order_rel = self.env.cr.fetchone()
-                order_line = self.env["sale.order.line"].browse(order_rel)
+                lines = self.env['sale.order.line'].\
+                    search([('invoice_lines', 'in', [i_line.id])], limit=1)
+                order_line = lines and lines[0] or False
 
                 if order_line:
                     o_line_data = order_line.read(['purchase_price'])[0]
