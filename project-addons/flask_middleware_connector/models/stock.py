@@ -19,8 +19,11 @@
 #
 ##############################################################################
 
-from openerp import models, api
+from openerp import models, api, SUPERUSER_ID
 from ..events.product_events import on_stock_move_change
+from openerp.addons.connector.event import (on_record_create,
+                    on_record_write,
+                    on_record_unlink)
 from openerp.addons.connector.session import ConnectorSession
 
 
@@ -32,10 +35,34 @@ class StockMove(models.Model):
 
     @api.multi
     def write(self, vals):
+        """
+        Incluir la comprobacion de todas las lineas del albaran despues de esta funcion.
+        Si un albaran tiene alguna linea esperando disponibilidad, su estado sera parcialmente disponible.
+        Si un albaran tiene todas las lineas listas, ninguna esperando disponibilidad y ninguna o \
+        varias lineas canceladas, su estado tiene que ser listo para transeferir. 
+        SI un albaran tiene todas sus lineas canceladas su estado pasa a cancelado. 
+        Si un albaran tiene todas sus lineas esperando disponibilidad y ninguna\
+        o alguna linea cancelada, su estado sera esperando disponibilidad  
+        """
+        old_state = False
+        new_state = False
+        if self:
+            old_state = self[0].picking_id.state
         res = super(StockMove, self).write(vals)
+        if self:
+            new_state = self[0].picking_id.state
+        if old_state != new_state:
+            session = ConnectorSession(self.env.cr, SUPERUSER_ID,
+                                       context=self.env.context)
+            vals_picking = {'state': new_state}
+            order = self.env['sale.order'].search([('name', '=', self[0].picking_id.origin)])
+            for picking in order.picking_ids:
+                on_record_write.fire(session, 'stock.picking',
+                                     picking.id, vals_picking)
+
         if vals.get('state', False) and vals["state"] != "draft":
             for move in self:
-                session = ConnectorSession(self.env.cr, self.env.uid,
+                session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                            context=self.env.context)
                 on_stock_move_change.fire(session, 'stock.move',
                                           move.id)
