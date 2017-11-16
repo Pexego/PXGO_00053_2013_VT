@@ -24,3 +24,4 @@ from . import invoice_events
 from . import rma_events
 from . import country_events
 from . import commercial_events
+from . import picking_events
