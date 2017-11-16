@@ -2,8 +2,11 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, fields
-
+from openerp import models, api, fields, SUPERUSER_ID
+from openerp.addons.connector.event import (on_record_create,
+                    on_record_write,
+                    on_record_unlink)
+from openerp.addons.connector.session import ConnectorSession
 
 class SaleOrder(models.Model):
 
@@ -19,6 +22,13 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).action_ship_create()
         for sale in self:
             sale.picking_ids.write({'commercial': sale.user_id.id})
+            session = ConnectorSession(self.env.cr, SUPERUSER_ID,
+                                       context=self.env.context)
+            for picking in sale.picking_ids:
+                for move in picking.move_lines:
+                    on_record_create.fire(session, 'stock.move',
+                                          move.id)
+
         return res
 
     @api.multi
