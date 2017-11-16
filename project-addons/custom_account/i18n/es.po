@@ -572,3 +572,15 @@ msgstr "Zona"
 msgid "Commercial Regions"
 msgstr "Regiones comerciales"
 
+#. module: custom_account
+#: code:addons/custom_account/account.py:397
+#, python-format
+msgid "Warning"
+msgstr "Aviso"
+
+#. module: custom_account
+#: code:addons/custom_account/account.py:398
+#, python-format
+msgid "Remember to change due date in associated payment(s)"
+msgstr "Recuerde cambiar la fecha de vencimiento en el(los) efecto(s) asociado(s)"
+
