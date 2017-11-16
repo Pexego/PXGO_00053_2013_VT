@@ -219,14 +219,14 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree</field>
             <field name="context">{'search_default_order_partner_id': active_id, 'group_by': ['state','product_id']}</field>
-            <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
         <record id="res_partner_view_buttons_add_products_no" model="ir.ui.view">
             <field name="name">res.partner.view.buttons.add_products_no</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form" />
-            <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='buttons']" position="inside">
                     <button class="oe_inline oe_stat_button" type="action" name="%(act_res_partner_2_sale_order_line)d"
