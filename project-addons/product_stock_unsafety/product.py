@@ -99,19 +99,49 @@ class product_product(models.Model):
                 product.joking_index = max_joking
 
     @api.one
+    def _get_next_move(self, product, limit=1):
+        next_move = self.env['stock.move'].search(
+            [('product_id', '=', product.id),
+             ('picking_type_id', '=', self.env.ref("stock.picking_type_in").id),
+             ('location_id', '=', self.env.ref("stock.stock_location_suppliers").id),
+             ('state', '=', 'assigned')],
+            limit=limit,
+            order='date_expected ASC')
+
+        return next_move
+
+    @api.one
     def _get_next_incoming_date(self):
         """ Get next incoming date """
         for product in self:
-            next_move = self.env['stock.move'].search(
-                [('product_id', '=', product.id),
-                 ('picking_type_id', '=', self.env.ref("stock.picking_type_in").id),
-                 ('location_id', '=', self.env.ref("stock.stock_location_suppliers").id),
-                 ('state', '=', 'assigned')],
-                limit=1,
-                order='date_expected ASC')
+            next_move = self._get_next_move(product, limit=1)
+            if next_move[0]:
+                product.next_incoming_date = next_move[0].date_expected
 
-            if next_move:
-                product.next_incoming_date = next_move.date_expected
+    @api.model
+    def _set_cicle_supplier_product(self, supplier_id, order_cycle):
+        """Set the cicle of a product depends of the first supplier"""
+        product_obj = self.env['product.product']
+        purchase_obj = self.env['purchase.order.line']
+
+        for product in product_obj.search([]):
+            purchase = purchase_obj.search([('product_id', '=', product.id)], order='id desc', limit=1)
+            if purchase.invoiced and supplier_id == purchase.order_id.partner_id.id:
+                vals = {'order_cycle': order_cycle}
+                product.write(vals)
+
+    @api.one
+    def _get_min_suggested_qty(self):
+        """ Get the min suggested qty to buy of a product """
+        for product in self:
+            next_moves = self._get_next_move(product, limit=3)
+            sixty_days_sales = - product.last_sixty_days_sales
+            order_cycle = product.order_cycle
+            res = (sixty_days_sales / 60) * order_cycle \
+                + product.virtual_stock_conservative
+            for move in next_moves:
+                res += move.product_uom_qty
+            product.min_suggested_qty = res
 
     remaining_days_sale = fields.Float('Remaining Stock Days', readonly=True,
                                        compute='_calc_remaining_days',
@@ -127,4 +157,4 @@ class product_product(models.Model):
                                   related="orderpoint_ids.min_days_id",
                                   readonly=True)
     next_incoming_date = fields.Date('Next incoming date', compute='_get_next_incoming_date')
-
+    min_suggested_qty = fields.Integer('Min qty suggested', compute='_get_min_suggested_qty')

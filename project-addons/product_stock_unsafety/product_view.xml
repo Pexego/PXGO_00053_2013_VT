@@ -37,6 +37,7 @@
                     <field name="biggest_sale_id"/>
                     <field name="biggest_sale_qty"/>
                     <field name="remaining_days_sale"/>
+                    <field name="min_suggested_qty"/>
                     <button name="%(action_add_to_purchase_order_wzd)d" type="action" string="Add to purchase order" icon="gtk-execute"/>
                 </tree>
             </field>
