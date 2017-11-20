@@ -32,6 +32,12 @@ class Partner(models.Model):
 
     email2 = fields.Char('Second Email')
     not_send_following_email = fields.Boolean()
+    unreconciled_purchase_aml_ids = fields.One2many('account.move.line', 'partner_id',
+                                                    domain=['&', ('reconcile_id', '=', False), '&',
+                                                            ('account_id.active', '=', True), '&',
+                                                            ('account_id.type', '=', 'payable'), '&',
+                                                            ('account_id.not_payment_followup', '=', False),
+                                                            ('state', '!=', 'draft')])
 
     @api.one
     def _pending_orders_amount(self):

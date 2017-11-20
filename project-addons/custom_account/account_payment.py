@@ -15,3 +15,10 @@ class PaymentLine(models.Model):
     def _get_is_refund(self):
         for line in self:
             line.is_refund = line.amount_currency < 0 and True or False
+
+
+class AccountAccount(models.Model):
+
+    _inherit = 'account.account'
+
+    not_payment_followup = fields.Boolean("Don't show on supplier payment follow-ups")

@@ -584,3 +584,8 @@ msgstr "Aviso"
 msgid "Remember to change due date in associated payment(s)"
 msgstr "Recuerde cambiar la fecha de vencimiento en el(los) efecto(s) asociado(s)"
 
+#. module: custom_account
+#: field:account.account,not_payment_followup:0
+msgid "Don't show on supplier payment follow-ups"
+msgstr "No mostrar en el seguimiento de pagos a proveedores"
+
