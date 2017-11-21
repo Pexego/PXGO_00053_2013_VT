@@ -107,8 +107,11 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                         export_rmaproduct.delay(session, 'claim.line', line.id,
                                                 priority=10, eta=240)
 
-            pickings = session.env['stock.picking'].search(
-                [('partner_id', 'child_of', partner.id)])
+            pickings = session.env['stock.picking'].search([
+                ('partner_id', 'child_of', [partner.id]),
+                ('state', '!=', 'cancel'),
+                ('picking_type_id.code', '=', 'outgoing')
+            ])
             for picking in pickings:
                 export_picking.delay(session, 'stock.picking', picking.id, priority=5, eta=120)
                 for line in picking.move_lines:
@@ -136,8 +139,11 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                              line.equivalent_product_id.web == 'published'):
                         export_rmaproduct.delay(session, 'claim.line', line.id,
                                                 priority=10, eta=240)
-            pickings = session.env['stock.picking'].search(
-                [('partner_id', 'child_of', partner.id)])
+            pickings = session.env['stock.picking'].search([
+                ('partner_id', 'child_of', [partner.id]),
+                ('state', '!=', 'cancel'),
+                ('picking_type_id.code', '=', 'outgoing')
+            ])
             for picking in pickings:
                 export_picking.delay(session, 'stock.picking', picking.id, priority=5, eta=120)
                 for line in picking.move_lines:
@@ -187,8 +193,11 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                              line.equivalent_product_id.web == 'published'):
                         export_rmaproduct.delay(session, 'claim.line', line.id,
                                                 priority=10, eta=240)
-            pickings = session.env['stock.picking'].search(
-                [('partner_id', 'child_of', partner.id)])
+            pickings = session.env['stock.picking'].search([
+                ('partner_id', 'child_of', [partner.id]),
+                ('state', '!=', 'cancel'),
+                ('picking_type_id.code', '=', 'outgoing')
+            ])
             for picking in pickings:
                 export_picking.delay(session, 'stock.picking', picking.id, priority=5, eta=120)
                 for line in picking.move_lines:
@@ -217,8 +226,11 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                              line.equivalent_product_id.web == 'published'):
                         export_rmaproduct.delay(session, 'claim.line', line.id,
                                                 priority=10, eta=240)
-            pickings = session.env['stock.picking'].search(
-                [('partner_id', 'child_of', partner.id)])
+            pickings = session.env['stock.picking'].search([
+                ('partner_id', 'child_of', [partner.id]),
+                ('state', '!=', 'cancel'),
+                ('picking_type_id.code', '=', 'outgoing')
+            ])
             for picking in pickings:
                 export_picking.delay(session, 'stock.picking', rma.id, priority=5, eta=120)
                 for line in picking.move_lines:
