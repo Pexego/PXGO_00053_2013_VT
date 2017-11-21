@@ -17,6 +17,7 @@ class SaleOrder(models.Model):
     is_some_reserved = fields.Boolean(compute='_compute_is_some_reserved',
                                       search='_search_is_some_reserved')
 
+    # TODO Revisar esta funcion, cuando se comprueba que el estado no sea cancelado creo que no hace falta ya que esto tiene pinta de solo hacerse cuando se crea los albaranes
     @api.multi
     def action_ship_create(self):
         res = super(SaleOrder, self).action_ship_create()
@@ -25,9 +26,10 @@ class SaleOrder(models.Model):
             session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                        context=self.env.context)
             for picking in sale.picking_ids:
-                for move in picking.move_lines:
-                    on_record_create.fire(session, 'stock.move',
-                                          move.id)
+                if picking.state != 'cancel':
+                    for move in picking.move_lines:
+                        on_record_create.fire(session, 'stock.move',
+                                              move.id)
 
         return res
 
