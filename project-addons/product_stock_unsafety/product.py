@@ -122,11 +122,18 @@ class product_product(models.Model):
     def _set_cicle_supplier_product(self, supplier_id, order_cycle):
         """Set the cicle of a product depends of the first supplier"""
         product_obj = self.env['product.product']
-        purchase_obj = self.env['purchase.order.line']
-
-        for product in product_obj.search([]):
-            purchase = purchase_obj.search([('product_id', '=', product.id)], order='id desc', limit=1)
-            if purchase.invoiced and supplier_id == purchase.order_id.partner_id.id:
+        purchase_line_obj = self.env['purchase.order.line']
+        purchase_obj = self.env['purchase.order']
+        products_data = purchase_line_obj.read_group([('invoiced', '=', True),
+                                                      ('order_id.partner_id', '=', supplier_id)],
+                                                     ['product_id'],
+                                                     ['product_id'])
+        for product_data in products_data:
+            purchase = purchase_line_obj.search([('product_id', '=', product_data['product_id'][0]),
+                                                 ('invoiced', '=', True)],
+                                                order='id desc', limit=1)
+            if supplier_id == purchase.order_id.partner_id.id:
+                product = product_obj.browse(purchase.product_id.id)
                 vals = {'order_cycle': order_cycle}
                 product.write(vals)
 
