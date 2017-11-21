@@ -46,24 +46,24 @@ class StockMove(models.Model):
         """
         old_state = False
         new_state = False
-        if self:
+        res = False
+        for move in self:
             old_state = self[0].picking_id.state
-        res = super(StockMove, self).write(vals)
-        if self:
+            res = super(StockMove, self).write(vals)
             new_state = self[0].picking_id.state
-        if old_state != new_state:
-            session = ConnectorSession(self.env.cr, SUPERUSER_ID,
-                                       context=self.env.context)
-            vals_picking = {'state': new_state}
-            order = self.env['sale.order'].search([('name', '=', self[0].picking_id.origin)])
-            for picking in order.picking_ids:
-                on_record_write.fire(session, 'stock.picking',
-                                     picking.id, vals_picking)
-
-        if vals.get('state', False) and vals["state"] != "draft":
-            for move in self:
+            if old_state != new_state:
                 session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                            context=self.env.context)
-                on_stock_move_change.fire(session, 'stock.move',
-                                          move.id)
+                vals_picking = {'state': new_state}
+                order = self.env['sale.order'].search([('name', '=', self[0].picking_id.origin)])
+                for picking in order.picking_ids:
+                    on_record_write.fire(session, 'stock.picking',
+                                         picking.id, vals_picking)
+
+            if vals.get('state', False) and vals["state"] != "draft":
+                for move in self:
+                    session = ConnectorSession(self.env.cr, SUPERUSER_ID,
+                                               context=self.env.context)
+                    on_stock_move_change.fire(session, 'stock.move',
+                                              move.id)
         return res
