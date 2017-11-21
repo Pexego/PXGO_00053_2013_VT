@@ -42,7 +42,7 @@ class PickingExporter(Exporter):
         vals = {
                 "odoo_id": picking.id,
                 "name": name,
-                "partner_id": picking.partner_id.id,
+                "partner_id": picking.partner_id.commercial_partner_id.id,
                 "date": picking.date,
                 "date_done": picking.date_done or "",
                 "move_type": picking.move_type,
