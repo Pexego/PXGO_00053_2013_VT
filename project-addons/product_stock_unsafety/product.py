@@ -123,7 +123,7 @@ class product_product(models.Model):
         """Set the cicle of a product depends of the first supplier"""
         product_obj = self.env['product.product']
         purchase_line_obj = self.env['purchase.order.line']
-        purchase_obj = self.env['purchase.order']
+        vals = {'order_cycle': order_cycle}
         products_data = purchase_line_obj.read_group([('invoiced', '=', True),
                                                       ('order_id.partner_id', '=', supplier_id)],
                                                      ['product_id'],
@@ -133,8 +133,7 @@ class product_product(models.Model):
                                                  ('invoiced', '=', True)],
                                                 order='id desc', limit=1)
             if supplier_id == purchase.order_id.partner_id.id:
-                product = product_obj.browse(purchase.product_id.id)
-                vals = {'order_cycle': order_cycle}
+                product = purchase.product_id
                 product.write(vals)
 
     @api.one
@@ -144,7 +143,7 @@ class product_product(models.Model):
             next_moves = self._get_next_move(product, limit=3)
             sixty_days_sales = - product.last_sixty_days_sales
             order_cycle = product.order_cycle
-            res = (sixty_days_sales / 60) * order_cycle \
+            res = (sixty_days_sales / 60.0) * order_cycle \
                 + product.virtual_stock_conservative
             for move in next_moves:
                 res += move.product_uom_qty
