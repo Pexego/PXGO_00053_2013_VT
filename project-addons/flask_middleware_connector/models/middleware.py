@@ -71,59 +71,6 @@ class MiddlewareBackend(models.Model):
     def _select_versions(self):
         return [('1.0', 'Middleware 1.0')]
 
-    @api.model
-    def _get_post_data(self):
-        session = ConnectorSession(self.env.cr, self.env.uid,
-                                   context=self.env.context)
-        backend = session.env['middleware.backend'].search([])[0]
-
-        self.server = xmlrpclib.ServerProxy(backend.location)
-        self.uid = self.server.login(backend.username, backend.password)
-        res = self.server.post(self.uid, backend.password, 'post')
-
-        for object in res:
-            if object['odoo_model'] == 'sale.order':
-                import ipdb
-                ipdb.set_trace()
-                sale_obj = self.env['sale.order']
-                sale = ast.literal_eval(object['model_data'])
-                partner_obj = self.env['res.partner']
-                partner = partner_obj.browse(int(sale['partner_id']))
-                fiscal_position = partner.fiscal_position
-                user_id = partner.user_id.id
-                section_id = partner.user_id.section_id.id
-                transporter_id = partner.transporter_id.id
-
-
-
-            if object['odoo_model'] == 'crm_claim':
-                rma = ast.literal_eval(object['model_data'])
-                partner_obj = self.env['res.partner']
-                partner = partner_obj.browse(int(rma['partner_id']))
-                delivery_address_id = partner.id
-                for contact in partner.child_ids:
-                    if contact.type == 'delivery':
-                        delivery_address_id = contact.id
-
-                comercial = partner.user_id.id
-                email_from = partner.email_web or partner.email
-                partner_phone = partner.phone
-                creation_date = date.today().strftime('%Y-%m-%d')
-                rma.update({'delivery_address_id': delivery_address_id, 'comercial': comercial,
-                            'email_from': email_from, 'partner_phone': partner_phone, 'date': creation_date})
-
-                rma_obj = self.env['crm.claim']
-                rma_obj.create(rma)
-
-            elif object['odoo_model'] == 'res.partner':
-                import ipdb
-                ipdb.set_trace()
-                contact = ast.literal_eval(object['model_data'])
-                partner_obj = self.env['res.partner']
-                partner = partner_obj.browse(contact['parent_id'])
-                partner.child_ids.create(contact)
-
-
     version = fields.Selection(
         selection='_select_versions',
         string='Version',
