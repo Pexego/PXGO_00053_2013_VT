@@ -44,21 +44,15 @@ class StockMove(models.Model):
         Si un albaran tiene todas sus lineas esperando disponibilidad y ninguna\
         o alguna linea cancelada, su estado sera esperando disponibilidad  
         """
-        old_state = False
-        new_state = False
-        res = False
+        res = super(StockMove, self).write(vals)
         for move in self:
-            old_state = self[0].picking_id.state
-            res = super(StockMove, self).write(vals)
-            new_state = self[0].picking_id.state
-            if old_state != new_state:
+            if vals.get('picking_id', False) or (vals.get('state', False) and move.picking_id):
                 session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                            context=self.env.context)
-                vals_picking = {'state': new_state}
-                order = self.env['sale.order'].search([('name', '=', self[0].picking_id.origin)])
+                order = self.env['sale.order'].search([('name', '=', move.picking_id.origin)])
                 for picking in order.picking_ids:
                     on_record_write.fire(session, 'stock.picking',
-                                         picking.id, vals_picking)
+                                         picking.id, vals)
 
             if vals.get('state', False) and vals["state"] != "draft":
                 for move in self:
