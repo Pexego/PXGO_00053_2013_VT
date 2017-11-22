@@ -18,8 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, exceptions, api, _
-import ipdb
+from openerp import models, fields, exceptions, api, _ipdb
 
 
 class StockHistory(models.Model):
