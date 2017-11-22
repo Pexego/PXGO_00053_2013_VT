@@ -189,6 +189,12 @@ msgstr "ID"
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:170
 #, python-format
+msgid "We would also like to inform you of the following invoices which will become due in the next 6 days"
+msgstr "Aprovechamos para informarle de los vencimientos en los próximos 6 días"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:170
+#, python-format
 msgid "Invoice Date"
 msgstr "Fecha factura"
 
