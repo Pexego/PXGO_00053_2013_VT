@@ -47,12 +47,13 @@ class StockMove(models.Model):
         res = super(StockMove, self).write(vals)
         for move in self:
             if vals.get('picking_id', False) or (vals.get('state', False) and move.picking_id):
+                vals_picking = {'state': vals['state']}
                 session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                            context=self.env.context)
                 order = self.env['sale.order'].search([('name', '=', move.picking_id.origin)])
                 for picking in order.picking_ids:
                     on_record_write.fire(session, 'stock.picking',
-                                         picking.id, vals)
+                                         picking.id, vals_picking)
 
             if vals.get('state', False) and vals["state"] != "draft":
                 for move in self:
