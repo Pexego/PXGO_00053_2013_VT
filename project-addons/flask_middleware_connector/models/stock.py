@@ -35,22 +35,16 @@ class StockMove(models.Model):
 
     @api.multi
     def write(self, vals):
-        """
-        Incluir la comprobacion de todas las lineas del albaran despues de esta funcion.
-        Si un albaran tiene alguna linea esperando disponibilidad, su estado sera parcialmente disponible.
-        Si un albaran tiene todas las lineas listas, ninguna esperando disponibilidad y ninguna o \
-        varias lineas canceladas, su estado tiene que ser listo para transeferir. 
-        SI un albaran tiene todas sus lineas canceladas su estado pasa a cancelado. 
-        Si un albaran tiene todas sus lineas esperando disponibilidad y ninguna\
-        o alguna linea cancelada, su estado sera esperando disponibilidad  
-        """
         res = super(StockMove, self).write(vals)
         for move in self:
             if vals.get('picking_id', False) or (vals.get('state', False) and move.picking_id):
-                vals_picking = {'state': vals['state']}
+                vals_picking = {'state': move.picking_id.state}
+                if not vals_picking['state']:
+                    vals_picking = {'state': vals['state']}
                 session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                            context=self.env.context)
-                order = self.env['sale.order'].search([('name', '=', move.picking_id.origin)])
+                order = self.env['sale.order'].search([('name', '=', move.picking_id.origin),
+                                                       ('state', '!=', '')])
                 for picking in order.picking_ids:
                     on_record_write.fire(session, 'stock.picking',
                                          picking.id, vals_picking)
