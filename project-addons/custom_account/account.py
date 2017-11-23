@@ -40,6 +40,16 @@ class AccountMoveLine(models.Model):
         moves = [x.move_id.id for x in invoices]
         return [('move_id', 'in', moves)]
 
+    @api.multi
+    def write(self, vals):
+        if vals.get('date_maturity'):
+            # Si antes de editar la fecha, ésta coincidía con la de la factura, también deben coincidir tras el cambio
+            # (significa que este efecto es el único asociado a la factura o el que tiene fecha vencimiento más tardía)
+            if self.date_maturity == self.invoice.date_due:
+                self.invoice.write({'date_due': vals['date_maturity']})
+        res = super(AccountMoveLine, self).write(vals)
+        return res
+
     scheme = fields.Selection(selection=[('CORE', 'Basic (CORE)'),
                                          ('B2B', 'Enterprise (B2B)')],
                               string='Scheme',
@@ -105,6 +115,9 @@ class AccountInvoice(models.Model):
                                     compute="get_subtotal_wt_rect", store=True)
     total_wt_rect = fields.Float("Total",
                                  compute="get_total_wt_rect", store=True)
+
+    date_due = fields.Date(string='Due Date',
+                           readonly=True, states={'draft': [('readonly', False)], 'open': [('readonly', False)]})
 
     @api.onchange('user_id')
     def onchage_user_id(self):
@@ -375,6 +388,15 @@ class AccountInvoice(models.Model):
         res = super(AccountInvoice, self)._get_first_invoice_fields(invoice)
         res.update({'section_id': invoice.section_id.id})
         return res
+
+    @api.multi
+    @api.onchange('date_due')
+    def onchange_date_due(self):
+        if self.state == 'open':
+            return {'warning': {
+                'title': _('Warning'),
+                'message': _('Remember to change due date in associated payment(s)')
+            }}
 
 
 class AccountJournal(models.Model):
