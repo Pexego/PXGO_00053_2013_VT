@@ -42,7 +42,7 @@ class AccountMoveLine(models.Model):
 
     @api.multi
     def write(self, vals):
-        if 'date_maturity' in vals:
+        if vals.get('date_maturity'):
             # Si antes de editar la fecha, ésta coincidía con la de la factura, también deben coincidir tras el cambio
             # (significa que este efecto es el único asociado a la factura o el que tiene fecha vencimiento más tardía)
             if self.date_maturity == self.invoice.date_due:
