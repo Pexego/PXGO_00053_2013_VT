@@ -118,24 +118,6 @@ class product_product(models.Model):
             if next_move[0]:
                 product.next_incoming_date = next_move[0].date_expected
 
-    @api.model
-    def _set_cicle_supplier_product(self, supplier_id, order_cycle):
-        """Set the cicle of a product depends of the first supplier"""
-        product_obj = self.env['product.product']
-        purchase_line_obj = self.env['purchase.order.line']
-        vals = {'order_cycle': order_cycle}
-        products_data = purchase_line_obj.read_group([('invoiced', '=', True),
-                                                      ('order_id.partner_id', '=', supplier_id)],
-                                                     ['product_id'],
-                                                     ['product_id'])
-        for product_data in products_data:
-            purchase = purchase_line_obj.search([('product_id', '=', product_data['product_id'][0]),
-                                                 ('invoiced', '=', True)],
-                                                order='id desc', limit=1)
-            if supplier_id == purchase.order_id.partner_id.id:
-                product = purchase.product_id
-                product.write(vals)
-
     @api.one
     def _get_min_suggested_qty(self):
         """ Get the min suggested qty to buy of a product """
