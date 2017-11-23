@@ -32,7 +32,6 @@ class StockMove(models.Model):
     _inherit = "stock.move"
 
     #TODO: Debería ser al asignar un producto, al cancelarlo, al finalizarlo y al eliminar la reserve
-
     @api.multi
     def write(self, vals):
         res = super(StockMove, self).write(vals)
@@ -43,16 +42,14 @@ class StockMove(models.Model):
                     vals_picking = {'state': vals['state']}
                 session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                            context=self.env.context)
-                order = self.env['sale.order'].search([('name', '=', move.picking_id.origin),
-                                                       ('state', '!=', '')])
+                order = self.env['sale.order'].search([('name', '=', move.picking_id.origin)])
                 for picking in order.picking_ids:
                     on_record_write.fire(session, 'stock.picking',
                                          picking.id, vals_picking)
 
             if vals.get('state', False) and vals["state"] != "draft":
-                for move in self:
-                    session = ConnectorSession(self.env.cr, SUPERUSER_ID,
-                                               context=self.env.context)
-                    on_stock_move_change.fire(session, 'stock.move',
-                                              move.id)
+                session = ConnectorSession(self.env.cr, SUPERUSER_ID,
+                                           context=self.env.context)
+                on_stock_move_change.fire(session, 'stock.move',
+                                          move.id)
         return res

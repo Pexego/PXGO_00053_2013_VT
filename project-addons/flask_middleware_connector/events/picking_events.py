@@ -176,7 +176,7 @@ def delay_export_picking_line_create(session, model_name, record_id, vals=None):
             and move_line.picking_id.partner_id.commercial_partner_id.active \
             and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing':
-        export_pickingproduct.delay(session, model_name, record_id, priority=1, eta=120)
+        export_pickingproduct.delay(session, model_name, record_id, priority=1, eta=180)
 
 
 @on_record_write(model_names='stock.move')
@@ -189,7 +189,7 @@ def delay_export_picking_line_write(session, model_name, record_id, vals):
             and move_line.picking_id.picking_type_id.code == 'outgoing':
         for field in up_fields:
             if field in vals:
-                update_pickingproduct.delay(session, model_name, record_id, priority=2, eta=180)
+                update_pickingproduct.delay(session, model_name, record_id, priority=2, eta=240)
 
 
 @on_record_unlink(model_names='stock.move')
@@ -199,7 +199,7 @@ def delay_export_picking_line_unlink(session, model_name, record_id):
             and move_line.picking_id.partner_id.commercial_partner_id.active \
             and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing':
-        unlink_pickingproduct.delay(session, model_name, record_id, priority=5, eta=180)
+        unlink_pickingproduct.delay(session, model_name, record_id, priority=5, eta=240)
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
