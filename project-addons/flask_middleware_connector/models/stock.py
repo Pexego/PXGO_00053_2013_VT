@@ -35,15 +35,22 @@ class StockMove(models.Model):
     @api.multi
     def write(self, vals):
         res = super(StockMove, self).write(vals)
+        picking_done = []
         for move in self:
             if vals.get('picking_id', False) or (vals.get('state', False) and move.picking_id):
-                vals_picking = {'state': move.picking_id.state}
-                if not vals_picking['state']:
+                import ipdb
+                ipdb.set_trace()
+                vals_picking = {}
+                if vals.get('state', False):
                     vals_picking = {'state': vals['state']}
+                else:
+                    vals_picking = {'state': move.picking_id.state}
                 session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                            context=self.env.context)
-                on_record_write.fire(session, 'stock.picking',
-                                     move.picking_id.id, vals_picking)
+                if move.picking_id.id not in picking_done:
+                    on_record_write.fire(session, 'stock.picking',
+                                         move.picking_id.id, vals_picking)
+                    picking_done.append(move.picking_id.id)
 
             if vals.get('state', False) and vals["state"] != "draft":
                 session = ConnectorSession(self.env.cr, SUPERUSER_ID,
