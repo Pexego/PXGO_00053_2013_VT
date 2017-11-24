@@ -22,6 +22,16 @@ msgid "Is all reserved"
 msgstr "Todo reservado"
 
 #. module: stock_custom
+#: field:stock.history,brand_id:0
+msgid "Brand"
+msgstr "Marca"
+
+#. module: stock_custom
+#: view:stock.history:stock_custom.view_stock_history_report_search_group_by_brand
+msgid "Brand"
+msgstr "Marca"
+
+#. module: stock_custom
 #: view:product.template:stock_custom.product_template_kanban_stock_view_inherit
 msgid "Incoming:"
 msgstr "Entrante:"

@@ -149,12 +149,15 @@ class MiddlewareBackend(models.Model):
             partner_ids = partner_obj.search([('is_company', '=', True),
                                               ('web', '=', True),
                                               ('customer', '=', True)])
+            contact_ids = partner_obj.search([('parent_id', 'in', partner_ids.ids),
+                                              ('active', '=', True),
+                                              ('customer', '=', True),
+                                              ('is_company', '=', False),
+                                              ('web', '=', False)])
+            for contact in contact_ids:
+                export_partner.delay(session, "res.partner", contact.id)
             #~ for partner in partner_ids:
-            #contact_ids = partner_obj.search([('parent_id', 'in', partner_ids.ids),
-            #                                  ('active', '=', True),
-            #                                  ('customer', '=', True)])
-            for partner in partner_ids:
-                export_partner.delay(session, "res.partner", partner.id)
+            #~     export_partner.delay(session, "res.partner", partner.id)
             #~ substates = self.env['substate.substate'].search([])
             #~ for substate in substates:
                 #~ export_rma_status(session, 'substate.substate', substate.id)

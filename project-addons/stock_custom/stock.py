@@ -19,7 +19,12 @@
 #
 ##############################################################################
 from openerp import models, fields, exceptions, api, _
-import ipdb
+
+
+class StockHistory(models.Model):
+    _inherit = 'stock.history'
+
+    brand_id = fields.Many2one(string="Brand", related='move_id.product_id.product_brand_id')
 
 
 class stock_picking(models.Model):

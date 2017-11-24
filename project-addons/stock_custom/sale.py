@@ -2,8 +2,11 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, fields
-
+from openerp import models, api, fields, SUPERUSER_ID
+from openerp.addons.connector.event import (on_record_create,
+                    on_record_write,
+                    on_record_unlink)
+from openerp.addons.connector.session import ConnectorSession
 
 class SaleOrder(models.Model):
 
@@ -14,11 +17,20 @@ class SaleOrder(models.Model):
     is_some_reserved = fields.Boolean(compute='_compute_is_some_reserved',
                                       search='_search_is_some_reserved')
 
+    # TODO Revisar esta funcion, cuando se comprueba que el estado no sea cancelado creo que no hace falta ya que esto tiene pinta de solo hacerse cuando se crea los albaranes
     @api.multi
     def action_ship_create(self):
         res = super(SaleOrder, self).action_ship_create()
         for sale in self:
             sale.picking_ids.write({'commercial': sale.user_id.id})
+            session = ConnectorSession(self.env.cr, SUPERUSER_ID,
+                                       context=self.env.context)
+            for picking in sale.picking_ids:
+                if picking.state != 'cancel':
+                    for move in picking.move_lines:
+                        on_record_create.fire(session, 'stock.move',
+                                              move.id)
+
         return res
 
     @api.multi

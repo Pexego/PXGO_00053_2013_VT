@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="calc_cicle_supplier_product_wzd_form" model="ir.ui.view">
+            <field name="name">calc.cicle.supplier.product.wzd.form</field>
+            <field name="model">calc.cicle.supplier.product</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Set cicle product">
+                    <group>
+                        <field name="supplier_id" required="True"/>
+                        <field name="order_cycle" required="True"/>
+                    </group>
+                    <button string="Set cicle" name="set_cicle_supplier_product" type="object" icon="gtk-ok"/>
+                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="calc_cicle_supplier_product_wzd_action" model="ir.actions.act_window">
+            <field name="name">Calculate cicle supplier</field>
+            <field name="res_model">calc.cicle.supplier.product</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="calc_cicle_supplier_product_wzd_form"/>
+        </record>
+
+        <menuitem id="calc_cicle_supplier_product_wzd_menu" action="calc_cicle_supplier_product_wzd_action"
+            parent="purchase.menu_procurement_management"/>
+
+    </data>
+</openerp>

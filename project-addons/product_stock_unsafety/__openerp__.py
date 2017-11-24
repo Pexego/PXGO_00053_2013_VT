@@ -53,6 +53,7 @@ Module that adds the management to the products under minimal.
              "wizard/create_purchase_order_view.xml",
              "wizard/assign_purchase_order_view.xml",
              "wizard/create_production_order_view.xml",
+             "wizard/calc_cicle_supplier_product_view.xml",
              "data/product_stock_unsafety_data.xml"],
     "installable": True,
     "application": True,
