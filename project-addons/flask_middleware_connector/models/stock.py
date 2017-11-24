@@ -38,8 +38,6 @@ class StockMove(models.Model):
         picking_done = []
         for move in self:
             if vals.get('picking_id', False) or (vals.get('state', False) and move.picking_id):
-                import ipdb
-                ipdb.set_trace()
                 vals_picking = {}
                 if vals.get('state', False):
                     vals_picking = {'state': vals['state']}
