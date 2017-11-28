@@ -41,13 +41,13 @@ class AccountMoveLine(models.Model):
         return [('move_id', 'in', moves)]
 
     @api.multi
-    def write(self, vals):
+    def write(self, vals, context=None, check=True, update_check=True):
         if vals.get('date_maturity'):
             # Si antes de editar la fecha, ésta coincidía con la de la factura, también deben coincidir tras el cambio
             # (significa que este efecto es el único asociado a la factura o el que tiene fecha vencimiento más tardía)
             if self.date_maturity == self.invoice.date_due:
                 self.invoice.write({'date_due': vals['date_maturity']})
-        res = super(AccountMoveLine, self).write(vals)
+        res = super(AccountMoveLine, self).write(vals, context=context, check=check, update_check=update_check)
         return res
 
     scheme = fields.Selection(selection=[('CORE', 'Basic (CORE)'),
