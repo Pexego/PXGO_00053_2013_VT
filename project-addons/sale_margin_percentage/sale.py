@@ -47,6 +47,8 @@ class sale_order_line(models.Model):
                     self.margin_perc = round((margin * 100) / purchase_price, 2)
                 else:
                     self.margin_perc = round((margin * 100) / sale_price, 2)
+            elif sale_price == 0.0 and self.discount == 100:
+                self.margin_perc = -100
             self.margin = margin
 
     margin = fields.Float(compute="_product_margin", string='Margin',
