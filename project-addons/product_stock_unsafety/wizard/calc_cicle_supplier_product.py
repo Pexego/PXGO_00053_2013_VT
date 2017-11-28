@@ -32,7 +32,6 @@ class CalcCicleSupplierProduct(models.TransientModel):
     @api.multi
     def set_cicle_supplier_product(self):
         """Set the cicle of a product depends of the first supplier"""
-        product_obj = self.env['product.product']
         purchase_line_obj = self.env['purchase.order.line']
         vals = {'order_cycle': self.order_cycle}
         products_data = purchase_line_obj.read_group([('invoiced', '=', True),
