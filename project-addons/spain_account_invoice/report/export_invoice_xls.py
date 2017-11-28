@@ -129,7 +129,7 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
                 "END "
                 "as partner_name, "
                 "p.id as partner_id, "
-                "t.tax_amount as tax_amount, "
+                "t.amount as amount, "
                 "t.base_amount as tax_base, "
                 "it.value as country_name, "
                 "t.name as tax_description "
@@ -309,7 +309,7 @@ try:
                         'totals': [1, 0, 'text', None]},
                     'tax_amount': {
                         'header': [1, 20, 'text', _render("_('Cuota IVA')")],
-                        'lines': [1, 0, 'number', _render("l['tax_amount']"),
+                        'lines': [1, 0, 'number', _render("l['amount']"),
                                   None, self.aml_cell_style_decimal],
                         'totals': [1, 0, 'text', None]},
                     'tax_amount_ret': {
@@ -628,8 +628,8 @@ try:
 
                         l['tax_amount_ret'] = 0.0
                         if l['tax_description'] == 'Retenciones IRPF 15%':
-                            l['tax_amount_ret'] = -float(l['tax_amount'])
-                            l['tax_amount'] = 0.0
+                            l['tax_amount_ret'] = -float(l['amount'])
+                            l['amount'] = 0.0
                             l['tax_base'] = 0.0
                             l['amount_total'] = 0.0
 
