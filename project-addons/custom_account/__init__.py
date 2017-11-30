@@ -28,3 +28,4 @@ from . import voucher
 from . import account_payment
 from . import payment
 from . import wizard
+from. import account_treasury_forecast

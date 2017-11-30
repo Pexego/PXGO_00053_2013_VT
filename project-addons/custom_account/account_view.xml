@@ -247,6 +247,7 @@
             <field name="arch" type="xml">
                 <field name="sale_ok" position="after">
                     <field name="blocked"/>
+                    <field name="treasury_forecast_type"/>
                 </field>
             </field>
         </record>
