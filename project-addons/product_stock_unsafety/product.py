@@ -122,7 +122,7 @@ class product_product(models.Model):
     def _get_min_suggested_qty(self):
         """ Get the min suggested qty to buy of a product """
         for product in self:
-            next_moves = self._get_next_move(product, limit=3)
+            next_moves = self._get_next_move(product, limit=3)[0]
             sixty_days_sales = - product.last_sixty_days_sales
             order_cycle = product.order_cycle
             res = (sixty_days_sales / 60.0) * order_cycle \
@@ -143,6 +143,6 @@ class product_product(models.Model):
     replacement_id = fields.Many2one("product.product", "Replaced by")
     min_days_id = fields.Many2one("minimum.day", "Stock Minimum Days",
                                   related="orderpoint_ids.min_days_id",
-                                  readonly=True)
+                                   readonly=True)
     next_incoming_date = fields.Date('Next incoming date', compute='_get_next_incoming_date')
     min_suggested_qty = fields.Integer('Min qty suggested', compute='_get_min_suggested_qty')
