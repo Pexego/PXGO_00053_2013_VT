@@ -214,11 +214,9 @@ class AccountInvoice(models.Model):
                                                       operator=operator,
                                                       limit=limit)
         args = args or []
-        recs = self.browse()
-        if not res:
-            recs = self.search([('invoice_number', operator, name)] + args,
-                               limit=limit)
-            res = recs.name_get()
+        recs = self.search([('invoice_number', operator, name)] + args, limit=limit)
+        if recs:
+            res.extend(recs.name_get())
         return res
 
     @api.multi
