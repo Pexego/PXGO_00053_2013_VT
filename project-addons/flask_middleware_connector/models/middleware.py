@@ -32,6 +32,7 @@ from ..events.commercial_events import export_commercial
 from ..events.product_events import update_product, export_product, export_product_category, export_product_brand, export_product_brand_rel
 from ..events.rma_events import export_rma, export_rmaproduct, export_rma_status
 from ..events.invoice_events import export_invoice
+from ..events.picking_events import export_picking
 from ..connector import get_environment
 import ast
 import xmlrpclib
@@ -149,24 +150,33 @@ class MiddlewareBackend(models.Model):
             partner_ids = partner_obj.search([('is_company', '=', True),
                                               ('web', '=', True),
                                               ('customer', '=', True)])
-            contact_ids = partner_obj.search([('parent_id', 'in', partner_ids.ids),
-                                              ('active', '=', True),
-                                              ('customer', '=', True),
-                                              ('is_company', '=', False),
-                                              ('web', '=', False)])
-            for contact in contact_ids:
-                export_partner.delay(session, "res.partner", contact.id)
+            #~ picking_obj = self.env['stock.picking']
+            #~ picking_ids = picking_obj.search([('partner_id', 'child_of', partner_ids.ids),
+                                              #~ ('state', '!=', 'cancel'),
+                                              #~ ('picking_type_id.code', '=', 'outgoing')])
+            #~ for picking in picking_ids:
+                #~ export_picking.delay(session, 'stock.picking', picking.id)
+
+            #~ contact_ids = partner_obj.search([('parent_id', 'in', partner_ids.ids),
+                                              #~ ('active', '=', True),
+                                              #~ ('customer', '=', True),
+                                              #~ ('is_company', '=', False),
+                                              #~ ('web', '=', False)])
+            #~ for contact in contact_ids:
+                #~ export_partner.delay(session, "res.partner", contact.id)
             #~ for partner in partner_ids:
             #~     export_partner.delay(session, "res.partner", partner.id)
             #~ substates = self.env['substate.substate'].search([])
             #~ for substate in substates:
                 #~ export_rma_status(session, 'substate.substate', substate.id)
-            #~ rmas = self.env['crm.claim'].search([('partner_id.web', '=', True)])
-            #~ for rma in rmas:
-                #~ export_rma(session, 'crm.claim', rma.id)
-                #~ for line in rma.claim_line_ids:
-                    #~ if line.product_id.web == 'published':
-                        #~ export_rmaproduct(session, 'claim.line', line.id)
+
+            rmas = self.env['crm.claim'].search(['|', ('partner_id.web', '=', True),
+                                                 ('partner_id.commercial_partner_id.web', '=', True)])
+            for rma in rmas:
+                export_rma.delay(session, 'crm.claim', rma.id)
+                for line in rma.claim_line_ids:
+                    #~if line.product_id.web == 'published':
+                    export_rmaproduct.delay(session, 'claim.line', line.id)
             #~ invoices = self.env['account.invoice'].\
                 #~ search([('commercial_partner_id.web',
                 # '=', True),
