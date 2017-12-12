@@ -98,7 +98,7 @@ class product_product(models.Model):
                     and product.categ_id.parent_id.name != 'Outlet':
                 product.joking_index = max_joking
 
-    @api.one
+    @api.model
     def _get_next_move(self, product, limit=1):
         next_move = self.env['stock.move'].search(
             [('product_id', '=', product.id),
@@ -115,14 +115,14 @@ class product_product(models.Model):
         """ Get next incoming date """
         for product in self:
             next_move = self._get_next_move(product, limit=1)
-            if next_move[0]:
-                product.next_incoming_date = next_move[0].date_expected
+            if next_move:
+                product.next_incoming_date = next_move.date_expected
 
     @api.one
     def _get_min_suggested_qty(self):
         """ Get the min suggested qty to buy of a product """
         for product in self:
-            next_moves = self._get_next_move(product, limit=3)[0]
+            next_moves = self._get_next_move(product, limit=3)
             sixty_days_sales = - product.last_sixty_days_sales
             order_cycle = product.order_cycle
             res = (sixty_days_sales / 60.0) * order_cycle \
