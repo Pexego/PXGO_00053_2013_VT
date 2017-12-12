@@ -589,3 +589,7 @@ msgstr "Recuerde cambiar la fecha de vencimiento en el(los) efecto(s) asociado(s
 msgid "Don't show on supplier payment follow-ups"
 msgstr "No mostrar en el seguimiento de pagos a proveedores"
 
+#. module: custom_account
+#: field:sale.report,main_supplier:0
+msgid "Main supplier"
+msgstr "Proveedor principal"
