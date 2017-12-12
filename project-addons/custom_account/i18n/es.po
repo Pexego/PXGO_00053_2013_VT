@@ -694,3 +694,7 @@ msgstr "Importe final"
 msgid "Account bank"
 msgstr "Cuenta bancaria"
 
+#. module: custom_account
+#: field:sale.report,main_supplier:0
+msgid "Main supplier"
+msgstr "Proveedor principal"
