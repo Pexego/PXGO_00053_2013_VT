@@ -51,3 +51,18 @@ class stock_days_positive(models.Model):
             GROUP BY product_id,datum
             HAVING sum(quantity) > 0)
             """ % tuple(location_ids))
+
+
+class stock_history(models.Model):
+    _inherit = 'stock.history'
+
+
+    def init(self, cr):
+        """
+            En un update all se inicia 2 veces esta vista, la 2º vez al
+            eliminarla elimina tambien stock_days, por lo que tenemos que
+            forzarlo para iniciarla de nuevo
+        """
+        res = super(stock_history,self).init(cr)
+        self.pool['stock.days.positive'].init(cr)
+        return res
