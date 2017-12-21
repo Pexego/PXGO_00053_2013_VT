@@ -202,7 +202,7 @@ class stock_deposit(models.Model):
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
                  'origin': deposit.sale_id.name,
-                 'date_done': datetime.now(),
+                 'date_done': fields.Datetime.now(),
                  'invoice_state': 'none',
                  'commercial': deposit.user_id.id,
                  'group_id': procurement_id.id})
@@ -211,7 +211,7 @@ class stock_deposit(models.Model):
                 'product_uom_qty': deposit.product_uom_qty,
                 'product_uom': deposit.product_uom.id,
                 'partner_id': deposit.partner_id.id,
-                'name': 'Loss Deposit: ' + deposit.move_id.name,
+                'name': u'Loss Deposit: ' + deposit.move_id.name,
                 'location_id': deposit.move_id.location_dest_id.id,
                 'location_dest_id': deposit_loss_loc.id,
                 'invoice_state': 'none',
