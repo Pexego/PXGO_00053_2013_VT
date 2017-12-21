@@ -166,7 +166,8 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", "user_id",
                  "property_product_pricelist", "lang", "sync", "type",
-                 "parent_id", "is_company", "email"]
+                 "parent_id", "is_company", "email", "active", "prospective"]
+
     if vals.get('is_company', False) or partner.is_company:
         contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
                                                    ('is_company', '=', False)])
@@ -177,7 +178,6 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             for contact in contacts:
                 export_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=120)
-
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
                                                               ('number', 'not like', '%ef%')])
             for invoice in invoices:
@@ -244,7 +244,8 @@ def delay_export_partner_write(session, model_name, record_id, vals):
 
             unlink_partner.delay(session, model_name, record_id, priority=1, eta=60)
 
-        elif "active" in vals and not vals["active"] and partner.web:
+        elif "active" in vals and not vals["active"] and partner.web or \
+                "prospective" in vals and not vals["prospective"]:
             for contact in contacts:
                 unlink_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=60)
