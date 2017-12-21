@@ -15,6 +15,10 @@
                             string="Sale"
                             class="oe_highlight"
                             states="draft"/>
+                        <button name="deposit_loss" type="object"
+                            string="Deposit loss"
+                            class="oe_highlight"
+                            states="draft"/>
                         <!--<button name="%(stock_deposit.stock_invoice_deposit_action)d" type="action"
                             string="Invoice"
                             class="oe_highlight"
@@ -41,8 +45,10 @@
                                     <field name="invoice_id" />
                                     <field name="move_id" />
                                     <field name="sale_move_id" />
+                                    <field name="loss_move_id" />
                                     <field name="sale_picking_id"/>
                                     <field name="return_picking_id" />
+                                    <field name="loss_picking_id" />
                                  </group>
                                 <group name="dates_grp" string="Dates">
                                     <field name="delivery_date" />

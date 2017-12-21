@@ -344,3 +344,22 @@ msgstr "Udm"
 msgid "deposit count"
 msgstr "Depósitos #"
 
+#. module: stock_deposit
+#: field:stock.deposit,loss_picking_id:0
+msgid "Loss Picking"
+msgstr "Albarán de pérdida"
+
+#. module: stock_deposit
+#: field:stock.deposit,loss_move_id:0
+msgid "Loss Move"
+msgstr "Mov. pérdida"
+
+#. module: stock_deposit
+#: selection:stock.deposit,state:0
+msgid "Loss"
+msgstr "Pérdida"
+
+#. module: stock_deposit
+#: view:stock.deposit:stock_deposit.view_stock_deposit_form
+msgid "Deposit loss"
+msgstr "A pérdidas"

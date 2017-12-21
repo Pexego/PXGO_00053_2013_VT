@@ -38,7 +38,7 @@
                 'custom_partner', 'sale_quick_payment', "web_readonly_bypass",
                 'account_direct_debit_with_refunds', 'account_followup',
                 'account_invoice_merge', 'customer_area', 'account_balance_reporting',
-                'account_voucher'],
+                'account_voucher', 'account_treasury_forecast'],
     "data": ['account_view.xml',
              'partner_view.xml',
              'report/account_invoice_report_view.xml',
@@ -50,6 +50,7 @@
              'purchase_view.xml',
              'product_view.xml',
              'report/sale_report_view.xml',
-             'voucher_view.xml'],
+             'voucher_view.xml',
+             'account_treasury_forecast_view.xml'],
     "installable": True
 }

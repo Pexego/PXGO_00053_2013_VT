@@ -60,7 +60,8 @@ class stock_deposit(models.Model):
                                  readonly=True)
     state = fields.Selection([('draft', 'Draft'), ('sale', 'Sale'),
                               ('returned', 'Returned'),
-                              ('invoiced', 'Invoiced')], 'State',
+                              ('invoiced', 'Invoiced'),
+                              ('loss', 'Loss')], 'State',
                              readonly=True, required=True)
     sale_move_id = fields.Many2one('stock.move', 'Sale Move', required=False,
                                    readonly=True, ondelete='cascade', select=1)
@@ -70,6 +71,11 @@ class stock_deposit(models.Model):
     return_picking_id = fields.Many2one('stock.picking', 'Return Picking',
                                         required=False, readonly=True,
                                         ondelete='cascade', select=1)
+    loss_move_id = fields.Many2one('stock.move', 'Loss Move', required=False,
+                                   readonly=True, ondelete='cascade', select=1)
+    loss_picking_id = fields.Many2one(related='loss_move_id.picking_id',
+                                      string='Loss picking',
+                                      readonly=True)
     user_id = fields.Many2one('res.users', 'Comercial', required=False,
                               readonly=False, ondelete='cascade', select=1)
 
@@ -184,3 +190,39 @@ class stock_deposit(models.Model):
         #~ if mail_ids:
             #~ mail_ids.send()
         return True
+
+    @api.multi
+    def deposit_loss(self):
+        move_obj = self.env['stock.move']
+        picking_type_id = self.env.ref('stock.picking_type_out')
+        deposit_loss_loc = self.env.ref('stock_deposit.stock_location_deposit_loss')
+        for deposit in self:
+            procurement_id = deposit.sale_id.procurement_group_id
+            picking = self.env['stock.picking'].create(
+                {'picking_type_id': picking_type_id.id,
+                 'partner_id': deposit.partner_id.id,
+                 'origin': deposit.sale_id.name,
+                 'date_done': fields.Datetime.now(),
+                 'invoice_state': 'none',
+                 'commercial': deposit.user_id.id,
+                 'group_id': procurement_id.id})
+            values = {
+                'product_id': deposit.product_id.id,
+                'product_uom_qty': deposit.product_uom_qty,
+                'product_uom': deposit.product_uom.id,
+                'partner_id': deposit.partner_id.id,
+                'name': u'Loss Deposit: ' + deposit.move_id.name,
+                'location_id': deposit.move_id.location_dest_id.id,
+                'location_dest_id': deposit_loss_loc.id,
+                'invoice_state': 'none',
+                'picking_id': picking.id,
+                'procurement_id': deposit.move_id.procurement_id.id,
+                'commercial': deposit.user_id.id,
+                'group_id': procurement_id.id
+            }
+            move = move_obj.create(values)
+            move.action_confirm()
+            move.force_assign()
+            move.action_done()
+            deposit.write({'state': 'loss', 'loss_move_id': move.id})
+
