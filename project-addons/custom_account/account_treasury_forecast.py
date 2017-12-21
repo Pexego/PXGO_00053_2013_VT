@@ -31,7 +31,7 @@ class AccountTreasuryForecast(models.Model):
 
     payment_mode_customer = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
     account_bank = fields.Many2one('res.partner.bank', 'Account bank',
-                                   domain=lambda self: [('partner_id', '=', self.env.user.company_id.id)])
+                                   domain=lambda self: [('partner_id', '=', self.env.user.company_id.partner_id.id)])
     check_old_open_customer = fields.Boolean(string="Old (opened)")
     opened_start_date_customer = fields.Date(string="Start Date")
     payment_mode_supplier = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
@@ -40,31 +40,24 @@ class AccountTreasuryForecast(models.Model):
 
     @api.one
     @api.constrains('payment_mode_customer', 'check_old_open_customer',
-                    'payment_mode_supplier', 'check_old_open_supplier')
+                    'payment_mode_supplier', 'check_old_open_supplier',
+                    'opened_start_date_customer', 'opened_start_date_supplier', 'start_date')
     def check_filter(self):
         if not self.payment_mode_customer or not self.payment_mode_supplier:
             raise exceptions.Warning(
                 _('Error!:: You must select one option for payment mode fields.'))
         elif self.payment_mode_customer != 'debit_receipt':
             if self.check_old_open_customer:
-                if not self.opened_start_date_customer:
+                if self.opened_start_date_customer >= self.start_date:
                     raise exceptions.Warning(
-                        _('Error!:: You must select start date for old opened invoices in customers.'))
-                else:
-                    if self.opened_start_date_customer >= self.start_date:
-                        raise exceptions.Warning(
-                            _('Error!:: Start date of old opened invoices in customers must be lower '
-                              'than the start date specified before.'))
+                        _('Error!:: Start date of old opened invoices in customers must be lower '
+                          'than the start date specified before.'))
         elif self.payment_mode_supplier != 'debit_receipt':
             if self.check_old_open_supplier:
-                if not self.opened_start_date_supplier:
+                if self.opened_start_date_supplier >= self.start_date:
                     raise exceptions.Warning(
-                        _('Error!:: You must select start date for old opened invoices in suppliers.'))
-                else:
-                    if self.opened_start_date_supplier >= self.start_date:
-                        raise exceptions.Warning(
-                            _('Error!:: Start date of old opened invoices in suppliers must be lower '
-                              'than the start date specified before.'))
+                        _('Error!:: Start date of old opened invoices in suppliers must be lower '
+                          'than the start date specified before.'))
 
     @api.one
     def calculate_invoices(self):
