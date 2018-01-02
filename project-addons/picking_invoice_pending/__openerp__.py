@@ -36,7 +36,8 @@
                 'purchase_discount',
                 'custom_account'],
     'data': ['res_company_view.xml',
-             'stock_picking_view.xml'],
+             'stock_picking_view.xml',
+             'email_template.xml'],
     'active': False,
     'installable': True,
 }
