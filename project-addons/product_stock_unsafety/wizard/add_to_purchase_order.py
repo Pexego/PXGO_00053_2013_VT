@@ -28,7 +28,8 @@ class AddToPurchaseOrderWzd(models.TransientModel):
 
     purchase_id = fields.Many2one("purchase.order", "Purchase",
                                   domain=[('state', '=', 'draft')])
-    purchase_qty = fields.Float("Qty. to purchase", required=True)
+    custom_purchase_qty = fields.Boolean('Custom purchase qty')
+    purchase_qty = fields.Float("Qty. to purchase")
 
     @api.multi
     def assign_purchase_order(self):
@@ -41,9 +42,13 @@ class AddToPurchaseOrderWzd(models.TransientModel):
             line_vals = {'order_id': purchase.id,
                          'product_id': product.id,
                          'price_unit': 0.0}
+            if obj.custom_purchase_qty:
+                purchase_qty = obj.purchase_qty
+            else:
+                purchase_qty = product.min_suggested_qty
             line_vals.update(purchase_line_obj.
                              onchange_product_id(purchase.pricelist_id.id,
-                                                 product.id, obj.purchase_qty,
+                                                 product.id, purchase_qty,
                                                  product.uom_id.id,
                                                  purchase.partner_id.id,
                                                  purchase.date_order,
