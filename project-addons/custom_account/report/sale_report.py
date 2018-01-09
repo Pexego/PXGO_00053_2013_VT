@@ -29,10 +29,12 @@ class SaleReport(models.Model):
     parent_category_id = fields.Many2one("product.category", 'Parent categ.')
     partner_ref = fields.Char("Partner ref")
     state_name = fields.Char("State Name")
+    main_supplier = fields.Many2one('res.partner', 'Main supplier')
 
     def _select(self):
         select_str = (", t.product_brand_id as brand_id, pc.parent_id as "
-                      "parent_category_id, rp.ref as partner_ref, cs.name as state_name")
+                      "parent_category_id, rp.ref as partner_ref, cs.name as state_name, "
+                      "t.manufacturer as main_supplier")
         return super(SaleReport, self)._select() + select_str
 
     def _from(self):
@@ -44,5 +46,5 @@ class SaleReport(models.Model):
 
 
     def _group_by(self):
-        group_by_str = """, t.product_brand_id, rp.ref, pc.parent_id, cs.name"""
+        group_by_str = """, t.product_brand_id, rp.ref, pc.parent_id, cs.name, t.manufacturer"""
         return super(SaleReport, self)._group_by() + group_by_str

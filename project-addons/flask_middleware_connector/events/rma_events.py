@@ -69,7 +69,7 @@ class RmaAdapter(GenericAdapter):
 def delay_create_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
     if rma.partner_id and rma.partner_id.web:
-        export_rma.delay(session, model_name, record_id, priority=5)
+        export_rma.delay(session, model_name, record_id)
 
 
 @on_record_write(model_names='crm.claim')
@@ -80,11 +80,11 @@ def delay_write_rma(session, model_name, record_id, vals):
     if vals.get("partner_id", False) and rma.partner_id.web:
         export_rma.delay(session, model_name, record_id)
     elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
-        unlink_rma.delay(session, model_name, record_id, priority=6)
+        unlink_rma.delay(session, model_name, record_id, priority=6, eta=120)
     elif rma.partner_id.web:
         for field in up_fields:
             if field in vals:
-                update_rma.delay(session, model_name, record_id)
+                update_rma.delay(session, model_name, record_id, priority=5, eta=60)
                 break
 
 
@@ -164,7 +164,7 @@ def delay_create_rma_line(session, model_name, record_id, vals):
     if claim_line.claim_id.partner_id.web and \
             (not claim_line.equivalent_product_id) and \
             vals.get('web', False):
-        export_rmaproduct.delay(session, model_name, record_id, priority=10, eta=60)
+        export_rmaproduct.delay(session, model_name, record_id, priority=10, eta=120)
 
 
 @on_record_write(model_names='claim.line')
@@ -176,14 +176,14 @@ def delay_write_rma_line(session, model_name, record_id, vals):
                  "internal_description", "product_returned_quantity",
                  "equivalent_product_id", "prodlot_id", "invoice_id"]
     if vals.get('web', False):
-        export_rmaproduct.delay(session, model_name, record_id, priority=10, eta=60)
+        export_rmaproduct.delay(session, model_name, record_id, priority=10, eta=120)
     elif not vals.get('web', False) and not claim_line.web:
-        unlink_rmaproduct.delay(session, model_name, record_id, priority=20, eta=120)
+        unlink_rmaproduct.delay(session, model_name, record_id, priority=20, eta=180)
     elif claim_line.claim_id.partner_id.web and claim_line.web:
         for field in up_fields:
             if field in vals:
                 update_rmaproduct.delay(session, model_name, record_id,
-                                        priority=15, eta=120)
+                                        priority=15, eta=180)
                 break
 
 
@@ -191,7 +191,7 @@ def delay_write_rma_line(session, model_name, record_id, vals):
 def delay_unlink_rma_line(session, model_name, record_id):
     claim_line = session.env[model_name].browse(record_id)
     if claim_line.claim_id.partner_id.web and claim_line.web:
-        unlink_rmaproduct.delay(session, model_name, record_id, priority=20, eta=120)
+        unlink_rmaproduct.delay(session, model_name, record_id, priority=20, eta=180)
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,

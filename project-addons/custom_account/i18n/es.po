@@ -646,22 +646,10 @@ msgid "Error!:: You must select one option for payment mode fields."
 msgstr "¡Error!:: Debe seleccionar una opción en los campos de método de pago."
 
 #. module: custom_account
-#: code:addons/custom_account/account_treasury_forecast.py:53
-#, python-format
-msgid "Error!:: You must select start date for old opened invoices in customers."
-msgstr "¡Error!:: Debe seleccionar una fecha de inicio para las facturas retrasadas (abiertas) en clientes."
-
-#. module: custom_account
 #: code:addons/custom_account/account_treasury_forecast.py:57
 #, python-format
 msgid "Error!:: Start date of old opened invoices in customers must be lower than the start date specified before."
 msgstr "¡Error!:: La fecha de inicio de las facturas atrasadas en clientes tiene que ser menor que la fecha de inicio especificada anteriormente."
-
-#. module: custom_account
-#: code:addons/custom_account/account_treasury_forecast.py:63
-#, python-format
-msgid "Error!:: You must select start date for old opened invoices in suppliers."
-msgstr "¡Error!:: Debe seleccionar una fecha de inicio para las facturas retrasadas (abiertas) en proveedores."
 
 #. module: custom_account
 #: code:addons/custom_account/account_treasury_forecast.py:67
@@ -694,3 +682,7 @@ msgstr "Importe final"
 msgid "Account bank"
 msgstr "Cuenta bancaria"
 
+#. module: custom_account
+#: field:sale.report,main_supplier:0
+msgid "Main supplier"
+msgstr "Proveedor principal"

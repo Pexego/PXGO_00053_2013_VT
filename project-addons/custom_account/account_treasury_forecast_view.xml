@@ -33,7 +33,8 @@
                                         <field name="account_bank" colspan="4" attrs="{'invisible':[('payment_mode_customer', '=', 'debit_receipt')]}"/>
                                         <field name="check_old_open_customer" colspan="2" attrs="{'invisible':[('payment_mode_customer', '=', 'debit_receipt')]}"/>
                                         <field name="opened_start_date_customer" colspan="2" attrs="{'invisible':['|', ('check_old_open_customer', '=', False),
-                                                                                                               ('payment_mode_customer', '=', 'debit_receipt')]}"/>
+                                                                                                               ('payment_mode_customer', '=', 'debit_receipt')],
+                                                                                                     'required': [('check_old_open_customer', '=', True)]}"/>
                                     </group>
                                     <separator string="" colspan="4" />
                                 </group>
@@ -47,7 +48,8 @@
                                     <group col="4" colspan="4">
                                         <field name="check_old_open_supplier" colspan="2" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
                                         <field name="opened_start_date_supplier" colspan="2" attrs="{'invisible':['|', ('check_old_open_supplier', '=', False),
-                                                                                                               ('payment_mode_supplier', '=', 'debit_receipt')]}"/>
+                                                                                                               ('payment_mode_supplier', '=', 'debit_receipt')],
+                                                                                                     'required': [('check_old_open_supplier', '=', True)]}"/>
                                     </group>
                                     <separator string="" colspan="4" />
                                 </group>

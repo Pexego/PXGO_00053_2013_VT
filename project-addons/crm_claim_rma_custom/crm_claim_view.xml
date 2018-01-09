@@ -2,18 +2,18 @@
 <openerp>
     <data>
 
-      <!--<record id="equivalent_products_wizard_inherit" model="ir.ui.view">
-          <field name="name">equivalent.products.wizard</field>
-          <field name="model">equivalent.products.wizard</field>
-          <field name="type">form</field>
-          <field name="inherit_id" ref="crm_claim_rma.equivalent_products_wizard"/>
-          <field name="arch" type="xml">
-              <xpath expr="//form[@string='Equivalent products']/group/field[@name='tag_ids']" position="replace">
-                <field name="tag_ids" on_change="onchange_tags(tag_ids)" >
+        <record id="equivalent_products_wizard_no_create" model="ir.ui.view">
+            <field name="name">equivalent.products.wizard.no.create</field>
+            <field name="model">equivalent.products.wizard</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="crm_claim_rma.equivalent_products_wizard"/>
+            <field name="arch" type="xml">
+                <field name="product_id" position="attributes">
+                    <attribute name="options">{'no_create': True, 'no_open': True}</attribute>
                 </field>
-              </xpath>
-          </field>
-      </record>-->
+            </field>
+        </record>
+
         <record model="ir.ui.view" id="crm_claim_rma_form_view_inherit_new_refund">
             <field name="name">CRM - Claim product return Form</field>
             <field name="model">crm.claim</field>
