@@ -18,9 +18,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions
+from openerp import models, fields, api, exceptions, SUPERUSER_ID
 from openerp.tools.translate import _
 from datetime import datetime, timedelta
+from openerp.addons.connector.event import on_record_write
+from openerp.addons.connector.session import ConnectorSession
 
 
 class AccountMoveLine(models.Model):
@@ -90,6 +92,35 @@ class AccountInvoiceLine(models.Model):
 class AccountInvoice(models.Model):
 
     _inherit = 'account.invoice'
+
+    @api.model
+    def _check_paid_invoices(self, offset_days):
+        today = datetime.today()
+        start_date = datetime.today() - timedelta(days=15)
+        invoice_ids = self.env['account.invoice'].search([('date_due', '>=', start_date),
+                                                          ('date_due', '<=', today),
+                                                          ('state', '=', 'paid'),
+                                                          ('payment_mode_id.name', '=', 'Recibo domiciliado'),
+                                                          ('number', 'not like', 'VEN'),
+                                                          ('type', '=', 'out_invoice')])
+        for invoice in invoice_ids:
+            res = {}
+            for payment in invoice.payment_ids:
+                for payment_account in payment.move_id.line_id:
+                    if payment_account.account_id.code == '43120000' \
+                                        and payment_account.account_id.user_type.code == 'receivable' \
+                                        and payment_account.reconcile_id:
+                        for reconcile_line in payment_account.reconcile_id.line_id:
+                            if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
+                                cron = self.env['ir.cron'].search_read([('function', '=', '_check_paid_invoices')])
+                                date = datetime.strptime(cron[0]['nextcall'], '%Y-%m-%d %H:%M:%S').date() - timedelta(days=offset_days)
+                                cron_date = date.strftime('%Y-%m-%d')
+                                if reconcile_line.date >= cron_date:
+                                    res['state'] = 'paid'
+                                    session = ConnectorSession(self.env.cr, SUPERUSER_ID,
+                                                               context=self.env.context)
+                                    on_record_write.fire(session, 'account.invoice',
+                                                         invoice.id, res, checked_state=True)
 
     attach_picking = fields.Boolean('Attach picking')
     picking_ids = fields.One2many('stock.picking', string='pickings',
