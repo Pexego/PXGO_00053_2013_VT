@@ -218,3 +218,52 @@ class StockPicking(models.Model):
                 pick.pending_stock_reverse_move_id.unlink()
         res = super(StockPicking, self).unlink()
         return res
+
+    @api.model
+    def cron_create_invoices(self):
+        ctx = dict(self._context)
+        picking_obj = self.env['stock.picking']
+        journal_obj = self.env['account.journal']
+        journal_id = journal_obj.search([('type', '=', 'sale')])[0].id
+        # Deliveries to Invoice
+        pickings = picking_obj.search([('state', '=', 'done'),
+                                       ('invoice_state', '=', '2binvoiced'),
+                                       ('invoice_type_id.name', '=', 'Diaria'),
+                                       ('picking_type_id.code', '=', 'outgoing'),
+                                       ('tests', '=', False)],
+                                      order='date_done')
+
+        # Create invoice
+        res = pickings.action_invoice_create(journal_id=journal_id, group=False, type='out_invoice')
+        if len(pickings) != len(res):
+            template = self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False)
+            ctx.update({
+                'default_model': 'stock.picking',
+                'default_res_id': pickings[0].id,
+                'default_use_template': bool(template.id),
+                'default_template_id': template.id,
+                'default_composition_mode': 'comment',
+                'mark_so_as_sent': True
+            })
+            composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
+            composer_id.with_context(ctx).send_mail()
+
+        # Validate invoice
+        invoices_created = self.env['account.invoice'].browse(res)
+        invoices_created.signal_workflow('invoice_open')
+        invoice_states = invoices_created.mapped('state')
+        if 'draft' in invoice_states or 'cancel' in invoice_states or \
+                'proforma' in invoice_states or 'proforma2' in invoice_states:
+            template = self.env.ref('picking_invoice_pending.alert_cron_validate_invoices', False)
+            ctx.update({
+                'default_model': 'account.invoice',
+                'default_res_id': invoices_created[0].id,
+                'default_use_template': bool(template.id),
+                'default_template_id': template.id,
+                'default_composition_mode': 'comment',
+                'mark_so_as_sent': True
+            })
+            composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
+            composer_id.with_context(ctx).send_mail()
+
+        return True

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data noupdate="1">
+
+        <record id="alert_cron_create_invoices" model="email.template">
+            <field name="name">Fail create invoice email</field>
+            <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
+            <field name="subject">Error en la facturacion automatica</field>
+            <field name="email_to">${'ssanchez@visiotechsecurity.com'}</field>
+            <field name="model_id" ref="picking_invoice_pending.model_stock_picking"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${'es_ES'}</field>
+            <field name="body_html"><![CDATA[
+<p>Se ha producido un error en la creacion de la facturacion automatica</p>
+]]>
+             </field>
+        </record>
+
+        <record id="alert_cron_validate_invoices" model="email.template">
+            <field name="name">Fail validate invoice email</field>
+            <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
+            <field name="subject">Error en la facturacion automatica</field>
+            <field name="email_to">${'ssanchez@visiotechsecurity.com'}</field>
+            <field name="model_id" ref="picking_invoice_pending.model_stock_picking"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${'es_ES'}</field>
+            <field name="body_html"><![CDATA[
+<p>Se ha producido un error en la validacion de la facturacion automatica</p>
+]]>
+             </field>
+        </record>
+
+    </data>
+</openerp>
