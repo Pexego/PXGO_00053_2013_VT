@@ -11,7 +11,7 @@
                     <group>
                         <field name="purchase_id" required="True"/>
                         <field name="custom_purchase_qty"/>
-                        <field name="purchase_qty" attrs="{'invisible': [('custom_purchase_qty', '=', False)]}"/>
+                        <field name="purchase_qty" attrs="{'invisible': [('custom_purchase_qty', '=', False)], 'required': [('custom_purchase_qty', '=', True)]}"/>
                     </group>
                     <button string="Add to purchase" name="assign_purchase_order" type="object" icon="gtk-ok"/>
                     <button string="Cancel" special="cancel" icon="gtk-cancel"/>
