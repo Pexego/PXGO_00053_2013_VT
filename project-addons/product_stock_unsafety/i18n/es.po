@@ -388,6 +388,11 @@ msgid "Qty ordered"
 msgstr "Cant. pedida"
 
 #. module: product_stock_unsafety
+#: field:add.to.purchase.order.wzd,custom_purchase_qty:0
+msgid "Custom purchase qty"
+msgstr "Cant. personalizada"
+
+#. module: product_stock_unsafety
 #: field:add.to.purchase.order.wzd,purchase_qty:0
 msgid "Qty. to purchase"
 msgstr "Cant. a comprar"
