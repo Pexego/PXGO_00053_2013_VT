@@ -58,8 +58,6 @@ class ResPartner(models.Model):
         actual_date = datetime.now()
         actual_year = actual_date.year
         past_month = actual_date - relativedelta(months=1)
-        import ipdb
-        ipdb.set_trace()
         past_month_year = past_month.year
         past_month = past_month.month
         past_year = actual_date - relativedelta(years=1)
