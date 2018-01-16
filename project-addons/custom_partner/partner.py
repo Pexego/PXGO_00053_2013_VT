@@ -30,6 +30,7 @@ from datetime import datetime, timedelta
 import dateutil.relativedelta
 from openerp.exceptions import ValidationError
 from calendar import monthrange
+from dateutil.relativedelta import relativedelta
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -54,19 +55,24 @@ class ResPartner(models.Model):
         partner_ids = partner_obj.search([('is_company', '=', True),
                                           ('child_ids', '!=', False),
                                           ('customer', '=', True)])
-        actual_year = datetime.now().year
-        actual_month = datetime.now().month
-        past_month = actual_month - 1
-        actual_day = datetime.now().day
+        actual_date = datetime.now()
+        actual_year = actual_date.year
+        past_month = actual_date - relativedelta(months=1)
+        past_month_year = past_month.year
+        past_month = past_month.month
+        past_year = actual_date - relativedelta(years=1)
+        past_year = past_year.year
+        actual_month = actual_date.month
+        actual_day = actual_date.day
         start_year = str(actual_year) + '-01-01'
-        start_past_year = str(actual_year - 1) + '-01-01'
+        start_past_year = str(past_year) + '-01-01'
         start_month = str(actual_year) + '-' + str(actual_month) + '-01'
-        start_past_month = str(actual_year) + '-' + str(past_month) + '-01'
+        start_past_month = str(past_month_year) + '-' + str(past_month) + '-01'
         end_year = str(actual_year) + '-12-31'
-        end_past_year = str(actual_year - 1) + '-12-31'
+        end_past_year = str(past_year) + '-12-31'
         end_month = str(actual_year) + '-' + str(actual_month) + '-' + str(actual_day)
-        end_day_past_month = monthrange(actual_year, past_month)
-        end_past_month = str(actual_year) + '-' + str(past_month) + '-' + str(end_day_past_month[1])
+        end_day_past_month = monthrange(past_month_year, past_month)
+        end_past_month = str(past_month_year) + '-' + str(past_month) + '-' + str(end_day_past_month[1])
         for partner in partner_ids:
             invoice_ids_year = invoice_obj.search_read([('date_invoice', '>=', start_year),
                                                    ('date_invoice', '<=', end_year),
