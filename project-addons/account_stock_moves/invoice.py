@@ -43,13 +43,16 @@ class account_invoice_line(orm.Model):
                                        move.product_id.uom_id.id)
             total_qty += qty
             if move.product_id.cost_method in ['average', 'real'] \
-                    and move.price_unit:
+                    and (move.price_unit or
+                         (move.purchase_line_id and
+                          not move.purchase_line_id.price_subtotal)):
                 price_unit = move.price_unit
                 moves_price += price_unit * qty
             else:
                 price_unit = move.product_id.standard_price
                 moves_price += price_unit * qty
             res['price_move'] = moves_price
+            res['move_id'] = move.id
             if move.purchase_line_id and move.picking_id and \
                     move.picking_id.backorder_id:
                 res['create_date'] = move._get_origin_create_date()
@@ -72,7 +75,8 @@ class account_invoice_line(orm.Model):
                 company_currency = i_line.invoice_id.company_id.currency_id.id
                 if i_line.product_id \
                     and i_line.product_id.valuation == 'real_time' \
-                        and i_line.product_id.type != 'service':
+                        and i_line.product_id.type != 'service' and \
+                        i_line.move_id:
                     # get the price difference account at the product
                     acc = i_line.product_id.\
                         property_account_creditor_price_difference \
@@ -106,7 +110,8 @@ class account_invoice_line(orm.Model):
                     # calculate and write down the possible price difference
                     # between invoice price and product price
                     for line in res:
-                        if i_line.product_id.id == line['product_id']:
+                        if 'move_id' in line and \
+                                i_line.move_id.id == line['move_id']:
 
                             if 'price_move' in line and line['price_move'] != \
                                     i_line.price_subtotal and acc:
