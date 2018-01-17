@@ -35,7 +35,7 @@ import base64
 class InvoiceExporter(Exporter):
     _model_name = ['account.invoice']
 
-    def update(self, binding_id, mode, state=None):
+    def update(self, binding_id, mode):
         invoice = self.model.browse(binding_id)
         report = self.env['report'].browse(invoice.id)
         result = report.get_pdf('account.report_invoice_custom')
@@ -49,17 +49,9 @@ class InvoiceExporter(Exporter):
                 'subtotal_wt_rect': invoice.subtotal_wt_rect,
                 'total_wt_rect': invoice.total_wt_rect,
                 'pdf_file_data': result_encode,
+                'state': invoice.state_web or invoice._get_state_web(), #Llamada a _get_state_web para evitar problemas en facturas que no tienen inicializado ese valor
                 'payment_mode_id': invoice.payment_mode_id.name}
-        if state:
-            vals['state'] = state
-        else:
-            vals['state'] = invoice.state
-            res = _new_state_invoice(invoice, vals)
-            if res:
-                vals['state'] = res
         if mode == 'insert':
-            if invoice.returned_payment and invoice.state == 'open':
-                vals['state'] = 'returned'
             return self.backend_adapter.insert(vals)
         else:
             return self.backend_adapter.update(binding_id, vals)
@@ -74,60 +66,29 @@ class InvoiceAdapter(GenericAdapter):
     _middleware_model = 'invoice'
 
 
-def _new_state_invoice(invoice, vals):
-    res = None
-    if 'payment_mode_id' in vals and vals.get('payment_mode_id', False) == 'Recibo domicialiado' \
-            or invoice.payment_mode_id.name == 'Recibo domiciliado':
-        if 'returned_payment' in vals and vals.get('returned_payment', False) or invoice.returned_payment:
-            if 'state' in vals and vals.get('state', False) == 'open' and \
-                    invoice.returned_payment or ('returned_payment' in vals and vals.get('returned_payment', False)):
-                res = 'returned'
-        elif 'state' in vals and vals.get('state', False) == 'paid':
-            for payment in invoice.payment_ids:
-                for payment_account in payment.move_id.line_id:
-                    if payment_account.account_id.code == '43120000' \
-                                        and payment_account.account_id.user_type.code == 'receivable' \
-                                        and payment_account.reconcile_id:
-                        for reconcile_line in payment_account.reconcile_id.line_id:
-                            if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
-                                res = 'paid'
-                        break
-                    else:
-                        res = 'remitted'
-                if res == 'paid':
-                    break
-    return res
-
-
 @on_record_write(model_names='account.invoice')
-def delay_write_invoice(session, model_name, record_id, vals, checked_state=False):
+def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
-    up_fields = ["number", "client_ref", "date_invoice", "state", "partner_id",
+    up_fields = ["number", "client_ref", "date_invoice", "state_web", "partner_id",
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect", "payment_ids",
                  "returned_payment", "payment_mode_id"]
-
-    if invoice.partner_id and invoice.commercial_partner_id.web:
+    if invoice.partner_id and invoice.commercial_partner_id.web and 'state' in vals or 'state_web' in vals:
         job = session.env['queue.job'].search([('func_string', 'not like', '%confirm_one_invoice%'),
                                                ('func_string', 'like', '%, ' + str(invoice.id) + ')%'),
                                                ('model_name', '=', model_name)], order='date_created desc', limit=1)
         if job:
-            if not checked_state:
-                vals['state'] = _new_state_invoice(invoice, vals)
-                if not vals['state']:
-                    del vals['state']
-            if vals.get('state', False) == 'open' and 'unlink_invoice' in job[0].func_string:
+            if invoice.state_web == 'open' and 'unlink_invoice' in job[0].func_string:
                 export_invoice.delay(session, model_name, record_id, priority=5)
-            elif vals.get('state', False) in ('paid', 'returned', 'remitted'):
-                update_invoice.delay(session, model_name, record_id, state=vals.get('state', False),
-                                     priority=10, eta=60)
-            elif vals.get('state', False) == 'cancel' and 'unlink_invoice' not in job[0].func_string:
+            elif invoice.state_web in ('paid', 'returned', 'remitted'):
+                update_invoice.delay(session, model_name, record_id, priority=10, eta=60)
+            elif invoice.state_web == 'cancel' and 'unlink_invoice' not in job[0].func_string:
                 unlink_invoice.delay(session, model_name, record_id, priority=15)
-            elif invoice.state == 'open':
+            elif invoice.state_web == 'open':
                 for field in up_fields:
                     if field in vals:
                         update_invoice.delay(session, model_name, record_id, priority=10, eta=60)
                         break
-        elif invoice.state == 'open':
+        elif invoice.state_web == 'open':
             export_invoice.delay(session, model_name, record_id, priority=5, eta=60)
 
 
@@ -140,9 +101,9 @@ def export_invoice(session, model_name, record_id):
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
-def update_invoice(session, model_name, record_id, state=None):
+def update_invoice(session, model_name, record_id):
     invoice_exporter = _get_exporter(session, model_name, record_id, InvoiceExporter)
-    return invoice_exporter.update(record_id, "update", state)
+    return invoice_exporter.update(record_id, "update")
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
