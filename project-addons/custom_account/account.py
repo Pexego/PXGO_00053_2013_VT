@@ -94,13 +94,13 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     @api.model
-    def _check_paid_invoices(self, offset_days):
+    def _check_paid_invoices(self, start_days, offset_days):
         today = datetime.today()
-        start_date = datetime.today() - timedelta(days=15)
+        start_date = datetime.today() - timedelta(days=start_days)
         invoice_ids = self.env['account.invoice'].search([('date_due', '>=', start_date),
                                                           ('date_due', '<=', today),
-                                                          ('state', '=', 'paid'),
-                                                          ('payment_mode_id.name', '=', 'Recibo domiciliado'),
+                                                          ('state_web', '=', 'remitted'),
+                                                          ('payment_mode_id.name', '=', 'Recibo domiciliado'), #No estoy seguro de que el filtro del modo de pago sea necesario
                                                           ('number', 'not like', 'VEN'),
                                                           ('type', '=', 'out_invoice')])
         for invoice in invoice_ids:
@@ -116,11 +116,7 @@ class AccountInvoice(models.Model):
                                 date = datetime.strptime(cron[0]['nextcall'], '%Y-%m-%d %H:%M:%S').date() - timedelta(days=offset_days)
                                 cron_date = date.strftime('%Y-%m-%d')
                                 if reconcile_line.date >= cron_date:
-                                    res['state'] = 'paid'
-                                    session = ConnectorSession(self.env.cr, SUPERUSER_ID,
-                                                               context=self.env.context)
-                                    on_record_write.fire(session, 'account.invoice',
-                                                         invoice.id, res, checked_state=True)
+                                    invoice._get_state_web()
 
     attach_picking = fields.Boolean('Attach picking')
     picking_ids = fields.One2many('stock.picking', string='pickings',
@@ -149,6 +145,32 @@ class AccountInvoice(models.Model):
 
     date_due = fields.Date(string='Due Date',
                            readonly=True, states={'draft': [('readonly', False)], 'open': [('readonly', False)]})
+    state_web = fields.Char('State web', compute='_get_state_web', store=True)
+
+    @api.multi
+    @api.depends('state', 'payment_mode_id', 'payment_ids')
+    def _get_state_web(self):
+        for invoice in self:
+            val = invoice.state
+            if invoice.payment_mode_id:
+                if invoice.state == 'open' and invoice.returned_payment:
+                    self.state_web = 'returned'
+                elif invoice.state == 'paid':
+                    for payment in invoice.payment_ids:
+                        for payment_account in payment.move_id.line_id:
+                            if payment_account.account_id.code == '43120000' \
+                                                and payment_account.account_id.user_type.code == 'receivable' \
+                                                and payment_account.reconcile_id:
+                                for reconcile_line in payment_account.reconcile_id.line_id:
+                                    if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
+                                        self.state_web = 'paid'
+                                break
+                            else:
+                                self.state_web = 'remitted'
+                else:
+                    self.state_web = val
+            else:
+                self.state_web = val
 
     @api.onchange('user_id')
     def onchage_user_id(self):
