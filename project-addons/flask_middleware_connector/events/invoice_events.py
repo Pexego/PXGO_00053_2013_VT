@@ -70,8 +70,7 @@ class InvoiceAdapter(GenericAdapter):
 def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
     up_fields = ["number", "client_ref", "date_invoice", "state_web", "partner_id",
-                 "date_due", "subtotal_wt_rect", "subtotal_wt_rect", "payment_ids",
-                 "returned_payment", "payment_mode_id"]
+                 "date_due", "subtotal_wt_rect", "subtotal_wt_rect", "payment_ids"]
     if invoice.partner_id and invoice.commercial_partner_id.web and 'state' in vals or 'state_web' in vals:
         job = session.env['queue.job'].search([('func_string', 'not like', '%confirm_one_invoice%'),
                                                ('func_string', 'like', '%, ' + str(invoice.id) + ')%'),
@@ -92,7 +91,7 @@ def delay_write_invoice(session, model_name, record_id, vals):
             export_invoice.delay(session, model_name, record_id, priority=5, eta=60)
 
 
-@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+@job(retry_pattern={1: 10  * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def export_invoice(session, model_name, record_id):
     invoice_exporter = _get_exporter(session, model_name, record_id, InvoiceExporter)
