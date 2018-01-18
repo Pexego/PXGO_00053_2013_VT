@@ -151,8 +151,6 @@ class AccountInvoice(models.Model):
     def _check_payments(self):
         res = ''
         for payment in self.payment_ids:
-            import ipdb
-            ipdb.set_trace()
             for payment_account in payment.move_id.line_id:
                 if payment_account.account_id.id == self.payment_mode_id.transfer_account_id.id:
                     for reconcile_line in payment_account.reconcile_id.line_id:
