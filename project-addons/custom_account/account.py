@@ -94,29 +94,9 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     @api.model
-    def _check_paid_invoices(self, start_days, offset_days):
-        today = datetime.today()
-        start_date = datetime.today() - timedelta(days=start_days)
-        invoice_ids = self.env['account.invoice'].search([('date_due', '>=', start_date),
-                                                          ('date_due', '<=', today),
-                                                          ('state_web', '=', 'remitted'),
-                                                          ('payment_mode_id.name', '=', 'Recibo domiciliado'), #No estoy seguro de que el filtro del modo de pago sea necesario
-                                                          ('number', 'not like', 'VEN'),
-                                                          ('type', '=', 'out_invoice')])
-        for invoice in invoice_ids:
-            res = {}
-            for payment in invoice.payment_ids:
-                for payment_account in payment.move_id.line_id:
-                    if payment_account.account_id.code == '43120000' \
-                                        and payment_account.account_id.user_type.code == 'receivable' \
-                                        and payment_account.reconcile_id:
-                        for reconcile_line in payment_account.reconcile_id.line_id:
-                            if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
-                                cron = self.env['ir.cron'].search_read([('function', '=', '_check_paid_invoices')])
-                                date = datetime.strptime(cron[0]['nextcall'], '%Y-%m-%d %H:%M:%S').date() - timedelta(days=offset_days)
-                                cron_date = date.strftime('%Y-%m-%d')
-                                if reconcile_line.date >= cron_date:
-                                    invoice._get_state_web()
+    def _check_paid_invoices(self):
+        invoice_ids = self.env['account.invoice'].search([('state_web', '=', 'remitted')])
+        invoice_ids._get_state_web()
 
     attach_picking = fields.Boolean('Attach picking')
     picking_ids = fields.One2many('stock.picking', string='pickings',
@@ -151,26 +131,37 @@ class AccountInvoice(models.Model):
     @api.depends('state', 'payment_mode_id', 'payment_ids')
     def _get_state_web(self):
         for invoice in self:
-            val = invoice.state
+            res = ''
+            invoice_state = invoice.state
             if invoice.payment_mode_id:
                 if invoice.state == 'open' and invoice.returned_payment:
-                    self.state_web = 'returned'
-                elif invoice.state == 'paid':
-                    for payment in invoice.payment_ids:
-                        for payment_account in payment.move_id.line_id:
-                            if payment_account.account_id.code == '43120000' \
-                                                and payment_account.account_id.user_type.code == 'receivable' \
-                                                and payment_account.reconcile_id:
-                                for reconcile_line in payment_account.reconcile_id.line_id:
-                                    if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
-                                        self.state_web = 'paid'
-                                break
-                            else:
-                                self.state_web = 'remitted'
+                    res = 'returned'
+                elif invoice.state == 'paid' \
+                        and invoice.payment_mode_id.transfer_account_id \
+                        and invoice.payment_mode_id.payment_order_type == 'debit':
+                    res = invoice._check_payments()[0]
                 else:
-                    self.state_web = val
+                    res = invoice_state
             else:
-                self.state_web = val
+                res = invoice_state
+
+            invoice.state_web = res
+
+    @api.one
+    def _check_payments(self):
+        res = ''
+        for payment in self.payment_ids:
+            import ipdb
+            ipdb.set_trace()
+            for payment_account in payment.move_id.line_id:
+                if payment_account.account_id.id == self.payment_mode_id.transfer_account_id.id:
+                    for reconcile_line in payment_account.reconcile_id.line_id:
+                        if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
+                            res = 'paid'
+                            return res
+                else:
+                    res = 'remitted'
+        return res
 
     @api.onchange('user_id')
     def onchage_user_id(self):
