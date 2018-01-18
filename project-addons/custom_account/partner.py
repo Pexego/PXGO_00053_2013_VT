@@ -115,3 +115,8 @@ class Partner(models.Model):
         self.payment_responsible_id = self.user_id.id
         if self.user_id and self.user_id.default_section_id:
             self.section_id = self.user_id.default_section_id.id
+
+    @api.multi
+    def action_done(self):
+        return self.write({'payment_next_action_date': False, 'payment_next_action': ''})
+
