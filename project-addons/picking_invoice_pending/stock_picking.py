@@ -221,20 +221,24 @@ class StockPicking(models.Model):
 
     @api.model
     def cron_create_invoices(self):
-        ctx = dict(self._context)
         picking_obj = self.env['stock.picking']
         journal_obj = self.env['account.journal']
         journal_id = journal_obj.search([('type', '=', 'sale')])[0].id
+        inv_type = 'out_invoice'
+        ctx = dict(self._context or {})
+        ctx['date_inv'] = False
+        ctx['inv_type'] = inv_type
+
         # Deliveries to Invoice
-        pickings = picking_obj.search([('state', '=', 'done'),
-                                       ('invoice_state', '=', '2binvoiced'),
-                                       ('invoice_type_id.name', '=', 'Diaria'),
-                                       ('picking_type_id.code', '=', 'outgoing'),
-                                       ('tests', '=', False)],
-                                      order='date_done')
+        pickings = picking_obj.with_context(ctx).search([('state', '=', 'done'),
+                                                         ('invoice_state', '=', '2binvoiced'),
+                                                         ('invoice_type_id.name', '=', 'Diaria'),
+                                                         ('picking_type_id.code', '=', 'outgoing'),
+                                                         ('tests', '=', False)],
+                                                        order='date_done')
 
         # Create invoice
-        res = pickings.action_invoice_create(journal_id=journal_id, group=False, type='out_invoice')
+        res = pickings.action_invoice_create(journal_id=journal_id, group=False, type=inv_type)
         if len(pickings) != len(res):
             template = self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False)
             ctx.update({
