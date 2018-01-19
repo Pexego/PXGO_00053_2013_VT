@@ -23,3 +23,4 @@ from . import connector
 from . import backend
 from . import events
 from . import models
+from . import wizard
