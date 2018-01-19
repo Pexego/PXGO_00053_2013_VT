@@ -18,9 +18,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions
+from openerp import models, fields, api, exceptions, SUPERUSER_ID
 from openerp.tools.translate import _
 from datetime import datetime, timedelta
+from openerp.addons.connector.event import on_record_write
+from openerp.addons.connector.session import ConnectorSession
 
 
 class AccountMoveLine(models.Model):
@@ -91,6 +93,11 @@ class AccountInvoice(models.Model):
 
     _inherit = 'account.invoice'
 
+    @api.model
+    def _check_paid_invoices(self):
+        invoice_ids = self.env['account.invoice'].search([('state_web', '=', 'remitted')])
+        invoice_ids._get_state_web()
+
     attach_picking = fields.Boolean('Attach picking')
     picking_ids = fields.One2many('stock.picking', string='pickings',
                                   compute='_get_picking_ids')
@@ -118,6 +125,41 @@ class AccountInvoice(models.Model):
 
     date_due = fields.Date(string='Due Date',
                            readonly=True, states={'draft': [('readonly', False)], 'open': [('readonly', False)]})
+    state_web = fields.Char('State web', compute='_get_state_web', store=True)
+
+    @api.multi
+    @api.depends('state', 'payment_mode_id', 'payment_ids')
+    def _get_state_web(self):
+        for invoice in self:
+            res = ''
+            invoice_state = invoice.state
+            if invoice.payment_mode_id:
+                if invoice.state == 'open' and invoice.returned_payment:
+                    res = 'returned'
+                elif invoice.state == 'paid' \
+                        and invoice.payment_mode_id.transfer_account_id \
+                        and invoice.payment_mode_id.payment_order_type == 'debit':
+                    res = invoice._check_payments()[0]
+                else:
+                    res = invoice_state
+            else:
+                res = invoice_state
+
+            invoice.state_web = res
+
+    @api.one
+    def _check_payments(self):
+        res = ''
+        for payment in self.payment_ids:
+            for payment_account in payment.move_id.line_id:
+                if payment_account.account_id.id == self.payment_mode_id.transfer_account_id.id:
+                    for reconcile_line in payment_account.reconcile_id.line_id:
+                        if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
+                            res = 'paid'
+                            return res
+                else:
+                    res = 'remitted'
+        return res
 
     @api.onchange('user_id')
     def onchage_user_id(self):

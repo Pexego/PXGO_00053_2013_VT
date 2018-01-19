@@ -49,5 +49,37 @@
         <menuitem name="Middleware Backends" parent="connector.menu_connector"
             action="action_middleware_backend" id="menu_middleware_backend"/>
 
+        <record id="middleware_backend_export_form" model="ir.ui.view">
+            <field name="name">middleware.backend.export.form</field>
+            <field name="model">middleware.backend.export</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Export Wizard" version="7.0">
+                    <group>
+                        <field name="type_export"/>
+                        <field name="mode_export"/>
+                    </group>
+                    <footer>
+                        <button name="do_export" type="object"
+                            string="Start" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="middleware_backend_export_action" model="ir.actions.act_window">
+            <field name="name">Export Wizard Form</field>
+            <field name="res_model">middleware.backend.export</field>
+            <field name="view_mode">form</field>
+            <field name="view_type">form</field>
+            <field name="target">new</field>
+            <field name="view_id" ref="middleware_backend_export_form"/>
+        </record>
+
+        <menuitem id="middleware_backend_export_menu" action="middleware_backend_export_action"
+            parent="connector.menu_connector"/>
+
     </data>
 </openerp>
