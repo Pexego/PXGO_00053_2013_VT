@@ -41,17 +41,15 @@
             <field name="arch" type="xml">
                 <search string="Visit Search">
                     <field name="user_id"/>
-                    <field name="partner_id"/>
+                    <field name="partner_id" filter_domain="['|', ('partner_id','child_of', self),
+                                                                    '&amp;', ('partner_id.active', '=', False),
+                                                                             ('partner_id','ilike', self)]"/>
                     <field name="salesperson_select"/>
                     <field name="region_ids" string="Commercial region" filter_domain="['|', ('region_ids.code','ilike',self), ('region_ids','ilike',self)]"/>
                     <separator/>
                     <filter string="Email sent" name="email_sent" domain="[('email_sent','=',True)]"/>
-                    <field name="partner_id">
-                        <filter domain="[('partner_id.active', '=', False)]" string="Prospective Customs"/>
-                    </field>
-                    <field name="partner_id">
-                        <filter domain="[('partner_id.active','=',True)]" string="Active Customs"/>
-                    </field>
+                    <filter string="Prospective Customs" domain="[('partner_id.active', '=', False)]"/>
+                    <filter string="Active Customs" domain="[('partner_id.active','=',True)]"/>
                     <separator/>
                     <group string="Group By">
                         <filter string="Partner" domain="[]"
@@ -86,7 +84,7 @@
                         <div>
                             <h2>
                                 <field name="partner_id" string="Partner"
-                                       domain="['&amp;', '|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True), ('is_company', '=', True)]"/>
+                                       domain="['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]"/>
                             </h2>
                         </div>
                         <div>
