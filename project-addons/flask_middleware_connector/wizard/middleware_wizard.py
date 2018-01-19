@@ -60,11 +60,10 @@ class MiddlewareBackend(models.Model):
             partner_ids = partner_obj.search([('is_company', '=', True),
                                               ('web', '=', True),
                                               ('customer', '=', True)])
-            contact_ids = partner_obj.search([('parent_id', 'in', partner_ids.ids),
-                                              ('active', '=', True),
+            contact_ids = partner_obj.search([('id', 'child_of', partner_ids.ids),
+                                              ('id', 'not in', partner_ids.ids),
                                               ('customer', '=', True),
-                                              ('is_company', '=', False),
-                                              ('web', '=', False)])
+                                              ('is_company', '=', False)])
             if self.mode_export == 'export':
                 for partner in partner_ids:
                     export_partner.delay(session, "res.partner", partner.id)
