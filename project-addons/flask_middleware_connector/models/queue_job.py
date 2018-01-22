@@ -25,7 +25,7 @@ from openerp import models, fields, api
 class QueueJob(models.Model):
     _inherit = 'queue.job'
 
-    @api.multi
+    @api.model
     def create(self, vals):
         res = super(QueueJob, self).create(vals)
         if not res.active:
