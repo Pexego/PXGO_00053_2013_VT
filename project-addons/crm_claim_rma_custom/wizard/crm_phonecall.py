@@ -69,7 +69,9 @@ class CrmPhonecall(models.Model):
     scope = fields.Selection(SCOPE, 'Scope call')
     call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type', required=True)
     partner_country = fields.Many2one(related='partner_id.country_id', string='Country', readonly=True)
+    partner_salesperson = fields.Many2one(related='partner_id.user_id', string='Salesperson', readonly=True)
     brand_id = fields.Many2one('product.brand', 'Brand')
+    subject = fields.Char('Call Subject')
 
     def utc_to_local(self, utc_dt):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
@@ -131,3 +133,18 @@ class CrmPhonecall(models.Model):
             'brand_id': self.brand_id.id
         }
         self.write(datas)
+
+
+class ResPartner(models.Model):
+    """ Inherits partner and adds Phonecalls information in the partner form """
+    _inherit = 'res.partner'
+
+    @api.multi
+    def _sat_phonecall_count(self):
+        phonecall_obj = self.env['crm.phonecall']
+        for partner in self:
+            phonecalls = phonecall_obj.search_count([('partner_id', 'child_of', partner.id), ('scope', '=', 'sat')])
+            partner.sat_phonecall_count = phonecalls
+
+    sat_phonecall_count = fields.Integer(compute='_sat_phonecall_count', store=False, string='SAT Calls')
+    phonecall_ids = fields.One2many('crm.phonecall', 'partner_id', 'Phonecalls', domain=[('scope', '=', 'sales')])
