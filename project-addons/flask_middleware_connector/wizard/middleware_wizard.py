@@ -28,7 +28,7 @@ from ..events.invoice_events import export_invoice, update_invoice
 from ..events.picking_events import export_picking, update_picking, export_pickingproduct, update_pickingproduct
 
 
-class MiddlewareBackend(models.Model):
+class MiddlewareBackend(models.TransientModel):
     _name = 'middleware.backend.export'
 
     type_export = fields.Selection(
