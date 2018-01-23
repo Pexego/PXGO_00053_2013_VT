@@ -46,7 +46,10 @@
                                     <field name="payment_mode_supplier" string="Choose the payment mode" colspan="4"/>
                                     <separator string="Transfers filters" colspan="4" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
                                     <group col="4" colspan="4">
-                                        <field name="check_old_open_supplier" colspan="2" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
+                                        <group col="2" colspan="2">
+                                            <field name="check_old_open_supplier" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
+                                            <field name="not_bankable_supplier" attrs="{'invisible':[('payment_mode_supplier', '=', 'debit_receipt')]}"/>
+                                        </group>
                                         <field name="opened_start_date_supplier" colspan="2" attrs="{'invisible':['|', ('check_old_open_supplier', '=', False),
                                                                                                                ('payment_mode_supplier', '=', 'debit_receipt')],
                                                                                                      'required': [('check_old_open_supplier', '=', True)]}"/>
@@ -83,6 +86,9 @@
             <field name="model">report.account.treasury.forecast.analysis</field>
             <field name="inherit_id" ref="account_treasury_forecast_banking.report_treasury_forecast_analysis_tree"/>
             <field name="arch" type="xml">
+                <tree position="attributes">
+                    <attribute name="colors">red:accumulative_balance&lt;0</attribute>
+                </tree>
                 <field name="date" position="after">
                     <field name="concept"/>
                     <field name="partner_id"/>

@@ -37,6 +37,7 @@ class AccountTreasuryForecast(models.Model):
     payment_mode_supplier = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
     check_old_open_supplier = fields.Boolean(string="Old (opened)")
     opened_start_date_supplier = fields.Date(string="Start Date")
+    not_bankable_supplier = fields.Boolean(string="Without Bankable Suppliers")
 
     @api.one
     @api.constrains('payment_mode_customer', 'check_old_open_customer',
@@ -110,7 +111,9 @@ class AccountTreasuryForecast(models.Model):
             out_invoice_lst.append(new_id.id)
 
         # SUPPLIER
-        search_filter_supplier = ['&', ('type', 'in', ['in_invoice', 'in_refund'])]
+        search_filter_supplier = ['&', '&', ('type', 'in', ['in_invoice', 'in_refund']),
+                                  ('partner_id.commercial_partner_id', '!=', 148435)]  # Omit AEAT invoices
+
         if self.payment_mode_supplier == 'debit_receipt':
             search_filter_supplier.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
                                            ('state', 'in', ['open', 'paid']),
@@ -128,6 +131,12 @@ class AccountTreasuryForecast(models.Model):
                 start_date = self.opened_start_date_supplier
             else:
                 start_date = self.start_date
+
+            if self.not_bankable_supplier:
+                id_currency_usd = self.env.ref("base.USD").id
+                search_filter_supplier.extend(['&', '|', ('partner_id.property_product_pricelist_purchase.currency_id',
+                                                          '!=', id_currency_usd),
+                                               ('partner_id.property_account_payable.code', '!=', '40000000')])
 
             search_filter_supplier.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
                                            '&', ('state', '=', 'open'),

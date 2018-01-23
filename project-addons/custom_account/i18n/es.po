@@ -707,3 +707,8 @@ msgstr "Cuenta bancaria"
 #: field:report.account.treasury.forecast.analysis,accumulative_balance:0
 msgid "Accumulated"
 msgstr "Acumulado"
+
+#. module: custom_account
+#: field:account.treasury.forecast,not_bankable_supplier:0
+msgid "Without Bankable Suppliers"
+msgstr "Sin financiables"
