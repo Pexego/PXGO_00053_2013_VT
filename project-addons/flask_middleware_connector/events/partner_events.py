@@ -245,7 +245,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             unlink_partner.delay(session, model_name, record_id, priority=1, eta=60)
 
         elif "active" in vals and not vals["active"] and partner.web or \
-                "prospective" in vals and not vals["prospective"]:
+                "prospective" in vals and vals["prospective"]:
             for contact in contacts:
                 unlink_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=60)
