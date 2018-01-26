@@ -40,6 +40,9 @@ class InvoiceExporter(Exporter):
         report = self.env['report'].browse(invoice.id)
         result = report.get_pdf('account.report_invoice_custom')
         result_encode = base64.b64encode(result)
+        if not invoice.state_web:
+            invoice._get_state_web()
+
         vals = {'odoo_id': invoice.id,
                 'number': invoice.number,
                 'partner_id': invoice.partner_id.commercial_partner_id.id,
@@ -49,7 +52,7 @@ class InvoiceExporter(Exporter):
                 'subtotal_wt_rect': invoice.subtotal_wt_rect,
                 'total_wt_rect': invoice.total_wt_rect,
                 'pdf_file_data': result_encode,
-                'state': invoice.state_web or invoice._get_state_web(), #Llamada a _get_state_web para evitar problemas en facturas que no tienen inicializado ese valor
+                'state': invoice.state_web, #Llamada a _get_state_web para evitar problemas en facturas que no tienen inicializado ese valor
                 'payment_mode_id': invoice.payment_mode_id.name}
         if mode == 'insert':
             return self.backend_adapter.insert(vals)
@@ -71,7 +74,9 @@ def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
     up_fields = ["number", "client_ref", "date_invoice", "state_web", "partner_id",
                  "date_due", "subtotal_wt_rect", "subtotal_wt_rect", "payment_ids"]
-    if invoice.partner_id and invoice.commercial_partner_id.web and 'state' in vals or 'state_web' in vals:
+    if invoice.partner_id and invoice.commercial_partner_id.web \
+            and 'state' in vals or 'state_web' in vals\
+            and invoice.company_id.id == 1:
         job = session.env['queue.job'].search([('func_string', 'not like', '%confirm_one_invoice%'),
                                                ('func_string', 'like', '%, ' + str(invoice.id) + ')%'),
                                                ('model_name', '=', model_name)], order='date_created desc', limit=1)
