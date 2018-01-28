@@ -79,7 +79,7 @@ class MiddlewareBackend(models.TransientModel):
                 search([('commercial_partner_id.web', '=', True),
                         ('state', 'in', ['open', 'paid']),
                         ('number', 'not like', '%ef%'),
-                        ('number', 'not like', 'VEN%')])
+                        ('company_id', '=', 1)])
             if self.mode_export == 'export':
                 for invoice in invoices:
                     export_invoice.delay(session, 'account.invoice', invoice.id)
