@@ -68,8 +68,8 @@ class CrmPhonecall(models.Model):
     partner_ref = fields.Char('Ref. Contact', readonly=True, compute='get_partner_ref')
     scope = fields.Selection(SCOPE, 'Scope call')
     call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type', required=True)
-    partner_country = fields.Many2one(related='partner_id.country_id', string='Country', readonly=True)
-    partner_salesperson = fields.Many2one(related='partner_id.user_id', string='Salesperson', readonly=True)
+    partner_country = fields.Many2one('res.country', related='partner_id.country_id', string='Country', readonly=True)
+    partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
     brand_id = fields.Many2one('product.brand', 'Brand')
     subject = fields.Char('Call Subject')
 
@@ -143,7 +143,7 @@ class ResPartner(models.Model):
     def _sat_phonecall_count(self):
         phonecall_obj = self.env['crm.phonecall']
         for partner in self:
-            phonecalls = phonecall_obj.search_count([('partner_id', 'child_of', partner.id), ('scope', '=', 'sat')])
+            phonecalls = phonecall_obj.search_count([('partner_id', 'child_of', [partner.id]), ('scope', '=', 'sat')])
             partner.sat_phonecall_count = phonecalls
 
     sat_phonecall_count = fields.Integer(compute='_sat_phonecall_count', store=False, string='SAT Calls')
