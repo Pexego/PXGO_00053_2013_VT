@@ -118,5 +118,14 @@ class Partner(models.Model):
 
     @api.multi
     def action_done(self):
-        return self.write({'payment_next_action_date': False, 'payment_next_action': ''})
+        context = dict(self._context or {})
+        context['params']['not_change_payment_responsible'] = True
+        return super(Partner, self).action_done(context=context)
+
+    @api.multi
+    def write(self, vals):
+        context = self.env.context
+        if 'params' in context and context['params'].get('not_change_payment_responsible', False):
+            vals.pop('payment_responsible_id')
+        return super(Partner, self).write(vals)
 
