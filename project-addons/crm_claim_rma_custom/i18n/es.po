@@ -576,3 +576,25 @@ msgstr "Consulta sobre cursos/certificados"
 #: selection:crm.phonecall,call_type_sat:0
 msgid "Others"
 msgstr "Otros"
+
+#. module: crm_claim_rma_custom
+#: view:crm.phonecall:crm_claim_rma_custom.crm_phonecall_custom_wizard_form_view_sat
+#: view:crm.phonecall:crm_claim_rma_custom.crm_case_inbound_phone_tree_view_sat
+msgid "Subject"
+msgstr "Asunto"
+
+#. module: crm_claim_rma_custom
+#: field:crm.phonecall,partner_salesperson:0
+msgid "Salesperson"
+msgstr "Comercial"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_case_categ_phone_incoming0_sat_partner
+msgid "SAT Calls"
+msgstr "Llamadas SAT"
+
+#. module: crm_claim_rma_custom
+#: view:res.partner:crm_claim_rma_custom.view_partners_form_crm_calls_sat
+#: selection:res.partner,sat_phonecall_count:0
+msgid "SAT Calls"
+msgstr "Llamadas SAT"

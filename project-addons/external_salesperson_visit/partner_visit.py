@@ -106,7 +106,7 @@ class partner_visit(models.Model):
     @api.depends('partner_id')
     def get_internal_salesperson(self):
         if self.partner_id:
-            self.salesperson_select = self.partner_id.commercial_partner_id.user_id.id
+            self.salesperson_select = self.partner_id.sudo().commercial_partner_id.user_id.id
 
     @api.multi
     @api.onchange('add_user_email')
@@ -123,8 +123,10 @@ class partner_visit(models.Model):
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        if self.partner_id:
+        if self.partner_id.area_id:
             self.area_id = self.partner_id.area_id.id
+        else:
+            self.area_id = self.partner_id.sudo().commercial_partner_id.area_id.id
 
     @api.one
     def send_email(self):
@@ -164,7 +166,7 @@ class res_partner(models.Model):
         visits = self.pool['partner.visit']
         res = {}
         for partner in self.browse(cr, uid, ids):
-            visit_ids = visits.search(cr, uid, [('partner_id', '=', partner.id), ('visit_state', '=', 'log')])
+            visit_ids = visits.search(cr, uid, [('partner_id', 'child_of', [partner.id]), ('visit_state', '=', 'log')])
             res[partner.id] = len(visit_ids)
         return res
 

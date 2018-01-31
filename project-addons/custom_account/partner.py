@@ -115,3 +115,17 @@ class Partner(models.Model):
         self.payment_responsible_id = self.user_id.id
         if self.user_id and self.user_id.default_section_id:
             self.section_id = self.user_id.default_section_id.id
+
+    @api.multi
+    def action_done(self):
+        context = dict(self._context or {})
+        context['params']['not_change_payment_responsible'] = True
+        return super(Partner, self).action_done(context=context)
+
+    @api.multi
+    def write(self, vals):
+        context = self.env.context
+        if 'params' in context and context['params'].get('not_change_payment_responsible', False):
+            vals.pop('payment_responsible_id')
+        return super(Partner, self).write(vals)
+

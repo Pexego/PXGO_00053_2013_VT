@@ -686,3 +686,29 @@ msgstr "Cuenta bancaria"
 #: field:sale.report,main_supplier:0
 msgid "Main supplier"
 msgstr "Proveedor principal"
+
+#. module: custom_account
+#: field:report.account.treasury.forecast.analysis,concept:0
+msgid "Concept"
+msgstr "Concepto"
+
+#. module: custom_account
+#: field:report.account.treasury.forecast.analysis,partner_id:0
+msgid "Partner/Supplier"
+msgstr "Cliente/Proveedor"
+
+#. module: custom_account
+#: view:report.account.treasury.forecast.analysis:custom_account.report_treasury_forecast_analysis_search
+#: field:report.account.treasury.forecast.analysis,bank_id:0
+msgid "Bank Account"
+msgstr "Cuenta bancaria"
+
+#. module: custom_account
+#: field:report.account.treasury.forecast.analysis,accumulative_balance:0
+msgid "Accumulated"
+msgstr "Acumulado"
+
+#. module: custom_account
+#: field:account.treasury.forecast,not_bankable_supplier:0
+msgid "Without Bankable Suppliers"
+msgstr "Sin financiables"
