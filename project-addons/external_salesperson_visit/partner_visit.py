@@ -166,7 +166,7 @@ class res_partner(models.Model):
         visits = self.pool['partner.visit']
         res = {}
         for partner in self.browse(cr, uid, ids):
-            visit_ids = visits.search(cr, uid, [('partner_id', 'child_of', partner.id), ('visit_state', '=', 'log')])
+            visit_ids = visits.search(cr, uid, [('partner_id', 'child_of', [partner.id]), ('visit_state', '=', 'log')])
             res[partner.id] = len(visit_ids)
         return res
 
