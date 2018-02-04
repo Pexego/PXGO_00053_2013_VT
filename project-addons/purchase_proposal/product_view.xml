@@ -74,5 +74,16 @@
             </field>
           </field>
         </record>
+
+        <record id="product_template_form_view_ext" model="ir.ui.view">
+            <field name="name">product.template.form.inherit</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="sale_customer_discount.product_normal_form_view_add_discount"/>
+            <field name="arch" type="xml">
+                <field name="standard_price" position="after">
+                    <field name="pvm_price"/>
+                </field>
+            </field>
+        </record>
     </data>
 </openerp>
