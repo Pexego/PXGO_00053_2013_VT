@@ -24,6 +24,7 @@ class Invoice(SyncModel):
     subtotal_wt_rect = FloatField()
     total_wt_rect = FloatField()
     pdf_file_data = TextField()
+    payment_mode_id = CharField(max_length=30)
 
     MOD_NAME = 'invoice'
 

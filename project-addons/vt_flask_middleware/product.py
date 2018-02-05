@@ -57,6 +57,7 @@ class Product(SyncModel):
     pvd_1 = FloatField(default=0.0)
     pvd_2 = FloatField(default=0.0)
     pvd_3 = FloatField(default=0.0)
+    pvm = FloatField(default=0.0)
     last_sixty_days_sales = FloatField(default=0.0)
     joking_index = FloatField(default=0.0)
     external_stock = FloatField(default=0.0)

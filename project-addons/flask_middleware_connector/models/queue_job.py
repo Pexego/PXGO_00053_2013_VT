@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2016 Comunitea All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,5 +18,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import stock_transfer_details
-from . import middleware_wizard
+
+from openerp import models, fields, api
+
+
+class QueueJob(models.Model):
+    _inherit = 'queue.job'
+
+    @api.model
+    def create(self, vals):
+        res = super(QueueJob, self).create(vals)
+        if not res.active:
+            res.active = True
+        return res

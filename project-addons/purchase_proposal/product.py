@@ -22,6 +22,32 @@ from openerp import models, fields, api
 import datetime
 
 
+class ProductTemplate(models.Model):
+
+    _inherit = 'product.template'
+
+    @api.depends('standard_price')
+    @api.onchange('standard_price')
+    @api.multi
+    def _get_pvm(self):
+        pricelist = self.env['product.pricelist'].search_read([('name', '=', 'PVM')], ['id'])
+        pricelist_id = pricelist[0]['id']
+        new_ctx = dict(self._context)
+        new_ctx.update({
+            'pricelist': pricelist_id
+        })
+        for product in self:
+            product_final = self.with_context(new_ctx).browse(product.id)
+            # esto no se si funciona sino habría que volver a instanciar los self.ids
+            # con el contexto en un browse o usar api.one pero así nos evitamos que en
+            # una entrada múltiple haya que hacer el search_read en tarifas en cada entrada.
+            product_final.pvm_price = product_final.price
+            # este campo es calculado y nos devuelve el precio del prodiucto según la tarifa
+            # en contexto, acepta también otros parámetros
+
+    pvm_price = fields.Float("PVM Price", readonly=True, store=True, compute='_get_pvm')
+
+
 class ProductProduct(models.Model):
 
     _inherit = 'product.product'

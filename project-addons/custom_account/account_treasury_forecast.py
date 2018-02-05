@@ -18,8 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, _
-
+from openerp import models, fields, tools, api, exceptions, _
+import openerp.addons.decimal_precision as dp
 
 PAYMENT_MODE = [('debit_receipt', 'Debit receipt'),
                 ('transfer', 'Transfer'),
@@ -37,6 +37,7 @@ class AccountTreasuryForecast(models.Model):
     payment_mode_supplier = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
     check_old_open_supplier = fields.Boolean(string="Old (opened)")
     opened_start_date_supplier = fields.Date(string="Start Date")
+    not_bankable_supplier = fields.Boolean(string="Without Bankable Suppliers")
 
     @api.one
     @api.constrains('payment_mode_customer', 'check_old_open_customer',
@@ -92,7 +93,7 @@ class AccountTreasuryForecast(models.Model):
             search_filter_customer.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
                                            '&', ('state', '=', 'open'),
                                            '&', ('date_due', '>=', start_date), ('date_due', '<=', self.end_date)])
-        invoice_ids = invoice_obj.search(search_filter_customer)
+        invoice_ids = invoice_obj.search(search_filter_customer, order='date_due asc, id asc')
         for invoice_o in invoice_ids:
             values = {
                 'invoice_id': invoice_o.id,
@@ -110,7 +111,9 @@ class AccountTreasuryForecast(models.Model):
             out_invoice_lst.append(new_id.id)
 
         # SUPPLIER
-        search_filter_supplier = ['&', ('type', 'in', ['in_invoice', 'in_refund'])]
+        search_filter_supplier = ['&', '&', ('type', 'in', ['in_invoice', 'in_refund']),
+                                  ('partner_id.commercial_partner_id', '!=', 148435)]  # Omit AEAT invoices
+
         if self.payment_mode_supplier == 'debit_receipt':
             search_filter_supplier.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
                                            ('state', 'in', ['open', 'paid']),
@@ -129,10 +132,17 @@ class AccountTreasuryForecast(models.Model):
             else:
                 start_date = self.start_date
 
+            if self.not_bankable_supplier:
+                id_currency_usd = self.env.ref("base.USD").id
+                search_filter_supplier.extend(['&', '|', ('partner_id.property_product_pricelist_purchase.currency_id',
+                                                          '!=', id_currency_usd),
+                                               ('partner_id.property_account_payable.code', '!=', '40000000')])
+
             search_filter_supplier.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
                                            '&', ('state', '=', 'open'),
                                            '&', ('date_due', '>=', start_date), ('date_due', '<=', self.end_date)])
-        invoice_ids = invoice_obj.search(search_filter_supplier)
+
+        invoice_ids = invoice_obj.search(search_filter_supplier, order='date_due asc, id asc')
         for invoice_o in invoice_ids:
             values = {
                 'invoice_id': invoice_o.id,
@@ -153,5 +163,148 @@ class AccountTreasuryForecast(models.Model):
                     'in_invoice_ids': [(6, 0, in_invoice_lst)]})
 
         return new_invoice_ids
+
+
+class ReportAccountTreasuryForecastAnalysis(models.Model):
+    _inherit = 'report.account.treasury.forecast.analysis'
+    _order = 'treasury_id asc, date asc, id_ref asc'
+
+    id_ref = fields.Char(string="Id Reference")
+    concept = fields.Char(string="Concept")
+    partner_id = fields.Many2one('res.partner', string='Partner/Supplier')
+    bank_id = fields.Many2one('res.partner.bank', string='Bank Account')
+    accumulative_balance = fields.Float(string="Accumulated", digits_compute=dp.get_precision('Account'))
+
+    def init(self, cr):
+        tools.drop_view_if_exists(cr, 'report_account_treasury_forecast_analysis')
+        cr.execute("""
+            create or replace view report_account_treasury_forecast_analysis
+                as (
+                    SELECT	    analysis.id, 
+                                analysis.treasury_id, 
+                                analysis.id_ref, 
+                                analysis.date, 
+                                analysis.concept, 
+                                rp.id as partner_id, 
+                                analysis.payment_mode_id,
+                                pm.bank_id,
+                                analysis.credit, 
+                                analysis.debit, 
+                                analysis.balance, 
+                                analysis.type,
+                                sum(balance) OVER (PARTITION BY analysis.treasury_id
+                                            ORDER BY analysis.treasury_id desc, analysis.date, analysis.id_ref) AS accumulative_balance
+                            FROM (
+                                select  '0' as id,
+                                    0 as id_ref,
+                                    'Importe inicial' as concept,
+                                    tf.id as treasury_id,
+                                    tf.start_date as date,
+                                    null as credit,
+                                    null as debit,
+                                    start_amount as balance,
+                                    null as payment_mode_id,
+                                    null as type,
+                                    null partner_id
+                                from    account_treasury_forecast tf 
+                                where   tf.start_amount > 0 -- Incluir linea de importe inicial
+                                union
+                                select
+                                    tfl.id || 'l' AS id,
+                                    tfl.id as id_ref,
+                                    tfl.name as concept,
+                                    treasury_id,
+                                    tfl.date as date,
+                                    CASE WHEN tfl.line_type='receivable' THEN 0.0
+                                    ELSE amount
+                                    END as credit,
+                                    CASE WHEN tfl.line_type='receivable' THEN amount
+                                    ELSE 0.0
+                                    END as debit,
+                                    CASE WHEN tfl.line_type='receivable' THEN amount
+                                    ELSE -amount
+                                    END as balance,
+                                    payment_mode_id,
+                                    CASE WHEN tfl.line_type='receivable' THEN 'in'
+                                    ELSE 'out'
+                                    END as type,
+                                    tfl.partner_id
+                                from    account_treasury_forecast tf 
+                                    inner join account_treasury_forecast_line tfl on tf.id = tfl.treasury_id
+                                union
+                                select
+                                    tcf.id || 'c' AS id,
+                                    tcf.id as id_ref,
+                                    tcf.name as concept,
+                                    treasury_id,
+                                    tcf.date as date,
+                                    CASE WHEN tcf.flow_type='in' THEN 0.0
+                                    ELSE abs(amount)
+                                    END as credit,
+                                    CASE WHEN tcf.flow_type='in' THEN amount
+                                    ELSE 0.0
+                                    END as debit,
+                                    amount as balance,
+                                    payment_mode_id,
+                                    flow_type as type,
+                                    null as partner_id
+                                from    account_treasury_forecast tf 
+                                    inner join account_treasury_forecast_cashflow tcf on tf.id = tcf.treasury_id
+                                union
+                                select
+                                    tfii.id || 'i' AS id,
+                                    ai.id as id_ref, 
+                                    ai.number as concept,
+                                    treasury_id,
+                                    tfii.date_due as date,
+                                    CASE WHEN ai.type='in_invoice' THEN tfii.total_amount
+                                    ELSE 0.0
+                                    END as credit,
+                                    CASE WHEN ai.type='in_invoice' THEN 0.0
+                                    ELSE tfii.total_amount
+                                    END as debit,
+                                    CASE WHEN ai.type='in_invoice' THEN -tfii.total_amount
+                                    ELSE tfii.total_amount
+                                    END as balance,
+                                    tfii.payment_mode_id,
+                                    CASE WHEN ai.type='in_invoice' THEN 'out'
+                                    ELSE 'in'
+                                    END as type,
+                                    tfii.partner_id
+                                    from
+                                    account_treasury_forecast tf 
+                                    inner join account_treasury_forecast_in_invoice_rel tfiir on tf.id = tfiir.treasury_id 
+                                    inner join account_treasury_forecast_invoice tfii on tfii.id = tfiir.in_invoice_id 
+                                    inner join account_invoice ai on ai.id = tfii.invoice_id
+                                union
+                                select
+                                    tfio.id || 'o' AS id,
+                                    ai.id as id_ref, 
+                                    ai.number as concept,
+                                    treasury_id,
+                                    tfio.date_due as date,
+                                    CASE WHEN ai.type='out_invoice' THEN 0.0
+                                    ELSE tfio.total_amount
+                                    END as credit,
+                                    CASE WHEN ai.type='out_invoice' THEN tfio.total_amount
+                                    ELSE 0.0
+                                    END as debit,
+                                    CASE WHEN ai.type='out_invoice' THEN tfio.total_amount
+                                    ELSE -tfio.total_amount
+                                    END as balance,
+                                    tfio.payment_mode_id,
+                                    CASE WHEN ai.type='out_invoice' THEN 'in'
+                                    ELSE 'out'
+                                    END as type,
+                                    tfio.partner_id
+                                from    account_treasury_forecast tf 
+                                    inner join account_treasury_forecast_out_invoice_rel tfior on tf.id = tfior.treasury_id 
+                                    inner join account_treasury_forecast_invoice tfio on tfio.id = tfior.out_invoice_id 
+                                    inner join account_invoice ai on ai.id = tfio.invoice_id
+                            ) analysis
+                            LEFT JOIN res_partner rp ON rp.id = analysis.partner_id
+                            LEFT JOIN payment_mode pm ON pm.id = analysis.payment_mode_id
+                            ORDER  BY analysis.treasury_id, analysis.date, analysis.id_ref
+            )""")
 
 

@@ -30,6 +30,7 @@ import xmlrpclib
 
 import base64
 
+
 @middleware
 class InvoiceExporter(Exporter):
     _model_name = ['account.invoice']
@@ -39,16 +40,20 @@ class InvoiceExporter(Exporter):
         report = self.env['report'].browse(invoice.id)
         result = report.get_pdf('account.report_invoice_custom')
         result_encode = base64.b64encode(result)
+        if not invoice.state_web:
+            invoice._get_state_web()
+
         vals = {'odoo_id': invoice.id,
                 'number': invoice.number,
                 'partner_id': invoice.partner_id.commercial_partner_id.id,
                 'client_ref': invoice.name or "",
                 'date_invoice': invoice.date_invoice,
                 'date_due': invoice.date_due,
-                'state': invoice.state,
                 'subtotal_wt_rect': invoice.subtotal_wt_rect,
                 'total_wt_rect': invoice.total_wt_rect,
-                'pdf_file_data': result_encode}
+                'pdf_file_data': result_encode,
+                'state': invoice.state_web, #Llamada a _get_state_web para evitar problemas en facturas que no tienen inicializado ese valor
+                'payment_mode_id': invoice.payment_mode_id.name}
         if mode == 'insert':
             return self.backend_adapter.insert(vals)
         else:
@@ -67,30 +72,31 @@ class InvoiceAdapter(GenericAdapter):
 @on_record_write(model_names='account.invoice')
 def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
-    up_fields = ["number", "client_ref", "date_invoice", "state", "partner_id",
-                 "date_due", "subtotal_wt_rect", "subtotal_wt_rect"]
-
-    if invoice.partner_id and invoice.commercial_partner_id.web:
+    up_fields = ["number", "client_ref", "date_invoice", "state_web", "partner_id",
+                 "date_due", "subtotal_wt_rect", "subtotal_wt_rect", "payment_ids"]
+    if invoice.partner_id and invoice.commercial_partner_id.web \
+            and 'state' in vals or 'state_web' in vals\
+            and invoice.company_id.id == 1:
         job = session.env['queue.job'].search([('func_string', 'not like', '%confirm_one_invoice%'),
                                                ('func_string', 'like', '%, ' + str(invoice.id) + ')%'),
                                                ('model_name', '=', model_name)], order='date_created desc', limit=1)
         if job:
-            if vals.get('state', False) == 'open' and 'unlink_invoice' in job[0].func_string:
+            if invoice.state_web == 'open' and 'unlink_invoice' in job[0].func_string:
                 export_invoice.delay(session, model_name, record_id, priority=5)
-            elif vals.get('state', False) == 'paid':
+            elif invoice.state_web in ('paid', 'returned', 'remitted'):
                 update_invoice.delay(session, model_name, record_id, priority=10, eta=60)
-            elif vals.get('state', False) == 'cancel' and 'unlink_invoice' not in job[0].func_string:
+            elif invoice.state_web == 'cancel' and 'unlink_invoice' not in job[0].func_string:
                 unlink_invoice.delay(session, model_name, record_id, priority=15)
-            elif invoice.state == 'open':
+            elif invoice.state_web == 'open':
                 for field in up_fields:
                     if field in vals:
                         update_invoice.delay(session, model_name, record_id, priority=10, eta=60)
                         break
-        elif invoice.state == 'open':
+        elif invoice.state_web == 'open':
             export_invoice.delay(session, model_name, record_id, priority=5, eta=60)
 
 
-@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+@job(retry_pattern={1: 10  * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def export_invoice(session, model_name, record_id):
     invoice_exporter = _get_exporter(session, model_name, record_id, InvoiceExporter)
