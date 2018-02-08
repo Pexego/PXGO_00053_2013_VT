@@ -360,3 +360,15 @@ msgstr "El producto, la marca y la categoría están vacíos"
 #: view:rappel:custom_partner.rappel_form_add_brand
 msgid "You must fill in only one of the following fields to define the validity area of rappel:"
 msgstr "Debe rellenar solamente uno de los siguientes datos para definir el ámbito de validez del rappel:"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:643
+#, python-format
+msgid "Warning!"
+msgstr "¡Advertencia!"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:644
+#, python-format
+msgid "Remember to set our partner email, not dropship email!"
+msgstr "¡Recuerde poner el correo de nuestro cliente, no del cliente final (dropship)!"
