@@ -101,6 +101,7 @@ def delay_export_picking_write(session, model_name, record_id, vals):
             for field in up_fields:
                 if field in vals:
                     update_picking.delay(session, model_name, record_id, priority=2, eta=120)
+                    break
 
 
 @on_record_unlink(model_names='stock.picking')

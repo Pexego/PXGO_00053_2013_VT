@@ -21,11 +21,12 @@
 
 from openerp import models, fields, api, _
 from openerp.addons.connector.session import ConnectorSession
-from ..events.partner_events import export_partner, update_partner
+from ..events.partner_events import export_partner, update_partner, export_partner_tag, update_partner_tag, export_partner_tag_rel, update_partner_tag_rel
 from ..events.product_events import update_product, export_product
 from ..events.rma_events import export_rma, export_rmaproduct, update_rma, update_rmaproduct
 from ..events.invoice_events import export_invoice, update_invoice
 from ..events.picking_events import export_picking, update_picking, export_pickingproduct, update_pickingproduct
+from .. events.order_events import export_order, export_orderproduct, update_order, update_orderproduct
 
 
 class MiddlewareBackend(models.TransientModel):
@@ -37,7 +38,10 @@ class MiddlewareBackend(models.TransientModel):
             ('invoices', 'Invoices'),
             ('pickings', 'Pickings'),
             ('rmas', 'RMAs'),
-            ('products', 'Products')
+            ('products', 'Products'),
+            ('order', 'Orders'),
+            ('tags', 'Tags'),
+            ('customer_tags_rel', 'Customer Tags Rel')
         ],
         string='Export type',
         required=True,
@@ -131,3 +135,45 @@ class MiddlewareBackend(models.TransientModel):
                 for product in product_ids:
                     update_product.delay(session, 'product.product', product.id)
             product.web = 'published'
+
+        elif self.type_export == 'tags':
+            tag_obj = self.env['res.partner.category']
+            tag_ids = tag_obj.search([('active', '=', True)])
+            if self.mode_export == 'export':
+                for tag in tag_ids:
+                    export_partner_tag.delay(session, 'res.partner.category', tag.id)
+            else:
+                for tag in tag_ids:
+                    update_partner_tag.delay(session, 'res.partner.category', tag.id)
+
+        elif self.type_export == 'customer_tags_rel':
+            partner_obj = self.env['res.partner']
+            partner_ids = partner_obj.search([('is_company', '=', True),
+                                              ('web', '=', True),
+                                              ('customer', '=', True)])
+            if self.mode_export == 'export':
+                for partner in partner_ids:
+                    for category in partner.category_id:
+                        export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner.id, category.id)
+            else:
+                for partner in partner_ids:
+                    for category in partner.category_id:
+                        update_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner.id, category.id)
+
+        elif self.type_expor == 'order':
+            partner_obj = self.env['res.partner']
+            partner_ids = partner_obj.search([('is_company', '=', True),
+                                              ('web', '=', True),
+                                              ('customer', '=', True)])
+            sales = session.env['sale.order'].search([('partner_id', 'child_of', partner.ids),
+                                                      ('state', 'in', ['done','progress','draft','reserve'])])
+            if self.mode_export == 'export':
+                for sale in sales:
+                    export_order.delay(session, 'sale.order', sale.id)
+                    for line in sale.order_line:
+                        export_orderproduct.delay(session, 'sale.order.line', line.id)
+            else:
+                for sale in sales:
+                    update_order.delay(session, 'sale.order', sale.id)
+                    for line in sale.order_line:
+                        update_orderproduct.delay(session, 'sale.order.line', line.id)

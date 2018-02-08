@@ -12,6 +12,23 @@ from app import app
 from database import SyncModel
 
 
+class CustomerTag(SyncModel):
+    """
+    User tag model.
+
+    Note: follows the 'user model' protocol specified by flask_peewee.auth.Auth
+    """
+
+    odoo_id = IntegerField(unique=True)
+    name = CharField(max_length=70)
+    parent_id = IntegerField(null=True)
+
+    MOD_NAME = 'customertag'
+
+    def __unicode__(self):
+        return self.name
+
+
 class Customer(SyncModel):
     """
     User model.
@@ -30,14 +47,26 @@ class Customer(SyncModel):
     country = CharField(max_length=100, null=True)
     state = CharField(max_length=100, null=True)
     email = CharField(max_length=70, null=True)
-    commercial_id = ForeignKeyField(Commercial, on_delete='CASCADE', null=True)
     odoo_id = IntegerField(unique=True)
     lang = CharField(max_length=5, null=True)
     type = CharField(max_length=30, null=True)
     parent_id = IntegerField(null=True)
+    commercial_id = ForeignKeyField(Commercial, on_delete='CASCADE', null=True)
     is_company = BooleanField(default=True)
 
     MOD_NAME = 'customer'
 
     def __unicode__(self):
         return self.fiscal_name
+
+
+class CustomerTagCustomerRel(SyncModel):
+
+    odoo_id = IntegerField()
+    customertag_id = ForeignKeyField(CustomerTag, on_delete='CASCADE')
+
+    MOD_NAME = 'customertagcustomerrel'
+
+    def __unicode__(self):
+        return u"Customer id: %s - Tag id: %s" % (self.odoo_id, self.customertag_id)
+
