@@ -76,10 +76,11 @@ def delay_export_order_write(session, model_name, record_id, vals):
             unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
         elif 'state' in vals.keys() and vals['state'] in  ('draft', 'reserve'):
             export_order.delay(session, model_name, record_id, priority=2, eta=80)
-        for field in up_fields:
-            if field in vals:
-                update_order.delay(session, model_name, record_id, priority=5, eta=120)
-                break
+        elif order.state in ('draft', 'reserve', 'progress', 'done'):
+            for field in up_fields:
+                if field in vals:
+                    update_order.delay(session, model_name, record_id, priority=5, eta=120)
+                    break
 
 
 @on_record_unlink(model_names='sale.order')
