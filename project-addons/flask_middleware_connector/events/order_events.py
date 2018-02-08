@@ -69,9 +69,11 @@ def delay_export_order_write(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
     up_fields = ["name", "state", "partner_id", "total_amount", "date_order", "client_order_ref"]
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
+        if 'state' in vals.keys() and vals['state'] not in ('done','progress','draft','reserve'):
+            unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
         for field in up_fields:
             if field in vals:
-                update_order.delay(session, model_name, record_id, priority=7, eta=120)
+                update_order.delay(session, model_name, record_id, priority=5, eta=120)
                 break
 
 
@@ -79,7 +81,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
 def delay_export_order_unlink(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
-        unlink_order.delay(session, model_name, record_id, priority=7, eta=120)
+        unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
@@ -136,7 +138,7 @@ class OrderProductAdapter(GenericAdapter):
 def delay_export_orderproduct_create(session, model_name, record_id, vals):
     orderproduct = session.env[model_name].browse(record_id)
     if orderproduct.order_id.partner_id.web or orderproduct.order_id.partner_id.commercial_partner_id.web:
-        export_orderproduct.delay(session, model_name, record_id, priority=2, eta=180)
+        export_orderproduct.delay(session, model_name, record_id, priority=2, eta=120)
 
 
 @on_record_write(model_names='sale.order.line')
@@ -146,7 +148,7 @@ def delay_export_orderproduct_write(session, model_name, record_id, vals):
     if orderproduct.order_id.partner_id.web or orderproduct.order_id.partner_id.commercial_partner_id.web:
         for field in up_fields:
             if field in vals:
-                update_orderproduct.delay(session, model_name, record_id, priority=7, eta=180)
+                update_orderproduct.delay(session, model_name, record_id, priority=5, eta=120)
                 break
 
 
