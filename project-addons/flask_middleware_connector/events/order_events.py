@@ -40,7 +40,8 @@ class OrderExporter(Exporter):
                 "state": order.state,
                 "partner_id": order.partner_id.id,
                 "amount_total": order.amount_total,
-                "   ": order.date_order,
+                "date_order": order.date_order,
+                "amount_untaxed": order.amount_untaxed,
                 "client_order_ref": order.client_order_ref,
         }
         if mode == "insert":
@@ -68,7 +69,8 @@ def delay_export_order_create(session, model_name, record_id, vals):
 @on_record_write(model_names='sale.order')
 def delay_export_order_write(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
-    up_fields = ["name", "state", "partner_id", "amount_total", "date_order", "client_order_ref"]
+    #He cogido order_line porque no entra amount_total ni amount_untaxed en el write
+    up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref", "order_line"] 
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
         if 'state' in vals.keys() and vals['state'] not in ('done', 'progress', 'reserve'):
             unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
@@ -147,7 +149,7 @@ def delay_export_orderproduct_create(session, model_name, record_id, vals):
 @on_record_write(model_names='sale.order.line')
 def delay_export_orderproduct_write(session, model_name, record_id, vals):
     orderproduct = session.env[model_name].browse(record_id)
-    up_fields = ["product_id", "product_qty", "price_subtotal", "order_id"]
+    up_fields = ["product_id", "product_uom_qty", "price_unit", "discount", "order_id"]
     if orderproduct.order_id.partner_id.web or orderproduct.order_id.partner_id.commercial_partner_id.web:
         for field in up_fields:
             if field in vals:
