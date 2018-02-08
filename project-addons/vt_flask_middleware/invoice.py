@@ -30,4 +30,3 @@ class Invoice(SyncModel):
 
     def __unicode__(self):
         return u"%s - %s" % (self.odoo_id, self.number)
-
