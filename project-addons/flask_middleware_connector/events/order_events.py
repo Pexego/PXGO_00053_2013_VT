@@ -72,7 +72,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
     #He cogido order_line porque no entra amount_total ni amount_untaxed en el write
     up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref", "order_line"] 
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
-        if 'state' in vals.keys() and vals['state'] not in ('done', 'progress', 'reserve'):
+        if 'state' in vals.keys() and vals['state'] == 'cancel':
             unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
         elif 'state' in vals.keys() and vals['state'] in  ('draft', 'reserve'):
             export_order.delay(session, model_name, record_id, priority=2, eta=80)
