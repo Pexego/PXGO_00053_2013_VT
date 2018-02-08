@@ -39,8 +39,8 @@ class OrderExporter(Exporter):
                 "name": order.name,
                 "state": order.state,
                 "partner_id": order.partner_id.id,
-                "total_amount": order.amount_total,
-                "date_order": order.date_order,
+                "amount_total": order.amount_total,
+                "   ": order.date_order,
                 "client_order_ref": order.client_order_ref,
         }
         if mode == "insert":
@@ -61,16 +61,19 @@ class OrderAdapter(GenericAdapter):
 def delay_export_order_create(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
-        export_order.delay(session, model_name, record_id, priority=2, eta=80)
+        if 'state' in vals.keys() and vals['state'] in ('draft', 'reserve'):
+            export_order.delay(session, model_name, record_id, priority=2, eta=80)
 
 
 @on_record_write(model_names='sale.order')
 def delay_export_order_write(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
-    up_fields = ["name", "state", "partner_id", "total_amount", "date_order", "client_order_ref"]
+    up_fields = ["name", "state", "partner_id", "amount_total", "date_order", "client_order_ref"]
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
-        if 'state' in vals.keys() and vals['state'] not in ('done','progress','draft','reserve'):
+        if 'state' in vals.keys() and vals['state'] not in ('done', 'progress', 'reserve'):
             unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
+        elif 'state' in vals.keys() and vals['state'] in  ('draft', 'reserve'):
+            export_order.delay(session, model_name, record_id, priority=2, eta=80)
         for field in up_fields:
             if field in vals:
                 update_order.delay(session, model_name, record_id, priority=5, eta=120)
@@ -117,7 +120,7 @@ class OrderProductExporter(Exporter):
         vals = {"odoo_id": orderproduct.id,
                 "product_id": orderproduct.product_id.id,
                 "product_qty": orderproduct.product_uom_qty,
-                "total_price": orderproduct.price_subtotal,
+                "price_subtotal": orderproduct.price_subtotal,
                 "order_id": orderproduct.order_id.id,
         }
         if mode == "insert":
@@ -144,7 +147,7 @@ def delay_export_orderproduct_create(session, model_name, record_id, vals):
 @on_record_write(model_names='sale.order.line')
 def delay_export_orderproduct_write(session, model_name, record_id, vals):
     orderproduct = session.env[model_name].browse(record_id)
-    up_fields = ["product_id", "product_qty", "total_price", "order_id"]
+    up_fields = ["product_id", "product_qty", "price_subtotal", "order_id"]
     if orderproduct.order_id.partner_id.web or orderproduct.order_id.partner_id.commercial_partner_id.web:
         for field in up_fields:
             if field in vals:
