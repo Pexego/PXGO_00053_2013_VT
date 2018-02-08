@@ -236,6 +236,7 @@
                     <attribute name="default_order">claim_id asc</attribute>
                 </tree>
                 <field name="claim_id" position="after">
+                    <field name="claim_name" string="Claim Subject"/>
                     <field name="user_id"/>
                     <field name="comercial"/>
                 </field>
