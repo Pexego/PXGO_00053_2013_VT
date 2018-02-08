@@ -28,6 +28,7 @@ from ..unit.backend_adapter import GenericAdapter
 from .rma_events import unlink_rma, unlink_rmaproduct, export_rma, export_rmaproduct
 from .invoice_events import unlink_invoice, export_invoice
 from .picking_events import export_picking, unlink_picking, export_pickingproduct, unlink_pickingproduct
+from .order_events import export_order, unlink_order, export_orderproduct, unlink_orderproduct
 
 @middleware
 class PartnerExporter(Exporter):
@@ -44,9 +45,9 @@ class PartnerExporter(Exporter):
                 "street": partner.street or "",
                 "city": partner.city or "",
                 "zipcode": partner.zip,
+                "commercial_id": partner.user_id.id,
                 "country": partner.country_id and partner.country_id.code or
                 "",
-                "commercial_id": partner.user_id.id,
                 "ref": partner.ref,
                 "discount": partner.discount,
                 "pricelist_name": partner.property_product_pricelist and
@@ -86,9 +87,19 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                                        partner.active):
             export_partner.delay(session, model_name, record_id, priority=1,
                                  eta=60)
+            tags = partner.category_id
+            for tag in tags:
+                export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                             record_id, tag.id, priority=10, eta=60)
             for contact in contacts:
                 export_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=120)
+            sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
+                                                    ('state', 'in', ['done','progress','draft','reserve'])])
+            for sale in sales:
+                export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
+                for line in sale.order_line:
+                    export_orderproduct.delay(session, 'sale.order.line', line.id, priority=10, eta=180)
 
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
                                                               ('number', 'not like', '%ef%')])
@@ -178,6 +189,18 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             for contact in contacts:
                 export_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=120)
+            tags = partner.category_id
+            for tag in tags:
+                export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                             record_id, tag.id, priority=10, eta=60)
+
+            sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
+                                                    ('state', 'in', ['done','progress','draft','reserve'])])
+            for sale in sales:
+                export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
+                for line in sale.order_line:
+                    export_orderproduct.delay(session, 'sale.order.line', line.id, priority=10, eta=180)
+
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
                                                               ('number', 'not like', '%ef%')])
             for invoice in invoices:
@@ -210,6 +233,17 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             for contact in contacts:
                 export_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=120)
+            tags = partner.category_id
+            for tag in tags:
+                export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                             record_id, tag.id, priority=10, eta=60)
+
+            sale = session.env['sale.order'].search([('commercial_partner_id', '=', partner.id),
+                                                    ('state', 'in', ('done', 'progress', 'draft', 'reserve'))])
+            for sale in sales:
+                export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
+                for line in sale.order_line:
+                    export_orderproduct.delay(session, 'sale.order.line', line.id, priority=10, eta=180)
 
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
                                                               ('number', 'not like', '%ef%')])
@@ -238,6 +272,8 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                                                 priority=10, eta=240)
 
         elif "web" in vals and not vals["web"]:
+            #unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+            #                             record_id, eta=60)
             for contact in contacts:
                 unlink_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=60)
@@ -246,6 +282,8 @@ def delay_export_partner_write(session, model_name, record_id, vals):
 
         elif "active" in vals and not vals["active"] and partner.web or \
                 "prospective" in vals and vals["prospective"]:
+            #unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+            #                             record_id, eta=60)
             for contact in contacts:
                 unlink_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=60)
@@ -265,6 +303,13 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                         unlink_partner.delay(session, model_name, child[1], priority=2)
 
         elif partner.web and (vals.get('is_company', False) or partner.is_company):
+            if 'category_id' in vals.keys():
+                tags = partner.category_id
+                unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                             record_id, priority=5, eta=60)
+                for tag_id in vals.get('category_id', False)[0][2]:
+                    export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                                 record_id, tag_id, priority=10, eta=120)
             for field in up_fields:
                 if field in vals:
                     update_partner.delay(session, model_name, record_id, priority=2, eta=120)
@@ -292,13 +337,16 @@ def delay_unlink_partner(session, model_name, record_id):
     partner = session.env[model_name].browse(record_id)
     contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
                                                ('is_company', '=', False)])
-
     if partner.web:
+        #unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+        #                                     record_id, eta=60)
         for contact in contacts:
             unlink_partner.delay(session, model_name, contact.id, eta=60)
         unlink_partner.delay(session, model_name, record_id, eta= 60)
 
     elif partner.commercial_partner_id.web:
+        #unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+        #                                     record_id, eta=60)
         for contact in contacts:
             unlink_partner.delay(session, model_name, contact.id, eta=60)
         unlink_partner.delay(session, model_name, record_id, eta=60)
@@ -349,3 +397,151 @@ def delay_export_pricelist_version_write(session, model_name, record_id, vals):
           pricelist_version.pricelist_id.id), ('web', '=', True)])
     for partner in partners:
         update_partner.delay(session, 'res.partner', partner.id)
+
+
+@middleware
+class PartnerTagExporter(Exporter):
+
+    _model_name = ['res.partner.category']
+
+    def update(self, binding_id, mode):
+        tag = self.model.browse(binding_id)
+        vals = {"odoo_id": tag.id,
+                "name": tag.name,
+                "parent_id": tag.parent_id.id,
+                }
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(binding_id, vals)
+
+    def delete(self, binding_id):
+        return self.backend_adapter.remove(binding_id)
+
+
+@middleware
+class PartnerTagAdapter(GenericAdapter):
+    _model_name = 'res.partner.category'
+    _middleware_model = 'customertag'
+
+@on_record_create(model_names='res.partner.category')
+def delay_export_partner_tag_create(session, model_name, record_id, vals):
+    export_partner_tag.delay(session, model_name, record_id, priority=1, eta=60)
+
+@on_record_write(model_names='res.partner.category')
+def delay_export_partner_tag_write(session, model_name, record_id, vals):
+    tag = session.env[model_name].browse(record_id)
+    up_fields = ["name", "parent_id", "active"]
+    if 'active' in vals and not vals.get('active', False):
+        unlink_partner_tag.delay(session, model_name, record_id, priority=3, eta=120)
+    elif 'active' in vals and vals.get('active', False):
+        export_partner_tag.delay(session, model_name, record_id, priority=1, eta=60)
+    else:
+        update_partner_tag.delay(session, model_name, record_id, priority=2, eta=120)
+
+@on_record_unlink(model_names='res.partner.category')
+def delay_export_partner_tag_remove(session, model_name, record_id):
+    unlink_partner_tag.delay(session, model_name, record_id, priority=3, eta=120)
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def export_partner_tag(session, model_name, record_id):
+    partner_tag_exporter = _get_exporter(session, model_name, record_id,
+                                         PartnerTagExporter)
+    return partner_tag_exporter.update(record_id, "insert")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def update_partner_tag(session, model_name, record_id):
+    partner_tag_exporter = _get_exporter(session, model_name, record_id,
+                                         PartnerTagExporter)
+    return partner_tag_exporter.update(record_id, "update")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def unlink_partner_tag(session, model_name, record_id):
+    partner_tag_exporter = _get_exporter(session, model_name, record_id,
+                                         PartnerTagExporter)
+    return partner_tag_exporter.delete(record_id)
+
+
+@middleware
+class PartnerTagRelExporter(Exporter):
+
+    _model_name = ['res.partner.res.partner.category.rel']
+
+    def update(self, partner_record_id, category_record_id, mode):
+        partner = self.env['res.partner'].browse(partner_record_id)
+        category = self.env['res.partner.category'].browse(category_record_id)
+        vals = {"odoo_id": partner.id,
+                "customertag_id": category.id,
+                }
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(partner_record_id, category_record_id, vals)
+
+    def delete(self, partner_record_id):
+        return self.backend_adapter.remove(partner_record_id)
+
+
+@middleware
+class PartnerTagRelAdapter(GenericAdapter):
+    _model_name = 'res.partner.res.partner.category.rel'
+    _middleware_model = 'customertagcustomerrel'
+
+
+def delay_export_partner_tag_rel_create(session, model_name, partner_record_id, vals):
+    if 'category_id' in vals:
+        return True
+    elif 'web' in vals and vals.get('web', False):
+        partner = session.env['res.partner'].browse(partner_record_id)
+        for tag in partner.category_id:
+            export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner_record_id, tag, priority=2, eta=120)
+
+
+def delay_export_partner_tag_rel_write(session, model_name, partner_record_id, vals):
+    """
+    - [[6, 0, [ids]]]: Borra las asociaciones actuales del campo y le asocia los identificadores
+contenidos en ids (int[])
+- [[4, id]]: Asocia el identificador contenido en id (int) al campo.
+- [[3, id]]: Desasocia el identificador contenido en id (int) del campo.
+- [[3, id]]: Desasocia el identificador contenido en id (int) del campo.
+- [[2, id]]: Desasocia y borra el identificador contenido en id (int) del campo y de la base de
+datos.
+    """
+    #if model_name == 'res.partner':
+        #unlink_partner_tag
+
+    update_partner_tag_rel.delay(session, model_name, partner_record_id, priority=2, eta=60)
+
+
+def delay_export_partner_tag_rel_unlink(session, model_name, partner_record_id, vals):
+    #unlink_partner_tag_rel.delay(session, model_name, partner_record_id, priority=2, eta=120)
+    unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner_record_id, priority=5, eta=120)
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def export_partner_tag_rel(session, model_name, partner_record_id, category_record_id):
+    partner_tag_rel_exporter = _get_exporter(session, model_name, partner_record_id,
+                                             PartnerTagRelExporter)
+    return partner_tag_rel_exporter.update(partner_record_id, category_record_id, "insert")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def update_partner_tag_rel(session, model_name, partner_record_id, category_record_id):
+    partner_tag_rel_exporter = _get_exporter(session, model_name, partner_record_id,
+                                             PartnerTagRelExporter)
+    return partner_tag_rel_exporter.update(partner_record_id, category_record_id, "update")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def unlink_partner_tag_rel(session, model_name, partner_record_id):
+    partner_tag_rel_exporter = _get_exporter(session, model_name, partner_record_id,
+                                             PartnerTagRelExporter)
+    return partner_tag_rel_exporter.delete(partner_record_id)
