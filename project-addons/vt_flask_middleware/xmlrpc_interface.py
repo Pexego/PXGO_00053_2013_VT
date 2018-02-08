@@ -3,7 +3,8 @@ from app import app
 from database import db
 from user import User
 from country import Country
-from customer import Customer
+from customer import Customer, CustomerTag, CustomerTagCustomerRel
+from order import Order, OrderProduct
 from invoice import Invoice
 from commercial import Commercial
 from product import Product, ProductCategory
@@ -12,6 +13,9 @@ from auth import auth
 from sync_log import SyncLog
 from flask import session
 from utils import parse_many2one_vals
+import xmlrpclib
+import datetime
+import logging
 from implemented_models import MODELS_CLASS
 handler = XMLRPCHandler('xmlrpc')
 handler.connect(app, '/xmlrpc')
@@ -106,5 +110,13 @@ def unlink(user_id, password, model, odoo_id):
             for rma in Rma.select().where(
                     Rma.stage_id == rec.id):
                 rma.delete_instance()
+        elif model == 'customertagcustomerrel':
+            for customertagcustomerrel in CustomerTagCustomerRel.select().where(
+                    CustomerTagCustomerRel.odoo_id == rec.odoo_id):
+                customertagcustomerrel.delete_instance()
+        elif model == 'order':
+            for order in Order.select().where(
+                Order.partner_id == rec.id):
+                order.delete_instance()
         rec.delete_instance()
     return True
