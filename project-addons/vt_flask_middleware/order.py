@@ -11,7 +11,8 @@ class Order(SyncModel):
     name = CharField(max_length=30)
     state = CharField(max_length=15)
     partner_id = ForeignKeyField(Customer, on_delete="CASCADE")
-    total_amount = FloatField(default=0.0)
+    amount_total= FloatField(default=0.0)
+    amount_untaxed = FloatField(default=0.0)
     date_order = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     client_order_ref = CharField(max_length=50, null=True)
 
@@ -25,7 +26,7 @@ class OrderProduct(SyncModel):
     odoo_id = IntegerField(unique=True)
     product_id = ForeignKeyField(Product, on_delete='CASCADE')
     product_qty = IntegerField()
-    total_price = FloatField()
+    price_subtotal = FloatField(default=0.0)
     order_id = ForeignKeyField(Order, on_delete='CASCADE')
 
     MOD_NAME = 'orderproduct'
