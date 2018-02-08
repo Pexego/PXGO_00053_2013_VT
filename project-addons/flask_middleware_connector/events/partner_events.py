@@ -473,10 +473,8 @@ class PartnerTagRelExporter(Exporter):
     _model_name = ['res.partner.res.partner.category.rel']
 
     def update(self, partner_record_id, category_record_id, mode):
-        partner = self.env['res.partner'].browse(partner_record_id)
-        category = self.env['res.partner.category'].browse(category_record_id)
-        vals = {"odoo_id": partner.id,
-                "customertag_id": category.id,
+        vals = {"odoo_id": partner_record_id,
+                "customertag_id": category_record_id,
                 }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
