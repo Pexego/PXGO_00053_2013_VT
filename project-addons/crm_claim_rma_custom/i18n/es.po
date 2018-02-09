@@ -612,7 +612,6 @@ msgid "One or more products aren't pending shipping yet!"
 msgstr "¡Algunos de los productos no están pendientes de envío todavia!"
 
 #. module: crm_claim_rma_custom
-#: view:crm.line:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
-#: field:crm.line,claim_name:0
+#: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
 msgid "Claim Subject"
 msgstr "Objeto de la reclamación"
