@@ -160,7 +160,6 @@ def delay_export_orderproduct_write(session, model_name, record_id, vals):
 
 @on_record_unlink(model_names='sale.order.line')
 def delay_export_orderproduct_unlink(session, model_name, record_id):
-    import ipdb; ipdb.set_trace()
     orderproduct = session.env[model_name].browse(record_id)
     if orderproduct.order_id.partner_id.web or orderproduct.order_id.partner_id.commercial_partner_id.web:
         unlink_orderproduct.delay(session, model_name, record_id, priority=7, eta=180)
