@@ -160,12 +160,12 @@ class MiddlewareBackend(models.TransientModel):
                     for category in partner.category_id:
                         update_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner.id, category.id)
 
-        elif self.type_expor == 'order':
+        elif self.type_export == 'order':
             partner_obj = self.env['res.partner']
             partner_ids = partner_obj.search([('is_company', '=', True),
                                               ('web', '=', True),
                                               ('customer', '=', True)])
-            sales = session.env['sale.order'].search([('partner_id', 'child_of', partner.ids),
+            sales = session.env['sale.order'].search([('partner_id', 'child_of', partner_ids.ids),
                                                       ('state', 'in', ['done','progress','draft','reserve'])])
             if self.mode_export == 'export':
                 for sale in sales:
