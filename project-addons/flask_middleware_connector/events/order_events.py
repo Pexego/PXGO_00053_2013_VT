@@ -84,7 +84,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
 
 
 @on_record_unlink(model_names='sale.order')
-def delay_export_order_unlink(session, model_name, record_id, vals):
+def delay_export_order_unlink(session, model_name, record_id):
     order = session.env[model_name].browse(record_id)
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
         unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
@@ -159,7 +159,7 @@ def delay_export_orderproduct_write(session, model_name, record_id, vals):
 
 
 @on_record_unlink(model_names='sale.order.line')
-def delay_export_orderproduct_unlink(session, model_name, record_id, vals):
+def delay_export_orderproduct_unlink(session, model_name, record_id):
     orderproduct = session.env[model_name].browse(record_id)
     if orderproduct.order_id.partner_id.web or orderproduct.order_id.partner_id.commercial_partner_id.web:
         unlink_orderproduct.delay(session, model_name, record_id, priority=7, eta=180)

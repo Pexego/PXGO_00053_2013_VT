@@ -440,7 +440,7 @@ def delay_export_partner_tag_write(session, model_name, record_id, vals):
         update_partner_tag.delay(session, model_name, record_id, priority=2, eta=120)
 
 @on_record_unlink(model_names='res.partner.category')
-def delay_export_partner_tag_remove(session, model_name, record_id):
+def delay_export_partner_tag_unlink(session, model_name, record_id):
     unlink_partner_tag.delay(session, model_name, record_id, priority=3, eta=120)
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
@@ -516,7 +516,7 @@ datos.
     update_partner_tag_rel.delay(session, model_name, partner_record_id, priority=2, eta=60)
 
 
-def delay_export_partner_tag_rel_unlink(session, model_name, partner_record_id, vals):
+def delay_export_partner_tag_rel_unlink(session, model_name, partner_record_id):
     #unlink_partner_tag_rel.delay(session, model_name, partner_record_id, priority=2, eta=120)
     unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner_record_id, priority=5, eta=120)
 
