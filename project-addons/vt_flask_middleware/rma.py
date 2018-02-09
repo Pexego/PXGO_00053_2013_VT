@@ -16,6 +16,7 @@ class RmaStatus(SyncModel):
     def __unicode__(self):
         return self.name
 
+
 class RmaStage(SyncModel):
     MOD_NAME = 'rmastage'
 
