@@ -30,7 +30,7 @@ class ProductTemplate(models.Model):
     @api.depends("standard_price")
     @api.multi
     def _get_pvm(self):
-        pricelist = self.env['product.pricelist'].search_read([('name', '=', 'PVM1')], ['id'])
+        pricelist = self.env['product.pricelist'].search_read([('name', '=', 'PVM')], ['id'])
         if pricelist:
             pricelist_id = pricelist[0]['id']
             new_ctx = dict(self._context)
