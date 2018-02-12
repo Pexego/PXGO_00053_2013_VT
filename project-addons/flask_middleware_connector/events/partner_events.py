@@ -461,7 +461,7 @@ def delay_export_partner_tag_write(session, model_name, record_id, vals):
             for tag_id in tags.ids:
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
                                             partner.id, tag_id, priority=10, eta=120)
-    else:
+    elif tag.active:
         update_partner_tag.delay(session, model_name, record_id, priority=2, eta=120)
 
 @on_record_unlink(model_names='res.partner.category')
