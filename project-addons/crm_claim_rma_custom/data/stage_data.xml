@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record model="crm.claim.stage" id="stage_claim6">
+            <field name="name">Pte. de envío</field>
+            <field name="sequence">27</field>
+            <field name="case_default" eval="True"/>
+        </record>
+
+    </data>
+</openerp>

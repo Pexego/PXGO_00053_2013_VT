@@ -598,3 +598,20 @@ msgstr "Llamadas SAT"
 #: selection:res.partner,sat_phonecall_count:0
 msgid "SAT Calls"
 msgstr "Llamadas SAT"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:105
+#, python-format
+msgid "Warning!"
+msgstr "¡Advertencia!"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:106
+#, python-format
+msgid "One or more products aren't pending shipping yet!"
+msgstr "¡Algunos de los productos no están pendientes de envío todavia!"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
+msgid "Claim Subject"
+msgstr "Objeto de la reclamación"

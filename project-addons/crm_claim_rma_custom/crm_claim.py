@@ -83,15 +83,25 @@ class CrmClaimRma(models.Model):
 
     @api.multi
     def write(self, vals):
-        stage_repaired_id = self.env.ref('crm_claim.stage_claim2').id
-        if 'stage_id' in vals and vals['stage_id'] == stage_repaired_id:
-            for line in self.claim_line_ids:
-                line_state = self.env['ir.model.data'].search([('model', '=', 'substate.substate'),
-                                                               ('module', '=', 'crm_claim_rma_custom'),
-                                                               ('res_id', '=', line.substate_id.id)])
-                if line_state.name in self.check_states:
-                    raise except_orm(_('Warning!'),
-                                     _("One or more products aren't review yet!"))
+        if 'stage_id' in vals:
+            stage_ids = []
+            stage_repaired_id = self.env.ref('crm_claim.stage_claim2').id
+            stage_ids.append(stage_repaired_id)
+            stage_pending_shipping_id = self.env.ref('crm_claim_rma_custom.stage_claim6').id
+            stage_ids.append(stage_pending_shipping_id)
+            if vals['stage_id'] in stage_ids:
+                for line in self.claim_line_ids:
+                    line_state = self.env['ir.model.data'].search([('model', '=', 'substate.substate'),
+                                                                   ('module', '=', 'crm_claim_rma_custom'),
+                                                                   ('res_id', '=', line.substate_id.id)])
+                    if vals['stage_id'] == stage_repaired_id:
+                        if line_state.name in self.check_states:
+                            raise except_orm(_('Warning!'),
+                                             _("One or more products aren't review yet!"))
+                    else:
+                        if line_state.name != 'substate_pending_shipping':
+                            raise except_orm(_('Warning!'),
+                                             _("One or more products aren't pending shipping yet!"))
 
         return super(CrmClaimRma, self).write(vals)
 
@@ -379,6 +389,7 @@ class CrmClaimLine(models.Model):
     substate_id = fields. \
         Many2one(default=lambda self:
     self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
+    claim_name = fields.Selection(related='claim_id.name', readonly=True)
 
     res = {}
 
