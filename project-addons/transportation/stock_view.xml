@@ -14,6 +14,7 @@
                         <field name="carrier_tracking_ref"/>
                         <field name="carrier_name"/>
                         <field name="carrier_service"/>
+                        <button name="button_check_tracking" string="Check tracking status" type="object" colspan="4"/>
                     </group>
                     <group>
                         <label for="weight" string="Weight"/>
