@@ -433,10 +433,35 @@ def delay_export_partner_tag_write(session, model_name, record_id, vals):
     tag = session.env[model_name].browse(record_id)
     up_fields = ["name", "parent_id", "active"]
     if 'active' in vals and not vals.get('active', False):
+        partner_obj = session.env['res.partner']
+        partner_ids = partner_obj.search([('is_company', '=', True),
+                                          ('web', '=', True),
+                                          ('customer', '=', True),
+                                          ('category_id', 'in', record_id)])
         unlink_partner_tag.delay(session, model_name, record_id, priority=3, eta=120)
+        for partner in partner_ids:
+            unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                         partner.id, priority=5, eta=60)
+            tags = partner.category_id
+            for tag_id in tags.ids:
+                export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                             partner.id, tag_id, priority=10, eta=120)
     elif 'active' in vals and vals.get('active', False):
-        export_partner_tag.delay(session, model_name, record_id, priority=1, eta=60)
-    else:
+        partner_obj = session.env['res.partner']
+        partner_ids = partner_obj.search([('is_company', '=', True),
+                                        ('web', '=', True),
+                                        ('customer', '=', True),
+                                        ('category_id', 'in', record_id)])
+        export_partner_tag.delay(
+            session, model_name, record_id, priority=1, eta=60)
+        for partner in partner_ids:
+            unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                        partner.id, priority=5, eta=60)
+            tags = partner.category_id
+            for tag_id in tags.ids:
+                export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                            partner.id, tag_id, priority=10, eta=120)
+    elif tag.active:
         update_partner_tag.delay(session, model_name, record_id, priority=2, eta=120)
 
 @on_record_unlink(model_names='res.partner.category')

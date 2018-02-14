@@ -37,6 +37,12 @@
                 <field name="partner_id" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </field>
+                <field name="product_qty" position="attributes">
+                    <attribute name="sum">Total Qty.</attribute>
+                </field>
+                <field name="price_subtotal" position="attributes">
+                    <attribute name="sum">Subtotal.</attribute>
+                </field>
             </field>
         </record>
 
