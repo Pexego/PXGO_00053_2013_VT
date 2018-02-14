@@ -45,7 +45,11 @@ class AddToPurchaseOrderWzd(models.TransientModel):
             if obj.custom_purchase_qty:
                 purchase_qty = obj.purchase_qty
             else:
-                purchase_qty = product.min_suggested_qty
+                min_suggested_qty = product.min_suggested_qty
+                if min_suggested_qty < 0:
+                    purchase_qty = -(product.min_suggested_qty)
+                else:
+                     purchase_qty = min_suggested_qty
             line_vals.update(purchase_line_obj.
                              onchange_product_id(purchase.pricelist_id.id,
                                                  product.id, purchase_qty,
