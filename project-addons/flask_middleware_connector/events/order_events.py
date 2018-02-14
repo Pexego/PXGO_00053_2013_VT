@@ -70,12 +70,16 @@ def delay_export_order_create(session, model_name, record_id, vals):
 def delay_export_order_write(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
     #He cogido order_line porque no entra amount_total ni amount_untaxed en el write
-    up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref", "order_line"] 
+    up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref", "order_line"]
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
+        job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(order.id) + ')%'),
+                                               ('model_name', '=', model_name)], order='date_created desc', limit=1)
         if 'state' in vals.keys() and vals['state'] == 'cancel':
             unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
-        elif 'state' in vals.keys() and vals['state'] in  ('draft', 'reserve'):
+        elif 'state' in vals.keys() and vals['state'] in ('draft', 'reserve') and 'unlink' in job.name:
             export_order.delay(session, model_name, record_id, priority=2, eta=80)
+            for line in order.order_line:
+                export_orderproduct.delay(session, 'sale.order.line', line.id, priority=2, eta=120)
         elif order.state in ('draft', 'reserve', 'progress', 'done'):
             for field in up_fields:
                 if field in vals:

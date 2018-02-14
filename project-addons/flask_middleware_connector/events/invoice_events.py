@@ -73,7 +73,7 @@ class InvoiceAdapter(GenericAdapter):
 def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
     up_fields = ["number", "client_ref", "date_invoice", "state_web", "partner_id",
-                 "date_due", "subtotal_wt_rect", "subtotal_wt_rect", "payment_ids"]
+                 "date_due", "subtotal_wt_rect", "subtotal_wt_rect", "payment_ids", "payment_mode_id"]
     if invoice.partner_id and invoice.commercial_partner_id.web \
             and 'state' in vals or 'state_web' in vals\
             and invoice.company_id.id == 1:
@@ -82,21 +82,21 @@ def delay_write_invoice(session, model_name, record_id, vals):
                                                ('model_name', '=', model_name)], order='date_created desc', limit=1)
         if job:
             if invoice.state_web == 'open' and 'unlink_invoice' in job[0].func_string:
-                export_invoice.delay(session, model_name, record_id, priority=5)
+                export_invoice.delay(session, model_name, record_id, priority=5, eta=120)
             elif invoice.state_web in ('paid', 'returned', 'remitted'):
-                update_invoice.delay(session, model_name, record_id, priority=10, eta=60)
+                update_invoice.delay(session, model_name, record_id, priority=10, eta=120)
             elif invoice.state_web == 'cancel' and 'unlink_invoice' not in job[0].func_string:
-                unlink_invoice.delay(session, model_name, record_id, priority=15)
+                unlink_invoice.delay(session, model_name, record_id, priority=15, eta=120)
             elif invoice.state_web == 'open':
                 for field in up_fields:
                     if field in vals:
-                        update_invoice.delay(session, model_name, record_id, priority=10, eta=60)
+                        update_invoice.delay(session, model_name, record_id, priority=10, eta=120)
                         break
         elif invoice.state_web == 'open':
-            export_invoice.delay(session, model_name, record_id, priority=5, eta=60)
+            export_invoice.delay(session, model_name, record_id, priority=5, eta=120)
 
 
-@job(retry_pattern={1: 10  * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
 def export_invoice(session, model_name, record_id):
     invoice_exporter = _get_exporter(session, model_name, record_id, InvoiceExporter)
