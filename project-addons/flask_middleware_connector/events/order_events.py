@@ -62,8 +62,7 @@ class OrderAdapter(GenericAdapter):
 def delay_export_order_create(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
-        if 'state' in vals.keys() and vals['state'] in ('draft', 'reserve'):
-            export_order.delay(session, model_name, record_id, priority=2, eta=80)
+        export_order.delay(session, model_name, record_id, priority=2, eta=80)
 
 
 @on_record_write(model_names='sale.order')
@@ -76,7 +75,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
                                                ('model_name', '=', model_name)], order='date_created desc', limit=1)
         if 'state' in vals.keys() and vals['state'] == 'cancel':
             unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
-        elif 'state' in vals.keys() and vals['state'] in ('draft', 'reserve') and 'unlink' in job.name:
+        elif 'state' in vals.keys() and vals['state'] in ('draft', 'reserve') and job.name and 'unlink' in job.name:
             export_order.delay(session, model_name, record_id, priority=2, eta=80)
             for line in order.order_line:
                 export_orderproduct.delay(session, 'sale.order.line', line.id, priority=2, eta=120)
