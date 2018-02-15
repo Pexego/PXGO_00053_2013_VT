@@ -60,13 +60,14 @@ class StockPicking(models.Model):
         carrier = self.carrier_name
         status_list = self.env['picking.tracking.status.list']
         url = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking')
+        password = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking.pass')
         if 'Correos' in carrier:
             carrier_ref = carrier_ref[-13:]
 
         data = {'request_API': {
                     "numRef": carrier_ref,
                     "transportista": carrier,
-                    "password": "bkqF3dfW"
+                    "password": password
         }}
         response = requests.session().post(url, data=json.dumps(data))
         if response.status_code != 200:
