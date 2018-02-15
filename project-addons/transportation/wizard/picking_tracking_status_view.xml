@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_picking_tracking_status" model="ir.ui.view">
+            <field name="name">Picking Tracking Status</field>
+            <field name="model">picking.tracking.status</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+              <form string="Tracking status information">
+                  <group>
+                      <field name="status_request"/>
+                      <field name="status_picking"/>
+                  </group>
+                  <field name="status_list" mode="tree">
+                        <tree string="Status" colors="blue:last_record == True" editable="bottom">
+                            <field name="status"/>
+                            <field name="date"/>
+                            <field name="city"/>
+                            <field name="last_record" invisible="1"/>
+                        </tree>
+                  </field>
+             </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

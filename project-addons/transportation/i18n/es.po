@@ -290,3 +290,54 @@ msgstr "el ratio no puede ser 0"
 #: field:sale.order,transporter_id:0
 msgid "transporter"
 msgstr "Transportista"
+
+#. module: transportation
+#: view:stock.picking:transportation.view_picking_withtransport_out_form
+msgid "Check tracking status"
+msgstr "Comprobar estado del envío"
+
+#. module: transportation
+#: field:picking.tracking.status,status_picking:0
+msgid "STATUS"
+msgstr "Estado actual"
+
+#. module: transportation
+#: field:picking.tracking.status,status_request:0
+msgid "Status request"
+msgstr "Estado de la petición"
+
+#. module: transportation
+#: selection:picking.tracking.status,status_request:0
+msgid "Error Request"
+msgstr "Error en la petición"
+
+#. module: transportation
+#: selection:picking.tracking.status,status_request:0
+msgid "Information Available"
+msgstr "Información disponible"
+
+#. module: transportation
+#: selection:picking.tracking.status,status_request:0
+msgid "No Information"
+msgstr "Sin información"
+
+#. module: transportation
+#: view:picking.tracking.status:transportation.view_picking_tracking_status
+msgid "Tracking status information"
+msgstr "Información del tracking"
+
+#. module: transportation
+#: field:picking.tracking.status.list,status:0
+msgid "Status"
+msgstr "Estado"
+
+#. module: transportation
+#: field:picking.tracking.status.list,city:0
+msgid "City"
+msgstr "Ciudad"
+
+#. module: transportation
+#: field:picking.tracking.status.list,date:0
+msgid "Date"
+msgstr "Fecha"
+

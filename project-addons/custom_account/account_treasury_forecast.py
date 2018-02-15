@@ -103,8 +103,8 @@ class AccountTreasuryForecast(models.Model):
                 'state': invoice_o.state,
                 'base_amount': invoice_o.amount_untaxed,
                 'tax_amount': invoice_o.amount_tax,
-                'total_amount': invoice_o.amount_total,
-                'residual_amount': invoice_o.residual,
+                'total_amount': invoice_o.total_wt_rect,
+                'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
             }
             new_id = treasury_invoice_obj.create(values)
             new_invoice_ids.append(new_id)
@@ -152,8 +152,8 @@ class AccountTreasuryForecast(models.Model):
                 'state': invoice_o.state,
                 'base_amount': invoice_o.amount_untaxed,
                 'tax_amount': invoice_o.amount_tax,
-                'total_amount': invoice_o.amount_total,
-                'residual_amount': invoice_o.residual,
+                'total_amount': invoice_o.total_wt_rect,
+                'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
             }
             new_id = treasury_invoice_obj.create(values)
             new_invoice_ids.append(new_id)
@@ -257,15 +257,13 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     ai.number as concept,
                                     treasury_id,
                                     tfii.date_due as date,
-                                    CASE WHEN ai.type='in_invoice' THEN tfii.total_amount
+                                    CASE WHEN ai.type='in_invoice' THEN ABS(tfii.total_amount)
                                     ELSE 0.0
                                     END as credit,
                                     CASE WHEN ai.type='in_invoice' THEN 0.0
-                                    ELSE tfii.total_amount
+                                    ELSE ABS(tfii.total_amount)
                                     END as debit,
-                                    CASE WHEN ai.type='in_invoice' THEN -tfii.total_amount
-                                    ELSE tfii.total_amount
-                                    END as balance,
+                                    -tfii.total_amount as balance,
                                     tfii.payment_mode_id,
                                     CASE WHEN ai.type='in_invoice' THEN 'out'
                                     ELSE 'in'
@@ -284,14 +282,12 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     treasury_id,
                                     tfio.date_due as date,
                                     CASE WHEN ai.type='out_invoice' THEN 0.0
-                                    ELSE tfio.total_amount
+                                    ELSE ABS(tfio.total_amount)
                                     END as credit,
-                                    CASE WHEN ai.type='out_invoice' THEN tfio.total_amount
+                                    CASE WHEN ai.type='out_invoice' THEN ABS(tfio.total_amount)
                                     ELSE 0.0
                                     END as debit,
-                                    CASE WHEN ai.type='out_invoice' THEN tfio.total_amount
-                                    ELSE -tfio.total_amount
-                                    END as balance,
+                                    tfio.total_amount as balance,
                                     tfio.payment_mode_id,
                                     CASE WHEN ai.type='out_invoice' THEN 'in'
                                     ELSE 'out'
