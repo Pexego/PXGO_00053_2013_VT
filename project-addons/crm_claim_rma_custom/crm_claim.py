@@ -364,11 +364,15 @@ class ClaimInvoiceLine(models.Model):
         else:
             raise exceptions.Warning(_('Partner not selected'))
 
-    def onchange_values(self, cr, uid, ids, qty, price_unit, discount,
-                        context=None):
+    @api.onchange("qty", "price_unit", "discount")
+    def onchange_values(self):
+        if self.product_id and self.invoice_id:
+            for line in self.invoice_id.invoice_line:
+                if line.product_id == self.product_id and line.quantity < self.qty:
+                    raise exceptions.Warning(_('Quantity cannot be bigger than the quantity specified on invoice'))
         price_subtotal = \
-            discount and qty * price_unit - (discount * price_unit / 100) or \
-            qty * price_unit
+            self.discount and self.qty * self.price_unit - (self.discount * self.price_unit / 100) or \
+            self.qty * self.price_unit
         res = {'value': {'price_subtotal': price_subtotal}}
         return res
 

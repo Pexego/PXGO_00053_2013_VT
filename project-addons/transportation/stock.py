@@ -21,6 +21,8 @@
 
 from openerp import models, fields, api
 import openerp.addons.decimal_precision as dp
+import requests
+import json
 
 
 class StockPicking(models.Model):
@@ -51,6 +53,63 @@ class StockPicking(models.Model):
         return self.env['product.uom'].search([('category_id', '=',
                                                 uom_categ_id.id),
                                                ('factor', '=', 1)])[0]
+
+    @api.multi
+    def button_check_tracking(self):
+        carrier_ref = self.carrier_tracking_ref
+        carrier = self.carrier_name
+        status_list = self.env['picking.tracking.status.list']
+        url = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking')
+        password = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking.pass')
+        if 'Correos' in carrier:
+            carrier_ref = carrier_ref[-13:]
+
+        data = {'request_API': {
+                    "numRef": carrier_ref,
+                    "transportista": carrier,
+                    "password": password
+        }}
+        response = requests.session().post(url, data=json.dumps(data))
+        if response.status_code != 200:
+            raise Exception(response.text)
+        if 'error' in response.url:
+            raise Exception("Could not find information on url '%s'" % response.url)
+        info = json.loads(response.text)
+
+        view_id = self.env['picking.tracking.status']
+        ctx = {'information': info}
+        new = view_id.with_context(ctx).create({})
+        status_list.search([('picking_id', '=', self.id)]).unlink()
+        if info["activity"]:
+            for status in info["activity"]:
+                city_country = status["Ciudad"]
+                if status["Pais"]:
+                    city_country += ' (' + status["Pais"] + ')'
+
+                date_time = status["fecha"] + ' ' + status["hora"]
+
+                data_status = {
+                    'wizard_id': new.id,
+                    'picking_id': self.id,
+                    'status': status["Status"],
+                    'city': city_country,
+                    'date': date_time
+                }
+                new.write({'status_list': [(0, 0, data_status)]})
+            last = status_list.search([('wizard_id', '=', new.id)], order='id', limit=1)
+            last.write({'last_record': True})
+
+        return {
+            'name': 'Tracking status information',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'target': 'new',
+            'res_model': 'picking.tracking.status',
+            'res_id': new.id,
+            'src_model': 'stock.picking',
+            'type': 'ir.actions.act_window',
+            'id': 'action_picking_tracking_status',
+            }
 
     @api.multi
     def write(self, vals):
