@@ -317,9 +317,7 @@ class ClaimInvoiceLine(models.Model):
 
     @api.one
     def _get_subtotal(self):
-        self.price_subtotal = self.discount and \
-                              self.qty * self.price_unit * ((100.0 - self.discount) / 100.0) or \
-                              self.qty * self.price_unit
+        self.price_subtotal = self.qty * self.price_unit * ((100.0 - self.discount) / 100.0)
 
     @api.onchange("product_id", "invoice_id")
     def onchange_product_id(self):
@@ -370,9 +368,7 @@ class ClaimInvoiceLine(models.Model):
             for line in self.invoice_id.invoice_line:
                 if line.product_id == self.product_id and line.quantity < self.qty:
                     raise exceptions.Warning(_('Quantity cannot be bigger than the quantity specified on invoice'))
-        price_subtotal = \
-            self.discount and self.qty * self.price_unit - (self.discount * self.price_unit / 100) or \
-            self.qty * self.price_unit
+        price_subtotal = self.qty * self.price_unit * ((100.0 - self.discount) / 100.0)
         res = {'value': {'price_subtotal': price_subtotal}}
         return res
 
