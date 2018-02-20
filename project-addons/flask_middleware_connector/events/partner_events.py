@@ -231,7 +231,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
                                              record_id, tag.id, priority=10, eta=60)
 
-            sale = session.env['sale.order'].search([('commercial_partner_id', '=', partner.id),
+            sales = session.env['sale.order'].search([('commercial_partner_id', '=', partner.id),
                                                     ('state', 'in', ('done', 'progress', 'draft', 'reserve'))])
             for sale in sales:
                 export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)

@@ -79,7 +79,7 @@ def delay_export_picking_create(session, model_name, record_id, vals):
 def delay_export_picking_write(session, model_name, record_id, vals):
     picking = session.env[model_name].browse(record_id)
     up_fields = ["date_done", "move_type", "carrier_name", "carrier_tracking_ref",
-                 "state"]
+                 "state", "partner_id"]
     if picking.partner_id.commercial_partner_id.web \
             and picking.partner_id.commercial_partner_id.active \
             and picking.partner_id.active \
