@@ -54,6 +54,7 @@ class PartnerExporter(Exporter):
                 partner.property_product_pricelist.name or "",
                 "state": partner.state_id and partner.state_id.name or "",
                 "email": partner.email_web or "",
+                "prospective": partner.prospective,
                 "lang": partner.lang and partner.lang.split("_")[0] or 'es'}
         if not vals['is_company']:
             vals.update({"type": partner.type, "parent_id": partner.parent_id.id, "email": partner.email})
@@ -78,11 +79,13 @@ def delay_export_partner_create(session, model_name, record_id, vals):
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", 'user_id',
                  "property_product_pricelist", "lang", "type",
-                 "parent_id", "is_company", "email"]
+                 "parent_id", "is_company", "email", "prospective"]
     if vals.get('is_company', False) or partner.is_company:
 
-        if vals.get("web", False) and (vals.get('active', False) or
-                                       partner.active):
+        if vals.get("web", False) and ((vals.get('active', False) or \
+                                       partner.active) or \
+                                       (vals.get('prospective', False) or \
+                                        partner.prospective)):
             export_partner.delay(session, model_name, record_id, priority=1,
                                  eta=60)
             tags = partner.category_id
@@ -117,14 +120,16 @@ def delay_export_partner_create(session, model_name, record_id, vals):
             pickings = session.env['stock.picking'].search([
                 ('partner_id', 'child_of', [partner.id]),
                 ('state', '!=', 'cancel'),
-                ('picking_type_id.code', '=', 'outgoing')
+                ('picking_type_id.code', '=', 'outgoing'),
+                ('company_id', '=', 1),
+                ('not_sync', '=', False)
             ])
             for picking in pickings:
                 export_picking.delay(session, 'stock.picking', picking.id, priority=5, eta=120)
                 for line in picking.move_lines:
                         export_pickingproduct.delay(session, 'stock.move', line.id,
                                                     priority=10, eta=240)
-        elif vals.get("active", False) and partner.web:
+        elif vals.get("active", False) or vals.get("prospective", False) and partner.web:
             export_partner.delay(session, model_name, record_id, priority=1,
                                  eta=60)
 
@@ -146,7 +151,9 @@ def delay_export_partner_create(session, model_name, record_id, vals):
             pickings = session.env['stock.picking'].search([
                 ('partner_id', 'child_of', [partner.id]),
                 ('state', '!=', 'cancel'),
-                ('picking_type_id.code', '=', 'outgoing')
+                ('picking_type_id.code', '=', 'outgoing'),
+                ('company_id', '=', 1),
+                ('not_sync', '=', False)
             ])
             for picking in pickings:
                 export_picking.delay(session, 'stock.picking', picking.id, priority=5, eta=120)
@@ -159,7 +166,8 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                     update_partner.delay(session, model_name, record_id, priority=5, eta=120)
                     break
     else:
-        if partner.parent_id.web and 'active' in vals and vals.get('active', False):
+        if partner.parent_id.web and 'active' in vals and vals.get('active', False) or \
+                                     'prospective' in vals and vals.get('prospective', False):
             export_partner.delay(session, model_name, record_id, priority=1,
                                  eta=120)
 
@@ -176,7 +184,8 @@ def delay_export_partner_write(session, model_name, record_id, vals):
         contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
                                                    ('is_company', '=', False)])
         if (vals.get("web", False) and \
-                vals.get('active', partner.active) and \
+                (vals.get('active', partner.active) or \
+                 vals.get('active', partner.prospective))and \
                 vals.get('is_company', partner.is_company)):
             export_partner.delay(session, model_name, record_id, priority=1, eta=60)
             for contact in contacts:
@@ -212,7 +221,9 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             pickings = session.env['stock.picking'].search([
                 ('partner_id', 'child_of', [partner.id]),
                 ('state', '!=', 'cancel'),
-                ('picking_type_id.code', '=', 'outgoing')
+                ('picking_type_id.code', '=', 'outgoing'),
+                ('company_id', '=', 1),
+                ('not_sync', '=', False)
             ])
             for picking in pickings:
                 export_picking.delay(session, 'stock.picking', picking.id, priority=5, eta=120)
@@ -220,7 +231,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                     export_pickingproduct.delay(session, 'stock.move', line.id,
                                                 priority=10, eta=240)
 
-        elif (vals.get("active", False) and partner.web and \
+        elif ((vals.get("active", False) or vals.get('prospective', False)) and partner.web and \
                 vals.get('is_company', partner.is_company)):
             export_partner.delay(session, model_name, record_id, priority=1, eta=60)
             for contact in contacts:
@@ -231,7 +242,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
                                              record_id, tag.id, priority=10, eta=60)
 
-            sale = session.env['sale.order'].search([('commercial_partner_id', '=', partner.id),
+            sales = session.env['sale.order'].search([('commercial_partner_id', '=', partner.id),
                                                     ('state', 'in', ('done', 'progress', 'draft', 'reserve'))])
             for sale in sales:
                 export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
@@ -256,27 +267,25 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             pickings = session.env['stock.picking'].search([
                 ('partner_id', 'child_of', [partner.id]),
                 ('state', '!=', 'cancel'),
-                ('picking_type_id.code', '=', 'outgoing')
+                ('picking_type_id.code', '=', 'outgoing'),
+                ('company_id', '=', 1),
+                ('not_sync', '=', False)
             ])
             for picking in pickings:
-                export_picking.delay(session, 'stock.picking', rma.id, priority=5, eta=120)
+                export_picking.delay(session, 'stock.picking', picking.id, priority=5, eta=120)
                 for line in picking.move_lines:
                     export_pickingproduct.delay(session, 'stock.move', line.id,
                                                 priority=10, eta=240)
 
         elif "web" in vals and not vals["web"]:
-            #unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-            #                             record_id, eta=60)
             for contact in contacts:
                 unlink_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=60)
 
             unlink_partner.delay(session, model_name, record_id, priority=1, eta=60)
 
-        elif "active" in vals and not vals["active"] and partner.web or \
-                "prospective" in vals and vals["prospective"]:
-            #unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-            #                             record_id, eta=60)
+        elif partner.web and ("active" in vals and not vals["active"] and not partner.prospective or \
+                              "prospective" in vals and not vals["prospective"] and not partner.active):
             for contact in contacts:
                 unlink_partner.delay(session, model_name, contact.id, priority=1,
                                      eta=60)
@@ -297,7 +306,6 @@ def delay_export_partner_write(session, model_name, record_id, vals):
 
         elif partner.web and (vals.get('is_company', False) or partner.is_company):
             if 'category_id' in vals.keys():
-                tags = partner.category_id
                 unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
                                              record_id, priority=5, eta=60)
                 for tag_id in vals.get('category_id', False)[0][2]:
@@ -413,9 +421,11 @@ class PartnerTagAdapter(GenericAdapter):
     _model_name = 'res.partner.category'
     _middleware_model = 'customertag'
 
+
 @on_record_create(model_names='res.partner.category')
 def delay_export_partner_tag_create(session, model_name, record_id, vals):
     export_partner_tag.delay(session, model_name, record_id, priority=1, eta=60)
+
 
 @on_record_write(model_names='res.partner.category')
 def delay_export_partner_tag_write(session, model_name, record_id, vals):
@@ -435,7 +445,8 @@ def delay_export_partner_tag_write(session, model_name, record_id, vals):
             for tag_id in tags.ids:
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
                                              partner.id, tag_id, priority=10, eta=120)
-    elif 'active' in vals and vals.get('active', False):
+    elif 'active' in vals and vals.get('active', False) or \
+         'prospective' in vals and vals.get('prospective', False):
         partner_obj = session.env['res.partner']
         partner_ids = partner_obj.search([('is_company', '=', True),
                                         ('web', '=', True),
@@ -445,17 +456,19 @@ def delay_export_partner_tag_write(session, model_name, record_id, vals):
             session, model_name, record_id, priority=1, eta=60)
         for partner in partner_ids:
             unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-                                        partner.id, priority=5, eta=60)
+                                         partner.id, priority=5, eta=60)
             tags = partner.category_id
             for tag_id in tags.ids:
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-                                            partner.id, tag_id, priority=10, eta=120)
+                                             partner.id, tag_id, priority=10, eta=120)
     elif tag.active:
         update_partner_tag.delay(session, model_name, record_id, priority=2, eta=120)
+
 
 @on_record_unlink(model_names='res.partner.category')
 def delay_export_partner_tag_unlink(session, model_name, record_id):
     unlink_partner_tag.delay(session, model_name, record_id, priority=3, eta=120)
+
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
                     5: 50 * 60})
@@ -524,14 +537,10 @@ contenidos en ids (int[])
 - [[2, id]]: Desasocia y borra el identificador contenido en id (int) del campo y de la base de
 datos.
     """
-    #if model_name == 'res.partner':
-        #unlink_partner_tag
-
     update_partner_tag_rel.delay(session, model_name, partner_record_id, priority=2, eta=60)
 
 
 def delay_export_partner_tag_rel_unlink(session, model_name, partner_record_id):
-    #unlink_partner_tag_rel.delay(session, model_name, partner_record_id, priority=2, eta=120)
     unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner_record_id, priority=5, eta=120)
 
 
