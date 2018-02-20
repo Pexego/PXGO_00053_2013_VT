@@ -69,7 +69,7 @@ class RmaAdapter(GenericAdapter):
 def delay_create_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
     if rma.partner_id and rma.partner_id.web:
-        export_rma.delay(session, model_name, record_id)
+        export_rma.delay(session, model_name, record_id, priority=1)
 
 
 @on_record_write(model_names='crm.claim')
@@ -77,14 +77,19 @@ def delay_write_rma(session, model_name, record_id, vals):
     rma = session.env[model_name].browse(record_id)
     up_fields = ["date", "date_received", "delivery_type", "delivery_address_id",
                  "partner_id", "stage_id", "number", "name"]
-    if vals.get("partner_id", False) and rma.partner_id.web:
-        export_rma.delay(session, model_name, record_id)
-    elif 'partner_id' in vals.keys() and not vals.get("partner_id"):
+    job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(rma.id) + ')%'),
+                                           ('model_name', '=', model_name)], order='date_created desc', limit=1)
+    if vals.get("partner_id", False) and rma.partner_id.web and 'unlink' in job.name:
+        export_rma.delay(session, model_name, record_id, priority=1)
+        for line in rma.claim_line_ids:
+            export_rmaproduct.delay(session, 'claim.line', line.id, priority=10, eta=120)
+    elif 'partner_id' in vals.keys() and not vals.get("partner_id") or \
+            vals.get("partner_id", False) and not rma.partner_id.web:
         unlink_rma.delay(session, model_name, record_id, priority=6, eta=120)
     elif rma.partner_id.web:
         for field in up_fields:
             if field in vals:
-                update_rma.delay(session, model_name, record_id, priority=5, eta=60)
+                update_rma.delay(session, model_name, record_id, priority=5, eta=120)
                 break
 
 
