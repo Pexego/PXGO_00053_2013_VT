@@ -15,6 +15,7 @@ class Order(SyncModel):
     amount_untaxed = FloatField(default=0.0)
     date_order = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     client_order_ref = CharField(max_length=50, null=True)
+    partner_shipping_id = ForeignKeyField(Customer, on_delete='CASCADE', related_name='shipping_id')
 
     MOD_NAME = 'order'
 
