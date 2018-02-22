@@ -43,7 +43,11 @@ class OrderExporter(Exporter):
                 "date_order": order.date_order,
                 "amount_untaxed": order.amount_untaxed,
                 "client_order_ref": order.client_order_ref,
-                'partner_shipping_id': order.partner_shipping_id.id,
+                'shipping_street': order.partner_shipping_id.street,
+                'shipping_zip': order.partner_shipping_id.zip,
+                'shipping_city': order.partner_shipping_id.city,
+                'shipping_state': order.partner_shipping_id.state_id.name,
+                'shipping_country': order.partner_shipping_id.country_id.name,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
