@@ -28,7 +28,7 @@ from ..unit.backend_adapter import GenericAdapter
 from .rma_events import unlink_rma, unlink_rmaproduct, export_rma, export_rmaproduct
 from .invoice_events import unlink_invoice, export_invoice
 from .picking_events import export_picking, unlink_picking, export_pickingproduct, unlink_pickingproduct
-from .order_events import export_order, unlink_order, export_orderproduct, unlink_orderproduct
+from .order_events import export_order, update_order, unlink_order, export_orderproduct, unlink_orderproduct
 
 @middleware
 class PartnerExporter(Exporter):
@@ -94,13 +94,15 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                                              record_id, tag.id, priority=10, eta=60)
 
             sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
-                                                    ('state', 'in', ['done','progress','draft','reserve'])])
+                                                      ('company_id', '=', 1),
+                                                      ('state', 'in', ['done', 'progress', 'draft', 'reserve'])])
             for sale in sales:
                 export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
                 for line in sale.order_line:
                     export_orderproduct.delay(session, 'sale.order.line', line.id, priority=10, eta=180)
 
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
+                                                              ('company_id', '=', 1),
                                                               ('number', 'not like', '%ef%')])
             for invoice in invoices:
                 export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
@@ -133,7 +135,20 @@ def delay_export_partner_create(session, model_name, record_id, vals):
             export_partner.delay(session, model_name, record_id, priority=1,
                                  eta=60)
 
+            tags = partner.category_id
+            for tag in tags:
+                export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
+                                             record_id, tag.id, priority=10, eta=60)
+
+            sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
+                                                      ('company_id', '=', 1),
+                                                      ('state', 'in', ['done', 'progress', 'draft', 'reserve'])])
+            for sale in sales:
+                export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
+                for line in sale.order_line:
+                    export_orderproduct.delay(session, 'sale.order.line', line.id, priority=10, eta=180)
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
+                                                              ('company_id', '=', 1),
                                                               ('number', 'not like', '%ef%')])
             for invoice in invoices:
                 export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
@@ -164,6 +179,21 @@ def delay_export_partner_create(session, model_name, record_id, vals):
             for field in up_fields:
                 if field in vals:
                     update_partner.delay(session, model_name, record_id, priority=5, eta=120)
+
+                    if 'street' in vals or \
+                            'zip' in vals or \
+                            'city' in vals or \
+                            'country_id' in vals or \
+                            'state_id' in vals:
+                        sales = session.env['sale.order'].search([
+                            ('partner_id', '=', partner.id),
+                            '|',
+                            ('state', '!=', 'cancel'),
+                            ('state', '!=', 'done'),
+                            ('company_id', '=', 1)
+                        ])
+                        for sale in sales:
+                            update_order.delay(session, 'sale.order', sale.id, priority=5, eta=180)
                     break
     else:
         if partner.parent_id.web and 'active' in vals and vals.get('active', False) or \
@@ -182,7 +212,8 @@ def delay_export_partner_write(session, model_name, record_id, vals):
 
     if vals.get('is_company', False) or partner.is_company:
         contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
-                                                   ('is_company', '=', False)])
+                                                   ('is_company', '=', False),
+                                                   ('active', '=', True)])
         if (vals.get("web", False) and \
                 (vals.get('active', partner.active) or \
                  vals.get('active', partner.prospective))and \
@@ -197,13 +228,15 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                                              record_id, tag.id, priority=10, eta=60)
 
             sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
-                                                    ('state', 'in', ['done','progress','draft','reserve'])])
+                                                      ('company_id', '=', 1),
+                                                      ('state', 'in', ['done','progress','draft','reserve'])])
             for sale in sales:
                 export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
                 for line in sale.order_line:
                     export_orderproduct.delay(session, 'sale.order.line', line.id, priority=10, eta=180)
 
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
+                                                              ('company_id', '=', 1),
                                                               ('number', 'not like', '%ef%')])
             for invoice in invoices:
                 export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
@@ -243,13 +276,15 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                                              record_id, tag.id, priority=10, eta=60)
 
             sales = session.env['sale.order'].search([('commercial_partner_id', '=', partner.id),
-                                                    ('state', 'in', ('done', 'progress', 'draft', 'reserve'))])
+                                                      ('company_id', '=', 1),
+                                                      ('state', 'in', ('done', 'progress', 'draft', 'reserve'))])
             for sale in sales:
                 export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
                 for line in sale.order_line:
                     export_orderproduct.delay(session, 'sale.order.line', line.id, priority=10, eta=180)
 
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
+                                                              ('company_id', '=', 1),
                                                               ('number', 'not like', '%ef%')])
             for invoice in invoices:
                 export_invoice.delay(session, 'account.invoice', invoice.id, priority=5, eta=120)
@@ -314,6 +349,20 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             for field in up_fields:
                 if field in vals:
                     update_partner.delay(session, model_name, record_id, priority=2, eta=120)
+                    if 'street' in vals or \
+                            'zip' in vals or \
+                            'city' in vals or \
+                            'country_id' in vals or \
+                            'state_id' in vals:
+                        sales = session.env['sale.order'].search([
+                            ('partner_id', '=', partner.id),
+                            '|',
+                            ('state', '!=', 'cancel'),
+                            ('state', '!=', 'done'),
+                            ('company_id', '=', 1)
+                        ])
+                        for sale in sales:
+                            update_order.delay(session, 'sale.order', sale.id, priority=5, eta=180)
                     break
     else:
         if partner.commercial_partner_id and \
@@ -325,13 +374,28 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             elif 'active' in vals and not vals.get('active', False):
                 unlink_partner.delay(session, model_name, record_id, priority=1,
                                      eta=60)
-            elif partner.active:
+            else:
                 for field in up_fields:
                     if field in vals:
-                        update_partner.delay(session, model_name, record_id, priority=3,
-                                             eta=180)
-                        break
+                        if partner.active:
+                            update_partner.delay(session, model_name, record_id, priority=3,
+                                                 eta=180)
 
+                        if 'street' in vals or \
+                                'zip' in vals or \
+                                'city' in vals or \
+                                'country_id' in vals or \
+                                'state_id' in vals:
+                            sales = session.env['sale.order'].search([
+                                ('partner_shipping_id', '=', partner.id),
+                                '|',
+                                ('state', '!=', 'cancel'),
+                                ('state', '!=', 'done'),
+                                ('company_id', '=', 1)
+                            ])
+                            for sale in sales:
+                                update_order.delay(session, 'sale.order', sale.id, priority=5, eta=180)
+                        break
 
 @on_record_unlink(model_names='res.partner')
 def delay_unlink_partner(session, model_name, record_id):
