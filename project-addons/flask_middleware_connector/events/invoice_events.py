@@ -94,6 +94,11 @@ def delay_write_invoice(session, model_name, record_id, vals):
                         break
         elif invoice.state_web == 'open':
             export_invoice.delay(session, model_name, record_id, priority=5, eta=120)
+    else:
+        for field in up_fields:
+            if field in vals:
+                update_invoice.delay(session, model_name, record_id, priority=10, eta=60)
+                break
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
