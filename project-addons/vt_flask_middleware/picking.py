@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from peewee import CharField, IntegerField, DateTimeField, ForeignKeyField, TextField
+from peewee import CharField, IntegerField, DateTimeField, ForeignKeyField, TextField, BooleanField
 from app import app
 from customer import Customer
 from product import Product
@@ -18,6 +18,7 @@ class Picking(SyncModel):
     origin = CharField(max_length=30)
     state = CharField(max_length=30)
     pdf_file_data = TextField()
+    dropship = BooleanField(default=False)
 
     MOD_NAME = 'picking'
 
