@@ -80,8 +80,6 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                  "property_product_pricelist", "lang", "type",
                  "parent_id", "is_company", "email"]
     if vals.get('is_company', False) or partner.is_company:
-        contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
-                                                   ('is_company', '=', False)])
 
         if vals.get("web", False) and (vals.get('active', False) or
                                        partner.active):
@@ -91,9 +89,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
             for tag in tags:
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
                                              record_id, tag.id, priority=10, eta=60)
-            for contact in contacts:
-                export_partner.delay(session, model_name, contact.id, priority=1,
-                                     eta=120)
+
             sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
                                                     ('state', 'in', ['done','progress','draft','reserve'])])
             for sale in sales:
@@ -131,9 +127,6 @@ def delay_export_partner_create(session, model_name, record_id, vals):
         elif vals.get("active", False) and partner.web:
             export_partner.delay(session, model_name, record_id, priority=1,
                                  eta=60)
-            for contact in contacts:
-                export_partner.delay(session, model_name, contact.id, priority=1,
-                                     eta=120)
 
             invoices = session.env['account.invoice'].search([('commercial_partner_id', '=', partner.id),
                                                               ('number', 'not like', '%ef%')])
@@ -238,7 +231,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
                                              record_id, tag.id, priority=10, eta=60)
 
-            sale = session.env['sale.order'].search([('commercial_partner_id', '=', partner.id),
+            sales = session.env['sale.order'].search([('commercial_partner_id', '=', partner.id),
                                                     ('state', 'in', ('done', 'progress', 'draft', 'reserve'))])
             for sale in sales:
                 export_order.delay(session, 'sale.order', sale.id, priority=5, eta=120)
@@ -338,15 +331,11 @@ def delay_unlink_partner(session, model_name, record_id):
     contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
                                                ('is_company', '=', False)])
     if partner.web:
-        #unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-        #                                     record_id, eta=60)
         for contact in contacts:
             unlink_partner.delay(session, model_name, contact.id, eta=60)
         unlink_partner.delay(session, model_name, record_id, eta= 60)
 
     elif partner.commercial_partner_id.web:
-        #unlink_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-        #                                     record_id, eta=60)
         for contact in contacts:
             unlink_partner.delay(session, model_name, contact.id, eta=60)
         unlink_partner.delay(session, model_name, record_id, eta=60)

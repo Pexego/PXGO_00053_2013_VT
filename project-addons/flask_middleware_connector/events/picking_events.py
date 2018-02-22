@@ -73,21 +73,18 @@ def delay_export_picking_create(session, model_name, record_id, vals):
             and picking.partner_id.commercial_partner_id.active \
             and picking.picking_type_id.code == 'outgoing':
         export_picking.delay(session, model_name, record_id, priority=1, eta=60)
-        picking_products = session.env['stock.move'].search([('picking_id', '=', picking.id)])
-        for product in picking_products:
-            export_pickingproduct.delay(session, 'stock.move', product.id, priority=1, eta=120)
 
 
 @on_record_write(model_names='stock.picking')
 def delay_export_picking_write(session, model_name, record_id, vals):
     picking = session.env[model_name].browse(record_id)
     up_fields = ["date_done", "move_type", "carrier_name", "carrier_tracking_ref",
-                 "state"]
+                 "state", "partner_id"]
     if picking.partner_id.commercial_partner_id.web \
             and picking.partner_id.commercial_partner_id.active \
             and picking.partner_id.active \
             and picking.picking_type_id.code == 'outgoing':
-        if 'name' in vals:
+        if 'name' in vals or 'partner_id' in vals:
             export_picking.delay(session, model_name, record_id, priority=1, eta=60)
             picking_products = session.env['stock.move'].search([('picking_id', '=', picking.id)])
             for product in picking_products:
@@ -102,6 +99,12 @@ def delay_export_picking_write(session, model_name, record_id, vals):
                 if field in vals:
                     update_picking.delay(session, model_name, record_id, priority=2, eta=120)
                     break
+    else:
+        job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(record_id) + ')%'),
+                                               ('model_name', '=', model_name)], order='date_created desc', limit=1)
+
+        if job and 'unlink' not in job.name:
+            unlink_picking.delay(session, model_name, record_id, priority=5, eta=120)
 
 
 @on_record_unlink(model_names='stock.picking')
