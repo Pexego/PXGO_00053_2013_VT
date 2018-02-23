@@ -635,6 +635,17 @@ class ResPartner(models.Model):
                                   + ''' : %s </center> </strong>''' % (total)
         return followup_table
 
+    @api.multi
+    @api.onchange('dropship')
+    def onchange_dropship(self):
+        if self.dropship:
+            res = {'warning': {
+                'title': _('Warning'),
+                'message': _('Remember to set our partner email, not dropship email!')
+            }}
+            if res:
+                return res
+
 
 class rappel_calculated(models.Model):
 

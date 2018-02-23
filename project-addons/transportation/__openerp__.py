@@ -34,6 +34,7 @@
                 'customer_area',
                 'stock'],
     "data": ['security/ir.model.access.csv',
+             'wizard/picking_tracking_status_view.xml',
              'res_partner_view.xml',
              'transportation_view.xml',
              'sale_view.xml', 'stock_view.xml'],

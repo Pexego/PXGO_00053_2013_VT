@@ -35,7 +35,6 @@ class AddToPurchaseOrderWzd(models.TransientModel):
     def assign_purchase_order(self):
         obj = self[0]
         product_obj = self.env["product.product"]
-        view_obj = self.env["ir.ui.view"]
         purchase_line_obj = self.env["purchase.order.line"]
         for product in product_obj.browse(self.env.context['active_ids']):
             purchase = obj.purchase_id
@@ -45,7 +44,11 @@ class AddToPurchaseOrderWzd(models.TransientModel):
             if obj.custom_purchase_qty:
                 purchase_qty = obj.purchase_qty
             else:
-                purchase_qty = product.min_suggested_qty
+                min_suggested_qty = product.min_suggested_qty
+                if min_suggested_qty < 0:
+                    purchase_qty = -(product.min_suggested_qty)
+                else:
+                     purchase_qty = min_suggested_qty
             line_vals.update(purchase_line_obj.
                              onchange_product_id(purchase.pricelist_id.id,
                                                  product.id, purchase_qty,
@@ -59,12 +62,4 @@ class AddToPurchaseOrderWzd(models.TransientModel):
                 line_vals['taxes_id'] = [(6, 0, line_vals['taxes_id'])]
             purchase_line_obj.create(line_vals)
 
-        view = view_obj.search([('model', '=', "purchase.order"),
-                                ('type', '=', 'form')])[0]
-        return {'name': _("Purchase Order"),
-                'view_type': 'form',
-                'view_mode': 'form',
-                'view_id': view.id,
-                'res_model': "purchase.order",
-                'res_id': obj.purchase_id.id,
-                'type': 'ir.actions.act_window'}
+        return {'type': 'ir.actions.act_window_close'}

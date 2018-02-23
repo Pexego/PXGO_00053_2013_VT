@@ -41,4 +41,49 @@ class product_product(models.Model):
         else:
             self.is_outlet = False
 
+    @api.model
+    def cron_update_outlet_price(self):
+        outlet_categ_ids = []
+        outlet_categ_ids.append(self.env.ref('product_outlet.product_category_o1').id)
+        outlet_categ_ids.append(self.env.ref('product_outlet.product_category_o2').id)
+        outlet_products = self.env['product.product'].search([('categ_id', 'in', outlet_categ_ids),
+                                                              ('normal_product_id.list_price', '!=', 0)],
+                                                             order="id desc", limit=100)
+        for product_o in outlet_products:
+            origin_product = product_o.normal_product_id
+            price_outlet = origin_product.list_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet2 = origin_product.list_price2 * (1 - product_o.categ_id.percent / 100)
+            price_outlet3 = origin_product.list_price3 * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvd = origin_product.pvd1_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvd2 = origin_product.pvd2_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvd3 = origin_product.pvd3_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvi = origin_product.pvi1_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvi2 = origin_product.pvi2_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvi3 = origin_product.pvi3_price * (1 - product_o.categ_id.percent / 100)
+
+            if round(product_o.list_price, 2) != round(price_outlet, 2) or \
+                    round(product_o.list_price2, 2) != round(price_outlet2, 2) or \
+                    round(product_o.list_price3, 2) != round(price_outlet3, 2) or \
+                    round(product_o.pvd1_price, 2) != round(price_outlet_pvd, 2) or \
+                    round(product_o.pvd2_price, 2) != round(price_outlet_pvd2, 2) or \
+                    round(product_o.pvd3_price, 2) != round(price_outlet_pvd3, 2) or \
+                    round(product_o.pvi1_price, 2) != round(price_outlet_pvi, 2) or \
+                    round(product_o.pvi2_price, 2) != round(price_outlet_pvi2, 2) or \
+                    round(product_o.pvi3_price, 2) != round(price_outlet_pvi3, 2) or \
+                    round(product_o.commercial_cost, 2) != round(origin_product.commercial_cost, 2):
+                # update all prices
+                values = {
+                    'standard_price': price_outlet,
+                    'list_price': price_outlet,
+                    'list_price2': price_outlet2,
+                    'list_price3': price_outlet3,
+                    'pvd1_price': price_outlet_pvd,
+                    'pvd2_price': price_outlet_pvd2,
+                    'pvd3_price': price_outlet_pvd3,
+                    'pvi1_price': price_outlet_pvi,
+                    'pvi2_price': price_outlet_pvi2,
+                    'pvi3_price': price_outlet_pvi3,
+                    'commercial_cost': origin_product.commercial_cost,
+                }
+                product_o.write(values)
 

@@ -56,7 +56,7 @@ class ProductExporter(Exporter):
                     'pvd_1': product.pvd1_price,
                     'pvd_2': product.pvd2_price,
                     'pvd_3': product.pvd3_price,
-                    'pvm': product.pvm_price,
+                    'pvm': product.product_tmpl_id.pvm_price,
                     'joking_index': product.joking_index,
                     'sale_ok': product.sale_ok,
                     'ean13': product.ean13,
