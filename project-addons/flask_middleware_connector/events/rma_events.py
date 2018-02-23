@@ -79,7 +79,10 @@ def delay_write_rma(session, model_name, record_id, vals):
                  "partner_id", "stage_id", "number", "name"]
     job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(rma.id) + ')%'),
                                            ('model_name', '=', model_name)], order='date_created desc', limit=1)
-    if vals.get("partner_id", False) and rma.partner_id.web and job.name and 'unlink' in job.name:
+    import ipdb
+    ipdb.set_trace()
+    if vals.get("partner_id", False) and rma.partner_id.web and ((job.name and 'unlink' in job.name) or \
+                                                                 not job.name):
         export_rma.delay(session, model_name, record_id, priority=1)
         for line in rma.claim_line_ids:
             export_rmaproduct.delay(session, 'claim.line', line.id, priority=10, eta=120)
