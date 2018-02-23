@@ -70,7 +70,7 @@ class PickingAdapter(GenericAdapter):
 @on_record_create(model_names='stock.picking')
 def delay_export_picking_create(session, model_name, record_id, vals):
     picking = session.env[model_name].browse(record_id)
-    if picking.partner_id.commercial_partner_id.web and picking.partner_id.active \
+    if picking.partner_id.commercial_partner_id.web \
             and picking.partner_id.commercial_partner_id.active \
             and picking.picking_type_id.code == 'outgoing' \
             and not picking.not_sync \
@@ -85,7 +85,6 @@ def delay_export_picking_write(session, model_name, record_id, vals):
                  "state", "not_sync", "company_id", "partner_id"]
     if picking.partner_id.commercial_partner_id.web \
             and picking.partner_id.commercial_partner_id.active \
-            and picking.partner_id.active \
             and picking.picking_type_id.code == 'outgoing' \
             and not picking.not_sync \
             and picking.company_id.id == 1:
@@ -119,7 +118,6 @@ def delay_export_picking_unlink(session, model_name, record_id):
     picking = session.env[model_name].browse(record_id)
     if picking.partner_id.commercial_partner_id.web \
             and picking.partner_id.commercial_partner_id.active \
-            and picking.partner_id.active \
             and picking.picking_type_id.code == 'outgoing' \
             and not picking.not_sync \
             and picking.company_id.id == 1:
