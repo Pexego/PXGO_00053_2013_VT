@@ -394,7 +394,7 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     INNER JOIN res_partner_bank rpb ON rpb.id = bm.bank_account
                                     cross join  account_treasury_forecast atf
                                     WHERE   bm.date_due BETWEEN atf.start_date AND atf.end_date
-                                            AND coalesce(bm.paid, False) = False AND atf.not_bank_maturity = False    
+                                            AND coalesce(bm.paid, False) = False AND coalesce(atf.not_bank_maturity, False) = False    
                             ) analysis
                             LEFT JOIN payment_mode pm ON pm.id = analysis.payment_mode_id
                             ORDER  BY analysis.treasury_id, analysis.date, analysis.id_ref
