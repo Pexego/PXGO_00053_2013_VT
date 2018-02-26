@@ -188,7 +188,7 @@ def delay_export_picking_line_create(session, model_name, record_id, vals=None):
             and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing' \
             and not move_line.picking_id.not_sync \
-            and move_line.picking_id.company_id == 1:
+            and move_line.picking_id.company_id.id == 1:
         export_pickingproduct.delay(session, model_name, record_id, priority=1, eta=180)
 
 
@@ -201,7 +201,7 @@ def delay_export_picking_line_write(session, model_name, record_id, vals):
             and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing'\
             and not move_line.picking_id.not_sync \
-            and move_line.picking_id.company_id == 1:
+            and move_line.picking_id.company_id.id == 1:
         for field in up_fields:
             if field in vals:
                 update_pickingproduct.delay(session, model_name, record_id, priority=2, eta=240)
@@ -215,7 +215,7 @@ def delay_export_picking_line_unlink(session, model_name, record_id):
             and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing' \
             and not move_line.picking_id.not_sync \
-            and move_line.picking_id.company_id == 1:
+            and move_line.picking_id.company_id.id == 1:
         unlink_pickingproduct.delay(session, model_name, record_id, priority=5, eta=240)
 
 
