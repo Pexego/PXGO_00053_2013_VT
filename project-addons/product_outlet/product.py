@@ -48,7 +48,7 @@ class product_product(models.Model):
         outlet_categ_ids.append(self.env.ref('product_outlet.product_category_o2').id)
         outlet_products = self.env['product.product'].search([('categ_id', 'in', outlet_categ_ids),
                                                               ('normal_product_id.list_price', '!=', 0)],
-                                                             order="id desc", limit=100)
+                                                             order="id desc")
         for product_o in outlet_products:
             origin_product = product_o.normal_product_id
             price_outlet = origin_product.list_price * (1 - product_o.categ_id.percent / 100)
