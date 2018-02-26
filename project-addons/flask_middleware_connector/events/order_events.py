@@ -43,6 +43,11 @@ class OrderExporter(Exporter):
                 "date_order": order.date_order,
                 "amount_untaxed": order.amount_untaxed,
                 "client_order_ref": order.client_order_ref,
+                'shipping_street': order.partner_shipping_id.street,
+                'shipping_zip': order.partner_shipping_id.zip,
+                'shipping_city': order.partner_shipping_id.city,
+                'shipping_state': order.partner_shipping_id.state_id.name,
+                'shipping_country': order.partner_shipping_id.country_id.name,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
@@ -69,7 +74,7 @@ def delay_export_order_create(session, model_name, record_id, vals):
 def delay_export_order_write(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
     #He cogido order_line porque no entra amount_total ni amount_untaxed en el write
-    up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref", "order_line"]
+    up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref", "order_line", "partner_shipping_id"]
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
         job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(order.id) + ')%'),
                                                ('model_name', '=', model_name)], order='date_created desc', limit=1)

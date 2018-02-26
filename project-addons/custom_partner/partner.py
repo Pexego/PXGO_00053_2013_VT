@@ -462,14 +462,6 @@ class ResPartner(models.Model):
         return super(ResPartner, self).create(vals)
 
     @api.multi
-    @api.constrains('web')
-    def check_client_type(self):
-        if self.web and self.prospective:
-            raise ValidationError(_('The client is prospective. The client cannot be created on the web.'))
-        else:
-            return True
-
-    @api.multi
     def write(self, vals):
         if vals.get('dropship', False):
             vals['active'] = False

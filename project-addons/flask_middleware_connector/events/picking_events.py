@@ -50,7 +50,8 @@ class PickingExporter(Exporter):
                 "carrier_tracking_ref": picking.carrier_tracking_ref or "",
                 "origin": picking.origin,
                 "state": picking.state,
-                "pdf_file_data": result_encode or ""
+                "pdf_file_data": result_encode or "",
+                "dropship": picking.partner_id.dropship,
                 }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
@@ -69,9 +70,11 @@ class PickingAdapter(GenericAdapter):
 @on_record_create(model_names='stock.picking')
 def delay_export_picking_create(session, model_name, record_id, vals):
     picking = session.env[model_name].browse(record_id)
-    if picking.partner_id.commercial_partner_id.web and picking.partner_id.active \
+    if picking.partner_id.commercial_partner_id.web \
             and picking.partner_id.commercial_partner_id.active \
-            and picking.picking_type_id.code == 'outgoing':
+            and picking.picking_type_id.code == 'outgoing' \
+            and not picking.not_sync \
+            and picking.company_id.id == 1:
         export_picking.delay(session, model_name, record_id, priority=1, eta=60)
 
 
@@ -79,17 +82,20 @@ def delay_export_picking_create(session, model_name, record_id, vals):
 def delay_export_picking_write(session, model_name, record_id, vals):
     picking = session.env[model_name].browse(record_id)
     up_fields = ["date_done", "move_type", "carrier_name", "carrier_tracking_ref",
-                 "state", "partner_id"]
+                 "state", "not_sync", "company_id", "partner_id"]
     if picking.partner_id.commercial_partner_id.web \
             and picking.partner_id.commercial_partner_id.active \
-            and picking.partner_id.active \
-            and picking.picking_type_id.code == 'outgoing':
+            and picking.picking_type_id.code == 'outgoing' \
+            and not picking.not_sync \
+            and picking.company_id.id == 1:
         if 'name' in vals or 'partner_id' in vals:
             export_picking.delay(session, model_name, record_id, priority=1, eta=60)
             picking_products = session.env['stock.move'].search([('picking_id', '=', picking.id)])
             for product in picking_products:
                 export_pickingproduct.delay(session, 'stock.move', product.id, priority=1, eta=120)
-        elif 'state' in vals and vals['state'] == 'cancel':
+        elif 'state' in vals and vals['state'] == 'cancel' \
+                or 'not_sync' in vals and vals['not_sync'] \
+                or 'company_id' in vals and vals['company_id'] != 1:
             picking_products = session.env['stock.move'].search([('picking_id', '=', picking.id)])
             for product in picking_products:
                 unlink_pickingproduct.delay(session, 'stock.move', product.id, priority=1, eta=120)
@@ -112,8 +118,9 @@ def delay_export_picking_unlink(session, model_name, record_id):
     picking = session.env[model_name].browse(record_id)
     if picking.partner_id.commercial_partner_id.web \
             and picking.partner_id.commercial_partner_id.active \
-            and picking.partner_id.active \
-            and picking.picking_type_id.code == 'outgoing':
+            and picking.picking_type_id.code == 'outgoing' \
+            and not picking.not_sync \
+            and picking.company_id.id == 1:
         picking_products = session.env['stock.move'].search([('picking_id', '=', picking.id)])
         for product in picking_products:
             unlink_pickingproduct.delay(session, 'stock.move', product.id, priority=1, eta=120)
@@ -179,7 +186,9 @@ def delay_export_picking_line_create(session, model_name, record_id, vals=None):
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
             and move_line.picking_id.partner_id.active \
-            and move_line.picking_id.picking_type_id.code == 'outgoing':
+            and move_line.picking_id.picking_type_id.code == 'outgoing' \
+            and not move_line.picking_id.not_sync \
+            and move_line.picking_id.company_id.id == 1:
         export_pickingproduct.delay(session, model_name, record_id, priority=1, eta=180)
 
 
@@ -190,7 +199,9 @@ def delay_export_picking_line_write(session, model_name, record_id, vals):
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
             and move_line.picking_id.partner_id.active \
-            and move_line.picking_id.picking_type_id.code == 'outgoing':
+            and move_line.picking_id.picking_type_id.code == 'outgoing'\
+            and not move_line.picking_id.not_sync \
+            and move_line.picking_id.company_id.id == 1:
         for field in up_fields:
             if field in vals:
                 update_pickingproduct.delay(session, model_name, record_id, priority=2, eta=240)
@@ -202,7 +213,9 @@ def delay_export_picking_line_unlink(session, model_name, record_id):
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
             and move_line.picking_id.partner_id.active \
-            and move_line.picking_id.picking_type_id.code == 'outgoing':
+            and move_line.picking_id.picking_type_id.code == 'outgoing' \
+            and not move_line.picking_id.not_sync \
+            and move_line.picking_id.company_id.id == 1:
         unlink_pickingproduct.delay(session, model_name, record_id, priority=5, eta=240)
 
 
