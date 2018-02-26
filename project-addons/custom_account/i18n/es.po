@@ -693,7 +693,7 @@ msgid "Concept"
 msgstr "Concepto"
 
 #. module: custom_account
-#: field:report.account.treasury.forecast.analysis,partner_id:0
+#: field:report.account.treasury.forecast.analysis,partner_name:0
 msgid "Partner/Supplier"
 msgstr "Cliente/Proveedor"
 
@@ -712,3 +712,70 @@ msgstr "Acumulado"
 #: field:account.treasury.forecast,not_bankable_supplier:0
 msgid "Without Bankable Suppliers"
 msgstr "Sin financiables"
+
+#. module: custom_account
+#: field:account.treasury.forecast,not_bank_maturity:0
+msgid "Without Bank Maturities"
+msgstr "Sin vencimientos bancarios"
+
+#. module: custom_account
+#: help:account.treasury.forecast,not_bank_maturity:0
+msgid "It will be reflected in the treasury analysis"
+msgstr "Se reflejará en el análisis de la previsión"
+
+
+#. module: custom_account
+#: field:bank.maturity,bank_account:0
+msgid "Bank account"
+msgstr "Cuenta bancaria"
+
+#. module: custom_account
+#: field:bank.maturity,bank_name:0
+msgid "Bank"
+msgstr "Banco"
+
+#. module: custom_account
+#: field:bank.maturity,date_due:0
+msgid "Due Date"
+msgstr "Fecha vencimiento"
+
+#. module: custom_account
+#: field:bank.maturity,amount:0
+msgid "Amount"
+msgstr "Importe"
+
+#. module: custom_account
+#: field:bank.maturity,paid:0
+msgid "Paid"
+msgstr "Pagado"
+
+#. module: custom_account
+#: model:ir.ui.menu,name:custom_account.menu_treasury_forecast_bank_maturity
+#: model:ir.actions.act_window,name:custom_account.action_treasury_forecast_bank_maturities
+msgid "Bank Maturities"
+msgstr "Vencimientos Bancarios"
+
+#. module: custom_account
+#: field:account.treasury.forecast.line.template,period_quantity:0
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: custom_account
+#: field:account.treasury.forecast.line.template,period_type:0
+msgid "Period"
+msgstr "Periodo"
+
+#. module: custom_account
+#: selection:account.treasury.forecast.line.template,period_type:0
+msgid "Days"
+msgstr "Días"
+
+#. module: custom_account
+#: selection:account.treasury.forecast.line.template,period_type:0
+msgid "Months"
+msgstr "Meses"
+
+#. module: custom_account
+#: field:account.treasury.forecast.line,paid:0
+msgid "Paid"
+msgstr "Pagado"

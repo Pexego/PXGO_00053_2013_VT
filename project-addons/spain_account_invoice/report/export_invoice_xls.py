@@ -129,10 +129,11 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
                 "END "
                 "as partner_name, "
                 "p.id as partner_id, "
-                "t.amount as amount, "
+                "t.tax_amount as tax_amount, "
                 "t.base_amount as tax_base, "
                 "it.value as country_name, "
-                "t.name as tax_description "
+                "t.name as tax_description, "
+                "i.type as type "
                 "FROM("
                 "account_invoice i "
                 "LEFT JOIN res_partner p "
@@ -309,7 +310,7 @@ try:
                         'totals': [1, 0, 'text', None]},
                     'tax_amount': {
                         'header': [1, 20, 'text', _render("_('Cuota IVA')")],
-                        'lines': [1, 0, 'number', _render("l['amount']"),
+                        'lines': [1, 0, 'number', _render("l['tax_amount']"),
                                   None, self.aml_cell_style_decimal],
                         'totals': [1, 0, 'text', None]},
                     'tax_amount_ret': {
@@ -624,14 +625,20 @@ try:
                             ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
                                                           wb)
 
-                        l['amount_total'] = amount_total
+                        if 'refund' in l['type']:
+                            if amount_total > 0:
+                                l['amount_total'] = -amount_total
+                        else:
+                            l['amount_total'] = amount_total
 
                         l['tax_amount_ret'] = 0.0
                         if l['tax_description'] == 'Retenciones IRPF 15%':
-                            l['tax_amount_ret'] = -float(l['amount'])
-                            l['amount'] = 0.0
+                            l['tax_amount_ret'] = -float(l['tax_amount'])
+                            l['tax_amount'] = 0.0
                             l['tax_base'] = 0.0
                             l['amount_total'] = 0.0
+                        elif l['tax_description'] == 'IVA 21% Intracomunitario. Bienes corrientes (2)':
+                            l['tax_amount'] = -l['tax_amount']
 
                         if (length < line_count) and (l['number'] == lines[line_count]['number']):
                             if l['tax_description'] != '21% IVA soportado (operaciones corrientes)':

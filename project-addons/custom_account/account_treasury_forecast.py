@@ -20,10 +20,14 @@
 ##############################################################################
 from openerp import models, fields, tools, api, exceptions, _
 import openerp.addons.decimal_precision as dp
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 PAYMENT_MODE = [('debit_receipt', 'Debit receipt'),
                 ('transfer', 'Transfer'),
                 ('both', 'Both')]
+
+PERIOD = [('days', 'Days'), ('months', 'Months')]
 
 
 class AccountTreasuryForecast(models.Model):
@@ -38,6 +42,8 @@ class AccountTreasuryForecast(models.Model):
     check_old_open_supplier = fields.Boolean(string="Old (opened)")
     opened_start_date_supplier = fields.Date(string="Start Date")
     not_bankable_supplier = fields.Boolean(string="Without Bankable Suppliers")
+    not_bank_maturity = fields.Boolean(string="Without Bank Maturities",
+                                       help="It will be reflected in the treasury analysis")
 
     @api.one
     @api.constrains('payment_mode_customer', 'check_old_open_customer',
@@ -47,18 +53,16 @@ class AccountTreasuryForecast(models.Model):
         if not self.payment_mode_customer or not self.payment_mode_supplier:
             raise exceptions.Warning(
                 _('Error!:: You must select one option for payment mode fields.'))
-        elif self.payment_mode_customer != 'debit_receipt':
-            if self.check_old_open_customer:
-                if self.opened_start_date_customer >= self.start_date:
-                    raise exceptions.Warning(
-                        _('Error!:: Start date of old opened invoices in customers must be lower '
-                          'than the start date specified before.'))
-        elif self.payment_mode_supplier != 'debit_receipt':
-            if self.check_old_open_supplier:
-                if self.opened_start_date_supplier >= self.start_date:
-                    raise exceptions.Warning(
-                        _('Error!:: Start date of old opened invoices in suppliers must be lower '
-                          'than the start date specified before.'))
+        elif self.payment_mode_customer != 'debit_receipt' and self.check_old_open_customer \
+                and self.opened_start_date_customer >= self.start_date:
+            raise exceptions.Warning(
+                _('Error!:: Start date of old opened invoices in customers must be lower '
+                  'than the start date specified before.'))
+        elif self.payment_mode_supplier != 'debit_receipt' and self.check_old_open_supplier \
+                and self.opened_start_date_supplier >= self.start_date:
+            raise exceptions.Warning(
+                _('Error!:: Start date of old opened invoices in suppliers must be lower '
+                  'than the start date specified before.'))
 
     @api.one
     def calculate_invoices(self):
@@ -101,8 +105,8 @@ class AccountTreasuryForecast(models.Model):
                 'partner_id': invoice_o.partner_id.id,
                 'journal_id': invoice_o.journal_id.id,
                 'state': invoice_o.state,
-                'base_amount': invoice_o.amount_untaxed,
-                'tax_amount': invoice_o.amount_tax,
+                'base_amount': invoice_o.subtotal_wt_rect,
+                'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
                 'total_amount': invoice_o.total_wt_rect,
                 'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
             }
@@ -150,8 +154,8 @@ class AccountTreasuryForecast(models.Model):
                 'partner_id': invoice_o.partner_id.id,
                 'journal_id': invoice_o.journal_id.id,
                 'state': invoice_o.state,
-                'base_amount': invoice_o.amount_untaxed,
-                'tax_amount': invoice_o.amount_tax,
+                'base_amount': invoice_o.subtotal_wt_rect,
+                'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
                 'total_amount': invoice_o.total_wt_rect,
                 'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
             }
@@ -164,6 +168,79 @@ class AccountTreasuryForecast(models.Model):
 
         return new_invoice_ids
 
+    @api.model
+    def next_date_period(self, date_origin, period, quantity):
+        date = datetime.strptime(date_origin, "%Y-%m-%d")
+        if period == 'days':
+            date_calculated = (datetime(date.year, date.month, date.day) + relativedelta(days=quantity))
+        else:
+            date_calculated = (datetime(date.year, date.month, date.day) + relativedelta(months=quantity))
+        return date_calculated.strftime('%Y-%m-%d')
+
+    @api.one
+    def calculate_line(self):
+        new_line_ids = []
+        line_obj = self.env['account.treasury.forecast.line']
+        temp_line_obj = self.env['account.treasury.forecast.line.template']
+        temp_line_lst = temp_line_obj.search([('treasury_template_id', '=', self.template_id.id)])
+        for line_o in temp_line_lst:
+            date_calculated = line_o.date
+            while date_calculated <= self.end_date and not line_o.paid:
+                if self.start_date <= date_calculated <= self.end_date:
+                    values = {
+                        'name': line_o.name,
+                        'date': date_calculated,
+                        'line_type': line_o.line_type,
+                        'partner_id': line_o.partner_id.id,
+                        'template_line_id': line_o.id,
+                        'amount': line_o.amount,
+                        'treasury_id': self.id,
+                    }
+                    new_line_id = line_obj.create(values)
+                    new_line_ids.append(new_line_id)
+                date_calculated = self.next_date_period(date_calculated, line_o.period_type, line_o.period_quantity)
+        return new_line_ids
+
+    @api.multi
+    def write(self, vals):
+        if 'check_old_open_customer' in vals and not vals['check_old_open_customer']:
+            vals['opened_start_date_customer'] = False
+        if 'check_old_open_supplier' in vals and not vals['check_old_open_supplier']:
+            vals['opened_start_date_supplier'] = False
+        return super(AccountTreasuryForecast, self).write(vals)
+
+    @api.one
+    def calc_final_amount(self):
+        super(AccountTreasuryForecast, self).calc_final_amount()
+        balance = self.final_amount
+        for recurring_line in self.recurring_line_ids.search([('paid', '=', True)]):
+            balance += recurring_line.amount
+        self.final_amount = balance
+
+
+class BankMaturity(models.Model):
+    _name = "bank.maturity"
+
+    bank_account = fields.Many2one("res.partner.bank", string="Bank account",
+                                   domain=lambda self: [("partner_id", "=", self.env.user.company_id.partner_id.id)])
+    bank_name = fields.Char("Bank", related='bank_account.bank_name', readonly=True)
+    date_due = fields.Date(string="Due Date")
+    amount = fields.Float(string="Amount", digits=dp.get_precision('Account'))
+    paid = fields.Boolean(string="Paid")
+
+
+class AccountTreasuryForecastLineTemplate(models.Model):
+    _inherit = 'account.treasury.forecast.line.template'
+
+    period_quantity = fields.Integer("Quantity")
+    period_type = fields.Selection(PERIOD, string="Period")
+
+
+class AccountTreasuryForecastLine(models.Model):
+    _inherit = 'account.treasury.forecast.line'
+
+    paid = fields.Boolean(string="Paid")
+
 
 class ReportAccountTreasuryForecastAnalysis(models.Model):
     _inherit = 'report.account.treasury.forecast.analysis'
@@ -171,9 +248,9 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
 
     id_ref = fields.Char(string="Id Reference")
     concept = fields.Char(string="Concept")
-    partner_id = fields.Many2one('res.partner', string='Partner/Supplier')
+    partner_name = fields.Char('Partner/Supplier')
     bank_id = fields.Many2one('res.partner.bank', string='Bank Account')
-    accumulative_balance = fields.Float(string="Accumulated", digits_compute=dp.get_precision('Account'))
+    accumulative_balance = fields.Float(string="Accumulated", digits=dp.get_precision('Account'))
 
     def init(self, cr):
         tools.drop_view_if_exists(cr, 'report_account_treasury_forecast_analysis')
@@ -185,7 +262,7 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                 analysis.id_ref, 
                                 analysis.date, 
                                 analysis.concept, 
-                                rp.id as partner_id, 
+                                analysis.partner_name, 
                                 analysis.payment_mode_id,
                                 pm.bank_id,
                                 analysis.credit, 
@@ -199,13 +276,13 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     0 as id_ref,
                                     'Importe inicial' as concept,
                                     tf.id as treasury_id,
-                                    tf.start_date as date,
+                                    LEAST(tf.start_date, tf.opened_start_date_customer, tf.opened_start_date_supplier) as date,
                                     null as credit,
                                     null as debit,
                                     start_amount as balance,
                                     null as payment_mode_id,
                                     null as type,
-                                    null partner_id
+                                    null partner_name
                                 from    account_treasury_forecast tf 
                                 where   tf.start_amount > 0 -- Incluir linea de importe inicial
                                 union
@@ -228,9 +305,11 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     CASE WHEN tfl.line_type='receivable' THEN 'in'
                                     ELSE 'out'
                                     END as type,
-                                    tfl.partner_id
+                                    rp.display_name as partner_name
                                 from    account_treasury_forecast tf 
-                                    inner join account_treasury_forecast_line tfl on tf.id = tfl.treasury_id
+                                    inner join account_treasury_forecast_line tfl on tf.id = tfl.treasury_id 
+                                                                                        and coalesce(tfl.paid, False) = False
+                                    left join res_partner rp ON rp.id = tfl.partner_id
                                 union
                                 select
                                     tcf.id || 'c' AS id,
@@ -268,12 +347,13 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     CASE WHEN ai.type='in_invoice' THEN 'out'
                                     ELSE 'in'
                                     END as type,
-                                    tfii.partner_id
+                                    rp.display_name as partner_name
                                     from
                                     account_treasury_forecast tf 
                                     inner join account_treasury_forecast_in_invoice_rel tfiir on tf.id = tfiir.treasury_id 
                                     inner join account_treasury_forecast_invoice tfii on tfii.id = tfiir.in_invoice_id 
                                     inner join account_invoice ai on ai.id = tfii.invoice_id
+                                    left join res_partner rp ON rp.id = tfii.partner_id
                                 union
                                 select
                                     tfio.id || 'o' AS id,
@@ -292,13 +372,30 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     CASE WHEN ai.type='out_invoice' THEN 'in'
                                     ELSE 'out'
                                     END as type,
-                                    tfio.partner_id
+                                    rp.display_name as partner_name
                                 from    account_treasury_forecast tf 
                                     inner join account_treasury_forecast_out_invoice_rel tfior on tf.id = tfior.treasury_id 
                                     inner join account_treasury_forecast_invoice tfio on tfio.id = tfior.out_invoice_id 
                                     inner join account_invoice ai on ai.id = tfio.invoice_id
+                                    left join res_partner rp ON rp.id = tfio.partner_id
+                                union
+                                select  bm.id || 'v' as id,
+                                    bm.id as id_ref,
+                                    'Vencimiento bancario' as concept,
+                                    atf.id as treasury_id,
+                                    bm.date_due as date,
+                                    null as credit,
+                                    null as debit,
+                                    -bm.amount as balance,
+                                    null as payment_mode_id,
+                                    'out' as type,
+                                    rpb.bank_name partner_name
+                                    from    bank_maturity bm -- Incluir próximos vencimientos
+                                    INNER JOIN res_partner_bank rpb ON rpb.id = bm.bank_account
+                                    cross join  account_treasury_forecast atf
+                                    WHERE   bm.date_due BETWEEN atf.start_date AND atf.end_date
+                                            AND coalesce(bm.paid, False) = False AND coalesce(atf.not_bank_maturity, False) = False    
                             ) analysis
-                            LEFT JOIN res_partner rp ON rp.id = analysis.partner_id
                             LEFT JOIN payment_mode pm ON pm.id = analysis.payment_mode_id
                             ORDER  BY analysis.treasury_id, analysis.date, analysis.id_ref
             )""")
