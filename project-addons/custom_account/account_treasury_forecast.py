@@ -225,7 +225,7 @@ class BankMaturity(models.Model):
                                    domain=lambda self: [("partner_id", "=", self.env.user.company_id.partner_id.id)])
     bank_name = fields.Char("Bank", related='bank_account.bank_name', readonly=True)
     date_due = fields.Date(string="Due Date")
-    amount = fields.Float(string="Amount", digits_compute=dp.get_precision('Account'))
+    amount = fields.Float(string="Amount", digits=dp.get_precision('Account'))
     paid = fields.Boolean(string="Paid")
 
 
@@ -250,7 +250,7 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
     concept = fields.Char(string="Concept")
     partner_name = fields.Char('Partner/Supplier')
     bank_id = fields.Many2one('res.partner.bank', string='Bank Account')
-    accumulative_balance = fields.Float(string="Accumulated", digits_compute=dp.get_precision('Account'))
+    accumulative_balance = fields.Float(string="Accumulated", digits=dp.get_precision('Account'))
 
     def init(self, cr):
         tools.drop_view_if_exists(cr, 'report_account_treasury_forecast_analysis')
