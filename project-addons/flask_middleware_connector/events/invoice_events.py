@@ -94,7 +94,7 @@ def delay_write_invoice(session, model_name, record_id, vals):
                         break
         elif invoice.state_web == 'open':
             export_invoice.delay(session, model_name, record_id, priority=5, eta=120)
-    else:
+    elif invoice.state in ('open', 'paid'):
         for field in up_fields:
             if field in vals:
                 update_invoice.delay(session, model_name, record_id, priority=10, eta=60)
