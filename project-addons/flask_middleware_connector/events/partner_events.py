@@ -131,7 +131,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                 for line in picking.move_lines:
                         export_pickingproduct.delay(session, 'stock.move', line.id,
                                                     priority=10, eta=240)
-        elif vals.get("active", False) or vals.get("prospective", False) and partner.web:
+        elif (vals.get("active", False) or vals.get("prospective", False)) and partner.web:
             export_partner.delay(session, model_name, record_id, priority=1,
                                  eta=60)
 
