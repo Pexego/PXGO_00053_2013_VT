@@ -11,7 +11,7 @@ class Order(SyncModel):
     name = CharField(max_length=30)
     state = CharField(max_length=15)
     partner_id = ForeignKeyField(Customer, on_delete="CASCADE")
-    amount_total= DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
+    amount_total = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
     amount_untaxed = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
     date_order = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
     client_order_ref = CharField(max_length=50, null=True)
@@ -33,6 +33,9 @@ class OrderProduct(SyncModel):
     product_qty = IntegerField()
     price_subtotal = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
     order_id = ForeignKeyField(Order, on_delete='CASCADE')
+    no_rappel = BooleanField(default=False)
+    deposit = BooleanField(default=False)
+    pack_parent_line_id = IntegerField(null=True)
 
     MOD_NAME = 'orderproduct'
 
