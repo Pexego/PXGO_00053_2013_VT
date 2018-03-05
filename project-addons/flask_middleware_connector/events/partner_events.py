@@ -131,7 +131,8 @@ def delay_export_partner_create(session, model_name, record_id, vals):
                 for line in picking.move_lines:
                         export_pickingproduct.delay(session, 'stock.move', line.id,
                                                     priority=10, eta=240)
-        elif (vals.get("active", False) or vals.get("prospective", False)) and partner.web:
+        elif (vals.get("active", False) or vals.get('prospective', False)) and vals.get('web', False) and \
+                partner.web:
             export_partner.delay(session, model_name, record_id, priority=1,
                                  eta=60)
 
@@ -264,8 +265,9 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                     export_pickingproduct.delay(session, 'stock.move', line.id,
                                                 priority=10, eta=240)
 
-        elif ((vals.get("active", False) or vals.get('prospective', False)) and partner.web and \
-                vals.get('is_company', partner.is_company)):
+        elif (vals.get("active", False) or vals.get('prospective', False)) and vals.get('web', False) and \
+                partner.web and \
+                vals.get('is_company', partner.is_company):
             export_partner.delay(session, model_name, record_id, priority=1, eta=60)
             for contact in contacts:
                 export_partner.delay(session, model_name, contact.id, priority=1,
@@ -396,6 +398,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
                             for sale in sales:
                                 update_order.delay(session, 'sale.order', sale.id, priority=5, eta=180)
                         break
+
 
 @on_record_unlink(model_names='res.partner')
 def delay_unlink_partner(session, model_name, record_id):
