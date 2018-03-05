@@ -26,9 +26,16 @@ class AddToPurchaseOrderWzd(models.TransientModel):
 
     _name = "add.to.purchase.order.wzd"
 
-    purchase_id = fields.Many2one("purchase.order", "Purchase",
-                                  domain=[('state', '=', 'draft')])
+    @api.model
+    def _get_manufacturer(self):
+        product_obj = self.env["product.product"]
+        product = product_obj.browse(self.env.context['active_ids'])
+        return product.product_tmpl_id.manufacturer
+
+    purchase_id = fields.Many2one("purchase.order", "Purchase")
     custom_purchase_qty = fields.Boolean('Custom purchase qty')
+    manufacturer = fields.Many2one('res.partner', 'Manufacturer', readonly=True, invisible=False,
+                                   default=_get_manufacturer)
     purchase_qty = fields.Float("Qty. to purchase")
 
     @api.multi
