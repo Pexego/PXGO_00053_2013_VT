@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from peewee import CharField, IntegerField, DateTimeField, ForeignKeyField, DecimalField
+from peewee import CharField, IntegerField, DateTimeField, ForeignKeyField, DecimalField, BooleanField
 from app import app
 from customer import Customer
 from product import Product
@@ -18,7 +18,7 @@ class Order(SyncModel):
     shipping_street = CharField(max_length=100, null=True)
     shipping_zip = CharField(max_length=10, null=True)
     shipping_city = CharField(max_length=50, null=True)
-    shipping_state = CharField(max_length=30, null=True)
+    shipping_state = CharField(max_length=100, null=True)
     shipping_country = CharField(max_length=50, null=True)
 
     MOD_NAME = 'order'
