@@ -51,6 +51,17 @@ class SaleOrder(models.Model):
     _inherit = "sale.order"
 
     @api.multi
+    def onchange_partner_id(self, partner_id, context=None):
+        val = super(SaleOrder, self).onchange_partner_id(partner_id, context=None)
+        new_partner = self.env['res.partner'].browse(partner_id)
+        for child in new_partner.child_ids:
+            if child.default_shipping_address:
+                val['value']['partner_shipping_id'] = child.id
+                break
+
+        return val
+
+    @api.multi
     def open_historical_orders(self):
         self.ensure_one()
         partner_id = self.partner_id.commercial_partner_id.id
