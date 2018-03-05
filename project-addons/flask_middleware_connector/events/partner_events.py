@@ -91,7 +91,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
             tags = partner.category_id
             for tag in tags:
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-                                             record_id, tag.id, priority=10, eta=60)
+                                             record_id, tag.id, priority=10, eta=120)
 
             sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
                                                       ('company_id', '=', 1),
@@ -138,7 +138,7 @@ def delay_export_partner_create(session, model_name, record_id, vals):
             tags = partner.category_id
             for tag in tags:
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-                                             record_id, tag.id, priority=10, eta=60)
+                                             record_id, tag.id, priority=10, eta=120)
 
             sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
                                                       ('company_id', '=', 1),
@@ -225,7 +225,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             tags = partner.category_id
             for tag in tags:
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-                                             record_id, tag.id, priority=10, eta=60)
+                                             record_id, tag.id, priority=10, eta=120)
 
             sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
                                                       ('company_id', '=', 1),
@@ -273,7 +273,7 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             tags = partner.category_id
             for tag in tags:
                 export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel',
-                                             record_id, tag.id, priority=10, eta=60)
+                                             record_id, tag.id, priority=10, eta=120)
 
             sales = session.env['sale.order'].search([('partner_id', 'child_of', [record_id]),
                                                       ('company_id', '=', 1),
