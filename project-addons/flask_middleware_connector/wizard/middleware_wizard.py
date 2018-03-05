@@ -46,6 +46,7 @@ class MiddlewareBackend(models.TransientModel):
         string='Export type',
         required=True,
     )
+
     mode_export = fields.Selection(
         selection=[
             ('export', 'Export'),
@@ -54,6 +55,11 @@ class MiddlewareBackend(models.TransientModel):
         string='Export mode',
         required=True,
     )
+
+    start_date = fields.Date('Start Date', select=True,
+                             default=fields.Date.context_today)
+    finish_date = fields.Date('Finish Date', select=True,
+                              default=fields.Date.context_today)
 
     @api.multi
     def do_export(self):
@@ -83,7 +89,9 @@ class MiddlewareBackend(models.TransientModel):
                 search([('commercial_partner_id.web', '=', True),
                         ('state', 'in', ['open', 'paid']),
                         ('number', 'not like', '%ef%'),
-                        ('company_id', '=', 1)])
+                        ('company_id', '=', 1),
+                        ('date_invoice', '>=', self.start_date),
+                        ('date_invoice', '<=', self.finish_date)])
             if self.mode_export == 'export':
                 for invoice in invoices:
                     export_invoice.delay(session, 'account.invoice', invoice.id)
@@ -98,6 +106,10 @@ class MiddlewareBackend(models.TransientModel):
             picking_obj = self.env['stock.picking']
             picking_ids = picking_obj.search([('partner_id', 'child_of', partner_ids.ids),
                                               ('state', '!=', 'cancel'),
+                                              ('company_id', '=', 1),
+                                              ('not_sync', '=', False),
+                                              ('date', '>=', self.start_date),
+                                              ('date', '<=', self.finish_date),
                                               ('picking_type_id.code', '=', 'outgoing')])
             if self.mode_export == 'export':
                 for picking in picking_ids:
@@ -113,7 +125,9 @@ class MiddlewareBackend(models.TransientModel):
         elif self.type_export == 'rmas':
             rma_obj = self.env['crm.claim']
             rmas = rma_obj.search(['|', ('partner_id.web', '=', True),
-                                        ('partner_id.commercial_partner_id.web', '=', True)])
+                                        ('partner_id.commercial_partner_id.web', '=', True),
+                                   ('date', '>=', self.start_date),
+                                   ('date', '<=', self.finish_date)])
             if self.mode_export == 'export':
                 for rma in rmas:
                     export_rma.delay(session, 'crm.claim', rma.id)
@@ -166,7 +180,10 @@ class MiddlewareBackend(models.TransientModel):
                                               ('web', '=', True),
                                               ('customer', '=', True)])
             sales = session.env['sale.order'].search([('partner_id', 'child_of', partner_ids.ids),
-                                                      ('state', 'in', ['done','progress','draft','reserve'])])
+                                                      ('state', 'in', ['done', 'progress', 'draft', 'reserve']),
+                                                      ('date_order', '>=', self.start_date),
+                                                      ('date_order', '<=', self.finish_date),
+                                                      ('company_id', '=', 1)])
             if self.mode_export == 'export':
                 for sale in sales:
                     export_order.delay(session, 'sale.order', sale.id)
