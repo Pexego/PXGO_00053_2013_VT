@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, exceptions, osv, _
+from openerp.exceptions import Warning
 from openerp.addons.account_followup.report import account_followup_print
 from openerp.osv import osv, fields as fields2
 from collections import defaultdict
@@ -467,6 +468,27 @@ class ResPartner(models.Model):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
             vals['email_web'] = None
+        if 'child_ids' in vals.keys():
+            default_shipping_address = False
+            vals_dict = {}
+            for child in vals['child_ids']:
+                if child[2] and 'default_shipping_address' in child[2]:
+                    if 'True' in vals_dict and child[2]['default_shipping_address']:
+                        raise Warning('Warning', 'Dos o mas direcciones marcadas como predeterminadas')
+                    else:
+                        vals_dict[str(child[2]['default_shipping_address'])] = child[1]
+
+            if 'True' in vals_dict:
+                for child in self.child_ids:
+                    if child.default_shipping_address:
+                        default_shipping_address = child.id
+                        break
+                if default_shipping_address and 'False' in vals_dict and \
+                        vals_dict['False'] != default_shipping_address:
+                        raise Warning('Warning',
+                                         'Ya hay una direccion de envio predeterminada. Primero desmarque esta antes de generar otra')
+                elif default_shipping_address and len(vals_dict) == 1:
+                    raise Warning('Warning', 'Ya hay una direccion de envio predeterminada. Primero desmarque esta antes de generar otra')
         res = super(ResPartner, self).write(vals)
         if 'lang' in vals and not vals.get('lang', False):
             for partner in self:
