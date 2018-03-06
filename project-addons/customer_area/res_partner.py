@@ -35,15 +35,7 @@ class res_partner(models.Model):
     @api.onchange('default_shipping_address')
     def onchange_default_shipping(self):
         if 'default_parent_id' in self.env.context:
-            old_favourite = self.env['res.partner'].search([('parent_id', '=', self.env.context['default_parent_id']),
-                                            ('default_shipping_address', '=', True),
-                                            ('is_company', '=', False)])
-
             if self.default_shipping_address:
-                if old_favourite:
-                    raise ValueError('Warning',
-                                     'Ya hay una direccion de envio predeterminada. Primero desmarque esta antes de generar otra')
-                else:
                     image = modules.get_module_resource('customer_area', 'static/src/img/', 'icon-fav.png')
                     with open(image, "rb") as image_file:
                         encoded_string = base64.b64encode(image_file.read())
