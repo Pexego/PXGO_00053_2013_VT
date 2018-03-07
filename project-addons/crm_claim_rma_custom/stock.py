@@ -88,7 +88,7 @@ class stock_move(models.Model):
         res = super(stock_move, self).action_done()
         for move in self:
             if move.claim_line_id:
-                claim_line_obj = self.env['claim.line'].browse(move.claim_line_id.id)
+                claim_line_obj = move.claim_line_id
                 if claim_line_obj.claim_type == u'supplier':
                     qty = claim_line_obj.product_returned_quantity
                     loc_lost = self.env.ref('crm_rma_advance_location.stock_location_carrier_loss')
