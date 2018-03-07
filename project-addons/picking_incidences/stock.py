@@ -209,9 +209,10 @@ class StockPicking(models.Model):
         pickings_ref = ''
         template = self.env.ref('picking_incidences.alert_cron_accept_qty_incoming_shipments', False)
         picking_category = self.env.ref('stock.picking_type_in').id
+        location_supplier = self.env.ref('stock.stock_location_suppliers').id
         picking_list = self.env['stock.picking'].search([('picking_type_id', '=', picking_category),
                                                          ('state', 'in', ['assigned', 'partially_available']),
-                                                         ('location_id', 'ilike', 'supp'),
+                                                         ('location_id', '=', location_supplier),
                                                          ('with_incidences', '=', True)])
         for picking in picking_list:
             picking.action_accept_ready_qty()
