@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp.osv import fields, orm
+from openerp import api
 
 class sale_order(orm.Model):
 
@@ -46,8 +47,24 @@ class sale_order(orm.Model):
     }
 
     def action_risk_approval(self, cr, uid, ids, context=None):
-        self.apply_promotions(cr, uid, ids, context)
-        self.write(cr, uid, ids, {'state': 'risk_approval'}, context)
+        import ipdb
+        ipdb.set_trace()
+        order = self.browse(cr, uid, ids, context)
+        view_form = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'sale_custom', 'sale_confirm_wizard_form_wizard')
+        wzd = self.pool('sale.confirm.wizard').create(cr, uid, {})
+        if not order.is_all_reserved or 'confirmed' not in context:
+            return {'name': "Sale confirm",
+                    'view_mode': 'form',
+                    'view_type': 'form',
+                    'res_model': 'sale.confirm',
+                    'type': 'ir.actions.act_window',
+                    'target': 'new',
+                    'res_id': wzd,
+                    'views': [(view_form, 'form')]
+                    }
+        else:
+            self.apply_promotions(cr, uid, ids, context)
+            self.write(cr, uid, ids, {'state': 'risk_approval'}, context)
 
-        self.action_button_confirm(cr, uid, ids, context)
-        return True
+            self.action_button_confirm(cr, uid, ids, context)
+            return True
