@@ -25,6 +25,7 @@ class StockHistory(models.Model):
     _inherit = 'stock.history'
 
     brand_id = fields.Many2one(string="Brand", related='move_id.product_id.product_brand_id')
+    manufacturer = fields.Many2one(string="Manufacturer", related='move_id.product_id.manufacturer')
 
 
 class stock_picking(models.Model):
