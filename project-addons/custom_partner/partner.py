@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, exceptions, osv, _
+from openerp.exceptions import Warning
 from openerp.addons.account_followup.report import account_followup_print
 from openerp.osv import osv, fields as fields2
 from collections import defaultdict
@@ -460,6 +461,17 @@ class ResPartner(models.Model):
             vals['email_web'] = None
         vals['date'] = fields.Date.today()
         return super(ResPartner, self).create(vals)
+
+    @api.multi
+    @api.constrains('child_ids')
+    def check_default_shipping_child(self):
+        vals_dict = {}
+        for child in self.child_ids:
+            if child.default_shipping_address:
+                if 'True' in vals_dict:
+                    raise Warning('Warning', 'Dos o mas direcciones marcadas como predeterminadas')
+                else:
+                    vals_dict[str(child.default_shipping_address)] = child.id
 
     @api.multi
     def write(self, vals):
