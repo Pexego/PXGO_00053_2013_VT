@@ -56,9 +56,9 @@ class MiddlewareBackend(models.TransientModel):
         required=True,
     )
 
-    start_date = fields.Date('Start Date', select=True,
+    start_date = fields.Date('Start Date',
                              default=fields.Date.context_today)
-    finish_date = fields.Date('Finish Date', select=True,
+    finish_date = fields.Date('Finish Date', 
                               default=fields.Date.context_today)
 
     @api.multi
