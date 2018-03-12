@@ -25,12 +25,11 @@ class SaleConfirmWizard(models.TransientModel):
 
     _name = 'sale.confirm.wizard'
 
-    str = fields.Char()
-
     @api.multi
     def confirm_transfer(self):
         import ipdb
         ipdb.set_trace()
-        context = self.env.context
+        context = self.env.context.copy()
         context['confirmed'] = True
-        self.env['sale.order'].action_risk_approval(context)
+        self.env['sale.order'].browse(self.env.context['active_id']).\
+            with_context(context).action_risk_approval()
