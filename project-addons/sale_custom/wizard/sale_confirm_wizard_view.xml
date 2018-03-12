@@ -11,6 +11,7 @@
                         Coso
                     </group>
                     <footer>
+                        <button string="Confirm" name="confirm_transfer" type="object" icon="gtk-ok"/>
                         <button string="Cancel" special="cancel" icon="gtk-cancel"/>
                     </footer>
                 </form>
