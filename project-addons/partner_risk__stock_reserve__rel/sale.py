@@ -49,18 +49,18 @@ class sale_order(orm.Model):
     def action_risk_approval(self, cr, uid, ids, context=None):
         import ipdb
         ipdb.set_trace()
-        order = self.browse(cr, uid, ids, context)
+        order = self.browse(cr, uid, ids[0], context)
         view_form = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'sale_custom', 'sale_confirm_wizard_form_wizard')
         wzd = self.pool('sale.confirm.wizard').create(cr, uid, {})
         if not order.is_all_reserved or 'confirmed' not in context:
             return {'name': "Sale confirm",
                     'view_mode': 'form',
                     'view_type': 'form',
-                    'res_model': 'sale.confirm',
+                    'res_model': 'sale.confirm.wizard',
                     'type': 'ir.actions.act_window',
                     'target': 'new',
                     'res_id': wzd,
-                    'views': [(view_form, 'form')]
+                    'views': [(view_form[1], 'form')]
                     }
         else:
             self.apply_promotions(cr, uid, ids, context)
