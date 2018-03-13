@@ -82,7 +82,8 @@ class AccountInvoice(models.Model):
                 for picking in pick_ids:
                     lines_to_reconcile = self.env['account.move.line']
                     if picking.pending_invoice_move_id:
-                        date = inv.date_invoice or time.strftime('%Y-%m-%d')
+                        date = (inv.registration_date or
+                                inv.date_invoice or time.strftime('%Y-%m-%d'))
                         acc_id = inv.company_id.\
                             property_pending_supplier_invoice_account.id
                         line_ids = move_line_obj.\
@@ -91,7 +92,8 @@ class AccountInvoice(models.Model):
                                     ('account_id', '=', acc_id)])
                         lines_to_reconcile += line_ids[0]
                         move_rev = picking.pending_invoice_move_id.\
-                            create_reversals(date)
+                            create_reversals(date, reversal_period_id=
+                                             inv.period_id.id)
                         if not move_rev:
                             continue
                         move_rev = move_obj.browse(move_rev[0])
