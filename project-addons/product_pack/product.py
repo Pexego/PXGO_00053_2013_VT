@@ -77,6 +77,9 @@ class product_product(orm.Model):
 
             first_subproduct = True
             pack_stock = 0
+            pack_available = 0
+            pack_incoming = 0
+            pack_outgoing = 0
 
             # Check if product stock depends on it's subproducts stock.
             if product.pack_line_ids:
@@ -89,49 +92,74 @@ class product_product(orm.Model):
                         continue
                     if first_subproduct:
                         subproduct_quantity = subproduct.quantity
+                        if subproduct_quantity == 0:
+                            continue
                         result = self.\
                             _product_available(cr, uid,
                                                [subproduct.product_id.id],
                                                field_names, arg, context)
                         subproduct_stock = result[subproduct.product_id.id]
-                        subproduct_stock = subproduct_stock['qty_available']
-                        if subproduct_quantity == 0:
-                            continue
+                        subproduct_available = \
+                            subproduct_stock['qty_available']
+                        subproduct_virtual = \
+                            subproduct_stock['virtual_available']
+                        subproduct_incoming = subproduct_stock['incoming_qty']
+                        subproduct_outgoing = subproduct_stock['outgoing_qty']
 
                         """ Calculate real stock for current pack from the
                         subproduct stock and needed quantity """
                         pack_stock = math.floor(
-                            subproduct_stock / subproduct_quantity)
+                            subproduct_available / subproduct_quantity)
+                        pack_available = math.floor(
+                            subproduct_virtual / subproduct_quantity)
+                        pack_incoming = math.floor(
+                            subproduct_incoming / subproduct_quantity)
+                        pack_outgoing = math.floor(
+                            subproduct_outgoing / subproduct_quantity)
                         first_subproduct = False
                         continue
 
                     # Take the info of the next subproduct
                     subproduct_quantity_next = subproduct.quantity
-                    result2 = self.\
-                        _product_available(cr, uid, [subproduct.product_id.id],
-                                           field_names, arg,
-                                           context)[subproduct.product_id.id]
-                    subproduct_stock_next = result2['qty_available']
-
                     if (
                         subproduct_quantity_next == 0
                         or subproduct_quantity_next == 0.0
                     ):
                         continue
+                    result2 = self.\
+                        _product_available(cr, uid, [subproduct.product_id.id],
+                                           field_names, arg,
+                                           context)[subproduct.product_id.id]
+                    subproduct_stock_next = result2['qty_available']
+                    subproduct_virtual_next = result2['virtual_available']
+                    subproduct_incoming_next = result2['incoming_qty']
+                    subproduct_outgoing_next = result2['outgoing_qty']
 
                     pack_stock_next = math.floor(
                         subproduct_stock_next / subproduct_quantity_next)
+                    pack_available_next = math.floor(
+                        subproduct_virtual_next / subproduct_quantity_next)
+                    pack_incoming_next = math.floor(
+                        subproduct_incoming_next / subproduct_quantity_next)
+                    pack_outgoing_next = math.floor(
+                        subproduct_outgoing_next / subproduct_quantity_next)
 
                     # compare the stock of a subproduct and the next subproduct
                     if pack_stock_next < pack_stock:
                         pack_stock = pack_stock_next
+                    if pack_available_next < pack_available:
+                        pack_available = pack_available_next
+                    if pack_incoming_next < pack_incoming:
+                        pack_incoming = pack_incoming_next
+                    if pack_outgoing_next < pack_outgoing:
+                        pack_outgoing = pack_outgoing_next
 
                 # result is the minimum stock of all subproducts
                 res[product.id] = {
                     'qty_available': pack_stock,
-                    'incoming_qty': 0,
-                    'outgoing_qty': 0,
-                    'virtual_available': pack_stock,
+                    'incoming_qty': pack_incoming,
+                    'outgoing_qty': pack_outgoing,
+                    'virtual_available': pack_available,
                 }
             else:
                 res[product.id] = stock[product.id]
@@ -217,7 +245,7 @@ class product_product(orm.Model):
 
     _defaults = {
         'pack_fixed_price': True,
-        'stock_depends': True 
+        'stock_depends': True
     }
 
     def write(self, cr, uid, ids, vals, context=None):

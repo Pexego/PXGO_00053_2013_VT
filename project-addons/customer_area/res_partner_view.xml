@@ -23,7 +23,9 @@
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
                 <field name="website" position="before">
-                    <field name="area_id" on_change="change_sales_team(area_id)" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)], 'invisible':[('customer', '=', False)]}"/>
+                    <field name="area_id" on_change="change_sales_team(area_id)"
+                           attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)], 'invisible':[('customer', '=', False)]}"
+                           options="{'no_quick_create':True,'no_create_edit':True}"/>
                 </field>
                 <xpath expr="//field[@name='child_ids']/form//field[@name='mobile']" position="before">
                     <field name="active"/>

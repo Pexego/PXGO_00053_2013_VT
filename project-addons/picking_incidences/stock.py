@@ -203,3 +203,34 @@ class StockPicking(models.Model):
                 self.action_assign()
             self.message_post(body=_("User %s accepted confirmed qties.") %
                               (self.env.user.name))
+
+    @api.model
+    def cron_accept_qty_incoming_shipments(self):
+        pickings_ref = ''
+        template = self.env.ref('picking_incidences.alert_cron_accept_qty_incoming_shipments', False)
+        picking_category = self.env.ref('stock.picking_type_in').id
+        location_supplier = self.env.ref('stock.stock_location_suppliers').id
+        picking_list = self.env['stock.picking'].search([('picking_type_id', '=', picking_category),
+                                                         ('state', 'in', ['assigned', 'partially_available']),
+                                                         ('location_id', '=', location_supplier),
+                                                         ('with_incidences', '=', True)])
+        for picking in picking_list:
+            picking.action_accept_ready_qty()
+            pickings_ref += '\n' + picking.name
+
+        if picking_list:
+            ctx = dict(self._context)
+            ctx.update({
+                'default_model': 'stock.picking',
+                'default_res_id': picking_list[0].id,
+                'default_use_template': bool(template.id),
+                'default_template_id': template.id,
+                'default_composition_mode': 'comment',
+                'mark_so_as_sent': True,
+                'pickings_name': pickings_ref
+            })
+            composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
+            composer_id.with_context(ctx).send_mail()
+
+        return True
+
