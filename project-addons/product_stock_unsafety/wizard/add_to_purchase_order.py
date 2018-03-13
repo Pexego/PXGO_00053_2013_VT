@@ -45,8 +45,6 @@ class AddToPurchaseOrderWzd(models.TransientModel):
         product_obj = self.env["product.product"]
         purchase_line_obj = self.env["purchase.order.line"]
         for product in product_obj.browse(self.env.context['active_ids']):
-            import ipdb
-            ipdb.set_trace()
             purchase = obj.purchase_id if obj.purchase_id else obj.purchase_id_wt_manufacturer
             line_vals = {'order_id': purchase.id,
                          'product_id': product.id,
