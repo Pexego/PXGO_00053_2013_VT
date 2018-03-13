@@ -133,6 +133,9 @@ class OrderProductExporter(Exporter):
                 "product_qty": orderproduct.product_uom_qty,
                 "price_subtotal": orderproduct.price_subtotal,
                 "order_id": orderproduct.order_id.id,
+                "no_rappel": orderproduct.no_rappel,
+                "deposit": orderproduct.deposit,
+                "pack_parent_line_id": orderproduct.pack_parent_line_id.id,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
@@ -158,7 +161,8 @@ def delay_export_orderproduct_create(session, model_name, record_id, vals):
 @on_record_write(model_names='sale.order.line')
 def delay_export_orderproduct_write(session, model_name, record_id, vals):
     orderproduct = session.env[model_name].browse(record_id)
-    up_fields = ["product_id", "product_uom_qty", "price_unit", "discount", "order_id"]
+    up_fields = ["product_id", "product_uom_qty", "price_unit", "discount", "order_id",
+                 "no_rappel", "deposit", "pack_parent_line_id"]
     if orderproduct.order_id.partner_id.web or orderproduct.order_id.partner_id.commercial_partner_id.web:
         for field in up_fields:
             if field in vals:
