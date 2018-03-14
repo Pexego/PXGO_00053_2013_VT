@@ -639,6 +639,17 @@ try:
                             l['amount_total'] = 0.0
                         elif l['tax_description'] == 'IVA 21% Intracomunitario. Bienes corrientes (2)':
                             l['tax_amount'] = -l['tax_amount']
+                        elif l['tax_description'] == "Retenciones 19% (Arrendamientos)":
+                            if 'tax_percent' not in l:
+                                l['tax_percent'] = 0
+
+                            l['amount_total'] = amount_total
+                            if 'refund' in l['type']:
+                                l['amount_total'] = -l['amount_total']
+
+                            l['tax_amount_ret'] = -float(l['tax_amount'])
+                            l['tax_amount'] = 0.0
+                            l['tax_base'] = 0.0
 
                         if (length < line_count) and (l['number'] == lines[line_count]['number']):
                             if l['tax_description'] != '21% IVA soportado (operaciones corrientes)':
