@@ -8,7 +8,7 @@
             <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
             <field name="subject">Error en la facturacion automatica</field>
             <field name="email_to">${'ssanchez@visiotechsecurity.com'}</field>
-            <field name="model_id" ref="picking_invoice_pending.model_stock_picking"/>
+            <field name="model_id" ref="stock.model_stock_picking"/>
             <field name="auto_delete" eval="True"/>
             <field name="lang">${'es_ES'}</field>
             <field name="body_html"><![CDATA[
@@ -22,11 +22,27 @@
             <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
             <field name="subject">Error en la facturacion automatica</field>
             <field name="email_to">${'ssanchez@visiotechsecurity.com'}</field>
-            <field name="model_id" ref="picking_invoice_pending.model_stock_picking"/>
+            <field name="model_id" ref="stock.model_stock_picking"/>
             <field name="auto_delete" eval="True"/>
             <field name="lang">${'es_ES'}</field>
             <field name="body_html"><![CDATA[
 <p>Se ha producido un error en la validacion de la facturacion automatica</p>
+]]>
+             </field>
+        </record>
+
+        <record id="alert_cron_create_invoices_empty_lines" model="email.template">
+            <field name="name">Fail create invoice lines email</field>
+            <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
+            <field name="subject">Error en la facturacion automatica</field>
+            <field name="email_to">${'contabilidad@visiotechsecurity.com'}</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="lang">${'es_ES'}</field>
+            <field name="body_html"><![CDATA[
+<p>Se ha producido un error en la facturacion automatica debido a que se han generado facturas sin lineas, por lo que no se ha podido validar ninguna.
+   Por favor, revise las facturas en estado borrador.
+</p>
 ]]>
              </field>
         </record>
