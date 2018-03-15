@@ -384,6 +384,7 @@ class CrmClaimLine(models.Model):
     _inherit = "claim.line"
 
     comercial = fields.Many2one("res.users", String="Comercial", related="claim_id.comercial")
+    date_received = fields.Date(related="claim_id.date_received")
     name = fields.Char(required=False)
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
     substate_id = fields. \

@@ -621,3 +621,8 @@ msgstr "Objeto de la reclamación"
 #, python-format
 msgid "Quantity cannot be bigger than the quantity specified on invoice"
 msgstr "La cantidad no puede ser mayor que la cantidad especificada en la factura"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
+msgid "Received date"
+msgstr "Fecha de recepción"
