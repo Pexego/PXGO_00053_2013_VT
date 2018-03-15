@@ -9,7 +9,10 @@
             <field name="arch" type="xml">
                 <form string="Add to purchase order">
                     <group>
-                        <field name="purchase_id" domain="[('state', '=', 'draft'), ('partner_id', '=', manufacturer)]" required="True"/>
+                        <field name="purchase_id" domain="[('state', '=', 'draft'), ('partner_id', '=', manufacturer)]"
+                               attrs="{'invisible':[('manufacturer', '=', False)], 'required':[('manufacturer', '!=', False)]}"/>
+                        <field name="purchase_id_wt_manufacturer" domain="[('state', '=', 'draft')]"
+                               attrs="{'invisible':[('manufacturer', '!=', False)], 'required':[('manufacturer', '=', False)]}"/>
                         <field name="custom_purchase_qty"/>
                         <field name="manufacturer"/>
                         <field name="purchase_qty" attrs="{'invisible': [('custom_purchase_qty', '=', False)], 'required': [('custom_purchase_qty', '=', True)]}"/>
