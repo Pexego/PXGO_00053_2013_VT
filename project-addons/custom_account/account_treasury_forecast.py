@@ -184,21 +184,22 @@ class AccountTreasuryForecast(models.Model):
         temp_line_obj = self.env['account.treasury.forecast.line.template']
         temp_line_lst = temp_line_obj.search([('treasury_template_id', '=', self.template_id.id)])
         for line_o in temp_line_lst:
-            date_calculated = line_o.date
-            while date_calculated <= self.end_date and not line_o.paid:
-                if self.start_date <= date_calculated <= self.end_date:
-                    values = {
-                        'name': line_o.name,
-                        'date': date_calculated,
-                        'line_type': line_o.line_type,
-                        'partner_id': line_o.partner_id.id,
-                        'template_line_id': line_o.id,
-                        'amount': line_o.amount,
-                        'treasury_id': self.id,
-                    }
-                    new_line_id = line_obj.create(values)
-                    new_line_ids.append(new_line_id)
-                date_calculated = self.next_date_period(date_calculated, line_o.period_type, line_o.period_quantity)
+            if line_o.period_quantity and not line_o.paid:
+                date_calculated = line_o.date
+                while date_calculated <= self.end_date:
+                    if self.start_date <= date_calculated <= self.end_date:
+                        values = {
+                            'name': line_o.name,
+                            'date': date_calculated,
+                            'line_type': line_o.line_type,
+                            'partner_id': line_o.partner_id.id,
+                            'template_line_id': line_o.id,
+                            'amount': line_o.amount,
+                            'treasury_id': self.id,
+                        }
+                        new_line_id = line_obj.create(values)
+                        new_line_ids.append(new_line_id)
+                    date_calculated = self.next_date_period(date_calculated, line_o.period_type, line_o.period_quantity)
         return new_line_ids
 
     @api.multi
@@ -232,8 +233,8 @@ class BankMaturity(models.Model):
 class AccountTreasuryForecastLineTemplate(models.Model):
     _inherit = 'account.treasury.forecast.line.template'
 
-    period_quantity = fields.Integer("Quantity")
-    period_type = fields.Selection(PERIOD, string="Period")
+    period_quantity = fields.Integer("Quantity", default=1)
+    period_type = fields.Selection(PERIOD, string="Period", default="months")
 
 
 class AccountTreasuryForecastLine(models.Model):

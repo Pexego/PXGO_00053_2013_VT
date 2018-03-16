@@ -228,6 +228,8 @@ class StockPicking(models.Model):
         ctx = dict(self._context or {})
         ctx['date_inv'] = False
         ctx['inv_type'] = inv_type
+        templates = []
+        validate = True
 
         # Deliveries to Invoice
         pickings = picking_obj.with_context(ctx).search([('state', '=', 'done'),
@@ -239,31 +241,28 @@ class StockPicking(models.Model):
 
         # Create invoice
         res = pickings.action_invoice_create(journal_id=journal_id, group=False, type=inv_type)
-        if len(pickings) != len(res):
-            template = self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False)
-            ctx.update({
-                'default_model': 'stock.picking',
-                'default_res_id': pickings[0].id,
-                'default_use_template': bool(template.id),
-                'default_template_id': template.id,
-                'default_composition_mode': 'comment',
-                'mark_so_as_sent': True
-            })
-            composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
-            composer_id.with_context(ctx).send_mail()
-
-        # Validate invoice
         invoices_created = self.env['account.invoice'].browse(res)
-        invoices_created.signal_workflow('invoice_open')
-        invoice_states = invoices_created.mapped('state')
-        if 'draft' in invoice_states or 'cancel' in invoice_states or \
-                'proforma' in invoice_states or 'proforma2' in invoice_states:
-            template = self.env.ref('picking_invoice_pending.alert_cron_validate_invoices', False)
+        if len(pickings) != len(res):
+            templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
+        if len(res) != len(invoices_created.mapped('invoice_line.invoice_id.id')):
+            # There are invoices created without lines
+            templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices_empty_lines', False))
+            # Do not validate them because it will generate an error
+            validate = False
+        if validate:
+            # Validate invoice
+            invoices_created.signal_workflow('invoice_open')
+            invoice_states = invoices_created.mapped('state')
+            if 'draft' in invoice_states or 'cancel' in invoice_states or \
+                    'proforma' in invoice_states or 'proforma2' in invoice_states:
+                templates.append(self.env.ref('picking_invoice_pending.alert_cron_validate_invoices', False))
+
+        for tmpl in templates:
             ctx.update({
                 'default_model': 'account.invoice',
                 'default_res_id': invoices_created[0].id,
-                'default_use_template': bool(template.id),
-                'default_template_id': template.id,
+                'default_use_template': bool(tmpl.id),
+                'default_template_id': tmpl.id,
                 'default_composition_mode': 'comment',
                 'mark_so_as_sent': True
             })

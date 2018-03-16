@@ -26,9 +26,17 @@ class AddToPurchaseOrderWzd(models.TransientModel):
 
     _name = "add.to.purchase.order.wzd"
 
-    purchase_id = fields.Many2one("purchase.order", "Purchase",
-                                  domain=[('state', '=', 'draft')])
+    @api.model
+    def _get_manufacturer(self):
+        product_obj = self.env["product.product"]
+        product = product_obj.browse(self.env.context['active_ids'])
+        return product.product_tmpl_id.manufacturer
+
+    purchase_id = fields.Many2one("purchase.order", "Purchase")
+    purchase_id_wt_manufacturer = fields.Many2one("purchase.order", "Purchase")
     custom_purchase_qty = fields.Boolean('Custom purchase qty')
+    manufacturer = fields.Many2one('res.partner', 'Manufacturer', readonly=True, invisible=False,
+                                   default=_get_manufacturer)
     purchase_qty = fields.Float("Qty. to purchase")
 
     @api.multi
@@ -37,7 +45,7 @@ class AddToPurchaseOrderWzd(models.TransientModel):
         product_obj = self.env["product.product"]
         purchase_line_obj = self.env["purchase.order.line"]
         for product in product_obj.browse(self.env.context['active_ids']):
-            purchase = obj.purchase_id
+            purchase = obj.purchase_id if obj.purchase_id else obj.purchase_id_wt_manufacturer
             line_vals = {'order_id': purchase.id,
                          'product_id': product.id,
                          'price_unit': 0.0}

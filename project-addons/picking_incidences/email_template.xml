@@ -8,7 +8,7 @@
             <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
             <field name="subject">[Odoo] Recepciones con incidencias validadas automaticamente</field>
             <field name="email_to">${'purchasing.spain@visiotechsecurity.com'}</field>
-            <field name="model_id" ref="picking_incidences.model_stock_picking"/>
+            <field name="model_id" ref="stock.model_stock_picking"/>
             <field name="auto_delete" eval="True"/>
             <field name="lang">${'es_ES'}</field>
             <field name="body_html"><![CDATA[
