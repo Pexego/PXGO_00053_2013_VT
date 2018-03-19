@@ -24,13 +24,3 @@ from openerp import models, fields, api, _
 class SaleConfirmWizard(models.TransientModel):
 
     _name = 'sale.confirm.wizard'
-
-    str = fields.Char()
-
-    @api.multi
-    def confirm_transfer(self):
-        import ipdb
-        ipdb.set_trace()
-        context = self.env.context
-        context['confirmed'] = True
-        self.env['sale.order'].action_risk_approval(context)
