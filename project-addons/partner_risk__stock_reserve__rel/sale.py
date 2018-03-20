@@ -50,7 +50,9 @@ class sale_order(orm.Model):
         order = self.browse(cr, uid, ids[0], context)
         view_form = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'sale_custom', 'sale_confirm_wizard_form_wizard')
         wzd = self.pool('sale.confirm.wizard').create(cr, uid, {})
-        if not order.is_all_reserved or 'confirmed' not in context:
+        import ipdb
+        ipdb.set_trace()
+        if not order.is_all_reserved and 'confirmed' not in context:
             return {'name': "Sale confirm",
                     'view_mode': 'form',
                     'view_type': 'form',
