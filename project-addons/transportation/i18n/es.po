@@ -341,3 +341,8 @@ msgstr "Ciudad"
 msgid "Date"
 msgstr "Fecha"
 
+#. module: transportation
+#: field:picking.tracking.status,num_packages:0
+msgid "Num Packages"
+msgstr "Bultos"
+
