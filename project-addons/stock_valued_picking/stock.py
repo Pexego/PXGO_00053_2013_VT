@@ -43,6 +43,15 @@ class stock_picking(models.Model):
         string='Sale price', readonly=True, store=True)
     external_note = fields.Text(
         ' External Notes')
+    cost = fields.Float(
+        compute='_get_cost', digits_compute=dp.get_precision('Sale Price'),
+        string='Cost', readonly=True )
+
+    @api.multi
+    def _get_cost(self):
+        for picking in self:
+            for line in picking.move_lines:
+                picking.cost = picking.cost + line.cost_subtotal
 
     @api.multi
     @api.depends('move_lines', 'partner_id')
