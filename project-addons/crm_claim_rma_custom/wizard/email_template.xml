@@ -7,7 +7,6 @@
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
             <field name="subject">Call to SAT from ${object.partner_id.commercial_partner_id.name}</field>
             <field name="email_to">${object.partner_salesperson.email|safe}</field >
-            <!--field name="email_to">'rcerrillo@visiotechsecurity.com'</field-->
             <field name="model_id" ref="crm_claim.model_crm_claim"/>
             <field name="auto_delete" eval="False"/>
             <field name="lang">${object.lang}</field>
@@ -16,7 +15,7 @@
 <ul>
 <li>Partner: ${object.partner_id.commercial_partner_id.name}</li>
 <li>Date: ${object.date}</li>
-Tipo de llamada: ${dict(object.fields_get(allfields=['call_type_sat'])['call_type_sat']['selection'])[object.call_type_sat]}<br></li>
+<li>Call type: ${dict(object.fields_get(allfields=['call_type_sat'])['call_type_sat']['selection'])[object.call_type_sat]}<br></li>
 <li>Subject: ${object.subject or 'N/A'}</li>
 <li>Brand: ${object.brand_id.name or 'N/A'}</li>
 <li>Description: ${object.description or 'N/A'}</li>
