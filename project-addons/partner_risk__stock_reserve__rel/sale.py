@@ -51,7 +51,12 @@ class sale_order(orm.Model):
         order = self.browse(cr, uid, ids[0], context)
         view_form = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'sale_custom', 'sale_confirm_wizard_form_wizard')
         wzd = self.pool('sale.confirm.wizard').create(cr, uid, {})
-        
+
+        self.apply_promotions(cr, uid, ids, context)
+        self.write(cr, uid, ids, {'state': 'risk_approval'}, context)
+
+        self.action_button_confirm(cr, uid, ids, context)
+
         if not order.is_all_reserved and 'confirmed' not in context:
             return {'name': "Sale confirm",
                     'view_mode': 'form',
@@ -63,8 +68,4 @@ class sale_order(orm.Model):
                     'views': [(view_form[1], 'form')]
                     }
         else:
-            self.apply_promotions(cr, uid, ids, context)
-            self.write(cr, uid, ids, {'state': 'risk_approval'}, context)
-
-            self.action_button_confirm(cr, uid, ids, context)
             return True
