@@ -38,11 +38,6 @@
                 </xpath>
                 <field name="order_line" position="after">
                     <div class="pull-left col-xs-6">
-                        <separator string="Top Products" colspan="2"/>
-                        <field name="top_products"
-                               context="{'tree_view_ref':'sale_order_board.view_top_products'}" nolabel="1"/>
-                    </div>
-                    <div class="pull-right col-xs-6">
                         <separator string="Calc Transporter"  colspan="2"/>
                         <button name="compute_variables"
                                  string="Create RFQ" type="object"
