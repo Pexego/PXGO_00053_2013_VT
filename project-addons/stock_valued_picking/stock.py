@@ -45,7 +45,7 @@ class stock_picking(models.Model):
         ' External Notes')
     cost = fields.Float(
         compute='_get_cost', digits_compute=dp.get_precision('Sale Price'),
-        string='Cost', readonly=True )
+        string='Cost', readonly=True, help='Historical cost in order time')
 
     @api.multi
     def _get_cost(self):
