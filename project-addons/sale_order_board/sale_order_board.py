@@ -45,8 +45,7 @@ class SaleOrder(models.Model):
             shipment_groups = order.env['res.country.group'].search([('shipment', '=', True),
                                                                      ('country_ids', 'in', order.partner_shipping_id.country_id.id)])
             transporter_ids = order.env['transportation.transporter'].search([('country_group_id', 'in', shipment_groups.ids)])
-            import ipdb
-            ipdb.set_trace()
+
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.ups.api.request'))
