@@ -45,6 +45,8 @@ class SaleOrder(models.Model):
             shipment_groups = order.env['res.country.group'].search([('shipment', '=', True),
                                                                      ('country_ids', 'in', order.partner_shipping_id.country_id.id)])
             transporter_ids = order.env['transportation.transporter'].search([('country_group_id', 'in', shipment_groups.ids)])
+            import ipdb
+            ipdb.set_trace()
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.ups.api.request'))
@@ -252,10 +254,13 @@ class SaleOrder(models.Model):
                             response_data = response_data.replace('&lt;', '<')
                         if 'encoding=' in response.text:
                             response_data = re.sub('(<\?xml(.+?)>)', '', response_data)
+                        if 'ns1:out' in response.text:
+                            response_data = re.sub('.+<ns1:out>', '', response_data)
+                            response_data = re.sub('<\/ns1:out>.+', '', response_data)
                         try:
                             shipping_amount = 0.0
                             response_data = '<?xml version="1.0" encoding="utf-8"?>' + response_data
-                            root = ET.fromstring(response_data)
+                            root = ET.fromstring(response_data.encode('UTF-8'))
                             for children in root.iter('REG'):
                                 for code in children.iterfind('COD_CONCEPTO_IMP'):
                                     if code.text in concept_codes_valids:

@@ -33,9 +33,6 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='order_line']" position="attributes">
-                    <attribute name="on_change">call_call_trans()</attribute>
-                </xpath>
                 <field name="order_line" position="after">
                     <div class="pull-left col-xs-6">
                         <separator string="Calc Transporter"  colspan="2"/>
