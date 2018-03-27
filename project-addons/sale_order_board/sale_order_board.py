@@ -33,9 +33,6 @@ import base64
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    top_products = fields.One2many('product.product', 'products_partner',
-                                   string="Top Products", readonly=True, compute="_set_top_products")
-
     @api.multi
     def compute_variables(self):
         view_id = self.env['picking.rated.wizard']
