@@ -30,19 +30,19 @@ class PaymentOrderLine(models.Model):
                             'bank_id': line.invoice.mandate_id.partner_bank_id.id,
                         })
             if partner_bank_id and 'mandate_id' not in vals:
-                mandates = self.env['account.banking.mandate'].search(
+                mandates = self.env['account.banking.mandate'].search_read(
                     [('partner_bank_id', '=', partner_bank_id),
-                     ('state', '=', 'valid')])
+                     ('state', '=', 'valid')], ['id'])
                 if mandates:
-                    vals['mandate_id'] = mandates[0].id
+                    vals['mandate_id'] = mandates[0]['id']
                 else:
                     banking_mandate_valid = self.env['account.banking.mandate'].search_read(
                         [('partner_id', '=', partner_id), ('state', '=', 'valid')],
-                        ['id', 'partner_bank_id'])[0]
+                        ['id', 'partner_bank_id'])
                     if banking_mandate_valid:
                         vals.update({
-                            'mandate_id': banking_mandate_valid['id'],
-                            'bank_id': banking_mandate_valid['partner_bank_id'][0],
+                            'mandate_id': banking_mandate_valid[0]['id'],
+                            'bank_id': banking_mandate_valid[0]['partner_bank_id'][0],
                         })
         if 'mandate_id' not in vals:
             vals['mandate_id'] = False
