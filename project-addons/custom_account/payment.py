@@ -13,6 +13,41 @@ class PaymentOrderLine(models.Model):
 
     partner_name = fields.Char(related='partner_id.name', store=True)
 
+    @api.model
+    def create(self, vals=None):
+        if vals is None:
+            vals = {}
+        partner_bank_id = vals.get('bank_id')
+        move_line_id = vals.get('move_line_id')
+        partner_id = vals.get('partner_id')
+        if self.env.context.get('search_payment_order_type') == 'debit' and 'mandate_id' not in vals:
+            if move_line_id:
+                line = self.env['account.move.line'].browse(move_line_id)
+                if line.invoice and line.invoice.type == 'out_invoice' and line.invoice.mandate_id:
+                    if line.invoice.mandate_id.state == 'valid':
+                        vals.update({
+                            'mandate_id': line.invoice.mandate_id.id,
+                            'bank_id': line.invoice.mandate_id.partner_bank_id.id,
+                        })
+            if partner_bank_id and 'mandate_id' not in vals:
+                mandates = self.env['account.banking.mandate'].search(
+                    [('partner_bank_id', '=', partner_bank_id),
+                     ('state', '=', 'valid')])
+                if mandates:
+                    vals['mandate_id'] = mandates[0].id
+                else:
+                    banking_mandate_valid = self.env['account.banking.mandate'].search_read(
+                        [('partner_id', '=', partner_id), ('state', '=', 'valid')],
+                        ['id', 'partner_bank_id'])[0]
+                    if banking_mandate_valid:
+                        vals.update({
+                            'mandate_id': banking_mandate_valid['id'],
+                            'bank_id': banking_mandate_valid['partner_bank_id'][0],
+                        })
+        if 'mandate_id' not in vals:
+            vals['mandate_id'] = False
+        return super(PaymentOrderLine, self).create(vals)
+
 
 class PaymentOrder(models.Model):
 
