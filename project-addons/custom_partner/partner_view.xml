@@ -133,6 +133,16 @@
                         attrs="{'invisible': [('customer', '=', False)]}" string="Pickings"
                         icon="fa-pencil-square-o" groups="stock.group_stock_user"/>
                 </xpath>
+                <xpath expr="//page[@name='sales_purchases']" position="after">
+                    <page name='global_invoiced' string="Global Invoiced" attrs="{'invisible': [('customer', '=', False)]}">
+                        <group colspan="4" col="4">
+                            <field name="current_global_invoiced" readonly="1"/>
+                            <field name="current_employees" readonly="1"/>
+                            <field name="past_year_global_invoiced" readonly="1"/>
+                            <field name="past_year_employees" readonly="1"/>
+                        </group>
+                    </page>
+                </xpath>
             </field>
         </record>
 

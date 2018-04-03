@@ -372,3 +372,28 @@ msgstr "¡Advertencia!"
 #, python-format
 msgid "Remember to set our partner email, not dropship email!"
 msgstr "¡Recuerde poner el correo de nuestro cliente, no del cliente final (dropship)!"
+
+#. module: custom_partner
+#: field:res.partner,current_global_invoiced:0
+msgid "Current year invoiced (global)"
+msgstr "Facturación (global) año en curso"
+
+#. module: custom_partner
+#: field:res.partner,past_year_global_invoiced:0
+msgid "Past year invoiced (global)"
+msgstr "Facturación (global) año anterior"
+
+#. module: custom_partner
+#: field:res.partner,current_employees:0
+msgid "Current year employees"
+msgstr "Empleados año en curso"
+
+#. module: custom_partner
+#: field:res.partner,past_year_employees:0
+msgid "Past year employees"
+msgstr "Empleados año anterior"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.res_partner_view_buttons_add_quotations
+msgid "Global Invoiced"
+msgstr "Facturación global"

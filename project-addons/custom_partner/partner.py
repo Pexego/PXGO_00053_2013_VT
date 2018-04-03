@@ -47,6 +47,10 @@ class ResPartner(models.Model):
     past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True, default=0.0)
     monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True, default=0.0)
     past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True, default=0.0)
+    current_global_invoiced = fields.Float('Current year invoiced (global)', default=0.0)
+    past_year_global_invoiced = fields.Float('Past year invoiced (global)', default=0.0)
+    current_employees = fields.Integer('Current year employees', default=0)
+    past_year_employees = fields.Integer('Past year employees', default=0)
 
     @api.model
     def _calculate_annual_invoiced(self):
