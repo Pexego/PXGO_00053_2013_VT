@@ -7,10 +7,20 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="purchase_proposal.product_add_proposal_data"/>
             <field name="arch" type="xml">
-                <field name="last_sixty_days_sales" position="after">
+                <field name="last_sixty_days_sales" position="before">
                     <field name="remaining_days_sale"/>
-                    <field name="joking_index"/>
                     <field name="replacement_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="product_add_joking_index" model="ir.ui.view">
+            <field name="name">product.product.form.add_joking_index</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="purchase_proposal.product_product_form_view_add_ref_manufacturer"/>
+            <field name="arch" type="xml">
+                <field name="ref_manufacturer" position="after">
+                    <field name="joking_index"/>
                 </field>
             </field>
         </record>

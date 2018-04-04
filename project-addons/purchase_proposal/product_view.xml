@@ -33,6 +33,8 @@
                     </div>
                     <group colspan="4" col="4">
                         <field name="last_sixty_days_sales"/>
+                    </group>
+                    <group colspan="4" col="4">
                         <button name="action_compute_last_sixty_days_sales" string="Compute sale in last sixty days with stock" type="object" group="base.group_sale_salesman"/>
                     </group>
                     <field name="biggest_sale_id" group="base.group_sale_salesman"/>
