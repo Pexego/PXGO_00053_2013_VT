@@ -621,3 +621,37 @@ msgstr "Objeto de la reclamación"
 #, python-format
 msgid "Quantity cannot be bigger than the quantity specified on invoice"
 msgstr "La cantidad no puede ser mayor que la cantidad especificada en la factura"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
+msgid "Received date"
+msgstr "Fecha de recepción"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.email_template_call_sat
+msgid "Call Alert Email"
+msgstr "Email de alerta de llamada"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.email_template_call_sat
+msgid "Call to SAT from ${object.partner_id.commercial_partner_id.name}"
+msgstr "Llamada a SAT de ${object.partner_id.commercial_partner_id.name}"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.email_template_call_sat
+msgid "<p>Call information:</p>
+<ul>
+<li>Partner: ${object.partner_id.commercial_partner_id.name}</li>
+<li>Date: ${object.date}</li><li>Type call:&nbsp;${object.call_type_sat}<br></li>
+<li>Subject: ${object.subject or 'N/A'}</li>
+<li>Brand: ${object.brand_id.name or 'N/A'}</li>
+<li>Description: ${object.description or 'N/A'}</li>
+</ul>"
+msgstr "<p>Información de la llamada:</p>
+<ul>
+<li>Empresa: ${object.partner_id.commercial_partner_id.name}</li>
+<li>Fecha: ${object.date}</li><li>Type call:&nbsp;${object.call_type_sat}<br></li>
+<li>Asunto: ${object.subject or 'N/A'}</li>
+<li>Marca: ${object.brand_id.name or 'N/A'}</li>
+<li>Descripción: ${object.description or 'N/A'}</li>
+</ul>"

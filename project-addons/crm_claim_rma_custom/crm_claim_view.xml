@@ -239,6 +239,7 @@
                     <field name="claim_name" string="Claim Subject"/>
                     <field name="user_id"/>
                     <field name="comercial"/>
+                    <field name="date_received" string="Received date"/>
                 </field>
                 <!--/tree-->
             </field>
