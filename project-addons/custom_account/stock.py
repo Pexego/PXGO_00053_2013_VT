@@ -162,6 +162,7 @@ class SaleOrder(models.Model):
     sale_notes = fields.Text("Sale internal notes")
     partner_tags = fields.Many2many('res.partner.category', id1='sale_id',
                                     id2='category_id', string='Tags')
+    ref_partner = fields.Char(related="partner_id.ref", string="Client reference")
 
     def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
         return fields.Datetime.now()

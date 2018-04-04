@@ -779,3 +779,8 @@ msgstr "Meses"
 #: field:account.treasury.forecast.line,paid:0
 msgid "Paid"
 msgstr "Pagado"
+
+#. module: custom_account
+#: field:sale.order,ref_partner:0
+msgid "Client reference"
+msgstr "Referencia del cliente"
