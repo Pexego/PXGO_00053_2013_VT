@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="sale_confirm_wizard_form_wizard" model="ir.ui.view">
+            <field name="name">sale.confirm.wizard.form.wizard</field>
+            <field name="model">sale.confirm.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Confirm Order" version="7.0">
+                    <group>
+                        <p style="font-size:20px; color:red">
+                            Some of the products of this order aren't available now. Please consider that!
+                        </p>
+                    </group>
+                    <footer>
+                        <button string="Okey!" special="cancel" icon="gtk-ok"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

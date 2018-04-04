@@ -19,9 +19,11 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields
+from openerp import models, api, fields, exceptions, _
 from datetime import datetime
+from openerp.exceptions import except_orm, ValidationError
 import pytz
+
 
 CALL_TYPE = [('check_stock', 'Check Stock'),
              ('check_prices', 'Check Prices'),
@@ -72,6 +74,7 @@ class CrmPhonecall(models.Model):
     partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
     brand_id = fields.Many2one('product.brand', 'Brand')
     subject = fields.Char('Call Subject')
+    email_sent = fields.Boolean('Email sent', default=False, readonly=True)
 
     def utc_to_local(self, utc_dt):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
@@ -97,6 +100,29 @@ class CrmPhonecall(models.Model):
         if not self.call_type_sat and 'call_type_sat' not in datas:
             datas['call_type_sat'] = 'none'
         return super(CrmPhonecall, self).write(datas)
+
+    @api.one
+    def send_email(self):
+
+        mail_pool = self.env['mail.mail']
+        context = self._context.copy()
+        context['base_url'] = self.env['ir.config_parameter'].get_param('web.base.url')
+
+        template_id = self.env.ref('crm_claim_rma_custom.email_template_call_sat')
+
+        if template_id:
+            mail_id = template_id.with_context(context).send_mail(self.id)
+        else:
+            mail_id = 0
+
+        if mail_id:
+            mail_id_check = mail_pool.browse(mail_id)
+            mail_id_check.send()
+            self.email_sent = True
+        else:
+            raise except_orm(_('Email Error'), _('Email has not been sent'))
+
+        return True
 
     @api.multi
     def end_call(self):
@@ -133,6 +159,14 @@ class CrmPhonecall(models.Model):
             'brand_id': self.brand_id.id
         }
         self.write(datas)
+
+
+
+    @api.multi
+    def end_call_notif(self):
+        self.end_call()
+        self.send_email()
+#       if self.call_type_sat == 'counsel' or self.call_type_sat == 'check_working':
 
 
 class ResPartner(models.Model):
