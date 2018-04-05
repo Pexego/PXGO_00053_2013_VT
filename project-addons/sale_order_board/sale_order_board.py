@@ -50,16 +50,18 @@ class SaleOrder(models.Model):
             package_pieces = 0
             products_wo_weight = 0
             for order_line in order.order_line:
-                if order_line.product_id.weight == 0:
+                if order_line.product_id.weight == 0 and order_line.product_id.type == 'product':
                     products_wo_weight += 1
                     continue
                 package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
                 package_pieces += int(order_line.product_uom_qty)
             num_pieces = int((package_weight / 20) + 1)
             package_weight = str(package_weight).decode("utf-8")
-            new.write({'total_weight': package_weight,
-                       'product_wo_weight': products_wo_weight})
-
+            products_wo_weight = str(products_wo_weight).decode("utf-8")
+            if products_wo_weight != '0':
+                products_wo_weight = products_wo_weight +\
+                                     " of the product(s) of the order don't have set the weights," +\
+                                     " please take the shipping cost as an aproximation"
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.ups.api.request'))
@@ -204,7 +206,9 @@ class SaleOrder(models.Model):
                                     'order_id': order.id,
                                     'wizard_id': new.id
                                 }
-                                new.write({'data': [(0, 0, rated_status)]})
+                                new.write({'total_weight': package_weight,
+                                           'products_wo_weight': products_wo_weight,
+                                           'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'SEUR':
                     account_code = order.env['ir.config_parameter'].get_param('account.code.seur.api.request')
@@ -281,7 +285,9 @@ class SaleOrder(models.Model):
                                 'order_id': order.id,
                                 'wizard_id': new.id
                             }
-                            new.write({'data': [(0, 0, rated_status)]})
+                            new.write({'total_weight': package_weight,
+                                       'products_wo_weight': products_wo_weight,
+                                       'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'TNT':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.tnt.api.request'))
@@ -383,7 +389,9 @@ class SaleOrder(models.Model):
                                             'order_id': order.id,
                                             'wizard_id': new.id
                                         }
-                                        new.write({'data': [(0, 0, rated_status)]})
+                                        new.write({'total_weight': package_weight,
+                                                   'products_wo_weight': products_wo_weight,
+                                                   'data': [(0, 0, rated_status)]})
                     except AttributeError:
                         raise Exception("The response is not valid or it changed")
 
