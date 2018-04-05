@@ -8,9 +8,8 @@
             <field name="arch" type="xml">
                 <form string="Confirm Order" version="7.0">
                     <group>
-                        <p style="font-size:40px; color:red">
-                            Some of the products of this order aren't available now.
-                            Please consider that!
+                        <p style="font-size:20px; color:red">
+                            Some of the products of this order aren't available now. Please consider that!
                         </p>
                     </group>
                     <footer>

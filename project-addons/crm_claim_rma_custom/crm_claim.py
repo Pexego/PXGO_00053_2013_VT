@@ -69,8 +69,7 @@ class CrmClaimRma(models.Model):
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
 
-    check_states = ['substate_received', 'substate_process',
-                    'substate_pending_shipping', 'substate_due_receive']
+    check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
     @api.onchange('claim_type')
     def onchange_claim_type(self):
@@ -384,6 +383,7 @@ class CrmClaimLine(models.Model):
     _inherit = "claim.line"
 
     comercial = fields.Many2one("res.users", String="Comercial", related="claim_id.comercial")
+    date_received = fields.Date(related="claim_id.date_received")
     name = fields.Char(required=False)
     invoice_id = fields.Many2one("account.invoice", string="Invoice")
     substate_id = fields. \

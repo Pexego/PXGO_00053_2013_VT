@@ -779,3 +779,21 @@ msgstr "Meses"
 #: field:account.treasury.forecast.line,paid:0
 msgid "Paid"
 msgstr "Pagado"
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/account_payment_banking.py:36
+#, python-format
+msgid "\nMissing SEPA Direct Debit mandate on the bank payment line with partner '%s' (reference '%s')."
+msgstr "\nFalta el mandato de adeudo directo SEPA en la linea de pago bancario con la empresa '%s' (referencia '%s')."
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/account_payment_banking.py:40
+#, python-format
+msgid "\nThe SEPA Direct Debit mandate with reference '%s' for partner '%s' has expired."
+msgstr "\nEl mandato de adeudo directo SEPA con referencia '%s' para la empresa '%s' ha expirado."
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/account_payment_banking.py:45
+#, python-format
+msgid "\nThe mandate with reference '%s' for partner '%s' has type set to 'One-Off' and it has a last debit date set to '%s', so we can't use it."
+msgstr "\nEl mandato con referencia '%s' para la empresa '%s' tipo como 'Único', ya tiene como fecha de último cobro '%s', por lo que no se puede usar."

@@ -314,3 +314,18 @@ msgstr "La fecha fin no puede ser menor que la fecha inicio"
 msgid "(By default, the graph shows the analysis per month of the daily stock average of the last 6 months)"
 msgstr "(Por defecto, la gráfica muestra el análisis por mes de la media de stock diario de los últimos 6 meses)"
 
+#. module: stock_custom
+#: field:stock.picking.report,area_id:0
+msgid "Area"
+msgstr "Zona"
+
+#. module: stock_custom
+#: field:stock.picking.report,state_name:0
+msgid "State Name"
+msgstr "Provincia"
+
+#. module: stock_custom
+#: field:stock.picking.report,section_id:0
+msgid "Sales Team"
+msgstr "Equipo de ventas"
+
