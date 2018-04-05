@@ -25,7 +25,9 @@ from openerp import models, fields, api, _, exceptions
 class PickingRatedWizard(models.TransientModel):
     _name = 'picking.rated.wizard'
 
-    data = fields.One2many('picking.rated.wizard.tree', 'wizard_id', string='Data', readonly=True)
+    total_weight = fields.Char('Total Weight (Kgs)', readonly=True)
+    products_wo_weight = fields.Integer()
+    data = fields.One2many('picking.rated.wizard.tree', 'wizard_id', string='Shipping Data', readonly=True)
 
 
 class PickingRatedWizardTree(models.TransientModel):
