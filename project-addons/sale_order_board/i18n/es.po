@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-17 13:26+0000\n"
-"PO-Revision-Date: 2017-05-17 13:26+0000\n"
+"POT-Creation-Date: 2018-04-05 13:26+0000\n"
+"PO-Revision-Date: 2018-04-05 13:26+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,12 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_order_board
-#: view:picking.rated.wizard:sale_order_board.view_order_request_info
+#: field:picking.rated.wizard,total_weight:0
 msgid "Total Weight (Kgs)"
 msgstr "Peso Total (Kgs)"
 
 #. module: sale_order_board
-#: view:picking.rated.wizard:sale_order_board.view_order_request_info
+#: field:picking.rated.wizard,data:0
 msgid "Shipping Data"
 msgstr "Calculo del envio"
 
@@ -31,7 +31,22 @@ msgid "Shipping Data Information"
 msgstr "Informacion de envio"
 
 #. module: sale_order_board
-#: view:picking.rated.wizard:sale_order_board.view_order_request_info
+#: field:picking.rated.wizard.tree,service:0
+msgid "Service"
+msgstr "Servicio"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard.tree,amount:0
+msgid "Amount"
+msgstr "Total"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard.tree,currency:0
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard,products_wo_weight:0
 msgid "of the product(s) of the order don't have set the weights, please take the shipping cost as an aproximation"
 msgstr "de los productos del pedido no tienen marcados los pesos, tenga en cuenta que el coste de envio es una aproximacion"
 

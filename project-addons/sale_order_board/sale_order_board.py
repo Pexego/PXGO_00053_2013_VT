@@ -62,6 +62,8 @@ class SaleOrder(models.Model):
                 products_wo_weight = products_wo_weight +\
                                      " of the product(s) of the order don't have set the weights," +\
                                      " please take the shipping cost as an aproximation"
+            new.write({'total_weight': package_weight,
+                       'products_wo_weight': products_wo_weight})
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.ups.api.request'))
@@ -206,9 +208,7 @@ class SaleOrder(models.Model):
                                     'order_id': order.id,
                                     'wizard_id': new.id
                                 }
-                                new.write({'total_weight': package_weight,
-                                           'products_wo_weight': products_wo_weight,
-                                           'data': [(0, 0, rated_status)]})
+                                new.write({'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'SEUR':
                     account_code = order.env['ir.config_parameter'].get_param('account.code.seur.api.request')
@@ -285,9 +285,7 @@ class SaleOrder(models.Model):
                                 'order_id': order.id,
                                 'wizard_id': new.id
                             }
-                            new.write({'total_weight': package_weight,
-                                       'products_wo_weight': products_wo_weight,
-                                       'data': [(0, 0, rated_status)]})
+                            new.write({'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'TNT':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.tnt.api.request'))
@@ -389,14 +387,12 @@ class SaleOrder(models.Model):
                                             'order_id': order.id,
                                             'wizard_id': new.id
                                         }
-                                        new.write({'total_weight': package_weight,
-                                                   'products_wo_weight': products_wo_weight,
-                                                   'data': [(0, 0, rated_status)]})
+                                        new.write({'data': [(0, 0, rated_status)]})
                     except AttributeError:
                         raise Exception("The response is not valid or it changed")
 
         return {
-            'name': 'Tracking Rated Information',
+            'name': 'Shipping Data Information',
             'view_type': 'form',
             'view_mode': 'form',
             'target': 'new',
