@@ -33,9 +33,6 @@ import base64
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
-    top_products = fields.One2many('product.product', 'products_partner',
-                                   string="Top Products", readonly=True, compute="_set_top_products")
-
     @api.multi
     def compute_variables(self):
         view_id = self.env['picking.rated.wizard']
@@ -48,6 +45,25 @@ class SaleOrder(models.Model):
             shipment_groups = order.env['res.country.group'].search([('shipment', '=', True),
                                                                      ('country_ids', 'in', order.partner_shipping_id.country_id.id)])
             transporter_ids = order.env['transportation.transporter'].search([('country_group_id', 'in', shipment_groups.ids)])
+
+            package_weight = 0.0
+            package_pieces = 0
+            products_wo_weight = 0
+            for order_line in order.order_line:
+                if order_line.product_id.weight == 0 and order_line.product_id.type == 'product':
+                    products_wo_weight += 1
+                    continue
+                package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
+                package_pieces += int(order_line.product_uom_qty)
+            num_pieces = int((package_weight / 20) + 1)
+            package_weight = str(package_weight).decode("utf-8")
+            products_wo_weight = str(products_wo_weight).decode("utf-8")
+            if products_wo_weight != '0':
+                products_wo_weight = products_wo_weight +\
+                                     " of the product(s) of the order don't have set the weights," +\
+                                     " please take the shipping cost as an aproximation"
+            new.write({'total_weight': package_weight,
+                       'products_wo_weight': products_wo_weight})
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.ups.api.request'))
@@ -87,10 +103,6 @@ class SaleOrder(models.Model):
                     package_length = 10
                     package_width = 10
                     package_height = 10
-                    package_weight = 0.0
-                    for order_line in order.order_line:
-                        package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
-                    package_weight = str(package_weight).decode("utf-8")
                     context = ""
 
                     for service in transporter.service_ids:
@@ -177,7 +189,6 @@ class SaleOrder(models.Model):
                             }
                         }
                         url = order.env['ir.config_parameter'].get_param('url.prod.ups.api.request')
-                        #url = order.env['ir.config_parameter'].get_param('url.test.ups.api.request')
                         json_request = rate_request
                         response = requests.session().post(url, data=json.dumps(json_request))
                         if response.status_code != 200:
@@ -204,11 +215,6 @@ class SaleOrder(models.Model):
                     user_id = order.env['ir.config_parameter'].get_param('user.seur.api.request')
                     password_id = order.env['ir.config_parameter'].get_param('password.seur.api.request')
                     destination_city = order.partner_shipping_id.city
-                    package_weight = 0.0
-                    for order_line in order.order_line:
-                        package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
-                    num_pieces = int((package_weight / 20) + 1)
-                    package_weight = str(package_weight).decode("utf-8")
                     destination_postal_code = order.partner_shipping_id.zip
                     url = order.env['ir.config_parameter'].get_param('url.seur.api.request')
                     list_services = ast.literal_eval(order.env['ir.config_parameter'].get_param('services.seur.api.request'))
@@ -255,10 +261,13 @@ class SaleOrder(models.Model):
                             response_data = response_data.replace('&lt;', '<')
                         if 'encoding=' in response.text:
                             response_data = re.sub('(<\?xml(.+?)>)', '', response_data)
+                        if 'ns1:out' in response.text:
+                            response_data = re.sub('.+<ns1:out>', '', response_data)
+                            response_data = re.sub('<\/ns1:out>.+', '', response_data)
                         try:
                             shipping_amount = 0.0
                             response_data = '<?xml version="1.0" encoding="utf-8"?>' + response_data
-                            root = ET.fromstring(response_data)
+                            root = ET.fromstring(response_data.encode('UTF-8'))
                             for children in root.iter('REG'):
                                 for code in children.iterfind('COD_CONCEPTO_IMP'):
                                     if code.text in concept_codes_valids:
@@ -282,9 +291,9 @@ class SaleOrder(models.Model):
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.tnt.api.request'))
                     account_number = order.env['ir.config_parameter'].get_param('account.number.tnt.api.request')
                     account_country = order.env['ir.config_parameter'].get_param('account.country.tnt.api.request')
-                    account_user_test = order.env['ir.config_parameter'].get_param('account.user.test.tnt.api.request')
+                    #account_user_test = order.env['ir.config_parameter'].get_param('account.user.test.tnt.api.request')
                     account_user = order.env['ir.config_parameter'].get_param('account.user.tnt.api.request')
-                    account_password_test = order.env['ir.config_parameter'].get_param('account.password.test.tnt.api.request')
+                    #account_password_test = order.env['ir.config_parameter'].get_param('account.password.test.tnt.api.request')
                     account_password = order.env['ir.config_parameter'].get_param('account.password.tnt.api.request')
                     url = order.env['ir.config_parameter'].get_param('url.tnt.api.request')
 
@@ -297,17 +306,11 @@ class SaleOrder(models.Model):
                     delivery_postcode = order.partner_shipping_id.zip
                     delivery_country = order.partner_shipping_id.country_id.code
 
-                    package_weight = 0.0
-                    package_pieces = 0
-                    for order_line in order.order_line:
-                        package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
-                        package_pieces += int(order_line.product_uom_qty)
-                    package_weight = str(package_weight).decode("utf-8")
                     auth = str(account_user) + ":" + str(account_password)
                     auth = auth.encode("utf-8")
                     byte_auth = bytearray(auth)
-                    autentication = base64.b64encode(byte_auth)
-                    headers = {'content-type': 'text/xml', 'Authorization': 'Basic %s' % str(autentication)}
+                    authentication = base64.b64encode(byte_auth)
+                    headers = {'content-type': 'text/xml', 'Authorization': 'Basic %s' % str(authentication)}
                     now = datetime.now()
                     rate_request = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                     <priceRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -389,7 +392,7 @@ class SaleOrder(models.Model):
                         raise Exception("The response is not valid or it changed")
 
         return {
-            'name': 'Tracking Rated Information',
+            'name': 'Shipping Data Information',
             'view_type': 'form',
             'view_mode': 'form',
             'target': 'new',

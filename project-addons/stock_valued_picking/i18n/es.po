@@ -95,3 +95,13 @@ msgstr "Valor sin impuestos"
 msgid "amount gross"
 msgstr "Importe bruto"
 
+#. module: stock_valued_picking
+#: field:stock.picking,cost:0
+msgid "Cost"
+msgstr "Coste"
+
+#. module: stock_valued_picking
+#: help:stock.picking,cost:0
+msgid "Historical cost in order time"
+msgstr "Coste histórico del momento del pedido"
+
