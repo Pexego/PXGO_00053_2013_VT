@@ -1,0 +1,59 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * sale_order_board
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-05 13:26+0000\n"
+"PO-Revision-Date: 2018-04-05 13:26+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard,total_weight:0
+msgid "Total Weight (Kgs)"
+msgstr "Peso Total (Kgs)"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard,data:0
+msgid "Shipping Data"
+msgstr "Calculo del envio"
+
+#. module: sale_order_board
+#: view:picking.rated.wizard:sale_order_board.view_order_request_info
+msgid "Shipping Data Information"
+msgstr "Informacion de envio"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard.tree,service:0
+msgid "Service"
+msgstr "Servicio"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard.tree,amount:0
+msgid "Amount"
+msgstr "Total"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard.tree,currency:0
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: sale_order_board
+#: field:picking.rated.wizard,products_wo_weight:0
+msgid "of the product(s) of the order don't have set the weights, please take the shipping cost as an aproximation"
+msgstr "de los productos del pedido no tienen marcados los pesos, tenga en cuenta que el coste de envio es una aproximacion"
+
+#. module: sale_order_board
+#: view:sale.order:sale_order_board.view_price_calc
+msgid "Calculate Shipping Prices"
+msgstr "Calculo de Envio"
+
+
+
