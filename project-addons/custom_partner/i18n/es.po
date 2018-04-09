@@ -372,3 +372,18 @@ msgstr "¡Advertencia!"
 #, python-format
 msgid "Remember to set our partner email, not dropship email!"
 msgstr "¡Recuerde poner el correo de nuestro cliente, no del cliente final (dropship)!"
+
+#. module: custom_partner
+#: help:rappel.current.info,curr_qty_pickings:0
+msgid "Qty estimation in pickings pending to be invoiced (shipping cost and product with no-rappel check in the order are not verified)"
+msgstr "Cantidad estimada en albaranes pendientes de ser facturados (gastos de envío y productos con el check no-rappel en el pedido no se verifican) "
+
+#. module: custom_partner
+#: field:rappel.current.info,curr_qty_pickings:0
+msgid "Qty pending invoice"
+msgstr "Cant. pendiente de facturar"
+
+#. module: custom_partner
+#: view:rappel.current.info:custom_partner.view_rappel_current_info_tree_add_qty_picking
+msgid "Curr. qty invoiced"
+msgstr "Cant. act. facturada"
