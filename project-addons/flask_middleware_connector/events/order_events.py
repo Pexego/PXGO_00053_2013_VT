@@ -90,7 +90,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
             export_order.delay(session, model_name, record_id, priority=2, eta=80)
             for line in order.order_line:
                 export_orderproduct.delay(session, 'sale.order.line', line.id, priority=2, eta=120)
-        elif 'state' in vals.keys() and vals['state'] in ('draft', 'reserve', 'progress', 'done', 'shipping_except', 'invoice_except'):
+        elif order.state in ('draft', 'reserve', 'progress', 'done', 'shipping_except', 'invoice_except'):
             for field in up_fields:
                 if field in vals:
                     update_order.delay(session, model_name, record_id, priority=5, eta=120)
