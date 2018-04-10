@@ -372,19 +372,19 @@
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="street" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                  <field name="zip" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="city" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="state_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
                 <field name="country_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="email" position="attributes">
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
