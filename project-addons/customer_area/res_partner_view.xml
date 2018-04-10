@@ -35,6 +35,21 @@
                         <field name="default_shipping_address"/><label for="default_shipping_address"/>
                     </div>
                 </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='street']" position="attributes">
+                    <attribute name="attrs">{'required': [('type', '=', 'delivery')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='city']" position="attributes">
+                    <attribute name="attrs">{'required': [('type', '=', 'delivery')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='state_id']" position="attributes">
+                    <attribute name="attrs">{'required': [('type', '=', 'delivery')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='country_id']" position="attributes">
+                    <attribute name="attrs">{'required': [('type', '=', 'delivery')]}</attribute>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='zip']" position="attributes">
+                    <attribute name="attrs">{'required': [('type', '=', 'delivery')]}</attribute>
+                </xpath>
                 <xpath expr="//field[@name='child_ids']/form//field[@name='mobile']" position="after">
                     <field name="area_id"/>
                 </xpath>
