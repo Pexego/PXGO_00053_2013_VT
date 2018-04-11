@@ -35,9 +35,12 @@ class OrderExporter(Exporter):
 
     def update(self, binding_id, mode):
         order = self.model.browse(binding_id)
+        state = order.state
+        if state in ('shipping_except', 'invoice_except'):
+            state = 'done'
         vals = {"odoo_id": order.id,
                 "name": order.name,
-                "state": order.state,
+                "state": state,
                 "partner_id": order.partner_id.id,
                 "amount_total": order.amount_total,
                 "date_order": order.date_order,
@@ -48,6 +51,7 @@ class OrderExporter(Exporter):
                 'shipping_city': order.partner_shipping_id.city,
                 'shipping_state': order.partner_shipping_id.state_id.name,
                 'shipping_country': order.partner_shipping_id.country_id.name,
+                'delivery_type': order.delivery_type,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
@@ -56,6 +60,7 @@ class OrderExporter(Exporter):
 
     def delete(self, binding_id):
         return self.backend_adapter.remove(binding_id)
+
 
 @middleware
 class OrderAdapter(GenericAdapter):
@@ -74,7 +79,8 @@ def delay_export_order_create(session, model_name, record_id, vals):
 def delay_export_order_write(session, model_name, record_id, vals):
     order = session.env[model_name].browse(record_id)
     #He cogido order_line porque no entra amount_total ni amount_untaxed en el write
-    up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref", "order_line", "partner_shipping_id"]
+    up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref",
+                 "order_line", "partner_shipping_id", "delivery_type"]
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
         job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(order.id) + ')%'),
                                                ('model_name', '=', model_name)], order='date_created desc', limit=1)
@@ -84,7 +90,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
             export_order.delay(session, model_name, record_id, priority=2, eta=80)
             for line in order.order_line:
                 export_orderproduct.delay(session, 'sale.order.line', line.id, priority=2, eta=120)
-        elif order.state in ('draft', 'reserve', 'progress', 'done'):
+        elif order.state in ('draft', 'reserve', 'progress', 'done', 'shipping_except', 'invoice_except'):
             for field in up_fields:
                 if field in vals:
                     update_order.delay(session, model_name, record_id, priority=5, eta=120)
