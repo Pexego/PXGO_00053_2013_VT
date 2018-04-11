@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2018 Visiotech All Rights Reserved
+#    $Jesus Garcia Manzanas <jgmanzanas@visiotechsecurity.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,6 +18,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, _
 
-from . import account_followup_print
-from . import banking_export_sdd
+
+class SaleConfirmWizard(models.TransientModel):
+
+    _name = 'sale.confirm.wizard'
+
+    @api.multi
+    def confirm_transfer(self):
+        context = self.env.context.copy()
+        context['confirmed'] = True
+        self.env['sale.order'].browse(self.env.context['active_id']).\
+            with_context(context).action_risk_approval()

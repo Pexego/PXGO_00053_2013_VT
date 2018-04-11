@@ -2,7 +2,6 @@
 ##############################################################################
 #
 #    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,5 +18,14 @@
 #
 ##############################################################################
 
-from . import account_followup_print
-from . import banking_export_sdd
+{
+    'name': 'Aspersia account custom',
+    'version': '1.0',
+    'category': 'account',
+    'description': '',
+    'author': '',
+    'website': '',
+    "depends": ['report', 'account'],
+    "data": ['account_view.xml'],
+    "installable": True
+}
