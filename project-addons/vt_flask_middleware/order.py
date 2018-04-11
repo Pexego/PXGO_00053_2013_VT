@@ -20,6 +20,7 @@ class Order(SyncModel):
     shipping_city = CharField(max_length=50, null=True)
     shipping_state = CharField(max_length=100, null=True)
     shipping_country = CharField(max_length=50, null=True)
+    delivery_type = CharField(max_length=30)
 
     MOD_NAME = 'order'
 
