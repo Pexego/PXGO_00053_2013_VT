@@ -32,7 +32,8 @@ class ResPartner(models.Model):
     @api.one
     def _is_accounting(self):
 
-        accountant = self.env['res.groups'].search([('name', '=', 'Contabilidad')])
+        accountant = self.env.ref('account.group_account_manager')
+
         is_accountant = self.env.user.id in accountant.users.ids
 
         if is_accountant:
