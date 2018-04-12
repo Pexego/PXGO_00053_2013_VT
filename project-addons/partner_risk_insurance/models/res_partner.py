@@ -66,7 +66,7 @@ class ResPartner(models.Model):
                                         'partner by the risk insurance '
                                         'company.')
 
-    risk_insurance_comment = fields.Char('Comments')
+    risk_insurance_comment = fields.Text('Comments')
 
     is_accounting = fields.Boolean('Is Acounting', compute="_is_accounting")
 
