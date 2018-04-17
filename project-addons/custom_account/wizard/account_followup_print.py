@@ -18,7 +18,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, _
+from openerp import models, fields, api, tools, _
+import copy
 
 
 class AccountFollowupPrint(models.Model):
@@ -34,3 +35,39 @@ class AccountFollowupPrint(models.Model):
     def automatice_process(self):
         wzd = self.create({'date': fields.Date.today()})
         wzd.do_process()
+
+    @api.multi
+    def _get_partners_followp(self):
+        res = super(AccountFollowupPrint, self)._get_partners_followp()
+        iter_res = copy.deepcopy(res)
+        company_id = self.company_id.id
+
+        # Avoid sending followup account emails to suppliers
+        self.env.cr.execute(
+            "SELECT l.partner_id, l.followup_line_id,l.date_maturity, l.date, l.id "
+            "FROM account_move_line AS l "
+            "LEFT JOIN account_account AS a "
+            "ON (l.account_id=a.id) "
+            "LEFT JOIN res_partner AS rp ON (l.partner_id = rp.id) "
+            "WHERE (l.reconcile_id IS NULL) "
+            "AND (a.type='receivable') "
+            "AND (l.state<>'draft') "
+            "AND (l.partner_id is NOT NULL) "
+            "AND (a.active) "
+            "AND (l.debit > 0) "
+            "AND (l.company_id = %s) "
+            "AND (l.blocked = False) "
+            "AND (rp.customer = False) "
+            "AND (rp.supplier = True) "
+            "ORDER BY l.date", (company_id,))
+
+        move_lines = self.env.cr.fetchall()
+        move_line_supplier = [str(id) for partner_id, followup_line_id, date_maturity, date, id in move_lines]
+
+        for lines in iter_res['to_update']:
+            if lines in move_line_supplier:
+                supplier_id = res['to_update'][lines]['partner_id']
+                res['to_update'].pop(lines)
+                res['partner_ids'].remove(supplier_id)
+        return res
+
