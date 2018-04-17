@@ -61,7 +61,8 @@ class ProductExporter(Exporter):
                     'sale_ok': product.sale_ok,
                     'ean13': product.ean13,
                     'manufacturer_ref': product.manufacturer_pref,
-                    'description_sale': product.description_sale}
+                    'description_sale': product.description_sale,
+                    'type': product.type}
             if product.show_stock_outside:
                 vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
@@ -117,7 +118,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
                  "product_brand_id", "last_sixty_days_sales",
                  "joking_index", "sale_ok", "ean13", "description_sale",
-                 "manufacturer_pref", "standard_price"]
+                 "manufacturer_pref", "standard_price", "type"]
     export_product.delay(session, model_name, record_id)
     claim_lines = session.env['claim.line'].search(
         [('product_id', '=', product.id),
@@ -141,7 +142,8 @@ def delay_export_product_write(session, model_name, record_id, vals):
                  "pvi3_price", "list_price2", "list_price3",
                  "pvd1_relation", "pvd2_relation", "pvd3_relation",
                  "last_sixty_days_sales", "joking_index", "sale_ok",
-                 "ean13", "description_sale", "manufacturer_pref", "standard_price"]
+                 "ean13", "description_sale", "manufacturer_pref", "standard_price",
+                 "type"]
     for field in up_fields:
         if field in vals:
             update_product.delay(session, model_name, record_id, priority=2, eta=30)

@@ -122,3 +122,8 @@ msgstr ""
 #: model:ir.module.module,shortdesc:partner_risk_insurance.module_meta_information
 msgid "Partner Risk Insurance"
 msgstr "Seguro del riesgo de empresas"
+
+#. module: partner_risk_insurance
+#: field:res.partner,risk_insurance_comment:0
+msgid "Comments"
+msgstr "Comentarios"

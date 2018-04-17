@@ -781,6 +781,11 @@ msgid "Paid"
 msgstr "Pagado"
 
 #. module: custom_account
+#: field:sale.order,ref_partner:0
+msgid "Client reference"
+msgstr "Referencia del cliente"
+
+#. module: custom_account
 #: code:addons/custom_account/wizard/account_payment_banking.py:36
 #, python-format
 msgid "\nMissing SEPA Direct Debit mandate on the bank payment line with partner '%s' (reference '%s')."

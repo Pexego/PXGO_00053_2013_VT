@@ -55,7 +55,10 @@ class PartnerExporter(Exporter):
                 "state": partner.state_id and partner.state_id.name or "",
                 "email": partner.email_web or "",
                 "prospective": partner.prospective,
-                "lang": partner.lang and partner.lang.split("_")[0] or 'es'}
+                "lang": partner.lang and partner.lang.split("_")[0] or 'es',
+                "phone1": partner.phone,
+                "phone2": partner.mobile,
+                }
         if not vals['is_company']:
             vals.update({"type": partner.type, "parent_id": partner.parent_id.id, "email": partner.email})
         if mode == "insert":
@@ -79,7 +82,8 @@ def delay_export_partner_create(session, model_name, record_id, vals):
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", 'user_id',
                  "property_product_pricelist", "lang", "type",
-                 "parent_id", "is_company", "email", "prospective"]
+                 "parent_id", "is_company", "email", "prospective", "phone",
+                 "mobile"]
     if vals.get('is_company', False) or partner.is_company:
 
         if vals.get("web", False) and ((vals.get('active', False) or \
@@ -209,7 +213,8 @@ def delay_export_partner_write(session, model_name, record_id, vals):
     up_fields = ["name", "comercial", "vat", "city", "street", "zip",
                  "country_id", "state_id", "email_web", "ref", "user_id",
                  "property_product_pricelist", "lang", "sync", "type",
-                 "parent_id", "is_company", "email", "active", "prospective"]
+                 "parent_id", "is_company", "email", "active", "prospective",
+                 "phone", "mobile"]
 
     if vals.get('is_company', False) or partner.is_company:
         contacts = session.env[model_name].search([('parent_id', 'child_of', [record_id]),
