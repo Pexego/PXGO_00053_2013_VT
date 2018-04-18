@@ -20,3 +20,4 @@
 ##############################################################################
 
 from . import sale_confirm_wizard
+from . import sale_report_xls_wizard
