@@ -507,5 +507,19 @@
             </field>
         </record>
 
+        <record id="view_rappel_current_info_tree_add_qty_picking" model="ir.ui.view">
+            <field name="name">rappel.current.info.tree.add_qty_picking</field>
+            <field name="model">rappel.current.info</field>
+            <field name="inherit_id" ref="rappel.view_rappel_current_info_tree"/>
+            <field name="arch" type="xml">
+                <field name="curr_qty" position="attributes">
+                    <attribute name="string">Curr. qty invoiced</attribute>
+                </field>
+                <field name="curr_qty" position="after">
+                    <field name="curr_qty_pickings"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>

@@ -216,6 +216,12 @@ class AccountTreasuryForecast(models.Model):
         balance = self.final_amount
         for recurring_line in self.recurring_line_ids.search([('paid', '=', True)]):
             balance += recurring_line.amount
+        if not self.not_bank_maturity:
+            bank_maturities = self.env['bank.maturity'].search([('date_due', '>=', self.start_date),
+                                                                ('date_due', '<=', self.end_date),
+                                                                ('paid', '=', False)])
+            bank_amount = sum([x.amount for x in bank_maturities])
+            balance -= bank_amount
         self.final_amount = balance
 
 

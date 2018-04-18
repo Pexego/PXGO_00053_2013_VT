@@ -700,6 +700,26 @@ class ResPartnerRappelRel(models.Model):
 
         return invoice_lines, refund_lines
 
+    @api.multi
+    def _calculate_qty_picking(self):
+        picking_obj = self.env['stock.picking']
+        move_obj = self.env['stock.move']
+        products = self.rappel_id.get_products()
+        period = self._get_next_period()
+        if period:
+            picking_ids = picking_obj.search([('date_done', '>=', period[0].strftime("%Y-%m-%d")),
+                                              ('date_done', '<=', period[1].strftime("%Y-%m-%d")),
+                                              ('state', '=', 'done'),
+                                              ('invoice_state', '=', '2binvoiced'),
+                                              ('partner_id', 'child_of', [self.partner_id.id])])
+
+            picking_lines = move_obj.search([('picking_id', 'in', picking_ids.ids),
+                                             ('product_id', 'in', products)])
+
+            price_subtotal_lines = picking_lines.mapped('procurement_id.sale_line_id.price_subtotal')
+            amount_total = sum([x for x in price_subtotal_lines])
+            return amount_total
+
     @api.model
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
         goal_percentage = 0
@@ -719,6 +739,7 @@ class ResPartnerRappelRel(models.Model):
                     if total:
                         total_rappel = total * rappel.rappel_id.fix_qty / 100.0
                     rappel_info["curr_qty"] = total
+                    rappel_info["curr_qty_pickings"] = rappel._calculate_qty_picking()
 
                 rappel_info['amount'] = total_rappel
             else:
@@ -730,6 +751,7 @@ class ResPartnerRappelRel(models.Model):
                 total = sum([x[field] for x in invoice_lines]) - \
                     sum([x[field] for x in refund_lines])
                 rappel_info["curr_qty"] = total
+                rappel_info["curr_qty_pickings"] = rappel._calculate_qty_picking()
                 if total:
                     section = self.env['rappel.section'].search(
                         [('rappel_id', '=', rappel.rappel_id.id),
@@ -844,6 +866,10 @@ class RappelInvoice(models.TransientModel):
 class RappelCurrentInfo(models.Model):
 
     _inherit = "rappel.current.info"
+
+    curr_qty_pickings = fields.Float("Qty pending invoice", readonly=True,
+                                     help="Qty estimation in pickings pending to be invoiced (shipping cost and"
+                                          "product with no-rappel in the order are not verified)")
 
     @api.model
     def send_rappel_info_mail(self):
