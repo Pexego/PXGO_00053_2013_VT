@@ -35,9 +35,10 @@ class SaleReport(models.TransientModel):
         """
         for sale_report in self:
             move_line_obj = sale_report.env['account.move.line']
+            payment_term_ids = self.env['account.payment.term'].search([('name', 'ilike', 'Pago inmediato')]).ids
             move_line_ids = move_line_obj.search_read([('account_id.type', '=', 'receivable'),
                                                       ('reconcile_id', '=', False),
-                                                      ('payment_term_id', 'not ilike', 'Pago inmediato'),
+                                                      ('payment_term_id', 'not in', payment_term_ids),
                                                       ('stored_invoice_id', '!=', False)], ['maturity_residual'])
             autocartera = 0.0
             for move_line in move_line_ids:
@@ -63,8 +64,11 @@ class SaleReport(models.TransientModel):
             product_tmpl_obj = sale_report.env["product.template"]
             product_obj = sale_report.env["product.product"]
             res = 0.0
+            location_ids = [self.env.ref('crm_rma_advance_location.stock_location_rma').id,
+                            self.env.ref('location_moves.stock_location_damaged').id,
+                            self.env['stock.location'].search([('name', '=', 'Averiados')]).ids]
             stock_history_data = stock_history_obj.search_read([('date', '<=', date_search),
-                                                                ('location_id', 'not in', (23, 30, 33))],
+                                                                ('location_id', 'not in', location_ids)],
                                                                 ['quantity', 'price_unit_on_quant', 'product_id', 'company_id'])
 
             for line in stock_history_data:
@@ -116,13 +120,15 @@ class SaleReport(models.TransientModel):
     def _where(self, date_start, date_end):
         where_str = "WHERE state not in ('draft', 'cancel') " \
                     "and date_confirm <= '" + date_end + "'::TIMESTAMP " \
-                    "and date_confirm >= '" + date_start + "'::TIMESTAMP "
+                    "and date_confirm >= '" + date_start + "'::TIMESTAMP " \
+                    "and company_id = 1"
         return where_str
 
     @api.multi
     def _where_stock(self, date):
         where_str = "WHERE state not in ('draft', 'cancel') " \
-                    "and date_confirm <= '" + date + "'::TIMESTAMP "
+                    "and date_confirm <= '" + date + "'::TIMESTAMP " \
+                    "and company_id = 1"
         return where_str
 
     @api.multi
