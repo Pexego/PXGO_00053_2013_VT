@@ -65,8 +65,9 @@ class SaleReport(models.TransientModel):
             product_obj = sale_report.env["product.product"]
             res = 0.0
             location_ids = [self.env.ref('crm_rma_advance_location.stock_location_rma').id,
-                            self.env.ref('location_moves.stock_location_damaged').id,
-                            self.env['stock.location'].search([('name', '=', 'Averiados')]).ids]
+                            self.env.ref('location_moves.stock_location_damaged').id]
+            for location in self.env['stock.location'].search([('name', '=', 'Averiados')]).ids:
+                location_ids.append(location)
             stock_history_data = stock_history_obj.search_read([('date', '<=', date_search),
                                                                 ('location_id', 'not in', location_ids)],
                                                                 ['quantity', 'price_unit_on_quant', 'product_id', 'company_id'])
