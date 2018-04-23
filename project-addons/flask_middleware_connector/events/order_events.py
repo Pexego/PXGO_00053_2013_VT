@@ -85,7 +85,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
         job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(order.id) + ')%'),
                                                ('model_name', '=', model_name)], order='date_created desc', limit=1)
         if 'state' in vals.keys() and vals['state'] == 'cancel':
-            unlink_order.delay(session, model_name, record_id, priority=7, eta=80)
+            unlink_order.delay(session, model_name, record_id, priority=7, eta=180)
         elif 'state' in vals.keys() and vals['state'] in ('draft', 'reserve') and job.name and 'unlink' in job.name:
             export_order.delay(session, model_name, record_id, priority=2, eta=80)
             for line in order.order_line:
@@ -142,7 +142,6 @@ class OrderProductExporter(Exporter):
                 "no_rappel": orderproduct.no_rappel,
                 "deposit": orderproduct.deposit,
                 "pack_parent_line_id": orderproduct.pack_parent_line_id.id,
-                "discount": orderproduct.discount,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
