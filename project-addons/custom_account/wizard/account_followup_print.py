@@ -44,7 +44,7 @@ class AccountFollowupPrint(models.Model):
 
         # Avoid sending followup account emails to suppliers
         self.env.cr.execute(
-            "SELECT l.partner_id, l.followup_line_id,l.date_maturity, l.date, l.id "
+            "SELECT l.id "
             "FROM account_move_line AS l "
             "LEFT JOIN account_account AS a "
             "ON (l.account_id=a.id) "
@@ -62,7 +62,7 @@ class AccountFollowupPrint(models.Model):
             "ORDER BY l.date", (company_id,))
 
         move_lines = self.env.cr.fetchall()
-        move_line_supplier = [str(id) for partner_id, followup_line_id, date_maturity, date, id in move_lines]
+        move_line_supplier = [str(id) for id in move_lines]
 
         for lines in iter_res['to_update']:
             if lines in move_line_supplier:
