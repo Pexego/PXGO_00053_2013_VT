@@ -37,6 +37,7 @@ class OrderProduct(SyncModel):
     no_rappel = BooleanField(default=False)
     deposit = BooleanField(default=False)
     pack_parent_line_id = IntegerField(null=True)
+    discount = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
 
     MOD_NAME = 'orderproduct'
 
