@@ -262,6 +262,7 @@
             <field name="arch" type="xml" >
                 <field name="payment_responsible_id" position="after">
                     <field name="send_followup_to_user"/>
+                    <field name="notified_creditoycaucion"/>
                 </field>
                 <field name="unreconciled_aml_ids" position="attributes">
                     <attribute name="attrs">{'invisible':[('supplier', '=', True)]}</attribute>

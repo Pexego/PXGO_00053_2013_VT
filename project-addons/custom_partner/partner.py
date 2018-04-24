@@ -377,6 +377,7 @@ class ResPartner(models.Model):
                                       'Invoice type')
     dropship = fields.Boolean("Dropship")
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
+    notified_creditoycaucion = fields.Date("Notified to Crédito y Caución")
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
     att = fields.Char("A/A")

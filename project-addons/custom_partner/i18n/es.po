@@ -287,6 +287,11 @@ msgid "Send followup to sales agent"
 msgstr "Enviar seguimiento al comercial"
 
 #. module: custom_partner
+#: field:res.partner,notified_creditoycaucion:0
+msgid "Notified to Crédito y Caución"
+msgstr "Notificado a Crédito y Caución"
+
+#. module: custom_partner
 #: field:res.partner,total_invoiced_real:0
 msgid "Total Invoiced"
 msgstr "Total facturado"
