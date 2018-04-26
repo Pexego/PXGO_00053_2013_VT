@@ -93,8 +93,14 @@ class product_product(models.Model):
                     product.joking_index = joking_index
         for product in product_obj.browse(filter_ids):
             if product.joking_index == -1 \
-                    and product.last_sixty_days_sales == 0\
-                    and product.type == 'product'\
+                    and product.last_sixty_days_sales == 0 \
+                    and product.type == 'product' \
+                    and product.categ_id.parent_id.name != 'Outlet' \
+                    and (product.virtual_available - product.incoming_qty + product.qty_available_external) == 0:
+                product.joking_index = 0
+            elif product.joking_index == -1 \
+                    and product.last_sixty_days_sales == 0 \
+                    and product.type == 'product' \
                     and product.categ_id.parent_id.name != 'Outlet':
                 product.joking_index = max_joking
 
