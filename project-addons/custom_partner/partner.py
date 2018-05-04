@@ -651,6 +651,19 @@ class ResPartner(models.Model):
             if res:
                 return res
 
+    @api.multi
+    def open_partner(self):
+
+        self.ensure_one()
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        record_url = base_url + '/web/?#id=' + str(self.id) + '&view_type=form&model=res.partner'
+        return {
+            'type': 'ir.actions.act_url',
+            'view_type': 'form',
+            'url': record_url,
+            'target': 'new'
+        }
+
 
 class rappel_calculated(models.Model):
 

@@ -343,6 +343,7 @@
                     <field name="category_id"/>
                     <field name="annual_invoiced"/>
                     <field name="last_sale_date"/>
+                    <button name="open_partner" type="object" string="" icon="gtk-redo"/>
                 </field>
             </field>
         </record>
