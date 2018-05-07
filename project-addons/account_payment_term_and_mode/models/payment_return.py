@@ -53,14 +53,15 @@ class PaymentReturn(models.Model):
             lines2reconcile.reconcile_partial()
             return_line.write(
                 {'reconcile_id': move_line2.reconcile_partial_id.id})
+
+            # Mark negative line as no-followup
+            for line_id in lines2reconcile:
+                if line_id.debit - line_id.credit < 0:
+                    line_id.blocked = True
+
         # Mark invoice as payment refused
         invoices_returned.write(self._prepare_invoice_returned_vals())
         move_id.button_validate()
         self.write({'state': 'done', 'move_id': move_id.id})
-
-        # Mark negative line as no-followup
-        for line_id in lines2reconcile:
-            if line_id.debit - line_id.credit < 0:
-                line_id.blocked = True
 
         return True
