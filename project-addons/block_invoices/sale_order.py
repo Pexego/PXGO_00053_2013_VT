@@ -30,6 +30,7 @@ class sale_order(models.Model):
     """
     _inherit = 'sale.order'
     blocked = fields.Boolean(related='partner_id.commercial_partner_id.blocked_sales')
+    defaulter = fields.Boolean(related='partner_id.commercial_partner_id.defaulter')
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
@@ -46,8 +47,15 @@ class sale_order(models.Model):
         partner_ids_to_check = [partner_dict['commercial_partner_id'][0], part]
         unique_partner_ids_to_check = filter(lambda a: a != False,[x for i,x in enumerate(partner_ids_to_check)if x not in partner_ids_to_check[i+1:]])
         for partner_id in unique_partner_ids_to_check:
-            partner_fields_dict = self.pool.get('res.partner').read(cr, uid, partner_id, ['blocked_sales','name'])
-            if partner_fields_dict['blocked_sales']:
+            partner_fields_dict = self.pool.get('res.partner').read(cr, uid, partner_id, ['blocked_sales', 'defaulter', 'name'])
+            if partner_fields_dict['defaulter']:
+                title = _("Warning for %s") % partner_fields_dict['name']
+                message = _('Defaulter customer! Please contact the accounting department.')
+                warning = {
+                    'title': title,
+                    'message': message,
+                }
+            elif partner_fields_dict['blocked_sales']:
                 title =  _("Warning for %s") % partner_fields_dict['name']
                 message = _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.')
                 warning = {
@@ -75,6 +83,9 @@ class sale_order(models.Model):
                 message = _('Customer %s blocked by lack of payment. Check '
                             'the maturity dates of their account move '
                             'lines.') % partner.name
+                raise exceptions.Warning(message)
+            if partner.defaulter:
+                message = _('Defaulter customer! Please contact the accounting department.')
                 raise exceptions.Warning(message)
 
         return super(sale_order, self).action_button_confirm()
