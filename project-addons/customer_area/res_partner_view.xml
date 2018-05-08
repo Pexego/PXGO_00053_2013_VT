@@ -27,8 +27,14 @@
                            attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)], 'invisible':[('customer', '=', False)]}"
                            options="{'no_quick_create':True,'no_create_edit':True}"/>
                 </field>
-                <xpath expr="//field[@name='child_ids']/form//field[@name='mobile']" position="before">
+                <xpath expr="//field[@name='child_ids']/form//field[@name='mobile']" position="after">
                     <field name="active"/>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='phone']" position="attributes">
+                    <attribute name="string">Phone/Mobile 1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='mobile']" position="attributes">
+                    <attribute name="string">Phone/Mobile 2</attribute>
                 </xpath>
                 <xpath expr="//field[@name='child_ids']/form//field[@name='use_parent_address']" position="before">
                     <div attrs="{'invisible': [('type','!=', 'delivery')]}" name="div_default">
