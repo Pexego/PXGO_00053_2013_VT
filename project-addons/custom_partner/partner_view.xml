@@ -262,6 +262,8 @@
             <field name="arch" type="xml" >
                 <field name="payment_responsible_id" position="after">
                     <field name="send_followup_to_user"/>
+                    <field name="notified_creditoycaucion" attrs="{'readonly':[('is_accounting','!=',True)]}" />
+                    <field name="is_accounting" invisible="1" />
                 </field>
                 <field name="unreconciled_aml_ids" position="attributes">
                     <attribute name="attrs">{'invisible':[('supplier', '=', True)]}</attribute>
@@ -342,6 +344,7 @@
                     <field name="category_id"/>
                     <field name="annual_invoiced"/>
                     <field name="last_sale_date"/>
+                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
                 </field>
             </field>
         </record>
