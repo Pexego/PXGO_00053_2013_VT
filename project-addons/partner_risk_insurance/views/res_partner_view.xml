@@ -21,6 +21,8 @@
                         </group>
                         <group>
                             <field name="risk_insurance_coverage_percent" />
+                            <field name="risk_insurance_comment" attrs="{'readonly':[('is_accounting','!=',True)]}" />
+                            <field name="is_accounting" invisible="1" />
                         </group>
                         <group>
                             <field name="risk_insurance_code" />

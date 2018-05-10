@@ -20,6 +20,7 @@ class Order(SyncModel):
     shipping_city = CharField(max_length=50, null=True)
     shipping_state = CharField(max_length=100, null=True)
     shipping_country = CharField(max_length=50, null=True)
+    delivery_type = CharField(max_length=30)
 
     MOD_NAME = 'order'
 
@@ -36,6 +37,7 @@ class OrderProduct(SyncModel):
     no_rappel = BooleanField(default=False)
     deposit = BooleanField(default=False)
     pack_parent_line_id = IntegerField(null=True)
+    discount = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
 
     MOD_NAME = 'orderproduct'
 

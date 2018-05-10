@@ -19,6 +19,9 @@
         "stock_reserve_sale"
     ],
     "data": [
-        'views/sale_view.xml'
+        'views/sale_view.xml',
+        'views/sale_report_xls_view.xml',
+        'wizard/sale_report_xls_wizard_view.xml',
+        'wizard/sale_confirm_wizard_view.xml'
     ],
 }

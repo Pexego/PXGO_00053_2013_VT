@@ -272,6 +272,8 @@
             <field name="arch" type="xml" >
                 <field name="payment_responsible_id" position="after">
                     <field name="send_followup_to_user"/>
+                    <field name="notified_creditoycaucion" attrs="{'readonly':[('is_accounting','!=',True)]}" />
+                    <field name="is_accounting" invisible="1" />
                 </field>
                 <field name="unreconciled_aml_ids" position="attributes">
                     <attribute name="attrs">{'invisible':[('supplier', '=', True)]}</attribute>
@@ -352,6 +354,7 @@
                     <field name="category_id"/>
                     <field name="annual_invoiced"/>
                     <field name="last_sale_date"/>
+                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
                 </field>
             </field>
         </record>
@@ -382,19 +385,19 @@
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="street" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                  <field name="zip" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="city" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="state_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
                 <field name="country_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="email" position="attributes">
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
@@ -513,6 +516,20 @@
                 </field>
                 <field name="product_id" position="after">
                     <field name="brand_ids" attrs="{'invisible':[('global_application','=', True)]}"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_rappel_current_info_tree_add_qty_picking" model="ir.ui.view">
+            <field name="name">rappel.current.info.tree.add_qty_picking</field>
+            <field name="model">rappel.current.info</field>
+            <field name="inherit_id" ref="rappel.view_rappel_current_info_tree"/>
+            <field name="arch" type="xml">
+                <field name="curr_qty" position="attributes">
+                    <attribute name="string">Curr. qty invoiced</attribute>
+                </field>
+                <field name="curr_qty" position="after">
+                    <field name="curr_qty_pickings"/>
                 </field>
             </field>
         </record>
