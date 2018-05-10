@@ -133,6 +133,16 @@
                         attrs="{'invisible': [('customer', '=', False)]}" string="Pickings"
                         icon="fa-pencil-square-o" groups="stock.group_stock_user"/>
                 </xpath>
+                <xpath expr="//page[@name='sales_purchases']" position="after">
+                    <page name='global_invoiced' string="Global Invoiced" attrs="{'invisible': [('customer', '=', False)]}">
+                        <group colspan="4" col="4">
+                            <field name="current_global_invoiced" readonly="1"/>
+                            <field name="current_employees" readonly="1"/>
+                            <field name="past_year_global_invoiced" readonly="1"/>
+                            <field name="past_year_employees" readonly="1"/>
+                        </group>
+                    </page>
+                </xpath>
             </field>
         </record>
 
@@ -262,6 +272,8 @@
             <field name="arch" type="xml" >
                 <field name="payment_responsible_id" position="after">
                     <field name="send_followup_to_user"/>
+                    <field name="notified_creditoycaucion" attrs="{'readonly':[('is_accounting','!=',True)]}" />
+                    <field name="is_accounting" invisible="1" />
                 </field>
                 <field name="unreconciled_aml_ids" position="attributes">
                     <attribute name="attrs">{'invisible':[('supplier', '=', True)]}</attribute>
@@ -342,6 +354,7 @@
                     <field name="category_id"/>
                     <field name="annual_invoiced"/>
                     <field name="last_sale_date"/>
+                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
                 </field>
             </field>
         </record>

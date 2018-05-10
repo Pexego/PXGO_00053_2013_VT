@@ -287,6 +287,11 @@ msgid "Send followup to sales agent"
 msgstr "Enviar seguimiento al comercial"
 
 #. module: custom_partner
+#: field:res.partner,notified_creditoycaucion:0
+msgid "Notified to Crédito y Caución"
+msgstr "Notificado a Crédito y Caución"
+
+#. module: custom_partner
 #: field:res.partner,total_invoiced_real:0
 msgid "Total Invoiced"
 msgstr "Total facturado"
@@ -327,6 +332,11 @@ msgstr "Telefono/Móvil 1"
 #: view:res.partner:custom_partner.view_partner_form_add_require
 msgid "Phone/Mobile 2"
 msgstr "Telefono/Móvil 2"
+
+#. module: custom_partner
+#: view:res.partner:view_partner_tree_custom
+msgid "Open partner in new tab"
+msgstr "Abrir cliente en nueva pestaña"
 
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:360
@@ -387,3 +397,28 @@ msgstr "Cant. pendiente de facturar"
 #: view:rappel.current.info:custom_partner.view_rappel_current_info_tree_add_qty_picking
 msgid "Curr. qty invoiced"
 msgstr "Cant. act. facturada"
+
+#. module: custom_partner
+#: field:res.partner,current_global_invoiced:0
+msgid "Current year invoiced (global)"
+msgstr "Facturación (global) año en curso"
+
+#. module: custom_partner
+#: field:res.partner,past_year_global_invoiced:0
+msgid "Past year invoiced (global)"
+msgstr "Facturación (global) año anterior"
+
+#. module: custom_partner
+#: field:res.partner,current_employees:0
+msgid "Current year employees"
+msgstr "Empleados año en curso"
+
+#. module: custom_partner
+#: field:res.partner,past_year_employees:0
+msgid "Past year employees"
+msgstr "Empleados año anterior"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.res_partner_view_buttons_add_quotations
+msgid "Global Invoiced"
+msgstr "Facturación global"

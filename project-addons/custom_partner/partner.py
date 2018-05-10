@@ -47,6 +47,10 @@ class ResPartner(models.Model):
     past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True, default=0.0)
     monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True, default=0.0)
     past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True, default=0.0)
+    current_global_invoiced = fields.Float('Current year invoiced (global)', default=0.0)
+    past_year_global_invoiced = fields.Float('Past year invoiced (global)', default=0.0)
+    current_employees = fields.Integer('Current year employees', default=0)
+    past_year_employees = fields.Integer('Past year employees', default=0)
 
     @api.model
     def _calculate_annual_invoiced(self):
@@ -377,6 +381,8 @@ class ResPartner(models.Model):
                                       'Invoice type')
     dropship = fields.Boolean("Dropship")
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
+    notified_creditoycaucion = fields.Date("Notified to Crédito y Caución")
+    is_accounting = fields.Boolean('Is Acounting', compute="_is_accounting")
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
     att = fields.Char("A/A")
@@ -391,6 +397,16 @@ class ResPartner(models.Model):
     _sql_constraints = [
         ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
     ]
+
+    @api.one
+    def _is_accounting(self):
+        accountant = self.env.ref('account.group_account_manager')
+        is_accountant = self.env.user.id in accountant.users.ids
+
+        if is_accountant:
+            self.is_accounting = True
+        else:
+            self.is_accounting = False
 
     @api.multi
     def _get_purchased_quantity(self):
@@ -649,6 +665,19 @@ class ResPartner(models.Model):
             }}
             if res:
                 return res
+
+    @api.multi
+    def open_partner(self):
+
+        self.ensure_one()
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        record_url = base_url + '/web/?#id=' + str(self.id) + '&view_type=form&model=res.partner'
+        return {
+            'type': 'ir.actions.act_url',
+            'view_type': 'form',
+            'url': record_url,
+            'target': 'new'
+        }
 
 
 class rappel_calculated(models.Model):
