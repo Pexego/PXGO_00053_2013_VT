@@ -422,3 +422,13 @@ msgstr "Empleados año anterior"
 #: view:res.partner:custom_partner.res_partner_view_buttons_add_quotations
 msgid "Global Invoiced"
 msgstr "Facturación global"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
+msgid "No current month sales"
+msgstr "Sin ventas este mes"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
+msgid "Customers with previous month sales (but no sales action in current month)"
+msgstr "Clientes con ventas en el mes pasado (pero sin ventas en el mes actual)"

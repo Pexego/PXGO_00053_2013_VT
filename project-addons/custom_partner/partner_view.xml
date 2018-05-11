@@ -60,6 +60,12 @@
                     <field name="zip"/>
                     <field name="phone"/>
                 </field>
+                <filter name="supplier" position="after">
+                    <separator/>
+                    <filter string="No current month sales"
+                           domain="[['past_month_invoiced', '>', 0], ['monthly_invoiced', '=', 0]]"
+                           help="Customers with previous month sales (but no sales action in current month)"/>
+                </filter>
             </field>
         </record>
 
