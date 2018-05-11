@@ -419,9 +419,9 @@ msgid "Past year employees"
 msgstr "Empleados año anterior"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.res_partner_view_buttons_add_quotations
-msgid "Global Invoiced"
-msgstr "Facturación global"
+#: view:res.partner:custom_partner.view_partner_warning_form_add_global_data
+msgid "Global data"
+msgstr "Datos globales"
 
 #. module: custom_partner
 #: view:res.partner:custom_partner.view_res_partner_filter_add_comercial

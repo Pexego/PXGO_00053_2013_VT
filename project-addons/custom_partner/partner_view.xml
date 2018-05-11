@@ -139,8 +139,16 @@
                         attrs="{'invisible': [('customer', '=', False)]}" string="Pickings"
                         icon="fa-pencil-square-o" groups="stock.group_stock_user"/>
                 </xpath>
-                <xpath expr="//page[@name='sales_purchases']" position="after">
-                    <page name='global_invoiced' string="Global Invoiced" attrs="{'invisible': [('customer', '=', False)]}">
+            </field>
+        </record>
+
+        <record id="view_partner_warning_form_add_global_data" model="ir.ui.view">
+            <field name="name">res.partner.warning.form.inherit.global.data</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="warning.view_partner_warning_form"/>
+            <field name="arch" type="xml">
+                <page string="Warnings" position="after">
+                    <page name='global_data' string="Global data" attrs="{'invisible': [('customer', '=', False)]}">
                         <group colspan="4" col="4">
                             <field name="current_global_invoiced" readonly="1"/>
                             <field name="current_employees" readonly="1"/>
@@ -148,7 +156,7 @@
                             <field name="past_year_employees" readonly="1"/>
                         </group>
                     </page>
-                </xpath>
+                </page>
             </field>
         </record>
 
