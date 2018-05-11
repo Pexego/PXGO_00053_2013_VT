@@ -11,9 +11,6 @@
                     <separator/>
                    <filter string="Lost" name="lost" domain="[('customer_lost','=',1)]" help="Customer lost"/>
                    <filter string="No lost" name="no_lost" domain="[('customer_lost','=',0)]" help="No lost customers"/>
-                   <filter string="No current month sales"
-                           domain="[['past_month_invoiced', '>', 0], ['monthly_invoiced', '=', 0]]"
-                           help="Customers with previous month sales (but no sales action in current month)"/>
                 </filter>
             </field>
         </record>

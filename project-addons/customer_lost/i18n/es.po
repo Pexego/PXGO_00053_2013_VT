@@ -135,14 +135,3 @@ msgstr "Proveedores"
 #: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Tag"
 msgstr "Etiqueta"
-
-#. module: customer_lost
-#: view:res.partner:customer_lost.res_partner_view_lost_search
-msgid "No current month sales"
-msgstr "Sin ventas este mes"
-
-#. module: customer_lost
-#: view:res.partner:customer_lost.res_partner_view_lost_search
-msgid "Customers with previous month sales (but no sales action in current month)"
-msgstr "Clientes con ventas en el mes pasado (pero sin ventas en el mes actual)"
-
