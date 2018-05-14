@@ -78,14 +78,15 @@ class sale_order(models.Model):
         partner_ids_to_check = [order.partner_id.commercial_partner_id.id,
                                 order.partner_id.id]
         partner_ids_to_check = list(set(partner_ids_to_check))
+        message = ''
         for partner in self.env['res.partner'].browse(partner_ids_to_check):
             if partner.blocked_sales and not order.allow_confirm_blocked:
                 message = _('Customer %s blocked by lack of payment. Check '
                             'the maturity dates of their account move '
                             'lines.') % partner.name
-                raise exceptions.Warning(message)
-            if partner.defaulter:
+            elif partner.defaulter:
                 message = _('Defaulter customer! Please contact the accounting department.')
+            if message:
                 raise exceptions.Warning(message)
 
         return super(sale_order, self).action_button_confirm()
