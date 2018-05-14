@@ -397,3 +397,38 @@ msgstr "Cant. pendiente de facturar"
 #: view:rappel.current.info:custom_partner.view_rappel_current_info_tree_add_qty_picking
 msgid "Curr. qty invoiced"
 msgstr "Cant. act. facturada"
+
+#. module: custom_partner
+#: field:res.partner,current_global_invoiced:0
+msgid "Current year invoiced (global)"
+msgstr "Facturación (global) año en curso"
+
+#. module: custom_partner
+#: field:res.partner,past_year_global_invoiced:0
+msgid "Past year invoiced (global)"
+msgstr "Facturación (global) año anterior"
+
+#. module: custom_partner
+#: field:res.partner,current_employees:0
+msgid "Current year employees"
+msgstr "Empleados año en curso"
+
+#. module: custom_partner
+#: field:res.partner,past_year_employees:0
+msgid "Past year employees"
+msgstr "Empleados año anterior"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_partner_warning_form_add_global_data
+msgid "Global data"
+msgstr "Datos globales"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
+msgid "No current month sales"
+msgstr "Sin ventas este mes"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
+msgid "Customers with previous month sales (but no sales action in current month)"
+msgstr "Clientes con ventas en el mes pasado (pero sin ventas en el mes actual)"
