@@ -174,6 +174,8 @@ class product_product(orm.Model):
             'Stock depends of components',
             help='Mark if pack stock is calcualted from component stock'
         ),
+        'is_pack': fields.boolean(
+        ),
         'pack_fixed_price': fields.boolean(
             'Pack has fixed price',
             help="""
@@ -250,6 +252,16 @@ class product_product(orm.Model):
 
     def write(self, cr, uid, ids, vals, context=None):
         pack_lines_to_update = []
+
+        if 'pack_line_ids' in vals:
+            for prod in vals['pack_line_ids']:
+                if prod[0] in (0, 1, 4):
+                    is_pack = True
+                    break
+                elif prod[0] == 2:
+                    is_pack = False
+            self.write(cr, uid, ids, {'is_pack': is_pack}, context=context)
+
         if 'standard_price' in vals:
             for prod in self.browse(cr, uid, ids, context=context):
                 if vals['standard_price'] != prod.standard_price:
