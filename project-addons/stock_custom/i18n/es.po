@@ -329,3 +329,7 @@ msgstr "Provincia"
 msgid "Sales Team"
 msgstr "Equipo de ventas"
 
+#. module: stock_custom
+#: field:product.product,ref_visiotech:0
+msgid "Visiotech reference"
+msgstr "Referencia Visiotech"

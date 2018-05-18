@@ -9,6 +9,7 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     virtual_stock_cooked = fields.Float('Stock Available Cooking', compute="_get_virtual_stock_cooked")
+    ref_visiotech = fields.Char('Visiotech reference')
 
     @api.multi
     def _get_virtual_stock_cooked(self):
