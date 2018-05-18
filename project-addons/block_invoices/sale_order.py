@@ -32,6 +32,7 @@ class sale_order(models.Model):
     blocked = fields.Boolean(related='partner_id.commercial_partner_id.blocked_sales')
     defaulter = fields.Boolean(related='partner_id.commercial_partner_id.defaulter')
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
+    blocked_magreb = fields.Boolean(default=False)
 
     def onchange_partner_id(self, cr, uid, ids, part, context=None):
         """
@@ -72,6 +73,19 @@ class sale_order(models.Model):
 
         return {'value': result.get('value',{}), 'warning':warning}
 
+    @api.one
+    @api.onchange('partner_id', 'section_id', 'payment_term')
+    def get_block_magreb (self):
+
+        if ((self.section_id.complete_name == 'Magreb'
+             and self.payment_term.name in ('Pago inmediato', 'Prepago'))
+            or (self.partner_id.section_id.name == 'Magreb'
+                and self.partner_id.property_payment_term.name in ('Pago inmediato', 'Prepago'))) \
+                and self.allow_confirm_blocked is False:
+            self.blocked_magreb = True
+        else:
+            self.blocked_magreb = False
+
     @api.multi
     def action_button_confirm(self):
         order = self[0]
@@ -86,7 +100,14 @@ class sale_order(models.Model):
                             'lines.') % partner.name
             elif partner.defaulter:
                 message = _('Defaulter customer! Please contact the accounting department.')
+            elif partner.customer_payment_mode.name == 'Recibo domiciliado' and len(partner.bank_ids) == 0:
+                message = _('Order blocked. The client has not bank account.')
+
             if message:
                 raise exceptions.Warning(message)
+
+        if self.blocked_magreb and self.allow_confirm_blocked is False:
+            message = _('Order blocked. The accounting department must approve this order.')
+            raise exceptions.Warning(message)
 
         return super(sale_order, self).action_button_confirm()
