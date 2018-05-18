@@ -13,9 +13,10 @@ class PaymentReturn(models.Model):
         reconcile_partial = [line.reconcile_partial_id.id for line in self.move_id.line_id if line.reconcile_partial_id]
 
         # Mark negative line as no-followup
-        for deb_line in self.line_ids.partner_id.unreconciled_aml_ids:
-            if (deb_line.debit - deb_line.credit < 0) \
-                    and (deb_line.reconcile_partial_id.id == reconcile_partial[0]):
-                deb_line.write({'blocked': True})
+        for dline in self.line_ids:
+            for deb_line in dline.partner_id.unreconciled_aml_ids:
+                if (deb_line.debit - deb_line.credit < 0) \
+                        and (deb_line.reconcile_partial_id.id in reconcile_partial):
+                    deb_line.write({'blocked': True})
 
         return res
