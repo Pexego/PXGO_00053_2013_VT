@@ -69,7 +69,4 @@ class ProductProduct(models.Model):
         else:
             self.is_pack = False
 
-        import ipdb
-        ipdb.set_trace()
-
     is_pack = fields.Boolean(compute='compute_is_pack', store=True)
