@@ -235,3 +235,14 @@ class AccountVoucher(models.Model):
 
     amount_with_currency_rate = fields.Float("Rate amount",
                                              compute="_get_amount_with_rate")
+
+    @api.multi
+    def action_move_line_create(self):
+        res = super(AccountVoucher, self).action_move_line_create()
+
+        lines = self.browse(self.ids).move_ids
+        for line in lines:
+            if not line.reconcile_ref:
+                line.write({'blocked': True})
+
+        return res
