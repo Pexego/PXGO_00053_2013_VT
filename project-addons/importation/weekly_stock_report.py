@@ -233,10 +233,12 @@ class weekly_stock_report(object):
                                     ('location_dest_id', '=',
                                      data['location_id'][0]),
                                     ('date', '<=',
-                                     next_sunday.strftime("%Y-%m-%d"))],
+                                     next_sunday.strftime("%Y-%m-%d")),
+                                    ('state', '=', 'done')],
                                    limit=1, order="date desc")
-                        in_date = self.read('stock.move', move_ids,
-                                            ['date'])[0]['date'][:11]
+                        in_date = move_ids and \
+                            self.read('stock.move', move_ids,
+                                      ['date'])[0]['date'][:11] or ""
                         ws.write(line, 0, product_data['default_code'])
                         ws.write(line, 1, data['quantity'])
                         ws.write(line, 2, data['location_id'][1])
