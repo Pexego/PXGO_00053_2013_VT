@@ -225,8 +225,8 @@ class weekly_stock_report(object):
                                  next_sunday.strftime("%Y-%m-%d 23:23:59"))],
                                ['location_id', 'quantity'], ['location_id'])
                 for data in product_stock_data:
-                    line += 1
                     if data['quantity']:
+                        line += 1
                         move_ids = self.\
                             search("stock.move",
                                    [('product_id', '=', product_id),
