@@ -237,12 +237,10 @@ class weekly_stock_report(object):
                                    limit=1, order="date desc")
                         in_date = self.read('stock.move', move_ids,
                                             ['date'])[0]['date'][:11]
-                    else:
-                        in_date = ""
-                    ws.write(line, 0, product_data['default_code'])
-                    ws.write(line, 1, data['quantity'])
-                    ws.write(line, 2, data['location_id'][1])
-                    ws.write(line, 3, in_date)
+                        ws.write(line, 0, product_data['default_code'])
+                        ws.write(line, 1, data['quantity'])
+                        ws.write(line, 2, data['location_id'][1])
+                        ws.write(line, 3, in_date)
                 print "Prod %s de %s" % (prod, products_len)
 
             start_date = next_sunday+relativedelta(weekday=MO)
