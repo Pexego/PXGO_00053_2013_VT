@@ -679,6 +679,25 @@ class ResPartner(models.Model):
             'target': 'new'
         }
 
+    @api.multi
+    def call_new_window(self):
+
+        # import ipdb
+        # ipdb.set_trace()
+
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        order_view_id = self.env.ref('custom_partner.crm_case_categ_phone_incoming3').id
+        record_url = base_url + '/web?#page=0&limit=80&view_type=list&model=crm.phonecall&action=' + str(order_view_id) + '&active_id=' + str(self.id)
+
+        return {
+            'name': 'Phone Calls',
+            'view_type': 'tree',
+            'type': 'ir.actions.act_url',
+            'url': record_url,
+            'context': self.env.context,
+            'target': 'new',
+            }
+
 
 class rappel_calculated(models.Model):
 
