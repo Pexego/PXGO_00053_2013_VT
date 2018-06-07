@@ -27,7 +27,7 @@
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
     "depends": ['base', 'product', 'connector', 'stock', 'custom_partner', 'crm_claim_rma', 'product_virtual_stock_conservative'],
-    "data": ["views/middleware_view.xml", "views/product_view.xml", 'views/res_users.xml',
+    "data": ["views/middleware_view.xml", "views/product_view.xml", 'views/res_users.xml', 'views/account_invoice.xml',
              "views/product_brand.xml", "views/claim_line_view.xml", "security/ir.model.access.csv"],
     "installable": True
 }

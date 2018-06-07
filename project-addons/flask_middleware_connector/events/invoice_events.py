@@ -53,7 +53,8 @@ class InvoiceExporter(Exporter):
                 'total_wt_rect': invoice.total_wt_rect,
                 'pdf_file_data': result_encode,
                 'state': invoice.state_web, #Llamada a _get_state_web para evitar problemas en facturas que no tienen inicializado ese valor
-                'payment_mode_id': invoice.payment_mode_id.name}
+                'payment_mode_id': invoice.payment_mode_id.name,
+                'orders': invoice.orders}
         if mode == 'insert':
             return self.backend_adapter.insert(vals)
         else:
