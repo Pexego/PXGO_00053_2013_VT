@@ -64,7 +64,8 @@ class sale_order_line(osv.osv):
 
     _columns = {
         'product_tags': fields.function(_get_tags_product, string='Tags',
-                                        type='char', size=255)
+                                        type='char', size=255),
+        'web_discount': fields.boolean('Web Discount')
     }
 
 

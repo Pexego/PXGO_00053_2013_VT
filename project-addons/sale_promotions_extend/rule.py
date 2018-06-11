@@ -47,7 +47,8 @@ ATTRIBUTES = [
     ('comp_sub_total', 'Compute sub total of products'),
     ('comp_sub_total_x', 'Compute sub total excluding products'),
     ('custom', 'Custom domain expression'),
-    ('order_pricelist', _('Order Pricelist'))
+    ('order_pricelist', _('Order Pricelist')),
+    ('web_discount', 'Web Discount')
 ]
 
 ACTION_TYPES = [
@@ -62,7 +63,8 @@ ACTION_TYPES = [
     ('prod_disc_fix', _('Fixed amount on Product')),
     ('cart_disc_perc', _('Discount % on Sub Total')),
     ('cart_disc_fix', _('Fixed amount on Sub Total')),
-    ('prod_x_get_y', _('Buy X get Y free'))
+    ('prod_x_get_y', _('Buy X get Y free')),
+    ('web_disc_accumulated', _('Web Discount % on Product accumulated'))
 ]
 
 
@@ -142,6 +144,13 @@ class PromotionsRulesConditionsExprs(orm.Model):
                 }
             }
 
+        if attribute == 'web_discount':
+            return {
+                'value': {
+                    'value': "True"
+                }
+            }
+
         return {}
     _columns = {
         'attribute': fields.selection(ATTRIBUTES,
@@ -176,6 +185,7 @@ class PromotionsRulesConditionsExprs(orm.Model):
                          'prod_net_price',
                          'comp_sub_total',
                          'comp_sub_total_x',
+                         'web_discount',
                          ] and \
             not comparator in NUMERCIAL_COMPARATORS:
             raise Exception(
@@ -275,6 +285,8 @@ class PromotionsRulesConditionsExprs(orm.Model):
                                comparator,
                                value
                                )
+        if attribute == 'web_discount':
+            return "%s" % attribute
         return "order.%s %s %s" % (
                                     attribute,
                                     comparator,
@@ -307,6 +319,8 @@ class PromotionsRulesConditionsExprs(orm.Model):
                 products.append(product_code)
                 prod_lines[product_code] = line.product_id
                 prod_tag = line.product_tags
+                if line.web_discount:
+                    web_discount = True
                 prod_qty[product_code] = prod_qty.get(
                                             product_code, 0.00
                                                     ) + line.product_uom_qty
@@ -352,6 +366,8 @@ class PromotionsRulesActions(orm.Model):
         if action_type in ['brand_disc_perc', 'brand_disc_perc_accumulated']:
             res = {'value': {'product_code': "'brand_code'",
                              'arguments': "0.00"}}
+        if action_type in ['web_disc_accumulated']:
+            res = {'value': {'arguments': "10.00"}}
         return res
 
     def apply_perc_discount_accumulated(self, cursor, user, action, order_line,
@@ -450,4 +466,12 @@ class PromotionsRulesActions(orm.Model):
                     order_line.product_id.product_brand_id.code:
                 self.apply_perc_discount(cursor, user, action, order_line,
                                          context)
+        return {}
+
+    def action_web_disc_accumulated(self, cursor, user, action, order,
+                               context=None):
+        for order_line in order.order_line:
+            if order_line.web_discount:
+                self.apply_perc_discount_accumulated(cursor, user, action,
+                                                     order_line, context)
         return {}
