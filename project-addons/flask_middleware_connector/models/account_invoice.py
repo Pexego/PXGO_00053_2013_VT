@@ -5,15 +5,14 @@ class AccountInvoice(models.Model):
 
     _inherit = "account.invoice"
 
-    orders = fields.Char('Orders', compute='get_orders', readonly=True, store=True)
+    orders = fields.Char('Orders', compute='get_orders', readonly=True, store=False)
 
     @api.multi
     @api.depends('invoice_line')
     def get_orders(self):
-        orders = ''
         for invoice in self:
+            orders = ''
             for order in invoice.sale_order_ids:
-                if orders.find(order.name) == -1:
-                    orders += order.name + ','
+                orders += order.name + ','
             if orders.endswith(','):
                 self.orders = orders[:-1]
