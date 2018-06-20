@@ -8,7 +8,6 @@ class AccountInvoice(models.Model):
     orders = fields.Char('Orders', compute='get_orders', readonly=True, store=False)
 
     @api.multi
-    @api.depends('invoice_line')
     def get_orders(self):
         for invoice in self:
             orders = ''
