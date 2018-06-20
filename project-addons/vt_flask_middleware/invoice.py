@@ -24,6 +24,7 @@ class Invoice(SyncModel):
     total_wt_rect = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
     pdf_file_data = TextField()
     payment_mode_id = CharField(max_length=30)
+    orders = TextField()
 
     MOD_NAME = 'invoice'
 
