@@ -29,7 +29,7 @@
     "depends": ['base',
                 'sale',
                 'customer_area',
-                'custom_partner'],
+                ],
     "data": ['data/cron.xml',
               'data/ir.config_parameter.xml',
               'res_partner_view.xml'],
