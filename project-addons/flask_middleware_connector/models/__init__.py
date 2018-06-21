@@ -26,3 +26,4 @@ from . import stock
 from . import middleware
 from . import product_brand
 from . import queue_job
+from . import account_invoice
