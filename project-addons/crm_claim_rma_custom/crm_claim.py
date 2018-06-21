@@ -202,6 +202,7 @@ class CrmClaimRma(models.Model):
             domain_journal = [('type', '=', 'sale_refund')]
             acc_journal_obj = self.pool.get('account.journal')
             acc_journal_ids = acc_journal_obj.search(cr, uid, domain_journal)
+            partner_bank_id = False
             for banks in claim_obj.partner_id.bank_ids:
                 for mandate in banks.mandate_ids:
                     if mandate.state == 'valid':
