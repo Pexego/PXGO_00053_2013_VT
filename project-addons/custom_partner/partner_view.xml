@@ -486,7 +486,7 @@
             <field name="inherit_id" ref="l10n_es_partner.view_partner_form_comercial"/>
             <field name="arch" type="xml">
                 <field name="comercial" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', True)]}</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
             </field>
         </record>
