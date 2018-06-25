@@ -250,7 +250,7 @@ class PromotionsRulesConditionsExprs(orm.Model):
         if attribute == 'prod_tag':
             return '%s %s prod_tag' % (value, comparator)
         if attribute == 'order_pricelist':
-            return """order.pricelist_id.name == %s""" % value
+            return """order.pricelist_id.name %s %s""" % (comparator, value)
         if attribute in [
                          'prod_qty',
                          'prod_unit_price',
