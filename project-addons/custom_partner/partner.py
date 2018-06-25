@@ -736,15 +736,23 @@ class ResPartnerRappelRel(models.Model):
              ('state', 'in', ['open', 'paid']),
              ('commercial_partner_id', '=', self.partner_id.id)])
 
-        # se buscan las rectificativas
-        refund_lines = self.env['account.invoice.line'].search(
-            [('invoice_id', 'in', [x.id for x in refunds]),
-             ('product_id', 'in', products),
-             ('no_rappel', '=', False)])
-        invoice_lines = self.env['account.invoice.line'].search(
-            [('invoice_id', 'in', [x.id for x in invoices]),
-             ('product_id', 'in', products),
-             ('no_rappel', '=', False)])
+        # Si el rappel afecta al catalago entero, no hacer la comprobacion por producto
+        if self.rappel_id.global_application:
+            refund_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in refunds]),
+                 ('no_rappel', '=', False)])
+            invoice_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in invoices]),
+                 ('no_rappel', '=', False)])
+        else:
+            refund_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in refunds]),
+                 ('product_id', 'in', products),
+                 ('no_rappel', '=', False)])
+            invoice_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in invoices]),
+                 ('product_id', 'in', products),
+                 ('no_rappel', '=', False)])
 
         return invoice_lines, refund_lines
 
