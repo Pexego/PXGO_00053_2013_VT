@@ -112,6 +112,11 @@ class SaleOrder(osv.osv):
                                      context=context)
 
         super(SaleOrder, self).clear_existing_promotion_lines(cursor, user, order_id, context=None)
+        order_line_ids = order_line_obj.search(cursor, user,
+                                               [
+                                                   ('order_id', '=', order.id),
+                                               ], context=context
+                                               )
 
         for line in order_line_obj.browse(cursor, user, order_line_ids, context):
             if line.discount == -1.0:
