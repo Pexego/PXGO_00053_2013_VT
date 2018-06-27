@@ -149,16 +149,15 @@ def delay_export_product_write(session, model_name, record_id, vals):
         if field in vals:
             update_product.delay(session, model_name, record_id, priority=2, eta=30)
             break
-    if product.is_pack:
-        is_pack = session.env['product.pack.line'].search([('product_id', '=', record_id)])
-        for pack in is_pack:
-            min_stock = False
-            for product in pack.parent_product_id.pack_line_ids:
-                product_stock_qty = product.product_id.virtual_available_wo_incoming
-                if not min_stock or min_stock > product_stock_qty:
-                    min_stock = product_stock_qty
-            if min_stock:
-                update_product.delay(session, model_name, pack.parent_product_id.id, priority=2, eta=30)
+    is_pack = session.env['product.pack.line'].search([('product_id', '=', record_id)])
+    for pack in is_pack:
+        min_stock = False
+        for product in pack.parent_product_id.pack_line_ids:
+            product_stock_qty = product.product_id.virtual_available_wo_incoming
+            if not min_stock or min_stock > product_stock_qty:
+                min_stock = product_stock_qty
+        if min_stock:
+            update_product.delay(session, model_name, pack.parent_product_id.id, priority=2, eta=30)
 
 
 @on_record_unlink(model_names='product.product')
@@ -171,6 +170,9 @@ def update_stock_quantity(session, model_name, record_id):
     move = session.env[model_name].browse(record_id)
     if move.product_id.show_stock_outside:
         update_product.delay(session, "product.product", move.product_id.id, priority=2, eta=30)
+    is_pack = session.env['product.pack.line'].search([('product_id', '=', move.product_id.id)])
+    for pack in is_pack:
+        update_product.delay(session, "product.product", pack.parent_product_id.id, priority=2, eta=30)
 
 
 @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
