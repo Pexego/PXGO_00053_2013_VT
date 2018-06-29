@@ -47,6 +47,10 @@ class ResPartner(models.Model):
     past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True, default=0.0)
     monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True, default=0.0)
     past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True, default=0.0)
+    current_global_invoiced = fields.Float('Current year invoiced (global)', default=0.0)
+    past_year_global_invoiced = fields.Float('Past year invoiced (global)', default=0.0)
+    current_employees = fields.Integer('Current year employees', default=0)
+    past_year_employees = fields.Integer('Past year employees', default=0)
 
     @api.model
     def _calculate_annual_invoiced(self):
@@ -377,6 +381,8 @@ class ResPartner(models.Model):
                                       'Invoice type')
     dropship = fields.Boolean("Dropship")
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
+    notified_creditoycaucion = fields.Date("Notified to Crédito y Caución")
+    is_accounting = fields.Boolean('Is Acounting', compute="_is_accounting")
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
     att = fields.Char("A/A")
@@ -391,6 +397,16 @@ class ResPartner(models.Model):
     _sql_constraints = [
         ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
     ]
+
+    @api.one
+    def _is_accounting(self):
+        accountant = self.env.ref('account.group_account_manager')
+        is_accountant = self.env.user.id in accountant.users.ids
+
+        if is_accountant:
+            self.is_accounting = True
+        else:
+            self.is_accounting = False
 
     @api.multi
     def _get_purchased_quantity(self):
@@ -650,6 +666,38 @@ class ResPartner(models.Model):
             if res:
                 return res
 
+    @api.multi
+    def open_partner(self):
+
+        self.ensure_one()
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        record_url = base_url + '/web/?#id=' + str(self.id) + '&view_type=form&model=res.partner'
+        return {
+            'type': 'ir.actions.act_url',
+            'view_type': 'form',
+            'url': record_url,
+            'target': 'new'
+        }
+
+    @api.multi
+    def call_new_window(self):
+
+        # import ipdb
+        # ipdb.set_trace()
+
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        order_view_id = self.env.ref('custom_partner.crm_case_categ_phone_incoming3').id
+        record_url = base_url + '/web?#page=0&limit=80&view_type=list&model=crm.phonecall&action=' + str(order_view_id) + '&active_id=' + str(self.id)
+
+        return {
+            'name': 'Phone Calls',
+            'view_type': 'tree',
+            'type': 'ir.actions.act_url',
+            'url': record_url,
+            'context': self.env.context,
+            'target': 'new',
+            }
+
 
 class rappel_calculated(models.Model):
 
@@ -688,17 +736,45 @@ class ResPartnerRappelRel(models.Model):
              ('state', 'in', ['open', 'paid']),
              ('commercial_partner_id', '=', self.partner_id.id)])
 
-        # se buscan las rectificativas
-        refund_lines = self.env['account.invoice.line'].search(
-            [('invoice_id', 'in', [x.id for x in refunds]),
-             ('product_id', 'in', products),
-             ('no_rappel', '=', False)])
-        invoice_lines = self.env['account.invoice.line'].search(
-            [('invoice_id', 'in', [x.id for x in invoices]),
-             ('product_id', 'in', products),
-             ('no_rappel', '=', False)])
+        # Si el rappel afecta al catalago entero, no hacer la comprobacion por producto
+        if self.rappel_id.global_application:
+            refund_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in refunds]),
+                 ('no_rappel', '=', False)])
+            invoice_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in invoices]),
+                 ('no_rappel', '=', False)])
+        else:
+            refund_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in refunds]),
+                 ('product_id', 'in', products),
+                 ('no_rappel', '=', False)])
+            invoice_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in invoices]),
+                 ('product_id', 'in', products),
+                 ('no_rappel', '=', False)])
 
         return invoice_lines, refund_lines
+
+    @api.multi
+    def _calculate_qty_picking(self):
+        picking_obj = self.env['stock.picking']
+        move_obj = self.env['stock.move']
+        products = self.rappel_id.get_products()
+        period = self._get_next_period()
+        if period:
+            picking_ids = picking_obj.search([('date_done', '>=', period[0].strftime("%Y-%m-%d")),
+                                              ('date_done', '<=', period[1].strftime("%Y-%m-%d")),
+                                              ('state', '=', 'done'),
+                                              ('invoice_state', '=', '2binvoiced'),
+                                              ('partner_id', 'child_of', [self.partner_id.id])])
+
+            picking_lines = move_obj.search([('picking_id', 'in', picking_ids.ids),
+                                             ('product_id', 'in', products)])
+
+            price_subtotal_lines = picking_lines.mapped('procurement_id.sale_line_id.price_subtotal')
+            amount_total = sum([x for x in price_subtotal_lines])
+            return amount_total
 
     @api.model
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
@@ -719,6 +795,7 @@ class ResPartnerRappelRel(models.Model):
                     if total:
                         total_rappel = total * rappel.rappel_id.fix_qty / 100.0
                     rappel_info["curr_qty"] = total
+                    rappel_info["curr_qty_pickings"] = rappel._calculate_qty_picking()
 
                 rappel_info['amount'] = total_rappel
             else:
@@ -730,6 +807,7 @@ class ResPartnerRappelRel(models.Model):
                 total = sum([x[field] for x in invoice_lines]) - \
                     sum([x[field] for x in refund_lines])
                 rappel_info["curr_qty"] = total
+                rappel_info["curr_qty_pickings"] = rappel._calculate_qty_picking()
                 if total:
                     section = self.env['rappel.section'].search(
                         [('rappel_id', '=', rappel.rappel_id.id),
@@ -844,6 +922,10 @@ class RappelInvoice(models.TransientModel):
 class RappelCurrentInfo(models.Model):
 
     _inherit = "rappel.current.info"
+
+    curr_qty_pickings = fields.Float("Qty pending invoice", readonly=True,
+                                     help="Qty estimation in pickings pending to be invoiced (shipping cost and"
+                                          "product with no-rappel in the order are not verified)")
 
     @api.model
     def send_rappel_info_mail(self):

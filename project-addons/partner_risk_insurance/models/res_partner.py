@@ -29,6 +29,17 @@ class ResPartner(models.Model):
     def _credit_limit(self):
         self.credit_limit = (self.company_credit_limit +
                              self.insurance_credit_limit)
+    @api.one
+    def _is_accounting(self):
+
+        accountant = self.env.ref('account.group_account_manager')
+
+        is_accountant = self.env.user.id in accountant.users.ids
+
+        if is_accountant:
+            self.is_accounting = True
+        else:
+            self.is_accounting = False
 
     credit_limit = fields.Float('Credit Limit', store=True,
                                 compute=_credit_limit)
@@ -55,3 +66,12 @@ class ResPartner(models.Model):
                                         help='Secondary code assigned to this '
                                         'partner by the risk insurance '
                                         'company.')
+
+    risk_insurance_comment = fields.Text('Comments')
+
+    is_accounting = fields.Boolean('Is Acounting', compute="_is_accounting")
+
+
+
+
+

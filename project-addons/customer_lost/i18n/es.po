@@ -135,4 +135,3 @@ msgstr "Proveedores"
 #: view:res.partner:customer_lost.view_res_partner_filter_report
 msgid "Tag"
 msgstr "Etiqueta"
-

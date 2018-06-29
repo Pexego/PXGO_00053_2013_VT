@@ -32,4 +32,13 @@ msgstr "La cantidad de un producto no puede ser negativo o cero"
 msgid "Partner Orders"
 msgstr "Pedidos Cliente"
 
+#. module: sale_custom
+#: view:sale.confirm.wizard:sale_custom.sale_confirm_wizard_form_wizard
+msgid "Some of the products of this order aren't available now. Please consider that!"
+msgstr "Algunos de los productos no estan disponibles actualmente. Por favor, tengalo en cuenta!"
 
+
+#. module: sale_custom
+#: view:sale.confirm.wizard:sale_custom.sale_confirm_wizard_form_wizard
+msgid "Sale Confirm"
+msgstr "Confirmar Tramitacion"

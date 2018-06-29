@@ -60,6 +60,12 @@
                     <field name="zip"/>
                     <field name="phone"/>
                 </field>
+                <filter name="supplier" position="after">
+                    <separator/>
+                    <filter string="No current month sales"
+                           domain="[['past_month_invoiced', '>', 0], ['monthly_invoiced', '=', 0]]"
+                           help="Customers with previous month sales (but no sales action in current month)"/>
+                </filter>
             </field>
         </record>
 
@@ -123,16 +129,34 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="priority" eval="20"/>
-            <field name="groups_id" eval="[(4, ref('base.group_sale_salesman'))]"/>
+            <field name="groups_id" eval="[(4, ref('base.group_partner_manager'))]"/>
             <field name="arch" type="xml">
                 <xpath expr="//div[@name='buttons']" position="inside">
                     <button class="oe_inline oe_stat_button" type="action" name="%(act_res_partner_2_sale_quotations)d"
                         attrs="{'invisible': [('customer', '=', False)]}" string="Quotations"
-                        icon="fa-strikethrough" groups="base.group_sale_salesman"/>
+                        icon="fa-strikethrough"/>
                     <button class="oe_inline oe_stat_button" type="action" name="%(act_res_partner_2_stock_picking)d"
                         attrs="{'invisible': [('customer', '=', False)]}" string="Pickings"
                         icon="fa-pencil-square-o" groups="stock.group_stock_user"/>
                 </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_warning_form_add_global_data" model="ir.ui.view">
+            <field name="name">res.partner.warning.form.inherit.global.data</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="warning.view_partner_warning_form"/>
+            <field name="arch" type="xml">
+                <page string="Warnings" position="after">
+                    <page name='global_data' string="Global data" attrs="{'invisible': [('customer', '=', False)]}">
+                        <group colspan="4" col="4">
+                            <field name="current_global_invoiced" readonly="1"/>
+                            <field name="current_employees" readonly="1"/>
+                            <field name="past_year_global_invoiced" readonly="1"/>
+                            <field name="past_year_employees" readonly="1"/>
+                        </group>
+                    </page>
+                </page>
             </field>
         </record>
 
@@ -262,6 +286,8 @@
             <field name="arch" type="xml" >
                 <field name="payment_responsible_id" position="after">
                     <field name="send_followup_to_user"/>
+                    <field name="notified_creditoycaucion" attrs="{'readonly':[('is_accounting','!=',True)]}" />
+                    <field name="is_accounting" invisible="1" />
                 </field>
                 <field name="unreconciled_aml_ids" position="attributes">
                     <attribute name="attrs">{'invisible':[('supplier', '=', True)]}</attribute>
@@ -342,7 +368,20 @@
                     <field name="category_id"/>
                     <field name="annual_invoiced"/>
                     <field name="last_sale_date"/>
+                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
                 </field>
+            </field>
+        </record>
+
+          <record id="view_partner_tree" model="ir.ui.view">
+            <field name="name">res.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="customer_lost.view_partner_tree"/>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                 <field name="parent_id" invisible="1" position="after">
+                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
+                 </field>
             </field>
         </record>
 
@@ -372,19 +411,19 @@
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="street" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                  <field name="zip" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="city" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="state_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
                 <field name="country_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="email" position="attributes">
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
@@ -447,7 +486,7 @@
             <field name="inherit_id" ref="l10n_es_partner.view_partner_form_comercial"/>
             <field name="arch" type="xml">
                 <field name="comercial" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
             </field>
         </record>
@@ -504,6 +543,55 @@
                 <field name="product_id" position="after">
                     <field name="brand_ids" attrs="{'invisible':[('global_application','=', True)]}"/>
                 </field>
+            </field>
+        </record>
+
+        <record id="view_rappel_current_info_tree_add_qty_picking" model="ir.ui.view">
+            <field name="name">rappel.current.info.tree.add_qty_picking</field>
+            <field name="model">rappel.current.info</field>
+            <field name="inherit_id" ref="rappel.view_rappel_current_info_tree"/>
+            <field name="arch" type="xml">
+                <field name="curr_qty" position="attributes">
+                    <attribute name="string">Curr. qty invoiced</attribute>
+                </field>
+                <field name="curr_qty" position="after">
+                    <field name="curr_qty_pickings"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="crm_case_categ_phone_incoming3">
+            <field name="name">Logged Calls</field>
+            <field name="res_model">crm.phonecall</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,calendar</field>
+            <field name="view_id" ref="crm.crm_case_inbound_phone_tree_view"/>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_partner_id': active_id, 'default_duration': 1.0, 'search_default_user_id': uid, 'search_default_state': 'done', 'default_state': 'done', 'default_scope': 'sales'}</field>
+            <field name="search_view_id" ref="crm.view_crm_case_phonecalls_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to log the summary of a phone call.
+              </p><p>
+                Odoo allows you to log inbound calls on the fly to track the
+                history of the communication with a customer or to inform another
+                team member.
+              </p><p>
+                In order to follow up on the call, you can trigger a request for
+                another call, a meeting or an opportunity.
+              </p>
+            </field>
+        </record>
+
+        <record id="custom_call_button" model="ir.ui.view">
+            <field name="name">custom.call.button</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="crm.view_partners_form_crm_calls"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(crm.crm_case_categ_phone_incoming0)d']" position="attributes">
+                    <attribute name="name">call_new_window</attribute>
+                    <attribute name="type">object</attribute>
+                </xpath>
             </field>
         </record>
 

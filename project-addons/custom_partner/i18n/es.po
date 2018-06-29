@@ -287,6 +287,11 @@ msgid "Send followup to sales agent"
 msgstr "Enviar seguimiento al comercial"
 
 #. module: custom_partner
+#: field:res.partner,notified_creditoycaucion:0
+msgid "Notified to Crédito y Caución"
+msgstr "Notificado a Crédito y Caución"
+
+#. module: custom_partner
 #: field:res.partner,total_invoiced_real:0
 msgid "Total Invoiced"
 msgstr "Total facturado"
@@ -327,6 +332,11 @@ msgstr "Telefono/Móvil 1"
 #: view:res.partner:custom_partner.view_partner_form_add_require
 msgid "Phone/Mobile 2"
 msgstr "Telefono/Móvil 2"
+
+#. module: custom_partner
+#: view:res.partner:view_partner_tree_custom
+msgid "Open partner in new tab"
+msgstr "Abrir cliente en nueva pestaña"
 
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:360
@@ -372,3 +382,53 @@ msgstr "¡Advertencia!"
 #, python-format
 msgid "Remember to set our partner email, not dropship email!"
 msgstr "¡Recuerde poner el correo de nuestro cliente, no del cliente final (dropship)!"
+
+#. module: custom_partner
+#: help:rappel.current.info,curr_qty_pickings:0
+msgid "Qty estimation in pickings pending to be invoiced (shipping cost and product with no-rappel check in the order are not verified)"
+msgstr "Cantidad estimada en albaranes pendientes de ser facturados (gastos de envío y productos con el check no-rappel en el pedido no se verifican) "
+
+#. module: custom_partner
+#: field:rappel.current.info,curr_qty_pickings:0
+msgid "Qty pending invoice"
+msgstr "Cant. pendiente de facturar"
+
+#. module: custom_partner
+#: view:rappel.current.info:custom_partner.view_rappel_current_info_tree_add_qty_picking
+msgid "Curr. qty invoiced"
+msgstr "Cant. act. facturada"
+
+#. module: custom_partner
+#: field:res.partner,current_global_invoiced:0
+msgid "Current year invoiced (global)"
+msgstr "Facturación (global) año en curso"
+
+#. module: custom_partner
+#: field:res.partner,past_year_global_invoiced:0
+msgid "Past year invoiced (global)"
+msgstr "Facturación (global) año anterior"
+
+#. module: custom_partner
+#: field:res.partner,current_employees:0
+msgid "Current year employees"
+msgstr "Empleados año en curso"
+
+#. module: custom_partner
+#: field:res.partner,past_year_employees:0
+msgid "Past year employees"
+msgstr "Empleados año anterior"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_partner_warning_form_add_global_data
+msgid "Global data"
+msgstr "Datos globales"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
+msgid "No current month sales"
+msgstr "Sin ventas este mes"
+
+#. module: custom_partner
+#: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
+msgid "Customers with previous month sales (but no sales action in current month)"
+msgstr "Clientes con ventas en el mes pasado (pero sin ventas en el mes actual)"

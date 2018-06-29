@@ -84,7 +84,8 @@
                         <div>
                             <h2>
                                 <field name="partner_id" string="Partner"
-                                       domain="['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]"/>
+                                       domain="['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]"
+                                       context="{'default_is_company': True, 'default_active': False, 'default_prospective': True}"/>
                             </h2>
                         </div>
                         <div>
