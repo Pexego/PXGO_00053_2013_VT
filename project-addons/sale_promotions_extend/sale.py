@@ -65,7 +65,8 @@ class sale_order_line(osv.osv):
     _columns = {
         'product_tags': fields.function(_get_tags_product, string='Tags',
                                         type='char', size=255),
-        'web_discount': fields.boolean('Web Discount')
+        'web_discount': fields.boolean('Web Discount'),
+        'accumulated_promo': fields.boolean(default=False)
     }
 
 
@@ -103,13 +104,10 @@ class SaleOrder(osv.osv):
                                                    ('order_id', '=', order.id),
                                                ], context=context
                                                )
+
+        line_dict = {}
         for line in order_line_obj.browse(cursor, user, order_line_ids, context):
-            if not line.discount and not line.old_discount:
-                order_line_obj.write(cursor, user,
-                                     [line.id],
-                                     {'discount': 0.00,
-                                      'old_discount': -1.00},
-                                     context=context)
+            line_dict[line.id] = line.old_discount
 
         super(SaleOrder, self).clear_existing_promotion_lines(cursor, user, order_id, context=None)
         order_line_ids = order_line_obj.search(cursor, user,
@@ -119,9 +117,16 @@ class SaleOrder(osv.osv):
                                                )
 
         for line in order_line_obj.browse(cursor, user, order_line_ids, context):
-            if line.discount == -1.0:
+            #if the line has an accumulated promo and the discount of the partner is 0
+            if line.accumulated_promo and line_dict[line.id] == 0.0:
                 order_line_obj.write(cursor, user,
                                      [line.id],
-                                     {'discount': 0.00,
-                                      'old_discount': -1.00},
+                                     {'discount': line.old_discount,
+                                      'old_discount': 0.00,
+                                      'accumulated_promo': False},
+                                     context=context)
+            elif line.accumulated_promo:
+                order_line_obj.write(cursor, user,
+                                     [line.id],
+                                     {'accumulated_promo': False},
                                      context=context)
