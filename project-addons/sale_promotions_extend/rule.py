@@ -374,7 +374,7 @@ class PromotionsRulesActions(orm.Model):
     def apply_perc_discount_accumulated(self, cursor, user, action, order_line,
                                         context=None):
         order_line_obj = self.pool.get('sale.order.line')
-        final_discount = eval(action.arguments)
+        final_discount = eval(action.arguments)  # 10.00
         if order_line.discount:
             price_discounted = order_line_obj._calc_line_base_price(
                 cursor, user, order_line, context=context)
@@ -382,15 +382,22 @@ class PromotionsRulesActions(orm.Model):
                 (1 - (eval(action.arguments) / 100.0))
             final_discount = 100.0 - (new_price_unit * 100.0 /
                                       order_line.price_unit)
-        old_old_discount = order_line.old_discount
-        order_line_obj.write(cursor, user, order_line.id,
-                             {'discount': final_discount,
-                              'old_discount': order_line.discount},
-                             context)
-        if old_old_discount == -1.0 :
-           order_line_obj.write(cursor, user, order_line.id,
-                                {'old_discount': -1.0},
-                                context)
+        # order_line.order_id.partner_id.property_product_pricelist.version_id.items_id.price_discount
+        # old_old_discount = order_line.old_discount
+        if order_line.accumulated_promo:
+            order_line_obj.write(cursor, user, order_line.id,
+                                 {'discount': final_discount},
+                                 context)
+        else:
+            order_line_obj.write(cursor, user, order_line.id,
+                                 {'discount': final_discount,
+                                  'old_discount': order_line.discount,
+                                  'accumulated_promo': True},
+                                 context)
+        # if old_old_discount == -1.0 :
+        #    order_line_obj.write(cursor, user, order_line.id,
+        #                         {'old_discount': -1.0},
+        #                         context)
 
 
     def action_tag_disc_perc_accumulated(self, cursor, user, action, order,
