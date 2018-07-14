@@ -513,12 +513,18 @@ track_activity_query_size = 1024
 #------------------------------------------------------------------------------
 
 #custom_variable_classes = ''        # list of custom variable class names
-default_statistics_target = 50 # pgtune wizard 2016-02-19
-maintenance_work_mem = 1GB # pgtune wizard 2016-02-19
+default_statistics_target = 100 # pgtune wizard 2016-02-19
+maintenance_work_mem = 2GB # pgtune wizard 2016-02-19
 constraint_exclusion = on # pgtune wizard 2016-02-19
 checkpoint_completion_target = 0.9 # pgtune wizard 2016-02-19
-effective_cache_size = 64GB # pgtune wizard 2016-02-19
-work_mem = 160MB # pgtune wizard 2016-02-19
-wal_buffers = 8MB # pgtune wizard 2016-02-19
+effective_cache_size = 72GB # pgtune wizard 2016-02-19
+wal_buffers = 16MB # pgtune wizard 2016-02-19
 #checkpoint_segments = 16 # pgtune wizard 2016-02-19
-shared_buffers = 22GB # pgtune wizard 2016-02-19
+shared_buffers = 24GB # pgtune wizard 2016-02-19
+min_wal_size = 2GB 
+max_wal_size = 4GB
+random_page_cost = 1.1
+effective_io_concurrency = 200
+max_worker_processes = 32
+max_parallel_workers_per_gather = 16
+work_mem = 5242kB
