@@ -113,7 +113,7 @@
                         <button name="end_call" type="object"
                             string="End Call" class="oe_highlight"/>
                         <button name="end_call_notif" type="object"
-                            string="End Call and Notify" class="oe_highlight" attrs="{'invisible':['&amp;',('call_type_sat', '!=', 'counsel'), ('call_type_sat', '!=', 'check_working')]}" />
+                            string="End Call and Notify" class="oe_highlight"/>
                         or
                         <button string="Cancel Call" class="oe_link" special="cancel"/>
                     </footer>
