@@ -382,16 +382,16 @@ class PromotionsRulesActions(orm.Model):
                 (1 - (eval(action.arguments) / 100.0))
             final_discount = 100.0 - (new_price_unit * 100.0 /
                                       order_line.price_unit)
-        old_old_discount = order_line.old_discount
-        order_line_obj.write(cursor, user, order_line.id,
-                             {'discount': final_discount,
-                              'old_discount': order_line.discount},
-                             context)
-        if old_old_discount == -1.0 :
-           order_line_obj.write(cursor, user, order_line.id,
-                                {'old_discount': -1.0},
-                                context)
-
+        if order_line.accumulated_promo:
+            order_line_obj.write(cursor, user, order_line.id,
+                                 {'discount': final_discount},
+                                 context)
+        else:
+            order_line_obj.write(cursor, user, order_line.id,
+                                 {'discount': final_discount,
+                                  'old_discount': order_line.discount,
+                                  'accumulated_promo': True},
+                                 context)
 
     def action_tag_disc_perc_accumulated(self, cursor, user, action, order,
                                          context=None):
