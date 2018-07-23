@@ -82,7 +82,7 @@
                     <button name="%(action_view_historical_orders)d" string="Partner Orders" class="oe_stat_button"
                             type="action" icon="fa-strikethrough" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve'])]}"/>
                     <button name="button_notification" string="Avisos" class="oe_stat_button"
-                            type="object" icon="fa-exclamation-triangle" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve'])]}"/>
+                            type="object" icon="fa-exclamation-triangle" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve', 'sent'])]}"/>
                 </xpath>
             </field>
         </record>
