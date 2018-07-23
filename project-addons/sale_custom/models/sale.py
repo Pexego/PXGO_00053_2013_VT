@@ -81,4 +81,20 @@ class SaleOrder(models.Model):
             'target': 'new'
         }
 
+    @api.multi
+    def button_notification(self):
 
+        res_partner_id = self.partner_id
+        view_id = self.env.ref('sale_custom.view_warning_form').id  # Id asociado a esa vista
+
+        return {
+            'name': 'Avisos',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'res.partner',
+            'view_id': view_id,
+            'res_id': res_partner_id.id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'flags': {'form': {'options': {'mode': 'view'}}}
+        }
