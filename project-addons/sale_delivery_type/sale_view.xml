@@ -6,7 +6,7 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <field name="partner_invoice_id" position="before">
+                <field name="pricelist_id" position="after">
                     <field name="delivery_type" widget='selection'/>
                 </field>
             </field>
