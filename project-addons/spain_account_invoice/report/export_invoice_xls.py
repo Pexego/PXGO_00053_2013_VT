@@ -381,21 +381,6 @@ try:
             amount_total = float(price_total)
             return amount_total
 
-        def _compute_tax_amounts_in_invoice_currency(self, cr, uid, ids, user_id, invoice_id, tax_amount_origin):
-            """Compute the tax_amounts in the currency of the invoice
-            """
-            currency_obj = self.pool.get('res.currency')
-            currency_rate_obj = self.pool.get('res.currency.rate')
-            user = self.pool['res.partner'].browse(cr, uid, user_id)
-            invoice = self.pool['account.invoice'].browse(cr, uid, invoice_id)
-            invoice_currency_id = invoice.currency_id.id
-            base_currency_id = user.company_id.currency_id.id
-            ctx = {'date': invoice.date_invoice}
-            price_total = currency_obj.compute(cr, uid, invoice_currency_id, base_currency_id, tax_amount_origin,
-                                               context=ctx)
-            tax_amount = float(price_total)
-            return tax_amount
-
         def generate_xls_report(self, _p, _xs, data, objects, wb):
             wanted_list = _p.wanted_list
             self.wanted_list = wanted_list
@@ -639,9 +624,6 @@ try:
                             new_sheet_name = "%s_%s" % (sheet_name, ws_count)
                             ws, row_pos = self.get_new_ws(_p, _xs, new_sheet_name,
                                                           wb)
-
-                        l['tax_amount'] = self._compute_tax_amounts_in_invoice_currency(self.cr, self.uid, [], l['partner_id'],
-                                                                                   l['invoice_id'], l['tax_amount'])
 
                         if 'refund' in l['type']:
                             if amount_total > 0:
