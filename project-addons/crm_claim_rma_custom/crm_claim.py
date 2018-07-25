@@ -202,6 +202,14 @@ class CrmClaimRma(models.Model):
             domain_journal = [('type', '=', 'sale_refund')]
             acc_journal_obj = self.pool.get('account.journal')
             acc_journal_ids = acc_journal_obj.search(cr, uid, domain_journal)
+            partner_bank_id = False
+            for banks in claim_obj.partner_id.bank_ids:
+                for mandate in banks.mandate_ids:
+                    if mandate.state == 'valid':
+                        partner_bank_id = banks.id
+                        break
+                    else:
+                        partner_bank_id = False
             header_vals = {
                 'partner_id': claim_obj.partner_id.id,
                 'fiscal_position':
@@ -220,8 +228,7 @@ class CrmClaimRma(models.Model):
                 'payment_term': claim_obj.partner_id.property_payment_term.id,
                 'payment_mode_id':
                     claim_obj.partner_id.customer_payment_mode.id,
-                'partner_bank_id': claim_obj.partner_id.bank_ids and
-                    claim_obj.partner_id.bank_ids[0].id or False
+                'partner_bank_id': partner_bank_id
             }
             inv_obj = self.pool.get('account.invoice')
             inv_id = inv_obj.create(cr, uid, header_vals, context=context)

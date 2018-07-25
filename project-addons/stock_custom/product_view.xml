@@ -31,6 +31,17 @@
             </field>
         </record>
 
+        <record id="product_add_visiotech_reference" model="ir.ui.view">
+            <field name="name">product.product.form.add_visiotech_reference</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product_stock_unsafety.product_add_joking_index"/>
+            <field name="arch" type="xml">
+                <field name="joking_index" position="before">
+                    <field name="ref_visiotech"/>
+                </field>
+            </field>
+        </record>
+
         <delete model="ir.ui.view" id="product_brand.product_search_form_view"/>
 
         <record id="product_add_tags_search" model="ir.ui.view">
@@ -40,7 +51,8 @@
             <field name="inherit_id" ref="product.product_search_form_view"/>
             <field name="arch" type="xml">
                 <field name="name" position="attributes">
-                    <attribute name="filter_domain">['|', '|', ('default_code', 'ilike', self), ('name','ilike',self),('ref_manufacturer','ilike',self)]</attribute>
+                    <attribute name="filter_domain">['|', '|', '|', ('default_code', 'ilike', self), ('name','ilike',self),
+                                                                    ('ref_manufacturer','ilike',self), ('ref_visiotech','ilike',self)]</attribute>
                 </field>
                 <field name="name" position="after">
                     <field name="tag_ids" string="Tag"/>

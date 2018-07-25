@@ -26,6 +26,7 @@ class ProductTemplate(models.Model):
 
     _inherit = "product.template"
 
+
     web = fields.Selection([('not_published', 'Not published'),
                             ('published', 'Published')], "Web",
                            default="not_published", copy=False,
@@ -54,3 +55,18 @@ class ProductTemplate(models.Model):
                 vals['description_sale'] = description_sale
 
         return super(ProductTemplate, self).write(vals)
+
+
+class ProductProduct(models.Model):
+
+    _inherit = "product.product"
+
+    @api.one
+    @api.depends('pack_line_ids')
+    def compute_is_pack(self):
+        if self.pack_line_ids:
+            self.is_pack = True
+        else:
+            self.is_pack = False
+
+    is_pack = fields.Boolean(compute='compute_is_pack', store=True)

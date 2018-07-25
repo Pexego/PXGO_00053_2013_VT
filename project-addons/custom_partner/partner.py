@@ -679,6 +679,25 @@ class ResPartner(models.Model):
             'target': 'new'
         }
 
+    @api.multi
+    def call_new_window(self):
+
+        # import ipdb
+        # ipdb.set_trace()
+
+        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        order_view_id = self.env.ref('custom_partner.crm_case_categ_phone_incoming3').id
+        record_url = base_url + '/web?#page=0&limit=80&view_type=list&model=crm.phonecall&action=' + str(order_view_id) + '&active_id=' + str(self.id)
+
+        return {
+            'name': 'Phone Calls',
+            'view_type': 'tree',
+            'type': 'ir.actions.act_url',
+            'url': record_url,
+            'context': self.env.context,
+            'target': 'new',
+            }
+
 
 class rappel_calculated(models.Model):
 
@@ -717,15 +736,23 @@ class ResPartnerRappelRel(models.Model):
              ('state', 'in', ['open', 'paid']),
              ('commercial_partner_id', '=', self.partner_id.id)])
 
-        # se buscan las rectificativas
-        refund_lines = self.env['account.invoice.line'].search(
-            [('invoice_id', 'in', [x.id for x in refunds]),
-             ('product_id', 'in', products),
-             ('no_rappel', '=', False)])
-        invoice_lines = self.env['account.invoice.line'].search(
-            [('invoice_id', 'in', [x.id for x in invoices]),
-             ('product_id', 'in', products),
-             ('no_rappel', '=', False)])
+        # Si el rappel afecta al catalago entero, no hacer la comprobacion por producto
+        if self.rappel_id.global_application:
+            refund_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in refunds]),
+                 ('no_rappel', '=', False)])
+            invoice_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in invoices]),
+                 ('no_rappel', '=', False)])
+        else:
+            refund_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in refunds]),
+                 ('product_id', 'in', products),
+                 ('no_rappel', '=', False)])
+            invoice_lines = self.env['account.invoice.line'].search(
+                [('invoice_id', 'in', [x.id for x in invoices]),
+                 ('product_id', 'in', products),
+                 ('no_rappel', '=', False)])
 
         return invoice_lines, refund_lines
 

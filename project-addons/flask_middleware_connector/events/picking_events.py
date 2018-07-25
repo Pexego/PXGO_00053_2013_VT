@@ -194,7 +194,7 @@ def delay_export_picking_line_create(session, model_name, record_id, vals=None):
 
 @on_record_write(model_names='stock.move')
 def delay_export_picking_line_write(session, model_name, record_id, vals):
-    up_fields = ["parent_id", "product_uom_qty", "product_id"]
+    up_fields = ["parent_id", "product_uom_qty", "product_id", "picking_id"]
     move_line = session.env[model_name].browse(record_id)
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \

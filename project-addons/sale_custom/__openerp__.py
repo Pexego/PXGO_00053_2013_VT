@@ -16,6 +16,7 @@
         "sale",
         "sale_display_stock",
         "sale_margin_percentage",
+        "partner_risk_advice",
         "stock_reserve_sale"
     ],
     "data": [

@@ -64,7 +64,9 @@ class sale_order_line(osv.osv):
 
     _columns = {
         'product_tags': fields.function(_get_tags_product, string='Tags',
-                                        type='char', size=255)
+                                        type='char', size=255),
+        'web_discount': fields.boolean('Web Discount'),
+        'accumulated_promo': fields.boolean(default=False)
     }
 
 
@@ -85,4 +87,46 @@ class SaleOrder(osv.osv):
         if order.state == 'reserve':
             order.order_reserve()
 
+        taxes = order.order_line[0].tax_id
+        for line in order.order_line:
+            if line.promotion_line:
+                line.tax_id = taxes
+                line.sequence = 999
+
         return res
+
+    def clear_existing_promotion_lines(self, cursor, user,
+                                       order_id, context=None):
+        order = self.browse(cursor, user, order_id, context)
+        order_line_obj = self.pool.get('sale.order.line')
+        order_line_ids = order_line_obj.search(cursor, user,
+                                               [
+                                                   ('order_id', '=', order.id),
+                                               ], context=context
+                                               )
+
+        line_dict = {}
+        for line in order_line_obj.browse(cursor, user, order_line_ids, context):
+            line_dict[line.id] = line.old_discount
+
+        super(SaleOrder, self).clear_existing_promotion_lines(cursor, user, order_id, context=None)
+        order_line_ids = order_line_obj.search(cursor, user,
+                                               [
+                                                   ('order_id', '=', order.id),
+                                               ], context=context
+                                               )
+
+        for line in order_line_obj.browse(cursor, user, order_line_ids, context):
+            #if the line has an accumulated promo and the discount of the partner is 0
+            if line.accumulated_promo and line_dict[line.id] == 0.0:
+                order_line_obj.write(cursor, user,
+                                     [line.id],
+                                     {'discount': line.old_discount,
+                                      'old_discount': 0.00,
+                                      'accumulated_promo': False},
+                                     context=context)
+            elif line.accumulated_promo:
+                order_line_obj.write(cursor, user,
+                                     [line.id],
+                                     {'accumulated_promo': False},
+                                     context=context)
