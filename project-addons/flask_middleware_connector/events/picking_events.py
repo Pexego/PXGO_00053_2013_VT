@@ -185,7 +185,6 @@ def delay_export_picking_line_create(session, model_name, record_id, vals=None):
     move_line = session.env[model_name].browse(record_id)
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
-            and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing' \
             and not move_line.picking_id.not_sync \
             and move_line.picking_id.company_id.id == 1:
@@ -198,7 +197,6 @@ def delay_export_picking_line_write(session, model_name, record_id, vals):
     move_line = session.env[model_name].browse(record_id)
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
-            and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing'\
             and not move_line.picking_id.not_sync \
             and move_line.picking_id.company_id.id == 1:
@@ -212,7 +210,6 @@ def delay_export_picking_line_unlink(session, model_name, record_id):
     move_line = session.env[model_name].browse(record_id)
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
-            and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing' \
             and not move_line.picking_id.not_sync \
             and move_line.picking_id.company_id.id == 1:
