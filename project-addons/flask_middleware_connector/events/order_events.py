@@ -83,7 +83,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
                  "order_line", "partner_shipping_id", "delivery_type"]
     if order.partner_id.web or order.partner_id.commercial_partner_id.web:
         job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(order.id) + ')%'),
-                                               ('model_name', '=', model_name)], order='date_created desc', limit=1)
+                                               ('model_name', '=', model_name)], order='date_created desc, id desc', limit=1)
         if 'state' in vals.keys() and vals['state'] == 'cancel':
             unlink_order.delay(session, model_name, record_id, priority=7, eta=80)
         elif 'state' in vals.keys() and vals['state'] in ('draft', 'reserve') and job.name and 'unlink' in job.name:
@@ -93,7 +93,7 @@ def delay_export_order_write(session, model_name, record_id, vals):
         elif order.state in ('draft', 'reserve', 'progress', 'done', 'shipping_except', 'invoice_except'):
             for field in up_fields:
                 if field in vals:
-                    update_order.delay(session, model_name, record_id, priority=5, eta=120)
+                    update_order.delay(session, model_name, record_id, priority=5, eta=80)
                     break
 
 
