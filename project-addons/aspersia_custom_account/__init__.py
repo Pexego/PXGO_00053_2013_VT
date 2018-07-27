@@ -19,3 +19,4 @@
 ##############################################################################
 from . import account
 from . import report
+from . import stock
