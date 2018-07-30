@@ -44,10 +44,11 @@ class SaleOrder(models.Model):
 
         for sale in self:
             for line in sale.order_line:
-                if line.product_uom_qty % line.product_id.sale_in_groups_of != 0:
-                    raise exceptions.Warning(
-                        _('The product %s can only be sold in groups of %s') %
-                        (line.product_id.name, line.product_id.sale_in_groups_of))
+                if line.product_id and line.product_id.sale_in_groups_of != 0.0:
+                    if line.product_uom_qty % line.product_id.sale_in_groups_of != 0:
+                        raise exceptions.Warning(
+                            _('The product %s can only be sold in groups of %s') %
+                            (line.product_id.name, line.product_id.sale_in_groups_of))
 
         res = super(SaleOrder, self).action_button_confirm()
 
