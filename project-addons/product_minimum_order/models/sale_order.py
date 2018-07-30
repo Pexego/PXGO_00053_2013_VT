@@ -20,10 +20,12 @@ class SaleOrderLine(models.Model):
 
         if product:
             product_obj = self.env['product.product'].browse(product)
-            if qty % product_obj.sale_in_groups_of != 0:
-
+            if qty % product_obj.sale_in_groups_of != 0 \
+                    and name and name == product_obj.default_code + '\n' + product_obj.description_sale:
                 warning_msgs = (_('The product %s can only be sold in groups of %s') %
                                 (product_obj.name, product_obj.sale_in_groups_of))
+            elif not name:
+                res['value'].update({'product_uom_qty': product_obj.sale_in_groups_of})
 
         if warning_msgs:
             warning = {
@@ -44,10 +46,11 @@ class SaleOrder(models.Model):
 
         for sale in self:
             for line in sale.order_line:
-                if line.product_uom_qty % line.product_id.sale_in_groups_of != 0:
-                    raise exceptions.Warning(
-                        _('The product %s can only be sold in groups of %s') %
-                        (line.product_id.name, line.product_id.sale_in_groups_of))
+                if line.product_id and line.product_id.sale_in_groups_of != 0.0:
+                    if line.product_uom_qty % line.product_id.sale_in_groups_of != 0:
+                        raise exceptions.Warning(
+                            _('The product %s can only be sold in groups of %s') %
+                            (line.product_id.name, line.product_id.sale_in_groups_of))
 
         res = super(SaleOrder, self).action_button_confirm()
 
