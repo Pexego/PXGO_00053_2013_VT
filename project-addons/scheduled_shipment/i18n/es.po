@@ -15,8 +15,14 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: order_scheduled_time
+#. module: scheduled_shipment
 #: field:sale.order,scheduled_date:0
 msgid "Send scheduled date"
 msgstr "Fecha programada de envío"
+
+#. module: scheduled_shipment
+#: code:addons/scheduled_shipment/sale.py:43
+#, python-format
+msgid "Scheduled date must be bigger than current date"
+msgstr "La fecha programada tiene que ser mayor que la fecha actual"
 
