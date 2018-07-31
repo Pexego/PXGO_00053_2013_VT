@@ -27,6 +27,7 @@
                     <field name="city"/>
                     <field name="street"/>
                     <field name="country_id"/>
+                    <field name="addr_accuracy"/>
                 </geoengine>
             </field>
             <field eval="16" name="priority"/>
