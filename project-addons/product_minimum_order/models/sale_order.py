@@ -20,12 +20,15 @@ class SaleOrderLine(models.Model):
 
         if product:
             product_obj = self.env['product.product'].browse(product)
+            description = lambda s: '' if not s else '\n' + s
             if qty % product_obj.sale_in_groups_of != 0 \
-                    and name and name == product_obj.default_code + '\n' + product_obj.description_sale:
+                    and name and name == product_obj.default_code + description(product_obj.description_sale):
                 warning_msgs = (_('The product %s can only be sold in groups of %s') %
                                 (product_obj.name, product_obj.sale_in_groups_of))
             elif not name:
                 res['value'].update({'product_uom_qty': product_obj.sale_in_groups_of})
+                if product_obj.sale_in_groups_of > 1.0:
+                    res['warning'] = {}
 
         if warning_msgs:
             warning = {
