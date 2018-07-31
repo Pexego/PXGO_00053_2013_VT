@@ -138,3 +138,8 @@ msgstr "o"
 #: view:geoengine.geoname.encoder:geoengine_geoname_geocoder.geo_partner_view_form_button
 msgid "Encode address"
 msgstr "Geolocalizar"
+
+#. module: geoengine_geoname_geocoder
+#: field:res.partner,addr_accuracy:0
+msgid "Address Accuracy"
+msgstr "Precisión"

@@ -8,6 +8,10 @@
                 <xpath expr="//notebook/page//field[@name='geo_point']" position="before">
                     <button name="geocode_partner" string="Encode address" type="object"
                     help="Update partner location on the map"/>
+                    <group>
+                        <label for="addr_accuracy"/>
+                        <field name="addr_accuracy"/>
+                    </group>
                 </xpath>
             </field>
         </record>

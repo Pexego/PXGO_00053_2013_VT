@@ -25,7 +25,7 @@ import xml.dom.minidom
 import logging
 import unidecode
 
-from openerp import fields, models, api
+from openerp import fields as fields2, models, api, _
 from openerp.tools.translate import _
 from openerp.exceptions import ValidationError
 from openerp.exceptions import except_orm
@@ -41,6 +41,7 @@ class ResPartner(geo_model.GeoModel):
 
     geo_point = fields.GeoPoint(
         'Addresses coordinate', readonly=True)
+    addr_accuracy = fields2.Char('Address Accuracy', readonly=True)
 
     def _can_geocode(self):
         usr = self.env['res.users']
@@ -66,7 +67,8 @@ class ResPartner(geo_model.GeoModel):
             longitude = get_first_text(code, 'lng') or None
             latitude = latitude and float(latitude)
             longitude = longitude and float(longitude)
-            return latitude, longitude
+            accuracy = get_first_text(code, 'location_type') or 'PRECISE'
+            return latitude, longitude, accuracy
 
         res = answer.read()
         if not isinstance(res, basestring):
@@ -76,7 +78,10 @@ class ResPartner(geo_model.GeoModel):
         if len(codes) < 1:
             logger.warn("Geonaming failed: %s", res)
             return False
-        latitude, longitude = parse_code(codes[0])
+        latitude, longitude, accuracy = parse_code(codes[0])
+        if accuracy is not 'APPROXIMATE':
+            accuracy = 'PRECISE'
+        self.addr_accuracy = accuracy
         return fields.GeoPoint.from_latlon(self.env.cr, latitude, longitude)
 
     @api.multi
