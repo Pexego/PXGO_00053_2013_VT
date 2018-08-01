@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#       * order_scheduled_time
+#       * scheduled_shipment
 #
 msgid ""
 msgstr ""
@@ -17,11 +17,11 @@ msgstr ""
 
 #. module: scheduled_shipment
 #: field:sale.order,scheduled_date:0
-msgid "Send scheduled date"
+msgid "Scheduled Date"
 msgstr "Fecha programada de envío"
 
 #. module: scheduled_shipment
-#: code:addons/scheduled_shipment/sale.py:43
+#: code:addons/scheduled_shipment/models/sale.py:42
 #, python-format
 msgid "Scheduled date must be bigger than current date"
 msgstr "La fecha programada tiene que ser mayor que la fecha actual"

@@ -39,7 +39,7 @@ class SaleOrder(models.Model):
                     datetime.strptime(scheduled_date, '%Y-%m-%d %H:%M:%S')
                 difference = difference.total_seconds() / float(60)
                 if difference > 0:
-                    raise ValidationError("Scheduled date must be bigger than current date")
+                    raise ValidationError(_("Scheduled date must be bigger than current date"))
         return super(SaleOrder, self).write(vals)
 
 
