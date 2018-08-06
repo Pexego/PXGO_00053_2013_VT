@@ -23,5 +23,5 @@ msgstr "Se vende en grupos de"
 #. module: product_minimum_order
 #: code:addons/product_minimum_order/models/sale_order.py:25
 #, python-format
-msgid "The product AC-PEGATINA-ES can only be sold in groups of 5.0"
-msgstr "El producto AC-PEGATINA-ES puede ser vendido en grupos de 5.0"
+msgid "The product %s can only be sold in groups of %s"
+msgstr "El producto %s puede ser vendido en grupos de %s"

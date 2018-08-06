@@ -37,3 +37,8 @@ msgstr ""
 #: model:geoengine.vector.layer,name:geoengine_partner.geoengine_vector_layer_res_partner
 msgid "Partner location"
 msgstr "Localización del cliente"
+
+#. module: geoengine_partner
+#: view:res.partner:geoengine_partner.geo_partner_view_form
+msgid "Map"
+msgstr "Mapa"

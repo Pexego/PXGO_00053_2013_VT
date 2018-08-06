@@ -119,7 +119,8 @@ class Partner(models.Model):
     @api.multi
     def action_done(self):
         context = dict(self._context or {})
-        context['params']['not_change_payment_responsible'] = True
+        if 'params' in context:
+            context['params']['not_change_payment_responsible'] = True
         return super(Partner, self).action_done(context=context)
 
     @api.multi
