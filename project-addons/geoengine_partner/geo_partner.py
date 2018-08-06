@@ -21,6 +21,7 @@
 
 from openerp.addons.base_geoengine import geo_model
 from openerp.addons.base_geoengine import fields
+from openerp import fields as fields2
 
 
 class ResPartner(geo_model.GeoModel):
@@ -28,3 +29,4 @@ class ResPartner(geo_model.GeoModel):
     _inherit = "res.partner"
 
     geo_point = fields.GeoPoint('Addresses coordinate')
+    addr_accuracy = fields2.Char('Address Accuracy', readonly=True)

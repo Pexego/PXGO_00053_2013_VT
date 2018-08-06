@@ -25,7 +25,7 @@ import xml.dom.minidom
 import logging
 import unidecode
 
-from openerp import fields, models, api
+from openerp import fields as fields2, models, api, _
 from openerp.tools.translate import _
 from openerp.exceptions import ValidationError
 from openerp.exceptions import except_orm
@@ -41,6 +41,7 @@ class ResPartner(geo_model.GeoModel):
 
     geo_point = fields.GeoPoint(
         'Addresses coordinate', readonly=True)
+    addr_accuracy = fields2.Char('Address Accuracy', readonly=True)
 
     def _can_geocode(self):
         usr = self.env['res.users']
@@ -66,7 +67,8 @@ class ResPartner(geo_model.GeoModel):
             longitude = get_first_text(code, 'lng') or None
             latitude = latitude and float(latitude)
             longitude = longitude and float(longitude)
-            return latitude, longitude
+            accuracy = get_first_text(code, 'location_type') or 'PRECISE'
+            return latitude, longitude, accuracy
 
         res = answer.read()
         if not isinstance(res, basestring):
@@ -76,7 +78,18 @@ class ResPartner(geo_model.GeoModel):
         if len(codes) < 1:
             logger.warn("Geonaming failed: %s", res)
             return False
-        latitude, longitude = parse_code(codes[0])
+        for code in codes:
+            address = get_first_text(code, 'formatted_address')
+            if self.country_id.name in address:
+                latitude, longitude, accuracy = parse_code(code)
+            else:
+                latitude = False
+                longitude = False
+        if not latitude or not longitude:
+            latitude, longitude, accuracy = parse_code(codes[0])
+        if accuracy != 'APPROXIMATE':
+            accuracy = 'PRECISE'
+        self.addr_accuracy = accuracy
         return fields.GeoPoint.from_latlon(self.env.cr, latitude, longitude)
 
     @api.multi
@@ -109,7 +122,6 @@ class ResPartner(geo_model.GeoModel):
             except:
                 logger.info('error - %s ', partner.name)
                 logger.info('%s - %s, %s', partner.name, partner.street, partner.city)
-            # partner.geo_point = self._get_point_from_reply(answer)
 
     @api.multi
     def geocode_partner(self):
@@ -144,43 +156,6 @@ class ResPartner(geo_model.GeoModel):
             except:
                 logger.info('error - %s ', partner.name)
                 logger.info('%s - %s, %s', partner.name, partner.street, partner.city)
-
-    '''@api.multi
-    def geocode_from_geonames(self, srid='900913',
-                              strict=True, context=None):
-        context = context or {}
-        base_url = u'http://api.geonames.org/postalCodeSearch?'
-        config_parameter_obj = self.env['ir.config_parameter']
-        username = config_parameter_obj.get_param(
-            'geoengine_geonames_username')
-        if not username:
-            raise ValidationError(
-                _('A username is required to access '
-                  'http://ws.geonames.org/ \n'
-                  'Please provides a valid one by setting a '
-                  'value in System Paramter for the key '
-                  '"geoengine_geonames_username"'))
-        filters = {}
-        for add in self:
-            logger.info('geolocalize %s', add.name)
-            country_code = add.country_id.code or \
-                self.env.user.company_id.country_id.code
-            if country_code and (add.city or add.zip):
-                filters[u'country'] = country_code.encode('utf-8')
-                filters[u'username'] = username.encode('utf-8')
-                if add.city:
-                    filters[u'placename'] = add.city.encode('utf-8')
-                if add.zip:
-                    filters[u'postalcode'] = add.zip.encode('utf-8')
-                filters[u'maxRows'] = u'1'
-                try:
-                    url = base_url + urlencode(filters)
-                    answer = urlopen(url)
-                    add.geo_point = self._get_point_from_reply(answer)
-                except Exception, exc:
-                    logger.exception('error while updating geocodes')
-                    if strict:
-                        raise except_orm(_('Geoencoding fails'), str(exc))'''
 
     @api.multi
     def write(self, vals):
