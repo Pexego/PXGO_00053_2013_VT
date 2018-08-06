@@ -88,7 +88,8 @@ def delay_export_picking_write(session, model_name, record_id, vals):
             and picking.picking_type_id.code == 'outgoing' \
             and not picking.not_sync \
             and picking.company_id.id == 1:
-        if 'name' in vals or 'partner_id' in vals:
+        if 'name' in vals or 'partner_id' in vals or \
+                ('not_sync' in vals and not vals['not_sync']):
             export_picking.delay(session, model_name, record_id, priority=1, eta=60)
             picking_products = session.env['stock.move'].search([('picking_id', '=', picking.id)])
             for product in picking_products:
