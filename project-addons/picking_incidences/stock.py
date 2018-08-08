@@ -75,7 +75,7 @@ class StockPicking(models.Model):
         bck_id = super(StockPicking, self).\
             _create_backorder(cr, uid, picking, backorder_moves=backorder_moves, context=context)
         if bck_id:
-            picking.write({'partial_picking': True})
+            picking.write({'partial_picking': True, 'date_done': False})
         return bck_id
 
     @api.one

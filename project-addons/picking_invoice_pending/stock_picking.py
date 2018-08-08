@@ -162,19 +162,19 @@ class StockPicking(models.Model):
                     res = pick.with_context(ctx).action_invoice_create(journal_id=journal_id, group=False, type=inv_type)
                     invoice_created = self.env['account.invoice'].browse(res)
                     if not invoice_created:
-                        templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
+                        templates.append(self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices', False))
                         validate = False
                     elif not invoice_created.invoice_line:
                         # Invoice created without lines
                         templates.append(
-                            self.env.ref('picking_invoice_pending.alert_cron_create_invoices_empty_lines', False))
-                        # Do not validate them because it will generate an error
+                            self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices_empty_lines', False))
+                        # Do not validate it because it will generate an error
                         validate = False
                     if validate:
                         # Validate invoice
                         invoice_created.signal_workflow('invoice_open')
                         if invoice_created.state in ('draft', 'cancel', 'proforma', 'proforma2'):
-                            templates.append(self.env.ref('picking_invoice_pending.alert_cron_validate_invoices', False))
+                            templates.append(self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
 
                     for tmpl in templates:
                         ctx.update({

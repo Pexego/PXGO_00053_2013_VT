@@ -1,0 +1,28 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * scheduled_shipment
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-07 11:30+0000\n"
+"PO-Revision-Date: 2018-06-07 11:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: scheduled_shipment
+#: field:sale.order,scheduled_date:0
+msgid "Scheduled Date"
+msgstr "Fecha programada de envío"
+
+#. module: scheduled_shipment
+#: code:addons/scheduled_shipment/models/sale.py:42
+#, python-format
+msgid "Scheduled date must be bigger than current date"
+msgstr "La fecha programada tiene que ser mayor que la fecha actual"
+
