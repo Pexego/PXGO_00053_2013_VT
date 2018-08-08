@@ -240,10 +240,10 @@ class AccountVoucher(models.Model):
     def action_move_line_create(self):
         res = super(AccountVoucher, self).action_move_line_create()
 
-        #lines = self.browse(self.ids).move_ids
-        lines = self.mapped('move_ids')
-        for line in lines:
-            if not line.reconcile_ref:
-                line.write({'blocked': True})
+        if 'RCONF' in self.journal_id.code or 'RPAG' in self.journal_id.code:
+            lines = self.mapped('move_ids')
+            for line in lines:
+                if not line.reconcile_ref:
+                    line.write({'blocked': True})
 
         return res
