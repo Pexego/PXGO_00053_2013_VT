@@ -1022,10 +1022,6 @@ class AccountVoucher(models.Model):
     @api.multi
     def account_move_get(self):
 
-
-        import ipdb
-        ipdb.set_trace()
-
         move = super(AccountVoucher, self).account_move_get(self.id)
         move['vref'] = self.reference
 
