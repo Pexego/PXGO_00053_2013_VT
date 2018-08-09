@@ -1005,3 +1005,28 @@ class RappelCurrentInfo(models.Model):
         if mail_ids:
             mail_ids.send()
 
+
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    ref_line = fields.Char('Reference', related='move_id.vref')
+
+class AccountMove(models.Model):
+    _inherit = "account.move"
+
+    vref = fields.Char('Reference')
+
+class AccountVoucher(models.Model):
+    _inherit = "account.voucher"
+
+    @api.multi
+    def account_move_get(self):
+
+
+        import ipdb
+        ipdb.set_trace()
+
+        move = super(AccountVoucher, self).account_move_get(self.id)
+        move['vref'] = self.reference
+
+        return move

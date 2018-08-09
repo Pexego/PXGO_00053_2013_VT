@@ -306,6 +306,12 @@
                         </tree>
                     </field>
                 </field>
+                <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name ='company_id']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name ='blocked']" position="before">
+                    <field name="ref_line" readonly="True"/>
+                </xpath>
             </field>
         </record>
 
