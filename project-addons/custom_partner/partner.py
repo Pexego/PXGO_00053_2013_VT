@@ -1009,7 +1009,7 @@ class RappelCurrentInfo(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    ref_line = fields.Char('Reference', related='move_id.vref')
+    ref_line = fields.Char('Payment Reference', related='move_id.vref')
 
 class AccountMove(models.Model):
     _inherit = "account.move"
