@@ -5,13 +5,14 @@
 <openerp>
     <data>
 
-        <record id="view_order_form_sales_partner" model="ir.ui.view">
-            <field name="name">partner.sale.order.history</field>
+        <record id="view_order_form_scheduled_date" model="ir.ui.view">
+            <field name="name">sale.order.scheduled.data</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale_stock.view_order_form_inherit"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='logistics']/field[@name='order_policy']" position="after">
-                    <field name="scheduled_date"/>
+                    <field name="scheduled_date"
+                           attrs="{'readonly': [('state','in', ('progress', 'manual', 'shipping_except', 'invoice_except', 'done', 'history', 'cancel'))]}"/>
                 </xpath>
             </field>
         </record>
