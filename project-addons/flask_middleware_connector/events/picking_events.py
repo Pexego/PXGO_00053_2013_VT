@@ -88,7 +88,8 @@ def delay_export_picking_write(session, model_name, record_id, vals):
             and picking.picking_type_id.code == 'outgoing' \
             and not picking.not_sync \
             and picking.company_id.id == 1:
-        if 'name' in vals or 'partner_id' in vals:
+        if 'name' in vals or 'partner_id' in vals or \
+                ('not_sync' in vals and not vals['not_sync']):
             export_picking.delay(session, model_name, record_id, priority=1, eta=60)
             picking_products = session.env['stock.move'].search([('picking_id', '=', picking.id)])
             for product in picking_products:
@@ -185,7 +186,6 @@ def delay_export_picking_line_create(session, model_name, record_id, vals=None):
     move_line = session.env[model_name].browse(record_id)
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
-            and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing' \
             and not move_line.picking_id.not_sync \
             and move_line.picking_id.company_id.id == 1:
@@ -198,7 +198,6 @@ def delay_export_picking_line_write(session, model_name, record_id, vals):
     move_line = session.env[model_name].browse(record_id)
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
-            and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing'\
             and not move_line.picking_id.not_sync \
             and move_line.picking_id.company_id.id == 1:
@@ -212,7 +211,6 @@ def delay_export_picking_line_unlink(session, model_name, record_id):
     move_line = session.env[model_name].browse(record_id)
     if move_line.picking_id.partner_id.commercial_partner_id.web \
             and move_line.picking_id.partner_id.commercial_partner_id.active \
-            and move_line.picking_id.partner_id.active \
             and move_line.picking_id.picking_type_id.code == 'outgoing' \
             and not move_line.picking_id.not_sync \
             and move_line.picking_id.company_id.id == 1:

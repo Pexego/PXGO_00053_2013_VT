@@ -6,8 +6,11 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <field name="partner_invoice_id" position="before">
+                <field name="pricelist_id" position="after">
                     <field name="delivery_type" widget='selection'/>
+                </field>
+                <field name="partner_id" position="attributes">
+                    <attribute name="context">{'search_default_customer':1, 'show_address': 0}</attribute>
                 </field>
             </field>
         </record>
