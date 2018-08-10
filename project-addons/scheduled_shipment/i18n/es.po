@@ -26,3 +26,7 @@ msgstr "Fecha programada de envío"
 msgid "Scheduled date must be bigger than current date"
 msgstr "La fecha programada tiene que ser mayor que la fecha actual"
 
+#. module: scheduled_shipment
+#: field:stock.picking,scheduled_date:0
+msgid "Scheduled Date"
+msgstr "Fecha programada de envío"
