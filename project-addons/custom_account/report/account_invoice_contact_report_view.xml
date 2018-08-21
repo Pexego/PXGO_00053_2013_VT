@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    <record id="view_account_invoice_contact_report_graph" model="ir.ui.view">
+         <field name="name">account.invoice.report.graph</field>
+         <field name="model">account.invoice.contact.report</field>
+         <field name="arch" type="xml">
+             <graph string="Invoices Contact Analysis" type="pivot">
+                 <field name="date" type="row"/>
+                 <field name="period_id" type="col"/>
+                 <field name="price_total" type="measure"/>
+             </graph>
+         </field>
+    </record>
+
+    <record id="action_account_invoice_contact_report" model="ir.actions.act_window">
+        <field name="name">Invoices Contact Analysis</field>
+        <field name="res_model">account.invoice.contact.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">graph</field>
+        <field name="domain">[('state', 'not in', ['draft', 'cancel'])]</field>
+    </record>
+
+    <menuitem action="action_account_invoice_contact_report" id="menu_action_account_invoice_contact_report" parent="account.menu_finance_reporting" sequence="10"/>
+    
+</data>
+</openerp>
