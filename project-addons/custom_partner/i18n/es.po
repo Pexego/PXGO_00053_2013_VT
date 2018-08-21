@@ -432,3 +432,8 @@ msgstr "Sin ventas este mes"
 #: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
 msgid "Customers with previous month sales (but no sales action in current month)"
 msgstr "Clientes con ventas en el mes pasado (pero sin ventas en el mes actual)"
+
+#. module: custom_partner
+#: field:account.move.line,ref_line:0
+msgid "Payment Reference"
+msgstr "Referencia de pago"

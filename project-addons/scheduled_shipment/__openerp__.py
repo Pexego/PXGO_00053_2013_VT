@@ -13,7 +13,8 @@
         "base",
         "sale",
         "connector",
-        "sale_stock"
+        "sale_stock",
+        "picking_invoice_pending"
     ],
     "data": [
         'data/job_channel_data.xml',

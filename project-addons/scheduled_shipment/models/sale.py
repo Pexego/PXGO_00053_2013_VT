@@ -48,6 +48,7 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     scheduled_picking = fields.Boolean(default="False")
+    scheduled_date = fields.Datetime(related='sale_id.scheduled_date', readonly=True)
 
     @api.multi
     def _process_picking_scheduled_time(self):
