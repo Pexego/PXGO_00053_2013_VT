@@ -303,3 +303,8 @@ msgstr "Lote final"
 #: field:mrp.production,sale_line_id:0
 msgid "order line"
 msgstr "Linea de venta"
+
+#. module: sale_product_customize
+#: selection:product.template,state:0
+msgid "Make to order"
+msgstr "Bajo Pedido"

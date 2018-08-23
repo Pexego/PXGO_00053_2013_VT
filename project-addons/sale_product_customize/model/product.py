@@ -38,6 +38,7 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     custom = fields.Boolean("Custom", readonly=True)
+    state = fields.Selection(selection_add=[('make_to_order', 'Make to order')])
 
 
 class ProductProduct(models.Model):
