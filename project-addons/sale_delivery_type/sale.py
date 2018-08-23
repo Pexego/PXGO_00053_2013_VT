@@ -43,11 +43,11 @@ class sale_order(osv.osv):
         installationServ_id = self.env['transportation.service'].search([('name', '=', 'Recoge agencia cliente')]).ids
         installationTrans_id = self.env['transportation.transporter'].search([('name', '=', 'Recoge agencia cliente')]).ids
 
-        if self.delivery_type == 'carrier':
+        if self.delivery_type == 'installations':
             self.service_id = carrierServ_id[0]
             self.transporter_id = carrierTrans_id[0]
 
-        if self.delivery_type == 'installations':
+        if self.delivery_type == 'carrier':
             self.service_id = installationServ_id[0]
             self.transporter_id = installationTrans_id[0]
 
