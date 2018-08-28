@@ -66,9 +66,9 @@ class MiddlewareCRUDAdapter(CRUDAdapter):
             try:
                 result = self.server.create(self.uid, self.password, model,
                                             data)
-            except:
+            except Exception as err:
                 _logger.error("create(%s, %s) failed", model, data)
-                raise
+                raise RetryableJobError(err)
             else:
                 _logger.debug("create(%s, %s) returned %s in %s seconds",
                               model, data, result,
@@ -100,9 +100,9 @@ class MiddlewareCRUDAdapter(CRUDAdapter):
             try:
                 result = self.server.write(self.uid, self.password, model, id,
                                            data)
-            except:
+            except Exception as err:
                 _logger.error("write(%s, %s, %s) failed", model, id, data)
-                raise
+                raise RetryableJobError(err)
             else:
                 _logger.debug("write(%s, %s, %s) returned %s in %s seconds",
                               model, id, data, result,
