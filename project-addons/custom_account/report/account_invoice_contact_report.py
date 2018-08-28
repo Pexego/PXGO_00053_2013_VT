@@ -30,9 +30,11 @@ class AccountInvoiceContactReport(models.Model):
 
     number = fields.Char('Number', readonly=True)
     date = fields.Date('Date', readonly=True)
+    date_due = fields.Date('Due Date', readonly=True)
     period_id = fields.Many2one('account.period', 'Period', domain=[('state', '<>', 'done')], readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner Company', readonly=True)
     contact_id = fields.Many2one('res.partner', 'Partner Contact', readonly=True)
+    section_id = fields.Many2one('crm.case.section', 'Sales Team')
     currency_id = fields.Many2one('res.currency', 'Currency', readonly=True)
     type = fields.Selection([
         ('out_invoice', 'Customer Invoice'),
@@ -54,15 +56,18 @@ class AccountInvoiceContactReport(models.Model):
     def _select(self):
         select_str = """
             SELECT  sub.id, sub.number, sub.partner_id, sub.contact_id, 
-                    sub.date, sub.period_id, sub.type, sub.state, sub.currency_id,
-                    sub.price_total / cr.rate as price_total, sub.benefit
+                    sub.date, sub.date_due, sub.section_id, sub.period_id, sub.type, sub.state, sub.currency_id,
+                    sub.price_total / cr.rate as price_total, 
+                    CASE WHEN sub.type IN ('out_refund') THEN -sub.benefit
+                         WHEN sub.type IN ('out_invoice') THEN sub.benefit
+                         ELSE 0 END as benefit
         """
         return select_str
 
     def _sub_select(self):
         select_str = """
                 SELECT  ai.id, ai.number AS number, ai.partner_id, coalesce(rp_contact.id, ai.partner_id) AS contact_id,
-                        ai.date_invoice AS date, ai.period_id, ai.type, ai.state, ai.currency_id, 
+                        ai.date_invoice AS date, ai.date_due, ai.section_id, ai.period_id, ai.type, ai.state, ai.currency_id, 
                         SUM(CASE
                                 WHEN ai.type::text = ANY (ARRAY['out_refund'::character varying::text, 'in_invoice'::character varying::text])
                                 THEN - ail.price_subtotal
@@ -85,8 +90,8 @@ class AccountInvoiceContactReport(models.Model):
 
     def _group_by(self):
         group_by_str = """
-                GROUP BY ai.id, ai.partner_id, coalesce(rp_contact.id, ai.partner_id), ai.number, ai.date_invoice, ai.period_id,
-                      ai.currency_id, ai.type, ai.state
+                GROUP BY ai.id, ai.partner_id, coalesce(rp_contact.id, ai.partner_id), ai.number, ai.date_invoice, 
+                ai.section_id, ai.period_id, ai.currency_id, ai.type, ai.state
         """
         return group_by_str
 
