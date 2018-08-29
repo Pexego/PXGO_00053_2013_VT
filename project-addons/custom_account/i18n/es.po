@@ -859,5 +859,59 @@ msgstr "Total base"
 msgid "Benefit"
 msgstr "Beneficio"
 
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "This Year"
+msgstr "Este año"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Refund"
+msgstr "Factura rectificativa"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Sales Team"
+msgstr "Equipo de ventas"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Without ef"
+msgstr "Sin ef"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Status"
+msgstr "Estado"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Company"
+msgstr "Compañía"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Period"
+msgstr "Período"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Due Month"
+msgstr "Mes de vencimiento"
 
 
