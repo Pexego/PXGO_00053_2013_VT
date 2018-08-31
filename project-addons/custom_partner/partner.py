@@ -561,12 +561,10 @@ class ResPartner(models.Model):
             current_date = fields2.date.context_today(self, cr, uid, context=context)
             rml_parse = account_followup_print.report_rappel(cr, uid, "followup_rml_parser")
             final_res = self._all_lines_get_with_partner(cr, uid, partner, company.id, days=days)
-#Aprovechamos para informarl0e de los vencimientos en los próximos 6 días
-#<p>We would also like to inform you of the following invoices which will become due in the next 6 days</p><br>
+
             for currency_dict in final_res:
                 currency = currency_dict.get('line', [{'currency_id': company.currency_id}])[0]['currency_id']
                 followup_table += '''
-                <p>''' + _("We would also like to inform you of the following invoices which will become due in the next 6 days") + '''</p><br>
                 <table border="2" width=100%%>
                 <tr>
                     <td>''' + _("Invoice Date") + '''</td>
