@@ -230,6 +230,7 @@ class PurchaseLineInvoice(models.TransientModel):
         inv_id = super(PurchaseLineInvoice, self).\
             _make_invoice_by_partner(partner, orders, lines_ids)
         invoice = self.env["account.invoice"].browse(inv_id)
+        invoice.payment_mode_id = partner.supplier_payment_mode.id
         invoice.button_reset_taxes()
         return inv_id
 
