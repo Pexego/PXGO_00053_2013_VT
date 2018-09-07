@@ -802,3 +802,116 @@ msgstr "\nEl mandato de adeudo directo SEPA con referencia '%s' para la empresa 
 #, python-format
 msgid "\nThe mandate with reference '%s' for partner '%s' has type set to 'One-Off' and it has a last debit date set to '%s', so we can't use it."
 msgstr "\nEl mandato con referencia '%s' para la empresa '%s' tipo como 'Único', ya tiene como fecha de último cobro '%s', por lo que no se puede usar."
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.action_account_invoice_contact_report
+#: model:ir.ui.menu,name:custom_account.menu_action_account_invoice_contact_report
+msgid "Invoices Contact Analysis"
+msgstr "Análisis de facturas (contactos)"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,number:0
+msgid "Number"
+msgstr "Número"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,date:0
+msgid "Date"
+msgstr "Fecha"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,period_id:0
+msgid "Period"
+msgstr "Período"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,partner_id:0
+msgid "Partner Company"
+msgstr "Empresa matriz"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,contact_id:0
+msgid "Partner contact"
+msgstr "Contacto"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,currency_id:0
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,type:0
+msgid "Type"
+msgstr "Tipo"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,state:0
+msgid "State"
+msgstr "Estado"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,price_total:0
+msgid "Total Without Tax"
+msgstr "Total base"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,benefit:0
+msgid "Benefit"
+msgstr "Beneficio"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "This Year"
+msgstr "Este año"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Refund"
+msgstr "Factura rectificativa"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Sales Team"
+msgstr "Equipo de ventas"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Without ef"
+msgstr "Sin ef"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Status"
+msgstr "Estado"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Company"
+msgstr "Compañía"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Period"
+msgstr "Período"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Due Month"
+msgstr "Mes de vencimiento"
+
+
