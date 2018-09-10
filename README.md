@@ -1,5 +1,5 @@
-# Buildout base para proyectos con OpenERP y PostgreSQL
-OpenERP master en el base, PostgreSQL 9.3.4 y Supervisord 3.0
+# Buildout base para proyectos con Odoo y PostgreSQL
+Odoo 11.0 en el base, PostgreSQL 10.3 , python3, con supervisor
 - Buildout crea cron para iniciar Supervisord después de reiniciar (esto no lo he probado)
 - Supervisor ejecuta PostgreSQL, más info http://supervisord.org/
 - También ejecuta la instancia de PostgreSQL
@@ -19,46 +19,36 @@ $ deb http://apt.anybox.fr/openerp common main
 ```
 $ sudo apt-key adv --keyserver hkp://subkeys.pgp.net --recv-keys 0xE38CEB07
 ```
+- Instalar dependencias python3
+```
+$ sudo apt-get install python3-dev
+```
 - Actualizar e instalar
 ```
 $ sudo apt-get update
 $ sudo apt-get install openerp-server-system-build-deps
 ```
-- Para poder compilar e instalar postgres (debemos valorar si queremos hacerlo siempre), es necesario instalar el siguiente paquete (no e sla solución ideal, debería poder hacerlo el propio buildout, pero de momento queda así)
+- Para poder compilar e instalar postgres
 ```
 $ sudo apt-get install libreadline-dev
-$ sudo apt-get install libcups2-dev
-$ sudo apt-get install gfortran libopenblas-dev liblapack-dev
-```
-- Descargar el  repositorio de buildouts :
-```
-$ git clone https://github.com/Pexego/Buildouts.git
-```
-- [EN REVISIÓN] Hacer checkout de la rama deseada según proyecto
-```
-$ git checkout <rama>
 ```
 - Crear un virtualenv dentro de la carpeta del respositorio. Esto podría ser opcional, obligatorio para desarrollo o servidor de pruebas, tal vez podríamos no hacerlo para un despliegue en producción. Si no está instalado, instalar el paquete de virtualenv. Es necesario tener la versión que se instala con easy_install o con pip, desinstalar el paquete python-virtualenv si fuera necesario e instalarlo con easy_install
 ```
 $ sudo easy_install virtualenv
-$ virtualenv sandbox --no-setuptools
+$ virtualenv -p python3.5 sandbox
 ```
-- Crear la carpeta eggs (no se crea al vuelo, ¿debería?
+- Ahora procedemos a ejecutar el buildout en nuestro entorno virtual
 ```
-$ mkdir eggs
-```
-- Ahora procedemos a ehecutar el buildout en nuestro entorno virtual
-```
-$ sandbox/bin/python bootstrap.py -c [archivo_buildout]
-```
-- Y por último, si se desea usar la receta de OpenERP de desarrollo se hará lo siguiente. ÇYA se ha publicado un anueva versión con soporte para Odoo con lo que , en principio no parece necesario:
-- descargar receta de openerp del repo de anybox en launchpad, en el archivo de configuración de buildout poner la ruta al repo de anybox.
-```
-$ bzr branch lp:anybox.recipe.openerp
+$ sandbox/bin/python3.5 bootstrap.py -c [archivo_buildout]
 ```
 - Lanzar buildout (el -c [archivo_buildout] se usa cuando no tiene el nombre por defecto buildout.cfg)
 ```
 $ bin/buildout -c [archivo_buildout]
+```
+- Actualmente supervisor no funciona en python3, por lo que si no se instala manualmente es necesario lanzar postgres y odoo con los comandos
+```
+$ parts/postgres/bin/postmaster --config-file=etc/postgresql.conf
+$ bin/start_odoo
 ```
 
 - Puede que de error, hay que lanzar el supervisor y volver a hacer bin/buildout:
@@ -70,37 +60,40 @@ $ bin/buildout -c [archivo_buildout]
 - Si fuera necesario hacer update all, se puede parar desde el supervisor y en la consola hacer:
 ```
 $ cd bin
-$ ./upgrade_openerp
+$ ./upgrade_odoo
 ```
-- oddo se lanza en el puerto 9069 (se pude configurar en otro)
+- odoo se lanza en el puerto 9069 (se pude configurar en otro)
 
+## Securizar el acceso al supervisor
+```
+$ sudo apt-get install iptables
+$ sudo iptables -A INPUT -i lo -p tcp --dport 9002 -j ACCEPT
+$ sudo iptables -A INPUT -p tcp --dport 9002 -j DROP
+$ sudo apt-get install iptables-persistent (marcamos "yes" en las preguntas que nos hace al instalarse)
+```
 
-
-## Configurar OpenERP
-Archivo de configuración: etc/openerp.cfg, si sequieren cambiar opciones en  openerp.cfg, no se debe editar el fichero,
-si no añadirlas a la sección [openerp] deñ buildout.cfg
+## Configurar Odoo
+Archivo de configuración: etc/odoo.cfg, si sequieren cambiar opciones en  odoo.cfg, no se debe editar el fichero,
+si no añadirlas a la sección [odoo] del buildout.cfg
 y establecer esas opciones .'add_option' = value, donde 'add_option'  y ejecutar buildout otra vez.
 
-Por ejmplo: cambiar el nivel de logging de OpenERP
+Por ejemplo: cambiar el nivel de logging de odoo
 ```
 'buildout.cfg'
 ...
-[openerp]
+[odoo]
 options.log_handler = [':ERROR']
 ...
 ```
 
-Si se quiere ejecutar más de una instancia de OpenERP, se deben cambiar los puertos,
+Si se quiere ejecutar más de una instancia de odoo, se deben cambiar los puertos,
 please change ports:
 ```
-openerp_xmlrpc_port = 8069  (8069 default openerp)
-openerp_xmlrpcs_port = 8071 (8071 default openerp)
+odoo_xmlrpc_port = 9069  (8069 default odoo)
+odoo_xmlrpcs_port = 9071 (8071 default odoo)
 supervisor_port = 9002      (9001 default supervisord)
 postgres_port = 5434        (5432 default postgres)
 ```
-
-# TODO
-- Generar Apache and Nginx config for virualhost with Buildout
 
 # Contributors
 
