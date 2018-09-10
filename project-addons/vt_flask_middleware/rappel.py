@@ -19,8 +19,8 @@ class Rappel(SyncModel):
 class RappelCustomerInfo(SyncModel):
 
     odoo_id = IntegerField(unique=True)
-    rappel_id = ForeignKeyField(Rappel)
-    partner_id = ForeignKeyField(Customer)
+    rappel_id = ForeignKeyField(Rappel, on_delete='CASCADE')
+    partner_id = ForeignKeyField(Customer, on_delete='CASCADE')
     date_start = CharField(max_length=15)
     date_end = CharField(max_length=15)
     amount = FloatField(default=0.0)
