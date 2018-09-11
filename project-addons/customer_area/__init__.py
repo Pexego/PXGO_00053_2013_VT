@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import res_partner
-import sale
-import report
-import res_users
+from . import res_partner
+from . import sale
+from . import report
+from . import res_users

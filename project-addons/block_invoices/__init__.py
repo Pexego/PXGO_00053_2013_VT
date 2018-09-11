@@ -21,9 +21,9 @@
 #
 ##############################################################################
 
-import res_company
-import res_partner
-import sale_order
+from . import res_company
+from . import res_partner
+from . import sale_order
 #import account_invoice
 #import stock_invoice_onshipping
 #import sale_make_invoice

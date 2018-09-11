@@ -18,6 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import mood
-import res_partner
-import sale
+from . import mood
+from . import res_partner
+from . import sale

@@ -21,8 +21,8 @@
 
 import json
 import logging
-from openerp.addons.web import http
-from openerp.addons.web.http import request
+from odoo import http
+from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 

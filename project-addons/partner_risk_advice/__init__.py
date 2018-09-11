@@ -20,6 +20,6 @@
 ##############################################################################
 
 
-import risk_advice
-import res_partner
+from . import risk_advice
+from . import res_partner
 
