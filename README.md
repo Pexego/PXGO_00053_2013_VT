@@ -1,5 +1,5 @@
 # Buildout base para proyectos con Odoo y PostgreSQL
-Odoo 11.0 en el base, PostgreSQL 10.3 , python3, con supervisor
+Odoo 11.0 en el base, PostgreSQL 10.5 , python3, con supervisor
 - Buildout crea cron para iniciar Supervisord después de reiniciar (esto no lo he probado)
 - Supervisor ejecuta PostgreSQL, más info http://supervisord.org/
 - También ejecuta la instancia de PostgreSQL
@@ -31,15 +31,16 @@ $ sudo apt-get install openerp-server-system-build-deps
 - Para poder compilar e instalar postgres
 ```
 $ sudo apt-get install libreadline-dev
+$ sudo apt-get install cups libcups2-dev
 ```
-- Crear un virtualenv dentro de la carpeta del respositorio. Esto podría ser opcional, obligatorio para desarrollo o servidor de pruebas, tal vez podríamos no hacerlo para un despliegue en producción. Si no está instalado, instalar el paquete de virtualenv. Es necesario tener la versión que se instala con easy_install o con pip, desinstalar el paquete python-virtualenv si fuera necesario e instalarlo con easy_install
+- Crear un virtualenv dentro de la carpeta del respositorio. Esto podría ser opcional, obligatorio para desarrollo o servidor de pruebas, tal vez podríamos no hacerlo para un despliegue en producción. Si no está instalado, instalar el paquete de virtualenv. Es necesario tener la versión que se instala con easy_install o con pip, desinstalar el paquete python3-virtualenv si fuera necesario e instalarlo con easy_install
 ```
-$ sudo easy_install virtualenv
-$ virtualenv -p python3.5 sandbox
+$ sudo pip3 install virtualenv
+$ virtualenv -p python3 sandbox
 ```
 - Ahora procedemos a ejecutar el buildout en nuestro entorno virtual
 ```
-$ sandbox/bin/python3.5 bootstrap.py -c [archivo_buildout]
+$ sandbox/bin/python3 bootstrap.py -c [archivo_buildout]
 ```
 - Lanzar buildout (el -c [archivo_buildout] se usa cuando no tiene el nombre por defecto buildout.cfg)
 ```
