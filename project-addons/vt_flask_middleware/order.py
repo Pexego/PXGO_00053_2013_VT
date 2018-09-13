@@ -38,6 +38,7 @@ class OrderProduct(SyncModel):
     deposit = BooleanField(default=False)
     pack_parent_line_id = IntegerField(null=True)
     discount = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
+    price_unit = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
 
     MOD_NAME = 'orderproduct'
 
