@@ -213,7 +213,7 @@ class stock_production_lot(models.Model):
         for lot in self:
             quant = self.env['stock.quant'].search([('lot_id', '=', lot.id)], order="id desc", limit=1)
             if quant and quant.history_ids:
-                lot.partner_id = quant.history_ids[0].partner_id
+                lot.partner_id = quant.history_ids[0].partner_id.commercial_partner_id
             else:
                 lot.partner_id = False
 
