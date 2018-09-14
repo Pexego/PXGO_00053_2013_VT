@@ -211,7 +211,7 @@ class stock_production_lot(models.Model):
     @api.depends('quant_ids')
     def _get_partner_id(self):
         for lot in self:
-            quant = self.env['stock.quant'].search([('lot_id', '=', lot.id)], order="id", limit=1)
+            quant = self.env['stock.quant'].search([('lot_id', '=', lot.id)], order="id desc", limit=1)
             if quant and quant.history_ids:
                 lot.partner_id = quant.history_ids[0].partner_id
             else:
