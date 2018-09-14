@@ -2,7 +2,7 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, _
+from openerp import models, api, fields, exceptions, _
 from openerp.exceptions import except_orm
 
 
@@ -98,3 +98,19 @@ class SaleOrder(models.Model):
             'target': 'new',
             'flags': {'form': {'options': {'mode': 'view'}}}
         }
+
+    validated_dir = fields.Boolean(default=False)
+
+    @api.one
+    def validate_address(self):
+        self.validated_dir = True
+
+    @api.multi
+    def action_button_confirm(self):
+
+        for sale in self:
+            if not sale.validated_dir and sale.create_uid.email == self.env['ir.config_parameter'].get_param('web.user.buyer'):
+                message = _('Please, validate shipping address.')
+                raise exceptions.Warning(message)
+
+        return super(SaleOrder, self).action_button_confirm()
