@@ -160,34 +160,65 @@ class SaleOrder(models.Model):
                                         "Code": service_code,
                                         "Description": "Service Code Description"
                                     },
-                                    "Package": {
-                                        "PackagingType": {
-                                            "Code": "02",
-                                            "Description": "Rate"
-                                        },
-                                        "Dimensions": {
-                                            "UnitOfMeasurement": {
-                                                "Code": dimension_measure_code,
-                                                "Description": dimension_measure_description
-                                            },
-                                            "Length": str(package_length),
-                                            "Width": str(package_width),
-                                            "Height": str(package_height)
-                                        },
-                                        "PackageWeight": {
-                                            "UnitOfMeasurement": {
-                                                "Code": weight_measure_code,
-                                                "Description": weight_measure_description
-                                            },
-                                            "Weight": str(package_weight)
-                                        }
-                                    },
+                                    "Package": [],
                                     "ShipmentRatingOptions": {
                                         "NegotiatedRatesIndicator": "1"
                                     }
                                 }
                             }
                         }
+
+                        # Generate multiple packages
+                        package_w = 0.0
+                        for p in range(int(float(package_weight)/30)+1):
+                            package_w = package_w + 30
+                            if float(package_weight) - package_w > 0:
+                                rate_request['RateRequest']['Shipment']['Package'].append({
+                                                "PackagingType": {
+                                                    "Code": "02",
+                                                    "Description": "Rate"
+                                                },
+                                                "Dimensions": {
+                                                    "UnitOfMeasurement": {
+                                                        "Code": dimension_measure_code,
+                                                        "Description": dimension_measure_description
+                                                    },
+                                                    "Length": str(package_length),
+                                                    "Width": str(package_width),
+                                                    "Height": str(package_height)
+                                                },
+                                                "PackageWeight": {
+                                                    "UnitOfMeasurement": {
+                                                        "Code": weight_measure_code,
+                                                        "Description": weight_measure_description
+                                                    },
+                                                    "Weight": "30.0"
+                                                }
+                                            })
+                            elif float(package_weight) - package_w < 0:
+                                rate_request['RateRequest']['Shipment']['Package'].append({
+                                    "PackagingType": {
+                                        "Code": "02",
+                                        "Description": "Rate"
+                                    },
+                                    "Dimensions": {
+                                        "UnitOfMeasurement": {
+                                            "Code": dimension_measure_code,
+                                            "Description": dimension_measure_description
+                                        },
+                                        "Length": str(package_length),
+                                        "Width": str(package_width),
+                                        "Height": str(package_height)
+                                    },
+                                    "PackageWeight": {
+                                        "UnitOfMeasurement": {
+                                            "Code": weight_measure_code,
+                                            "Description": weight_measure_description
+                                        },
+                                        "Weight": str(float(package_weight) - p * 30)
+                                    }
+                                })
+
                         url = order.env['ir.config_parameter'].get_param('url.prod.ups.api.request')
                         json_request = rate_request
                         response = requests.session().post(url, data=json.dumps(json_request))
