@@ -523,49 +523,6 @@
             </field>
         </record>
 
-        <record id="rappel_calculated_tree_add_percentage" model="ir.ui.view">
-            <field name="name">rappel.calculated.tree.add.percentage</field>
-            <field name="model">rappel.calculated</field>
-            <field name="inherit_id" ref="rappel.rappel_calculated_tree"/>
-            <field name="arch" type="xml">
-                <field name="invoice_id" position="after">
-                    <field name="goal_percentage"/>
-                </field>
-            </field>
-        </record>
-
-         <record id="rappel_form_add_brand" model="ir.ui.view">
-            <field name="name">rappel.form.add.brand</field>
-            <field name="model">rappel</field>
-            <field name="inherit_id" ref="rappel.rappel_form"/>
-            <field name="arch" type="xml">
-                <field name="global_application" position="after">
-                    <separator colspan="4" attrs="{'invisible':[('global_application','=', True)]}"/>
-                    <label colspan="4" string="You must fill in only one of the following fields to define the validity area of rappel:"
-                           attrs="{'invisible':[('global_application','=', True)]}"
-                           style="color: red;"/>
-                    <separator colspan="4" attrs="{'invisible':[('global_application','=', True)]}"/>
-                </field>
-                <field name="product_id" position="after">
-                    <field name="brand_ids" attrs="{'invisible':[('global_application','=', True)]}"/>
-                </field>
-            </field>
-        </record>
-
-        <record id="view_rappel_current_info_tree_add_qty_picking" model="ir.ui.view">
-            <field name="name">rappel.current.info.tree.add_qty_picking</field>
-            <field name="model">rappel.current.info</field>
-            <field name="inherit_id" ref="rappel.view_rappel_current_info_tree"/>
-            <field name="arch" type="xml">
-                <field name="curr_qty" position="attributes">
-                    <attribute name="string">Curr. qty invoiced</attribute>
-                </field>
-                <field name="curr_qty" position="after">
-                    <field name="curr_qty_pickings"/>
-                </field>
-            </field>
-        </record>
-
         <record model="ir.actions.act_window" id="crm_case_categ_phone_incoming3">
             <field name="name">Logged Calls</field>
             <field name="res_model">crm.phonecall</field>

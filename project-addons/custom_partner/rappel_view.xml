@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="rappel_calculated_tree_add_percentage" model="ir.ui.view">
+            <field name="name">rappel.calculated.tree.add.percentage</field>
+            <field name="model">rappel.calculated</field>
+            <field name="inherit_id" ref="rappel.rappel_calculated_tree"/>
+            <field name="arch" type="xml">
+                <field name="invoice_id" position="after">
+                    <field name="goal_percentage"/>
+                </field>
+            </field>
+        </record>
+
+         <record id="rappel_form_add_brand" model="ir.ui.view">
+            <field name="name">rappel.form.add.brand</field>
+            <field name="model">rappel</field>
+            <field name="inherit_id" ref="rappel.rappel_form"/>
+            <field name="arch" type="xml">
+                <field name="global_application" position="after">
+                    <separator colspan="4" attrs="{'invisible':[('global_application','=', True)]}"/>
+                    <label colspan="4" string="You must fill in only one of the following fields to define the validity area of rappel:"
+                           attrs="{'invisible':[('global_application','=', True)]}"
+                           style="color: red;"/>
+                    <separator colspan="4" attrs="{'invisible':[('global_application','=', True)]}"/>
+                </field>
+                <field name="product_id" position="after">
+                    <field name="brand_ids" attrs="{'invisible':[('global_application','=', True)]}"/>
+                </field>
+                <field name="global_application" position="before">
+                    <field name="discount_voucher" groups="base.group_system"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_rappel_current_info_tree_add_qty_picking" model="ir.ui.view">
+            <field name="name">rappel.current.info.tree.add_qty_picking</field>
+            <field name="model">rappel.current.info</field>
+            <field name="inherit_id" ref="rappel.view_rappel_current_info_tree"/>
+            <field name="arch" type="xml">
+                <field name="curr_qty" position="attributes">
+                    <attribute name="string">Curr. qty invoiced</attribute>
+                </field>
+                <field name="curr_qty" position="after">
+                    <field name="curr_qty_pickings"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_rappel_info" model="ir.ui.view">
+            <field name="name">partner.rappel.info</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="rappel.view_partner_form_add_rappel"/>
+            <field name="arch" type="xml">
+                <field name="rappel_ids" position="replace">
+                     <field name="rappel_info_ids" nolabel="1" colspan="4" editable="bottom">
+                         <tree string="Rappels info" editable="bottom" colors="blue:discount_voucher == True">
+                             <field name="rappel_id"/>
+                             <field name="discount_voucher" invisible="True"/>
+                             <field name="start_rappel"/>
+                             <field name="end_rappel"/>
+                             <field name="last_settlement_date"/>
+                             <field name="start_current_info"/>
+                             <field name="end_current_info"/>
+                             <field name="current_amount"/>
+                          </tree>
+                      </field>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
