@@ -162,3 +162,60 @@ def unlink_rappel_info(session, model_name, record_id):
     rappel_info_exporter = _get_exporter(session, model_name, record_id, RappelInfoExporter)
     return rappel_info_exporter.delete(record_id)
 
+@middleware
+class RappelSectionExporter(Exporter):
+
+    _model_name = ['rappel.section']
+
+    def update(self, rappel_section_id, mode):
+        rappel_section = self.model.browse(rappel_section_id)
+        vals = {"odoo_id": rappel_section.id,
+                "rappel_id": rappel_section.rappel_id.id,
+                "percent": rappel_section.percent,
+                "rappel_from": rappel_section.rappel_from,
+                "rappel_until": rappel_section.rappel_until,
+                }
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(rappel_section, vals)
+
+    def delete(self, rappel_section):
+        return self.backend_adapter.remove(rappel_section)
+
+
+@middleware
+class RappelSectionAdapter(GenericAdapter):
+    _model_name = 'rappel.section'
+    _middleware_model = 'rappelsection'
+
+@on_record_create(model_names='rappel.section')
+def delay_create_rappel_section(session, model_name, record_id, vals):
+    export_rappel_section.delay(session, model_name, record_id, priority=1, eta=60)
+
+@on_record_write(model_names='rappel.section')
+def delay_write_rappel_section(session, model_name, record_id, vals):
+    update_rappel_section.delay(session, model_name, record_id, priority=2, eta=120)
+
+@on_record_unlink(model_names='rappel.section')
+def delay_unlink_rappel_section(session, model_name, record_id):
+    unlink_rappel_section.delay(session, model_name, record_id, priority=3, eta=120)
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def export_rappel_section(session, model_name, record_id):
+    rappel_section_exporter = _get_exporter(session, model_name, record_id, RappelSectionExporter)
+    return rappel_section_exporter.update(record_id, "insert")
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def update_rappel_section(session, model_name, record_id):
+    rappel_section_exporter = _get_exporter(session, model_name, record_id, RappelSectionExporter)
+    return rappel_section_exporter.update(record_id, "update")
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def unlink_rappel_section(session, model_name, record_id):
+    rappel_section_exporter = _get_exporter(session, model_name, record_id, RappelSectionExporter)
+    return rappel_section_exporter.delete(record_id)
+
