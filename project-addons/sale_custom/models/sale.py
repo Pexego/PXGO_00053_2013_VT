@@ -114,11 +114,12 @@ class SaleOrder(models.Model):
                 raise exceptions.Warning(message)
 
             shipping_cost_line = False
-            for line in self.order_line:
-                if line.product_id.categ_id.name == 'Portes':
-                    shipping_cost_line = True
-            if not shipping_cost_line:
-                message = _('Please, introduce a shipping cost line.')
-                raise exceptions.Warning(message)
+            if self.delivery_type not in ('installations', 'carrier'):
+                for line in self.order_line:
+                    if line.product_id.categ_id.name == 'Portes':
+                        shipping_cost_line = True
+                if not shipping_cost_line:
+                    message = _('Please, introduce a shipping cost line.')
+                    raise exceptions.Warning(message)
 
         return super(SaleOrder, self).action_button_confirm()
