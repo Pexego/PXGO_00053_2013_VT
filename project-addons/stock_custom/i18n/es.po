@@ -333,3 +333,19 @@ msgstr "Equipo de ventas"
 #: field:product.product,ref_visiotech:0
 msgid "Visiotech reference"
 msgstr "Referencia Visiotech"
+
+#. module: stock_custom
+#: field:stock.production.lot,partner_id:0
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: stock_custom
+#: field:stock.production.lot,lot_notes:0
+#: view:stock.production.lot:view_production_lot_form_customers
+msgid "Notes"
+msgstr "Notas"
+
+#. module: stock_custom
+#: help:stock.production.lot,partner_id:0
+msgid "The last customer in possession of the product"
+msgstr "El último cliente en posesión del producto"

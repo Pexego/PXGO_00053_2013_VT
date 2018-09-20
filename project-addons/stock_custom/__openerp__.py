@@ -30,7 +30,7 @@
                  "custom_account", "picking_incidences",
                  "reserve_without_save_sale", "sale_display_stock",
                  "stock_reserve_sale", "product_brand", "product_pack",
-                 "product_stock_unsafety"],
+                 "product_stock_unsafety","stock"],
     "data" : ["ir_attachment_view.xml",
               "stock_custom_report.xml",
               "report/stock_report.xml",
