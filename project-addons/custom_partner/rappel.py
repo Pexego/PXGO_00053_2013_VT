@@ -447,7 +447,9 @@ class PartnerRappelInfo(models.Model):
                         rci.amount as current_amount
                 FROM rappel_current_info rci
                 JOIN res_partner_rappel_rel rprr ON rprr.partner_id = rci.partner_id and rprr.rappel_id = rci.rappel_id
+                                 and rci.date_start BETWEEN rprr.date_start and COALESCE(rprr.date_end, rci.date_start)
                 JOIN rappel r ON r.id = rci.rappel_id 
+                WHERE rprr.date_start <= current_date and COALESCE(rprr.date_end, current_date) >= current_date
             )""" % self._table)
 
 
