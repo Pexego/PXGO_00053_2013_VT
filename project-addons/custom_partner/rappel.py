@@ -110,65 +110,47 @@ class ResPartnerRappelRel(models.Model):
                            'partner_id': rappel.partner_id.id,
                            'date_start': period[0],
                            'amount': 0.0,
+                           'amount_est': 0.0,
                            'date_end': period[1]}
             total_rappel = 0.0
+            total_rappel_est = 0.0
             if rappel.rappel_id.calc_mode == 'fixed':
                 if rappel.rappel_id.calc_amount == 'qty':
                     total_rappel = rappel.rappel_id.fix_qty
                 else:
                     total = sum([x.price_subtotal for x in invoice_lines]) - \
                         sum([x.price_subtotal for x in refund_lines])
+                    qty_pickings = rappel._calculate_qty_picking()
+                    total_est = total + qty_pickings
                     if total:
                         total_rappel = total * rappel.rappel_id.fix_qty / 100.0
+                    if total_est:
+                        total_rappel_est = total_est * rappel.rappel_id.fix_qty / 100.0
                     rappel_info["curr_qty"] = total
-                    rappel_info["curr_qty_pickings"] = rappel._calculate_qty_picking()
+                    rappel_info["curr_qty_pickings"] = qty_pickings
 
                 rappel_info['amount'] = total_rappel
+                rappel_info['amount_est'] = total_rappel_est
             else:
                 field = ''
                 if rappel.rappel_id.qty_type == 'value':
                     field = 'price_subtotal'
                 else:
                     field = 'quantity'
+                qty_pickings = rappel._calculate_qty_picking()
                 total = sum([x[field] for x in invoice_lines]) - \
                     sum([x[field] for x in refund_lines])
+                total_est = total + qty_pickings
                 rappel_info["curr_qty"] = total
-                rappel_info["curr_qty_pickings"] = rappel._calculate_qty_picking()
-                if total:
-                    section = self.env['rappel.section'].search(
-                        [('rappel_id', '=', rappel.rappel_id.id),
-                         ('rappel_from', '<=', total),
-                         ('rappel_until', '>=', total)])
-                    if not section:
-                        section = self.env['rappel.section'].search(
-                            [('rappel_id', '=', rappel.rappel_id.id),
-                             ('rappel_from', '<=', total),
-                             ('rappel_until', '=', False)],
-                            order='rappel_from desc', limit=1)
-                    if section:
-                        goal_percentage = 100
-                    else:
-                        # Check if goal percentage is more than 80% to get the rappel
-                        section = self.env['rappel.section'].search(
-                            [('rappel_id', '=', rappel.rappel_id.id),
-                             ('rappel_from', '<=', total/0.8),
-                             ('rappel_from', '>', total)])
-                        if section.rappel_from:
-                            goal_percentage = (total / section.rappel_from) * 100
-                        else:
-                            goal_percentage = 0
+                rappel_info["curr_qty_pickings"] = qty_pickings
 
-                    if not section:
-                        rappel_info['amount'] = 0.0
-                    else:
-                        rappel_info['section_id'] = section.id
-                        section = section[0]
-                        if rappel.rappel_id.calc_amount == 'qty':
-                            total_rappel = section.percent
-                        else:
-                            total_rappel = total * \
-                                section.percent / 100.0
-                            rappel_info['amount'] = total_rappel
+                if self.partner_id.invoice_type_id.name in ('Mensual', 'Quincenal', 'Semanal') and total_est:
+                    rappel_info, goal_percentage, total_rappel = self.compute_total(rappel, total_est, rappel_info, True)
+                else:
+                    rappel_info['amount_est'] = 0.0
+
+                if total:
+                    rappel_info, goal_percentage, total_rappel = self.compute_total(rappel, total, rappel_info, False)
                 else:
                     rappel_info['amount'] = 0.0
 
@@ -189,6 +171,49 @@ class ResPartnerRappelRel(models.Model):
 
         return True
 
+    def compute_total(self, rappel, total, rappel_info, estimated):
+        total_rappel = 0.0
+        section = self.env['rappel.section'].search(
+            [('rappel_id', '=', rappel.rappel_id.id),
+             ('rappel_from', '<=', total),
+             ('rappel_until', '>=', total)])
+        if not section:
+            section = self.env['rappel.section'].search(
+                [('rappel_id', '=', rappel.rappel_id.id),
+                 ('rappel_from', '<=', total),
+                 ('rappel_until', '=', False)],
+                order='rappel_from desc', limit=1)
+        if section:
+            goal_percentage = 100
+        else:
+            # Check if goal percentage is more than 80% to get the rappel
+            section = self.env['rappel.section'].search(
+                [('rappel_id', '=', rappel.rappel_id.id),
+                 ('rappel_from', '<=', total / 0.8),
+                 ('rappel_from', '>', total)])
+            if section.rappel_from:
+                goal_percentage = (total / section.rappel_from) * 100
+            else:
+                goal_percentage = 0
+
+        if not section:
+            if estimated:
+                rappel_info['amount_est'] = 0.0
+            else:
+                rappel_info['amount'] = 0.0
+        else:
+            rappel_info['section_id'] = section.id
+            section = section[0]
+            if rappel.rappel_id.calc_amount == 'qty':
+                total_rappel = section.percent
+            else:
+                total_rappel = total * section.percent / 100.0
+                if estimated:
+                    rappel_info['amount_est'] = total_rappel
+                else:
+                    rappel_info['amount'] = total_rappel
+
+        return rappel_info, goal_percentage, total_rappel
 
 class rappel(models.Model):
 
@@ -339,6 +364,7 @@ class RappelCurrentInfo(models.Model):
     curr_qty_pickings = fields.Float("Qty pending invoice", readonly=True,
                                      help="Qty estimation in pickings pending to be invoiced (shipping cost and"
                                           "product with no-rappel in the order are not verified)")
+    amount_est = fields.Float("Estimated amount", readonly=True, default=0.0)
 
     @api.model
     def send_rappel_info_mail(self):
