@@ -27,6 +27,8 @@ from ..events.rma_events import export_rma, export_rmaproduct, update_rma, updat
 from ..events.invoice_events import export_invoice, update_invoice
 from ..events.picking_events import export_picking, update_picking, export_pickingproduct, update_pickingproduct
 from .. events.order_events import export_order, export_orderproduct, update_order, update_orderproduct
+from .. events.rappel_events import export_rappel, update_rappel
+from .. events.rappel_events import export_rappel_section, update_rappel_section
 
 
 class MiddlewareBackend(models.TransientModel):
@@ -41,7 +43,9 @@ class MiddlewareBackend(models.TransientModel):
             ('products', 'Products'),
             ('order', 'Orders'),
             ('tags', 'Tags'),
-            ('customer_tags_rel', 'Customer Tags Rel')
+            ('customer_tags_rel', 'Customer Tags Rel'),
+            ('rappel', 'Rappel'),
+            ('rappelsection', 'Rappel Sections')
         ],
         string='Export type',
         required=True,
@@ -194,3 +198,25 @@ class MiddlewareBackend(models.TransientModel):
                     update_order.delay(session, 'sale.order', sale.id)
                     for line in sale.order_line:
                         update_orderproduct.delay(session, 'sale.order.line', line.id)
+
+        elif self.type_export == 'rappel':
+            rappel_obj = self.env['rappel']
+            rappel_ids = rappel_obj.search([])
+            if self.mode_export == 'export':
+                for rappel in rappel_ids:
+                    export_rappel.delay(session, 'rappel', rappel.id)
+            else:
+                for rappel in rappel_ids:
+                    update_rappel.delay(session, 'rappel', rappel.id)
+
+
+        elif self.type_export == 'rappelsection':
+            rappel_section_obj = self.env['rappel.section']
+            rappel_section_ids = rappel_section_obj.search([])
+            if self.mode_export == 'export':
+                for section in rappel_section_ids:
+                    export_rappel_section.delay(session, 'rappel.section', section.id)
+            else:
+                for section in rappel_section_ids:
+                    update_rappel_section.delay(session, 'rappel.section', section.id)
+

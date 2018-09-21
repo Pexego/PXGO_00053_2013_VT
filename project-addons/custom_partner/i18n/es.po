@@ -437,3 +437,38 @@ msgstr "Clientes con ventas en el mes pasado (pero sin ventas en el mes actual)"
 #: field:account.move.line,ref_line:0
 msgid "Payment Reference"
 msgstr "Referencia de pago"
+
+#. module: custom_partner
+#: field:partner.rappel.info,partner_id:0
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: custom_partner
+#: field:partner.rappel.info,start_rappel:0
+msgid "Start rappel"
+msgstr "Comienzo rappel"
+
+#. module: custom_partner
+#: field:partner.rappel.info,end_rappel:0
+msgid "End rappel"
+msgstr "Fin rappel"
+
+#. module: custom_partner
+#: field:partner.rappel.info,last_settlement_date:0
+msgid "Last settlement date"
+msgstr "Últ. fecha liquidación"
+
+#. module: custom_partner
+#: field:partner.rappel.info,start_current_info:0
+msgid "Start current period"
+msgstr "Comienzo período actual"
+
+#. module: custom_partner
+#: field:partner.rappel.info,end_current_info:0
+msgid "End current period"
+msgstr "Fin período actual"
+
+#. module: custom_partner
+#: field:partner.rappel.info,current_amount:0
+msgid "Current rappel amount"
+msgstr "Cantidad rappel actual"

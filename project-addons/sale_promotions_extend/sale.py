@@ -87,7 +87,7 @@ class SaleOrder(osv.osv):
         if order.state == 'reserve':
             order.order_reserve()
 
-        taxes = order.order_line[0].tax_id
+        taxes = order.order_line.filtered(lambda l: len(l.tax_id) > 0)[0].tax_id
         for line in order.order_line:
             if line.promotion_line:
                 line.tax_id = taxes

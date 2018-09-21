@@ -20,6 +20,7 @@
 ##############################################################################
 import openerp
 from openerp.osv import osv, fields
+from openerp import models, api
 
 
 class sale_order(osv.osv):
@@ -34,3 +35,24 @@ class sale_order(osv.osv):
     _defaults = {
         'delivery_type': 'shipping'
     }
+
+    @api.onchange('delivery_type')
+    def onchange_delivery_type(self):
+        carrierServ_id = self.env['transportation.service'].search([('name', '=', 'Medios Propios')]).ids
+        carrierTrans_id = self.env['transportation.transporter'].search([('name', '=', 'Medios Propios')]).ids
+        installationServ_id = self.env['transportation.service'].search([('name', '=', 'Recoge agencia cliente')]).ids
+        installationTrans_id = self.env['transportation.transporter'].search([('name', '=', 'Recoge agencia cliente')]).ids
+
+        if self.delivery_type == 'installations':
+            self.service_id = carrierServ_id[0]
+            self.transporter_id = carrierTrans_id[0]
+
+        if self.delivery_type == 'carrier':
+            self.service_id = installationServ_id[0]
+            self.transporter_id = installationTrans_id[0]
+
+        if self.delivery_type == 'shipping':
+            self.service_id = self.partner_id.service_id.id
+            self.transporter_id = self.partner_id.transporter_id.id
+
+
