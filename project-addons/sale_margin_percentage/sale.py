@@ -51,6 +51,38 @@ class sale_order_line(models.Model):
                 self.margin_perc = -100
             self.margin = margin
 
+    @api.one
+    @api.depends("product_uom_qty", "price_unit", "discount", "product_id")
+    def _product_margin_rappel(self):
+        self.margin_perc_rappel = 0.0
+        self.purchase_price = 0.0
+
+        if self.product_id and self.product_id.standard_price and not self.pack_depth:
+
+            self.purchase_price = self.product_id.standard_price
+
+            sale_price = self.price_unit * self.product_uom_qty * ((100.0 - self.discount) / 100.0)
+            purchase_price = self.purchase_price * self.product_uom_qty
+            if self.product_id.product_brand_id.name in self.env['rappel'].search([('name', 'like', 'Vale Ahorro%')],limit=1).mapped('brand_ids.name'):
+                if self.order_id.partner_id.property_product_pricelist.name in ('PVPA 55', 'PVPB 55', 'PVPC 55'):
+                    rappel = sale_price * 0.10
+                elif self.order_id.partner_id.property_product_pricelist.name in ('PVPA 52,5', 'PVPB 52,5', 'PVPC 52,5'):
+                    rappel = sale_price * 0.05
+                else:
+                    rappel = 0.0
+            else:
+                rappel = 0.0
+            sale_price_rappel = sale_price - rappel
+            margin = round(sale_price_rappel - purchase_price, 2)
+
+            if sale_price:
+                if sale_price < purchase_price:
+                    self.margin_perc_rappel = round((margin * 100) / purchase_price, 2)
+                else:
+                    self.margin_perc_rappel = round((margin * 100) / sale_price_rappel, 2)
+            elif sale_price == 0.0 and self.discount == 100:
+                self.margin_perc_rappel = -100
+
     margin = fields.Float(compute="_product_margin", string='Margin',
                           store=True, multi='marg', readonly=True)
     margin_perc = fields.Float(compute="_product_margin", string='Margin %',
@@ -58,6 +90,8 @@ class sale_order_line(models.Model):
     purchase_price = fields.Float(compute="_product_margin", readonly=True,
                                   string="Purchase price", store=True,
                                   multi='marg')
+    margin_perc_rappel = fields.Float(compute="_product_margin_rappel", string='Margin rappel',
+                               store=True, multi='marg', readonly=True, help='Margin after the Coupon rappel')
 
 
 class sale_order(models.Model):
