@@ -31,6 +31,58 @@ class rappel_calculated(models.Model):
 
     goal_percentage = fields.Float("Goal Percentage")
 
+    @api.model
+    def create_rappel_invoice(self, rappels_to_invoice):
+        # Journal = Sales refund (SCNJ)
+        journal_obj = self.env['account.journal']
+        journal_id = journal_obj.search([('type', '=', 'sale_refund')], order='id')[0].id
+
+        # Prepare context to call action_invoice method
+        ctx = dict(self._context or {})
+        ctx['active_ids'] = rappels_to_invoice
+        ctx['active_id'] = rappels_to_invoice[0]
+
+        rappel_invoice_wzd = self.env['rappel.invoice.wzd']
+        new_data_invoice = rappel_invoice_wzd.with_context(ctx).create({'journal_id': journal_id,
+                                                                        'group_by_partner': True,
+                                                                        'invoice_date': False})
+        
+        # Create invoice
+        new_data_invoice.action_invoice()
+
+        invoice = self.browse(rappels_to_invoice).mapped('invoice_id')
+        invoice.signal_workflow('invoice_open')
+
+        # Insert negative lines in the created invoice
+        if len(rappels_to_invoice) > 1:
+            invoice_line_obj = self.env["account.invoice.line"]
+            for rp in self.browse(rappels_to_invoice):
+                if not rp.invoice_id:
+                    rappel_product = rp.rappel_id.type_id.product_id
+                    account_id = rappel_product.property_account_income
+                    if not account_id:
+                        account_id = rappel_product.categ_id. \
+                            property_account_income_categ
+                    taxes_ids = rappel_product.taxes_id
+                    fpos = rp.partner_id.property_account_position or False
+                    if fpos:
+                        account_id = fpos.map_account(account_id)
+                        taxes_ids = fpos.map_tax(taxes_ids)
+                    tax_ids = [(6, 0, [x.id for x in taxes_ids])]
+                    invoice_line_obj.create({'product_id': rappel_product.id,
+                                             'name': u'%s (%s-%s(' %
+                                                     (rp.rappel_id.name,
+                                                      rp.date_start,
+                                                      rp.date_end),
+                                             'invoice_id': invoice.id,
+                                             'account_id': account_id.id,
+                                             'invoice_line_tax_id': tax_ids,
+                                             'price_unit': rp.quantity,
+                                             'quantity': 1})
+                    rp.invoice_id = invoice.id
+
+        return True
+
 
 class ResPartnerRappelRel(models.Model):
 
@@ -105,6 +157,7 @@ class ResPartnerRappelRel(models.Model):
     @api.model
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
         goal_percentage = 0
+        rappel_calculated_obj = self.env['rappel.calculated']
         for rappel in self:
             rappel_info = {'rappel_id': rappel.rappel_id.id,
                            'partner_id': rappel.partner_id.id,
@@ -174,7 +227,7 @@ class ResPartnerRappelRel(models.Model):
 
             if period[1] <= fields.Date.from_string(fields.Date.today()):
                 if total_rappel:
-                    self.env['rappel.calculated'].create({
+                    rappel_calculated_obj.create({
                         'partner_id': rappel.partner_id.id,
                         'date_start': period[0],
                         'date_end': period[1],
@@ -182,6 +235,17 @@ class ResPartnerRappelRel(models.Model):
                         'rappel_id': rappel.rappel_id.id,
                         'goal_percentage': goal_percentage
                     })
+                    if rappel.rappel_id.discount_voucher and total_rappel > 0:
+                        rappel_to_invoice = []
+                        rappel_old = rappel_calculated_obj.search_read([('partner_id', '=', rappel.partner_id.id),
+                                                                        ('rappel_id.discount_voucher', '=', True),
+                                                                        ('invoice_id', '=', False)], ['id', 'quantity'])
+                        amount_total = 0
+                        for rp in rappel_old:
+                            rappel_to_invoice.append(rp['id'])
+                            amount_total += rp['quantity']
+                        if amount_total > 0:
+                            rappel_calculated_obj.create_rappel_invoice(rappel_to_invoice)
                 rappel.last_settlement_date = period[1]
             else:
                 if tmp_model and rappel_info:
