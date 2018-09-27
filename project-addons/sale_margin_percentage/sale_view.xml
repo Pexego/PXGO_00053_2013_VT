@@ -24,31 +24,17 @@
                 </xpath>
                 <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
                     <field name="margin_perc_rappel" readonly="1"/>
-                    <field name="margin_perc" readonly="1"/>
+                    <field name="margin_perc" readonly="1" invisible="1"/>
                     <field name="tax_id" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
                 </xpath>
                 <field name="amount_untaxed" position="after">
-                    <label for="margin"/>
+                    <label for="margin_rappel"/>
                     <div>
-                        <field name="margin" class="oe_inline"/>%%
+                        <field name="margin_rappel" class="oe_inline"/>%%
                     </div>
                 </field>
             </field>
         </record>
-
-        <record model="ir.ui.view" id="sale_margin_est_sale_order">
-        <field name="name">sale.order.margin.est.view.form</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
-        <field name="arch" type="xml">
-             <field name="amount_untaxed" position="after">
-                <label for="margin_rappel"/>
-                <div>
-                    <field name="margin_rappel" class="oe_inline"/>%%
-                </div>
-             </field>
-        </field>
-    </record>
 
     </data>
 </openerp>

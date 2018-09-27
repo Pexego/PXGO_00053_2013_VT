@@ -37,8 +37,8 @@ msgstr "Línea pedido de venta"
 
 #. module: sale_margin_percentage
 #: field:sale.order.line,margin_perc_rappel:0
-msgid "Margin rappel"
-msgstr "Margen rappel"
+msgid "Margin"
+msgstr "Margen"
 
 #. module: sale_margin_percentage
 #: help:sale.order.line,margin_perc_rappel:0
@@ -47,8 +47,8 @@ msgstr "Margen después del Vale Ahorro"
 
 #. module: sale_margin_percentage
 #: field:sale.order,margin_rappel:0
-msgid "Margin with rappel"
-msgstr "Margen con rappel"
+msgid "Margin"
+msgstr "Margen"
 
 #. module: sale_margin_percentage
 #: help:sale.order,margin_rappel:0

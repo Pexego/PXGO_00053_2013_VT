@@ -93,7 +93,7 @@ class sale_order_line(models.Model):
     purchase_price = fields.Float(compute="_product_margin", readonly=True,
                                   string="Purchase price", store=True,
                                   multi='marg')
-    margin_perc_rappel = fields.Float(compute="_product_margin_rappel", string='Margin rappel',
+    margin_perc_rappel = fields.Float(compute="_product_margin_rappel", string='Margin',
                                store=True, multi='marg', readonly=True, help='Margin after the Coupon rappel')
 
 
@@ -161,5 +161,5 @@ class sale_order(models.Model):
     margin = fields.Float(compute="_product_margin", string='Margin',
                           help="It gives profitability by calculating "
                                "percentage.", store=True, readonly=True)
-    margin_rappel = fields.Float(compute="_product_margin_rappel", string='Margin with rappel',
+    margin_rappel = fields.Float(compute="_product_margin_rappel", string='Margin',
                           help="Margin based on the coupon rappel", store=True, readonly=True)
