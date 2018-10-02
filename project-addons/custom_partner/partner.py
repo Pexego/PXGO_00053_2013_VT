@@ -423,7 +423,7 @@ class ResPartner(models.Model):
     @api.constrains('email_web')
     def check_unique_email_web(self):
         if self.email_web:
-            ids = self.search([('email_web', '=ilike', self.email_web.lower()), ('id', '<>', self.id)])
+            ids = self.search([('email_web', '=ilike', self.email_web), ('id', '<>', self.id)])
             if ids:
                 raise exceptions.ValidationError(_('Email web must be unique'))
 
