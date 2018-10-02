@@ -472,3 +472,9 @@ msgstr "Fin período actual"
 #: field:partner.rappel.info,current_amount:0
 msgid "Current rappel amount"
 msgstr "Cantidad rappel actual"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:428
+#, python-format
+msgid "Email web must be unique"
+msgstr "El email web debe ser único"

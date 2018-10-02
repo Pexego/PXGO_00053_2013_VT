@@ -420,6 +420,13 @@ class ResPartner(models.Model):
             total = sum(purchases.mapped('amount_total'))
             partner.purchase_quantity = total
 
+    @api.constrains('email_web')
+    def check_unique_email_web(self):
+        if self.email_web:
+            ids = self.search([('email_web', '=ilike', self.email_web.lower()), ('id', '<>', self.id)])
+            if ids:
+                raise exceptions.ValidationError(_('Email web must be unique'))
+
     @api.constrains('ref', 'is_company', 'active')
     def check_unique_ref(self):
         if self.is_company and self.active:
