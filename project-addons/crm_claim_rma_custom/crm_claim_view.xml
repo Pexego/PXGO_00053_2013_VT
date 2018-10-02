@@ -221,9 +221,21 @@
             <field name="model">crm.claim</field>
             <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
             <field name="arch" type="xml">
+
               <field name="priority" position="replace">
                 <field name="priority"/>
               </field>
+
+              <separator string="Claim/Action Description" position="replace"/>
+              <field name="description" position="attributes">
+                <attribute name='invisible'>1</attribute>
+              </field>
+
+              <xpath expr="//sheet/group/notebook" position="after">
+                  <separator colspan="4" string="Claim/Action Description" groups="base.group_user"/>
+                  <field name="description" colspan="4" nolabel="1"/>
+              </xpath>
+
             </field>
         </record>
 
