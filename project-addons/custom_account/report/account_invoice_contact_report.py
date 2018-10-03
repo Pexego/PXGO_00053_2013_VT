@@ -52,11 +52,14 @@ class AccountInvoiceContactReport(models.Model):
     ], 'Invoice Status', readonly=True)
     price_total = fields.Float('Total Without Tax', readonly=True)
     benefit = fields.Float('Benefit', readonly=True)
+    brand_id = fields.Many2one('product.brand', 'Brand', readonly=True)
+    product_id = fields.Many2one('product.product', 'Product', readonly=True)
 
     def _select(self):
         select_str = """
-            SELECT  sub.id, sub.number, sub.partner_id, sub.contact_id, 
+            SELECT  sub.id, sub.id_invoice, sub.number, sub.partner_id, sub.contact_id, 
                     sub.date, sub.date_due, sub.section_id, sub.period_id, sub.type, sub.state, sub.currency_id,
+                    sub.product_id, sub.brand_id,
                     sub.price_total / cr.rate as price_total, 
                     CASE WHEN sub.type IN ('out_refund') THEN -sub.benefit
                          WHEN sub.type IN ('out_invoice') THEN sub.benefit
@@ -66,8 +69,9 @@ class AccountInvoiceContactReport(models.Model):
 
     def _sub_select(self):
         select_str = """
-                SELECT  ai.id, ai.number AS number, ai.partner_id, coalesce(rp_contact.id, ai.partner_id) AS contact_id,
-                        ai.date_invoice AS date, ai.date_due, ai.section_id, ai.period_id, ai.type, ai.state, ai.currency_id, 
+                SELECT  ail.id, ai.id AS id_invoice, ai.number AS number, ai.partner_id, coalesce(rp_contact.id, ai.partner_id) AS contact_id,
+                        ai.date_invoice AS date, ai.date_due, ai.section_id, ai.period_id, ai.type, ai.state, ai.currency_id,  
+                        ail.product_id, pt.product_brand_id AS brand_id,
                         SUM(CASE
                                 WHEN ai.type::text = ANY (ARRAY['out_refund'::character varying::text, 'in_invoice'::character varying::text])
                                 THEN - ail.price_subtotal
@@ -85,12 +89,14 @@ class AccountInvoiceContactReport(models.Model):
                 LEFT JOIN sale_order_line sol ON  sol.id = solir.order_line_id
                 LEFT JOIN sale_order so ON so.id = sol.order_id
                 LEFT JOIN res_partner rp_contact ON rp_contact.id = so.partner_shipping_id 
+                LEFT JOIN product_product pp ON pp.id = ail.product_id
+                LEFT JOIN product_template pt ON pt.id = pp.product_tmpl_id
         """
         return from_str
 
     def _group_by(self):
         group_by_str = """
-                GROUP BY ai.id, ai.partner_id, coalesce(rp_contact.id, ai.partner_id), ai.number, ai.date_invoice, 
+                GROUP BY ail.id, ail.product_id, pt.product_brand_id, ai.id, ai.partner_id, coalesce(rp_contact.id, ai.partner_id), ai.number, ai.date_invoice, 
                 ai.section_id, ai.period_id, ai.currency_id, ai.type, ai.state
         """
         return group_by_str
