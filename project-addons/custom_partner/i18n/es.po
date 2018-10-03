@@ -478,3 +478,8 @@ msgstr "Cantidad rappel actual"
 #, python-format
 msgid "Email web must be unique"
 msgstr "El email web debe ser único"
+
+#. module: custom_partner
+#: field:rappel.current.info,amount_est:0
+msgid "Estimated amount"
+msgstr "Importe estimado"

@@ -105,6 +105,7 @@ class RappelInfoExporter(Exporter):
                 "date_start": rappel_info.date_start,
                 "date_end": rappel_info.date_end,
                 "amount": rappel_info.amount,
+                "amount_est": rappel_info.amount_est,
                 }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
