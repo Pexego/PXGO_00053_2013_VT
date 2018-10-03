@@ -37,6 +37,7 @@ class sale_order(osv.osv):
     }
 
     @api.onchange('delivery_type')
+    @api.multi
     def onchange_delivery_type(self):
         carrierServ_id = self.env['transportation.service'].search([('name', '=', 'Medios Propios')]).ids
         carrierTrans_id = self.env['transportation.transporter'].search([('name', '=', 'Medios Propios')]).ids

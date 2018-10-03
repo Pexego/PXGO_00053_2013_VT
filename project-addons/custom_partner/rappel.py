@@ -31,6 +31,58 @@ class rappel_calculated(models.Model):
 
     goal_percentage = fields.Float("Goal Percentage")
 
+    @api.model
+    def create_rappel_invoice(self, rappels_to_invoice):
+        # Journal = Sales refund (SCNJ)
+        journal_obj = self.env['account.journal']
+        journal_id = journal_obj.search([('type', '=', 'sale_refund')], order='id')[0].id
+
+        # Prepare context to call action_invoice method
+        ctx = dict(self._context or {})
+        ctx['active_ids'] = rappels_to_invoice
+        ctx['active_id'] = rappels_to_invoice[0]
+
+        rappel_invoice_wzd = self.env['rappel.invoice.wzd']
+        new_data_invoice = rappel_invoice_wzd.with_context(ctx).create({'journal_id': journal_id,
+                                                                        'group_by_partner': True,
+                                                                        'invoice_date': False})
+        
+        # Create invoice
+        new_data_invoice.action_invoice()
+
+        invoice = self.browse(rappels_to_invoice).mapped('invoice_id')
+        invoice.signal_workflow('invoice_open')
+
+        # Insert negative lines in the created invoice
+        if len(rappels_to_invoice) > 1:
+            invoice_line_obj = self.env["account.invoice.line"]
+            for rp in self.browse(rappels_to_invoice):
+                if not rp.invoice_id:
+                    rappel_product = rp.rappel_id.type_id.product_id
+                    account_id = rappel_product.property_account_income
+                    if not account_id:
+                        account_id = rappel_product.categ_id. \
+                            property_account_income_categ
+                    taxes_ids = rappel_product.taxes_id
+                    fpos = rp.partner_id.property_account_position or False
+                    if fpos:
+                        account_id = fpos.map_account(account_id)
+                        taxes_ids = fpos.map_tax(taxes_ids)
+                    tax_ids = [(6, 0, [x.id for x in taxes_ids])]
+                    invoice_line_obj.create({'product_id': rappel_product.id,
+                                             'name': u'%s (%s-%s(' %
+                                                     (rp.rappel_id.name,
+                                                      rp.date_start,
+                                                      rp.date_end),
+                                             'invoice_id': invoice.id,
+                                             'account_id': account_id.id,
+                                             'invoice_line_tax_id': tax_ids,
+                                             'price_unit': rp.quantity,
+                                             'quantity': 1})
+                    rp.invoice_id = invoice.id
+
+        return True
+
 
 class ResPartnerRappelRel(models.Model):
 
@@ -105,6 +157,7 @@ class ResPartnerRappelRel(models.Model):
     @api.model
     def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
         goal_percentage = 0
+        rappel_calculated_obj = self.env['rappel.calculated']
         for rappel in self:
             rappel_info = {'rappel_id': rappel.rappel_id.id,
                            'partner_id': rappel.partner_id.id,
@@ -174,7 +227,7 @@ class ResPartnerRappelRel(models.Model):
 
             if period[1] <= fields.Date.from_string(fields.Date.today()):
                 if total_rappel:
-                    self.env['rappel.calculated'].create({
+                    rappel_calculated_obj.create({
                         'partner_id': rappel.partner_id.id,
                         'date_start': period[0],
                         'date_end': period[1],
@@ -182,6 +235,17 @@ class ResPartnerRappelRel(models.Model):
                         'rappel_id': rappel.rappel_id.id,
                         'goal_percentage': goal_percentage
                     })
+                    if rappel.rappel_id.discount_voucher and total_rappel > 0:
+                        rappel_to_invoice = []
+                        rappel_old = rappel_calculated_obj.search_read([('partner_id', '=', rappel.partner_id.id),
+                                                                        ('rappel_id.discount_voucher', '=', True),
+                                                                        ('invoice_id', '=', False)], ['id', 'quantity'])
+                        amount_total = 0
+                        for rp in rappel_old:
+                            rappel_to_invoice.append(rp['id'])
+                            amount_total += rp['quantity']
+                        if amount_total > 0:
+                            rappel_calculated_obj.create_rappel_invoice(rappel_to_invoice)
                 rappel.last_settlement_date = period[1]
             else:
                 if tmp_model and rappel_info:
@@ -230,6 +294,7 @@ class rappel(models.Model):
         partner_rappel_obj = self.env['res.partner.rappel.rel']
         now = datetime.now()
         now_str = now.strftime("%Y-%m-%d")
+        yesterday_str = (now - relativedelta(days=1)).strftime("%Y-%m-%d")
 
         pricelist_1 = tuple(pricelist_obj.search([('name', 'ilike', 'PVP%52,5')]).ids)
         pricelist_2 = tuple(pricelist_obj.search([('name', 'ilike', 'PVP%55')]).ids)
@@ -244,10 +309,10 @@ class rappel(models.Model):
                                                         ('is_company', '=', True), ('parent_id', '=', False)]).ids)
         partner_rappel_1 = tuple(partner_rappel_obj.search([('rappel_id', '=', rappel_pricelist_1),
                                                             '|',  ('date_end', '=', False),
-                                                            ('date_end', '>', now), ('date_start', '<=', now_str)]).mapped('partner_id.id'))
+                                                            ('date_end', '>=', now_str), ('date_start', '<=', now_str)]).mapped('partner_id.id'))
         partner_rappel_2 = tuple(partner_rappel_obj.search([('rappel_id', '=', rappel_pricelist_2),
                                                             '|', ('date_end', '=', False),
-                                                            ('date_end', '>', now), ('date_start', '<=', now_str)]).mapped('partner_id.id'))
+                                                            ('date_end', '>=', now_str), ('date_start', '<=', now_str)]).mapped('partner_id.id'))
 
         end_actual_month = now.strftime("%Y-%m") + '-' + str(monthrange(now.year, now.month)[1])
         start_next_month = (now + relativedelta(months=1)).strftime("%Y-%m") + '-01'
@@ -273,7 +338,7 @@ class rappel(models.Model):
         # Clientes a los que ya no les corresponde el rappel -> Se actualiza fecha fin con la fecha actual
         remove_partners = set(partner_rappel_1) - set(partner_pricelist_1)
         if remove_partners:
-            vals = {'date_end': now_str}
+            vals = {'date_end': yesterday_str}
             partner_to_update = partner_rappel_obj.search([('rappel_id', '=', rappel_pricelist_1),
                                                            ('partner_id', 'in', tuple(remove_partners)),
                                                            '|',  ('date_end', '=', False),
@@ -301,7 +366,7 @@ class rappel(models.Model):
         # Clientes a los que ya no les corresponde el rappel -> Se actualiza fecha fin con la fecha actual
         remove_partners = set(partner_rappel_2) - set(partner_pricelist_2)
         if remove_partners:
-            update_date = {'date_end': now_str}
+            update_date = {'date_end': yesterday_str}
             partner_to_update = partner_rappel_obj.search([('rappel_id', '=', rappel_pricelist_2),
                                                            ('partner_id', 'in', tuple(remove_partners)),
                                                            '|', ('date_end', '=', False),
@@ -426,29 +491,29 @@ class PartnerRappelInfo(models.Model):
     _order = 'partner_id, rappel_id desc'
     # _table = 'partner_rappel_info'
 
-    partner_id = fields.Many2one('res.partner', 'Partner')
-    rappel_id = fields.Many2one('rappel', 'Rappel')
-    start_rappel = fields.Date('Start rappel')
-    end_rappel = fields.Date('End rappel')
-    last_settlement_date = fields.Date('Last settlement date')
-    start_current_info = fields.Date('Start current period')
-    end_current_info = fields.Date('End current period')
-    current_amount = fields.Float('Current rappel amount')
-    discount_voucher = fields.Boolean('Discount voucher')
+    partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
+    rappel_id = fields.Many2one('rappel', 'Rappel', readonly=True)
+    start_rappel = fields.Date('Start rappel', readonly=True)
+    end_rappel = fields.Date('End rappel', readonly=True)
+    last_settlement_date = fields.Date('Last settlement date', readonly=True)
+    start_current_info = fields.Date('Start current period', readonly=True)
+    end_current_info = fields.Date('End current period', readonly=True)
+    current_amount = fields.Float('Current rappel amount', readonly=True)
+    discount_voucher = fields.Boolean('Discount voucher', readonly=True)
 
     def init(self, cr):
         # self._table = partner_rappel_info
         tools.drop_view_if_exists(cr, self._table)
         cr.execute("""
             CREATE OR REPLACE VIEW %s AS (
-                SELECT  rprr.id, rci.partner_id, rci.rappel_id, r.discount_voucher,
+                SELECT  rprr.id, rprr.partner_id, rprr.rappel_id, r.discount_voucher,
                         rprr.date_start as start_rappel, rprr.date_end as end_rappel, last_settlement_date,
                         rci.date_start as start_current_info, rci.date_end as end_current_info, 
                         rci.amount as current_amount
-                FROM rappel_current_info rci
-                JOIN res_partner_rappel_rel rprr ON rprr.partner_id = rci.partner_id and rprr.rappel_id = rci.rappel_id
+                FROM res_partner_rappel_rel rprr
+                LEFT JOIN rappel_current_info rci ON rprr.partner_id = rci.partner_id and rprr.rappel_id = rci.rappel_id
                                  and rci.date_start BETWEEN rprr.date_start and COALESCE(rprr.date_end, rci.date_start)
-                JOIN rappel r ON r.id = rci.rappel_id 
+                JOIN rappel r ON r.id = rprr.rappel_id 
                 WHERE rprr.date_start <= current_date and COALESCE(rprr.date_end, current_date) >= current_date
             )""" % self._table)
 

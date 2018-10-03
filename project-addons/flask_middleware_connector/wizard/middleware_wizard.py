@@ -29,6 +29,7 @@ from ..events.picking_events import export_picking, update_picking, export_picki
 from .. events.order_events import export_order, export_orderproduct, update_order, update_orderproduct
 from .. events.rappel_events import export_rappel, update_rappel
 from .. events.rappel_events import export_rappel_section, update_rappel_section
+from .. events.country_events import export_country_state, update_country_state
 
 
 class MiddlewareBackend(models.TransientModel):
@@ -45,7 +46,8 @@ class MiddlewareBackend(models.TransientModel):
             ('tags', 'Tags'),
             ('customer_tags_rel', 'Customer Tags Rel'),
             ('rappel', 'Rappel'),
-            ('rappelsection', 'Rappel Sections')
+            ('rappelsection', 'Rappel Sections'),
+            ('countrystate', 'States')
         ],
         string='Export type',
         required=True,
@@ -209,7 +211,6 @@ class MiddlewareBackend(models.TransientModel):
                 for rappel in rappel_ids:
                     update_rappel.delay(session, 'rappel', rappel.id)
 
-
         elif self.type_export == 'rappelsection':
             rappel_section_obj = self.env['rappel.section']
             rappel_section_ids = rappel_section_obj.search([])
@@ -219,4 +220,14 @@ class MiddlewareBackend(models.TransientModel):
             else:
                 for section in rappel_section_ids:
                     update_rappel_section.delay(session, 'rappel.section', section.id)
+
+        elif self.type_export == 'countrystate':
+            country_state_obj = self.env['res.country.state']
+            country_state_ids = country_state_obj.search([])
+            if self.mode_export == 'export':
+                for section in country_state_ids:
+                    export_country_state.delay(session, 'res.country.state', section.id)
+            else:
+                for section in country_state_ids:
+                    update_country_state.delay(session, 'res.country.state', section.id)
 

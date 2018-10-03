@@ -94,3 +94,69 @@ def unlink_country(session, model_name, record_id):
     country_exporter = _get_exporter(session, model_name, record_id,
                                      CountryExporter)
     return country_exporter.delete(record_id)
+
+
+@middleware
+class CountryStateExporter(Exporter):
+
+    _model_name = ['res.country.state']
+
+    def update(self, binding_id, mode):
+        country_state = self.model.browse(binding_id)
+        vals = {"name": country_state.name,
+                "code": country_state.code,
+                "country_id": country_state.country_id.id,
+                "odoo_id": country_state.id}
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(binding_id, vals)
+
+    def delete(self, binding_id):
+        return self.backend_adapter.remove(binding_id)
+
+
+@middleware
+class CountryStateAdapter(GenericAdapter):
+    _model_name = 'res.country.state'
+    _middleware_model = 'countrystate'
+
+
+@on_record_create(model_names='res.country.state')
+def delay_export_country_state_create(session, model_name, record_id, vals):
+    export_country_state.delay(session, model_name, record_id, priority=1)
+
+
+@on_record_write(model_names='res.country.state')
+def delay_export_country_state_write(session, model_name, record_id, vals):
+    up_fields = ["name", "code", "country_id"]
+    for field in up_fields:
+        if field in vals:
+            update_country_state.delay(session, model_name, record_id, priority=3)
+            break
+
+
+@on_record_unlink(model_names='res.country.state')
+def delay_unlink_country_state(session, model_name, record_id):
+    unlink_country_state.delay(session, model_name, record_id, priority=5)
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def export_country_state(session, model_name, record_id):
+    country_state_exporter = _get_exporter(session, model_name, record_id, CountryStateExporter)
+    return country_state_exporter.update(record_id, "insert")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def update_country_state(session, model_name, record_id):
+    country_state_exporter = _get_exporter(session, model_name, record_id, CountryStateExporter)
+    return country_state_exporter.update(record_id, "update")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def unlink_country_state(session, model_name, record_id):
+    country_state_exporter = _get_exporter(session, model_name, record_id, CountryStateExporter)
+    return country_state_exporter.delete(record_id)
