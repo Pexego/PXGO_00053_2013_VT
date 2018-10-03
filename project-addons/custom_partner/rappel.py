@@ -309,10 +309,10 @@ class rappel(models.Model):
                                                         ('is_company', '=', True), ('parent_id', '=', False)]).ids)
         partner_rappel_1 = tuple(partner_rappel_obj.search([('rappel_id', '=', rappel_pricelist_1),
                                                             '|',  ('date_end', '=', False),
-                                                            ('date_end', '>', now), ('date_start', '<=', now_str)]).mapped('partner_id.id'))
+                                                            ('date_end', '>=', now_str), ('date_start', '<=', now_str)]).mapped('partner_id.id'))
         partner_rappel_2 = tuple(partner_rappel_obj.search([('rappel_id', '=', rappel_pricelist_2),
                                                             '|', ('date_end', '=', False),
-                                                            ('date_end', '>', now), ('date_start', '<=', now_str)]).mapped('partner_id.id'))
+                                                            ('date_end', '>=', now_str), ('date_start', '<=', now_str)]).mapped('partner_id.id'))
 
         end_actual_month = now.strftime("%Y-%m") + '-' + str(monthrange(now.year, now.month)[1])
         start_next_month = (now + relativedelta(months=1)).strftime("%Y-%m") + '-01'
