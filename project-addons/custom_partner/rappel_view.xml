@@ -54,8 +54,8 @@
             <field name="inherit_id" ref="rappel.view_partner_form_add_rappel"/>
             <field name="arch" type="xml">
                 <field name="rappel_ids" position="replace">
-                     <field name="rappel_info_ids" nolabel="1" colspan="4" editable="bottom">
-                         <tree string="Rappels info" editable="bottom" colors="blue:discount_voucher == True">
+                     <field name="rappel_info_ids" nolabel="1" colspan="4">
+                         <tree string="Rappels info" editable="bottom" create="false" delete="false">
                              <field name="rappel_id"/>
                              <field name="discount_voucher" invisible="True"/>
                              <field name="start_rappel"/>
@@ -69,6 +69,8 @@
                 </field>
             </field>
         </record>
+
+        <menuitem id="rappel.menu_rappel_config_sale" name="Rappel" sequence="50" parent="base.menu_sales"/>
 
     </data>
 </openerp>
