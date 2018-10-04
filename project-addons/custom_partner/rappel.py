@@ -276,6 +276,7 @@ class ResPartnerRappelRel(models.Model):
                     rappel_info['amount_est'] = total_rappel
                 else:
                     rappel_info['amount'] = total_rappel
+                    rappel_info['amount_est'] = total_rappel
 
         return rappel_info, goal_percentage, total_rappel
 
