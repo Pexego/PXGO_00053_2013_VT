@@ -24,6 +24,7 @@ class RappelCustomerInfo(SyncModel):
     date_start = CharField(max_length=15)
     date_end = CharField(max_length=15)
     amount = FloatField(default=0.0)
+    amount_est = FloatField(default=0.0)
 
     MOD_NAME = 'rappelcustomerinfo'
 

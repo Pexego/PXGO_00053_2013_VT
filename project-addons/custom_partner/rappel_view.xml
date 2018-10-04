@@ -45,6 +45,9 @@
                 <field name="curr_qty" position="after">
                     <field name="curr_qty_pickings"/>
                 </field>
+                <field name="amount" position="before">
+                    <field name="amount_est"/>
+                </field>
             </field>
         </record>
 
