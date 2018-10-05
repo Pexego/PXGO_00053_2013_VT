@@ -46,6 +46,11 @@ msgid "PVD 3 Margin"
 msgstr "Margen PVD_C"
 
 #. module: sale_customer_discount
+#: field:product.product,margin_pvd4:0
+msgid "PVD 4 Margin"
+msgstr "Margen PVD_D"
+
+#. module: sale_customer_discount
 #: field:product.product,margin_pvd_pvi_1:0
 msgid "PVD/PVI 1 margin"
 msgstr "Relación PVD/PVI 1"
@@ -61,9 +66,19 @@ msgid "PVD/PVI 3 margin"
 msgstr "Relación PVD/PVI 3"
 
 #. module: sale_customer_discount
+#: field:product.product,margin_pvd_pvi_4:0
+msgid "PVD/PVI 4 margin"
+msgstr "Relación PVD/PVI 4"
+
+#. module: sale_customer_discount
 #: field:product.product,pvd3_price:0
 msgid "PVD 3 price"
 msgstr "PVD_C"
+
+#. module: sale_customer_discount
+#: field:product.product,pvd4_price:0
+msgid "PVD 4 price"
+msgstr "PVD_D"
 
 #. module: sale_customer_discount
 #: field:product.product,margin_pvi1:0
@@ -96,6 +111,16 @@ msgid "PVI 3 price"
 msgstr "PVI_C"
 
 #. module: sale_customer_discount
+#: field:product.product,margin_pvi4:0
+msgid "PVI 4 Margin"
+msgstr "Margen PVI_D"
+
+#. module: sale_customer_discount
+#: field:product.product,pvi4_price:0
+msgid "PVI 4 price"
+msgstr "PVI_D"
+
+#. module: sale_customer_discount
 #: field:product.product,pvd2_relation:0
 msgid "PVP 2 / PVD 2 relation"
 msgstr "Relación PVP_B / PVD_B"
@@ -104,6 +129,11 @@ msgstr "Relación PVP_B / PVD_B"
 #: field:product.product,pvd3_relation:0
 msgid "PVP 3 / PVD 3 relation"
 msgstr "Relación PVP_C / PVD_C"
+
+#. module: sale_customer_discount
+#: field:product.product,pvd4_relation:0
+msgid "PVP 4 / PVD 4 relation"
+msgstr "Relación PVP_D / PVD_D"
 
 #. module: sale_customer_discount
 #: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
@@ -119,6 +149,11 @@ msgstr "PVP B"
 #: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
 msgid "PVP C"
 msgstr "PVP C"
+
+#. module: sale_customer_discount
+#: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP D"
+msgstr "PVP D"
 
 #. module: sale_customer_discount
 #: field:product.product,pvd1_relation:0
@@ -144,3 +179,8 @@ msgstr "PVP_B"
 #: field:product.product,list_price3:0
 msgid "Sale Price 2"
 msgstr "PVP_C"
+
+#. module: sale_customer_discount
+#: field:product.product,list_price4:0
+msgid "Sale Price 3"
+msgstr "PVP_D"
