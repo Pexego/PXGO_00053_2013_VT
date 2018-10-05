@@ -58,7 +58,7 @@ class CrmClaimRma(models.Model):
                                                                        ('2', 'High'),
                                                                        ('3', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
-    country = fields.Many2one("res.country", string="Country", related='partner_id.country_id')
+    country = fields.Many2one("res.country", string="Country")
     date = fields.Date('Claim Date', select=True,
                        default=fields.Date.context_today)
     write_date = fields.Datetime("Update date", readonly=True)
@@ -163,15 +163,17 @@ class CrmClaimRma(models.Model):
             if vals:
                 claim_inv_line_obj.create(cr, uid, vals, context)
 
-    def onchange_partner_id(self, cr, uid, ids, partner_id, email=False,
-                            context=None):
-        res = super(CrmClaimRma, self).onchange_partner_id(cr, uid, ids,
-                                                           partner_id,
-                                                           email=email,
-                                                           context=context)
+    def onchange_partner_id(self, cr, uid, ids, partner_id, email=False, context=None):
+        res = super(CrmClaimRma, self).onchange_partner_id(cr, uid, ids, partner_id, email=email, context=context)
+
+        import ipdb
+        ipdb.set_trace()
+
         if partner_id:
             partner = self.pool["res.partner"].browse(cr, uid, partner_id)
             res['value']['delivery_address_id'] = partner_id
+            res['value']['section_id'] = partner.section_id   # Get section_id from res.partner
+            res['value']['country'] = partner.country_id      # Get country_id from res.partner
             if partner.user_id:
                 res['value']['comercial'] = partner.user_id.id
 

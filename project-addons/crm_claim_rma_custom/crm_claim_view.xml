@@ -38,6 +38,11 @@
                 <filter string="Closure" position="after">
                     <filter string="Comercial" domain="[]" context="{'group_by':'comercial'}"/>
                 </filter>
+
+                <group expand="0" string="Group By">
+                    <filter string="Country" domain="[]" context="{'group_by':'country'}"/>
+                </group>
+
             </field>
         </record>
 
