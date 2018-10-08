@@ -166,9 +166,6 @@ class CrmClaimRma(models.Model):
     def onchange_partner_id(self, cr, uid, ids, partner_id, email=False, context=None):
         res = super(CrmClaimRma, self).onchange_partner_id(cr, uid, ids, partner_id, email=email, context=context)
 
-        import ipdb
-        ipdb.set_trace()
-
         if partner_id:
             partner = self.pool["res.partner"].browse(cr, uid, partner_id)
             res['value']['delivery_address_id'] = partner_id
