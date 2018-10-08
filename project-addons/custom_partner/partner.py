@@ -51,6 +51,7 @@ class ResPartner(models.Model):
     past_year_global_invoiced = fields.Float('Past year invoiced (global)', default=0.0)
     current_employees = fields.Integer('Current year employees', default=0)
     past_year_employees = fields.Integer('Past year employees', default=0)
+    rappel_info_ids = fields.One2many('partner.rappel.info', 'partner_id', 'Rappels Info')
 
     @api.model
     def _calculate_annual_invoiced(self):
@@ -419,6 +420,13 @@ class ResPartner(models.Model):
             total = sum(purchases.mapped('amount_total'))
             partner.purchase_quantity = total
 
+    @api.constrains('email_web')
+    def check_unique_email_web(self):
+        if self.email_web:
+            ids = self.search([('email_web', '=ilike', self.email_web), ('id', '<>', self.id)])
+            if ids:
+                raise exceptions.ValidationError(_('Email web must be unique'))
+
     @api.constrains('ref', 'is_company', 'active')
     def check_unique_ref(self):
         if self.is_company and self.active:
@@ -561,12 +569,10 @@ class ResPartner(models.Model):
             current_date = fields2.date.context_today(self, cr, uid, context=context)
             rml_parse = account_followup_print.report_rappel(cr, uid, "followup_rml_parser")
             final_res = self._all_lines_get_with_partner(cr, uid, partner, company.id, days=days)
-#Aprovechamos para informarl0e de los vencimientos en los próximos 6 días
-#<p>We would also like to inform you of the following invoices which will become due in the next 6 days</p><br>
+
             for currency_dict in final_res:
                 currency = currency_dict.get('line', [{'currency_id': company.currency_id}])[0]['currency_id']
                 followup_table += '''
-                <p>''' + _("We would also like to inform you of the following invoices which will become due in the next 6 days") + '''</p><br>
                 <table border="2" width=100%%>
                 <tr>
                     <td>''' + _("Invoice Date") + '''</td>
@@ -697,313 +703,6 @@ class ResPartner(models.Model):
             'context': self.env.context,
             'target': 'new',
             }
-
-
-class rappel_calculated(models.Model):
-
-    _inherit = 'rappel.calculated'
-
-    goal_percentage = fields.Float("Goal Percentage")
-
-
-class ResPartnerRappelRel(models.Model):
-
-    _inherit = "res.partner.rappel.rel"
-
-    @api.multi
-    def _get_next_period(self):
-        period = super(ResPartnerRappelRel, self)._get_next_period()
-        if period and str(period[0]) == self.last_settlement_date:
-            period[0] += relativedelta(days=1)
-            period[1] += relativedelta(days=1)
-        return period
-
-    @api.multi
-    def _get_invoices(self, period, products):
-        res = super(ResPartnerRappelRel, self)._get_invoices(period, products)
-
-        self.ensure_one()
-        invoices = self.env['account.invoice'].search(
-            [('type', '=', 'out_invoice'),
-             ('date_invoice', '>=', period[0]),
-             ('date_invoice', '<=', period[1]),
-             ('state', 'in', ['open', 'paid']),
-             ('commercial_partner_id', '=', self.partner_id.id)])
-        refunds = self.env['account.invoice'].search(
-            [('type', '=', 'out_refund'),
-             ('date_invoice', '>=', period[0]),
-             ('date_invoice', '<=', period[1]),
-             ('state', 'in', ['open', 'paid']),
-             ('commercial_partner_id', '=', self.partner_id.id)])
-
-        # Si el rappel afecta al catalago entero, no hacer la comprobacion por producto
-        if self.rappel_id.global_application:
-            refund_lines = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', [x.id for x in refunds]),
-                 ('no_rappel', '=', False)])
-            invoice_lines = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', [x.id for x in invoices]),
-                 ('no_rappel', '=', False)])
-        else:
-            refund_lines = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', [x.id for x in refunds]),
-                 ('product_id', 'in', products),
-                 ('no_rappel', '=', False)])
-            invoice_lines = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', [x.id for x in invoices]),
-                 ('product_id', 'in', products),
-                 ('no_rappel', '=', False)])
-
-        return invoice_lines, refund_lines
-
-    @api.multi
-    def _calculate_qty_picking(self):
-        picking_obj = self.env['stock.picking']
-        move_obj = self.env['stock.move']
-        products = self.rappel_id.get_products()
-        period = self._get_next_period()
-        if period:
-            picking_ids = picking_obj.search([('date_done', '>=', period[0].strftime("%Y-%m-%d")),
-                                              ('date_done', '<=', period[1].strftime("%Y-%m-%d")),
-                                              ('state', '=', 'done'),
-                                              ('invoice_state', '=', '2binvoiced'),
-                                              ('partner_id', 'child_of', [self.partner_id.id])])
-
-            picking_lines = move_obj.search([('picking_id', 'in', picking_ids.ids),
-                                             ('product_id', 'in', products)])
-
-            price_subtotal_lines = picking_lines.mapped('procurement_id.sale_line_id.price_subtotal')
-            amount_total = sum([x for x in price_subtotal_lines])
-            return amount_total
-
-    @api.model
-    def compute(self, period, invoice_lines, refund_lines, tmp_model=False):
-        goal_percentage = 0
-        for rappel in self:
-            rappel_info = {'rappel_id': rappel.rappel_id.id,
-                           'partner_id': rappel.partner_id.id,
-                           'date_start': period[0],
-                           'amount': 0.0,
-                           'date_end': period[1]}
-            total_rappel = 0.0
-            if rappel.rappel_id.calc_mode == 'fixed':
-                if rappel.rappel_id.calc_amount == 'qty':
-                    total_rappel = rappel.rappel_id.fix_qty
-                else:
-                    total = sum([x.price_subtotal for x in invoice_lines]) - \
-                        sum([x.price_subtotal for x in refund_lines])
-                    if total:
-                        total_rappel = total * rappel.rappel_id.fix_qty / 100.0
-                    rappel_info["curr_qty"] = total
-                    rappel_info["curr_qty_pickings"] = rappel._calculate_qty_picking()
-
-                rappel_info['amount'] = total_rappel
-            else:
-                field = ''
-                if rappel.rappel_id.qty_type == 'value':
-                    field = 'price_subtotal'
-                else:
-                    field = 'quantity'
-                total = sum([x[field] for x in invoice_lines]) - \
-                    sum([x[field] for x in refund_lines])
-                rappel_info["curr_qty"] = total
-                rappel_info["curr_qty_pickings"] = rappel._calculate_qty_picking()
-                if total:
-                    section = self.env['rappel.section'].search(
-                        [('rappel_id', '=', rappel.rappel_id.id),
-                         ('rappel_from', '<=', total),
-                         ('rappel_until', '>=', total)])
-                    if not section:
-                        section = self.env['rappel.section'].search(
-                            [('rappel_id', '=', rappel.rappel_id.id),
-                             ('rappel_from', '<=', total),
-                             ('rappel_until', '=', False)],
-                            order='rappel_from desc', limit=1)
-                    if section:
-                        goal_percentage = 100
-                    else:
-                        # Check if goal percentage is more than 80% to get the rappel
-                        section = self.env['rappel.section'].search(
-                            [('rappel_id', '=', rappel.rappel_id.id),
-                             ('rappel_from', '<=', total/0.8),
-                             ('rappel_from', '>', total)])
-                        if section.rappel_from:
-                            goal_percentage = (total / section.rappel_from) * 100
-                        else:
-                            goal_percentage = 0
-
-                    if not section:
-                        rappel_info['amount'] = 0.0
-                    else:
-                        rappel_info['section_id'] = section.id
-                        section = section[0]
-                        if rappel.rappel_id.calc_amount == 'qty':
-                            total_rappel = section.percent
-                        else:
-                            total_rappel = total * \
-                                section.percent / 100.0
-                            rappel_info['amount'] = total_rappel
-                else:
-                    rappel_info['amount'] = 0.0
-
-            if period[1] <= fields.Date.from_string(fields.Date.today()):
-                if total_rappel:
-                    self.env['rappel.calculated'].create({
-                        'partner_id': rappel.partner_id.id,
-                        'date_start': period[0],
-                        'date_end': period[1],
-                        'quantity': total_rappel,
-                        'rappel_id': rappel.rappel_id.id,
-                        'goal_percentage': goal_percentage
-                    })
-                rappel.last_settlement_date = period[1]
-            else:
-                if tmp_model and rappel_info:
-                    self.env['rappel.current.info'].create(rappel_info)
-
-        return True
-
-
-class rappel(models.Model):
-
-    _inherit = 'rappel'
-    brand_ids = fields.Many2many('product.brand', 'rappel_product_brand_rel',
-                                 'rappel_id', 'product_brand_id', 'Brand')
-
-    @api.multi
-    def get_products(self):
-        product_obj = self.env['product.product']
-        product_ids = self.env['product.product']
-        for rappel in self:
-            if not rappel.global_application:
-                if rappel.product_id:
-                    product_ids += rappel.product_id
-                elif rappel.brand_ids:
-                    product_ids += product_obj.search(
-                        [('product_brand_id', 'in', rappel.brand_ids.ids)])
-                elif rappel.product_categ_id:
-                    product_ids += product_obj.search(
-                        [('categ_id', '=', rappel.product_categ_id.id)])
-            else:
-                product_ids += product_obj.search([])
-        return product_ids.ids
-
-    @api.constrains('global_application', 'product_id', 'brand_ids', 'product_categ_id')
-    def _check_application(self):
-        if not self.global_application and not self.product_id \
-                and not self.product_categ_id and not self.brand_ids:
-            raise exceptions. \
-                ValidationError(_('Product, brand and category are empty'))
-
-
-class RappelInvoice(models.TransientModel):
-
-    _inherit = "rappel.invoice.wzd"
-
-    @api.multi
-    def action_invoice(self):
-        res = super(RappelInvoice, self).action_invoice()
-        compute_rappel_obj = self.env["rappel.calculated"]
-        for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
-            if rappel.quantity <= 0:
-                continue
-            if rappel.invoice_id:
-                invoice = rappel.invoice_id
-                if not invoice.payment_mode_id \
-                        or not invoice.partner_bank_id \
-                        or not invoice.section_id:
-                    rappel.invoice_id.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
-                                             'partner_bank_id': rappel.partner_id.bank_ids and
-                                                                    rappel.partner_id.bank_ids[0].id or False,
-                                             'section_id': rappel.partner_id.section_id.id})
-        return res
-
-
-class RappelCurrentInfo(models.Model):
-
-    _inherit = "rappel.current.info"
-
-    curr_qty_pickings = fields.Float("Qty pending invoice", readonly=True,
-                                     help="Qty estimation in pickings pending to be invoiced (shipping cost and"
-                                          "product with no-rappel in the order are not verified)")
-
-    @api.model
-    def send_rappel_info_mail(self):
-        mail_pool = self.env['mail.mail']
-        mail_ids = self.env['mail.mail']
-        partner_pool = self.env['res.partner'].search([('rappel_ids', '!=', '')])
-        for partner in partner_pool:
-            partner_list = []
-            partner_list.append(partner.id)
-            pool_partners = self.search([('partner_id', '=', partner.id)])
-            send = False
-            if pool_partners:
-
-                values = {}
-                for rappel in pool_partners:
-
-                    date_end = datetime.strptime(str(rappel.date_end), '%Y-%m-%d')
-                    date_start = datetime.strptime(str(rappel.date_start), '%Y-%m-%d')
-                    today = datetime.strptime(str(fields.Date.today()), '%Y-%m-%d')
-
-                    for rappel_timing in rappel.rappel_id.advice_timing_ids:
-
-                        if rappel_timing.advice_timing == 'fixed':
-                            timing = (date_end - today).days
-                            if timing == rappel_timing.timing:
-                                send = True
-
-                        if rappel_timing.advice_timing == 'variable':
-
-                            timing = (date_end - date_start).days*rappel_timing.timing/100
-                            timing2= (today - date_start).days
-
-                            if timing == timing2:
-                                send = True
-
-                        if send == True and rappel.curr_qty:
-                            if values.get(partner.id):
-                                values[partner.id].append ({
-                                    'concepto': rappel.rappel_id.name,
-                                    'date_start': date_start.strftime('%d/%m/%Y'),
-                                    'date_end': date_end.strftime('%d/%m/%Y'),
-                                    'advice_timing': rappel_timing.advice_timing,
-                                    'timing': rappel_timing.timing,
-                                    'curr_qty': rappel.curr_qty,
-                                    'section_goal': rappel.section_goal,
-                                    'section_id': rappel.section_id,
-                                    'amount': rappel.amount
-                                })
-                            else:
-                                values[partner.id] = [{
-                                    'concepto': rappel.rappel_id.name,
-                                    'date_start': date_start.strftime('%d/%m/%Y'),
-                                    'date_end': date_end.strftime('%d/%m/%Y'),
-                                    'advice_timing': rappel_timing.advice_timing,
-                                    'timing': rappel_timing.timing,
-                                    'curr_qty': rappel.curr_qty,
-                                    'section_goal': rappel.section_goal,
-                                    'section_id': rappel.section_id,
-                                    'amount': rappel.amount
-                                }]
-                        send = False
-
-                if values.get(partner.id):
-                    template = self.env.ref('rappel.rappel_mail_advice')
-                    ctx = dict(self._context)
-                    ctx.update({
-                        'partner_email': partner.email,
-                        'partner_id': partner.id,
-                        'partner_lang': partner.lang,
-                        'partner_name': partner.name,
-                        'mail_from': self.env.user.company_id.email,
-                        'values': values[partner.id]
-                    })
-
-                    mail_id = template.with_context(ctx).send_mail(rappel.partner_id.id)
-                    mail_ids += mail_pool.browse(mail_id)
-        if mail_ids:
-            mail_ids.send()
 
 
 class AccountMoveLine(models.Model):

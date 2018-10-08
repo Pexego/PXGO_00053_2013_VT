@@ -192,7 +192,7 @@ class SaleOrder(models.Model):
                                                          context=context)
         if part and res.get('value', False):
             partner = self.pool['res.partner'].browse(cr, uid, part)
-            res['value']['partner_tags'] = [x.id for x in partner.category_id]
+            res['value']['partner_tags'] = [(6, 0, [x.id for x in partner.category_id])]
             if partner.section_id:
                 res['value']['section_id'] = partner.section_id.id
 
@@ -230,6 +230,7 @@ class PurchaseLineInvoice(models.TransientModel):
         inv_id = super(PurchaseLineInvoice, self).\
             _make_invoice_by_partner(partner, orders, lines_ids)
         invoice = self.env["account.invoice"].browse(inv_id)
+        invoice.payment_mode_id = partner.supplier_payment_mode.id
         invoice.button_reset_taxes()
         return inv_id
 

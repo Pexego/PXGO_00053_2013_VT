@@ -41,29 +41,32 @@ class Partner(models.Model):
 
     @api.one
     def _pending_orders_amount(self):
-        total = 0.0
-        moves = self.env['stock.move'].\
-            search([('partner_id', 'child_of', [self.id]),
-                    ('state', 'not in', ['draft', 'cancel']),
-                    ('procurement_id.sale_line_id', '!=', False),
-                    ('invoice_state', '=', '2binvoiced')])
+        web_user = self.env['ir.config_parameter'].get_param('web.user.buyer')
+        create_uid = self.env['res.users'].browse([self.env.uid])
+        if create_uid.email != web_user:
+            total = 0.0
+            moves = self.env['stock.move'].\
+                search([('partner_id', 'child_of', [self.id]),
+                        ('state', 'not in', ['draft', 'cancel']),
+                        ('procurement_id.sale_line_id', '!=', False),
+                        ('invoice_state', '=', '2binvoiced')])
 
-        for move in moves:
-            line = move.procurement_id.sale_line_id
-            sign = move.picking_type_code == "outgoing" and 1 or -1
-            total += sign * (move.product_uom_qty * (line.price_unit * (1 - (line.discount or 0.0) / 100.0)))
+            for move in moves:
+                line = move.procurement_id.sale_line_id
+                sign = move.picking_type_code == "outgoing" and 1 or -1
+                total += sign * (move.product_uom_qty * (line.price_unit * (1 - (line.discount or 0.0) / 100.0)))
 
-        lines = self.env['sale.order.line'].\
-            search([('order_id.partner_id', 'child_of', [self.id]),
-                    ('order_id.state', 'not in',
-                     ['draft','cancel','wait_risk','sent',
-                      'history', 'reserve']),
-                    ('invoiced', '=', False), '|', ('product_id', '=', False),
-                    ('product_id.type', '=', 'service')])
-        for sline in lines:
-            total += sline.price_subtotal
+            lines = self.env['sale.order.line'].\
+                search([('order_id.partner_id', 'child_of', [self.id]),
+                        ('order_id.state', 'not in',
+                         ['draft','cancel','wait_risk','sent',
+                          'history', 'reserve']),
+                        ('invoiced', '=', False), '|', ('product_id', '=', False),
+                        ('product_id.type', '=', 'service')])
+            for sline in lines:
+                total += sline.price_subtotal
 
-        self.pending_orders_amount = total
+            self.pending_orders_amount = total
 
     @api.multi
     def _get_valid_followup_partners(self):

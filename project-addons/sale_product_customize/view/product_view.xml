@@ -62,6 +62,13 @@
             </field>
         </record>
 
+        <record id="action_product_brand_tree_view" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="product_brand.view_product_brand_tree"/>
+            <field name="act_window_id" ref="product_brand.action_product_brand"/>
+        </record>
+
 
     </data>
 </openerp>
