@@ -33,12 +33,15 @@ class product_product(osv.osv):
                 'margin_pvd1': 0.0,
                 'margin_pvd2': 0.0,
                 'margin_pvd3': 0.0,
+                'margin_pvd4': 0.0,
                 'margin_pvi1': 0.0,
                 'margin_pvi2': 0.0,
                 'margin_pvi3': 0.0,
+                'margin_pvi4': 0.0,
                 'margin_pvd_pvi_1': 0.0,
                 'margin_pvd_pvi_2': 0.0,
-                'margin_pvd_pvi_3': 0.0
+                'margin_pvd_pvi_3': 0.0,
+                'margin_pvd_pvi_4': 0.0
             }
             if product.list_price and product.pvd1_relation:
                 res[product.id]['margin_pvd1'] = \
@@ -53,6 +56,11 @@ class product_product(osv.osv):
                 res[product.id]['margin_pvd3'] = \
                     (1 - (product.standard_price /
                          (product.list_price3 * product.pvd3_relation))) * \
+                    100.0
+            if product.list_price4 and product.pvd4_relation:
+                res[product.id]['margin_pvd4'] = \
+                    (1 - (product.standard_price /
+                         (product.list_price4 * product.pvd4_relation))) * \
                     100.0
             if product.pvi1_price:
                 res[product.id]['margin_pvi1'] = \
@@ -72,6 +80,12 @@ class product_product(osv.osv):
                 if product.pvd3_price:
                     res[product.id]['margin_pvd_pvi_3'] = \
                         ((product.pvd3_price - product.pvi3_price) / product.pvd3_price) * 100
+            if product.pvi4_price:
+                res[product.id]['margin_pvi4'] = \
+                    (1 - (product.standard_price / product.pvi4_price)) * 100.0
+                if product.pvd4_price:
+                    res[product.id]['margin_pvd_pvi_4'] = \
+                        ((product.pvd4_price - product.pvi4_price) / product.pvd4_price) * 100
         return res
 
     _columns = {
@@ -79,6 +93,9 @@ class product_product(osv.osv):
                                     digits_compute=dp.get_precision('Product \
                                                                     Price')),
         'list_price3': fields.float('Sale Price 2',
+                                    digits_compute=dp.get_precision('Product \
+                                                                    Price')),
+        'list_price4': fields.float('Sale Price 3',
                                     digits_compute=dp.get_precision('Product \
                                                                     Price')),
         'commercial_cost': fields.float('Commercial Cost',
@@ -90,17 +107,23 @@ class product_product(osv.osv):
                                       default=0.5),
         'pvd3_relation': fields.float('PVP 3 / PVD 3 relation', digits=(4, 2),
                                       default=0.5),
+        'pvd4_relation': fields.float('PVP 4 / PVD 4 relation', digits=(4, 2),
+                                      default=0.5),
         'pvd1_price': fields.float('PVD 1 price', digits_compute=
                                    dp.get_precision('Product Price')),
         'pvd2_price': fields.float('PVD 2 price', digits_compute=
                                    dp.get_precision('Product Price')),
         'pvd3_price': fields.float('PVD 3 price', digits_compute=
                                    dp.get_precision('Product Price')),
+        'pvd4_price': fields.float('PVD 4 price', digits_compute=
+                                   dp.get_precision('Product Price')),
         'pvi1_price': fields.float('PVI 1 price', digits_compute =
                                    dp.get_precision('Product Price')),
         'pvi2_price': fields.float('PVI 2 price', digits_compute =
                                    dp.get_precision('Product Price')),
         'pvi3_price': fields.float('PVI 3 price', digits_compute =
+                                   dp.get_precision('Product Price')),
+        'pvi4_price': fields.float('PVI 4 price', digits_compute=
                                    dp.get_precision('Product Price')),
         'margin_pvd1': fields.function(_get_margins,
                                        string="PVD 1 Margin",
@@ -129,6 +152,15 @@ class product_product(osv.osv):
                                                c={}: ids,
                                                ['list_price3', 'pvd3_relation',
                                                 'standard_price'], 10), }),
+        'margin_pvd4': fields.function(_get_margins,
+                                       string="PVD 4 Margin",
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                                  (lambda self, cr, uid, ids,
+                                                          c={}: ids,
+                                                   ['list_price4', 'pvd4_relation',
+                                                    'standard_price'], 10), }),
         'margin_pvi1': fields.function(_get_margins,
                                        string="PVI 1 Margin",
                                        type="float", multi="_get_margins",
@@ -156,6 +188,15 @@ class product_product(osv.osv):
                                                c={}: ids,
                                                ['pvi3_price',
                                                 'standard_price'], 10), }),
+        'margin_pvi4': fields.function(_get_margins,
+                                       string="PVI 4 Margin",
+                                       type="float", multi="_get_margins",
+                                       digits=(5, 2),
+                                       store={'product.product':
+                                                  (lambda self, cr, uid, ids,
+                                                          c={}: ids,
+                                                   ['pvi4_price',
+                                                    'standard_price'], 10), }),
         'margin_pvd_pvi_1': fields.function(_get_margins,
                                        string='PVD/PVI 1 margin',
                                        type="float", multi="_get_margins",
@@ -183,6 +224,15 @@ class product_product(osv.osv):
                                                c={}: ids,
                                                ['pvi3_price',
                                                 'pvd3_price'], 10), }),
+        'margin_pvd_pvi_4': fields.function(_get_margins,
+                                            string='PVD/PVI 4 margin',
+                                            type="float", multi="_get_margins",
+                                            digits=(5, 2),
+                                            store={'product.product':
+                                                       (lambda self, cr, uid, ids,
+                                                               c={}: ids,
+                                                        ['pvi4_price',
+                                                         'pvd4_price'], 10), }),
     }
 
     def pvd1_price_change(self, cr, uid, ids, pvd1_price, standard_price, pvi1_price, pvd1_relation=0.5):
@@ -232,6 +282,21 @@ class product_product(osv.osv):
                          'margin_pvd_pvi_3': margin_pvd_pvi_3}}
         return res
 
+    def pvd4_price_change(self, cr, uid, ids, pvd4_price, standard_price, pvi4_price, pvd4_relation=0.5):
+        if pvd4_price:
+            list_price = (1.0 / pvd4_relation) * pvd4_price
+            margin_pvd = (1 - (standard_price / pvd4_price)) * 100.0
+            margin_pvd_pvi_4 = ((pvd4_price - pvi4_price) / pvd4_price) * 100
+        else:
+            list_price = 0
+            margin_pvd = 0
+            margin_pvd_pvi_4 = 0
+
+        res = {'value': {'list_price4': list_price,
+                         'margin_pvd4': margin_pvd,
+                         'margin_pvd_pvi_4': margin_pvd_pvi_4}}
+        return res
+
     def pvi1_price_change(self, cr, uid, ids, standard_price, pvi1_price, pvd1_price):
         # res = {'value': {'margin_pvi1': (1 - (standard_price / pvi1_price)) * 100.0}}
         if pvd1_price:
@@ -278,6 +343,22 @@ class product_product(osv.osv):
 
         res = {'value': {'margin_pvi3': margin_pvi3,
                          'margin_pvd_pvi_3': margin_pvd_pvi_3}}
+
+        return res
+
+    def pvi4_price_change(self, cr, uid, ids, standard_price, pvi4_price, pvd4_price):
+        if pvd4_price:
+            margin_pvd_pvi_4 = ((pvd4_price - pvi4_price) / pvd4_price) * 100
+        else:
+            margin_pvd_pvi_4 = 0
+
+        if pvi4_price:
+            margin_pvi4 = (1 - (standard_price / pvi4_price)) * 100.0
+        else:
+            margin_pvi4 = 0
+
+        res = {'value': {'margin_pvi4': margin_pvi4,
+                         'margin_pvd_pvi_4': margin_pvd_pvi_4}}
 
         return res
 

@@ -232,6 +232,8 @@ class sale_order(models.Model):
                     nan_external_prices was installed with the product pack """
                     if 'prices_used' in line:
                         vals['prices_used'] = line.prices_used
+                    if line.deposit:
+                        vals['deposit'] = True
 
                     self.pool.get('sale.order.line').create(
                         cr, uid, vals, context)
