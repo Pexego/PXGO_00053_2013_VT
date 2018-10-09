@@ -50,12 +50,14 @@ class ProductExporter(Exporter):
                     'pvi_1': product.pvi1_price,
                     'pvi_2': product.pvi2_price,
                     'pvi_3': product.pvi3_price,
+                    'pvi_4': product.pvi4_price,
                     'uom_name': product.uom_id.name,
                     'last_sixty_days_sales': product.last_sixty_days_sales,
                     'brand_id': product.product_brand_id.id,
                     'pvd_1': product.pvd1_price,
                     'pvd_2': product.pvd2_price,
                     'pvd_3': product.pvd3_price,
+                    'pvd_4': product.pvd4_price,
                     'pvm': product.product_tmpl_id.pvm_price,
                     'joking_index': product.joking_index,
                     'sale_ok': product.sale_ok,
@@ -114,10 +116,10 @@ def delay_export_product_template_write(session, model_name, record_id, vals):
 @on_record_create(model_names='product.product')
 def delay_export_product_create(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
-    up_fields = ["name", "default_code", "pvi1_price", "pvi2_price",
-                 "pvi3_price", "list_price", "list_price2", "list_price3",
-                 "pvd1_relation", "pvd2_relation", "pvd3_relation", "categ_id",
-                 "product_brand_id", "last_sixty_days_sales",
+    up_fields = ["name", "default_code", "pvi1_price", "pvi2_price", "pvi3_price", "pvi4_price",
+                 "list_price", "list_price2", "list_price3", "list_price4",
+                 "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
+                 "categ_id", "product_brand_id", "last_sixty_days_sales",
                  "joking_index", "sale_ok", "ean13", "description_sale",
                  "manufacturer_pref", "standard_price", "type", "pack_line_ids"]
     export_product.delay(session, model_name, record_id)
@@ -139,9 +141,9 @@ def delay_export_product_create(session, model_name, record_id, vals):
 @on_record_write(model_names='product.product')
 def delay_export_product_write(session, model_name, record_id, vals):
     product = session.env[model_name].browse(record_id)
-    up_fields = ["default_code", "pvi1_price", "pvi2_price",
-                 "pvi3_price", "list_price2", "list_price3",
-                 "pvd1_relation", "pvd2_relation", "pvd3_relation",
+    up_fields = ["default_code", "pvi1_price", "pvi2_price", "pvi3_price", "pvi4_price",
+                 "list_price2", "list_price3", "list_price4",
+                 "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
                  "last_sixty_days_sales", "joking_index", "sale_ok",
                  "ean13", "description_sale", "manufacturer_pref", "standard_price",
                  "type","pack_line_ids"]
