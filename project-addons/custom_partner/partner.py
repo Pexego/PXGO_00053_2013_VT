@@ -51,7 +51,6 @@ class ResPartner(models.Model):
     past_year_global_invoiced = fields.Float('Past year invoiced (global)', default=0.0)
     current_employees = fields.Integer('Current year employees', default=0)
     past_year_employees = fields.Integer('Past year employees', default=0)
-    rappel_info_ids = fields.One2many('partner.rappel.info', 'partner_id', 'Rappels Info')
 
     @api.model
     def _calculate_annual_invoiced(self):

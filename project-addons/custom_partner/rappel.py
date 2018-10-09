@@ -511,37 +511,4 @@ class RappelCurrentInfo(models.Model):
             mail_ids.send()
 
 
-class PartnerRappelInfo(models.Model):
-
-    _name = "partner.rappel.info"
-    _auto = False
-    _order = 'partner_id, rappel_id desc'
-    # _table = 'partner_rappel_info'
-
-    partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
-    rappel_id = fields.Many2one('rappel', 'Rappel', readonly=True)
-    start_rappel = fields.Date('Start rappel', readonly=True)
-    end_rappel = fields.Date('End rappel', readonly=True)
-    last_settlement_date = fields.Date('Last settlement date', readonly=True)
-    start_current_info = fields.Date('Start current period', readonly=True)
-    end_current_info = fields.Date('End current period', readonly=True)
-    current_amount = fields.Float('Current rappel amount', readonly=True)
-    discount_voucher = fields.Boolean('Discount voucher', readonly=True)
-
-    def init(self, cr):
-        # self._table = partner_rappel_info
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""
-            CREATE OR REPLACE VIEW %s AS (
-                SELECT  rprr.id, rprr.partner_id, rprr.rappel_id, r.discount_voucher,
-                        rprr.date_start as start_rappel, rprr.date_end as end_rappel, last_settlement_date,
-                        rci.date_start as start_current_info, rci.date_end as end_current_info, 
-                        rci.amount as current_amount
-                FROM res_partner_rappel_rel rprr
-                LEFT JOIN rappel_current_info rci ON rprr.partner_id = rci.partner_id and rprr.rappel_id = rci.rappel_id
-                                 and rci.date_start BETWEEN rprr.date_start and COALESCE(rprr.date_end, rci.date_start)
-                JOIN rappel r ON r.id = rprr.rappel_id 
-                WHERE rprr.date_start <= current_date and COALESCE(rprr.date_end, current_date) >= current_date
-            )""" % self._table)
-
 
