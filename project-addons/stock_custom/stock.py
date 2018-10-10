@@ -21,6 +21,17 @@
 from openerp import models, fields, exceptions, api, _
 
 
+class StockQuant(models.Model):
+
+    _inherit = "stock.quant"
+
+    @api.model
+    def create(self, vals):
+        if vals.get('negative_move_id') and vals.get('lot_id'):
+            del vals['lot_id']
+        return super(StockQuant, self).create(vals)
+
+
 class StockHistory(models.Model):
     _inherit = 'stock.history'
 
