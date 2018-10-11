@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,8 +18,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
-from openerp import modules
+from odoo import models, fields, api
+from odoo import modules
 import base64
 
 
@@ -31,15 +30,14 @@ class res_partner(models.Model):
     region_ids = fields.Many2many(related='area_id.commercial_region_ids')
     default_shipping_address = fields.Boolean('Default Shipping Address', default=False)
 
-    @api.one
     @api.onchange('default_shipping_address')
     def onchange_default_shipping(self):
         if 'default_parent_id' in self.env.context:
             if self.default_shipping_address:
-                    image = modules.get_module_resource('customer_area', 'static/src/img/', 'icon-fav.png')
-                    with open(image, "rb") as image_file:
-                        encoded_string = base64.b64encode(image_file.read())
-                        self.image = encoded_string
+                image = modules.get_module_resource('customer_area', 'static/src/img/', 'icon-fav.png')
+                with open(image, "rb") as image_file:
+                    encoded_string = base64.b64encode(image_file.read())
+                    self.image = encoded_string
             else:
                 self.image = False
 

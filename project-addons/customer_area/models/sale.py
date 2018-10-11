@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from odoo import models, fields
 
 
-class ResUsers(models.Model):
+class sale_order(models.Model):
 
-    _inherit = 'res.users'
+    _inherit = 'sale.order'
 
-    area_ids = fields.Many2many('res.partner.area', 'res_users_area_rel',
-                                'user_ud', 'area_id', 'Areas')
+    area_id = fields.Many2one('res.partner.area', string='Area', store=True,
+                              related='partner_id.area_id')
