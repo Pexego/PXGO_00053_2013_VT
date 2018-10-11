@@ -53,7 +53,7 @@ class res_partner_area(models.Model):
 
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15)
-    sales_team = fields.Many2one('crm.case.section', 'Sales Team')
+    sales_team = fields.Many2one('crm.team', 'Sales Team')
     commercial_region_ids = fields.Many2many('res.partner.area.region', 'res_partner_area_region_rel',
                                              'area_id', 'commercial_region_id', 'Commercial Regions')
 
