@@ -7,11 +7,13 @@
             <field name="model">res.users</field>
             <field name="inherit_id" ref="base.view_users_form"/>
             <field name="arch" type="xml">
-                <field name="company_ids" position="after">
-                    <group string="Work areas" name="work_areas">
-                        <field name="area_ids"/>
-                    </group>
-                </field>
+                <xpath expr="/form/sheet/notebook/page[@name='access_rights']" position="after">
+                    <page string="Areas" name="areas" >
+                        <group string="Work areas" name="work_areas">
+                            <field name="area_ids"/>
+                        </group>
+                    </page>
+                </xpath>
             </field>
         </record>
 
