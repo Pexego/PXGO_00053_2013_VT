@@ -32,14 +32,13 @@ class res_partner(models.Model):
 
     @api.onchange('default_shipping_address')
     def onchange_default_shipping(self):
-        if 'default_parent_id' in self.env.context:
-            if self.default_shipping_address:
-                image = modules.get_module_resource('customer_area', 'static/src/img/', 'icon-fav.png')
-                with open(image, "rb") as image_file:
-                    encoded_string = base64.b64encode(image_file.read())
-                    self.image = encoded_string
-            else:
-                self.image = False
+        if self.default_shipping_address:
+            image = modules.get_module_resource('customer_area', 'static/src/img/', 'icon-fav.png')
+            with open(image, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read())
+                self.image = encoded_string
+        else:
+            self.image = False
 
     @api.multi
     def change_sales_team(self, area_id):
