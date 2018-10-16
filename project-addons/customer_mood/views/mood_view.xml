@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <record id="view_mood_tree" model="ir.ui.view">
@@ -8,7 +8,6 @@
             <field name="arch" type="xml">
                 <tree string="Moods">
                     <field name="name"/>
-                    <field name="image" invisible="1"/>
                 </tree>
             </field>
         </record>
@@ -19,7 +18,6 @@
             <field name="arch" type="xml">
                 <form string="Moods">
                 <sheet>
-                    <field name="image" widget='image' class="oe_left oe_avatar" />
                     <div class="oe_title oe_left">
                         <div class="oe_edit_only">
                             <label for="name"/>
@@ -41,7 +39,7 @@
             <field name="help">Manage the moods</field>
         </record>
 
-        <menuitem action="action_mood" id="menu_mood" parent="base.menu_base_config" sequence="2"/>
+        <menuitem action="action_mood" id="menu_mood" parent="sale.menu_sale_config" sequence="2"/>
 
     </data>
-</openerp>
+</odoo>

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -18,24 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
-from openerp import tools
-from openerp.osv import osv, fields
+from odoo import models, fields, api
 
 
-class res_partner(osv.osv):
+class res_partner(models.Model):
     _inherit = 'res.partner'
 
-    def _get_image(self, cr, uid, ids, name, args, context=None):
-        """ """
-        result = dict.fromkeys(ids, False)
-        for partner in self.browse(cr, uid, ids, context=context):
-            if partner.mood_image and partner.mood_image.image_small:
-                result[partner.id] = partner.mood_image.image_small
-        return result
+    mood_image = fields.Many2one('mood')
 
-    _columns = {
-        'mood_image': fields.many2one('mood', 'Mood'),
-        'selected_image': fields.function(_get_image, string="Mood",
-                                          type="binary"),
-    }
