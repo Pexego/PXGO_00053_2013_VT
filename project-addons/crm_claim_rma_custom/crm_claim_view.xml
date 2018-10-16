@@ -79,6 +79,7 @@
                 </field>
                 <field name="email_from" position="after">
                     <field name="comercial"/>
+                    <field name="country" invisible="True"/>
                     <field name="category_id" widget="many2many_tags"/>
                 </field>
                 <field name="claim_type" position="attributes">
