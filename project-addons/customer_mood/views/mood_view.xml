@@ -39,7 +39,7 @@
             <field name="help">Manage the moods</field>
         </record>
 
-        <menuitem action="action_mood" id="menu_mood" parent="sale.menu_sale_config" sequence="2"/>
+        <menuitem action="action_mood" id="menu_mood" parent="crm.crm_menu_config" sequence="2"/>
 
     </data>
 </odoo>
