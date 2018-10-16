@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,24 +18,27 @@
 #
 ##############################################################################
 
-from odoo import models, fields, tools
+{
+    "name": "Customer Mood",
+    "version": "1.0",
+    "author": "Pexego",
+    'website': 'www.pexego.es',
+    "category": "Sales",
+    "description": """
+Customer Mood
+========================================
 
-
-class mood(models.Model):
-    _name = 'mood'
-    _descrition = 'Moods'
-
-    def _get_image(self):
-        for obj in self:
-            obj.image_small = tools.image_get_resized_images(obj.image)
-
-    def _set_image(self):
-        for obj in self:
-            obj.write({'image': tools.image_resize_image_big(obj.image_small)})
-
-    name = fields.Char('Name', size=128, required=True, index=True)
-    image = fields.Binary("Image",
-                          help="This field contains the image used to \
-                                set the mood, limited to 1024x1024px")
-    image_small = fields.Binary(compute="_get_image", inverse="_set_image",
-                                string="Small-sized image", store=True)
+    * Set the mood in which a customer is, and to know at a glance.
+    * When ordering, it also shows the mood icon for the selected customer.
+""",
+    "depends": ["base", "sale"],
+    "data": [
+        "views/mood_view.xml",
+        "views/res_partner_view.xml",
+        "security/ir.model.access.csv"
+    ],
+    "demo": [],
+    'auto_install': False,
+    "installable": True,
+    'images': [],
+}

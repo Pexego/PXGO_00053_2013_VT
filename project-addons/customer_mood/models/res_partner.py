@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -22,13 +21,7 @@
 from odoo import models, fields
 
 
-class res_partner(models.Model):
+class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    def _get_image(self):
-        for partner in self:
-            if partner.mood_image and partner.mood_image.image_small:
-                partner.selected_image = partner.mood_image.image_small
-
-    mood_image = fields.Many2one('mood', 'Mood')
-    selected_image = fields.Binary(compute="_get_image", string="Mood")
+    mood_image = fields.Many2one('mood')

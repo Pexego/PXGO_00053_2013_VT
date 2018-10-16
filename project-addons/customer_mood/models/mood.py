@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,16 +18,11 @@
 #
 ##############################################################################
 
-from odoo import api, models, fields
+from odoo import models, fields
 
 
-class sale_order(models.Model):
-    _inherit = 'sale.order'
+class Mood(models.Model):
+    _name = 'mood'
+    _descrition = 'Moods'
 
-    customer_mood = fields.Binary('Customer Mood', readonly=True)
-
-    @api.onchange('partner_id')
-    def onchange_partner_id_set_mood(self):
-        if self.partner_id:
-            if self.partner_id.mood_image and self.partner_id.mood_image.image:
-                self.customer_mood = self.partner_id.mood_image.image_small
+    name = fields.Char('Name', size=128, required=True, index=True)
