@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,48 +18,45 @@
 #
 ##############################################################################
 
-from odoo import fields, models, _
+from odoo import fields, models, api, fields, _
 
 
-class ui(models.Model):
+class ProductTemplate(models.Model):
 
-    _inherit = "product.product"
+    _inherit = "product.template"
 
     state2 = fields.Selection([
             ('active', 'Active'),
             ('edition', 'In edition'),
             ('published', 'Published')], 'Status',
             readonly=True, required=True, default='active')
-    sale_ok = fields.Boolean(default=False)
+    sale_ok = fields.Boolean(
+        'Can be Sold', default=False,
+        help="Specify if the product can be selected in a sales order line.")
 
-    def act_active(self, cr, uid, ids, context=None):
-        return True
 
-    def act_edition(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state2': 'edition'}, context)
-        for product in self.browse(cr, uid, ids, context):
+    @api.multi
+    def signal_edition(self):
+        self.write({'state2': 'edition'})
+        for product in self:
             vals = {
                 'body':
                 _(u'The product %s is in edition state') % product.name,
-                'model': 'product.product',
+                'model': 'product.template',
                 'res_id': product.id,
                 'type': 'comment'
             }
-            self.pool.get('mail.message').create(cr, uid, vals,
-                                                 context=context)
-        return True
+            self.env['mail.message'].create(vals)
 
-    def act_publish(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state2': 'published', 'sale_ok': True},
-                   context)
-        for product in self.browse(cr, uid, ids, context):
+    @api.multi
+    def signal_publish(self):
+        self.write({'state2': 'published', 'sale_ok': True})
+        for product in self:
             vals = {
                 'body':
                 _(u'The product %s has been published') % product.name,
-                'model': 'product.product',
+                'model': 'product.template',
                 'res_id': product.id,
                 'type': 'comment'
             }
-            self.pool.get('mail.message').create(cr, uid, vals,
-                                                 context=context)
-        return True
+            self.env['mail.message'].create(vals)
