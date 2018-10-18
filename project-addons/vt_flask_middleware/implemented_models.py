@@ -1,6 +1,6 @@
 from country import Country, CountryState
 from product import Product, ProductCategory, ProductBrand, \
-    ProductBrandCountryRel
+    ProductBrandCountryRel, ProductTag, ProductTagProductRel
 from customer import Customer, CustomerTag, CustomerTagCustomerRel
 from invoice import Invoice
 from order import Order, OrderProduct
@@ -16,14 +16,14 @@ MODELS_CLASS = {
     'rmaproduct': RmaProduct, 'country': Country, 'commercial': Commercial,
     'productbrand': ProductBrand, 'productbrandcountryrel': ProductBrandCountryRel, 
     'order': Order, 'orderproduct': OrderProduct, 'rappel': Rappel, 'rappelcustomerinfo': RappelCustomerInfo,
-    'rappelsection':RappelSection, 'countrystate': CountryState}#, 'post': Post}
+    'rappelsection':RappelSection, 'countrystate': CountryState, 'producttag': ProductTag, 'producttagproductrel': ProductTagProductRel}#, 'post': Post}
 
 MASTER_CLASSES = {'commercial': Commercial,'productcategory': ProductCategory,
                   'rmastatus': RmaStatus, 'rmastage': RmaStage,
-                  'country': Country, 'productbrand': ProductBrand, 'rappel': Rappel}
+                  'country': Country, 'productbrand': ProductBrand, 'rappel': Rappel, 'producttag': ProductTag}
 
 DEPENDENT_CLASSES = {'invoice': Invoice, 'customer': Customer, 'customertag': CustomerTag, 'customertagcustomerrel': CustomerTagCustomerRel,
                      'product': Product, 'picking': Picking, 'pickingproduct': PickingProduct,
                      'rma': Rma, 'rmaproduct': RmaProduct,
-                     'productbrandcountryrel': ProductBrandCountryRel, 'order': Order,
+                     'productbrandcountryrel': ProductBrandCountryRel, 'order': Order, 'producttagproductrel': ProductTagProductRel,
                      'orderproduct': OrderProduct, 'rappelcustomerinfo': RappelCustomerInfo, 'countrystate': CountryState}
