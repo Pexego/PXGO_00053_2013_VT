@@ -22,7 +22,7 @@
 from openerp import models, fields, api, _
 from openerp.addons.connector.session import ConnectorSession
 from ..events.partner_events import export_partner, update_partner, export_partner_tag, update_partner_tag, export_partner_tag_rel, update_partner_tag_rel
-from ..events.product_events import update_product, export_product, export_product_tag, update_product_tag
+from ..events.product_events import update_product, export_product, export_product_tag, update_product_tag, export_product_tag_rel
 from ..events.rma_events import export_rma, export_rmaproduct, update_rma, update_rmaproduct
 from ..events.invoice_events import export_invoice, update_invoice
 from ..events.picking_events import export_picking, update_picking, export_pickingproduct, update_pickingproduct
@@ -48,7 +48,8 @@ class MiddlewareBackend(models.TransientModel):
             ('rappel', 'Rappel'),
             ('rappelsection', 'Rappel Sections'),
             ('countrystate', 'States'),
-            ('producttag', 'Product Tag')
+            ('producttag', 'Product Tag'),
+            ('producttagproductrel', 'Product Tags Rel')
         ],
         string='Export type',
         required=True,
@@ -242,3 +243,11 @@ class MiddlewareBackend(models.TransientModel):
                 for tag in product_tag_ids:
                     update_product_tag.delay(session, 'product.tag', tag.id)
 
+        elif self.type_export == 'producttagproductrel':
+            product_obj = self.env['product.product']
+            product_ids = product_obj.search([])
+
+            if self.mode_export == 'export':
+                for product in product_ids:
+                    for tag in product.tag_ids:
+                        export_product_tag_rel.delay(session, 'product.tag.rel', product.id, tag.id)
