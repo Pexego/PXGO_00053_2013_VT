@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-17 16:23+0000\n"
 "PO-Revision-Date: 2014-12-17 16:23+0000\n"
@@ -16,17 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_states
-#: selection:product.product,state2:0
+#: selection:product.template,state2:0
 msgid "Active"
 msgstr "Activo"
 
 #. module: product_states
-#: view:product.product:product_states.product_add_states
+#: view:product.template:product_states.product_add_states
 msgid "Edition"
 msgstr "Edición"
 
 #. module: product_states
-#: selection:product.product,state2:0
+#: selection:product.template,state2:0
 msgid "In edition"
 msgstr "En edición"
 
@@ -36,12 +36,12 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: product_states
-#: view:product.product:product_states.product_add_states
+#: view:product.template:product_states.product_add_states
 msgid "Publish"
 msgstr "Publicar"
 
 #. module: product_states
-#: selection:product.product,state2:0
+#: selection:product.template,state2:0
 msgid "Published"
 msgstr "Publicado"
 
@@ -51,7 +51,7 @@ msgid "Sales"
 msgstr "Ventas"
 
 #. module: product_states
-#: field:product.product,state2:0
+#: field:product.template,state2:0
 msgid "Status"
 msgstr "Estado"
 
@@ -71,4 +71,9 @@ msgstr "El producto %s está en edición"
 #: view:product.product:product_states.product_add_states
 msgid "{'readonly':[('state2', '!=', 'published')]}"
 msgstr "{'readonly':[('state2', '!=', 'published')]}"
+
+#. module: product_states
+#: view:product.template:product.product_template_form_view
+msgid "Sale Conditions"
+msgstr "Condiciones de venta"
 
