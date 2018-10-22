@@ -34,8 +34,8 @@ class OrderCheckPricesWizard(models.TransientModel):
                     brand_lines.append({'brand_id': product_brand_default.id})
         return brand_lines
 
-    date_start = fields.Date('Date start', default=fields.datetime.now())
-    date_end = fields.Date('Date end', default=fields.datetime.now())
+    date_start = fields.Date('Date start', default=fields.Datetime.now)
+    date_end = fields.Date('Date end', default=fields.Datetime.now)
     brand_list = fields.One2many('order.check.prices.wizard.brands', 'wizard_id', 'Brands', default=_get_default_brands)
     warning = fields.Char('Warning', readonly=True, translate=True, default=lambda self:
                           _("Warning! Remember that order lines prices will be compared with actual product data"))
