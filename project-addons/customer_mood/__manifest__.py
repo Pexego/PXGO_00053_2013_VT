@@ -31,7 +31,7 @@ Customer Mood
     * Set the mood in which a customer is, and to know at a glance.
     * When ordering, it also shows the mood icon for the selected customer.
 """,
-    "depends": ["base", "sale"],
+    "depends": ["base", "sale", "crm"],
     "data": [
         "views/mood_view.xml",
         "views/res_partner_view.xml",
