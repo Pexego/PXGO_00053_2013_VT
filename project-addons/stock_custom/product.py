@@ -55,15 +55,15 @@ class ProductProduct(models.Model):
         product_object = self.env['product.product']
         category_object = self.env['product.category']
         category_id = category_object.search([('name', '=', 'NUEVOS')])
-        products = product_object.search([('categ_id', '=', category_id.id), ('qty_available', '>', 0)])
-        ids_products = [x.id for x in products]
+        products = product_object.search([('categ_id', '=', category_id.id)])
+        ids_products = [x.id for x in products if x.qty_available_external > 0 or x.qty_available > 0]
         return {
             'domain': "[('id','in', " + str(ids_products) + ")]",
             'name': _('Stock New'),
             'view_mode': 'tree,form',
             'view_type': 'form',
             'context': {'tree_view_ref': 'product.product_product_tree_view',
-                        'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3']},
+                        'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3', 'list_price4']},
             'res_model': 'product.product',
             'type': 'ir.actions.act_window',
         }

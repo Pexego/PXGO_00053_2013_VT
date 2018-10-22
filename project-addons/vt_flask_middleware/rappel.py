@@ -24,8 +24,23 @@ class RappelCustomerInfo(SyncModel):
     date_start = CharField(max_length=15)
     date_end = CharField(max_length=15)
     amount = FloatField(default=0.0)
+    amount_est = FloatField(default=0.0)
 
     MOD_NAME = 'rappelcustomerinfo'
 
     def __unicode__(self):
         return u"Customer: %s - Rappel: %s" % (self.partner_id, self.rappel_id)
+
+
+class RappelSection(SyncModel):
+
+    odoo_id = IntegerField(unique=True)
+    rappel_id = ForeignKeyField(Rappel)
+    percent = FloatField(default=0.0)
+    rappel_from = FloatField(default=0.0)
+    rappel_until = FloatField(default=0.0)
+
+    MOD_NAME = 'rappelsection'
+
+    def __unicode__(self):
+        return u"Rappel: %s - Percentage %s" % (self.rappel_id, self.percent)

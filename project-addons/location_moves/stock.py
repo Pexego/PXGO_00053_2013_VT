@@ -49,6 +49,10 @@ class StockLotacion(models.Model):
         self.location_move(product_id, 'stock_location_kitchen', qty,
                            'stock_location_nursing',False, check_qty, assign)
 
+    def move_stock_nursing(self, product_id, qty, check_qty, assign=True):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_nursing',False, check_qty, assign)
+
     def move_nursing_damaged(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_nursing', qty,
                            'stock_location_damaged',False, check_qty, assign)
