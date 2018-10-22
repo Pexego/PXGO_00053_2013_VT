@@ -72,10 +72,13 @@ class CrmClaimRma(models.Model):
 
     @api.multi
     def button_products_return(self):
+        if not self.claim_line_ids:
+            return False
+
         view_id_wizard = self.env.ref('crm_claim_rma_custom.claim_line_update_view').id
 
         return {
-            'name': 'Actualización de datos en común en todas las lineas RMA´s',
+            'name': 'Update lines of RMAs',
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'claim.line',

@@ -221,7 +221,7 @@
                 </xpath>
 
                 <xpath expr="//button[@string='New Products Return']" position="before">
-                    <button name="button_products_return" type="object" string="Actualizar datos lineas"
+                    <button name="button_products_return" type="object" string="Update claim lines"
                      attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
                 </xpath>
             </field>
@@ -233,7 +233,7 @@
             <field name="model">claim.line</field>
             <field name="arch" type="xml">
                 <form>
-                    <separator string="Datos a actualizar" colspan="4"/>
+                    <separator string="Update data" colspan="4"/>
                     <group>
                         <field name="substate_id"/>
                         <field name="claim_origine"/>
