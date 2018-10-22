@@ -1,0 +1,83 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* order_line_check_price
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-22 11:00+0000\n"
+"PO-Revision-Date: 2018-10-22 11:00+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: order_line_check_price
+#: code:addons/order_line_check_price/wizard/order_check_prices_wizard.py:84
+#, python-format
+msgid "Total compared lines: %s \nTotal lines with different prices: %s"
+msgstr "Total de líneas comparadas: %s \nTotal de líneas con diferente precio: %s"
+
+#. module: order_line_check_price
+#: code:addons/order_line_check_price/wizard/order_check_prices_wizard.py:42
+#, python-format
+msgid "Warning! Remember that order lines prices will be compared with actual product data"
+msgstr "¡Aviso! Recuerde que los precios de las líneas de los pedidos se compararán con la información actual del producto"
+
+#. module: order_line_check_price
+#: model:ir.actions.act_window,name:order_line_check_price.action_review_changes_sale_price
+#: model:ir.ui.menu,name:order_line_check_price.menu_review_changes_sale_prices
+msgid "Order prices review"
+msgstr "Revisión precios pedidos"
+
+#. module: order_line_check_price
+#: view:order.check.prices.wizard:order_line_check_price.order_check_prices_wizard_form
+msgid "Search"
+msgstr "Buscar"
+
+#. module: order_line_check_price
+#: view:order.check.prices.wizard:order_line_check_price.order_check_prices_wizard_form
+#: view:order.check.prices.wizard:order_line_check_price.order_check_prices_wizard_form_warning
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: order_line_check_price
+#: view:order.check.prices.wizard:order_line_check_price.order_check_prices_wizard_form_warning
+msgid "View changes"
+msgstr "Ver cambios"
+
+#. module: order_line_check_price
+#: code:addons/order_line_check_price/wizard/order_check_prices_wizard.py:84
+#, python-format
+msgid "Info changes"
+msgstr "Información de cambios"
+
+#. module: order_line_check_price
+#: code:addons/order_line_check_price/wizard/order_check_prices_wizard.py:84
+#, python-format
+msgid "Check price changes"
+msgstr "Comprobar cambios en precios"
+
+#. module: order_line_check_price
+#: field:order.check.prices.wizard,date_start:0
+msgid "Date start"
+msgstr "Fecha inicio"
+
+#. module: order_line_check_price
+#: field:order.check.prices.wizard,date_end:0
+msgid "Date end"
+msgstr "Fecha fin"
+
+#. module: order_line_check_price
+#: field:order.check.prices.wizard,brand_list:0
+msgid "Brands"
+msgstr "Marcas"
+
+#. module: order_line_check_price
+#: field:order.check.prices.wizard.brands,brand_id:0
+msgid "Brand"
+msgstr "Marca"
+
