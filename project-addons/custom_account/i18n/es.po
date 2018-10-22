@@ -914,4 +914,13 @@ msgstr "Período"
 msgid "Due Month"
 msgstr "Mes de vencimiento"
 
+#. module: custom_account
+#: field:account.invoice.contact.report,brand_id:0
+msgid "Brand"
+msgstr "Marca"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,product_id:0
+msgid "Product"
+msgstr "Producto"
 

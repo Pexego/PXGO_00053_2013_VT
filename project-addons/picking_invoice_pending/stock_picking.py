@@ -133,7 +133,8 @@ class StockPicking(models.Model):
                 if (pick.picking_type_id.code == "incoming" and pick.move_lines
                         and pick.move_lines[0].purchase_line_id and
                         pick.invoice_state in ['invoiced', '2binvoiced'] and
-                        pick.company_id.required_invoice_pending_move):
+                        pick.company_id.required_invoice_pending_move and
+                        not pick.pending_stock_reverse_move_id):
                     pick.refresh()
                     if not pick.company_id.\
                             property_pending_variation_account or not \
@@ -209,7 +210,9 @@ class StockPicking(models.Model):
                     and pick.move_lines[0].purchase_line_id and \
                     pick.invoice_state in ['invoiced', '2binvoiced'] and \
                     pick.company_id.required_invoice_pending_move and \
-                    not pick.backorder_id:
+                    not pick.backorder_id and \
+                    not pick.pending_invoice_move_id and \
+                    not pick.pending_stock_move_id:
                 debit_account = pick.company_id.\
                     property_pending_expenses_account
                 credit_account = pick.company_id.\
