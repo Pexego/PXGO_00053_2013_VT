@@ -656,3 +656,29 @@ msgstr "<p>Información de la llamada:</p>
 <li>Marca: ${object.brand_id.name or 'N/A'}</li>
 <li>Descripción: ${object.description or 'N/A'}</li>
 </ul>"
+
+#. module: crm_claim_rma_custom
+#: view:crm.claim:crm_claim_rma_custom.inherit_crm_case_claims_form_view
+msgid "Update RMA´s lines"
+msgstr "Actualizar Lineas RMA´s"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:81
+#, python-formats
+msgid "Data update in common in all RMA lines"
+msgstr "Actualización de datos en común en todas las lineas RMA´s"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.claim_line_update_view
+msgid "Update data"
+msgstr "Actualizar datos"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.claim_line_update_view
+msgid "Update"
+msgstr "Actualizar"
+
+#. module: crm_claim_rma_custom
+#: view:claim.line:crm_claim_rma_custom.claim_line_update_view
+msgid "Cancel"
+msgstr "Cancelar"

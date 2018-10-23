@@ -71,14 +71,14 @@ class CrmClaimRma(models.Model):
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
     @api.multi
-    def button_products_return(self):
+    def button_update_lines_wizard(self):
         if not self.claim_line_ids:
             return False
 
         view_id_wizard = self.env.ref('crm_claim_rma_custom.claim_line_update_view').id
 
         return {
-            'name': 'Update lines of RMAs',
+            'name': _('Data update in common in all RMA lines'),
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'claim.line',
@@ -448,7 +448,7 @@ class CrmClaimLine(models.Model):
         return res
 
     @api.multi
-    def button_Update_lines(self):
+    def button_update_lines(self):
         # Get the parameters of action wizard
         substate_id_wizard = self.substate_id
         claim_origine_wizard = self.claim_origine
