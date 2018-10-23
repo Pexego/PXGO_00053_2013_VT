@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -29,11 +28,11 @@
     "depends" : ['base',
                  'sale',
                  ],
-    "data" : ['res_partner_view.xml',
-              'partner_area_view.xml',
+    "data" : ['views/res_partner_view.xml',
+              'views/partner_area_view.xml',
               'report/sale_report_view.xml',
-              'sale_view.xml',
+              'views/sale_view.xml',
               'security/ir.model.access.csv',
-              'res_users_view.xml'],
+              'views/res_users_view.xml'],
     "installable": True
 }

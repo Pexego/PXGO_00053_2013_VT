@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <record id="search_sale_report_add_area" model="ir.ui.view">
@@ -7,19 +7,19 @@
         <field name="model">sale.report</field>
             <field name="inherit_id" ref="sale.view_order_product_search"/>
             <field name="arch" type="xml">
-                <field name="date_confirm" position="after">
+                <field name="date" position="after">
                     <field name="area_id"/>
                     <field name="commercial_region_ids" string="Commercial Region"
                            filter_domain="['|', ('commercial_region_ids.code','ilike',self), ('commercial_region_ids','ilike',self)]"/>
                 </field>
-                <filter string="Company" position="after">
+                <xpath expr="//filter[7]" position="after">
                     <filter name="area_id" string="Area" context="{'group_by':'area_id'}"/>
-                </filter>
-                <filter string="Company" position="attributes">
-                    <attribute name="invisible">True</attribute>
-                </filter>
+                </xpath>
+                <xpath expr="//filter[7]" position="attributes">
+                     <attribute name="invisible">True</attribute>
+                </xpath>
             </field>
         </record>
 
     </data>
-</openerp>
+</odoo>
