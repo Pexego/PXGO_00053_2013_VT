@@ -41,10 +41,10 @@ class res_partner(models.Model):
             self.image = False
 
     @api.multi
-    def change_sales_team(self, area_id):
-        area = self.env['res.partner.area'].browse(int(area_id))
-
-        return {'value': {'section_id': area.sales_team.id}}
+    @api.onchange('area_id')
+    def change_sales_team(self):
+        # TODO: revisar cuando el campo team_id esté en la vista de res_partner
+        return {'value': {'team_id': self.area_id.sales_team.id}}
 
 
 class res_partner_area(models.Model):
