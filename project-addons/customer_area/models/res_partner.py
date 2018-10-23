@@ -43,8 +43,9 @@ class res_partner(models.Model):
     @api.multi
     @api.onchange('area_id')
     def change_sales_team(self):
-        # TODO: revisar cuando el campo team_id esté en la vista de res_partner
-        return {'value': {'team_id': self.area_id.sales_team.id}}
+        if self.area_id:
+            # TODO: revisar cuando el campo team_id esté en la vista de res_partner
+            self.team_id = self.area_id.sales_team.id
 
 
 class res_partner_area(models.Model):
