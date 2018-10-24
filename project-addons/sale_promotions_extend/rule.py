@@ -64,7 +64,8 @@ ACTION_TYPES = [
     ('cart_disc_perc', _('Discount % on Sub Total')),
     ('cart_disc_fix', _('Fixed amount on Sub Total')),
     ('prod_x_get_y', _('Buy X get Y free')),
-    ('web_disc_accumulated', _('Web Discount % on Product accumulated'))
+    ('web_disc_accumulated', _('Web Discount % on Product accumulated')),
+    ('a_get_b_product_tag', _('AxB on product tag'))
 ]
 
 
@@ -369,6 +370,8 @@ class PromotionsRulesActions(orm.Model):
                              'arguments': "0.00"}}
         if action_type in ['web_disc_accumulated']:
             res = {'value': {'arguments': "10.00"}}
+        if action_type in ['a_get_b_product_tag']:
+            res = {'value': {'product_code': "'product_tag'", 'arguments': "A,B"}}
         return res
 
     def apply_perc_discount_accumulated(self, cursor, user, action, order_line,
@@ -482,3 +485,37 @@ class PromotionsRulesActions(orm.Model):
                 self.apply_perc_discount_accumulated(cursor, user, action,
                                                      order_line, context)
         return {}
+
+    def action_a_get_b_product_tag(self, cursor, user, action, order,
+                               context=None):
+        qty_a, qty_b = [eval(arg) for arg in action.arguments.split(",")]
+        for order_line in order.order_line:
+            if not order_line.pack_parent_line_id:
+                if eval(action.product_code) in order_line.product_id.tag_ids.mapped('name'):
+                    qty = order_line.product_uom_qty
+
+                    for order_line_2 in order.order_line:
+                        if order_line_2.product_id.id == order_line.product_id.id:
+                            qty = order_line_2.product_uom_qty
+
+                    num_lines = int(qty / qty_a) * (qty_a - qty_b)
+
+                    return self.create_y_line_axb(cursor, user, action, order, order_line.price_unit, order_line.discount, num_lines, order_line.product_id, context)
+
+    def create_y_line_axb(self, cr, uid, action, order, price_unit, discount, quantity, product_id, context=None):
+        vals = {
+            'order_id':order.id,
+            #'product_id':product_id.id,
+            'name':'[%s]%s (%s)' % (
+                     product_id.default_code,
+                     product_id.name,
+                     action.promotion.name),
+            'price_unit': -price_unit,
+            'discount': discount,
+            'promotion_line':True,
+            'product_uom_qty':quantity,
+            'product_uom':product_id.uom_id.id
+        }
+        self.create_line(cr, uid, vals, context)
+        return True
+
