@@ -30,5 +30,7 @@
             </field>
         </record>
 
+        <!--TODO: cambiar de sitio el campo categ_id y ponerlo en la pestaña Ventas. -->
+
     </data>
 </odoo>
