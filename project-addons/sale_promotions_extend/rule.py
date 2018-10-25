@@ -488,19 +488,22 @@ class PromotionsRulesActions(orm.Model):
 
     def action_a_get_b_product_tag(self, cursor, user, action, order,
                                context=None):
+        promo_products = []
         qty_a, qty_b = [eval(arg) for arg in action.arguments.split(",")]
-        for order_line in order.order_line:
-            if not order_line.pack_parent_line_id:
-                if eval(action.product_code) in order_line.product_id.tag_ids.mapped('name'):
-                    qty = order_line.product_uom_qty
+        for order_line in order.order_line.filtered(lambda l: not l.promotion_line):
+            if order_line.product_id.id not in promo_products:
+                if not order_line.pack_parent_line_id:
+                    if eval(action.product_code) in order_line.product_id.tag_ids.mapped('name'):
+                        qty = 0
+                        for order_line_2 in order.order_line:
+                            if order_line_2.product_id.id == order_line.product_id.id:
+                                qty += order_line_2.product_uom_qty
+                        num_lines = int(qty / qty_a) * (qty_a - qty_b)
+                        if qty - qty_a >= 0:
+                            self.create_y_line_axb(cursor, user, action, order, order_line.price_unit, order_line.discount, num_lines, order_line.product_id, context)
+                            promo_products.append(order_line.product_id.id)
 
-                    for order_line_2 in order.order_line:
-                        if order_line_2.product_id.id == order_line.product_id.id:
-                            qty = order_line_2.product_uom_qty
-
-                    num_lines = int(qty / qty_a) * (qty_a - qty_b)
-
-                    return self.create_y_line_axb(cursor, user, action, order, order_line.price_unit, order_line.discount, num_lines, order_line.product_id, context)
+        return {}
 
     def create_y_line_axb(self, cr, uid, action, order, price_unit, discount, quantity, product_id, context=None):
         vals = {
