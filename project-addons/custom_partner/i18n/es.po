@@ -437,3 +437,14 @@ msgstr "Clientes con ventas en el mes pasado (pero sin ventas en el mes actual)"
 #: field:account.move.line,ref_line:0
 msgid "Payment Reference"
 msgstr "Referencia de pago"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:428
+#, python-format
+msgid "Email web must be unique"
+msgstr "El email web debe ser único"
+
+#. module: custom_partner
+#: field:rappel.current.info,amount_est:0
+msgid "Estimated amount"
+msgstr "Importe estimado"

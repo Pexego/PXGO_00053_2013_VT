@@ -14,9 +14,11 @@
                     <field name="lst_price" string="PVP A"/>
                     <field name="list_price2" string="PVP B"/>
                     <field name="list_price3" string="PVP C"/>
+                    <field name="list_price4" string="PVP D"/>
                     <field name="pvi1_price" string="PVI A"/>
                     <field name="pvi2_price" string="PVI B"/>
                     <field name="pvi3_price" string="PVI C"/>
+                    <field name="pvi4_price" string="PVI D"/>
                 </field>
                 <field name="uom_id" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -66,6 +68,11 @@
                      <field name="pvd3_relation" readonly="1"/>
                      <field name="list_price3" readonly="1"/>
                      <label for="margin_pvd3"/><div><field name="margin_pvd3" class="oe_inline"/> %% </div>
+
+                     <field name="pvd4_price" on_change="pvd4_price_change(pvd4_price, standard_price, pvi4_price, pvd4_relation)"/>
+                     <field name="pvd4_relation" readonly="1"/>
+                     <field name="list_price4" readonly="1"/>
+                     <label for="margin_pvd4"/><div><field name="margin_pvd4" class="oe_inline"/> %% </div>
                      </group>
                      <group colspan="4" col="6">
                         <field name="pvi1_price" on_change="pvi1_price_change(standard_price, pvi1_price, pvd1_price)"/>
@@ -79,6 +86,10 @@
                         <field name="pvi3_price" on_change="pvi3_price_change(standard_price, pvi3_price, pvd3_price)"/>
                         <label for="margin_pvd_pvi_3"/><div><field name="margin_pvd_pvi_3" class="oe_inline"/> %% </div>
                         <label for="margin_pvi3"/><div><field name="margin_pvi3" class="oe_inline"/> %% </div>
+
+                        <field name="pvi4_price" on_change="pvi4_price_change(standard_price, pvi4_price, pvd4_price)"/>
+                        <label for="margin_pvd_pvi_4"/><div><field name="margin_pvd_pvi_4" class="oe_inline"/> %% </div>
+                        <label for="margin_pvi4"/><div><field name="margin_pvi4" class="oe_inline"/> %% </div>
 
                         <field name="standard_price"/>
                         <field name="cost_method"/>
@@ -99,6 +110,7 @@
                 <field name="lst_price" position="after">
                     <field name="list_price2"/>
                     <field name="list_price3"/>
+                    <field name="list_price4"/>
                 </field>
             </field>
         </record>
@@ -110,7 +122,7 @@
             <field name="view_mode">tree,form,kanban</field>
             <field name="view_type">form</field>
             <field name="view_id" ref="product.product_product_tree_view"/>
-            <field name="context">{"search_default_filter_to_sell":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3']}</field>
+            <field name="context">{"search_default_filter_to_sell":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3', 'list_price4']}</field>
         </record>
 
         <record id="purchase.product_normal_action_puchased" model="ir.actions.act_window">
@@ -119,7 +131,7 @@
             <field name="res_model">product.product</field>
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,kanban</field>
-            <field name="context">{"search_default_filter_to_purchase":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3']}</field>
+            <field name="context">{"search_default_filter_to_purchase":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3', 'list_price4']}</field>
             <field name="search_view_id" eval="False"/> <!-- Force empty -->
             <field name="view_id" eval="False"/> <!-- Force empty -->
             <field name="help" type="html">

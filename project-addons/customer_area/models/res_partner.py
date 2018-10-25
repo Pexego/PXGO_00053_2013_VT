@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,8 +18,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
-from openerp import modules
+from odoo import models, fields, api
+from odoo import modules
 import base64
 
 
@@ -31,23 +30,22 @@ class res_partner(models.Model):
     region_ids = fields.Many2many(related='area_id.commercial_region_ids')
     default_shipping_address = fields.Boolean('Default Shipping Address', default=False)
 
-    @api.one
     @api.onchange('default_shipping_address')
     def onchange_default_shipping(self):
-        if 'default_parent_id' in self.env.context:
-            if self.default_shipping_address:
-                    image = modules.get_module_resource('customer_area', 'static/src/img/', 'icon-fav.png')
-                    with open(image, "rb") as image_file:
-                        encoded_string = base64.b64encode(image_file.read())
-                        self.image = encoded_string
-            else:
-                self.image = False
+        if self.default_shipping_address:
+            image = modules.get_module_resource('customer_area', 'static/src/img/', 'icon-fav.png')
+            with open(image, "rb") as image_file:
+                encoded_string = base64.b64encode(image_file.read())
+                self.image = encoded_string
+        else:
+            self.image = False
 
     @api.multi
-    def change_sales_team(self, area_id):
-        area = self.env['res.partner.area'].browse(int(area_id))
-
-        return {'value': {'section_id': area.sales_team.id}}
+    @api.onchange('area_id')
+    def change_sales_team(self):
+        if self.area_id:
+            # TODO: revisar cuando el campo team_id esté en la vista de res_partner
+            self.team_id = self.area_id.sales_team.id
 
 
 class res_partner_area(models.Model):
@@ -55,7 +53,7 @@ class res_partner_area(models.Model):
 
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15)
-    sales_team = fields.Many2one('crm.case.section', 'Sales Team')
+    sales_team = fields.Many2one('crm.team', 'Sales Team')
     commercial_region_ids = fields.Many2many('res.partner.area.region', 'res_partner_area_region_rel',
                                              'area_id', 'commercial_region_id', 'Commercial Regions')
 

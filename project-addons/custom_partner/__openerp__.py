@@ -32,6 +32,6 @@
                 'account_due_list', 'rappel', 'product_brand', 'customer_lost'],
     "data": ["partner_view.xml", "stock_view.xml",
              "security/ir.model.access.csv", "sale_view.xml",
-             "data/custom_partner_data.xml"],
+             "data/custom_partner_data.xml", "rappel_view.xml"],
     "installable": True
 }

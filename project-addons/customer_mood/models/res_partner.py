@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,13 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields, api
 
-from openerp import models, fields
 
+class res_partner(models.Model):
+    _inherit = 'res.partner'
 
-class ResUsers(models.Model):
+    mood_image = fields.Many2one('mood')
 
-    _inherit = 'res.users'
-
-    area_ids = fields.Many2many('res.partner.area', 'res_users_area_rel',
-                                'user_ud', 'area_id', 'Areas')

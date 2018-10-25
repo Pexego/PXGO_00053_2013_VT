@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,13 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields, api, tools
 
-from openerp import models, fields
 
+class mood(models.Model):
+    _name = 'mood'
+    _descrition = 'Moods'
 
-class sale_order(models.Model):
-
-    _inherit = 'sale.order'
-
-    area_id = fields.Many2one('res.partner.area', string='Area', store=True,
-                              related='partner_id.area_id')
+    name = fields.Char('Name', size=128, required=True, index=True)

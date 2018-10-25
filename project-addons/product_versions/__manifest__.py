@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
@@ -12,7 +11,7 @@
     "application": False,
     "installable": True,
     "depends": [
-        "product",
+        "product", "sales_team"
     ],
     "data": [
         'views/product_view.xml',

@@ -21,6 +21,17 @@
 from openerp import models, fields, exceptions, api, _
 
 
+class StockQuant(models.Model):
+
+    _inherit = "stock.quant"
+
+    @api.model
+    def create(self, vals):
+        if vals.get('negative_move_id') and vals.get('lot_id'):
+            del vals['lot_id']
+        return super(StockQuant, self).create(vals)
+
+
 class StockHistory(models.Model):
     _inherit = 'stock.history'
 
@@ -199,3 +210,21 @@ class StockReservation(models.Model):
             if moves:
                 date_expected = moves[0].date_expected
             res.next_reception_date = date_expected
+
+
+class stock_production_lot(models.Model):
+    _inherit = 'stock.production.lot'
+
+    partner_id = fields.Many2one('res.partner', string='Customer', compute='_get_partner_id', help='The last customer in possession of the product')
+    lot_notes = fields.Text('Notes')
+
+    @api.multi
+    @api.depends('quant_ids')
+    def _get_partner_id(self):
+        for lot in self:
+            quant = self.env['stock.quant'].search([('lot_id', '=', lot.id)], order="id desc", limit=1)
+            if quant and quant.history_ids:
+                lot.partner_id = quant.history_ids[0].partner_id.commercial_partner_id
+            else:
+                lot.partner_id = False
+
