@@ -500,18 +500,18 @@ class PromotionsRulesActions(orm.Model):
                                 qty += order_line_2.product_uom_qty
                         num_lines = int(qty / qty_a) * (qty_a - qty_b)
                         if qty - qty_a >= 0:
-                            self.create_y_line_axb(cursor, user, action, order, order_line.price_unit, order_line.discount, num_lines, order_line.product_id, context)
+                            self.create_y_line_axb(cursor, user, action, order, order_line.price_unit, order_line.discount, order_line.sequence, num_lines, order_line.product_id, context)
                             promo_products.append(order_line.product_id.id)
 
         return {}
 
-    def create_y_line_axb(self, cr, uid, action, order, price_unit, discount, quantity, product_id, context=None):
+    def create_y_line_axb(self, cr, uid, action, order, price_unit, discount, sequence, quantity, product_id, context=None):
         vals = {
-            'order_id':order.id,
+            'order_id': order.id,
+            'sequence': sequence,
             #'product_id':product_id.id,
-            'name':'[%s]%s (%s)' % (
+            'name':'%s (%s)' % (
                      product_id.default_code,
-                     product_id.name,
                      action.promotion.name),
             'price_unit': -price_unit,
             'discount': discount,
