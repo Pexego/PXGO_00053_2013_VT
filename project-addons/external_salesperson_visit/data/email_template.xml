@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
+<odoo>
     <data noupdate="1">
         <!--Email template to internal salesperson-->
         <record id="email_template_logged_visits" model="mail.template">
@@ -46,4 +46,4 @@
         </record>
 
     </data>
-</openerp>
+</odoo>

@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
-#
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,21 +14,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-{
-    'name': 'Partner Visit',
-    'version': '1.0',
-    'category': 'Custom',
-    'description': """
-        External Salesperson Visit:
-    """,
-    'author': 'Nadia Ferreyra',
-    'website': '',
-    "depends": ['base', 'mail', 'web_readonly_bypass',
-                'custom_partner', 'customer_area'],
-    "data": ['partner_visit_view.xml',
-             'email_template.xml',
-             'security/ir.model.access.csv',
-             'security/external_salesperson_visit_security.xml'],
-    "installable": True
-}
+from . import partner_visit
