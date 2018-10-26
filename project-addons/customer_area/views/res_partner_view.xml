@@ -23,7 +23,7 @@
             <field name="inherit_id" ref="base.view_partner_form" />
             <field name="arch" type="xml">
                 <field name="website" position="before">
-                    <!--TODO: revisar este campo al migrar custom_partner field name="area_id"
+                    <!--TODO: revisar este campo al migrar custom_partner field name="area_id" (atributos y colocacion)
                            attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)], 'invisible':[('customer', '=', False)]}"
                            options="{'no_quick_create':True,'no_create_edit':True}"/-->
                     <field name="area_id"
