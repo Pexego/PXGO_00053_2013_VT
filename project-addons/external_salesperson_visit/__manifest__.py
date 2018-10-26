@@ -28,10 +28,10 @@
     'website': '',
     'depends': ['base',
                 'mail',
-                'crm'
+                'crm',
+                'customer_area'
                 # TODO
-                # , 'web_readonly_bypass',
-                # 'custom_partner', 'customer_area'
+                # 'custom_partner',
                 ],
     'data': ['views/partner_visit_view.xml',
              'data/email_template.xml',

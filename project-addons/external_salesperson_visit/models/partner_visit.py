@@ -51,9 +51,8 @@ class PartnerVisit(models.Model):
     partner_monthly_invoiced = fields.Float(related='partner_id.monthly_invoiced')
     partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced')"""
 
-    # TODO -> depende de customer_area
-    """area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
-    region_ids = fields.Many2many(related='area_id.commercial_region_ids')"""
+    area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
+    region_ids = fields.Many2many(related='area_id.commercial_region_ids')
 
     @api.one
     @api.constrains('confirm_done')
@@ -120,8 +119,6 @@ class PartnerVisit(models.Model):
             }}
             return res
 
-    # TODO -> depende de customer_area
-    """"
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
@@ -129,7 +126,6 @@ class PartnerVisit(models.Model):
             self.area_id = self.partner_id.area_id.id
         else:
             self.area_id = self.partner_id.sudo().commercial_partner_id.area_id.id
-    """
 
     @api.one
     def send_email(self):
