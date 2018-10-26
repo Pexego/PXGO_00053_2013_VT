@@ -167,5 +167,5 @@ class ResPartner(models.Model):
                                             ('visit_state', '=', 'log')], ['id'])
             partner.visit_count = len(visit_ids)
 
-    visit_count = fields.Integer(string="Visits", compute=_visits_count)
+    visit_count = fields.Integer(string="Visits", compute='_visits_count')
 
