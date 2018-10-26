@@ -16,13 +16,15 @@
                     <field name="create_date" invisible="1"/>
                     <field name="partner_ref"/>
                     <field name="partner_id"/>
-                    <field name="partner_pricelist"/>
                     <!-- TODO -> depende de custom_partner
+                    <field name="partner_pricelist"/>
                     <field name="partner_annual_invoiced"/>
                     <field name="partner_monthly_invoiced"/>
                     <field name="partner_past_year_invoiced"/>
                     <field name="partner_past_month_invoiced"/>-->
-                    <field name="user_id"/>
+                    <field name="user_id" context="{'default_groups_ref': ['base.group_user',
+                                                                           'base.group_partner_manager',
+                                                                           'base.group_sale_salesman_all_leads']}"/>
                     <field name="description"/>
                     <field name="salesperson_select"/>
                     <field name="add_user_email"/>
@@ -45,8 +47,9 @@
                                                                     '&amp;', ('partner_id.active', '=', False),
                                                                              ('partner_id','ilike', self)]"/>
                     <field name="salesperson_select"/>
+                    <!-- TODO -> depende de customer_area
                     <field name="region_ids" string="Commercial region"
-                           filter_domain="['|', ('region_ids.code','ilike',self), ('region_ids','ilike',self)]"/>
+                           filter_domain="['|', ('region_ids.code','ilike',self), ('region_ids','ilike',self)]"/-->
                     <separator/>
                     <filter name="email_sent" string="Email sent" domain="[('email_sent','=',True)]"/>
                     <filter name="prospective_customers" string="Prospective Customers" domain="[('partner_id.active', '=', False)]"/>
@@ -84,16 +87,18 @@
                     <sheet>
                         <div>
                             <h2>
-                                <field name="partner_id" string="Partner"
-                                       domain="['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]"
-                                       context="{'default_is_company': True, 'default_active': False, 'default_prospective': True}"/>
+                                <field name="partner_id" string="Partner"/>
+                                <!-- TODO -> depende de prospective_customer
+                                domain="['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]"
+                                       context="{'default_is_company': True, 'default_active': False, 'default_prospective': True}"/>-->
                             </h2>
                         </div>
                         <div>
                             <group name="form_data">
                                 <field name="partner_address"/>
                                 <field name="partner_ref" invisible="1"/>
-                                <field name="area_id" force_save="1"/>
+                                <!-- TODO -> depende de customer_area
+                                <field name="area_id"/-->
                                 <field name="visit_date"/>
                                 <field name="user_id"/>
                                 <field name="visit_state"/>
@@ -140,6 +145,8 @@
             <field name="view_mode">tree,form,calendar</field>
             <field name="domain">[('visit_state','=','log')]</field>
             <field name="context">{'default_visit_state':'log'} </field>
+                                    <!--TODO-> Depende de customer_area
+                                    'readonly_by_pass': 'area_id' (Context)-->
             <field name="search_view_id" ref="external_salesperson_visit.partner_visit_search"/>
         </record>
 
@@ -154,6 +161,8 @@
             <field name="view_mode">tree,form,calendar</field>
             <field name="domain">[('visit_state','=','schedule')]</field>
             <field name="context">{'default_visit_state':'schedule'} </field>
+                                  <!--TODO-> Depende de customer_area
+                                  'readonly_by_pass': 'area_id' (Context)-->
             <field name="search_view_id" ref="external_salesperson_visit.partner_visit_search"/>
         </record>
 
