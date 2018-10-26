@@ -1,5 +1,7 @@
 ##############################################################################
 #
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
+#
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
 #    by the Free Software Foundation, either version 3 of the License, or
@@ -14,4 +16,27 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import models
+
+{
+    'name': 'Partner Visit',
+    'version': '1.0',
+    'category': 'Custom',
+    'description': """
+        External Salesperson Visit
+    """,
+    'author': 'Nadia Ferreyra',
+    'website': '',
+    'depends': ['base',
+                'mail',
+                'crm',
+                'customer_area'
+                # TODO
+                # 'custom_partner',
+                ],
+    'data': ['views/partner_visit_view.xml',
+             'data/email_template.xml',
+             'security/ir.model.access.csv',
+             'security/external_salesperson_visit_security.xml'
+             ],
+    'installable': True
+}
