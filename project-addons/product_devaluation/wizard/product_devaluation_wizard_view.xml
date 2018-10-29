@@ -59,9 +59,9 @@
                         <group>
                             <field name="journal_id" required="1"/>
                         </group>
-                        <group>
+                        <!--TODO: Migrar <group>
                             <field name="period_id" required="1" domain="[('state', '=', 'draft')]"/>
-                        </group>
+                        </group>-->
 
 
                     </group>

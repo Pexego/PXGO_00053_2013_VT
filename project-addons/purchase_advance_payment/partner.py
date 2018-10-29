@@ -68,11 +68,11 @@ class ResPartner(models.Model):
     on_account_purchase = fields.Float("Purchase on account amount",
                                        readonly=True,
                                        compute="_get_on_account_pur_amount")
-
-    supplier_currency = fields.Many2one(
-        'res.currency',
-        related='property_product_pricelist_purchase.currency_id',
-        readonly=True)
+    #TODO: Migrar
+    # ~ supplier_currency = fields.Many2one(
+        # ~ 'res.currency',
+        # ~ related='property_product_pricelist_purchase.currency_id',
+        # ~ readonly=True)
 
 
 class ResCompany(models.Model):

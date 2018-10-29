@@ -3,7 +3,7 @@
 <openerp>
     <data noupdate="1">
         <!--Email template to internal salesperson-->
-        <record id="email_template_logged_visits" model="email.template">
+        <record id="email_template_logged_visits" model="mail.template">
             <field name="name">Logged Visit Email</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
             <field name="subject">Done visit to ${object.partner_id.commercial_partner_id.name}</field>
@@ -24,7 +24,7 @@
              </field>
         </record>
 
-        <record id="email_template_scheduled_visits" model="email.template">
+        <record id="email_template_scheduled_visits" model="mail.template">
             <field name="name">Scheduled Visit Email</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
             <field name="subject">Scheduled visit to ${object.partner_id.commercial_partner_id.name}</field>

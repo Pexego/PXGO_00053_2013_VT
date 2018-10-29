@@ -12,9 +12,9 @@
                 </page>
                 <xpath expr="/form/sheet" position="before">
                     <header>
-                        <button name="signal_edition" string="Edition"
+                        <button name="act_edition" string="Edition" type="object"
                                 attrs="{'invisible': [('state2','in', ['edition', 'published'])]}" class="oe_highlight"/>
-                        <button name="signal_publish" string="Publish"
+                        <button name="act_publish" string="Publish" type="object"
                                 attrs="{'invisible': [('state2','in', ['active', 'published'])]}" class="oe_highlight"/>
                         <field name="state2" widget="statusbar"/>
                     </header>

@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="view_partner_form_add_web_field" model="ir.ui.view">
+        <!-- TODO: MIgrar<record id="view_partner_form_add_web_field" model="ir.ui.view">
             <field name="name">res.partner.form.add_web_field</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="purchase_advance_payment.view_partner_property_form_add_on_account"/>
@@ -44,7 +44,7 @@
                     <attribute name="options">{'currency_field': 'eur_currency'}</attribute>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_res_partner_filter_add_comercial" model="ir.ui.view">
             <field name="name">res.partner.select</field>
@@ -279,7 +279,7 @@
             </field>
         </record>
 
-        <record id="view_partner_inherit_followup_form_add_send_email" model="ir.ui.view">
+        <!--TODO: Migrar <record id="view_partner_inherit_followup_form_add_send_email" model="ir.ui.view">
             <field name="name">res.partner.followup.form.inherit.add_send_email</field>
             <field name="inherit_id" ref="account_followup.view_partner_inherit_followup_form"/>
             <field name="model">res.partner</field>
@@ -313,9 +313,9 @@
                     <field name="ref_line" readonly="True"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
-        <record id="view_partner_inherit_followup_form_add_invoice" model="ir.ui.view">
+        <!-- TODO: Migrar<record id="view_partner_inherit_followup_form_add_invoice" model="ir.ui.view">
             <field name="name">res.partner.followup.form.inherit.add_invoice</field>
             <field name="inherit_id" ref="account_followup.view_partner_inherit_followup_form"/>
             <field name="model">res.partner</field>
@@ -325,7 +325,7 @@
                     <field name="stored_invoice_id"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
         <record id="warning_non_active_client" model="ir.ui.view">
             <field name="name">res.partner.warning.non.active.client</field>

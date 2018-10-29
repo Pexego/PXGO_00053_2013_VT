@@ -165,12 +165,3 @@ msgstr "La cantidad introducida es mayor que la cantidad disponible."
 #: field:product.category,percent:0
 msgid "Outlet Percent"
 msgstr "Porcentaje de Outlet"
-
-#. module: product_outlet
-#: help::product.category,percent:0
-msgid "This outlet percent will be used when a product moves to an outlet category"
-msgstr "Este porcentaje de outlet será utilizado cuando un producto se envía a una categoria outlet"
-
-#. module: product_outlet
-msgid "Error ! The outlet percent values must be between 0 and 100"
-msgstr "Error ! El valor del procentaje de outlet debe de estar entre 0 y 100"

@@ -30,13 +30,13 @@
     """,
     'author': 'Pexego',
     'website': '',
-    "depends": ['email_template', 'report', 'account', 'stock', 'product_brand',
+    "depends": ['mail', 'report', 'account', 'stock', 'product_brand',
                 'stock_account', 'sale_stock', 'account_payment_partner', 'crm',
-                'account_payment', 'sale', 'purchase', 'nan_partner_risk',
+                'account_payment_mode', 'sale', 'purchase', 'nan_partner_risk',
                 'sale_margin_percentage', 'account_banking_sepa_direct_debit',
                 'account_banking_payment_export', 'stock_reserve_sale',
                 'custom_partner', 'sale_quick_payment', "web_readonly_bypass",
-                'account_direct_debit_with_refunds', 'account_followup',
+                'account_direct_debit_with_refunds', 'account_credit_control',
                 'account_invoice_merge', 'customer_area', 'account_balance_reporting',
                 'account_voucher', 'account_treasury_forecast_cashflow',
                 'account_treasury_forecast_banking'],
@@ -53,6 +53,7 @@
              'report/sale_report_view.xml',
              'voucher_view.xml',
              'account_treasury_forecast_view.xml',
-             'report/account_invoice_contact_report_view.xml'],
+             #TODO: Migrar 'report/account_invoice_contact_report_view.xml'
+             ],
     "installable": True
 }

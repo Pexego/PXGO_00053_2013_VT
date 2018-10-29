@@ -242,10 +242,10 @@
         </record>
         <record id="payment_mode_add_blocked_form" model="ir.ui.view">
             <field name="name">payment.mode.form</field>
-            <field name="model">payment.mode</field>
-            <field name="inherit_id" ref="account_banking_payment_export.view_payment_mode_form_inherit"/>
+            <field name="model">account.payment.mode</field>
+            <field name="inherit_id" ref="account_payment_mode.account_payment_mode_form"/>
             <field name="arch" type="xml">
-                <field name="sale_ok" position="after">
+                <field name="payment_type" position="after">
                     <field name="blocked"/>
                     <field name="treasury_forecast_type"/>
                 </field>

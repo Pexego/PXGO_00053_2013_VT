@@ -26,7 +26,7 @@ from openerp.osv import osv, fields
 
 class email_template(osv.Model):
 
-    _inherit = "email.template"
+    _inherit = "mail.template"
 
     _columns = {
         'add_followers': fields.boolean('Add Followers', help='Choice to add followers in template')

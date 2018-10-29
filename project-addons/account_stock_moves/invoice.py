@@ -71,7 +71,7 @@ class account_invoice_line(orm.Model):
             cr, uid, invoice_id, context=context)
         currency_obj = self.pool.get('res.currency')
         if inv.type in ('in_invoice', 'in_refund'):
-            for i_line in inv.invoice_line:
+            for i_line in inv.invoice_line_ids:
                 company_currency = i_line.invoice_id.company_id.currency_id.id
                 if i_line.product_id \
                     and i_line.product_id.valuation == 'real_time' \

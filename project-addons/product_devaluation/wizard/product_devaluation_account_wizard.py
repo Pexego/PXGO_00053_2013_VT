@@ -31,8 +31,9 @@ class product_devaluation_account_wizard(models.TransientModel):
     name = fields.Char('Account Ref', readonly=True, default=lambda self:
     self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].product_id.name)
     account_move_id = fields.Integer("Account ID")
-    period_id = fields.Many2one('account.period', 'Period', default=lambda self:
-        self.env['account.period'].find(time())[0].id)
+    #TODO: Migrar
+    #period_id = fields.Many2one('account.period', 'Period', default=lambda self:
+    #    self.env['account.period'].find(time())[0].id)
     journal_id = fields.Many2one('account.journal', 'Journal', default=lambda self:
         self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].
         product_id.categ_id.devaluation_journal_id or self.env.user.company_id.devaluation_journal_id, required=True)

@@ -2,7 +2,7 @@
 
 <openerp>
     <data noupdate="1">
-        <record id="email_template_call_sat" model="email.template">
+        <record id="email_template_call_sat" model="mail.template">
             <field name="name">Call Alert Email</field>
             <field name="email_from">${(object.user_id.email or '')|safe}</field>
             <field name="subject">Call to SAT from ${object.partner_id.commercial_partner_id.name}</field>

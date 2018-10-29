@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="view_partner_property_form_add_on_account" model="ir.ui.view">
+        <!-- TODO: Migrar <record id="view_partner_property_form_add_on_account" model="ir.ui.view">
             <field name="name">res.partner.property.form.inherit_add_on_account</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="account.view_partner_property_form"/>
@@ -13,7 +13,7 @@
                     <field name="on_account_purchase" attrs="{'invisible': [('supplier', '!=', True)]}" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_account_config_settings_add_advance_payment_acc" model="ir.ui.view">
             <field name="name">account settings add advance payment acc</field>
