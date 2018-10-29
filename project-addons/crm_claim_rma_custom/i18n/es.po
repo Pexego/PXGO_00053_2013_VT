@@ -659,7 +659,7 @@ msgstr "<p>Información de la llamada:</p>
 
 #. module: crm_claim_rma_custom
 #: view:crm.claim:crm_claim_rma_custom.inherit_crm_case_claims_form_view
-msgid "Update RMA´s lines"
+msgid "Update RMA lines"
 msgstr "Actualizar Lineas RMA´s"
 
 #. module: crm_claim_rma_custom

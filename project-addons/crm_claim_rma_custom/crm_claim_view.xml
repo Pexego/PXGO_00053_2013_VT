@@ -221,7 +221,7 @@
                 </xpath>
 
                 <xpath expr="//button[@string='New Products Return']" position="before">
-                    <button name="button_update_lines_wizard" type="object" string="Update claim lines"
+                    <button name="button_update_lines_wizard" type="object" string="Update RMA lines"
                      attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
                 </xpath>
             </field>
