@@ -51,29 +51,28 @@
             </field>
         </record>
 
-        <record id="view_partner_form_add_rappel_info" model="ir.ui.view">
-            <field name="name">partner.rappel.info</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="rappel.view_partner_form_add_rappel"/>
-            <field name="arch" type="xml">
-                <field name="rappel_ids" position="replace">
-                     <field name="rappel_info_ids" nolabel="1" colspan="4">
-                         <tree string="Rappels info" editable="bottom" create="false" delete="false">
-                             <field name="rappel_id"/>
-                             <field name="discount_voucher" invisible="True"/>
-                             <field name="start_rappel"/>
-                             <field name="end_rappel"/>
-                             <field name="last_settlement_date"/>
-                             <field name="start_current_info"/>
-                             <field name="end_current_info"/>
-                             <field name="current_amount"/>
-                          </tree>
-                      </field>
-                </field>
-            </field>
+        <record model="ir.actions.act_window" id="action_view_rappel_info">
+            <field name="name">Rappel Info</field>
+            <field name="res_model">rappel.current.info</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_rappel_current_info_tree_add_qty_picking"/>
         </record>
 
-        <menuitem id="rappel.menu_rappel_config_sale" name="Rappel" sequence="50" parent="base.menu_sales"/>
+        <record id="view_partner_form_add_rappel_info" model="ir.ui.view">
+            <field name="name">res.partner.rappel.button</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="priority" eval="80"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='buttons']" position="inside">
+                    <button class="oe_inline oe_stat_button" type="action" name="%(action_view_rappel_info)d" string="Rappel"
+                        context="{'search_default_partner_id': active_id, 'default_partner_id': active_id}"
+                        icon="fa-flag-checkered">
+                    </button>
+                </xpath>
+            </field>
+        </record>
 
     </data>
 </openerp>

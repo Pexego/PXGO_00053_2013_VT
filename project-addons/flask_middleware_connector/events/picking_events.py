@@ -107,8 +107,9 @@ def delay_export_picking_write(session, model_name, record_id, vals):
                     update_picking.delay(session, model_name, record_id, priority=2, eta=120)
                     break
     else:
-        job = session.env['queue.job'].search([('func_string', 'like', '%, ' + str(record_id) + ')%'),
-                                               ('model_name', '=', model_name)], order='date_created desc', limit=1)
+        job = session.env['queue.job'].sudo().search([('func_string', 'like', '%, ' + str(record_id) + ')%'),
+                                                      ('model_name', '=', model_name)], order='date_created desc',
+                                                     limit=1)
 
         if job and 'unlink' not in job.name:
             unlink_picking.delay(session, model_name, record_id, priority=5, eta=120)

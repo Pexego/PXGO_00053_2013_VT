@@ -33,7 +33,7 @@
             <field name="view_mode">tree,form,kanban</field>
             <field name="view_type">form</field>
             <field name="view_id" ref="product.product_product_tree_view"/>
-            <field name="context">{"search_default_filter_to_sell":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3']}</field>
+            <field name="context">{"search_default_filter_to_sell":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3', 'list_price4']}</field>
             <field name="domain">[('custom', '=', False)]</field>
         </record>
 
@@ -44,7 +44,7 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form,kanban</field>
             <field name="domain">[('custom', '=', False)]</field>
-            <field name="context">{"search_default_filter_to_purchase":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3']}</field>
+            <field name="context">{"search_default_filter_to_purchase":1, 'readonly_by_pass': ['lst_price', 'list_price2', 'list_price3', 'list_price4']}</field>
             <field name="search_view_id" eval="False"/> <!-- Force empty -->
             <field name="view_id" eval="False"/> <!-- Force empty -->
             <field name="help" type="html">

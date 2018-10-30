@@ -54,9 +54,11 @@ class Product(SyncModel):
     pvi_1 = FloatField(default=0.0)
     pvi_2 = FloatField(default=0.0)
     pvi_3 = FloatField(default=0.0)
+    pvi_4 = FloatField(default=0.0)
     pvd_1 = FloatField(default=0.0)
     pvd_2 = FloatField(default=0.0)
     pvd_3 = FloatField(default=0.0)
+    pvd_4 = FloatField(default=0.0)
     pvm = FloatField(default=0.0)
     last_sixty_days_sales = FloatField(default=0.0)
     joking_index = FloatField(default=0.0)
@@ -70,3 +72,25 @@ class Product(SyncModel):
 
     def __unicode__(self):
         return self.name
+
+class ProductTag(SyncModel):
+
+    odoo_id = IntegerField(unique=True)
+    name = CharField(max_length=70)
+
+    MOD_NAME = 'producttag'
+
+    def __unicode__(self):
+        return self.name
+
+
+class ProductTagProductRel(SyncModel):
+
+    odoo_id = IntegerField()
+    producttag_id = ForeignKeyField(ProductTag, on_delete='CASCADE')
+
+    MOD_NAME = 'producttagproductrel'
+
+    def __unicode__(self):
+        return u"Product id: %s - Tag id: %s" % (self.odoo_id, self.producttag_id)
+
