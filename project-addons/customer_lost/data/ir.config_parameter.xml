@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data noupdate="0">
         <record forcecreate="True" id="min_months_last_purchase" model="ir.config_parameter">
             <field name="key">min.months.last.purchase</field>
@@ -11,4 +11,4 @@
             <field name="value">12</field>
         </record>
     </data>
-</openerp>
+</odoo>

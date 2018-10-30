@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -29,9 +28,10 @@
     "depends": ['base',
                 'sale',
                 'customer_area',
+                'crm',
                 ],
     "data": ['data/cron.xml',
               'data/ir.config_parameter.xml',
-              'res_partner_view.xml'],
+              'views/res_partner_view.xml'],
     "installable": True
 }
