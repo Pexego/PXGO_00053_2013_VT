@@ -163,7 +163,10 @@ def delay_export_product_write(session, model_name, record_id, vals):
 
     if 'tag_ids' in vals.keys():
         unlink_product_tag_rel.delay(session, 'product.tag.rel', record_id, priority=5, eta=60)
-        for tag_id in vals.get('tag_ids', False)[0][2]:
+        tag_ids = vals.get('tag_ids', False)[0][-1]
+        if type(tag_ids) is int:
+            tag_ids = [tag_ids]
+        for tag_id in tag_ids:
             export_product_tag_rel.delay(session, 'product.tag.rel', record_id, tag_id, priority=2, eta=120)
 
 
