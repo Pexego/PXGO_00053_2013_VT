@@ -66,6 +66,5 @@
         </record>
 
     <menuitem action="action_show_customer_lost" id="menu_customer_lost_report" parent="crm.crm_menu_report" sequence="10"/>
-
     </data>
 </odoo>
