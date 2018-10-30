@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import models, fields
+from odoo import models, fields, api
 from datetime import date, datetime
 from dateutil.relativedelta import relativedelta
 
@@ -31,6 +31,7 @@ class ResPartner(models.Model):
     last_sale_date = fields.Date('Last sale', readonly=True)
     customer_win = fields.Boolean('Customer win', readonly=True, default=False)
 
+    @api.multi
     def _get_month_parameters(self):
         """
             Devuelve los meses configurados en los parametros en una tupla.
@@ -42,6 +43,7 @@ class ResPartner(models.Model):
         else:
             return int(months_min_sale), int(months_max_sale)
 
+    @api.model
     def run_scheduler_custmer_lost(self,automatic=False, use_new_cursor=False):
         sale_obj = self.env['sale.order']
         months_min_sale, months_max_sale = self._get_month_parameters()
