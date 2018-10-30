@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,22 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields, api
 
-{
-    'name': "Customer area",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Add area to partner""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends" : ['base',
-                 'sale',
-                 ],
-    "data" : ['res_partner_view.xml',
-              'partner_area_view.xml',
-              'report/sale_report_view.xml',
-              'sale_view.xml',
-              'security/ir.model.access.csv',
-              'res_users_view.xml'],
-    "installable": True
-}
+
+class res_partner(models.Model):
+    _inherit = 'res.partner'
+
+    mood_image = fields.Many2one('mood')
+

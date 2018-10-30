@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -18,23 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
-from openerp import tools
-from openerp.osv import osv, fields
+from odoo import models, fields, api, tools
 
 
-class sale_order(osv.osv):
-    _inherit = 'sale.order'
-    _columns = {
-        'customer_mood': fields.binary('Customer Mood', readonly=True)
-    }
+class mood(models.Model):
+    _name = 'mood'
+    _descrition = 'Moods'
 
-    def onchange_partner_id(self, cr, uid, ids, part, context=None):
-        result = super(sale_order, self).onchange_partner_id(cr, uid, ids,
-                                                             part, context)
-        if part:
-            part = self.pool.get('res.partner').browse(cr, uid, part,
-                                                       context=context)
-            if part.mood_image and part.mood_image.image:
-                result['value']['customer_mood'] = part.mood_image.image_small
-        return result
+    name = fields.Char('Name', size=128, required=True, index=True)
