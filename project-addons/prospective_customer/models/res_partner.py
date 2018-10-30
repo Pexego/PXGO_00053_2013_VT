@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,15 +18,12 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from odoo import models, fields
 
 
-class sale_order(orm.Model):
+class ResPartner(models.Model):
 
-    _inherit = "sale.order"
+    _inherit = 'res.partner'
 
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        for order in self.browse(cr, uid, ids, context):
-            if order.partner_id.prospective:
-                self.pool.get('res.partner').write(cr, uid, order.partner_id.id, {'active': True, 'prospective': False})
-        super(sale_order,self).action_button_confirm(cr, uid, ids, context)
+    prospective = fields.Boolean("Prospective")
+

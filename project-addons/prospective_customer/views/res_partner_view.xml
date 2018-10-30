@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-        <record id="res_parnter_add_prospective_form" model="ir.ui.view">
+
+        <record id="res_partner_add_prospective_form" model="ir.ui.view">
             <field name="name">res.partner.prospective.form</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="active" position="after">
+                <xpath expr="//group[@name='sale']/field[@name='customer']" position="after">
                     <field name="prospective" attrs="{'invisible':[('customer', '=', False)]}"/>
-                </field>
+                </xpath>
             </field>
         </record>
 
-    <record id="action_view_prospective_customers" model="ir.actions.act_window">
+        <record id="action_view_prospective_customers" model="ir.actions.act_window">
             <field name="name">Prospective customers</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">res.partner</field>
@@ -32,8 +33,8 @@
             </field>
         </record>
 
-    <menuitem id="res_partner_prospective" name="Prospective customers" string="Prospective customers"
-        action="action_view_prospective_customers"  parent="base.menu_sales" sequence="3"/>
+        <menuitem id="res_partner_prospective" name="Prospective customers" string="Prospective customers"
+                  action="action_view_prospective_customers"  parent="sale.sale_order_menu" sequence="4"/>
 
     </data>
-</openerp>
+</odoo>
