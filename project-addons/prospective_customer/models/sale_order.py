@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,16 +18,17 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
-from openerp.tools.translate import _
+from odoo import models, api
 
 
-class res_partner(orm.Model):
+class SaleOrder(models.Model):
 
-    _inherit = "res.partner"
+    _inherit = 'sale.order'
 
-    _columns = {
-        'prospective': fields.boolean('Prospective'),
-        }
-
+    @api.multi
+    def action_confirm(self):
+        for order in self:
+            if order.partner_id.prospective:
+                order.partner_id.write({'active': True, 'prospective': False})
+        super(SaleOrder, self).action_confirm()
 
