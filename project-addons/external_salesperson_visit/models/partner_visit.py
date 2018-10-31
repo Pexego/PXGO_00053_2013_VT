@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -18,38 +17,39 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, _
-from openerp.osv import fields as fields2
-from openerp.exceptions import except_orm, ValidationError
+from odoo import models, fields, api, exceptions, _
+from odoo.exceptions import except_orm, ValidationError
 from datetime import datetime
 
 
-class partner_visit(models.Model):
+class PartnerVisit(models.Model):
     """ Model for Partner Visits """
-    _name = "partner.visit"
-    _rec_name = "partner_id"
+    _name = 'partner.visit'
+    _rec_name = 'partner_id'
     _description = "Partner Visit"
-    _order = "visit_date desc"
+    _order = 'visit_date desc'
     _inherit = ['mail.thread']
 
-    create_date = fields.Datetime('Creation Date', readonly=True, default=fields.Datetime.now)
-    visit_date = fields.Datetime('Visit Date', required=True)
-    user_id = fields.Many2one('res.users', 'External salesperson', readonly=True, default=lambda self: self.env.user.id)
-    partner_id = fields.Many2one('res.partner', 'Partner', required=True)
-    partner_ref = fields.Char('Ref. Contact', readonly=True, compute='get_partner_ref')
-    partner_address = fields.Char('Address', readonly=True, compute='get_address')
-    description = fields.Text('Summary', required=True)
-    visit_state = fields.Selection([('log', 'Log'), ('schedule', 'Schedule')], string='Status', readonly=True)
-    email_sent = fields.Boolean('Email sent', default=False, readonly=True)
-    salesperson_select = fields.Many2one('res.users', 'Notify to', readonly=True,
+    create_date = fields.Datetime("Creation Date", readonly=True, default=fields.Datetime.now)
+    visit_date = fields.Datetime("Visit Date", required=True)
+    user_id = fields.Many2one('res.users', "External salesperson", readonly=True, default=lambda self: self.env.user.id)
+    partner_id = fields.Many2one('res.partner', "Partner", required=True)
+    partner_ref = fields.Char("Ref. Contact", readonly=True, compute='get_partner_ref')
+    partner_address = fields.Char("Address", readonly=True, compute='get_address')
+    description = fields.Text("Summary", required=True)
+    visit_state = fields.Selection([('log', "Log"), ('schedule', "Schedule")], string="Status", readonly=True)
+    email_sent = fields.Boolean("Email sent", default=False, readonly=True)
+    salesperson_select = fields.Many2one('res.users', "Notify to", readonly=True,
                                          compute='get_internal_salesperson', store=True)
-    add_user_email = fields.Many2one('res.users', 'CC to')
-    confirm_done = fields.Boolean('Done', default=False)
+    add_user_email = fields.Many2one('res.users', "CC to")
+    confirm_done = fields.Boolean("Done", default=False)
+
     partner_pricelist = fields.Many2one(related='partner_id.property_product_pricelist')
-    partner_annual_invoiced = fields.Float(related='partner_id.annual_invoiced')
+    # TODO -> depende de custom_partner
+    """partner_annual_invoiced = fields.Float(related='partner_id.annual_invoiced')
     partner_past_year_invoiced = fields.Float(related='partner_id.past_year_invoiced')
     partner_monthly_invoiced = fields.Float(related='partner_id.monthly_invoiced')
-    partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced')
+    partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced')"""
 
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
     region_ids = fields.Many2many(related='area_id.commercial_region_ids')
@@ -61,7 +61,7 @@ class partner_visit(models.Model):
 
         difference = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f') - \
                      datetime.strptime(self.visit_date, '%Y-%m-%d %H:%M:%S')
-        difference = difference.total_seconds() / float(60)
+        difference = difference.total_seconds()
 
         if self.confirm_done:
             if difference < 0:
@@ -85,10 +85,10 @@ class partner_visit(models.Model):
         return True
 
     @api.multi
-    def write(self, datas):
-        if 'confirm_done' in datas and datas['confirm_done']:
-                datas['visit_state'] = 'log'
-        res = super(partner_visit, self).write(datas)
+    def write(self, data):
+        if 'confirm_done' in data and data['confirm_done']:
+                data['visit_state'] = 'log'
+        res = super(PartnerVisit, self).write(data)
         return res
 
     @api.one
@@ -117,8 +117,7 @@ class partner_visit(models.Model):
                 'message': _('CC user has been changed. Remember that it is necessary to click on "Notify by email" '
                              'button to send email')
             }}
-            if res:
-                return res
+            return res
 
     @api.multi
     @api.onchange('partner_id')
@@ -135,11 +134,9 @@ class partner_visit(models.Model):
         context['base_url'] = self.env['ir.config_parameter'].get_param('web.base.url')
 
         if self.visit_state == 'log':
-            template_id = self.env.ref(
-                'external_salesperson_visit.email_template_logged_visits', False)
+            template_id = self.env.ref('external_salesperson_visit.email_template_logged_visits', False)
         elif self.visit_state == 'schedule':
-            template_id = self.env.ref(
-                'external_salesperson_visit.email_template_scheduled_visits', False)
+            template_id = self.env.ref('external_salesperson_visit.email_template_scheduled_visits', False)
         else:
             template_id = 0
 
@@ -158,19 +155,17 @@ class partner_visit(models.Model):
         return True
 
 
-class res_partner(models.Model):
+class ResPartner(models.Model):
     """ Inherits partner and adds Visit information in the partner form """
     _inherit = 'res.partner'
 
-    def _visits_count(self, cr, uid, ids, field_name, arg, context=None):
-        visits = self.pool['partner.visit']
-        res = {}
-        for partner in self.browse(cr, uid, ids):
-            visit_ids = visits.search(cr, uid, [('partner_id', 'child_of', [partner.id]), ('visit_state', '=', 'log')])
-            res[partner.id] = len(visit_ids)
-        return res
+    @api.multi
+    def _visits_count(self):
+        visits = self.env['partner.visit']
+        for partner in self:
+            visit_ids = visits.search_read([('partner_id', 'child_of', [partner.id]),
+                                            ('visit_state', '=', 'log')], ['id'])
+            partner.visit_count = len(visit_ids)
 
-    _columns = {
-        'visit_count': fields2.function(_visits_count, string="Visits", type="integer"),
-    }
+    visit_count = fields.Integer(string="Visits", compute='_visits_count')
 

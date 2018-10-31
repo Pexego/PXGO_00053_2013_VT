@@ -18,4 +18,20 @@
 #
 ##############################################################################
 
-from . import models
+{
+    'name': "Customer lost",
+    'version': '1.0',
+    'category': 'sale',
+    'description': """ Show the lost customers""",
+    'author': 'Pexego Sistemas Informáticos',
+    'website': 'www.pexego.es',
+    "depends": ['base',
+                'sale',
+                'customer_area',
+                'crm',
+                ],
+    "data": ['data/cron.xml',
+              'data/ir.config_parameter.xml',
+              'views/res_partner_view.xml'],
+    "installable": True
+}

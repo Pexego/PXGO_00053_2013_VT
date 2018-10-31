@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
-#
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,20 +14,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-{
-    'name': "Customer lost",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """ Show the lost customers""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['base',
-                'sale',
-                'customer_area',
-                ],
-    "data": ['data/cron.xml',
-              'data/ir.config_parameter.xml',
-              'res_partner_view.xml'],
-    "installable": True
-}
+from . import partner_visit
