@@ -16,65 +16,65 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: customer_area
-#: view:res.partner:customer_area.res_partner_view_area_search
-#: field:res.partner,area_id:0
-#: view:res.partner.area:customer_area.res_partner_area_form
-#: field:sale.order,area_id:0
-#: view:sale.report:customer_area.search_sale_report_add_area
-#: field:sale.report,area_id:0
+#: model:ir.ui.view,arch_db:customer_area.res_partner_view_area_search
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_id
+#: model:ir.ui.view,arch_db:customer_area.res_partner_area_form
+#: model:ir.model.fields,field_description:customer_area.field_sale_order_area_id
+#: model:ir.ui.view,arch_db:customer_area.search_sale_report_add_area
+#: model:ir.model.fields,field_description:customer_area.field_sale_report_area_id
 msgid "Area"
 msgstr "Zona"
 
 #. module: customer_area
 #: model:ir.actions.act_window,name:customer_area.action_res_partner_area
 #: model:ir.ui.menu,name:customer_area.res_partner_area_menu
-#: view:res.partner.area:customer_area.res_partner_area_filter
-#: view:res.partner.area:customer_area.res_partner_area_tree
+#: model:ir.ui.view,arch_db:customer_area.res_partner_area_filter
+#: model:ir.ui.view,arch_db:customer_area.res_partner_area_tree
 msgid "Areas"
 msgstr "Zonas"
 
 #. module: customer_area
-#: field:res.partner.area,code:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_code
 msgid "Code"
 msgstr "Código"
 
 #. module: customer_area
-#: view:sale.report:customer_area.search_sale_report_add_area
+#: model:ir.ui.view,arch_db:customer_area.search_sale_report_add_area
 msgid "Company"
 msgstr "Compañía"
 
 #. module: customer_area
-#: view:res.partner:customer_area.res_partner_view_area_search
+#: model:ir.ui.view,arch_db:customer_area.res_partner_view_area_search
 msgid "Country"
 msgstr "País"
 
 #. module: customer_area
-#: field:res.partner.area,create_uid:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_create_uid
 msgid "Created by"
 msgstr "Created by"
 
 #. module: customer_area
-#: field:res.partner.area,create_date:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_create_date
 msgid "Created on"
 msgstr "Created on"
 
 #. module: customer_area
-#: field:res.partner.area,id:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_id
 msgid "ID"
 msgstr "ID"
 
 #. module: customer_area
-#: field:res.partner.area,write_uid:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_write_uid
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
 #. module: customer_area
-#: field:res.partner.area,write_date:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_write_date
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
 #. module: customer_area
-#: field:res.partner.area,name:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_name
 msgid "Name"
 msgstr "Nombre"
 
@@ -94,38 +94,38 @@ msgid "Sales Orders Statistics"
 msgstr "Estadísticas pedidos de venta"
 
 #. module: customer_area
-#: field:res.partner.area,sales_team:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_sales_team
 msgid "Sales Team"
 msgstr "Equipo de Ventas"
 
 #. module: customer_area
 #: model:ir.actions.act_window,name:customer_area.action_res_partner_area_region
 #: model:ir.ui.menu,name:customer_area.res_partner_area_region_menu
-#: view:res.partner.area.region:customer_area.res_partner_area_region_tree
-#: view:res.partner.area.region:customer_area.res_partner_area_region_filter
-#: field:res.partner.area,commercial_region_ids:0
+#: model:ir.ui.view,arch_db:customer_area.res_partner_area_region_tree
+#: model:ir.ui.view,arch_db:customer_area.res_partner_area_region_filter
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_commercial_region_ids
 msgid "Commercial Regions"
 msgstr "Regiones comerciales"
 
 #. module: customer_area
-#: field:res.partner.area.region,name:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_region_name
 msgid "Name"
 msgstr "Nombre"
 
 #. module: customer_area
-#: field:res.partner.area.region,code:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_region_code
 msgid "Code"
 msgstr "Código"
 
 #. module: customer_area
-#: field:res.partner.area.region,area_ids:0
+#: model:ir.model.fields,field_description:customer_area.field_res_partner_area_region_area_ids
 msgid "Areas"
 msgstr "Áreas"
 
 #. module: customer_area
-#: view:res.partner.area.region:customer_area.res_partner_area_region_form
-#: view:res.partner:customer_area.res_partner_view_area_search
-#: view:sale.report:customer_area.search_sale_report_add_area
+#: model:ir.ui.view,arch_db:customer_area.res_partner_area_region_form
+#: model:ir.ui.view,arch_db:customer_area.res_partner_view_area_search
+#: model:ir.ui.view,arch_db:customer_area.search_sale_report_add_area
 msgid "Commercial Region"
 msgstr "Región Comercial"
 
