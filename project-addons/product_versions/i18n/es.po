@@ -16,47 +16,47 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_versions
-#: field:product.version,create_uid:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: product_versions
-#: field:product.version,create_date:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_create_date
 msgid "Created on"
 msgstr "Creado el"
 
 #. module: product_versions
-#: field:product.version,name:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_name
 msgid "Description"
 msgstr "Descripción"
 
 #. module: product_versions
-#: field:product.version,display_name:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_display_name
 msgid "Display Name"
 msgstr "Nombre"
 
 #. module: product_versions
-#: field:product.version,id:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_id
 msgid "ID"
 msgstr "ID"
 
 #. module: product_versions
-#: field:product.version,__last_update:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version___last_update
 msgid "Last Modified on"
 msgstr "Últ. modificación el"
 
 #. module: product_versions
-#: field:product.version,write_uid:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_write_uid
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
 
 #. module: product_versions
-#: field:product.version,write_date:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_write_date
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
 
 #. module: product_versions
-#: field:product.version,product_tmpl_id:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_product_tmpl_id
 msgid "Product"
 msgstr "Producto"
 
@@ -66,13 +66,13 @@ msgid "Product Template"
 msgstr "Plantilla de producto"
 
 #. module: product_versions
-#: field:product.version,version:0
+#: model:ir.model.fields,field_description:product_versions.field_product_version_version
 msgid "Version"
 msgstr "Versión"
 
 #. module: product_versions
-#: view:product.template:product_versions.product_template_form_view_add_versions_pag
-#: view:product.product:product_versions.product_template_form_view_add_versions_page
-#: field:product.template,version_ids:0
+#: model:ir.ui.view,arch_db:product_versions.product_template_form_view_add_versions_pag
+#: model:ir.ui.view,arch_db:product_versions.product_template_form_view_add_versions_page
+#: model:ir.model.fields,field_description:product_versions.field_product_template_version_ids
 msgid "Versions"
 msgstr "Versiones"
