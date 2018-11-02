@@ -21,7 +21,7 @@
 from odoo import fields, models, api, fields, _
 
 
-class ProductTemplate(models.Model):
+class ProductProduct(models.Model):
 
     _inherit = "product.template"
 
@@ -30,6 +30,7 @@ class ProductTemplate(models.Model):
             ('edition', 'In edition'),
             ('published', 'Published')], 'Status',
             readonly=True, required=True, default='active')
+
     sale_ok = fields.Boolean(
         'Can be Sold', default=False,
         help="Specify if the product can be selected in a sales order line.")
@@ -60,3 +61,8 @@ class ProductTemplate(models.Model):
                 'type': 'comment'
             }
             self.env['mail.message'].create(vals)
+
+# class ProductTemplate(models.Model):
+#
+#     _inherit = "product.template"
+
