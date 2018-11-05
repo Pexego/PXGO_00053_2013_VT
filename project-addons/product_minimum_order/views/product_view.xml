@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-        <record id="product_sale_in_groups" model="ir.ui.view">
+        <!--record id="product_sale_in_groups" model="ir.ui.view">
             <field name="name">product.product.sale_in_groups</field>
             <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
-                <group name="sale_condition" position="inside">
+                <group name="sale" position="inside">
                     <field name="sale_in_groups_of"/>
                 </group>
             </field>
+        </record-->
+
+        <record id="product_change_sales_page" model="ir.ui.view">
+            <field name="name">product.change.sales.page</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <group name="sale" position="inside">
+                        <field name="sale_in_groups_of"/>
+                </group>
+            </field>
         </record>
+
     </data>
-</openerp>
+</odoo>
