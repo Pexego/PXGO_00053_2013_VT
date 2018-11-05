@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <template id="report_saleorder_proforma" inherit_id="sale.report_saleorder_document">
             <xpath expr="//div[@class='page']/h2" position="replace">
                 <h2>
+                    <!--TODO: probar informe cuando estén completos-->
                     <span
                         t-if="o.state not in ['draft','sent'] and o.proforma == False">Order N° </span>
                     <span
@@ -14,4 +15,4 @@
             </xpath>
         </template>
     </data>
-</openerp>
+</odoo>

@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,7 +15,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from odoo import models, fields
 
 
 class SaleOrder(models.Model):
