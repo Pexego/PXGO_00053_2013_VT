@@ -70,8 +70,8 @@ class rappel_calculated(models.Model):
                         taxes_ids = fpos.map_tax(taxes_ids)
                     tax_ids = [(6, 0, [x.id for x in taxes_ids])]
                     invoice_line_obj.create({'product_id': rappel_product.id,
-                                             'name': u'%s (%s-%s(' %
-                                                     (rp.rappel_id.name,
+                                             'name': u'%s (%s-%s)' %
+                                                     (rp.rappel_id.description,
                                                       rp.date_start,
                                                       rp.date_end),
                                              'invoice_id': invoice.id,
@@ -289,6 +289,7 @@ class rappel(models.Model):
     discount_voucher = fields.Boolean('Discount voucher')
     pricelist_ids = fields.Many2many('product.pricelist', 'rappel_product_pricelist_rel',
                                      'rappel_id', 'product_pricelist_id', 'Pricelist')
+    description = fields.Char('Description', translate=True)
 
     @api.multi
     def get_products(self):
@@ -475,4 +476,20 @@ class RappelCurrentInfo(models.Model):
             mail_ids.send()
 
 
+class ComputeRappelInvoice(models.TransientModel):
+
+    _inherit = "rappel.invoice.wzd"
+
+    @api.multi
+    def action_invoice(self):
+        res = super(ComputeRappelInvoice, self).action_invoice()
+        compute_rappel_obj = self.env["rappel.calculated"]
+        for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
+            if rappel.invoice_id:
+                for line in rappel.invoice_id.invoice_line:
+                    line.write({'name': u'%s (%s-%s)' %
+                                        (rappel.rappel_id.description,
+                                         rappel.date_start,
+                                         rappel.date_end)})
+        return res
 
