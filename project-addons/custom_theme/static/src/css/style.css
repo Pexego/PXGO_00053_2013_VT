@@ -100,10 +100,11 @@ body.o_web_client .o_main .o_sub_menu {
 }
 body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_section {
   margin: 10px 0 0 0;
-  color: #454545;
+  /*color: #454545;*/
+  color: #31314f;
   text-transform: uppercase;
   /*background-color: #e9e9ef;*/ /*color submenu titulos*/
-  background-color: #dadaed;
+  background-color: #efefef;
   padding: 4px 6px 4px 18px;
 }
 /* TABLES */
@@ -137,4 +138,49 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
   line-height: 1.42857;
   padding: 8px;
   vertical-align: top;
+}
+
+/* FILTERS */
+
+.o_searchview
+.o_searchview_facet {
+
+    border: 1px solid #e9e9e9;
+    background: #e9e9f1;
+    border-radius: 5px;
+
+}
+.o_searchview
+.o_searchview_facet
+.o_searchview_facet_label {
+
+    background-color: #7c7bad;
+    border-radius: 4px;
+
+}
+
+/* MAIL THREAD */
+
+.o_mail_thread
+.o_thread_message
+.o_thread_message_core.o_mail_note, .o_mail_activity
+.o_thread_message
+.o_thread_message_core.o_mail_note {
+
+    background-color: rgba(229, 229, 229, 0.5);
+    padding-left: 9.6px;
+    border-bottom: 1px solid #d9d7d7;
+    border-radius: 8px;
+
+}
+
+/* FICHAS */
+
+.o_form_view .o_form_sheet_bg .o_form_sheet {
+
+    margin: 12px;
+    max-width: none;
+    width: auto;
+    border-radius: 8px;
+
 }
