@@ -4,17 +4,15 @@
 
         <record id="product_add_states" model="ir.ui.view">
             <field name="name">product.add.states</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
-                <xpath expr="/form/sheet" position="before">
-                    <header position="inside">
-                        <button name="signal_edition" string="Edition" type="object"
-                                attrs="{'invisible': [('state2','in', ['edition', 'published'])]}" class="oe_highlight"/>
-                        <button name="signal_publish" string="Publish" type="object"
-                                attrs="{'invisible': [('state2','in', ['active', 'published'])]}" class="oe_highlight"/>
-                        <field name="state2" widget="statusbar"/>
-                    </header>
+                <xpath expr="//header" position="inside">
+                    <button name="signal_edition" string="Edition" type="object"
+                            attrs="{'invisible': [('state2','in', ['edition', 'published'])]}" class="oe_highlight"/>
+                    <button name="signal_publish" string="Publish" type="object"
+                            attrs="{'invisible': [('state2','in', ['active', 'published'])]}" class="oe_highlight"/>
+                    <field name="state2" widget="statusbar"/>
                 </xpath>
             </field>
         </record>

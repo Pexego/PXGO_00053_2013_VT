@@ -23,17 +23,13 @@ from odoo import fields, models, api, fields, _
 
 class ProductProduct(models.Model):
 
-    _inherit = "product.template"
+    _inherit = "product.product"
 
     state2 = fields.Selection([
             ('active', 'Active'),
             ('edition', 'In edition'),
             ('published', 'Published')], 'Status',
             readonly=True, required=True, default='active')
-
-    sale_ok = fields.Boolean(
-        'Can be Sold', default=False,
-        help="Specify if the product can be selected in a sales order line.")
 
 
     @api.multi
@@ -62,7 +58,12 @@ class ProductProduct(models.Model):
             }
             self.env['mail.message'].create(vals)
 
-# class ProductTemplate(models.Model):
-#
-#     _inherit = "product.template"
+
+class ProductTemplate(models.Model):
+
+    _inherit = "product.template"
+
+    sale_ok = fields.Boolean(
+        'Can be Sold', default=False,
+        help="Specify if the product can be selected in a sales order line.")
 
