@@ -35,7 +35,7 @@
             <field name="inherit_id" ref="sale_quick_payment.sale_order_view_form" />
             <field name="arch" type="xml">
                 <button name="%(sale_quick_payment.open_pay_sale_order)d" position="attributes">
-                  <attribute name="states">draft,sent,reserve</attribute>
+                  <attribute name="states">draft,sent,reserve,progress,done</attribute>
                 </button>
             </field>
         </record>

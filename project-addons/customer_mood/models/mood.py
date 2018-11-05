@@ -24,4 +24,4 @@ class mood(models.Model):
     _name = 'mood'
     _descrition = 'Moods'
 
-    name = fields.Char('Name', size=128, required=True, select=True)
+    name = fields.Char('Name', size=128, required=True, index=True)

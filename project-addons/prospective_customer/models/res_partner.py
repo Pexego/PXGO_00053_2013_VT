@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,20 +18,12 @@
 #
 ##############################################################################
 
-{
-    'name': 'Partner Visit',
-    'version': '1.0',
-    'category': 'Custom',
-    'description': """
-        External Salesperson Visit:
-    """,
-    'author': 'Nadia Ferreyra',
-    'website': '',
-    "depends": ['base', 'email_template', 'web_readonly_bypass',
-                'custom_partner', 'customer_area'],
-    "data": ['partner_visit_view.xml',
-             'email_template.xml',
-             'security/ir.model.access.csv',
-             'security/external_salesperson_visit_security.xml'],
-    "installable": True
-}
+from odoo import models, fields
+
+
+class ResPartner(models.Model):
+
+    _inherit = 'res.partner'
+
+    prospective = fields.Boolean("Prospective")
+

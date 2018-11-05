@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,15 +17,26 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
-
-
-class sale_order(orm.Model):
-
-    _inherit = "sale.order"
-
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        for order in self.browse(cr, uid, ids, context):
-            if order.partner_id.prospective:
-                self.pool.get('res.partner').write(cr, uid, order.partner_id.id, {'active': True, 'prospective': False})
-        super(sale_order,self).action_button_confirm(cr, uid, ids, context)
+{
+    'name': 'Partner Visit',
+    'version': '1.0',
+    'category': 'Custom',
+    'description': """
+        External Salesperson Visit
+    """,
+    'author': 'Nadia Ferreyra',
+    'website': '',
+    'depends': ['base',
+                'mail',
+                'crm',
+                'customer_area'
+                # TODO
+                # 'custom_partner',
+                ],
+    'data': ['views/partner_visit_view.xml',
+             'data/email_template.xml',
+             'security/ir.model.access.csv',
+             'security/external_salesperson_visit_security.xml'
+             ],
+    'installable': True
+}

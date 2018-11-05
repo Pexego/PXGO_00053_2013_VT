@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,16 +18,20 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
-from openerp.tools.translate import _
-
-
-class res_partner(orm.Model):
-
-    _inherit = "res.partner"
-
-    _columns = {
-        'prospective': fields.boolean('Prospective'),
-        }
-
-
+{
+    'name': "Customer lost",
+    'version': '1.0',
+    'category': 'sale',
+    'description': """ Show the lost customers""",
+    'author': 'Pexego Sistemas Informáticos',
+    'website': 'www.pexego.es',
+    "depends": ['base',
+                'sale',
+                'customer_area',
+                'crm',
+                ],
+    "data": ['data/cron.xml',
+              'data/ir.config_parameter.xml',
+              'views/res_partner_view.xml'],
+    "installable": True
+}
