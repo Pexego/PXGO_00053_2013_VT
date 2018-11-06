@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class ResPartner(models.Model):
 
-    _inherit = "res.partner"
+    _inherit = 'res.partner'
 
     points_in_bag = fields.Integer(compute='_get_points', string='Points',
                                    readonly=True)
