@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,31 +18,27 @@
 #
 ##############################################################################
 
-from openerp import models
+from odoo import models, api
 
 
 class SaleOrder(models.Model):
 
-    _inherit = "sale.order"
+    _inherit = 'sale.order'
 
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
-        res = super(SaleOrder, self).action_button_confirm(cr, uid, ids,
-                                                           context=context)
-        rule_obj = self.pool['sale.point.programme.rule']
-        bag_obj = self.pool['res.partner.point.programme.bag']
-        for order in self.browse(cr, uid, ids, context=context):
+    @api.multi
+    def action_confirm(self):
+
+        res = super(SaleOrder, self).action_confirm()
+        rule_obj = self.env['sale.point.programme.rule']
+        bag_obj = self.env['res.partner.point.programme.bag']
+        for order in self:
             total_product_qty = 0.0
             categories = {}
             products = {}
-            rules = rule_obj.search(cr, uid, ['|', ('date_start', '<=',
-                                                    order.date_order[:10]),
-                                              ('date_start', '=', False),
-                                              '|', ('date_end', '>=',
-                                                    order.date_order[:10]),
-                                              ('date_end', '=', False)],
-                                    context=context)
+            rules = rule_obj.search(['|', ('date_start', '<=', order.date_order[:10]),
+                                          ('date_start', '=', False),
+                                     '|', ('date_end', '>=', order.date_order[:10]),
+                                          ('date_end', '=', False)])
 
             if rules:
                 for line in order.order_line:
@@ -64,7 +59,7 @@ class SaleOrder(models.Model):
                                                 'amount': line.price_subtotal}
                     total_product_qty += line.product_uom_qty
 
-                for rule in rule_obj.browse(cr, uid, rules, context=context):
+                for rule in rules:
                     points = False
                     if rule.product_id:
                         if rule.product_id.id in products:
@@ -91,22 +86,18 @@ class SaleOrder(models.Model):
                         else:
                             partner_id = order.partner_id.parent_id.id
 
-                        bag_obj.create(cr, uid,
-                                       {'name': rule.name,
+                        bag_obj.create({'name': rule.name,
                                         'point_rule_id': rule.id,
                                         'order_id': order.id,
                                         'points': points[0],
-                                        'partner_id': partner_id},
-                                       context=context)
+                                        'partner_id': partner_id})
         return res
 
-    def action_cancel(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
-        res = super(SaleOrder, self).action_cancel(cr, uid, ids,
-                                                   context=context)
-        bag_obj = self.pool['res.partner.point.programme.bag']
-        bag_ids = bag_obj.search(cr, uid, [('order_id', 'in', ids)],
-                                 context=context)
-        bag_obj.unlink(cr, uid, bag_ids, context=context)
+    @api.one
+    def action_cancel(self):
+
+        res = super(SaleOrder, self).action_cancel()
+        bag_ids = self.env['res.partner.point.programme.bag'].search([('order_id', '=', self.id)])
+        bag_ids.unlink()
+
         return res

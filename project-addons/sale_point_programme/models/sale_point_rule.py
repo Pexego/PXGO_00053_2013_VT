@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _, exceptions
+from odoo import models, fields, api, _, exceptions
 
 
 class SalePointProgrammeRule(models.Model):
 
-    _name = "sale.point.programme.rule"
+    _name = 'sale.point.programme.rule'
 
     name = fields.Char('Description', required=True, size=128)
     date_start = fields.Date('Start date')
@@ -35,7 +34,7 @@ class SalePointProgrammeRule(models.Model):
     attribute = fields.Selection([('amount_untaxed', 'Amount untaxed'),
                                   ('product_qty', 'Product qty.')],
                                  'Attribute to value', required=True,
-                                 default="amount_untaxed")
+                                 default='amount_untaxed')
     operator = fields.Selection([('for_each', 'For each'),
                                  ('>', 'Greater than'),
                                  ('<', 'Less than'),

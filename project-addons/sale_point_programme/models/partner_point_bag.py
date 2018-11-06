@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,22 +18,15 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields
 
 
-class ResPartner(models.Model):
+class PartnerPointProgrammeBag(models.Model):
 
-    _inherit = "res.partner"
+    _name = 'res.partner.point.programme.bag'
 
-    points_in_bag = fields.Integer(compute='_get_points', string='Points',
-                                   readonly=True)
-
-    @api.one
-    def _get_points(self):
-        if self.id:
-            self.points_in_bag = \
-                sum([x.points for x in
-                     self.env['res.partner.point.programme.bag'].
-                     search([('partner_id', 'child_of', self.id)])])
-        else:
-            self.points_in_bag = 0
+    name = fields.Char('Description', size=128, readonly=True)
+    point_rule_id = fields.Many2one('sale.point.programme.rule', 'Rule', readonly=True)
+    order_id = fields.Many2one('sale.order', 'Sale order', readonly=True)
+    points = fields.Integer('Points', readonly=True)
+    partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
