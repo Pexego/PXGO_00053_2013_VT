@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,10 +18,10 @@
 #
 ##############################################################################
 
-from openerp import fields, models
+from odoo import fields, models
 
 
-class document(models.Model):
+class Document(models.Model):
 
     _name = 'stock.document'
 
