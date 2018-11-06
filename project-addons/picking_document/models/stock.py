@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,16 +18,23 @@
 #
 ##############################################################################
 
-{
-    'name': "Picking document",
-    'version': '1.0',
-    'category': 'stock',
-    'description': """""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['stock'],
-    "data": ['document_view.xml',
-             'stock_view.xml',
-             'security/ir.model.access.csv'],
-    "installable": True
-}
+from odoo import fields, api, models, _
+
+
+class StockPicking(models.Model):
+
+    _inherit = 'stock.picking'
+
+    document_ids = fields.Many2many(
+        'stock.document',
+        'document_picking_rel',
+        'document_id',
+        'picking_id',
+        'Documents')
+
+    qty = fields.Integer('qty', compute='_calculate_qty')
+
+    @api.one
+    def _calculate_qty(self):
+        picking_name = self.name
+        self.qty = sum(move_lines.product_uom_qty for move_lines in self.move_lines)
