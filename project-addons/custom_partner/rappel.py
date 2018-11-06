@@ -51,7 +51,6 @@ class rappel_calculated(models.Model):
         new_data_invoice.action_invoice()
 
         invoice = self.browse(rappels_to_invoice).mapped('invoice_id')
-        invoice.signal_workflow('invoice_open')
 
         # Insert negative lines in the created invoice
         if len(rappels_to_invoice) > 1:
@@ -80,6 +79,9 @@ class rappel_calculated(models.Model):
                                              'price_unit': rp.quantity,
                                              'quantity': 1})
                     rp.invoice_id = invoice.id
+
+        invoice.button_reset_taxes()
+        invoice.signal_workflow('invoice_open')
 
         return True
 
@@ -290,6 +292,7 @@ class rappel(models.Model):
     pricelist_ids = fields.Many2many('product.pricelist', 'rappel_product_pricelist_rel',
                                      'rappel_id', 'product_pricelist_id', 'Pricelist')
     description = fields.Char('Description', translate=True)
+    sequence = fields.Integer('Sequence', default=100)
 
     @api.multi
     def get_products(self):
@@ -363,6 +366,14 @@ class rappel(models.Model):
                                                                '|', ('date_end', '=', False),
                                                                ('date_end', '>', now), ('date_start', '<=', now_str)])
                 partner_to_update.write(vals)
+
+    @api.model
+    def compute_rappel(self):
+        if not self.ids:
+            ordered_rappels = self.search([], order='sequence')
+        else:
+            ordered_rappels = self.sorted(key=lambda x: x.sequence)
+        super(rappel, ordered_rappels).compute_rappel()
 
 
 class RappelInvoice(models.TransientModel):
