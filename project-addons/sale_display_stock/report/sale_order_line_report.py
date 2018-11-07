@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea All Rights Reserved
@@ -18,10 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, tools
+from odoo import models, fields, tools
 
 
-class sale_order_line_report(models.Model):
+class SaleOrderLineReport(models.Model):
 
     _name = 'sale.order.line.report'
     _auto = False
@@ -30,7 +29,7 @@ class sale_order_line_report(models.Model):
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
     product_qty = fields.Float('Quantity', readonly=True)
     uom = fields.Many2one('product.uom', 'UoM', readonly=True)
-    price_unit =  fields.Float('Price unit', readonly=True)
+    price_unit = fields.Float('Price unit', readonly=True)
     discount = fields.Float('Discount', readonly=True)
     salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
     state = fields.Char('State', readonly=True)

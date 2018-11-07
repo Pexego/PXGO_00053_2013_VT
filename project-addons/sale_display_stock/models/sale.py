@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,11 +18,11 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
-import openerp.addons.decimal_precision as dp
+from odoo import models, fields, api
+import odoo.addons.decimal_precision as dp
 
 
-class sale_order_line(models.Model):
+class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     qty_available = fields.\
@@ -53,14 +52,15 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    @api.cr_uid_ids_context
+    @api.multi
+    @api.returns('self', lambda value: value.id)
     def message_post(
-        self, cr, uid, thread_id, body='', subject=None, type='notification',
+        self, thread_id, body='', subject=None, type='notification',
         subtype=None, parent_id=False, attachments=None, context=None,
         content_subtype='html', **kwargs):
         context = dict(context)
         context.pop('mail_post_autofollow', False)
         return super(SaleOrder, self).message_post(
-            cr, uid, thread_id, body, subject, type,
+            thread_id, body, subject, type,
             subtype, parent_id, attachments, context, content_subtype,
             **kwargs)

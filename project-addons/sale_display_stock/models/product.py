@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
@@ -20,8 +19,8 @@
 ##############################################################################
 
 import math
-from openerp import models, fields, api
-import openerp.addons.decimal_precision as dp
+from odoo import models, fields, api
+import odoo.addons.decimal_precision as dp
 
 
 class ProductTemplate(models.Model):
