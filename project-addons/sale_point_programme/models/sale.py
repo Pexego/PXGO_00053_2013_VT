@@ -93,9 +93,9 @@ class SaleOrder(models.Model):
                                         'partner_id': partner_id})
         return res
 
-    @api.one
+    @api.multi
     def action_cancel(self):
-
+        self.ensure_one()
         res = super(SaleOrder, self).action_cancel()
         bag_ids = self.env['res.partner.point.programme.bag'].search([('order_id', '=', self.id)])
         bag_ids.unlink()
