@@ -43,21 +43,23 @@ class SalePointProgrammeRule(models.Model):
     value = fields.Float('Value', digits=(16, 2), required=True, default=1.0)
     active = fields.Boolean('Active', default=True)
 
-    @api.one
+    @api.multi
     @api.constrains('date_start', 'date_end')
     def validate(self):
-        if self.date_end < self.date_start:
-            raise exceptions.Warning(_("End date is less than start date"))
+        for rule in self:
+            if rule.date_end < rule.date_start:
+                raise exceptions.Warning(_("End date is less than start date"))
 
-    @api.one
+    @api.multi
     def evaluate(self, amount):
-        if self.operator == "for_each":
-            mult = amount / (self.value or 1.0)
-            return int(mult * self.points)
-        else:
-            if eval(str(amount) + self.operator + str(self.value)):
-                return self.points
+        for rule in self:
+            if rule.operator == "for_each":
+                mult = amount / (rule.value or 1.0)
+                return int(mult * rule.points)
             else:
-                return 0
+                if eval(str(amount) + rule.operator + str(rule.value)):
+                    return rule.points
+                else:
+                    return 0
 
 
