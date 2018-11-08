@@ -28,12 +28,13 @@ class ResPartner(models.Model):
     points_in_bag = fields.Integer(compute='_get_points', string='Points',
                                    readonly=True)
 
-    @api.one
+    @api.multi
     def _get_points(self):
-        if self.id:
-            self.points_in_bag = \
-                sum([x.points for x in
-                     self.env['res.partner.point.programme.bag'].
-                     search([('partner_id', 'child_of', self.id)])])
-        else:
-            self.points_in_bag = 0
+        for partner in self:
+            if partner.id:
+                partner.points_in_bag = \
+                    sum([x.points for x in
+                         self.env['res.partner.point.programme.bag'].
+                         search([('partner_id', 'child_of', partner.id)])])
+            else:
+                partner.points_in_bag = 0

@@ -80,7 +80,7 @@ class SaleOrder(models.Model):
                     else:
                         points = rule.evaluate(total_product_qty)
 
-                    if points and points[0]:
+                    if points:
                         if order.partner_id.is_company or not order.partner_id.parent_id:
                             partner_id = order.partner_id.id
                         else:
@@ -89,7 +89,7 @@ class SaleOrder(models.Model):
                         bag_obj.create({'name': rule.name,
                                         'point_rule_id': rule.id,
                                         'order_id': order.id,
-                                        'points': points[0],
+                                        'points': points,
                                         'partner_id': partner_id})
         return res
 
