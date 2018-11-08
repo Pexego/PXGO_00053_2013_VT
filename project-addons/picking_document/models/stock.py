@@ -34,7 +34,7 @@ class StockPicking(models.Model):
 
     qty = fields.Integer('qty', compute='_calculate_qty')
 
-    @api.one
+    @api.multi
     def _calculate_qty(self):
-        picking_name = self.name
-        self.qty = sum(move_lines.product_uom_qty for move_lines in self.move_lines)
+        for picking in self:
+            picking.qty = sum(move_lines.product_uom_qty for move_lines in picking.move_lines)
