@@ -219,6 +219,34 @@
                     <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
                     <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
                 </xpath>
+
+                <xpath expr="//button[@string='New Products Return']" position="before">
+                    <button name="button_update_lines_wizard" type="object" string="Update RMA lines"
+                     attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!--Wizard to update rma lines-->
+        <record model="ir.ui.view" id="claim_line_update_view">
+            <field name="name">claim_line_update</field>
+            <field name="model">claim.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <separator string="Update data" colspan="4"/>
+                    <group>
+                        <field name="substate_id"/>
+                        <field name="claim_origine"/>
+                        <field name="partner_id" invisible="1"/>
+                        <field name="invoice_id" domain="[('partner_id', 'child_of', [partner_id]),('state', '!=', 'draft')]"/>
+                    </group>
+
+                    <footer>
+                        <button name="button_update_lines" string="Update" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
             </field>
         </record>
 
@@ -259,7 +287,7 @@
                     <field name="comercial"/>
                     <field name="date_received" string="Received date"/>
                 </field>
-                <!--/tree-->
+
             </field>
         </record>
 
@@ -295,6 +323,7 @@
             </field>
         </record>
 
+
         <menuitem name="Received Claims" id="menu_crm_case_claims"
             parent="base.menu_aftersale" action="crm_case_categ_claim_sort" sequence="1"/>
 
@@ -302,8 +331,6 @@
             <field name="domain">[('claim_type', '=', 'customer')]</field>
             <field name="context">{"search_default_partner_id": active_id, "stage_type":'claim', "claim_type": 'customer', "default_claim_type": 'customer'}</field>
         </record>-->
-
-
 
     </data>
 </openerp>
