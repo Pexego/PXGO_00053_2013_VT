@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,21 +18,23 @@
 #
 ##############################################################################
 
-{
-    'name': "Sale points programme",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Allows to include rules to price customer with point
-for fidelization programmes""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['sale',
-                'base',
-                'product',
-                'prospective_customer'],
-    "data": ['partner_point_bag_view.xml',
-             'sale_point_rule_view.xml',
-             'partner_view.xml',
-             'security/ir.model.access.csv'],
-    "installable": True
-}
+from odoo import models, fields, api
+
+
+class ResPartner(models.Model):
+
+    _inherit = 'res.partner'
+
+    points_in_bag = fields.Integer(compute='_get_points', string='Points',
+                                   readonly=True)
+
+    @api.multi
+    def _get_points(self):
+        for partner in self:
+            if partner.id:
+                partner.points_in_bag = \
+                    sum([x.points for x in
+                         self.env['res.partner.point.programme.bag'].
+                         search([('partner_id', 'child_of', partner.id)])])
+            else:
+                partner.points_in_bag = 0

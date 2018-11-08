@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,16 +18,15 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from odoo import models, fields
 
 
 class PartnerPointProgrammeBag(models.Model):
 
-    _name = "res.partner.point.programme.bag"
+    _name = 'res.partner.point.programme.bag'
 
     name = fields.Char('Description', size=128, readonly=True)
-    point_rule_id = fields.Many2one('sale.point.programme.rule', 'Rule',
-                                    readonly=True)
+    point_rule_id = fields.Many2one('sale.point.programme.rule', 'Rule', readonly=True)
     order_id = fields.Many2one('sale.order', 'Sale order', readonly=True)
     points = fields.Integer('Points', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)

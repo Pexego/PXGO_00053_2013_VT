@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _, exceptions
+from odoo import models, fields, api, _, exceptions
 
 
 class SalePointProgrammeRule(models.Model):
 
-    _name = "sale.point.programme.rule"
+    _name = 'sale.point.programme.rule'
 
     name = fields.Char('Description', required=True, size=128)
     date_start = fields.Date('Start date')
@@ -35,7 +34,7 @@ class SalePointProgrammeRule(models.Model):
     attribute = fields.Selection([('amount_untaxed', 'Amount untaxed'),
                                   ('product_qty', 'Product qty.')],
                                  'Attribute to value', required=True,
-                                 default="amount_untaxed")
+                                 default='amount_untaxed')
     operator = fields.Selection([('for_each', 'For each'),
                                  ('>', 'Greater than'),
                                  ('<', 'Less than'),
@@ -44,21 +43,23 @@ class SalePointProgrammeRule(models.Model):
     value = fields.Float('Value', digits=(16, 2), required=True, default=1.0)
     active = fields.Boolean('Active', default=True)
 
-    @api.one
+    @api.multi
     @api.constrains('date_start', 'date_end')
     def validate(self):
-        if self.date_end < self.date_start:
-            raise exceptions.Warning(_("End date is less than start date"))
+        for rule in self:
+            if rule.date_end < rule.date_start:
+                raise exceptions.Warning(_("End date is less than start date"))
 
-    @api.one
+    @api.multi
     def evaluate(self, amount):
-        if self.operator == "for_each":
-            mult = amount / (self.value or 1.0)
-            return int(mult * self.points)
-        else:
-            if eval(str(amount) + self.operator + str(self.value)):
-                return self.points
+        for rule in self:
+            if rule.operator == "for_each":
+                mult = amount / (rule.value or 1.0)
+                return int(mult * rule.points)
             else:
-                return 0
+                if eval(str(amount) + rule.operator + str(rule.value)):
+                    return rule.points
+                else:
+                    return 0
 
 
