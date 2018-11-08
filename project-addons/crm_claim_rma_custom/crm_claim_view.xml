@@ -248,7 +248,7 @@
                     </footer>
                 </form>
             </field>
-        </record>s
+        </record>
 
         <record model="ir.ui.view" id="crm_case_claims_form_view_inherit">
             <field name="name">CRM - Claims Form</field>
