@@ -456,9 +456,9 @@ class CrmClaimLine(models.Model):
 
         # Rewrite the parameters of claim_lines
         for rma_line in self.claim_id.claim_line_ids:
-            rma_line.substate_id = substate_id_wizard
-            rma_line.claim_origine = claim_origine_wizard
-            rma_line.invoice_id = invoice_id_wizard
+            rma_line.write({'substate_id': substate_id_wizard.id, 'claim_origine': claim_origine_wizard,
+                            'invoice_id': invoice_id_wizard.id})
+
 
 
 

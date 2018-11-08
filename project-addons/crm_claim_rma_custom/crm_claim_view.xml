@@ -238,7 +238,7 @@
                         <field name="substate_id"/>
                         <field name="claim_origine"/>
                         <field name="partner_id" invisible="1"/>
-                        <field name="invoice_id" domain="[('partner_id', 'child_of', partner_id),('state', '!=', 'draft')]"/>
+                        <field name="invoice_id" domain="[('partner_id', 'child_of', [partner_id]),('state', '!=', 'draft')]"/>
                     </group>
 
                     <footer>
@@ -248,7 +248,7 @@
                     </footer>
                 </form>
             </field>
-        </record>
+        </record>s
 
         <record model="ir.ui.view" id="crm_case_claims_form_view_inherit">
             <field name="name">CRM - Claims Form</field>
