@@ -448,3 +448,8 @@ msgstr "El email web debe ser único"
 #: field:rappel.current.info,amount_est:0
 msgid "Estimated amount"
 msgstr "Importe estimado"
+
+#. module: custom_partner
+#: field:rappel,description:0
+msgid "Description"
+msgstr "Descripción"

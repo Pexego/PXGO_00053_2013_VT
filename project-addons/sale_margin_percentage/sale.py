@@ -63,13 +63,16 @@ class sale_order_line(models.Model):
 
             sale_price = self.price_unit * self.product_uom_qty * ((100.0 - self.discount) / 100.0)
             purchase_price = self.purchase_price * self.product_uom_qty
-            if self.product_id.product_brand_id.id in self.env['rappel'].search([('name', 'like', 'Vale Ahorro%')], limit=1).brand_ids.ids:
-                if self.order_id.partner_id.property_product_pricelist.name in ('PVPA 55', 'PVPB 55', 'PVPC 55'):
-                    rappel = sale_price * 0.10
-                elif self.order_id.partner_id.property_product_pricelist.name in ('PVPA 52,5', 'PVPB 52,5', 'PVPC 52,5'):
-                    rappel = sale_price * 0.05
-                else:
-                    rappel = 0.0
+            coupon_rappels = self.env['rappel'].search([('discount_voucher', '=', True)])
+            rappel = 0.0
+
+            if self.product_id.product_brand_id.id in coupon_rappels[0].brand_ids.ids:
+                for coupon in coupon_rappels:
+                    if self.order_id.partner_id.property_product_pricelist.id in tuple(coupon.pricelist_ids.ids):
+                        rappel = sale_price * coupon.fix_qty / 100
+                        break
+                    else:
+                        rappel = 0.0
             else:
                 rappel = 0.0
             sale_price_rappel = sale_price - rappel
