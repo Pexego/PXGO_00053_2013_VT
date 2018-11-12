@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
-#
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,18 +15,4 @@
 #
 ##############################################################################
 
-{
-    'name': "Associated products",
-    'version': '1.0',
-    'category': 'Sales Management',
-    'description': """This module adds associated products""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale",
-                 "sale_commission"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
-    "installable": True
-}
+from . import product

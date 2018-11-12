@@ -18,4 +18,18 @@
 #
 ##############################################################################
 
-from . import models
+{
+    'name': "Associated products",
+    'version': '1.0',
+    'category': 'Sales Management',
+    'description': """This module adds associated products""",
+    'author': 'Pexego Sistemas Informáticos',
+    'website': '',
+    "depends": ['base',
+                'product',
+                'sale',
+                'sale_commission'],
+    "data": ['security/ir.model.access.csv',
+              'views/product_view.xml'],
+    "installable": True
+}
