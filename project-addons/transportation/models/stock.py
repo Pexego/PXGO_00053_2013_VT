@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Omar Castiñeira Saavedra
@@ -19,8 +18,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
-import openerp.addons.decimal_precision as dp
+from odoo import models, fields, api
+import odoo.addons.decimal_precision as dp
 import requests
 import json
 
@@ -62,6 +61,8 @@ class StockPicking(models.Model):
         url = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking')
         password = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking.pass')
         language = self.env.user.lang or u'es_ES'
+        import ipdb
+        ipdb.set_trace()
         if 'Correos' in carrier:
             carrier_ref = carrier_ref[-13:]
         elif 'UPS' in carrier:
@@ -163,7 +164,7 @@ class StockPicking(models.Model):
 
 class StockMove(models.Model):
 
-    _inherit = "stock.move"
+    _inherit = 'stock.move'
 
     @api.multi
     @api.depends('product_id', 'product_uom_qty', 'product_uom', 'weight_st',
@@ -174,9 +175,9 @@ class StockMove(models.Model):
             if move.product_id.weight > 0.00:
                 converted_qty = move.product_qty
                 weight = (converted_qty * move.product_id.weight)
-
-                if move.product_id.weight_net > 0.00:
-                    weight_net = (converted_qty * move.product_id.weight_net)
+                # TODO: revisar esto weight_net no existe en producto
+                # if move.product_id.weight_net > 0.00:
+                #     weight_net = (converted_qty * move.product_id.weight_net)
             if move.weight_st:
                 weight = move.weight_st
             if move.weight_net_st:
