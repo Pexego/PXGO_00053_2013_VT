@@ -9,6 +9,9 @@
     "depends": [
         "web"
     ],
+    'qweb': [
+        "static/xml/base.xml",
+    ],
     "auto_install": False,
     "installable": True,
 }

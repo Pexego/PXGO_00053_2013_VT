@@ -1,3 +1,23 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Muli:300,400,600,700");
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
+@import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,300,500,700");
+
+/* FUENTES */
+body {
+  font-family: "Open Sans", sans-serif;
+  font-size: 13px;
+  overflow-x: hidden;
+}
+
+* {
+
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 6px;
+
+}
 .o_web_client
 .navbar {
     background: #3f3f66; /*navbar*/
@@ -196,7 +216,7 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     flex: 1 1 auto;
     width: 300px;
     margin: 4px 8px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     border-color: #ffffff;
 
@@ -212,6 +232,43 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
 
 }
 
+.o_kanban_view.o_kanban_ungrouped
+.o_kanban_record:hover {
+
+    -ms-flex: 1 1 auto;
+    -moz-flex: 1 1 auto;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1 1 auto;
+    flex: 1 1 auto;
+    width: 300px;
+    margin: 4px 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    border-color: #f5f5f5;
+    background-color: #f5f5f5;
+
+}
+
+.o_form_view
+.o_field_widget
+.o_kanban_view.o_kanban_ungrouped
+.o_kanban_record {
+
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+
+}
+
+.o_form_view
+.o_field_widget
+.o_kanban_view.o_kanban_ungrouped
+.o_kanban_record:hover {
+
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    background: #f5f5f5;
+    border-color: #f5f5f5;
+
+}
+
 /*ficha imagen*/
 .o_form_view
 .oe_avatar > img {
@@ -222,5 +279,48 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     border: none;
     border-radius: 60px;
+
+}
+
+.modal-content  {
+    -webkit-border-radius: 8px !important;
+    -moz-border-radius: 8px !important;
+    border-radius: 8px;
+
+}
+
+$bg-color: #fff; //container background-color;
+$basic-dark-color: #d3283f; //color of the spinner
+$border-width: 4px; //width of spinners border
+$basic-spinner-dimensions: 125px; //width and height of spinner
+$main-spinner-dimensions: $basic-spinner-dimensions - $border-width * 2; //width and height of bigger circle
+$small-spinner-dimensions: $main-spinner-dimensions * 0.7;
+
+/* ------------------------ ANIMACION LOADING ------------------------------ */
+
+.fa-spin-inv {
+  -webkit-animation: fa-spin 2s infinite linear;
+  animation: fa-spin 2s infinite linear;
+
+@-webkit-keyframes fa-spin-inv {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(-359deg);
+    transform: rotate(-359deg);
+  }
+}
+@keyframes fa-spin-inv {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(-359deg);
+    transform: rotate(-359deg);
+  }
+}
 
 }
