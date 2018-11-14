@@ -219,11 +219,20 @@
                     <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
                     <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
                 </xpath>
+            </field>
+        </record>
 
-                <xpath expr="//button[@string='New Products Return']" position="before">
+        <record model="ir.ui.view" id="crm_rma_advance_location_form_view_inherit">
+            <field name="name">Claims Form wizard</field>
+            <field name="model">crm.claim</field>
+            <field name="inherit_id" ref="crm_rma_advance_location.crm_claim_rma_form_view"/>
+            <field name="arch" type="xml">
+
+              <xpath expr="//button[@string='New Product Loss']" position="after">
                     <button name="button_update_lines_wizard" type="object" string="Update RMA lines"
                      attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
-                </xpath>
+              </xpath>
+
             </field>
         </record>
 
@@ -269,7 +278,6 @@
                   <separator colspan="4" string="Claim/Action Description" groups="base.group_user"/>
                   <field name="description" colspan="4" nolabel="1"/>
               </xpath>
-
             </field>
         </record>
 
