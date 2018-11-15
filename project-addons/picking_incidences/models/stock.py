@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,10 +18,10 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api, _, exceptions
-import openerp.addons.decimal_precision as dp
-from openerp.tools.float_utils import float_compare, float_round
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import fields, models, api, _, exceptions
+import odoo.addons.decimal_precision as dp
+from odoo.tools.float_utils import float_compare, float_round
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
 

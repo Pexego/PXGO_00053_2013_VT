@@ -27,6 +27,6 @@
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
     "depends": ['stock', 'crm_claim_rma_custom'],
-    "data": ['picking_view.xml', 'email_template.xml'],
+    "data": ['views/picking_view.xml', 'views/email_template.xml'],
     "installable": True
 }
