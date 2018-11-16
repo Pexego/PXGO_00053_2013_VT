@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp.osv import fields, orm
+from openerp import models, api, fields as fields2
 
 
 class product(orm.Model):
@@ -30,6 +31,9 @@ class product(orm.Model):
         'associated_product_ids': fields.one2many('product.associated',
                                                   'product_id',
                                                   'Associated products'),
+        'equivalent_product_ids': fields.one2many('product.equivalent',
+                                                  'product_id',
+                                                  'Equivalent products'),
     }
 
 
@@ -51,3 +55,11 @@ class associated_products(orm.Model):
         'uom_id': fields.many2one('product.uom', 'UoM', required=True, default=_get_default_uom_id),
         'discount': fields.float('Discount (%)', required=True, default=0)
     }
+
+
+class EquivalentProduct(models.Model):
+
+    _name = 'product.equivalent'
+
+    product_id = fields2.Many2one('product.product', 'Product', required=True)
+    equivalent_id = fields2.Many2one('product.product', 'Equivalent product', required=True)
