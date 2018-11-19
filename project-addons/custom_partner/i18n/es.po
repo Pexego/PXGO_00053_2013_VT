@@ -151,6 +151,16 @@ msgid "Dropship"
 msgstr "Dropship"
 
 #. module: custom_partner
+#: field:res.partner,ref_supplier:0
+msgid "Ref. Supplier"
+msgstr "Ref. Proveedor"
+
+#. module: custom_partner
+#: field:product.supplierinfo,ref_supplier:0
+msgid "Ref. Supplier"
+msgstr "Ref. Proveedor"
+
+#. module: custom_partner
 #: code:addons/custom_partner/partner.py:173
 #, python-format
 msgid "Due Date"
