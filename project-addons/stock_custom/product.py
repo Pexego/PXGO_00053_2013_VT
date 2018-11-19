@@ -68,3 +68,11 @@ class ProductProduct(models.Model):
             'type': 'ir.actions.act_window',
         }
 
+    @api.multi
+    @api.onchange('sale_ok')
+    def onchange_sale_ok(self):
+        if not self.sale_ok:
+            return {'warning': {
+                'title': _('Warning'),
+                'message': _('Remember that in order to discontinue this product you must add the corresponding tag')
+            }}
