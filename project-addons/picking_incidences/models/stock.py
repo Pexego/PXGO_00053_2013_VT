@@ -27,7 +27,7 @@ import time
 
 class StockMove(models.Model):
 
-    _inherit = "stock.move"
+    _inherit = 'stock.move'
 
     qty_ready = fields.\
         Float('Qty ready', readonly=True, copy=False,
@@ -48,12 +48,12 @@ class StockMove(models.Model):
 
 class StockPicking(models.Model):
 
-    _inherit = "stock.picking"
+    _inherit = 'stock.picking'
 
     with_incidences = fields.Boolean('With incidences', readonly=True,
                                      copy=False)
     block_picking = fields.Boolean('Albarán procesado Vstock')
-    partial_picking = fields.Boolean("Partial picking", default=False)
+    partial_picking = fields.Boolean('Partial picking', default=False)
 
     #~ @api.multi
     #~ def write(self, vals):
@@ -71,12 +71,12 @@ class StockPicking(models.Model):
         #~ return res
 
     def _create_backorder(self, cr, uid, picking, backorder_moves=[], context=None):
-        bck_id = super(StockPicking, self).\
-            _create_backorder(cr, uid, picking, backorder_moves=backorder_moves, context=context)
+        bck_id = super(StockPicking, self)._create_backorder(cr, uid, picking, backorder_moves=backorder_moves, context=context)
         if bck_id:
             picking.write({'partial_picking': True, 'date_done': False})
         return bck_id
 
+    # FIXME: arreglar esta función
     @api.one
     def action_accept_ready_qty(self):
         self.with_incidences = False
@@ -91,10 +91,8 @@ class StockPicking(models.Model):
                                         precision_rounding=precision)
             if not move.qty_ready:
                 new_moves.append(move.id)
-            elif float_compare(remaining_qty, 0,
-                               precision_rounding=precision) > 0 and \
-                float_compare(remaining_qty, move.product_qty,
-                              precision_rounding=precision) < 0:
+            elif float_compare(remaining_qty, 0, precision_rounding=precision) > 0 and \
+                 float_compare(remaining_qty, move.product_qty, precision_rounding=precision) < 0:
                 new_move = move.split(move, remaining_qty)
                 new_moves.append(new_move)
         if new_moves:
@@ -113,20 +111,8 @@ class StockPicking(models.Model):
     def action_assign(self):
         res = super(StockPicking, self).action_assign()
         for pick in self:
-            pick.write({'with_incidences': False})
+            pick.with_incidences = False
         return res
-
-    @api.cr_uid_ids_context
-    def do_enter_transfer_details(self, cr, uid, picking, context=None):
-        for pick in self.pool['stock.picking'].browse(cr, uid, picking,
-                                                      context=context):
-            if pick.with_incidences:
-                raise exceptions.Warning(_("Cannot process picking with "
-                                           "incidences. Please fix or "
-                                           "ignore it."))
-        return super(StockPicking, self).do_enter_transfer_details(cr, uid,
-                                                                   picking,
-                                                                   context)
 
     @api.multi
     def action_done(self):

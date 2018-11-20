@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Pexego Sistemas Informáticos All Rights Reserved
@@ -26,7 +25,7 @@
     'description': """Possibility of check pickings as under incidence""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    "depends": ['stock', 'crm_claim_rma_custom'],
+    "depends": ['stock'],
     "data": ['views/picking_view.xml', 'views/email_template.xml'],
     "installable": True
 }
