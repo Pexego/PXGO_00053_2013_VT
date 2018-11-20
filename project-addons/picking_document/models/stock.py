@@ -18,4 +18,23 @@
 #
 ##############################################################################
 
-from . import models
+from odoo import fields, api, models, _
+
+
+class StockPicking(models.Model):
+
+    _inherit = 'stock.picking'
+
+    document_ids = fields.Many2many(
+        'stock.document',
+        'document_picking_rel',
+        'document_id',
+        'picking_id',
+        'Documents')
+
+    qty = fields.Integer('qty', compute='_calculate_qty')
+
+    @api.multi
+    def _calculate_qty(self):
+        for picking in self:
+            picking.qty = sum(move_lines.product_uom_qty for move_lines in picking.move_lines)

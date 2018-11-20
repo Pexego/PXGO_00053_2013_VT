@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@pexego.es>$
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,21 +18,20 @@
 #
 ##############################################################################
 
-{
-    'name': "Sale points programme",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Allows to include rules to price customer with point
-for fidelization programmes""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['sale',
-                'base',
-                'product',
-                'prospective_customer'],
-    "data": ['partner_point_bag_view.xml',
-             'sale_point_rule_view.xml',
-             'partner_view.xml',
-             'security/ir.model.access.csv'],
-    "installable": True
-}
+from odoo import fields, models
+
+
+class Document(models.Model):
+
+    _name = 'stock.document'
+
+    name = fields.Char('Name', size=64, required=True)
+
+    description = fields.Text('Description')
+
+    picking_ids = fields.Many2many(
+        'stock.picking',
+        'document_picking_rel',
+        'picking_id',
+        'document_id',
+        'Pickings')

@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    $Omar Castiñeira Saavedra <omar@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,23 +18,23 @@
 #
 ##############################################################################
 
-from openerp import fields, api, models, _
-
-class stock_picking(models.Model):
-
-    _inherit = 'stock.picking'
+from odoo import models, fields, api
 
 
-    document_ids = fields.Many2many(
-        'stock.document',
-        'document_picking_rel',
-        'document_id',
-        'picking_id',
-        'Documents')
+class ResPartner(models.Model):
 
-    qty = fields.Integer('qty', compute='_calculate_qty')
+    _inherit = 'res.partner'
 
-    @api.one
-    def _calculate_qty(self):
-        picking_name = self.name
-        self.qty = sum(move_lines.product_uom_qty for move_lines in self.move_lines)
+    points_in_bag = fields.Integer(compute='_get_points', string='Points',
+                                   readonly=True)
+
+    @api.multi
+    def _get_points(self):
+        for partner in self:
+            if partner.id:
+                partner.points_in_bag = \
+                    sum([x.points for x in
+                         self.env['res.partner.point.programme.bag'].
+                         search([('partner_id', 'child_of', partner.id)])])
+            else:
+                partner.points_in_bag = 0

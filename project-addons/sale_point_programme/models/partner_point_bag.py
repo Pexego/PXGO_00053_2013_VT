@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    $Omar Castiñeira Saavedra <omar@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,15 +18,15 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from odoo import models, fields
 
 
-class sale_order(orm.Model):
+class PartnerPointProgrammeBag(models.Model):
 
-    _inherit = "sale.order"
+    _name = 'res.partner.point.programme.bag'
 
-    def action_button_confirm(self, cr, uid, ids, context=None):
-        for order in self.browse(cr, uid, ids, context):
-            if order.partner_id.prospective:
-                self.pool.get('res.partner').write(cr, uid, order.partner_id.id, {'active': True, 'prospective': False})
-        super(sale_order,self).action_button_confirm(cr, uid, ids, context)
+    name = fields.Char('Description', size=128, readonly=True)
+    point_rule_id = fields.Many2one('sale.point.programme.rule', 'Rule', readonly=True)
+    order_id = fields.Many2one('sale.order', 'Sale order', readonly=True)
+    points = fields.Integer('Points', readonly=True)
+    partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)

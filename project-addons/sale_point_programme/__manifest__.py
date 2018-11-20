@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    $Omar Castiñeira Saavedra <omar@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,15 +19,19 @@
 ##############################################################################
 
 {
-    'name': "Picking document",
+    'name': "Sale points programme",
     'version': '1.0',
-    'category': 'stock',
-    'description': """""",
+    'category': 'sale',
+    'description': """Allows to include rules to price customer with point
+for fidelization programmes""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    "depends": ['stock'],
-    "data": ['document_view.xml',
-             'stock_view.xml',
+    "depends": ['sale',
+                'base',
+                'product'],
+    "data": ['views/partner_point_bag_view.xml',
+             'views/sale_point_rule_view.xml',
+             'views/partner_view.xml',
              'security/ir.model.access.csv'],
     "installable": True
 }

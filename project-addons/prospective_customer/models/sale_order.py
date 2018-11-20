@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@pexego.es>$
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,22 +18,17 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, api
 
 
-class ResPartner(models.Model):
+class SaleOrder(models.Model):
 
-    _inherit = "res.partner"
+    _inherit = 'sale.order'
 
-    points_in_bag = fields.Integer(compute='_get_points', string='Points',
-                                   readonly=True)
+    @api.multi
+    def action_confirm(self):
+        for order in self:
+            if order.partner_id.prospective:
+                order.partner_id.write({'active': True, 'prospective': False})
+        super(SaleOrder, self).action_confirm()
 
-    @api.one
-    def _get_points(self):
-        if self.id:
-            self.points_in_bag = \
-                sum([x.points for x in
-                     self.env['res.partner.point.programme.bag'].
-                     search([('partner_id', 'child_of', self.id)])])
-        else:
-            self.points_in_bag = 0

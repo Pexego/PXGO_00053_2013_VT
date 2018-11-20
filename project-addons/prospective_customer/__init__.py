@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,5 +18,4 @@
 #
 ##############################################################################
 
-from . import res_partner
-from . import sale_order
+from . import models

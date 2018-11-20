@@ -1,8 +1,4 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
-#
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,20 +15,5 @@
 #
 ##############################################################################
 
-from openerp import fields, models
-
-
-class document(models.Model):
-
-    _name = 'stock.document'
-
-    name = fields.Char('Name', size=64, required=True)
-
-    description = fields.Text('Description')
-
-    picking_ids = fields.Many2many(
-        'stock.picking',
-        'document_picking_rel',
-        'picking_id',
-        'document_id',
-        'Pickings')
+from . import res_partner
+from . import sale_order

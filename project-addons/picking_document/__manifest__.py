@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@pexego.es>$
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,16 +18,16 @@
 #
 ##############################################################################
 
-from openerp import models, fields
-
-
-class PartnerPointProgrammeBag(models.Model):
-
-    _name = "res.partner.point.programme.bag"
-
-    name = fields.Char('Description', size=128, readonly=True)
-    point_rule_id = fields.Many2one('sale.point.programme.rule', 'Rule',
-                                    readonly=True)
-    order_id = fields.Many2one('sale.order', 'Sale order', readonly=True)
-    points = fields.Integer('Points', readonly=True)
-    partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
+{
+    'name': "Picking document",
+    'version': '1.0',
+    'category': 'stock',
+    'description': """""",
+    'author': 'Pexego Sistemas Informáticos',
+    'website': 'www.pexego.es',
+    "depends": ['stock'],
+    "data": ['views/document_view.xml',
+             'views/stock_view.xml',
+             'security/ir.model.access.csv'],
+    "installable": True
+}

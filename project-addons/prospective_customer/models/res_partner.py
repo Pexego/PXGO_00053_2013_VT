@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,20 +18,12 @@
 #
 ##############################################################################
 
-{
-    'name': "Prospective customer",
-    'version': '1.0',
-    'category': '',
-    'description': """Adds prospective customers menu and search it on sale order, and crm views""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends" : ["base",
-                 "sale",
-                 "crm",
-                 "sale_crm"],
-    "data" : ["res_partner_view.xml",
-              "sale_order_view.xml",
-              "crm_view.xml",
-              "calendar_view.xml"],
-    "installable": True
-}
+from odoo import models, fields
+
+
+class ResPartner(models.Model):
+
+    _inherit = 'res.partner'
+
+    prospective = fields.Boolean("Prospective")
+
