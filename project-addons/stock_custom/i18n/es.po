@@ -349,3 +349,15 @@ msgstr "Notas"
 #: help:stock.production.lot,partner_id:0
 msgid "The last customer in possession of the product"
 msgstr "El último cliente en posesión del producto"
+
+#. module: stock_custom
+#: code:addons/stock_custom/product.py:76
+#, python-format
+msgid "Warning"
+msgstr "Aviso"
+
+#. module: stock_custom
+#: code:addons/stock_custom/product.py:76
+#, python-format
+msgid "Remember that in order to discontinue this product you must add the corresponding tag"
+msgstr "Recuerde que para descatalogar este producto, debe añadir la etiqueta correspondiente"
