@@ -5,7 +5,7 @@
         <record id="product_add_states" model="ir.ui.view">
             <field name="name">product.add.states</field>
             <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
                     <button name="signal_edition" string="Edition" type="object"
