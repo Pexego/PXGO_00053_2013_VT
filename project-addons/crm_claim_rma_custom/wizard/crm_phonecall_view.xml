@@ -105,7 +105,7 @@
                         <field name="partner_country"/>
                         <field name="user_id"/>
                         <field name="call_type_sat"/>
-                        <field name="brand_id"/>
+                        <field name="brand_id" options="{'no_create': True}"/>
                         <field name="subject" string="Subject"/>
                         <field name="description"/>
                     </group>
@@ -146,7 +146,7 @@
                     <field name="partner_country"/>
                     <field name="user_id" context="{'default_groups_ref': ['base.group_user', 'base.group_partner_manager', 'base.group_sale_salesman_all_leads']}"/>
                     <field name="call_type_sat"/>
-                    <field name="brand_id"/>
+                    <field name="brand_id" options="{'no_create': True}"/>
                     <field name="subject" string="Subject"/>
                     <field name="description"/>
                     <field name="duration" string="Duration (min)" widget="float_time" class="oe_inline" style="vertical-align:baseline"/>
