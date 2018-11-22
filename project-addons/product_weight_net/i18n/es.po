@@ -17,11 +17,21 @@ msgstr ""
 
 
 #. module: product_weight_net
-#: model:ir.model.fields,field_description:product_weight_net.field_product_product_weight
+#: model:ir.model.fields,field_description:product_weight_net.field_product_template_weight
 msgid "Weight gross"
 msgstr "Peso bruto"
 
 #. module: product_weight_net
-#: model:ir.model.fields,field_description:product_weight_net.field_product_product_weight
+#: model:ir.model.fields,field_description:product_weight_net.field_product_template_weight_net
 msgid "Weight net"
 msgstr "Peso neto"
+
+#. module: product_weight_net
+#: model:ir.model.fields,help:product_weight_net.field_weight
+msgid "The gross weight in Kg"
+msgstr "El peso bruto en Kg"
+
+#. module: product_weight_net
+#: model:ir.model.fields,help:product_weight_net.field_weight_net
+msgid "The net weight in Kg."
+msgstr "El peso neto en Kg"
