@@ -217,7 +217,9 @@
                 </xpath>
                 <xpath expr="//field[@name='delivery_address_id']" position="attributes">
                     <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
-                    <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
+                    <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True,
+                                               'default_not_print_picking': True, 'default_parent_id': partner_id, 'show_address':1}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
                 </xpath>
             </field>
         </record>
