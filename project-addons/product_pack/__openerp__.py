@@ -39,7 +39,7 @@ as children of the pack product.
     "website": "http://www.agilebg.com",
     "depends": [
         'account',
-        'sale',
+        'sales_team',
         'sale_stock',
         'stock_account',
         'purchase',

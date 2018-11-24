@@ -18,35 +18,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
-from openerp import tools
-from openerp.osv import osv, fields
+
+from odoo import models, fields, tools
 
 
-class mood(osv.osv):
+class mood(models.Model):
     _name = 'mood'
     _descrition = 'Moods'
 
-    def _get_image(self, cr, uid, ids, name, args, context=None):
-        result = dict.fromkeys(ids, False)
-        for obj in self.browse(cr, uid, ids, context=context):
-            result[obj.id] = tools.image_get_resized_images(obj.image)
-        return result
+    def _get_image(self):
+        for obj in self:
+            obj.image_small = tools.image_get_resized_images(obj.image)
 
-    def _set_image(self, cr, uid, id, name, value, args, context=None):
-        return self.write(cr, uid, [id],
-                          {'image': tools.image_resize_image_big(value)},
-                          context=context)
+    def _set_image(self):
+        for obj in self:
+            obj.write({'image': tools.image_resize_image_big(obj.image_small)})
 
-    _columns = {
-        'name': fields.char('Name', size=128, required=True, select=True),
-        'image': fields.binary("Image",
-                               help="This field contains the image used to \
-                                     set the mood, limited to 1024x1024px"),
-        'image_small': fields.function(_get_image, fnct_inv=_set_image,
-                                       string="Small-sized image",
-                                       type="binary", multi="_get_image",
-                                       store={'mood': (lambda self, cr, uid,
-                                                       ids, c={}: ids,
-                                                       ['image'], 10), })
-    }
+    name = fields.Char('Name', size=128, required=True, index=True)
+    image = fields.Binary("Image",
+                          help="This field contains the image used to \
+                                set the mood, limited to 1024x1024px")
+    image_small = fields.Binary(compute="_get_image", inverse="_set_image",
+                                string="Small-sized image", store=True)

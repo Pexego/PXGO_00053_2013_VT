@@ -30,9 +30,9 @@ class report_intrastat(models.Model):
     country_id = fields.Many2one('res.country', 'Country')
 
 
-    def init(self, cr):
-        drop_view_if_exists(cr, 'report_intrastat')
-        cr.execute("""
+    def init(self):
+        drop_view_if_exists(self._cr, 'report_intrastat')
+        self._cr.execute("""
             create or replace view report_intrastat as (
                 select
                     to_char(inv.date_invoice, 'YYYY') as name,

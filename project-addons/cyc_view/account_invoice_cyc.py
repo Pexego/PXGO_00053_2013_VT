@@ -19,7 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, tools
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 
 
 class AccountInvoiceCyC(models.Model):
@@ -51,9 +51,9 @@ class AccountInvoiceCyC(models.Model):
     user_id = fields.Many2one("res.users", "Comercial", readonly=True)
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
 
-    def init(self, cr):
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""CREATE VIEW account_invoice_cyc as (
+    def init(self):
+        tools.drop_view_if_exists(self._cr, self._table)
+        self._cr.execute("""CREATE VIEW account_invoice_cyc as (
 select min(a.id) as id, a.country_id, sum(a.credit_covered) as credit_covered,
 sum(a.credit_not_covered) as credit_not_covered, a.user_id, a.area_id,
 sum(a.not_credit) as not_credit, sum(a.cash) as cash, a.invoice_year,

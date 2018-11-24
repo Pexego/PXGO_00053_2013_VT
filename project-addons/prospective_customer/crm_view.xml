@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="crm_phonecall_add_prospective_customer_form" model="ir.ui.view">
+        <!--TODO: Migrar <record id="crm_phonecall_add_prospective_customer_form" model="ir.ui.view">
             <field name="name">crm.phonecall.add.prospective.customer</field>
             <field name="model">crm.phonecall</field>
             <field name="inherit_id" ref="crm.crm_case_phone_form_view"/>
@@ -23,7 +23,7 @@
                     <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="crm_lead_add_prospective_customer_form" model="ir.ui.view">
             <field name="name">crm.lead.add.prospective.customer.form</field>
@@ -61,7 +61,7 @@
             </field>
         </record>
 
-        <record id="crm_make_sale_add_prospective" model="ir.ui.view">
+        <!--TODO: Migrar<record id="crm_make_sale_add_prospective" model="ir.ui.view">
             <field name="name">crm.make.sale.add.prospective</field>
             <field name="model">crm.make.sale</field>
             <field name="inherit_id" ref="sale_crm.view_crm_make_sale"/>
@@ -70,7 +70,7 @@
                     <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

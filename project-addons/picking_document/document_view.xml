@@ -49,7 +49,7 @@
             <field name="search_view_id" ref="document_filter"/>
         </record>
 
-        <menuitem name="Document" parent="stock.menu_stock_configuration" action="action_document" id="menu_document"/>
+        <menuitem name="Document" parent="stock.menu_warehouse_config" action="action_document" id="menu_document"/>
 
     </data>
 </openerp>

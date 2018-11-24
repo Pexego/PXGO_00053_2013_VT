@@ -19,26 +19,19 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
-from openerp.tools.translate import _
+from odoo import fields, models, _
 
 
-class ui(orm.Model):
+class ui(models.Model):
 
     _inherit = "product.product"
 
-    _columns = {
-        'state2': fields.selection([
+    state2 = fields.Selection([
             ('active', 'Active'),
             ('edition', 'In edition'),
             ('published', 'Published')], 'Status',
-            readonly=True, required=True),
-        }
-
-    _defaults = {
-        'state2': 'active',
-        'sale_ok': False
-    }
+            readonly=True, required=True, default='active')
+    sale_ok = fields.Boolean(default=False)
 
     def act_active(self, cr, uid, ids, context=None):
         return True

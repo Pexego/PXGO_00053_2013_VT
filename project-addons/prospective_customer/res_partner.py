@@ -19,16 +19,11 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
-from openerp.tools.translate import _
+from odoo import fields, models
 
 
-class res_partner(orm.Model):
+class res_partner(models.Model):
 
     _inherit = "res.partner"
 
-    _columns = {
-        'prospective': fields.boolean('Prospective'),
-        }
-
-
+    prospective = fields.Boolean('Prospective')

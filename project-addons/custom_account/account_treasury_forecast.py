@@ -19,7 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, tools, api, exceptions, _
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
@@ -259,22 +259,22 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
     bank_id = fields.Many2one('res.partner.bank', string='Bank Account')
     accumulative_balance = fields.Float(string="Accumulated", digits=dp.get_precision('Account'))
 
-    def init(self, cr):
-        tools.drop_view_if_exists(cr, 'report_account_treasury_forecast_analysis')
-        cr.execute("""
+    def init(self):
+        tools.drop_view_if_exists(self._cr, 'report_account_treasury_forecast_analysis')
+        self._cr.execute("""
             create or replace view report_account_treasury_forecast_analysis
                 as (
-                    SELECT	    analysis.id, 
-                                analysis.treasury_id, 
-                                analysis.id_ref, 
-                                analysis.date, 
-                                analysis.concept, 
-                                analysis.partner_name, 
+                    SELECT          analysis.id,
+                                analysis.treasury_id,
+                                analysis.id_ref,
+                                analysis.date,
+                                analysis.concept,
+                                analysis.partner_name,
                                 analysis.payment_mode_id,
                                 pm.bank_id,
-                                analysis.credit, 
-                                analysis.debit, 
-                                analysis.balance, 
+                                analysis.credit,
+                                analysis.debit,
+                                analysis.balance,
                                 analysis.type,
                                 sum(balance) OVER (PARTITION BY analysis.treasury_id
                                             ORDER BY analysis.treasury_id desc, analysis.date, analysis.id_ref) AS accumulative_balance
@@ -290,7 +290,7 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     null as payment_mode_id,
                                     null as type,
                                     null partner_name
-                                from    account_treasury_forecast tf 
+                                from    account_treasury_forecast tf
                                 where   tf.start_amount > 0 -- Incluir linea de importe inicial
                                 union
                                 select
@@ -313,8 +313,8 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     ELSE 'out'
                                     END as type,
                                     rp.display_name as partner_name
-                                from    account_treasury_forecast tf 
-                                    inner join account_treasury_forecast_line tfl on tf.id = tfl.treasury_id 
+                                from    account_treasury_forecast tf
+                                    inner join account_treasury_forecast_line tfl on tf.id = tfl.treasury_id
                                                                                         and coalesce(tfl.paid, False) = False
                                     left join res_partner rp ON rp.id = tfl.partner_id
                                 union
@@ -334,12 +334,12 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     payment_mode_id,
                                     flow_type as type,
                                     null as partner_id
-                                from    account_treasury_forecast tf 
+                                from    account_treasury_forecast tf
                                     inner join account_treasury_forecast_cashflow tcf on tf.id = tcf.treasury_id
                                 union
                                 select
                                     tfii.id || 'i' AS id,
-                                    ai.id as id_ref, 
+                                    ai.id as id_ref,
                                     ai.number as concept,
                                     treasury_id,
                                     tfii.date_due as date,
@@ -356,15 +356,15 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     END as type,
                                     rp.display_name as partner_name
                                     from
-                                    account_treasury_forecast tf 
-                                    inner join account_treasury_forecast_in_invoice_rel tfiir on tf.id = tfiir.treasury_id 
-                                    inner join account_treasury_forecast_invoice tfii on tfii.id = tfiir.in_invoice_id 
+                                    account_treasury_forecast tf
+                                    inner join account_treasury_forecast_in_invoice_rel tfiir on tf.id = tfiir.treasury_id
+                                    inner join account_treasury_forecast_invoice tfii on tfii.id = tfiir.in_invoice_id
                                     inner join account_invoice ai on ai.id = tfii.invoice_id
                                     left join res_partner rp ON rp.id = tfii.partner_id
                                 union
                                 select
                                     tfio.id || 'o' AS id,
-                                    ai.id as id_ref, 
+                                    ai.id as id_ref,
                                     ai.number as concept,
                                     treasury_id,
                                     tfio.date_due as date,
@@ -380,9 +380,9 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     ELSE 'out'
                                     END as type,
                                     rp.display_name as partner_name
-                                from    account_treasury_forecast tf 
-                                    inner join account_treasury_forecast_out_invoice_rel tfior on tf.id = tfior.treasury_id 
-                                    inner join account_treasury_forecast_invoice tfio on tfio.id = tfior.out_invoice_id 
+                                from    account_treasury_forecast tf
+                                    inner join account_treasury_forecast_out_invoice_rel tfior on tf.id = tfior.treasury_id
+                                    inner join account_treasury_forecast_invoice tfio on tfio.id = tfior.out_invoice_id
                                     inner join account_invoice ai on ai.id = tfio.invoice_id
                                     left join res_partner rp ON rp.id = tfio.partner_id
                                 union
@@ -401,7 +401,7 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     INNER JOIN res_partner_bank rpb ON rpb.id = bm.bank_account
                                     cross join  account_treasury_forecast atf
                                     WHERE   bm.date_due BETWEEN atf.start_date AND atf.end_date
-                                            AND coalesce(bm.paid, False) = False AND coalesce(atf.not_bank_maturity, False) = False    
+                                            AND coalesce(bm.paid, False) = False AND coalesce(atf.not_bank_maturity, False) = False
                             ) analysis
                             LEFT JOIN payment_mode pm ON pm.id = analysis.payment_mode_id
                             ORDER  BY analysis.treasury_id, analysis.date, analysis.id_ref

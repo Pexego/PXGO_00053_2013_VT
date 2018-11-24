@@ -22,7 +22,7 @@
 from openerp import models, fields, api, exceptions, _
 from datetime import datetime, time
 from openerp.exceptions import ValidationError
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 
 
 class product_devaluation_account_wizard(models.TransientModel):

@@ -182,7 +182,7 @@
             <field name="search_view_id" ref="view_stock_container_filter"/>
         </record>
 
-        <menuitem name="Containers" parent="purchase.menu_procurement_management_inventory"
+        <menuitem name="Containers" parent="purchase.menu_purchase_config"
             action="action_stock_container" id="stock_container_menu"/>
 
     </data>

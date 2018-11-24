@@ -65,6 +65,6 @@
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
         </record>
 
-    <menuitem action="action_show_customer_lost" id="menu_customer_lost_report" parent="base.next_id_64" sequence="10"/>
+    <menuitem action="action_show_customer_lost" id="menu_customer_lost_report" parent="sale.menu_report_product_all" sequence="10"/>
     </data>
 </openerp>

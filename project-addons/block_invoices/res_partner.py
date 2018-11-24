@@ -21,12 +21,12 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
+from odoo import fields, models
 from datetime import datetime, timedelta
 import time
 
 
-class ResPartner(osv.osv):
+class ResPartner(models.Model):
     """
     Herencia de la clase Empresa
     """
@@ -128,7 +128,6 @@ class ResPartner(osv.osv):
         return True
 
     _inherit = "res.partner"
-    _columns = {
-        'blocked_sales': fields.boolean('Sales blocked?', copy=False),
-        'defaulter': fields.boolean('Defaulter')
-    }
+
+    blocked_sales = fields.Boolean('Sales blocked?', copy=False)
+    defaulter = fields.Boolean('Defaulter')

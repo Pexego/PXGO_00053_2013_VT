@@ -18,23 +18,17 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
-from openerp import tools
-from openerp.osv import osv, fields
+
+from odoo import api, models, fields
 
 
-class sale_order(osv.osv):
+class sale_order(models.Model):
     _inherit = 'sale.order'
-    _columns = {
-        'customer_mood': fields.binary('Customer Mood', readonly=True)
-    }
 
-    def onchange_partner_id(self, cr, uid, ids, part, context=None):
-        result = super(sale_order, self).onchange_partner_id(cr, uid, ids,
-                                                             part, context)
-        if part:
-            part = self.pool.get('res.partner').browse(cr, uid, part,
-                                                       context=context)
-            if part.mood_image and part.mood_image.image:
-                result['value']['customer_mood'] = part.mood_image.image_small
-        return result
+    customer_mood = fields.Binary('Customer Mood', readonly=True)
+
+    @api.onchange('partner_id')
+    def onchange_partner_id_set_mood(self):
+        if self.partner_id:
+            if self.partner_id.mood_image and self.partner_id.mood_image.image:
+                self.customer_mood = self.partner_id.mood_image.image_small

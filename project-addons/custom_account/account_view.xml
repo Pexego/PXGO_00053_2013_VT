@@ -74,8 +74,6 @@
             </field>
         </record>
 
-        <menuitem id="account.menu_finance_reporting" name="Accounting" parent="base.menu_reporting" sequence="35" groups="account.group_account_manager"/>
-
         <record id="payment_order_populate_account_move_line_add_scheme_tree" model="ir.ui.view">
             <field name="name">payment.order.populate.account.move.line.tree</field>
             <field name="model">account.move.line</field>
