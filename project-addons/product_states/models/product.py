@@ -39,7 +39,7 @@ class ProductProduct(models.Model):
             vals = {
                 'body':
                 _(u'The product %s is in edition state') % product.name,
-                'model': 'product.template',
+                'model': 'product.product',
                 'res_id': product.id,
                 'type': 'comment'
             }
@@ -52,7 +52,7 @@ class ProductProduct(models.Model):
             vals = {
                 'body':
                 _(u'The product %s has been published') % product.name,
-                'model': 'product.template',
+                'model': 'product.product',
                 'res_id': product.id,
                 'type': 'comment'
             }
