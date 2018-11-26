@@ -26,3 +26,4 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     prospective = fields.Boolean("Prospective")
+

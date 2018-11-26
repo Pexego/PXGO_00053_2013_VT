@@ -17,11 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields, api
 
-from odoo import models, fields
 
-
-class ResPartner(models.Model):
+class res_partner(models.Model):
     _inherit = 'res.partner'
 
     mood_image = fields.Many2one('mood')
+

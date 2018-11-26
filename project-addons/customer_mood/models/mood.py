@@ -17,11 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields, api, tools
 
-from odoo import models, fields
 
-
-class Mood(models.Model):
+class mood(models.Model):
     _name = 'mood'
     _descrition = 'Moods'
 
