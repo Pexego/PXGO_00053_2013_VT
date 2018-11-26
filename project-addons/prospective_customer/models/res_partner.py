@@ -18,17 +18,12 @@
 #
 ##############################################################################
 
-from odoo import models, api
+from odoo import models, fields
 
 
-class SaleOrder(models.Model):
+class ResPartner(models.Model):
 
-    _inherit = 'sale.order'
+    _inherit = 'res.partner'
 
-    @api.multi
-    def action_confirm(self):
-        for order in self:
-            if order.partner_id.prospective:
-                order.partner_id.write({'active': True, 'prospective': False})
-        super(SaleOrder, self).action_confirm()
+    prospective = fields.Boolean("Prospective")
 
