@@ -305,6 +305,7 @@ class ClaimInvoiceLine(models.Model):
     _name = "claim.invoice.line"
     _rec_name = "product_description"
 
+    sequence = fields.Integer()
     claim_id = fields.Many2one('crm.claim', 'Claim')
     claim_number = fields.Char("Claim Number")
     claim_line_id = fields.Many2one('claim.line', 'Claim lne')
