@@ -27,7 +27,7 @@ class purchase_order_line(orm.Model):
         'sequence': fields.integer(
             'Sequence',
             help="""Gives the sequence order when displaying a list of
-            purchase order lines. """
+            purchase order lines. """, default=10
         ),
         'pack_depth': fields.integer(
             'Depth', required=True,
@@ -41,7 +41,7 @@ class purchase_order_line(orm.Model):
             'purchase.order.line', 'pack_parent_line_id', 'Lines in pack'
         ),
     }
-    _order = 'order_id desc, id'
+    _order = 'order_id desc, sequence, id'
     _defaults = {
         'pack_depth': 0,
     }
