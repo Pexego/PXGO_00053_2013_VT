@@ -55,6 +55,6 @@
             <field name="help">This report performs analysis on your quotations and sales orders. Analysis check your sales revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the Invoice Analysis report in the Accounting application.</field>
         </record>
 
-        <menuitem action="action_order_report_all_picking" id="menu_report_product_all_picking" parent="base.next_id_64" sequence="11"/>
+        <menuitem action="action_order_report_all_picking" id="menu_report_product_all_picking" parent="sale.menu_report_product_all" sequence="11"/>
      </data>
 </openerp>

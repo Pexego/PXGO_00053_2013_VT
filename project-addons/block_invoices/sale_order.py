@@ -21,8 +21,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields, exceptions, api
-from openerp.tools.translate import _
+from odoo import models, fields, exceptions, api, _
+
 
 class sale_order(models.Model):
     """

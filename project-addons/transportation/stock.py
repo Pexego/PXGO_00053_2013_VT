@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import models, fields, api
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 import requests
 import json
 

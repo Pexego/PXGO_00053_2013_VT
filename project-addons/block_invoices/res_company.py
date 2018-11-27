@@ -21,10 +21,10 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm, osv
+from odoo import fields, models
 
-class ResCompany(osv.osv):
+
+class ResCompany(models.Model):
     _inherit = "res.company"
-    _columns = {
-        'block_customer_days': fields.integer('Grace days for blocking customers sales')
-    }
+
+    block_customer_days = fields.Integer('Grace days for blocking customers sales')

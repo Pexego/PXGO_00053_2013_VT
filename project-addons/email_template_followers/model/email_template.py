@@ -21,13 +21,12 @@
 ################################################################################
 
 
-from openerp.osv import osv, fields
+from odoo import models, fields
 
 
-class email_template(osv.Model):
+class email_template(models.Model):
 
-    _inherit = "email.template"
+    _inherit = "mail.template"
 
-    _columns = {
-        'add_followers': fields.boolean('Add Followers', help='Choice to add followers in template')
-    }
+    add_followers = fields.Boolean('Add Followers',
+                                   help='Choice to add followers in template')

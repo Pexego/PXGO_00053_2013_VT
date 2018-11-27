@@ -30,14 +30,14 @@ class stock_days_positive(models.Model):
     qty = fields.Float('Quantity')
     datum = fields.Date('Date')
 
-    def init(self, cr):
-        warehouse_obj = self.pool["stock.warehouse"]
+    def init(self):
+        warehouse_obj = self.env["stock.warehouse"]
         location_ids = []
-        warehouse_ids = warehouse_obj.search(cr, 1, [])
-        for warehouse in warehouse_obj.browse(cr, 1, warehouse_ids):
+        warehouse_ids = warehouse_obj.search([])
+        for warehouse in warehouse_ids:
             location_ids.append(warehouse.view_location_id.id)
-        tools.drop_view_if_exists(cr, 'stock_days_positive')
-        cr.execute(
+        tools.drop_view_if_exists(self._cr, 'stock_days_positive')
+        self._cr.execute(
             """
             CREATE OR REPLACE VIEW stock_days_positive as (
             SELECT EXTRACT(EPOCH from datum) || '' || product_id as id, product_id, SUM(quantity) AS qty,datum
@@ -57,12 +57,12 @@ class stock_history(models.Model):
     _inherit = 'stock.history'
 
 
-    def init(self, cr):
+    def init(self):
         """
             En un update all se inicia 2 veces esta vista, la 2º vez al
             eliminarla elimina tambien stock_days, por lo que tenemos que
             forzarlo para iniciarla de nuevo
         """
-        res = super(stock_history,self).init(cr)
-        self.pool['stock.days.positive'].init(cr)
+        res = super(stock_history,self).init()
+        self.env['stock.days.positive'].init()
         return res

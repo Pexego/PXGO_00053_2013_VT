@@ -18,27 +18,21 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields
-from openerp import api, models
+
+from odoo import api, models, fields
 
 
 class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
-    _columns = {
-        'pack_depth': fields.integer(
-            'Depth', required=True,
-            help='Depth of the product if it is part of a pack.'
-        ),
-        'pack_parent_line_id': fields.many2one(
+
+    pack_depth = fields.Integer(
+            'Depth', required=True, default=0,
+            help='Depth of the product if it is part of a pack.')
+    pack_parent_line_id = fields.Many2one(
             'sale.order.line', 'Pack',
-            help='The pack that contains this product.', ondelete="cascade"
-        ),
-        'pack_child_line_ids': fields.one2many(
-            'sale.order.line', 'pack_parent_line_id', 'Lines in pack'),
-    }
-    _defaults = {
-        'pack_depth': 0,
-    }
+            help='The pack that contains this product.', ondelete="cascade")
+    pack_child_line_ids = fields.One2many(
+            'sale.order.line', 'pack_parent_line_id', 'Lines in pack')
 
     def invoice_line_create(self, cr, uid, ids, context=None):
         no_pack_ids = []

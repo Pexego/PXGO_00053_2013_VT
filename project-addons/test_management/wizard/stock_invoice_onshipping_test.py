@@ -134,7 +134,7 @@ class StockInvoiceOnShippingTests(models.TransientModel):
             invoice.commercial_partner_id.company_id = False
 
             invoice.account_id = accounts[0].id
-            for line in invoice.invoice_line:
+            for line in invoice.invoice_line_ids:
                 line.invoice_line_tax_id = [(6, 0, [])]
                 line.company_id = self.env.user.company_id.test_company_id.id
                 line.move_id = False
