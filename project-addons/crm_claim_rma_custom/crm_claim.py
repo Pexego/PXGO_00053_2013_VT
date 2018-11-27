@@ -321,7 +321,9 @@ class CrmClaimRma(models.Model):
 class ClaimInvoiceLine(models.Model):
     _name = "claim.invoice.line"
     _rec_name = "product_description"
+    _order = 'sequence,id'
 
+    sequence = fields.Integer()
     claim_id = fields.Many2one('crm.claim', 'Claim')
     claim_number = fields.Char("Claim Number")
     claim_line_id = fields.Many2one('claim.line', 'Claim lne')
