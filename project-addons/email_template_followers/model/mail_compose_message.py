@@ -34,7 +34,7 @@ class mail_compose_message(osv.TransientModel):
         values = super(mail_compose_message, self).generate_email_for_composer(cr, uid,
                                                         template_id, res_id, context=context)
 
-        email_template_obj = self.pool.get('email.template')
+        email_template_obj = self.pool.get('mail.template')
 
         email_template = email_template_obj.browse(cr, uid, template_id, context=context)
         if values.get('partner_ids', False) and email_template.add_followers:

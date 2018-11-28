@@ -20,25 +20,20 @@
 #
 ##############################################################################
 import math
-from openerp.osv import fields, orm
-import openerp.addons.decimal_precision as dp
-from openerp import api
+from odoo import fields, models, api
 from collections import Counter
 
 
-class product_pack(orm.Model):
+class product_pack(models.Model):
     _name = 'product.pack.line'
     _rec_name = 'product_id'
-    _columns = {
-        'parent_product_id': fields.many2one(
+
+    parent_product_id = fields.Many2one(
             'product.product', 'Parent Product',
-            ondelete='cascade', required=True
-        ),
-        'quantity': fields.float('Quantity', required=True),
-        'product_id': fields.many2one(
-            'product.product', 'Product', required=True
-        ),
-    }
+            ondelete='cascade', required=True)
+    quantity = fields.Float('Quantity', required=True)
+    product_id = fields.Many2one(
+            'product.product', 'Product', required=True)
 
     def update_pack_products(self, cr, uid, ids, context=None):
         for update_line in self.browse(cr, uid, ids):
@@ -61,7 +56,7 @@ class product_pack(orm.Model):
         return res
 
 
-class product_product(orm.Model):
+class product_product(models.Model):
     _inherit = 'product.product'
 
     def _product_available(self, cr, uid, ids, field_names=None, arg=False,
@@ -169,84 +164,75 @@ class product_product(orm.Model):
         return super(product_product, self).\
             _search_product_quantity(cr, uid, obj, name, domain, context)
 
-    _columns = {
-        'stock_depends': fields.boolean(
-            'Stock depends of components',
-            help='Mark if pack stock is calcualted from component stock'
-        ),
-        'pack_fixed_price': fields.boolean(
-            'Pack has fixed price',
+    stock_depends = fields.Boolean(
+            'Stock depends of components', default=True,
+            help='Mark if pack stock is calcualted from component stock')
+    pack_fixed_price = fields.Boolean(
+            'Pack has fixed price', default=True,
             help="""
             Mark this field if the public price of the pack should be fixed.
             Do not mark it if the price should be calculated from the sum of
             the prices of the products in the pack.
-        """
-        ),
-        'pack_line_ids': fields.one2many(
+        """)
+    pack_line_ids = fields.One2many(
             'product.pack.line', 'parent_product_id', 'Pack Products',
-            help='List of products that are part of this pack.'
-        ),
-        'qty_available': fields.
-        function(_product_available, multi='qty_available',
-                 type='float',
-                 digits_compute=
-                 dp.get_precision('Product Unit of Measure'),
-                 string='Quantity On Hand',
-                 fnct_search=_search_product_quantity,
-                 help="Current quantity of products.\n"
-                      "In a context with a single Stock Location, this "
-                      "includes goods stored at this Location, or any of its "
-                      "children.\nIn a context with a single Warehouse, this "
-                      "includes goods stored in the Stock Location of this "
-                      "Warehouse, or any of its children.\n"
-                      "Stored in the Stock Location of the Warehouse of this "
-                      "Shop, or any of its children.\n"
-                      "Otherwise, this includes goods stored in any Stock "
-                      "Location with 'internal' type."),
-        'virtual_available': fields.
-        function(_product_available, multi='qty_available', type='float',
-                 digits_compute=dp.get_precision('Product Unit of Measure'),
-                 string='Forecast Quantity',
-                 fnct_search=_search_product_quantity,
-                 help="Forecast quantity (computed as Quantity On Hand "
-                 "- Outgoing + Incoming)\n"
-                 "In a context with a single Stock Location, this includes "
-                 "goods stored in this location, or any of its children.\n"
-                 "In a context with a single Warehouse, this includes "
-                 "goods stored in the Stock Location of this Warehouse, or "
-                 "any of its children.\n"
-                 "Otherwise, this includes goods stored in any Stock Location "
-                 "with 'internal' type."),
-        'incoming_qty': fields.
-        function(_product_available, multi='qty_available', type='float',
-                 digits_compute=dp.get_precision('Product Unit of Measure'),
-                 string='Incoming', fnct_search=_search_product_quantity,
-                 help="Quantity of products that are planned to arrive.\n"
-                 "In a context with a single Stock Location, this includes "
-                 "goods arriving to this Location, or any of its children.\n"
-                 "In a context with a single Warehouse, this includes "
-                 "goods arriving to the Stock Location of this Warehouse, or "
-                 "any of its children.\n"
-                 "Otherwise, this includes goods arriving to any Stock "
-                 "Location with 'internal' type."),
-        'outgoing_qty': fields.
-        function(_product_available, multi='qty_available', type='float',
-                 digits_compute=dp.get_precision('Product Unit of Measure'),
-                 string='Outgoing', fnct_search=_search_product_quantity,
-                 help="Quantity of products that are planned to leave.\n"
-                 "In a context with a single Stock Location, this includes "
-                 "goods leaving this Location, or any of its children.\n"
-                 "In a context with a single Warehouse, this includes "
-                 "goods leaving the Stock Location of this Warehouse, or "
-                 "any of its children.\n"
-                 "Otherwise, this includes goods leaving any Stock "
-                 "Location with 'internal' type."),
-    }
-
-    _defaults = {
-        'pack_fixed_price': True,
-        'stock_depends': True
-    }
+            help='List of products that are part of this pack.')
+    #TODO: Migrar
+        # ~ 'qty_available': fields.
+        # ~ function(_product_available, multi='qty_available',
+                 # ~ type='float',
+                 # ~ digits_compute=
+                 # ~ dp.get_precision('Product Unit of Measure'),
+                 # ~ string='Quantity On Hand',
+                 # ~ fnct_search=_search_product_quantity,
+                 # ~ help="Current quantity of products.\n"
+                      # ~ "In a context with a single Stock Location, this "
+                      # ~ "includes goods stored at this Location, or any of its "
+                      # ~ "children.\nIn a context with a single Warehouse, this "
+                      # ~ "includes goods stored in the Stock Location of this "
+                      # ~ "Warehouse, or any of its children.\n"
+                      # ~ "Stored in the Stock Location of the Warehouse of this "
+                      # ~ "Shop, or any of its children.\n"
+                      # ~ "Otherwise, this includes goods stored in any Stock "
+                      # ~ "Location with 'internal' type."),
+        # ~ 'virtual_available': fields.
+        # ~ function(_product_available, multi='qty_available', type='float',
+                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ string='Forecast Quantity',
+                 # ~ fnct_search=_search_product_quantity,
+                 # ~ help="Forecast quantity (computed as Quantity On Hand "
+                 # ~ "- Outgoing + Incoming)\n"
+                 # ~ "In a context with a single Stock Location, this includes "
+                 # ~ "goods stored in this location, or any of its children.\n"
+                 # ~ "In a context with a single Warehouse, this includes "
+                 # ~ "goods stored in the Stock Location of this Warehouse, or "
+                 # ~ "any of its children.\n"
+                 # ~ "Otherwise, this includes goods stored in any Stock Location "
+                 # ~ "with 'internal' type."),
+        # ~ 'incoming_qty': fields.
+        # ~ function(_product_available, multi='qty_available', type='float',
+                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ string='Incoming', fnct_search=_search_product_quantity,
+                 # ~ help="Quantity of products that are planned to arrive.\n"
+                 # ~ "In a context with a single Stock Location, this includes "
+                 # ~ "goods arriving to this Location, or any of its children.\n"
+                 # ~ "In a context with a single Warehouse, this includes "
+                 # ~ "goods arriving to the Stock Location of this Warehouse, or "
+                 # ~ "any of its children.\n"
+                 # ~ "Otherwise, this includes goods arriving to any Stock "
+                 # ~ "Location with 'internal' type."),
+        # ~ 'outgoing_qty': fields.
+        # ~ function(_product_available, multi='qty_available', type='float',
+                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ string='Outgoing', fnct_search=_search_product_quantity,
+                 # ~ help="Quantity of products that are planned to leave.\n"
+                 # ~ "In a context with a single Stock Location, this includes "
+                 # ~ "goods leaving this Location, or any of its children.\n"
+                 # ~ "In a context with a single Warehouse, this includes "
+                 # ~ "goods leaving the Stock Location of this Warehouse, or "
+                 # ~ "any of its children.\n"
+                 # ~ "Otherwise, this includes goods leaving any Stock "
+                 # ~ "Location with 'internal' type."),
 
     def write(self, cr, uid, ids, vals, context=None):
         pack_lines_to_update = []

@@ -1,7 +1,7 @@
 <openerp>
     <data>
 
-        <record id="account_move_line_partner_tree_add_cyc" model="ir.ui.view">
+        <!--TODO: Migrar <record id="account_move_line_partner_tree_add_cyc" model="ir.ui.view">
             <field name="name">account.move.line.partner.tree.add_cyc</field>
             <field name="model">account.move.line</field>
             <field name="inherit_id" ref="account_followup.account_move_line_partner_tree"/>
@@ -11,9 +11,9 @@
                     <field name="cyc_limit_date_insolvency"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
-        <record id="view_move_line_form_add_cyc" model="ir.ui.view">
+        <!-- TODO: MIgrar <record id="view_move_line_form_add_cyc" model="ir.ui.view">
             <field name="name">account.move.line.form.followup.add_cyc</field>
             <field name="model">account.move.line</field>
             <field name="inherit_id" ref="account_followup.view_move_line_form"/>
@@ -23,9 +23,9 @@
                     <field name="cyc_limit_date_insolvency"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
-        <record id="view_partner_inherit_followup_form_add_cyc" model="ir.ui.view">
+        <!-- Migrar<record id="view_partner_inherit_followup_form_add_cyc" model="ir.ui.view">
             <field name="name">res.partner.followup.form.inherit.add_cyc</field>
             <field name="inherit_id" ref="account_followup.view_partner_inherit_followup_form"/>
             <field name="model">res.partner</field>
@@ -36,7 +36,7 @@
                     <field name="cyc_limit_date_insolvency"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     "name": "Product Minimum Order",
     "version": "0.1",

@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import models, fields, api, exceptions, _
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 
 
 class AccountVoucherWizard(models.TransientModel):

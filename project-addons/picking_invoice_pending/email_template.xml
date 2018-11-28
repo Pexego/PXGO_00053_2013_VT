@@ -3,7 +3,7 @@
 <openerp>
     <data noupdate="1">
 
-        <record id="alert_cron_create_invoices" model="email.template">
+        <record id="alert_cron_create_invoices" model="mail.template">
             <field name="name">Fail create invoice email</field>
             <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
             <field name="subject">Error en la facturacion automatica</field>
@@ -17,7 +17,7 @@
              </field>
         </record>
 
-        <record id="alert_cron_validate_invoices" model="email.template">
+        <record id="alert_cron_validate_invoices" model="mail.template">
             <field name="name">Fail validate invoice email</field>
             <field name="email_from">${'contabilidad@visiotechsecurity.com'}</field>
             <field name="subject">Error en la facturacion automatica</field>
@@ -31,7 +31,7 @@
              </field>
         </record>
 
-        <record id="alert_cron_create_invoices_empty_lines" model="email.template">
+        <record id="alert_cron_create_invoices_empty_lines" model="mail.template">
             <field name="name">Fail create invoice lines email</field>
             <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
             <field name="subject">Error en la facturacion automatica</field>
@@ -47,7 +47,7 @@
              </field>
         </record>
 
-        <record id="alert_picking_autocreate_invoices" model="email.template">
+        <record id="alert_picking_autocreate_invoices" model="mail.template">
             <field name="name">Fail create invoice email picking</field>
             <field name="email_from">odoo_team@visiotechsecurity.com</field>
             <field name="subject">Error en la facturacion automatica</field>
@@ -61,7 +61,7 @@
              </field>
         </record>
 
-        <record id="alert_picking_autovalidate_invoices" model="email.template">
+        <record id="alert_picking_autovalidate_invoices" model="mail.template">
             <field name="name">Fail validate invoice email picking</field>
             <field name="email_from">odoo_team@visiotechsecurity.com</field>
             <field name="subject">Error en la facturacion automatica</field>
@@ -75,7 +75,7 @@
              </field>
         </record>
 
-        <record id="alert_picking_autocreate_invoices_empty_lines" model="email.template">
+        <record id="alert_picking_autocreate_invoices_empty_lines" model="mail.template">
             <field name="name">Fail create invoice lines email picking</field>
             <field name="email_from">odoo_team@visiotechsecurity.com</field>
             <field name="subject">Error en la facturacion automatica</field>

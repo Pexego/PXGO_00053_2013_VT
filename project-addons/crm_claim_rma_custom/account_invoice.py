@@ -31,7 +31,7 @@ class AccountInvoice(models.Model):
         if 'state' in vals.keys():
             if vals['state'] == 'paid':
                 for invoice in self:
-                    invoice_line_ids = [x.id for x in invoice.invoice_line]
+                    invoice_line_ids = [x.id for x in invoice.invoice_line_ids]
                     substate_id = self.env.ref(
                         'crm_claim_rma_custom.substate_refund').id
                     claim_lines = self.env['claim.line'].search(

@@ -2,7 +2,7 @@
 <openerp>
 <data>
 
-    <record model="ir.actions.act_window" id="crm.crm_case_categ_phone_incoming0">
+    <!--TODO: Migrar<record model="ir.actions.act_window" id="crm.crm_case_categ_phone_incoming0">
         <field name="name">Logged Calls</field>
         <field name="res_model">crm.phonecall</field>
         <field name="view_type">form</field>
@@ -24,7 +24,7 @@
             another call, a meeting or an opportunity.
           </p>
         </field>
-    </record>
+    </record>-->
 
 </data>
 </openerp>

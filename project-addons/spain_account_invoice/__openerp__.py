@@ -31,7 +31,7 @@
     'depends': [
         'account',
         'account_invoice_currency',
-        'report_xls',
+        'report_xlsx',
     ],
     'external_dependencies': {
         'python': ['xlwt'],
@@ -40,5 +40,5 @@
         'report/export_invoice_xls.xml',
         'wizard/xls_invoice_report_wizard.xml',
     ],
-    'installable': True,
+    'installable': False, # TODO: Migrar
 }

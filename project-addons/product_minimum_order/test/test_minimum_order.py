@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
-
-from openerp.tests.common import TransactionCase
+from odoo.tests.common import TransactionCase
 
 
 class TestMinimumOrder(TransactionCase):

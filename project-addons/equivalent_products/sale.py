@@ -19,11 +19,10 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
-from openerp.tools.translate import _
+from odoo import models, _
 
 
-class sale_order_line(orm.Model):
+class sale_order_line(models.Model):
 
     _inherit = "sale.order.line"
 

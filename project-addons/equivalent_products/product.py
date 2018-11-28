@@ -19,24 +19,22 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
+from odoo import fields, models
 
 
-class product(orm.Model):
+class product(models.Model):
 
     _inherit = "product.product"
 
-    _columns = {
-        'tag_ids': fields.many2many(
+    tag_ids = fields.Many2many(
             'product.tag',
             'product_tag_rel',
             'product_id',
             'tag_id',
-            'Tags'),
-    }
+            'Tags')
 
 
-class product_tag(orm.Model):
+class product_tag(models.Model):
 
     def name_get(self, cr, uid, ids, context=None):
         if isinstance(ids, (list, tuple)) and not len(ids):
@@ -81,25 +79,17 @@ class product_tag(orm.Model):
     _parent_order = "name"
     _order = 'parent_left'
 
-    _columns = {
-        'name': fields.char('Name', size=64, required=True),
-        'complete_name': fields.function(_name_get_fnc, type="char",
-                                         string='Name'),
-        'product_ids': fields.many2many(
+    name = fields.Char('Name', size=64, required=True)
+    complete_name = fields.Char(compute="_name_get_fnc", string='Name')
+    product_ids = fields.Many2many(
             'product.product',
             'product_tag_rel',
             'tag_id',
             'product_id',
-            'Products'),
-        'parent_id': fields.many2one('product.tag', 'Parent',
-                                     ondelete='cascade'),
-        'child_id': fields.one2many('product.tag', 'parent_id',
-                                    string='Child tags'),
-        'parent_left': fields.integer('Left Parent', select=True),
-        'parent_right': fields.integer('Right Parent', select=True),
-    }
-
-    _constraints = [
-        (orm.Model._check_recursion,
-         'Error ! You cannot create recursive tags.', ['parent_id'])
-    ]
+            'Products')
+    parent_id = fields.Many2one('product.tag', 'Parent',
+                                ondelete='cascade')
+    child_id = fields.One2many('product.tag', 'parent_id',
+                               string='Child tags')
+    parent_left = fields.Integer('Left Parent', index=True)
+    parent_right = fields.Integer('Right Parent', index=True)
