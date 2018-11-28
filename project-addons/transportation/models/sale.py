@@ -19,7 +19,6 @@
 ##############################################################################
 
 from odoo import models, fields, api
-from datetime import date
 
 
 class SaleOrder(models.Model):

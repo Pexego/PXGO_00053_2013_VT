@@ -269,6 +269,12 @@ msgid "Weight"
 msgstr "Peso"
 
 #. module: transportation
+#: model:ir.ui.view,arch_db:transportation.view_picking_withtransport_out_form
+msgid "Weight Net"
+msgstr "Peso neto"
+
+
+#. module: transportation
 #: model:ir.model.fields,field_description:transportation.field_assignation_counter_daily_assigned
 msgid "daily"
 msgstr "diario"
