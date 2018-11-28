@@ -102,7 +102,7 @@ class stock_pciking(orm.Model):
                 obj_invoice = self.pool.get('account.invoice').browse(cr, uid, invoice, context=context)
 
                 partner_bank_id = False
-                for banks in obj_invoice.partner_id.bank_ids:
+                for banks in obj_invoice.partner_id.commercial_partner_id.bank_ids:
                     for mandate in banks.mandate_ids:
                         if mandate.state == 'valid':
                             partner_bank_id = banks.id
@@ -111,8 +111,8 @@ class stock_pciking(orm.Model):
                             partner_bank_id = False
 
                 obj_invoice.write({
-                    'section_id': obj_invoice.partner_id.section_id.id,
-                    'payment_mode_id': obj_invoice.partner_id.customer_payment_mode.id,
+                    'section_id': obj_invoice.partner_id.commercial_partner_id.section_id.id,
+                    'payment_mode_id': obj_invoice.partner_id.commercial_partner_id.customer_payment_mode.id,
                     'partner_bank_id': partner_bank_id
                 })
 
