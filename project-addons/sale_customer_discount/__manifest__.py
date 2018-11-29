@@ -36,7 +36,7 @@ Sales customer discount
     "depends": ["base", "product", "stock_account", "pmp_landed_costs",
                 "web_readonly_bypass", "hide_product_variants", "purchase"],
     "data": [
-        "product_view.xml",
+        "views/product_view.xml",
     ],
     "demo": [],
     'auto_install': False,
