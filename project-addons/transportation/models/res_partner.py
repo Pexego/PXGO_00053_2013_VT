@@ -32,13 +32,11 @@ class ResPartner(models.Model):
     @api.multi
     @api.onchange('country_id')
     def onchange_country_id(self):
-        self.ensure_one()
         self.transporter_id = self.country_id.default_transporter
 
     @api.multi
     @api.onchange('transporter_id')
     def onchange_transporter_id(self):
-        self.ensure_one()
         service_ids = [x.id for x in self.transporter_id.service_ids]
         if self.service_id.id not in service_ids:
             self.service_id = False
