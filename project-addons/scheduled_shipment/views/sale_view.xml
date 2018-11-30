@@ -2,7 +2,7 @@
 <!-- © 2016 Comunitea
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 
-<openerp>
+<odoo>
     <data>
 
         <record id="view_order_form_scheduled_date" model="ir.ui.view">
@@ -17,7 +17,7 @@
             </field>
         </record>
 
-        <record id="view_picking_form_add_pending_move_scheduled_date" model="ir.ui.view">
+        <!--TODO: Migrar picking_invoice_pending <record id="view_picking_form_add_pending_move_scheduled_date" model="ir.ui.view">
             <field name="name">stock.picking.tree</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="picking_invoice_pending.view_picking_form_add_pending_move"/>
@@ -26,7 +26,7 @@
                     <field name="scheduled_date"/>
                 </field>
             </field>
-        </record>
+        </record> -->
 
     </data>
-</openerp>
+</odoo>

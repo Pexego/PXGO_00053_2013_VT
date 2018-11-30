@@ -1,18 +1,17 @@
-# -*- coding: utf-8 -*-
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
 
-from openerp import models, fields, api, SUPERUSER_ID, exceptions, _
-from openerp.exceptions import ValidationError
+from odoo import models, fields, api, SUPERUSER_ID, exceptions, _
+from odoo.exceptions import ValidationError
 from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
 try:
-    from openerp.addons.connector.queue.job import job
-    from openerp.addons.connector.session import ConnectorSession
+    from odoo.addons.connector.queue.job import job
+    from odoo.addons.connector.session import ConnectorSession
 except ImportError:
     _logger.debug('Can not `import connector`.')
     import functools
