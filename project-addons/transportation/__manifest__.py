@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -32,11 +31,12 @@
     "depends": ['base',
                 'sale',
                 'customer_area',
-                'stock'],
+                'stock',],
     "data": ['security/ir.model.access.csv',
              'wizard/picking_tracking_status_view.xml',
-             'res_partner_view.xml',
-             'transportation_view.xml',
-             'sale_view.xml', 'stock_view.xml'],
+             'views/res_partner_view.xml',
+             'views/transportation_view.xml',
+             'views/sale_view.xml', 'views/stock_view.xml',
+             'data/parameters.xml'],
     "installable": True
 }

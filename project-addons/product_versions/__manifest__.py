@@ -11,8 +11,8 @@
     "application": False,
     "installable": True,
     "depends": [
-        "product",
-        'sales_team'],
+        "product", "sales_team"
+    ],
     "data": [
         'views/product_view.xml',
         'security/ir.model.access.csv'
