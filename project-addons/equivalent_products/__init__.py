@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-import product
-import sale
-import wizard
+from . import product
+from . import sale
+from . import wizard
 #import report

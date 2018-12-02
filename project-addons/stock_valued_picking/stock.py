@@ -27,24 +27,24 @@ class stock_picking(models.Model):
     _inherit = "stock.picking"
 
     amount_untaxed = fields.Float(
-        compute='_amount_all', digits_compute=dp.get_precision('Sale Price'),
+        compute='_amount_all', digits=dp.get_precision('Sale Price'),
         string='Untaxed Amount', readonly=True, store=True)
     amount_tax = fields.Float(
-        compute='_amount_all', digits_compute=dp.get_precision('Sale Price'),
+        compute='_amount_all', digits=dp.get_precision('Sale Price'),
         string='Taxes', readonly=True, store=True)
     amount_total = fields.Float(
-        compute='_amount_all', digits_compute=dp.get_precision('Sale Price'),
+        compute='_amount_all', digits=dp.get_precision('Sale Price'),
         string='Total', readonly=True, store=True)
     amount_gross = fields.Float(
-        compute='_amount_all', digits_compute=dp.get_precision('Sale Price'),
+        compute='_amount_all', digits=dp.get_precision('Sale Price'),
         string='amount gross', readonly=True, store=True)
     amount_discounted = fields.Float(
-        compute='_amount_all', digits_compute=dp.get_precision('Sale Price'),
+        compute='_amount_all', digits=dp.get_precision('Sale Price'),
         string='Sale price', readonly=True, store=True)
     external_note = fields.Text(
         ' External Notes')
     cost = fields.Float(
-        compute='_get_cost', digits_compute=dp.get_precision('Sale Price'),
+        compute='_get_cost', digits=dp.get_precision('Sale Price'),
         string='Cost', readonly=True, help='Historical cost in order time')
 
     @api.multi
@@ -101,27 +101,27 @@ class stock_move(models.Model):
 
     price_subtotal = fields.Float(
         compute='_get_subtotal', string="Subtotal",
-        digits_compute=dp.get_precision('Sale Price'), readonly=True,
+        digits=dp.get_precision('Sale Price'), readonly=True,
         store=True)
     order_price_unit = fields.Float(
         compute='_get_subtotal', string="Price unit",
-        digits_compute=dp.get_precision('Sale Price'), readonly=True,
+        digits=dp.get_precision('Sale Price'), readonly=True,
         store=True)
     cost_subtotal = fields.Float(
         compute='_get_subtotal', string="Cost subtotal",
-        digits_compute=dp.get_precision('Sale Price'), readonly=True,
+        digits=dp.get_precision('Sale Price'), readonly=True,
         store=True)
     margin = fields.Float(
         compute='_get_subtotal', string="Margin",
-        digits_compute=dp.get_precision('Sale Price'), readonly=True,
+        digits=dp.get_precision('Sale Price'), readonly=True,
         store=True)
     percent_margin = fields.Float(
         compute='_get_subtotal', string="% margin",
-        digits_compute=dp.get_precision('Sale Price'), readonly=True,
+        digits=dp.get_precision('Sale Price'), readonly=True,
         store=True)
 
     @api.multi
-    @api.depends('product_id', 'product_qty', 'procurement_id.sale_line_id')
+    @api.depends('product_id', 'product_qty')
     def _get_subtotal(self):
         for move in self:
             if move.procurement_id.sale_line_id:

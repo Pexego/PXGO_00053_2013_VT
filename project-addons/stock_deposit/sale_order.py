@@ -44,7 +44,7 @@ class sale_order_line(models.Model):
     _columns = {
         'price_subtotal': fields_old.function(
             _amount_line, string='Subtotal',
-            digits_compute=dp.get_precision('Account')),
+            digits=dp.get_precision('Account')),
     }
     deposit = fields.Boolean('Deposit')
     deposit_date = fields.Date('Date Dep.')

@@ -46,7 +46,7 @@
         <field name="search_view_id" ref="commission_report_filter"/>
     </record>
 
-    <menuitem action="action_commission_report_all" id="menu_action_commission_report_all" parent="sale_commission.menu_sale_commissions_conf" sequence="0"/>
+    <!--TODO: Migrar<menuitem action="action_commission_report_all" id="menu_action_commission_report_all" parent="sale_commission.menu_sale_commissions_conf" sequence="0"/>-->
 
     </data>
 </openerp>

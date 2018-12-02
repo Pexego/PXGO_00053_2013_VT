@@ -154,5 +154,4 @@ class account_invoice_line(orm.Model):
                                     'taxes': line.get('taxes', []),
                                     })
                     res += diff_res
-            print res
         return res

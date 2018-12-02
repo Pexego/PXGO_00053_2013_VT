@@ -82,7 +82,7 @@
             <field name="domain">[('tag_ids', 'in', active_ids)]</field>
         </record>
 
-        <record model="ir.values" id="ir_open_tag">
+        <!--TODO: Migrar<record model="ir.values" id="ir_open_tag">
             <field name="key2">tree_but_open</field>
             <field name="model">product.tag</field>
             <field name="name">Open tag</field>
@@ -94,7 +94,7 @@
             action="product_tag_action"
             id="product.menu_products_tag"
             parent="base.menu_product"
-            sequence="30" groups="base.group_no_one"/>
+            sequence="30" groups="base.group_no_one"/>-->
 
         <record id="product_tag_list_view" model="ir.ui.view">
             <field name="name">product.tag.list</field>
@@ -114,10 +114,10 @@
             <field name="view_type">form</field>
             <field name="view_id" ref="product_tag_list_view"/>
         </record>
-        <menuitem action="product_tag_action_form"
+        <!--TODO: Migrar<menuitem action="product_tag_action_form"
             groups="base.group_no_one"
             id="menu_product_tag_action_form"
-            parent="product.prod_config_main" sequence="2"/>
+            parent="product.prod_config_main" sequence="2"/>-->
 
     </data>
 </openerp>

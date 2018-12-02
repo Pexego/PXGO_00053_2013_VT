@@ -42,7 +42,7 @@ class ResPartner(models.Model):
                 try:
                     res_parse = phonenumbers.parse(vals.get(field), countrycode)
                     vals[field] = phonenumbers.format_number(res_parse, phonenumbers.PhoneNumberFormat.E164)
-                except Exception, e:
+                except Exception as e:
                     raise Warning(
                     ("Cannot format the phone number '%s' to "
                     "international format. Error: %s")

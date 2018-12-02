@@ -90,16 +90,16 @@ class product_product(osv.osv):
 
     _columns = {
         'list_price2': fields.float('Sale Price',
-                                    digits_compute=dp.get_precision('Product \
+                                    digits=dp.get_precision('Product \
                                                                     Price')),
         'list_price3': fields.float('Sale Price 2',
-                                    digits_compute=dp.get_precision('Product \
+                                    digits=dp.get_precision('Product \
                                                                     Price')),
         'list_price4': fields.float('Sale Price 3',
-                                    digits_compute=dp.get_precision('Product \
+                                    digits=dp.get_precision('Product \
                                                                     Price')),
         'commercial_cost': fields.float('Commercial Cost',
-                                        digits_compute=
+                                        digits=
                                         dp.get_precision('Product Price')),
         'pvd1_relation': fields.float('PVP/PVD 1 relation', digits=(4, 2),
                                       default=0.5),
@@ -109,21 +109,21 @@ class product_product(osv.osv):
                                       default=0.5),
         'pvd4_relation': fields.float('PVP 4 / PVD 4 relation', digits=(4, 2),
                                       default=0.5),
-        'pvd1_price': fields.float('PVD 1 price', digits_compute=
+        'pvd1_price': fields.float('PVD 1 price', digits=
                                    dp.get_precision('Product Price')),
-        'pvd2_price': fields.float('PVD 2 price', digits_compute=
+        'pvd2_price': fields.float('PVD 2 price', digits=
                                    dp.get_precision('Product Price')),
-        'pvd3_price': fields.float('PVD 3 price', digits_compute=
+        'pvd3_price': fields.float('PVD 3 price', digits=
                                    dp.get_precision('Product Price')),
-        'pvd4_price': fields.float('PVD 4 price', digits_compute=
+        'pvd4_price': fields.float('PVD 4 price', digits=
                                    dp.get_precision('Product Price')),
-        'pvi1_price': fields.float('PVI 1 price', digits_compute =
+        'pvi1_price': fields.float('PVI 1 price', digits =
                                    dp.get_precision('Product Price')),
-        'pvi2_price': fields.float('PVI 2 price', digits_compute =
+        'pvi2_price': fields.float('PVI 2 price', digits =
                                    dp.get_precision('Product Price')),
-        'pvi3_price': fields.float('PVI 3 price', digits_compute =
+        'pvi3_price': fields.float('PVI 3 price', digits =
                                    dp.get_precision('Product Price')),
-        'pvi4_price': fields.float('PVI 4 price', digits_compute=
+        'pvi4_price': fields.float('PVI 4 price', digits=
                                    dp.get_precision('Product Price')),
         'margin_pvd1': fields.function(_get_margins,
                                        string="PVD 1 Margin",

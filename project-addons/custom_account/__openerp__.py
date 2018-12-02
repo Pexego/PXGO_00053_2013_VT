@@ -30,7 +30,7 @@
     """,
     'author': 'Pexego',
     'website': '',
-    "depends": ['mail', 'report', 'account', 'stock', 'product_brand',
+    "depends": ['mail', 'account', 'stock', 'product_brand',
                 'stock_account', 'sale_stock', 'account_payment_partner', 'crm',
                 'account_payment_mode', 'sale', 'purchase', 'nan_partner_risk',
                 'sale_margin_percentage', 'account_banking_sepa_direct_debit',

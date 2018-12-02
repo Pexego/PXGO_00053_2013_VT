@@ -181,7 +181,7 @@ class product_product(models.Model):
         # ~ 'qty_available': fields.
         # ~ function(_product_available, multi='qty_available',
                  # ~ type='float',
-                 # ~ digits_compute=
+                 # ~ digits=
                  # ~ dp.get_precision('Product Unit of Measure'),
                  # ~ string='Quantity On Hand',
                  # ~ fnct_search=_search_product_quantity,
@@ -197,7 +197,7 @@ class product_product(models.Model):
                       # ~ "Location with 'internal' type."),
         # ~ 'virtual_available': fields.
         # ~ function(_product_available, multi='qty_available', type='float',
-                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ digits=dp.get_precision('Product Unit of Measure'),
                  # ~ string='Forecast Quantity',
                  # ~ fnct_search=_search_product_quantity,
                  # ~ help="Forecast quantity (computed as Quantity On Hand "
@@ -211,7 +211,7 @@ class product_product(models.Model):
                  # ~ "with 'internal' type."),
         # ~ 'incoming_qty': fields.
         # ~ function(_product_available, multi='qty_available', type='float',
-                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ digits=dp.get_precision('Product Unit of Measure'),
                  # ~ string='Incoming', fnct_search=_search_product_quantity,
                  # ~ help="Quantity of products that are planned to arrive.\n"
                  # ~ "In a context with a single Stock Location, this includes "
@@ -223,7 +223,7 @@ class product_product(models.Model):
                  # ~ "Location with 'internal' type."),
         # ~ 'outgoing_qty': fields.
         # ~ function(_product_available, multi='qty_available', type='float',
-                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ digits=dp.get_precision('Product Unit of Measure'),
                  # ~ string='Outgoing', fnct_search=_search_product_quantity,
                  # ~ help="Quantity of products that are planned to leave.\n"
                  # ~ "In a context with a single Stock Location, this includes "

@@ -37,7 +37,6 @@ Module that adds the management to the products under minimal.
                 "sale",
                 "purchase",
                 "stock",
-                "procurement",
                 "product_virtual_stock_conservative",
                 "purchase_proposal",
                 "product_brand",

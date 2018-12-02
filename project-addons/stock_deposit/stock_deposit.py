@@ -48,10 +48,11 @@ class stock_deposit(models.Model):
                                  string='Destination Address',
                                  store=True,
                                  readonly=True)
-    sale_id = fields.Many2one(related='move_id.procurement_id.sale_line_id.order_id',
-                              string='Sale',
-                              store=True,
-                              readonly=True)
+    #TODO: Migrar
+    # ~ sale_id = fields.Many2one(related='move_id.procurement_id.sale_line_id.order_id',
+                              # ~ string='Sale',
+                              # ~ store=True,
+                              # ~ readonly=True)
     delivery_date = fields.Datetime('Date of Transfer')
     return_date = fields.Date('Return date')
     company_id = fields.Many2one(related='move_id.company_id',

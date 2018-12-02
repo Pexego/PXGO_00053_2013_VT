@@ -206,7 +206,6 @@ class ApplyOnAccountPurchaseAmount(models.TransientModel):
             line2.reconcile = move[2]
             line2.amount = move[1]
 
-            print "voucher: ", voucher
             voucher.signal_workflow('proforma_voucher')
 
         return True

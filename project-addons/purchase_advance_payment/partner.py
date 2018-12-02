@@ -85,13 +85,14 @@ class ResCompany(models.Model):
                         domain="[('type', '=', 'payable')]")
 
 
-class AccountConfigSettings(models.TransientModel):
+# TODO: Migrar
+# ~ class AccountConfigSettings(models.TransientModel):
 
-    _inherit = 'account.config.settings'
+    # ~ _inherit = 'account.config.settings'
 
-    purchase_advance_payment_account = fields.\
-        Many2one('account.account',
-                 related='company_id.purchase_advance_payment_account',
-                 string="Purchase advance payment account",
-                 domain="[('type', '=', 'payable'),"
-                        "('company_id', '=', company_id)]")
+    # ~ purchase_advance_payment_account = fields.\
+        # ~ Many2one('account.account',
+                 # ~ related='company_id.purchase_advance_payment_account',
+                 # ~ string="Purchase advance payment account",
+                 # ~ domain="[('type', '=', 'payable'),"
+                        # ~ "('company_id', '=', company_id)]")

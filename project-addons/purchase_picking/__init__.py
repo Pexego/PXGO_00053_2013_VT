@@ -19,6 +19,6 @@
 #
 ##############################################################################
 
-import purchase
-import wizard
-import stock
+from . import purchase
+from . import wizard
+from . import stock
