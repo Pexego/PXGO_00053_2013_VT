@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import models, api, exceptions, _, fields
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 from openerp.tools import float_round
 
 

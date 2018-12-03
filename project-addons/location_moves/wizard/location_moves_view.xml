@@ -43,7 +43,7 @@
             name="Create moves"
             string="Create moves"
             action="act_location_moves"
-            parent="stock.menu_stock_configuration"/>
+            parent="stock.menu_warehouse_config"/>
 
     </data>
 </openerp>

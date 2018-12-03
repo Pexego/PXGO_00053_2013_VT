@@ -2,7 +2,7 @@
 <openerp>
     <data noupdate="0">
 
-        <record id="partner_risk_advice_mail_global_ok" model="email.template">
+        <record id="partner_risk_advice_mail_global_ok" model="mail.template">
             <field name="name">Risk Advice Mail Global</field>
             <field name="email_from">${(object.user_id.email or object.company_id.email or 'noreply@localhost')|safe}</field>
             <field name="reply_to">${(object.user_id.email or object.company_id.email or 'noreply@localhost')|safe}</field>

@@ -18,28 +18,23 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, orm
-from openerp import api
+from odoo import fields, models, api
 
 
-class stock_pciking(orm.Model):
+class stock_pciking(models.Model):
 
     _inherit = 'stock.picking'
 
-    def _has_packs(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        for pick in self.browse(cr, uid, ids, context):
-            res[pick.id] = False
+    @api.multi
+    def _has_packs(self):
+        for pick in self:
+            pick.has_packs = False
             for line in pick.move_lines:
                 if line.pack_component:
-                    res[pick.id] = True
+                    pick.has_packs = True
                     break
-        return res
 
-    _columns = {
-        'has_packs': fields.function(_has_packs, string='Packs',
-                                     type='boolean'),
-    }
+    has_packs = fields.Boolean('Packs', compute="_has_packs")
 
     def action_invoice_create(self, cr, uid, ids, journal_id, group=False,
                               type='out_invoice', context=None):
@@ -105,7 +100,7 @@ class stock_pciking(orm.Model):
         return invoices
 
 
-class stock_move(orm.Model):
+class stock_move(models.Model):
 
     _inherit = 'stock.move'
 
@@ -116,19 +111,12 @@ class stock_move(orm.Model):
             sale_id = self.move_dest_id.get_sale_line_id()
         return sale_id
 
-    def _pack_component(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        for move in self.browse(cr, uid, ids, context):
-            res[move.id] = False
-            if self.get_sale_line_id(cr, uid, move.id, context):
-                if self.get_sale_line_id(cr, uid, move.id, context).\
-                        pack_parent_line_id:
-                    res[move.id] = True
-        return res
+    @api.multi
+    def _pack_component(self):
+        for move in self:
+            move.pack_component = False
+            if move.get_sale_line_id():
+                if move.get_sale_line_id().pack_parent_line_id:
+                    move.pack_component = True
 
-    _columns = {
-        'pack_component': fields.function(_pack_component,
-                                          string='pack component',
-                                          type='boolean',
-                                          store=False),
-    }
+    pack_component = fields.Boolean('Pack component', compute="_pack_component")

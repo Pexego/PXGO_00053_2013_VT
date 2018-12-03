@@ -54,7 +54,7 @@ class CrmClaimRma(models.Model):
     name = fields.Selection([('return', 'Return'),
                              ('rma', 'RMA')], 'Claim Subject',
                             required=True, default='rma')
-    priority = fields.Selection(default='1', required=True, selection=[('1', 'No priority'), 
+    priority = fields.Selection(default='1', required=True, selection=[('1', 'No priority'),
                                                                        ('2', 'High'),
                                                                        ('3', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
@@ -138,7 +138,7 @@ class CrmClaimRma(models.Model):
                                                               claim_line.id)])
                 if claim_inv_lines:
                     continue
-                for inv_line in claim_line.invoice_id.invoice_line:
+                for inv_line in claim_line.invoice_id.invoice_line_ids:
                     if inv_line.product_id == claim_line.product_id:
                         if inv_line.invoice_line_tax_id:
                             taxes_ids = \
@@ -332,7 +332,7 @@ class ClaimInvoiceLine(models.Model):
                 if self.invoice_id:
                     # res['value'] = {'invoice_id': self.invoice_id.id}
                     any_line = False
-                    for line in self.invoice_id.invoice_line:
+                    for line in self.invoice_id.invoice_line_ids:
                         if not self.product_id == line.product_id:
                             any_line = False
                         else:
@@ -370,7 +370,7 @@ class ClaimInvoiceLine(models.Model):
     @api.onchange("qty", "price_unit", "discount")
     def onchange_values(self):
         if self.product_id and self.invoice_id:
-            for line in self.invoice_id.invoice_line:
+            for line in self.invoice_id.invoice_line_ids:
                 if line.product_id == self.product_id and line.quantity < self.qty:
                     raise exceptions.Warning(_('Quantity cannot be bigger than the quantity specified on invoice'))
         price_subtotal = self.qty * self.price_unit * ((100.0 - self.discount) / 100.0)

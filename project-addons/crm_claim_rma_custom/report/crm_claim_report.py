@@ -38,14 +38,14 @@ class crm_claim_cost_report(osv.osv):
                                     readonly=True),
     }
 
-    def init(self, cr):
+    def init(self):
 
         """ Display Number of cases And Section Name
         @param cr: the current row, from the database cursor,
          """
 
-        tools.drop_view_if_exists(cr, 'crm_claim_cost_report')
-        cr.execute("""
+        tools.drop_view_if_exists(self._cr, 'crm_claim_cost_report')
+        self._cr.execute("""
             create or replace view crm_claim_cost_report as (
                 select
                     min(c.id) as id,

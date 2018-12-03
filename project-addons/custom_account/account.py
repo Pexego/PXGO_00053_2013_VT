@@ -111,7 +111,7 @@ class AccountInvoice(models.Model):
                                  readonly=True, store=False)
     invoice_type_id = fields. \
         Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
-                 related="invoice_line.picking_id.invoice_type_id")
+                 related="invoice_line_ids.picking_id.invoice_type_id")
     active = fields.Boolean(default=True)
     not_send_email = fields.Boolean("Not send email")
     total = fields.Float("Total Paid", compute="total_paid")
@@ -262,11 +262,11 @@ class AccountInvoice(models.Model):
         return res
 
     @api.multi
-    @api.depends('invoice_line')
+    @api.depends('invoice_line_ids')
     def _get_picking_ids(self):
         for invoice in self:
             invoice.picking_ids = invoice. \
-                mapped('invoice_line.move_id.picking_id').sorted()
+                mapped('invoice_line_ids.move_id.picking_id').sorted()
 
     @api.multi
     @api.returns('account.move.line')
@@ -419,7 +419,7 @@ class AccountInvoice(models.Model):
     def invoice_validate(self):
         res = super(AccountInvoice, self).invoice_validate()
         for inv in self:
-            for line in inv.invoice_line:
+            for line in inv.invoice_line_ids:
                 line.write({'cost_unit': line.product_id.standard_price})
         return res
 
@@ -450,7 +450,7 @@ class AccountJournal(models.Model):
 
 class PaymentMode(models.Model):
 
-    _inherit = 'payment.mode'
+    _inherit = 'account.payment.mode'
 
     blocked = fields.Boolean('No Follow-up')
     treasury_forecast_type = fields.Selection([('debit_receipt', 'Debit receipt'),

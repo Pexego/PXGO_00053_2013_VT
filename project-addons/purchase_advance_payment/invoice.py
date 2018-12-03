@@ -30,7 +30,7 @@ class AccountInvoice(models.Model):
     def _get_pur_advance_amount(self):
         orders = []
         amount = 0.0
-        for line in self.invoice_line:
+        for line in self.invoice_line_ids:
             if line.move_id and line.move_id.purchase_line_id:
                 purchase = line.move_id.purchase_line_id.order_id
                 if purchase not in orders:
