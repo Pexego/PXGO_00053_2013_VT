@@ -28,7 +28,7 @@
     'author': 'Comunitea',
     'website': '',
     "depends": ['account', 'account_payment_partner', 'customer_area',
-                'account_followup'],
+                'account_credit_control'],
     "data": ['account_invoice_cyc_view.xml',
              'security/ir.model.access.csv',
              'account_view.xml'],

@@ -34,9 +34,9 @@ class commission_report(models.Model):
     settled = fields.Boolean('Settled')
     inv_date = fields.Date('Date invoice')
 
-    def init(self, cr):
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""CREATE or REPLACE VIEW %s as (
+    def init(self):
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        self._cr.execute("""CREATE or REPLACE VIEW %s as (
             SELECT c_line.id,
                 i_line.product_id  AS product_id,
                 c_line.agent  AS agent_id,

@@ -23,7 +23,7 @@ from datetime import datetime, timedelta
 from openerp import models, fields, api
 from openerp.osv import fields as fields_old
 from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 
 
 class sale_order_line(models.Model):

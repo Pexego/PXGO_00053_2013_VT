@@ -16,12 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_point_programme
-#: field:sale.point.programme.rule,active:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_active
 msgid "Active"
 msgstr "Activa"
 
 #. module: sale_point_programme
-#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
 msgid "Actives"
 msgstr "Activas"
 
@@ -31,41 +31,41 @@ msgid "Amount untaxed"
 msgstr "Base imponible"
 
 #. module: sale_point_programme
-#: field:sale.point.programme.rule,attribute:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_attribute
 msgid "Attribute to value"
 msgstr "Atributo a valorar"
 
 #. module: sale_point_programme
-#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
-#: field:sale.point.programme.rule,category_id:0
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_category_id
 msgid "Category"
 msgstr "Categoría"
 
 #. module: sale_point_programme
-#: field:res.partner.point.programme.bag,create_uid:0
-#: field:sale.point.programme.rule,create_uid:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_create_uid
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: sale_point_programme
-#: field:res.partner.point.programme.bag,create_date:0
-#: field:sale.point.programme.rule,create_date:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_create_date
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_create_date
 msgid "Created on"
 msgstr "Creado en"
 
 #. module: sale_point_programme
-#: field:res.partner.point.programme.bag,name:0
-#: field:sale.point.programme.rule,name:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_name
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_name
 msgid "Description"
 msgstr "Descripción"
 
 #. module: sale_point_programme
-#: field:sale.point.programme.rule,date_end:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_date_end
 msgid "End date"
 msgstr "Fecha fin"
 
 #. module: sale_point_programme
-#: code:addons/sale_point_programme/sale_point_rule.py:51
+#: code:addons/sale_point_programme/sale_point_rule.py:50
 #, python-format
 msgid "End date is less than start date"
 msgstr "La fecha fin es menor que la fecha de inicio"
@@ -86,26 +86,26 @@ msgid "Greater than"
 msgstr "Mayor que"
 
 #. module: sale_point_programme
-#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
-#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
 msgid "Group By"
 msgstr "Agrupar por"
 
 #. module: sale_point_programme
-#: field:res.partner.point.programme.bag,id:0
-#: field:sale.point.programme.rule,id:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_id
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_id
 msgid "ID"
 msgstr "ID"
 
 #. module: sale_point_programme
-#: field:res.partner.point.programme.bag,write_uid:0
-#: field:sale.point.programme.rule,write_uid:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_write_uid
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_write_uid
 msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: sale_point_programme
-#: field:res.partner.point.programme.bag,write_date:0
-#: field:sale.point.programme.rule,write_date:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_write_date
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_write_date
 msgid "Last Updated on"
 msgstr "Fecha última actualización"
 
@@ -115,14 +115,14 @@ msgid "Less than"
 msgstr "Menor que"
 
 #. module: sale_point_programme
-#: field:sale.point.programme.rule,operator:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_operator
 msgid "Operator"
 msgstr "Operador"
 
 #. module: sale_point_programme
 #: model:ir.model,name:sale_point_programme.model_res_partner
-#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
-#: field:res.partner.point.programme.bag,partner_id:0
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_partner_id
 msgid "Partner"
 msgstr "Empresa"
 
@@ -132,11 +132,11 @@ msgid "Point programmes"
 msgstr "Programas puntos"
 
 #. module: sale_point_programme
-#: view:res.partner:sale_point_programme.view_partner_form_add_points_widget
-#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
-#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_form
-#: field:res.partner.point.programme.bag,points:0
-#: field:sale.point.programme.rule,points:0
+#: model:ir.ui.view,arch_db:sale_point_programme.view_partner_form_add_points_widget
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_form
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_points
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_points
 msgid "Points"
 msgstr "Puntos"
 
@@ -147,7 +147,7 @@ msgstr "Reglas recompensa puntos"
 
 #. module: sale_point_programme
 #: model:ir.ui.menu,name:sale_point_programme.points_rules_menu
-#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_tree
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_tree
 msgid "Points reward rules"
 msgstr "Reglas recompensa puntos"
 
@@ -155,13 +155,13 @@ msgstr "Reglas recompensa puntos"
 #: model:ir.actions.act_window,name:sale_point_programme.action_open_partner_points
 #: model:ir.actions.act_window,name:sale_point_programme.action_points_tracebility
 #: model:ir.ui.menu,name:sale_point_programme.points_traceability_menu
-#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_tree
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_tree
 msgid "Points traceability"
 msgstr "Trazabilidad puntos"
 
 #. module: sale_point_programme
-#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
-#: field:sale.point.programme.rule,product_id:0
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_product_id
 msgid "Product"
 msgstr "Producto"
 
@@ -171,28 +171,28 @@ msgid "Product qty."
 msgstr "Cant. producto"
 
 #. module: sale_point_programme
-#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
-#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_form
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_form
 msgid "Reward rule"
 msgstr "Regla recompensa"
 
 #. module: sale_point_programme
-#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
 msgid "Reward rules"
 msgstr "Reglas recompensa"
 
 #. module: sale_point_programme
-#: field:res.partner.point.programme.bag,point_rule_id:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_point_rule_id
 msgid "Rule"
 msgstr "Regla"
 
 #. module: sale_point_programme
-#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
 msgid "Sale"
 msgstr "Venta"
 
 #. module: sale_point_programme
-#: field:res.partner.point.programme.bag,order_id:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_order_id
 msgid "Sale order"
 msgstr "Venta"
 
@@ -202,12 +202,12 @@ msgid "Sales Order"
 msgstr "Pedido de venta"
 
 #. module: sale_point_programme
-#: field:sale.point.programme.rule,date_start:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_date_start
 msgid "Start date"
 msgstr "Fecha inicio"
 
 #. module: sale_point_programme
-#: field:sale.point.programme.rule,value:0
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_value
 msgid "Value"
 msgstr "Valor"
 

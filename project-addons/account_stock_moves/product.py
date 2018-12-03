@@ -17,29 +17,20 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, osv
+from odoo import fields, models
 
 
-class product_category(osv.osv):
+class product_category(models.Model):
     _inherit = "product.category"
-    _columns = {
-        'property_account_creditor_price_difference_categ': fields.property(
-            type='many2one',
-            relation='account.account',
-            string="Price Difference Account",
-            help="This account will be used to value price difference between purchase price and cost price."),
+    property_account_creditor_price_difference_categ = fields.Many2one(
+            'account.account', string="Price Difference Account",
+            company_dependent=True,
+            help="This account will be used to value price difference between purchase price and cost price.")
 
 
-    }
-
-
-class product_template(osv.osv):
+class product_template(models.Model):
     _inherit = "product.template"
-    _columns = {
-        'property_account_creditor_price_difference': fields.property(
-            type='many2one',
-            relation='account.account',
-            string="Price Difference Account",
-            help="This account will be used to value price difference between purchase price and cost price."),
 
-    }
+    property_account_creditor_price_difference = fields.Many2one(
+            'account.account', string="Price Difference Account", company_dependent=True,
+            help="This account will be used to value price difference between purchase price and cost price.")

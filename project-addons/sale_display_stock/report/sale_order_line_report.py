@@ -40,9 +40,9 @@ class SaleOrderLineReport(models.Model):
     qty_stock = fields.Float('Stock qty', group_operator="avg", readonly=True)
     company_id = fields.Many2one("res.company", "Company", readonly=True)
 
-    def init(self, cr):
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""
+    def init(self):
+        tools.drop_view_if_exists(self._cr, self._table)
+        self._cr.execute("""
 CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.name as name,
        sol.order_partner_id as partner_id,

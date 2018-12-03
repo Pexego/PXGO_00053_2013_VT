@@ -21,29 +21,28 @@
 ################################################################################
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
 {
-    "name": "Email template Followers", 
-    "version": "1.1", 
-    "author": "Vauxoo", 
-    "category": "Addons Vauxoo", 
+    "name": "Email template Followers",
+    "version": "1.1",
+    "author": "Vauxoo",
+    "category": "Addons Vauxoo",
     "description": """
 Added field boolean to allow send email all followers from template
-    """, 
-    "website": "http://vauxoo.com", 
-    "license": "", 
+    """,
+    "website": "http://vauxoo.com",
+    "license": "",
     "depends": [
-        "mail", 
-        "email_template"
-    ], 
-    "demo": [], 
+        "mail",
+    ],
+    "demo": [],
     "data": [
-        "view/email_template_view.xml", 
+        "view/email_template_view.xml",
         "view/mail_compose_message_view.xml"
-    ], 
-    "test": [], 
-    "js": [], 
-    "css": [], 
-    "qweb": [], 
-    "installable": True, 
-    "auto_install": False, 
+    ],
+    "test": [],
+    "js": [],
+    "css": [],
+    "qweb": [],
+    "installable": True,
+    "auto_install": False,
     "active": False
 }

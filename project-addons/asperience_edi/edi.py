@@ -20,14 +20,9 @@
 #
 ##############################################################################
 
-from openerp import netsvc
-import openerp.tools
-from openerp.osv import fields, osv
-from openerp.tools import config
-from openerp.tools.translate import _
-from openerp.tools import ustr
-from openerp import pooler
-import time
+from odoo import fields, models, _, api, exceptions, tools
+from odoo.tools import ustr
+from odoo import sql_db
 from datetime import datetime
 import os
 import csv
@@ -35,14 +30,9 @@ import re
 import codecs, cStringIO
 import shutil
 from ftplib import FTP
-import base64
-import threading, thread
-import traceback
-import sys
+import threading
 import logging
-import paramiko
 from lxml import etree
-from pprint import pprint
 
 _logger = logging.getLogger(__name__)
 try:
@@ -209,86 +199,68 @@ def fillzero(data, parameters, length, type, cast):
         data="0"+str(data)
     return data
 
-class edi_edi (osv.osv):
+class edi_edi (models.Model):
     _name = 'edi.edi'
     _description = 'edi.edi'
 
-    def _length(self, cr, uid, ids, name, arg, context=None):
-        res = {}
-        for edi in self.browse(cr, uid, ids, context=context):
+    @api.multi
+    def _length(self):
+        for edi in self:
             if edi.stop_identifier <= 0  and edi.start_identifier <= 0:
-                res[edi.id] = 0
+                edi.length_identifier = 0
             else:
-                res[edi.id] = edi.stop_identifier - edi.start_identifier + 1
-        return res
+                edi.length_identifier = edi.stop_identifier - edi.start_identifier + 1
 
-    _columns = {
-        'name':fields.char('Name', size=128, required=True),
-        'code':fields.char('Code', size=128, required=True),
-        'start_identifier':fields.integer('Start identifier', required=True),
-        'stop_identifier':fields.integer('Stop identifier', required=True),
-        'length_identifier': fields.function(_length, readonly=True, method=True, store=False, string='Length identifier', type='integer'),
-        'log_ids':fields.one2many('edi.edi.log', 'edi', 'Log'),
-        'result_ids':fields.one2many('edi.edi.result', 'edi', 'Result'),
-        'file_template':fields.char('Template File (Regular Expression)',128),
-        'type': fields.selection([('edi','edi'),('csv','csv'),('xml','xml'),('csv_struct','csv structured')], 'Type', required=True, size=24),
-        'thread':fields.boolean('Progress',readonly=True),
+    name = fields.Char('Name', size=128, required=True)
+    code = fields.Char('Code', size=128, required=True)
+    start_identifier = fields.Integer('Start identifier', required=True, default=0)
+    stop_identifier = fields.Integer('Stop identifier', required=True, default=0)
+    length_identifier = fields.Integer(compute="_length", string='Length identifier')
+    log_ids = fields.One2many('edi.edi.log', 'edi', 'Log')
+    result_ids = fields.One2many('edi.edi.result', 'edi', 'Result')
+    file_template = fields.Char('Template File (Regular Expression)', size=128, default=".*")
+    type = fields.Selection([('edi','edi'),('csv','csv'),('xml','xml'),('csv_struct','csv structured')], 'Type', required=True, size=24)
+    thread = fields.Boolean('Progress',readonly=True)
 
-        'charset': fields.selection([('UTF-8','UTF-8'),('ISO-8859-1','ISO-8859-1'),('ISO-8859-2','ISO-8859-2'),], 'Charset', required=True, size=24),
-        'end_line': fields.selection([('simple','Unix/Linux'),('win','Windows')], 'End line', required=True, size=24),
-        'float_separator': fields.selection([(',',','),('.','.')], 'Float Separator', required=True, size=5),
-        'delimiter':fields.char('Delimiter', size=1, required=True),
-        'quotechar':fields.char('Quotechar', size=1),
+    charset = fields.Selection([('UTF-8','UTF-8'),('ISO-8859-1','ISO-8859-1'),('ISO-8859-2','ISO-8859-2'),], 'Charset', required=True, size=24, default="UTF-8")
+    end_line = fields.Selection([('simple','Unix/Linux'),('win','Windows')], 'End line', required=True, size=24, default="simple")
+    float_separator = fields.Selection([(',',','),('.','.')], 'Float Separator', required=True, size=5, default=".")
+    delimiter = fields.Char('Delimiter', size=1, required=True, default=';')
+    quotechar = fields.Char('Quotechar', size=1, default="\"")
 
-        'force':fields.boolean('Force'),
-        'no_empty_file': fields.boolean('No Empty File'),
-        'header_xml':fields.char('Header XML', size=256,),
+    force = fields.Boolean('Force')
+    no_empty_file = fields.Boolean('No Empty File', default=True)
+    header_xml = fields.Char('Header XML', size=256,)
 
-        'skip_first':fields.boolean('Skip the First'),
-        'line_start':fields.integer('Start line', required=True),
-        'line_stop':fields.integer('Stop line', required=True),
+    skip_first = fields.Boolean('Skip the First')
+    line_start = fields.Integer('Start line', required=True, default=-1)
+    line_stop = fields.Integer('Stop line', required=True, default=-1)
 
-        'eval_in': fields.text('IN'),
-        'eval_out': fields.text('OUT'),
-        'path_in':fields.char('Path In', size=128,),
-        'path_in_move':fields.char('Path In Move', size=128,),
-        'path_out':fields.char('Path Out', size=128,),
+    eval_in = fields.Text('IN')
+    eval_out = fields.Text('OUT')
+    path_in = fields.Char('Path In', size=128, default='./addons/asperience_edi/data_import/')
+    path_in_move = fields.Char('Path In Move', size=128,)
+    path_out = fields.Char('Path Out', size=128, default='./addons/asperience_edi/data_export/')
 
-        'line_edi_ids':fields.one2many('edi.edi.line.edi', 'edi', 'Line Edi'),
-        'fields_ids':fields.one2many('edi.edi.csv.field', 'edi', 'Fields'),
-        'fields_xml_ids':fields.one2many('edi.edi.xml.field', 'edi', 'Fields'),
-        'line_csv_ids':fields.one2many('edi.edi.line.csv', 'edi', 'Line Structured CSV'),
+    line_edi_ids = fields.One2many('edi.edi.line.edi', 'edi', 'Line Edi')
+    fields_ids = fields.One2many('edi.edi.csv.field', 'edi', 'Fields')
+    fields_xml_ids = fields.One2many('edi.edi.xml.field', 'edi', 'Fields')
+    line_csv_ids = fields.One2many('edi.edi.line.csv', 'edi', 'Line Structured CSV')
 
-        'copy_in':fields.boolean('Copy before import'),
-        'ftp_path_in':fields.char('Path In', size=128,),
-        'ftp_url_in':fields.char('Url In', size=128),
-        'ftp_port_in':fields.integer('port In'),
-        'ftp_login_in':fields.char('Login In', size=128),
-        'ftp_password_in':fields.char('password', size=128),
-        'ftp_path_in_archive':fields.char('Path In Archive', size=128,),
+    copy_in = fields.Boolean('Copy before import')
+    ftp_path_in = fields.Char('Path In', size=128,)
+    ftp_url_in = fields.Char('Url In', size=128)
+    ftp_port_in = fields.Integer('port In')
+    ftp_login_in = fields.Char('Login In', size=128)
+    ftp_password_in = fields.Char('password', size=128)
+    ftp_path_in_archive = fields.Char('Path In Archive', size=128,)
 
-        'copy_out':fields.boolean('Copy after export'),
-        'ftp_path_out':fields.char('Path Out', size=128,),
-        'ftp_url_out':fields.char('Url Out', size=128),
-        'ftp_port_out':fields.integer('port Out'),
-        'ftp_login_out':fields.char('Login Out', size=128),
-        'ftp_password_out':fields.char('Password Out', size=128),
-    }
-    _defaults = {
-        'path_in': lambda *a: './addons/asperience_edi/data_import/',
-        'path_out': lambda *a: './addons/asperience_edi/data_export/',
-        'start_identifier': lambda *a: 0,
-        'stop_identifier': lambda *a: 0,
-        'line_start': lambda *a: -1,
-        'line_stop': lambda *a: -1,
-        'delimiter': lambda *a: ";",
-        'quotechar': lambda *a: "\"",
-        'file_template': lambda *a: ".*",
-        'float_separator': lambda *a: ".",
-        'end_line': lambda *a: "simple",
-        'charset': lambda *a: "UTF-8",
-        'no_empty_file': lambda *a: True,
-    }
+    copy_out = fields.Boolean('Copy after export')
+    ftp_path_out = fields.Char('Path Out', size=128,)
+    ftp_url_out = fields.Char('Url Out', size=128)
+    ftp_port_out = fields.Integer('port Out')
+    ftp_login_out = fields.Char('Login Out', size=128)
+    ftp_password_out = fields.Char('Password Out', size=128)
 
     def copy(self, cr, uid, id, default={}, context={}):
         default.update( {'log_ids':[],'result_ids':[]})
@@ -655,7 +627,7 @@ class edi_edi (osv.osv):
     @asperience_log
     def import_edi_thread(self, cr, uid, ids, context=False):
         _logger.debug('IMPORT EDI THREAD %s' % (ids))
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         thread_ptr = threading.Thread(target=self.import_edi, args=(cr2, uid, ids, context))
         thread_ptr.start()
         return {}
@@ -666,7 +638,7 @@ class edi_edi (osv.osv):
         thread = False
         if "thread" in context:
             thread = context["thread"]
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         cr2.autocommit(True)
         exception = False
         if not ids :
@@ -744,7 +716,7 @@ class edi_edi (osv.osv):
     @asperience_log
     def export_edi_thread(self, cr, uid, ids, context=False):
         _logger.debug("EXPORT EDI THREAD %s" % (ids))
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         thread_ptr = threading.Thread(target=self.export_edi, args=(cr2, uid, ids, context))
         thread_ptr.start()
         return {}
@@ -755,7 +727,7 @@ class edi_edi (osv.osv):
         thread = False
         if "thread" in context:
             thread = context["thread"]
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         cr2.autocommit(True)
         exception = False
         if not ids :
@@ -806,7 +778,7 @@ class edi_edi (osv.osv):
     @asperience_log
     def import_csv_thread(self, cr, uid, ids, context=False):
         _logger.debug("IMPORT CSV THREAD %s" % (ids))
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         thread_ptr = threading.Thread(target=self.import_csv, args=(cr2, uid, ids, context))
         thread_ptr.start()
         return {}
@@ -817,7 +789,7 @@ class edi_edi (osv.osv):
         thread = False
         if "thread" in context:
             thread = context["thread"]
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         cr2.autocommit(True)
         exception = False
         if not ids :
@@ -910,7 +882,7 @@ class edi_edi (osv.osv):
     @asperience_log
     def export_csv_thread(self, cr, uid, ids, context=False):
         _logger.debug("EXPORT CSV THREAD %s" % (ids))
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         thread_ptr = threading.Thread(target=self.export_csv, args=(cr2, uid, ids, context))
         thread_ptr.start()
         return {}
@@ -923,7 +895,7 @@ class edi_edi (osv.osv):
         ctx = dict(context)
         if "thread" in ctx:
             thread = ctx["thread"]
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         cr2.autocommit(True)
         exception = False
         if not ids :
@@ -973,7 +945,7 @@ class edi_edi (osv.osv):
 
     def import_xml_thread(self, cr, uid, ids, context=False):
         _logger.debug("IMPORT XML THREAD %s" % (ids))
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         thread_ptr = threading.Thread(target=self.import_xml, args=(cr2, uid, ids, context))
         thread_ptr.start()
         return {}
@@ -984,7 +956,7 @@ class edi_edi (osv.osv):
         thread = False
         if "thread" in context:
             thread = context["thread"]
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         cr2.autocommit(True)
         exception = False
         if not ids :
@@ -1057,7 +1029,7 @@ class edi_edi (osv.osv):
 
     @asperience_log
     def export_xml_thread(self, cr, uid, ids, context=False):
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         thread_ptr = threading.Thread(target=self.export_xml, args=(cr2, uid, ids, context))
         thread_ptr.start()
         return {}
@@ -1067,7 +1039,7 @@ class edi_edi (osv.osv):
         thread = False
         if "thread" in context:
             thread = context["thread"]
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         cr2.autocommit(True)
         exception = False
         if not ids :
@@ -1118,7 +1090,7 @@ class edi_edi (osv.osv):
     @asperience_log
     def import_csv_struct_thread(self, cr, uid, ids, context=False):
         _logger.debug("IMPORT CSV STRUCT THREAD %s" % (ids))
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         thread_ptr = threading.Thread(target=self.import_csv_struct, args=(cr2, uid, ids, context))
         thread_ptr.start()
         return {}
@@ -1129,7 +1101,7 @@ class edi_edi (osv.osv):
         thread = False
         if "thread" in context:
             thread = context["thread"]
-        cr2 = pooler.get_db(cr.dbname).cursor(serialized=False)
+        cr2 = sql_db.db_connect(self.env.cr.dbname).cursor()
         cr2.autocommit(True)
         exception = False
         if not ids :
@@ -1261,9 +1233,9 @@ class edi_edi (osv.osv):
         message = "%s edi %s : %s %s" % (vals['type'],vals['name'],vals['object_id'],vals['write_access'])
         self.log(cr, uid, ids[0], message)
         log_obj.create(cr,uid,vals)
-edi_edi()
 
-class edi_edi_log (osv.osv):
+
+class edi_edi_log (models.Model):
     _name = 'edi.edi.log'
 
     def write_access(self, cr, uid, model,ids):
@@ -1300,255 +1272,202 @@ class edi_edi_log (osv.osv):
         res = obj.read(cr, uid, ids, ['model', 'name'], context)
         return [(r['model'], r['name']) for r in res]
 
-    _columns = {
-        'name':fields.char('Name', size=128, required=True),
-        'date': fields.datetime('Date'),
-        'edi':fields.many2one('edi.edi', 'Edi', required=True),
-        'object_id' : fields.reference('Object', selection=_models_get, size=64),
-        'type': fields.selection([('export','export'),('import','import')], 'Type', required=True, size=24),
-        'ref':fields.char('Ref', size=128),
-        'write_access': fields.boolean('Write access'),
-    }
-    _defaults = {
-        "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S"),
-        'write_access': lambda *a: True,
-    }
-    _order = "date desc, id desc"
-edi_edi_log()
+    name = fields.Char('Name', size=128, required=True)
+    date = fields.Datetime('Date', default=fields.Datetime.now)
+    edi = fields.Many2one('edi.edi', 'Edi', required=True)
+    object_id = fields.Reference(string='Object', selection=_models_get, size=64)
+    type = fields.Selection([('export','export'),('import','import')], 'Type', required=True, size=24)
+    ref = fields.Char('Ref', size=128)
+    write_access = fields.Boolean('Write access', default=True)
 
-class edi_edi_result (osv.osv):
+    _order = "date desc, id desc"
+
+
+class edi_edi_result (models.Model):
     _name = 'edi.edi.result'
     _description = 'edi.edi.result'
 
-    _columns = {
-        'name':fields.char('Name', size=128, required=True),
-        'date': fields.datetime('Date'),
-        'edi':fields.many2one('edi.edi', 'Edi', required=True),
-        'value': fields.text('Value'),
-    }
-    _defaults = {
-        "date": lambda *a: time.strftime("%Y-%m-%d %H:%M:%S"),
-    }
-    _order = "date desc, id desc"
-edi_edi_result()
+    name = fields.Char('Name', size=128, required=True)
+    date = fields.Datetime('Date', default=fields.Datetime.now)
+    edi = fields.Many2one('edi.edi', 'Edi', required=True)
+    value = fields.Text('Value')
 
-class edi_edi_line_edi (osv.osv):
+    _order = "date desc, id desc"
+
+
+class edi_edi_line_edi (models.Model):
     _name = 'edi.edi.line.edi'
     _description = 'edi.edi.line.edi'
 
-    def check_name(self, cr, uid, ids):
-        for line in self.browse(cr,uid,ids):
+    @api.constrains('name')
+    def check_name(self):
+        for line in self:
             if len(line.name) != int(line.edi.length_identifier) and int(line.edi.length_identifier) != 0:
-                return False
-        return True
+                raise exceptions.ValidationError(_("Invalid length for name"))
 
-    def _dict_fields_ids(self, cr, uid, ids, name, arg, context=None):
-        res = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            res[line.id] = ""
+    @api.multi
+    def _dict_fields_ids(self):
+        for line in self:
             for field in line.fields_ids:
-                res[line.id] += "\""+field.name+"\":False,\r"
+                line.dict += "\""+field.name+"\":False,\r"
 
             char = '0'
             for field in line.fields_ids:
-                res[line.id] += char*field.length
+                line.dict += char*field.length
                 if char == '0':
                     char = '1'
                 else:
                     char = '0'
-        return res
 
-    _columns = {
-        'name':fields.char('Name', size=128, required=True),
-        'sequence': fields.integer('Sequence', required=True),
-        'edi':fields.many2one('edi.edi', 'Line', required=True),
-        'fields_ids':fields.one2many('edi.edi.line.edi.field', 'line', 'Fields'),
-        'dict': fields.function(_dict_fields_ids, readonly=False, method=True, store=False, string='Dict to put in eval', type='text'),
-    }
-    _defaults = {
-        'sequence': lambda *a : 1,
-    }
+    name = fields.Char('Name', size=128, required=True)
+    sequence = fields.Integer('Sequence', required=True, default=1)
+    edi = fields.Many2one('edi.edi', 'Line', required=True)
+    fields_ids = fields.One2many('edi.edi.line.edi.field', 'line', 'Fields')
+    dict = fields.Text(compute="_dict_fields_ids", string='Dict to put in eval')
+
     _order = "sequence"
 
-    _constraints = [(check_name, "Invalid length for name", ["name"])]
 
-edi_edi_line_edi()
-
-class edi_edi_line_edi_field (osv.osv):
+class edi_edi_line_edi_field (models.Model):
     _name = 'edi.edi.line.edi.field'
     _description = 'edi.edi.line.edi.field'
 
-    def check_start_stop(self, cr, uid, ids):
-        for field in self.browse(cr,uid,ids):
+    @api.constrains("start","stop")
+    def check_start_stop(self):
+        for field in self:
             if field.start > field.stop:
-                return False
+                raise exceptions.ValidationError(_("Invalid start stop"))
             for next in field.line.fields_ids:
                 if field.start >= next.start and field.start <= next.stop and field.id != next.id:
-                    return False
+                    raise exceptions.ValidationError(_("Invalid start stop"))
                 elif field.stop >= next.start and field.stop <= next.stop and field.id != next.id:
-                    return False
-        return True
-
-    def check_name(self, cr, uid, ids):
-        for field in self.browse(cr,uid,ids):
+                    raise exceptions.ValidationError(_("Invalid start stop"))
+    @api.constrains("name")
+    def check_name(self):
+        for field in self:
             for next in field.line.fields_ids:
                 if field.name == next.name and field.id != next.id:
-                    return False
-        return True
+                    raise exceptions.ValidationError(_("The name must be unique !"))
 
-    def _length(self, cr, uid, ids, name, arg, context=None):
-        res = {}
-        for field in self.browse(cr, uid, ids, context=context):
-            res[field.id] = field.stop - field.start + 1
-        return res
+    @api.multi
+    def _length(self):
+        for field in self:
+            field.length = field.stop - field.start + 1
 
-    _columns = {
-        'name':fields.char('Name', size=128, required=True),
-        'line':fields.many2one('edi.edi.line.edi', 'Line', required=True),
-        'start':fields.integer('Start', required=True),
-        'stop':fields.integer('Stop', required=True),
-        'length': fields.function(_length, readonly=True, method=True, store=False, string='Length', type='integer'),
-        'align': fields.selection([('right','right'),('left','left'),('zero','zero')], 'Align', required=True, size=24),
-        'type': fields.selection([('int','int'),('float','float'),('char','char')], 'Type', required=True, size=24),
-        'cast':fields.char('Cast', size=128,),
-        'description':fields.char('Description', size=128,),
-    }
-    _defaults = {
-    }
+    name = fields.Char('Name', size=128, required=True)
+    line = fields.Many2one('edi.edi.line.edi', 'Line', required=True)
+    start = fields.Integer('Start', required=True)
+    stop = fields.Integer('Stop', required=True)
+    length = fields.Integer(compute="_length", string='Length')
+    align = fields.Selection([('right','right'),('left','left'),('zero','zero')], 'Align', required=True, size=24)
+    type = fields.Selection([('int','int'),('float','float'),('char','char')], 'Type', required=True, size=24)
+    cast = fields.Char('Cast', size=128,)
+    description = fields.Char('Description', size=128,)
+
     _order = "line,start"
 
-    _constraints = [(check_start_stop, "Invalid start stop", ["start","stop"]),(check_name, "The name must be unique !", ["name"])]
-edi_edi_line_edi_field()
 
-class edi_edi_csv_field (osv.osv):
+class edi_edi_csv_field (models.Model):
     _name = 'edi.edi.csv.field'
     _description = 'edi.edi.csv.field'
 
-    def check_name(self, cr, uid, ids):
-        for field in self.browse(cr,uid,ids):
+    @api.constrains('name')
+    def check_name(self):
+        for field in self:
             for next in field.edi.fields_ids:
                 if field.name == next.name and field.id != next.id:
-                    return False
-        return True
+                    raise exceptions.ValidationError(_("The name must be unique !"))
 
-    def check_sequence(self, cr, uid, ids):
-        for field in self.browse(cr,uid,ids):
+    @api.constrains('sequence')
+    def check_sequence(self):
+        for field in self:
             for next in field.edi.fields_ids:
                 if field.sequence == next.sequence and field.id != next.id:
-                    return False
-        return True
+                    raise exceptions.ValidationError(_("The sequence must be unique !"))
 
-    _columns = {
-        'name':fields.char('Name', size=128, required=True),
-        'sequence': fields.integer('Sequence', required=True),
-        'edi':fields.many2one('edi.edi', 'Edi', required=True),
-        'type': fields.selection([('int','int'),('float','float'),('char','char')], 'Type', required=True, size=24),
-        'cast':fields.char('Cast', size=128,),
-        'description':fields.char('Description', size=128,),
-    }
-    _defaults = {
-        'sequence': lambda *a : 1
-    }
+    name = fields.Char('Name', size=128, required=True)
+    sequence = fields.Integer('Sequence', required=True, default=1)
+    edi = fields.Many2one('edi.edi', 'Edi', required=True)
+    type = fields.Selection([('int','int'),('float','float'),('char','char')], 'Type', required=True, size=24)
+    cast = fields.Char('Cast', size=128,)
+    description = fields.Char('Description', size=128,)
+
     _order = "edi,sequence"
 
-    _constraints = [(check_name, "The name must be unique !", ["name"]),(check_sequence, "The sequence must be unique !", ["sequence"])]
-edi_edi_csv_field()
 
-class edi_edi_xml_field (osv.osv):
+class edi_edi_xml_field (models.Model):
     _name = 'edi.edi.xml.field'
     _description = 'edi.edi.xml.field'
 
-    def check_name(self, cr, uid, ids):
-        for field in self.browse(cr,uid,ids):
+    @api.constrains('name')
+    def check_name(self):
+        for field in self:
             for next in field.edi.fields_ids:
                 if field.name == next.name and field.id != next.id:
-                    return False
-        return True
+                    raise exceptions.ValidationError(_("The name must be unique !"))
 
-    _columns = {
-        'name':fields.char('Name', size=128, required=True),
-        'sequence': fields.integer('Sequence', required=True),
-        'parent':fields.many2one('edi.edi.xml.field', 'Parent'),
-        'edi':fields.many2one('edi.edi', 'Edi', required=True),
-        'type': fields.selection([('int','int'),('float','float'),('char','char')], 'Type', required=True, size=24),
-        'cast':fields.char('Cast', size=128,),
-        'description':fields.char('Description', size=128,),
-    }
-    _defaults = {
-        'sequence': lambda *a : 1
-    }
+    name = fields.Char('Name', size=128, required=True)
+    sequence = fields.Integer('Sequence', required=True, default=1)
+    parent = fields.Many2one('edi.edi.xml.field', 'Parent')
+    edi = fields.Many2one('edi.edi', 'Edi', required=True)
+    type = fields.Selection([('int','int'),('float','float'),('char','char')], 'Type', required=True, size=24)
+    cast = fields.Char('Cast', size=128,)
+    description = fields.Char('Description', size=128,)
+
     _order = "parent,sequence"
 
-    _constraints = [(check_name, "The name must be unique !", ["name"])]
-edi_edi_xml_field()
 
-class edi_edi_line_csv (osv.osv):
+class edi_edi_line_csv (models.Model):
     _name = 'edi.edi.line.csv'
     _description = 'Lines for structured CSV'
 
-    def check_name(self, cr, uid, ids):
-        for line in self.browse(cr,uid,ids):
+    @api.constrains('name')
+    def check_name(self):
+        for line in self:
             if len(line.name) != int(line.edi.length_identifier) and int(line.edi.length_identifier) != 0:
-                return False
-        return True
+                raise exceptions.ValidationError(_("Invalid length for name"))
 
-    def _dict_fields_ids(self, cr, uid, ids, name, arg, context=None):
-        res = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            res[line.id] = ""
+    @api.multi
+    def _dict_fields_ids(self):
+        for line in self:
             for field in line.fields_ids:
-                res[line.id] += "\""+field.name+"\":False,\r"
-        return res
+                line.dict += "\""+field.name+"\":False,\r"
 
-    _columns = {
-        'name':fields.char('Name', size=128, required=True),
-        'sequence': fields.integer('Sequence', required=True),
-        'edi':fields.many2one('edi.edi', 'Line', required=True),
-        'fields_ids':fields.one2many('edi.edi.line.csv.field', 'line', 'Fields'),
-        'dict': fields.function(_dict_fields_ids, readonly=False, method=True, store=False, string='Dict to put in eval', type='text'),
-        'description':fields.char('Description', size=128,),
-    }
-    _defaults = {
-        'sequence': lambda *a : 1,
-    }
+    name = fields.Char('Name', size=128, required=True)
+    sequence = fields.Integer('Sequence', required=True, default=1)
+    edi = fields.Many2one('edi.edi', 'Line', required=True)
+    fields_ids = fields.One2many('edi.edi.line.csv.field', 'line', 'Fields')
+    dict = fields.Text(compute="_dict_fields_ids", string='Dict to put in eval')
+    description = fields.Char('Description', size=128,)
+
     _order = "edi,sequence"
 
-    _constraints = [(check_name, "Invalid length for name", ["name"])]
 
-edi_edi_line_csv()
-
-class edi_edi_line_csv_field (osv.osv):
+class edi_edi_line_csv_field (models.Model):
     _name = 'edi.edi.line.csv.field'
     _description = 'Fields for structured CSV lines'
 
-    def check_name(self, cr, uid, ids):
-        for field in self.browse(cr,uid,ids):
+    @api.constrains('name')
+    def check_name(self):
+        for field in self:
             for next in field.line.fields_ids:
                 if field.name == next.name and field.id != next.id:
-                    return False
-        return True
+                    raise exceptions.ValidationError(_("The name must be unique !"))
 
-    def check_sequence(self, cr, uid, ids):
-        for field in self.browse(cr,uid,ids):
+    @api.constrains('sequence')
+    def check_sequence(self):
+        for field in self:
             for next in field.line.fields_ids:
                 if field.sequence == next.sequence and field.id != next.id:
-                    return False
-        return True
+                    raise exceptions.ValidationError(_("The sequence must be unique !"))
 
-    _columns = {
-        'line':fields.many2one('edi.edi.line.csv', 'Line', required=True),
-        'name':fields.char('Name', size=128, required=True),
-        'sequence': fields.integer('Sequence', required=True),
-        'type': fields.selection([('int','int'),('float','float'),('char','char')], 'Type', required=True, size=24),
-        'cast':fields.char('Cast', size=128,),
-        'description':fields.char('Description', size=128,),
-    }
-    _defaults = {
-    }
+    line = fields.Many2one('edi.edi.line.csv', 'Line', required=True)
+    name = fields.Char('Name', size=128, required=True)
+    sequence = fields.Integer('Sequence', required=True)
+    type = fields.Selection([('int','int'),('float','float'),('char','char')], 'Type', required=True, size=24)
+    cast = fields.Char('Cast', size=128,)
+    description = fields.Char('Description', size=128,)
+
     _order = "line,sequence"
-
-    _constraints = [(check_name, "The name must be unique !", ["name"]),(check_sequence, "The sequence must be unique !", ["sequence"])]
-
-edi_edi_line_csv_field()
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

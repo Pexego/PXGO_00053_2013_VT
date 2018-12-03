@@ -27,7 +27,7 @@
     'author': 'Comunitea Servicios Tecnológicos',
     'website': 'www.comunitea.com',
     "depends": ['base', 'sale', 'l10n_es_partner', 'warning', 'account',
-                'base_partner_sequence', 'stock', 'account_followup',
+                'base_partner_sequence', 'stock', 'account_credit_control',
                 'purchase', 'purchase_advance_payment',
                 'account_due_list', 'rappel', 'product_brand', 'customer_lost'],
     "data": ["partner_view.xml", "stock_view.xml",
