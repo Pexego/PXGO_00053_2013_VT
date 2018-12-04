@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Omar Castiñeira Saavedra
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 import odoo.addons.decimal_precision as dp
 import requests
 import json
@@ -33,7 +32,7 @@ class StockPicking(models.Model):
     @api.depends('move_lines.state', 'move_lines.picking_id',
                  'move_lines.product_id', 'move_lines.product_uom_qty',
                  'move_lines.product_uom')
-    def _cal_weight(self):
+    def cal_weight(self):
         for picking in self:
             total_weight = total_weight_net = 0.00
             for move in picking.move_lines:
@@ -56,82 +55,84 @@ class StockPicking(models.Model):
 
     @api.multi
     def button_check_tracking(self):
-        carrier_ref = self.carrier_tracking_ref
-        carrier = self.carrier_name
-        status_list = self.env['picking.tracking.status.list']
-        url = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking')
-        password = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking.pass')
-        language = self.env.user.lang or u'es_ES'
-        if 'Correos' in carrier:
-            carrier_ref = carrier_ref[-13:]
-        elif 'UPS' in carrier:
-            carrier_ref = carrier_ref[:35]
-
-        data = {'request_API': {
-                    "numRef": carrier_ref,
-                    "transportista": carrier,
-                    "password": password,
-                    "language": language
-        }}
-
-        response = requests.session().post(url, data=json.dumps(data))
-        if response.status_code != 200:
-            raise Exception(response.text)
-        if 'error' in response.url:
-            raise Exception("Could not find information on url '%s'" % response.url)
-        info = json.loads(response.text)
-
-        # Update picking field "number of packages"
-        if info['Num_bags']:
-            self.number_of_packages = info['Num_bags']
-
-        view_id = self.env['picking.tracking.status']
-        ctx = {'information': info}
-        new = view_id.with_context(ctx).create({})
-        # Update wizard field "num packages"
-        new.write({'num_packages': info['Num_bags']})
-        status_list.search([('picking_id', '=', self.id)]).unlink()
-
-        if info["Bags"]:
-            for package in info["Bags"]:
-                info_package = info["Bags"][package]
-                data_status = {
-                    'wizard_id': new.id,
-                    'picking_id': self.id,
-                    'packages_reference': info_package["Tracking"][0] + ' (x' + str(info_package["Num_bags"]) + ')',
-                    'status': package.upper()
-                }
-                new.write({'status_list': [(0, 0, data_status)]})
-                last_status = True
-                for status in info_package["Activity"]:
-                    city_country = status["City"]
-                    if status["Country"]:
-                        city_country += ' (' + status["Country"] + ')'
-
-                    date_time = status["Date"] + ' ' + status["Time"]
-
-                    data_status = {
-                        'wizard_id': new.id,
-                        'picking_id': self.id,
-                        'status': status["Status"],
-                        'city': city_country,
-                        'date': date_time,
-                        'last_record': last_status
-                    }
-                    new.write({'status_list': [(0, 0, data_status)]})
-                    last_status = False
-
-        return {
-            'name': 'Tracking status information',
-            'view_type': 'form',
-            'view_mode': 'form',
-            'target': 'new',
-            'res_model': 'picking.tracking.status',
-            'res_id': new.id,
-            'src_model': 'stock.picking',
-            'type': 'ir.actions.act_window',
-            'id': 'action_picking_tracking_status',
-            }
+        pass
+        # # TODO: Revisar este botón al tener datos de tracking
+        # carrier_ref = self.carrier_tracking_ref
+        # carrier = self.carrier_name
+        # status_list = self.env['picking.tracking.status.list']
+        # url = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking')
+        # password = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking.pass')
+        # language = self.env.user.lang or u'es_ES'
+        # if 'Correos' in carrier:
+        #     carrier_ref = carrier_ref[-13:]
+        # elif 'UPS' in carrier:
+        #     carrier_ref = carrier_ref[:35]
+        #
+        # data = {'request_API': {
+        #             "numRef": carrier_ref,
+        #             "transportista": carrier,
+        #             "password": password,
+        #             "language": language
+        # }}
+        #
+        # response = requests.session().post(url, data=json.dumps(data))
+        # if response.status_code != 200:
+        #     raise Exception(response.text)
+        # if 'error' in response.url:
+        #     raise Exception("Could not find information on url '%s'" % response.url)
+        # info = json.loads(response.text)
+        #
+        # # Update picking field "number of packages"
+        # if info['Num_bags']:
+        #     self.number_of_packages = info['Num_bags']
+        #
+        # view_id = self.env['picking.tracking.status']
+        # ctx = {'information': info}
+        # new = view_id.with_context(ctx).create({})
+        # # Update wizard field "num packages"
+        # new.write({'num_packages': info['Num_bags']})
+        # status_list.search([('picking_id', '=', self.id)]).unlink()
+        #
+        # if info["Bags"]:
+        #     for package in info["Bags"]:
+        #         info_package = info["Bags"][package]
+        #         data_status = {
+        #             'wizard_id': new.id,
+        #             'picking_id': self.id,
+        #             'packages_reference': info_package["Tracking"][0] + ' (x' + str(info_package["Num_bags"]) + ')',
+        #             'status': package.upper()
+        #         }
+        #         new.write({'status_list': [(0, 0, data_status)]})
+        #         last_status = True
+        #         for status in info_package["Activity"]:
+        #             city_country = status["City"]
+        #             if status["Country"]:
+        #                 city_country += ' (' + status["Country"] + ')'
+        #
+        #             date_time = status["Date"] + ' ' + status["Time"]
+        #
+        #             data_status = {
+        #                 'wizard_id': new.id,
+        #                 'picking_id': self.id,
+        #                 'status': status["Status"],
+        #                 'city': city_country,
+        #                 'date': date_time,
+        #                 'last_record': last_status
+        #             }
+        #             new.write({'status_list': [(0, 0, data_status)]})
+        #             last_status = False
+        #
+        #  return {
+        #     'name': 'Tracking status information',
+        #     'view_type': 'form',
+        #     'view_mode': 'form',
+        #     'target': 'new',
+        #     'res_model': 'picking.tracking.status',
+        #     'res_id': new.id,
+        #     'src_model': 'stock.picking',
+        #     'type': 'ir.actions.act_window',
+        #     'id': 'action_picking_tracking_status',
+        #     }
 
     @api.multi
     def write(self, vals):
@@ -146,9 +147,9 @@ class StockPicking(models.Model):
     weight_st = fields.Float(digits_compute=dp.get_precision('Stock Weight'))
     weight_net_st = fields.\
         Float(digits_compute=dp.get_precision('Stock Weight'))
-    weight = fields.Float('Weight', compute='_cal_weight', multi=True, readonly=False,
+    weight = fields.Float('Weight', compute='cal_weight', multi=True, readonly=False,
                           digits_compute=dp.get_precision('Stock Weight'))
-    weight_net = fields.Float('Net Weight', compute="_cal_weight", readonly=False,
+    weight_net = fields.Float('Net Weight', compute="cal_weight", readonly=False,
                               digits_compute=dp.get_precision('Stock Weight'),
                               multi=True)
     carrier_tracking_ref = fields.Char('Carrier Tracking Ref', copy=False)
@@ -163,18 +164,16 @@ class StockPicking(models.Model):
 
 class StockMove(models.Model):
 
-    _inherit = "stock.move"
+    _inherit = 'stock.move'
 
     @api.multi
-    @api.depends('product_id', 'product_uom_qty', 'product_uom', 'weight_st',
-                 'weight_net_st')
-    def _cal_move_weight(self):
+    @api.depends('product_id', 'product_uom_qty', 'product_uom', 'weight_st', 'weight_net_st')
+    def cal_move_weight(self):
         for move in self:
             weight = weight_net = 0.00
             if move.product_id.weight > 0.00:
                 converted_qty = move.product_qty
                 weight = (converted_qty * move.product_id.weight)
-
                 if move.product_id.weight_net > 0.00:
                     weight_net = (converted_qty * move.product_id.weight_net)
             if move.weight_st:
@@ -191,10 +190,10 @@ class StockMove(models.Model):
                                                 uom_categ_id.id),
                                                ('factor', '=', 1)])[0]
 
-    weight = fields.Float('Weight', compute='_cal_move_weight', multi=True,
+    weight = fields.Float('Weight', compute='cal_move_weight', multi=True,
                           digits_compute=dp.get_precision('Stock Weight'),
                           store=True, readonly=False)
-    weight_net = fields.Float('Net weight', compute='_cal_move_weight',
+    weight_net = fields.Float('Net weight', compute='cal_move_weight',
                               digits_compute=dp.get_precision('Stock Weight'),
                               store=True, multi=True, readonly=False)
     weight_st = fields.Float(digits_compute=dp.get_precision('Stock Weight'))

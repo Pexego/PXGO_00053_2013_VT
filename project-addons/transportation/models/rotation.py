@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,13 +18,13 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 import math
 
 
-class area_transportist_rel(models.Model):
+class AreaTransportistRel(models.Model):
 
-    _name = "area.transportist.rel"
+    _name = 'area.transportist.rel'
 
     area_id = fields.Many2one('res.partner.area', 'Area')
 
@@ -35,9 +34,9 @@ class area_transportist_rel(models.Model):
     ratio_shipping = fields.Integer('ratio')
 
 
-class transportation_daily(models.Model):
+class TransportationDaily(models.Model):
 
-    _name = "transportation.daily"
+    _name = 'transportation.daily'
 
     date = fields.Date('Date')
     area_id = fields.Many2one('res.partner.area', 'Area')
@@ -46,7 +45,7 @@ class transportation_daily(models.Model):
 
     def create(self, vals):
         counter_obj = self.env['assignation.counter']
-        obj = super(transportation_daily, self).create(vals)
+        obj = super(TransportationDaily, self).create(vals)
         for transporter in obj.area_id.transporter_rotation_ids:
             counter_vals = {
                 'transporter': transporter.transporter_id.id,
@@ -78,7 +77,7 @@ class transportation_daily(models.Model):
             counter[0].quantity += 1
 
 
-class assignation_counter(models.Model):
+class AssignationCounter(models.Model):
 
     _name = 'assignation.counter'
     _order = 'rot_counter, ratio desc'

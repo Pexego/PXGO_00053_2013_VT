@@ -45,6 +45,6 @@ class SaleOrder(models.Model):
                             _("The product {0} can only be sold in groups of {1}")
                             .format(line.product_id.name, line.product_id.sale_in_groups_of))
 
-        res = super(SaleOrder, self).action_button_confirm()
+        res = super(SaleOrder, self).action_confirm()
 
         return res
