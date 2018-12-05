@@ -11,12 +11,13 @@
     "depends": [
         "base",
         "sale",
-        "connector",
+        "stock",
+        "queue_job",
         "sale_stock"
-        "picking_invoice_pending"
     ],
     "data": [
         'data/job_channel_data.xml',
         'views/sale_view.xml',
+        'wizard/schedule_wizard_view.xml',
     ],
 }

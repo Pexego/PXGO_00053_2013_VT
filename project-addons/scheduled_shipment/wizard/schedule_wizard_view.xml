@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="scheduled_shipping_wizard">
+            <field name="name">Schedule Shipping</field>
+            <field name="model">stock.schedule.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                      <field name="scheduled_date"/>
+                    </group>
+                    <footer>
+                        <button string="Cancel" special="cancel" class="oe_highlight"/>
+                        <button name="action_button_schedule" string="Schedule" type="object" class="oe_highlight" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_schedule_shipping_wizard" model="ir.actions.act_window">
+            <field name="name">Schedule Shipping</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.schedule.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="scheduled_shipping_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>
