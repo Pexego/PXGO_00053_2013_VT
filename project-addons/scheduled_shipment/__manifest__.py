@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
@@ -12,12 +11,13 @@
     "depends": [
         "base",
         "sale",
-        "connector",
-        "sale_stock",
-        "picking_invoice_pending"
+        "stock",
+        "queue_job",
+        "sale_stock"
     ],
     "data": [
         'data/job_channel_data.xml',
         'views/sale_view.xml',
+        'wizard/schedule_wizard_view.xml',
     ],
 }
