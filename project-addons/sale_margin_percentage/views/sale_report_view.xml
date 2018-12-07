@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-<data>
+<odoo>
+    <data>
           <record id="view_order_product_graph2" model="ir.ui.view">
                <field name="name">sale.report.graph2</field>
                <field name="model">sale.report</field>
@@ -24,5 +24,5 @@
                    </graph>
                </field>
           </record>
-</data>
-</openerp>
+    </data>
+</odoo>

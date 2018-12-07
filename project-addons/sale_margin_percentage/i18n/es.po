@@ -16,12 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_margin_percentage
-#: field:sale.order.line,margin_perc:0
+#: model:ir.model.fields,field_description:sale_margin_percentage.field_sale_order_line_margin_perc
 msgid "Margin"
 msgstr "Margen"
 
 #. module: sale_margin_percentage
-#: field:sale.order,total_purchase:0
+#: model:ir.model.fields,field_description:sale_margin_percentage.field_sale_order_total_purchase
 msgid "Price purchase"
 msgstr "Precio de compra"
 
@@ -36,22 +36,22 @@ msgid "Sales Order Line"
 msgstr "Línea pedido de venta"
 
 #. module: sale_margin_percentage
-#: field:sale.order.line,margin_perc_rappel:0
+#: model:ir.model.fields,field_description:sale_margin_percentage.field_sale_order_line_margin_perc_rappel
 msgid "Margin"
 msgstr "Margen"
 
 #. module: sale_margin_percentage
-#: help:sale.order.line,margin_perc_rappel:0
+#: model:ir.model.fields,help:sale_margin_percentage.field_sale_order_line_margin_perc_rappel
 msgid "Margin after the Coupon rappel"
 msgstr "Margen después del Vale Ahorro"
 
 #. module: sale_margin_percentage
-#: field:sale.order,margin_rappel:0
+#: model:ir.model.fields,field_description:sale_margin_percentage.field_sale_order_margin_rappel
 msgid "Margin"
 msgstr "Margen"
 
 #. module: sale_margin_percentage
-#: help:sale.order,margin_rappel:0
+#: model:ir.model.fields,help:sale_margin_percentage.field_sale_order_margin_rappel
 msgid "Margin based on the coupon rappel"
 msgstr "Margen calculado con el vale ahorro"
 

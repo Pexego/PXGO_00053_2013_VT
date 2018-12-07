@@ -1,11 +1,11 @@
 
 
-from openerp.osv import fields, osv
-from openerp import tools
+from odoo import models, fields, api
+from odoo import tools
 
 
-class sale_report(osv.osv):
-    _inherit = "sale.report"
+class SaleReport(models.Model):
+    _inherit = 'sale.report'
 
     _columns = {
         'benefit': fields.float('Benefit', readonly=True),
@@ -13,7 +13,7 @@ class sale_report(osv.osv):
     }
 
     def _select(self):
-        select_str = super(sale_report, self)._select()
+        select_str = super(SaleReport, self)._select()
         this_str = \
             """,sum(l.product_uom_qty * l.price_unit * (100.0-l.discount) /
              100.0) - sum(l.purchase_price*l.product_uom_qty)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -21,12 +20,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
-class sale_order_line(models.Model):
+class SaleOrderLine(models.Model):
 
-    _inherit = "sale.order.line"
+    _inherit = 'sale.order.line'
 
     @api.one
     @api.depends("product_uom_qty", "price_unit", "discount", "product_id")
@@ -97,9 +96,9 @@ class sale_order_line(models.Model):
                                store=True, multi='marg', readonly=True, help='Margin after the Coupon rappel')
 
 
-class sale_order(models.Model):
+class SaleOrder(models.Model):
 
-    _inherit = "sale.order"
+    _inherit = 'sale.order'
 
     @api.multi
     def fix_sale_margin(self):
