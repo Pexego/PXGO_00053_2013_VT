@@ -4,7 +4,7 @@
 
         <menuitem id="crm_phonecall_menu_sat" name="Phone Calls" parent="crm_claim_rma.menu_sat" sequence="10"/>
 
-        <record id="crm_phonecall_custom_call_type" model="ir.ui.view">
+        <!--TODO: Migrar<record id="crm_phonecall_custom_call_type" model="ir.ui.view">
             <field name="name">crm.phonecall.custom.call.type</field>
             <field name="model">crm.phonecall</field>
             <field name="type">tree</field>
@@ -26,7 +26,7 @@
                     <field name="description"/>
                 </field>
             </field>
-        </record>
+        </record>-->
         <record id="crm_phonecall_custom_wizard_form_view" model="ir.ui.view">
             <field name="name">crm.phonecall.custom.wizard.form</field>
             <field name="model">crm.phonecall</field>
@@ -63,7 +63,7 @@
         <menuitem id="crm_phonecall_custom_wizard_menu" action="crm_phonecall_custom_wizard_action"
             parent="crm.menu_crm_case_phone" sequence="1"/>
 
-        <record id="crm_phonecall_form_add_call_type" model="ir.ui.view">
+        <!--TODO: Migrar <record id="crm_phonecall_form_add_call_type" model="ir.ui.view">
             <field name="name">crm.phonecall.form.add.call.type</field>
             <field name="model">crm.phonecall</field>
             <field name="inherit_id" ref="crm.crm_case_phone_form_view"/>
@@ -76,7 +76,7 @@
                     <field name="description"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_crm_case_phonecalls_filter_group_by" model="ir.ui.view">
             <field name="name">crm.phonecall.form.add.group.by</field>
@@ -135,7 +135,7 @@
                   parent="crm_phonecall_menu_sat" sequence="1"/>
 
         <!--Logged Phonecalls Tree View SAT-->
-        <record model="ir.ui.view" id="crm_case_inbound_phone_tree_view_sat">
+        <!--TODO: Migrar<record model="ir.ui.view" id="crm_case_inbound_phone_tree_view_sat">
             <field name="name">CRM - Logged Phone Calls Tree SAT</field>
             <field name="model">crm.phonecall</field>
             <field name="arch" type="xml">
@@ -187,7 +187,7 @@
             <field name="domain">[('scope', '=', 'sat')]</field>
             <field name="context">{'search_default_state': 'done', 'default_state': 'done', 'default_scope': 'sat'}</field>
             <field name="search_view_id" ref="crm.view_crm_case_phonecalls_filter"/>
-        </record>
+        </record>-->
 
         <record id="view_partners_form_crm_calls_sat" model="ir.ui.view">
             <field name="name">view.res.partner.form.crm.inherited.calls.sat</field>

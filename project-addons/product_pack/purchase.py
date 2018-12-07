@@ -18,36 +18,23 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import fields, orm
+from odoo import fields, models
 
 
-class purchase_order_line(orm.Model):
+class purchase_order_line(models.Model):
     _inherit = 'purchase.order.line'
-    _columns = {
-        'sequence': fields.integer(
-            'Sequence',
-            help="""Gives the sequence order when displaying a list of
-            purchase order lines. """
-        ),
-        'pack_depth': fields.integer(
-            'Depth', required=True,
-            help='Depth of the product if it is part of a pack.'
-        ),
-        'pack_parent_line_id': fields.many2one(
+
+    pack_depth = fields.Integer(
+            'Depth', required=True, default=0,
+            help='Depth of the product if it is part of a pack.')
+    pack_parent_line_id = fields.Many2one(
             'purchase.order.line', 'Pack',
-            help='The pack that contains this product.'
-        ),
-        'pack_child_line_ids': fields.one2many(
-            'purchase.order.line', 'pack_parent_line_id', 'Lines in pack'
-        ),
-    }
-    _order = 'order_id desc, id'
-    _defaults = {
-        'pack_depth': 0,
-    }
+            help='The pack that contains this product.')
+    pack_child_line_ids = fields.One2many(
+            'purchase.order.line', 'pack_parent_line_id', 'Lines in pack')
 
 
-class purchase_order(orm.Model):
+class purchase_order(models.Model):
     _inherit = 'purchase.order'
 
     def create(self, cr, uid, vals, context=None):

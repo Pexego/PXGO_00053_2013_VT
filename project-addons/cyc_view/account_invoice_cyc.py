@@ -19,7 +19,7 @@
 #
 ##############################################################################
 from openerp import models, fields, tools
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 
 
 class AccountInvoiceCyC(models.Model):
@@ -51,9 +51,9 @@ class AccountInvoiceCyC(models.Model):
     user_id = fields.Many2one("res.users", "Comercial", readonly=True)
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
 
-    def init(self, cr):
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""CREATE VIEW account_invoice_cyc as (
+    def init(self):
+        tools.drop_view_if_exists(self._cr, self._table)
+        self._cr.execute("""CREATE VIEW account_invoice_cyc as (
 select min(a.id) as id, a.country_id, sum(a.credit_covered) as credit_covered,
 sum(a.credit_not_covered) as credit_not_covered, a.user_id, a.area_id,
 sum(a.not_credit) as not_credit, sum(a.cash) as cash, a.invoice_year,
@@ -65,8 +65,8 @@ SUM(ai.amount_total) as credit_covered,
 CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
 extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-left join payment_mode pm on pm.id = ai.payment_mode_id
-left join account_journal aj on aj.id = pm.journal
+left join account_payment_mode pm on pm.id = ai.payment_mode_id
+left join account_journal aj on aj.id = pm.fixed_journal_id
 where ai.company_id = 1 and p.credit_limit > 0 and p.risk_insurance_grant_date is not null and
 (ai.payment_mode_id is null or aj.type != 'cash') and ai.type = 'out_invoice'
 and ai.state in ('open', 'paid')
@@ -78,8 +78,8 @@ select min(ai.id) as id, p.country_id, -SUM(ai.amount_total) as credit_covered,
 CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
 extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-left join payment_mode pm on pm.id = ai.payment_mode_id
-left join account_journal aj on aj.id = pm.journal
+left join account_payment_mode pm on pm.id = ai.payment_mode_id
+left join account_journal aj on aj.id = pm.fixed_journal_id
 where ai.company_id = 1 and p.credit_limit > 0 and p.risk_insurance_grant_date is not null and
 (ai.payment_mode_id is null or aj.type != 'cash') and ai.type = 'out_refund'
 and ai.state in ('open', 'paid')
@@ -91,8 +91,8 @@ SUM(ai.amount_total) as credit_not_covered, 0.0 as not_credit, 0.0 as cash,
 CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
 extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-left join payment_mode pm on pm.id = ai.payment_mode_id
-left join account_journal aj on aj.id = pm.journal
+left join account_payment_mode pm on pm.id = ai.payment_mode_id
+left join account_journal aj on aj.id = pm.fixed_journal_id
 where ai.company_id = 1 and p.credit_limit > 0 and p.risk_insurance_grant_date is null and
 (ai.payment_mode_id is null or aj.type != 'cash') and ai.type = 'out_invoice'
 and ai.state in ('open', 'paid')
@@ -104,8 +104,8 @@ select min(ai.id) as id, p.country_id, 0.0 as credit_covered,
 CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
 extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-left join payment_mode pm on pm.id = ai.payment_mode_id
-left join account_journal aj on aj.id = pm.journal
+left join account_payment_mode pm on pm.id = ai.payment_mode_id
+left join account_journal aj on aj.id = pm.fixed_journal_id
 where ai.company_id = 1 and p.credit_limit > 0 and p.risk_insurance_grant_date is null and
 (ai.payment_mode_id is null or aj.type != 'cash') and ai.type = 'out_refund'
 and ai.state in ('open', 'paid')
@@ -117,8 +117,8 @@ select min(ai.id) as id, p.country_id, 0.0 as credit_covered,
 CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
 extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-left join payment_mode pm on pm.id = ai.payment_mode_id
-left join account_journal aj on aj.id = pm.journal
+left join account_payment_mode pm on pm.id = ai.payment_mode_id
+left join account_journal aj on aj.id = pm.fixed_journal_id
 where ai.company_id = 1 and p.credit_limit <= 0 and (ai.payment_mode_id is null or aj.type != 'cash')
 and ai.type = 'out_invoice' and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
@@ -129,8 +129,8 @@ select min(ai.id) as id, p.country_id, 0.0 as credit_covered,
 CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
 extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-left join payment_mode pm on pm.id = ai.payment_mode_id
-left join account_journal aj on aj.id = pm.journal
+left join account_payment_mode pm on pm.id = ai.payment_mode_id
+left join account_journal aj on aj.id = pm.fixed_journal_id
 where ai.company_id = 1 and p.credit_limit <= 0 and (ai.payment_mode_id is null or aj.type != 'cash')
 and ai.type = 'out_refund' and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
@@ -141,8 +141,8 @@ select min(ai.id) as id, p.country_id, 0.0 as credit_covered,
 CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
 extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-left join payment_mode pm on pm.id = ai.payment_mode_id
-left join account_journal aj on aj.id = pm.journal
+left join account_payment_mode pm on pm.id = ai.payment_mode_id
+left join account_journal aj on aj.id = pm.fixed_journal_id
 where ai.company_id = 1 and aj.type = 'cash' and ai.type = 'out_invoice'
 and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
@@ -153,8 +153,8 @@ select min(ai.id) as id, p.country_id, 0.0 as credit_covered,
 CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
 extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-left join payment_mode pm on pm.id = ai.payment_mode_id
-left join account_journal aj on aj.id = pm.journal
+left join account_payment_mode pm on pm.id = ai.payment_mode_id
+left join account_journal aj on aj.id = pm.fixed_journal_id
 where ai.company_id = 1 and aj.type = 'cash' and ai.type = 'out_refund'
 and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,

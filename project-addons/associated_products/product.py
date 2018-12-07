@@ -19,21 +19,19 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
+from odoo import fields, models
 
 
-class product(orm.Model):
+class product(models.Model):
 
     _inherit = "product.product"
 
-    _columns = {
-        'associated_product_ids': fields.one2many('product.associated',
-                                                  'product_id',
-                                                  'Associated products'),
-    }
+    associated_product_ids = fields.One2many('product.associated',
+                                             'product_id',
+                                             'Associated products')
 
 
-class associated_products(orm.Model):
+class associated_products(models.Model):
 
     _name = "product.associated"
     _description = "This model provides the association between a \
@@ -42,12 +40,11 @@ class associated_products(orm.Model):
     def _get_default_uom_id(self):
         return self.env.ref('product.product_uom_unit').id
 
-    _columns = {
-        'product_id': fields.many2one('product.product', 'Product',
-                                      required=True),
-        'associated_id': fields.many2one('product.product',
-                                         'Associated product', required=True),
-        'quantity': fields.float('Quantity', required=True),
-        'uom_id': fields.many2one('product.uom', 'UoM', required=True, default=_get_default_uom_id),
-        'discount': fields.float('Discount (%)', required=True, default=0)
-    }
+    product_id = fields.Many2one('product.product', 'Product',
+                                 required=True)
+    associated_id = fields.Many2one('product.product',
+                                    'Associated product', required=True)
+    quantity = fields.Float('Quantity', required=True)
+    uom_id = fields.Many2one('product.uom', 'UoM', required=True,
+                             default=_get_default_uom_id),
+    discount = fields.Float('Discount (%)', required=True, default=0)

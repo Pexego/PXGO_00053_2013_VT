@@ -165,7 +165,7 @@ class StockPicking(models.Model):
                     if not invoice_created:
                         templates.append(self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices', False))
                         validate = False
-                    elif not invoice_created.invoice_line:
+                    elif not invoice_created.invoice_line_ids:
                         # Invoice created without lines
                         templates.append(
                             self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices_empty_lines', False))

@@ -28,7 +28,7 @@
     'website': 'www.comunitea.com',
     "depends": ['sale', 'account', 'sale_stock', 'stock_account'],
     "data": ['security/test_management_security.xml',
-             'wizard/stock_invoice_onshipping_test_view.xml',
+             #TODO: Migrate 'wizard/stock_invoice_onshipping_test_view.xml',
              'procurement_view.xml',
              'stock_view.xml',
              'sale_view.xml',

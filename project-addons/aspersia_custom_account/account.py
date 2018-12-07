@@ -40,7 +40,7 @@ class AccountInvoice(models.Model):
     def invoice_validate(self):
         res = super(AccountInvoice, self).invoice_validate()
         for inv in self:
-            for line in inv.invoice_line:
+            for line in inv.invoice_line_ids:
                 line.write({'cost_unit': line.product_id.standard_price})
         return res
 
