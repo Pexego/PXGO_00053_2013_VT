@@ -1,5 +1,3 @@
-
-
 from odoo import models, fields, api
 from odoo import tools
 
@@ -7,10 +5,8 @@ from odoo import tools
 class SaleReport(models.Model):
     _inherit = 'sale.report'
 
-    _columns = {
-        'benefit': fields.float('Benefit', readonly=True),
-        'cost_price': fields.float('Cost Price', readonly=True)
-    }
+    benefit = fields.float('Benefit', readonly=True),
+    cost_price = fields.float('Cost Price', readonly=True)
 
     def _select(self):
         select_str = super(SaleReport, self)._select()
