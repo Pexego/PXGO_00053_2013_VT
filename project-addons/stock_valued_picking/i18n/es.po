@@ -16,27 +16,27 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: stock_valued_picking
-#: field:stock.picking,external_note:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_picking_external_note
 msgid " External Notes"
 msgstr " Notas externas"
 
 #. module: stock_valued_picking
-#: field:stock.move,percent_margin:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_move_percent_margin
 msgid "% margin"
 msgstr "% margen"
 
 #. module: stock_valued_picking
-#: field:stock.move,cost_subtotal:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_move_cost_subtotal
 msgid "Cost subtotal"
 msgstr "Subtotal"
 
 #. module: stock_valued_picking
-#: help:res.partner,valued_picking:0
+#: model:ir.model.fields,help:stock_valued_picking.field_res_partner_valued_picking
 msgid "If checked It will print valued picks for this customer"
 msgstr "Si está marcado, se imprimirán albaranes de salida valorados para este cliente"
 
 #. module: stock_valued_picking
-#: field:stock.move,margin:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_move_margin
 msgid "Margin"
 msgstr "Margen"
 
@@ -51,17 +51,17 @@ msgid "Picking List"
 msgstr "Albarán"
 
 #. module: stock_valued_picking
-#: field:stock.move,order_price_unit:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_move_order_price_unit
 msgid "Price unit"
 msgstr "Precio unitario"
 
 #. module: stock_valued_picking
-#: field:res.partner,valued_picking:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_res_partner_valued_picking
 msgid "Print valued picking"
 msgstr "Albarán valorado"
 
 #. module: stock_valued_picking
-#: field:stock.picking,amount_discounted:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_picking_amount_discounted
 msgid "Sale price"
 msgstr "Precio de venta"
 
@@ -71,37 +71,37 @@ msgid "Stock Move"
 msgstr "Movimiento de existencias"
 
 #. module: stock_valued_picking
-#: field:stock.move,price_subtotal:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_move_price_subtotal
 msgid "Subtotal"
 msgstr "Subtotal"
 
 #. module: stock_valued_picking
-#: field:stock.picking,amount_tax:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_picking_amount_tax
 msgid "Taxes"
 msgstr "Impuestos"
 
 #. module: stock_valued_picking
-#: field:stock.picking,amount_total:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_picking_amount_total
 msgid "Total"
 msgstr "Total"
 
 #. module: stock_valued_picking
-#: field:stock.picking,amount_untaxed:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_picking_amount_untaxed
 msgid "Untaxed Amount"
 msgstr "Valor sin impuestos"
 
 #. module: stock_valued_picking
-#: field:stock.picking,amount_gross:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_picking_amount_gross
 msgid "amount gross"
 msgstr "Importe bruto"
 
 #. module: stock_valued_picking
-#: field:stock.picking,cost:0
+#: model:ir.model.fields,field_description:stock_valued_picking.field_stock_picking_cost
 msgid "Cost"
 msgstr "Coste"
 
 #. module: stock_valued_picking
-#: help:stock.picking,cost:0
+#: model:ir.model.fields,help:stock_valued_picking.field_stock_picking_cost
 msgid "Historical cost in order time"
 msgstr "Coste histórico del momento del pedido"
 
