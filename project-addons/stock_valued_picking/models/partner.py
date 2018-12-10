@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -18,10 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields
+from odoo import models, fields
 
 
-class resPartner(models.Model):
+class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     valued_picking = fields.Boolean(string="Print valued picking",

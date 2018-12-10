@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Pexego All Rights Reserved
@@ -18,13 +17,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
+from odoo import models, fields, api
 import odoo.addons.decimal_precision as dp
 
 
-class stock_picking(models.Model):
+class StockPicking(models.Model):
 
-    _inherit = "stock.picking"
+    _inherit = 'stock.picking'
 
     amount_untaxed = fields.Float(
         compute='_amount_all', digits_compute=dp.get_precision('Sale Price'),
@@ -95,9 +94,9 @@ class stock_picking(models.Model):
                 picking.amount_untaxed
 
 
-class stock_move(models.Model):
+class StockMove(models.Model):
 
-    _inherit = "stock.move"
+    _inherit = 'stock.move'
 
     price_subtotal = fields.Float(
         compute='_get_subtotal', string="Subtotal",

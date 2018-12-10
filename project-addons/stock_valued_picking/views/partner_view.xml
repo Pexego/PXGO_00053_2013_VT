@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<openerp>
+<odoo>
     <data>
         <!-- Supplier/Client form view, general inherit -->
         <record id="midban_view_partner_form" model="ir.ui.view">
@@ -16,4 +15,4 @@
 
 
     </data>
-</openerp>
+</odoo>
