@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Pexego All Rights Reserved
@@ -26,11 +25,11 @@
     'description': """""",
     'author': 'Pexego',
     'website': '',
-    "depends": ['sale', 'stock', 'sale_stock', 'product_pack'],
+    "depends": ['sale', 'stock', 'sale_stock'],
     "data": [
-        'views/valued_picking_report.xml',
-        # 'stock_report.xml',
-        'stock_view.xml',
-        'partner_view.xml'],
+        'report/valued_picking_report.xml',
+        # 'report/stock_report.xml',
+        'views/stock_view.xml',
+        'views/partner_view.xml'],
     "installable": True
 }
