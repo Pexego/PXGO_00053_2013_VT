@@ -66,14 +66,14 @@ class StockPicking(models.Model):
                 or False
             for line in picking.move_lines:
                 price_unit = 0.0
-                sale_line = line.procurement_id.sale_line_id
+                sale_line = line.sale_line_id
                 if sale_line and line.state != 'cancel':
                     price_unit = sale_line.price_unit * \
                         (1-(sale_line.discount or 0.0)/100.0)
                     for c in sale_line.tax_id.compute_all(
-                            price_unit, line.product_qty,
-                            line.product_id,
-                            sale_line.order_id.partner_id)['taxes']:
+                            price_unit, quantity=line.product_qty,
+                            product=line.product_id,
+                            partner=sale_line.order_id.partner_id)['taxes']:
                         taxes += c.get('amount', 0.0)
                     amount_gross += (sale_line.price_unit *
                                      line.product_qty)
@@ -120,13 +120,13 @@ class StockMove(models.Model):
         store=True)
 
     @api.multi
-    @api.depends('product_id', 'product_qty', 'procurement_id.sale_line_id')
+    @api.depends('product_id', 'product_qty', 'sale_line_id')
     def _get_subtotal(self):
         for move in self:
-            if move.procurement_id.sale_line_id:
+            if move.sale_line_id:
                 cost_price = move.product_id.standard_price or 0.0
-                price_unit = (move.procurement_id.sale_line_id.price_unit *
-                              (1-(move.procurement_id.sale_line_id.discount or
+                price_unit = (move.sale_line_id.price_unit *
+                              (1-(move.sale_line_id.discount or
                                   0.0)/100.0))
                 move.price_subtotal = price_unit * move.product_qty
                 move.order_price_unit = price_unit

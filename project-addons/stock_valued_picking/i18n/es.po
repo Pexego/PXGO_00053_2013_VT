@@ -58,7 +58,7 @@ msgstr "Precio unitario"
 #. module: stock_valued_picking
 #: model:ir.model.fields,field_description:stock_valued_picking.field_res_partner_valued_picking
 msgid "Print valued picking"
-msgstr "Albarán valorado"
+msgstr "Imprimir albarán valorado"
 
 #. module: stock_valued_picking
 #: model:ir.model.fields,field_description:stock_valued_picking.field_stock_picking_amount_discounted

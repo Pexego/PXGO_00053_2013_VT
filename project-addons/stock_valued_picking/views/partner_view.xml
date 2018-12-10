@@ -7,12 +7,11 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="active" position="after">
+                <field name="customer" position="after">
                     <field name="valued_picking"/>
                 </field>
             </field>
         </record>
-
-
+        
     </data>
 </odoo>
