@@ -29,8 +29,8 @@
     'depends' : ['base', 'sales_team', 'sale_stock', 'stock_reserve_sale',
                  'email_template_followers', 'stock_valued_picking'],
     'data' : ['wizard/stock_invoice_deposit.xml', 'wizard/stock_sale_deposit.xml',
-              'stock_data.xml', 'stock_deposit.xml', 'res_partner_view.xml',
-              'security/ir.model.access.csv', 'sale_view.xml',
+              'views/stock_data.xml', 'views/stock_deposit.xml', 'views/res_partner_view.xml',
+              'security/ir.model.access.csv', 'views/sale_view.xml',
               'data/stock_deposit_data.xml'],
     'installable': True
 }
