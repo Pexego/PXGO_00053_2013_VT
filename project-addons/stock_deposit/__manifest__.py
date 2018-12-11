@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -26,7 +25,7 @@
     'description': """Manage deposit of goods in a customer location""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    'depends' : ['base', 'sales_team', 'sale_stock', 'stock_reserve_sale',
+    'depends' : ['base', 'sales_team', 'sale_stock', 'sale',
                  'email_template_followers', 'stock_valued_picking'],
     'data' : ['wizard/stock_invoice_deposit.xml', 'wizard/stock_sale_deposit.xml',
               'views/stock_data.xml', 'views/stock_deposit.xml', 'views/res_partner_view.xml',

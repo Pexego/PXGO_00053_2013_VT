@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="0">
 
         <record id="view_order_form_deposit" model="ir.ui.view">
             <field name="name">sale.order.form.deposit</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale_stock.view_order_form_inherit"/>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
             <field name="arch" type="xml">
 
                 <xpath expr="//field[@name='order_line']/form//field[@name='state']" position="before">
@@ -21,9 +21,9 @@
         <record id="view_order_form_deposit_button" model="ir.ui.view">
             <field name="name">sale.order.form</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
+            <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <div name="buttons" position="inside">
+                <xpath expr="//button[@name='action_view_invoice']" position="before">
                     <field name="id" invisible="1"/>
                     <field name="deposit_count" invisible="1"/>
                     <button
@@ -34,9 +34,9 @@
                             string="Deposits"
                             attrs="{'invisible': [('deposit_count', '=', 0)]}"
                             context="{'search_default_sale_id': id}"/>
-                </div>
-            </field>
+                </xpath>
+           </field>
         </record>
 
     </data>
-</openerp>
+</odoo>

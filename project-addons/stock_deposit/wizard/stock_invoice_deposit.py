@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Pexego All Rights Reserved
@@ -18,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 
 
 class StockInvoiceDeposit(models.TransientModel):
@@ -48,7 +47,7 @@ class StockInvoiceDeposit(models.TransientModel):
 
             sale_lines = self.env['sale.order.line']
             for deposit in sale_deposit:
-                sale_lines += deposit.move_id.procurement_id.sale_line_id
+                sale_lines += deposit.move_id.group_id.sale_line_id
             my_context = dict(self.env.context)
             my_context['invoice_deposit'] = True
             lines = sale_lines.with_context(my_context).invoice_line_create()

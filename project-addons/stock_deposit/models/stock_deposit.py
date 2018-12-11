@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Santi Argüeso
@@ -18,14 +17,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
+from odoo import models, fields, api
 from datetime import datetime
 
 
-class stock_deposit(models.Model):
+class StockDeposit(models.Model):
     _name = 'stock.deposit'
     _description = "Deposits"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread', 'mail.activity.mixin']
 
     product_id = fields.Many2one(string='Product',
                                  related='move_id.product_id',
@@ -48,7 +47,7 @@ class stock_deposit(models.Model):
                                  string='Destination Address',
                                  store=True,
                                  readonly=True)
-    sale_id = fields.Many2one(related='move_id.procurement_id.sale_line_id.order_id',
+    sale_id = fields.Many2one(related='move_id.sale_line_id.order_id',
                               string='Sale',
                               store=True,
                               readonly=True)

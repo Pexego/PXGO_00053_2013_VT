@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Santi Argüeso
@@ -20,34 +19,27 @@
 ##############################################################################
 
 from datetime import datetime, timedelta
-from openerp import models, fields, api
-from openerp.osv import fields as fields_old
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+from odoo import models, fields, api
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 import odoo.addons.decimal_precision as dp
 
 
-class sale_order_line(models.Model):
+class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
-    def _amount_line(self, cr, uid, ids, field_name, arg, context=None):
-        # se mantiene en la api antigua por no sobreescribir todo el calculo
-        if context is None:
-            context = {}
-        values = super(sale_order_line, self)._amount_line(cr, uid,  ids,
-                                                           field_name, arg,
-                                                           context=context)
-        for line in self.browse(cr, uid, ids, context=context):
-            if line.deposit:
-                values[line.id] = 0.0
-        return values
-
-    _columns = {
-        'price_subtotal': fields_old.function(
-            _amount_line, string='Subtotal',
-            digits_compute=dp.get_precision('Account')),
-    }
     deposit = fields.Boolean('Deposit')
     deposit_date = fields.Date('Date Dep.')
+
+    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id')
+    def _compute_amount(self):
+        super(SaleOrderLine, self)._compute_amount()
+        for line in self:
+            if line.deposit:
+                line.update({
+                    'price_tax': 0.0,
+                    'price_total': 0.0,
+                    'price_subtotal': 0.0,
+                })
 
     @api.onchange('deposit')
     def onchange_deposit(self):
@@ -65,10 +57,10 @@ class sale_order_line(models.Model):
         for line in self:
             if not line.deposit or self.env.context.get('invoice_deposit', False):
                 lines += line
-        return super(sale_order_line, lines).invoice_line_create()
+        return super(SaleOrderLine, lines).invoice_line_create()
 
 
-class sale_order(models.Model):
+class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     deposit_ids = fields.One2many('stock.deposit', 'sale_id', 'Deposits')
@@ -85,11 +77,11 @@ class sale_order(models.Model):
         if line.deposit:
             return 0.0
         else:
-            return super(sale_order, self)._amount_line_tax(line)
+            return super(SaleOrder, self)._amount_line_tax(line)
 
     @api.model
     def _prepare_order_line_procurement(self, order, line, group_id=False):
-        vals = super(sale_order, self)._prepare_order_line_procurement(
+        vals = super(SaleOrder, self)._prepare_order_line_procurement(
             order, line, group_id=group_id)
         if line.deposit:
             deposit_id = self.env.ref('stock_deposit.stock_location_deposit')

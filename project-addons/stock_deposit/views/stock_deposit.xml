@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="0">
         <record id="view_stock_deposit_form" model="ir.ui.view">
             <field name="name">stock.deposit.form</field>
@@ -96,7 +96,7 @@
             <field name="name">stock.deposit.search</field>
             <field name="model">stock.deposit</field>
             <field name="arch" type="xml">
-                <search string="Deposits" version="7.0">
+                <search string="Deposits">
                     <field name="product_id" />
                     <field name="user_id" />
                     <field name="partner_id" filter_domain="[('partner_id','child_of',self)]"/>
@@ -105,7 +105,7 @@
                     <filter name="draft" string="Deposits"
                         domain="[('state', '=', 'draft')]"
                         help="Active deposits"/>
-                    <group expand="0" string="Group By...">
+                    <group expand="0" string="Group By">
                         <filter string="Partner"
                             name="groupby_parner"
                             context="{'group_by': 'partner_id'}"/>
@@ -151,4 +151,4 @@
             parent="stock.menu_stock_inventory_control"
             sequence="40"/>
     </data>
-</openerp>
+</odoo>

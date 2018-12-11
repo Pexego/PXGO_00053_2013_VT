@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Santi Argüeso
@@ -19,21 +18,21 @@
 #
 ##############################################################################
 
-from openerp import models, api
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, api
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 from datetime import datetime, timedelta
 
 
-class stock_move(models.Model):
+class StockMove(models.Model):
     _inherit = 'stock.move'
 
     @api.multi
     def action_done(self):
-        res = super(stock_move, self).action_done()
+        res = super(StockMove, self).action_done()
         deposit_obj = self.env['stock.deposit']
         for move in self:
-            if move.procurement_id.sale_line_id.deposit and \
+            if move.sale_line_id.deposit and \
                     move.picking_type_id.code == "outgoing":
                 formatted_date = datetime.strptime(time.strftime('%Y-%m-%d'),
                                                    "%Y-%m-%d")
@@ -44,29 +43,29 @@ class stock_move(models.Model):
                     'delivery_date':
                     time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                     'return_date':
-                    move.procurement_id.sale_line_id.deposit_date or
+                    move.sale_line_id.deposit_date or
                     return_date,
                     'user_id':
-                    move.procurement_id.sale_line_id.order_id.user_id.id,
+                    move.sale_line_id.order_id.user_id.id,
                     'state': 'draft'
                 }
                 deposit_obj.create(values)
         return res
 
 
-class stock_picking(models.Model):
+class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     @api.model
     def _invoice_create_line(self, moves, journal_id, inv_type='out_invoice'):
         moves_invoice = self.env['stock.move']
         for move in moves:
-            if move.procurement_id.sale_line_id.deposit and \
+            if move.sale_line_id.deposit and \
                     move.location_id.usage == 'internal':
                 move.invoice_state = 'invoiced'
                 continue
             moves_invoice += move
-        return super(stock_picking, self)._invoice_create_line(
+        return super(StockPicking, self)._invoice_create_line(
             moves_invoice, journal_id, inv_type)
 
     @api.multi
@@ -74,15 +73,15 @@ class stock_picking(models.Model):
         for picking in self:
             all_deposit = True
             for move in picking.move_lines:
-                if not move.procurement_id.sale_line_id.deposit:
+                if not move.sale_line_id.deposit:
                     all_deposit = False
             if all_deposit and picking.invoice_state == '2binvoiced':
                 picking.invoice_state = 'invoiced'
-        return super(stock_picking, self).action_assign()
+        return super(StockPicking, self).action_assign()
 
     @api.model
     def _get_invoice_vals(self, key, inv_type, journal_id, move):
-        res = super(stock_picking, self)._get_invoice_vals(key, inv_type, journal_id, move)
+        res = super(StockPicking, self)._get_invoice_vals(key, inv_type, journal_id, move)
         if 'comment' in res:
             res.pop('comment', None)
         return res
