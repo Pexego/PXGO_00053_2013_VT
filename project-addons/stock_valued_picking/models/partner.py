@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Javier Colmenero Fernández <javier@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,19 +17,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields
 
-{
-    'name': 'Stock valued picking',
-    'version': '1.0',
-    'category': 'stock',
-    'description': """""",
-    'author': 'Pexego',
-    'website': '',
-    "depends": ['sale', 'stock', 'sale_stock', 'product_pack'],
-    "data": [
-        'views/valued_picking_report.xml',
-        # 'stock_report.xml',
-        'stock_view.xml',
-        'partner_view.xml'],
-    "installable": True
-}
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    valued_picking = fields.Boolean(string="Print valued picking",
+                                    domain=[('customer', '=', True)],
+                                    help="If checked It will print valued "
+                                    "picks for this customer")
