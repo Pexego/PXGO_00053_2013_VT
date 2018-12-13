@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,38 +18,28 @@
 #
 ##############################################################################
 
-from odoo import fields, models
+from odoo import fields, models, api
 
 
-class product(models.Model):
+class Product(models.Model):
 
-    _inherit = "product.product"
+    _inherit = 'product.product'
 
-    tag_ids = fields.Many2many(
-            'product.tag',
-            'product_tag_rel',
-            'product_id',
-            'tag_id',
-            'Tags')
+    tag_ids = fields.Many2many('product.tag', 'product_tag_rel', 'product_id', 'tag_id', "Tags")
 
 
-class product_tag(models.Model):
+class ProductTag(models.Model):
 
-    def name_get(self, cr, uid, ids, context=None):
-        if isinstance(ids, (list, tuple)) and not len(ids):
-            return []
-        if isinstance(ids, (long, int)):
-            ids = [ids]
-        reads = self.read(cr, uid, ids, ['name', 'parent_id'], context=context)
-        res = []
-        for record in reads:
-            name = record['name']
-            if record['parent_id'] and record['parent_id'][1]:
-                name = record['parent_id'][1] + u' / ' + (name or "")
-            res.append((record['id'], (name or "")))
-        return res
+    @api.multi
+    def get_complete_name(self):
+        for record in self:
+            name = record.name
+            if record.parent_id:
+                name = record.parent_id.name + u' / ' + (name or "")
+            record.complete_name = name
 
-    def name_search(self, cr, uid, name, args=None, operator='ilike',
+    # Useless function (?)
+    """def name_search(self, cr, uid, name, args=None, operator='ilike',
                     context=None, limit=100):
         if not args:
             args = []
@@ -68,28 +57,18 @@ class product_tag(models.Model):
         else:
             ids = self.search(cr, uid, args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
+    """
 
-    def _name_get_fnc(self, cr, uid, ids, prop, unknow_none, context=None):
-        res = self.name_get(cr, uid, ids, context=context)
-        return dict(res)
-
-    _name = "product.tag"
+    _name = 'product.tag'
     _parent_store = True
-    _parent_name = "parent_id"
-    _parent_order = "name"
+    _parent_name = 'parent_id'
+    _parent_order = 'name'
     _order = 'parent_left'
 
-    name = fields.Char('Name', size=64, required=True)
-    complete_name = fields.Char(compute="_name_get_fnc", string='Name')
-    product_ids = fields.Many2many(
-            'product.product',
-            'product_tag_rel',
-            'tag_id',
-            'product_id',
-            'Products')
-    parent_id = fields.Many2one('product.tag', 'Parent',
-                                ondelete='cascade')
-    child_id = fields.One2many('product.tag', 'parent_id',
-                               string='Child tags')
-    parent_left = fields.Integer('Left Parent', index=True)
-    parent_right = fields.Integer('Right Parent', index=True)
+    name = fields.Char("Name", size=64, required=True)
+    complete_name = fields.Char(compute='get_complete_name', string="Name")
+    product_ids = fields.Many2many('product.product', 'product_tag_rel', 'tag_id', 'product_id', "Products")
+    parent_id = fields.Many2one('product.tag', "Parent", ondelete='cascade')
+    child_id = fields.One2many('product.tag', 'parent_id', string="Child tags")
+    parent_left = fields.Integer("Left Parent", index=True)
+    parent_right = fields.Integer("Right Parent", index=True)

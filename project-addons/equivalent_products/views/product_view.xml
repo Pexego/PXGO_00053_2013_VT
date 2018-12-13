@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="product_add_tags_form" model="ir.ui.view">
             <field name="name">product.product.add.tags.form</field>
@@ -46,7 +46,8 @@
             </field>
         </record>
 
-        <record id="product_tag_tree_view" model="ir.ui.view">
+        <!-- TODO: de momento no se migra -->
+        <!--record id="product_tag_tree_view" model="ir.ui.view">
             <field name="name">product.tag.tree</field>
             <field name="model">product.tag</field>
             <field name="field_parent">child_id</field>
@@ -71,9 +72,9 @@
                 this tag or to a child of this tag.
               </p>
             </field>
-        </record>
+        </record-->
 
-        <record id="products_by_tag" model="ir.actions.act_window">
+        <!--record id="products_by_tag" model="ir.actions.act_window">
             <field name="name">Product</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">product.product</field>
@@ -88,13 +89,12 @@
             <field name="name">Open tag</field>
             <field name="value" eval="'ir.actions.act_window,' + str(ref('products_by_tag'))"/>
             <field name="object" eval="True"/>
-        </record>
+        </record-->
 
-        <menuitem
-            action="product_tag_action"
+        <!--menuitem action="product_tag_action"
             id="product.menu_products_tag"
-            parent="base.menu_product"
-            sequence="30" groups="base.group_no_one"/>
+            parent="sale.product_menu_catalog"
+            sequence="30" groups="base.group_no_one"/-->
 
         <record id="product_tag_list_view" model="ir.ui.view">
             <field name="name">product.tag.list</field>
@@ -117,7 +117,7 @@
         <menuitem action="product_tag_action_form"
             groups="base.group_no_one"
             id="menu_product_tag_action_form"
-            parent="product.prod_config_main" sequence="2"/>
+            parent="sale.prod_config_main" sequence="2"/>
 
     </data>
-</openerp>
+</odoo>
