@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <!-- Overwrited default picking report to print a valued or not valued report-->
         <template id="stock.report_picking">
@@ -319,4 +319,4 @@
              </t>
         </template>
     </data>
-</openerp>
+</odoo>

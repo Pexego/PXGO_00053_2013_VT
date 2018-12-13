@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <record id="view_picking_withtransport_out_form" model="ir.ui.view">
@@ -7,7 +7,7 @@
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//page[@string='Additional Info']/group[last()]" position="after">
+                <xpath expr="//page[@name='extra']/group[last()]" position="after">
                 <separator string="Carrier Information"/>
                 <group>
                     <group>
@@ -15,19 +15,24 @@
                         <field name="carrier_name"/>
                         <field name="carrier_service"/>
                         <button name="button_check_tracking" string="Check tracking status"
-                                type="object" colspan="4" states="done"/>
+                                type="object" states="done"/>
                     </group>
                     <group>
                         <label for="weight" string="Weight"/>
                         <div>
                             <field name="weight" class="oe_inline"/>
-                            <field name="weight_uom_id" nolabel="1" class="oe_inline"/>
+                            <field name="weight_uom_id" nolabel="1" class="oe_inline" style="margin-left:5px"/>
                         </div>
-                        <field name="weight_net" groups="base.group_no_one"/>
+                        <label for="weight_net" string="Weight Net"/>
+                        <div>
+                            <field name="weight_net" class="oe_inline"/>
+                            <field name="weight_uom_id" nolabel="1" class="oe_inline" style="margin-left:5px"/>
+                        </div>
                         <field name="number_of_packages"/>
                         <field name="total_cbm"/>
                     </group>
                 </group>
+                <field name="note" string="Note" placeholder="Add an internal note that will be printed on the Picking Operations sheet"/>
                 </xpath>
             </field>
         </record>
@@ -39,7 +44,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='date_expected']" position="after">
                     <field name="weight"/>
-                    <field name="weight_net" groups="base.group_no_one"/>
+                    <field name="weight_net"/>
                 </xpath>
             </field>
         </record>
@@ -56,11 +61,11 @@
                             <field name="weight" nolabel="1" class="oe_inline"/>
                             <field name="weight_uom_id" nolabel="1" class="oe_inline"/>
                         </div>
-                        <field name="weight_net" groups="base.group_no_one"/>
+                        <field name="weight_net"/>
                     </group>
                 </xpath>
             </field>
         </record>
 
     </data>
-</openerp>
+</odoo>

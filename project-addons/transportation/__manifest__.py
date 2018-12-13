@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,29 +18,25 @@
 #
 ##############################################################################
 
-from openerp import models, fields
-
-
-class transporter(models.Model):
-
-    _name = "transportation.transporter"
-
-    name = fields.Char('Name', size=64, required=True)
-    partner_id = fields.Many2one('res.partner', 'Partner', required=True)
-    service_ids = fields.Many2many('transportation.service',
-                                   'transporter_service_rel',
-                                   'transporter_id',
-                                   'service_id',
-                                   'Services')
-
-
-class transport_service(models.Model):
-
-    _name = "transportation.service"
-
-    name = fields.Char('Name', size=64, required=True)
-    transporter_ids = fields.Many2many('transportation.transporter',
-                                       'transporter_service_rel',
-                                       'service_id',
-                                       'transporter_id',
-                                       'Transporters')
+{
+    'name': "Transportation",
+    'version': '1.0',
+    'category': 'sale',
+    'description':
+    """
+        Gestión de transportistas y rotación.
+    """,
+    'author': 'Pexego Sistemas Informáticos',
+    'website': 'www.pexego.es',
+    "depends": ['base',
+                'sale',
+                'customer_area',
+                'stock',],
+    "data": ['security/ir.model.access.csv',
+             'wizard/picking_tracking_status_view.xml',
+             'views/res_partner_view.xml',
+             'views/transportation_view.xml',
+             'views/sale_view.xml', 'views/stock_view.xml',
+             'data/parameters.xml'],
+    "installable": True
+}

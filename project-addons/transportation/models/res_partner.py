@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,10 +18,10 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 
 
-class res_partner(models.Model):
+class ResPartner(models.Model):
 
     _inherit = 'res.partner'
     transporter_id = fields.Many2one('transportation.transporter',
@@ -30,10 +29,12 @@ class res_partner(models.Model):
     service_id = fields.Many2one('transportation.service',
                                  'Transport service')
 
+    @api.multi
     @api.onchange('country_id')
     def onchange_country_id(self):
         self.transporter_id = self.country_id.default_transporter
 
+    @api.multi
     @api.onchange('transporter_id')
     def onchange_transporter_id(self):
         service_ids = [x.id for x in self.transporter_id.service_ids]
@@ -42,7 +43,7 @@ class res_partner(models.Model):
         return {'domain': {'service_id': [('id', 'in', service_ids)]}}
 
 
-class res_country(models.Model):
+class ResCountry(models.Model):
 
     _inherit = 'res.country'
 
@@ -50,9 +51,9 @@ class res_country(models.Model):
                                           'Default transporter')
 
 
-class res_partner_area(models.Model):
+class ResPartnerArea(models.Model):
 
-    _inherit = "res.partner.area"
+    _inherit = 'res.partner.area'
 
     transporter_rotation_ids = fields.One2many('area.transportist.rel',
                                                'area_id', 'Rotation')
@@ -66,7 +67,7 @@ class res_partner_area(models.Model):
 
     @api.one
     def write(self, values):
-        super(res_partner_area, self).write(values)
+        super(ResPartnerArea, self).write(values)
         for rot in self.transporter_rotation_ids:
             if rot.ratio_shipping == 0:
                 raise exceptions.except_orm(

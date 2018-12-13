@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
-        <menuitem name="Transportation" parent="base.menu_base_config" id="menu_transportation_sale"/>
+        <menuitem name="Transportation" parent="sale.menu_sale_config" id="menu_transportation_sale"/>
 
         <!-- Transporter views -->
         <record id="transporter_tree" model="ir.ui.view">
@@ -128,4 +128,4 @@
          action="action_transportation_service" id="menu_transportation_service_sale" sequence="2"/>
 
     </data>
-</openerp>
+</odoo>
