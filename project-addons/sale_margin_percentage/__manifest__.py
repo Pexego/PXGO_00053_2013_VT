@@ -27,7 +27,8 @@
     'author': 'Pexego',
     'depends': ['sale',
                # 'stock_deposit',
-                'pmp_landed_costs'],
+               # 'pmp_landed_costs'
+                ],
     'data': ["views/sale_view.xml", "views/sale_report_view.xml"],
     'auto_install': False,
     'installable': True,
