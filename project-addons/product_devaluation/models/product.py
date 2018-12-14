@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,12 +18,13 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api
+from odoo import fields, models, api
 from datetime import datetime, time
 
-class product_category(models.Model):
 
-    _inherit='product.category'
+class ProductCategory(models.Model):
+
+    _inherit = 'product.category'
 
     devaluation_journal_id = fields.Many2one('account.journal', 'Journal',
                                              default=lambda self:
@@ -42,13 +42,13 @@ class product_category(models.Model):
                                                     default=lambda self:
                                                     self.env.user.company_id.devaluation_account_credit_id)
 
-class product_devaluation(models.Model):
+class ProductDevaluation(models.Model):
 
-    _name = "product.devaluation"
+    _name = 'product.devaluation'
 
     @api.one
     def _get_total_dev(self):
-        self.total_dev=self.quantity*(self.price_after-self.price_before)
+        self.total_dev = self.quantity*(self.price_after-self.price_before)
 
     product_id = fields.Many2one('product.product', 'Product')
     quantity = fields.Float('Quantity')

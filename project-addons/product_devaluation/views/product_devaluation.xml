@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
+<odoo>
     <data>
 
         <record id="view_tree_devaluation_searched" model="ir.ui.view">
@@ -57,7 +57,6 @@
             sequence="30"
         />
 
-
         <record id="view_category_property_devaluation_form" model="ir.ui.view">
             <field name="name">product.category.stock.property.devaluation.form.inherit</field>
             <field name="model">product.category</field>
@@ -85,11 +84,5 @@
             key2="client_action_multi"
             id="action_product_devaluation_create_account"/>
 
-
-
-
-
-
-
     </data>
-</openerp>
+</odoo>
