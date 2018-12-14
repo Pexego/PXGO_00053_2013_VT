@@ -1,8 +1,4 @@
 ##############################################################################
-#
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
-#
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
 #    by the Free Software Foundation, either version 3 of the License, or
@@ -18,7 +14,6 @@
 #
 ##############################################################################
 
-from . import models
-# TODO: de momento no se migra:
-# from . import wizard
-# import report
+from . import product
+# TODO: de momento no se migra la parte de 'sale'
+# from . import sale

@@ -18,7 +18,25 @@
 #
 ##############################################################################
 
-from . import models
-# TODO: de momento no se migra:
-# from . import wizard
-# import report
+{
+    'name': "Equivalent products",
+    'version': '1.0',
+    'category': 'Sales Management',
+    'description': """This module adds tags an equivalent products for sales""",
+    'author': 'Pexego Sistemas Informáticos',
+    'website': '',
+    "depends": ["base",
+                "product",
+                "sale",
+                "stock"
+                # "sale_commission"
+                ],
+    "data": ["security/ir.model.access.csv",
+             "views/product_view.xml",
+             # TODO: de momento no se migra:
+             # "sale_view.xml",
+             # "wizard/sale_equivalent_products_wizard_view.xml",
+             # "report/sale_report_view.xml",
+             ],
+    "installable": True
+}
