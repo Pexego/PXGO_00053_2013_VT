@@ -32,8 +32,8 @@
                 'equivalent_products',
                 'account'],
     "data": ['wizard/product_devaluation_wizard_view.xml',
-             'product_devaluation.xml',
-             'res_company.xml',
+             'views/product_devaluation.xml',
+             'views/res_company.xml',
              'security/ir.model.access.csv'
              ],
     "installable": True
