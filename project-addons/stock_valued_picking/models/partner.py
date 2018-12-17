@@ -1,7 +1,7 @@
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    $Javier Colmenero Fernández <javier@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -17,8 +17,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields
 
-from . import models
-# TODO: de momento no se migra:
-# from . import wizard
-# import report
+
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
+
+    valued_picking = fields.Boolean(string="Print valued picking",
+                                    domain=[('customer', '=', True)],
+                                    help="If checked It will print valued "
+                                    "picks for this customer")

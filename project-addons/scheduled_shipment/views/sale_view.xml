@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- © 2016 Comunitea
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
 
-<openerp>
-    <data>
-
-        <!--TODO: Migrar<record id="view_order_form_scheduled_date" model="ir.ui.view">
+        <record id="view_order_form_scheduled_date" model="ir.ui.view">
             <field name="name">sale.order.scheduled.data</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale_stock.view_order_form_inherit"/>
+            <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
             <field name="arch" type="xml">
-                <xpath expr="//group[@name='logistics']/field[@name='order_policy']" position="after">
+                <xpath expr="//group[@name='sale_shipping']/field[@name='picking_policy']" position="after">
                     <field name="scheduled_date"
                            attrs="{'readonly': [('state','in', ('progress', 'manual', 'shipping_except', 'invoice_except', 'done', 'history', 'cancel'))]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_add_button_to_schedule" model="ir.ui.view">
+            <field name="name">stock.picking.tree</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <!-- TODO: revisar estados donde aparece el boton -->
+                    <button name="action_shedule" states="confirmed,waiting,partially_available,assigned" string="Schedule Shipping" type="object" groups="base.group_user"/>
                 </xpath>
             </field>
         </record>
@@ -20,13 +30,12 @@
         <record id="view_picking_form_add_pending_move_scheduled_date" model="ir.ui.view">
             <field name="name">stock.picking.tree</field>
             <field name="model">stock.picking</field>
-            <field name="inherit_id" ref="picking_invoice_pending.view_picking_form_add_pending_move"/>
+            <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
-                <field name="picking_type_id" position="after">
-                    <field name="scheduled_date"/>
+                <field name="priority" position="after">
+                    <field name="scheduled_shipping_date"/>
                 </field>
             </field>
-        </record>-->
+        </record>
 
-    </data>
-</openerp>
+</odoo>

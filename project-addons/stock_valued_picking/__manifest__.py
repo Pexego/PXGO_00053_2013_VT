@@ -1,6 +1,6 @@
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    Copyright (C) 2015 Pexego All Rights Reserved
 #    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -18,7 +18,18 @@
 #
 ##############################################################################
 
-from . import models
-# TODO: de momento no se migra:
-# from . import wizard
-# import report
+{
+    'name': 'Stock valued picking',
+    'version': '1.0',
+    'category': 'stock',
+    'description': """""",
+    'author': 'Pexego',
+    'website': '',
+    "depends": ['sale', 'stock', 'sale_stock'],
+    "data": [
+        'report/valued_picking_report.xml',
+        # 'report/stock_report.xml',
+        'views/stock_view.xml',
+        'views/partner_view.xml'],
+    "installable": True
+}
