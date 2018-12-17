@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="stock_move_search_add_new_state" model="ir.ui.view">
             <field name="name">stock.move.search.add.new.state</field>
@@ -13,9 +12,9 @@
                 <field name="origin" position="after">
                     <field name="container_id"/>
                 </field>
-                <filter string="Picking" position="after">
+                <!--TODO: Migrar<filter string="Picking" position="after">
                     <filter string="Container" name="groupby_container_id" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'container_id'}"/>
-                </filter>
+                </filter>-->
             </field>
         </record>
 
@@ -53,9 +52,9 @@
                 <field name="origin" position="after">
                     <field name="shipping_identifier"/>
                 </field>
-                <field name="min_date" position="attributes">
+                <!--TODO: Migrar<field name="min_date" position="attributes">
                     <attribute name="invisible">0</attribute>
-                </field>
+                </field>-->
             </field>
         </record>
 
@@ -73,7 +72,7 @@
             </field>
         </record>
 
-        <record id="view_move_picking_form_add_partner" model="ir.ui.view">
+        <!--TODO: Migrate<record id="view_move_picking_form_add_partner" model="ir.ui.view">
             <field name="name">stock.move.form</field>
             <field name="model">stock.move</field>
             <field name="inherit_id" ref="stock.view_move_picking_form"/>
@@ -85,7 +84,7 @@
                     </group>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_move_form_add_container" model="ir.ui.view">
             <field name="name">stock.move.form.add_container</field>
@@ -93,6 +92,7 @@
             <field name="inherit_id" ref="stock.view_move_form"/>
             <field name="arch" type="xml">
                 <field name="date_expected" position="after">
+                    <field name="picking_id" invisible="1"/>
                     <field name="container_id" attrs="{'invisible': ['|',('picking_id', '!=', False),('state', 'in', ['cancel','done'])]}"/>
                 </field>
             </field>
@@ -124,7 +124,7 @@
             <field name="name">Stock Moves Custom Tree</field>
             <field name="model">stock.move</field>
             <field name="arch" type="xml">
-                <tree colors="grey:state == 'cancel'" string="Moves" create="false">
+                <tree decoration-muted="state == 'cancel'" string="Moves" create="false">
                     <field name="product_id"/>
                     <field name="product_uom_qty"/>
                     <field name="price_unit"/>
@@ -165,7 +165,6 @@
         <record id="view_stock_container_filter" model="ir.ui.view">
             <field name="name">stock.container.search</field>
             <field name="model">stock.container</field>
-            <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Containers">
                    <field name="name"/>
@@ -185,5 +184,4 @@
         <menuitem name="Containers" parent="purchase.menu_purchase_config"
             action="action_stock_container" id="stock_container_menu"/>
 
-    </data>
-</openerp>
+</odoo>

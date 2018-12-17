@@ -59,7 +59,7 @@
             <field name="view_id" ref="view_rappel_current_info_tree_add_qty_picking"/>
         </record>
 
-        <record id="view_partner_form_add_rappel_info" model="ir.ui.view">
+        <!--TODO: MIgrar<record id="view_partner_form_add_rappel_info" model="ir.ui.view">
             <field name="name">res.partner.rappel.button</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
@@ -72,7 +72,7 @@
                     </button>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

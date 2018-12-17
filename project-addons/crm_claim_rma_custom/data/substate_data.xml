@@ -13,10 +13,6 @@
           <field name="padding">5</field>
           <field name="number_next">1</field>
         </record> -->
-        <record id="seq_type_crm_claim_rma_supplier" model="ir.sequence.type">
-            <field name="name">CRM Claim RMA Supplier</field>
-            <field name="code">crm.claim.rma.supplier</field>
-        </record>
 
         <record id="seq_crm_claim_supplier" model="ir.sequence">
             <field name="name">CRM Claim Supplier</field>

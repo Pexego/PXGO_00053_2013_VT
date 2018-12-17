@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+
         <record model="ir.ui.view" id="view_sale_promo_form2_remove_button">
             <field name="name">sale.order.promo.form2.remove.button</field>
             <field name="model">sale.order</field>
-            <field name="type">form</field>
             <field name="inherit_id" ref="openerp_sale_promotions.view_sale_promo_form2" />
             <field name="arch" type="xml">
                 <button name="apply_promotions" position="replace">
@@ -16,7 +15,6 @@
        <!-- <record model="ir.ui.view" id="view_order_form_reserve_add_button">
             <field name="name">sale.order.form.reserve.add.button</field>
             <field name="model">sale.order</field>
-            <field name="type">form</field>
             <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve" />
             <field name="priority">1</field>
             <field name="arch" type="xml">
@@ -39,8 +37,4 @@
             </field>
         </record>
 
-
-
-
-    </data>
-</openerp>
+</odoo>

@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, osv, tools, _
+from odoo import models, fields, api, exceptions, tools, _
 from datetime import datetime
 from calendar import monthrange
 from dateutil.relativedelta import relativedelta
@@ -46,7 +46,7 @@ class rappel_calculated(models.Model):
         new_data_invoice = rappel_invoice_wzd.with_context(ctx).create({'journal_id': journal_id,
                                                                         'group_by_partner': True,
                                                                         'invoice_date': False})
-        
+
         # Create invoice
         new_data_invoice.action_invoice()
 
@@ -64,7 +64,7 @@ class rappel_calculated(models.Model):
                         account_id = rappel_product.categ_id. \
                             property_account_income_categ
                     taxes_ids = rappel_product.taxes_id
-                    fpos = rp.partner_id.property_account_position or False
+                    fpos = rp.partner_id.property_account_position_id or False
                     if fpos:
                         account_id = fpos.map_account(account_id)
                         taxes_ids = fpos.map_tax(taxes_ids)

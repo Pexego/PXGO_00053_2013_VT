@@ -56,10 +56,10 @@ for line in data[filename]:
                         vals['partner_id'] = partner_id[0]
                         partner = partner_obj.browse(cr, uid, partner_id[0])
                         vals['pricelist_id'] = partner.property_product_pricelist.id
-                        vals['fiscal_position'] = partner.property_account_position.id
+                        vals['fiscal_position'] = partner.property_account_position_id.id
                         if not vals.get('payment_mode_id', False):
                                 vals['payment_mode_id'] = partner.customer_payment_mode.id
-                        vals['payment_term'] = partner.property_payment_term.id
+                        vals['payment_term'] = partner.property_payment_term_id.id
         if line and line[0] == 'NADDP':
                 partner_id = partner_obj.search(cr, uid, [('gln', '=', line[1]['destino'])])
                 if not partner_id:
@@ -74,10 +74,10 @@ for line in data[filename]:
                         vals['partner_id'] = partner_id[0]
                         partner = partner_obj.browse(cr, uid, partner_id[0])
                         vals['pricelist_id'] = partner.property_product_pricelist.id
-                        vals['fiscal_position'] = partner.property_account_position.id
+                        vals['fiscal_position'] = partner.property_account_position_id.id
                         if not vals.get('payment_mode_id', False):
                                 vals['payment_mode_id'] = partner.customer_payment_mode.id
-                        vals['payment_term'] = partner.property_payment_term.id
+                        vals['payment_term'] = partner.property_payment_term_id.id
         if line and 'LIN' in line[0]:
                 if old_sale_id:
                         wf_service = netsvc.LocalService('workflow')

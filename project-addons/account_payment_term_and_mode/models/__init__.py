@@ -20,5 +20,4 @@
 ##############################################################################
 
 from . import payment_term
-from . import invoice
 from . import payment_return

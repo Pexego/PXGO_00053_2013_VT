@@ -32,7 +32,7 @@ class RiskAdviceMail(models.Model):
     days_after= fields.Integer("Days from last invoice")
     global_ok = fields.Boolean ("Global", default = False, help = "True: all partners but those with specific advices")
     partner_id = fields.Many2one("res.partner", "Customer")
-    template_id = fields.Many2one("email.template", "Template", required = True)
+    template_id = fields.Many2one("mail.template", "Template", required = True)
 
     _sql_constraints = [
         ('name_uniq', 'unique(global_ok, days_after, partner_id)', 'global_ok, days_after must be unique')
@@ -43,7 +43,7 @@ class RiskAdviceMail(models.Model):
         acc_move_line_obj = self.env['account.move.line']
         partners = acc_move_line_obj.\
             read_group([('partner_id', '!=', False),
-                        ('reconcile_id', '=', False)], ["partner_id"],
+                        ('full_reconcile_id', '=', False)], ["partner_id"],
                        groupby="partner_id")
 
         res = {}
@@ -69,7 +69,7 @@ class RiskAdviceMail(models.Model):
             line_ids = acc_move_line_obj.search([
                 ('partner_id','=',partner.id),
                 ('account_id', 'in', accounts),
-                ('reconcile_id','=',False)
+                ('full_reconcile_id','=',False)
                 ], order = "date_maturity asc")
 
             amount = 0.0

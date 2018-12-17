@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
 
-        <record id="view_order_form_change_button" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_order_form_change_button" model="ir.ui.view">
             <field name="name">sale.order.form.change_button</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <button name="copy_quotation" position="before">
                     <button name="%(action_view_account_voucher_wizard)d" string="Pay sale advanced"
@@ -19,7 +17,6 @@
                 </page>
 
             </field>
-        </record>
+        </record>-->
 
-    </data>
-</openerp>
+</odoo>

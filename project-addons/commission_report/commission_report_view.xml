@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
-    <data>
+<odoo>
 
         <record id="view_commssion_report" model="ir.ui.view">
          <field name="name">commission.report.graph</field>
@@ -20,7 +19,6 @@
     <record id="commission_report_filter" model="ir.ui.view">
         <field name="name">commission.report.search</field>
         <field name="model">commission.report</field>
-        <field name="type">search</field>
         <field name="arch" type="xml">
             <search string="Commission Analysis">
                 <field name="product_id"/>
@@ -48,6 +46,5 @@
 
     <!--TODO: Migrar<menuitem action="action_commission_report_all" id="menu_action_commission_report_all" parent="sale_commission.menu_sale_commissions_conf" sequence="0"/>-->
 
-    </data>
-</openerp>
+</odoo>
 

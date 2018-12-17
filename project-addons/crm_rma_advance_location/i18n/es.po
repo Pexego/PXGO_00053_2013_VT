@@ -1,0 +1,207 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* crm_rma_advance_location
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-18 16:16+0000\n"
+"PO-Revision-Date: 2016-02-18 16:16+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: crm_rma_advance_location
+#: model:stock.location,name:crm_rma_advance_location.stock_location_breakage_loss
+msgid "Breakage Loss"
+msgstr "Pérdidas por roturas"
+
+#. module: crm_rma_advance_location
+#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: crm_rma_advance_location
+#: model:stock.location,name:crm_rma_advance_location.stock_location_carrier_loss
+msgid "Carrier Loss"
+msgstr "Pérdidas"
+
+#. module: crm_rma_advance_location
+#: model:ir.actions.act_window,name:crm_rma_advance_location.action_loss_picking_from_claim_picking
+msgid "Create Incomming Shipment to Breakkage Loss Location"
+msgstr "Crear una recepción a la ubicación de pérdidas por rotura"
+
+#. module: crm_rma_advance_location
+#: model:ir.actions.act_window,name:crm_rma_advance_location.action_used_picking_from_claim_picking
+msgid "Create Incomming Shipment to Refurbish Location"
+msgstr "Crear una recepción a la ubicación de Reacondicionamiento"
+
+#. module: crm_rma_advance_location
+#: model:ir.actions.act_window,name:crm_rma_advance_location.action_stock_picking_from_claim_picking
+msgid "Create Incomming Shipment to Stock"
+msgstr "Crear una recepción a Existencias"
+
+#. module: crm_rma_advance_location
+#: model:ir.actions.act_window,name:crm_rma_advance_location.action_claim_picking_loss
+msgid "Create Products Loss"
+msgstr "Crear pérdida"
+
+#. module: crm_rma_advance_location
+#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+msgid "Create picking"
+msgstr "Crear albarán"
+
+#. module: crm_rma_advance_location
+#: field:claim_make_picking_from_picking.wizard,create_uid:0
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: crm_rma_advance_location
+#: field:claim_make_picking_from_picking.wizard,create_date:0
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: crm_rma_advance_location
+#: field:claim_make_picking_from_picking.wizard,picking_line_dest_location:0
+msgid "Dest. Location"
+msgstr "Ubic. destino"
+
+#. module: crm_rma_advance_location
+#: field:claim_make_picking_from_picking.wizard,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: crm_rma_advance_location
+#: field:claim_make_picking_from_picking.wizard,write_uid:0
+msgid "Last Updated by"
+msgstr "Últ. actualización por"
+
+#. module: crm_rma_advance_location
+#: field:claim_make_picking_from_picking.wizard,write_date:0
+msgid "Last Updated on"
+msgstr "Últ. actualización el"
+
+#. module: crm_rma_advance_location
+#: field:stock.warehouse,lot_breakage_loss_id:0
+msgid "Location Breakage Loss"
+msgstr "Ubicación pérdidas rotura"
+
+#. module: crm_rma_advance_location
+#: field:stock.warehouse,lot_breakdown_id:0
+msgid "Location Breakdown"
+msgstr "Ubicación averías"
+
+#. module: crm_rma_advance_location
+#: field:stock.warehouse,lot_carrier_loss_id:0
+msgid "Location Carrier Loss"
+msgstr "Ubicación pérdidas transporte"
+
+#. module: crm_rma_advance_location
+#: field:stock.warehouse,lot_rma_id:0
+msgid "Location RMA"
+msgstr "Ubicación RMA"
+
+#. module: crm_rma_advance_location
+#: field:stock.warehouse,lot_refurbish_id:0
+msgid "Location Refurbish"
+msgstr "Ubicación reacondicionamiento"
+
+#. module: crm_rma_advance_location
+#: help:claim_make_picking_from_picking.wizard,picking_line_source_location:0
+msgid "Location where the returned products are from."
+msgstr "Ubicación desde donde se devolverán los productos."
+
+#. module: crm_rma_advance_location
+#: help:claim_make_picking_from_picking.wizard,picking_line_dest_location:0
+msgid "Location where the system will stock the returned products."
+msgstr "Ubicación donde el sistema almacenará los productos devueltos."
+
+#. module: crm_rma_advance_location
+#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+msgid "Locations"
+msgstr "Ubicaciones"
+
+#. module: crm_rma_advance_location
+#: model:stock.location,name:crm_rma_advance_location.stock_location_mistake_loss
+msgid "Mistake Loss"
+msgstr "Pérdidas por errores"
+
+#. module: crm_rma_advance_location
+#: view:crm.claim:crm_rma_advance_location.crm_claim_rma_form_view
+msgid "New Product Loss"
+msgstr "Nuevo producto perdido"
+
+#. module: crm_rma_advance_location
+#: field:claim_make_picking_from_picking.wizard,picking_line_ids:0
+msgid "Picking lines"
+msgstr "Lineas albarán"
+
+#. module: crm_rma_advance_location
+#: view:stock.picking:crm_rma_advance_location.picking_in_form
+msgid "Product to Loss"
+msgstr "Producto a pérdidas"
+
+#. module: crm_rma_advance_location
+#: view:stock.picking:crm_rma_advance_location.picking_in_form
+msgid "Product to refurbish stock"
+msgstr "Producto a reacondicionamiento"
+
+#. module: crm_rma_advance_location
+#: view:stock.picking:crm_rma_advance_location.picking_in_form
+msgid "Product to stock"
+msgstr "Producto a existencias"
+
+#. module: crm_rma_advance_location
+#: model:stock.location,name:crm_rma_advance_location.stock_location_rma
+msgid "RMA"
+msgstr "RMA"
+
+#. module: crm_rma_advance_location
+#: model:stock.location,name:crm_rma_advance_location.stock_location_refurbish
+msgid "Refurbish"
+msgstr "Reacondicionamiento"
+
+#. module: crm_rma_advance_location
+#: model:ir.model,name:crm_rma_advance_location.model_mrp_repair_line
+msgid "Repair Line"
+msgstr "Línea reparación"
+
+#. module: crm_rma_advance_location
+#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+msgid "Select lines for picking"
+msgstr "Seleccione lineas para albaranar"
+
+#. module: crm_rma_advance_location
+#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+msgid "Select lines to add in picking"
+msgstr "Seleccione lineas para añadir al albarán"
+
+#. module: crm_rma_advance_location
+#: field:claim_make_picking_from_picking.wizard,picking_line_source_location:0
+msgid "Source Location"
+msgstr "Ubic. origen"
+
+#. module: crm_rma_advance_location
+#: model:ir.model,name:crm_rma_advance_location.model_stock_warehouse
+msgid "Warehouse"
+msgstr "Almacén"
+
+#. module: crm_rma_advance_location
+#: model:ir.model,name:crm_rma_advance_location.model_claim_make_picking_wizard
+msgid "Wizard to create pickings from claim lines"
+msgstr "Asistente para crear envíos desde la línea de reclamación"
+
+#. module: crm_rma_advance_location
+#: model:ir.model,name:crm_rma_advance_location.model_claim_make_picking_from_picking_wizard
+msgid "Wizard to create pickings from picking lines"
+msgstr "Asistente para crear albaranes desde lineas de albarán"
+
+#. module: crm_rma_advance_location
+#: view:mrp.repair:crm_rma_advance_location.view_repair_order_form_add_new_ctx
+msgid "{'default_product_uom_qty': product_qty, 'cur_location_id': location_id}"
+msgstr "{'default_product_uom_qty': product_qty, 'cur_location_id': location_id}"
+

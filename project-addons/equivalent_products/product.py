@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class product(models.Model):
@@ -36,12 +36,9 @@ class product(models.Model):
 
 class product_tag(models.Model):
 
-    def name_get(self, cr, uid, ids, context=None):
-        if isinstance(ids, (list, tuple)) and not len(ids):
-            return []
-        if isinstance(ids, (long, int)):
-            ids = [ids]
-        reads = self.read(cr, uid, ids, ['name', 'parent_id'], context=context)
+    @api.multi
+    def name_get(self):
+        reads = self.read(['name', 'parent_id'])
         res = []
         for record in reads:
             name = record['name']
@@ -69,9 +66,11 @@ class product_tag(models.Model):
             ids = self.search(cr, uid, args, limit=limit, context=context)
         return self.name_get(cr, uid, ids, context)
 
-    def _name_get_fnc(self, cr, uid, ids, prop, unknow_none, context=None):
-        res = self.name_get(cr, uid, ids, context=context)
-        return dict(res)
+    @api.multi
+    @api.depends('name', 'parent_id')
+    def _name_get_fnc(self):
+        for record in self:
+            record.complete_name = record.name_get()[0][1]
 
     _name = "product.tag"
     _parent_store = True

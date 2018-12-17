@@ -10,13 +10,13 @@
                 <field name="priority" position="after">
                     <field name="invoice_type_id" attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
                 </field>
-                <field name="date_done" position="attributes">
+                <!--TODO: Migrar<field name="date_done" position="attributes">
                     <attribute name="groups"></attribute>
-                </field>
+                </field>-->
             </field>
         </record>
 
-        <record id="stock_picking_search_add_invoice_type" model="ir.ui.view">
+        <!--TODO: Migrar<record id="stock_picking_search_add_invoice_type" model="ir.ui.view">
             <field name="name">stock.picking.search</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_internal_search"/>
@@ -28,7 +28,7 @@
                     <filter string="Invoice type" domain="[]" context="{'group_by':'invoice_type_id'}"/>
                 </filter>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

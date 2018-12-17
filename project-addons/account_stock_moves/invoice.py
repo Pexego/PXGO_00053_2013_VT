@@ -22,10 +22,10 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from odoo import models
 
 
-class account_invoice_line(orm.Model):
+class account_invoice_line(models.Model):
     _inherit = "account.invoice.line"
 
     def move_line_get_item(self, cr, uid, line, context=None):

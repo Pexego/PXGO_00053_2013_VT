@@ -5,7 +5,7 @@
 <openerp>
     <data>
 
-        <record id="product_form_view_move_button" model="ir.ui.view">
+        <!--TODO: Migrar<record id="product_form_view_move_button" model="ir.ui.view">
             <field name="name">product.product.form</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_normal_form_view"/>
@@ -15,7 +15,7 @@
                         string="Stock moves" type="object" icon="fa-cubes" attrs="{'invisible':[('type', '=', 'service')]}"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_stock_product_tree" model="ir.ui.view">
             <field name="name">product.stock.tree.inherit</field>
@@ -56,7 +56,7 @@
                 </field>
                 <field name="name" position="after">
                     <field name="tag_ids" string="Tag"/>
-                    <field name="seller_id" string="Main Supplier"/>
+                    <!--TODO: MIgrar<field name="seller_id" string="Main Supplier"/>-->
                 </field>
                 <field name="categ_id" position="attributes">
                     <attribute name="filter_domain"></attribute>

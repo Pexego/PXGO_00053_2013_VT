@@ -19,19 +19,16 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, osv, _
-from openerp.exceptions import Warning
+from odoo import models, fields, api, exceptions, _
+from odoo.exceptions import Warning
 #TODO: (Ahora es account_credit_control) from openerp.addons.account_followup.report import account_followup_print
-from openerp.osv import osv, fields as fields2
 from collections import defaultdict
 import time
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import dateutil.relativedelta
-from openerp.exceptions import ValidationError
 from calendar import monthrange
-from dateutil.relativedelta import relativedelta
 
 
 class ResPartnerInvoiceType(models.Model):
@@ -189,7 +186,7 @@ class ResPartner(models.Model):
     def _unblock_invoices(self):
         date_limit = date.today() - timedelta(days=7)
         payment_term_ids = self.env['account.payment.term'].search([('blocked', '=', 'True')])
-        partner_ids = self.env['res.partner'].search([('property_payment_term', 'in', payment_term_ids.ids)])
+        partner_ids = self.env['res.partner'].search([('property_payment_term_id', 'in', payment_term_ids.ids)])
         invoice_ids = self.env['account.invoice'].search([('date_due', '<=', date_limit),
                                                           ('state', '=', 'open'),
                                                           ('partner_id', 'child_of', partner_ids.ids),
@@ -201,104 +198,105 @@ class ResPartner(models.Model):
         val = {'blocked': False}
         move_ids.write(val)
 
-    def _purchase_invoice_count(self, cr, uid, ids, field_name, arg, context=None):
-        invoice = self.pool.get('account.invoice')
-        res = {}
-        for partner_id in ids:
-            res[partner_id] = invoice.search_count(cr, uid, [
-                ('partner_id', 'child_of', partner_id),
-                '|', ('type', '=', 'in_invoice'), ('type', '=', 'in_refund')], context=context)
-        return res
+    @api.multi
+    def _purchase_invoice_count(self):
+        invoice = self.env['account.invoice']
+        for partner in self:
+            partner.supplier_all_invoice_count = invoice.\
+                search_count([('partner_id', 'child_of', partner.id),
+                              '|', ('type', '=', 'in_invoice'),
+                              ('type', '=', 'in_refund')])
 
-    def _invoice_total_real(self, cr, uid, ids, field_name, arg, context=None):
-        result = {}
-        if context is None:
-            context = {}
-        account_invoice_report = self.pool.get('account.invoice.report')
-        user = self.pool['res.users'].browse(cr, uid, uid, context=context)
-        user_currency_id = user.company_id.currency_id.id
-        for partner_id in ids:
-            all_partner_ids = self.pool['res.partner'].search(
-                cr, uid, [('id', 'child_of', partner_id)], context=context)
+    #TODO: Migrar
+    # ~ def _invoice_total_real(self, cr, uid, ids, field_name, arg, context=None):
+        # ~ result = {}
+        # ~ if context is None:
+            # ~ context = {}
+        # ~ account_invoice_report = self.pool.get('account.invoice.report')
+        # ~ user = self.pool['res.users'].browse(cr, uid, uid, context=context)
+        # ~ user_currency_id = user.company_id.currency_id.id
+        # ~ for partner_id in ids:
+            # ~ all_partner_ids = self.pool['res.partner'].search(
+                # ~ cr, uid, [('id', 'child_of', partner_id)], context=context)
 
-            # searching account.invoice.report via the orm is comparatively expensive
-            # (generates queries "id in []" forcing to build the full table).
-            # In simple cases where all invoices are in the same currency than the user's company
-            # access directly these elements
-            domain = [('partner_id', 'in', all_partner_ids),
-                      ('state', 'not in', ['draft', 'cancel']),
-                      ('number', 'not like', '%_ef%')]
-            if context.get('date_from', False):
-                domain.append(('date', '>=', context['date_from']))
-            # generate where clause to include multicompany rules
-            where_query = account_invoice_report._where_calc(cr, uid, domain,
-                                                             context=context)
-            account_invoice_report._apply_ir_rules(cr, uid, where_query, 'read', context=context)
-            from_clause, where_clause, where_clause_params = where_query.get_sql()
+            # ~ # searching account.invoice.report via the orm is comparatively expensive
+            # ~ # (generates queries "id in []" forcing to build the full table).
+            # ~ # In simple cases where all invoices are in the same currency than the user's company
+            # ~ # access directly these elements
+            # ~ domain = [('partner_id', 'in', all_partner_ids),
+                      # ~ ('state', 'not in', ['draft', 'cancel']),
+                      # ~ ('number', 'not like', '%_ef%')]
+            # ~ if context.get('date_from', False):
+                # ~ domain.append(('date', '>=', context['date_from']))
+            # ~ # generate where clause to include multicompany rules
+            # ~ where_query = account_invoice_report._where_calc(cr, uid, domain,
+                                                             # ~ context=context)
+            # ~ account_invoice_report._apply_ir_rules(cr, uid, where_query, 'read', context=context)
+            # ~ from_clause, where_clause, where_clause_params = where_query.get_sql()
 
-            query = """ WITH currency_rate (currency_id, rate, date_start, date_end) AS (
-                                SELECT r.currency_id, r.rate, r.name AS date_start,
-                                    (SELECT name FROM res_currency_rate r2
-                                     WHERE r2.name > r.name AND
-                                           r2.currency_id = r.currency_id
-                                     ORDER BY r2.name ASC
-                                     LIMIT 1) AS date_end
-                                FROM res_currency_rate r
-                                )
-                      SELECT SUM(price_total * cr.rate) as total
-                        FROM account_invoice_report account_invoice_report, currency_rate cr
-                       WHERE %s
-                         AND cr.currency_id = %%s
-                         AND (COALESCE(account_invoice_report.date, NOW()) >= cr.date_start)
-                         AND (COALESCE(account_invoice_report.date, NOW()) < cr.date_end OR cr.date_end IS NULL)
-                    """ % where_clause
+            # ~ query = """ WITH currency_rate (currency_id, rate, date_start, date_end) AS (
+                                # ~ SELECT r.currency_id, r.rate, r.name AS date_start,
+                                    # ~ (SELECT name FROM res_currency_rate r2
+                                     # ~ WHERE r2.name > r.name AND
+                                           # ~ r2.currency_id = r.currency_id
+                                     # ~ ORDER BY r2.name ASC
+                                     # ~ LIMIT 1) AS date_end
+                                # ~ FROM res_currency_rate r
+                                # ~ )
+                      # ~ SELECT SUM(price_total * cr.rate) as total
+                        # ~ FROM account_invoice_report account_invoice_report, currency_rate cr
+                       # ~ WHERE %s
+                         # ~ AND cr.currency_id = %%s
+                         # ~ AND (COALESCE(account_invoice_report.date, NOW()) >= cr.date_start)
+                         # ~ AND (COALESCE(account_invoice_report.date, NOW()) < cr.date_end OR cr.date_end IS NULL)
+                    # ~ """ % where_clause
 
-            # price_total is in the currency with rate = 1
-            # total_invoice should be displayed in the current user's currency
-            cr.execute(query, where_clause_params + [user_currency_id])
-            result[partner_id] = cr.fetchone()[0]
+            # ~ # price_total is in the currency with rate = 1
+            # ~ # total_invoice should be displayed in the current user's currency
+            # ~ cr.execute(query, where_clause_params + [user_currency_id])
+            # ~ result[partner_id] = cr.fetchone()[0]
 
-        return result
+        # ~ return result
 
-    def _get_amounts_and_date(self, cr, uid, ids, name, arg, context=None):
-        '''
-        Function that computes values for the followup functional fields. Note that 'payment_amount_due'
-        is similar to 'credit' field on res.partner except it filters on user's company.
-        '''
-        res = super(ResPartner, self)._get_amounts_and_date(cr, uid, ids, name, arg, context=context)
-        company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
-        current_date = fields2.date.context_today(self, cr, uid, context=context)
-        for partner in self.browse(cr, uid, ids, context=context):
-            if partner.supplier:
-                worst_due_date = False
-                amount_due = amount_overdue = 0.0
-                for aml in partner.unreconciled_purchase_aml_ids:
-                    if (aml.company_id == company):
-                        date_maturity = aml.date_maturity or aml.date
-                        if not worst_due_date or date_maturity < worst_due_date:
-                            worst_due_date = date_maturity
-                        amount_due += aml.result
-                        if (date_maturity <= current_date):
-                            amount_overdue += aml.result
-                res[partner.id] = {'payment_amount_due': amount_due,
-                                   'payment_amount_overdue': amount_overdue,
-                                   'payment_earliest_due_date': worst_due_date}
-        return res
+    #TODO: Migrar
+    # ~ def _get_amounts_and_date(self, cr, uid, ids, name, arg, context=None):
+        # ~ '''
+        # ~ Function that computes values for the followup functional fields. Note that 'payment_amount_due'
+        # ~ is similar to 'credit' field on res.partner except it filters on user's company.
+        # ~ '''
+        # ~ res = super(ResPartner, self)._get_amounts_and_date(cr, uid, ids, name, arg, context=context)
+        # ~ company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
+        # ~ current_date = fields.Date.today()
+        # ~ for partner in self.browse(cr, uid, ids, context=context):
+            # ~ if partner.supplier:
+                # ~ worst_due_date = False
+                # ~ amount_due = amount_overdue = 0.0
+                # ~ for aml in partner.unreconciled_purchase_aml_ids:
+                    # ~ if (aml.company_id == company):
+                        # ~ date_maturity = aml.date_maturity or aml.date
+                        # ~ if not worst_due_date or date_maturity < worst_due_date:
+                            # ~ worst_due_date = date_maturity
+                        # ~ amount_due += aml.result
+                        # ~ if (date_maturity <= current_date):
+                            # ~ amount_overdue += aml.result
+                # ~ res[partner.id] = {'payment_amount_due': amount_due,
+                                   # ~ 'payment_amount_overdue': amount_overdue,
+                                   # ~ 'payment_earliest_due_date': worst_due_date}
+        # ~ return res
 
-    def _payment_due_search(self, cr, uid, obj, name, args, context=None):
-        res = super(ResPartner, self)._payment_due_search(cr, uid, obj, name, args, context=context)
-        return res
+    #TODO: Migrar
+    # ~ def _payment_due_search(self, cr, uid, obj, name, args, context=None):
+        # ~ res = super(ResPartner, self)._payment_due_search(cr, uid, obj, name, args, context=context)
+        # ~ return res
 
-    _columns = {
-        'total_invoiced_real': fields2.function(_invoice_total_real, string="Total Invoiced", type='float',
-                                         groups='account.group_account_invoice'),
-        'supplier_all_invoice_count': fields2.function(_purchase_invoice_count, string='# Supplier Invoices',
-                                                       type='integer'),
-        'payment_amount_due': fields2.function(_get_amounts_and_date,
-                                              type='float', string="Amount Due",
-                                              store=False, multi="followup",
-                                              fnct_search=_payment_due_search),
-    }
+    #TODO: Migrar
+    # ~ total_invoiced_real = fields.Float(compute="_invoice_total_real", string="Total Invoiced",
+                                       # ~ groups='account.group_account_invoice')
+    supplier_all_invoice_count = fields.Integer(compute="_purchase_invoice_count", string='# Supplier Invoices')
+    #TODO: Migrar
+    # ~ payment_amount_due = fields.Float(compute="_get_amounts_and_date",
+                                      # ~ string="Amount Due",
+                                      # ~ search=_payment_due_search)
 
     @api.one
     def _get_products_sold(self):
@@ -316,21 +314,22 @@ class ResPartner(models.Model):
                                             ('state', 'not in',
                                              ['draft', 'cancel', 'sent'])]))
 
-    @api.one
-    def _get_growth_rate(self):
-        if self.customer:
-            search_date_180 = (date.today() - relativedelta(days=180)).\
-                strftime("%Y-%m-%d")
-            invoiced_180 = self.with_context(date_from=search_date_180).\
-                browse(self.id).total_invoiced_real
-            diary_invoice = invoiced_180 / 180.0
-            goal = diary_invoice * 15.0
-            if goal:
-                search_date_15 = (date.today() - relativedelta(days=15)).\
-                    strftime("%Y-%m-%d")
-                invoiced_15 = self.with_context(date_from=search_date_15).\
-                    browse(self.id).total_invoiced_real
-                self.growth_rate = invoiced_15 / goal
+    #TODO: Migrar
+    # ~ @api.one
+    # ~ def _get_growth_rate(self):
+        # ~ if self.customer:
+            # ~ search_date_180 = (date.today() - relativedelta(days=180)).\
+                # ~ strftime("%Y-%m-%d")
+            # ~ invoiced_180 = self.with_context(date_from=search_date_180).\
+                # ~ browse(self.id).total_invoiced_real
+            # ~ diary_invoice = invoiced_180 / 180.0
+            # ~ goal = diary_invoice * 15.0
+            # ~ if goal:
+                # ~ search_date_15 = (date.today() - relativedelta(days=15)).\
+                    # ~ strftime("%Y-%m-%d")
+                # ~ invoiced_15 = self.with_context(date_from=search_date_15).\
+                    # ~ browse(self.id).total_invoiced_real
+                # ~ self.growth_rate = invoiced_15 / goal
 
     @api.one
     def _get_average_margin(self):
@@ -386,14 +385,14 @@ class ResPartner(models.Model):
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
     purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
     att = fields.Char("A/A")
-    growth_rate = fields.Float("Growth rate", readonly=True,
-                               compute="_get_growth_rate")
+    #TODO: Migrar
+    # ~ growth_rate = fields.Float("Growth rate", readonly=True,
+                               # ~ compute="_get_growth_rate")
     average_margin = fields.Float("Average Margin", readonly=True, compute="_get_average_margin")
 
     unreconciled_purchase_aml_ids = fields.One2many('account.move.line', 'partner_id',
-                                           domain=['&', ('reconcile_id', '=', False), '&',
-                                                   ('account_id.active', '=', True), '&',
-                                                   ('account_id.type', '=', 'payable'), ('state', '!=', 'draft')])
+                                           domain=[('full_reconcile_id', '=', False),
+                                                   ('account_id.internal_type', '=', 'payable'), ('move_id.state', '!=', 'draft')])
     _sql_constraints = [
         ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
     ]
@@ -455,23 +454,20 @@ class ResPartner(models.Model):
                 raise exceptions. \
                     ValidationError(_('VAT must be unique'))
 
-    def name_get(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
-        if isinstance(ids, (int, long)):
-            ids = [ids]
+    @api.multi
+    def name_get(self):
         res = []
-        for record in self.browse(cr, uid, ids, context=context):
+        for record in self:
             name = record.name
             if record.parent_id and not record.is_company and not record.dropship:
                 name = "%s, %s" % (record.parent_name, name)
-            if context.get('show_address_only'):
+            if self.env.context.get('show_address_only'):
                 name = self._display_address(cr, uid, record, without_company=True, context=context)
-            if context.get('show_address'):
+            if self.env.context.get('show_address'):
                 name = name + "\n" + self._display_address(cr, uid, record, without_company=True, context=context)
             name = name.replace('\n\n', '\n')
             name = name.replace('\n\n', '\n')
-            if context.get('show_email') and record.email:
+            if self.env.context.get('show_email') and record.email:
                 name = "%s <%s>" % (name, record.email)
             res.append((record.id, name))
         return res
@@ -514,9 +510,9 @@ class ResPartner(models.Model):
         moveline_obj = self.pool['account.move.line']
 
         domain = [('partner_id', '=', partner.id),
-                  ('account_id.type', '=', 'receivable'),
-                  ('reconcile_id', '=', False),
-                  ('state', '!=', 'draft'),
+                  ('account_id.internal_type', '=', 'receivable'),
+                  ('full_reconcile_id', '=', False),
+                  ('move_id.state', '!=', 'draft'),
                   ('company_id', '=', company_id),
                   ('date_maturity', '>', today)]
         if days:
@@ -565,7 +561,7 @@ class ResPartner(models.Model):
         followup_table = ''
         if partner.unreconciled_aml_ids:
             company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
-            current_date = fields2.date.context_today(self, cr, uid, context=context)
+            current_date = fields.Date.today()
             rml_parse = account_followup_print.report_rappel(cr, uid, "followup_rml_parser")
             final_res = self._all_lines_get_with_partner(cr, uid, partner, company.id, days=days)
 
@@ -619,7 +615,7 @@ class ResPartner(models.Model):
         followup_table = ''
         if partner.unreconciled_aml_ids:
             company = self.pool.get('res.users').browse(cr, uid, uid, context=context).company_id
-            current_date = fields2.date.context_today(self, cr, uid, context=context)
+            current_date = fields.Date.today()
             rml_parse = account_followup_print.report_rappel(cr, uid, "followup_rml_parser")
             final_res = rml_parse._lines_get_with_partner(partner, company.id)
 

@@ -57,7 +57,7 @@ class account_invoice(models.Model):
         if not partner_id:
             return {'value': {
             'account_id': False,
-            'payment_term': False,
+            'payment_term_id': False,
             }
         }
         warning = {}

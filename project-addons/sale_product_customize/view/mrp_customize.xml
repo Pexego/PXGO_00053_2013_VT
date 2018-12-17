@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="mrp_customize_type_tree" model="ir.ui.view">
             <field name="name">mrp.customize.type</field>
             <field name="model">mrp.customize.type</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Customize type">
                     <field name="code"/>
@@ -18,7 +16,6 @@
         <record id="mrp_customize_type_form" model="ir.ui.view">
             <field name="name">mrp.customize.type</field>
             <field name="model">mrp.customize.type</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Customize type">
                     <group>
@@ -39,5 +36,4 @@
 
         <menuitem name="Customize type" parent="base.menu_base_config" action="action_mrp_customize_type" id="menu_customize_type"/>
 
-    </data>
-</openerp>
+</odoo>

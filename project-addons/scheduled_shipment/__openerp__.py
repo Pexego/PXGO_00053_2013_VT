@@ -12,7 +12,7 @@
     "depends": [
         "base",
         "sale",
-        "connector",
+        "queue_job",
         "sale_stock",
         "picking_invoice_pending"
     ],

@@ -33,8 +33,7 @@
                 </field>
                 <group name="sale" position="inside">
                     <group>
-                        <label for="categ_id" string="Internal Category"/>
-                        <field name="categ_id" nolabel="1"/>
+                        <field name="categ_id" string="Internal Category"/>
                     </group>
                 </group>
             </field>

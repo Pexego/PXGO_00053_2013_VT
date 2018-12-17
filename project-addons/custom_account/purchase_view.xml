@@ -11,7 +11,7 @@
             <field name="picking_type_id" position="after">
                 <field name="remark" string="Remark"/>
             </field>
-            <xpath expr="//page[@string='Deliveries &amp; Invoices']/group/group" position="replace">
+            <!--TODO: Migrar<xpath expr="//page[@string='Deliveries &amp; Invoices']/group/group" position="replace">
                 <group>
                   <field name="location_id" groups="stock.group_locations"/>
                   <field name="shipped" groups="base.group_no_one"/>
@@ -21,19 +21,12 @@
                   <field name="prepared_merchandise_date"/>
                   <field name="estimated_arrival_date"/>
                 </group>
-            </xpath>
+            </xpath>-->
             <xpath expr="//field[@name='order_line']/tree/field[@name='company_id']" position="attributes">
                 <attribute name="invisible">True</attribute>
             </xpath>
             <xpath expr="//field[@name='date_order']" position="after">
                 <field name="minimum_planned_date"/>
-            </xpath>
-            <xpath expr="//notebook/page[@string='Products']/field[@name='order_line']/tree[@string='Purchase Order Lines']/field[@name='product_id']" position="attributes">
-                <attribute name="on_change">onchange_product_id(parent.pricelist_id,product_id,0,False,parent.partner_id, parent.minimum_planned_date,parent.fiscal_position,date_planned,False,False,parent.state,context)</attribute>
-            </xpath>
-            <xpath expr="//group/field[@name='company_id']" position="replace"/>
-            <xpath expr="//page[@string='Deliveries &amp; Invoices']/group/group/field[@name='location_id']" position="before">
-              <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='product_qty']" position="attributes">
                 <attribute name="on_change"></attribute>
@@ -49,11 +42,11 @@
           <field name="model">purchase.order</field>
           <field name="inherit_id" ref="purchase.purchase_order_tree"/>
           <field name="arch" type="xml">
-              <xpath expr="//field[@name='minimum_planned_date']" position="after">
+              <!--TODO: Migrar<xpath expr="//field[@name='minimum_planned_date']" position="after">
                   <field name="manufacture_date"/>
                   <field name="prepared_merchandise_date"/>
                   <field name="estimated_arrival_date"/>
-              </xpath>
+              </xpath>-->
               <field name='company_id' position="attributes">
                 <attribute name="invisible">True</attribute>
               </field>
@@ -74,13 +67,13 @@
           <field name="model">purchase.order</field>
           <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
           <field name="arch" type="xml">
-              <xpath expr="//search[@string='Search Purchase Order']/field[@name='partner_id']" position="after">
+              <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="partner_ref"/>
               </xpath>
           </field>
       </record>
 
-      <record id="purchase_order_line_form_inv_comp" model="ir.ui.view">
+      <!--TODO: Migrar<record id="purchase_order_line_form_inv_comp" model="ir.ui.view">
         <field name="name">purchase.order.line.form.inv_comp</field>
         <field name="model">purchase.order.line</field>
         <field name="inherit_id" ref="purchase.purchase_order_line_form"/>
@@ -89,7 +82,7 @@
                 <attribute name="invisible">True</attribute>
             </field>
         </field>
-      </record>
+      </record>-->
 
     </data>
 </openerp>

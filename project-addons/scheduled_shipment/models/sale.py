@@ -10,12 +10,13 @@ from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
-try:
-    from openerp.addons.connector.queue.job import job
-    from openerp.addons.connector.session import ConnectorSession
-except ImportError:
-    _logger.debug('Can not `import connector`.')
-    import functools
+#TODO: Migrar
+# ~ try:
+    # ~ from openerp.addons.connector.queue.job import job
+    # ~ from openerp.addons.connector.session import ConnectorSession
+# ~ except ImportError:
+    # ~ _logger.debug('Can not `import connector`.')
+    # ~ import functools
 
 
 class SaleOrder(models.Model):
@@ -43,20 +44,21 @@ class SaleOrder(models.Model):
         return super(SaleOrder, self).write(vals)
 
 
-class StockPicking(models.Model):
+#TODO: Migrar
+# ~ class StockPicking(models.Model):
 
-    _inherit = 'stock.picking'
+    # ~ _inherit = 'stock.picking'
 
-    scheduled_picking = fields.Boolean(default="False")
-    scheduled_date = fields.Datetime(related='sale_id.scheduled_date', readonly=True)
+    # ~ scheduled_picking = fields.Boolean(default="False")
+    # ~ scheduled_date = fields.Datetime(related='sale_id.scheduled_date', readonly=True)
 
-    @api.multi
-    def _process_picking_scheduled_time(self):
-        """Process picking shipping in a scheduled date"""
-        for picking in self:
-            scheduled_date = datetime.strptime(picking.sale_id.scheduled_date, '%Y-%m-%d %H:%M:%S')
-            session = ConnectorSession(self.env.cr, SUPERUSER_ID, context=self.env.context)
-            make_picking_sync.delay(session, 'stock.picking', picking.id, eta=scheduled_date)
+    # ~ @api.multi
+    # ~ def _process_picking_scheduled_time(self):
+        # ~ """Process picking shipping in a scheduled date"""
+        # ~ for picking in self:
+            # ~ scheduled_date = datetime.strptime(picking.sale_id.scheduled_date, '%Y-%m-%d %H:%M:%S')
+            # ~ session = ConnectorSession(self.env.cr, SUPERUSER_ID, context=self.env.context)
+            # ~ make_picking_sync.delay(session, 'stock.picking', picking.id, eta=scheduled_date)
 
 
 class StockMove(models.Model):
@@ -74,12 +76,13 @@ class StockMove(models.Model):
         return res
 
 
-@job(default_channel='root.schedule_picking')
-def make_picking_sync(session, model_name, picking_id):
-    model = session.env[model_name]
-    picking = model.browse(picking_id)
-    if picking.exists():
-        list_picks = model.search([('origin', '=', picking.origin), ('state', '!=', 'cancel')])
-        for pick in list_picks:
-            pick.not_sync = False
+#TODO: Migrar
+# ~ @job(default_channel='root.schedule_picking')
+# ~ def make_picking_sync(session, model_name, picking_id):
+    # ~ model = session.env[model_name]
+    # ~ picking = model.browse(picking_id)
+    # ~ if picking.exists():
+        # ~ list_picks = model.search([('origin', '=', picking.origin), ('state', '!=', 'cancel')])
+        # ~ for pick in list_picks:
+            # ~ pick.not_sync = False
 

@@ -19,9 +19,8 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api
-from openerp.osv import osv
-from openerp.tools.translate import _
+from odoo import fields, models, _
+
 
 WARNING_MESSAGE = [
                    ('no-message','No Message'),
@@ -29,18 +28,20 @@ WARNING_MESSAGE = [
                    ('block','Blocking Message')
                    ]
 
+
 WARNING_HELP = _('Selecting the "Warning" option will notify user with the message, Selecting "Blocking Message" will throw an exception with the message and block the flow. The Message has to be written in the next field.')
 
 
 class res_partner(models.Model):
     _inherit = "res.partner"
 
-    risk_advice_ids = fields.One2many ("partner.risk.advice", "partner_id")
-    rma_warn = fields.Selection(WARNING_MESSAGE, 'Invoice', help=WARNING_HELP, required=True, default='no-message')
+    risk_advice_ids = fields.One2many("partner.risk.advice", "partner_id")
+    rma_warn = fields.Selection(WARNING_MESSAGE, 'Invoice', help=WARNING_HELP,
+                                required=True, default='no-message')
     rma_warn_msg = fields.Text('Message for RMA')
 
 
-class crm_claim(osv.osv):
+class crm_claim(models.Model):
     _inherit = 'crm.claim'
 
     def onchange_partner_id(self, cr, uid, ids, part, email=False, context=None):

@@ -28,7 +28,7 @@
             </field>
         </record>
 
-        <record id="view_price_calc" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_price_calc" model="ir.ui.view">
             <field name="name">view.price.calc</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="transportation.sale_order_add_transporter"/>
@@ -40,7 +40,7 @@
                             class="oe_highlight"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>
