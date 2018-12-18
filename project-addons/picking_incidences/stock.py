@@ -20,7 +20,7 @@
 ##############################################################################
 
 from openerp import fields, models, api, _, exceptions
-import openerp.addons.decimal_precision as dp
+import odoo.addons.decimal_precision as dp
 from openerp.tools.float_utils import float_compare, float_round
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time

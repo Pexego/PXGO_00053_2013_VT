@@ -30,9 +30,9 @@ class report_intrastat(models.Model):
     country_id = fields.Many2one('res.country', 'Country')
 
 
-    def init(self, cr):
-        drop_view_if_exists(cr, 'report_intrastat')
-        cr.execute("""
+    def init(self):
+        drop_view_if_exists(self._cr, 'report_intrastat')
+        self._cr.execute("""
             create or replace view report_intrastat as (
                 select
                     to_char(inv.date_invoice, 'YYYY') as name,
@@ -67,7 +67,7 @@ class report_intrastat(models.Model):
                     left join (product_template pt
                         left join product_product pp on (pp.product_tmpl_id = pt.id))
                     on (inv_line.product_id = pp.id)
-                    left join product_uom uom on uom.id=inv_line.uos_id
+                    left join product_uom uom on uom.id=inv_line.uom_id
                     left join product_uom puom on puom.id = pt.uom_id
                     left join report_intrastat_code intrastat on pt.intrastat_id = intrastat.id
                     left join (res_partner inv_address

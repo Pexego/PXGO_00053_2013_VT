@@ -21,10 +21,10 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
-from openerp.tools.translate import _
+from odoo import models, _, exceptions
 
-class sale_make_invoice(osv.osv_memory):
+
+class sale_make_invoice(models.TransientModel):
     """
 
     """
@@ -49,5 +49,5 @@ class sale_make_invoice(osv.osv_memory):
                 if partner_fields_dict['blocked_sales'] and not order.allow_confirm_blocked:
                     title = _("Warning for %s") % partner_fields_dict['name']
                     message = _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.')
-                    raise osv.except_osv(title, message)
+                    raise exceptions.UserError(title, message)
         return super(sale_make_invoice,self).view_init(cr, uid, fields_list, context=context)

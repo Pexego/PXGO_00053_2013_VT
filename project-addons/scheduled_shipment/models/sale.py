@@ -1,20 +1,18 @@
-# -*- coding: utf-8 -*-
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 import logging
 
-from openerp import models, fields, api, SUPERUSER_ID, exceptions, _
-from openerp.exceptions import ValidationError
+from odoo import models, fields, api, SUPERUSER_ID, exceptions, _
+from odoo.exceptions import ValidationError
 from datetime import datetime
 
 _logger = logging.getLogger(__name__)
 
 try:
-    from openerp.addons.connector.queue.job import job
-    from openerp.addons.connector.session import ConnectorSession
+    from odoo.addons.queue_job.job import job
 except ImportError:
-    _logger.debug('Can not `import connector`.')
+    _logger.debug('Can not `import queue_job`.')
     import functools
 
 
@@ -48,38 +46,53 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
     scheduled_picking = fields.Boolean(default="False")
-    scheduled_date = fields.Datetime(related='sale_id.scheduled_date', readonly=True)
+    scheduled_shipping_date = fields.Datetime('Scheduled shipping date', related='sale_id.scheduled_date', readonly=True)
 
     @api.multi
     def _process_picking_scheduled_time(self):
         """Process picking shipping in a scheduled date"""
         for picking in self:
             scheduled_date = datetime.strptime(picking.sale_id.scheduled_date, '%Y-%m-%d %H:%M:%S')
-            session = ConnectorSession(self.env.cr, SUPERUSER_ID, context=self.env.context)
-            make_picking_sync.delay(session, 'stock.picking', picking.id, eta=scheduled_date)
+            picking.with_delay(eta=scheduled_date).make_picking_sync()
+
+    @api.multi
+    def action_shedule(self):
+
+        view_id = self.env['stock.schedule.wizard']
+        new = view_id.create({})
+
+        return {
+            'name': 'Schedule Shippement',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'target': 'new',
+            'res_model': 'stock.schedule.wizard',
+            'src_model': 'stock.picking',
+            'res_id': new.id,
+            'type': 'ir.actions.act_window',
+            'id': 'action_schedule_shipping_wizard',
+            'context': {'parent_obj': self.id},
+            }
+
+    @job(default_channel='root.schedule_picking')
+    @api.multi
+    def make_picking_sync(self):
+        if self.state != 'cancel':
+            #self.not_sync = False
+            pass
 
 
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
     @api.multi
-    def _picking_assign(self, procurement_group, location_from, location_to):
-        res = super(StockMove, self)._picking_assign(procurement_group, location_from, location_to)
+    def _assign_picking(self):
+        res = super(StockMove, self)._assign_picking()
         pickings = self.mapped('picking_id')
         for pick in pickings:
-            if pick.sale_id.scheduled_date and not pick.not_sync:
-                pick.not_sync = True
+            if pick.sale_id.scheduled_date:  # TODO: descomentar al migrar crm_claim_rma_custom and not pick.not_sync:
+               # pick.not_sync = True
                 pick.scheduled_picking = True
                 pick._process_picking_scheduled_time()
         return res
-
-
-@job(default_channel='root.schedule_picking')
-def make_picking_sync(session, model_name, picking_id):
-    model = session.env[model_name]
-    picking = model.browse(picking_id)
-    if picking.exists():
-        list_picks = model.search([('origin', '=', picking.origin), ('state', '!=', 'cancel')])
-        for pick in list_picks:
-            pick.not_sync = False
 

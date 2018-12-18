@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from odoo import models, fields
 
 
 class SaleOrder(models.Model):
@@ -46,6 +46,6 @@ class ResPartner(models.Model):
 
 class PaymentMode(models.Model):
 
-    _inherit = "payment.mode"
+    _inherit = "account.payment.mode"
 
     edi_code = fields.Char("Edi code")

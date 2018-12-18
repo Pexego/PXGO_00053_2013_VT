@@ -27,8 +27,8 @@
 
         <record id="view_payment_mode_form_add_edi_fields" model="ir.ui.view">
             <field name="name">payment.mode.form.add_edi_fields</field>
-            <field name="model">payment.mode</field>
-            <field name="inherit_id" ref="account_payment.view_payment_mode_form"/>
+            <field name="model">account.payment.mode</field>
+            <field name="inherit_id" ref="account_payment_mode.account_payment_mode_form"/>
             <field name="arch" type="xml">
                 <field name="name" position="after">
                     <field name="edi_code"/>

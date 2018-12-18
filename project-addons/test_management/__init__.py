@@ -22,6 +22,6 @@
 from . import stock
 from . import procurement
 from . import sale
-from . import wizard
+#TODO: MIgrar from . import wizard
 from . import company
 from . import users

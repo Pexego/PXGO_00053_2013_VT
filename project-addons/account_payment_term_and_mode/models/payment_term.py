@@ -26,4 +26,4 @@ class AccountPaymentTermLine(models.Model):
 
     _inherit = "account.payment.term.line"
 
-    payment_mode_id = fields.Many2one("payment.mode", "Payment mode")
+    payment_mode_id = fields.Many2one("account.payment.mode", "Payment mode")

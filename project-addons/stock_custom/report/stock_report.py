@@ -92,10 +92,10 @@ class stock_picking_report(models.Model):
         """
         return group_by_str
 
-    def init(self, cr):
+    def init(self):
         # self._table = sale_report
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""CREATE or REPLACE VIEW %s as (
+        tools.drop_view_if_exists(self._cr, self._table)
+        self._cr.execute("""CREATE or REPLACE VIEW %s as (
             %s
             FROM ( %s )
             WHERE ( %s )

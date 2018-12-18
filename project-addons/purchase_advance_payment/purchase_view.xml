@@ -21,7 +21,7 @@
             </field>
         </record>
 
-        <record id="account_voucher.action_vendor_payment" model="ir.actions.act_window">
+        <!--TODO: Migrar<record id="account_voucher.action_vendor_payment" model="ir.actions.act_window">
             <field name="name">Supplier Payments</field>
             <field name="res_model">account.voucher</field>
             <field name="view_type">form</field>
@@ -37,7 +37,7 @@
                 Odoo helps you easily track payments you make and the remaining balances you need to pay your suppliers.
               </p>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>
