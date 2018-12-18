@@ -48,3 +48,11 @@ class associated_products(models.Model):
     uom_id = fields.Many2one('product.uom', 'UoM', required=True,
                              default=_get_default_uom_id),
     discount = fields.Float('Discount (%)', required=True, default=0)
+
+
+class EquivalentProduct(models.Model):
+
+    _name = 'product.equivalent'
+
+    product_id = fields2.Many2one('product.product', 'Product', required=True)
+    equivalent_id = fields2.Many2one('product.product', 'Equivalent product', required=True)

@@ -29,7 +29,11 @@
                     <field name="brand_ids" attrs="{'invisible':[('global_application','=', True)]}"/>
                 </field>
                 <field name="global_application" position="before">
+                    <field name="description"/>
+                    <field name="sequence" groups="base.group_system"/>
                     <field name="discount_voucher" groups="base.group_system"/>
+                    <field name="pricelist_ids" groups="base.group_system"
+                           attrs="{'invisible':[('discount_voucher','=', False)]}"/>
                 </field>
             </field>
         </record>

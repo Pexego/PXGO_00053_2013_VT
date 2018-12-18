@@ -91,7 +91,8 @@ class SaleOrder(osv.osv):
         for line in order.order_line:
             if line.promotion_line:
                 line.tax_id = taxes
-                line.sequence = 999
+                if '3 por ciento' in line.name:
+                    line.sequence = 999
 
         return res
 
