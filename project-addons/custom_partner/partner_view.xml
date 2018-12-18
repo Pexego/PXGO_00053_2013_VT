@@ -28,6 +28,7 @@
                 <field name="ref" position="replace"/>
                 <field name="title" position="after">
                     <field name="ref"/>
+                    <field name="ref_supplier" attrs="{'invisible': [('supplier', '=', False)]}"/>
                     <field name="user_id"/>
                     <field name="dropship" attrs="{'invisible': [('type', '!=', 'delivery')]}"/>
                 </field>
@@ -555,6 +556,17 @@
                     <attribute name="name">call_new_window</attribute>
                     <attribute name="type">object</attribute>
                 </xpath>
+            </field>
+        </record>
+
+        <record id="product_supplierinfo_tree_view_add_ref" model="ir.ui.view">
+            <field name="name">product.supplier.add.ref</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="ref_supplier"/>
+                </field>
             </field>
         </record>
 
