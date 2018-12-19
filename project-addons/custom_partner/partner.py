@@ -462,9 +462,9 @@ class ResPartner(models.Model):
             if record.parent_id and not record.is_company and not record.dropship:
                 name = "%s, %s" % (record.parent_name, name)
             if self.env.context.get('show_address_only'):
-                name = self._display_address(cr, uid, record, without_company=True, context=context)
+                name = self._display_address(without_company=True)
             if self.env.context.get('show_address'):
-                name = name + "\n" + self._display_address(cr, uid, record, without_company=True, context=context)
+                name = name + "\n" + self._display_address(without_company=True)
             name = name.replace('\n\n', '\n')
             name = name.replace('\n\n', '\n')
             if self.env.context.get('show_email') and record.email:

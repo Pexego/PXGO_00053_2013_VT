@@ -28,6 +28,15 @@ import odoo.addons.decimal_precision as dp
 class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
 
+    def _compute_amount(self):
+        super(sale_order_line, self.filtered(lambda x: not x.deposit)).\
+            _compute_amount()
+        for line in self.filtered('deposit'):
+            line.update({
+                'price_tax': 0.0,
+                'price_total': 0.0,
+                'price_subtotal': 0.0})
+
     def _amount_line(self, cr, uid, ids, field_name, arg, context=None):
         # se mantiene en la api antigua por no sobreescribir todo el calculo
         if context is None:
@@ -40,9 +49,7 @@ class sale_order_line(models.Model):
                 values[line.id] = 0.0
         return values
 
-    price_subtotal = fields.Float(
-            compute="_amount_line", string='Subtotal',
-            digits=dp.get_precision('Account'))
+
     deposit = fields.Boolean('Deposit')
     deposit_date = fields.Date('Date Dep.')
 

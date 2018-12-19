@@ -94,7 +94,6 @@
             <field name="arch" type="xml">
                 <field name="partner_shipping_id" position="after">
                     <field name="validated_dir" invisible="1"/>
-                    <label for="compute_variables"/>
                     <button name="validate_address"
                             string="Validate address" type="object"
                             class="oe_highlight"

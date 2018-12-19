@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from odoo import models, fields
+from odoo import api, models, fields
 
 
 class product_product(models.Model):
@@ -45,14 +45,13 @@ class product_template(models.Model):
 
     _inherit = "product.template"
 
-    def _get_reserves_qty(self, cr, uid, ids, field_name, args, context=None):
-        ret = {}
-        res_obj = self.pool.get('stock.reservation')
-        for prod in self.browse(cr, uid, ids, context=context):
+    @api.multi
+    def _get_reserves_qty(self):
+        res_obj = self.env['stock.reservation']
+        for prod in self:
             prod_ids = prod.product_variant_ids.ids
-            res_ids = res_obj.search(cr, uid, [('product_id', 'in', prod_ids), ('state', 'not in', ['cancel', 'done'])], context=context)
-            res = res_obj.browse(cr, uid, res_ids, context=context)
-            ret[prod.id] = sum([x.product_uom_qty for x in res])
-        return ret
+            res = res_obj.search([('product_id', 'in', prod_ids),
+                                  ('state', 'not in', ['cancel', 'done'])])
+            prod.reserves_count = sum(res.mapped('product_uom_qty'))
 
     reserves_count = fields.Float(compute="_get_reserves_qty")
