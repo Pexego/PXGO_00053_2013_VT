@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+<!-- 
+        <report
+            string="Valued picking"
+            id="action_report_valued_picking"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            name="stock_valued_picking.report_valued_picking"
+            file="stock_valued_picking.report_valued_picking"
+        /> -->
+
+
+    </data>
+</odoo>

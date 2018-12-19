@@ -20,12 +20,11 @@
 ##############################################################################
 
 
-from openerp.osv import fields, orm
+from odoo import fields, models, _, exceptions
 from lxml import etree
-from openerp.tools.translate import _
 
 
-class sale_equivalent_products(orm.TransientModel):
+class sale_equivalent_products(models.TransientModel):
 
     _name = "sale.equivalent.products"
     _description = "Wizard for change products in sale order line"
@@ -55,15 +54,11 @@ class sale_equivalent_products(orm.TransientModel):
             res[wiz.id] = list(product_ids)
         return res
 
-    _columns = {
-        'line_id': fields.many2one('sale.order.line', 'Line'),
-        'tag_ids': fields.one2many('sale.equivalent.tag', 'wiz_id', 'Tags'),
-        'product_ids': fields.function(_get_products, type='one2many',
-                                       relation='product.product',
-                                       string='Products'),
-        'product_id': fields.many2one('product.product', 'Product selected'),
-    }
-
+    line_id = fields.Many2one('sale.order.line', 'Line')
+    tag_ids = fields.One2many('sale.equivalent.tag', 'wiz_id', 'Tags')
+    product_ids = fields.One2many('product.product', compute="_get_products",
+                                  string='Products')
+    product_id = fields.Many2one('product.product', 'Product selected')
 
     def fields_view_get(self, cr, uid, view_id=None, view_type='form',
                         context=None, toolbar=False, submenu=False):
@@ -119,8 +114,7 @@ class sale_equivalent_products(orm.TransientModel):
         wiz = self.browse(cr, uid, ids[0], context)
 
         if wiz.product_id.id not in [x.id for x in wiz.product_ids]:
-            raise orm.except_orm(_('Error'),
-                                 _('El producto no es equivalente'))
+            raise exceptions.UserError(_('El producto no es equivalente'))
         order_line_obj = self.pool.get('sale.order.line')
         order_line_obj.write(cr, uid,
                              [wiz.line_id.id],
@@ -154,12 +148,10 @@ class sale_equivalent_products(orm.TransientModel):
         }
 
 
-class sale_equivalent_tag(orm.TransientModel):
+class sale_equivalent_tag(models.TransientModel):
 
     _name = "sale.equivalent.tag"
     _description = "Tags for equivalent products wizard"
 
-    _columns = {
-        'wiz_id': fields.many2one('sale.equivalent.products', 'Wizard'),
-        'name': fields.char('Name', size=64),
-    }
+    wiz_id = fields.Many2one('sale.equivalent.products', 'Wizard')
+    name = fields.Char('Name', size=64)

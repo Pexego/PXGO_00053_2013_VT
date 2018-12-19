@@ -20,12 +20,12 @@
 #
 ##############################################################################
 import time
-from openerp.osv import fields,osv
+from openerp.osv import osv
 from openerp.tools import config
 
 class ir_attachment(osv.osv):
     _inherit = 'ir.attachment'
-    
+
     _order = 'create_date desc,name desc'
-ir_attachment()
+
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

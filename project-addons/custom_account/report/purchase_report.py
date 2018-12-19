@@ -30,9 +30,9 @@ from openerp import tools
 class purchase_report(osv.osv):
     _inherit = "purchase.report"
 
-    def init(self, cr):
-        tools.sql.drop_view_if_exists(cr, 'purchase_report')
-        cr.execute("""
+    def init(self):
+        tools.sql.drop_view_if_exists(self._cr, 'purchase_report')
+        self._cr.execute("""
             create or replace view purchase_report as (
                 select
                     min(l.id) as id,

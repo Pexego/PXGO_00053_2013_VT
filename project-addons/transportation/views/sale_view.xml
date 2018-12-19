@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sale_order_add_transporter" model="ir.ui.view">
+            <field name="name">sale.order.add.transporter</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="pricelist_id" position="after">
+                    <field name="transporter_id" attrs="{'readonly': [('state', 'not in', ['draft', 'sent', 'reserve'])]}"/>
+                    <field name="service_id"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -35,7 +35,7 @@ class AccountInvoice(models.Model):
             lines_to_unreconcile = self.env['account.move.line']
             for inv in self:
                 pick_ids = []
-                for line in inv.invoice_line:
+                for line in inv.invoice_line_ids:
                     if line.move_id and line.move_id.picking_id and \
                             line.move_id.picking_id not in pick_ids:
                         pick_ids.append(line.move_id.picking_id)
@@ -74,7 +74,7 @@ class AccountInvoice(models.Model):
 
             for inv in self:
                 pick_ids = []
-                for line in inv.invoice_line:
+                for line in inv.invoice_line_ids:
                     if line.move_id and line.move_id.picking_id and \
                             line.move_id.picking_id not in pick_ids:
                         pick_ids.append(line.move_id.picking_id)

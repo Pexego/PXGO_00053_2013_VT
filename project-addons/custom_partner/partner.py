@@ -21,7 +21,7 @@
 
 from openerp import models, fields, api, exceptions, osv, _
 from openerp.exceptions import Warning
-from openerp.addons.account_followup.report import account_followup_print
+#TODO: (Ahora es account_credit_control) from openerp.addons.account_followup.report import account_followup_print
 from openerp.osv import osv, fields as fields2
 from collections import defaultdict
 import time
@@ -534,7 +534,7 @@ class ResPartner(models.Model):
             invoice_obj = self.pool['account.invoice']
             if line.stored_invoice_id:
                 invoice = invoice_obj.browse(cr, uid, line.stored_invoice_id[0].id)
-                client_order_ref = invoice.invoice_line[0].move_id.procurement_id.sale_line_id.order_id.client_order_ref
+                client_order_ref = invoice.invoice_line_ids[0].move_id.procurement_id.sale_line_id.order_id.client_order_ref
                 if not client_order_ref:
                     client_order_ref = ""
             else:

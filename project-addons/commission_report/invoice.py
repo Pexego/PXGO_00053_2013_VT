@@ -27,10 +27,10 @@ class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
     @api.one
-    @api.depends('invoice_line.agents.agent')
+    @api.depends('invoice_line_ids.agents.agent')
     def _get_agents_str(self):
         agents = self.env["res.partner"]
-        for line in self.invoice_line:
+        for line in self.invoice_line_ids:
             for agent_line in line.agents:
                 agents += agent_line.agent
 

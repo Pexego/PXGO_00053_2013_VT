@@ -33,7 +33,7 @@ class account_invoice_report(models.Model):
 
     _inherit = 'account.invoice.report'
 
-    payment_mode_id = fields.Many2one('payment.mode', 'Payment mode')
+    payment_mode_id = fields.Many2one('account.payment.mode', 'Payment mode')
     number = fields.Char('Number')
     benefit = fields.Float('Benefit')
     brand_name = fields.Char('Brand name')
