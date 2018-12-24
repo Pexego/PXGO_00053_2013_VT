@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -27,7 +26,7 @@
     'description': """Several customizations mrp repair""",
     'author': 'Comunitea Servicios Tecnologicos',
     'website': 'www.comunitea.com',
-    "depends" : ["base", "mrp_repair"],
-    "data" : ["mrp_repair_view.xml"],
-    "installable": True
+    'depends': ['base', 'mrp_repair'],
+    'data': ["views/mrp_repair_view.xml"],
+    'installable': True
 }

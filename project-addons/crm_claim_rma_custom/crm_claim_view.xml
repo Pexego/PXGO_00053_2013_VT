@@ -87,6 +87,7 @@
                     <page string="Invoicing">
                         <field name="claim_inv_line_ids" nolabel="1" colspan="4" editable="bottom">
                             <tree editable="bottom">
+                              <field name="sequence" widget="handle"/>
                               <field name="invoice_id" domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
                               <field name="product_id"/>
                               <field name="product_description"/>
@@ -214,8 +215,47 @@
                 </xpath>
                 <!--TODO:Migrar<xpath expr="//field[@name='delivery_address_id']" position="attributes">
                     <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
-                    <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
-                </xpath>-->
+                    <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True,
+                                               'default_not_print_picking': True, 'default_parent_id': partner_id, 'show_address':1}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </xpath-->
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="crm_rma_advance_location_form_view_inherit">
+            <field name="name">Claims Form wizard</field>
+            <field name="model">crm.claim</field>
+            <field name="inherit_id" ref="crm_rma_advance_location.crm_claim_rma_form_view"/>
+            <field name="arch" type="xml">
+
+              <xpath expr="//button[@string='New Product Loss']" position="after">
+                    <button name="button_update_lines_wizard" type="object" string="Update RMA lines"
+                     attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
+              </xpath>
+
+            </field>
+        </record>
+
+        <!--Wizard to update rma lines-->
+        <record model="ir.ui.view" id="claim_line_update_view">
+            <field name="name">claim_line_update</field>
+            <field name="model">claim.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <separator string="Update data" colspan="4"/>
+                    <group>
+                        <field name="substate_id"/>
+                        <field name="claim_origine"/>
+                        <field name="partner_id" invisible="1"/>
+                        <field name="invoice_id" domain="[('partner_id', 'child_of', [partner_id]),('state', '!=', 'draft')]"/>
+                    </group>
+
+                    <footer>
+                        <button name="button_update_lines" string="Update" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
             </field>
         </record>
 
@@ -238,7 +278,6 @@
                   <separator colspan="4" string="Claim/Action Description" groups="base.group_user"/>
                   <field name="description" colspan="4" nolabel="1"/>
               </xpath>
-
             </field>
         </record>
 
@@ -256,6 +295,7 @@
                     <field name="comercial"/>
                     <field name="date_received" string="Received date"/>
                 </field>
+
             </field>
         </record>
 

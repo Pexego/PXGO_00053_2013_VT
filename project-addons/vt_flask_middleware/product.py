@@ -72,3 +72,25 @@ class Product(SyncModel):
 
     def __unicode__(self):
         return self.name
+
+class ProductTag(SyncModel):
+
+    odoo_id = IntegerField(unique=True)
+    name = CharField(max_length=70)
+
+    MOD_NAME = 'producttag'
+
+    def __unicode__(self):
+        return self.name
+
+
+class ProductTagProductRel(SyncModel):
+
+    odoo_id = IntegerField()
+    producttag_id = ForeignKeyField(ProductTag, on_delete='CASCADE')
+
+    MOD_NAME = 'producttagproductrel'
+
+    def __unicode__(self):
+        return u"Product id: %s - Tag id: %s" % (self.odoo_id, self.producttag_id)
+

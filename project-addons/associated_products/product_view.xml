@@ -48,4 +48,25 @@
             </field>
         </record>
 
+        <!-- Equivalent products -->
+        <record id="product_add_equivalent_products" model="ir.ui.view">
+            <field name="name">product.equivalent.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Equivalent Products">
+                        <field name="equivalent_product_ids" nolabel="1">
+                            <tree editable="top">
+                                <field name="equivalent_id"/>
+                            </tree>
+                            <form>
+                                <field name="equivalent_id"/>
+                            </form>
+                        </field>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
 </odoo>
