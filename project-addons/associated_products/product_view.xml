@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="product_add_associateds_products_form" model="ir.ui.view">
             <field name="name">product.product.add.associateds.form</field>
@@ -19,9 +18,8 @@
         <record id="product_associated_form" model="ir.ui.view">
             <field name="name">product.associated.form</field>
             <field name="model">product.associated</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Associated products" version="7.0">
+                <form string="Associated products">
                     <sheet>
                         <group>
                             <group>
@@ -71,5 +69,4 @@
             </field>
         </record>
 
-    </data>
-</openerp>
+</odoo>

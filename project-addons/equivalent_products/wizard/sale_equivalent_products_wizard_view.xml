@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
-    <data>
+<odoo>
 
         <record id="equivalent_products_wizard" model="ir.ui.view">
             <field name="name">equivalent.products.wizard</field>
             <field name="model">sale.equivalent.products</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Equivalent products">
                     <group>
@@ -28,6 +26,5 @@
             </field>
         </record>
 
-    </data>
-</openerp>
+</odoo>
 

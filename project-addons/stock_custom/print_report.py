@@ -35,7 +35,6 @@ class Report(models.Model):
 
     def get_pdf(self, cr, uid, ids, report_name, html=None, data=None,
                 context=None):
-        print "IDS: ", ids
         res = super(Report, self).get_pdf(cr, uid, ids, report_name, html=html,
                                           data=data, context=context)
         if report_name == "stock_custom.report_picking_with_attachments":

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <record id="product_add_stock_graphic_form" model="ir.ui.view">
+        <!--TODO: MIgrar<record id="product_add_stock_graphic_form" model="ir.ui.view">
             <field name="name">product.product.add.stock.graphic.form</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product_pack.nan_product_pack_form"/>
@@ -22,6 +22,6 @@
                     </page>
                 </page>
             </field>
-        </record>
+        </record>-->
     </data>
 </openerp>

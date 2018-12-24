@@ -27,7 +27,7 @@
             </field>
         </record>
 
-        <record id="view_order_line_form2_add_display_stock_reserved" model="ir.ui.view">
+       <!--TODO: Migrar<record id="view_order_line_form2_add_display_stock_reserved" model="ir.ui.view">
             <field name="name">sale.order.line.form2.add.display.stock_reserved</field>
             <field name="model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_order_line_form2"/>
@@ -36,7 +36,7 @@
                     <field name="qty_reserved"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

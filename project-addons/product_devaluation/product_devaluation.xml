@@ -7,7 +7,7 @@
             <field name="name">product.devaluation.tree</field>
             <field name="model">product.devaluation</field>
             <field name="arch" type="xml">
-                <tree string="Product Devaluation" version="7.0"  colors="red: total_dev>1">
+                <tree string="Product Devaluation" decoration-danger="total_dev&gt;1">
                     <field name="product_id"/>
                     <field name="accounted_ok"/>
                     <field name="quantity" />
@@ -23,7 +23,7 @@
             <field name="name">product.devaluation.tree.search</field>
             <field name="model">product.devaluation</field>
             <field name="arch" type="xml">
-                <search string="Product Devaluation" version="7.0">
+                <search string="Product Devaluation">
                     <field name="id" />
                     <field name="product_id" />
 

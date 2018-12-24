@@ -5,7 +5,7 @@
 <openerp>
     <data>
 
-        <record id="sale_order_line_tree_reorganize" model="ir.ui.view">
+        <!--TODO: Migrar<record id="sale_order_line_tree_reorganize" model="ir.ui.view">
             <field name="name">sale.order.form</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale_margin_percentage.sale_margin_percentage_sale_order"/>
@@ -19,7 +19,7 @@
                     <field name="tax_id" widget="many2many_tags" required="1" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
          <record id="action_view_historical_orders" model="ir.actions.server">
             <field name="name">Historical Partner Orders View</field>
@@ -73,7 +73,7 @@
             </field>
         </record>
 
-        <record id="view_order_form_sales_partner" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_order_form_sales_partner" model="ir.ui.view">
             <field name="name">partner.sale.order.history</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
@@ -85,7 +85,7 @@
                             type="object" icon="fa-exclamation-triangle" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve', 'sent'])]}"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_order_form_imp_ship_addr_val" model="ir.ui.view">
             <field name="name">sale.order.form.imp_ship_addr_val</field>
@@ -94,7 +94,6 @@
             <field name="arch" type="xml">
                 <field name="partner_shipping_id" position="after">
                     <field name="validated_dir" invisible="1"/>
-                    <label for="compute_variables"/>
                     <button name="validate_address"
                             string="Validate address" type="object"
                             class="oe_highlight"

@@ -213,8 +213,8 @@
             file="crm_claim_summary_report.report_translated"
             report_type="qweb-pdf"/>
 
-        <record id="claim_summary_report" model="ir.actions.report.xml">
+        <!--TODO: Migrar<record id="claim_summary_report" model="ir.actions.report.xml">
             <field name="paperformat_id" ref="report.paperformat_us"/>
-        </record>
+        </record>-->
     </data>
 </openerp>

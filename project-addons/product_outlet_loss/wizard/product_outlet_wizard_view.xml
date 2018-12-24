@@ -58,7 +58,6 @@
         <record id="outlet_loss_account_wizard" model="ir.ui.view">
             <field name="name">account.outlet.loss.wizard.form</field>
             <field name="model">outlet.account.wizard</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
 
                 <form string="Create account">

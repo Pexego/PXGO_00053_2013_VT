@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record model="ir.ui.view" id="sale_margin_percentage_sale_order">
+        <!--TODO: Migrar<record model="ir.ui.view" id="sale_margin_percentage_sale_order">
             <field name="name">sale.order.margin.percentage.view.form</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="stock_deposit.view_order_form_deposit"/>
@@ -34,7 +34,7 @@
                     </div>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

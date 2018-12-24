@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="product_normal_form_view_add_tariff" model="ir.ui.view">
+        <!--TODO: Migrar<record id="product_normal_form_view_add_tariff" model="ir.ui.view">
             <field name="name">product.product.form.add_tariff</field>
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_normal_form_view"/>
@@ -11,7 +11,7 @@
                     <field name="tariff"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

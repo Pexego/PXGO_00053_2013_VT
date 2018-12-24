@@ -10,6 +10,7 @@
                 <field name="state" position="after">
                     <field name="location_usage" invisible="1"/>
                     <field name="picking_type_code" invisible="1"/>
+                    <field name="picking_id" invisible="1"/>
                     <button name="%(location_moves.act_quality_move_wzd)d"
                         string="Quality move" type="action"
                         icon="gtk-convert"
@@ -28,6 +29,7 @@
                 <field name="state" position="after">
                     <field name="location_usage" invisible="1"/>
                     <field name="picking_type_code" invisible="1"/>
+                    <field name="picking_id" invisible="1"/>
                     <button name="%(location_moves.act_quality_move_wzd)d"
                         string="Quality move" type="action"
                         icon="gtk-convert"

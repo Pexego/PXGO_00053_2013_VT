@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+
         <record id="daily_sales_wizard_form_view" model="ir.ui.view">
             <field name="name">daily.sales.wizard.form</field>
             <field name="model">xls.sale.report.wizard</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Sales Daily XLS" version="7.0">
+                <form string="Sales Daily XLS">
                     <footer>
                         <button name="sale_report_data" type="object"
                             string="Export Sale Daily" class="oe_highlight"/>
@@ -26,8 +25,7 @@
             <field name="view_id" ref="daily_sales_wizard_form_view"/>
         </record>
 
-        <menuitem id="daily_sale_wizard_menu" action="daily_sale_wizard_form_action"
-            parent='account.menu_finance_generic_reporting'/>
+        <!--TODO: Migrar<menuitem id="daily_sale_wizard_menu" action="daily_sale_wizard_form_action"
+            parent='account.menu_finance_generic_reporting'/>-->
 
-    </data>
-</openerp>
+</odoo>

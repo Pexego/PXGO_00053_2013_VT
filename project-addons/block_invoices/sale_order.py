@@ -80,7 +80,7 @@ class sale_order(models.Model):
         if ((self.section_id.complete_name == 'Magreb'
              and self.payment_term.name in ('Pago inmediato', 'Prepago'))
             or (self.partner_id.section_id.name == 'Magreb'
-                and self.partner_id.property_payment_term.name in ('Pago inmediato', 'Prepago'))) \
+                and self.partner_id.property_payment_term_id.name in ('Pago inmediato', 'Prepago'))) \
                 and self.allow_confirm_blocked is False:
             self.blocked_magreb = True
         else:

@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="account_invoice_add_picking_attach" model="ir.ui.view">
+        <!--TODO: MIgrar<record id="account_invoice_add_picking_attach" model="ir.ui.view">
             <field name="name">account.invoice.form</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_form"/>
@@ -21,9 +21,9 @@
                     <attribute name="readonly">True</attribute>
                 </field>
             </field>
-        </record>
+        </record>-->
 
-        <record id="account.action_invoice_tree" model="ir.actions.act_window">
+        <!--TODO: Migrar<record id="account.action_invoice_tree" model="ir.actions.act_window">
             <field name="context">{'type':'out_invoice', 'readonly_by_pass': ['section_id']}</field>
         </record>
 
@@ -72,9 +72,9 @@
                     <field name="date_due"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
-        <record id="payment_order_populate_account_move_line_add_scheme_tree" model="ir.ui.view">
+        <!--TODO: Migrar<record id="payment_order_populate_account_move_line_add_scheme_tree" model="ir.ui.view">
             <field name="name">payment.order.populate.account.move.line.tree</field>
             <field name="model">account.move.line</field>
             <field name="inherit_id" ref="account_banking_payment_export.payment_order_populate_view_move_line_tree"/>
@@ -86,7 +86,7 @@
                     <attribute name="sum">Total Residual</attribute>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_move_line_tree_add_curr_date" model="ir.ui.view">
             <field name="name">account.move.line.tree.add_curr_date</field>
@@ -122,7 +122,7 @@
             </field>
         </record>
 
-        <record id="invoice_supplier_form_add_pick" model="ir.ui.view">
+        <!--TODO: Migrar<record id="invoice_supplier_form_add_pick" model="ir.ui.view">
             <field name="name">account.invoice.supplier.form.add_pick</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
@@ -147,7 +147,7 @@
                     <field name="sale_order_id"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
         <record id="invoice_tree_add_invoice_type" model="ir.ui.view">
             <field name="name">account.invoice.tree.add_invoice_type</field>
@@ -160,18 +160,18 @@
                 <field name="company_id" position="after">
                     <field name="invoice_type_id"/>
                 </field>
-                <field name="residual" position="before">
+                <!--TODO: Migrar<field name="residual" position="before">
                     <field name="payment_mode_id"/>
                     <field name="payment_term"/>
-                </field>
+                </field>-->
                 <field name="state" position="before">
                     <field name="subtotal_wt_rect" sum="Subtotal"/>
                     <field name="total_wt_rect" sum="Total"/>
                 </field>
-                <field name="amount_untaxed" position="attributes">
+                <!--TODO: Migrar<field name="amount_untaxed" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </field>
-                <field name="amount_total" position="attributes">
+                </field>-->
+                <field name="amount_total_signed" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
                 <field name="state" position="after">
@@ -215,20 +215,14 @@
                 <field name="user_id" position="before">
                     <field name="commercial_partner_id" string="Partner"/>
                 </field>
-                <xpath expr="//filter[@string='Partner']" position="attributes">
-                    <attribute name="invisible">True</attribute>
-                </xpath>
-                <xpath expr="//filter[@string='Salesperson']" position="before">
-                    <filter string="Partner" context="{'group_by':'commercial_partner_id'}"/>
-                </xpath>
             </field>
         </record>
 
-        <record id="account.action_invoice_refund_out_tree" model="ir.actions.act_window">
+         <!--TODO: MIgrar<record id="account.action_invoice_refund_out_tree" model="ir.actions.act_window">
             <field name="context">{'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale', 'search_default_without_ef':1}</field>
         </record>
 
-        <record id="invoice_tree_invisible_section" model="ir.ui.view">
+       <record id="invoice_tree_invisible_section" model="ir.ui.view">
             <field name="name">account.invoice.tree.invisible.section</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="sale.account_invoice_tree"/>
@@ -248,7 +242,7 @@
                     <field name="treasury_forecast_type"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_payment_term_form_add_blocked" model="ir.ui.view">
             <field name="name">account.payment.term.form.add_blocked</field>

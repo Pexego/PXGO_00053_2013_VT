@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="view_order_form_shipping_balance" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_order_form_shipping_balance" model="ir.ui.view">
             <field name="name">sale.order.shipping.balance.form</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
@@ -19,7 +19,7 @@
                         </button>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

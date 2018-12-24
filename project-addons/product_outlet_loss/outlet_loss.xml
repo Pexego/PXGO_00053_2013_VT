@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
-    <data>
+<odoo>
 
         <record id="view_tree_outlet_loss" model="ir.ui.view">
             <field name="name">outlet.loss.tree</field>
             <field name="model">outlet.loss</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
-                <tree string="Product Outlet Loss" colors="red: outlet_ok==True">
+                <tree string="Product Outlet Loss" decoration-danger="outlet_ok==True">
                     <field name="date_move"/>
                     <field name="product_id"/>
                     <field name="qty"/>
@@ -80,7 +78,7 @@
             <field name="name">outlet.loss.tree</field>
             <field name="model">outlet.loss</field>
             <field name="arch" type="xml">
-                <tree string="Product Outlet Lost" version="7.0"  colors="red: outlet_ok==True">
+                <tree string="Product Outlet Lost" decoration-danger="outlet_ok==True">
 
 
                     <field name="product_id" invisible="1" />
@@ -98,10 +96,9 @@
             <field name="name">outlet.loss.tree</field>
             <field name="model">outlet.loss</field>
             <field name="arch" type="xml">
-                <search string="Product Outlet Lost" version="7.0">
+                <search string="Product Outlet Lost">
                     <field name="id" />
                     <field name="product_id" />
-                    <separator/>
                     <group string="Group By...">
                         <filter string="Current Year" domain="[('date_move','&gt;=', datetime.datetime.now().strftime('%Y-01-01'))]" />
                         <filter string="Product" domain="[]"
@@ -137,20 +134,4 @@
             parent="stock.menu_stock_inventory_control"
             sequence="30"/>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    </data>
-</openerp>
+</odoo>

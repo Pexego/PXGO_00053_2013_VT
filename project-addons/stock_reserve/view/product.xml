@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="0">
+
+        <record model="ir.ui.view" id="product_form_reservation_view">
+            <field name="name">product.product.form.reserve</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="stock.product_form_view_procurement_button"/>
+            <field name="arch" type="xml">
+               <button name="toggle_active" position="before">
+                    <button
+                        class="oe_stat_button"
+                        icon="fa-cogs"
+                        name="open_stock_reservation"
+                        type="object">
+                        <field string="Reservations" name="reserves_count" widget="statinfo" />
+                   </button>
+                </button>
+            </field>
+        </record>
+
+
+        <record model="ir.ui.view" id="product_kanban_reserve_view">
+            <field name="name">Product Kanban Reserve</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_kanban_view"/>
+            <field name="arch" type="xml">
+                <field name="lst_price" position="after">
+                    <field name="reserves_count"/>
+                </field>
+                <xpath expr="//div[@name='tags']" position="inside">
+                    <a name="open_stock_reservation" type="object" t-if="record.reserves_count.raw_value&gt;1">
+                        <t t-esc="record.reception_count.value"/> Reservations
+                    </a>
+
+                </xpath>
+            </field>
+        </record>
+
+        <!--TODO: Migrar<record id="view_template_property_form_add_qty" model="ir.ui.view">
+            <field name="name">product.template.stock.property.form.add.qty</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="stock.view_template_property_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@string='Stock and Expected Variations']/div[1]" position="after">
+                    <field string="Reservations stock" name="reserves_count"/>
+                </xpath>
+            </field>
+        </record>-->
+
+    </data>
+</openerp>

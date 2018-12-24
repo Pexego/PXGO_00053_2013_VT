@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="add_to_purchase_order_wzd_form" model="ir.ui.view">
             <field name="name">add.to.purchase.order.wzd.form</field>
             <field name="model">add.to.purchase.order.wzd</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Add to purchase order">
                     <group>
@@ -43,5 +41,4 @@
             key2="client_action_multi"
             id="add_multiple_to_purchase_order_wzd_form"/>
 
-    </data>
-</openerp>
+</odoo>

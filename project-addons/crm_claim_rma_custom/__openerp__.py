@@ -33,14 +33,14 @@
                 'sale_display_stock', 'crm_rma_advance_location',
                 'custom_partner', 'block_invoices', 'product_pack',
                 'product_brand', 'mail'],
-    "data": ['crm_claim_view.xml', 'mrp_repair_wkf.xml',
+    "data": ['crm_claim_view.xml',
              'data/substate_data.xml', 'security/ir.model.access.csv',
              'wizard/claim_make_picking_view.xml', 'stock_view.xml',
              'wizard/equivalent_products_wizard_view.xml',
              'wizard/claim_make_picking_from_picking_view.xml',
              'wizard/crm_phonecall_view.xml',
              'wizard/email_template.xml',
-             'report/crm_claim_report_view.xml',
+             #TODO: Migrar'report/crm_claim_report_view.xml',
              'data/stage_data.xml'],
     "installable": True
 }

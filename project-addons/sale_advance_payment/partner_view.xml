@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="view_partner_property_form_add_on_account" model="ir.ui.view">
+        <!--TODO: Migrar <record id="view_partner_property_form_add_on_account" model="ir.ui.view">
             <field name="name">res.partner.property.form.inherit_add_on_account</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="account.view_partner_property_form"/>
@@ -24,7 +24,7 @@
                     <field name="sale_advance_payment_account"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_company_form_add_advance_payment_acc" model="ir.ui.view">
             <field name="name">res.company.form.add_advance_payment_acc</field>

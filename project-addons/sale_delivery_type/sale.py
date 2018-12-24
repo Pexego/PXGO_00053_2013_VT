@@ -18,23 +18,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
-from openerp.osv import osv, fields
-from openerp import models, api
+
+from odoo import models, api, fields
 
 
-class sale_order(osv.osv):
+class sale_order(models.Model):
     _inherit = 'sale.order'
-    _columns = {
-        'delivery_type': fields.selection([
+
+    delivery_type = fields.Selection([
             ('shipping', 'Shipping'),
             ('carrier', 'Carrier - Customer'),
-            ('installations', 'Pickup in installations'), ],
-            'Delivery type', required=True)
-    }
-    _defaults = {
-        'delivery_type': 'shipping'
-    }
+            ('installations', 'Pickup in installations')],
+            'Delivery type', required=True, default='shipping')
 
     @api.onchange('delivery_type')
     @api.multi

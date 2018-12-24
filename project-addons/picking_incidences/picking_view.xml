@@ -16,9 +16,9 @@
                     <field name="with_incidences"/>
                     <field name="block_picking" readonly="1"/>
                 </field>
-                <button name="do_unreserve" position="attributes">
+                <!--TODO: Migrar<button name="do_unreserve" position="attributes">
                     <attribute name="attrs">{'invisible': ['|',('quant_reserved_exist', '=', False),('block_picking', '=', True)]}</attribute>
-                </button>
+                </button>-->
             </field>
         </record>
 
@@ -34,7 +34,7 @@
             </field>
         </record>
 
-        <record id="view_move_picking_form_add_ready_qty" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_move_picking_form_add_ready_qty" model="ir.ui.view">
             <field name="name">stock.move.form.add_ready_qty</field>
             <field name="model">stock.move</field>
             <field name="inherit_id" ref="stock.view_move_picking_form"/>
@@ -44,7 +44,7 @@
                     <field name="qty_confirmed"/>
                 </label>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

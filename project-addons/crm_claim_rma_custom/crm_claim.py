@@ -58,7 +58,7 @@ class CrmClaimRma(models.Model):
                                                                        ('3', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
     country = fields.Many2one("res.country", string="Country")
-    date = fields.Date('Claim Date', select=True,
+    date = fields.Date('Claim Date', index=True,
                        default=fields.Date.context_today)
     write_date = fields.Datetime("Update date", readonly=True)
     date_received = fields.Date('Received Date')
@@ -229,7 +229,7 @@ class CrmClaimRma(models.Model):
             header_vals = {
                 'partner_id': claim_obj.partner_id.id,
                 'fiscal_position':
-                    claim_obj.partner_id.property_account_position.id,
+                    claim_obj.partner_id.property_account_position_id.id,
                 'date_invoice': datetime.now().strftime('%Y-%m-%d'),
                 'journal_id': acc_journal_ids[0],
                 'account_id':
@@ -241,7 +241,7 @@ class CrmClaimRma(models.Model):
                 'section_id': claim_obj.partner_id.section_id.id,
                 'claim_id': claim_obj.id,
                 'type': 'out_refund',
-                'payment_term': claim_obj.partner_id.property_payment_term.id,
+                'payment_term_id': claim_obj.partner_id.property_payment_term_id.id,
                 'payment_mode_id':
                     claim_obj.partner_id.customer_payment_mode.id,
                 'partner_bank_id': partner_bank_id
@@ -276,7 +276,7 @@ class CrmClaimRma(models.Model):
                             'product.category', context=context)
                     account_id = prop and prop.id or False
                 fiscal_position = claim_obj.partner_id. \
-                    property_account_position
+                    property_account_position_id
                 account_id = fp_obj.map_account(cr, uid,
                                                 fiscal_position, account_id)
                 vals = {
@@ -293,7 +293,7 @@ class CrmClaimRma(models.Model):
                 }
                 if line.tax_ids:
                     fiscal_position = claim_obj.partner_id. \
-                        property_account_position
+                        property_account_position_id
                     taxes_ids = fp_obj.map_tax(cr, uid, fiscal_position,
                                                line.tax_ids)
                     vals['invoice_line_tax_id'] = [(6, 0, taxes_ids)]
@@ -376,7 +376,7 @@ class ClaimInvoiceLine(models.Model):
                 if taxes_ids:
                     self.tax_ids = taxes_ids
                 else:
-                    fpos = self.claim_id.partner_id.property_account_position
+                    fpos = self.claim_id.partner_id.property_account_position_id
                     self.tax_ids = fpos.map_tax(self.product_id.product_tmpl_id.taxes_id)
             else:
                 self.price_subtotal = self.discount and \
