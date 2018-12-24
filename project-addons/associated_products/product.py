@@ -54,5 +54,5 @@ class EquivalentProduct(models.Model):
 
     _name = 'product.equivalent'
 
-    product_id = fields2.Many2one('product.product', 'Product', required=True)
-    equivalent_id = fields2.Many2one('product.product', 'Equivalent product', required=True)
+    product_id = fields.Many2one('product.product', 'Product', required=True)
+    equivalent_id = fields.Many2one('product.product', 'Equivalent product', required=True)
