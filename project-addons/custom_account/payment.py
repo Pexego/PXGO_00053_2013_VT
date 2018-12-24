@@ -7,7 +7,7 @@ from openerp import models, fields, api, exceptions, _
 
 class PaymentOrderLine(models.Model):
 
-    _inherit = 'payment.line'
+    _inherit = 'account.payment.line'
 
     _order = 'partner_name'
 
@@ -51,7 +51,7 @@ class PaymentOrderLine(models.Model):
 
 class PaymentOrder(models.Model):
 
-    _inherit = 'payment.order'
+    _inherit = 'account.payment.order'
 
     @api.multi
     def action_sent(self):

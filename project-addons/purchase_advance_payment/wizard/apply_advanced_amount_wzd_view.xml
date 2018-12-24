@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="view_apply_on_account_purchase_wizard" model="ir.ui.view">
             <field name="name">Apply on account</field>
             <field name="model">apply.on.account.purchase.amount</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Apply on account to invoice">
                     <group>
@@ -32,6 +30,5 @@
             <field name="target">new</field>
         </record>
 
-    </data>
-</openerp>
+</odoo>
 

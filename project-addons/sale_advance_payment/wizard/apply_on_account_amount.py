@@ -49,8 +49,8 @@ class ApplyOnAccountAmount(models.TransientModel):
 
         for voucher in voucher_ids:
             for move in voucher.move_ids:
-                if move.account_id.type in ('receivable', 'payable') and \
-                        not move.reconcile_id and \
+                if move.account_id.internal_type in ('receivable', 'payable') and \
+                        not move.full_reconcile_id and \
                         (not move.reconcile_partial_id or
                          move.amount_residual_currency > 0):
                     moves += move
@@ -60,8 +60,8 @@ class ApplyOnAccountAmount(models.TransientModel):
                                       ('partner_id', '=',
                                        invoice.partner_id.id),
                                       ('credit', '>', 0.0),
-                                      ('reconcile_id', '=', False),
-                                      ('account_id.type', '=', 'receivable')])
+                                      ('full_reconcile_id', '=', False),
+                                      ('account_id.internal_type', '=', 'receivable')])
         for move2 in moves2:
             vouchers = voucher_obj.search([('move_id', '=',
                                             move2.move_id.id),

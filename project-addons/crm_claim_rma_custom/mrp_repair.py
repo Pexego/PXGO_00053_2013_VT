@@ -53,7 +53,7 @@ class mrp_repair(models.Model):
             repair = self.browse(repair_id)
             partner = repair.partner_id
             inv_vals = {
-                'payment_term': partner.property_payment_term.id,
+                'payment_term_id': partner.property_payment_term_id.id,
                 'payment_mode_id': partner.customer_payment_mode.id,
                 'partner_bank_id': partner.bank_ids and
                 partner.bank_ids[0].id or False

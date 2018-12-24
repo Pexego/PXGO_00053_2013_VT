@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="account_invoice_cyc_tree" model="ir.ui.view">
             <field name="name">account.invoice.cyc.tree</field>
             <field name="model">account.invoice.cyc</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Cyc report" create="false" edit="false">
                     <field name="country_id"/>
@@ -26,7 +24,6 @@
         <record id="account_invoice_cyc_filter" model="ir.ui.view">
             <field name="name">account.invoice.cyc.search</field>
             <field name="model">account.invoice.cyc</field>
-            <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Report">
                    <field name="invoice_year"/>
@@ -60,5 +57,4 @@
         <menuitem name="Cyc report" parent="account.account_reports_business_intelligence_menu"
             action="action_account_invoice_cyc" id="account_invoice_menu_cyc"/>
 
-    </data>
-</openerp>
+</odoo>

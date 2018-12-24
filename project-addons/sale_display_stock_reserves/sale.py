@@ -28,6 +28,6 @@ class sale_order_line(models.Model):
 
     qty_reserved = fields.Float('Qty reserved', readonly=True,
                                 related='product_id.reserves_count',
-                                digits_compute=
+                                digits=
                                 dp.get_precision('Product Unit \
                                                   of Measure'))

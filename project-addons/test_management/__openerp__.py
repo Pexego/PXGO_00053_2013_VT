@@ -26,13 +26,12 @@
     'description': """""",
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
-    "depends": ['sale', 'account', 'sale_stock', 'stock_account'],
+    "depends": ['sale', 'account', 'sale_stock', 'stock_account', 'auth_crypt'],
     "data": ['security/test_management_security.xml',
              #TODO: Migrate 'wizard/stock_invoice_onshipping_test_view.xml',
              'procurement_view.xml',
              'stock_view.xml',
              'sale_view.xml',
              'company_view.xml'],
-    'conflicts': ['auth_crypt'],
     "installable": True
 }

@@ -25,7 +25,7 @@ from . import minimum_days
 from . import product
 from . import under_minimum
 from . import stock_warehouse_orderpoint
-from . import schedulers
+#TODO: Migrarfrom . import schedulers
 from . import purchase
 from . import wizard
 from . import mrp

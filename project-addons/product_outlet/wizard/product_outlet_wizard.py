@@ -47,7 +47,7 @@ class product_outlet_wizard(models.TransientModel):
             search([('company_id', '=', company_id)])
         if not warehouse_ids:
             return False
-        return warehouse_ids[0]
+        return warehouse_ids[0].id
 
     @api.model
     def _get_default_location(self):
@@ -56,7 +56,7 @@ class product_outlet_wizard(models.TransientModel):
             search([('company_id', '=', company_id)])
         if not warehouse_ids:
             return False
-        return warehouse_ids[0].lot_rma_id
+        return warehouse_ids[0].lot_rma_id.id
 
     qty = fields.Float('Quantity')
     product_id = fields.Many2one('product.product', 'Product',

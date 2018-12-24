@@ -101,10 +101,10 @@ class AccountInvoiceContactReport(models.Model):
         """
         return group_by_str
 
-    def init(self, self._cr):
+    def init(self):
         # self._table = account_invoice_contact_report
         tools.drop_view_if_exists(self._cr, self._table)
-        cr.execute("""CREATE or REPLACE VIEW %s as (
+        self._cr.execute("""CREATE or REPLACE VIEW %s as (
             WITH currency_rate (currency_id, rate, date_start, date_end) AS (
                 SELECT r.currency_id, r.rate, r.name AS date_start,
                     (SELECT name FROM res_currency_rate r2

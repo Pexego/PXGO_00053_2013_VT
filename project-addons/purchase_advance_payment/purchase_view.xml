@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="purchase_order_form_change_button" model="ir.ui.view">
             <field name="name">purchase.order.form.change_button</field>
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref="purchase.purchase_order_form"/>
-            <field name="type">form</field>
             <field name="arch" type="xml">
-                <button name="action_cancel_draft" position="before">
+                <!--TODO: Migrar<button name="action_cancel_draft" position="before">
                     <button name="%(action_view_account_purchase_voucher_wizard)d" string="Pay purchase advanced"
                         type="action" icon="gtk-execute" groups="account.group_account_invoice" attrs="{'invisible': ['|',('state', 'in', ['done','cancel','history','draft','sent']),('invoiced', '=', True)]}"/>
-                </button>
-                <page string="Deliveries &amp; Invoices" position="after">
+                </button>-->
+                <notebook position="inside">
                     <page string="Payment advances" groups="account.group_account_invoice">
                         <field name="account_voucher_ids" nolabel="1" colspan="4" context="{'form_view_ref': 'account_voucher.view_voucher_form'}"/>
                     </page>
-                </page>
+                </notebook>
 
             </field>
         </record>
@@ -39,5 +37,4 @@
             </field>
         </record>-->
 
-    </data>
-</openerp>
+</odoo>

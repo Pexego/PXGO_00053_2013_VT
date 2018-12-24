@@ -29,7 +29,7 @@ class stock_picking_report(models.Model):
             ('done', 'Done')], 'Pciking Status', readonly=True)
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
     state_name = fields.Many2one('res.country.state', 'State Name', readonly=True)
-    section_id = fields.Many2one('crm.case.section', 'Sales Team', readonly=True)
+    #TODO: Migrarsection_id = fields.Many2one('crm.case.section', 'Sales Team', readonly=True)
 
     def _select(self):
         select_str = """
@@ -47,9 +47,10 @@ class stock_picking_report(models.Model):
                     l.state,
                     t.categ_id as categ_id,
                     rp.area_id as area_id,
-                    rp.state_id as state_name,
-                    rp.section_id as section_id
-        """
+                    rp.state_id as state_name"""
+                    #TODO: Migrar
+                    # ~ ,rp.section_id as section_id
+        # ~ """
         return select_str
 
     def _from(self):
@@ -87,9 +88,10 @@ class stock_picking_report(models.Model):
                     l.state,
                     rp.id,
                     rp.area_id,
-                    rp.state_id,
-                    rp.section_id
-        """
+                    rp.state_id"""
+        #TODO: Migrar
+                    # ~ ,rp.section_id
+        # ~ """
         return group_by_str
 
     def init(self):

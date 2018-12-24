@@ -18,19 +18,15 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import openerp
-from openerp.osv import osv, fields
+
+from odoo import models, fields
 
 
-class crm_claim(osv.osv):
+class crm_claim(models.Model):
     _inherit = 'crm.claim'
-    _columns = {
-        'delivery_type': fields.selection([
+
+    delivery_type = fields.Selection([
             ('shipping', 'Shipping'),
             ('carrier', 'Carrier - Customer'),
             ('installations', 'Pickup in installations'), ],
-            'Delivery type', required=True)
-    }
-    _defaults = {
-        'delivery_type': 'shipping'
-    }
+            'Delivery type', required=True, default='shipping')

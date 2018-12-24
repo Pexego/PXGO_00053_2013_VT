@@ -19,16 +19,7 @@
 #
 ##############################################################################
 
-try:
-    #Backward compatible
-    from sets import Set as set
-except:
-    pass
-
-from openerp.osv import osv, orm, fields
-from openerp.tools.misc import ustr
-from openerp import netsvc
-from openerp.tools.translate import _
+from odoo import models, fields, _
 
 # LOGGER = netsvc.Logger()
 DEBUG = False
@@ -68,7 +59,7 @@ ACTION_TYPES = [
 ]
 
 
-class PromotionsRulesConditionsExprs(orm.Model):
+class PromotionsRulesConditionsExprs(models.Model):
     _inherit = 'promos.rules.conditions.exps'
 
     def on_change(self, cursor, user, ids=None,
@@ -152,12 +143,10 @@ class PromotionsRulesConditionsExprs(orm.Model):
             }
 
         return {}
-    _columns = {
-        'attribute': fields.selection(ATTRIBUTES,
-                                      'Attribute',
-                                      size=50,
-                                      required=True)
-    }
+
+    attribute = fields.Selection(ATTRIBUTES,
+                                 'Attribute',
+                                 size=50, required=True)
 
     def validate(self, cursor, user, vals, context=None):
         """
@@ -343,11 +332,10 @@ class PromotionsRulesConditionsExprs(orm.Model):
         return eval(expression.serialised_expr)
 
 
-class PromotionsRulesActions(orm.Model):
+class PromotionsRulesActions(models.Model):
     _inherit = 'promos.rules.actions'
-    _columns = {
-        'action_type': fields.selection(ACTION_TYPES, 'Action', required=True)
-    }
+
+    action_type = fields.Selection(ACTION_TYPES, 'Action', required=True)
 
     def on_change(self, cr, uid, ids=None, action_type=None, product_code=None,
                   arguments=None, context=None):
