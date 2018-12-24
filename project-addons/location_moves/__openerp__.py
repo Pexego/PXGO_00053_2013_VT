@@ -26,7 +26,7 @@
     'description': """""",
     'author': 'Pexego',
     'website': 'www.pexego.es',
-    "depends": ['stock', 'purchase_picking', 'procurement'],
+    "depends": ['stock', 'purchase_picking'],
     "data": ['stock_data.xml', 'wizard/location_moves_view.xml',
              'wizard/quality_move_view.xml', "stock_view.xml"],
     "installable": True

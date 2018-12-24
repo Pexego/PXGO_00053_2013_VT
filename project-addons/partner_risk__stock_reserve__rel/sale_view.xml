@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-    <record id="sale_change_reserve_button_state" model="ir.ui.view">
+    <!--TODO: Migrar<record id="sale_change_reserve_button_state" model="ir.ui.view">
         <field name="name">sale.change.reserve.button.state.form</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="nan_partner_risk.sale_order_form_risk"/>
@@ -18,7 +18,7 @@
                 <button name="draft_to_risk" string="Confirm Order" states="sent" class="oe_highlight" groups="base.group_user" invisible="1"/>
             </xpath>
         </field>
-    </record>
+    </record>-->
 
     <record id="view_order_line_tree_avoid_create_product" model="ir.ui.view">
         <field name="name">view.order.line.tree.avoid.create.product</field>

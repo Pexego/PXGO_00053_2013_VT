@@ -19,33 +19,12 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
-from openerp import api
+from odoo import models, api
 
 
-class sale_order(orm.Model):
+class sale_order(models.Model):
 
     _inherit = 'sale.order'
-
-    _columns = {
-        'state': fields.selection([
-            ('draft', 'Draft Quotation'),
-            ('sent', 'Quotation Sent'),
-            ('cancel', 'Cancelled'),
-            ('reserve', 'Reserved'),
-            ('waiting_date', 'Waiting Schedule'),
-            ('wait_risk', 'Waiting Risk Approval'),
-            ('risk_approval', 'Risk & VIES approval'),
-            ('progress', 'Sales Order'),
-            ('manual', 'Sale to Invoice'),
-            ('shipping_except', 'Shipping Exception'),
-            ('invoice_except', 'Invoice Exception'),
-            ('done', 'Done'),
-            ], 'Status', readonly=True, copy=False, help="Gives the status of the quotation or sales order.\
-              \nThe exception status is automatically set when a cancel operation occurs \
-              in the invoice validation (Invoice Exception) or in the picking list process (Shipping Exception).\nThe 'Waiting Schedule' status is set when the invoice is confirmed\
-               but waiting for the scheduler to run on the order date.", select=True),
-    }
 
     def action_risk_approval(self, cr, uid, ids, context=None):
         order = self.browse(cr, uid, ids[0], context)

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_repair_order_form_add_new_ctx" model="ir.ui.view">
+            <field name="name">mrp.repair.form</field>
+            <field name="model">mrp.repair</field>
+            <field name="inherit_id" ref="mrp_repair.view_repair_order_form"/>
+            <field name="arch" type="xml">
+                <field name="operations" position="attributes">
+                    <attribute name="context">{'default_product_uom_qty': product_qty, 'cur_location_id': location_id}</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

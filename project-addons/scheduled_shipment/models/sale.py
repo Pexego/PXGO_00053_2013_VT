@@ -95,4 +95,3 @@ class StockMove(models.Model):
                 pick.scheduled_picking = True
                 pick._process_picking_scheduled_time()
         return res
-

@@ -25,6 +25,12 @@
             <field name="location_id" ref="stock.stock_location_stock"/>
         </record>
 
+        <record id="stock_location_outlet_changes" model="stock.location">
+            <field name="name">Outlet Changes</field>
+            <field name="usage">inventory</field>
+            <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+        </record>
+
         <record id="tag_outlet" model="product.tag">
             <field name="name">Outlet</field>
         </record>

@@ -1,11 +1,9 @@
 <?xml version="1.0"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="equivalent_products_wizard_no_create" model="ir.ui.view">
             <field name="name">equivalent.products.wizard.no.create</field>
             <field name="model">equivalent.products.wizard</field>
-            <field name="type">form</field>
             <field name="inherit_id" ref="crm_claim_rma.equivalent_products_wizard"/>
             <field name="arch" type="xml">
                 <field name="product_id" position="attributes">
@@ -14,7 +12,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="crm_claim_rma_form_view_inherit_new_refund">
+        <!--TODO: Migracion<record model="ir.ui.view" id="crm_claim_rma_form_view_inherit_new_refund">
             <field name="name">CRM - Claim product return Form</field>
             <field name="model">crm.claim</field>
             <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
@@ -44,7 +42,7 @@
                 </group>
 
             </field>
-        </record>
+        </record>-->
 
         <record model="ir.ui.view" id="crm_case_claims_tree_view_received">
             <field name="name">CRM - Claims Tree</field>
@@ -85,10 +83,11 @@
                 <field name="claim_type" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
-                <page string="Follow Up" position="after">
+                <!--TODO: Migrar<page string="Follow Up" position="after">
                     <page string="Invoicing">
                         <field name="claim_inv_line_ids" nolabel="1" colspan="4" editable="bottom">
                             <tree editable="bottom">
+                              <field name="sequence" widget="handle"/>
                               <field name="invoice_id" domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
                               <field name="product_id"/>
                               <field name="product_description"/>
@@ -111,7 +110,7 @@
                                   type="object" string="New Refund"/>
                         </group>
                     </page>
-                </page>
+                </page>-->
             </field>
         </record>
 
@@ -166,9 +165,9 @@
           <field name="model">crm.claim</field>
           <field name="inherit_id" ref="crm_claim_rma.crm_case_claims_tree_view"/>
           <field name="arch" type="xml">
-            <xpath expr="//field[@name='section_id']" position="replace">
+            <!--TODO: Migrar<xpath expr="//field[@name='section_id']" position="replace">
               <field name="section_id" invisible="1"/>
-            </xpath>
+            </xpath>-->
             <xpath expr="//field[@name='claim_type']" position="replace">
               <field name="claim_type" invisible="1"/>
             </xpath>
@@ -194,12 +193,12 @@
                     <field name="priority"/>
                     <field name="bool_category_id"/>
                 </xpath>
-                <xpath expr="//field[@name='date_action_next']" position="replace">
+                <!--TODO: Migrar<xpath expr="//field[@name='date_action_next']" position="replace">
                     <field name="date_action_next" invisible="1"/>
                 </xpath>
                 <xpath expr="//field[@name='action_next']" position="replace">
                     <field name="action_next" invisible="1"/>
-                </xpath>
+                </xpath>-->
                 <xpath expr="//field[@name='categ_id']" position="replace">
                     <field name="categ_id" invisible="1"/>
                 </xpath>
@@ -213,12 +212,50 @@
             <field name="arch" type="xml">
                 <xpath expr="//group/field[@name='name']" position="replace">
                     <field name="name" on_change="onchange_name(name)"/>
-                <!-- <attributes name="on_change">onchange_name(name)</attributes> -->
                 </xpath>
-                <xpath expr="//field[@name='delivery_address_id']" position="attributes">
+                <!--TODO:Migrar<xpath expr="//field[@name='delivery_address_id']" position="attributes">
                     <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
-                    <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
-                </xpath>
+                    <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True,
+                                               'default_not_print_picking': True, 'default_parent_id': partner_id, 'show_address':1}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </xpath-->
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="crm_rma_advance_location_form_view_inherit">
+            <field name="name">Claims Form wizard</field>
+            <field name="model">crm.claim</field>
+            <field name="inherit_id" ref="crm_rma_advance_location.crm_claim_rma_form_view"/>
+            <field name="arch" type="xml">
+
+              <xpath expr="//button[@string='New Product Loss']" position="after">
+                    <button name="button_update_lines_wizard" type="object" string="Update RMA lines"
+                     attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
+              </xpath>
+
+            </field>
+        </record>
+
+        <!--Wizard to update rma lines-->
+        <record model="ir.ui.view" id="claim_line_update_view">
+            <field name="name">claim_line_update</field>
+            <field name="model">claim.line</field>
+            <field name="arch" type="xml">
+                <form>
+                    <separator string="Update data" colspan="4"/>
+                    <group>
+                        <field name="substate_id"/>
+                        <field name="claim_origine"/>
+                        <field name="partner_id" invisible="1"/>
+                        <field name="invoice_id" domain="[('partner_id', 'child_of', [partner_id]),('state', '!=', 'draft')]"/>
+                    </group>
+
+                    <footer>
+                        <button name="button_update_lines" string="Update" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
             </field>
         </record>
 
@@ -232,16 +269,15 @@
                 <field name="priority"/>
               </field>
 
-              <separator string="Claim/Action Description" position="replace"/>
+              <!--TODO:Migrar<separator string="Claim/Action Description" position="replace"/>
               <field name="description" position="attributes">
                 <attribute name='invisible'>1</attribute>
-              </field>
+              </field>-->
 
               <xpath expr="//sheet/group/notebook" position="after">
                   <separator colspan="4" string="Claim/Action Description" groups="base.group_user"/>
                   <field name="description" colspan="4" nolabel="1"/>
               </xpath>
-
             </field>
         </record>
 
@@ -250,16 +286,16 @@
             <field name="model">claim.line</field>
             <field name="inherit_id" ref="crm_claim_rma.crm_claim_line_tree_view2"/>
             <field name="arch" type="xml">
-                <tree string="Returned lines" position="attributes">
+                <!--TODO: Migrar<tree string="Returned lines" position="attributes">
                     <attribute name="default_order">claim_id asc</attribute>
-                </tree>
+                </tree>-->
                 <field name="claim_id" position="after">
                     <field name="claim_name" string="Claim Subject"/>
                     <field name="user_id"/>
                     <field name="comercial"/>
                     <field name="date_received" string="Received date"/>
                 </field>
-                <!--/tree-->
+
             </field>
         </record>
 
@@ -296,14 +332,7 @@
         </record>
 
         <menuitem name="Received Claims" id="menu_crm_case_claims"
-            parent="base.menu_aftersale" action="crm_case_categ_claim_sort" sequence="1"/>
-
-        <!--<record model="ir.actions.act_window" id="crm_claim.crm_case_categ_claim0">
-            <field name="domain">[('claim_type', '=', 'customer')]</field>
-            <field name="context">{"search_default_partner_id": active_id, "stage_type":'claim', "claim_type": 'customer', "default_claim_type": 'customer'}</field>
-        </record>-->
+            parent="crm_claim.menu_aftersale" action="crm_case_categ_claim_sort" sequence="1"/>
 
 
-
-    </data>
-</openerp>
+</odoo>

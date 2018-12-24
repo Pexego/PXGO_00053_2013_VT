@@ -76,7 +76,7 @@ class ProductTemplate(models.Model):
             for subproduct in product_product_obj.pack_line_ids:
                 subproduct_quantity_next = subproduct.quantity
                 if subproduct_quantity_next:
-                    result = subproduct.product_id._product_available()[subproduct.product_id.id]
+                    result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
                     subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
                     pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
                     if first_subproduct:
@@ -99,7 +99,7 @@ class ProductTemplate(models.Model):
             for subproduct in product_product_obj.pack_line_ids:
                 subproduct_quantity_next = subproduct.quantity
                 if subproduct_quantity_next:
-                    result = subproduct.product_id._product_available()[subproduct.product_id.id]
+                    result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
                     subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
                     pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
                     if first_subproduct:
@@ -160,7 +160,7 @@ class ProductProduct(models.Model):
             for subproduct in self.pack_line_ids:
                 subproduct_quantity_next = subproduct.quantity
                 if subproduct_quantity_next:
-                    result = subproduct.product_id._product_available()[subproduct.product_id.id]
+                    result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
                     subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
                     pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
                     if first_subproduct:

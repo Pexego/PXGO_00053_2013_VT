@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<openerp>
-    <data>
+<odoo>
 
         <record id="product_outlet_wizard_form" model="ir.ui.view">
             <field name="name">product.outlet.wizard.form</field>
             <field name="model">product.outlet.wizard</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Send product to wizard">
                     <group>
@@ -44,13 +41,11 @@
             <field name="model">product.category</field>
             <field name="inherit_id" ref="product.product_category_form_view"/>
             <field name="arch" type="xml">
-                <field name="type" position="after">
+                <field name="parent_id" position="after">
                     <field name="percent"/>
                 </field>
             </field>
         </record>
 
-
-    </data>
-</openerp>
+</odoo>
 

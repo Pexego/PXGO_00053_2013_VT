@@ -7,7 +7,7 @@ from customer import Customer, CustomerTag, CustomerTagCustomerRel
 from order import Order, OrderProduct
 from invoice import Invoice
 from commercial import Commercial
-from product import Product, ProductCategory
+from product import Product, ProductCategory, ProductTag, ProductTagProductRel
 from rma import RmaStatus, RmaStage, Rma, RmaProduct
 from auth import auth
 from sync_log import SyncLog
@@ -114,6 +114,10 @@ def unlink(user_id, password, model, odoo_id):
             for customertagcustomerrel in CustomerTagCustomerRel.select().where(
                     CustomerTagCustomerRel.odoo_id == rec.odoo_id):
                 customertagcustomerrel.delete_instance()
+        elif model == 'producttagproductrel':
+            for producttagproductrel in ProductTagProductRel.select().where(
+                    ProductTagProductRel.odoo_id == rec.odoo_id):
+                producttagproductrel.delete_instance()
         elif model == 'order':
             for order in Order.select().where(
                 Order.partner_id == rec.id):

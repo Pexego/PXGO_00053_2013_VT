@@ -53,16 +53,17 @@ class stock_days_positive(models.Model):
             """ % tuple(location_ids))
 
 
-class stock_history(models.Model):
-    _inherit = 'stock.history'
+#TODO: Migrar
+# ~ class stock_history(models.Model):
+    # ~ _inherit = 'stock.history'
 
 
-    def init(self):
-        """
-            En un update all se inicia 2 veces esta vista, la 2º vez al
-            eliminarla elimina tambien stock_days, por lo que tenemos que
-            forzarlo para iniciarla de nuevo
-        """
-        res = super(stock_history,self).init()
-        self.env['stock.days.positive'].init()
-        return res
+    # ~ def init(self):
+        # ~ """
+            # ~ En un update all se inicia 2 veces esta vista, la 2º vez al
+            # ~ eliminarla elimina tambien stock_days, por lo que tenemos que
+            # ~ forzarlo para iniciarla de nuevo
+        # ~ """
+        # ~ res = super(stock_history,self).init()
+        # ~ self.env['stock.days.positive'].init()
+        # ~ return res

@@ -120,7 +120,7 @@ class StockInvoiceOnShippingTests(models.TransientModel):
         for invoice in self.env["account.invoice"].sudo().browse(res):
             invoice.company_id = self.env.user.company_id.test_company_id.id
             invoice.fiscal_position = False
-            invoice.payment_term = False
+            invoice.payment_term_id = False
             invoice.tax_line = [(6, 0, [])]
             invoice.period_id = False
             invoice.payment_mode_id = False

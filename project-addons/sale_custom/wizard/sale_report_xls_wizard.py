@@ -36,8 +36,8 @@ class SaleReport(models.TransientModel):
         for sale_report in self:
             move_line_obj = sale_report.env['account.move.line']
             payment_term_ids = self.env['account.payment.term'].search([('name', 'ilike', 'Pago inmediato')]).ids
-            move_line_ids = move_line_obj.search_read([('account_id.type', '=', 'receivable'),
-                                                      ('reconcile_id', '=', False),
+            move_line_ids = move_line_obj.search_read([('account_id.internal_type', '=', 'receivable'),
+                                                      ('full_reconcile_id', '=', False),
                                                       ('payment_term_id', 'not in', payment_term_ids),
                                                       ('stored_invoice_id', '!=', False)], ['maturity_residual'])
             autocartera = 0.0
@@ -92,27 +92,27 @@ class SaleReport(models.TransientModel):
 
     @api.multi
     def _select(self):
-        this_str = """ 
+        this_str = """
             SELECT date_confirm::date, sum(price_total) as daily_sales,
             sum(benefit) as daily_benefit """
         return this_str
 
     @api.multi
     def _select_margin_month(self):
-        this_str = """ 
+        this_str = """
             SELECT sum(price_total) as monthly_sales,
             sum(benefit) as monthly_benefit """
         return this_str
 
     @api.multi
     def _select_thirty_days_sales(self):
-        this_str = """ 
+        this_str = """
             SELECT sum(price_total) as thirty_days_sales"""
         return this_str
 
     @api.multi
     def _from(self):
-        from_str = """ 
+        from_str = """
         FROM sale_report
         """
         return from_str
@@ -135,7 +135,7 @@ class SaleReport(models.TransientModel):
     @api.multi
     def _group_by(self):
         group_by_str = """
-            GROUP BY date_confirm::DATE 
+            GROUP BY date_confirm::DATE
             ORDER BY date_confirm::DATE asc
         """
         return group_by_str

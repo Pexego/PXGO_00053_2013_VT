@@ -1,16 +1,13 @@
 
 
-from openerp.osv import fields, osv
-from openerp import tools
+from odoo import fields, models, tools
 
 
-class sale_report(osv.osv):
+class sale_report(models.Model):
     _inherit = "sale.report"
 
-    _columns = {
-        'benefit': fields.float('Benefit', readonly=True),
-        'cost_price': fields.float('Cost Price', readonly=True)
-    }
+    benefit = fields.Float('Benefit', readonly=True)
+    cost_price = fields.Float('Cost Price', readonly=True)
 
     def _select(self):
         select_str = super(sale_report, self)._select()

@@ -23,11 +23,10 @@
 # Please note that these reports are not multi-currency !!!
 #
 
-from openerp.osv import osv
-from openerp import tools
+from odoo import models, tools
 
 
-class purchase_report(osv.osv):
+class purchase_report(models.Model):
     _inherit = "purchase.report"
 
     def init(self):
@@ -37,7 +36,7 @@ class purchase_report(osv.osv):
                 select
                     min(l.id) as id,
                     s.date_order as date,
-                    l.state,
+                    s.state,
                     s.date_approve,
                     s.minimum_planned_date as expected_date,
                     s.dest_address_id,
@@ -84,7 +83,7 @@ class purchase_report(osv.osv):
                     l.product_id,
                     t.categ_id,
                     s.date_order,
-                    l.state,
+                    s.state,
                     spt.warehouse_id,
                     u.uom_type,
                     u.category_id,

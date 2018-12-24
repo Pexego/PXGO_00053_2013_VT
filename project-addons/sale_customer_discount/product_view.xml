@@ -24,9 +24,9 @@
                     <attribute name="invisible">1</attribute>
                 </field>
                 <field name="attribute_value_ids" position="replace"/>
-                <field name="ean13" position="after">
+                <!--TODO: Migrar<field name="ean13" position="after">
                     <field name="categ_id"/>
-                </field>
+                </field>-->
             </field>
         </record>
 
@@ -41,7 +41,7 @@
             </field>
         </record>
 
-        <record id="product_normal_form_view_add_discount" model="ir.ui.view">
+        <!--TODO: Migrar<record id="product_normal_form_view_add_discount" model="ir.ui.view">
             <field name="name">product.product.form.add.discount</field>
             <field name="model">product.product</field>
             <field name="mode">primary</field>
@@ -98,7 +98,7 @@
                 </xpath>
 
             </field>
-        </record>
+        </record>-->
 
          <record id="product_kanban_view_add_discount" model="ir.ui.view">
             <field name="name">Product Kanban</field>

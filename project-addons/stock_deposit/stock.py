@@ -19,8 +19,8 @@
 #
 ##############################################################################
 
-from openerp import models, api
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, api
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 from datetime import datetime, timedelta
 

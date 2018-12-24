@@ -8,14 +8,19 @@
  *  Se modifica una linea, se modifica la temporal y si se guarda se convierte
  *  Se elimina una linea, se elimina la temporal, al guardar si no hay temporal se bora tambien la firme
  */
-openerp.reserve_without_save_sale = function(instance) {
-    instance.web.FormView.include({
+odoo.define('reserve_without_save_sale', function(require) {
+    "use strict";
+
+    var FormView = require('web.FormView');
+    var data = require('web.data')
+
+    FormView.include({
         on_button_cancel: function(event){
             console.log('se cancela')
             return this._super.apply(this, arguments);
         }
     });
-    instance.web.BufferedDataSet.include({
+    data.DataSet.include({
         create: function(data, options) {
             if (this._model.name == 'sale.order.line' && this.parent_view.datarecord.state == 'reserve') {
                 console.log('entra en create editado')
@@ -226,4 +231,4 @@ openerp.reserve_without_save_sale = function(instance) {
             return this._super.apply(this, arguments);
         },
     });
-};
+});
