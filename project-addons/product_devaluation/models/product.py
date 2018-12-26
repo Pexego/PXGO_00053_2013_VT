@@ -27,20 +27,17 @@ class ProductCategory(models.Model):
     _inherit = 'product.category'
 
     devaluation_journal_id = fields.Many2one('account.journal', 'Journal',
-                                             default=lambda self:
-                                             self.env.user.company_id.devaluation_journal_id)
+                                             default=lambda self: self.env.user.company_id.devaluation_journal_id)
     devaluation_account_provision_id = fields.Many2one('account.account', 'Provision Account',
-                                                       domain=[('type', '<>', 'view'), ('type', '<>', 'closed')],
                                                        default=lambda self:
                                                        self.env.user.company_id.devaluation_account_provision_id)
     devaluation_account_debit_id = fields.Many2one('account.account', 'Debit Account',
-                                                   domain=[('type', '<>', 'view'), ('type', '<>', 'closed')],
                                                    default=lambda self:
                                                    self.env.user.company_id.devaluation_account_debit_id)
     devaluation_account_credit_id = fields.Many2one('account.account', 'Credit Account',
-                                                    domain=[('type', '<>', 'view'), ('type', '<>', 'closed')],
                                                     default=lambda self:
                                                     self.env.user.company_id.devaluation_account_credit_id)
+
 
 class ProductDevaluation(models.Model):
 
@@ -53,12 +50,9 @@ class ProductDevaluation(models.Model):
     product_id = fields.Many2one('product.product', 'Product')
     quantity = fields.Float('Quantity')
     price_before = fields.Float('Price Before')
-    price_after = fields.Float ('Price After')
-    total_dev = fields.Float ("Total Devaluation", compute = _get_total_dev)
-    date_dev = fields.Date('Devaluated on', default = fields.datetime.now())
-    #TODO: Migrar
-    #period_id = fields.Many2one('account.period', 'Period', default=lambda self:
-    #    self.env['account.period'].find(time())[0], required=True)
+    price_after = fields.Float('Price After')
+    total_dev = fields.Float('Total Devaluation', compute=_get_total_dev)
+    date_dev = fields.Date('Devaluated on', default=fields.datetime.now())
     accounted_ok = fields.Boolean("Accounted", default=False)
 
 
