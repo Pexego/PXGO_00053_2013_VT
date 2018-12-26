@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -22,16 +21,19 @@
 from odoo import fields, models
 
 
-class product(models.Model):
+class Product(models.Model):
 
     _inherit = "product.product"
 
     associated_product_ids = fields.One2many('product.associated',
                                              'product_id',
                                              'Associated products')
+    equivalent_product_ids = fields.One2many('product.equivalent',
+                                             'product_id',
+                                             'Equivalent products')
 
 
-class associated_products(models.Model):
+class AssociatedProducts(models.Model):
 
     _name = "product.associated"
     _description = "This model provides the association between a \
@@ -44,7 +46,7 @@ class associated_products(models.Model):
                                  required=True)
     associated_id = fields.Many2one('product.product',
                                     'Associated product', required=True)
-    quantity = fields.Float('Quantity', required=True)
+    quantity = fields.Float(required=True)
     uom_id = fields.Many2one('product.uom', 'UoM', required=True,
                              default=_get_default_uom_id),
     discount = fields.Float('Discount (%)', required=True, default=0)
@@ -55,4 +57,5 @@ class EquivalentProduct(models.Model):
     _name = 'product.equivalent'
 
     product_id = fields.Many2one('product.product', 'Product', required=True)
-    equivalent_id = fields.Many2one('product.product', 'Equivalent product', required=True)
+    equivalent_id = fields.Many2one('product.product', 'Equivalent product',
+                                    required=True)
