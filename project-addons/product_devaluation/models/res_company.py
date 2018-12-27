@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,17 +18,14 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api
-from openerp.exceptions import ValidationError
+from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 
-class res_company(models.Model):
-    _inherit = "res.company"
+class ResCompany(models.Model):
+    _inherit = 'res.company'
 
     devaluation_journal_id = fields.Many2one('account.journal', 'Journal')
-    devaluation_account_provision_id = fields.Many2one('account.account', 'Provision Account',
-                                                       domain=[('type', '<>', 'view'), ('type', '<>', 'closed')])
-    devaluation_account_debit_id = fields.Many2one('account.account', 'Debit Account',
-                                                   domain=[('type', '<>', 'view'), ('type', '<>', 'closed')])
-    devaluation_account_credit_id = fields.Many2one('account.account', 'Credit Account',
-                                                    domain=[('type', '<>', 'view'), ('type', '<>', 'closed')])
+    devaluation_account_provision_id = fields.Many2one('account.account', 'Provision Account')
+    devaluation_account_debit_id = fields.Many2one('account.account', 'Debit Account')
+    devaluation_account_credit_id = fields.Many2one('account.account', 'Credit Account')
