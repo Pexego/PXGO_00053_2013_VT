@@ -75,10 +75,10 @@ class sale_order_line(models.Model):
     @api.multi
     def unlink(self):
 
-        res_id= self.order_id.id
+        res_id = self.mapped('order_id.id')
 
         res = super(sale_order_line, self).unlink()
-        line2 = self.env['shipping.balance'].search([('sale_id', '=', res_id)])
+        line2 = self.env['shipping.balance'].search([('sale_id', 'in', res_id)])
         if line2:
             line2.unlink()
         return True

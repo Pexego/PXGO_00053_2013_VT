@@ -25,13 +25,22 @@ class purchase_order_line(models.Model):
     _inherit = 'purchase.order.line'
 
     pack_depth = fields.Integer(
-            'Depth', required=True, default=0,
+            'Depth', required=True, default=0, #default=10
             help='Depth of the product if it is part of a pack.')
     pack_parent_line_id = fields.Many2one(
             'purchase.order.line', 'Pack',
             help='The pack that contains this product.')
     pack_child_line_ids = fields.One2many(
             'purchase.order.line', 'pack_parent_line_id', 'Lines in pack')
+
+    """_columns = {
+        'sequence': fields.integer(
+            'Sequence',
+            help='''Gives the sequence order when displaying a list of
+               purchase order lines. ''', default=10
+        ),
+    }
+    _order = 'order_id desc, sequence, id'"""
 
 
 class purchase_order(models.Model):

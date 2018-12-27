@@ -105,6 +105,8 @@ class product_outlet_wizard(models.TransientModel):
     def make_move(self):
         outlet_categ_id = \
             self.env.ref('product_outlet.product_category_outlet')
+        loss_location = self.env.\
+            ref('product_outlet.stock_location_outlet_changes')
         stock_location = self.location_orig_id
         outlet_location = self.env.ref('product_outlet.stock_location_outlet')
         move_obj = self.env['stock.move']
@@ -173,8 +175,7 @@ class product_outlet_wizard(models.TransientModel):
 
         move_in = move_obj.create({'product_id': new_product.id,
                                    'product_uom_qty': self.qty,
-                                   'location_id':
-                                       new_product.property_stock_inventory.id,
+                                   'location_id': loss_location.id,
                                    'location_dest_id':
                                        self.warehouse_id.wh_input_stock_loc_id.id,
                                    'product_uom': new_product.uom_id.id,
@@ -186,8 +187,7 @@ class product_outlet_wizard(models.TransientModel):
         move_out = move_obj.create({'product_id': product.id,
                                     'product_uom_qty': self.qty,
                                     'location_id': stock_location.id,
-                                    'location_dest_id':
-                                        product.property_stock_inventory.id,
+                                    'location_dest_id': loss_location.id,
                                     'product_uom': product.uom_id.id,
                                     'picking_type_id':
                                         self.warehouse_id.out_type_id.id,
