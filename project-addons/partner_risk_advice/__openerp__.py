@@ -26,8 +26,7 @@
     'description': """Manage Risk Advices by Email""",
     'author': 'Comunitea Servicios Tecnológicos',
     'website': 'www.comunitea.com',
-    "depends": ['base','mail', 'warning'
-                ],
+    "depends": ['base','mail', "crm_claim"],
     "data": [
             'views/res_partner_view.xml',
             'views/partner_risk_advice_mail.xml',

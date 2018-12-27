@@ -19,10 +19,9 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, orm
-from openerp.tools.translate import _
+from odoo import fields, models, _
 
-import StringIO
+from io import StringIO
 from datetime import datetime
 import calendar
 from dateutil.relativedelta import relativedelta
@@ -33,13 +32,11 @@ matplotlib.use('Agg')
 from matplotlib import pyplot as plt
 
 
-class res_partner(orm.Model):
+class res_partner(models.Model):
 
     _inherit = 'res.partner'
 
-    _columns = {
-        'sale_graphic': fields.binary("Sale graphic"),
-    }
+    sale_graphic = fields.Binary("Sale graphic")
 
     def _last_day_of_month(self, _date):
         return (datetime(_date.year, _date.month, 1) +
@@ -163,7 +160,7 @@ class res_partner(orm.Model):
                 fig = plt.gcf()
 
                 # Create the graphic with the data
-                io = StringIO.StringIO()
+                io = StringIO()
                 fig.savefig(io, format='png')
                 io.seek(0)
                 img_data = base64.b64encode(io.getvalue())

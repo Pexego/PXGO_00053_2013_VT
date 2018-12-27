@@ -26,7 +26,8 @@
     'author': 'Banking addons community',
     'website': 'https://launchpad.net/banking-addons',
     'category': 'Banking addons',
-    'depends': ['account', 'account_payment_mode', 'account_payment_return'],
+    'depends': ['account', 'account_payment_mode', 'account_payment_return',
+                'account_due_dates_str'],
     'data': ['views/account_view.xml'],
     'description': '''
 Allow to set a preferer payment mode on payment term lines. Only informative

@@ -18,17 +18,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
+from odoo import models, fields
 
 
-class minimum_day(osv.Model):
+class minimum_day(models.Model):
     _name = 'minimum.day'
     _description = 'Setting minimum stock days'
-    _columns = {
-        'name': fields.char('Name', size=255, required=True),
-        'days_sale': fields.float('Security Days', required=True),
-        'default': fields.boolean('Default')
-    }
-    _defaults = {
-        'default': True
-    }
+
+    name = fields.Char('Name', size=255, required=True)
+    days_sale = fields.Float('Security Days', required=True)
+    default = fields.Boolean('Default', default=True)

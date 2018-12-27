@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
-    <data>
-
+<odoo>
         <record id="location_moves_form" model="ir.ui.view">
             <field name="name">location.moves.form</field>
             <field name="model">location.moves</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Location moves">
                     <group>
@@ -45,6 +42,5 @@
             action="act_location_moves"
             parent="stock.menu_warehouse_config"/>
 
-    </data>
-</openerp>
+</odoo>
 

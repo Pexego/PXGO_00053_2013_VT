@@ -18,13 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
+from odoo import models, fields
 
 
-class stock_warehouse_orderpoint(osv.Model):
+class stock_warehouse_orderpoint(models.Model):
     _inherit = 'stock.warehouse.orderpoint'
-    _columns = {
-        'min_days_id': fields.many2one('minimum.day',
+
+    min_days_id = fields.Many2one('minimum.day',
                                        'Stock Mínimum Days',
                                        required=True)
-    }

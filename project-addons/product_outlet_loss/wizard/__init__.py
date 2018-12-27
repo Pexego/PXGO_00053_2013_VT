@@ -19,4 +19,4 @@
 #
 ##############################################################################
 
-import product_outlet_wizard
+from . import product_outlet_wizard

@@ -30,8 +30,7 @@ class AccountVoucherWizard(models.TransientModel):
     journal_id = fields.Many2one('account.journal', 'Journal', required=True)
     amount_total = fields.Float('Amount total', readonly=True)
     amount_advance = fields.Float('Amount advanced', required=True,
-                                  digits_compute=
-                                  dp.get_precision('Sale Price'))
+                                  digits=dp.get_precision('Sale Price'))
     date = fields.Date("Date", required=True,
                        default=fields.Date.context_today)
     exchange_rate = fields.Float("Exchange rate", digits=(16, 6), default=1.0,

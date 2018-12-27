@@ -20,7 +20,7 @@
 ##############################################################################
 
 from . import ir_attachment
-from . import print_report
+#TODO: Migrarfrom . import print_report
 from . import stock
 from . import partner
 from . import product

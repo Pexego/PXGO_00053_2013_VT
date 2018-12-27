@@ -53,9 +53,9 @@ class StockInvoiceDeposit(models.TransientModel):
             lines = sale_lines.with_context(my_context).invoice_line_create()
             inv_vals = self.env['sale.order']._prepare_invoice(sale, lines)
             inv_vals['journal_id'] = self.journal_id.id
-            if not inv_vals.get("payment_term", False):
-                inv_vals['payment_term'] = \
-                    sale.partner_id.property_payment_term.id
+            if not inv_vals.get("payment_term_id", False):
+                inv_vals['payment_term_id'] = \
+                    sale.partner_id.property_payment_term_id.id
             if not inv_vals.get("payment_mode_id", False):
                 inv_vals['payment_mode_id'] = \
                     sale.partner_id.customer_payment_mode.id

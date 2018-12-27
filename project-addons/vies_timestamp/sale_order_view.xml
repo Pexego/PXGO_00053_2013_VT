@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        <record id="sale_order_form_add_vies_fields" model="ir.ui.view">
+        <!--TODO: migrar<record id="sale_order_form_add_vies_fields" model="ir.ui.view">
             <field name="name">sale.order.form.add.vies.fields</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="nan_partner_risk.sale_order_form_risk"/>
@@ -17,6 +17,6 @@
                     </group>
                 </xpath>
             </field>
-        </record>
+        </record>-->
     </data>
 </openerp>

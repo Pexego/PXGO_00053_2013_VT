@@ -10,9 +10,9 @@ def _custom_lines_get_with_partner(self, partner, company_id):
     moveline_obj = self.pool['account.move.line']
     moveline_ids = moveline_obj.search(self.cr, self.uid, [
                         ('partner_id', '=', partner.id),
-                        ('account_id.type', '=', 'receivable'),
-                        ('reconcile_id', '=', False),
-                        ('state', '!=', 'draft'),
+                        ('account_id.internal_type', '=', 'receivable'),
+                        ('full_reconcile_id', '=', False),
+                        ('move_id.state', '!=', 'draft'),
                         ('company_id', '=', company_id),
                         '|', ('date_maturity', '=', False), ('date_maturity', '<=', fields.date.context_today(self, self.cr, self.uid)),
                     ])

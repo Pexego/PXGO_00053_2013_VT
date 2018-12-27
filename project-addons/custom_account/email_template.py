@@ -24,7 +24,7 @@ import base64
 
 class EmailTemplate(models.Model):
 
-    _inherit = 'email.template'
+    _inherit = 'mail.template'
 
     def generate_email_batch(self, cr, uid, template_id, res_ids, context=None,
                              fields=None):

@@ -27,7 +27,6 @@
     'author': 'Alberto Luengo para Comunitea',
     'website': 'luengocabanillas.com',
     "depends": ['sale', 'partner_risk__stock_reserve__rel'],
-    "data": ['sale_order_view.xml', 'fiscal_position_view.xml',
-             'sale_workflow.xml'],
+    "data": ['sale_order_view.xml', 'fiscal_position_view.xml'],
     "installable": True
 }
