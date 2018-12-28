@@ -26,12 +26,13 @@ class ResPartner(models.Model):
     deposit_count = fields.Integer(string='# of Deposits',
                                    compute='_deposit_count')
 
-    @api.one
+    @api.multi
     def _deposit_count(self):
-        if self.active:
-            deposit_ids = self.env['stock.deposit'].search([('partner_id', 'child_of', [self.id])])
-        else:
-            deposit_ids = []
+        for partner in self:
+            if partner.active:
+                deposit_ids = self.env['stock.deposit'].search([('partner_id', 'child_of', [partner.id])])
+            else:
+                deposit_ids = []
 
-        self.deposit_count = len(deposit_ids)
+            partner.deposit_count = len(deposit_ids)
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Santi Argüeso
@@ -25,30 +24,25 @@ from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 import odoo.addons.decimal_precision as dp
 
 
-class sale_order_line(models.Model):
+class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
+    @api.depends('product_uom_qty', 'discount', 'price_unit', 'tax_id', 'deposit')
     def _compute_amount(self):
-        super(sale_order_line, self.filtered(lambda x: not x.deposit)).\
-            _compute_amount()
+        super(SaleOrderLine, self.filtered(lambda x: not x.deposit))._compute_amount()
         for line in self.filtered('deposit'):
             line.update({
                 'price_tax': 0.0,
                 'price_total': 0.0,
                 'price_subtotal': 0.0})
 
-    def _amount_line(self, cr, uid, ids, field_name, arg, context=None):
-        # se mantiene en la api antigua por no sobreescribir todo el calculo
-        if context is None:
-            context = {}
-        values = super(sale_order_line, self)._amount_line(cr, uid,  ids,
-                                                           field_name, arg,
-                                                           context=context)
-        for line in self.browse(cr, uid, ids, context=context):
-            if line.deposit:
-                values[line.id] = 0.0
-        return values
-
+    # def _amount_line(self):
+    #     # se mantiene en la api antigua por no sobreescribir todo el calculo
+    #     values = super(SaleOrderLine, self)._amount_line()
+    #     for line in self:
+    #         if line.deposit:
+    #             values[line.id] = 0.0
+    #     return values
 
     deposit = fields.Boolean('Deposit')
     deposit_date = fields.Date('Date Dep.')
@@ -69,33 +63,33 @@ class sale_order_line(models.Model):
         for line in self:
             if not line.deposit or self.env.context.get('invoice_deposit', False):
                 lines += line
-        return super(sale_order_line, lines).invoice_line_create()
+        return super(SaleOrderLine, lines).invoice_line_create()
 
-# TODO: Migrar
-# ~ class sale_order(models.Model):
-    # ~ _inherit = 'sale.order'
 
-    # ~ deposit_ids = fields.One2many('stock.deposit', 'sale_id', 'Deposits')
-    # ~ deposit_count = fields.Integer('deposit count', compute='_get_deposit_len',
-                                   # ~ store=True)
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
 
-    # ~ @api.one
-    # ~ @api.depends('deposit_ids')
-    # ~ def _get_deposit_len(self):
-        # ~ self.deposit_count = len(self.deposit_ids)
+    deposit_ids = fields.One2many('stock.deposit', 'sale_id', 'Deposits')
+    deposit_count = fields.Integer('deposit count', compute='_get_deposit_len',
+                                   store=True)
 
-    # ~ @api.model
-    # ~ def _amount_line_tax(self, line):
-        # ~ if line.deposit:
-            # ~ return 0.0
-        # ~ else:
-            # ~ return super(sale_order, self)._amount_line_tax(line)
+    @api.multi
+    @api.depends('deposit_ids')
+    def _get_deposit_len(self):
+        for sale in self:
+            sale.deposit_count = len(sale.deposit_ids)
 
-    # ~ @api.model
-    # ~ def _prepare_order_line_procurement(self, order, line, group_id=False):
-        # ~ vals = super(sale_order, self)._prepare_order_line_procurement(
-            # ~ order, line, group_id=group_id)
-        # ~ if line.deposit:
-            # ~ deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
-            # ~ vals['location_id'] = deposit_id.id
-        # ~ return vals
+    # @api.model
+    # def _amount_line_tax(self, line):
+    #     if line.deposit:
+    #         return 0.0
+    #     else:
+    #         return super(SaleOrder, self)._amount_line_tax(line)
+
+    # @api.model
+    # def _prepare_order_line_procurement(self, order, line, group_id=False):
+    #     vals = super(SaleOrder, self)._prepare_order_line_procurement(order, line, group_id=group_id)
+    #     if line.deposit:
+    #         deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
+    #         vals['location_id'] = deposit_id.id
+    #     return vals
