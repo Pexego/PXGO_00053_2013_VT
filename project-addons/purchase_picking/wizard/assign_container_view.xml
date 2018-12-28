@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="assign_container_wzd_view" model="ir.ui.view">
             <field name="name">assign.container.wzd.form</field>
             <field name="model">assign.container.wzd</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Assign container">
                     <group>
@@ -26,5 +24,4 @@
             key2="client_action_multi"
             id="action_assign_container"/>
 
-    </data>
-</openerp>
+</odoo>

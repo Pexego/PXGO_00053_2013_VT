@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: scheduled_shipment
-#: field:sale.order,scheduled_date:0
+#: model:ir.model.fields,field_description:scheduled_shipment.field_sale_order_scheduled_date
 msgid "Scheduled Date"
 msgstr "Fecha programada de envío"
 
@@ -27,6 +27,26 @@ msgid "Scheduled date must be bigger than current date"
 msgstr "La fecha programada tiene que ser mayor que la fecha actual"
 
 #. module: scheduled_shipment
-#: field:stock.picking,scheduled_date:0
-msgid "Scheduled Date"
+#: model:ir.model.fields,field_description:scheduled_shipment.field_stock_picking_scheduled_shipping_date
+msgid "Scheduled shipping date"
 msgstr "Fecha programada de envío"
+
+#. module: scheduled_shipment
+#: model:ir.ui.view,arch_db:scheduled_shipment.view_add_button_to_schedule
+msgid "Schedule Shipping"
+msgstr "Programar envío"
+
+#. module: scheduled_shipment
+#: model:ir.model.fields,field_description:scheduled_shipment.field_stock_schedule_wizard_scheduled_date
+msgid "Scheduled shipping date"
+msgstr "Fecha programada de envío"
+
+#. module: scheduled_shipment
+#: model:ir.ui.view,arch_db:scheduled_shipment.scheduled_shipping_wizard
+msgid "Schedule Shipping"
+msgstr "Programar envío"
+
+#. module: scheduled_shipment
+#: model:ir.ui.view,arch_db:scheduled_shipment.scheduled_shipping_wizard
+msgid "Schedule"
+msgstr "Programar"

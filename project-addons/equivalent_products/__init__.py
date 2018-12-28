@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-import product
-import sale
-import wizard
-#import report
+from . import models
+# TODO: de momento no se migra:
+# from . import wizard
+# import report

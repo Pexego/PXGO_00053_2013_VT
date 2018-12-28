@@ -18,11 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, SUPERUSER_ID
-from openerp.tools.translate import _
-from datetime import datetime, timedelta
-from openerp.addons.connector.event import on_record_write
-from openerp.addons.connector.session import ConnectorSession
+from openerp import models, fields, api, _
 
 
 class AccountMoveLine(models.Model):
@@ -153,7 +149,7 @@ class AccountInvoice(models.Model):
         for payment in self.payment_ids:
             for payment_account in payment.move_id.line_id:
                 if payment_account.account_id.id == self.payment_mode_id.transfer_account_id.id:
-                    for reconcile_line in payment_account.reconcile_id.line_id:
+                    for reconcile_line in payment_account.full_reconcile_id.line_id:
                         if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
                             res = 'paid'
                             return res
@@ -301,7 +297,7 @@ class AccountInvoice(models.Model):
             'total_amount_currency': 0,
         }
         for move_line in move_lines:
-            if move_line[line_type] > 0 and not move_line.reconcile_id:
+            if move_line[line_type] > 0 and not move_line.full_reconcile_id:
                 if move_line.date > res['max_date']:
                     res['max_date'] = move_line.date
                 res['lines'] += move_line
@@ -334,7 +330,7 @@ class AccountInvoice(models.Model):
         first_partner = lines[0].partner_id
         first_account = lines[0].account_id
         for line in lines:
-            if (line.account_id.type in ('receivable', 'payable') and
+            if (line.account_id.internal_type in ('receivable', 'payable') and
                     line.partner_id != first_partner):
                 return False
             if line.account_id != first_account:
@@ -439,13 +435,14 @@ class AccountInvoice(models.Model):
             }}
 
 
-class AccountJournal(models.Model):
+#TODO: Migrar
+# ~ class AccountJournal(models.Model):
 
-    _inherit = "account.journal"
+    # ~ _inherit = "account.journal"
 
-    payment_method_ids = fields.One2many("payment.method", "journal_id",
-                                         "Payment methods related",
-                                         readonly=True)
+    # ~ payment_method_ids = fields.One2many("payment.method", "journal_id",
+                                         # ~ "Payment methods related",
+                                         # ~ readonly=True)
 
 
 class PaymentMode(models.Model):
@@ -511,59 +508,60 @@ class AccountInvoiceConfirm(models.TransientModel):
         return res
 
 
-class InvoiceMerge(models.TransientModel):
-    _inherit = "invoice.merge"
+#TODO: Migrar
+# ~ class InvoiceMerge(models.TransientModel):
+    # ~ _inherit = "invoice.merge"
 
-    @api.model
-    def _dirty_check(self):
-        if self.env.context.get('active_model', '') == 'account.invoice':
-            ids = self.env.context['active_ids']
-            if len(ids) < 2:
-                raise exceptions.Warning(
-                    _('Please select multiple invoice to merge in the list '
-                      'view.'))
-            inv_obj = self.env['account.invoice'].browse(ids)
-            invs = inv_obj.read(['account_id', 'state', 'type', 'company_id',
-                                 'partner_id', 'currency_id', 'journal_id',
-                                 'payment_term', 'payment_mode_id',
-                                 'user_id', 'section_id', 'invoice_type_id'])
-            for d in invs:
-                if d['state'] != 'draft':
-                    raise exceptions.Warning(
-                        _('At least one of the selected invoices is %s!') %
-                        d['state'])
-                if d['account_id'] != invs[0]['account_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices use the same account!'))
-                if d['company_id'] != invs[0]['company_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices are at the same company!'))
-                if d['partner_id'] != invs[0]['partner_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices are for the same partner!'))
-                if d['type'] != invs[0]['type']:
-                    raise exceptions.Warning(
-                        _('Not all invoices are of the same type!'))
-                if d['currency_id'] != invs[0]['currency_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices are at the same currency!'))
-                if d['journal_id'] != invs[0]['journal_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices are at the same journal!'))
-                if d['payment_term'] != invs[0]['payment_term']:
-                    raise exceptions.Warning(
-                        _('Not all invoices have the same payment term!'))
-                if d['payment_mode_id'] != invs[0]['payment_mode_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices use the same payment mode!'))
-                if d['user_id'] != invs[0]['user_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices are at the same salesperson!'))
-                if d['section_id'] != invs[0]['section_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices are at the same sales team!'))
-                if d['invoice_type_id'] != invs[0]['invoice_type_id']:
-                    raise exceptions.Warning(
-                        _('Not all invoices are of the same invoice type!'))
-        return {}
+    # ~ @api.model
+    # ~ def _dirty_check(self):
+        # ~ if self.env.context.get('active_model', '') == 'account.invoice':
+            # ~ ids = self.env.context['active_ids']
+            # ~ if len(ids) < 2:
+                # ~ raise exceptions.Warning(
+                    # ~ _('Please select multiple invoice to merge in the list '
+                      # ~ 'view.'))
+            # ~ inv_obj = self.env['account.invoice'].browse(ids)
+            # ~ invs = inv_obj.read(['account_id', 'state', 'type', 'company_id',
+                                 # ~ 'partner_id', 'currency_id', 'journal_id',
+                                 # ~ 'payment_term', 'payment_mode_id',
+                                 # ~ 'user_id', 'section_id', 'invoice_type_id'])
+            # ~ for d in invs:
+                # ~ if d['state'] != 'draft':
+                    # ~ raise exceptions.Warning(
+                        # ~ _('At least one of the selected invoices is %s!') %
+                        # ~ d['state'])
+                # ~ if d['account_id'] != invs[0]['account_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices use the same account!'))
+                # ~ if d['company_id'] != invs[0]['company_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices are at the same company!'))
+                # ~ if d['partner_id'] != invs[0]['partner_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices are for the same partner!'))
+                # ~ if d['type'] != invs[0]['type']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices are of the same type!'))
+                # ~ if d['currency_id'] != invs[0]['currency_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices are at the same currency!'))
+                # ~ if d['journal_id'] != invs[0]['journal_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices are at the same journal!'))
+                # ~ if d['payment_term'] != invs[0]['payment_term']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices have the same payment term!'))
+                # ~ if d['payment_mode_id'] != invs[0]['payment_mode_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices use the same payment mode!'))
+                # ~ if d['user_id'] != invs[0]['user_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices are at the same salesperson!'))
+                # ~ if d['section_id'] != invs[0]['section_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices are at the same sales team!'))
+                # ~ if d['invoice_type_id'] != invs[0]['invoice_type_id']:
+                    # ~ raise exceptions.Warning(
+                        # ~ _('Not all invoices are of the same invoice type!'))
+        # ~ return {}
 

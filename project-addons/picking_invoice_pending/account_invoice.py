@@ -46,14 +46,14 @@ class AccountInvoice(models.Model):
                             move_line_ids = move_line_obj.\
                                 search([('move_id', '=',
                                          picking.pending_invoice_move_id.id),
-                                        ('reconcile_id', '!=', None)])
+                                        ('full_reconcile_id', '!=', None)])
                             lines_to_unreconcile += move_line_ids[0]
                             if move_line_ids:
                                 move_line_rev_ids = move_line_obj.\
                                     search([('move_id', '=',
                                              picking.pending_invoice_move_id.
                                              reversal_id.id),
-                                            ('reconcile_id', '!=', None)])
+                                            ('full_reconcile_id', '!=', None)])
                                 lines_to_unreconcile += move_line_rev_ids[0]
                                 unrecl = [x.id for x in lines_to_unreconcile]
                                 move_line_obj.\

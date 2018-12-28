@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="create_production_order_wzd_form" model="ir.ui.view">
             <field name="name">create.production.order.wzd.form</field>
             <field name="model">create.production.order.wzd</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Create production order">
                     <label string="A production order will be created for selected products"/>
@@ -24,5 +22,4 @@
             key2="client_action_multi"
             id="create_production_order_wzd_action"/>
 
-    </data>
-</openerp>
+</odoo>

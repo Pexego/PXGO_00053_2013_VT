@@ -10,7 +10,7 @@
                 <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="attributes">
                     <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
                 </xpath>
-                <button name="view_picking" position="replace">
+                <!--TODO: Migrar<button name="view_picking" position="replace">
                     <field name="picking_created" invisible="1"/>
                     <button name="view_picking" string="View picking" type="object"
                             attrs="{'invisible': [('picking_created', '=', False)]}"
@@ -20,7 +20,7 @@
                     <button name="move_lines_create_picking" string="Create picking" type="object"
                             attrs="{'invisible': [('state','in',('draft', 'cancel'))]}"
                             class="oe_highlight"/>
-                </button>
+                </button>-->
             </field>
         </record>
 
@@ -46,7 +46,7 @@
             </field>
         </record>
 
-        <record id="view_purchase_order_filter" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_purchase_order_filter" model="ir.ui.view">
             <field name="name">purchase.order.list.select</field>
             <field name="model">purchase.order</field>
             <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
@@ -56,7 +56,7 @@
                     <filter name="cancelled" string="Cancelled" domain="[('state','=','cancel')]"/>
                 </filter>
             </field>
-        </record>
+        </record>-->
 
         <record id="purchase.purchase_rfq" model="ir.actions.act_window">
             <field name="name">Requests for Quotation</field>
@@ -65,7 +65,7 @@
             <field name="context">{'search_default_not_cancelled': 1}</field>
             <field name="domain">[('state','in',('draft','sent','bid','cancel', 'confirmed'))]</field>
             <field name="view_mode">tree,form,graph,calendar</field>
-            <field name="search_view_id" ref="view_purchase_order_filter"/>
+            <!--TODO: Migrar<field name="search_view_id" ref="view_purchase_order_filter"/>-->
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 Click to create a request for quotation.

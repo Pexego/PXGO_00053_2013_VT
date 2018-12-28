@@ -19,24 +19,21 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
-from openerp import tools
+from odoo import fields, models, tools
 
 
-class crm_claim_cost_report(osv.osv):
+class crm_claim_cost_report(models.Model):
 
     _inherit = "crm.claim.cost.report"
 
-    _columns = {
-        'priority': fields.selection([('1', 'High'), ('2', 'Critical')],
-                                     'Priority', readonly=True),
-        'comercial_id': fields.many2one("res.users", string="Comercial",
-                                        readonly=True),
-        'claim_date': fields.date('Claim Date', readonly=True),
-        'subject': fields.selection([('return', 'Return'),
+    priority = fields.Selection([('1', 'High'), ('2', 'Critical')],
+                                     'Priority', readonly=True)
+    comercial_id = fields.Many2one("res.users", string="Comercial",
+                                        readonly=True)
+    claim_date = fields.Date('Claim Date', readonly=True)
+    subject = fields.Selection([('return', 'Return'),
                                      ('rma', 'RMA')], string='Claim Subject',
-                                    readonly=True),
-    }
+                                    readonly=True)
 
     def init(self):
 

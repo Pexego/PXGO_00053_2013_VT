@@ -20,7 +20,7 @@
 ##############################################################################
 
 from . import stock
-from . import procurement
+#TODO: MIgrar from . import procurement
 from . import sale
 #TODO: MIgrar from . import wizard
 from . import company

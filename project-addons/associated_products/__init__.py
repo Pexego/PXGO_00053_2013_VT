@@ -19,5 +19,5 @@
 #
 ##############################################################################
 
-import product
-import sale
+from . import product
+from . import sale

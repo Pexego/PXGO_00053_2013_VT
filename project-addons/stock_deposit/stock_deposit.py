@@ -18,14 +18,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
+from odoo import models, fields, api
 from datetime import datetime
 
 
 class stock_deposit(models.Model):
     _name = 'stock.deposit'
     _description = "Deposits"
-    _inherit = ['mail.thread', 'ir.needaction_mixin']
+    _inherit = ['mail.thread']
 
     product_id = fields.Many2one(string='Product',
                                  related='move_id.product_id',
@@ -39,7 +39,7 @@ class stock_deposit(models.Model):
                                   readonly=True)
     invoice_id = fields.Many2one('account.invoice', 'Invoice')
     move_id = fields.Many2one('stock.move', 'Deposit Move', required=True,
-                              readonly=True, ondelete='cascade', select=1)
+                              readonly=True, ondelete='cascade', index=1)
     picking_id = fields.Many2one(related='move_id.picking_id',
                                  string='Picking',
                                  store=True,
@@ -48,10 +48,11 @@ class stock_deposit(models.Model):
                                  string='Destination Address',
                                  store=True,
                                  readonly=True)
-    sale_id = fields.Many2one(related='move_id.procurement_id.sale_line_id.order_id',
-                              string='Sale',
-                              store=True,
-                              readonly=True)
+    #TODO: Migrar
+    # ~ sale_id = fields.Many2one(related='move_id.procurement_id.sale_line_id.order_id',
+                              # ~ string='Sale',
+                              # ~ store=True,
+                              # ~ readonly=True)
     delivery_date = fields.Datetime('Date of Transfer')
     return_date = fields.Date('Return date')
     company_id = fields.Many2one(related='move_id.company_id',
@@ -64,20 +65,20 @@ class stock_deposit(models.Model):
                               ('loss', 'Loss')], 'State',
                              readonly=True, required=True)
     sale_move_id = fields.Many2one('stock.move', 'Sale Move', required=False,
-                                   readonly=True, ondelete='cascade', select=1)
+                                   readonly=True, ondelete='cascade', index=1)
     sale_picking_id = fields.Many2one(related='sale_move_id.picking_id',
                                       string='Sale picking',
                                       readonly=True)
     return_picking_id = fields.Many2one('stock.picking', 'Return Picking',
                                         required=False, readonly=True,
-                                        ondelete='cascade', select=1)
+                                        ondelete='cascade', index=1)
     loss_move_id = fields.Many2one('stock.move', 'Loss Move', required=False,
-                                   readonly=True, ondelete='cascade', select=1)
+                                   readonly=True, ondelete='cascade', index=1)
     loss_picking_id = fields.Many2one(related='loss_move_id.picking_id',
                                       string='Loss picking',
                                       readonly=True)
     user_id = fields.Many2one('res.users', 'Comercial', required=False,
-                              readonly=False, ondelete='cascade', select=1)
+                              readonly=False, ondelete='cascade', index=1)
     cost_subtotal = fields.Float('Cost', related='move_id.cost_subtotal',
                                  store=True, readonly=True)
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -33,7 +34,8 @@ Sales customer discount
     and 'cost margin' and 'commercial margin' of the sale price 2.
 """,
     "depends": ["base", "product", "stock_account", "pmp_landed_costs",
-                "hide_product_variants", "purchase"],
+                #TODO: Migrar"web_readonly_bypass", "hide_product_variants",
+                "purchase"],
     "data": [
         "views/product_view.xml",
     ],

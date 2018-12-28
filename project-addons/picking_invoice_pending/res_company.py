@@ -28,7 +28,7 @@ class ResCompany(models.Model):
 
     property_pending_supplier_invoice_account = \
         fields.Many2one("account.account", "Pending supplier invoice account",
-                        domain=[('type', '=', 'payable')],
+                        domain=[('internal_type', '=', 'payable')],
                         help="This account is used for accounting in pending "
                              "supplier invoices.", company_dependent=True)
     property_pending_expenses_account = \

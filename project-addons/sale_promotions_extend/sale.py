@@ -18,10 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
+from odoo import models, fields
 
 
-class sale_order_line(osv.osv):
+class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
 
     def _get_tag_recursivity(self, cr, uid, ids, context=None):
@@ -62,15 +62,12 @@ class sale_order_line(osv.osv):
                 result[line.id] = u", ".join(stream)
         return result
 
-    _columns = {
-        'product_tags': fields.function(_get_tags_product, string='Tags',
-                                        type='char', size=255),
-        'web_discount': fields.boolean('Web Discount'),
-        'accumulated_promo': fields.boolean(default=False)
-    }
+    product_tags = fields.Char(eompute="_get_tags_product", string='Tags')
+    web_discount = fields.Boolean('Web Discount')
+    accumulated_promo = fields.Boolean(default=False)
 
 
-class SaleOrder(osv.osv):
+class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
@@ -91,7 +88,8 @@ class SaleOrder(osv.osv):
         for line in order.order_line:
             if line.promotion_line:
                 line.tax_id = taxes
-                line.sequence = 999
+                if '3 por ciento' in line.name:
+                    line.sequence = 999
 
         return res
 

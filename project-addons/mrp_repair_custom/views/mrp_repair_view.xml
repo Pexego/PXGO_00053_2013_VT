@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_repair_order_form_customs" model="ir.ui.view">
+            <field name="name">mrp.repair.form.customs</field>
+            <field name="inherit_id" ref="mrp_repair.view_repair_order_form"/>
+            <field name="model">mrp.repair</field>
+            <field name="arch" type="xml">
+                <field name="fees_lines" position="after">
+                    <field name="invoice_id" invisible="True"/>
+                </field>
+                <field name="fees_lines" position="attributes">
+                    <attribute name="attrs">{'readonly': ['|', ('invoice_method','=', 'none'), ('invoice_id', '!=', False)]}</attribute>
+                </field>
+                <xpath expr="//field[@name='fees_lines']/tree/field[@name='tax_id']" position="attributes">
+                    <attribute name="domain">[('parent_id', '=', False), ('type_tax_use', '&lt;&gt;', 'purchase')]</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

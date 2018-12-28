@@ -23,13 +23,13 @@
             <field name="domain_force">[('tests', '=', False),'|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
         </record>
 
-        <record model="ir.rule" id="procurement.procurement_rule">
+        <!--TODO: Migrar<record model="ir.rule" id="procurement.procurement_rule">
             <field name="name">procurement multi-company</field>
             <field name="model_id" search="[('model','=','procurement.order')]" model="ir.model"/>
             <field name="groups" eval="[(4, ref('stock.group_stock_user'))]"/>
             <field name="global" eval="0"/>
             <field name="domain_force">[('tests', '=', False),'|',('company_id','child_of',[user.company_id.id]),('company_id','=',False)]</field>
-        </record>
+        </record>-->
 
         <record model="ir.rule" id="stock_move_rule_tests">
              <field name="name">stock_move multi-company tests</field>
@@ -45,12 +45,12 @@
             <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
         </record>
 
-        <record model="ir.rule" id="procurement.procurement_rule_tests">
+        <!--TODO: Migrar<record model="ir.rule" id="procurement.procurement_rule_tests">
             <field name="name">procurement multi-company tests</field>
             <field name="model_id" search="[('model','=','procurement.order')]" model="ir.model"/>
             <field name="groups" eval="[(4, ref('group_test_manager'))]"/>
             <field name="domain_force">['|',('company_id','child_of',[user.company_id.id]),('company_id','=',False)]</field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

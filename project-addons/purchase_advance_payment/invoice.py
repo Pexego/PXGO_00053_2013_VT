@@ -47,13 +47,13 @@ class AccountInvoice(models.Model):
                 if vline.state != 'posted':
                     continue
                 for move in vline.move_ids:
-                    if move.account_id.type in ('receivable',
+                    if move.account_id.internal_type in ('receivable',
                                                 'payable'):
                         if move.reconcile_partial_id:
                             amount += move.amount_residual_currency > \
                                 0 and move.amount_residual_currency \
                                 or 0.0
-                        elif move.reconcile_id:
+                        elif move.full_reconcile_id:
                             continue
                         else:
                             amount += move.amount_currency or \
