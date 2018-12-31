@@ -33,8 +33,8 @@ Sales customer discount
     * Also, added the 'cost margin' and 'commercial margin' of the sale price
     and 'cost margin' and 'commercial margin' of the sale price 2.
 """,
-    "depends": ["base", "product", "stock_account", "pmp_landed_costs",
-                #TODO: Migrar"web_readonly_bypass", "hide_product_variants",
+    "depends": ["base", "product", "stock_account",
+                "hide_product_variants",
                 "purchase"],
     "data": [
         "views/product_view.xml",

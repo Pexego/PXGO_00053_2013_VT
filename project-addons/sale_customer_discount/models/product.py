@@ -80,27 +80,27 @@ class ProductProduct(models.Model):
                     product.margin_pvd_pvi_4 = \
                         ((product.pvd4_price - product.pvi4_price) / product.pvd4_price) * 100
 
-    list_price2 = fields.Float('Sale Price', digits_compute=dp.get_precision('Product Price'))
-    list_price3 = fields.Float('Sale Price 2', digits_compute=dp.get_precision('Product Price'))
-    list_price4 = fields.Float('Sale Price 3', digits_compute=dp.get_precision('Product Price'))
+    list_price2 = fields.Float('Sale Price', digits=dp.get_precision('Product Price'))
+    list_price3 = fields.Float('Sale Price 2', digits=dp.get_precision('Product Price'))
+    list_price4 = fields.Float('Sale Price 3', digits=dp.get_precision('Product Price'))
 
-    commercial_cost = fields.Float('Commercial Cost', digits_compute=dp.get_precision('Product Price'))
+    commercial_cost = fields.Float('Commercial Cost', digits=dp.get_precision('Product Price'))
 
     pvd1_relation = fields.Float('PVP/PVD 1 relation', digits=(4, 2), default=0.5)
     pvd2_relation = fields.Float('PVP 2 / PVD 2 relation', digits=(4, 2), default=0.5)
     pvd3_relation = fields.Float('PVP 3 / PVD 3 relation', digits=(4, 2), default=0.5)
     pvd4_relation = fields.Float('PVP 4 / PVD 4 relation', digits=(4, 2), default=0.5)
 
-    pvd1_price = fields.Float('PVD 1 price', digits_compute=dp.get_precision('Product Price'))
-    pvd2_price = fields.Float('PVD 2 price', digits_compute=dp.get_precision('Product Price'))
-    pvd3_price = fields.Float('PVD 3 price', digits_compute=dp.get_precision('Product Price'))
-    pvd4_price = fields.Float('PVD 4 price', digits_compute=dp.get_precision('Product Price'))
+    pvd1_price = fields.Float('PVD 1 price', digits=dp.get_precision('Product Price'))
+    pvd2_price = fields.Float('PVD 2 price', digits=dp.get_precision('Product Price'))
+    pvd3_price = fields.Float('PVD 3 price', digits=dp.get_precision('Product Price'))
+    pvd4_price = fields.Float('PVD 4 price', digits=dp.get_precision('Product Price'))
 
-    pvi1_price = fields.Float('PVI 1 price', digits_compute=dp.get_precision('Product Price'))
-    pvi2_price = fields.Float('PVI 2 price', digits_compute=dp.get_precision('Product Price'))
-    pvi3_price = fields.Float('PVI 3 price', digits_compute=dp.get_precision('Product Price'))
+    pvi1_price = fields.Float('PVI 1 price', digits=dp.get_precision('Product Price'))
+    pvi2_price = fields.Float('PVI 2 price', digits=dp.get_precision('Product Price'))
+    pvi3_price = fields.Float('PVI 3 price', digits=dp.get_precision('Product Price'))
 
-    pvi4_price = fields.Float('PVI 4 price', digits_compute=dp.get_precision('Product Price'))
+    pvi4_price = fields.Float('PVI 4 price', digits=dp.get_precision('Product Price'))
     margin_pvd1 = fields.Float(computed='_get_margins',
                                string="PVD 1 Margin",
                                digits=(5, 2),
