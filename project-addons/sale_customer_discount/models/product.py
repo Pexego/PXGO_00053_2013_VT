@@ -154,48 +154,48 @@ class ProductProduct(models.Model):
     def pvd1_price_change(self):
         pvd1_relation = 0.5
         if self.pvd1_price:
-            self.list_price = (1.0 / pvd1_relation) * self.pvd1_price
-            self.margin_pvd = (1 - (self.standard_price / self.pvd1_price)) * 100.0
+            self.lst_price = (1.0 / pvd1_relation) * self.pvd1_price
+            self.margin_pvd1 = (1 - (self.standard_price / self.pvd1_price)) * 100.0
             self.margin_pvd_pvi_1 = ((self.pvd1_price - self.pvi1_price) / self.pvd1_price) * 100
         else:
-            self.list_price = 0
-            self.margin_pvd = 0
+            self.lst_price = 0
+            self.margin_pvd1 = 0
             self.margin_pvd_pvi_1 = 0
 
     @api.onchange('pvd2_price')
     def pvd2_price_change(self):
         pvd2_relation = 0.5
         if self.pvd2_price:
-            self.list_price = (1.0 / pvd2_relation) * self.pvd2_price
-            self.margin_pvd = (1 - (self.standard_price / self.pvd2_price)) * 100.0
+            self.list_price2 = (1.0 / pvd2_relation) * self.pvd2_price
+            self.margin_pvd2 = (1 - (self.standard_price / self.pvd2_price)) * 100.0
             self.margin_pvd_pvi_2 = ((self.pvd2_price - self.pvi2_price) / self.pvd2_price) * 100
         else:
-            self.list_price = 0
-            self.margin_pvd = 0
+            self.list_price2 = 0
+            self.margin_pvd2 = 0
             self.margin_pvd_pvi_2 = 0
 
     @api.onchange('pvd3_price')
     def pvd3_price_change(self):
         pvd3_relation = 0.5
         if self.pvd3_price:
-            self.list_price = (1.0 / pvd3_relation) * self.pvd3_price
-            self.margin_pvd = (1 - (self.standard_price / self.pvd3_price)) * 100.0
+            self.list_price3 = (1.0 / pvd3_relation) * self.pvd3_price
+            self.margin_pvd3 = (1 - (self.standard_price / self.pvd3_price)) * 100.0
             self.margin_pvd_pvi_3 = ((self.pvd3_price - self.pvi3_price) / self.pvd3_price) * 100
         else:
-            self.list_price = 0
-            self.margin_pvd = 0
+            self.list_price3 = 0
+            self.margin_pvd3 = 0
             self.margin_pvd_pvi_3 = 0
 
     @api.onchange('pvd4_price')
     def pvd4_price_change(self):
         pvd4_relation = 0.5
         if self.pvd4_price:
-            self.list_price = (1.0 / pvd4_relation) * self.pvd4_price
-            self.margin_pvd = (1 - (self.standard_price / self.pvd4_price)) * 100.0
+            self.list_price4 = (1.0 / pvd4_relation) * self.pvd4_price
+            self.margin_pvd4 = (1 - (self.standard_price / self.pvd4_price)) * 100.0
             self.margin_pvd_pvi_4 = ((self.pvd4_price - self.pvi4_price) / self.pvd4_price) * 100
         else:
-            self.list_price = 0
-            self.margin_pvd = 0
+            self.list_price4 = 0
+            self.margin_pvd4 = 0
             self.margin_pvd_pvi_4 = 0
 
     @api.onchange('pvi1_price')

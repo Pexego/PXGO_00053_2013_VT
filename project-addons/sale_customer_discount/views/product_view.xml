@@ -24,9 +24,6 @@
                     <attribute name="invisible">1</attribute>
                 </field>
                 <field name="attribute_value_ids" position="replace"/>
-                <!--TODO: Migrar<field name="ean13" position="after">
-                    <field name="categ_id"/>
-                </field>-->
             </field>
         </record>
 
@@ -48,8 +45,6 @@
             <field eval="1" name="priority"/>
             <field name="inherit_id" ref="product.product_normal_form_view"/>
             <field name="arch" type="xml">
-                <!--xpath expr="//page[@string='Procurements']/group/group" position="replace"/-->
-
                 <field name="lst_price" position="replace"/>
                 <field name="standard_price" position="replace"/>
                 <xpath expr="//group[@name='group_standard_price']/label" position="attributes">
