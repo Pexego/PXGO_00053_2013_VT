@@ -189,10 +189,10 @@ class StockMove(models.Model):
                                                 uom_categ_id.id),
                                                ('factor', '=', 1)])[0]
 
-    weight = fields.Float('Weight', compute='_cal_move_weight',
+    weight = fields.Float('Weight', compute='cal_move_weight',
                           digits=dp.get_precision('Stock Weight'),
                           store=True, readonly=False)
-    weight_net = fields.Float('Net weight', compute='_cal_move_weight',
+    weight_net = fields.Float('Net weight', compute='cal_move_weight',
                               digits=dp.get_precision('Stock Weight'),
                               store=True, readonly=False)
     weight_st = fields.Float(digits=dp.get_precision('Stock Weight'))
