@@ -222,7 +222,7 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="crm_rma_advance_location_form_view_inherit">
+        <!-- <record model="ir.ui.view" id="crm_rma_advance_location_form_view_inherit">
             <field name="name">Claims Form wizard</field>
             <field name="model">crm.claim</field>
             <field name="inherit_id" ref="crm_rma_advance_location.crm_claim_rma_form_view"/>
@@ -231,10 +231,10 @@
               <xpath expr="//button[@string='New Product Loss']" position="after">
                     <button name="button_update_lines_wizard" type="object" string="Update RMA lines"
                      attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
-              </xpath>
+              </xpath> TODO: Migrar
 
             </field>
-        </record>
+        </record> -->
 
         <!--Wizard to update rma lines-->
         <record model="ir.ui.view" id="claim_line_update_view">
