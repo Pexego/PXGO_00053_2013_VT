@@ -11,7 +11,7 @@ class SaleOrderLine(models.Model):
 
         res = super(SaleOrderLine, self).product_id_change()
 
-        if self.product_id:
+        if self.product_id and self.product_uom_qty % self.product_id.sale_in_groups_of != 0:
             self.product_uom_qty = self.product_id.sale_in_groups_of
 
         return res
