@@ -19,9 +19,9 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 from datetime import datetime, time
-from openerp.exceptions import ValidationError
+from odoo.exceptions import ValidationError
 
 
 
