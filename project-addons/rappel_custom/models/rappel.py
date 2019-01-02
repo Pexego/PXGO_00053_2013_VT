@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -25,7 +24,7 @@ from calendar import monthrange
 from dateutil.relativedelta import relativedelta
 
 
-class rappel_calculated(models.Model):
+class RappelCalculated(models.Model):
 
     _inherit = 'rappel.calculated'
 
@@ -68,11 +67,12 @@ class rappel_calculated(models.Model):
                         account_id = fpos.map_account(account_id)
                         taxes_ids = fpos.map_tax(taxes_ids)
                     tax_ids = [(6, 0, [x.id for x in taxes_ids])]
+                    # TODO -> probar cambio para pasar variables a un string con format()
                     invoice_line_obj.create({'product_id': rappel_product.id,
-                                             'name': u'%s (%s-%s)' %
-                                                     (rp.rappel_id.description,
-                                                      rp.date_start,
-                                                      rp.date_end),
+                                             'name': u'{0} ({1}-{2})'.format(
+                                                            rp.rappel_id.name,
+                                                            rp.date_start,
+                                                            rp.date_end),
                                              'invoice_id': invoice.id,
                                              'account_id': account_id.id,
                                              'invoice_line_tax_id': tax_ids,
@@ -88,7 +88,7 @@ class rappel_calculated(models.Model):
 
 class ResPartnerRappelRel(models.Model):
 
-    _inherit = "res.partner.rappel.rel"
+    _inherit = 'res.partner.rappel.rel'
 
     @api.multi
     def _get_next_period(self):
@@ -174,7 +174,7 @@ class ResPartnerRappelRel(models.Model):
                     total_rappel = rappel.rappel_id.fix_qty
                 else:
                     total = sum([x.price_subtotal for x in invoice_lines]) - \
-                        sum([x.price_subtotal for x in refund_lines])
+                            sum([x.price_subtotal for x in refund_lines])
                     qty_pickings = rappel._calculate_qty_picking()
                     total_est = total + qty_pickings
                     if total:
@@ -194,13 +194,14 @@ class ResPartnerRappelRel(models.Model):
                     field = 'quantity'
                 qty_pickings = rappel._calculate_qty_picking()
                 total = sum([x[field] for x in invoice_lines]) - \
-                    sum([x[field] for x in refund_lines])
+                        sum([x[field] for x in refund_lines])
                 total_est = total + qty_pickings
                 rappel_info["curr_qty"] = total
                 rappel_info["curr_qty_pickings"] = qty_pickings
 
                 if self.partner_id.invoice_type_id.name in ('Mensual', 'Quincenal', 'Semanal') and total_est:
-                    rappel_info, goal_percentage, total_rappel = self.compute_total(rappel, total_est, rappel_info, True)
+                    rappel_info, goal_percentage, total_rappel = self.compute_total(rappel, total_est, rappel_info,
+                                                                                    True)
                 else:
                     rappel_info['amount_est'] = 0.0
 
@@ -283,9 +284,10 @@ class ResPartnerRappelRel(models.Model):
         return rappel_info, goal_percentage, total_rappel
 
 
-class rappel(models.Model):
+class Rappel(models.Model):
 
     _inherit = 'rappel'
+
     brand_ids = fields.Many2many('product.brand', 'rappel_product_brand_rel',
                                  'rappel_id', 'product_brand_id', 'Brand')
     discount_voucher = fields.Boolean('Discount voucher')
@@ -332,7 +334,7 @@ class rappel(models.Model):
         start_next_month = (now + relativedelta(months=1)).strftime("%Y-%m") + '-01'
 
         discount_voucher_rappels = rappel_obj.search([('discount_voucher', '=', True)])
-        
+
         for rappel in discount_voucher_rappels:
             pricelist_ids = tuple(rappel.pricelist_ids.ids)
             partner_pricelist = tuple(partner_obj.search([('property_product_pricelist', 'in', pricelist_ids),
@@ -373,12 +375,12 @@ class rappel(models.Model):
             ordered_rappels = self.search([], order='sequence')
         else:
             ordered_rappels = self.sorted(key=lambda x: x.sequence)
-        super(rappel, ordered_rappels).compute_rappel()
+        super(Rappel, ordered_rappels).compute_rappel()
 
 
 class RappelInvoice(models.TransientModel):
 
-    _inherit = "rappel.invoice.wzd"
+    _inherit = 'rappel.invoice.wzd'
 
     @api.multi
     def action_invoice(self):
@@ -401,7 +403,7 @@ class RappelInvoice(models.TransientModel):
 
 class RappelCurrentInfo(models.Model):
 
-    _inherit = "rappel.current.info"
+    _inherit = 'rappel.current.info'
 
     curr_qty_pickings = fields.Float("Qty pending invoice", readonly=True,
                                      help="Qty estimation in pickings pending to be invoiced (shipping cost and"
@@ -436,15 +438,15 @@ class RappelCurrentInfo(models.Model):
 
                         if rappel_timing.advice_timing == 'variable':
 
-                            timing = (date_end - date_start).days*rappel_timing.timing/100
-                            timing2= (today - date_start).days
+                            timing = (date_end - date_start).days * rappel_timing.timing / 100
+                            timing2 = (today - date_start).days
 
                             if timing == timing2:
                                 send = True
 
                         if send == True and rappel.curr_qty:
                             if values.get(partner.id):
-                                values[partner.id].append ({
+                                values[partner.id].append({
                                     'concepto': rappel.rappel_id.name,
                                     'date_start': date_start.strftime('%d/%m/%Y'),
                                     'date_end': date_end.strftime('%d/%m/%Y'),
@@ -489,8 +491,9 @@ class RappelCurrentInfo(models.Model):
 
 class ComputeRappelInvoice(models.TransientModel):
 
-    _inherit = "rappel.invoice.wzd"
+    _inherit = 'rappel.invoice.wzd'
 
+    # TODO -> Unificar esto con la otra definición del modelo en este archivo
     @api.multi
     def action_invoice(self):
         res = super(ComputeRappelInvoice, self).action_invoice()
@@ -498,9 +501,9 @@ class ComputeRappelInvoice(models.TransientModel):
         for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
             if rappel.invoice_id:
                 for line in rappel.invoice_id.invoice_line:
-                    line.write({'name': u'%s (%s-%s)' %
-                                        (rappel.rappel_id.description,
-                                         rappel.date_start,
-                                         rappel.date_end)})
+                    # TODO -> probar cambio para pasar variables a un string con format()
+                    line.write({'name': u'{0} ({1}-{2})'.format(
+                                                            rappel.rappel_id.description,
+                                                            rappel.date_start,
+                                                            rappel.date_end)})
         return res
-

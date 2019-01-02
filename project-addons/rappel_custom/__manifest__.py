@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -20,18 +19,12 @@
 ##############################################################################
 
 {
-    'name': "Partner custom",
+    'name': "Rappel custom",
     'version': '1.0',
     'category': 'Custom',
-    'description': """Several little customizations in partners""",
-    'author': 'Comunitea Servicios Tecnológicos',
-    'website': 'www.comunitea.com',
-    "depends": ['base', 'sale', 'l10n_es_partner', 'account',
-                'base_partner_sequence', 'stock', 'account_credit_control',
-                'purchase', 'purchase_advance_payment',
-                'account_due_list', 'rappel', 'product_brand', 'customer_lost'],
-    "data": ["partner_view.xml", "stock_view.xml",
-             "security/ir.model.access.csv", "sale_view.xml",
-             "data/custom_partner_data.xml", "rappel_view.xml"],
+    'description': """Several little customizations in rappels""",
+    'author': 'Nadia Ferreyra',
+    "depends": ['base', 'rappel', 'product_brand'],
+    "data": ["views/rappel_view.xml"],
     "installable": True
 }

@@ -18,4 +18,19 @@
 #
 ##############################################################################
 
-from . import models
+{
+    'name': "Partner custom",
+    'version': '1.0',
+    'category': 'Custom',
+    'description': """Several little customizations in partners""",
+    'author': 'Comunitea Servicios Tecnológicos',
+    'website': 'www.comunitea.com',
+    "depends": ['base', 'sale', 'l10n_es_partner', 'account',
+                'base_partner_sequence', 'stock', 'account_credit_control',
+                'purchase', 'purchase_advance_payment',
+                'account_due_list', 'customer_lost'],
+    "data": ["views/partner_view.xml", "views/stock_view.xml",
+             "security/ir.model.access.csv", "views/sale_view.xml",
+             "data/custom_partner_data.xml"],
+    "installable": True
+}

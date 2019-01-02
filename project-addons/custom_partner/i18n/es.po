@@ -361,25 +361,10 @@ msgid "Client Order Ref."
 msgstr "Referencia Cliente"
 
 #. module: custom_partner
-#: field:rappel.calculated,goal_percentage:0
-msgid "Goal Percentage"
-msgstr "Porcentaje de cumplimiento"
-
-#. module: custom_partner
-#: field:rappel,brand_ids:0
-msgid "Brand"
-msgstr "Marca"
-
-#. module: custom_partner
 #: code:addons/custom_partner/partner.py:76
 #, python-format
 msgid "Product, brand and category are empty"
 msgstr "El producto, la marca y la categoría están vacíos"
-
-#. module: custom_partner
-#: view:rappel:custom_partner.rappel_form_add_brand
-msgid "You must fill in only one of the following fields to define the validity area of rappel:"
-msgstr "Debe rellenar solamente uno de los siguientes datos para definir el ámbito de validez del rappel:"
 
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:643
@@ -392,21 +377,6 @@ msgstr "¡Advertencia!"
 #, python-format
 msgid "Remember to set our partner email, not dropship email!"
 msgstr "¡Recuerde poner el correo de nuestro cliente, no del cliente final (dropship)!"
-
-#. module: custom_partner
-#: help:rappel.current.info,curr_qty_pickings:0
-msgid "Qty estimation in pickings pending to be invoiced (shipping cost and product with no-rappel check in the order are not verified)"
-msgstr "Cantidad estimada en albaranes pendientes de ser facturados (gastos de envío y productos con el check no-rappel en el pedido no se verifican) "
-
-#. module: custom_partner
-#: field:rappel.current.info,curr_qty_pickings:0
-msgid "Qty pending invoice"
-msgstr "Cant. pendiente de facturar"
-
-#. module: custom_partner
-#: view:rappel.current.info:custom_partner.view_rappel_current_info_tree_add_qty_picking
-msgid "Curr. qty invoiced"
-msgstr "Cant. act. facturada"
 
 #. module: custom_partner
 #: field:res.partner,current_global_invoiced:0
@@ -454,12 +424,3 @@ msgstr "Referencia de pago"
 msgid "Email web must be unique"
 msgstr "El email web debe ser único"
 
-#. module: custom_partner
-#: field:rappel.current.info,amount_est:0
-msgid "Estimated amount"
-msgstr "Importe estimado"
-
-#. module: custom_partner
-#: field:rappel,description:0
-msgid "Description"
-msgstr "Descripción"

@@ -1,0 +1,56 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * rappel_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-31 08:30+0000\n"
+"PO-Revision-Date: 2018-10-31 08:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: rappel_custom
+#: field:rappel.calculated,goal_percentage:0
+msgid "Goal Percentage"
+msgstr "Porcentaje de cumplimiento"
+
+#. module: rappel_custom
+#: field:rappel,brand_ids:0
+msgid "Brand"
+msgstr "Marca"
+
+#. module: rappel_custom
+#: view:rappel:custom_partner.rappel_form_add_brand
+msgid "You must fill in only one of the following fields to define the validity area of rappel:"
+msgstr "Debe rellenar solamente uno de los siguientes datos para definir el ámbito de validez del rappel:"
+
+#. module: rappel_custom
+#: help:rappel.current.info,curr_qty_pickings:0
+msgid "Qty estimation in pickings pending to be invoiced (shipping cost and product with no-rappel check in the order are not verified)"
+msgstr "Cantidad estimada en albaranes pendientes de ser facturados (gastos de envío y productos con el check no-rappel en el pedido no se verifican) "
+
+#. module: rappel_custom
+#: field:rappel.current.info,curr_qty_pickings:0
+msgid "Qty pending invoice"
+msgstr "Cant. pendiente de facturar"
+
+#. module: rappel_custom
+#: view:rappel.current.info:custom_partner.view_rappel_current_info_tree_add_qty_picking
+msgid "Curr. qty invoiced"
+msgstr "Cant. act. facturada"
+
+#. module: rappel_custom
+#: field:rappel.current.info,amount_est:0
+msgid "Estimated amount"
+msgstr "Importe estimado"
+
+#. module: custom_partner
+#: field:rappel,description:0
+msgid "Description"
+msgstr "Descripción"
