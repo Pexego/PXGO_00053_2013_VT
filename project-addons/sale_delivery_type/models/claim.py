@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
@@ -22,7 +21,7 @@
 from odoo import models, fields
 
 
-class crm_claim(models.Model):
+class CrmClaim(models.Model):
     _inherit = 'crm.claim'
 
     delivery_type = fields.Selection([
