@@ -33,8 +33,8 @@ Sales delivery type
 """,
     "depends": ["base", "sale", "crm_claim_rma_custom"],
     "data": [
-        "sale_view.xml",
-        "claim_view.xml"
+        "views/sale_view.xml",
+        "views/claim_view.xml"
     ],
     "demo": [],
     'auto_install': False,
