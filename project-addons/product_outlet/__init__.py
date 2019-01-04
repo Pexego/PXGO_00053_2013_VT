@@ -20,4 +20,5 @@
 ##############################################################################
 
 from . import wizard
-from . import product
+from . import models
+
