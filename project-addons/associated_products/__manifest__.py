@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -26,11 +25,11 @@
     'description': """This module adds associated products""",
     'author': 'Pexego Sistemas Informáticos',
     'website': '',
-    "depends" : ["base",
-                 "product",
-                 "sale",
-                 "sale_commission"],
-    "data" : ["security/ir.model.access.csv",
-              "product_view.xml"],
+    "depends": ['base',
+                'product',
+                'sale',
+                'sale_commission'],
+    "data": ['security/ir.model.access.csv',
+              'views/product_view.xml'],
     "installable": True
 }
