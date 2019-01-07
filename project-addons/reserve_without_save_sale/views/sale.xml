@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_line_add_auxiliar_field" model="ir.ui.view">
+        <field name="name">sale.order.line.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/form/group/group/field[@name='product_id']" position="after">
+                <field name="unique_js_id" invisible="0"/>
+                <field name="temp_unique_js_id" invisible="0"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
+                <field name="unique_js_id" invisible="1"/>
+                <field name="temp_unique_js_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'not in', ['reserve'])]}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+                <attribute name="attrs"></attribute>
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <button name="action_cancel" position="attributes">
+                <attribute name="states">draft,sent,reserve</attribute>
+            </button>
+            <button name="print_quotation" position="after">
+                <button name="print_quotation" string="Print" type="object" states="reserve" class="o_sale_print"/>
+                <button name="action_quotation_send" string="Send by Email" type="object" states="reserve"/>
+            </button>
+
+            <button name="%(stock_reserve_sale.action_sale_stock_reserve)d" position="replace">
+                <button name="order_reserve"
+                    type="object"
+                    string="Reserve Stock"
+                    states="draft,sent"
+                    />
+            </button>
+            <button name="release_all_stock_reservation" position="replace"></button>
+        </field>
+    </record>
+
+
+    <template id="assets_backend" name="sales_team assets" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/reserve_without_save_sale/static/src/js/sale_order_line.js"></script>
+            </xpath>
+    </template>
+
+</odoo>

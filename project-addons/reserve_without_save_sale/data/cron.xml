@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data noupdate="1">
+<odoo noupdate="1">
 
-        <record forcecreate="True" id="ir_cron_delete_orphan_reserves" model="ir.cron">
-            <field name="name">Delete orphan reserves</field>
-            <field eval="True" name="active"/>
-            <field name="user_id" ref="base.user_root"/>
-            <field name="interval_number">30</field>
-            <field name="interval_type">minutes</field>
-            <field name="numbercall">-1</field>
-            <field eval="False" name="doall"/>
-            <field eval="'stock.reservation'" name="model"/>
-            <field eval="'delete_orphan_reserves'" name="function"/>
-        </record>
+    <record forcecreate="True" id="ir_cron_delete_orphan_reserves" model="ir.cron">
+        <field name="name">Delete orphan reserves</field>
+        <field eval="True" name="active"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">30</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall"/>
+        <field name="state">code</field>
+        <field name="model_id" ref="model_stock_reservation"/>
+        <field name="code">model.delete_orphan_reserves()</field>
+    </record>
 
-    </data>
-</openerp>
+</odoo>
