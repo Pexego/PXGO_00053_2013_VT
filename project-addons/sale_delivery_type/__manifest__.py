@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
-#    $Omar Castiñeira Saavedra$ <omar@comunitea.com>
+#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,14 +18,27 @@
 #
 ##############################################################################
 
-from odoo import models, fields
+{
+    "name": "Sale delivery type",
+    "version": "1.0",
+    "author": "Pexego",
+    'website': 'www.pexego.es',
+    "category": "Sales",
+    "description": """
+Sales delivery type
+========================================
 
-
-class crm_claim(models.Model):
-    _inherit = 'crm.claim'
-
-    delivery_type = fields.Selection([
-            ('shipping', 'Shipping'),
-            ('carrier', 'Carrier - Customer'),
-            ('installations', 'Pickup in installations'), ],
-            'Delivery type', required=True, default='shipping')
+    * Add the delivery type field to sales.
+""",
+    "depends": ["base", "sale"
+        # TODO, "crm_claim_rma_custom"
+                ],
+    "data": [
+        "views/sale_view.xml",
+        "views/claim_view.xml"
+    ],
+    "demo": [],
+    'auto_install': False,
+    "installable": True,
+    'images': [],
+}
