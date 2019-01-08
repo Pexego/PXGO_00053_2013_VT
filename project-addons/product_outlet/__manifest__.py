@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -31,6 +30,7 @@
                 'stock',
                 'equivalent_products'],
     "data": ['data/product_data.xml',
+             'data/cron.xml',
              'wizard/product_outlet_wizard_view.xml'],
     "installable": True
 }

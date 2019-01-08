@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,7 +18,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
+
 
 class ProductCategory(models.Model):
 
@@ -28,17 +28,19 @@ class ProductCategory(models.Model):
     percent = fields.Float(string="Outlet Percent",
                            help="This outlet percent will be used when a product moves to an outlet category")
 
-    @api.one
+    @api.multi
     @api.constrains('percent')
     def check_length(self):
-        percent = self.percent
-        if (percent > 100) | (percent < 0):
-            raise exceptions. \
-                ValidationError(_('Error ! The outlet percent values must be between 0 and 100'))
+        for categ in self:
+            percent = categ.percent
+            if (percent > 100) | (percent < 0):
+                raise exceptions. \
+                    ValidationError(_('Error ! The outlet percent values must be between 0 and 100'))
         return True
 
-class product_outlet_wizard(models.TransientModel):
-    _name = "product.outlet.wizard"
+
+class ProductOutletWizard(models.TransientModel):
+    _name = 'product.outlet.wizard'
 
     @api.model
     def _get_default_warehouse(self):
@@ -76,11 +78,11 @@ class product_outlet_wizard(models.TransientModel):
     percent = fields.Float(string="Percent",
                            help="This percent will be used when a product moves to an outlet category")
 
+    @api.onchange('categ_id')
     @api.multi
-    def onchange_percent(self, category_id):
+    def onchange_percent(self):
         if self.state == 'last':
-            percent = self.env['product.category'].browse(category_id).percent
-            return {'value': {'percent': percent}}
+            self.percent = self.env['product.category'].browse(self.categ_id).percent
 
     @api.onchange('warehouse_id')
     def onchange_warehouse(self):
@@ -196,9 +198,9 @@ class product_outlet_wizard(models.TransientModel):
                                         self.env.user.company_id.partner_id.id,
                                     'name': "OUTLET"})
 
-        move_out.action_confirm()
-        move_out.action_assign()
-        move_out.picking_id.not_sync = True
-        move_out.picking_id.odoo_management = True
-        move_in.action_confirm()
+        move_out._action_confirm()
+        move_out._action_assign()
+        #TODO: migrar crm_claim_rma_custom move_out.picking_id.not_sync = True
+        #TODO: migrar crm_claim_rma_custom move_out.picking_id.odoo_management = True
+        move_in._action_confirm()
         return {'type': 'ir.actions.act_window_close'}
