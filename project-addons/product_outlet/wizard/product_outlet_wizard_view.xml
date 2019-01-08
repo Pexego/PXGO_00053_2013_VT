@@ -5,19 +5,24 @@
         <field name="model">product.outlet.wizard</field>
         <field name="arch" type="xml">
             <form string="Send product to wizard">
-                <group>
-                    <field invisible="1" name="state" />
-                    <field name="warehouse_id"/>
-                    <field name="location_orig_id"/>
+                <field invisible="1" name="state" />
+                    <group>
+                        <field name="warehouse_id"/>
+                        <field name="location_orig_id"/>
+                    </group>
+                    <separator/>
                     <group states="first">
                     </group>
                     <group states="last">
-                        <field name="qty"/>
-                        <field name="categ_id" attrs="{'required': [('state', '=', 'last')]}"/>
-                        <field name="ean13"/>
-                        <group><field name="percent" readonly="1"/></group>
+                        <group>
+                            <field name="qty"/>
+                            <field name="categ_id" attrs="{'required': [('state', '=', 'last')]}"/>
+                            <field name="ean13"/>
+                        </group>
+                        <group>
+                            <field name="percent" readonly="1"/>
+                        </group>
                     </group>
-                </group>
                 <footer>
                     <button string="Send outlet" name="make_move" type="object"/>
                     <button string="Cancel" special="cancel"/>
