@@ -1,33 +1,38 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2014 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-
-from openerp import fields, models, api
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import fields, models, api
 
 
-class sale_order_line(models.Model):
+class SaleOrder(models.Model):
+
+    _inherit = 'sale.order'
+
+    state = fields.Selection(selection_add=[('reserve', 'Reserved')])
+
+    @api.model
+    def create(self, vals):
+        res = super().create(vals)
+        if res.state == 'reserve':
+            res.order_reserve()
+        return res
+
+    def order_reserve(self):
+        self.write({'state': 'reserve'})
+        lines = self.mapped('order_line').filtered(
+            lambda r: r.product_id and r.product_id.type != 'service')
+        lines.stock_reserve()
+        return True
+
+
+class SaleOrderLine(models.Model):
 
     _inherit = 'sale.order.line'
 
     unique_js_id = fields.Char('', size=64, copy=False)
     temp_unique_js_id = fields.Char('', size=64, copy=False)
+
+    def _test_block_on_reserve(self, vals):
+        super()._test_block_on_reserve(vals)
+        return False
 
     @api.multi
     def write(self, vals):
@@ -56,21 +61,23 @@ class sale_order_line(models.Model):
                     ctx['later'] = True
                 vals['unique_js_id'] = temp_unique_js_id
                 vals['temp_unique_js_id'] = ''
-        return super(sale_order_line, self.with_context(ctx)).write(vals)
+        return super(SaleOrderLine, self.with_context(ctx)).write(vals)
 
     @api.model
     def create(self, vals):
+        context2 = dict(self._context)
+        context2.pop('default_state', False)
         if vals.get('temp_unique_js_id', False):
             vals['unique_js_id'] = vals['temp_unique_js_id']
             vals.pop('temp_unique_js_id', None)
-            res = super(sale_order_line, self).create(vals)
+            res = super(SaleOrderLine, self.with_context(context2)).create(vals)
             reserve = self.env['stock.reservation'].search(
                 [('unique_js_id', '=', res.unique_js_id)])
             if reserve:
                 reserve.sale_line_id = res.id
                 reserve.origin = res.order_id.name
         else:
-            res = super(sale_order_line, self).create(vals)
+            res = super(SaleOrderLine, self.with_context(context2)).create(vals)
         return res
 
     @api.multi
@@ -96,7 +103,7 @@ class sale_order_line(models.Model):
                         reserves[0].sale_line_id = line.id
                         reserves[0].origin = line.order_id.name
 
-        return super(sale_order_line, self).read(fields=fields, load=load)
+        return super().read(fields=fields, load=load)
 
     @api.multi
     def unlink(self):
@@ -109,11 +116,23 @@ class sale_order_line(models.Model):
                 reserve = self.env['stock.reservation'].search(
                     [('unique_js_id', '=', line.temp_unique_js_id)])
                 reserve.unlink()
-        return super(sale_order_line, self).unlink()
+        return super().unlink()
 
-    @api.multi
     def stock_reserve(self):
         if self.env.context.get('later', False):
             return True
-        else:
-            return super(sale_order_line, self).stock_reserve()
+
+        for line in self:
+            if line.order_id.state in ('draft', 'sent', 'progress', 'done',
+                                       'manual'):
+                continue
+            if not line.is_stock_reservable:
+                continue
+            if line.reservation_ids:
+                for reserve in line.reservation_ids:
+                    reserve.reassign()
+            else:
+                vals = line._prepare_stock_reservation()
+                reservation = self.env['stock.reservation'].create(vals)
+                reservation.reserve()
+        return True

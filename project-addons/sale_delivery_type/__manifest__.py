@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -31,10 +30,12 @@ Sales delivery type
 
     * Add the delivery type field to sales.
 """,
-    "depends": ["base", "sale", "crm_claim_rma_custom"],
+    "depends": ["base", "sale"
+        # TODO, "crm_claim_rma_custom"
+                ],
     "data": [
-        "sale_view.xml",
-        "claim_view.xml"
+        "views/sale_view.xml",
+        "views/claim_view.xml"
     ],
     "demo": [],
     'auto_install': False,

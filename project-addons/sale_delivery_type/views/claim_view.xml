@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-
-        <record model="ir.ui.view" id="crm_case_claims_form_view_inherit_add_delivery_type">
+        <!--TODO Migrar record model="ir.ui.view" id="crm_case_claims_form_view_inherit_add_delivery_type">
             <field name="name">CRM - Claims Form</field>
             <field name="model">crm.claim</field>
             <field name="inherit_id" ref="crm_claim_rma_custom.crm_case_claims_form_view_inherit"/>
@@ -11,7 +10,6 @@
                 <field name="delivery_type"/>
               </field>
             </field>
-        </record>
-
+        </record-->
     </data>
-</openerp>
+</odoo>

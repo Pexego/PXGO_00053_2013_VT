@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra$ <omar@comunitea.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,14 +18,14 @@
 #
 ##############################################################################
 
-{
-    'name': "reserve without save sale",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Reserves stock for sales before save it""",
-    'author': 'Pexego',
-    'website': 'www.pexego.es',
-    "depends": ['base', 'web', 'sale', 'stock_reserve', 'stock_reserve_sale'],
-    "data": ['sale_view.xml', 'data/cron.xml'],
-    "installable": True
-}
+from odoo import models, fields
+
+
+class CrmClaim(models.Model):
+    _inherit = 'crm.claim'
+
+    delivery_type = fields.Selection([
+            ('shipping', 'Shipping'),
+            ('carrier', 'Carrier - Customer'),
+            ('installations', 'Pickup in installations'), ],
+            'Delivery type', required=True, default='shipping')
