@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,11 +18,11 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 from datetime import datetime, time
-from openerp.exceptions import ValidationError
+from odoo.exceptions import ValidationError
 
-class product_outlet_wizard(models.TransientModel):
+class ProductOutletWizard(models.TransientModel):
     _inherit = 'product.outlet.wizard'
 
     #~ price_unit = fields.Float(
@@ -44,17 +43,23 @@ class product_outlet_wizard(models.TransientModel):
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price2)
 
-    list_price = fields.Float(
+    lst_price = fields.Float(
         'Price PVP',
         readonly=True,
         default=lambda self:
-        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price)
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).lst_price)
 
     list_price3 = fields.Float(
         'Price PVP 3',
         readonly=True,
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price3)
+
+    # list_price4 = fields.Float(
+    #     'Price PVP 4',
+    #     readonly=True,
+    #     default=lambda self:
+    #     self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price4)
 
     pvd1_price = fields.Float(
         'Price PVD 1',
@@ -74,6 +79,12 @@ class product_outlet_wizard(models.TransientModel):
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).pvd3_price)
 
+    # pvd4_price = fields.Float(
+    #     'Price PVD 4',
+    #     readonly=True,
+    #     default=lambda self:
+    #     self.env['product.product'].browse(self.env.context.get('active_id', False)).pvd4_price)
+
     pvi1_price = fields.Float(
         'Price PVI 1',
         readonly=True,
@@ -91,6 +102,12 @@ class product_outlet_wizard(models.TransientModel):
         readonly=True,
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).pvi3_price)
+
+    # pvi4_price = fields.Float(
+    #     'Price PVI 4',
+    #     readonly=True,
+    #     default=lambda self:
+    #     self.env['product.product'].browse(self.env.context.get('active_id', False)).pvi4_price)
 
     commercial_cost = fields.Float(
         'Commercial Cost',
@@ -120,7 +137,7 @@ class product_outlet_wizard(models.TransientModel):
         outlet_product_selected = []
 
         if self.state == "first":
-            res = super(product_outlet_wizard, self).make_move()
+            res = super(ProductOutletWizard, self).make_move()
         else:
             if product.qty_available < self.qty:
                 raise ValidationError(_("Qty to outlet must be <= qty available"))
@@ -131,7 +148,7 @@ class product_outlet_wizard(models.TransientModel):
                 [('default_code', '=', self.product_id.name + category_selected.name)]
             )
 
-            res = super(product_outlet_wizard, self).make_move()
+            res = super(ProductOutletWizard, self).make_move()
 
             if self.state == "last":
                 act_prod = True
@@ -145,6 +162,9 @@ class product_outlet_wizard(models.TransientModel):
                 price_outlet3 = self.list_price3 - (self.list_price3 *
                                                     (category_selected.percent / 100))
 
+                price_outlet4 = self.list_price4 - (self.list_price4 *
+                                                    (category_selected.percent / 100))
+
                 price_outlet_pvd = self.pvd1_price - (self.pvd1_price *
                                                       (category_selected.percent / 100))
 
@@ -154,6 +174,9 @@ class product_outlet_wizard(models.TransientModel):
                 price_outlet_pvd3 = self.pvd3_price - (self.pvd3_price *
                                                        (category_selected.percent / 100))
 
+                price_outlet_pvd4 = self.pvd4_price - (self.pvd4_price *
+                                                       (category_selected.percent / 100))
+
                 price_outlet_pvi = self.pvi1_price - (self.pvi1_price *
                                                       (category_selected.percent / 100))
 
@@ -161,6 +184,9 @@ class product_outlet_wizard(models.TransientModel):
                                                        (category_selected.percent / 100))
 
                 price_outlet_pvi3 = self.pvi3_price - (self.pvi3_price *
+                                                       (category_selected.percent / 100))
+
+                price_outlet_pvi4 = self.pvi4_price - (self.pvi4_price *
                                                        (category_selected.percent / 100))
 
         outlet_product = self.env['product.product'].search(
@@ -192,14 +218,17 @@ class product_outlet_wizard(models.TransientModel):
                     'standard_price': price_outlet,
                     'list_price2': price_outlet2,
                     'list_price3': price_outlet3,
+                    'list_price4': price_outlet4,
                     'commercial_cost': self.commercial_cost,
                     'list_price': price_outlet,
                     'pvd1_price': price_outlet_pvd,
                     'pvd2_price': price_outlet_pvd2,
                     'pvd3_price': price_outlet_pvd3,
+                    'pvd4_price': price_outlet_pvd4,
                     'pvi1_price': price_outlet_pvi,
                     'pvi2_price': price_outlet_pvi2,
-                    'pvi3_price': price_outlet_pvi3
+                    'pvi3_price': price_outlet_pvi3,
+                    'pvi4_price': price_outlet_pvi4
                 }
                 outlet_product.write(values)
 

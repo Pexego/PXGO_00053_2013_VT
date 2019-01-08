@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -21,23 +20,19 @@
 ##############################################################################
 
 
-from openerp import models, fields, api, exceptions
+from odoo import models, fields, api, exceptions
 from datetime import date
-from openerp.exceptions import ValidationError
-
-
-from openerp import models
+from odoo.exceptions import ValidationError
 
 
 class SaleOrder(models.Model):
 
-    _inherit = "sale.order"
+    _inherit = 'sale.order'
 
     @api.multi
     def action_button_confirm(self):
 
         res = super(SaleOrder, self).action_button_confirm()
-
 
         if self:
             for line in self.order_line:
@@ -52,7 +47,6 @@ class SaleOrder(models.Model):
                         'order_line_id': line.id
                     }
                     nuevo = self.env['outlet.loss'].create(values)
-
 
         return res
 

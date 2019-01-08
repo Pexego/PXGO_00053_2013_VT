@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,15 +18,14 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api
-from openerp.exceptions import ValidationError
+from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 
-class res_company(models.Model):
-    _inherit = "res.company"
+class ResCompany(models.Model):
+    _inherit = 'res.company'
 
-    outlet_per_cent = fields.Float("% Outlet Devalue", default = 100)
-
+    outlet_per_cent = fields.Float("% Outlet Devalue", default=100)
 
     @api.constrains('outlet_per_cent')
     def _check_outlet_per_cent(self):
