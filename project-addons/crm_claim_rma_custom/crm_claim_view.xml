@@ -222,43 +222,6 @@
             </field>
         </record>
 
-        <record model="ir.ui.view" id="crm_rma_advance_location_form_view_inherit">
-            <field name="name">Claims Form wizard</field>
-            <field name="model">crm.claim</field>
-            <field name="inherit_id" ref="crm_rma_advance_location.crm_claim_rma_form_view"/>
-            <field name="arch" type="xml">
-
-              <xpath expr="//button[@string='New Product Loss']" position="after">
-                    <button name="button_update_lines_wizard" type="object" string="Update RMA lines"
-                     attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
-              </xpath>
-
-            </field>
-        </record>
-
-        <!--Wizard to update rma lines-->
-        <record model="ir.ui.view" id="claim_line_update_view">
-            <field name="name">claim_line_update</field>
-            <field name="model">claim.line</field>
-            <field name="arch" type="xml">
-                <form>
-                    <separator string="Update data" colspan="4"/>
-                    <group>
-                        <field name="substate_id"/>
-                        <field name="claim_origine"/>
-                        <field name="partner_id" invisible="1"/>
-                        <field name="invoice_id" domain="[('partner_id', 'child_of', [partner_id]),('state', '!=', 'draft')]"/>
-                    </group>
-
-                    <footer>
-                        <button name="button_update_lines" string="Update" type="object" class="oe_highlight"/>
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </footer>
-                </form>
-            </field>
-        </record>
-
         <record model="ir.ui.view" id="crm_case_claims_form_view_inherit">
             <field name="name">CRM - Claims Form</field>
             <field name="model">crm.claim</field>
@@ -330,6 +293,8 @@
                 </p>
             </field>
         </record>
+
+
 
 
         <menuitem name="Received Claims" id="menu_crm_case_claims"

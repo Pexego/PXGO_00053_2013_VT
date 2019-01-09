@@ -70,24 +70,6 @@ class CrmClaimRma(models.Model):
 
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
-    @api.multi
-    def button_update_lines_wizard(self):
-        if not self.claim_line_ids:
-            return False
-
-        view_id_wizard = self.env.ref('crm_claim_rma_custom.claim_line_update_view').id
-
-        return {
-            'name': _('Data update in common in all RMA lines'),
-            'view_type': 'form',
-            'view_mode': 'form',
-            'res_model': 'claim.line',
-            'type': 'ir.actions.act_window',
-            'res_id': self.claim_line_ids[0].id,
-            'view_id': view_id_wizard,
-            'target': 'new',
-        }
-
     @api.onchange('claim_type')
     def onchange_claim_type(self):
         if self.claim_type == 'customer':
@@ -446,20 +428,6 @@ class CrmClaimLine(models.Model):
         wzd = self.env["claim.make.repair"].create({'line_id': self.id})
         res = wzd.make()
         return res
-
-    @api.multi
-    def button_update_lines(self):
-        # Get the parameters of action wizard
-        substate_id_wizard = self.substate_id
-        claim_origine_wizard = self.claim_origine
-        invoice_id_wizard = self.invoice_id
-
-        # Rewrite the parameters of claim_lines
-        for rma_line in self.claim_id.claim_line_ids:
-            rma_line.write({'substate_id': substate_id_wizard.id, 'claim_origine': claim_origine_wizard,
-                            'invoice_id': invoice_id_wizard.id})
-
-
 
 
 
