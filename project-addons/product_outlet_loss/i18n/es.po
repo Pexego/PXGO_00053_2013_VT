@@ -144,6 +144,11 @@ msgid "Price PVP 3"
 msgstr "Precio PVP 3"
 
 #. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price4
+msgid "Price PVP 4"
+msgstr "Precio PVP 4"
+
+#. module: product_outlet_loss
 #: model:ir.model,name:product_outlet_loss.model_product_product
 #: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
 #: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss

@@ -30,9 +30,9 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.multi
-    def action_button_confirm(self):
+    def action_confirm(self):
 
-        res = super(SaleOrder, self).action_button_confirm()
+        res = super(SaleOrder, self).action_confirm()
 
         if self:
             for line in self.order_line:
@@ -57,7 +57,7 @@ class SaleOrder(models.Model):
         if self:
             for line in self.order_line:
                 if line.product_id.is_outlet:
-                    self.env['outlet.loss'].search([('order_line_id','=',line.id)]).unlink()
+                    self.env['outlet.loss'].search([('order_line_id', '=', line.id)]).unlink()
 
         return res
 

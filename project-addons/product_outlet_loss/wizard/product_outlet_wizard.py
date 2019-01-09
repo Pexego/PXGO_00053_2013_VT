@@ -55,11 +55,11 @@ class ProductOutletWizard(models.TransientModel):
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price3)
 
-    # list_price4 = fields.Float(
-    #     'Price PVP 4',
-    #     readonly=True,
-    #     default=lambda self:
-    #     self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price4)
+    list_price4 = fields.Float(
+        'Price PVP 4',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).list_price4)
 
     pvd1_price = fields.Float(
         'Price PVD 1',
@@ -79,11 +79,11 @@ class ProductOutletWizard(models.TransientModel):
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).pvd3_price)
 
-    # pvd4_price = fields.Float(
-    #     'Price PVD 4',
-    #     readonly=True,
-    #     default=lambda self:
-    #     self.env['product.product'].browse(self.env.context.get('active_id', False)).pvd4_price)
+    pvd4_price = fields.Float(
+        'Price PVD 4',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).pvd4_price)
 
     pvi1_price = fields.Float(
         'Price PVI 1',
@@ -103,11 +103,11 @@ class ProductOutletWizard(models.TransientModel):
         default=lambda self:
         self.env['product.product'].browse(self.env.context.get('active_id', False)).pvi3_price)
 
-    # pvi4_price = fields.Float(
-    #     'Price PVI 4',
-    #     readonly=True,
-    #     default=lambda self:
-    #     self.env['product.product'].browse(self.env.context.get('active_id', False)).pvi4_price)
+    pvi4_price = fields.Float(
+        'Price PVI 4',
+        readonly=True,
+        default=lambda self:
+        self.env['product.product'].browse(self.env.context.get('active_id', False)).pvi4_price)
 
     commercial_cost = fields.Float(
         'Commercial Cost',
@@ -153,7 +153,7 @@ class ProductOutletWizard(models.TransientModel):
             if self.state == "last":
                 act_prod = True
                 create_loss = True
-                price_outlet = self.list_price - (self.list_price *
+                price_outlet = self.lst_price - (self.lst_price *
                                                   (category_selected.percent / 100))
 
                 price_outlet2 = self.list_price2 - (self.list_price2 *
@@ -220,7 +220,7 @@ class ProductOutletWizard(models.TransientModel):
                     'list_price3': price_outlet3,
                     'list_price4': price_outlet4,
                     'commercial_cost': self.commercial_cost,
-                    'list_price': price_outlet,
+                    'lst_price': price_outlet,
                     'pvd1_price': price_outlet_pvd,
                     'pvd2_price': price_outlet_pvd2,
                     'pvd3_price': price_outlet_pvd3,
