@@ -34,7 +34,6 @@ Sales customer discount
     and 'cost margin' and 'commercial margin' of the sale price 2.
 """,
     "depends": ["base", "product", "stock_account",
-                "hide_product_variants",
                 "purchase"],
     "data": [
         "views/product_view.xml",
