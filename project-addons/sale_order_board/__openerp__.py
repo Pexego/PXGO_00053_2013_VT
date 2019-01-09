@@ -30,7 +30,7 @@
     'category': 'crm',
     'depends': ['sale', 'transportation'],
     'data': [
-        'sale_order_board_view.xml',
+        'views/sale_order_board_view.xml',
         'wizard/picking_rated_wizard_view.xml',
     ],
     'installable': True,
