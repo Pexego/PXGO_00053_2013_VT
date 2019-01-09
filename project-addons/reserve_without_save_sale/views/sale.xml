@@ -39,6 +39,30 @@
         </field>
     </record>
 
+    <!-- <record id="view_order_form_add_dispaly_stock_reserved" model="ir.ui.view">
+        <field name="name">sale.order.form_add_display_stock_reserved</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_display_stock.view_order_form_add_dispaly_stock"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/form/group/group/field[@name='product_id']" position="after">
+                <field name="qty_reserved"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='qty_available']" position="after">
+                <field name="qty_reserved"/>
+            </xpath>
+        </field>
+    </record>
+    TODO: Pendiente de migrar sale_display_stock
+    <record id="view_order_line_tree_add_display_stock_reserved" model="ir.ui.view">
+        <field name="name">sale.order.line.tree.add.display.stock_reserved</field>
+        <field name="model">sale.order.line</field>
+        <field name="inherit_id" ref="sale.view_order_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="qty_reserved"/>
+            </field>
+        </field>
+    </record> -->
 
     <template id="assets_backend" name="sales_team assets" inherit_id="web.assets_backend">
             <xpath expr="." position="inside">

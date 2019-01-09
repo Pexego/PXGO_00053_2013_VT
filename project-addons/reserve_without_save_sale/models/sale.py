@@ -1,5 +1,6 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import fields, models, api
+import odoo.addons.decimal_precision as dp
 
 
 class SaleOrder(models.Model):
@@ -29,6 +30,10 @@ class SaleOrderLine(models.Model):
 
     unique_js_id = fields.Char('', size=64, copy=False)
     temp_unique_js_id = fields.Char('', size=64, copy=False)
+    qty_reserved = fields.Float(readonly=True,
+                                related='product_id.reservation_count',
+                                digits=dp.get_precision('Product Unit \
+                                                  of Measure'))
 
     def _test_block_on_reserve(self, vals):
         super()._test_block_on_reserve(vals)
@@ -70,14 +75,16 @@ class SaleOrderLine(models.Model):
         if vals.get('temp_unique_js_id', False):
             vals['unique_js_id'] = vals['temp_unique_js_id']
             vals.pop('temp_unique_js_id', None)
-            res = super(SaleOrderLine, self.with_context(context2)).create(vals)
+            res = super(SaleOrderLine, self.with_context(context2)).create(
+                vals)
             reserve = self.env['stock.reservation'].search(
                 [('unique_js_id', '=', res.unique_js_id)])
             if reserve:
                 reserve.sale_line_id = res.id
                 reserve.origin = res.order_id.name
         else:
-            res = super(SaleOrderLine, self.with_context(context2)).create(vals)
+            res = super(SaleOrderLine, self.with_context(context2)).create(
+                vals)
         return res
 
     @api.multi

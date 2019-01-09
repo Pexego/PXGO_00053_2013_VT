@@ -35,7 +35,22 @@ class StockReservation(models.Model):
     def create(self, vals):
         context2 = dict(self._context)
         context2.pop('default_state', False)
-        return super(StockReservation, self.with_context(context2)).create()
+        res = super(StockReservation, self.with_context(context2)).create()
+        if vals.get('unique_js_id', False) and \
+                not vals.get('sale_line_id', False):
+            with registry(self.env.cr.dbname).cursor() as new_cr:
+                new_env = api.Environment(new_cr, self.env.uid,
+                                          self.env.context)
+
+                new_env.cr.execute("select id from sale_order_line where "
+                                   "unique_js_id = '%s'" % vals['unique_js_id']
+                                   )
+
+                lines = new_env.cr.fetchone()
+                if lines:
+                    self.with_env(new_env).write({'sale_line_id': lines[0]})
+                new_env.cr.commit()
+        return res
 
     def write(self, vals):
         if vals.get('sequence', False) and self._context.get('first', False):
@@ -83,15 +98,14 @@ class StockReservation(models.Model):
         res = super().reserve()
         self.refresh()
         for reservation in self:
-            reservation.message_post(body=_("Reserva modificada. Estado '%s'") % reservation.state)
+            reservation.message_post(
+                body=_("Reserva modificada. Estado '%s'") % reservation.state)
         return res
 
     def release(self):
         res = super().release()
         self.message_post(body=_("Reserva liberada."))
         return res
-
-
 
     @api.model
     def delete_orphan_reserves(self):
@@ -120,22 +134,3 @@ class StockReservation(models.Model):
             moves.action_cancel()
 
         return True
-
-    @api.model
-    def create(self, vals):
-        res = super().create(vals)
-        if vals.get('unique_js_id', False) and \
-                not vals.get('sale_line_id', False):
-            with registry(self.env.cr.dbname).cursor() as new_cr:
-                new_env = api.Environment(new_cr, self.env.uid,
-                                          self.env.context)
-
-                new_env.cr.execute("select id from sale_order_line where "
-                                   "unique_js_id = '%s'" % vals['unique_js_id'])
-
-                lines = new_env.cr.fetchone()
-                if lines:
-                    self.with_env(new_env).write({'sale_line_id': lines[0]})
-                new_env.cr.commit()
-
-        return res

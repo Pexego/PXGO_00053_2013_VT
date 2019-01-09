@@ -21,13 +21,3 @@
 import openerp
 from openerp import models, fields
 import odoo.addons.decimal_precision as dp
-
-
-class sale_order_line(models.Model):
-    _inherit = 'sale.order.line'
-
-    qty_reserved = fields.Float('Qty reserved', readonly=True,
-                                related='product_id.reserves_count',
-                                digits=
-                                dp.get_precision('Product Unit \
-                                                  of Measure'))

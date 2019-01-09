@@ -20,24 +20,19 @@
 ##############################################################################
 
 {
-    "name": "Sale display stock reserves",
+    "name": "TO REMOVE",
     "version": "1.0",
     "author": "Pexego",
     'website': 'www.pexego.es',
     "category": "Sales",
     "description": """
-Sales display stock reserves
-========================================
-
-    * Displays the reserved stock of product at each sale order line.
+TO REMOVE
 """,
-    "depends": ["base", "sale", "product", "stock_reserve", "sale_display_stock"],
+    "depends": ["base"],
     "data": [
-        "sale_view.xml",
-        'security/ir.model.access.csv'
     ],
     "demo": [],
     'auto_install': False,
-    "installable": True,
+    "installable": False,
     'images': [],
 }

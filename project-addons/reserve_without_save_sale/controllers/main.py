@@ -53,7 +53,8 @@ class WebsiteReservation(http.Controller):
             Si solo se modifica la cantidad se escribe.
         """
         if post.get('product_id', False):
-            product = request.env['product.product'].browse(int(post['product_id']))
+            product = request.env['product.product'].browse(
+                int(post['product_id']))
             if product.type == "product":
                 reservation = request.env['stock.reservation'].search(
                     [('unique_js_id', '=', post['unique_js_id'])])
@@ -74,7 +75,8 @@ class WebsiteReservation(http.Controller):
                     reserve = reservation.copy(vals)
                     reserve.reserve()
                     reservation.unlink()
-                    return json.dumps({'unique_js_id': post['new_js_unique_id']})
+                    return json.dumps(
+                        {'unique_js_id': post['new_js_unique_id']})
                 else:
                     # Solo nos importan los cambios en cantidad
                     reservation.write({'product_uom_qty': float(post['qty'])})
