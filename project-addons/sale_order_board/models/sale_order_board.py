@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Jesus Garcia Manzanas
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 import xml.etree.ElementTree as ET
 from datetime import datetime
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-
         <record id="transporter_form_country_ids" model="ir.ui.view">
             <field name="name">transporter.form.country.ids</field>
             <field name="model">transportation.transporter</field>
@@ -28,7 +27,7 @@
             </field>
         </record>
 
-        <!--TODO: Migrar<record id="view_price_calc" model="ir.ui.view">
+        <record id="view_price_calc" model="ir.ui.view">
             <field name="name">view.price.calc</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="transportation.sale_order_add_transporter"/>
@@ -39,7 +38,6 @@
                             class="oe_highlight"/>
                 </field>
             </field>
-        </record>-->
-
+        </record>
     </data>
-</openerp>
+</odoo>
