@@ -55,8 +55,8 @@ class SaleOrder(models.Model):
                 package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
                 package_pieces += int(order_line.product_uom_qty)
             num_pieces = int((package_weight / 20) + 1)
-            package_weight = str(package_weight).decode("utf-8")
-            products_wo_weight = str(products_wo_weight).decode("utf-8")
+            package_weight = str(package_weight)
+            products_wo_weight = str(products_wo_weight)
             if products_wo_weight != '0':
                 products_wo_weight = products_wo_weight +\
                                      " of the product(s) of the order don't have set the weights," +\
