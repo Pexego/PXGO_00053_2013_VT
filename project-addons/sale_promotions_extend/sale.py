@@ -85,9 +85,17 @@ class SaleOrder(osv.osv):
         context2.pop('default_state', False)
         self._prepare_custom_line(cursor, user, ids, moves=False,
                                   context=context2)
-        res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
-                                                      context=context2)
         order = self.browse(cursor, user, ids[0], context=context2)
+        promotions_obj = self.pool.get('promos.rules')
+
+        if not order.no_promos:
+            res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
+                                                          context=context2)
+        else:
+            self.clear_existing_promotion_lines(cursor, user, ids[0], context)
+            promotions_obj.apply_special_promotions(cursor, user, ids[0], context=None)
+            res = False
+
         if order.state == 'reserve':
             order.order_reserve()
 

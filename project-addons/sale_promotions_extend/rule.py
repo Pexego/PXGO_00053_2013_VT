@@ -524,8 +524,31 @@ class PromotionsRulesActions(orm.Model):
         return True
 
 
-class PromotionsRules(models.Model):
+class PromotionsRules(orm.Model):
 
     _inherit = "promos.rules"
 
-    special_promo = fields2.Boolean("Special Promo")
+    _columns = {
+        'special_promo': fields.boolean("Special Promo")
+    }
+
+    def apply_special_promotions(self, cr, uid, order_id, context=None):
+
+        order = self.pool.get('sale.order').browse(cr, uid,
+                                                   order_id, context=context)
+        active_promos = self.search(cr, uid, [('active', '=', True), ('special_promo', '=', True)], context=context)
+
+        for promotion_rule in self.browse(cr, uid, active_promos, context):
+            result = self.evaluate(cr, uid, promotion_rule, order, context)
+            #If evaluates to true
+            if result:
+                try:
+                    self.execute_actions(cr, uid,
+                                     promotion_rule, order_id,
+                                     context)
+                except Exception, e:
+                    raise orm.except_orm("Promotions", ustr(e))
+                #If stop further is true
+                if promotion_rule.stop_further:
+                    return True
+        return True
