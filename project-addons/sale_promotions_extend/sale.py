@@ -74,6 +74,10 @@ class SaleOrder(osv.osv):
 
     _inherit = "sale.order"
 
+    _columns = {
+        'no_promos': fields.boolean("Not apply promotions")
+    }
+
     def apply_promotions(self, cursor, user, ids, context=None):
         if context is None:
             context = {}

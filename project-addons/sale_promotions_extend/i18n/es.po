@@ -584,3 +584,8 @@ msgstr "no es igual a"
 msgid "Special Promo"
 msgstr "Promo especial"
 
+#. module: sale_promotions_extend
+#: field:sale.order,no_promos:0
+msgid "Not apply promotions"
+msgstr "No aplicar promociones"
+
