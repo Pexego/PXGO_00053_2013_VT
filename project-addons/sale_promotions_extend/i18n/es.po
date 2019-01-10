@@ -579,3 +579,8 @@ msgstr "menor o igual a"
 msgid "not equal to"
 msgstr "no es igual a"
 
+#. module: sale_promotions_extend
+#: field:promos.rules,special_promo:0
+msgid "Special Promo"
+msgstr "Promo especial"
+

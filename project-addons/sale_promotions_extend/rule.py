@@ -29,6 +29,7 @@ from openerp.osv import osv, orm, fields
 from openerp.tools.misc import ustr
 from openerp import netsvc
 from openerp.tools.translate import _
+from openerp import models, fields as fields2
 
 # LOGGER = netsvc.Logger()
 DEBUG = False
@@ -522,3 +523,9 @@ class PromotionsRulesActions(orm.Model):
         self.create_line(cr, uid, vals, context)
         return True
 
+
+class PromotionsRules(models.Model):
+
+    _inherit = "promos.rules"
+
+    special_promo = fields2.Boolean("Special Promo")
