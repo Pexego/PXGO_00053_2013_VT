@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+
         <record id="xls_invoice_report_wizard_form_view" model="ir.ui.view">
             <field name="name">xls.invoice.report.wizard.form</field>
             <field name="model">xls.invoice.report.wizard</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Invoice Report XLS" version="7.0">
+                <form string="Invoice Report XLS">
                     <group>
                         <field name="invoice_type"/>
                         <field name="country_group" domain="[('invoice_type', '=', 'out_invoice')]"
@@ -37,5 +36,4 @@
         <menuitem id="xls_invoice_report_wizard_menu" action="xls_invoice_report_wizard_action"
             parent="account.menu_finance_generic_reporting"/>
 
-    </data>
-</openerp>
+</odoo>

@@ -20,14 +20,22 @@
 ##############################################################################
 
 from datetime import datetime, timedelta
-from openerp import models, fields, api
-from openerp.osv import fields as fields_old
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
+from odoo import models, fields, api
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 import odoo.addons.decimal_precision as dp
 
 
 class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
+
+    def _compute_amount(self):
+        super(sale_order_line, self.filtered(lambda x: not x.deposit)).\
+            _compute_amount()
+        for line in self.filtered('deposit'):
+            line.update({
+                'price_tax': 0.0,
+                'price_total': 0.0,
+                'price_subtotal': 0.0})
 
     def _amount_line(self, cr, uid, ids, field_name, arg, context=None):
         # se mantiene en la api antigua por no sobreescribir todo el calculo
@@ -41,11 +49,7 @@ class sale_order_line(models.Model):
                 values[line.id] = 0.0
         return values
 
-    _columns = {
-        'price_subtotal': fields_old.function(
-            _amount_line, string='Subtotal',
-            digits_compute=dp.get_precision('Account')),
-    }
+
     deposit = fields.Boolean('Deposit')
     deposit_date = fields.Date('Date Dep.')
 
@@ -67,31 +71,31 @@ class sale_order_line(models.Model):
                 lines += line
         return super(sale_order_line, lines).invoice_line_create()
 
+# TODO: Migrar
+# ~ class sale_order(models.Model):
+    # ~ _inherit = 'sale.order'
 
-class sale_order(models.Model):
-    _inherit = 'sale.order'
+    # ~ deposit_ids = fields.One2many('stock.deposit', 'sale_id', 'Deposits')
+    # ~ deposit_count = fields.Integer('deposit count', compute='_get_deposit_len',
+                                   # ~ store=True)
 
-    deposit_ids = fields.One2many('stock.deposit', 'sale_id', 'Deposits')
-    deposit_count = fields.Integer('deposit count', compute='_get_deposit_len',
-                                   store=True)
+    # ~ @api.one
+    # ~ @api.depends('deposit_ids')
+    # ~ def _get_deposit_len(self):
+        # ~ self.deposit_count = len(self.deposit_ids)
 
-    @api.one
-    @api.depends('deposit_ids')
-    def _get_deposit_len(self):
-        self.deposit_count = len(self.deposit_ids)
+    # ~ @api.model
+    # ~ def _amount_line_tax(self, line):
+        # ~ if line.deposit:
+            # ~ return 0.0
+        # ~ else:
+            # ~ return super(sale_order, self)._amount_line_tax(line)
 
-    @api.model
-    def _amount_line_tax(self, line):
-        if line.deposit:
-            return 0.0
-        else:
-            return super(sale_order, self)._amount_line_tax(line)
-
-    @api.model
-    def _prepare_order_line_procurement(self, order, line, group_id=False):
-        vals = super(sale_order, self)._prepare_order_line_procurement(
-            order, line, group_id=group_id)
-        if line.deposit:
-            deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
-            vals['location_id'] = deposit_id.id
-        return vals
+    # ~ @api.model
+    # ~ def _prepare_order_line_procurement(self, order, line, group_id=False):
+        # ~ vals = super(sale_order, self)._prepare_order_line_procurement(
+            # ~ order, line, group_id=group_id)
+        # ~ if line.deposit:
+            # ~ deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
+            # ~ vals['location_id'] = deposit_id.id
+        # ~ return vals

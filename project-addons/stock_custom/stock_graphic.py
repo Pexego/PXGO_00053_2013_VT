@@ -17,12 +17,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
-from openerp.osv import fields, orm
-from openerp.tools.translate import _
-from openerp.exceptions import except_orm, Warning, RedirectWarning
+from odoo import models, fields, api, _, exceptions
 
-import StringIO
+from io import StringIO
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import time
@@ -34,32 +31,23 @@ import seaborn as sns
 import pandas as pd
 
 
-class ProductTemplate(orm.Model):
+class ProductTemplate(models.Model):
 
     _inherit = 'product.template'
 
-    _columns = {
-        'date_start': fields.date("Start date"),
-        'date_end': fields.date("End Date"),
-        'period': fields.selection([('week', 'Week'),
+    date_start = fields.Date("Start date", default=lambda *a: (datetime.now() - relativedelta(months=6)).strftime('%Y-%m-%d'))
+    date_end = fields.Date("End Date", default=fields.Date.today)
+    period = fields.Selection([('week', 'Week'),
                                     ('month', 'Month'),
                                     ('year', 'Year')
-                                    ], 'Time Period'),
-        'analysis_type': fields.selection([('average', 'Average'),
-                                           ('end_of_period', 'End of period')
-                                           ], 'Type of analysis'),
-        'stock_graphic': fields.binary("Graph")
-    }
-
-    _defaults = {
-        'date_start': lambda *a: (datetime.now() - relativedelta(months=6)).strftime('%Y-%m-%d'),
-        'date_end': lambda *a: datetime.now().strftime('%Y-%m-%d'),
-        'period': 'month',
-        'analysis_type': 'average'
-    }
+                                    ], 'Time Period', default='month')
+    analysis_type = fields.Selection([('average', 'Average'),
+                                      ('end_of_period', 'End of period')],
+                                     'Type of analysis', default='average')
+    stock_graphic = fields.Binary("Graph")
 
 
-class ProductProduct(orm.Model):
+class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
@@ -154,9 +142,9 @@ class ProductProduct(orm.Model):
             self.period = 'month'
             self.analysis_type = 'average'
         elif not self.date_start or not self.date_end or not self.period or not self.analysis_type:
-            raise except_orm(_('Error'), _('You must set all filter values'))
+            raise exceptions.UserError(_('You must set all filter values'))
         elif self.date_end < self.date_start:
-            raise except_orm(_('Error'), _('End date cannot be smaller than start date'))
+            raise exceptions.UserError(_('End date cannot be smaller than start date'))
 
         self.run_scheduler_graphic()
 
@@ -211,7 +199,7 @@ class ProductProduct(orm.Model):
             sns_plot.set_xticklabels(rotation=30)
 
             # Create the graphic with the data
-            io = StringIO.StringIO()
+            io = StringIO()
             sns_plot.savefig(io, format='png')
             io.seek(0)
             img_data = base64.b64encode(io.getvalue())

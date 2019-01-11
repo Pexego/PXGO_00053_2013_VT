@@ -18,15 +18,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields
-from openerp.addons.account.report.account_print_overdue import Overdue
+from odoo import models, fields
+#TODO: MIgrar
+# ~ from openerp.addons.account.report.account_print_overdue import Overdue
 
 
-class report_overdue(models.AbstractModel):
-    _name = 'report.account.report_overdue_custom'
-    _inherit = 'report.abstract_report'
-    _template = 'account.report_overdue_custom'
-    _wrapped_report_class = Overdue
+# ~ class report_overdue(models.AbstractModel):
+    # ~ _name = 'report.account.report_overdue_custom'
+    # ~ _inherit = 'report.abstract_report'
+    # ~ _template = 'account.report_overdue_custom'
+    # ~ _wrapped_report_class = Overdue
 
 
 class account_invoice_report(models.Model):

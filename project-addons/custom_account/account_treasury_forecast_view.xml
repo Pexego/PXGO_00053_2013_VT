@@ -88,7 +88,7 @@
             <field name="inherit_id" ref="account_treasury_forecast_banking.report_treasury_forecast_analysis_tree"/>
             <field name="arch" type="xml">
                 <tree position="attributes">
-                    <attribute name="colors">red:accumulative_balance&lt;0</attribute>
+                    <attribute name="decoration-danger">accumulative_balance&lt;0</attribute>
                 </tree>
                 <field name="date" position="after">
                     <field name="concept"/>
@@ -104,7 +104,7 @@
             <field name="name">account.treasury.forecast.bank.maturity</field>
             <field name="model">bank.maturity</field>
             <field name="arch" type="xml">
-                <tree strin="Maturities" editable="top">
+                <tree string="Maturities" editable="top">
                     <field name="bank_account"/>
                     <field name="bank_name"/>
                     <field name="date_due"/>

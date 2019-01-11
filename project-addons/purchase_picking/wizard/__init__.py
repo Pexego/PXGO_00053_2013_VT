@@ -19,5 +19,5 @@
 #
 ##############################################################################
 
-import create_picking_move
-import assign_container
+from . import create_picking_move
+from . import assign_container

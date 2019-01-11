@@ -7,7 +7,7 @@ from openerp import models, fields, api, exceptions, _
 
 class PaymentLine(models.Model):
 
-    _inherit = 'payment.line'
+    _inherit = 'account.payment.line'
 
     is_refund = fields.Boolean(compute='_get_is_refund')
 

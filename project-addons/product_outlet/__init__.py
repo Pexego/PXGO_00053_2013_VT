@@ -19,5 +19,5 @@
 #
 ##############################################################################
 
-import wizard
-import product
+from . import wizard
+from . import product

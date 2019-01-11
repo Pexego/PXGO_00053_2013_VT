@@ -20,7 +20,7 @@
 ##############################################################################
 
 
-from odoo import fields, models, _, exceptions
+from odoo import fields, models, _, exceptions, api
 from lxml import etree
 
 
@@ -60,41 +60,33 @@ class sale_equivalent_products(models.TransientModel):
                                   string='Products')
     product_id = fields.Many2one('product.product', 'Product selected')
 
-    def fields_view_get(self, cr, uid, view_id=None, view_type='form',
-                        context=None, toolbar=False, submenu=False):
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form',
+                        toolbar=False, submenu=False):
         """
             se añade domain al campo product_id.
         """
-        product_obj = self.pool.get('product.product')
-        if context is None:
-            context = {}
-        line_id = context.get('line_id', False)
-        res = super(sale_equivalent_products, self).fields_view_get(cr, uid,
-                                                                    view_id,
+        product_obj = self.env['product.product']
+        line_id = self.env.context.get('line_id', False)
+        res = super(sale_equivalent_products, self).fields_view_get(view_id,
                                                                     view_type,
-                                                                    context,
                                                                     toolbar,
                                                                     submenu)
         if line_id:
             # se buscan productos con los mismos tags que el de la linea
-            product_ids = set(product_obj.search(cr, uid,
-                                                 [('sale_ok', '=', True)],
-                                                 context=context))
-            line = self.pool.get('sale.order.line').browse(cr, uid, line_id,
-                                                           context)
+            product_ids = set(product_obj.search([('sale_ok', '=', True)]))
+            line = self.env['sale.order.line'].browse(line_id)
             product = line.product_id
             for tag in product.tag_ids:
-                products = product_obj.search(cr, uid,
-                                              [('tag_ids', 'in', [tag.id]),
-                                               ('sale_ok', '=', True)],
-                                              context=context)
-                product_ids = product_ids & set(products)
+                products = product_obj.search([('tag_ids', 'in', [tag.id]),
+                                               ('sale_ok', '=', True)])
+                product_ids |= products
 
             # se añade a la vista el domain
             doc = etree.XML(res['arch'])
             for node in doc.xpath("//field[@name='product_id']"):
                 node.set('domain', "[('id', 'in', " +
-                         str(list(product_ids)) + ")]")
+                         str(list(product_ids.ids)) + ")]")
             res['arch'] = etree.tostring(doc)
 
         return res

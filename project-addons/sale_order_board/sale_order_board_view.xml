@@ -28,19 +28,18 @@
             </field>
         </record>
 
-        <record id="view_price_calc" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_price_calc" model="ir.ui.view">
             <field name="name">view.price.calc</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="transportation.sale_order_add_transporter"/>
             <field name="arch" type="xml">
                 <field name="service_id" position="after">
-                    <label for="compute_variables"/>
                     <button name="compute_variables"
                             string="Calculate Shipping Prices" type="object"
                             class="oe_highlight"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<openerp>
-    <data>
+<odoo>
 
         <record id="mrp_customization_form" model="ir.ui.view">
             <field name="name">mrp.customization.wizard.form</field>
             <field name="model">mrp.customization.wizard</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Make customization">
                     <group>
@@ -40,6 +37,5 @@
         <menuitem action="action_customization_wizard" id="menu_action_customization_wizard"
             parent="mrp.menu_mrp_manufacturing" sequence="2"/>
 
-    </data>
-</openerp>
+</odoo>
 

@@ -5,7 +5,7 @@
 <openerp>
     <data>
 
-        <record id="product_category_add_code_form" model="ir.ui.view">
+        <!--TODO: Migrar<record id="product_category_add_code_form" model="ir.ui.view">
             <field name="name">product.category.form</field>
             <field name="model">product.category</field>
             <field name="inherit_id" ref="product.product_category_form_view"/>
@@ -14,7 +14,7 @@
                     <field name="code"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="product_brand_add_code_form" model="ir.ui.view">
             <field name="name">product.brand.form</field>

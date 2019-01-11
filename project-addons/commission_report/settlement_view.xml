@@ -10,10 +10,10 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem id="menu_action_settlement"
+        <!--TODO: Migrar <menuitem id="menu_action_settlement"
                   parent="sale_commission.menu_sale_commissions_conf"
                   sequence="80"
-                  action="action_settlement" />
+                  action="action_settlement" />-->
 
     </data>
 </openerp>

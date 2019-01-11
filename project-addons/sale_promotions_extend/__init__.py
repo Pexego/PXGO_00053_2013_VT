@@ -18,6 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import sale
-import rule
-import product
+from . import sale
+from . import rule
+from . import product

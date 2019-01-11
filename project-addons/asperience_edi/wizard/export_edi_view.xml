@@ -22,12 +22,12 @@
             <field name="target">new</field>
         </record>
 
-        <record id="ir_export_invoic_file_form" model="ir.values">
+        <!--TODO: Migrar<record id="ir_export_invoic_file_form" model="ir.values">
             <field name="name">Export Edi</field>
             <field name="key2">client_action_multi</field>
             <field name="model">account.invoice</field>
             <field name="value" eval="'ir.actions.act_window,%d'%act_export_invoic_file_form" />
-        </record>
+        </record>-->
 
         <record id="act_export_desadv_file_form" model="ir.actions.act_window">
             <field name="name">Export Edi</field>
@@ -38,12 +38,12 @@
             <field name="target">new</field>
         </record>
 
-        <record id="ir_export_desadv_file_form" model="ir.values">
+        <!--TODO: Migrar<record id="ir_export_desadv_file_form" model="ir.values">
             <field name="name">Export Edi</field>
             <field name="key2">client_action_multi</field>
             <field name="model">stock.picking</field>
             <field name="value" eval="'ir.actions.act_window,%d'%act_export_desadv_file_form" />
-        </record>
+        </record>-->
 
     </data>
 </openerp>

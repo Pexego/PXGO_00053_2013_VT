@@ -19,28 +19,29 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, osv
+from odoo import models, fields, api
 
+#TODO: Migrar
+# ~ class AccountVoucherLine(models.Model):
 
-class AccountVoucherLine(models.Model):
+    # ~ _inherit = "account.voucher.line"
 
-    _inherit = "account.voucher.line"
-
-    invoice = fields.Many2one('account.invoice', readonly=True, related='move_line_id.invoice')
+    # ~ invoice = fields.Many2one('account.invoice', readonly=True, related='move_line_id.invoice')
 
 
 class AccountVoucher(models.Model):
 
     _inherit = "account.voucher"
 
-    line_cr_ids = fields.One2many('account.voucher.line', 'voucher_id', 'Credits',
-                                  domain=['&', ('account_id.not_payment_followup', '=', False), ('type', '=', 'cr')],
-                                  context={'default_type': 'cr'}, readonly=True,
-                                  states={'draft': [('readonly', False)]})
-    line_dr_ids = fields.One2many('account.voucher.line', 'voucher_id', 'Debits',
-                                  domain=['&', ('account_id.not_payment_followup', '=', False), ('type', '=', 'dr')],
-                                  context={'default_type': 'dr'}, readonly=True,
-                                  states={'draft': [('readonly', False)]})
+    #TODO: Migrar
+    # ~ line_cr_ids = fields.One2many('account.voucher.line', 'voucher_id', 'Credits',
+                                  # ~ domain=['&', ('account_id.not_payment_followup', '=', False), ('type', '=', 'cr')],
+                                  # ~ context={'default_type': 'cr'}, readonly=True,
+                                  # ~ states={'draft': [('readonly', False)]})
+    # ~ line_dr_ids = fields.One2many('account.voucher.line', 'voucher_id', 'Debits',
+                                  # ~ domain=['&', ('account_id.not_payment_followup', '=', False), ('type', '=', 'dr')],
+                                  # ~ context={'default_type': 'dr'}, readonly=True,
+                                  # ~ states={'draft': [('readonly', False)]})
 
     @api.one
     def concile_all(self):
