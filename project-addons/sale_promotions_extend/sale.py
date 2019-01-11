@@ -66,7 +66,8 @@ class sale_order_line(osv.osv):
         'product_tags': fields.function(_get_tags_product, string='Tags',
                                         type='char', size=255),
         'web_discount': fields.boolean('Web Discount'),
-        'accumulated_promo': fields.boolean(default=False)
+        'accumulated_promo': fields.boolean(default=False),
+        'fixed_promo': fields.boolean(default=False)
     }
 
 
@@ -92,6 +93,7 @@ class SaleOrder(osv.osv):
             res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
                                                           context=context2)
         else:
+            # forzar volver a poner la terifa del cliente a las líneas
             self.clear_existing_promotion_lines(cursor, user, ids[0], context)
             promotions_obj.apply_special_promotions(cursor, user, ids[0], context=None)
             res = False
@@ -129,8 +131,12 @@ class SaleOrder(osv.osv):
                                                ], context=context
                                                )
 
+        import ipdb
+        ipdb.set_trace()
+
+
         for line in order_line_obj.browse(cursor, user, order_line_ids, context):
-            #if the line has an accumulated promo and the discount of the partner is 0
+            # if the line has an accumulated promo and the discount of the partner is 0
             if line.accumulated_promo and line_dict[line.id] == 0.0:
                 order_line_obj.write(cursor, user,
                                      [line.id],
@@ -142,4 +148,17 @@ class SaleOrder(osv.osv):
                 order_line_obj.write(cursor, user,
                                      [line.id],
                                      {'accumulated_promo': False},
+                                     context=context)
+            elif line.fixed_promo:
+                order_line_obj.write(cursor, user,
+                                     [line.id],
+                                     {'discount': line_dict[line.id],
+                                      'old_discount': False,
+                                      'accumulated_promo': False,
+                                      'fixed_promo': False},
+                                     context=context)
+            else:
+                order_line_obj.write(cursor, user,
+                                     [line.id],
+                                     {'fixed_promo': False},
                                      context=context)

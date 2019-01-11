@@ -443,6 +443,7 @@ class PromotionsRulesActions(orm.Model):
         vals = {
             'discount': eval(action.arguments),
             'old_discount': order_line.discount,
+            'fixed_promo': True,
         }
         return order_line.write(vals)
 
