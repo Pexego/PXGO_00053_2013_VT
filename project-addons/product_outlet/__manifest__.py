@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Kiko Sánchez <kiko@comunitea.com>$
+#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -20,20 +19,18 @@
 ##############################################################################
 
 {
-    'name': "Outlet Loss",
+    'name': "Outlet",
     'version': '1.0',
     'category': 'product',
-    'description': """Manage outlet products losses.""",
-    'author': 'Comunitea Servicios Tecnológicos',
-    'website': 'www.comunitea.com',
+    'description': """Manage outlet products.""",
+    'author': 'Pexego Sistemas Informáticos',
+    'website': 'www.pexego.es',
     "depends": ['base',
                 'product',
                 'stock',
-                'equivalent_products',
-                'product_outlet'],
-    "data": ['wizard/product_outlet_wizard_view.xml',
-             'outlet_loss.xml',
-             'res_company.xml',
-             'security/ir.model.access.csv'],
+                'equivalent_products'],
+    "data": ['data/product_data.xml',
+             'data/cron.xml',
+             'wizard/product_outlet_wizard_view.xml'],
     "installable": True
 }

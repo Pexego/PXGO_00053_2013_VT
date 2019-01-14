@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,19 +18,22 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api
-from openerp.exceptions import ValidationError
-
-
-class res_company(models.Model):
-    _inherit = "res.company"
-
-    outlet_per_cent = fields.Float("% Outlet Devalue", default = 100)
-
-
-    @api.constrains('outlet_per_cent')
-    def _check_outlet_per_cent(self):
-        if self.outlet_per_cent < 0:
-            raise ValidationError("% must be > 0")
-        if self.outlet_per_cent > 100:
-            raise ValidationError("% must be <=100")
+{
+    'name': "Outlet Loss",
+    'version': '1.0',
+    'category': 'product',
+    'description': """Manage outlet products losses.""",
+    'author': 'Comunitea Servicios Tecnológicos',
+    'website': 'www.comunitea.com',
+    "depends": ['base',
+                'product',
+                'stock',
+                'equivalent_products',
+                'product_outlet',
+                'sale_customer_discount'],
+    "data": ['wizard/product_outlet_wizard_view.xml',
+             'views/outlet_loss.xml',
+             'views/res_company.xml',
+             'security/ir.model.access.csv'],
+    "installable": True
+}

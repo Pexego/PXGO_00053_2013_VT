@@ -1,51 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-        <record id="product_outlet_wizard_form" model="ir.ui.view">
-            <field name="name">product.outlet.wizard.form</field>
-            <field name="model">product.outlet.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Send product to wizard">
+    <record id="product_outlet_wizard_form" model="ir.ui.view">
+        <field name="name">product.outlet.wizard.form</field>
+        <field name="model">product.outlet.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send product to wizard">
+                <field invisible="1" name="state" />
                     <group>
-                        <field invisible="1" name="state" />
                         <field name="warehouse_id"/>
                         <field name="location_orig_id"/>
-                        <group states="first">
-                        </group>
-                        <group states="last">
+                    </group>
+                    <separator/>
+                    <group states="first">
+                    </group>
+                    <group states="last">
+                        <group>
                             <field name="qty"/>
-                            <field name="categ_id" on_change="onchange_percent(categ_id)" attrs="{'required': [('state', '=', 'last')]}"/>
+                            <field name="categ_id" attrs="{'required': [('state', '=', 'last')]}"/>
                             <field name="ean13"/>
-                            <group><field name="percent" readonly="1"/></group>
+                        </group>
+                        <group>
+                            <field name="percent" readonly="1"/>
                         </group>
                     </group>
-                    <footer>
-                        <button string="Send outlet" name="make_move" type="object" icon="gtk-ok"/>
-                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                    </footer>
-                </form>
+                <footer>
+                    <button string="Send outlet" name="make_move" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+    id="act_product_to_outlet_wizard"
+    name="Send to outlet"
+    res_model="product.outlet.wizard"
+    src_model="product.product"
+    view_id="product_outlet_wizard_form"
+    view_mode="form"
+    target="new"/>
+
+    <record id="product_category_add_percent_form" model="ir.ui.view">
+        <field name="name">product.category.form.percent</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="percent"/>
             </field>
-        </record>
-
-        <act_window
-        id="act_product_to_outlet_wizard"
-        name="Send to outlet"
-        res_model="product.outlet.wizard"
-        src_model="product.product"
-        view_id="product_outlet_wizard_form"
-        view_mode="form"
-        target="new"/>
-
-        <record id="product_category_add_percent_form" model="ir.ui.view">
-            <field name="name">product.category.form.percent</field>
-            <field name="model">product.category</field>
-            <field name="inherit_id" ref="product.product_category_form_view"/>
-            <field name="arch" type="xml">
-                <field name="parent_id" position="after">
-                    <field name="percent"/>
-                </field>
-            </field>
-        </record>
-
+        </field>
+    </record>
 </odoo>
 

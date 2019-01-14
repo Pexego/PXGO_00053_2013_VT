@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
+#    $Kiko Sánchez <kiko@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,18 +18,18 @@
 #
 ##############################################################################
 
-{
-    'name': "Outlet",
-    'version': '1.0',
-    'category': 'product',
-    'description': """Manage outlet products.""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['base',
-                'product',
-                'stock',
-                'equivalent_products'],
-    "data": ['data/product_data.xml',
-             'wizard/product_outlet_wizard_view.xml'],
-    "installable": True
-}
+from odoo import fields, models, api
+from odoo.exceptions import ValidationError
+
+
+class ResCompany(models.Model):
+    _inherit = 'res.company'
+
+    outlet_per_cent = fields.Float("% Outlet Devalue", default=100)
+
+    @api.constrains('outlet_per_cent')
+    def _check_outlet_per_cent(self):
+        if self.outlet_per_cent < 0:
+            raise ValidationError("% must be > 0")
+        if self.outlet_per_cent > 100:
+            raise ValidationError("% must be <=100")
