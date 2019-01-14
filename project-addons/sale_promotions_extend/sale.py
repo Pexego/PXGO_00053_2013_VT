@@ -131,10 +131,6 @@ class SaleOrder(osv.osv):
                                                ], context=context
                                                )
 
-        import ipdb
-        ipdb.set_trace()
-
-
         for line in order_line_obj.browse(cursor, user, order_line_ids, context):
             # if the line has an accumulated promo and the discount of the partner is 0
             if line.accumulated_promo and line_dict[line.id] == 0.0:
