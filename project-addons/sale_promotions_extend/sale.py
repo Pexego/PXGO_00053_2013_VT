@@ -93,7 +93,6 @@ class SaleOrder(osv.osv):
             res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
                                                           context=context2)
         else:
-            # forzar volver a poner la terifa del cliente a las líneas
             self.clear_existing_promotion_lines(cursor, user, ids[0], context)
             promotions_obj.apply_special_promotions(cursor, user, ids[0], context=None)
             res = False
@@ -145,16 +144,5 @@ class SaleOrder(osv.osv):
                                      [line.id],
                                      {'accumulated_promo': False},
                                      context=context)
-            elif line.fixed_promo:
-                order_line_obj.write(cursor, user,
-                                     [line.id],
-                                     {'discount': line_dict[line.id],
-                                      'old_discount': False,
-                                      'accumulated_promo': False,
-                                      'fixed_promo': False},
-                                     context=context)
-            else:
-                order_line_obj.write(cursor, user,
-                                     [line.id],
-                                     {'fixed_promo': False},
-                                     context=context)
+            elif order.no_promos:
+                continue
