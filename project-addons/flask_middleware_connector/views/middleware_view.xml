@@ -60,6 +60,7 @@
                         <field name="mode_export"/>
                         <field name="start_date" attrs="{'invisible': [('type_export', 'not in', ('order', 'pickings', 'rmas', 'invoices'))], 'required': [('type_export', 'in', ('order', 'pickings', 'rmas', 'invoices'))]}"/>
                         <field name="finish_date" attrs="{'invisible': [('type_export', 'not in', ('order', 'pickings', 'rmas', 'invoices'))], 'required': [('type_export', 'in', ('order', 'pickings', 'rmas', 'invoices'))]}"/>
+                        <field name="model_ids"/>
                     </group>
                     <footer>
                         <button name="do_export" type="object"
