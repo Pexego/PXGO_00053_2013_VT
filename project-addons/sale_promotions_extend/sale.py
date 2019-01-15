@@ -66,8 +66,7 @@ class sale_order_line(osv.osv):
         'product_tags': fields.function(_get_tags_product, string='Tags',
                                         type='char', size=255),
         'web_discount': fields.boolean('Web Discount'),
-        'accumulated_promo': fields.boolean(default=False),
-        'fixed_promo': fields.boolean(default=False)
+        'accumulated_promo': fields.boolean(default=False)
     }
 
 
@@ -144,5 +143,3 @@ class SaleOrder(osv.osv):
                                      [line.id],
                                      {'accumulated_promo': False},
                                      context=context)
-            elif order.no_promos:
-                continue
