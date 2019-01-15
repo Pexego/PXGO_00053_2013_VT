@@ -589,3 +589,7 @@ msgstr "Promo especial"
 msgid "Not apply promotions"
 msgstr "No aplicar promociones"
 
+#. module: sale_promotions_extend
+#: help:sale.order,no_promos:0
+msgid "Reload the prices after marking this check"
+msgstr "Recalcular precio final después de marcar el check"

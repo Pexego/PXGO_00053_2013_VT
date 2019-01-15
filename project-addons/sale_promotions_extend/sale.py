@@ -76,7 +76,7 @@ class SaleOrder(osv.osv):
     _inherit = "sale.order"
 
     _columns = {
-        'no_promos': fields.boolean("Not apply promotions")
+        'no_promos': fields.boolean("Not apply promotions", help="Reload the prices after marking this check")
     }
 
     def apply_promotions(self, cursor, user, ids, context=None):
