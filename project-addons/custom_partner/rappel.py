@@ -92,10 +92,23 @@ class ResPartnerRappelRel(models.Model):
 
     @api.multi
     def _get_next_period(self):
-        period = super(ResPartnerRappelRel, self)._get_next_period()
-        if period and str(period[0]) == self.last_settlement_date:
-            period[0] += relativedelta(days=1)
-            period[1] += relativedelta(days=1)
+        self.ensure_one()
+        if self.last_settlement_date and self.last_settlement_date > self.date_start:
+            date_start = datetime.strptime(self.last_settlement_date, '%Y-%m-%d').date() + relativedelta(days=1)
+        else:
+            date_start = datetime.strptime(self.date_start, '%Y-%m-%d').date()
+
+        date_stop = date_start + relativedelta(months=self.PERIODICITIES_MONTHS[self.periodicity], days=-1)
+        if self.date_end:
+            date_end = datetime.strptime(self.date_end, '%Y-%m-%d').date()
+            if date_end < date_stop:
+                date_stop = date_end
+
+        if date_start != date_stop:
+            period = [date_start, date_stop]
+        else:
+            period = False
+
         return period
 
     @api.multi
