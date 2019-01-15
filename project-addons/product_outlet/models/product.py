@@ -1,24 +1,25 @@
-##############################################################################
-#
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# © 2014 Pexego Sistemas Informáticos
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import fields, models, api, _
+from odoo.exceptions import ValidationError
 
-from odoo import fields, models, api
+
+class ProductCategory(models.Model):
+
+    _inherit = 'product.category'
+
+    percent = fields.Float(string="Outlet Percent",
+                           help="This outlet percent will be used when a product moves to an outlet category")
+
+    @api.constrains('percent')
+    def check_length(self):
+        for categ in self:
+            percent = categ.percent
+            if (percent > 100) | (percent < 0):
+                raise ValidationError(
+                    _('Error ! The outlet percent values must be'
+                      'between 0 and 100'))
+        return True
 
 
 class ProductProduct(models.Model):
@@ -31,10 +32,9 @@ class ProductProduct(models.Model):
                                          'normal_product_id',
                                          'Outlet products')
 
-    @api.multi
     def _is_outlet(self):
+        outlet_cat = self.env.ref('product_outlet.product_category_outlet')
         for product in self:
-            outlet_cat = self.env.ref('product_outlet.product_category_outlet')
             if product.categ_id == outlet_cat or \
                     product.categ_id.parent_id == outlet_cat:
                 product.is_outlet = True
@@ -51,18 +51,19 @@ class ProductProduct(models.Model):
                                                              order="id desc")
         for product_o in outlet_products:
             origin_product = product_o.normal_product_id
-            price_outlet = origin_product.list_price * (1 - product_o.categ_id.percent / 100)
-            price_outlet2 = origin_product.list_price2 * (1 - product_o.categ_id.percent / 100)
-            price_outlet3 = origin_product.list_price3 * (1 - product_o.categ_id.percent / 100)
-            price_outlet4 = origin_product.list_price4 * (1 - product_o.categ_id.percent / 100)
-            price_outlet_pvd = origin_product.pvd1_price * (1 - product_o.categ_id.percent / 100)
-            price_outlet_pvd2 = origin_product.pvd2_price * (1 - product_o.categ_id.percent / 100)
-            price_outlet_pvd3 = origin_product.pvd3_price * (1 - product_o.categ_id.percent / 100)
-            price_outlet_pvd4 = origin_product.pvd4_price * (1 - product_o.categ_id.percent / 100)
-            price_outlet_pvi = origin_product.pvi1_price * (1 - product_o.categ_id.percent / 100)
-            price_outlet_pvi2 = origin_product.pvi2_price * (1 - product_o.categ_id.percent / 100)
-            price_outlet_pvi3 = origin_product.pvi3_price * (1 - product_o.categ_id.percent / 100)
-            price_outlet_pvi4 = origin_product.pvi4_price * (1 - product_o.categ_id.percent / 100)
+            origin_percent = (1 - product_o.categ_id.percent / 100)
+            price_outlet = origin_product.list_price * origin_percent
+            price_outlet2 = origin_product.list_price2 * origin_percent
+            price_outlet3 = origin_product.list_price3 * origin_percent
+            price_outlet4 = origin_product.list_price4 * origin_percent
+            price_outlet_pvd = origin_product.pvd1_price * origin_percent
+            price_outlet_pvd2 = origin_product.pvd2_price * origin_percent
+            price_outlet_pvd3 = origin_product.pvd3_price * origin_percent
+            price_outlet_pvd4 = origin_product.pvd4_price * origin_percent
+            price_outlet_pvi = origin_product.pvi1_price * origin_percent
+            price_outlet_pvi2 = origin_product.pvi2_price * origin_percent
+            price_outlet_pvi3 = origin_product.pvi3_price * origin_percent
+            price_outlet_pvi4 = origin_product.pvi4_price * origin_percent
 
             if round(product_o.list_price, 2) != round(price_outlet, 2) or \
                     round(product_o.list_price2, 2) != round(price_outlet2, 2) or \
@@ -95,4 +96,3 @@ class ProductProduct(models.Model):
                     'commercial_cost': origin_product.commercial_cost,
                 }
                 product_o.write(values)
-
