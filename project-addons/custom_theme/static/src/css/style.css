@@ -307,7 +307,7 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     flex: 0 0 auto;
     text-align: center;
     position: relative;
-    background-color: #555487;
+    background-color: #3a3a60;
     margin-top: -1px;
 
 }
@@ -320,7 +320,19 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
     height: 100%;
-    background-color: #555487;
+    background-color: #3a3a60;
+
+}
+/* background footer menu laeral */
+.o_web_client > .o_main .o_sub_menu .o_sub_menu_footer {
+
+    -ms-flex: 0 0 auto;
+    -moz-flex: 0 0 auto;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+    text-align: center;
+    background: #3a3a60;
 
 }
 
