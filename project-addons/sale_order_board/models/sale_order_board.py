@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, exceptions, _
+from odoo import models, fields, api
 import xml.etree.ElementTree as ET
 from datetime import datetime
 
@@ -358,7 +358,7 @@ class SaleOrder(models.Model):
                                 <town><![CDATA[""" + delivery_town + """]]></town>
                                 <postcode>""" + str(delivery_postcode) + """</postcode>
                             </delivery>
-                            <collectionDateTime>""" + now.strftime('%Y-%m-%dT%H:%M:%S') + """</collectionDateTime>                    
+                            <collectionDateTime>""" + now.strftime('%Y-%m-%dT%H:%M:%S') + """</collectionDateTime>
                             <product>
                                 <type>N</type>
                             </product>
@@ -445,4 +445,3 @@ class ResCountryGroup(models.Model):
 
     shipment = fields.Boolean('Shipment', default=False)
     transporter_ids = fields.One2many('transportation.transporter', 'country_group_id', readonly=True)
-

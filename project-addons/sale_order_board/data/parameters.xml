@@ -1,75 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
-    <data noupdate="1">
-        <record id="service_codes_ups_api_request" model="ir.config_parameter">
-           <field name="key">service.codes.ups.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="user_ups_api_request" model="ir.config_parameter">
-           <field name="key">user.ups.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="password_ups_api_request" model="ir.config_parameter">
-           <field name="key">password.ups.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="access_ups_api_request" model="ir.config_parameter">
-           <field name="key">access.ups.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="shipper_number_ups_api_request" model="ir.config_parameter">
-           <field name="key">shipper.number.ups.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="url_prod_ups_api_request" model="ir.config_parameter">
-           <field name="key">url.prod.ups.api.request</field>
-           <field name="value"></field>
-        </record>
+<odoo noupdate="1">
+      <record id="service_codes_ups_api_request" model="ir.config_parameter">
+         <field name="key">service.codes.ups.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="user_ups_api_request" model="ir.config_parameter">
+         <field name="key">user.ups.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="password_ups_api_request" model="ir.config_parameter">
+         <field name="key">password.ups.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="access_ups_api_request" model="ir.config_parameter">
+         <field name="key">access.ups.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="shipper_number_ups_api_request" model="ir.config_parameter">
+         <field name="key">shipper.number.ups.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="url_prod_ups_api_request" model="ir.config_parameter">
+         <field name="key">url.prod.ups.api.request</field>
+         <field name="value"></field>
+      </record>
 
-        <record id="account_code_seur_api_request" model="ir.config_parameter">
-           <field name="key">account.code.seur.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="user_seur_api_request" model="ir.config_parameter">
-           <field name="key">user.seur.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="password_seur_api_request" model="ir.config_parameter">
-           <field name="key">password.seur.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="url_seur_api_request" model="ir.config_parameter">
-           <field name="key">url.seur.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="services_seur_api_request" model="ir.config_parameter">
-           <field name="key">services.seur.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="products_seur_api_request" model="ir.config_parameter">
-           <field name="key">products.seur.api.request</field>
-           <field name="value"></field>
-        </record>
+      <record id="account_code_seur_api_request" model="ir.config_parameter">
+         <field name="key">account.code.seur.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="user_seur_api_request" model="ir.config_parameter">
+         <field name="key">user.seur.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="password_seur_api_request" model="ir.config_parameter">
+         <field name="key">password.seur.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="url_seur_api_request" model="ir.config_parameter">
+         <field name="key">url.seur.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="services_seur_api_request" model="ir.config_parameter">
+         <field name="key">services.seur.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="products_seur_api_request" model="ir.config_parameter">
+         <field name="key">products.seur.api.request</field>
+         <field name="value"></field>
+      </record>
 
-        <record id="service_codes_tnt_api_request" model="ir.config_parameter">
-           <field name="key">service.codes.tnt.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="account_number_tnt_api_request" model="ir.config_parameter">
-           <field name="key">account.number.tnt.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="account_country_tnt_api_request" model="ir.config_parameter">
-           <field name="key">account.country.tnt.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="account_user_tnt_api_request" model="ir.config_parameter">
-           <field name="key">account.user.tnt.api.request</field>
-           <field name="value"></field>
-        </record>
-        <record id="account_password_tnt_api_request" model="ir.config_parameter">
-           <field name="key">account.password.tnt.api.request</field>
-           <field name="value"></field>
-        </record>
-    </data>
+      <record id="service_codes_tnt_api_request" model="ir.config_parameter">
+         <field name="key">service.codes.tnt.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="account_number_tnt_api_request" model="ir.config_parameter">
+         <field name="key">account.number.tnt.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="account_country_tnt_api_request" model="ir.config_parameter">
+         <field name="key">account.country.tnt.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="account_user_tnt_api_request" model="ir.config_parameter">
+         <field name="key">account.user.tnt.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="account_password_tnt_api_request" model="ir.config_parameter">
+         <field name="key">account.password.tnt.api.request</field>
+         <field name="value"></field>
+      </record>
 </odoo>

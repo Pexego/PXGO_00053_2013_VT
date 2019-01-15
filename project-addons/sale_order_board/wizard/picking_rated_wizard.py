@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, _, exceptions
+from odoo import models, fields
 
 
 class PickingRatedWizard(models.TransientModel):
