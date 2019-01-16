@@ -19,9 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields, exceptions, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
-import time
+from openerp import models, api, fields
 
 
 class CrmClaimUpdateLines(models.TransientModel):
