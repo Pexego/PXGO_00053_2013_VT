@@ -1,0 +1,80 @@
+#. module: crm_claim_custom_update_line
+#: view:crm.claim:crm_claim_rma_custom.inherit_crm_case_claims_form_view
+msgid "Update RMA lines"
+msgstr "Actualizar Lineas RMA´s"
+
+#. module: crm_claim_custom_update_line
+#: view:crm_claim_update_lines.wizard:crm_claim_custom_update_line.view_crm_claim_update_lines_wizard
+msgid "Update data"
+msgstr "Actualizar datos"
+
+#. module: crm_claim_custom_update_line
+#: view:crm_claim_update_lines.wizard:crm_claim_custom_update_line.view_crm_claim_update_lines_wizard
+msgid "Update"
+msgstr "Actualizar"
+
+#. module: crm_claim_custom_update_line
+#: view:crm_claim_update_lines.wizard:crm_claim_custom_update_line.view_crm_claim_update_lines_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: crm_claim_custom_update_line
+#: code:addons/ccrm_claim_custom_update_line/models/crm_claim.py:40
+#, python-formats
+msgid "Data update in common in all RMA lines"
+msgstr "Actualización de datos en común en todas las lineas RMA´s"
+
+#. module: crm_claim_custom_update_line
+#: field:crm_claim_update_lines.wizard,substate_id:0
+msgid "substate_id_wizard"
+msgstr "Sub-estado"
+
+#. module: crm_claim_custom_update_line
+#: field:crm_claim_update_lines.wizard,invoice_id:0
+msgid "invoice_id"
+msgstr "Factura"
+
+#. module: crm_claim_custom_update_line
+#: field:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Claim Subject"
+msgstr "Objeto de la reclamación"
+
+#. module: crm_claim_custom_update_line
+#: selection:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Broken down product"
+msgstr "Producto Averiado"
+
+#. module: crm_claim_custom_update_line
+#: selection:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Not appropiate product"
+msgstr "Producto no adecuado"
+
+#. module: crm_claim_custom_update_line
+#: selection:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Order cancellation"
+msgstr "Cancelación de orden"
+
+#. module: crm_claim_custom_update_line
+#: selection:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Damaged delivered product"
+msgstr "Producto enviado dañado"
+
+#. module: crm_claim_custom_update_line
+#: selection:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Shipping error"
+msgstr "Error de envío"
+
+#. module: crm_claim_custom_update_line
+#: selection:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Exchange request"
+msgstr "Solicitar cambio"
+
+#. module: crm_claim_custom_update_line
+#: selection:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Lost during transport"
+msgstr "Perdido durante el transporte"
+
+#. module: crm_claim_custom_update_line
+#: selection:crm_claim_update_lines.wizard,claim_origine:0
+msgid "Other"
+msgstr "Otro"
