@@ -271,4 +271,4 @@ msgstr "Visitas Realizadas"
 #. module: external_salesperson_visit
 #: field:partner.visit,partner_visit_current_year:0
 msgid "Current year visits"
-msgstr "Visitas último año"
+msgstr "Visitas año actual"
