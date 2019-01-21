@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="view_picking_form_add_pending_move" model="ir.ui.view">
+        <!--TODO: MIgrar<record id="view_picking_form_add_pending_move" model="ir.ui.view">
             <field name="name">stock.picking.form.add_pending_move</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
@@ -13,7 +13,7 @@
                     <field name="pending_stock_reverse_move_id" attrs="{'invisible': [('picking_type_code','!=','incoming')]}"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

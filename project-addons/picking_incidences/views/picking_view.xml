@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<odoo>
+<openerp>
     <data>
 
         <record id="view_picking_form_add_incidences" model="ir.ui.view">
@@ -16,35 +16,35 @@
                     <field name="with_incidences"/>
                     <field name="block_picking" readonly="1"/>
                 </field>
-                <button name="do_unreserve" position="attributes">
-                    <attribute name="attrs">{'invisible': ['block_picking', '=', True]}</attribute>
-                </button>
+                <!--TODO: Migrar<button name="do_unreserve" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|',('quant_reserved_exist', '=', False),('block_picking', '=', True)]}</attribute>
+                </button>-->
             </field>
         </record>
 
         <record id="view_move_picking_tree_add_ready_qty" model="ir.ui.view">
             <field name="name">stock.move.tree.add_ready_qty</field>
-            <field name="model">stock.picking</field>
-            <field name="inherit_id" ref="stock.view_picking_form"/>
+            <field name="model">stock.move</field>
+            <field name="inherit_id" ref="stock.view_move_picking_tree"/>
             <field name="arch" type="xml">
-                <field name="quantity_done" position="before">
+                <field name="product_uom" position="after">
                     <field name="qty_ready"/>
                     <field name="qty_confirmed"/>
                 </field>
             </field>
         </record>
 
-        <record id="view_move_picking_form_add_ready_qty" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_move_picking_form_add_ready_qty" model="ir.ui.view">
             <field name="name">stock.move.form.add_ready_qty</field>
             <field name="model">stock.move</field>
             <field name="inherit_id" ref="stock.view_move_picking_form"/>
             <field name="arch" type="xml">
-                <label for="product_uom_qty" position="before">
+                <label for="product_uos_qty" position="before">
                     <field name="qty_ready"/>
                     <field name="qty_confirmed"/>
                 </label>
             </field>
-        </record>
+        </record>-->
 
     </data>
-</odoo>
+</openerp>

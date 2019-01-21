@@ -19,11 +19,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import time
-from openerp.osv import osv
-from openerp.tools import config
+from odoo import models
 
-class ir_attachment(osv.osv):
+class ir_attachment(models.Model):
     _inherit = 'ir.attachment'
 
     _order = 'create_date desc,name desc'

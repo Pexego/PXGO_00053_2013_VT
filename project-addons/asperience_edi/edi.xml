@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-        <data>
+<odoo>
+
                 <!--                      EDI                      -->
                 <record id="view_edi_edi_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.form</field>
                         <field name="model">edi.edi</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Edi process">
                                     <group colspan="4" col="4">
@@ -101,7 +100,6 @@
                 <record id="view_edi_edi_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.tree</field>
                         <field name="model">edi.edi</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Edi edi">
                                         <field name="name" />
@@ -117,7 +115,6 @@
                 <record id="view_edi_edi_log_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.log.form</field>
                         <field name="model">edi.edi.log</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Edi logs">
                                         <field name="name" />
@@ -132,7 +129,6 @@
                 <record id="view_edi_edi_log_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.log.tree</field>
                         <field name="model">edi.edi.log</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Edi logs">
                                         <field name="name" select="1"/>
@@ -150,7 +146,6 @@
                 <record id="view_edi_edi_result_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.result.form</field>
                         <field name="model">edi.edi.result</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Edi edi Result">
                                         <field name="name" />
@@ -162,7 +157,6 @@
                 <record id="view_edi_edi_result_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.result.tree</field>
                         <field name="model">edi.edi.result</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Edi edi Result">
                                         <field name="name" />
@@ -176,7 +170,6 @@
                 <record id="view_edi_edi_line_edi_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.line.edi.form</field>
                         <field name="model">edi.edi.line.edi</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Edi line">
                                         <field name="sequence" />
@@ -190,7 +183,6 @@
                 <record id="view_edi_edi_line_edi_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.line.edi.tree</field>
                         <field name="model">edi.edi.line.edi</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Edi line">
                                         <field name="sequence" />
@@ -204,7 +196,6 @@
                 <record id="view_edi_edi_line_edi_field_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.line.edi.field.form</field>
                         <field name="model">edi.edi.line.edi.field</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Edi field">
                                         <field name="name" />
@@ -221,7 +212,6 @@
                 <record id="view_edi_edi_line_edi_field_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.line.edi.field.tree</field>
                         <field name="model">edi.edi.line.edi.field</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Edi field" editable="top">
                                         <field name="name" />
@@ -240,7 +230,6 @@
                 <record id="view_edi_edi_csv_field_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.csv.field.form</field>
                         <field name="model">edi.edi.csv.field</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Edi field">
                                         <field name="name" />
@@ -254,7 +243,6 @@
                 <record id="view_edi_edi_csv_field_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.csv.field.tree</field>
                         <field name="model">edi.edi.csv.field</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Edi field" editable="top">
                                         <field name="name" />
@@ -270,7 +258,6 @@
                 <record id="view_edi_edi_xml_field_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.xml.field.form</field>
                         <field name="model">edi.edi.xml.field</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Edi field">
                                         <field name="name" />
@@ -285,7 +272,6 @@
                 <record id="view_edi_edi_xml_field_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.xml.field.tree</field>
                         <field name="model">edi.edi.xml.field</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Edi field" editable="top">
                                         <field name="name" />
@@ -302,7 +288,6 @@
                 <record id="view_edi_edi_line_csv_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.line.csv.form</field>
                         <field name="model">edi.edi.line.csv</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Csv line">
                                         <field name="sequence" />
@@ -316,7 +301,6 @@
                 <record id="view_edi_edi_line_csv_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.line.csv.tree</field>
                         <field name="model">edi.edi.line.csv</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Csv line">
                                         <field name="sequence" />
@@ -330,7 +314,6 @@
                 <record id="view_edi_edi_line_csv_field_form" model="ir.ui.view">
                         <field name="name">view.edi.edi.line.csv.field.form</field>
                         <field name="model">edi.edi.line.csv.field</field>
-                        <field name="type">form</field>
                         <field name="arch" type="xml">
                                 <form string="Csv field">
                                         <field name="name" />
@@ -344,7 +327,6 @@
                 <record id="view_edi_edi_line_csv_field_tree" model="ir.ui.view">
                         <field name="name">view.edi.edi.line.csv.field.tree</field>
                         <field name="model">edi.edi.line.csv.field</field>
-                        <field name="type">tree</field>
                         <field name="arch" type="xml">
                                 <tree string="Csv field" editable="top">
                                         <field name="name" />
@@ -355,5 +337,5 @@
                                 </tree>
                         </field>
                 </record>
-        </data>
-</openerp>
+
+</odoo>

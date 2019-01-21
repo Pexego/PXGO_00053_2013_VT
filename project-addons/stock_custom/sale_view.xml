@@ -4,18 +4,9 @@
 
 <openerp>
     <data>
-        <!--record id="view_order_form_show_is_all_reserved" model="ir.ui.view">
-            <field name="name">sale.order.form</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale_stock.view_order_form_inherit"/>
-            <field name="arch" type="xml">
-                <field name="picking_policy" position="before">
-                    <field name="is_all_reserved"/>
-                </field>
-            </field>
-        </record-->
 
-        <record id="view_sales_order_line_filter" model="ir.ui.view">
+
+        <!--TODO: Migrar<record id="view_sales_order_line_filter" model="ir.ui.view">
             <field name="name">sale.order.line.select</field>
             <field name="model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_sales_order_line_filter" />
@@ -24,21 +15,21 @@
                     <filter string="Date" domain="[]" context="{'group_by':'date_order'}"/>
                 </filter>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_sale_order_search" model="ir.ui.view">
             <field name="name">sale.order.search</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
             <field name="arch" type="xml">
-                <xpath expr="//filter[@string='Done']" position="after">
+                <xpath expr="//filter[@name='sales']" position="after">
                     <filter string="all reservations assigned" domain="[('is_all_reserved','=',True)]"/>
                     <filter string="some reservations assigned" domain="[('is_some_reserved','=',True)]"/>
                 </xpath>
             </field>
         </record>
 
-        <record id="view_order_form" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_order_form" model="ir.ui.view">
             <field name="name">sale.order.search</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
@@ -47,9 +38,9 @@
                     <button name="action_quotation_send_reserve" string="Send by Email" type="object" states="reserve" class="oe_highlight" groups="base.group_user"/>
                 </button>
             </field>
-        </record>
+        </record>-->
 
-        <record id="view_order_form_reserve" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_order_form_reserve" model="ir.ui.view">
             <field name="name">sale.order.form.reserve</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
@@ -58,7 +49,7 @@
                     <attribute name="icon">gtk-cancel</attribute>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

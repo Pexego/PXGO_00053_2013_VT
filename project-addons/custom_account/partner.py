@@ -21,8 +21,7 @@
 ##############################################################################
 
 from datetime import date
-from openerp import fields, models, api, exceptions, _
-from openerp.osv import fields as fields2
+from odoo import fields, models, api
 from dateutil.relativedelta import relativedelta
 
 
@@ -33,11 +32,10 @@ class Partner(models.Model):
     email2 = fields.Char('Second Email')
     not_send_following_email = fields.Boolean()
     unreconciled_purchase_aml_ids = fields.One2many('account.move.line', 'partner_id',
-                                                    domain=['&', ('reconcile_id', '=', False), '&',
-                                                            ('account_id.active', '=', True), '&',
-                                                            ('account_id.type', '=', 'payable'), '&',
+                                                    domain=[('full_reconcile_id', '=', False),
+                                                            ('account_id.internal_type', '=', 'payable'),
                                                             ('account_id.not_payment_followup', '=', False),
-                                                            ('state', '!=', 'draft')])
+                                                            ('move_id.state', '!=', 'draft')])
 
     @api.one
     def _pending_orders_amount(self):
@@ -82,9 +80,9 @@ class Partner(models.Model):
             if global_balance >=5 and not partner.not_send_following_email:
                 line_ids = self.env['account.move.line'].\
                     search([('partner_id', '=', partner.id),
-                            ('account_id.type', '=', 'receivable'),
-                            ('reconcile_id', '=', False),
-                            ('state', '!=', 'draft'),
+                            ('account_id.internal_type', '=', 'receivable'),
+                            ('full_reconcile_id', '=', False),
+                            ('move_id.state', '!=', 'draft'),
                             ('company_id', '=', company_id),
                             ('blocked', '!=', True),
                             '|', ('date_maturity', '=', False),

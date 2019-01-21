@@ -21,11 +21,11 @@
 ################################################################################
 
 
-from openerp.osv import osv
-from openerp import SUPERUSER_ID
+from odoo import models
+from odoo import SUPERUSER_ID
 
 
-class mail_compose_message(osv.TransientModel):
+class mail_compose_message(models.TransientModel):
 
     _inherit = 'mail.compose.message'
 

@@ -28,11 +28,11 @@
     'website': 'www.pexego.es',
     "depends": ['sale',
                 'sale_stock',
-                'nan_partner_risk',
+                'account_financial_risk',
                 'stock_reserve',
-                'stock_reserve_sale',
-                'sale_quick_payment'],
-    "data": ['sale_workflow.xml',
+                'stock_reserve_sale',],
+                #TODO: Migrar'sale_quick_payment'],
+    "data": [#'sale_workflow.xml',
              'sale_view.xml'],
     "installable": True
 }

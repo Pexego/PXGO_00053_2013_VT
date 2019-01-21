@@ -7,7 +7,7 @@
             <field name="name">Shipping Balance</field>
             <field name="model">shipping.balance</field>
             <field name="arch" type="xml" >
-                <tree editable="top" colors="red: balance==True">
+                <tree editable="top" decoration-danger="balance==True">
 
                     <field name="partner_id" invisible="1"/>
                     <field name="repair_id" invisible="1"/>

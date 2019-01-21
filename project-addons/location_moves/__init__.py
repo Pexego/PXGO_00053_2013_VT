@@ -19,5 +19,5 @@
 #
 ##############################################################################
 
-import stock, wizard
-import procurement
+from . import stock
+from . import wizard

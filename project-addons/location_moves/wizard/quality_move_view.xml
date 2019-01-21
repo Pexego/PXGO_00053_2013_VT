@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="quality_move_wzd_form" model="ir.ui.view">
             <field name="name">quality.move.wzdform</field>
             <field name="model">quality.move.wzd</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Quality move">
                     <group>
@@ -29,5 +27,4 @@
             <field name="context">{'form_view_ref': False}</field>
         </record>
 
-    </data>
-</openerp>
+</odoo>

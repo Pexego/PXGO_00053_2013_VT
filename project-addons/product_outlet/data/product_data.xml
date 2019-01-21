@@ -1,34 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data noupdate="1">
+<odoo noupdate="1">
 
-        <record id="product_category_outlet" model="product.category">
-            <field name="name">Outlet</field>
-            <field name="type">normal</field>
-        </record>
+    <record id="product_category_outlet" model="product.category">
+        <field name="name">Outlet</field>
+        <field name="type">normal</field>
+    </record>
 
-        <record id="product_category_o1" model="product.category">
-            <field name="parent_id" ref="product_category_outlet"/>
-            <field name="name">O1</field>
-            <field name="type">normal</field>
-        </record>
+    <record id="product_category_o1" model="product.category">
+        <field name="parent_id" ref="product_category_outlet"/>
+        <field name="name">O1</field>
+        <field name="type">normal</field>
+    </record>
 
-        <record id="product_category_o2" model="product.category">
-            <field name="parent_id" ref="product_category_outlet"/>
-            <field name="name">O2</field>
-            <field name="type">normal</field>
-        </record>
+    <record id="product_category_o2" model="product.category">
+        <field name="parent_id" ref="product_category_outlet"/>
+        <field name="name">O2</field>
+        <field name="type">normal</field>
+    </record>
 
-        <record id="stock_location_outlet" model="stock.location">
-            <field name="name">Outlet</field>
-            <field name="usage">internal</field>
-            <field name="location_id" ref="stock.stock_location_stock"/>
-        </record>
+    <record id="stock_location_outlet" model="stock.location">
+        <field name="name">Outlet</field>
+        <field name="usage">internal</field>
+        <field name="location_id" ref="stock.stock_location_stock"/>
+    </record>
 
-        <record id="tag_outlet" model="product.tag">
-            <field name="name">Outlet</field>
-        </record>
+    <record id="stock_location_outlet_changes" model="stock.location">
+        <field name="name">Outlet Changes</field>
+        <field name="usage">inventory</field>
+        <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+    </record>
 
-    </data>
-</openerp>
+    <record id="tag_outlet" model="product.tag">
+        <field name="name">Outlet</field>
+    </record>
+</odoo>
 

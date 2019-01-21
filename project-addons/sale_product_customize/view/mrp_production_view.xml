@@ -10,10 +10,10 @@
                 <field name="lot_id" position="before">
                     <field name="final_lot" invisible="1"/>
                 </field>
-                <field name="lot_id" position="attributes">
+                <!--TODO:Migrar<field name="lot_id" position="attributes">
                     <attribute name="attrs">{'required': [('final_lot', '=', False),
                         ('mode', '=', 'consume_produce')], 'readonly': [('final_lot', '=', True)]}</attribute>
-                </field>
+                </field>-->
 
                 <xpath expr="//tree/field[@name='lot_id']" position="before">
                     <field name="final_lot" invisible="1"/>
@@ -24,7 +24,7 @@
             </field>
         </record>
 
-        <record id="consume_move_add_final_lot" model="ir.ui.view">
+        <!--TODO: Migrar<record id="consume_move_add_final_lot" model="ir.ui.view">
             <field name="name">stock.move.consume</field>
             <field name="model">stock.move.consume</field>
             <field name="inherit_id" ref="mrp.view_stock_move_consume_wizard"/>
@@ -36,7 +36,7 @@
                     <attribute name="attrs">{'required': [('final_lot', '=', True)]}</attribute>
                 </field>
             </field>
-        </record>
+        </record>-->
 
 
         <record id="production_add_type_form" model="ir.ui.view">

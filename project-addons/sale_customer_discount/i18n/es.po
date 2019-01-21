@@ -16,152 +16,152 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_customer_discount
-#: field:product.product,commercial_cost:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_commercial_cost
 msgid "Commercial Cost"
 msgstr "Coste Comercial"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvd1:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd1
 msgid "PVD 1 Margin"
 msgstr "Margen PVD_A"
 
 #. module: sale_customer_discount
-#: field:product.product,pvd1_price:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd1_price
 msgid "PVD 1 price"
 msgstr "PVD_A"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvd2:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd2
 msgid "PVD 2 Margin"
 msgstr "Margen PVD_B"
 
 #. module: sale_customer_discount
-#: field:product.product,pvd2_price:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd2_price
 msgid "PVD 2 price"
 msgstr "PVD_B"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvd3:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd3
 msgid "PVD 3 Margin"
 msgstr "Margen PVD_C"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvd4:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd4
 msgid "PVD 4 Margin"
 msgstr "Margen PVD_D"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvd_pvi_1:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd_pvi_1
 msgid "PVD/PVI 1 margin"
 msgstr "Relación PVD/PVI 1"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvd_pvi_2:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd_pvi_2
 msgid "PVD/PVI 2 margin"
 msgstr "Relación PVD/PVI 2"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvd_pvi_3:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd_pvi_3
 msgid "PVD/PVI 3 margin"
 msgstr "Relación PVD/PVI 3"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvd_pvi_4:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd_pvi_4
 msgid "PVD/PVI 4 margin"
 msgstr "Relación PVD/PVI 4"
 
 #. module: sale_customer_discount
-#: field:product.product,pvd3_price:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd3_price
 msgid "PVD 3 price"
 msgstr "PVD_C"
 
 #. module: sale_customer_discount
-#: field:product.product,pvd4_price:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd4_price
 msgid "PVD 4 price"
 msgstr "PVD_D"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvi1:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvi1
 msgid "PVI 1 Margin"
 msgstr "Margen PVI_A"
 
 #. module: sale_customer_discount
-#: field:product.product,pvi1_price:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvi1_price
 msgid "PVI 1 price"
 msgstr "PVI_A"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvi2:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvi2
 msgid "PVI 2 Margin"
 msgstr "Margen PVI_B"
 
 #. module: sale_customer_discount
-#: field:product.product,pvi2_price:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvi2_price
 msgid "PVI 2 price"
 msgstr "PVI_B"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvi3:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvi3
 msgid "PVI 3 Margin"
 msgstr "Margen PVI_C"
 
 #. module: sale_customer_discount
-#: field:product.product,pvi3_price:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvi3_price
 msgid "PVI 3 price"
 msgstr "PVI_C"
 
 #. module: sale_customer_discount
-#: field:product.product,margin_pvi4:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvi4
 msgid "PVI 4 Margin"
 msgstr "Margen PVI_D"
 
 #. module: sale_customer_discount
-#: field:product.product,pvi4_price:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvi4_price
 msgid "PVI 4 price"
 msgstr "PVI_D"
 
 #. module: sale_customer_discount
-#: field:product.product,pvd2_relation:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd2_relation
 msgid "PVP 2 / PVD 2 relation"
 msgstr "Relación PVP_B / PVD_B"
 
 #. module: sale_customer_discount
-#: field:product.product,pvd3_relation:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd3_relation
 msgid "PVP 3 / PVD 3 relation"
 msgstr "Relación PVP_C / PVD_C"
 
 #. module: sale_customer_discount
-#: field:product.product,pvd4_relation:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd4_relation
 msgid "PVP 4 / PVD 4 relation"
 msgstr "Relación PVP_D / PVD_D"
 
 #. module: sale_customer_discount
-#: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
 msgid "PVP A"
 msgstr "PVP A"
 
 #. module: sale_customer_discount
-#: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
 msgid "PVP B"
 msgstr "PVP B"
 
 #. module: sale_customer_discount
-#: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
 msgid "PVP C"
 msgstr "PVP C"
 
 #. module: sale_customer_discount
-#: view:product.product:sale_customer_discount.product_product_tree_view_add_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
 msgid "PVP D"
 msgstr "PVP D"
 
 #. module: sale_customer_discount
-#: field:product.product,pvd1_relation:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd1_relation
 msgid "PVP/PVD 1 relation"
 msgstr "Relación PVP_A / PVD_A"
 
 #. module: sale_customer_discount
-#: view:product.product:sale_customer_discount.product_normal_form_view_add_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_normal_form_view_add_discount
 msgid "Prices"
 msgstr "Precios"
 
@@ -171,16 +171,16 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: sale_customer_discount
-#: field:product.product,list_price2:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price2
 msgid "Sale Price"
 msgstr "PVP_B"
 
 #. module: sale_customer_discount
-#: field:product.product,list_price3:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price3
 msgid "Sale Price 2"
 msgstr "PVP_C"
 
 #. module: sale_customer_discount
-#: field:product.product,list_price4:0
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price4
 msgid "Sale Price 3"
 msgstr "PVP_D"

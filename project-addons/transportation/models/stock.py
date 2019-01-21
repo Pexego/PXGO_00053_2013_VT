@@ -144,14 +144,13 @@ class StockPicking(models.Model):
 
     volume = fields.Float('Volume', copy=False)
     total_cbm = fields.Float('Total CBM')
-    weight_st = fields.Float(digits_compute=dp.get_precision('Stock Weight'))
+    weight_st = fields.Float(digits=dp.get_precision('Stock Weight'))
     weight_net_st = fields.\
-        Float(digits_compute=dp.get_precision('Stock Weight'))
-    weight = fields.Float('Weight', compute='cal_weight', multi=True, readonly=False,
-                          digits_compute=dp.get_precision('Stock Weight'))
+        Float(digits=dp.get_precision('Stock Weight'))
+    weight = fields.Float('Weight', compute='cal_weight', readonly=False,
+                          digits=dp.get_precision('Stock Weight'))
     weight_net = fields.Float('Net Weight', compute="cal_weight", readonly=False,
-                              digits_compute=dp.get_precision('Stock Weight'),
-                              multi=True)
+                              digits=dp.get_precision('Stock Weight'))
     carrier_tracking_ref = fields.Char('Carrier Tracking Ref', copy=False)
     number_of_packages = fields.Integer('Number of Packages', copy=False)
     weight_uom_id = fields.Many2one('product.uom', 'Unit of Measure',
@@ -190,15 +189,15 @@ class StockMove(models.Model):
                                                 uom_categ_id.id),
                                                ('factor', '=', 1)])[0]
 
-    weight = fields.Float('Weight', compute='cal_move_weight', multi=True,
-                          digits_compute=dp.get_precision('Stock Weight'),
+    weight = fields.Float('Weight', compute='cal_move_weight',
+                          digits=dp.get_precision('Stock Weight'),
                           store=True, readonly=False)
     weight_net = fields.Float('Net weight', compute='cal_move_weight',
-                              digits_compute=dp.get_precision('Stock Weight'),
-                              store=True, multi=True, readonly=False)
-    weight_st = fields.Float(digits_compute=dp.get_precision('Stock Weight'))
+                              digits=dp.get_precision('Stock Weight'),
+                              store=True, readonly=False)
+    weight_st = fields.Float(digits=dp.get_precision('Stock Weight'))
     weight_net_st = fields.\
-        Float(digits_compute=dp.get_precision('Stock Weight'))
+        Float(digits=dp.get_precision('Stock Weight'))
     weight_uom_id = fields.Many2one('product.uom', 'Unit of Measure',
                                     required=True, readonly="1",
                                     help="Unit of Measure (Unit of Measure) "

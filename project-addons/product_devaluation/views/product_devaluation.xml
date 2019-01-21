@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <data>
+
+        <record id="view_tree_devaluation_searched" model="ir.ui.view">
+            <field name="name">product.devaluation.tree</field>
+            <field name="model">product.devaluation</field>
+            <field name="arch" type="xml">
+                <tree string="Product Devaluation" decoration-danger="total_dev&gt;1">
+                    <field name="product_id"/>
+                    <field name="accounted_ok"/>
+                    <field name="quantity" />
+                    <field name="price_before"/>
+                    <field name="price_after"/>
+                    <field name="total_dev" sum="Total" />
+                    <field name="date_dev"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_devaluation_product_search" model="ir.ui.view">
+            <field name="name">product.devaluation.tree.search</field>
+            <field name="model">product.devaluation</field>
+            <field name="arch" type="xml">
+                <search string="Product Devaluation">
+                    <field name="id" />
+                    <field name="product_id" />
+
+                    <separator/>
+                    <group string="Group By...">
+                        <filter string="Accounted" name="accounted" domain="[('accounted_ok','=',False)]"/>
+                        <filter string="Current Year" domain="[('date_dev','&gt;=', datetime.datetime.now().strftime('%Y-01-01'))]" />
+                        <filter string="Product" domain="[]"
+                            name="groupby_product"
+                            context="{'group_by': 'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_open_search_devaluation_product" model="ir.actions.act_window">
+            <field name="name">Product Devaluation</field>
+            <field name="res_model">product.devaluation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_tree_devaluation_searched"/>
+            <field name="search_view_id" ref="view_devaluation_product_search"/>
+            <field name="context">{'search_default_groupby_product': 1, 'search_default_accounted' : 1}</field>
+        </record>
+
+        <menuitem
+            name="Product Devaluation"
+            action="action_open_search_devaluation_product"
+            id="menu_action_devaluation_product_search"
+            parent="stock.menu_stock_inventory_control"
+            sequence="30"
+        />
+
+        <record id="view_category_property_devaluation_form" model="ir.ui.view">
+            <field name="name">product.category.stock.property.devaluation.form.inherit</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="account.view_category_property_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <group name="account_property" position="after">
+                        <group name="account_stock_property_devaluation" string="Account Devaluation Properties" colspan="2">
+                            <field name="devaluation_journal_id"/>
+                            <field name="devaluation_account_provision_id"/>
+                            <field name="devaluation_account_debit_id"/>
+                            <field name="devaluation_account_credit_id"/>
+                        </group>
+                    </group>
+                </data>
+            </field>
+        </record>
+
+        <act_window name="Create Account"
+            res_model="product.devaluation.account.wizard"
+            src_model="product.devaluation"
+            view_id="view_tree_devaluation_searched"
+            view_mode="form"
+            target="new"
+            key2="client_action_multi"
+            id="action_product_devaluation_create_account"/>
+
+    </data>
+</odoo>
