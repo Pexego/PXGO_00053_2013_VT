@@ -107,3 +107,8 @@ msgstr "El usuario %s ha aceptado las cantidades preparadas."
 #: model:ir.model.fields,field_description:picking_incidences.field_stock_picking_with_incidences
 msgid "With incidences"
 msgstr "Con incidencias"
+
+#. module: picking_incidences
+#: selection:stock.picking,state:0
+msgid "Partially Available"
+msgstr "Parcialmente disponible"
