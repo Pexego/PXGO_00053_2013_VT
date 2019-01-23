@@ -133,7 +133,7 @@ class StockPicking(models.Model):
                 new_moves.append(move.id)
             elif float_compare(remaining_qty, 0, precision_rounding=precision) > 0 and \
                  float_compare(remaining_qty, move.product_qty, precision_rounding=precision) < 0:
-                new_move = move.split(move, remaining_qty)
+                new_move = move._split(remaining_qty)
                 new_moves.append(new_move)
         if new_moves:
             new_moves = self.env['stock.move'].browse(new_moves)
@@ -215,14 +215,14 @@ class StockPicking(models.Model):
                                    precision_rounding=precision) > 0 and \
                     float_compare(remaining_qty, move.product_qty,
                                   precision_rounding=precision) < 0:
-                    new_move = move.split(move, remaining_qty)
+                    new_move = move._split(remaining_qty)
                     new_moves.append(new_move)
                 if not move.product_uom_qty:
                     move.state = 'draft'
                     move.unlink()
             if new_moves:
                 new_moves = self.env['stock.move'].browse(new_moves)
-                bck = self._create_backorder(self)
+                bck = self._create_backorder_incidences(new_moves)
                 bck.write({'move_type': 'one'})
                 self.action_assign()
             self.message_post(body=_("User %s accepted confirmed qties.") %
