@@ -26,6 +26,6 @@
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
     "depends": ['stock'],
-    "data": ['views/picking_view.xml', 'views/email_template.xml'],
+    "data": ['views/picking_view.xml', 'views/email_template.xml', 'data/cron.xml'],
     "installable": True
 }
