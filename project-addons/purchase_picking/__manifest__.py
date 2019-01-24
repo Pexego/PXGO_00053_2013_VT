@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -21,7 +20,7 @@
 
 {
     'name': "Purchase picking",
-    'version': '1.0',
+    'version': '11.0',
     'category': 'purchase',
     'description': """When a purchase order is confirmed, creates the associated moves without picking.""",
     'author': 'Pexego Sistemas Informáticos',
