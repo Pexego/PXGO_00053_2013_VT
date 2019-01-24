@@ -11,9 +11,9 @@
             <field name="origin" position="after">
                 <field name="container_id"/>
             </field>
-            <!--TODO: Migrar<filter string="Picking" position="after">
+            <filter name="groupby_picking_id" position="after">
                 <filter string="Container" name="groupby_container_id" icon="terp-accessories-archiver" domain="[]"  context="{'group_by':'container_id'}"/>
-            </filter>-->
+            </filter>
         </field>
     </record>
 
@@ -51,9 +51,6 @@
             <field name="origin" position="after">
                 <field name="shipping_identifier"/>
             </field>
-            <!--TODO: Migrar<field name="min_date" position="attributes">
-                <attribute name="invisible">0</attribute>
-            </field>-->
         </field>
     </record>
 
@@ -71,7 +68,7 @@
         </field>
     </record>
 
-    <!--TODO: Migrate<record id="view_move_picking_form_add_partner" model="ir.ui.view">
+    <!--record id="view_move_picking_form_add_partner" model="ir.ui.view">
         <field name="name">stock.move.form</field>
         <field name="model">stock.move</field>
         <field name="inherit_id" ref="stock.view_move_picking_form"/>
@@ -83,7 +80,7 @@
                 </group>
             </field>
         </field>
-    </record>-->
+    </record-->
 
     <record id="view_move_form_add_container" model="ir.ui.view">
         <field name="name">stock.move.form.add_container</field>
@@ -110,7 +107,7 @@
                         <field name="date_expected"/>
                     </group>
                     <group col="2" colspan="2">
-                        <field name="picking_ids" widget="one2many_tags"/>
+                        <field name="picking_ids" widget="many2many_tags"/>
                     </group>
                     <separator string="Related Moves" colspan="4"/>
                     <field name="move_ids" context="{'tree_view_ref':'purchase_picking.stock_move_custom_tree'}" nolabel="1" colspan="4"/>
@@ -180,6 +177,6 @@
         <field name="search_view_id" ref="view_stock_container_filter"/>
     </record>
 
-    <menuitem name="Containers" parent="purchase.menu_purchase_config"
+    <menuitem name="Containers" parent="purchase.menu_purchase_control"
         action="action_stock_container" id="stock_container_menu"/>
 </odoo>

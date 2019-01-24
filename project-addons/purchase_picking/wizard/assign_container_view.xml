@@ -7,8 +7,8 @@
             <form string="Assign container">
                 <group>
                     <field name="container_id"/>
-                    <button string="Assign" name="action_assign" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                    <button string="Assign" name="action_assign" type="object"/>
+                    <button string="Cancel" special="cancel"/>
                 </group>
             </form>
         </field>

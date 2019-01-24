@@ -19,9 +19,10 @@
 ##############################################################################
 
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 
-class move_details(models.TransientModel):
+
+class MoveDetails(models.TransientModel):
 
     _name = 'picking.wizard.move.details'
 
@@ -31,7 +32,9 @@ class move_details(models.TransientModel):
     wizard_id = fields.Many2one('picking.from.moves.wizard', 'wizard')
 
 
-class create_picking_move(models.TransientModel):
+class CreatePickingMove(models.TransientModel):
+
+    _name = 'picking.from.moves.wizard'
 
     @api.model
     def _get_lines(self):
@@ -44,8 +47,6 @@ class create_picking_move(models.TransientModel):
                               'qty': move.product_uom_qty,
                               'move_id': move.id})
         return wiz_lines
-
-    _name = "picking.from.moves.wizard"
 
     date_picking = fields.Datetime('Date planned', required=True)
     move_detail_ids = fields.One2many('picking.wizard.move.details',
@@ -61,7 +62,7 @@ class create_picking_move(models.TransientModel):
         if len(pick_ids) > 1:
             action['domain'] = "[('id','in',[" + ','.join(map(str, pick_ids)) + "])]"
         else:
-            res =  self.env.ref('stock.view_picking_form').id
+            res = self.env.ref('stock.view_picking_form').id
             action['views'] = [(res, 'form')]
             action['res_id'] = pick_ids and pick_ids[0] or False
         return action
@@ -134,7 +135,7 @@ class create_picking_move(models.TransientModel):
                     'move_lines': [(6, 0, [x.id for x in moves_type])],
                     'origin': ', '.join(moves_type.mapped('purchase_line_id.order_id.name')),
                     'min_date': self.date_picking,
-                    'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none',
+                    # 'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none',
                     'temp': True
                 }
                 picking_ids += self.env['stock.picking'].create(picking_vals)

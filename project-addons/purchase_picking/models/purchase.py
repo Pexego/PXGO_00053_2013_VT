@@ -18,16 +18,16 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _
-from openerp.exceptions import except_orm
+from odoo import models, fields, api, _
+from odoo.exceptions import except_orm
+from odoo.tools.float_utils import float_is_zero, float_compare
 
 
-class purchase_order(models.Model):
+class PurchaseOrder(models.Model):
 
     _inherit = 'purchase.order'
 
-    picking_created = fields.Boolean('Picking created',
-                                     compute='is_picking_created')
+    picking_created = fields.Boolean('Picking created', compute='is_picking_created')
 
     @api.multi
     def test_moves_done(self):
@@ -40,72 +40,57 @@ class purchase_order(models.Model):
                         return False
         return True
 
+    @api.multi
     def is_picking_created(self):
-        self.picking_created = self.picking_ids and True or False
+        for order in self:
+            order.picking_created = order.picking_ids and True or False
 
-    def _prepare_order_line_move(self, cr, uid, order, order_line, picking_id,
-                                 group_id, context=None):
-        """
-            prepare the stock move data from the PO line.
-            This function returns a list of dictionary ready to be used in
-            stock.move's create()
-        """
-        purchase_line_obj = self.pool['purchase.order.line']
-        res = super(purchase_order, self)._prepare_order_line_move(
-            cr, uid, order, order_line, picking_id, group_id, context)
+    @api.multi
+    def _prepare_stock_moves(self, picking):
+        self.ensure_one()
+        # falla al entrar aqui ya que le pasamos False.id
+        res = super(PurchaseOrder, self)._prepare_stock_moves(picking)
+
+        import ipdb
+        ipdb.set_trace()
+
         for move_dict in res:
             move_dict.pop('picking_id', None)
             move_dict.pop('product_uos_qty', None)
             move_dict.pop('product_uos', None)
-            move_dict['partner_id'] = order.partner_id.id
-            if order.partner_ref:
-                move_dict['origin'] += ":" + order.partner_ref
+            move_dict['partner_id'] = self.partner_id.id
+            if self.partner_ref:
+                move_dict['origin'] += ":" + self.partner_ref
+
         return res
 
-    def action_picking_create(self, cr, uid, ids, context=None):
+    @api.multi
+    def _create_picking(self):
         """
             Se sobreescribe la función para que no se cree el picking.
         """
-        for order in self.browse(cr, uid, ids):
-            self._create_stock_moves(cr, uid, order, order.order_line,
-                                     False, context=context)
+        for order in self:
+            if any([ptype in ['product', 'consu'] for ptype in order.order_line.mapped('product_id.type')]):
+                moves = order.order_line._create_stock_moves(False)
+                seq = 0
+                for move in sorted(moves, key=lambda move: move.date_expected):
+                    seq += 5
+                    move.sequence = seq
+        return True
 
-    def _create_stock_moves(self, cr, uid, order, order_lines,
-                            picking_id=False, context=None):
-        """
-        MOD: Se sobreescribe la función para no confirmar los movimientos.
-        """
-        stock_move = self.pool.get('stock.move')
-        todo_moves = []
-        new_group = self.pool.get("procurement.group").create(
-            cr, uid, {'name': order.name, 'partner_id': order.partner_id.id},
-            context=context)
+    @api.multi
+    def move_lines_create_picking(self):
+        self.ensure_one()
+        mod_obj = self.env['ir.model.data']
+        act_obj = self.env['ir.actions.act_window']
+        moves = self.env['stock.move']
 
-        for order_line in order_lines:
-            if not order_line.product_id:
-                continue
-
-            if order_line.product_id.type in ('product', 'consu'):
-                for vals in self._prepare_order_line_move(
-                        cr, uid, order, order_line, picking_id, new_group,
-                        context=context):
-                    move = stock_move.create(cr, uid, vals, context=context)
-                    todo_moves.append(move)
-
-    def move_lines_create_picking(self, cr, uid, ids, context=None):
-        mod_obj = self.pool.get('ir.model.data')
-        act_obj = self.pool.get('ir.actions.act_window')
-        moves = self.pool('stock.move')
-
-        result = mod_obj.get_object_reference(cr, uid, 'stock', 'action_receive_move')
+        result = mod_obj.get_object_reference('stock', 'action_receive_move')
         id = result and result[1] or False
-        result = act_obj.read(cr, uid, [id], context=context)[0]
+        result = act_obj.read()[0]
 
-        self_purchase = self.browse(cr, uid, ids)
-        move_lines = moves.search(cr, uid,
-                                  [('origin', 'like', self_purchase.name + '%'),
-                                   ('picking_id', '=', False)],
-                                  context=context)
+        move_lines = moves.search([('origin', 'like', self.name + '%'),
+                                   ('picking_id', '=', False)])
         if len(move_lines) < 1:
             raise except_orm(_('Warning'), _('There is any move line without associated picking'))
 
@@ -117,16 +102,17 @@ class purchase_order(models.Model):
         return result
 
 
-class purchase_order_line(models.Model):
+class PurchaseOrderLine(models.Model):
+
     _inherit = 'purchase.order.line'
 
     @api.multi
     def write(self, vals):
-        res = super(purchase_order_line, self).write(vals)
+        res = super(PurchaseOrderLine, self).write(vals)
         for line in self:
             if line.move_ids and vals.get('date_planned', False):
                 for move in line.move_ids:
-                    if move.state not in ['cancel',u'done'] and \
+                    if move.state not in ['cancel', u'done'] and \
                             not move.container_id:
                         move.date_expected = vals['date_planned']
         return res
