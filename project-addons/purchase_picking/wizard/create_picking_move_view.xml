@@ -16,8 +16,10 @@
                             <field name="qty"/>
                         </tree>
                     </field>
-                    <button string="Create" name="action_create_picking" type="object"/>
-                    <button string="Cancel" special="cancel"/>
+                    <footer>
+                        <button string="Create" name="action_create_picking" type="object"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
                 </group>
             </form>
         </field>

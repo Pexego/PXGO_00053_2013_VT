@@ -6,10 +6,14 @@
         <field name="arch" type="xml">
             <form string="Assign container">
                 <group>
-                    <field name="container_id"/>
-                    <button string="Assign" name="action_assign" type="object"/>
-                    <button string="Cancel" special="cancel"/>
+                    <group>
+                        <field name="container_id"/>
+                    </group>
                 </group>
+                <footer>
+                    <button string="Assign" class="btn-primary" name="action_assign" type="object"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>

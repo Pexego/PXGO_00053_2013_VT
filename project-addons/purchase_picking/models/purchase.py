@@ -48,11 +48,9 @@ class PurchaseOrder(models.Model):
     @api.multi
     def _prepare_stock_moves(self, picking):
         self.ensure_one()
-        # falla al entrar aqui ya que le pasamos False.id
-        res = super(PurchaseOrder, self)._prepare_stock_moves(picking)
-
         import ipdb
         ipdb.set_trace()
+        res = super(PurchaseOrder, self)._prepare_stock_moves(picking)
 
         for move_dict in res:
             move_dict.pop('picking_id', None)
@@ -71,13 +69,15 @@ class PurchaseOrder(models.Model):
         """
         for order in self:
             if any([ptype in ['product', 'consu'] for ptype in order.order_line.mapped('product_id.type')]):
-                moves = order.order_line._create_stock_moves(False)
+                void_pick = self.env['stock.picking']
+                moves = order.order_line._create_stock_moves(void_pick)
                 seq = 0
                 for move in sorted(moves, key=lambda move: move.date_expected):
                     seq += 5
                     move.sequence = seq
         return True
 
+    # Esta función es muy extraña
     @api.multi
     def move_lines_create_picking(self):
         self.ensure_one()
@@ -85,8 +85,6 @@ class PurchaseOrder(models.Model):
         act_obj = self.env['ir.actions.act_window']
         moves = self.env['stock.move']
 
-        result = mod_obj.get_object_reference('stock', 'action_receive_move')
-        id = result and result[1] or False
         result = act_obj.read()[0]
 
         move_lines = moves.search([('origin', 'like', self.name + '%'),
