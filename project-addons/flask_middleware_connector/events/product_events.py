@@ -65,7 +65,8 @@ class ProductExporter(Exporter):
                     'manufacturer_ref': product.manufacturer_pref,
                     'description_sale': product.description_sale,
                     'type': product.type,
-                    'is_pack': product.is_pack}
+                    'is_pack': product.is_pack,
+                    'discontinued': product.discontinued}
             if product.show_stock_outside:
                 vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
@@ -121,7 +122,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
                  "categ_id", "product_brand_id", "last_sixty_days_sales",
                  "joking_index", "sale_ok", "ean13", "description_sale",
-                 "manufacturer_pref", "standard_price", "type", "pack_line_ids"]
+                 "manufacturer_pref", "standard_price", "type", "pack_line_ids", "discontinued"]
     export_product.delay(session, model_name, record_id)
     claim_lines = session.env['claim.line'].search(
         [('product_id', '=', product.id),
@@ -146,7 +147,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
                  "last_sixty_days_sales", "joking_index", "sale_ok",
                  "ean13", "description_sale", "manufacturer_pref", "standard_price",
-                 "type","pack_line_ids"]
+                 "type", "pack_line_ids", "discontinued"]
     for field in up_fields:
         if field in vals:
             update_product.delay(session, model_name, record_id, priority=2, eta=30)
