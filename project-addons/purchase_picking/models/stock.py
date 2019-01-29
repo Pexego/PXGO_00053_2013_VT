@@ -65,22 +65,7 @@ class StockContainer(models.Model):
             for line in container.move_ids:
                 if line.picking_id.id not in res:
                     res.append(line.picking_id.id)
-
                     container.picking_ids = res
-
-    name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', readonly=False, required=False)
-    move_ids = fields.One2many("stock.move", "container_id", "Moves",
-                               readonly=True, copy=False)
-    picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
-
-    user_id = fields.Many2one('Responsible', compute='_get_responsible')
-    company_id = fields.Many2one("res.company", "Company", required=True,
-                                 default=lambda self: self.env['res.company']._company_default_get('stock.container'))
-
-    _sql_constraints = [
-        ('name_uniq', 'unique(name)', 'Container name must be unique')
-    ]
 
     @api.multi
     def _get_responsible(self):
@@ -91,6 +76,20 @@ class StockContainer(models.Model):
             elif container.origin:
                 responsible = self.env['sale.order'].search([('name', '=', container.origin)]).user_id
             container.user_id = responsible
+
+    name = fields.Char("Container Ref.", required=True)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', readonly=False, required=False)
+    move_ids = fields.One2many("stock.move", "container_id", "Moves",
+                               readonly=True, copy=False)
+    picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
+
+    user_id = fields.Many2one(string='Responsible', compute='_get_responsible')
+    company_id = fields.Many2one("res.company", "Company", required=True,
+                                 default=lambda self: self.env['res.company']._company_default_get('stock.container'))
+
+    _sql_constraints = [
+        ('name_uniq', 'unique(name)', 'Container name must be unique')
+    ]
 
 
 class StockPicking(models.Model):
