@@ -46,23 +46,6 @@ class PurchaseOrder(models.Model):
             order.picking_created = order.picking_ids and True or False
 
     @api.multi
-    def _prepare_stock_moves(self, picking):
-        self.ensure_one()
-        import ipdb
-        ipdb.set_trace()
-        res = super(PurchaseOrder, self)._prepare_stock_moves(picking)
-
-        for move_dict in res:
-            move_dict.pop('picking_id', None)
-            move_dict.pop('product_uos_qty', None)
-            move_dict.pop('product_uos', None)
-            move_dict['partner_id'] = self.partner_id.id
-            if self.partner_ref:
-                move_dict['origin'] += ":" + self.partner_ref
-
-        return res
-
-    @api.multi
     def _create_picking(self):
         """
             Se sobreescribe la función para que no se cree el picking.
@@ -77,32 +60,40 @@ class PurchaseOrder(models.Model):
                     move.sequence = seq
         return True
 
-    # Esta función es muy extraña
     @api.multi
     def move_lines_create_picking(self):
         self.ensure_one()
-        mod_obj = self.env['ir.model.data']
-        act_obj = self.env['ir.actions.act_window']
-        moves = self.env['stock.move']
-
-        result = act_obj.read()[0]
-
-        move_lines = moves.search([('origin', 'like', self.name + '%'),
+        result = self.env['ir.actions.act_window'].for_xml_id('purchase_picking', 'action_receive_move')
+        move_lines = self.env['stock.move'].search([('origin', 'like', self.name + '%'),
                                    ('picking_id', '=', False)])
         if len(move_lines) < 1:
             raise except_orm(_('Warning'), _('There is any move line without associated picking'))
 
         result['context'] = []
         if len(move_lines) > 1:
-            result['domain'] = "[('id','in',[" + ','.join(map(str, move_lines)) + "])]"
+            result['domain'] = "[('id','in',[" + ','.join(map(str, move_lines.ids)) + "])]"
         else:
-            result['domain'] = "[('id','='," + str(move_lines[0]) + ")]"
+            result['domain'] = "[('id','='," + str(move_lines[0].id) + ")]"
         return result
 
 
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
+
+    @api.multi
+    def _prepare_stock_moves(self, picking):
+        res = super(PurchaseOrderLine, self)._prepare_stock_moves(picking)
+
+        for move_dict in res:
+            move_dict.pop('picking_id', None)
+            move_dict.pop('product_uos_qty', None)
+            move_dict.pop('product_uos', None)
+            move_dict['partner_id'] = self.order_id.partner_id.id
+            if self.order_id.partner_ref:
+                move_dict['origin'] += ":" + self.order_id.partner_ref
+
+        return res
 
     @api.multi
     def write(self, vals):
