@@ -187,7 +187,6 @@ class StockReservation(models.Model):
 
     @api.model
     def reassign_reservation_dates(self, product_id):
-        uom_obj = self.env['product.uom']
         product_uom = product_id.uom_id
         reservations = self.search(
             [('product_id', '=', product_id.id),
@@ -202,11 +201,11 @@ class StockReservation(models.Model):
         reservation_used = 0
         for move in moves:
             qty_used = 0
-            product_uom_qty = uom_obj._compute_quantity(move.product_uom_qty, product_uom)
+            product_uom_qty = move.product_uom._compute_quantity(move.product_uom_qty, product_uom)
             while qty_used < product_uom_qty and reservation_index < len(reservations):
                 reservation = reservations[reservation_index]
                 reservation_qty = reservation.product_uom_qty - reservation.reserved_availability
-                reservation_qty = uom_obj._compute_quantity(reservation_qty, product_uom)
+                reservation_qty = move.product_uom._compute_quantity(reservation_qty, product_uom)
                 if reservation_qty - reservation_used <= product_uom_qty - qty_used:
                     reservation.date_planned = move.date_expected
                     reservation_index += 1

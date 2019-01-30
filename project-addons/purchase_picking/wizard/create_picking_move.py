@@ -84,8 +84,6 @@ class CreatePickingMove(models.TransientModel):
                 move.move_id.container_id = False
             if not move.move_id.picking_type_id:
                 move.move_id.picking_type_id = type_id
-            # if move.move_id.picking_type_id.id not in picking_types.keys():
-            #     picking_types[move.move_id.picking_type_id.id] = {'inv': self.env['stock.move'], 'not_inv': self.env['stock.move']}
             if move.qty != move.move_id.product_uom_qty:
                 if not move.qty:
                     continue
@@ -93,11 +91,7 @@ class CreatePickingMove(models.TransientModel):
                     raise exceptions.except_orm(_('Quantity error'), _('The quantity is greater than the original.'))
                 new_move = move.move_id.copy({'product_uom_qty': move.qty})
                 new_move.purchase_line_id = move.move_id.purchase_line_id
-                # if move.move_id.invoice_state == 'none':
-                #     key = 'not_inv'
-                # else:
-                #     key = 'inv'
-                # picking_types[move.move_id.picking_type_id.id][key] += new_move
+
                 move.move_id.product_uom_qty = move.move_id.product_uom_qty - move.qty
                 all_moves += new_move
                 if self.container_id:
@@ -105,11 +99,6 @@ class CreatePickingMove(models.TransientModel):
                 else:
                     new_move.date_expected = self.date_picking
             else:
-                # if move.move_id.invoice_state == 'none':
-                #     key = 'not_inv'
-                # else:
-                #     key = 'inv'
-                # picking_types[move.move_id.picking_type_id.id][key] += move.move_id
                 if self.container_id:
                     move.move_id.container_id = self.container_id.id
                 else:
@@ -123,13 +112,14 @@ class CreatePickingMove(models.TransientModel):
                 if move.partner_id.id != partner:
                     partner = self.env.ref('purchase_picking.partner_multisupplier').id
                     break
-            # TODO: pasar location_id??
             picking_vals = {
                 'partner_id': partner,
                 'picking_type_id': type_id.id,
                 'move_lines': [(6, 0, [x.id for x in all_moves])],
                 'origin': ', '.join(all_moves.mapped('purchase_line_id.order_id.name')),
                 'min_date': self.date_picking,
+                'location_id': type_id.default_location_src_id.id,
+                'location_dest_id': type_id.default_location_dest_id.id,
                 'temp': True
             }
             picking_ids += self.env['stock.picking'].create(picking_vals)
