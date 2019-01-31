@@ -48,6 +48,7 @@ class ResPartner(models.Model):
     past_year_global_invoiced = fields.Float('Past year invoiced (global)', default=0.0)
     current_employees = fields.Integer('Current year employees', default=0)
     past_year_employees = fields.Integer('Past year employees', default=0)
+    ref_supplier = fields.Char('Ref. Supplier', size=3)
 
     @api.model
     def _calculate_annual_invoiced(self):
@@ -720,3 +721,9 @@ class AccountVoucher(models.Model):
         move['vref'] = self.reference
 
         return move
+
+
+class ProductSupplierInfo(models.Model):
+    _inherit = 'product.supplierinfo'
+
+    ref_supplier = fields.Char('Ref. Supplier', related='name.ref_supplier', readonly=True)

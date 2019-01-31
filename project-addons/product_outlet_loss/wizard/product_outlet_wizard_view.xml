@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
+<odoo>
     <data>
         <!--
         <record id="product_outlet_wizard_form" model="ir.ui.view">
@@ -41,9 +41,10 @@
                             <field name="commercial_cost"/>
                         </group>
                         <group>
-                            <field name="list_price" readonly="True"/>
+                            <field name="lst_price" readonly="True"/>
                             <field name="list_price2" readonly="True"/>
                             <field name="list_price3" readonly="True"/>
+                            <field name="list_price4" readonly="True"/>
                         </group>
                         <group>
                             <label for="date_move" string="Outlet on"/>
@@ -113,17 +114,14 @@
 
         -->
 
-
-        <act_window
+        <!--act_window
         id="act_product_to_outlet_wizard"
         name="Send to outlet"
         res_model="product.outlet.wizard"
         src_model="product.product"
         view_id="product_outlet_wizard_form"
         view_mode="form"
-        target="new"/>
-
-
+        target="new"/-->
 
     </data>
-</openerp>
+</odoo>

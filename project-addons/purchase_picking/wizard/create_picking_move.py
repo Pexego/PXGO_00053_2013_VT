@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -20,9 +19,10 @@
 ##############################################################################
 
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 
-class move_details(models.TransientModel):
+
+class MoveDetails(models.TransientModel):
 
     _name = 'picking.wizard.move.details'
 
@@ -32,7 +32,9 @@ class move_details(models.TransientModel):
     wizard_id = fields.Many2one('picking.from.moves.wizard', 'wizard')
 
 
-class create_picking_move(models.TransientModel):
+class CreatePickingMove(models.TransientModel):
+
+    _name = 'picking.from.moves.wizard'
 
     @api.model
     def _get_lines(self):
@@ -45,8 +47,6 @@ class create_picking_move(models.TransientModel):
                               'qty': move.product_uom_qty,
                               'move_id': move.id})
         return wiz_lines
-
-    _name = "picking.from.moves.wizard"
 
     date_picking = fields.Datetime('Date planned', required=True)
     move_detail_ids = fields.One2many('picking.wizard.move.details',
@@ -62,7 +62,7 @@ class create_picking_move(models.TransientModel):
         if len(pick_ids) > 1:
             action['domain'] = "[('id','in',[" + ','.join(map(str, pick_ids)) + "])]"
         else:
-            res =  self.env.ref('stock.view_picking_form').id
+            res = self.env.ref('stock.view_picking_form').id
             action['views'] = [(res, 'form')]
             action['res_id'] = pick_ids and pick_ids[0] or False
         return action
@@ -84,8 +84,6 @@ class create_picking_move(models.TransientModel):
                 move.move_id.container_id = False
             if not move.move_id.picking_type_id:
                 move.move_id.picking_type_id = type_id
-            if move.move_id.picking_type_id.id not in picking_types.keys():
-                picking_types[move.move_id.picking_type_id.id] = {'inv': self.env['stock.move'], 'not_inv': self.env['stock.move']}
             if move.qty != move.move_id.product_uom_qty:
                 if not move.qty:
                     continue
@@ -93,11 +91,7 @@ class create_picking_move(models.TransientModel):
                     raise exceptions.except_orm(_('Quantity error'), _('The quantity is greater than the original.'))
                 new_move = move.move_id.copy({'product_uom_qty': move.qty})
                 new_move.purchase_line_id = move.move_id.purchase_line_id
-                if move.move_id.invoice_state == 'none':
-                    key = 'not_inv'
-                else:
-                    key = 'inv'
-                picking_types[move.move_id.picking_type_id.id][key] += new_move
+
                 move.move_id.product_uom_qty = move.move_id.product_uom_qty - move.qty
                 all_moves += new_move
                 if self.container_id:
@@ -105,11 +99,6 @@ class create_picking_move(models.TransientModel):
                 else:
                     new_move.date_expected = self.date_picking
             else:
-                if move.move_id.invoice_state == 'none':
-                    key = 'not_inv'
-                else:
-                    key = 'inv'
-                picking_types[move.move_id.picking_type_id.id][key] += move.move_id
                 if self.container_id:
                     move.move_id.container_id = self.container_id.id
                 else:
@@ -117,31 +106,26 @@ class create_picking_move(models.TransientModel):
                 all_moves += move.move_id
         picking_ids = self.env['stock.picking']
 
-        # se crea un albarán por cada tipo
-        for pick_type in picking_types.keys():
-            for inv_type in picking_types[pick_type].keys():
-                moves_type = picking_types[pick_type][inv_type]
-                if not moves_type:
-                    continue
-                partner = moves_type[0].partner_id.id
-                for move in moves_type[1:]:
-                    if move.partner_id.id != partner:
-                        partner = self.env.ref('purchase_picking.partner_multisupplier').id
-                        break
+        for moves in all_moves:
+            partner = moves.partner_id.id
+            for move in all_moves[1:]:
+                if move.partner_id.id != partner:
+                    partner = self.env.ref('purchase_picking.partner_multisupplier').id
+                    break
+            picking_vals = {
+                'partner_id': partner,
+                'picking_type_id': type_id.id,
+                'move_lines': [(6, 0, [x.id for x in all_moves])],
+                'origin': ', '.join(all_moves.mapped('purchase_line_id.order_id.name')),
+                'min_date': self.date_picking,
+                'location_id': type_id.default_location_src_id.id,
+                'location_dest_id': type_id.default_location_dest_id.id,
+                'temp': True
+            }
+            picking_ids += self.env['stock.picking'].create(picking_vals)
+            picking_ids.action_confirm()
 
-                picking_vals = {
-                    'partner_id': partner,
-                    'picking_type_id': pick_type,
-                    'move_lines': [(6, 0, [x.id for x in moves_type])],
-                    'origin': ', '.join(moves_type.mapped('purchase_line_id.order_id.name')),
-                    'min_date': self.date_picking,
-                    'invoice_state': inv_type == 'inv' and '2binvoiced' or 'none',
-                    'temp': True
-                }
-                picking_ids += self.env['stock.picking'].create(picking_vals)
-        picking_ids.action_confirm()
-
-        all_moves.force_assign()
+        all_moves._force_assign()
         context2 = dict(context)
         context2['picking_ids'] = picking_ids.ids
         return self.with_context(context2)._view_picking()

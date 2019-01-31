@@ -192,6 +192,7 @@ class AccountInvoice(models.Model):
     @api.multi
     def last_payment_date(self):
         for invoice in self:
+            continue  # TODO: ya no existe last_rec_date
             if invoice.payment_ids:
                 len_payment = len(invoice.payment_ids) - 1
                 invoice.last_payment = \

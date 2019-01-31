@@ -69,23 +69,23 @@ class sale_order_line(models.Model):
 class sale_order(models.Model):
     _inherit = 'sale.order'
 
-    def create(self, cr, uid, vals, context=None):
-        result = super(sale_order, self).create(cr, uid, vals, context)
-        self.expand_packs(cr, uid, [result], context)
-        return result
+    # def create(self, cr, uid, vals, context=None):
+    #     result = super(sale_order, self).create(cr, uid, vals, context)
+    #     self.expand_packs(cr, uid, [result], context)
+    #     return result
 
-    def write(self, cr, uid, ids, vals, context=None):
-        result = super(sale_order, self).write(cr, uid, ids, vals, context)
-        self.expand_packs(cr, uid, ids, context)
-        return result
+    # def write(self, cr, uid, ids, vals, context=None):
+    #     result = super(sale_order, self).write(cr, uid, ids, vals, context)
+    #     self.expand_packs(cr, uid, ids, context)
+    #     return result
 
-    def copy(self, cr, uid, id, default={}, context=None):
-        line_obj = self.pool.get('sale.order.line')
-        result = super(sale_order, self).copy(cr, uid, id, default, context)
-        sale = self.browse(cr, uid, result, context)
-        self.unlink_pack_components(cr, uid, sale.id, context)
-        self.expand_packs(cr, uid, sale.id, context)
-        return result
+    # def copy(self, cr, uid, id, default={}, context=None):
+    #     line_obj = self.pool.get('sale.order.line')
+    #     result = super(sale_order, self).copy(cr, uid, id, default, context)
+    #     sale = self.browse(cr, uid, result, context)
+    #     self.unlink_pack_components(cr, uid, sale.id, context)
+    #     self.expand_packs(cr, uid, sale.id, context)
+    #     return result
 
     def unlink_pack_components(self, cr, uid, sale_id, context=None):
         search_vals = [('order_id', '=', sale_id), ('pack_parent_line_id', '!=', None),

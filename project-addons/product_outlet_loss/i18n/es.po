@@ -16,12 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_outlet_loss
-#: field:res.company,outlet_per_cent:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_res_company_outlet_per_cent
 msgid "% Outlet Devalue"
 msgstr "% Devaluación Outlet"
 
 #. module: product_outlet_loss
-#: field:product.outlet.wizard,commercial_cost:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_commercial_cost
 msgid "Commercial Cost"
 msgstr "Coste comercial"
 
@@ -31,49 +31,49 @@ msgid "Companies"
 msgstr "Compañías"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,create_uid:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,create_date:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_create_date
 msgid "Created on"
 msgstr "Creado el"
 
 #. module: product_outlet_loss
-#: view:outlet.loss:product_outlet_loss.view_outlet_loss_search
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
 msgid "Current Year"
 msgstr "Año Actual"
 
 #. module: product_outlet_loss
-#: field:product.outlet.wizard,percent:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_percent
 msgid "Default Outlet Price in %"
 msgstr "% Devaluación Outlet por defecto"
 
 #. module: product_outlet_loss
-#: view:outlet.loss:product_outlet_loss.view_outlet_loss_search
-#: view:outlet.loss:product_outlet_loss.view_search_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss
 msgid "Group By..."
 msgstr "Agrupado Por..."
 
 #. module: product_outlet_loss
-#: field:outlet.loss,id:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_id
 msgid "ID"
 msgstr "ID"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,write_uid:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_write_uid
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,write_date:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_write_date
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,date_move:0
-#: field:product.outlet.wizard,date_move:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_date_move
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_date_move
 msgid "Move to outlet on"
 msgstr "Movido a Outlet en"
 
@@ -88,12 +88,12 @@ msgid "Open Outlet Loss Filtro"
 msgstr "Filtrar Pérdidas por Outlet"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,order_line_id:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_order_line_id
 msgid "Order Line"
 msgstr "Linea venta"
 
 #. module: product_outlet_loss
-#: view:outlet.loss:product_outlet_loss.view_search_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss
 msgid "Outlet Loss"
 msgstr "Pérdidas por Outlet"
 
@@ -104,66 +104,71 @@ msgid "Outlet Lost"
 msgstr "Pérdidas por Outlet"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,price_outlet:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_price_outlet
 msgid "Outlet Price"
 msgstr "Precio de Outlet"
 
 #. module: product_outlet_loss
-#: view:product.outlet.wizard:product_outlet_loss.product_outlet_wizard_form
+#: model:ir.ui.view,arch_db:product_outlet_loss.product_outlet_wizard_form
 msgid "Outlet on"
 msgstr "Efectivo en"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,price_unit:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_price_unit
 msgid "Price"
 msgstr "Precio"
 
 #. module: product_outlet_loss
-#: field:product.outlet.wizard,price_outlet:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_price_outlet
 msgid "Price After"
 msgstr "Precio después"
 
 #. module: product_outlet_loss
-#: field:product.outlet.wizard,price_unit:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_price_unit
 msgid "Price Before"
 msgstr "Precio antes"
 
 #. module: product_outlet_loss
-#: field:product.outlet.wizard,list_price:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price
 msgid "Price PVP"
 msgstr "Precio PVP"
 
 #. module: product_outlet_loss
-#: field:product.outlet.wizard,list_price2:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price2
 msgid "Price PVP 2"
 msgstr "Precio PVP 2"
 
 #. module: product_outlet_loss
-#: field:product.outlet.wizard,list_price3:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price3
 msgid "Price PVP 3"
 msgstr "Precio PVP 3"
 
 #. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price4
+msgid "Price PVP 4"
+msgstr "Precio PVP 4"
+
+#. module: product_outlet_loss
 #: model:ir.model,name:product_outlet_loss.model_product_product
-#: view:outlet.loss:product_outlet_loss.view_outlet_loss_search
-#: view:outlet.loss:product_outlet_loss.view_search_outlet_loss
-#: field:outlet.loss,product_id:0
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_product_id
 msgid "Product"
 msgstr "Producto"
 
 #. module: product_outlet_loss
-#: view:outlet.loss:product_outlet_loss.view_tree_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_tree_outlet_loss
 msgid "Product Outlet Loss"
 msgstr "Pérdidas por Outlet"
 
 #. module: product_outlet_loss
-#: view:outlet.loss:product_outlet_loss.view_outlet_loss_search
-#: view:outlet.loss:product_outlet_loss.view_tree_outlet_loss_searched
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_tree_outlet_loss_searched
 msgid "Product Outlet Lost"
 msgstr "Pérdidas por Outlet"
 
 #. module: product_outlet_loss
-#: field:product.outlet.wizard,qty_available:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_qty_available
 msgid "Qty from stock"
 msgstr "Cantidad a Mover"
 
@@ -180,7 +185,7 @@ msgid "Qty to outlet must be >=0"
 msgstr "La cantidad que se mueve a outlet debe ser mayor o igual que 0"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,qty:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_qty
 msgid "Quantity"
 msgstr "Cantidad"
 
@@ -190,16 +195,16 @@ msgid "Send to outlet"
 msgstr "Enviar a outlet"
 
 #. module: product_outlet_loss
-#: view:outlet.loss:product_outlet_loss.view_search_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss
 msgid "Status"
 msgstr "Estado"
 
 #. module: product_outlet_loss
-#: view:outlet.loss:product_outlet_loss.view_tree_outlet_loss_searched
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_tree_outlet_loss_searched
 msgid "Total"
 msgstr "Total"
 
 #. module: product_outlet_loss
-#: field:outlet.loss,percent:0
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_percent
 msgid "Outlet Percent"
 msgstr "Porcentaje de Outlet"
