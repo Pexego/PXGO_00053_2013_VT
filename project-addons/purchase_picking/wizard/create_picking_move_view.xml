@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
+    <record id="create_picking_move_view" model="ir.ui.view">
+        <field name="name">create.picking.form</field>
+        <field name="model">picking.from.moves.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Picking">
+                <group>
+                    <field name="date_picking"/>
+                    <field name="container_id" context="{'default_date_expected': date_picking}"/>
+                    <field name="move_detail_ids" colspan="4" nolabel="1">
+                        <tree create="false" delete="false" editable="top">
+                            <field name="product_id" readonly="1"/>
+                            <field name="move_id" invisible="1"/>
+                            <field name="qty"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button string="Create" name="action_create_picking" type="object"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </group>
+            </form>
+        </field>
+    </record>
 
-        <record id="create_picking_move_view" model="ir.ui.view">
-            <field name="name">create.picking.form</field>
-            <field name="model">picking.from.moves.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Create Picking">
-                    <group>
-                        <field name="date_picking"/>
-                        <field name="container_id" context="{'default_date_expected': date_picking}"/>
-                        <field name="move_detail_ids" colspan="4" nolabel="1">
-                            <tree create="false" delete="false" editable="top">
-                                <field name="product_id" readonly="1"/>
-                                <field name="move_id" invisible="1"/>
-                                <field name="qty"/>
-                            </tree>
-                        </field>
-                        <button string="Create" name="action_create_picking" type="object" icon="gtk-ok"/>
-                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                    </group>
-                </form>
-            </field>
-        </record>
-
-        <act_window name="Create picking"
-            res_model="picking.from.moves.wizard"
-            src_model="stock.move"
-            view_id="create_picking_move_view"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"
-            id="action_create_picking"/>
-
+    <act_window name="Create picking"
+        res_model="picking.from.moves.wizard"
+        src_model="stock.move"
+        view_id="create_picking_move_view"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="action_create_picking"/>
 </odoo>
 
