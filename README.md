@@ -48,7 +48,7 @@ $ virtualenv sandbox --no-setuptools
 ```
 $ mkdir eggs
 ```
-- Ahora procedemos a ehecutar el buildout en nuestro entorno virtual
+- Ahora procedemos a ehecutar el buildout en nuestro entorno virtual, si falla al instalar un paquete de python que tenga código en c, lanzar con opción --setuptools-version=40.7.0
 ```
 $ sandbox/bin/python bootstrap.py -c [archivo_buildout]
 ```
