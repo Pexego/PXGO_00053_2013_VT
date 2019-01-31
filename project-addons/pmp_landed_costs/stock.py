@@ -28,10 +28,10 @@ class stock_move(models.Model):
         #res = super(stock_move, self).product_price_update_after_done(cr, uid, ids, context)
         product_obj = self.pool.get('product.product')
         for move in self.browse(cr, uid, ids, context=context):
-            if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
+            if (move.location_id.usage in ('supplier', 'production')) and (move.product_id.cost_method == 'real'):
                 product_obj.update_real_cost(cr, uid, move.product_id.id, context)
         #return res
 
     def _store_average_cost_price(self, cr, uid, move, context=None):
-        if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
+        if (move.location_id.usage in ('supplier', 'production')) and (move.product_id.cost_method == 'real'):
             return super(stock_move, self)._store_average_cost_price(cr, uid, move, context=context)
