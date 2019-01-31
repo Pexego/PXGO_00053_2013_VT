@@ -92,7 +92,7 @@ class stock_pciking(models.Model):
             if pack_moves:
                 self.pool.get('stock.move').write(cr, uid, [x.id for x in pack_moves], {'invoice_state': 'invoiced'}, context)
 
-            # update the section_id, payment_mode_id and partner_bank_id
+            # update the team_id, payment_mode_id and partner_bank_id
             if invoice:
                 obj_invoice = self.pool.get('account.invoice').browse(cr, uid, invoice, context=context)
 
@@ -106,7 +106,7 @@ class stock_pciking(models.Model):
                             partner_bank_id = False
 
                 obj_invoice.write({
-                    'section_id': obj_invoice.partner_id.commercial_partner_id.section_id.id,
+                    'team_id': obj_invoice.partner_id.commercial_partner_id.team_id.id,
                     'payment_mode_id': obj_invoice.partner_id.commercial_partner_id.customer_payment_mode.id,
                     'partner_bank_id': partner_bank_id
                 })
