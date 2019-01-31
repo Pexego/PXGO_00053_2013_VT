@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,16 +18,16 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api, _, exceptions
+from odoo import fields, models, api, _, exceptions
 import odoo.addons.decimal_precision as dp
-from openerp.tools.float_utils import float_compare, float_round
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo.tools.float_utils import float_compare, float_round
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
 
 class StockMove(models.Model):
 
-    _inherit = "stock.move"
+    _inherit = 'stock.move'
 
     qty_ready = fields.\
         Float('Qty ready', readonly=True, copy=False,
@@ -49,37 +48,75 @@ class StockMove(models.Model):
 
 class StockPicking(models.Model):
 
-    _inherit = "stock.picking"
+    _inherit = 'stock.picking'
 
     with_incidences = fields.Boolean('With incidences', readonly=True,
                                      copy=False)
     block_picking = fields.Boolean('Albarán procesado Vstock')
-    partial_picking = fields.Boolean("Partial picking", default=False)
+    partial_picking = fields.Boolean('Partial picking', default=False)
 
-    #~ @api.multi
-    #~ def write(self, vals):
-        #~ res = super(StockPicking, self).write(vals)
-        #~ if vals.get('with_incidences', False):
-            #~ for pick in self:
-                #~ no_incidence = True
-                #~ for move in pick.move_lines:
-                    #~ if not move.qty_ready or move.qty_ready > \
-                            #~ move.reserved_availability:
-                        #~ no_incidence = False
-                        #~ break
-                #~ if no_incidence:
-                    #~ pick.with_incidences = False
-        #~ return res
+    state = fields.Selection(selection_add=[('partially_available', 'Partially Available')])
 
-    def _create_backorder(self, cr, uid, picking, backorder_moves=[], context=None):
-        bck_id = super(StockPicking, self).\
-            _create_backorder(cr, uid, picking, backorder_moves=backorder_moves, context=context)
+    @api.depends('move_type', 'move_lines.state', 'move_lines.picking_id')
+    @api.one
+    def _compute_state(self):
+        super(StockPicking, self)._compute_state()
+        if self.state == 'assigned':
+            relevant_move_state = self.move_lines._get_relevant_state_among_moves()
+            if relevant_move_state == 'partially_available':
+                self.state = 'partially_available'
+
+    @api.multi
+    def write(self, vals):
+        res = super(StockPicking, self).write(vals)
+        if vals.get('with_incidences', False):
+            for pick in self:
+                no_incidence = True
+                for move in pick.move_lines:
+                    if not move.qty_ready or move.qty_ready > \
+                            move.reserved_availability:
+                        no_incidence = False
+                        break
+                if no_incidence:
+                    pick.with_incidences = False
+        return res
+
+    @api.multi
+    def _create_backorder(self, backorder_moves=[]):
+        bck_id = super(StockPicking, self)._create_backorder(backorder_moves=backorder_moves)
         if bck_id:
-            picking.write({'partial_picking': True, 'date_done': False})
+            self.write({'partial_picking': True, 'date_done': False})
         return bck_id
 
-    @api.one
+    @api.multi
+    def _create_backorder_incidences(self, backorder_moves):
+        """The original _create_backorder function just ignores backorder_moves"""
+        backorders = self.env['stock.picking']
+        for picking in self:
+            if not backorder_moves:
+                backorder_moves = picking.move_lines
+            moves_to_backorder = backorder_moves.filtered(lambda x: x.state not in ('done', 'cancel'))
+            if moves_to_backorder:
+                backorder_picking = picking.copy({
+                    'name': '/',
+                    'move_lines': [],
+                    'move_line_ids': [],
+                    'backorder_id': picking.id
+                })
+                picking.message_post(
+                    _('The backorder <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a> has been created.') % (
+                        backorder_picking.id, backorder_picking.name))
+                moves_to_backorder.write({'picking_id': backorder_picking.id})
+                moves_to_backorder.mapped('move_line_ids').write({'picking_id': backorder_picking.id})
+                backorder_picking.action_assign()
+                backorder_picking.write({'partial_picking': True, 'date_done': False})
+                backorders |= backorder_picking
+        return backorders
+
+
+    @api.multi
     def action_accept_ready_qty(self):
+        self.ensure_one()
         self.with_incidences = False
         new_moves = []
         for move in self.move_lines:
@@ -92,19 +129,17 @@ class StockPicking(models.Model):
                                         precision_rounding=precision)
             if not move.qty_ready:
                 new_moves.append(move.id)
-            elif float_compare(remaining_qty, 0,
-                               precision_rounding=precision) > 0 and \
-                float_compare(remaining_qty, move.product_qty,
-                              precision_rounding=precision) < 0:
-                new_move = move.split(move, remaining_qty)
+            elif float_compare(remaining_qty, 0, precision_rounding=precision) > 0 and \
+                 float_compare(remaining_qty, move.product_qty, precision_rounding=precision) < 0:
+                new_move = move._split(remaining_qty)
                 new_moves.append(new_move)
         if new_moves:
             new_moves = self.env['stock.move'].browse(new_moves)
-            bcko_id = self._create_backorder(self, backorder_moves=new_moves)
-            bck = self.browse(bcko_id)
+            bcko = self._create_backorder_incidences(new_moves)
             new_moves.write({'qty_ready': 0.0})
             self.do_unreserve()
-            self.recheck_availability()
+            self.action_assign()
+            #self.recheck_availability()
         self.message_post(body=_("User %s accepted ready quantities.") %
                           (self.env.user.name))
         self.action_done()
@@ -114,20 +149,8 @@ class StockPicking(models.Model):
     def action_assign(self):
         res = super(StockPicking, self).action_assign()
         for pick in self:
-            pick.write({'with_incidences': False})
+            pick.with_incidences = False
         return res
-
-    @api.cr_uid_ids_context
-    def do_enter_transfer_details(self, cr, uid, picking, context=None):
-        for pick in self.pool['stock.picking'].browse(cr, uid, picking,
-                                                      context=context):
-            if pick.with_incidences:
-                raise exceptions.Warning(_("Cannot process picking with "
-                                           "incidences. Please fix or "
-                                           "ignore it."))
-        return super(StockPicking, self).do_enter_transfer_details(cr, uid,
-                                                                   picking,
-                                                                   context)
 
     @api.multi
     def action_done(self):
@@ -190,19 +213,18 @@ class StockPicking(models.Model):
                                    precision_rounding=precision) > 0 and \
                     float_compare(remaining_qty, move.product_qty,
                                   precision_rounding=precision) < 0:
-                    new_move = move.split(move, remaining_qty)
+                    new_move = move._split(remaining_qty)
                     new_moves.append(new_move)
                 if not move.product_uom_qty:
                     move.state = 'draft'
                     move.unlink()
             if new_moves:
                 new_moves = self.env['stock.move'].browse(new_moves)
-                bckid = self._create_backorder(self, backorder_moves=new_moves)
-                bck = self.browse(bckid)
+                bck = self._create_backorder_incidences(new_moves)
                 bck.write({'move_type': 'one'})
                 self.action_assign()
             self.message_post(body=_("User %s accepted confirmed qties.") %
-                              (self.env.user.name))
+                              self.env.user.name)
 
     @api.model
     def cron_accept_qty_incoming_shipments(self):
