@@ -55,8 +55,8 @@ class RiskAdviceMail(models.Model):
             res = False
             break_risk=False
 
-            if partner.property_account_receivable:
-                accounts.append( partner.property_account_receivable.id )
+            if partner.property_account_receivable_id:
+                accounts.append( partner.property_account_receivable_id.id )
 
             if partner.property_account_payable:
                 accounts.append( partner.property_account_payable.id )

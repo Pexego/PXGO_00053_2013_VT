@@ -27,7 +27,8 @@
     'author': 'Pexego',
     'website': 'www.pexego.es',
     "depends": ['base', 'sale_commission'],
-    "data": ['commission_report_view.xml', 'security/ir.model.access.csv',
+    "data": [#TODO: Migrar'commission_report_view.xml', 
+             'security/ir.model.access.csv',
              'sale_commission_view.xml', 'settlement_view.xml',
              'sale_view.xml'],
     "installable": True
