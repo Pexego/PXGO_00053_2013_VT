@@ -71,6 +71,10 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
+    _columns = {
+        'no_promos': fields.boolean("Not apply promotions", help="Reload the prices after marking this check")
+    }
+
     def apply_promotions(self, cursor, user, ids, context=None):
         if context is None:
             context = {}
@@ -78,9 +82,17 @@ class SaleOrder(models.Model):
         context2.pop('default_state', False)
         self._prepare_custom_line(cursor, user, ids, moves=False,
                                   context=context2)
-        res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
-                                                      context=context2)
         order = self.browse(cursor, user, ids[0], context=context2)
+        promotions_obj = self.pool.get('promos.rules')
+
+        if not order.no_promos:
+            res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
+                                                          context=context2)
+        else:
+            self.clear_existing_promotion_lines(cursor, user, ids[0], context)
+            promotions_obj.apply_special_promotions(cursor, user, ids[0], context=None)
+            res = False
+
         if order.state == 'reserve':
             order.order_reserve()
 
@@ -115,7 +127,7 @@ class SaleOrder(models.Model):
                                                )
 
         for line in order_line_obj.browse(cursor, user, order_line_ids, context):
-            #if the line has an accumulated promo and the discount of the partner is 0
+            # if the line has an accumulated promo and the discount of the partner is 0
             if line.accumulated_promo and line_dict[line.id] == 0.0:
                 order_line_obj.write(cursor, user,
                                      [line.id],

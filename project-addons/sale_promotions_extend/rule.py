@@ -20,6 +20,13 @@
 ##############################################################################
 
 from odoo import models, fields, _
+from odoo.tools.misc import ustr
+try:
+    #Backward compatible
+    from sets import Set as set
+except:
+    pass
+
 
 # LOGGER = netsvc.Logger()
 DEBUG = False
@@ -429,7 +436,7 @@ class PromotionsRulesActions(models.Model):
                             context=None):
         vals = {
             'discount': eval(action.arguments),
-            'old_discount': order_line.discount,
+            'old_discount': order_line.discount
         }
         return order_line.write(vals)
 
@@ -510,3 +517,32 @@ class PromotionsRulesActions(models.Model):
         self.create_line(cr, uid, vals, context)
         return True
 
+
+class PromotionsRules(orm.Model):
+
+    _inherit = "promos.rules"
+
+    _columns = {
+        'special_promo': fields.boolean("Special Promo")
+    }
+
+    def apply_special_promotions(self, cr, uid, order_id, context=None):
+
+        order = self.pool.get('sale.order').browse(cr, uid,
+                                                   order_id, context=context)
+        active_promos = self.search(cr, uid, [('active', '=', True), ('special_promo', '=', True)], context=context)
+
+        for promotion_rule in self.browse(cr, uid, active_promos, context):
+            result = self.evaluate(cr, uid, promotion_rule, order, context)
+            #If evaluates to true
+            if result:
+                try:
+                    self.execute_actions(cr, uid,
+                                     promotion_rule, order_id,
+                                     context)
+                except Exception, e:
+                    raise orm.except_orm("Promotions", ustr(e))
+                #If stop further is true
+                if promotion_rule.stop_further:
+                    return True
+        return True

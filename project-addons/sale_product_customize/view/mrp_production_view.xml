@@ -44,14 +44,27 @@
             <field name="model">mrp.production</field>
             <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
             <field name="arch" type="xml">
+                <button name="%(mrp.act_mrp_product_produce)d" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <button name="button_produce" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
+                <button name="button_cancel" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </button>
                 <field name="origin" position="after">
                     <field name="sale_id"/>
                     <field name="production_name"/>
                     <field name="type_ids" widget="many2many_tags" attrs="{'readonly': [('state', 'not in', ['draft'])]}"/>
                 </field>
-                <form position="attributes">
+                <field name="priority" position="after">
+                    <field name="picking_out"/>
+                    <field name="picking_in"/>
+                </field>
+                <!--form position="attributes">
                     <attribute name="create">0</attribute>
-                </form>
+                </form-->
             </field>
         </record>
 
@@ -63,9 +76,9 @@
                 <field name="origin" position="after">
                     <field name="type_ids" widget="many2many_tags"/>
                 </field>
-                <tree position="attributes">
+                <!--tree position="attributes">
                     <attribute name="create">0</attribute>
-                </tree>
+                </tree-->
             </field>
         </record>
 
