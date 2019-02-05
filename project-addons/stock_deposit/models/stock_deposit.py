@@ -107,12 +107,10 @@ class StockDeposit(models.Model):
                 'group_id': deposit.move_id.group_id.id
             }
             move = move_obj.create(values)
-            #TODO: aqui tramitar el albarán y marcar la linea del pedido correspondiente como a facturar.
             move._action_confirm()
             move._force_assign()
             move._action_done()
-            deposit.move_id.sale_line_id.qty_invoiced = 0
-            deposit.move_id.sale_line_id.invoice_status = 'to invoice'
+            deposit.move_id.sale_line_id.write({'qty_invoiced': 0, 'invoice_status': 'to invoice'})
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
 
     @api.one
@@ -203,7 +201,7 @@ class StockDeposit(models.Model):
         picking_type_id = self.env.ref('stock.picking_type_out')
         deposit_loss_loc = self.env.ref('stock_deposit.stock_location_deposit_loss')
         for deposit in self:
-            procurement_id = deposit.sale_id.procurement_group_id
+            group_id = deposit.sale_id.procurement_group_id
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
@@ -211,7 +209,9 @@ class StockDeposit(models.Model):
                  'date_done': fields.Datetime.now(),
                  'invoice_state': 'none',
                  'commercial': deposit.user_id.id,
-                 'group_id': procurement_id.id})
+                 'location_id': deposit.move_id.location_dest_id.id,
+                 'location_dest_id': deposit_loss_loc.id,
+                 'group_id': group_id.id})
             values = {
                 'product_id': deposit.product_id.id,
                 'product_uom_qty': deposit.product_uom_qty,
@@ -222,13 +222,12 @@ class StockDeposit(models.Model):
                 'location_dest_id': deposit_loss_loc.id,
                 'invoice_state': 'none',
                 'picking_id': picking.id,
-                # 'procurement_id': deposit.move_id.procurement_id.id,
                 'commercial': deposit.user_id.id,
-                'group_id': procurement_id.id
+                'group_id': group_id.id
             }
             move = move_obj.create(values)
-            move.action_confirm()
-            move.force_assign()
-            move.action_done()
+            move._action_confirm()
+            move._force_assign()
+            move._action_done()
             deposit.write({'state': 'loss', 'loss_move_id': move.id})
 

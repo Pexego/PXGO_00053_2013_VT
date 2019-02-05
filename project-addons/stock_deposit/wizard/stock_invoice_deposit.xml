@@ -8,8 +8,10 @@
                 <group>
                     <field name="journal_id"/>
                 </group>
-                <button string="Create invoice" name="create_invoice" type="object"/>
-                <button string="Cancel" special="cancel"/>
+                <footer>
+                    <button string="Create invoice" name="create_invoice" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>

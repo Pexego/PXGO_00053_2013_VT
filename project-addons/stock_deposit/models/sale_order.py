@@ -48,12 +48,12 @@ class SaleOrderLine(models.Model):
             self.deposit_date = False
 
     @api.multi
-    def invoice_line_create(self):
+    def invoice_line_create(self, invoice_id, qty):
         lines = self.env['sale.order.line']
         for line in self:
             if not line.deposit or self.env.context.get('invoice_deposit', False):
                 lines += line
-        return super(SaleOrderLine, lines).invoice_line_create()
+        return super(SaleOrderLine, lines).invoice_line_create(invoice_id, qty)
 
 
 class SaleOrder(models.Model):

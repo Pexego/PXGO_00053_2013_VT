@@ -55,6 +55,16 @@ msgid "Create invoices"
 msgstr "Crear facturas"
 
 #. module: stock_deposit
+#: model:ir.ui.view,arch_db:stock_deposit.stock_sale_deposit_form
+msgid "Create sales"
+msgstr "Crear ventas"
+
+#. module: stock_deposit
+#: model:ir.actions.act_window,name:stock_deposit.stock_sale_deposit_action
+msgid "Create sales"
+msgstr "Crear ventas"
+
+#. module: stock_deposit
 #: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_create_uid
 #: model:ir.model.fields,field_description:stock_deposit.field_stock_invoice_deposit_create_uid
 msgid "Created by"
