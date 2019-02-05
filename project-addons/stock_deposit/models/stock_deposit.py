@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Santi Argüeso
@@ -22,7 +21,7 @@ from odoo import models, fields, api
 from datetime import datetime
 
 
-class stock_deposit(models.Model):
+class StockDeposit(models.Model):
     _name = 'stock.deposit'
     _description = "Deposits"
     _inherit = ['mail.thread']
@@ -48,11 +47,10 @@ class stock_deposit(models.Model):
                                  string='Destination Address',
                                  store=True,
                                  readonly=True)
-    #TODO: Migrar
-    # ~ sale_id = fields.Many2one(related='move_id.procurement_id.sale_line_id.order_id',
-                              # ~ string='Sale',
-                              # ~ store=True,
-                              # ~ readonly=True)
+    sale_id = fields.Many2one(related='move_id.sale_line_id.order_id',
+                              string='Sale',
+                              store=True,
+                              readonly=True)
     delivery_date = fields.Datetime('Date of Transfer')
     return_date = fields.Date('Return date')
     company_id = fields.Many2one(related='move_id.company_id',
@@ -87,15 +85,15 @@ class stock_deposit(models.Model):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_out')
         for deposit in self:
-            procurement_id = deposit.sale_id.procurement_group_id
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
                  'origin': deposit.sale_id.name,
                  'date_done': datetime.now(),
-                 'invoice_state': '2binvoiced',
                  'commercial': deposit.user_id.id,
-                 'group_id': procurement_id.id})
+                 'group_id': deposit.move_id.group_id.id,
+                 'location_id': deposit.move_id.location_dest_id.id,
+                 'location_dest_id': picking_type_id.default_location_dest_id.id})
             values = {
                 'product_id': deposit.product_id.id,
                 'product_uom_qty': deposit.product_uom_qty,
@@ -104,16 +102,17 @@ class stock_deposit(models.Model):
                 'name': 'Sale Deposit: ' + deposit.move_id.name,
                 'location_id': deposit.move_id.location_dest_id.id,
                 'location_dest_id': deposit.partner_id.property_stock_customer.id,
-                'invoice_state': '2binvoiced',
                 'picking_id': picking.id,
-                'procurement_id': deposit.move_id.procurement_id.id,
                 'commercial': deposit.user_id.id,
-                'group_id': procurement_id.id
+                'group_id': deposit.move_id.group_id.id
             }
             move = move_obj.create(values)
-            move.action_confirm()
-            move.force_assign()
-            move.action_done()
+            #TODO: aqui tramitar el albarán y marcar la linea del pedido correspondiente como a facturar.
+            move._action_confirm()
+            move._force_assign()
+            move._action_done()
+            deposit.move_id.sale_line_id.qty_invoiced = 0
+            deposit.move_id.sale_line_id.invoice_status = 'to invoice'
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
 
     @api.one
@@ -146,8 +145,9 @@ class stock_deposit(models.Model):
         }
         return move_template
 
-    @api.one
+    @api.multi
     def _create_stock_moves(self, picking=False):
+        self.ensure_one()
         stock_move = self.env['stock.move']
         todo_moves = self.env['stock.move']
         new_group = self.env['procurement.group'].create(
@@ -155,16 +155,19 @@ class stock_deposit(models.Model):
         for vals in self._prepare_deposit_move(picking, new_group):
             todo_moves += stock_move.create(vals)
 
-        todo_moves.action_confirm()
-        todo_moves.force_assign()
+        todo_moves._action_confirm()
+        todo_moves._force_assign()
 
     @api.multi
     def return_deposit(self):
         picking_type_id = self.env.ref('stock.picking_type_in')
+        deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
         for deposit in self:
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
-                 'partner_id': deposit.partner_id.id})
+                 'partner_id': deposit.partner_id.id,
+                 'location_id': deposit_id.id,
+                 'location_dest_id': picking_type_id.default_location_dest_id.id})
             deposit._create_stock_moves(picking)
             deposit.write({'state': 'returned',
                            'return_picking_id': picking.id})
@@ -219,7 +222,7 @@ class stock_deposit(models.Model):
                 'location_dest_id': deposit_loss_loc.id,
                 'invoice_state': 'none',
                 'picking_id': picking.id,
-                'procurement_id': deposit.move_id.procurement_id.id,
+                # 'procurement_id': deposit.move_id.procurement_id.id,
                 'commercial': deposit.user_id.id,
                 'group_id': procurement_id.id
             }

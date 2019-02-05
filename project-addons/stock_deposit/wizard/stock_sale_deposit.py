@@ -32,8 +32,7 @@ class StockSaleDeposit(models.TransientModel):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_out')
         picking = self.env['stock.picking'].create({
-            'picking_type_id': picking_type_id.id,
-            'invoice_state': '2binvoiced'})
+            'picking_type_id': picking_type_id.id})
 
         procurement_id = None
         sorted_deposits = sorted(deposits, key=lambda deposit: deposit.sale_id.procurement_group_id)
@@ -48,8 +47,7 @@ class StockSaleDeposit(models.TransientModel):
 
             elif picking['group_id'] != deposit.sale_id.procurement_group_id:
                 picking = self.env['stock.picking'].create({
-                    'picking_type_id': picking_type_id.id,
-                    'invoice_state': '2binvoiced'})
+                    'picking_type_id': picking_type_id.id})
                 procurement_id = deposit.sale_id.procurement_group_id
                 partner_id = deposit.partner_id.id
                 commercial = deposit.user_id.id
@@ -67,7 +65,7 @@ class StockSaleDeposit(models.TransientModel):
                 'location_dest_id': deposit.partner_id.property_stock_customer.id,
                 'invoice_state': '2binvoiced',
                 'picking_id': picking.id,
-                'procurement_id': deposit.move_id.procurement_id.id,
+                # 'procurement_id': deposit.move_id.procurement_id.id,
                 'commercial': deposit.user_id.id,
                 'group_id': procurement_id.id
             }

@@ -28,8 +28,8 @@ class StockMove(models.Model):
     _inherit = 'stock.move'
 
     @api.multi
-    def action_done(self):
-        res = super(StockMove, self).action_done()
+    def _action_done(self):
+        res = super(StockMove, self)._action_done()
         deposit_obj = self.env['stock.deposit']
         for move in self:
             if move.sale_line_id.deposit and \
@@ -53,67 +53,18 @@ class StockMove(models.Model):
         return res
 
 
-class StockPicking(models.Model):
-    _inherit = 'stock.picking'
+class ProcurementRule(models.Model):
+    _inherit = 'procurement.rule'
 
-    @api.model
-    def _invoice_create_line(self, moves, journal_id, inv_type='out_invoice'):
-        moves_invoice = self.env['stock.move']
-        for move in moves:
-            if move.sale_line_id.deposit and \
-                    move.location_id.usage == 'internal':
-                move.invoice_state = 'invoiced'
-                continue
-            moves_invoice += move
-        return super(StockPicking, self)._invoice_create_line(
-            moves_invoice, journal_id, inv_type)
+    def _get_stock_move_values(self, product_id, product_qty, product_uom,
+                               location_id, name, origin, values, group_id):
+        vals = super(ProcurementRule, self)._get_stock_move_values(
+            product_id, product_qty, product_uom,
+            location_id, name, origin, values, group_id)
+        if self.env['sale.order.line'].browse(vals['sale_line_id']).deposit:
+            deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
+            picking_type_id = self.env['stock.picking.type'].search([('name', '=', u'Depósitos')])
+            vals['location_dest_id'] = deposit_id.id
+            vals['picking_type_id'] = picking_type_id.id
 
-    @api.multi
-    def action_assign(self):
-        for picking in self:
-            all_deposit = True
-            for move in picking.move_lines:
-                if not move.sale_line_id.deposit:
-                    all_deposit = False
-            if all_deposit and picking.invoice_state == '2binvoiced':
-                picking.invoice_state = 'invoiced'
-        return super(StockPicking, self).action_assign()
-
-    @api.model
-    def _get_invoice_vals(self, key, inv_type, journal_id, move):
-        res = super(StockPicking, self)._get_invoice_vals(key, inv_type, journal_id, move)
-        if 'comment' in res:
-            res.pop('comment', None)
-        return res
-
-'''class stock_invoice_onshipping(models.TransientModel):
-
-    _inherit = 'stock.invoice.onshipping'
-
-    @api.multi
-    def open_invoice(self):
-        invoice_ids = self.create_invoice()
-        if not invoice_ids:
-            return True
-
-        action = {}
-
-        journal2type = {'sale': 'out_invoice', 'purchase': 'in_invoice',
-                        'sale_refund': 'out_refund',
-                        'purchase_refund': 'in_refund'}
-        inv_type = journal2type.get(self.journal_type) or 'out_invoice'
-        if inv_type == "out_invoice":
-            action = self.env.ref('account.action_invoice_tree1')
-        elif inv_type == "in_invoice":
-            action = self.env.ref('account.action_invoice_tree2')
-        elif inv_type == "out_refund":
-            action = self.env.ref('account.action_invoice_tree3')
-        elif inv_type == "in_refund":
-            action = self.env.ref('account.action_invoice_tree4')
-
-        if action:
-            act_data = action.read()
-            act_data['domain'] = "[('id','in', [" + \
-                ','.join(map(str, invoice_ids)) + "])]"
-            return action
-        return True'''
+        return vals
