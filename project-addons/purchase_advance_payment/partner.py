@@ -38,8 +38,8 @@ class ResPartner(models.Model):
         move_ids = []
         for voucher in voucher_ids:
             for move in voucher.move_ids:
-                if move.account_id.type in ('receivable', 'payable') and \
-                        not move.reconcile_id:
+                if move.account_id.internal_type in ('receivable', 'payable') and \
+                        not move.full_reconcile_id:
                     move_ids.append(move.id)
                     if move.reconcile_partial_id:
                         amount += move.amount_residual_currency > 0 and \
@@ -50,8 +50,8 @@ class ResPartner(models.Model):
         moves = move_line_obj.search([('id', 'not in', move_ids),
                                       ('partner_id', '=', self.id),
                                       ('debit', '>', 0.0),
-                                      ('reconcile_id', '=', False),
-                                      ('account_id.type', '=', 'payable')])
+                                      ('full_reconcile_id', '=', False),
+                                      ('account_id.internal_type', '=', 'payable')])
 
         for move in moves:
             vouchers = voucher_obj.search([('move_id', '=', move.move_id.id),
@@ -82,16 +82,17 @@ class ResCompany(models.Model):
     purchase_advance_payment_account = \
         fields.Many2one('account.account',
                         string="Purchase advance payment account",
-                        domain="[('type', '=', 'payable')]")
+                        domain="[('internal_type', '=', 'payable')]")
 
 
-class AccountConfigSettings(models.TransientModel):
+# TODO: Migrar
+# ~ class AccountConfigSettings(models.TransientModel):
 
-    _inherit = 'account.config.settings'
+    # ~ _inherit = 'account.config.settings'
 
-    purchase_advance_payment_account = fields.\
-        Many2one('account.account',
-                 related='company_id.purchase_advance_payment_account',
-                 string="Purchase advance payment account",
-                 domain="[('type', '=', 'payable'),"
-                        "('company_id', '=', company_id)]")
+    # ~ purchase_advance_payment_account = fields.\
+        # ~ Many2one('account.account',
+                 # ~ related='company_id.purchase_advance_payment_account',
+                 # ~ string="Purchase advance payment account",
+                 # ~ domain="[('internal_type', '=', 'payable'),"
+                        # ~ "('company_id', '=', company_id)]")

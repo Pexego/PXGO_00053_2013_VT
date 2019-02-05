@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="view_stock_history_report_tree_add_brand" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_stock_history_report_tree_add_brand" model="ir.ui.view">
             <field name="name">view.stock.history.report.tree.add.brand</field>
             <field name="model">stock.history</field>
             <field name="inherit_id" ref="stock_account.view_stock_history_report_tree"/>
@@ -12,7 +12,7 @@
                     <field name="manufacturer"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="inherit_vpicktree" model="ir.ui.view">
             <field name="name">stock.picking.tree</field>
@@ -22,16 +22,16 @@
                 <xpath expr="//field[@name='location_dest_id']" position="before">
                     <field name="location_id"/>
                 </xpath>
-                <field name="min_date" position="attributes">
+                <!--TODO:Migrar<field name="min_date" position="attributes">
                     <attribute name="invisible">0</attribute>
                 </field>
                 <field name="date" position="after">
                     <field name="date_done" string="Date Final"/>
-                </field>
+                </field>-->
             </field>
         </record>
 
-        <record model="ir.ui.view" id="product_template_kanban_stock_view_inherit">
+        <!--TODO: Migrar<record model="ir.ui.view" id="product_template_kanban_stock_view_inherit">
             <field name="name">Product Template Kanban Stock</field>
             <field name="model">product.template</field>
             <field name="inherit_id" ref="stock.product_template_kanban_stock_view"/>
@@ -55,32 +55,30 @@
                     <attribute name="invisible">1</attribute>
                 </button>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_picking_form_modify_note" model="ir.ui.view">
             <field name="name">stock.picking.form</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//notebook/page[@string='Products']/field[@name='note']" position="replace">
+                <xpath expr="//field[@name='note']" position="replace">
                     <field name="note" placeholder="Terms and conditions..." class="oe_inline"/>
-                </xpath>
-                <xpath expr="//notebook/page[@string='Products']/field[@name='note']" position="after">
                     <field name="internal_notes" placeholder="Internal Notess..." class="oe_inline"/>
                 </xpath>
                 <field name="company_id" position="after">
                     <field name="commercial"/>
                 </field>
-                <button name="do_partial_open_barcode" position="attributes">
+                <!--TODO: Migrar<button name="do_partial_open_barcode" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </button>
                 <button name="open_barcode_interface" position="attributes">
                     <attribute name="invisible">1</attribute>
-                </button>
+                </button>-->
             </field>
       </record>
 
-      <record id="picking_type_disable_barcode_button" model="ir.ui.view">
+      <!--TODO: Migrar<record id="picking_type_disable_barcode_button" model="ir.ui.view">
             <field name="name">stock.picking.type.kanban</field>
             <field name="model">stock.picking.type</field>
             <field name="inherit_id" ref="stock.stock_picking_type_kanban"/>
@@ -89,7 +87,7 @@
                     <attribute name="invisible">1</attribute>
                 </xpath>
             </field>
-      </record>
+      </record
 
       <record id="view_move_tree_rem_scrap_btn" model="ir.ui.view">
             <field name="name">stock.move.tree</field>
@@ -107,9 +105,9 @@
                     <field name="real_stock"/>
                 </field>
             </field>
-        </record>
+        </record>>-->
 
-        <record id="view_move_form_rem_scrap_btn" model="ir.ui.view">
+        <!--TODO: MIgrar<record id="view_move_form_rem_scrap_btn" model="ir.ui.view">
             <field name="name">stock.move.form</field>
             <field name="model">stock.move</field>
             <field name="inherit_id" ref="stock.view_move_form"/>
@@ -143,18 +141,14 @@
                     <attribute name="sum">Qty.</attribute>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_picking_search" model="ir.ui.view">
             <field name="name">stock.picking.search</field>
             <field name="model">stock.picking</field>
             <field name="inherit_id" ref="stock.view_picking_internal_search"/>
             <field name="arch" type="xml">
-                <field name="partner_id" position="attributes">
-                    <attribute name="operator">child_of</attribute>
-                    <attribute name="filter_domain"/>
-                </field>
-                <xpath expr="//filter[@string='Status']" position="after">
+                <xpath expr="//group" position="inside">
                     <filter string="Commercial" domain="[]" context="{'group_by':'commercial'}"/>
                 </xpath>
                 <field name="product_id" position="after">
@@ -168,7 +162,7 @@
             <field name="model">stock.reservation</field>
             <field name="inherit_id" ref="stock_reserve.view_stock_reservation_tree"/>
             <field name="arch" type="xml">
-                <field name="date_planned" position="after">
+                <field name="date_order" position="after">
                     <field name="next_reception_date"/>
                 </field>
             </field>
@@ -179,7 +173,7 @@
             <field name="model">stock.reservation</field>
             <field name="inherit_id" ref="stock_reserve.view_stock_reservation_form"/>
             <field name="arch" type="xml">
-                <field name="date_planned" position="after">
+                <field name="date_order" position="after">
                     <field name="next_reception_date"/>
                 </field>
             </field>
@@ -222,7 +216,7 @@
             <field name="model">stock.move</field>
             <field eval="8" name="priority"/>
             <field name="arch" type="xml">
-                <tree colors="grey:state == 'cancel';red:(state not in ('cancel','done')) and date > current_date" string="Moves">
+                <tree decoration-muted="state == 'cancel'" decoration-danger="state not in ('cancel','done') and date &gt; current_date" string="Moves">
                     <field name="product_id" on_change="onchange_product_id(product_id,location_id,location_dest_id, False)"/>
                     <field name="product_uom_qty" on_change="onchange_quantity(product_id, product_uom_qty, product_uom, product_uos)"/>
                     <field name="available_stock"/>
@@ -278,9 +272,9 @@
         <field name="act_window_id" ref="action_move_review_form"/>
         </record>
 
-        <menuitem action="action_move_review_form" id="menu_move_review" parent="stock.menu_traceability" sequence="4" groups="stock.group_locations"/>
+        <!--TODO: Migar<menuitem action="action_move_review_form" id="menu_move_review" parent="stock.menu_traceability" sequence="4" groups="stock.group_locations"/>-->
 
-        <record id="view_production_lot_form_customers" model="ir.ui.view">
+        <!--TODO: MIgrar<record id="view_production_lot_form_customers" model="ir.ui.view">
             <field name="name">stock.production.lot.form.customers</field>
             <field name="model">stock.production.lot</field>
             <field name="inherit_id" ref="stock.view_production_lot_form"/>
@@ -296,7 +290,7 @@
                     </group>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
         <record id="view_production_lot_tree_partner" model="ir.ui.view">
             <field name="name">stock.production.lot.tree.partner</field>

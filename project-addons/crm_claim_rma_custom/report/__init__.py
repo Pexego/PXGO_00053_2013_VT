@@ -19,4 +19,4 @@
 #
 ##############################################################################
 
-from . import crm_claim_report
+#TODO: Migrarfrom . import crm_claim_report

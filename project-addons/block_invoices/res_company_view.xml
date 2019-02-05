@@ -2,7 +2,7 @@
 <openerp>
     <data>
         <!--[01/07/15] Se añade el campo 'Dias de gracia bloqueo de clientes' a la vista form de la compañía-->
-        <record model="ir.ui.view" id="view_company_form_add_block_customers_form">
+        <!--TODO: Migrar<record model="ir.ui.view" id="view_company_form_add_block_customers_form">
             <field name="name">view.company.form.add.block.customers.form</field>
             <field name="inherit_id" ref="account.view_company_inherit_form"/>
             <field name="model">res.company</field>
@@ -13,7 +13,7 @@
                     </group>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

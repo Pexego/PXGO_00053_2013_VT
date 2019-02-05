@@ -22,8 +22,8 @@ msgid "Carrier - Customer"
 msgstr "Transportista -  Cliente"
 
 #. module: sale_delivery_type
-#: field:sale.order,delivery_type:0
-#: field:crm.claim,delivery_type:0
+#: model:ir.model.fields,field_description:sale_delivery_type.field_sale_order_delivery_type
+#: model:ir.model.fields,field_description:sale_delivery_type.field_crm_claim_delivery_type
 msgid "Delivery type"
 msgstr "Tipo de envío"
 

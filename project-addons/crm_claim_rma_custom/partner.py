@@ -19,34 +19,28 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, api
 
 
 class ResPartner(models.Model):
 
     _inherit = "res.partner"
 
-    def search(self, cr, uid, args, offset=0, limit=None, order=None,
-               context=None, count=False):
+    @api.model
+    def search(self, args, offset=0, limit=None, order=None, count=False):
         """Si recibimos en contexto un producto filtramos por los proveedores
            del producto"""
-        if context is None:
-            context = {}
-        if context.get('search_product_id', False):
-            supp_obj = self.pool.get('product.supplierinfo')
-            product_obj = self.pool.get('product.product')
-            product = product_obj.browse(cr, uid, context['search_product_id'])
+        if self.env.context.get('search_product_id'):
+            supp_obj = self.env['product.supplierinfo']
+            product_obj = self.env['product.product']
+            product = product_obj.browse(self.env.context['search_product_id'])
             args = []
             domain = [('product_tmpl_id', '=', product.product_tmpl_id.id)]
-            supp_ids = supp_obj.search(cr, uid, domain, context=context)
-            ids = set()
-            for supp in supp_obj.browse(cr, uid, supp_ids, context=context):
-                ids.add(supp.name.id)
-            ids = list(ids)
-            args.append(['id', 'in', ids])
-        return super(ResPartner, self).search(cr, uid, args,
+            supp_ids = supp_obj.search(domain)
+            partners = supp_ids.mapped('name')
+            args.append(['id', 'in', partners.ids])
+        return super(ResPartner, self).search(args,
                                               offset=offset,
                                               limit=limit,
                                               order=order,
-                                              context=context,
                                               count=count)

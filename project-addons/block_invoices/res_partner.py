@@ -59,12 +59,12 @@ class ResPartner(models.Model):
         # limite, de tipo 'receivable'
         cust_account_ids = account_facade.\
             search(cr, uid, [('company_id', '=', root_company_id),
-                             ('type', '=', 'receivable'),
+                             ('type', '=', 'internal_type'),
                              ('code', 'like', '430%')])
         move_line_ids = move_line_facade.\
             search(cr, uid, [('account_id', 'in', cust_account_ids),
                              ('date_maturity', '<', limit_customer_date),
-                             ('reconcile_id', '=', False)])
+                             ('full_reconcile_id', '=', False)])
         if len(move_line_ids) > 0:
             moves_to_search_dict = move_line_facade.\
                 read(cr, uid, move_line_ids, ['partner_id'])
@@ -98,7 +98,7 @@ class ResPartner(models.Model):
             cust_account_ids = account_facade.search(cr, uid,
                                                      [('company_id', '=',
                                                        user.company_id.id),
-                                                      ('type', '=',
+                                                      ('internal_type', '=',
                                                        'receivable'),
                                                       ('code', 'like',
                                                        '430%')])
@@ -109,7 +109,7 @@ class ResPartner(models.Model):
                                                       limit_customer_date),
                                                      ('date_maturity', '=',
                                                       False),
-                                                     ('reconcile_id', '=',
+                                                     ('full_reconcile_id', '=',
                                                       False),
                                                      ('partner_id', '=',
                                                       partner.id)])

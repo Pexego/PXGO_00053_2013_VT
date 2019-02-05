@@ -403,7 +403,7 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                                     WHERE   bm.date_due BETWEEN atf.start_date AND atf.end_date
                                             AND coalesce(bm.paid, False) = False AND coalesce(atf.not_bank_maturity, False) = False
                             ) analysis
-                            LEFT JOIN payment_mode pm ON pm.id = analysis.payment_mode_id
+                            LEFT JOIN account_payment_mode pm ON pm.id = analysis.payment_mode_id
                             ORDER  BY analysis.treasury_id, analysis.date, analysis.id_ref
             )""")
 

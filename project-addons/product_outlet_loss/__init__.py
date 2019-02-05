@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,6 +18,5 @@
 #
 ##############################################################################
 
-import wizard
-import product, res_company, sale_order
-
+from . import wizard
+from . import models

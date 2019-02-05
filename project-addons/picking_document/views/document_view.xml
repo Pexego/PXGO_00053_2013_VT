@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
 
         <record id="document_tree" model="ir.ui.view">
             <field name="name">document.tree</field>
             <field name="model">stock.document</field>
-            <field name="type">tree</field>
             <field name="arch" type="xml">
                 <tree string="Documents">
                     <field name="name"/>
@@ -17,7 +15,6 @@
         <record id="document_form" model="ir.ui.view">
             <field name="name">document.form</field>
             <field name="model">stock.document</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Document">
                     <sheet>
@@ -33,7 +30,6 @@
         <record id="document_filter" model="ir.ui.view">
             <field name="name">document.filter</field>
             <field name="model">stock.document</field>
-            <field name="type">search</field>
             <field name="arch" type="xml">
                 <search string="Document">
                    <field name="name"/>
@@ -51,5 +47,4 @@
 
         <menuitem name="Documents" parent="stock.menu_stock_config_settings" action="action_document" id="menu_document"/>
 
-    </data>
 </odoo>
