@@ -331,12 +331,6 @@
             </field>
         </record>
 
-<<<<<<< HEAD
-=======
-
-
-
->>>>>>> origin/master
         <menuitem name="Received Claims" id="menu_crm_case_claims"
             parent="crm_claim.menu_aftersale" action="crm_case_categ_claim_sort" sequence="1"/>
 

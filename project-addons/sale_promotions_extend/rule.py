@@ -518,13 +518,11 @@ class PromotionsRulesActions(models.Model):
         return True
 
 
-class PromotionsRules(orm.Model):
+class PromotionsRules(models.Model):
 
     _inherit = "promos.rules"
 
-    _columns = {
-        'special_promo': fields.boolean("Special Promo")
-    }
+    special_promo = fields.Boolean("Special Promo")
 
     def apply_special_promotions(self, cr, uid, order_id, context=None):
 
@@ -540,7 +538,7 @@ class PromotionsRules(orm.Model):
                     self.execute_actions(cr, uid,
                                      promotion_rule, order_id,
                                      context)
-                except Exception, e:
+                except Exception as e:
                     raise orm.except_orm("Promotions", ustr(e))
                 #If stop further is true
                 if promotion_rule.stop_further:

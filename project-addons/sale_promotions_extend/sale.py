@@ -71,9 +71,7 @@ class SaleOrder(models.Model):
 
     _inherit = "sale.order"
 
-    _columns = {
-        'no_promos': fields.boolean("Not apply promotions", help="Reload the prices after marking this check")
-    }
+    no_promos = fields.Boolean("Not apply promotions", help="Reload the prices after marking this check")
 
     def apply_promotions(self, cursor, user, ids, context=None):
         if context is None:
