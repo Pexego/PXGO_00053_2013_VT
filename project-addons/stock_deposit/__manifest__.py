@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -21,16 +20,16 @@
 
 {
     'name': 'Stock deposit',
-    'version': '1.0',
+    'version': '11.0',
     'category': 'product',
     'description': """Manage deposit of goods in a customer location""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    'depends' : ['base', 'sales_team', 'sale_stock', 'stock_reserve_sale',
-                 'email_template_followers', 'stock_valued_picking'],
-    'data' : ['wizard/stock_invoice_deposit.xml', 'wizard/stock_sale_deposit.xml',
-              'stock_data.xml', 'stock_deposit.xml', 'res_partner_view.xml',
-              'security/ir.model.access.csv', 'sale_view.xml',
+    'depends': ['base', 'sales_team', 'sale_stock', 'sale',
+                'email_template_followers', 'stock_valued_picking'],
+    'data': ['wizard/stock_invoice_deposit.xml', 'wizard/stock_sale_deposit.xml',
+              'views/stock_data.xml', 'views/stock_deposit.xml', 'views/res_partner_view.xml',
+              'security/ir.model.access.csv', 'views/sale_view.xml',
               'data/stock_deposit_data.xml'],
     'installable': True
 }
