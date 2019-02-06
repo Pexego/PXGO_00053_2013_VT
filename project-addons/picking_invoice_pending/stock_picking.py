@@ -173,6 +173,7 @@ class StockPicking(models.Model):
                         validate = False
                     if validate:
                         # Validate invoice
+                        invoice_created.button_reset_taxes()
                         invoice_created.signal_workflow('invoice_open')
                         if invoice_created.state in ('draft', 'cancel', 'proforma', 'proforma2'):
                             templates.append(self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
