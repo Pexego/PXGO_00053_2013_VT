@@ -12,7 +12,6 @@
                 </div>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="replace"></xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='deposit']" position="replace"></xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='deposit_date']" position="replace"></xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="replace"></xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="replace"></xpath>
