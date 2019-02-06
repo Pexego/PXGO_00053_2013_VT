@@ -349,6 +349,18 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
 
 }
 
+/* status bar */
+
+.o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled::after {
+    border-left-color: #7c7bad;
+}
+.o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled {
+    color: #f9f9f9;
+    font-size: 11px;
+    background-color: #7c7bad;
+    cursor: default;
+}
+
 $bg-color: #fff; //container background-color;
 $basic-dark-color: #d3283f; //color of the spinner
 $border-width: 4px; //width of spinners border
