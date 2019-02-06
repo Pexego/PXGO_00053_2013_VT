@@ -1,2 +1,2 @@
 from . import partner
-from . import stock
+# TODO -> Migrar: from . import stock

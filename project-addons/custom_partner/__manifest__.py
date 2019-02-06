@@ -29,8 +29,9 @@
                 'base_partner_sequence', 'stock', 'account_credit_control',
                 'purchase', 'purchase_advance_payment',
                 'account_due_list', 'customer_lost'],
-    "data": ["views/partner_view.xml", "views/stock_view.xml",
-             "security/ir.model.access.csv", "views/sale_view.xml",
+    "data": ["views/partner_view.xml",
+             # TODO: Migrar -> "views/stock_view.xml", "views/sale_view.xml",
+             "security/ir.model.access.csv",
              "data/custom_partner_data.xml"],
     "installable": True
 }

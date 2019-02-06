@@ -268,7 +268,7 @@
             <field name="domain">['|', ('type','=','in_invoice'),('type','=','in_refund')]</field>
         </record>
 
-        <!--TODO: Migrar <record id="res_partner_custom_view_purchase_account_buttons" model="ir.ui.view">
+        <record id="res_partner_custom_view_purchase_account_buttons" model="ir.ui.view">
             <field name="name">res.partner.custom.view.purchase.account.buttons</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="purchase.res_partner_view_purchase_account_buttons"/>
@@ -279,7 +279,7 @@
             </field>
         </record>
 
-        <record id="view_partner_inherit_followup_form_add_send_email" model="ir.ui.view">
+        <!--TODO: Migrar <record id="view_partner_inherit_followup_form_add_send_email" model="ir.ui.view">
             <field name="name">res.partner.followup.form.inherit.add_send_email</field>
             <field name="inherit_id" ref="account_followup.view_partner_inherit_followup_form"/>
             <field name="model">res.partner</field>
@@ -495,7 +495,7 @@
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
             </field>
-        </record>
+        </record>-->
 
         <record model="ir.ui.view" id="partner_view_buttons_override">
             <field name="name">partner.view.buttons.override</field>
@@ -506,20 +506,37 @@
                     <field name="total_invoiced_real" widget="monetary"/>
                 </field>
             </field>
-        </record>-->
+        </record>
 
-        <record model="ir.ui.view" id="partner_view_add_growth">
+        <!--record model="ir.ui.view" id="partner_view_add_growth">
             <field name="name">partner.view.add_growth</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="purchase.res_partner_view_purchase_account_buttons"/>
             <field name="arch" type="xml">
                 <field name="lang" position="after">
-                    <!--TODO: Migrar<field name="growth_rate"/>-->
+                    <field name="growth_rate"/>
                     <label for="average_margin" attrs="{'invisible': [('is_company', '!=', True)]}"/>
                         <div attrs="{'invisible': [('is_company', '!=', True)]}">
                             <field name="average_margin" class="oe_inline"/> %%
                         </div>
                 </field>
+            </field>
+        </record-->
+
+        <record model="ir.ui.view" id="partner_view_add_sale_analysis">
+            <field name="name">partner.view.sale.analysis</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                 <xpath expr="//page[@name='sales_purchases']/group">
+                    <group string="Sale analysis" name="sale_analysis">
+                        <field name="growth_rate"/>
+                        <label for="average_margin" attrs="{'invisible': [('is_company', '!=', True)]}"/>
+                        <div attrs="{'invisible': [('is_company', '!=', True)]}">
+                            <field name="average_margin" class="oe_inline"/> %%
+                        </div>
+                    </group>
+                </xpath>
             </field>
         </record>
 
