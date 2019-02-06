@@ -5,7 +5,7 @@
        <field name="model">sale.report</field>
        <field name="arch" type="xml">
            <graph string="Sales Analysis" type="pivot" stacked="True">
-               <field name="section_id" type="row"/>
+               <field name="team_id" type="row"/>
                <field name="date" interval="month" type="col"/>
                <field name="benefit" type="measure"/>
            </graph>
@@ -17,7 +17,7 @@
        <field name="model">sale.report</field>
        <field name="arch" type="xml">
            <graph string="Sales Analysis" type="pivot" stacked="True">
-               <field name="section_id" type="row"/>
+               <field name="team_id" type="row"/>
                <field name="date" interval="month" type="col"/>
                <field name="cost_price" type="measure"/>
            </graph>
