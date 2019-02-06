@@ -5,7 +5,7 @@ from odoo import tools
 class SaleReport(models.Model):
     _inherit = 'sale.report'
 
-    # benefit = fields.Float('Benefit', readonly=True),
+    benefit = fields.Float('Benefit', readonly=True),
     cost_price = fields.Float('Cost Price', readonly=True)
 
     def _select(self):
@@ -18,6 +18,16 @@ class SaleReport(models.Model):
         return select_str + this_str
 
     def _where(self):
-        where_str = " "# TODO: migrar stock_deposit l.deposit = false"
+        where_str = "l.deposit = false"
         return where_str
 
+    def init(self, cr):
+        # self._table = sale_report
+        tools.drop_view_if_exists(cr, self._table)
+        cr.execute("""CREATE or REPLACE VIEW %s as (
+            %s
+            FROM ( %s )
+            WHERE %s
+            %s
+            )""" % (self._table, self._select(), self._from(), self._where(),
+                    self._group_by()))

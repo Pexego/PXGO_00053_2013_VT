@@ -110,36 +110,36 @@ class SaleOrder(models.Model):
 
 
     @api.multi
-    @api.depends('order_line.margin')# TODO: migración stock_deposit, 'order_line.deposit')
+    @api.depends('order_line.margin', 'order_line.deposit')
     def _product_margin(self):
         for sale in self:
             sale.margin = 0.0
             margin = 0.0
             sale_price = 0.0
             for line in sale.order_line:
-                # TODO: migracion stock_deposit, lo de debajo va dentro de este if - if not line.deposit:
-                if line.price_unit > 0:
-                    margin += line.margin or 0.0
-                else:
-                    margin += line.price_unit
-                sale_price += line.price_subtotal or 0.0
+                if not line.deposit:
+                    if line.price_unit > 0:
+                        margin += line.margin or 0.0
+                    else:
+                        margin += line.price_unit
+                    sale_price += line.price_subtotal or 0.0
             if sale_price:
                 sale.margin = round((margin * 100) / sale_price, 2)
 
     @api.multi
-    @api.depends('order_line.margin_rappel')# TODO: migración stock_deposit, 'order_line.deposit')
+    @api.depends('order_line.margin_rappel', 'order_line.deposit')
     def _product_margin_rappel(self):
         for sale in self:
             sale.margin_rappel = 0.0
             margin_rappel = 0.0
             sale_price = 0.0
             for line in sale.order_line:
-                # TODO: migracion stock_deposit, lo de debajo va dentro de este if - if not line.deposit:
-                if line.price_unit > 0:
-                    margin_rappel += line.margin_rappel or 0.0
-                else:
-                    margin_rappel += line.price_unit
-                sale_price += line.price_subtotal or 0.0
+                if not line.deposit:
+                    if line.price_unit > 0:
+                        margin_rappel += line.margin_rappel or 0.0
+                    else:
+                        margin_rappel += line.price_unit
+                    sale_price += line.price_subtotal or 0.0
             if sale_price:
                 sale.margin_rappel = round((margin_rappel * 100) / sale_price, 2)
 
@@ -150,14 +150,14 @@ class SaleOrder(models.Model):
             for line in sale.order_line:
                 # ADDED for dependency with stock_deposit for not count
                 # deposit in total margin
-                # TODO: migracion stock_deposit, lo de debajo va dentro de este if - if not line.deposit:
-                if line.purchase_price:
-                    sale.total_purchase += line.purchase_price * \
-                        line.product_uom_qty
-                elif line.product_id:
-                    cost_price = line.product_id.standard_price
-                    sale.total_purchase += cost_price * \
-                        line.product_uom_qty
+                if not line.deposit:
+                    if line.purchase_price:
+                        sale.total_purchase += line.purchase_price * \
+                            line.product_uom_qty
+                    elif line.product_id:
+                        cost_price = line.product_id.standard_price
+                        sale.total_purchase += cost_price * \
+                            line.product_uom_qty
 
     total_purchase = fields.Float(compute='get_total_price_purchase',
                                   string='Price purchase', readonly=True)
