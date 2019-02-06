@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2018 Visiotech All Rights Reserved
+#    $Anthonny Contreras Vargas <acontreras@visiotechsecurity.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,18 +19,4 @@
 #
 ##############################################################################
 
-{
-    'name': 'Stock deposit',
-    'version': '1.0',
-    'category': 'product',
-    'description': """Manage deposit of goods in a customer location""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    'depends' : ['base', 'sales_team', 'sale_stock', 'stock_reserve_sale',
-                 'email_template_followers', 'stock_valued_picking'],
-    'data' : ['wizard/stock_invoice_deposit.xml', 'wizard/stock_sale_deposit.xml',
-              'stock_data.xml', 'stock_deposit.xml', 'res_partner_view.xml',
-              'security/ir.model.access.csv', 'sale_view.xml',
-              'data/stock_deposit_data.xml'],
-    'installable': True
-}
+from . import crm_claim

@@ -1,9 +1,7 @@
-
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
+#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -21,31 +19,17 @@
 ##############################################################################
 
 {
-    "name": "Promotions Extend",
-    "version": "1.0",
-    "author": "Pexego",
+    'name': 'Stock deposit',
+    'version': '11.0',
+    'category': 'product',
+    'description': """Manage deposit of goods in a customer location""",
+    'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    "category": "Generic Modules/Sales & Purchases",
-    "description": """
-Promotions extend
-========================================
-Features:
-1. Lets you apply discounts by product tags.
-""",
-    "depends": ["base",
-                "commercial_rules",
-                "equivalent_products",
-                "stock_reserve_sale",
-                "product_brand",
-                "sale_product_customize"],
-    "data": [
-        "sale_view.xml",
-        "rule.xml",
-        "product_view.xml"
-
-    ],
-    "demo": [],
-    'auto_install': False,
-    "installable": True,
-    'images': [],
+    'depends': ['base', 'sales_team', 'sale_stock', 'sale',
+                'email_template_followers', 'stock_valued_picking'],
+    'data': ['wizard/stock_invoice_deposit.xml', 'wizard/stock_sale_deposit.xml',
+              'views/stock_data.xml', 'views/stock_deposit.xml', 'views/res_partner_view.xml',
+              'security/ir.model.access.csv', 'views/sale_view.xml',
+              'data/stock_deposit_data.xml'],
+    'installable': True
 }

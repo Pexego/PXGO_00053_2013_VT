@@ -579,3 +579,17 @@ msgstr "menor o igual a"
 msgid "not equal to"
 msgstr "no es igual a"
 
+#. module: sale_promotions_extend
+#: field:promos.rules,special_promo:0
+msgid "Special Promo"
+msgstr "Promo especial"
+
+#. module: sale_promotions_extend
+#: field:sale.order,no_promos:0
+msgid "Not apply promotions"
+msgstr "No aplicar promociones"
+
+#. module: sale_promotions_extend
+#: help:sale.order,no_promos:0
+msgid "Reload the prices after marking this check"
+msgstr "Recalcular precio final después de marcar el check"

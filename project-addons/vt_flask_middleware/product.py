@@ -69,6 +69,8 @@ class Product(SyncModel):
     manufacturer_ref = CharField(max_length=100, null=True)
     type = CharField(max_length=10)
     is_pack = BooleanField()
+    discontinued = BooleanField()
+    state = CharField(max_length=50)
 
     def __unicode__(self):
         return self.name
