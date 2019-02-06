@@ -55,3 +55,13 @@ msgstr "Margen"
 msgid "Margin based on the coupon rappel"
 msgstr "Margen calculado con el vale ahorro"
 
+#. module: sale_margin_percentage
+#: model:ir.model.fields,field_description:sale_margin_percentage.field_sale_report_benefit
+msgid "Benefit"
+msgstr "Beneficio"
+
+#. module: sale_margin_percentage
+#: model:ir.model.fields,field_description:sale_margin_percentage.field_sale_report_cost_price
+msgid "Cost Price"
+msgstr "Precio de coste"
+
