@@ -52,7 +52,7 @@ class AccountInvoice(models.Model):
                         clean_line[field_name] = inv_line[field_name].id
                     elif column_type not in ('many2many', 'one2many'):
                         clean_line[field_name] = inv_line[field_name]
-                    elif field_name == 'invoice_line_tax_id':
+                    elif field_name == 'invoice_line_tax_ids':
                         tax_list = []
                         for tax in inv_line[field_name]:
                             tax_list.append(tax.id)

@@ -79,13 +79,13 @@ class ProductProduct(models.Model):
          'The code of product must be unique.')
     ]
 
-    def copy(self, cr, uid, id, default=None, context=None):
-        if default is None: default = {}
-        if not default.get('default_code', False):
-            prod = self.browse(cr, uid, id, context=context)
-            default['default_code'] = _("%s (copy)") % (prod.default_code)
-        return super(ProductProduct, self).copy(cr, uid, id, default=default,
-                                                context=context)
+    # def copy(self, cr, uid, id, default=None, context=None):
+    #     if default is None: default = {} TODO: Migrar
+    #     if not default.get('default_code', False):
+    #         prod = self.browse(cr, uid, id, context=context)
+    #         default['default_code'] = _("%s (copy)") % (prod.default_code)
+    #     return super(ProductProduct, self).copy(cr, uid, id, default=default,
+    #                                             context=context)
 
     @api.multi
     def name_get(self):

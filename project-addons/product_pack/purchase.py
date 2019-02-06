@@ -46,15 +46,15 @@ class purchase_order_line(models.Model):
 class purchase_order(models.Model):
     _inherit = 'purchase.order'
 
-    def create(self, cr, uid, vals, context=None):
-        result = super(purchase_order, self).create(cr, uid, vals, context)
-        self.expand_packs(cr, uid, [result], context)
-        return result
+    # def create(self, cr, uid, vals, context=None):
+    #     result = super(purchase_order, self).create(cr, uid, vals, context)
+    #     self.expand_packs(cr, uid, [result], context)
+    #     return result
 
-    def write(self, cr, uid, ids, vals, context=None):
-        result = super(purchase_order, self).write(cr, uid, ids, vals, context)
-        self.expand_packs(cr, uid, ids, context)
-        return result
+    # def write(self, cr, uid, ids, vals, context=None):
+    #     result = super(purchase_order, self).write(cr, uid, ids, vals, context)
+    #     self.expand_packs(cr, uid, ids, context)
+    #     return result
 
     def expand_packs(self, cr, uid, ids, context={}, depth=1):
         if type(ids) in [int, long]:

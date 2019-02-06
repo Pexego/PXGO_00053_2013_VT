@@ -147,9 +147,9 @@ class StockPicking(models.Model):
     weight_st = fields.Float(digits=dp.get_precision('Stock Weight'))
     weight_net_st = fields.\
         Float(digits=dp.get_precision('Stock Weight'))
-    weight = fields.Float('Weight', compute='_cal_weight', readonly=False,
+    weight = fields.Float('Weight', compute='cal_weight', readonly=False,
                           digits=dp.get_precision('Stock Weight'))
-    weight_net = fields.Float('Net Weight', compute="_cal_weight", readonly=False,
+    weight_net = fields.Float('Net Weight', compute="cal_weight", readonly=False,
                               digits=dp.get_precision('Stock Weight'))
     carrier_tracking_ref = fields.Char('Carrier Tracking Ref', copy=False)
     number_of_packages = fields.Integer('Number of Packages', copy=False)

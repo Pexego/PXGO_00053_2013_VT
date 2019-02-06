@@ -16,43 +16,43 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: purchase_picking
-#: view:assign.container.wzd:purchase_picking.assign_container_wzd_view
+#: model:ir.ui.view,arch_db:purchase_picking.assign_container_wzd_view
 msgid "Assign"
 msgstr "Asignar"
 
 #. module: purchase_picking
-#: view:assign.container.wzd:purchase_picking.assign_container_wzd_view
+#: model:ir.ui.view,arch_db:purchase_picking.assign_container_wzd_view
 #: model:ir.actions.act_window,name:purchase_picking.action_assign_container
 msgid "Assign container"
 msgstr "Asignar contenedor"
 
 #. module: purchase_picking
-#: view:picking.from.moves.wizard:purchase_picking.create_picking_move_view
+#: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: purchase_picking
-#: field:stock.container,company_id:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_company_id
 msgid "Company"
 msgstr "Compañía"
 
 #. module: purchase_picking
-#: field:stock.reservation,consumed_for:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_consumed_for
 msgid "Consumed for"
 msgstr "Consumido para"
 
 #. module: purchase_picking
-#: field:assign.container.wzd,container_id:0
-#: field:picking.from.moves.wizard,container_id:0
-#: view:stock.container:purchase_picking.view_stock_container_form
-#: view:stock.move:purchase_picking.stock_move_search_add_new_state
-#: field:stock.move,container_id:0
-#: field:stock.reservation,container_id:0
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_container_id
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_container_id
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+#: model:ir.ui.view,arch_db:purchase_picking.stock_move_search_add_new_state
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_move_container_id
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_container_id
 msgid "Container"
 msgstr "Contenedor"
 
 #. module: purchase_picking
-#: field:stock.container,name:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_name
 msgid "Container Ref."
 msgstr "Ref. contenedor"
 
@@ -64,18 +64,18 @@ msgstr "La referencia de contenedor debe ser única"
 #. module: purchase_picking
 #: model:ir.actions.act_window,name:purchase_picking.action_stock_container
 #: model:ir.ui.menu,name:purchase_picking.stock_container_menu
-#: view:stock.container:purchase_picking.view_stock_container_filter
-#: view:stock.container:purchase_picking.view_stock_container_tree
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_tree
 msgid "Containers"
 msgstr "Contenedores"
 
 #. module: purchase_picking
-#: view:picking.from.moves.wizard:purchase_picking.create_picking_move_view
+#: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
 msgid "Create"
 msgstr "Crear"
 
 #. module: purchase_picking
-#: view:picking.from.moves.wizard:purchase_picking.create_picking_move_view
+#: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
 msgid "Create Picking"
 msgstr "Crear albarán"
 
@@ -85,33 +85,33 @@ msgid "Create picking"
 msgstr "Crear albarán"
 
 #. module: purchase_picking
-#: field:assign.container.wzd,create_uid:0
-#: field:picking.from.moves.wizard,create_uid:0
-#: field:picking.wizard.move.details,create_uid:0
-#: field:stock.container,create_uid:0
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_create_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_create_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_create_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_create_uid
 msgid "Created by"
 msgstr "Created by"
 
 #. module: purchase_picking
-#: field:assign.container.wzd,create_date:0
-#: field:picking.from.moves.wizard,create_date:0
-#: field:picking.wizard.move.details,create_date:0
-#: field:stock.container,create_date:0
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_create_date
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_create_date
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_create_date
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_create_date
 msgid "Created on"
 msgstr "Created on"
 
 #. module: purchase_picking
-#: field:stock.container,date_expected:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_date_expected
 msgid "Date expected"
 msgstr "Fecha estimada"
 
 #. module: purchase_picking
-#: field:stock.container,picking_ids:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_picking_ids
 msgid "Pickings"
 msgstr "Albaranes"
 
 #. module: purchase_picking
-#: field:picking.from.moves.wizard,date_picking:0
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_date_picking
 msgid "Date planned"
 msgstr "Fecha planificada"
 
@@ -122,34 +122,34 @@ msgid "Goods received."
 msgstr "Mercancia recibida."
 
 #. module: purchase_picking
-#: field:picking.from.moves.wizard,id:0
-#: field:picking.wizard.move.details,id:0
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_id
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_id
 msgid "ID"
 msgstr "ID"
 
 #. module: purchase_picking
-#: field:assign.container.wzd,write_uid:0
-#: field:picking.from.moves.wizard,write_uid:0
-#: field:picking.wizard.move.details,write_uid:0
-#: field:stock.container,write_uid:0
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_write_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_write_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_write_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_write_uid
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
 #. module: purchase_picking
-#: field:assign.container.wzd,write_date:0
-#: field:picking.from.moves.wizard,write_date:0
-#: field:picking.wizard.move.details,write_date:0
-#: field:stock.container,write_date:0
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_write_date
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_write_date
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_write_date
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_write_date
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
 #. module: purchase_picking
-#: field:picking.wizard.move.details,move_id:0
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_move_id
 msgid "Move"
 msgstr "Movimiento"
 
 #. module: purchase_picking
-#: field:stock.container,move_ids:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_move_ids
 msgid "Moves"
 msgstr "Movimientos"
 
@@ -159,7 +159,7 @@ msgid "Picking List"
 msgstr "Albarán"
 
 #. module: purchase_picking
-#: view:stock.move:purchase_picking.view_move_picking_form_add_partner
+#: model:ir.ui.view,arch_db:purchase_picking.view_move_picking_form_add_partner
 msgid "Partner"
 msgstr "Empresa"
 
@@ -176,17 +176,17 @@ msgid "Picking error"
 msgstr "Error en albarán"
 
 #. module: purchase_picking
-#: field:stock.reservation,production_id:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_production_id
 msgid "Production Order for Produced Products"
 msgstr "Orden de producción para productos producidos"
 
 #. module: purchase_picking
-#: field:stock.reservation,raw_material_production_id:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_raw_material_production_id
 msgid "Production Order for Raw Materials"
 msgstr "Orden de producción para materias primas"
 
 #. module: purchase_picking
-#: field:purchase.order,picking_created:0
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_picking_created
 msgid "Picking created"
 msgstr "Albarán creado"
 
@@ -197,7 +197,7 @@ msgid "Picking error"
 msgstr "Error en albaranes"
 
 #. module: purchase_picking
-#: field:picking.wizard.move.details,product_id:0
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_product_id
 msgid "Product"
 msgstr "Producto"
 
@@ -212,7 +212,7 @@ msgid "Purchase Order Line"
 msgstr "Línea pedido de compra"
 
 #. module: purchase_picking
-#: field:picking.wizard.move.details,qty:0
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_qty
 msgid "Quantity"
 msgstr "Cantidad"
 
@@ -223,22 +223,22 @@ msgid "Quantity error"
 msgstr "Error en cantidad"
 
 #. module: purchase_picking
-#: view:purchase.order:purchase_picking.purchase_order_form_change_view_picking
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_order_form_change_view_picking
 msgid "Receive Products"
 msgstr "Recibir productos"
 
 #. module: purchase_picking
-#: view:stock.container:purchase_picking.view_stock_container_form
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
 msgid "Related Moves"
 msgstr "Movimientos relacionados"
 
 #. module: purchase_picking
-#: view:stock.move:purchase_picking.stock_move_custom_tree
+#: model:ir.ui.view,arch_db:purchase_picking.stock_move_custom_tree
 msgid "Order"
 msgstr "Pedido"
 
 #. module: purchase_picking
-#: field:stock.picking,shipping_identifier:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_shipping_identifier
 msgid "Shipping identifier"
 msgstr "Identificador de envío"
 
@@ -253,12 +253,12 @@ msgid "Stock Reservation"
 msgstr "Reserva de stock"
 
 #. module: purchase_picking
-#: help:stock.reservation,consumed_for:0
+#: model:ir.model.fields,help:purchase_picking.field_stock_reservation_consumed_for
 msgid "Technical field used to make the traceability of produced products"
 msgstr "Campo técnico usado para hacer la trazabilidad entre productos producidos"
 
 #. module: purchase_picking
-#: field:stock.picking,temp:0
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_temp
 msgid "Temp."
 msgstr "Temp."
 
@@ -287,12 +287,12 @@ msgid "Type not found"
 msgstr "Tipo no encontrado"
 
 #. module: purchase_picking
-#: field:picking.from.moves.wizard,move_detail_ids:0
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_move_detail_ids
 msgid "lines"
 msgstr "Lineas"
 
 #. module: purchase_picking
-#: field:picking.wizard.move.details,wizard_id:0
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_wizard_id
 msgid "wizard"
 msgstr "Asistente"
 
@@ -303,12 +303,12 @@ msgid "Set the partner in the created moves"
 msgstr "Establezca el proveedor en el movimiento"
 
 #. module: purchase_picking
-#: view:purchase.order:purchase_picking.purchase_order_form_change_view_picking
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_order_form_change_view_picking
 msgid "View pickings"
 msgstr "Ver albaranes"
 
 #. module: purchase_picking
-#: view:purchase.order:purchase_picking.purchase_order_form_change_view_picking
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_order_form_change_view_picking
 msgid "Create picking"
 msgstr "Crear albarán"
 

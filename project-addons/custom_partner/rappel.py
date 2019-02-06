@@ -75,7 +75,7 @@ class rappel_calculated(models.Model):
                                                       rp.date_end),
                                              'invoice_id': invoice.id,
                                              'account_id': account_id.id,
-                                             'invoice_line_tax_id': tax_ids,
+                                             'invoice_line_tax_ids': tax_ids,
                                              'price_unit': rp.quantity,
                                              'quantity': 1})
                     rp.invoice_id = invoice.id
@@ -92,10 +92,23 @@ class ResPartnerRappelRel(models.Model):
 
     @api.multi
     def _get_next_period(self):
-        period = super(ResPartnerRappelRel, self)._get_next_period()
-        if period and str(period[0]) == self.last_settlement_date:
-            period[0] += relativedelta(days=1)
-            period[1] += relativedelta(days=1)
+        self.ensure_one()
+        if self.last_settlement_date and self.last_settlement_date > self.date_start:
+            date_start = datetime.strptime(self.last_settlement_date, '%Y-%m-%d').date() + relativedelta(days=1)
+        else:
+            date_start = datetime.strptime(self.date_start, '%Y-%m-%d').date()
+
+        date_stop = date_start + relativedelta(months=self.PERIODICITIES_MONTHS[self.periodicity], days=-1)
+        if self.date_end:
+            date_end = datetime.strptime(self.date_end, '%Y-%m-%d').date()
+            if date_end < date_stop:
+                date_stop = date_end
+
+        if date_start != date_stop:
+            period = [date_start, date_stop]
+        else:
+            period = False
+
         return period
 
     @api.multi
@@ -332,7 +345,7 @@ class rappel(models.Model):
         start_next_month = (now + relativedelta(months=1)).strftime("%Y-%m") + '-01'
 
         discount_voucher_rappels = rappel_obj.search([('discount_voucher', '=', True)])
-        
+
         for rappel in discount_voucher_rappels:
             pricelist_ids = tuple(rappel.pricelist_ids.ids)
             partner_pricelist = tuple(partner_obj.search([('property_product_pricelist', 'in', pricelist_ids),
@@ -391,11 +404,11 @@ class RappelInvoice(models.TransientModel):
                 invoice = rappel.invoice_id
                 if not invoice.payment_mode_id \
                         or not invoice.partner_bank_id \
-                        or not invoice.section_id:
-                    rappel.invoice_id.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
+                        or not invoice.team_id:
+                    rappel.invoice_id.write({'payment_mode_id': rappel.partner_id.customer_payment_mode_id.id,
                                              'partner_bank_id': rappel.partner_id.bank_ids and
                                                                     rappel.partner_id.bank_ids[0].id or False,
-                                             'section_id': rappel.partner_id.section_id.id})
+                                             'team_id': rappel.partner_id.team_id.id})
         return res
 
 
@@ -496,11 +509,29 @@ class ComputeRappelInvoice(models.TransientModel):
         res = super(ComputeRappelInvoice, self).action_invoice()
         compute_rappel_obj = self.env["rappel.calculated"]
         for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
+            if rappel.quantity <= 0:
+                continue
             if rappel.invoice_id:
-                for line in rappel.invoice_id.invoice_line:
+                invoice_rappel = rappel.invoice_id
+                # Update description invoice lines
+                for line in invoice_rappel.invoice_line:
                     line.write({'name': u'%s (%s-%s)' %
                                         (rappel.rappel_id.description,
                                          rappel.date_start,
                                          rappel.date_end)})
+                # Update account data
+                if not invoice_rappel.payment_mode_id \
+                        or not invoice_rappel.partner_bank_id \
+                        or not invoice_rappel.section_id:
+                    partner_bank_id = False
+                    for banks in rappel.partner_id.bank_ids:
+                        for mandate in banks.mandate_ids:
+                            if mandate.state == 'valid':
+                                partner_bank_id = banks.id
+                                break
+                            else:
+                                partner_bank_id = False
+                    invoice_rappel.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
+                                          'partner_bank_id': partner_bank_id,
+                                          'section_id': rappel.partner_id.section_id.id})
         return res
-
