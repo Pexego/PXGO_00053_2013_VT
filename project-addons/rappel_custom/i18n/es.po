@@ -16,41 +16,41 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: rappel_custom
-#: field:rappel.calculated,goal_percentage:0
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_calculated_goal_percentage
 msgid "Goal Percentage"
 msgstr "Porcentaje de cumplimiento"
 
 #. module: rappel_custom
-#: field:rappel,brand_ids:0
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_brand_ids
 msgid "Brand"
 msgstr "Marca"
 
 #. module: rappel_custom
-#: view:rappel:custom_partner.rappel_form_add_brand
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_form_add_brand
 msgid "You must fill in only one of the following fields to define the validity area of rappel:"
 msgstr "Debe rellenar solamente uno de los siguientes datos para definir el ámbito de validez del rappel:"
 
 #. module: rappel_custom
-#: help:rappel.current.info,curr_qty_pickings:0
+#: model:ir.model.fields,help:rappel_custom.field_rappel_current_info_curr_qty_pickings
 msgid "Qty estimation in pickings pending to be invoiced (shipping cost and product with no-rappel check in the order are not verified)"
 msgstr "Cantidad estimada en albaranes pendientes de ser facturados (gastos de envío y productos con el check no-rappel en el pedido no se verifican) "
 
 #. module: rappel_custom
-#: field:rappel.current.info,curr_qty_pickings:0
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_current_info_curr_qty_pickings
 msgid "Qty pending invoice"
 msgstr "Cant. pendiente de facturar"
 
 #. module: rappel_custom
-#: view:rappel.current.info:custom_partner.view_rappel_current_info_tree_add_qty_picking
+#: model:ir.ui.view,arch_db:rappel_custom.view_rappel_current_info_tree_add_qty_picking
 msgid "Curr. qty invoiced"
 msgstr "Cant. act. facturada"
 
 #. module: rappel_custom
-#: field:rappel.current.info,amount_est:0
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_current_info_amount_est
 msgid "Estimated amount"
 msgstr "Importe estimado"
 
 #. module: custom_partner
-#: field:rappel,description:0
+#: model:ir.model.fields,field_description:custom_partner.field_rappel_description
 msgid "Description"
 msgstr "Descripción"
