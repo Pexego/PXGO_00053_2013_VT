@@ -21,13 +21,13 @@
 
 {
     'name': "Stock location moves",
-    'version': '1.0',
+    'version': '11.0',
     'category': 'stock',
     'description': """""",
     'author': 'Pexego',
     'website': 'www.pexego.es',
     "depends": ['stock', 'purchase_picking'],
-    "data": ['stock_data.xml', 'wizard/location_moves_view.xml',
-             'wizard/quality_move_view.xml', "stock_view.xml"],
+    "data": ['data/stock_data.xml', 'wizard/location_moves_view.xml',
+             'wizard/quality_move_view.xml', "views/stock_view.xml"],
     "installable": True
 }
