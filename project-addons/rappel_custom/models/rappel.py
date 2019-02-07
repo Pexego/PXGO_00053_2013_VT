@@ -67,7 +67,6 @@ class RappelCalculated(models.Model):
                         account_id = fpos.map_account(account_id)
                         taxes_ids = fpos.map_tax(taxes_ids)
                     tax_ids = [(6, 0, [x.id for x in taxes_ids])]
-                    # TODO -> probar cambio para pasar variables a un string con format()
                     invoice_line_obj.create({'product_id': rappel_product.id,
                                              'name': u'{0} ({1}-{2})'.format(
                                                             rp.rappel_id.name,
@@ -92,10 +91,23 @@ class ResPartnerRappelRel(models.Model):
 
     @api.multi
     def _get_next_period(self):
-        period = super(ResPartnerRappelRel, self)._get_next_period()
-        if period and str(period[0]) == self.last_settlement_date:
-            period[0] += relativedelta(days=1)
-            period[1] += relativedelta(days=1)
+        self.ensure_one()
+        if self.last_settlement_date and self.last_settlement_date > self.date_start:
+            date_start = datetime.strptime(self.last_settlement_date, '%Y-%m-%d').date() + relativedelta(days=1)
+        else:
+            date_start = datetime.strptime(self.date_start, '%Y-%m-%d').date()
+
+        date_stop = date_start + relativedelta(months=self.PERIODICITIES_MONTHS[self.periodicity], days=-1)
+        if self.date_end:
+            date_end = datetime.strptime(self.date_end, '%Y-%m-%d').date()
+            if date_end < date_stop:
+                date_stop = date_end
+
+        if date_start != date_stop:
+            period = [date_start, date_stop]
+        else:
+            period = False
+
         return period
 
     @api.multi
@@ -200,8 +212,7 @@ class ResPartnerRappelRel(models.Model):
                 rappel_info["curr_qty_pickings"] = qty_pickings
 
                 if self.partner_id.invoice_type_id.name in ('Mensual', 'Quincenal', 'Semanal') and total_est:
-                    rappel_info, goal_percentage, total_rappel = self.compute_total(rappel, total_est, rappel_info,
-                                                                                    True)
+                    rappel_info, goal_percentage, total_rappel = self.compute_total(rappel, total_est, rappel_info, True)
                 else:
                     rappel_info['amount_est'] = 0.0
 
@@ -378,29 +389,6 @@ class Rappel(models.Model):
         super(Rappel, ordered_rappels).compute_rappel()
 
 
-class RappelInvoice(models.TransientModel):
-
-    _inherit = 'rappel.invoice.wzd'
-
-    @api.multi
-    def action_invoice(self):
-        res = super(RappelInvoice, self).action_invoice()
-        compute_rappel_obj = self.env["rappel.calculated"]
-        for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
-            if rappel.quantity <= 0:
-                continue
-            if rappel.invoice_id:
-                invoice = rappel.invoice_id
-                if not invoice.payment_mode_id \
-                        or not invoice.partner_bank_id \
-                        or not invoice.section_id:
-                    rappel.invoice_id.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
-                                             'partner_bank_id': rappel.partner_id.bank_ids and
-                                                                    rappel.partner_id.bank_ids[0].id or False,
-                                             'section_id': rappel.partner_id.section_id.id})
-        return res
-
-
 class RappelCurrentInfo(models.Model):
 
     _inherit = 'rappel.current.info'
@@ -493,17 +481,35 @@ class ComputeRappelInvoice(models.TransientModel):
 
     _inherit = 'rappel.invoice.wzd'
 
-    # TODO -> Unificar esto con la otra definición del modelo en este archivo
     @api.multi
     def action_invoice(self):
         res = super(ComputeRappelInvoice, self).action_invoice()
         compute_rappel_obj = self.env["rappel.calculated"]
         for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
+            if rappel.quantity <= 0:
+                continue
             if rappel.invoice_id:
-                for line in rappel.invoice_id.invoice_line:
-                    # TODO -> probar cambio para pasar variables a un string con format()
+                invoice_rappel = rappel.invoice_id
+                # Update description invoice lines
+                for line in invoice_rappel.invoice_line:
                     line.write({'name': u'{0} ({1}-{2})'.format(
                                                             rappel.rappel_id.description,
                                                             rappel.date_start,
                                                             rappel.date_end)})
+                # Update account data
+                if not invoice_rappel.payment_mode_id \
+                        or not invoice_rappel.partner_bank_id \
+                        or not invoice_rappel.team_id:
+                    partner_bank_id = False
+                    for banks in rappel.partner_id.bank_ids:
+                        for mandate in banks.mandate_ids:
+                            if mandate.state == 'valid':
+                                partner_bank_id = banks.id
+                                break
+                            else:
+                                partner_bank_id = False
+                    invoice_rappel.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
+                                          'partner_bank_id': partner_bank_id,
+                                          'team_id': rappel.partner_id.team_id.id})
         return res
+

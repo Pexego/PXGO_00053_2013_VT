@@ -235,22 +235,22 @@ class product_product(models.Model):
                  # ~ "Otherwise, this includes goods leaving any Stock "
                  # ~ "Location with 'internal' type."),
 
-    def write(self, cr, uid, ids, vals, context=None):
-        pack_lines_to_update = []
-        if 'standard_price' in vals:
-            for prod in self.browse(cr, uid, ids, context=context):
-                if vals['standard_price'] != prod.standard_price:
-                    pline_ids = self.pool.get('product.pack.line').\
-                        search(cr, uid, [('product_id', '=', prod.id)])
-                    if pline_ids:
-                        pack_lines_to_update.extend(pline_ids)
-        res = super(product_product, self).write(cr, uid, ids, vals,
-                                                 context=context)
-        if pack_lines_to_update:
-            self.pool.get('product.pack.line').\
-                update_pack_products(cr, uid, pack_lines_to_update,
-                                     context=context)
-        return res
+    # def write(self, cr, uid, ids, vals, context=None):
+    #     pack_lines_to_update = []
+    #     if 'standard_price' in vals:
+    #         for prod in self.browse(cr, uid, ids, context=context):
+    #             if vals['standard_price'] != prod.standard_price:
+    #                 pline_ids = self.pool.get('product.pack.line').\
+    #                     search(cr, uid, [('product_id', '=', prod.id)])
+    #                 if pline_ids:
+    #                     pack_lines_to_update.extend(pline_ids)
+    #     res = super(product_product, self).write(cr, uid, ids, vals,
+    #                                              context=context)
+    #     if pack_lines_to_update:
+    #         self.pool.get('product.pack.line').\
+    #             update_pack_products(cr, uid, pack_lines_to_update,
+    #                                  context=context)
+    #     return res
 
     @api.multi
     def get_pack(self):

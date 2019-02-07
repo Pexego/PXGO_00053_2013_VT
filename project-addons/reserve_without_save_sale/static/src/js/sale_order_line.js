@@ -11,214 +11,116 @@
 odoo.define('reserve_without_save_sale', function(require) {
     "use strict";
 
-    var FormView = require('web.FormView');
-    var data = require('web.data')
+    var relational_fields = require('web.relational_fields')
 
-    FormView.include({
-        on_button_cancel: function(event){
-            console.log('se cancela')
-            return this._super.apply(this, arguments);
-        }
-    });
-    data.DataSet.include({
-        create: function(data, options) {
-            if (this._model.name == 'sale.order.line' && this.parent_view.datarecord.state == 'reserve') {
-                console.log('entra en create editado')
-                var dat = {
-                    'product_id': data.product_id,
-                    'qty': data.product_uom_qty,
-                    'uom': data.product_uom,
-                    'price_unit': data.price_unit,
-                    'name': options.readonly_fields.name
-                }
-                if (this.parent_view.datarecord.warehouse_id instanceof Array) {
-                    dat['warehouse'] = this.parent_view.datarecord.warehouse_id[0]
-                } else {
-                    dat['warehouse'] = this.parent_view.datarecord.warehouse_id
-                }
-                //Se crea un id unico para la reserva a crear.
-                var date = new Date();
-                var components = [
-                    date.getYear(),
-                    date.getMonth(),
-                    date.getDate(),
-                    date.getHours(),
-                    date.getMinutes(),
-                    date.getSeconds(),
-                    date.getMilliseconds()
-                ];
+    relational_fields.FieldOne2Many.include({
 
-                var id = components.join("");
-                dat['unique_js_id'] = id
-                data['temp_unique_js_id'] = id
-                var line_obj = this
-                /*var wh_model = new instance.web.Model("stock.warehouse");
-                console.log(dat['warehouse']);
-                wh_model.query(['lot_stock_id']).filter([['id', '=', dat['warehouse']]]).all().then(function(wh){
-                    console.log(wh);
-                    dat['location_id'] = wh[0].lot_stock_id[0];
-                    var model = new instance.web.Model("stock.reservation");
-                    model.call("create",[dat], {context:new instance.web.CompoundContext()})
-                    .then(function() {
-
-                    });
-                });*/
-                $.ajax({
-                    url: '/reservations/create/',
-                    type: 'POST',
-                    data: dat,
-                    dataType: 'json',
-                    timeout: 5000,
-                })
-
-
-
+        __get_line_vals: function(element, recordData) {
+            return {
+                'product_id': element.data.product_id.data.id,
+                'qty': element.data.product_uom_qty,
+                'uom': element.data.product_uom.data.id,
+                'price_unit': element.data.price_unit,
+                'name': element.data.name,
+                'warehouse': recordData.warehouse_id.data.id,
+                'csrf_token': require('web.core').csrf_token
             }
-
-            return this._super.apply(this, arguments);
         },
-        write: function(id, data, options) {
-            if (this._model.name == 'sale.order.line' && this.parent_view.datarecord.state == 'reserve') {
-                console.log(this.get('auxiliar_reserv_id'))
-                var _this = this;
-                this.cache.forEach(function(line) {
-                    if (line.id == id) {
-                        if(line['values']['temp_unique_js_id'] == ""){
-                            var dat = {
-                                'product_id': line['values']['product_id'][0],
-                                'qty': line['values']['product_uom_qty'],
-                                'uom': line['values']['product_uom'][0],
-                                'price_unit': line['values']['price_unit'],
-                                'name': line['values']['name']
-                            }
-                            if (_this.parent_view.datarecord.warehouse_id instanceof Array) {
-                                dat['warehouse'] = _this.parent_view.datarecord.warehouse_id[0]
-                            } else {
-                                dat['warehouse'] = _this.parent_view.datarecord.warehouse_id
-                            }
-                            var date = new Date();
-                            var components = [
-                                date.getYear(),
-                                date.getMonth(),
-                                date.getDate(),
-                                date.getHours(),
-                                date.getMinutes(),
-                                date.getSeconds(),
-                                date.getMilliseconds()
-                            ];
 
-                            var js_id = components.join("");
-                            dat['unique_js_id'] = js_id
-                            data['temp_unique_js_id'] = js_id
-                            line['values']['temp_unique_js_id'] = js_id
-                            var line_obj = this
-                            /*se buscan los cambios en las lineas antes de la
-                             * llamada ajax para evitar que se sobreescriba.*/
-                             var data_ser = {}
-                            changed = line['values']
+        __get_reserve_unique_id:  function() {
+            var date = new Date();
+            var components = [
+                date.getYear(),
+                date.getMonth(),
+                date.getDate(),
+                date.getHours(),
+                date.getMinutes(),
+                date.getSeconds(),
+                date.getMilliseconds()
+            ];
+            return components.join("");
+        },
 
-                            if(data.product_uom_qty &&  data.product_uom_qty != changed['product_uom_qty']){
-                                dat['qty'] = data.product_uom_qty
-                                dat['unique_js_id'] = changed['temp_unique_js_id']
-                            }
-
-
-                            if(data.product_id && data.product_id != changed['product_id']){
-                                dat['product_id'] = data.product_id
-                                data_ser['name'] = data['name']
-                                data_ser['old_unique_js_id'] = changed['temp_unique_js_id']
-                                var date = new Date();
-                                var components_ = [
-                                    date.getYear(),
-                                    date.getMonth(),
-                                    date.getDate(),
-                                    date.getHours(),
-                                    date.getMinutes(),
-                                    date.getSeconds(),
-                                    date.getMilliseconds()
-                                ];
-
-                                var new_id = components_.join("");
-                                data_ser['unique_js_id'] = new_id
-                                data['temp_unique_js_id'] = new_id
-                            }
+        _saveLine: function(recordID) {
+            /*
+                Siempre que se abandona la linea se llama a _onSaveline,
+                Tanto si se crea/edita como si no se hace nada.
+                Desde la función no hay manera de saber que ha lanzado el evento.
+            */
+            var self = this
+            var res = this._super.apply(this, arguments)
+            if (self.model == 'sale.order'  && self.name == 'order_line' && self.recordData.state == 'reserve') {
+                self.recordData.order_line.data.forEach(function(element){
+                    if (element.id == recordID) {
+                        if (element.data.product_id === false || element.data.product_uom === false){
+                            return;
+                        }
+                        // Si no tiene reserva temporal la creamos siempre
+                        if(element.data.temp_unique_js_id == ""){
+                            var dat = self.__get_line_vals(element, self.recordData);
+                            //Se crea un id unico para la reserva a crear.
+                            var id = self.__get_reserve_unique_id();
+                            dat['unique_js_id'] = id;
+                            self._setValue({
+                                operation: 'UPDATE',
+                                id: element.id,
+                                data: {'temp_unique_js_id': dat['unique_js_id']},
+                            });
                             $.ajax({
                                 url: '/reservations/create/',
                                 type: 'POST',
                                 data: dat,
                                 dataType: 'json',
                                 timeout: 5000,
-                                success: function(response_server){
-                                    $.ajax({
-                                        url: '/reservations/write/',
-                                        type: 'POST',
-                                        data: data_ser,
-                                        dataType: 'json',
-                                        timeout: 5000,
-                                    });
-                                }
                             });
                         }
                         else{
-                            var dat = {}
-                            changed = line['values']
-
-                            if(data.product_uom_qty &&  data.product_uom_qty != changed['product_uom_qty']){
-                                dat['qty'] = data.product_uom_qty
-                                dat['unique_js_id'] = changed['temp_unique_js_id']
-                            }
-
-
-                            if(data.product_id && data.product_id != changed['product_id']){
-                                dat['product_id'] = data.product_id
-                                dat['name'] = data['name']
-                                dat['old_unique_js_id'] = changed['temp_unique_js_id']
-                                var date = new Date();
-                                var components = [
-                                    date.getYear(),
-                                    date.getMonth(),
-                                    date.getDate(),
-                                    date.getHours(),
-                                    date.getMinutes(),
-                                    date.getSeconds(),
-                                    date.getMilliseconds()
-                                ];
-
-                                var new_id = components.join("");
-                                dat['unique_js_id'] = new_id
-                                data['temp_unique_js_id'] = new_id
-                            }
-
+                            var data = self.__get_line_vals(element, self.recordData)
+                            data['unique_js_id'] = element.data.temp_unique_js_id
+                            // Generamos el id en javascript por si es necesario crear reserva nueva.
+                            data['new_js_unique_id'] = self.__get_reserve_unique_id()
                             $.ajax({
                                 url: '/reservations/write/',
                                 type: 'POST',
-                                data: dat,
+                                data: data,
                                 dataType: 'json',
                                 timeout: 5000,
+                                success: function(response){
+                                    if(response != "" && response != true){
+                                        self._setValue({
+                                            operation: 'UPDATE',
+                                            id: element.id,
+                                            data: {'temp_unique_js_id': response['unique_js_id']},
+                                        });
+                                    }
+                                }
                             });
                         }
+
+                        return;
                     }
                 });
             }
-            return this._super.apply(this, arguments);
+            return res
         },
-        unlink: function(ids, callback, error_callback) {
-            console.log('entra en unlink editado')
-            if (this._model.name == 'sale.order.line' && this.parent_view.datarecord.state == 'reserve') {
-                this.cache.forEach(function(line) {
-                    if ($.inArray(line.id, ids) > -1) {
+
+        _onDeleteRecord: function(ev) {
+            if (this.model == 'sale.order'  && this.name == 'order_line' && this.recordData.state == 'reserve') {
+                this.recordData.order_line.data.forEach(function(element){
+                    if (element.id == ev.data.id) {
                         var to_delete_reserve = ""
-                        if(line['values']['temp_unique_js_id'] != ""){
-                            to_delete_reserve = line['values']['temp_unique_js_id']
+                        if(element.data.temp_unique_js_id != ""){
+                            to_delete_reserve = element.data.temp_unique_js_id
                         }
-                        if(line['values']['unique_js_id'] != ""){
-                            to_delete_reserve = line['values']['unique_js_id']
+                        if(element.data.unique_js_id != ""){
+                            to_delete_reserve = element.data.unique_js_id
                         }
                         if (to_delete_reserve != "") {
                             $.ajax({
                                 url: '/reservations/unlink/',
                                 type: 'POST',
                                 data: {
+                                    'csrf_token': require('web.core').csrf_token,
                                     'unique_js_id': to_delete_reserve
                                 },
                                 dataType: 'json',

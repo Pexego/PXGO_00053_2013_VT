@@ -103,7 +103,7 @@ class account_invoice_line(models.Model):
 
                     if oa:
                         # get the fiscal position
-                        fpos = i_line.invoice_id.fiscal_position or False
+                        fpos = i_line.invoice_id.fiscal_position_id or False
                         a = self.pool.get('account.fiscal.position').\
                             map_account(cr, uid, fpos, oa)
                     diff_res = []

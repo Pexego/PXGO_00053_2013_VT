@@ -68,16 +68,23 @@ class MiddlewareBackend(models.TransientModel):
                              default=fields.Date.context_today)
     finish_date = fields.Date('Finish Date', 
                               default=fields.Date.context_today)
+    model_ids = fields.Char('Ids')
 
     @api.multi
     def do_export(self):
         session = ConnectorSession(self.env.cr, self.env.uid,
                                    context=self.env.context)
+        if self.model_ids:
+            object_ids = list(map(int, self.model_ids.split(',')))
+
         if self.type_export == 'partner':
             partner_obj = self.env['res.partner']
-            partner_ids = partner_obj.search([('is_company', '=', True),
-                                              ('web', '=', True),
-                                              ('customer', '=', True)])
+            if object_ids:
+                partner_ids = partner_obj.browse(object_ids)
+            else:
+                partner_ids = partner_obj.search([('is_company', '=', True),
+                                                  ('web', '=', True),
+                                                  ('customer', '=', True)])
             contact_ids = partner_obj.search([('id', 'child_of', partner_ids.ids),
                                               ('id', 'not in', partner_ids.ids),
                                               ('customer', '=', True),
@@ -93,13 +100,16 @@ class MiddlewareBackend(models.TransientModel):
                 for contact in contact_ids:
                     update_partner.delay(session, "res.partner", contact.id)
         elif self.type_export == 'invoices':
-            invoices = self.env['account.invoice']. \
-                search([('commercial_partner_id.web', '=', True),
-                        ('state', 'in', ['open', 'paid']),
-                        ('number', 'not like', '%ef%'),
-                        ('company_id', '=', 1),
-                        ('date_invoice', '>=', self.start_date),
-                        ('date_invoice', '<=', self.finish_date)])
+            if object_ids:
+                invoices = self.env['account.invoice'].browse(object_ids)
+            else:
+                invoices = self.env['account.invoice']. \
+                    search([('commercial_partner_id.web', '=', True),
+                            ('state', 'in', ['open', 'paid']),
+                            ('number', 'not like', '%ef%'),
+                            ('company_id', '=', 1),
+                            ('date_invoice', '>=', self.start_date),
+                            ('date_invoice', '<=', self.finish_date)])
             if self.mode_export == 'export':
                 for invoice in invoices:
                     export_invoice.delay(session, 'account.invoice', invoice.id)
@@ -107,18 +117,21 @@ class MiddlewareBackend(models.TransientModel):
                 for invoice in invoices:
                     update_invoice.delay(session, 'account.invoice', invoice.id)
         elif self.type_export == 'pickings':
-            partner_obj = self.env['res.partner']
-            partner_ids = partner_obj.search([('is_company', '=', True),
-                                              ('web', '=', True),
-                                              ('customer', '=', True)])
-            picking_obj = self.env['stock.picking']
-            picking_ids = picking_obj.search([('partner_id', 'child_of', partner_ids.ids),
-                                              ('state', '!=', 'cancel'),
-                                              ('company_id', '=', 1),
-                                              ('not_sync', '=', False),
-                                              ('date', '>=', self.start_date),
-                                              ('date', '<=', self.finish_date),
-                                              ('picking_type_id.code', '=', 'outgoing')])
+            if object_ids:
+                picking_ids = self.env['stock.picking'].browse(object_ids)
+            else:
+                partner_obj = self.env['res.partner']
+                partner_ids = partner_obj.search([('is_company', '=', True),
+                                                  ('web', '=', True),
+                                                  ('customer', '=', True)])
+                picking_obj = self.env['stock.picking']
+                picking_ids = picking_obj.search([('partner_id', 'child_of', partner_ids.ids),
+                                                  ('state', '!=', 'cancel'),
+                                                  ('company_id', '=', 1),
+                                                  ('not_sync', '=', False),
+                                                  ('date', '>=', self.start_date),
+                                                  ('date', '<=', self.finish_date),
+                                                  ('picking_type_id.code', '=', 'outgoing')])
             if self.mode_export == 'export':
                 for picking in picking_ids:
                     export_picking.delay(session, 'stock.picking', picking.id)
@@ -132,10 +145,13 @@ class MiddlewareBackend(models.TransientModel):
 
         elif self.type_export == 'rmas':
             rma_obj = self.env['crm.claim']
-            rmas = rma_obj.search(['|', ('partner_id.web', '=', True),
-                                        ('partner_id.commercial_partner_id.web', '=', True),
-                                   ('date', '>=', self.start_date),
-                                   ('date', '<=', self.finish_date)])
+            if object_ids:
+                rmas = rma_obj.browse(object_ids)
+            else:
+                rmas = rma_obj.search(['|', ('partner_id.web', '=', True),
+                                            ('partner_id.commercial_partner_id.web', '=', True),
+                                       ('date', '>=', self.start_date),
+                                       ('date', '<=', self.finish_date)])
             if self.mode_export == 'export':
                 for rma in rmas:
                     export_rma.delay(session, 'crm.claim', rma.id)
@@ -149,7 +165,10 @@ class MiddlewareBackend(models.TransientModel):
 
         elif self.type_export == 'products':
             product_obj = self.env['product.product']
-            product_ids = product_obj.search([])
+            if object_ids:
+                product_ids = product_obj.browse(object_ids)
+            else:
+                product_ids = product_obj.search([])
             if self.mode_export == 'export':
                 for product in product_ids:
                     export_product.delay(session, 'product.product', product.id)
@@ -159,8 +178,12 @@ class MiddlewareBackend(models.TransientModel):
             product.web = 'published'
 
         elif self.type_export == 'tags':
+
             tag_obj = self.env['res.partner.category']
-            tag_ids = tag_obj.search([('active', '=', True)])
+            if object_ids:
+                tag_ids = tag_obj.browse(object_ids)
+            else:
+                tag_ids = tag_obj.search([('active', '=', True)])
             if self.mode_export == 'export':
                 for tag in tag_ids:
                     export_partner_tag.delay(session, 'res.partner.category', tag.id)
@@ -170,9 +193,12 @@ class MiddlewareBackend(models.TransientModel):
 
         elif self.type_export == 'customer_tags_rel':
             partner_obj = self.env['res.partner']
-            partner_ids = partner_obj.search([('is_company', '=', True),
-                                              ('web', '=', True),
-                                              ('customer', '=', True)])
+            if object_ids:
+                partner_ids = partner_obj.browse(object_ids)
+            else:
+                partner_ids = partner_obj.search([('is_company', '=', True),
+                                                  ('web', '=', True),
+                                                  ('customer', '=', True)])
             if self.mode_export == 'export':
                 for partner in partner_ids:
                     for category in partner.category_id:
@@ -183,15 +209,18 @@ class MiddlewareBackend(models.TransientModel):
                         update_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner.id, category.id)
 
         elif self.type_export == 'order':
-            partner_obj = self.env['res.partner']
-            partner_ids = partner_obj.search([('is_company', '=', True),
-                                              ('web', '=', True),
-                                              ('customer', '=', True)])
-            sales = session.env['sale.order'].search([('partner_id', 'child_of', partner_ids.ids),
-                                                      ('state', 'in', ['done', 'progress', 'draft', 'reserve']),
-                                                      ('date_order', '>=', self.start_date),
-                                                      ('date_order', '<=', self.finish_date),
-                                                      ('company_id', '=', 1)])
+            if object_ids:
+                sales = self.env['sale.order'].browse(object_ids)
+            else:
+                partner_obj = self.env['res.partner']
+                partner_ids = partner_obj.search([('is_company', '=', True),
+                                                  ('web', '=', True),
+                                                  ('customer', '=', True)])
+                sales = session.env['sale.order'].search([('partner_id', 'child_of', partner_ids.ids),
+                                                          ('state', 'in', ['done', 'progress', 'draft', 'reserve']),
+                                                          ('date_order', '>=', self.start_date),
+                                                          ('date_order', '<=', self.finish_date),
+                                                          ('company_id', '=', 1)])
             if self.mode_export == 'export':
                 for sale in sales:
                     export_order.delay(session, 'sale.order', sale.id)
@@ -205,7 +234,10 @@ class MiddlewareBackend(models.TransientModel):
 
         elif self.type_export == 'rappel':
             rappel_obj = self.env['rappel']
-            rappel_ids = rappel_obj.search([])
+            if object_ids:
+                rappel_ids = rappel_obj.browse(object_ids)
+            else:
+                rappel_ids = rappel_obj.search([])
             if self.mode_export == 'export':
                 for rappel in rappel_ids:
                     export_rappel.delay(session, 'rappel', rappel.id)
@@ -215,7 +247,10 @@ class MiddlewareBackend(models.TransientModel):
 
         elif self.type_export == 'rappelsection':
             rappel_section_obj = self.env['rappel.section']
-            rappel_section_ids = rappel_section_obj.search([])
+            if object_ids:
+                rappel_section_ids = rappel_section_obj.browse(object_ids)
+            else:
+                rappel_section_ids = rappel_section_obj.search([])
             if self.mode_export == 'export':
                 for section in rappel_section_ids:
                     export_rappel_section.delay(session, 'rappel.section', section.id)
@@ -225,7 +260,10 @@ class MiddlewareBackend(models.TransientModel):
 
         elif self.type_export == 'countrystate':
             country_state_obj = self.env['res.country.state']
-            country_state_ids = country_state_obj.search([])
+            if object_ids:
+                country_state_ids = country_state_obj.browse(object_ids)
+            else:
+                country_state_ids = country_state_obj.search([])
             if self.mode_export == 'export':
                 for section in country_state_ids:
                     export_country_state.delay(session, 'res.country.state', section.id)
@@ -235,7 +273,10 @@ class MiddlewareBackend(models.TransientModel):
 
         elif self.type_export == 'producttag':
             product_tag_obj = self.env['product.tag']
-            product_tag_ids = product_tag_obj.search([])
+            if object_ids:
+                product_tag_ids = product_tag_obj.browse(object_ids)
+            else:
+                product_tag_ids = product_tag_obj.search([])
             if self.mode_export == 'export':
                 for tag in product_tag_ids:
                     export_product_tag.delay(session, 'product.tag', tag.id)
@@ -245,7 +286,10 @@ class MiddlewareBackend(models.TransientModel):
 
         elif self.type_export == 'producttagproductrel':
             product_obj = self.env['product.product']
-            product_ids = product_obj.search([])
+            if object_ids:
+                product_ids = product_obj.browse(object_ids)
+            else:
+                product_ids = product_obj.search([])
 
             if self.mode_export == 'export':
                 for product in product_ids:

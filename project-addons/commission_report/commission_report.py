@@ -22,31 +22,32 @@
 from openerp import models, fields, tools
 
 
-class commission_report(models.Model):
-
-    _name = "commission.report"
-    _description = "Sale commission report"
-    _auto = False
-
-    product_id = fields.Many2one('product.product', 'Product')
-    agent_id = fields.Many2one('res.partner', 'Agent')
-    qty = fields.Float('Quantity')
-    settled = fields.Boolean('Settled')
-    inv_date = fields.Date('Date invoice')
-
-    def init(self):
-        tools.drop_view_if_exists(self.env.cr, self._table)
-        self._cr.execute("""CREATE or REPLACE VIEW %s as (
-            SELECT c_line.id,
-                i_line.product_id  AS product_id,
-                c_line.agent  AS agent_id,
-                c_line.amount  AS qty,
-                c_line.settled  AS settled,
-                inv.date_invoice  AS inv_date,
-                inv.state  AS state
-            FROM account_invoice_line AS i_line
-                JOIN account_invoice_line_agent  AS c_line ON i_line.id=c_line.object_id
-                JOIN account_invoice  AS inv ON i_line.invoice_id=inv.id
-            WHERE inv.state IN ('open', 'paid')
-            GROUP BY i_line.product_id, c_line.agent, c_line.amount, c_line.settled, inv.date_invoice, inv.state, c_line.id
-        )""" % (self._table,))
+# TODO: Migrar
+#class commission_report(models.Model):
+#
+#    _name = "commission.report"
+#    _description = "Sale commission report"
+#    _auto = False
+#
+#    product_id = fields.Many2one('product.product', 'Product')
+#    agent_id = fields.Many2one('res.partner', 'Agent')
+#    qty = fields.Float('Quantity')
+#    settled = fields.Boolean('Settled')
+#    inv_date = fields.Date('Date invoice')
+#
+#    def init(self):
+#        tools.drop_view_if_exists(self.env.cr, self._table)
+#        self._cr.execute("""CREATE or REPLACE VIEW %s as (
+#            SELECT c_line.id,
+#                i_line.product_id  AS product_id,
+#                c_line.agent  AS agent_id,
+#                c_line.amount  AS qty,
+#                c_line.settled  AS settled,
+#                inv.date_invoice  AS inv_date,
+#                inv.state  AS state
+#            FROM account_invoice_line AS i_line
+#                JOIN account_invoice_line_agent  AS c_line ON i_line.id=c_line.invoice_line
+#                JOIN account_invoice  AS inv ON i_line.invoice_id=inv.id
+#            WHERE inv.state IN ('open', 'paid')
+#            GROUP BY i_line.product_id, c_line.agent, c_line.amount, c_line.settled, inv.date_invoice, inv.state, c_line.id
+#        )""" % (self._table,))

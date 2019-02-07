@@ -28,6 +28,7 @@ class ResPartner(models.Model):
 
     @api.one
     def _get_on_account_amount(self):
+        return  # TODO: Fallo type = receipt
         amount = 0.0
         voucher_obj = self.env["account.voucher"]
         move_line_obj = self.env["account.move.line"]

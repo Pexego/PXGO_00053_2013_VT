@@ -40,6 +40,7 @@ Features:
                 "sale_product_customize"],
     "data": [
         "sale_view.xml",
+        "rule.xml",
         "product_view.xml"
 
     ],

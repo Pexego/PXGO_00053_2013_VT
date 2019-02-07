@@ -19,8 +19,8 @@
 #
 ##############################################################################
 
-from . import connector
-from . import backend
-from . import events
-from . import models
-from . import wizard
+# from . import connector TODO: migrar
+# from . import backend TODO: migrar
+# from . import events TODO: migrar
+# from . import models TODO: migrar
+# from . import wizard TODO: migrar

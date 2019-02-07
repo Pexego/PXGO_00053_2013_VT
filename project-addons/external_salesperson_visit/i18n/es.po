@@ -267,3 +267,13 @@ msgstr "Regiones comercial"
 #: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Commercial region"
 msgstr "Región comercial"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,partner_visit_count:0
+msgid "Visits"
+msgstr "Visitas Realizadas"
+
+#. module: external_salesperson_visit
+#: field:partner.visit,partner_visit_current_year:0
+msgid "Current year visits"
+msgstr "Visitas año actual"

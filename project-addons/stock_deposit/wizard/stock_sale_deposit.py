@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Pexego All Rights Reserved
@@ -18,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 
 
 class StockSaleDeposit(models.TransientModel):
@@ -32,29 +31,30 @@ class StockSaleDeposit(models.TransientModel):
                                        ('state', '=', 'draft')])
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_out')
+        deposit_location = self.env.ref('stock_deposit.stock_location_deposit')
         picking = self.env['stock.picking'].create({
             'picking_type_id': picking_type_id.id,
-            'invoice_state': '2binvoiced'})
+            'location_id': deposit_location.id,
+            'location_dest_id': picking_type_id.default_location_dest_id.id})
 
-        procurement_id = None
-        sorted_deposits = sorted(deposits, key=lambda deposit: deposit.sale_id.procurement_group_id)
+        sorted_deposits = sorted(deposits, key=lambda deposit: deposit.sale_id)
         for deposit in sorted_deposits:
             if not picking['partner_id']:
-                procurement_id = deposit.sale_id.procurement_group_id
                 partner_id = deposit.partner_id.id
                 commercial = deposit.user_id.id
-                group_id = procurement_id.id
+                group_id = deposit.sale_id.procurement_group_id.id
                 picking.write({'partner_id': partner_id, 'commercial': commercial,
                                'group_id': group_id, 'origin': deposit.sale_id.name})
 
             elif picking['group_id'] != deposit.sale_id.procurement_group_id:
                 picking = self.env['stock.picking'].create({
                     'picking_type_id': picking_type_id.id,
-                    'invoice_state': '2binvoiced'})
-                procurement_id = deposit.sale_id.procurement_group_id
+                    'location_id': deposit.move_id.location_dest_id.id,
+                    'location_dest_id': picking_type_id.default_location_dest_id.id
+                })
                 partner_id = deposit.partner_id.id
                 commercial = deposit.user_id.id
-                group_id = procurement_id.id
+                group_id = deposit.sale_id.procurement_group_id.id
                 picking.write({'partner_id': partner_id, 'commercial': commercial,
                                'group_id': group_id, 'origin': deposit.sale_id.name})
 
@@ -66,14 +66,13 @@ class StockSaleDeposit(models.TransientModel):
                 'name': 'Sale Deposit: ' + deposit.move_id.name,
                 'location_id': deposit.move_id.location_dest_id.id,
                 'location_dest_id': deposit.partner_id.property_stock_customer.id,
-                'invoice_state': '2binvoiced',
                 'picking_id': picking.id,
-                'procurement_id': deposit.move_id.procurement_id.id,
                 'commercial': deposit.user_id.id,
-                'group_id': procurement_id.id
+                'group_id': group_id
             }
             move = move_obj.create(values)
-            move.action_confirm()
-            move.force_assign()
-            move.action_done()
+            move._action_confirm()
+            move._force_assign()
+            move._action_done()
+            deposit.move_id.sale_line_id.write({'qty_invoiced': 0, 'invoice_status': 'to invoice'})
             deposit.write({'state': 'sale', 'sale_move_id': move.id})

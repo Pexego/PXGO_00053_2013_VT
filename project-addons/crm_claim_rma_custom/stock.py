@@ -39,14 +39,14 @@ class stock_picking(models.Model):
         return super(stock_picking, self).copy(default)
 
 
-    def action_assign(self, cr, uid, ids, context=None):
-        res = super(stock_picking, self).action_assign(cr, uid, ids,
-                                                       context=context)
-        for obj in self.browse(cr, uid, ids):
-            if obj.claim_id and obj.picking_type_code == "incoming":
-                obj.force_assign()
+    # def action_assign(self, cr, uid, ids, context=None):
+    #     res = super(stock_picking, self).action_assign(cr, uid, ids,
+    #                                                    context=context)
+    #     for obj in self.browse(cr, uid, ids):
+    #         if obj.claim_id and obj.picking_type_code == "incoming":
+    #             obj.force_assign()
 
-        return res
+    #     return res TODO: Migrar
 
     @api.model
     def do_transfer(self):
