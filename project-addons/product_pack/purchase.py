@@ -25,7 +25,7 @@ class purchase_order_line(models.Model):
     _inherit = 'purchase.order.line'
 
     pack_depth = fields.Integer(
-            'Depth', required=True, default=0,
+            'Depth', required=True, default=0, #default=10
             help='Depth of the product if it is part of a pack.')
     pack_parent_line_id = fields.Many2one(
             'purchase.order.line', 'Pack',
@@ -33,19 +33,28 @@ class purchase_order_line(models.Model):
     pack_child_line_ids = fields.One2many(
             'purchase.order.line', 'pack_parent_line_id', 'Lines in pack')
 
+    """_columns = {
+        'sequence': fields.integer(
+            'Sequence',
+            help='''Gives the sequence order when displaying a list of
+               purchase order lines. ''', default=10
+        ),
+    }
+    _order = 'order_id desc, sequence, id'"""
+
 
 class purchase_order(models.Model):
     _inherit = 'purchase.order'
 
-    def create(self, cr, uid, vals, context=None):
-        result = super(purchase_order, self).create(cr, uid, vals, context)
-        self.expand_packs(cr, uid, [result], context)
-        return result
+    # def create(self, cr, uid, vals, context=None):
+    #     result = super(purchase_order, self).create(cr, uid, vals, context)
+    #     self.expand_packs(cr, uid, [result], context)
+    #     return result
 
-    def write(self, cr, uid, ids, vals, context=None):
-        result = super(purchase_order, self).write(cr, uid, ids, vals, context)
-        self.expand_packs(cr, uid, ids, context)
-        return result
+    # def write(self, cr, uid, ids, vals, context=None):
+    #     result = super(purchase_order, self).write(cr, uid, ids, vals, context)
+    #     self.expand_packs(cr, uid, ids, context)
+    #     return result
 
     def expand_packs(self, cr, uid, ids, context={}, depth=1):
         if type(ids) in [int, long]:

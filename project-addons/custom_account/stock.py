@@ -79,13 +79,13 @@ class ProductProduct(models.Model):
          'The code of product must be unique.')
     ]
 
-    def copy(self, cr, uid, id, default=None, context=None):
-        if default is None: default = {}
-        if not default.get('default_code', False):
-            prod = self.browse(cr, uid, id, context=context)
-            default['default_code'] = _("%s (copy)") % (prod.default_code)
-        return super(ProductProduct, self).copy(cr, uid, id, default=default,
-                                                context=context)
+    # def copy(self, cr, uid, id, default=None, context=None):
+    #     if default is None: default = {} TODO: Migrar
+    #     if not default.get('default_code', False):
+    #         prod = self.browse(cr, uid, id, context=context)
+    #         default['default_code'] = _("%s (copy)") % (prod.default_code)
+    #     return super(ProductProduct, self).copy(cr, uid, id, default=default,
+    #                                             context=context)
 
     @api.multi
     def name_get(self):
@@ -160,19 +160,20 @@ class SaleOrder(models.Model):
     state = fields.Selection(selection_add=[("history", "History")])
     internal_notes = fields.Text("Internal Notes")
     sale_notes = fields.Text("Sale internal notes")
-    partner_tags = fields.Many2many('res.partner.category', id1='sale_id',
-                                    id2='category_id', string='Tags')
+    partner_tags = fields.Many2many('res.partner.category', column1='sale_id',
+                                    column2='category_id', string='Tags')
     ref_partner = fields.Char(related="partner_id.ref", string="Client reference", readonly=True)
 
     def _get_date_planned(self, cr, uid, order, line, start_date, context=None):
         return fields.Datetime.now()
 
-    def fields_view_get(self, cr, uid, view_id=None, view_type='form',
-                        context=None, toolbar=False, submenu=False):
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False,
+                        submenu=False):
         res = super(SaleOrder, self).\
-            fields_view_get(cr, uid, view_id=view_id, view_type=view_type,
-                            context=context, toolbar=toolbar, submenu=submenu)
-        no_create = context.get('no_create', False)
+            fields_view_get(view_id=view_id, view_type=view_type,
+                            toolbar=toolbar, submenu=submenu)
+        no_create = self.env.context.get('no_create', False)
         update = (no_create and view_type in ['form', 'tree']) or False
         if update:
             doc = etree.XML(res['arch'])
@@ -221,25 +222,19 @@ class PurchaseOrder(models.Model):
     state = fields.Selection(selection_add=[("history", "History")])
 
 
-class PurchaseLineInvoice(models.TransientModel):
+#TODO: Migrar
+# ~ class PurchaseLineInvoice(models.TransientModel):
 
-    _inherit = "purchase.order.line_invoice"
+    # ~ _inherit = "purchase.order.line_invoice"
 
-    @api.model
-    def _make_invoice_by_partner(self, partner, orders, lines_ids):
-        inv_id = super(PurchaseLineInvoice, self).\
-            _make_invoice_by_partner(partner, orders, lines_ids)
-        invoice = self.env["account.invoice"].browse(inv_id)
-        invoice.payment_mode_id = partner.supplier_payment_mode.id
-        invoice.button_reset_taxes()
-        return inv_id
-
-
-class PurchaseOrderLine(models.Model):
-
-    _inherit = "purchase.order.line"
-
-    state = fields.Selection(selection_add=[("history", "History")])
+    # ~ @api.model
+    # ~ def _make_invoice_by_partner(self, partner, orders, lines_ids):
+        # ~ inv_id = super(PurchaseLineInvoice, self).\
+            # ~ _make_invoice_by_partner(partner, orders, lines_ids)
+        # ~ invoice = self.env["account.invoice"].browse(inv_id)
+        # ~ invoice.payment_mode_id = partner.supplier_payment_mode.id
+        # ~ invoice.button_reset_taxes()
+        # ~ return inv_id
 
 
 class AccountInvoice(models.Model):
@@ -286,16 +281,17 @@ class StockQuant(models.Model):
         return res
 
 
-class WizardValuationHistory(models.TransientModel):
+#TODO: Migrar
+# ~ class WizardValuationHistory(models.TransientModel):
 
-    _inherit = 'wizard.valuation.history'
+    # ~ _inherit = 'wizard.valuation.history'
 
-    @api.multi
-    def open_table(self):
-        locations = []
-        res = super(WizardValuationHistory, self).open_table()
-        data = self.read()[0]
-        locations.append(self.env.ref("crm_rma_advance_location.stock_location_rma").id)
-        locations.append(self.env.ref("location_moves.stock_location_damaged").id)
-        res['domain'] = "[('date', '<=', '" + data['date'] + "'),('location_id', 'not in', " + str(locations) + ")]"
-        return res
+    # ~ @api.multi
+    # ~ def open_table(self):
+        # ~ locations = []
+        # ~ res = super(WizardValuationHistory, self).open_table()
+        # ~ data = self.read()[0]
+        # ~ locations.append(self.env.ref("crm_rma_advance_location.stock_location_rma").id)
+        # ~ locations.append(self.env.ref("location_moves.stock_location_damaged").id)
+        # ~ res['domain'] = "[('date', '<=', '" + data['date'] + "'),('location_id', 'not in', " + str(locations) + ")]"
+        # ~ return res

@@ -28,7 +28,6 @@
     'version': '8.0.1.0.0',
     'depends': [
         'crm_claim_rma',
-        'report',
         'crm_claim_rma_custom'
     ],
     'demo': [

@@ -33,13 +33,14 @@ Features:
 1. Lets you apply discounts by product tags.
 """,
     "depends": ["base",
-                "openerp_sale_promotions",
+                "commercial_rules",
                 "equivalent_products",
                 "stock_reserve_sale",
                 "product_brand",
                 "sale_product_customize"],
     "data": [
         "sale_view.xml",
+        "rule.xml",
         "product_view.xml"
 
     ],

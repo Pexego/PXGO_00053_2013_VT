@@ -28,14 +28,14 @@ class SaleOrderLine(models.Model):
     qty_available = fields.\
         Float('Qty available', readonly=True,
               related='product_id.virtual_stock_conservative',
-              digits_compute=dp.get_precision('Product Unit of Measure'))
+              digits=dp.get_precision('Product Unit of Measure'))
     qty_available_wo_wh = fields.\
         Float('Qty. on kitchen', readonly=True,
               related='product_id.qty_available_wo_wh',
-              digits_compute=dp.get_precision('Product Unit of Measure'))
+              digits=dp.get_precision('Product Unit of Measure'))
     incoming_qty = fields.\
         Float('Incoming qty.', readonly=True, compute='_get_incoming_qty',
-              digits_compute=dp.get_precision('Product Unit of Measure'))
+              digits=dp.get_precision('Product Unit of Measure'))
 
     @api.multi
     def _get_incoming_qty(self):

@@ -30,7 +30,7 @@
               "NaN·tic",
     'contributors': ["Daniel Campos <danielcampos@avanzosc.es>"],
     "website": "http://www.factorlibre.com",
-    "depends": [],
+    "depends": ["crm_claim"],
     "category": "Custom Modules",
     "data": ['views/res_partner_view.xml'],
     "active": False,

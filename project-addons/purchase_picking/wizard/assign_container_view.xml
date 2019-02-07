@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-
-        <record id="assign_container_wzd_view" model="ir.ui.view">
-            <field name="name">assign.container.wzd.form</field>
-            <field name="model">assign.container.wzd</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Assign container">
+<odoo>
+    <record id="assign_container_wzd_view" model="ir.ui.view">
+        <field name="name">assign.container.wzd.form</field>
+        <field name="model">assign.container.wzd</field>
+        <field name="arch" type="xml">
+            <form string="Assign container">
+                <group>
                     <group>
                         <field name="container_id"/>
-                        <button string="Assign" name="action_assign" type="object" icon="gtk-ok"/>
-                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
                     </group>
-                </form>
-            </field>
-        </record>
+                </group>
+                <footer>
+                    <button string="Assign" class="btn-primary" name="action_assign" type="object"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <act_window name="Assign container"
-            res_model="assign.container.wzd"
-            src_model="stock.move"
-            view_id="assign_container_wzd_view"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"
-            id="action_assign_container"/>
-
-    </data>
-</openerp>
+    <act_window name="Assign container"
+        res_model="assign.container.wzd"
+        src_model="stock.move"
+        view_id="assign_container_wzd_view"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="action_assign_container"/>
+</odoo>

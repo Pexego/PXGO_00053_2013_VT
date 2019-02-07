@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id="procurement_form_view_add_tests" model="ir.ui.view">
+        <!--TODO: Migrar<record id="procurement_form_view_add_tests" model="ir.ui.view">
             <field name="name">procurement.order.form.add_tests</field>
             <field name="model">procurement.order</field>
             <field name="inherit_id" ref="procurement.procurement_form_view"/>
@@ -11,7 +11,7 @@
                     <field name="tests" groups="test_management.group_test_manager"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

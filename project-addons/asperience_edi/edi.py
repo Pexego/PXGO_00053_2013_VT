@@ -27,7 +27,8 @@ from datetime import datetime
 import os
 import csv
 import re
-import codecs, cStringIO
+import codecs
+from io import StringIO
 import shutil
 from ftplib import FTP
 import threading
@@ -114,7 +115,7 @@ def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
 
 class UnicodeWriter:
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
-        self.queue = cStringIO.StringIO()
+        self.queue = StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
@@ -493,7 +494,7 @@ class edi_edi (models.Model):
                     _logger.debug(tmp)
                     tmp = ftp.sendcmd('RNTO '+edi.ftp_path_in_archive+file_name)
                     _logger.debug(tmp)
-                except Exception,e:
+                except Exception as e:
                     pass
 
             ftp.quit()
@@ -592,14 +593,11 @@ class edi_edi (models.Model):
         #First data = identifier
         for field in struct:
             parseFunc = stripnulls
-            print "field: ", struct[field]['name']
             if len(line) > struct[field]['sequence']:
                 result[struct[field]['name']] = parseFunc(line[struct[field]['sequence']],structs['<<>>'], struct[field]['type'], struct[field]['cast'])
             else:
                 result[struct[field]['name']] = False
-            print "result[struct[field]['name']]: ", result[struct[field]['name']]
 
-        print "identifier, result: ", (identifier,result)
         return identifier,result
 
     def _search_warning(self, cr, uid, ids, model, filter, type='raise',context={}):
@@ -612,14 +610,14 @@ class edi_edi (models.Model):
                 elif type == 'raise':
                     raise Exception(_('%s Not Found with filter %s') % (model,filter))
                 else:
-                    print _('%s Not Found with filter %s') % (model,filter)
+                    print('{} Not Found with filter {}').format(model, filter)
             else:
                 if type == 'log':
                     _logger.info(_('Many %s with filter %s') % (model,filter))
                 elif type == 'raise':
                     raise Exception(_('Many %s with filter %s') % (model,filter))
                 else:
-                    print _('Many %s with filter %s') % (model,filter)
+                    print('Many {} with filter {}').format(model, filter)
         else:
             obj_ids = obj_ids[0]
         return obj_ids
@@ -670,9 +668,9 @@ class edi_edi (models.Model):
                         file.close()
                         edi.eval_in = edi.eval_in.replace(chr(13),"\n")
                         _logger.debug("IMPORT EDI EVAL %s" % (edi.id))
-                        exec edi.eval_in
+                        exec(edi.eval_in)
                         _logger.debug("IMPORT EDI EVAL %s" % (edi.id))
-                    except Exception, e:
+                    except Exception as e:
                         if not os.path.exists (edi.path_in+"error/"):
                             os.makedirs(edi.path_in+"error/")
                         shutil.move(edi.path_in+os.path.basename(filename), edi.path_in+"error/"+os.path.basename(filename))
@@ -685,7 +683,7 @@ class edi_edi (models.Model):
                     self.pool.get('edi.edi.result').create(cr,uid,{"name":"file_import_edi_ok","value":filename,"edi":edi.id})
                     if result:
                         self.pool.get('edi.edi.result').create(cr,uid,{"name":"result_import_edi_ok","value":result,"edi":edi.id})
-            except Exception, e:
+            except Exception as e:
                 import sys,traceback
                 tb = sys.exc_info()
                 tb_s = "".join(traceback.format_exception(*tb))
@@ -749,13 +747,13 @@ class edi_edi (models.Model):
                 data = {}
                 eval_out = edi.eval_out.replace(chr(13),"\n")
                 _logger.debug("EXPORT EDI EVAL %s" % (edi.id))
-                exec eval_out
+                exec(eval_out)
                 _logger.debug("EXPORT EDI EVAL END %s" % (edi.id))
                 context['path_out'] = edi.path_out
                 edi._create_files(data,context=context)
                 if result:
                     self.pool.get('edi.edi.result').create(cr,uid,{"name":"result_export_edi_ok","value":result,"edi":edi.id})
-            except Exception, e:
+            except Exception as e:
                 import sys,traceback
                 tb = sys.exc_info()
                 tb_s = "".join(traceback.format_exception(*tb))
@@ -834,12 +832,12 @@ class edi_edi (models.Model):
                             vals_import = edi._parse_line_csv(line,structs)
 
                             _logger.debug("IMPORT CSV EVAL %s" % (ids))
-                            exec edi.eval_in
+                            exec(edi.eval_in)
                             _logger.debug("IMPORT CSV EVAL END %s" % (ids))
                             if gobreak :
                                 break
                         file.close()
-                    except Exception, e:
+                    except Exception as e:
                         if not os.path.exists (edi.path_in+"error/"):
                             os.makedirs(edi.path_in+"error/")
                         shutil.move(edi.path_in+os.path.basename(filename), edi.path_in+"error/"+os.path.basename(filename))
@@ -851,7 +849,7 @@ class edi_edi (models.Model):
                     self.pool.get('edi.edi.result').create(cr,uid,{"name":"file_import_csv_ok","value":filename,"edi":edi.id})
                     if result :
                         self.pool.get('edi.edi.result').create(cr,uid,{"name":"result_import_csv_ok","value":result,"edi":edi.id})
-            except Exception, e:
+            except Exception as e:
                 import sys,traceback
                 tb = sys.exc_info()
                 tb_s = "".join(traceback.format_exception(*tb))
@@ -917,7 +915,7 @@ class edi_edi (models.Model):
                 eval_out = edi.eval_out.replace(chr(13),"\n")
                 data = {}
                 _logger.debug("EXPORT CSV EVAL %s" % (ids))
-                exec eval_out
+                exec(eval_out)
                 _logger.debug("EXPORT CSV EVAL END %s" % (ids))
                 ctx['path_out'] = edi.path_out
                 self._create_files_csv(cr, uid, [edi.id], data=data,context=ctx)
@@ -986,9 +984,9 @@ class edi_edi (models.Model):
                         file_dict = xml2dict(etree.parse(file).getroot())
                         file.close()
                         _logger.debug("IMPORT XML EVAL %s" % (ids))
-                        exec edi.eval_in
+                        exec(edi.eval_in)
                         _logger.debug("IMPORT XML EVAL END %s" % (ids))
-                    except Exception, e:
+                    except Exception as e:
                         if not os.path.exists (edi.path_in+"error/"):
                             os.makedirs(edi.path_in+"error/")
                         shutil.move(edi.path_in+os.path.basename(filename), edi.path_in+"error/"+os.path.basename(filename))
@@ -999,7 +997,7 @@ class edi_edi (models.Model):
                     self.pool.get('edi.edi.result').create(cr,uid,{"name":"file_import_xml_ok","value":filename,"edi":edi.id})
                     if result :
                         self.pool.get('edi.edi.result').create(cr,uid,{"name":"result_import_xml_ok","value":result,"edi":edi.id})
-            except Exception, e:
+            except Exception as e:
                 import sys,traceback
                 tb = sys.exc_info()
                 tb_s = "".join(traceback.format_exception(*tb))
@@ -1061,7 +1059,7 @@ class edi_edi (models.Model):
                 edi.eval_out = edi.eval_out.replace(chr(13),"\n")
                 data = {}
                 _logger.debug("EXPORT XML EVAL %s" % (ids))
-                exec edi.eval_out
+                exec(edi.eval_out)
                 _logger.debug("EXPORT XML EVAL END %s" % (ids))
                 context['path_out'] = edi.path_out
                 edi._create_files_xml(data=data,context=context)
@@ -1144,9 +1142,9 @@ class edi_edi (models.Model):
                         file.close()
                         edi.eval_in = edi.eval_in.replace(chr(13),"\n")
                         _logger.debug("IMPORT CSV STRUCT EVAL %s" % (ids))
-                        exec edi.eval_in
+                        exec(edi.eval_in)
                         _logger.debug("IMPORT CSV STRUCT EVAL END %s" % (ids))
-                    except Exception, e:
+                    except Exception as e:
                         if not os.path.exists (edi.path_in+"error/"):
                             os.makedirs(edi.path_in+"error/")
                         shutil.move(edi.path_in+os.path.basename(filename), edi.path_in+"error/"+os.path.basename(filename))
@@ -1158,7 +1156,7 @@ class edi_edi (models.Model):
                     self.pool.get('edi.edi.result').create(cr,uid,{"name":"file_import_csv_struct_ok","value":filename,"edi":edi.id})
                     if result:
                         self.pool.get('edi.edi.result').create(cr,uid,{"name":"result_import_csv_struct_ok","value":result,"edi":edi.id})
-            except Exception, e:
+            except Exception as e:
                 import sys,traceback
                 tb = sys.exc_info()
                 tb_s = "".join(traceback.format_exception(*tb))
@@ -1266,11 +1264,11 @@ class edi_edi_log (models.Model):
                 break
         return True
 
-    def _models_get(self, cr, uid, context={}):
-        obj = self.pool.get('ir.model')
-        ids = obj.search(cr, uid, [])
-        res = obj.read(cr, uid, ids, ['model', 'name'], context)
-        return [(r['model'], r['name']) for r in res]
+    @api.model
+    def _models_get(self):
+        obj = self.env['ir.model']
+        ids = obj.search([])
+        return [(r.model, r.name) for r in ids]
 
     name = fields.Char('Name', size=128, required=True)
     date = fields.Datetime('Date', default=fields.Datetime.now)

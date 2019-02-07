@@ -65,7 +65,9 @@ class ProductExporter(Exporter):
                     'manufacturer_ref': product.manufacturer_pref,
                     'description_sale': product.description_sale,
                     'type': product.type,
-                    'is_pack': product.is_pack}
+                    'is_pack': product.is_pack,
+                    'discontinued': product.discontinued,
+                    'state': product.state}
             if product.show_stock_outside:
                 vals['external_stock'] = product.qty_available_external
                 stock_qty = eval("product." + self.backend_record.
@@ -121,7 +123,7 @@ def delay_export_product_create(session, model_name, record_id, vals):
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
                  "categ_id", "product_brand_id", "last_sixty_days_sales",
                  "joking_index", "sale_ok", "ean13", "description_sale",
-                 "manufacturer_pref", "standard_price", "type", "pack_line_ids"]
+                 "manufacturer_pref", "standard_price", "type", "pack_line_ids", "discontinued", "state"]
     export_product.delay(session, model_name, record_id)
     claim_lines = session.env['claim.line'].search(
         [('product_id', '=', product.id),
@@ -146,7 +148,7 @@ def delay_export_product_write(session, model_name, record_id, vals):
                  "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
                  "last_sixty_days_sales", "joking_index", "sale_ok",
                  "ean13", "description_sale", "manufacturer_pref", "standard_price",
-                 "type","pack_line_ids"]
+                 "type", "pack_line_ids", "discontinued", "state"]
     for field in up_fields:
         if field in vals:
             update_product.delay(session, model_name, record_id, priority=2, eta=30)
@@ -160,6 +162,14 @@ def delay_export_product_write(session, model_name, record_id, vals):
                 min_stock = product_stock_qty
         if min_stock:
             update_product.delay(session, model_name, pack.parent_product_id.id, priority=2, eta=30)
+
+    if 'tag_ids' in vals.keys():
+        unlink_product_tag_rel.delay(session, 'product.tag.rel', record_id, priority=5, eta=60)
+        tag_ids = vals.get('tag_ids', False)[0][-1]
+        if type(tag_ids) is int:
+            tag_ids = [tag_ids]
+        for tag_id in tag_ids:
+            export_product_tag_rel.delay(session, 'product.tag.rel', record_id, tag_id, priority=2, eta=120)
 
 
 @on_record_unlink(model_names='product.product')
@@ -406,3 +416,117 @@ def unlink_product_brand_rel(session, model_name, record_id):
     brand_exporter = _get_exporter(session, model_name, record_id,
                                       ProductbrandRelExporter)
     return brand_exporter.delete(record_id)
+
+
+@middleware
+class ProductTagExporter(Exporter):
+
+    _model_name = ['product.tag']
+
+    def update(self, binding_id, mode):
+        tag = self.model.browse(binding_id)
+        vals = {"odoo_id": tag.id,
+                "name": tag.name,
+                }
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(binding_id, vals)
+
+    def delete(self, binding_id):
+        return self.backend_adapter.remove(binding_id)
+
+
+@middleware
+class ProductTagAdapter(GenericAdapter):
+    _model_name = 'product.tag'
+    _middleware_model = 'producttag'
+
+
+@on_record_create(model_names='product.tag')
+def delay_export_product_tag_create(session, model_name, record_id, vals):
+    export_product_tag.delay(session, model_name, record_id, priority=1, eta=60)
+
+
+@on_record_write(model_names='product.tag')
+def delay_export_product_tag_write(session, model_name, record_id, vals):
+    update_product_tag.delay(session, model_name, record_id, priority=2, eta=120)
+
+
+@on_record_unlink(model_names='product.tag')
+def delay_export_product_tag_unlink(session, model_name, record_id):
+    unlink_product_tag.delay(session, model_name, record_id, priority=3, eta=120)
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def export_product_tag(session, model_name, record_id):
+    product_tag_exporter = _get_exporter(session, model_name, record_id,
+                                         ProductTagExporter)
+    return product_tag_exporter.update(record_id, "insert")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def update_product_tag(session, model_name, record_id):
+    product_tag_exporter = _get_exporter(session, model_name, record_id,
+                                         ProductTagExporter)
+    return product_tag_exporter.update(record_id, "update")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def unlink_product_tag(session, model_name, record_id):
+    product_tag_exporter = _get_exporter(session, model_name, record_id,
+                                         ProductTagExporter)
+    return product_tag_exporter.delete(record_id)
+
+
+@middleware
+class ProductTagRelExporter(Exporter):
+
+    _model_name = ['product.tag.rel']
+
+    def update(self, product_record_id, tag_record_id, mode):
+        vals = {"odoo_id": product_record_id,
+                "producttag_id": tag_record_id,
+                }
+        if mode == "insert":
+            return self.backend_adapter.insert(vals)
+        else:
+            return self.backend_adapter.update(product_record_id, tag_record_id, vals)
+
+    def delete(self, product_record_id):
+        return self.backend_adapter.remove(product_record_id)
+
+
+@middleware
+class ProductTagRelAdapter(GenericAdapter):
+    _model_name = 'product.tag.rel'
+    _middleware_model = 'producttagproductrel'
+
+
+
+def delay_export_product_tag_rel_create(session, model_name, product_record_id, tag_record_id, vals):
+    export_product_tag_rel.delay(session, 'product.tag.rel', product_record_id, tag_record_id, priority=2, eta=120)
+
+
+
+def delay_export_product_tag_rel_unlink(session, model_name, product_record_id):
+    unlink_product_tag_rel.delay(session, 'product.tag.rel', product_record_id, priority=5, eta=120)
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def export_product_tag_rel(session, model_name, product_record_id, tag_record_id):
+    product_tag_rel_exporter = _get_exporter(session, model_name, product_record_id,
+                                             ProductTagRelExporter)
+    return product_tag_rel_exporter.update(product_record_id, tag_record_id, "insert")
+
+
+@job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60,
+                    5: 50 * 60})
+def unlink_product_tag_rel(session, model_name, product_record_id):
+    product_tag_rel_exporter = _get_exporter(session, model_name, product_record_id,
+                                             ProductTagRelExporter)
+    return product_tag_rel_exporter.delete(product_record_id)

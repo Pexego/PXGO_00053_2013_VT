@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record forcecreate="True" id="ir_cron_shipments_with_incidences" model="ir.cron">
+        <field name="name">Accept qty incoming shipments with incidences</field>
+        <field eval="True" name="active" />
+        <field name="user_id" ref="base.user_root" />
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall" />
+        <field name="model_id" ref="model_stock_picking"/>
+        <field eval="'stock.picking'" name="model" />
+        <field eval="'cron_accept_qty_incoming_shipments'" name="function" />
+        <field name="state">code</field>
+        <field name="code">model.cron_accept_qty_incoming_shipments()</field>
+    </record>
+</odoo>

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="middleware_backend_form" model="ir.ui.view">
             <field name="name">middleware.backend.form</field>
@@ -52,14 +51,14 @@
         <record id="middleware_backend_export_form" model="ir.ui.view">
             <field name="name">middleware.backend.export.form</field>
             <field name="model">middleware.backend.export</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Export Wizard" version="7.0">
+                <form string="Export Wizard">
                     <group>
                         <field name="type_export"/>
                         <field name="mode_export"/>
                         <field name="start_date" attrs="{'invisible': [('type_export', 'not in', ('order', 'pickings', 'rmas', 'invoices'))], 'required': [('type_export', 'in', ('order', 'pickings', 'rmas', 'invoices'))]}"/>
                         <field name="finish_date" attrs="{'invisible': [('type_export', 'not in', ('order', 'pickings', 'rmas', 'invoices'))], 'required': [('type_export', 'in', ('order', 'pickings', 'rmas', 'invoices'))]}"/>
+                        <field name="model_ids"/>
                     </group>
                     <footer>
                         <button name="do_export" type="object"
@@ -83,5 +82,4 @@
         <menuitem id="middleware_backend_export_menu" action="middleware_backend_export_action"
             parent="connector.menu_connector"/>
 
-    </data>
-</openerp>
+</odoo>

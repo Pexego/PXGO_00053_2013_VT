@@ -75,6 +75,14 @@ msgstr "Atributo"
 msgid "Buy X get Y free"
 msgstr "Compre X y llévate Y"
 
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: code:addons/openerp_sale_promotions/models/rules.py:76
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:65
+#, python-format
+msgid "AxB on product tag"
+msgstr "AxB en tag de producto"
+
 #. module: openerp_sale_promotions
 #: field:promos.rules.conditions.exps,comparator:0
 msgid "Comparator"
@@ -571,3 +579,17 @@ msgstr "menor o igual a"
 msgid "not equal to"
 msgstr "no es igual a"
 
+#. module: sale_promotions_extend
+#: field:promos.rules,special_promo:0
+msgid "Special Promo"
+msgstr "Promo especial"
+
+#. module: sale_promotions_extend
+#: field:sale.order,no_promos:0
+msgid "Not apply promotions"
+msgstr "No aplicar promociones"
+
+#. module: sale_promotions_extend
+#: help:sale.order,no_promos:0
+msgid "Reload the prices after marking this check"
+msgstr "Recalcular precio final después de marcar el check"

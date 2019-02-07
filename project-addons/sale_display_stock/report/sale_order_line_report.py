@@ -59,7 +59,7 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        stck.qty AS qty_stock
 FROM   sale_order_line sol
        LEFT JOIN (SELECT product_id,
-                          Sum(qty) AS qty
+                          Sum(quantity) AS qty
                    FROM   stock_quant
                    WHERE  location_id IN (SELECT res_id
                                           FROM   ir_model_data
@@ -68,7 +68,7 @@ FROM   sale_order_line sol
                    GROUP  BY product_id) q_kt
                ON sol.product_id = q_kt.product_id
        LEFT JOIN (SELECT product_id,
-                          Sum(qty) AS qty
+                          Sum(quantity) AS qty
                    FROM   stock_quant
                    WHERE  location_id IN (SELECT loc.id
                                           FROM   stock_location loc

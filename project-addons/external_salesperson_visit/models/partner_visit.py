@@ -53,6 +53,8 @@ class PartnerVisit(models.Model):
 
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
     region_ids = fields.Many2many(related='area_id.commercial_region_ids')
+    partner_visit_count = fields.Integer(string='Visits', related='partner_id.visit_count', readonly=True)
+    partner_visit_current_year = fields.Integer(string='Current year visits', readonly=True, compute='get_visit_current_year')
 
     @api.one
     @api.constrains('confirm_done')
@@ -154,6 +156,14 @@ class PartnerVisit(models.Model):
 
         return True
 
+    @api.multi
+    def get_visit_current_year(self):
+
+        for visit in self:
+            date_now = datetime.now()
+            start_year = str(date_now.year) + '-01-01'
+            visit_ids = self.search_count([('partner_id', 'child_of', [visit.partner_id.id]), ('visit_state', '=', 'log'), ('visit_date', '>=', [start_year])])
+            visit.partner_visit_current_year = visit_ids
 
 class ResPartner(models.Model):
     """ Inherits partner and adds Visit information in the partner form """

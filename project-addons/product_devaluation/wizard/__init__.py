@@ -19,4 +19,5 @@
 #
 ##############################################################################
 
-import product_devaluation_wizard, product_devaluation_account_wizard
+from . import product_devaluation_wizard
+from . import product_devaluation_account_wizard

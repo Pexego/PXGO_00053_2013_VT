@@ -25,6 +25,7 @@
                     <field name="user_id"/>
                     <field name="description"/>
                     <field name="salesperson_select"/>
+                    <field name="partner_visit_count"/>
                     <field name="add_user_email"/>
                     <button string="Notify by email" name="send_email"
                             icon="fa-envelope" type="object"
@@ -97,6 +98,8 @@
                                 <field name="visit_date"/>
                                 <field name="user_id"/>
                                 <field name="visit_state"/>
+                                <field name="partner_visit_current_year"/>
+                                <field name="partner_visit_count"/>
                                 <field name="description" string="Visit Summary"/>
                                 <field name="create_date" invisible="1"/>
                                 <field name="salesperson_select"/>

@@ -59,110 +59,111 @@ class product_pack(models.Model):
 class product_product(models.Model):
     _inherit = 'product.product'
 
-    def _product_available(self, cr, uid, ids, field_names=None, arg=False,
-                           context=None):
-        res = {}
-        for product in self.browse(cr, uid, ids, context=context):
-            stock = super(product_product, self)._product_available(
-                cr, uid, [product.id], field_names, arg, context)
+    #TODO: Migrar si no se opta por mrp_om_phantom_fix
+    # ~ def _product_available(self, cr, uid, ids, field_names=None, arg=False,
+                           # ~ context=None):
+        # ~ res = {}
+        # ~ for product in self.browse(cr, uid, ids, context=context):
+            # ~ stock = super(product_product, self)._product_available(
+                # ~ cr, uid, [product.id], field_names, arg, context)
 
-            if not product.stock_depends:
-                res[product.id] = stock[product.id]
-                continue
+            # ~ if not product.stock_depends:
+                # ~ res[product.id] = stock[product.id]
+                # ~ continue
 
-            first_subproduct = True
-            pack_stock = 0
-            pack_available = 0
-            pack_incoming = 0
-            pack_outgoing = 0
+            # ~ first_subproduct = True
+            # ~ pack_stock = 0
+            # ~ pack_available = 0
+            # ~ pack_incoming = 0
+            # ~ pack_outgoing = 0
 
-            # Check if product stock depends on it's subproducts stock.
-            if product.pack_line_ids:
-                """ Go over all subproducts, take quantity needed for the pack
-                and its available stock """
-                for subproduct in product.pack_line_ids:
+            # ~ # Check if product stock depends on it's subproducts stock.
+            # ~ if product.pack_line_ids:
+                # ~ """ Go over all subproducts, take quantity needed for the pack
+                # ~ and its available stock """
+                # ~ for subproduct in product.pack_line_ids:
 
-                    # if subproduct is a service don't calculate the stock
-                    if subproduct.product_id.type == 'service':
-                        continue
-                    if first_subproduct:
-                        subproduct_quantity = subproduct.quantity
-                        if subproduct_quantity == 0:
-                            continue
-                        result = self.\
-                            _product_available(cr, uid,
-                                               [subproduct.product_id.id],
-                                               field_names, arg, context)
-                        subproduct_stock = result[subproduct.product_id.id]
-                        subproduct_available = \
-                            subproduct_stock['qty_available']
-                        subproduct_virtual = \
-                            subproduct_stock['virtual_available']
-                        subproduct_incoming = subproduct_stock['incoming_qty']
-                        subproduct_outgoing = subproduct_stock['outgoing_qty']
+                    # ~ # if subproduct is a service don't calculate the stock
+                    # ~ if subproduct.product_id.type == 'service':
+                        # ~ continue
+                    # ~ if first_subproduct:
+                        # ~ subproduct_quantity = subproduct.quantity
+                        # ~ if subproduct_quantity == 0:
+                            # ~ continue
+                        # ~ result = self.\
+                            # ~ _product_available(cr, uid,
+                                               # ~ [subproduct.product_id.id],
+                                               # ~ field_names, arg, context)
+                        # ~ subproduct_stock = result[subproduct.product_id.id]
+                        # ~ subproduct_available = \
+                            # ~ subproduct_stock['qty_available']
+                        # ~ subproduct_virtual = \
+                            # ~ subproduct_stock['virtual_available']
+                        # ~ subproduct_incoming = subproduct_stock['incoming_qty']
+                        # ~ subproduct_outgoing = subproduct_stock['outgoing_qty']
 
-                        """ Calculate real stock for current pack from the
-                        subproduct stock and needed quantity """
-                        pack_stock = math.floor(
-                            subproduct_available / subproduct_quantity)
-                        pack_available = math.floor(
-                            subproduct_virtual / subproduct_quantity)
-                        pack_incoming = math.floor(
-                            subproduct_incoming / subproduct_quantity)
-                        pack_outgoing = math.floor(
-                            subproduct_outgoing / subproduct_quantity)
-                        first_subproduct = False
-                        continue
+                        # ~ """ Calculate real stock for current pack from the
+                        # ~ subproduct stock and needed quantity """
+                        # ~ pack_stock = math.floor(
+                            # ~ subproduct_available / subproduct_quantity)
+                        # ~ pack_available = math.floor(
+                            # ~ subproduct_virtual / subproduct_quantity)
+                        # ~ pack_incoming = math.floor(
+                            # ~ subproduct_incoming / subproduct_quantity)
+                        # ~ pack_outgoing = math.floor(
+                            # ~ subproduct_outgoing / subproduct_quantity)
+                        # ~ first_subproduct = False
+                        # ~ continue
 
-                    # Take the info of the next subproduct
-                    subproduct_quantity_next = subproduct.quantity
-                    if (
-                        subproduct_quantity_next == 0
-                        or subproduct_quantity_next == 0.0
-                    ):
-                        continue
-                    result2 = self.\
-                        _product_available(cr, uid, [subproduct.product_id.id],
-                                           field_names, arg,
-                                           context)[subproduct.product_id.id]
-                    subproduct_stock_next = result2['qty_available']
-                    subproduct_virtual_next = result2['virtual_available']
-                    subproduct_incoming_next = result2['incoming_qty']
-                    subproduct_outgoing_next = result2['outgoing_qty']
+                    # ~ # Take the info of the next subproduct
+                    # ~ subproduct_quantity_next = subproduct.quantity
+                    # ~ if (
+                        # ~ subproduct_quantity_next == 0
+                        # ~ or subproduct_quantity_next == 0.0
+                    # ~ ):
+                        # ~ continue
+                    # ~ result2 = self.\
+                        # ~ _product_available(cr, uid, [subproduct.product_id.id],
+                                           # ~ field_names, arg,
+                                           # ~ context)[subproduct.product_id.id]
+                    # ~ subproduct_stock_next = result2['qty_available']
+                    # ~ subproduct_virtual_next = result2['virtual_available']
+                    # ~ subproduct_incoming_next = result2['incoming_qty']
+                    # ~ subproduct_outgoing_next = result2['outgoing_qty']
 
-                    pack_stock_next = math.floor(
-                        subproduct_stock_next / subproduct_quantity_next)
-                    pack_available_next = math.floor(
-                        subproduct_virtual_next / subproduct_quantity_next)
-                    pack_incoming_next = math.floor(
-                        subproduct_incoming_next / subproduct_quantity_next)
-                    pack_outgoing_next = math.floor(
-                        subproduct_outgoing_next / subproduct_quantity_next)
+                    # ~ pack_stock_next = math.floor(
+                        # ~ subproduct_stock_next / subproduct_quantity_next)
+                    # ~ pack_available_next = math.floor(
+                        # ~ subproduct_virtual_next / subproduct_quantity_next)
+                    # ~ pack_incoming_next = math.floor(
+                        # ~ subproduct_incoming_next / subproduct_quantity_next)
+                    # ~ pack_outgoing_next = math.floor(
+                        # ~ subproduct_outgoing_next / subproduct_quantity_next)
 
-                    # compare the stock of a subproduct and the next subproduct
-                    if pack_stock_next < pack_stock:
-                        pack_stock = pack_stock_next
-                    if pack_available_next < pack_available:
-                        pack_available = pack_available_next
-                    if pack_incoming_next < pack_incoming:
-                        pack_incoming = pack_incoming_next
-                    if pack_outgoing_next < pack_outgoing:
-                        pack_outgoing = pack_outgoing_next
+                    # ~ # compare the stock of a subproduct and the next subproduct
+                    # ~ if pack_stock_next < pack_stock:
+                        # ~ pack_stock = pack_stock_next
+                    # ~ if pack_available_next < pack_available:
+                        # ~ pack_available = pack_available_next
+                    # ~ if pack_incoming_next < pack_incoming:
+                        # ~ pack_incoming = pack_incoming_next
+                    # ~ if pack_outgoing_next < pack_outgoing:
+                        # ~ pack_outgoing = pack_outgoing_next
 
-                # result is the minimum stock of all subproducts
-                res[product.id] = {
-                    'qty_available': pack_stock,
-                    'incoming_qty': pack_incoming,
-                    'outgoing_qty': pack_outgoing,
-                    'virtual_available': pack_available,
-                }
-            else:
-                res[product.id] = stock[product.id]
-        return res
+                # ~ # result is the minimum stock of all subproducts
+                # ~ res[product.id] = {
+                    # ~ 'qty_available': pack_stock,
+                    # ~ 'incoming_qty': pack_incoming,
+                    # ~ 'outgoing_qty': pack_outgoing,
+                    # ~ 'virtual_available': pack_available,
+                # ~ }
+            # ~ else:
+                # ~ res[product.id] = stock[product.id]
+        # ~ return res
 
-    def _search_product_quantity(self, cr, uid, obj, name, domain, context):
-        return super(product_product, self).\
-            _search_product_quantity(cr, uid, obj, name, domain, context)
+    # ~ def _search_product_quantity(self, cr, uid, obj, name, domain, context):
+        # ~ return super(product_product, self).\
+            # ~ _search_product_quantity(cr, uid, obj, name, domain, context)
 
     stock_depends = fields.Boolean(
             'Stock depends of components', default=True,
@@ -181,7 +182,7 @@ class product_product(models.Model):
         # ~ 'qty_available': fields.
         # ~ function(_product_available, multi='qty_available',
                  # ~ type='float',
-                 # ~ digits_compute=
+                 # ~ digits=
                  # ~ dp.get_precision('Product Unit of Measure'),
                  # ~ string='Quantity On Hand',
                  # ~ fnct_search=_search_product_quantity,
@@ -197,7 +198,7 @@ class product_product(models.Model):
                       # ~ "Location with 'internal' type."),
         # ~ 'virtual_available': fields.
         # ~ function(_product_available, multi='qty_available', type='float',
-                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ digits=dp.get_precision('Product Unit of Measure'),
                  # ~ string='Forecast Quantity',
                  # ~ fnct_search=_search_product_quantity,
                  # ~ help="Forecast quantity (computed as Quantity On Hand "
@@ -211,7 +212,7 @@ class product_product(models.Model):
                  # ~ "with 'internal' type."),
         # ~ 'incoming_qty': fields.
         # ~ function(_product_available, multi='qty_available', type='float',
-                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ digits=dp.get_precision('Product Unit of Measure'),
                  # ~ string='Incoming', fnct_search=_search_product_quantity,
                  # ~ help="Quantity of products that are planned to arrive.\n"
                  # ~ "In a context with a single Stock Location, this includes "
@@ -223,7 +224,7 @@ class product_product(models.Model):
                  # ~ "Location with 'internal' type."),
         # ~ 'outgoing_qty': fields.
         # ~ function(_product_available, multi='qty_available', type='float',
-                 # ~ digits_compute=dp.get_precision('Product Unit of Measure'),
+                 # ~ digits=dp.get_precision('Product Unit of Measure'),
                  # ~ string='Outgoing', fnct_search=_search_product_quantity,
                  # ~ help="Quantity of products that are planned to leave.\n"
                  # ~ "In a context with a single Stock Location, this includes "
@@ -234,22 +235,22 @@ class product_product(models.Model):
                  # ~ "Otherwise, this includes goods leaving any Stock "
                  # ~ "Location with 'internal' type."),
 
-    def write(self, cr, uid, ids, vals, context=None):
-        pack_lines_to_update = []
-        if 'standard_price' in vals:
-            for prod in self.browse(cr, uid, ids, context=context):
-                if vals['standard_price'] != prod.standard_price:
-                    pline_ids = self.pool.get('product.pack.line').\
-                        search(cr, uid, [('product_id', '=', prod.id)])
-                    if pline_ids:
-                        pack_lines_to_update.extend(pline_ids)
-        res = super(product_product, self).write(cr, uid, ids, vals,
-                                                 context=context)
-        if pack_lines_to_update:
-            self.pool.get('product.pack.line').\
-                update_pack_products(cr, uid, pack_lines_to_update,
-                                     context=context)
-        return res
+    # def write(self, cr, uid, ids, vals, context=None):
+    #     pack_lines_to_update = []
+    #     if 'standard_price' in vals:
+    #         for prod in self.browse(cr, uid, ids, context=context):
+    #             if vals['standard_price'] != prod.standard_price:
+    #                 pline_ids = self.pool.get('product.pack.line').\
+    #                     search(cr, uid, [('product_id', '=', prod.id)])
+    #                 if pline_ids:
+    #                     pack_lines_to_update.extend(pline_ids)
+    #     res = super(product_product, self).write(cr, uid, ids, vals,
+    #                                              context=context)
+    #     if pack_lines_to_update:
+    #         self.pool.get('product.pack.line').\
+    #             update_pack_products(cr, uid, pack_lines_to_update,
+    #                                  context=context)
+    #     return res
 
     @api.multi
     def get_pack(self):

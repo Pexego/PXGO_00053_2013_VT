@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="calc_cicle_supplier_product_wzd_form" model="ir.ui.view">
             <field name="name">calc.cicle.supplier.product.wzd.form</field>
             <field name="model">calc.cicle.supplier.product</field>
-            <field name="type">form</field>
             <field name="arch" type="xml">
                 <form string="Set cicle product">
                     <group>
@@ -30,5 +28,4 @@
         <menuitem id="calc_cicle_supplier_product_wzd_menu" action="calc_cicle_supplier_product_wzd_action"
             parent="purchase.menu_procurement_management"/>
 
-    </data>
-</openerp>
+</odoo>

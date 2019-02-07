@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record model="ir.ui.view" id="view_promotion_rules_form_special">
+            <field name="name">promos.rules.form.special</field>
+            <field name="model">promos.rules</field>
+            <field name="inherit_id" ref="commercial_rules.view_promotion_rules_form"/>
+            <field name="arch" type="xml">
+                <field name="stop_further" position="after">
+                    <field name="special_promo"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</openerp>

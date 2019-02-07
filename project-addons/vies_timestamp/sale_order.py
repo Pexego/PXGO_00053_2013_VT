@@ -21,15 +21,11 @@
 
 from openerp import fields, models, _, tools, api, exceptions
 import time
-from urllib import getproxies
+from urllib.request import getproxies
 
 
 class SaleOrder(models.Model):
-    """
-    Ejemplos de CIFS/NIFs que sí validan:
-    BE0897290877
-    RO19386256
-    """
+
     _inherit = 'sale.order'
 
     vies_validation_check = fields.Boolean('VAT Validated through VIES?',

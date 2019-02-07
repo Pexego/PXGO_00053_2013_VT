@@ -34,6 +34,8 @@ class MrpProduction(models.Model):
                               relation="sale.order", string="Sale",
                               readonly=True)
     production_name = fields.Char("Production ref", readonly=True)
+    picking_out = fields.Many2one('stock.picking', "Out picking", readonly=True)
+    picking_in = fields.Many2one('stock.picking', "In picking", readonly=True)
 
     @api.one
     def action_assign(self):
@@ -51,34 +53,35 @@ class MrpProduction(models.Model):
 
     @api.multi
     def action_production_end(self):
-        produce_wzd = self.env["mrp.product.produce"]
-        pline_wzd = self.env["mrp.product.produce.line"]
-        for prod in self:
-            for fmove in prod.move_created_ids:
-                wzd = produce_wzd.create({"product_id": fmove.product_id.id,
-                                          "product_qty": fmove.product_uom_qty,
-                                          "mode": "consume_produce",
-                                          "lot_id": fmove.restrict_lot_id and
-                                          fmove.restrict_lot_id.id or False})
-                for line in prod.move_lines:
-                    pline_wzd.create({"product_id": line.product_id.id,
-                                      "product_qty": line.product_uom_qty,
-                                      "lot_id": line.restrict_lot_id and
-                                      line.restrict_lot_id.id or False,
-                                      "produce_id": wzd.id})
-                wzd.with_context(active_id=prod.id).do_produce()
-            if prod.test_production_done():
-                prod.state = "done"
+        t_quant = self.env['stock.quant']
+        for production in self:
+            for move in production.move_created_ids2:
+                quant_ids = t_quant.browse(move.quant_ids.ids)
+                quant_ids.write({'cost': move.price_unit})
+                # move.update_product_price()
+        return super(MrpProduction, self).action_production_end()
 
-        return True
+    @api.multi
+    def action_confirm(self):
+        res = super(MrpProduction, self).action_confirm()
+        picking_obj = self.env['stock.picking']
+        # Create out picking
+        pick_out = picking_obj.create({'partner_id': self.company_id.partner_id.id,
+                                       'picking_type_id': self.env.ref('stock.picking_type_out').id,
+                                       'origin': self.name})
+        # Update reference out picking
+        self.picking_out = pick_out.id
+        for move in self.move_lines:
+            move.picking_id = pick_out.id
+
+        return res
 
     def create(self, cr, uid, vals, context=None):
         if context is None:
             context = {}
         context2 = dict(context)
         context2.pop('default_state', False)
-        return super(MrpProduction, self).create(cr, uid, vals,
-                                                  context=context2)
+        return super(MrpProduction, self).create(cr, uid, vals, context=context2)
 
 
 class MrpBomLine(models.Model):
@@ -141,44 +144,46 @@ class MrpProductProduce(models.TransientModel):
         super(MrpProductProduce, self).do_produce()
         return True
 
-    @api.one
-    @api.depends('consume_lines')
-    def _get_final_lot(self):
-        final_lot = False
-        production = self.env['mrp.production'].browse(
-            self.env.context.get('active_id'))
-        for line in self.consume_lines:
-            if line.final_lot:
-                final_lot = True
-        if production.final_prod_lot:
-            final_lot = True
-        self.final_lot = final_lot
+# TODO: Migrar
+    # ~ @api.one
+    # ~ @api.depends('consume_lines')
+    # ~ def _get_final_lot(self):
+        # ~ final_lot = False
+        # ~ production = self.env['mrp.production'].browse(
+            # ~ self.env.context.get('active_id'))
+        # ~ for line in self.consume_lines:
+            # ~ if line.final_lot:
+                # ~ final_lot = True
+        # ~ if production.final_prod_lot:
+            # ~ final_lot = True
+        # ~ self.final_lot = final_lot
 
 
-class StockMoveConsume(models.TransientModel):
+# TODO: Migrar
+# ~ class StockMoveConsume(models.TransientModel):
 
-    _inherit = 'stock.move.consume'
+    # ~ _inherit = 'stock.move.consume'
 
-    final_lot = fields.Boolean('final lot')
+    # ~ final_lot = fields.Boolean('final lot')
 
-    @api.model
-    def default_get(self, fields):
-        res = super(StockMoveConsume, self).default_get(fields)
-        move = self.env['stock.move'].browse(self.env.context['active_id'])
-        if 'final_lot' in fields:
-            bom_line = self.env['mrp.bom.line'].search(
-                [('bom_id', '=', move.raw_material_production_id.bom_id.id),
-                 ('final_lot', '=', True),
-                 ('product_id', '=', move.product_id.id)])
-            res.update({'final_lot': bom_line and bom_line.final_lot or False})
-        return res
+    # ~ @api.model
+    # ~ def default_get(self, fields):
+        # ~ res = super(StockMoveConsume, self).default_get(fields)
+        # ~ move = self.env['stock.move'].browse(self.env.context['active_id'])
+        # ~ if 'final_lot' in fields:
+            # ~ bom_line = self.env['mrp.bom.line'].search(
+                # ~ [('bom_id', '=', move.raw_material_production_id.bom_id.id),
+                 # ~ ('final_lot', '=', True),
+                 # ~ ('product_id', '=', move.product_id.id)])
+            # ~ res.update({'final_lot': bom_line and bom_line.final_lot or False})
+        # ~ return res
 
-    @api.one
-    def do_move_consume(self):
-        move = self.env['stock.move'].browse(self.env.context['active_id'])
-        if self.final_lot:
-            production_lot = self.env['stock.production.lot'].create(
-                {'name': self.restrict_lot_id.name,
-                 'product_id': move.raw_material_production_id.product_id.id})
-            move.raw_material_production_id.final_prod_lot = production_lot
-        return super(StockMoveConsume, self).do_move_consume()
+    # ~ @api.one
+    # ~ def do_move_consume(self):
+        # ~ move = self.env['stock.move'].browse(self.env.context['active_id'])
+        # ~ if self.final_lot:
+            # ~ production_lot = self.env['stock.production.lot'].create(
+                # ~ {'name': self.restrict_lot_id.name,
+                 # ~ 'product_id': move.raw_material_production_id.product_id.id})
+            # ~ move.raw_material_production_id.final_prod_lot = production_lot
+        # ~ return super(StockMoveConsume, self).do_move_consume()

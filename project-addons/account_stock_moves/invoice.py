@@ -22,10 +22,10 @@
 #
 ##############################################################################
 
-from openerp.osv import orm
+from odoo import models
 
 
-class account_invoice_line(orm.Model):
+class account_invoice_line(models.Model):
     _inherit = "account.invoice.line"
 
     def move_line_get_item(self, cr, uid, line, context=None):
@@ -103,7 +103,7 @@ class account_invoice_line(orm.Model):
 
                     if oa:
                         # get the fiscal position
-                        fpos = i_line.invoice_id.fiscal_position or False
+                        fpos = i_line.invoice_id.fiscal_position_id or False
                         a = self.pool.get('account.fiscal.position').\
                             map_account(cr, uid, fpos, oa)
                     diff_res = []
@@ -154,5 +154,4 @@ class account_invoice_line(orm.Model):
                                     'taxes': line.get('taxes', []),
                                     })
                     res += diff_res
-            print res
         return res

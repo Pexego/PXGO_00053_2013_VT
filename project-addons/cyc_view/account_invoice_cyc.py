@@ -34,18 +34,18 @@ class AccountInvoiceCyC(models.Model):
 
     country_id = fields.Many2one('res.country', 'Country', readonly=True)
     credit_covered = fields.Float('Credit covered', readonly=True,
-                                  digits_compute=dp.get_precision('Account'))
+                                  digits=dp.get_precision('Account'))
     credit_not_covered = fields.Float(
         'Credit not covered', readonly=True,
-        digits_compute=dp.get_precision('Account'))
+        digits=dp.get_precision('Account'))
     not_credit = fields.Float('No credit', readonly=True,
-                              digits_compute=dp.get_precision('Account'))
+                              digits=dp.get_precision('Account'))
     cash = fields.Float('Cash', readonly=True,
-                        digits_compute=dp.get_precision('Account'))
+                        digits=dp.get_precision('Account'))
     invoice_year = fields.Char('Year', readonly=True)
     invoice_month = fields.Selection(MONTHS, string="Month", readonly=True)
     amount_total = fields.Float('Total', readonly=True,
-                                digits_compute=dp.get_precision('Account'))
+                                digits=dp.get_precision('Account'))
     invoice_state = fields.Selection([('open', 'Open'),('paid', 'Paid')],
                                      string="Invoice state", readonly=True)
     user_id = fields.Many2one("res.users", "Comercial", readonly=True)

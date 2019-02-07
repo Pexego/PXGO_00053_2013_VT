@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,5 +18,5 @@
 #
 ##############################################################################
 
-import create_picking_move
-import assign_container
+from . import create_picking_move
+from . import assign_container

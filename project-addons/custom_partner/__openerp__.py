@@ -26,7 +26,7 @@
     'description': """Several little customizations in partners""",
     'author': 'Comunitea Servicios Tecnológicos',
     'website': 'www.comunitea.com',
-    "depends": ['base', 'sale', 'l10n_es_partner', 'warning', 'account',
+    "depends": ['base', 'sale', 'l10n_es_partner', 'account',
                 'base_partner_sequence', 'stock', 'account_credit_control',
                 'purchase', 'purchase_advance_payment',
                 'account_due_list', 'rappel', 'product_brand', 'customer_lost'],

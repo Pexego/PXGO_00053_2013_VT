@@ -47,7 +47,7 @@
             </field>
         </record>
 
-        <record id="view_order_line_form2_add_display_stock" model="ir.ui.view">
+        <!--TODO: Migrar<record id="view_order_line_form2_add_display_stock" model="ir.ui.view">
             <field name="name">sale.order.line.form2.add.display.stock</field>
             <field name="model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_order_line_form2"/>
@@ -58,7 +58,7 @@
                     <field name="qty_available_wo_wh"/>
                 </field>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </odoo>

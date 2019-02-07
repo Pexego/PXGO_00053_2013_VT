@@ -18,10 +18,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.osv import osv, fields
+from odoo import models, fields
 
 
-class sale_order_line(osv.osv):
+class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
 
     def _get_tag_recursivity(self, cr, uid, ids, context=None):
@@ -62,17 +62,16 @@ class sale_order_line(osv.osv):
                 result[line.id] = u", ".join(stream)
         return result
 
-    _columns = {
-        'product_tags': fields.function(_get_tags_product, string='Tags',
-                                        type='char', size=255),
-        'web_discount': fields.boolean('Web Discount'),
-        'accumulated_promo': fields.boolean(default=False)
-    }
+    product_tags = fields.Char(eompute="_get_tags_product", string='Tags')
+    web_discount = fields.Boolean('Web Discount')
+    accumulated_promo = fields.Boolean(default=False)
 
 
-class SaleOrder(osv.osv):
+class SaleOrder(models.Model):
 
     _inherit = "sale.order"
+
+    no_promos = fields.Boolean("Not apply promotions", help="Reload the prices after marking this check")
 
     def apply_promotions(self, cursor, user, ids, context=None):
         if context is None:
@@ -81,9 +80,17 @@ class SaleOrder(osv.osv):
         context2.pop('default_state', False)
         self._prepare_custom_line(cursor, user, ids, moves=False,
                                   context=context2)
-        res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
-                                                      context=context2)
         order = self.browse(cursor, user, ids[0], context=context2)
+        promotions_obj = self.pool.get('promos.rules')
+
+        if not order.no_promos:
+            res = super(SaleOrder, self).apply_promotions(cursor, user, ids,
+                                                          context=context2)
+        else:
+            self.clear_existing_promotion_lines(cursor, user, ids[0], context)
+            promotions_obj.apply_special_promotions(cursor, user, ids[0], context=None)
+            res = False
+
         if order.state == 'reserve':
             order.order_reserve()
 
@@ -91,7 +98,8 @@ class SaleOrder(osv.osv):
         for line in order.order_line:
             if line.promotion_line:
                 line.tax_id = taxes
-                line.sequence = 999
+                if '3 por ciento' in line.name:
+                    line.sequence = 999
 
         return res
 
@@ -117,7 +125,7 @@ class SaleOrder(osv.osv):
                                                )
 
         for line in order_line_obj.browse(cursor, user, order_line_ids, context):
-            #if the line has an accumulated promo and the discount of the partner is 0
+            # if the line has an accumulated promo and the discount of the partner is 0
             if line.accumulated_promo and line_dict[line.id] == 0.0:
                 order_line_obj.write(cursor, user,
                                      [line.id],

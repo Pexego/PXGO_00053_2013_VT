@@ -2,7 +2,7 @@
 <openerp>
     <data>
 
-        <record id='account_voucher_buttons_concile' model='ir.ui.view'>
+        <!--TODO: Migrar<record id='account_voucher_buttons_concile' model='ir.ui.view'>
             <field name="name">account.voucher.buttons.concile</field>
             <field name="model">account.voucher</field>
             <field name="inherit_id" ref="account_voucher.view_vendor_payment_form"/>
@@ -25,7 +25,7 @@
                     <field name="invoice"/>
                 </xpath>
             </field>
-        </record>
+        </record>-->
 
     </data>
 </openerp>

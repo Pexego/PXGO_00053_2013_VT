@@ -48,9 +48,7 @@ class stock_pciking(models.Model):
         inv_line_obj = self.pool.get('account.invoice.line')
         todo = {}
         for picking in self.browse(cr, uid, ids, context=context):
-            partner = self._get_partner_to_invoice(cr, uid, picking,
-                                                   dict(context,
-                                                        inv_type=type))
+            partner = self._get_partner_to_invoice(cr, uid, picking, dict(context, inv_type=type))
             #grouping is based on the invoiced partner
             if group:
                 key = partner
@@ -62,7 +60,9 @@ class stock_pciking(models.Model):
                         todo.setdefault(key, [])
                         todo[key].append(move)
         invoices = []
+
         for moves in todo.values():
+            # find the stock_move lines and if pack_component is true, it will store in final_moves list
             final_moves = []
             pack_moves = []
             for move in moves:
@@ -70,33 +70,47 @@ class stock_pciking(models.Model):
                     final_moves.append(move)
                 else:
                     pack_moves.append(move)
+
+            # create invoices, when move line store in the list final_moves
             if final_moves:
-                invoices += self._invoice_create_line(cr, uid,
-                                                      final_moves + pack_moves,
-                                                      journal_id, type,
-                                                      context=context)
-                search_vals = [('invoice_id', 'in', invoices),
-                               ('move_id', 'in',
-                                [x.id for x in pack_moves])]
-                to_delete = inv_line_obj.search(cr, uid, search_vals,
-                                                context=context)
+                invoice = self._invoice_create_line(cr, uid, final_moves + pack_moves, journal_id, type, context=context)
+                invoices += invoice
+
+                search_vals = [('invoice_id', 'in', invoices), ('move_id', 'in', [x.id for x in pack_moves])]
+                to_delete = inv_line_obj.search(cr, uid, search_vals, context=context)
                 inv_line_obj.unlink(cr, uid, to_delete, context)
+
             else:
                 # Si el albarán no tiene ningun movimiento facturable se crea
                 # una factura con uno de los movimientos y se borran las lineas
-                invoice = self._invoice_create_line(cr, uid, [moves[0]],
-                                                    journal_id, type,
-                                                    context=context)
-                search_vals = [('invoice_id', '=', invoice),
-                               ('product_id', '=', moves[0].product_id.id)]
-                to_delete = inv_line_obj.search(cr, uid, search_vals,
-                                                context=context)
+                invoice = self._invoice_create_line(cr, uid, [moves[0]], journal_id, type, context=context)
+                search_vals = [('invoice_id', '=', invoice), ('product_id', '=', moves[0].product_id.id)]
+                to_delete = inv_line_obj.search(cr, uid, search_vals, context=context)
                 inv_line_obj.unlink(cr, uid, to_delete, context)
                 invoices += invoice
+
             if pack_moves:
-                self.pool.get('stock.move').\
-                    write(cr, uid, [x.id for x in pack_moves],
-                          {'invoice_state': 'invoiced'}, context)
+                self.pool.get('stock.move').write(cr, uid, [x.id for x in pack_moves], {'invoice_state': 'invoiced'}, context)
+
+            # update the team_id, payment_mode_id and partner_bank_id
+            if invoice:
+                obj_invoice = self.pool.get('account.invoice').browse(cr, uid, invoice, context=context)
+
+                partner_bank_id = False
+                for banks in obj_invoice.partner_id.commercial_partner_id.bank_ids:
+                    for mandate in banks.mandate_ids:
+                        if mandate.state == 'valid':
+                            partner_bank_id = banks.id
+                            break
+                        else:
+                            partner_bank_id = False
+
+                obj_invoice.write({
+                    'team_id': obj_invoice.partner_id.commercial_partner_id.team_id.id,
+                    'payment_mode_id': obj_invoice.partner_id.commercial_partner_id.customer_payment_mode.id,
+                    'partner_bank_id': partner_bank_id
+                })
+
         return invoices
 
 
