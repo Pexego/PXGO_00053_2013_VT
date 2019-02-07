@@ -7,9 +7,10 @@ class ProductProduct(models.Model):
 
     @api.multi
     def get_customizable_products(self):
-
+        tags = self.env['product.tag']
+        tag_code = tags.search([('name', '=', 'Personalizable')]).id
         product_object = self.env['product.product']
-        product = product_object.search([('tag_ids', '=', 4450)])
+        product = product_object.search([('tag_ids', '=', tag_code)])
 
         ids_products = [x.id for x in product]
         return {

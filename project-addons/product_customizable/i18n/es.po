@@ -19,5 +19,5 @@ msgstr ""
 #: model:ir.actions.server,name:product_customizable.action_product_customizable
 #: model:ir.ui.menu,name:product_customizable.menu_products_customizable
 #: code:addons/product_customizable/models/product_customizable.py:20
-msgid "Customizable Products"
-msgstr "Productos Personalizados"
+msgid "Customizable"
+msgstr "Personalizables"
