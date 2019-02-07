@@ -51,8 +51,8 @@ msgid "Calidad"
 msgstr "Calidad"
 
 #. module: location_moves
-#: view:location.moves:location_moves.location_moves_form
-#: view:quality.move.wzd:location_moves.quality_move_wzd_form
+#: model:ir.ui.view,arch_db:location_moves.location_moves_form
+#: model:ir.ui.view,arch_db:location_moves.quality_move_wzd_form
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -63,7 +63,7 @@ msgid "Cannot move more than origin move qty."
 msgstr "No puede mover más de la cantidad original del movimiento."
 
 #. module: location_moves
-#: field:location.moves,check_qty:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_check_qty
 msgid "Check Qty"
 msgstr "Comprobar disponibilidad"
 
@@ -83,7 +83,7 @@ msgid "Cooked -> Quality"
 msgstr "Cocinado -> Calidad"
 
 #. module: location_moves
-#: view:quality.move.wzd:location_moves.quality_move_wzd_form
+#: model:ir.ui.view,arch_db:location_moves.quality_move_wzd_form
 msgid "Create move"
 msgstr "Crear movimiento"
 
@@ -93,14 +93,14 @@ msgid "Create moves"
 msgstr "Crear movimientos"
 
 #. module: location_moves
-#: field:location.moves,create_uid:0
-#: field:quality.move.wzd,create_uid:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_create_uid
+#: model:ir.model.fields,field_description:location_moves.field_quality_move_wzd_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: location_moves
-#: field:location.moves,create_date:0
-#: field:quality.move.wzd,create_date:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_create_date
+#: model:ir.model.fields,field_description:location_moves.field_quality_move_wzd_create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -125,8 +125,8 @@ msgid "External -> Stock"
 msgstr "Almacén externo -> Existencias"
 
 #. module: location_moves
-#: field:location.moves,id:0
-#: field:quality.move.wzd,id:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_id
+#: model:ir.model.fields,field_description:location_moves.field_quality_move_wzd_id
 msgid "ID"
 msgstr "ID"
 
@@ -146,19 +146,19 @@ msgid "Kitchen -> Nursing"
 msgstr "Cocina -> Enfermería"
 
 #. module: location_moves
-#: field:location.moves,write_uid:0
-#: field:quality.move.wzd,write_uid:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_write_uid
+#: model:ir.model.fields,field_description:location_moves.field_quality_move_wzd_write_uid
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
 
 #. module: location_moves
-#: field:location.moves,write_date:0
-#: field:quality.move.wzd,write_date:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_write_date
+#: model:ir.model.fields,field_description:location_moves.field_quality_move_wzd_write_date
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
 
 #. module: location_moves
-#: view:location.moves:location_moves.location_moves_form
+#: model:ir.ui.view,arch_db:location_moves.location_moves_form
 msgid "Location moves"
 msgstr "Movimientos de localizacion"
 
@@ -178,7 +178,7 @@ msgid "Marketing -> Stock"
 msgstr "Marketing -> Existencias"
 
 #. module: location_moves
-#: field:location.moves,move_type:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_move_type
 msgid "Move type"
 msgstr "Tipo de movimiento"
 
@@ -211,7 +211,7 @@ msgid "Pantry -> Kitchen"
 msgstr "Despensa -> Cocina"
 
 #. module: location_moves
-#: field:location.moves,product_id:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_product_id
 msgid "Product"
 msgstr "Producto"
 
@@ -226,12 +226,12 @@ msgid "Producto"
 msgstr "Producto"
 
 #. module: location_moves
-#: field:location.moves,qty:0
+#: model:ir.model.fields,field_description:location_moves.field_location_moves_qty
 msgid "Qty"
 msgstr "Cantidad"
 
 #. module: location_moves
-#: field:quality.move.wzd,qty:0
+#: model:ir.model.fields,field_description:location_moves.field_quality_move_wzd_qty
 msgid "Qty. to move"
 msgstr "Cant. a mover"
 
@@ -242,10 +242,10 @@ msgstr "Calidad -> Cocinado"
 
 #. module: location_moves
 #: model:ir.actions.act_window,name:location_moves.act_quality_move_wzd
-#: view:quality.move.wzd:location_moves.quality_move_wzd_form
-#: view:stock.move:location_moves.view_move_picking_tree_add_quality_btn
-#: view:stock.move:location_moves.view_move_tree_add_quality_btn
-#: view:stock.move:location_moves.view_move_tree_receipt_picking_add_quality_btn
+#: model:ir.ui.view,arch_db:location_moves.quality_move_wzd_form
+#: model:ir.ui.view,arch_db:location_moves.view_move_picking_tree_add_quality_btn
+#: model:ir.ui.view,arch_db:location_moves.view_move_tree_add_quality_btn
+#: model:ir.ui.view,arch_db:location_moves.view_move_tree_receipt_picking_add_quality_btn
 msgid "Quality move"
 msgstr "Movimiento calidad"
 
@@ -301,12 +301,12 @@ msgid "The date planned of the reservation was                                  
 msgstr "La fecha planificada de la reserva ha cambiado."
 
 #. module: location_moves
-#: field:stock.move,picking_type_code:0
+#: model:ir.model.fields,field_description:location_moves.field_stock_move_picking_type_code
 msgid "Type of Operation"
 msgstr "Tipo de operación"
 
 #. module: location_moves
 #: model:ir.actions.act_window,name:location_moves.act_location_moves
-#: view:location.moves:location_moves.location_moves_form
+#: model:ir.ui.view,arch_db:location_moves.location_moves_form
 msgid "create moves"
 msgstr "Crear movimientos"

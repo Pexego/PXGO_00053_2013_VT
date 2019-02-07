@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -19,22 +18,21 @@
 #
 ##############################################################################
 
-from openerp import models, api, _, fields
-from openerp.exceptions import ValidationError, Warning
+from odoo import models, api, _, fields
+from odoo.exceptions import ValidationError, Warning
 
 
 class StockLotacion(models.Model):
 
-    _inherit = 'stock.location'
+    _inherit = "stock.location"
 
-    def get_quantity_source_location(self,location_id,product_id):
+    def get_quantity_source_location(self, location_id, product_id):
         ctx = dict(self.env.context)
-        ctx.update({'location' : location_id.id})
+        ctx.update({'location': location_id.id})
         product = self.env['product.product'].with_context(ctx).\
             browse(product_id)
         qty=product.qty_available
         return qty
-
 
     def move_pantry_kitchen(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_pantry', qty,
@@ -162,9 +160,8 @@ class StockLotacion(models.Model):
 
         if check_qty:
             if qty > self.\
-                    get_quantity_source_location(source_location,product_id):
-                raise Warning ("Check qty in source location")
-
+                    get_quantity_source_location(source_location, product_id):
+                raise Warning("Check qty in source location")
 
         type_id = self.env['stock.picking.type'].\
             search([('code', '=', 'internal')])
