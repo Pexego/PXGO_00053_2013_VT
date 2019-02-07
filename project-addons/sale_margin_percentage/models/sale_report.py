@@ -1,16 +1,15 @@
+from odoo import models, fields, api
+from odoo import tools
 
 
-from odoo import fields, models, tools
-
-
-class sale_report(models.Model):
-    _inherit = "sale.report"
+class SaleReport(models.Model):
+    _inherit = 'sale.report'
 
     benefit = fields.Float('Benefit', readonly=True)
     cost_price = fields.Float('Cost Price', readonly=True)
 
     def _select(self):
-        select_str = super(sale_report, self)._select()
+        select_str = super(SaleReport, self)._select()
         this_str = \
             """,sum(l.product_uom_qty * l.price_unit * (100.0-l.discount) /
              100.0) - sum(l.purchase_price*l.product_uom_qty)
@@ -19,9 +18,10 @@ class sale_report(models.Model):
         return select_str + this_str
 
     def _where(self):
-        where_str = "l.deposit = false and l.pack_depth = 0 "
+        where_str = "l.deposit = false"
         return where_str
 
+    @api.model_cr
     def init(self):
         # self._table = sale_report
         tools.drop_view_if_exists(self._cr, self._table)
