@@ -128,11 +128,12 @@ class ProductTemplate(models.Model):
               readonly=True,
               digits=dp.get_precision('Product Unit of Measure'))
     qty_in_production = fields.\
-        Float("Qty. in production",compute="_get_in_production_stock",
+        Float("Qty. in production", compute="_get_in_production_stock",
               readonly=True,
               digits=dp.get_precision('Product Unit of Measure'))
     virtual_available_wo_incoming = fields.\
-        Float("Virtual avail. conservative",compute="_get_avail_conservative",
+        Float("Virtual avail. conservative",
+              compute="_get_avail_conservative",
               readonly=True,
               digits=dp.get_precision('Product Unit of Measure'))
 
@@ -142,7 +143,7 @@ class ProductTemplate(models.Model):
             [('product_id', 'in', self.product_variant_ids.ids),
              ('state', 'in', ('confirmed', 'assigned')),
              ('picking_id.picking_type_code', '=', 'outgoing'),
-             ('procurement_id.sale_line_id', '!=', False)])
+             ('group_id.sale_id', '!=', False)])
         self.outgoing_picking_reserved_qty = sum(moves.mapped(
             'product_uom_qty'))
 
