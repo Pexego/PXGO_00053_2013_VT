@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,8 +15,8 @@
 #
 ##############################################################################
 
-import openerp.addons.decimal_precision as dp
-from openerp import models, fields, api
+import odoo.addons.decimal_precision as dp
+from odoo import models, fields, api
 
 
 class WizCreateInvoice(models.TransientModel):
@@ -33,22 +32,22 @@ class WizCreateInvoice(models.TransientModel):
     line_id = fields.Many2one("account.treasury.forecast.line.template",
                               string="Payment")
 
-    @api.one
+    @api.multi
     def button_create_inv(self):
         invoice_obj = self.env['account.invoice']
-        res_inv = invoice_obj.onchange_partner_id('in_invoice',
-                                                  self.partner_id.id)
-        values = res_inv['value']
-        values['name'] = ('Treasury: ' + self.description + '/ Amount: ' +
-                          str(self.amount))
-        values['reference'] = ('Treasury: ' + self.description + '/ Amount: ' +
-                               str(self.amount))
-        values['partner_id'] = self.partner_id.id
-        values['journal_id'] = self.journal_id.id
-        values['type'] = 'in_invoice'
-        invoice_id = invoice_obj.create(values)
-        self.line_id.write({'invoice_id': invoice_id.id, 'paid': 1,
-                            'journal_id': self.journal_id.id,
-                            'partner_id': self.partner_id.id,
-                            'amount': self.amount})
+        import ipdb
+        ipdb.set_trace()
+        for record in self:
+            values = {}
+            values['name'] = ('Treasury: ' + record.description + '/ Amount: ' + str(record.amount))
+            values['reference'] = ('Treasury: ' + record.description + '/ Amount: ' + str(record.amount))
+            values['partner_id'] = record.partner_id.id
+            values['journal_id'] = record.journal_id.id
+            values['type'] = 'in_invoice'
+            invoice_id = invoice_obj.create(values)
+            record.line_id.write({'invoice_id': invoice_id.id,
+                                  'paid': 1,
+                                  'journal_id': record.journal_id.id,
+                                  'partner_id': record.partner_id.id,
+                                  'amount': record.amount})
         return {'type': 'ir.actions.act_window_close'}
