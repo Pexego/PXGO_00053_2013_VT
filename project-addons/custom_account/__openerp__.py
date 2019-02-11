@@ -36,7 +36,7 @@
                 'account_financial_risk', 'account_payment_order',
                 'sale_margin_percentage', 'account_banking_sepa_direct_debit',
                 'stock_reserve_sale', 'sales_team',
-                'custom_partner',
+                'custom_partner', 'account_payment_return',
                 #TODO: 'sale_quick_payment',
                 'account_credit_control',
                 #TODO: MIgrar'account_invoice_merge',
