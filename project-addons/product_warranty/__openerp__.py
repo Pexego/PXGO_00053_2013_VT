@@ -23,7 +23,7 @@
 
 {
     'name': 'Product warranty',
-    'version': '1.0',
+    'version': '11.0',
     'category': 'Generic Modules/Product',
     'description': """
 Product Warranty
@@ -44,15 +44,13 @@ Those informations are used in the RMA Claim (Product Return Management) module.
     'depends': ['product'],
     'data': [
         'security/ir.model.access.csv',
-        'res_company_view.xml',
-        'product_warranty_view.xml',
+        'views/res_company_view.xml',
+        'views/product_warranty_view.xml',
     ],
     'demo_xml': [],
     'test': [],
     'installable': True,
     'active': False,
-    'certificate' : '',
-    'images': ['images/product_warranty.png'],
 }
 
 # vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
