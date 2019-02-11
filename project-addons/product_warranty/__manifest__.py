@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #########################################################################
 #                                                                       #
 #                                                                       #
@@ -41,7 +40,7 @@ Those informations are used in the RMA Claim (Product Return Management) module.
 """,
     'author': 'Akretion',
     'website': 'http://akretion.com',
-    'depends': ['product'],
+    'depends': ['product', 'sale'],
     'data': [
         'security/ir.model.access.csv',
         'views/res_company_view.xml',
@@ -52,5 +51,3 @@ Those informations are used in the RMA Claim (Product Return Management) module.
     'installable': True,
     'active': False,
 }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
