@@ -158,9 +158,6 @@ class StockLotacion(models.Model):
         source_location = self.env.ref(source_location)
         dest_location = self.env.ref(dest_location)
 
-        import ipdb
-        ipdb.set_trace()
-
         if check_qty:
             if qty > self.\
                     get_quantity_source_location(source_location, product_id):
