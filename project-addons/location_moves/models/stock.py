@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -19,22 +18,21 @@
 #
 ##############################################################################
 
-from openerp import models, api, _, fields
-from openerp.exceptions import ValidationError, Warning
+from odoo import models, api, _, fields
+from odoo.exceptions import ValidationError, Warning
 
 
 class StockLotacion(models.Model):
 
-    _inherit = 'stock.location'
+    _inherit = "stock.location"
 
-    def get_quantity_source_location(self,location_id,product_id):
+    def get_quantity_source_location(self, location_id, product_id):
         ctx = dict(self.env.context)
-        ctx.update({'location' : location_id.id})
+        ctx.update({'location': location_id.id})
         product = self.env['product.product'].with_context(ctx).\
             browse(product_id)
-        qty=product.qty_available
+        qty = product.qty_available
         return qty
-
 
     def move_pantry_kitchen(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_pantry', qty,
@@ -47,15 +45,15 @@ class StockLotacion(models.Model):
 
     def move_kitchen_nursing(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_kitchen', qty,
-                           'stock_location_nursing',False, check_qty, assign)
+                           'stock_location_nursing', False, check_qty, assign)
 
     def move_stock_nursing(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_nursing',False, check_qty, assign)
+                           'stock_location_nursing', False, check_qty, assign)
 
     def move_nursing_damaged(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_nursing', qty,
-                           'stock_location_damaged',False, check_qty, assign)
+                           'stock_location_damaged', False, check_qty, assign)
 
     def move_nursing_cooked(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_nursing', qty,
@@ -69,84 +67,84 @@ class StockLotacion(models.Model):
 
     def move_cooked_damaged(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_damaged',False, check_qty, assign)
+                           'stock_location_damaged', False, check_qty, assign)
 
     def move_beach_stock(self, product_id, qty, check_qty, assign=False):
         self.location_move(product_id, 'stock.stock_location_company', qty,
-                           'stock.stock_location_stock',True, check_qty,
+                           'stock.stock_location_stock', True, check_qty,
                            assign)
 
     def move_beach_kitchen(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_company', qty,
-                           'stock_location_kitchen',False, check_qty, assign)
+                           'stock_location_kitchen', False, check_qty, assign)
 
     def move_beach_pantry(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_company', qty,
-                           'stock_location_pantry',False, check_qty, assign)
+                           'stock_location_pantry', False, check_qty, assign)
 
     def move_stock_kitchen(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_kitchen',False, check_qty, assign)
+                           'stock_location_kitchen', False, check_qty, assign)
 
     def move_stock_pantry(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_pantry',False, check_qty, assign)
+                           'stock_location_pantry', False, check_qty, assign)
 
     def move_marketing_stock(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_marketing', qty,
-                           'stock.stock_location_stock',False, check_qty,
+                           'stock.stock_location_stock', False, check_qty,
                            assign)
 
     def move_stock_marketing(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_marketing',False, check_qty, assign)
+                           'stock_location_marketing', False, check_qty, assign)
 
     def move_product_stock(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_product', qty,
-                           'stock.stock_location_stock',False, check_qty,
+                           'stock.stock_location_stock', False, check_qty,
                            assign)
 
     def move_marketing_product(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_marketing', qty,
-                           'stock_location_product',False, check_qty,
+                           'stock_location_product', False, check_qty,
                            assign)
 
     def move_stock_product(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_product',False, check_qty, assign)
+                           'stock_location_product', False, check_qty, assign)
 
     def move_development_stock(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_development', qty,
-                           'stock.stock_location_stock',False, check_qty,
+                           'stock.stock_location_stock', False, check_qty,
                            assign)
 
     def move_stock_development(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_development',False, check_qty,
+                           'stock_location_development', False, check_qty,
                            assign)
 
     def move_cooked_quality(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_quality',False, check_qty,
+                           'stock_location_quality', False, check_qty,
                            assign)
 
     def move_sat_stock(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_sat', qty,
-                           'stock.stock_location_stock',True, check_qty,
+                           'stock.stock_location_stock', True, check_qty,
                            assign)
 
     def move_stock_sat(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock.stock_location_stock', qty,
-                           'stock_location_sat',False, check_qty, assign)
+                           'stock_location_sat', False, check_qty, assign)
 
     def move_external_stock(self, product_id, qty, check_qty, assign=True):
         self.location_move(product_id, 'stock_location_external', qty,
-                           'stock.stock_location_stock',True, check_qty,
+                           'stock.stock_location_stock', True, check_qty,
                            assign)
 
     def move_beach_external(self, product_id, qty, check_qty, assign=False):
         self.location_move(product_id, 'stock.stock_location_company', qty,
-                           'stock_location_external',False, check_qty,
+                           'stock_location_external', False, check_qty,
                            assign)
 
     def location_move(self, product_id, source_location, qty, dest_location,
@@ -162,21 +160,20 @@ class StockLotacion(models.Model):
 
         if check_qty:
             if qty > self.\
-                    get_quantity_source_location(source_location,product_id):
-                raise Warning ("Check qty in source location")
+                    get_quantity_source_location(source_location, product_id):
+                raise Warning("Check qty in source location")
 
-
-        type_id = self.env['stock.picking.type'].\
-            search([('code', '=', 'internal')])
+        type_id = self.env['stock.picking.type'].search([('code', '=', 'internal')])
         pick_vals = {
             'partner_id': self.env.user.company_id.partner_id.id,
             'picking_type_id': type_id.id,
+            'location_id': source_location.id,
+            'location_dest_id': dest_location.id
         }
         picking = self.env['stock.picking'].create(pick_vals)
         move_template = {
             'name': product.name,
             'product_id': product.id,
-
             'picking_type_id': type_id.id,
             'product_uom': product.uom_id.id,
             'product_uos': product.uom_id.id,
@@ -210,15 +207,13 @@ class StockLotacion(models.Model):
         reservation_used = 0
         for move in moves:
             qty_used = 0
-            product_uom_qty = uom_obj._compute_qty_obj(
-                move.product_uom, move.product_uom_qty, product_uom)
+            product_uom_qty = move.product_uom._compute_quantity(move.product_uom_qty, product_uom)
             while qty_used < product_uom_qty and reservation_index < \
                     len(reservations):
                 reservation = reservations[reservation_index]
                 reservation_qty = reservation.product_uom_qty - \
                     reservation.reserved_availability
-                reservation_qty = uom_obj._compute_qty_obj(
-                    reservation.product_uom, reservation_qty, product_uom)
+                reservation_qty = reservation.product_uom._compute_quantity(reservation_qty, product_uom)
                 if reservation_qty - reservation_used <= product_uom_qty - \
                         qty_used:
                     reservation.date_planned = move.date_expected
@@ -244,11 +239,11 @@ class StockMove(models.Model):
 
     _inherit = "stock.move"
 
-    location_usage = fields.Selection([('supplier', 'Supplier Location'),
+    location_usage = fields.Selection([('supplier', 'Vendor Location'),
                                        ('view', 'View'),
                                        ('internal', 'Internal Location'),
                                        ('customer', 'Customer Location'),
-                                       ('inventory', 'Inventory'),
+                                       ('inventory', 'Inventory Loss'),
                                        ('procurement', 'Procurement'),
                                        ('production', 'Production'),
                                        ('transit', 'Transit Location')],
