@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields, exceptions, _
+from odoo import models, api, fields, exceptions, _
 
 
 class QualityMoveWzd(models.TransientModel):
