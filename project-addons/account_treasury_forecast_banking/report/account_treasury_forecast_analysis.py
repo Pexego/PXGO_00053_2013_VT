@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,18 +15,18 @@
 #
 ##############################################################################
 
-import openerp.addons.decimal_precision as dp
-from openerp import models, fields, tools
+import odoo.addons.decimal_precision as dp
+from odoo import models, fields, tools
 
 
 class ReportAccountTreasuryForecastAnalysis(models.Model):
-    _name = "report.account.treasury.forecast.analysis"
+    _name = 'report.account.treasury.forecast.analysis'
     _description = "Treasury Forecast Analysis"
     _auto = False
 
-    treasury_id = fields.Many2one("account.treasury.forecast",
+    treasury_id = fields.Many2one('account.treasury.forecast',
                                   string="Treasury")
-    payment_mode_id = fields.Many2one("account.payment.mode", string="Payment Mode")
+    payment_mode_id = fields.Many2one('account.payment.mode', string="Payment Mode")
     debit = fields.Float(string="Debit",
                          digits=dp.get_precision('Account'))
     credit = fields.Float(string="Credit",

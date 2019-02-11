@@ -1,4 +1,4 @@
-<openerp>
+<odoo>
     <data>
 
         <record model="ir.ui.view" id="report_treasury_forecast_analysis_tree">
@@ -64,4 +64,4 @@
         groups="account.group_account_user"/>
         
     </data>
-</openerp>
+</odoo>

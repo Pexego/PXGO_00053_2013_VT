@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,23 +15,23 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class AccountTreasuryForecastInvoice(models.Model):
     _inherit = 'account.treasury.forecast.invoice'
 
-    payment_mode_id = fields.Many2one("account.payment.mode", string="Payment Mode",
+    payment_mode_id = fields.Many2one('account.payment.mode', string="Payment Mode",
                                       store=True,
                                       related="invoice_id.payment_mode_id")
     invoice_type = fields.Selection([('out_invoice', 'Customer Invoice'),
                                      ('in_invoice', 'Supplier Invoice'),
                                      ('out_refund', 'Customer Refund'),
                                      ('in_refund', 'Supplier Refund')],
-                                    string="Type", related="invoice_id.type")
-    payment_term_id = fields.Many2one("account.payment.term",
+                                    string="Type", related='invoice_id.type')
+    payment_term_id = fields.Many2one('account.payment.term',
                                       string="Payment Term",
-                                      related="invoice_id.payment_term_id")
+                                      related='invoice_id.payment_term_id')
 
 
 class AccountTreasuryForecastLine(models.Model):
