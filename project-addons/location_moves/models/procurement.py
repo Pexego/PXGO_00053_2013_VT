@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saaevdra <omar@comunitea.com>$
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,11 +18,23 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, api
 
+class ProcurementOrder(models.Model):
 
-class AccountPaymentTermLine(models.Model):
+    _inherit = "procurement.order"
 
-    _inherit = "account.payment.term.line"
+    @api.model
+    def run_scheduler(self, use_new_cursor=False, company_id = False):
+        res = super(ProcurementOrder, self).\
+            run_scheduler(use_new_cursor=use_new_cursor,
+                          company_id=company_id)
+        pick_ids = self.env["stock.picking"].\
+            search([("picking_type_code", "=", "internal"),
+                    ("state", "=", "assigned")])
+        for pick in pick_ids:
+            pick.action_done()
+        if use_new_cursor:
+            self.env.cr.commit()
 
-    payment_mode_id = fields.Many2one("account.payment.mode", "Payment mode")
+        return res

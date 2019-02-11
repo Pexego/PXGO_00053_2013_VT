@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,23 +18,18 @@
 #
 ##############################################################################
 
-from openerp import models, api
-
-class ProcurementOrder(models.Model):
-
-    _inherit = "procurement.order"
-
-    @api.model
-    def run_scheduler(self, use_new_cursor=False, company_id = False):
-        res = super(ProcurementOrder, self).\
-            run_scheduler(use_new_cursor=use_new_cursor,
-                          company_id=company_id)
-        pick_ids = self.env["stock.picking"].\
-            search([("picking_type_code", "=", "internal"),
-                    ("state", "=", "assigned")])
-        for pick in pick_ids:
-            pick.action_done()
-        if use_new_cursor:
-            self.env.cr.commit()
-
-        return res
+{
+    'name': 'Percentage of margins in Sales Orders',
+    'version': '1.0',
+    'category': 'Sales Management',
+    'description': """
+    """,
+    'author': 'Pexego',
+    'depends': ['sale',
+                'stock_deposit',
+                # 'pmp_landed_costs'
+                ],
+    'data': ["views/sale_view.xml", "views/sale_report_view.xml"],
+    'auto_install': False,
+    'installable': True,
+}
