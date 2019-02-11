@@ -21,8 +21,10 @@
                     <field name="move_type"/>
                 </group>
                 <newline/>
-                <button string="create moves" name="create_moves" type="object" icon="gtk-ok"/>
-                <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                <footer>
+                    <button string="create moves" name="create_moves" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>

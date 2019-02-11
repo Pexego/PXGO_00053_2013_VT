@@ -9,8 +9,10 @@
                     <field name="qty"/>
                 </group>
                 <newline/>
-                <button string="Create move" name="action_move" type="object" icon="gtk-ok"/>
-                <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                <footer>
+                    <button string="Create move" name="action_move" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>
