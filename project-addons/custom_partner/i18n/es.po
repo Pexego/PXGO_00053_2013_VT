@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_partner
-#: field:res.partner,sale_product_count:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_sale_product_count
 msgid "# Products sold"
 msgstr "# Prod. vendidos"
 
@@ -59,34 +59,34 @@ msgstr "<p class=\"oe_view_nocontent_create\">\n"
 "            "
 
 #. module: custom_partner
-#: field:res.partner,annual_invoiced:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_annual_invoiced
 msgid "Annual invoiced"
 msgstr "Facturación anual"
 
 #. module: custom_partner
-#: field:res.partner,monthly_invoiced:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_monthly_invoiced
 msgid "Monthly invoiced"
 msgstr "Facturación mensual"
 
 #. module: custom_partner
-#: field:res.partner,past_year_invoiced:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_past_year_invoiced
 msgid "Past year invoiced"
 msgstr "Facturación año anterior"
 
 #. module: custom_partner
-#: field:res.partner,past_month_invoiced:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_past_month_invoiced
 msgid "Past Month invoiced"
 msgstr "Facturación mes anterior"
 
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.view_partner_form_add_att
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_att
 msgid "The client is innactive"
 msgstr "El cliente está inactivo"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.view_partner_form_add_att
-#: field:res.partner,att:0
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_att
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_att
 msgid "A/A"
 msgstr "A/A"
 
@@ -115,22 +115,22 @@ msgid "At least, a contact must be added"
 msgstr "Al menos, un contacto debe ser añadido"
 
 #. module: custom_partner
-#: field:res.partner.invoice.type,create_uid:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.view_partner_form_add_web_field
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_web_field
 msgid "Created date"
 msgstr "Fecha de alta"
 
 #. module: custom_partner
-#: help:res.partner,web:0
+#: model:ir.model.fields,help:custom_partner.field_res_partner_web
 msgid "Created from web"
 msgstr "Creado desde la web"
 
 #. module: custom_partner
-#: field:res.partner.invoice.type,create_date:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_create_date
 msgid "Created on"
 msgstr "Creado el"
 
@@ -141,22 +141,22 @@ msgid "Description"
 msgstr "Descripción"
 
 #. module: custom_partner
-#: field:res.partner.invoice.type,display_name:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_display_name
 msgid "Display Name"
 msgstr "Nombre"
 
 #. module: custom_partner
-#: field:res.partner,dropship:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_dropship
 msgid "Dropship"
 msgstr "Dropship"
 
 #. module: custom_partner
-#: field:res.partner,ref_supplier:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_ref_supplier
 msgid "Ref. Supplier"
 msgstr "Ref. Proveedor"
 
 #. module: custom_partner
-#: field:product.supplierinfo,ref_supplier:0
+#: model:ir.model.fields,field_description:custom_partner.field_product_supplierinfo_ref_supplier
 msgid "Ref. Supplier"
 msgstr "Ref. Proveedor"
 
@@ -167,7 +167,7 @@ msgid "Due Date"
 msgstr "Fecha vencimiento"
 
 #. module: custom_partner
-#: field:res.partner,email_web:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_email_web
 msgid "Email Web"
 msgstr "Email Web"
 
@@ -177,22 +177,22 @@ msgid "Email web field, must be unique"
 msgstr "El campo email web, debe de ser único"
 
 #. module: custom_partner
-#: field:res.partner,eur_currency:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_eur_currency
 msgid "Eur currency"
 msgstr "Importe (€)"
 
 #. module: custom_partner
-#: field:res.partner,growth_rate:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_growth_rate
 msgid "Growth rate"
 msgstr "Crecimiento"
 
 #. module: custom_partner
-#: field:res.partner,average_margin:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_average_margin
 msgid "Average Margin"
 msgstr "Margen medio del último trimestre"
 
 #. module: custom_partner
-#: field:res.partner.invoice.type,id:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_id
 msgid "ID"
 msgstr "ID"
 
@@ -215,19 +215,19 @@ msgid "Invoice No."
 msgstr "Nº factura"
 
 #. module: custom_partner
-#: field:res.partner,invoice_type_id:0
-#: view:stock.picking:custom_partner.stock_picking_search_add_invoice_type
-#: field:stock.picking,invoice_type_id:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_id
+#: model:ir.ui.view,arch_db:custom_partner.stock_picking_search_add_invoice_type
+#: model:ir.model.fields,field_description:custom_partner.field_stock_picking_invoice_type_id
 msgid "Invoice type"
 msgstr "Tipo de facturación"
 
 #. module: custom_partner
-#: field:res.partner.invoice.type,write_uid:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_write_uid
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
 
 #. module: custom_partner
-#: field:res.partner.invoice.type,write_date:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_write_date
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
 
@@ -238,7 +238,7 @@ msgid "Lit."
 msgstr "Litigio"
 
 #. module: custom_partner
-#: field:res.partner.invoice.type,name:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_name
 msgid "Name"
 msgstr "Nombre"
 
@@ -260,23 +260,23 @@ msgstr "Albarán"
 
 #. module: custom_partner
 #: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_stock_picking
-#: view:res.partner:custom_partner.res_partner_view_buttons_add_quotations
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_quotations
 msgid "Pickings"
 msgstr "Albaranes"
 
 #. module: custom_partner
-#: view:stock.picking:custom_partner.stock_picking_search_add_invoice_type
+#: model:ir.ui.view,arch_db:custom_partner.stock_picking_search_add_invoice_type
 msgid "Procurement Group"
 msgstr "Grupo de abastecimiento"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.res_partner_view_buttons_add_products_no
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_products_no
 msgid "Products sold"
 msgstr "Prod. vendidos"
 
 #. module: custom_partner
 #: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_sale_quotations
-#: view:res.partner:custom_partner.res_partner_view_buttons_add_quotations
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_quotations
 msgid "Quotations"
 msgstr "Presupuestos"
 
@@ -292,22 +292,22 @@ msgid "Reference"
 msgstr "Referencia"
 
 #. module: custom_partner
-#: field:res.partner,send_followup_to_user:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_send_followup_to_user
 msgid "Send followup to sales agent"
 msgstr "Enviar seguimiento al comercial"
 
 #. module: custom_partner
-#: field:res.partner,notified_creditoycaucion:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_notified_creditoycaucion
 msgid "Notified to Crédito y Caución"
 msgstr "Notificado a Crédito y Caución"
 
 #. module: custom_partner
-#: field:res.partner,total_invoiced_real:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_total_invoiced_real
 msgid "Total Invoiced"
 msgstr "Total facturado"
 
 #. module: custom_partner
-#: view:sale.order:custom_partner.view_order_tree_add_amount_untaxed
+#: model:ir.ui.view,arch_db:custom_partner.view_order_tree_add_amount_untaxed
 msgid "Untaxed"
 msgstr "Base imponible"
 
@@ -318,7 +318,7 @@ msgid "VAT must be unique"
 msgstr "El NIF debe ser único"
 
 #. module: custom_partner
-#: field:res.partner,web:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_web
 msgid "Web"
 msgstr "Web"
 
@@ -329,22 +329,22 @@ msgid "Web customers"
 msgstr "Clientes desde web"
 
 #. module: custom_partner
-#: field:res.partner,purchase_quantity:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_purchase_quantity
 msgid "Purchase quantity"
 msgstr "Cantidad comprada pendiente de factura"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.view_partner_form_add_require
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_require
 msgid "Phone/Mobile 1"
 msgstr "Telefono/Móvil 1"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.view_partner_form_add_require
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_require
 msgid "Phone/Mobile 2"
 msgstr "Telefono/Móvil 2"
 
 #. module: custom_partner
-#: view:res.partner:view_partner_tree_custom
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_tree_custom
 msgid "Open partner in new tab"
 msgstr "Abrir cliente en nueva pestaña"
 
@@ -361,25 +361,10 @@ msgid "Client Order Ref."
 msgstr "Referencia Cliente"
 
 #. module: custom_partner
-#: field:rappel.calculated,goal_percentage:0
-msgid "Goal Percentage"
-msgstr "Porcentaje de cumplimiento"
-
-#. module: custom_partner
-#: field:rappel,brand_ids:0
-msgid "Brand"
-msgstr "Marca"
-
-#. module: custom_partner
 #: code:addons/custom_partner/partner.py:76
 #, python-format
 msgid "Product, brand and category are empty"
 msgstr "El producto, la marca y la categoría están vacíos"
-
-#. module: custom_partner
-#: view:rappel:custom_partner.rappel_form_add_brand
-msgid "You must fill in only one of the following fields to define the validity area of rappel:"
-msgstr "Debe rellenar solamente uno de los siguientes datos para definir el ámbito de validez del rappel:"
 
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:643
@@ -394,57 +379,42 @@ msgid "Remember to set our partner email, not dropship email!"
 msgstr "¡Recuerde poner el correo de nuestro cliente, no del cliente final (dropship)!"
 
 #. module: custom_partner
-#: help:rappel.current.info,curr_qty_pickings:0
-msgid "Qty estimation in pickings pending to be invoiced (shipping cost and product with no-rappel check in the order are not verified)"
-msgstr "Cantidad estimada en albaranes pendientes de ser facturados (gastos de envío y productos con el check no-rappel en el pedido no se verifican) "
-
-#. module: custom_partner
-#: field:rappel.current.info,curr_qty_pickings:0
-msgid "Qty pending invoice"
-msgstr "Cant. pendiente de facturar"
-
-#. module: custom_partner
-#: view:rappel.current.info:custom_partner.view_rappel_current_info_tree_add_qty_picking
-msgid "Curr. qty invoiced"
-msgstr "Cant. act. facturada"
-
-#. module: custom_partner
-#: field:res.partner,current_global_invoiced:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_current_global_invoiced
 msgid "Current year invoiced (global)"
 msgstr "Facturación (global) año en curso"
 
 #. module: custom_partner
-#: field:res.partner,past_year_global_invoiced:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_past_year_global_invoiced
 msgid "Past year invoiced (global)"
 msgstr "Facturación (global) año anterior"
 
 #. module: custom_partner
-#: field:res.partner,current_employees:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_current_employees
 msgid "Current year employees"
 msgstr "Empleados año en curso"
 
 #. module: custom_partner
-#: field:res.partner,past_year_employees:0
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_past_year_employees
 msgid "Past year employees"
 msgstr "Empleados año anterior"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.view_partner_warning_form_add_global_data
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_warning_form_add_global_data
 msgid "Global data"
 msgstr "Datos globales"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
+#: model:ir.ui.view,arch_db:custom_partner.view_res_partner_filter_add_comercial
 msgid "No current month sales"
 msgstr "Sin ventas este mes"
 
 #. module: custom_partner
-#: view:res.partner:custom_partner.view_res_partner_filter_add_comercial
+#: model:ir.ui.view,arch_db:custom_partner.view_res_partner_filter_add_comercial
 msgid "Customers with previous month sales (but no sales action in current month)"
 msgstr "Clientes con ventas en el mes pasado (pero sin ventas en el mes actual)"
 
 #. module: custom_partner
-#: field:account.move.line,ref_line:0
+#: model:ir.model.fields,field_description:custom_partner.field_account_move_line_ref_line
 msgid "Payment Reference"
 msgstr "Referencia de pago"
 
@@ -454,12 +424,3 @@ msgstr "Referencia de pago"
 msgid "Email web must be unique"
 msgstr "El email web debe ser único"
 
-#. module: custom_partner
-#: field:rappel.current.info,amount_est:0
-msgid "Estimated amount"
-msgstr "Importe estimado"
-
-#. module: custom_partner
-#: field:rappel,description:0
-msgid "Description"
-msgstr "Descripción"

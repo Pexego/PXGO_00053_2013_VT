@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -34,22 +33,23 @@ from calendar import monthrange
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
 
-    name = fields.Char('Name', required=True)
+    name = fields.Char("Name", required=True)
 
 
 class ResPartner(models.Model):
-    _inherit = "res.partner"
+    _inherit = 'res.partner'
 
-    annual_invoiced = fields.Float('Annual invoiced', readonly=True, store=True, default=0.0)
-    past_year_invoiced = fields.Float('Past year invoiced', readonly=True, store=True, default=0.0)
-    monthly_invoiced = fields.Float('Monthly invoiced', readonly=True, store=True, default=0.0)
-    past_month_invoiced = fields.Float('Past Month invoiced', readonly=True, store=True, default=0.0)
-    current_global_invoiced = fields.Float('Current year invoiced (global)', default=0.0)
-    past_year_global_invoiced = fields.Float('Past year invoiced (global)', default=0.0)
-    current_employees = fields.Integer('Current year employees', default=0)
-    past_year_employees = fields.Integer('Past year employees', default=0)
-    ref_supplier = fields.Char('Ref. Supplier', size=3)
+    annual_invoiced = fields.Float("Annual invoiced", readonly=True, store=True, default=0.0)
+    past_year_invoiced = fields.Float("Past year invoiced", readonly=True, store=True, default=0.0)
+    monthly_invoiced = fields.Float("Monthly invoiced", readonly=True, store=True, default=0.0)
+    past_month_invoiced = fields.Float("Past Month invoiced", readonly=True, store=True, default=0.0)
+    current_global_invoiced = fields.Float("Current year invoiced (global)", default=0.0)
+    past_year_global_invoiced = fields.Float("Past year invoiced (global)", default=0.0)
+    current_employees = fields.Integer("Current year employees", default=0)
+    past_year_employees = fields.Integer("Past year employees", default=0)
+    ref_supplier = fields.Char("Ref. Supplier", size=3)
 
+    # TODO -> Probar con la base de datos migrada
     @api.model
     def _calculate_annual_invoiced(self):
         partner_obj = self.env['res.partner']
@@ -78,36 +78,27 @@ class ResPartner(models.Model):
         end_past_month = str(past_month_year) + '-' + str(past_month) + '-' + str(end_day_past_month[1])
         for partner in partner_ids:
             invoice_ids_year = invoice_obj.search_read([('date_invoice', '>=', start_year),
-                                                   ('date_invoice', '<=', end_year),
-                                                   ('partner_id', 'child_of', [partner.id]),
-                                                   ('type', 'in', ['out_invoice', 'out_refund']),
-                                                   ('number', 'not like', '%_ef%'),
-                                                   '|',
-                                                   ('state', '=', 'open'),
-                                                   ('state', '=', 'paid')], ['type', 'amount_untaxed'])
-
-            invoice_ids_past_year = invoice_obj.search_read([('date_invoice', '>=', start_past_year),
-                                                        ('date_invoice', '<=', end_past_year),
+                                                        ('date_invoice', '<=', end_year),
                                                         ('partner_id', 'child_of', [partner.id]),
                                                         ('type', 'in', ['out_invoice', 'out_refund']),
                                                         ('number', 'not like', '%_ef%'),
                                                         '|',
-                                                        '|',
                                                         ('state', '=', 'open'),
-                                                        ('state', '=', 'paid'),
-                                                        ('state', '=', 'history')], ['type', 'amount_untaxed'])
+                                                        ('state', '=', 'paid')], ['type', 'amount_untaxed'])
+
+            invoice_ids_past_year = invoice_obj.search_read([('date_invoice', '>=', start_past_year),
+                                                             ('date_invoice', '<=', end_past_year),
+                                                             ('partner_id', 'child_of', [partner.id]),
+                                                             ('type', 'in', ['out_invoice', 'out_refund']),
+                                                             ('number', 'not like', '%_ef%'),
+                                                             '|',
+                                                             '|',
+                                                             ('state', '=', 'open'),
+                                                             ('state', '=', 'paid'),
+                                                             ('state', '=', 'history')], ['type', 'amount_untaxed'])
 
             invoice_ids_month = invoice_obj.search_read([('date_invoice', '>=', start_month),
-                                                    ('date_invoice', '<=', end_month),
-                                                    ('partner_id', 'child_of', [partner.id]),
-                                                    ('type', 'in', ['out_invoice', 'out_refund']),
-                                                    ('number', 'not like', '%_ef%'),
-                                                    '|',
-                                                    ('state', '=', 'open'),
-                                                    ('state', '=', 'paid')], ['type', 'amount_untaxed'])
-
-            invoice_ids_past_month = invoice_obj.search_read([('date_invoice', '>=', start_past_month),
-                                                         ('date_invoice', '<=', end_past_month),
+                                                         ('date_invoice', '<=', end_month),
                                                          ('partner_id', 'child_of', [partner.id]),
                                                          ('type', 'in', ['out_invoice', 'out_refund']),
                                                          ('number', 'not like', '%_ef%'),
@@ -115,29 +106,39 @@ class ResPartner(models.Model):
                                                          ('state', '=', 'open'),
                                                          ('state', '=', 'paid')], ['type', 'amount_untaxed'])
 
+            invoice_ids_past_month = invoice_obj.search_read([('date_invoice', '>=', start_past_month),
+                                                              ('date_invoice', '<=', end_past_month),
+                                                              ('partner_id', 'child_of', [partner.id]),
+                                                              ('type', 'in', ['out_invoice', 'out_refund']),
+                                                              ('number', 'not like', '%_ef%'),
+                                                              '|',
+                                                              ('state', '=', 'open'),
+                                                              ('state', '=', 'paid')], ['type', 'amount_untaxed'])
+
             picking_ids_year = picking_obj.search_read([('date_done', '>=', start_year),
-                                                   ('date_done', '<=', end_year),
-                                                   ('state', '=', 'done'),
-                                                   ('invoice_state', '=', '2binvoiced'),
-                                                   ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
+                                                        ('date_done', '<=', end_year),
+                                                        ('state', '=', 'done'),
+                                                        ('invoice_state', '=', '2binvoiced'),
+                                                        ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
 
             picking_ids_past_year = picking_obj.search_read([('date_done', '>=', start_past_year),
-                                                        ('date_done', '<=', end_past_year),
-                                                        ('invoice_state', '=', '2binvoiced'),
-                                                        ('partner_id', 'child_of', [partner.id]),
-                                                        ('state', '=', 'done')], ['amount_untaxed'])
+                                                             ('date_done', '<=', end_past_year),
+                                                             ('invoice_state', '=', '2binvoiced'),
+                                                             ('partner_id', 'child_of', [partner.id]),
+                                                             ('state', '=', 'done')], ['amount_untaxed'])
 
             picking_ids_month = picking_obj.search_read([('date_done', '>=', start_month),
-                                                    ('date_done', '<=', end_month),
-                                                    ('state', '=', 'done'),
-                                                    ('invoice_state', '=', '2binvoiced'),
-                                                    ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
-
-            picking_ids_past_month = picking_obj.search_read([('date_done', '>=', start_past_month),
-                                                         ('date_done', '<=', end_past_month),
+                                                         ('date_done', '<=', end_month),
                                                          ('state', '=', 'done'),
                                                          ('invoice_state', '=', '2binvoiced'),
                                                          ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
+
+            picking_ids_past_month = picking_obj.search_read([('date_done', '>=', start_past_month),
+                                                              ('date_done', '<=', end_past_month),
+                                                              ('state', '=', 'done'),
+                                                              ('invoice_state', '=', '2binvoiced'),
+                                                              ('partner_id', 'child_of', [partner.id])],
+                                                             ['amount_untaxed'])
 
             annual_invoiced = 0.0
             past_year_invoiced = 0.0
@@ -183,7 +184,8 @@ class ResPartner(models.Model):
                     'monthly_invoiced': monthly_invoiced, 'past_month_invoiced': past_month_invoiced}
             partner.write(vals)
 
-    @api.model
+    # TODO -> Migrar: depende de custom_account (Revisar si se sigue utilizando el cron o no)
+    """ @api.model
     def _unblock_invoices(self):
         date_limit = date.today() - timedelta(days=7)
         payment_term_ids = self.env['account.payment.term'].search([('blocked', '=', 'True')])
@@ -198,68 +200,68 @@ class ResPartner(models.Model):
                                          ('debit', '!=', '0')])
         val = {'blocked': False}
         move_ids.write(val)
+    """
 
     @api.multi
     def _purchase_invoice_count(self):
         invoice = self.env['account.invoice']
         for partner in self:
-            partner.supplier_all_invoice_count = invoice.\
-                search_count([('partner_id', 'child_of', partner.id),
-                              '|', ('type', '=', 'in_invoice'),
-                              ('type', '=', 'in_refund')])
+            partner.supplier_all_invoice_count = invoice.search_count([('partner_id', 'child_of', partner.id),
+                                                                       '|', ('type', '=', 'in_invoice'),
+                                                                       ('type', '=', 'in_refund')])
 
-    #TODO: Migrar
-    # ~ def _invoice_total_real(self, cr, uid, ids, field_name, arg, context=None):
-        # ~ result = {}
-        # ~ if context is None:
-            # ~ context = {}
-        # ~ account_invoice_report = self.pool.get('account.invoice.report')
-        # ~ user = self.pool['res.users'].browse(cr, uid, uid, context=context)
-        # ~ user_currency_id = user.company_id.currency_id.id
-        # ~ for partner_id in ids:
-            # ~ all_partner_ids = self.pool['res.partner'].search(
-                # ~ cr, uid, [('id', 'child_of', partner_id)], context=context)
+    @api.multi
+    def _invoice_total_real(self):
+        # TODO -> Probar cuando la tabla res_currency_rate tenga datos
+        result = {}
+        context = self.env.context
+        account_invoice_report = self.env['account.invoice.report']
+        user = self.env['res.users'].browse(self.env.uid)
+        user_currency_id = user.company_id.currency_id.id
+        for partner_id in self:
+            all_partner_ids = self.search([('id', 'child_of', partner_id.id)])
+            # searching account.invoice.report via the orm is comparatively expensive
+            # (generates queries "id in []" forcing to build the full table).
+            # In simple cases where all invoices are in the same currency than the user's company
+            # access directly these elements
+            domain = [('partner_id', 'in', all_partner_ids.ids),
+                      ('state', 'not in', ['draft', 'cancel'])
+                      # TODO -> Migrar: depende de custom_account
+                      # Error: Invalid field 'number' on account_invoice_report
+                      #  ,('number', 'not like', '%_ef%')
+                      ]
+            if context.get('date_from', False):
+                domain.append(('date', '>=', context['date_from']))
+            # generate where clause to include multicompany rules
+            where_query = account_invoice_report._where_calc(domain)
+            account_invoice_report._apply_ir_rules(where_query, 'read')
+            from_clause, where_clause, where_clause_params = where_query.get_sql()
 
-            # ~ # searching account.invoice.report via the orm is comparatively expensive
-            # ~ # (generates queries "id in []" forcing to build the full table).
-            # ~ # In simple cases where all invoices are in the same currency than the user's company
-            # ~ # access directly these elements
-            # ~ domain = [('partner_id', 'in', all_partner_ids),
-                      # ~ ('state', 'not in', ['draft', 'cancel']),
-                      # ~ ('number', 'not like', '%_ef%')]
-            # ~ if context.get('date_from', False):
-                # ~ domain.append(('date', '>=', context['date_from']))
-            # ~ # generate where clause to include multicompany rules
-            # ~ where_query = account_invoice_report._where_calc(cr, uid, domain,
-                                                             # ~ context=context)
-            # ~ account_invoice_report._apply_ir_rules(cr, uid, where_query, 'read', context=context)
-            # ~ from_clause, where_clause, where_clause_params = where_query.get_sql()
+            query = """ WITH currency_rate (currency_id, rate, date_start, date_end) AS (
+                                SELECT r.currency_id, r.rate, r.name AS date_start,
+                                    (SELECT name FROM res_currency_rate r2
+                                     WHERE r2.name > r.name AND
+                                           r2.currency_id = r.currency_id
+                                     ORDER BY r2.name ASC
+                                     LIMIT 1) AS date_end
+                                FROM res_currency_rate r
+                                )
+                      SELECT SUM(price_total * cr.rate) as total
+                        FROM account_invoice_report account_invoice_report, currency_rate cr
+                       WHERE %s
+                         AND cr.currency_id = %%s
+                         AND (COALESCE(account_invoice_report.date, NOW()) >= cr.date_start)
+                         AND (COALESCE(account_invoice_report.date, NOW()) < cr.date_end OR cr.date_end IS NULL)
+                    """ % where_clause
 
-            # ~ query = """ WITH currency_rate (currency_id, rate, date_start, date_end) AS (
-                                # ~ SELECT r.currency_id, r.rate, r.name AS date_start,
-                                    # ~ (SELECT name FROM res_currency_rate r2
-                                     # ~ WHERE r2.name > r.name AND
-                                           # ~ r2.currency_id = r.currency_id
-                                     # ~ ORDER BY r2.name ASC
-                                     # ~ LIMIT 1) AS date_end
-                                # ~ FROM res_currency_rate r
-                                # ~ )
-                      # ~ SELECT SUM(price_total * cr.rate) as total
-                        # ~ FROM account_invoice_report account_invoice_report, currency_rate cr
-                       # ~ WHERE %s
-                         # ~ AND cr.currency_id = %%s
-                         # ~ AND (COALESCE(account_invoice_report.date, NOW()) >= cr.date_start)
-                         # ~ AND (COALESCE(account_invoice_report.date, NOW()) < cr.date_end OR cr.date_end IS NULL)
-                    # ~ """ % where_clause
+            # price_total is in the currency with rate = 1
+            # total_invoice should be displayed in the current user's currency
+            self.env.cr.execute(query, where_clause_params + [user_currency_id])
+            result[partner_id] = self.env.cr.fetchone()[0]
 
-            # ~ # price_total is in the currency with rate = 1
-            # ~ # total_invoice should be displayed in the current user's currency
-            # ~ cr.execute(query, where_clause_params + [user_currency_id])
-            # ~ result[partner_id] = cr.fetchone()[0]
+        return result
 
-        # ~ return result
-
-    #TODO: Migrar
+    # TODO -> Migrar: mirar account_credit_control
     # ~ def _get_amounts_and_date(self, cr, uid, ids, name, arg, context=None):
         # ~ '''
         # ~ Function that computes values for the followup functional fields. Note that 'payment_amount_due'
@@ -285,16 +287,15 @@ class ResPartner(models.Model):
                                    # ~ 'payment_earliest_due_date': worst_due_date}
         # ~ return res
 
-    #TODO: Migrar
+    #TODO: Migrar: mirar account_credit_control
     # ~ def _payment_due_search(self, cr, uid, obj, name, args, context=None):
         # ~ res = super(ResPartner, self)._payment_due_search(cr, uid, obj, name, args, context=context)
         # ~ return res
 
-    #TODO: Migrar
-    # ~ total_invoiced_real = fields.Float(compute="_invoice_total_real", string="Total Invoiced",
-                                       # ~ groups='account.group_account_invoice')
-    supplier_all_invoice_count = fields.Integer(compute="_purchase_invoice_count", string='# Supplier Invoices')
-    #TODO: Migrar
+    total_invoiced_real = fields.Float(compute='_invoice_total_real', string="Total Invoiced",
+                                       groups='account.group_account_invoice')
+    supplier_all_invoice_count = fields.Integer(compute='_purchase_invoice_count', string="# Supplier Invoices")
+    #TODO: Migrar: mirar account_credit_control
     # ~ payment_amount_due = fields.Float(compute="_get_amounts_and_date",
                                       # ~ string="Amount Due",
                                       # ~ search=_payment_due_search)
@@ -315,60 +316,60 @@ class ResPartner(models.Model):
                                             ('state', 'not in',
                                              ['draft', 'cancel', 'sent'])]))
 
-    #TODO: Migrar
-    # ~ @api.one
-    # ~ def _get_growth_rate(self):
-        # ~ if self.customer:
-            # ~ search_date_180 = (date.today() - relativedelta(days=180)).\
-                # ~ strftime("%Y-%m-%d")
-            # ~ invoiced_180 = self.with_context(date_from=search_date_180).\
-                # ~ browse(self.id).total_invoiced_real
-            # ~ diary_invoice = invoiced_180 / 180.0
-            # ~ goal = diary_invoice * 15.0
-            # ~ if goal:
-                # ~ search_date_15 = (date.today() - relativedelta(days=15)).\
-                    # ~ strftime("%Y-%m-%d")
-                # ~ invoiced_15 = self.with_context(date_from=search_date_15).\
-                    # ~ browse(self.id).total_invoiced_real
-                # ~ self.growth_rate = invoiced_15 / goal
+    @api.multi
+    def _get_growth_rate(self):
+        # TODO -> Probar cuando se calcule bien total_invoiced_real
+        for partner in self:
+            if partner.customer:
+                search_date_180 = (date.today() - relativedelta(days=180)).strftime("%Y-%m-%d")
+                invoiced_180 = partner.with_context(date_from=search_date_180).browse(partner.id).total_invoiced_real
+                diary_invoice = invoiced_180 / 180.0
+                goal = diary_invoice * 15.0
+                if goal:
+                    search_date_15 = (date.today() - relativedelta(days=15)).strftime("%Y-%m-%d")
+                    invoiced_15 = partner.with_context(date_from=search_date_15).browse(partner.id).total_invoiced_real
+                    partner.growth_rate = invoiced_15 / goal
 
-    @api.one
+    @api.multi
     def _get_average_margin(self):
-        if self.customer:
-            margin_avg = 0.0
-            total_price = 0.0
-            total_cost = 0.0
+        for partner in self:
+            # import ipdb
+            # ipdb.set_trace()
+            if partner.customer:
+                margin_avg = 0.0
+                total_price = 0.0
+                total_cost = 0.0
 
-            d1 = datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
-            final_date = d1.strftime("%Y-%m-%d")
-            d2 = d1 - dateutil.relativedelta.relativedelta(months=3)
-            start_date = d2.strftime("%Y-%m-%d")
+                d1 = datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
+                final_date = d1.strftime("%Y-%m-%d")
+                d2 = d1 - dateutil.relativedelta.relativedelta(months=3)
+                start_date = d2.strftime("%Y-%m-%d")
 
-            invoices = self.env['account.invoice'].search(
-                [('commercial_partner_id', '=', self.id),
-                 ('number', 'not like', '%_ef%'),
-                 ('state', 'in', ['paid', 'history', 'open']),
-                 ('date_invoice', '>=', start_date),
-                 ('date_invoice', '<=', final_date)])
+                invoices = self.env['account.invoice'].search(
+                    [('commercial_partner_id', '=', partner.id),
+                     ('number', 'not like', '%_ef%'),
+                     ('state', 'in', ['paid', 'history', 'open']),
+                     ('date_invoice', '>=', start_date),
+                     ('date_invoice', '<=', final_date)])
 
-            invoices_line = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', invoices.ids)])
+                invoices_line = self.env['account.invoice.line'].search(
+                    [('invoice_id', 'in', invoices.ids)])
 
-            for i_line in invoices_line:
-                lines = self.env['sale.order.line'].\
-                    search([('invoice_lines', 'in', [i_line.id])], limit=1)
-                order_line = lines and lines[0] or False
+                for i_line in invoices_line:
+                    lines = self.env['sale.order.line'].search([('invoice_lines', 'in', [i_line.id])], limit=1)
+                    order_line = lines and lines[0] or False
 
-                if order_line:
-                    o_line_data = order_line.read(['purchase_price'])[0]
-                    total_price += i_line.quantity * i_line.price_unit * \
-                                   ((100.0 - i_line.discount) / 100)
-                    total_cost += i_line.quantity * o_line_data['purchase_price']
+                    # TODO -> Migrar: depende de sale_margin_percentage
+                    """if order_line:
+                        o_line_data = order_line.read(['purchase_price'])[0]
+                        total_price += i_line.quantity * i_line.price_unit * \
+                                       ((100.0 - i_line.discount) / 100)
+                        total_cost += i_line.quantity * o_line_data['purchase_price']"""
 
-            if total_price:
-                margin_avg = (1 - total_cost / total_price) * 100.0
+                if total_price:
+                    margin_avg = (1 - total_cost / total_price) * 100.0
 
-            self.average_margin = margin_avg
+                partner.average_margin = margin_avg
 
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
@@ -382,14 +383,12 @@ class ResPartner(models.Model):
     dropship = fields.Boolean("Dropship")
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
     notified_creditoycaucion = fields.Date("Notified to Crédito y Caución")
-    is_accounting = fields.Boolean('Is Acounting', compute="_is_accounting")
+    is_accounting = fields.Boolean("Is Acounting", compute="_is_accounting")
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
-    purchase_quantity = fields.Float('', compute='_get_purchased_quantity')
+    purchase_quantity = fields.Float("", compute='_get_purchased_quantity')
     att = fields.Char("A/A")
-    #TODO: Migrar
-    # ~ growth_rate = fields.Float("Growth rate", readonly=True,
-                               # ~ compute="_get_growth_rate")
-    average_margin = fields.Float("Average Margin", readonly=True, compute="_get_average_margin")
+    growth_rate = fields.Float("Growth rate", readonly=True, compute='_get_growth_rate')
+    average_margin = fields.Float("Average Margin", readonly=True, compute='_get_average_margin')
 
     unreconciled_purchase_aml_ids = fields.One2many('account.move.line', 'partner_id',
                                            domain=[('full_reconcile_id', '=', False),
@@ -461,15 +460,15 @@ class ResPartner(models.Model):
         for record in self:
             name = record.name
             if record.parent_id and not record.is_company and not record.dropship:
-                name = "%s, %s" % (record.parent_name, name)
+                name = "{0}, {1}".format(record.parent_name, name)
             if self.env.context.get('show_address_only'):
-                name = self._display_address(without_company=True)
+                name = record._display_address(without_company=True)
             if self.env.context.get('show_address'):
-                name = name + "\n" + self._display_address(without_company=True)
+                name = name + "\n" + record._display_address(without_company=True)
             name = name.replace('\n\n', '\n')
             name = name.replace('\n\n', '\n')
             if self.env.context.get('show_email') and record.email:
-                name = "%s <%s>" % (name, record.email)
+                name = "{0} <{1}>".format(name, record.email)
             res.append((record.id, name))
         return res
 
@@ -506,7 +505,8 @@ class ResPartner(models.Model):
                     partner.lang = partner.parent_id.lang
         return res
 
-    def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
+    # TODO: Migrar
+    """def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
         today = time.strftime('%Y-%m-%d')
         moveline_obj = self.pool['account.move.line']
 
@@ -598,14 +598,15 @@ class ResPartner(models.Model):
                                 </table>
                                 <strong><center style="font-size: 18px">''' + _("Amount not due") +\
                                   ''' : %s </center></strong>''' % (total)
-        return followup_table
+        return followup_table"""
 
-    def get_custom_followup_table_html(self, cr, uid, ids, context=None):
-        """ Build the html tables to be included in emails send to partners,
+    # TODO: Migrar
+    """def get_custom_followup_table_html(self, cr, uid, ids, context=None):
+        ''' Build the html tables to be included in emails send to partners,
             when reminding them their overdue invoices.
             :param ids: [id] of the partner for whom we are building the tables
             :rtype: string
-        """
+        '''
         assert len(ids) == 1
         if context is None:
             context = {}
@@ -655,7 +656,7 @@ class ResPartner(models.Model):
                                 </table>
                                 <strong> <center style="font-size: 18px">''' + _("Amount due") \
                                   + ''' : %s </center> </strong>''' % (total)
-        return followup_table
+        return followup_table"""
 
     @api.multi
     @api.onchange('dropship')
@@ -684,9 +685,6 @@ class ResPartner(models.Model):
     @api.multi
     def call_new_window(self):
 
-        # import ipdb
-        # ipdb.set_trace()
-
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
         order_view_id = self.env.ref('custom_partner.crm_case_categ_phone_incoming3').id
         record_url = base_url + '/web?#page=0&limit=80&view_type=list&model=crm.phonecall&action=' + str(order_view_id) + '&active_id=' + str(self.id)
@@ -702,17 +700,19 @@ class ResPartner(models.Model):
 
 
 class AccountMoveLine(models.Model):
-    _inherit = "account.move.line"
+    _inherit = 'account.move.line'
 
-    ref_line = fields.Char('Payment Reference', related='move_id.vref')
+    ref_line = fields.Char("Payment Reference", related='move_id.vref')
+
 
 class AccountMove(models.Model):
-    _inherit = "account.move"
+    _inherit = 'account.move'
 
-    vref = fields.Char('Reference')
+    vref = fields.Char("Reference")
+
 
 class AccountVoucher(models.Model):
-    _inherit = "account.voucher"
+    _inherit = 'account.voucher'
 
     @api.multi
     def account_move_get(self):
@@ -726,4 +726,4 @@ class AccountVoucher(models.Model):
 class ProductSupplierInfo(models.Model):
     _inherit = 'product.supplierinfo'
 
-    ref_supplier = fields.Char('Ref. Supplier', related='name.ref_supplier', readonly=True)
+    ref_supplier = fields.Char("Ref. Supplier", related='name.ref_supplier', readonly=True)

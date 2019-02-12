@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -25,7 +24,7 @@ from calendar import monthrange
 from dateutil.relativedelta import relativedelta
 
 
-class rappel_calculated(models.Model):
+class RappelCalculated(models.Model):
 
     _inherit = 'rappel.calculated'
 
@@ -69,13 +68,13 @@ class rappel_calculated(models.Model):
                         taxes_ids = fpos.map_tax(taxes_ids)
                     tax_ids = [(6, 0, [x.id for x in taxes_ids])]
                     invoice_line_obj.create({'product_id': rappel_product.id,
-                                             'name': u'%s (%s-%s)' %
-                                                     (rp.rappel_id.description,
-                                                      rp.date_start,
-                                                      rp.date_end),
+                                             'name': u'{0} ({1}-{2})'.format(
+                                                            rp.rappel_id.name,
+                                                            rp.date_start,
+                                                            rp.date_end),
                                              'invoice_id': invoice.id,
                                              'account_id': account_id.id,
-                                             'invoice_line_tax_ids': tax_ids,
+                                             'invoice_line_tax_id': tax_ids,
                                              'price_unit': rp.quantity,
                                              'quantity': 1})
                     rp.invoice_id = invoice.id
@@ -88,7 +87,7 @@ class rappel_calculated(models.Model):
 
 class ResPartnerRappelRel(models.Model):
 
-    _inherit = "res.partner.rappel.rel"
+    _inherit = 'res.partner.rappel.rel'
 
     @api.multi
     def _get_next_period(self):
@@ -187,7 +186,7 @@ class ResPartnerRappelRel(models.Model):
                     total_rappel = rappel.rappel_id.fix_qty
                 else:
                     total = sum([x.price_subtotal for x in invoice_lines]) - \
-                        sum([x.price_subtotal for x in refund_lines])
+                            sum([x.price_subtotal for x in refund_lines])
                     qty_pickings = rappel._calculate_qty_picking()
                     total_est = total + qty_pickings
                     if total:
@@ -207,7 +206,7 @@ class ResPartnerRappelRel(models.Model):
                     field = 'quantity'
                 qty_pickings = rappel._calculate_qty_picking()
                 total = sum([x[field] for x in invoice_lines]) - \
-                    sum([x[field] for x in refund_lines])
+                        sum([x[field] for x in refund_lines])
                 total_est = total + qty_pickings
                 rappel_info["curr_qty"] = total
                 rappel_info["curr_qty_pickings"] = qty_pickings
@@ -296,9 +295,10 @@ class ResPartnerRappelRel(models.Model):
         return rappel_info, goal_percentage, total_rappel
 
 
-class rappel(models.Model):
+class Rappel(models.Model):
 
     _inherit = 'rappel'
+
     brand_ids = fields.Many2many('product.brand', 'rappel_product_brand_rel',
                                  'rappel_id', 'product_brand_id', 'Brand')
     discount_voucher = fields.Boolean('Discount voucher')
@@ -386,35 +386,12 @@ class rappel(models.Model):
             ordered_rappels = self.search([], order='sequence')
         else:
             ordered_rappels = self.sorted(key=lambda x: x.sequence)
-        super(rappel, ordered_rappels).compute_rappel()
-
-
-class RappelInvoice(models.TransientModel):
-
-    _inherit = "rappel.invoice.wzd"
-
-    @api.multi
-    def action_invoice(self):
-        res = super(RappelInvoice, self).action_invoice()
-        compute_rappel_obj = self.env["rappel.calculated"]
-        for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
-            if rappel.quantity <= 0:
-                continue
-            if rappel.invoice_id:
-                invoice = rappel.invoice_id
-                if not invoice.payment_mode_id \
-                        or not invoice.partner_bank_id \
-                        or not invoice.team_id:
-                    rappel.invoice_id.write({'payment_mode_id': rappel.partner_id.customer_payment_mode_id.id,
-                                             'partner_bank_id': rappel.partner_id.bank_ids and
-                                                                    rappel.partner_id.bank_ids[0].id or False,
-                                             'team_id': rappel.partner_id.team_id.id})
-        return res
+        super(Rappel, ordered_rappels).compute_rappel()
 
 
 class RappelCurrentInfo(models.Model):
 
-    _inherit = "rappel.current.info"
+    _inherit = 'rappel.current.info'
 
     curr_qty_pickings = fields.Float("Qty pending invoice", readonly=True,
                                      help="Qty estimation in pickings pending to be invoiced (shipping cost and"
@@ -449,15 +426,15 @@ class RappelCurrentInfo(models.Model):
 
                         if rappel_timing.advice_timing == 'variable':
 
-                            timing = (date_end - date_start).days*rappel_timing.timing/100
-                            timing2= (today - date_start).days
+                            timing = (date_end - date_start).days * rappel_timing.timing / 100
+                            timing2 = (today - date_start).days
 
                             if timing == timing2:
                                 send = True
 
                         if send == True and rappel.curr_qty:
                             if values.get(partner.id):
-                                values[partner.id].append ({
+                                values[partner.id].append({
                                     'concepto': rappel.rappel_id.name,
                                     'date_start': date_start.strftime('%d/%m/%Y'),
                                     'date_end': date_end.strftime('%d/%m/%Y'),
@@ -502,7 +479,7 @@ class RappelCurrentInfo(models.Model):
 
 class ComputeRappelInvoice(models.TransientModel):
 
-    _inherit = "rappel.invoice.wzd"
+    _inherit = 'rappel.invoice.wzd'
 
     @api.multi
     def action_invoice(self):
@@ -515,14 +492,14 @@ class ComputeRappelInvoice(models.TransientModel):
                 invoice_rappel = rappel.invoice_id
                 # Update description invoice lines
                 for line in invoice_rappel.invoice_line:
-                    line.write({'name': u'%s (%s-%s)' %
-                                        (rappel.rappel_id.description,
-                                         rappel.date_start,
-                                         rappel.date_end)})
+                    line.write({'name': u'{0} ({1}-{2})'.format(
+                                                            rappel.rappel_id.description,
+                                                            rappel.date_start,
+                                                            rappel.date_end)})
                 # Update account data
                 if not invoice_rappel.payment_mode_id \
                         or not invoice_rappel.partner_bank_id \
-                        or not invoice_rappel.section_id:
+                        or not invoice_rappel.team_id:
                     partner_bank_id = False
                     for banks in rappel.partner_id.bank_ids:
                         for mandate in banks.mandate_ids:
@@ -533,5 +510,6 @@ class ComputeRappelInvoice(models.TransientModel):
                                 partner_bank_id = False
                     invoice_rappel.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
                                           'partner_bank_id': partner_bank_id,
-                                          'section_id': rappel.partner_id.section_id.id})
+                                          'team_id': rappel.partner_id.team_id.id})
         return res
+

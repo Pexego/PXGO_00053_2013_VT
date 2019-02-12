@@ -18,4 +18,13 @@
 #
 ##############################################################################
 
-from . import models
+{
+    'name': "Rappel custom",
+    'version': '1.0',
+    'category': 'Custom',
+    'description': """Several little customizations in rappels""",
+    'author': 'Nadia Ferreyra',
+    "depends": ['base', 'rappel', 'product_brand'],
+    "data": ["views/rappel_view.xml"],
+    "installable": True
+}
