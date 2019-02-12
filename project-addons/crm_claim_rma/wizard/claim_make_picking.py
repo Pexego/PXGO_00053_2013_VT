@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -25,9 +24,9 @@ from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
 
-class claim_make_picking(models.TransientModel):
+class ClaimMakePicking(models.TransientModel):
 
-    _name = 'claim_make_picking.wizard'
+    _name = "claim_make_picking.wizard"
     _description = 'Wizard to create pickings from claim lines'
 
     # Get default destination location
@@ -311,5 +310,3 @@ class claim_make_picking(models.TransientModel):
             }
         else:
             return {'type': 'ir.actions.act_window_close'}
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

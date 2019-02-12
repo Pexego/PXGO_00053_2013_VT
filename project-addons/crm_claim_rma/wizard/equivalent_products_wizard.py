@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -23,7 +22,7 @@
 from odoo import fields, models
 
 
-class equivalent_products_wizard(models.TransientModel):
+class EquivalentProductsWizard(models.TransientModel):
 
     _name = "equivalent.products.wizard"
     _description = "Wizard for change products in claim."
@@ -37,7 +36,7 @@ class equivalent_products_wizard(models.TransientModel):
     virtual_stock = fields.Float("Virtual Stock", readonly=True)
 
     def default_get(self, cr, uid, fields, context=None):
-        res = super(equivalent_products_wizard, self).default_get(cr, uid, fields, context=context)
+        res = super(EquivalentProductsWizard, self).default_get(cr, uid, fields, context=context)
         if context.get('line_id'):
             claim_line_id = self.pool.get('claim.line').browse(cr, uid, context['line_id'])
             res['product_id'] = claim_line_id.product_id.id

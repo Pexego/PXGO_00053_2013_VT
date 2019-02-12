@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -23,7 +22,7 @@
 
 from odoo import api, fields, models, exceptions
 
-class stock_picking(models.Model):
+class StockPicking(models.Model):
 
     _inherit = "stock.picking"
 
@@ -34,7 +33,7 @@ class stock_picking(models.Model):
 # stock_move in a picking already open.
 # In order to don't have to confirm the stock_move we override the create and
 # confirm it at the creation only for this case
-class stock_move(models.Model):
+class StockMove(models.Model):
 
     _inherit = "stock.move"
 
@@ -42,7 +41,7 @@ class stock_move(models.Model):
 
     @api.multi
     def action_done(self):
-        res = super(stock_move, self).action_done()
+        res = super(StockMove, self).action_done()
 
         for move in self:
             if move.claim_line_id:
@@ -71,18 +70,17 @@ class stock_move(models.Model):
 
         return res
 
-    # def create(self, cr, uid, vals, context=None):
-    #     move_id = super(stock_move, self
-    #                     ).create(cr, uid, vals, context=context)
-    #     if vals.get('picking_id'):
-    #         picking_obj = self.pool.get('stock.picking')
-    #         picking = picking_obj.browse(cr, uid, vals['picking_id'],
-    #                                      context=context)
-    #         if picking.claim_id and picking.picking_type_code == u'incoming':
-    #             self.write(cr, uid, move_id, {'state': 'confirmed'},
-    #                        context=context)
-    #     return move_id TODO: Migrar
-
+    def create(self, cr, uid, vals, context=None):
+        move_id = super(StockMove, self
+                        ).create(cr, uid, vals, context=context)
+        if vals.get('picking_id'):
+            picking_obj = self.pool.get('stock.picking')
+            picking = picking_obj.browse(cr, uid, vals['picking_id'],
+                                         context=context)
+            if picking.claim_id and picking.picking_type_code == u'incoming':
+                self.write(cr, uid, move_id, {'state': 'confirmed'},
+                           context=context)
+        return move_id
 
     @api.multi
     def write(self, vals):
@@ -103,4 +101,4 @@ class stock_move(models.Model):
                             message_post(body="The date planned was changed.",
                                          subtype='mt_comment',
                                          partner_ids=followers)
-        return super(stock_move, self).write(vals)
+        return super(StockMove, self).write(vals)

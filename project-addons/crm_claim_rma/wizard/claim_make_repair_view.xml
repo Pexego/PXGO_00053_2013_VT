@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
-    <data>
+<odoo>
+    <record id="claim_make_repair_wizard" model="ir.ui.view">
+        <field name="name">make.repair.form</field>
+        <field name="model">claim.make.repair</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Make repair">
+                <field name="line_id" invisible="1"/>
+                <button string="Make" name="make" type="object" icon="gtk-ok"/>
+                <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+            </form>
+        </field>
+    </record>
 
-        <record id="claim_make_repair_wizard" model="ir.ui.view">
-            <field name="name">make.repair.form</field>
-            <field name="model">claim.make.repair</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Make repair">
-                    <field name="line_id" invisible="1"/>
-                    <button string="Make" name="make" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                </form>
-            </field>
-        </record>
-
-        <act_window name="Make repair"
-            res_model="claim.make.repair"
-            src_model="claim.line"
-            view_id="claim_make_repair_wizard"
-            view_mode="form"
-            target="new"
-            id="action_claim_make_repair"/>
-
-    </data>
-</openerp>
+    <act_window name="Make repair"
+        res_model="claim.make.repair"
+        src_model="claim.line"
+        view_id="claim_make_repair_wizard"
+        view_mode="form"
+        target="new"
+        id="action_claim_make_repair"/>
+</odoo>
 

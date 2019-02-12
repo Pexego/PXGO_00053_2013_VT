@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
@@ -28,7 +27,7 @@ AVAILABLE_PRIORITIES = [
 ]
 
 
-class crm_claim_report(models.Model):
+class CrmClaimReport(models.Model):
     """ CRM Claim Report"""
 
     _name = "crm.claim.cost.report"
@@ -97,6 +96,3 @@ class crm_claim_report(models.Model):
                         c.categ_id,c.partner_id,c.company_id,c.create_date,
                         c.priority,c.type_action,c.date_deadline,c.date_closed,c.id
             )""")
-
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

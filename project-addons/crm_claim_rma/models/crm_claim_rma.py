@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -46,7 +45,7 @@ MOVE_STATE_SELECTION = [('draft', _('New')), ('cancel', _('Cancelled')),
                         ('confirmed', _('Waiting Availability')),
                         ('assigned', _('Available')), ('done', _('Done'))]
 
-class substate_substate(models.Model):
+class SubstateSubstate(models.Model):
     """ To precise a state (state=refused; substates= reason 1, 2,...) """
     _name = "substate.substate"
     _description = "substate that precise a given state"
@@ -58,7 +57,7 @@ class substate_substate(models.Model):
             help="To give more information about the sub state")
 
 
-class claim_line(models.Model):
+class ClaimLine(models.Model):
     """
     Class to handle a product return line (corresponding to one invoice line)
     """
@@ -88,7 +87,7 @@ class claim_line(models.Model):
             'refund_line_id': False,
         }
         std_default.update(default)
-        return super(claim_line, self).copy_data(
+        return super(ClaimLine, self).copy_data(
             cr, uid, id, default=std_default, context=context)
 
     @api.model
@@ -409,10 +408,10 @@ class claim_line(models.Model):
 
 # TODO add the option to split the claim_line in order to manage the same
 # product separately
-class crm_claim(models.Model):
-    _inherit = 'crm.claim'
+class CrmClaim(models.Model):
+    _inherit = "crm.claim"
 
-    _rec_name = 'number'
+    _rec_name = "number"
 
     @api.onchange('claim_type')
     def onchange_claim_type(self):
@@ -440,7 +439,7 @@ class crm_claim(models.Model):
         if ('number' not in vals) or (vals.get('number') == '/'):
             vals['number'] = self._get_sequence_number(cr, uid,
                                                        context=context)
-        new_id = super(crm_claim, self).create(cr, uid, vals, context=context)
+        new_id = super(CrmClaim, self).create(cr, uid, vals, context=context)
         return new_id
 
     def copy_data(self, cr, uid, id, default=None, context=None):
@@ -452,7 +451,7 @@ class crm_claim(models.Model):
             'number': self._get_sequence_number(cr, uid, context=context),
         }
         std_default.update(default)
-        return super(crm_claim, self).copy_data(
+        return super(CrmClaim, self).copy_data(
             cr, uid, id, default=std_default, context=context)
 
     number = fields.Char(
@@ -522,7 +521,7 @@ class crm_claim(models.Model):
                         vals['invoice_method'] != claim.invoice_method:
                     update_vals['invoice_method'] = vals['invoice_method']
 
-        res = super(crm_claim, self).write(cr, uid, ids, vals, context=context)
+        res = super(CrmClaim, self).write(cr, uid, ids, vals, context=context)
         if update_vals:
             for claim in self.browse(cr, uid, ids):
                 for line in claim.claim_line_ids:
@@ -533,7 +532,7 @@ class crm_claim(models.Model):
 
     def onchange_partner_address_id(self, cr, uid, ids, add, email=False,
                                     context=None):
-        res = super(crm_claim, self
+        res = super(CrmClaim, self
                     ).onchange_partner_address_id(cr, uid, ids, add,
                                                   email=email)
         if add:
@@ -594,7 +593,7 @@ class crm_claim(models.Model):
                                          context=context)]
 
     def message_get_suggested_recipients(self, cr, uid, ids, context=None):
-        recipients = super(crm_claim, self
+        recipients = super(CrmClaim, self
                            ).message_get_suggested_recipients(cr, uid, ids,
                                                               context=context)
         try:
@@ -614,9 +613,9 @@ class crm_claim(models.Model):
         return recipients
 
 
-class crm_claim_stage(models.Model):
+class CrmClaimStage(models.Model):
 
-    _inherit = 'crm.claim.stage'
+    _inherit = "crm.claim.stage"
 
     show_buttons = fields.Boolean('Show buttons')
     closed = fields.Boolean('closed')

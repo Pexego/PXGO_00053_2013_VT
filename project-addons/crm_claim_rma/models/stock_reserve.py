@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -21,8 +20,8 @@
 from odoo import models, fields
 
 
-class stock_reservation(models.Model):
-    _inherit = 'stock.reservation'
+class StockReservation(models.Model):
+    _inherit = "stock.reservation"
 
     claim_id = fields.Many2one(
             'crm.claim',

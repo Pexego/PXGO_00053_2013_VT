@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -23,7 +22,7 @@
 from odoo import models, _, exceptions, fields
 
 
-class account_invoice_refund(models.TransientModel):
+class AccountInvoiceRefund(models.TransientModel):
 
     _inherit = "account.invoice.refund"
 
@@ -34,7 +33,7 @@ class account_invoice_refund(models.TransientModel):
             context['active_ids'] = context.get('invoice_ids')
         elif context['active_model'] == u'crm.claim':
             raise exceptions.UserError(_('The claim not have invoices to refund.'))
-        return super(account_invoice_refund, self).compute_refund(
+        return super(AccountInvoiceRefund, self).compute_refund(
             cr, uid, ids, mode=mode, context=context)
 
     def _get_description(self, cr, uid, context=None):
