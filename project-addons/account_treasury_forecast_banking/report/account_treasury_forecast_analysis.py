@@ -16,7 +16,7 @@
 ##############################################################################
 
 import odoo.addons.decimal_precision as dp
-from odoo import models, fields, tools
+from odoo import models, fields, tools, api
 
 
 class ReportAccountTreasuryForecastAnalysis(models.Model):
@@ -37,9 +37,9 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
                             string="Type")
     date = fields.Date(string="Date")
 
+    @api.model_cr
     def init(self):
-        tools.drop_view_if_exists(self._cr,
-                                  'report_account_treasury_forecast_analysis')
+        tools.drop_view_if_exists(self._cr, 'report_account_treasury_forecast_analysis')
         self._cr.execute("""
             create or replace view report_account_treasury_forecast_analysis
                 as (
