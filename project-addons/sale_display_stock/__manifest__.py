@@ -36,9 +36,9 @@ Sales display stock
     "data": [
         "views/sale_view.xml",
         "views/product_view.xml",
-        # "report/sale_order_line_report.xml",
-        # "security/ir.model.access.csv",
-        # "security/sale_display_stock_security.xml"
+        "report/sale_order_line_report.xml",
+        "security/ir.model.access.csv",
+        "security/sale_display_stock_security.xml"
     ],
     "demo": [],
     'auto_install': False,

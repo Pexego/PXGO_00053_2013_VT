@@ -26,90 +26,93 @@ import odoo.addons.decimal_precision as dp
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
-    @api.one
+    @api.multi
     def _get_no_wh_internal_stock(self):
-        locs = []
-        locs.append(self.env.ref('location_moves.stock_location_kitchen').id)
-        locs.append(self.env.ref('location_moves.stock_location_pantry').id)
-        qty = self.with_context(location=locs).qty_available
-        self.qty_available_wo_wh = qty
+        for product in self:
+            locs = []
+            locs.append(self.env.ref('location_moves.stock_location_kitchen').id)
+            locs.append(self.env.ref('location_moves.stock_location_pantry').id)
+            qty = product.with_context(location=locs).qty_available
+            product.qty_available_wo_wh = qty
 
-    @api.one
+    @api.multi
     def _get_external_stock(self):
-        locs = [self.env.ref('location_moves.stock_location_external').id]
-        qty = self.with_context(location=locs).qty_available
-        self.qty_available_external = qty
+        for product in self:
+            locs = [self.env.ref('location_moves.stock_location_external').id]
+            qty = product.with_context(location=locs).qty_available
+            product.qty_available_external = qty
 
-    @api.one
+    @api.multi
     def _get_input_loc_stock(self):
-        locs = []
-        qty = 0.0
-        for wh in self.env["stock.warehouse"].search([]):
-            locs.append(wh.wh_input_stock_loc_id.id)
-            qty += self.with_context(location=locs).qty_available
-        self.qty_available_input_loc = qty
-
-    @api.one
-    def _get_in_production_stock(self):
-        if self.product_variant_ids:
-            moves = self.env["stock.move"].search([('product_id', 'in',
-                                                    self.product_variant_ids.ids),
-                                                    ('purchase_line_id', '!=',
-                                                    False),
-                                                    ('picking_id', '=', False),
-                                                    ('state', '!=', 'cancel')])
-
+        for product in self:
+            locs = []
             qty = 0.0
-            for move in moves:
-                qty += move.product_uom_qty
-            self.qty_in_production = qty
-        else:
-            self.qty_in_production = 0.0
+            for wh in self.env["stock.warehouse"].search([]):
+                locs.append(wh.wh_input_stock_loc_id.id)
+                qty += product.with_context(location=locs).qty_available
+            product.qty_available_input_loc = qty
 
-    @api.one
+    @api.multi
+    def _get_in_production_stock(self):
+        for product in self:
+            if product.product_variant_ids:
+                moves = self.env["stock.move"].search([('product_id', 'in', product.product_variant_ids.ids),
+                                                       ('purchase_line_id', '!=', False),
+                                                       ('picking_id', '=', False),
+                                                       ('state', '!=', 'cancel')])
+                qty = 0.0
+                for move in moves:
+                    qty += move.product_uom_qty
+                product.qty_in_production = qty
+            else:
+                product.qty_in_production = 0.0
+
+    @api.multi
     def _stock_conservative(self):
-        pack_stock = 0
-        first_subproduct = True
-        product_product_obj = self.env['product.product'].search([('product_tmpl_id', '=', self.id)])
-        if product_product_obj.pack_line_ids:
-            for subproduct in product_product_obj.pack_line_ids:
-                subproduct_quantity_next = subproduct.quantity
-                if subproduct_quantity_next:
-                    result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
-                    subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
-                    pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
-                    if first_subproduct:
-                        pack_stock = pack_stock_next
-                        first_subproduct = False
-                    else:
-                        if pack_stock_next < pack_stock:
+        for product in self:
+            pack_stock = 0
+            first_subproduct = True
+            product_product_obj = self.env['product.product'].search([('product_tmpl_id', '=', product.id)])
+            if product_product_obj.pack_line_ids:
+                for subproduct in product_product_obj.pack_line_ids:
+                    subproduct_quantity_next = subproduct.quantity
+                    if subproduct_quantity_next:
+                        result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
+                        subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
+                        pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
+                        if first_subproduct:
                             pack_stock = pack_stock_next
-            self.virtual_stock_conservative = pack_stock
-        else:
-            self.virtual_stock_conservative = self.qty_available - self.outgoing_qty - \
-                                              self.qty_available_wo_wh - self.qty_available_input_loc
+                            first_subproduct = False
+                        else:
+                            if pack_stock_next < pack_stock:
+                                pack_stock = pack_stock_next
+                product.virtual_stock_conservative = pack_stock
+            else:
+                product.virtual_stock_conservative = product.qty_available - product.outgoing_qty - \
+                                                  product.qty_available_wo_wh - product.qty_available_input_loc
 
-    @api.one
+    @api.multi
     def _get_avail_conservative(self):
-        pack_stock = 0
-        first_subproduct = True
-        product_product_obj = self.env['product.product'].search([('product_tmpl_id', '=', self.id)])
-        if product_product_obj.pack_line_ids:
-            for subproduct in product_product_obj.pack_line_ids:
-                subproduct_quantity_next = subproduct.quantity
-                if subproduct_quantity_next:
-                    result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
-                    subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
-                    pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
-                    if first_subproduct:
-                        pack_stock = pack_stock_next
-                        first_subproduct = False
-                    else:
-                        if pack_stock_next < pack_stock:
+        for product in self:
+            pack_stock = 0
+            first_subproduct = True
+            product_product_obj = self.env['product.product'].search([('product_tmpl_id', '=', product.id)])
+            if product_product_obj.pack_line_ids:
+                for subproduct in product_product_obj.pack_line_ids:
+                    subproduct_quantity_next = subproduct.quantity
+                    if subproduct_quantity_next:
+                        result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
+                        subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
+                        pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
+                        if first_subproduct:
                             pack_stock = pack_stock_next
-            self.virtual_available_wo_incoming = pack_stock
-        else:
-            self.virtual_available_wo_incoming = self.qty_available - self.outgoing_qty
+                            first_subproduct = False
+                        else:
+                            if pack_stock_next < pack_stock:
+                                pack_stock = pack_stock_next
+                product.virtual_available_wo_incoming = pack_stock
+            else:
+                product.virtual_available_wo_incoming = product.qty_available - product.outgoing_qty
 
     qty_available_wo_wh = fields.\
         Float(string="Qty. on kitchen", compute="_get_no_wh_internal_stock",
@@ -137,39 +140,41 @@ class ProductTemplate(models.Model):
               readonly=True,
               digits=dp.get_precision('Product Unit of Measure'))
 
-    @api.one
+    @api.multi
     def _get_outgoing_picking_qty(self):
-        moves = self.env['stock.move'].search(
-            [('product_id', 'in', self.product_variant_ids.ids),
-             ('state', 'in', ('confirmed', 'assigned')),
-             ('picking_id.picking_type_code', '=', 'outgoing'),
-             ('group_id.sale_id', '!=', False)])
-        self.outgoing_picking_reserved_qty = sum(moves.mapped(
-            'product_uom_qty'))
+        for product in self:
+            moves = self.env['stock.move'].search(
+                [('product_id', 'in', product.product_variant_ids.ids),
+                 ('state', 'in', ('confirmed', 'assigned')),
+                 ('picking_id.picking_type_code', '=', 'outgoing'),
+                 ('group_id.sale_id', '!=', False)])
+            product.outgoing_picking_reserved_qty = sum(moves.mapped(
+                'product_uom_qty'))
 
 
 class ProductProduct(models.Model):
 
     _inherit = "product.product"
 
-    @api.one
+    @api.multi
     def _stock_conservative(self):
-        pack_stock = 0
-        first_subproduct = True
-        if self.pack_line_ids:
-            for subproduct in self.pack_line_ids:
-                subproduct_quantity_next = subproduct.quantity
-                if subproduct_quantity_next:
-                    result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
-                    subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
-                    pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
-                    if first_subproduct:
-                        pack_stock = pack_stock_next
-                        first_subproduct = False
-                    else:
-                        if pack_stock_next < pack_stock:
+        for product in self:
+            pack_stock = 0
+            first_subproduct = True
+            if product.pack_line_ids:
+                for subproduct in product.pack_line_ids:
+                    subproduct_quantity_next = subproduct.quantity
+                    if subproduct_quantity_next:
+                        result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
+                        subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
+                        pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
+                        if first_subproduct:
                             pack_stock = pack_stock_next
-            self.virtual_stock_conservative = pack_stock
-        else:
-            self.virtual_stock_conservative = self.qty_available - self.outgoing_qty - \
-                                              self.qty_available_wo_wh - self.qty_available_input_loc
+                            first_subproduct = False
+                        else:
+                            if pack_stock_next < pack_stock:
+                                pack_stock = pack_stock_next
+                product.virtual_stock_conservative = pack_stock
+            else:
+                product.virtual_stock_conservative = product.qty_available - product.outgoing_qty - \
+                                                  product.qty_available_wo_wh - product.qty_available_input_loc

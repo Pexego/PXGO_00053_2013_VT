@@ -84,7 +84,7 @@ FROM   sale_order_line sol
                                          stock.parent_right)
                    GROUP  BY product_id) stck
                ON sol.product_id = stck.product_id
-WHERE  q_kt.qty > 0 and sol.id in (select sale_line_id from procurement_order po where po.state not in ('done', 'cancel'))
+WHERE  q_kt.qty > 0
 GROUP BY sol.id, sol.name, sol.order_partner_id, sol.product_uom_qty,
          sol.product_uom, sol.price_unit, sol.discount, sol.company_id,
          sol.salesman_id, sol.state, sol.order_id, q_kt.product_id, q_kt.qty, stck.qty)

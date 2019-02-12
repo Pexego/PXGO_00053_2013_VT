@@ -23,7 +23,7 @@ import odoo.addons.decimal_precision as dp
 
 
 class SaleOrderLine(models.Model):
-    _inherit = 'sale.order.line'
+    _inherit = "sale.order.line"
 
     qty_available = fields.\
         Float('Qty available', readonly=True,
@@ -49,8 +49,7 @@ class SaleOrderLine(models.Model):
 
 
 class SaleOrder(models.Model):
-
-    _inherit = 'sale.order'
+    _inherit = "sale.order"
 
     @api.multi
     @api.returns('self', lambda value: value.id)

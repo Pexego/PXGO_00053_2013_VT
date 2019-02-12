@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,company_id:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_company_id
 msgid "Company"
 msgstr "Compañía"
 
@@ -26,100 +26,127 @@ msgid "Sales Order Line"
 msgstr "Línea pedido de venta"
 
 #. module: sale_display_stock
-#: field:product.product,outgoing_picking_reserved_qty:0
-#: field:product.template,outgoing_picking_reserved_qty:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_outgoing_picking_reserved_qty
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_outgoing_picking_reserved_qty
 msgid "Outgoing picking reserved qty"
 msgstr "Stock en albaranes"
 
 #. module: sale_display_stock
-#: field:product.product,property_account_creditor_price_difference:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_property_account_creditor_price_difference
 msgid "Price Difference Account"
 msgstr "Cuenta diferencias precios"
 
 #. module: sale_display_stock
-#: field:product.product,qty_available_wo_wh:0
-#: field:product.template,qty_available_wo_wh:0
-#: field:sale.order.line,qty_available_wo_wh:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_qty_available_wo_wh
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_wo_wh
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_qty_available_wo_wh
 msgid "Qty. on kitchen"
 msgstr "Stock cocina"
 
 #. module: sale_display_stock
-#: field:product.product,qty_available_external:0
-#: field:product.template,qty_available_external:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_virtual_stock_conservative
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_virtual_stock_conservative
+#: model:ir.ui.view,arch_db:sale_display_stock.view_template_add_stocks
+msgid "Virtual Stock Conservative"
+msgstr "Stock disponible"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_reservation_count
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_reservation_count
+#: model:ir.ui.view,arch_db:sale_display_stock.view_template_add_stocks
+msgid "# Sales"
+msgstr "Stock en pedidos"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_qty_available
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_qty_available
+#: model:ir.ui.view,arch_db:sale_display_stock.view_template_add_stocks
+msgid "Quantity On Hand"
+msgstr "Stock real"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_qty_available
+msgid "Qty available"
+msgstr "Stock disp."
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_qty_available_external
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_external
 msgid "Qty. in external loc."
 msgstr "Stock alm. externo"
 
 #. module: sale_display_stock
-#: field:product.template,qty_in_production:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_in_production
 msgid "Qty. in production"
 msgstr "Fabricando"
 
 #. module: sale_display_stock
-#: field:product.template,qty_available_input_loc:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_input_loc
 msgid "Qty. on input"
 msgstr "Stock playa"
 
 #. module: sale_display_stock
-#: field:sale.order.line,incoming_qty:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_incoming_qty
 msgid "Incoming qty."
 msgstr "Stock ent."
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,discount:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_discount
 msgid "Discount"
 msgstr "Descuento"
 
 #. module: sale_display_stock
-#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
 msgid "Group By"
 msgstr "Agrupar por"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,id:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_id
 msgid "ID"
 msgstr "ID"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,name:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_name
 msgid "Name"
 msgstr "Nombre"
 
 #. module: sale_display_stock
-#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
-#: field:sale.order.line.report,order_id:0
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_order_id
 msgid "Order"
 msgstr "Pedido"
 
 #. module: sale_display_stock
-#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
-#: field:sale.order.line.report,partner_id:0
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_partner_id
 msgid "Partner"
 msgstr "Cliente"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,price_unit:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_price_unit
 msgid "Price unit"
 msgstr "Precio unidad"
 
 #. module: sale_display_stock
 #: model:ir.model,name:sale_display_stock.model_product_product
-#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
-#: field:sale.order.line.report,product_id:0
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_id
 msgid "Product"
 msgstr "Producto"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,qty_kitchen:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_kitchen
 msgid "Qty in kitchen"
 msgstr "Stock cocina"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,product_qty:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_qty
 msgid "Quantity"
 msgstr "Cantidad"
 
 #. module: sale_display_stock
-#: view:sale.order.line.report:sale_display_stock.sale_order_line_report_tree
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_tree
 msgid "Sale line report"
 msgstr "Informe de lineas de venta"
 
@@ -130,33 +157,33 @@ msgid "Sale lines report"
 msgstr "Informe de lineas de venta"
 
 #. module: sale_display_stock
-#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
-#: field:sale.order.line.report,salesman_id:0
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_salesman_id
 msgid "Salesperson"
 msgstr "Comercial"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,state:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_state
 msgid "State"
 msgstr "Estado"
 
 #. module: sale_display_stock
-#: view:sale.order.line:sale_display_stock.sale_order_line_report_filter
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
 msgid "Status"
 msgstr "Estado"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,qty_stock:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_stock
 msgid "Stock qty"
 msgstr "Stock"
 
 #. module: sale_display_stock
-#: field:sale.order.line.report,uom:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_uom
 msgid "UoM"
 msgstr "UdM"
 
 #. module: sale_display_stock
-#: field:product.product,virtual_available_wo_incoming:0
-#: field:product.template,virtual_available_wo_incoming:0
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_virtual_available_wo_incoming
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_virtual_available_wo_incoming
 msgid "Virtual avail. conservative"
 msgstr "Stock disponible"
