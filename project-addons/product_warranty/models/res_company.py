@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -23,7 +22,7 @@
 from odoo import fields, models
 
 
-class res_company(models.Model):
+class ResCompany(models.Model):
 
     _inherit = "res.company"
 
