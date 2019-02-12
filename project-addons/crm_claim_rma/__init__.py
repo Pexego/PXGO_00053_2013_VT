@@ -19,10 +19,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from . import models
 from . import wizard
-from . import crm_claim_rma
-from . import account_invoice
-from . import stock
 from . import report
-from . import stock_reserve
-from . import mrp_repair
+
