@@ -53,13 +53,8 @@ class SaleOrder(models.Model):
 
     @api.multi
     @api.returns('self', lambda value: value.id)
-    def message_post(
-        self, thread_id, body='', subject=None, type='notification',
-        subtype=None, parent_id=False, attachments=None, context=None,
-        content_subtype='html', **kwargs):
-        context = dict(context)
+    def message_post(self, **kwargs):
+        context = dict(self.env.context)
         context.pop('mail_post_autofollow', False)
-        return super(SaleOrder, self).message_post(
-            thread_id, body, subject, type,
-            subtype, parent_id, attachments, context, content_subtype,
-            **kwargs)
+        self = self.with_context(context)
+        return super(SaleOrder, self).message_post(**kwargs)
