@@ -61,7 +61,7 @@ class rappel_calculated(models.Model):
                     account_id = rappel_product.property_account_income
                     if not account_id:
                         account_id = rappel_product.categ_id. \
-                            property_account_income_categ
+                            property_account_income_categ_id
                     taxes_ids = rappel_product.taxes_id
                     fpos = rp.partner_id.property_account_position_id or False
                     if fpos:
