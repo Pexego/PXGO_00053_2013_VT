@@ -437,6 +437,8 @@ class ResPartner(models.Model):
 
     @api.constrains('child_ids', 'is_company', 'active')
     def check_unique_child_ids(self):
+        if self._context.get('install_mode'):
+            return
         if self.is_company and self.active:
             if not self.child_ids:
                 raise exceptions. \
@@ -444,6 +446,8 @@ class ResPartner(models.Model):
 
     @api.constrains('vat', 'is_company', 'supplier', 'customer', 'active')
     def check_unique_vat(self):
+        if self._context.get('install_mode'):
+            return
         if self.is_company and self.active:
             ids = self.search([('vat', '=', self.vat),
                                ('is_company', '=', True),
