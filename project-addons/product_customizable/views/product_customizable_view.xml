@@ -13,7 +13,7 @@
             </field>
         </record>
 
-        <menuitem id="menu_products_customizable" action="action_product_customizable" parent="base.menu_product" groups="base.group_no_one" sequence="2"/>
+        <menuitem id="menu_products_customizable" action="action_product_customizable" parent="base.menu_product" groups="base.group_user" sequence="2"/>
 
     </data>
 </openerp>
