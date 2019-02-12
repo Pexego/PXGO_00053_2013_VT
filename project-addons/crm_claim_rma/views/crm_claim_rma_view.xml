@@ -559,6 +559,9 @@
     <menuitem action="mrp_repair.action_repair_order_tree" id="mrp_repair.menu_repair_order" parent="crm_claim.menu_aftersale" groups="mrp.group_mrp_user" name="Repair Orders" sequence="50"/>
 
     <menuitem id="sat_config" name="Config"
+        parent="menu_sat" sequence="3" />
+
+    <menuitem id="sat_report" name="Reporting"
         parent="menu_sat" sequence="2" />
 
     <menuitem id="crm_claim.menu_config_claim" name="Claim"

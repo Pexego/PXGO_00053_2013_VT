@@ -35,11 +35,11 @@ class CrmClaimReport(models.Model):
     _description = "CRM Claim cost Report"
 
     user_id = fields.Many2one('res.users', 'User', readonly=True)
-    section_id = fields.Many2one('crm.case.section', 'Section', readonly=True)
+    team_id = fields.Many2one('crm.team', 'Team', readonly=True)
     company_id = fields.Many2one('res.company', 'Company', readonly=True)
     create_date = fields.Datetime('Create Date', readonly=True, index=True)
     claim_date = fields.Datetime('Claim Date', readonly=True)
-    delay_close = fields.Float('Delay to close', digits=(16, 2),readonly=True,
+    delay_close = fields.Float('Delay to close', digits=(16, 2), readonly=True,
                                group_operator="avg",
                                help="Number of Days to close the case")
     stage_id = fields.Many2one ('crm.claim.stage', 'Stage', readonly=True)
@@ -76,7 +76,7 @@ class CrmClaimReport(models.Model):
                     c.date_deadline as date_deadline,
                     c.user_id,
                     c.stage_id,
-                    c.section_id,
+                    c.team_id,
                     c.partner_id,
                     c.company_id,
                     c.categ_id,
@@ -92,7 +92,7 @@ class CrmClaimReport(models.Model):
                 from
                     crm_claim c
                 group by c.date,\
-                        c.user_id,c.section_id, c.stage_id,c.claim_type,\
+                        c.user_id,c.team_id, c.stage_id,c.claim_type,\
                         c.categ_id,c.partner_id,c.company_id,c.create_date,
                         c.priority,c.type_action,c.date_deadline,c.date_closed,c.id
             )""")

@@ -82,7 +82,7 @@
             <field name="team_id" ref="section_after_sales_service"/>
         </record>
 
-    <record model="crm.claim.category" id="crm_claim.stage_claim5">
+    <record model="crm.claim.category" id="stage_claim5">
             <field name="name">In Progress</field>
             <field name="sequence">27</field>
             <field name="case_default" eval="True"/>

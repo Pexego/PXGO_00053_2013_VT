@@ -1103,9 +1103,9 @@ msgid "Search Claims"
 msgstr "Buscar reclamaciones"
 
 #. module: crm_claim_rma
-#: field:crm.claim.cost.report,section_id:0
-msgid "Section"
-msgstr "Sección"
+#: field:crm.claim.cost.report,team_id:0
+msgid "Team"
+msgstr "Equipo"
 
 #. module: crm_claim_rma
 #: help:claim.line,substate_id:0
