@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,15 +15,15 @@
 #
 ##############################################################################
 
-from openerp import models, tools
+from odoo import models, tools, api
 
 
 class ReportAccountTreasuryForecastAnalysis(models.Model):
-    _inherit = "report.account.treasury.forecast.analysis"
+    _inherit = 'report.account.treasury.forecast.analysis'
 
+    @api.model_cr
     def init(self):
-        tools.drop_view_if_exists(self._cr,
-                                  'report_account_treasury_forecast_analysis')
+        tools.drop_view_if_exists(self._cr, 'report_account_treasury_forecast_analysis')
         self._cr.execute("""
             create or replace view report_account_treasury_forecast_analysis
                 as (

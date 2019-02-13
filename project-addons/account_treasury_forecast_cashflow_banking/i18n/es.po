@@ -26,8 +26,8 @@ msgid "Cash-Flow Records"
 msgstr "Registros de entrada y salida de caja"
 
 #. module: account_treasury_forecast_cashflow_banking
-#: field:account.treasury.forecast.cashflow,payment_mode_id:0
-#: field:account.treasury.forecast.cashflow.template,payment_mode_id:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow_banking.field_account_treasury_forecast_cashflow_payment_mode_id
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow_banking.field_account_treasury_forecast_cashflow_template_payment_mode_id
 msgid "Payment Mode"
 msgstr "Modo de pago"
 
