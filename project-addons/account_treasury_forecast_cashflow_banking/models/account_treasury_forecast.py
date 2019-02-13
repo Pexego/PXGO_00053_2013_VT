@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,22 +15,23 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class AccountTreasuryForecastCashflow(models.Model):
     _inherit = 'account.treasury.forecast.cashflow'
 
-    payment_mode_id = fields.Many2one("account.payment.mode", string="Payment Mode")
+    payment_mode_id = fields.Many2one('account.payment.mode', string="Payment Mode")
 
 
 class AccountTreasuryForecast(models.Model):
     _inherit = 'account.treasury.forecast'
 
-    @api.one
+    @api.multi
     def calculate_cashflow(self):
         result = super(AccountTreasuryForecast, self).calculate_cashflow()
-        for cashflow_o in self.cashflow_ids:
-            payment_mode_id = cashflow_o.template_line_id.payment_mode_id.id
-            cashflow_o.payment_mode_id = payment_mode_id
+        for record in self:
+            for cashflow_o in record.cashflow_ids:
+                payment_mode_id = cashflow_o.template_line_id.payment_mode_id.id
+                cashflow_o.payment_mode_id = payment_mode_id
         return result

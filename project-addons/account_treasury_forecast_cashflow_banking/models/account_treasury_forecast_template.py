@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,10 +15,10 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from odoo import models, fields
 
 
 class AccountTreasuryForecastCashflowTemplate(models.Model):
     _inherit = 'account.treasury.forecast.cashflow.template'
 
-    payment_mode_id = fields.Many2one("account.payment.mode", string="Payment Mode")
+    payment_mode_id = fields.Many2one('account.payment.mode', string="Payment Mode")
