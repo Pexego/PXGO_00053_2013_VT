@@ -152,7 +152,7 @@ class CrmPhonecall(models.Model):
             'name': self.name or False,
             'description': self.description or False,
             'categ_id': False,
-            'section_id': False,
+            'team_id': False,
             'opportunity_id': False,
             'duration': (duration.seconds / float(60)),
             'state': 'done',

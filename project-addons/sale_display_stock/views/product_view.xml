@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_template_add_stocks" model="ir.ui.view">
+        <field name="name">product.template.stock.add.stocks</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.view_template_property_form"/>
+        <field name="arch" type="xml">
+            <group name="operations" position="before">
+                <group string="Stock and Expected Variations" attrs="{'invisible': [('type', '=', 'service')]}" groups="base.group_user">
+                    <field name="qty_available" string="Quantity On Hand"/>
+                    <field name="reservation_count" string="# Sales"/>
+                    <field name="outgoing_picking_reserved_qty"/>
+                    <field name="virtual_stock_conservative" string="Virtual Stock Conservative"/>
+                    <field name="qty_available_wo_wh"/>
+                    <field name="qty_available_input_loc"/>
+                    <field name="qty_available_external"/>
+                    <field name="incoming_qty"/>
+                    <field name="qty_in_production"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+    <!--record id="view_template_property_form" model="ir.ui.view">
+        <field name="name">product.template.stock.property.form.inherit</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product_virtual_stock_conservative.view_template_form_add_conservative_qty"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@string='Stock and Expected Variations']/div[2]" position="replace"/>
+            <label for="incoming_qty" position="replace"/>
+            <field name="virtual_stock_conservative" position="after">
+                <field name="qty_available_wo_wh"/>
+                <field name="qty_available_input_loc"/>
+                <field name="qty_available_external"/>
+                <field name="incoming_qty"/>
+                <field name="qty_in_production"/>
+            </field>
+            <field name="virtual_available" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <button name="%(stock.action_view_change_product_quantity)d" position="replace"/>
+        </field>
+    </record-->
+</odoo>

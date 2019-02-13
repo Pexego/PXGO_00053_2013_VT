@@ -168,7 +168,7 @@ class CrmClaimRma(models.Model):
         if partner_id:
             partner = self.pool["res.partner"].browse(cr, uid, partner_id)
             res['value']['delivery_address_id'] = partner_id
-            res['value']['section_id'] = partner.section_id   # Get section_id from res.partner
+            res['value']['team_id'] = partner.team_id   # Get team_id from res.partner
             res['value']['country'] = partner.country_id      # Get country_id from res.partner
             if partner.user_id:
                 res['value']['comercial'] = partner.user_id.id
@@ -220,7 +220,7 @@ class CrmClaimRma(models.Model):
                     claim_obj.partner_id.property_product_pricelist.currency_id.id,
                 'company_id': claim_obj.company_id.id,
                 'user_id': uid,
-                'section_id': claim_obj.partner_id.section_id.id,
+                'team_id': claim_obj.partner_id.team_id.id,
                 'claim_id': claim_obj.id,
                 'type': 'out_refund',
                 'payment_term_id': claim_obj.partner_id.property_payment_term_id.id,
@@ -243,18 +243,18 @@ class CrmClaimRma(models.Model):
                     if not account_id:
                         account_id = \
                             line.product_id.categ_id. \
-                            property_account_income_categ.id
+                            property_account_income_categ_id.id
                     else:
                         account_id = line.product_id. \
                             property_account_expense.id
                         if not account_id:
                             account_id = \
                                 line.product_id.categ_id. \
-                                property_account_expense_categ.id
+                                property_account_expense_categ_id.id
                 else:
                     prop = self.pool.get('ir.property'). \
                         get(cr, uid,
-                            'property_account_income_categ',
+                            'property_account_income_categ_id',
                             'product.category', context=context)
                     account_id = prop and prop.id or False
                 fiscal_position = claim_obj.partner_id. \

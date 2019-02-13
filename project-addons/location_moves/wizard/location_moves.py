@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -20,12 +19,12 @@
 ##############################################################################
 
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
-class location_moves(models.TransientModel):
+class LocationMoves(models.TransientModel):
 
-    _name = 'location.moves'
+    _name = "location.moves"
 
     product_id = fields.Many2one('product.product', 'Product', required=True)
     qty = fields.Float('Qty', required=True)
