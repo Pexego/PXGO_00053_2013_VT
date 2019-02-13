@@ -35,8 +35,6 @@ class WizCreateInvoice(models.TransientModel):
     @api.multi
     def button_create_inv(self):
         invoice_obj = self.env['account.invoice']
-        import ipdb
-        ipdb.set_trace()
         for record in self:
             values = {}
             values['name'] = ('Treasury: ' + record.description + '/ Amount: ' + str(record.amount))
