@@ -12,16 +12,16 @@
         </field>
     </record>
 
-    <!--TODO:Migrar<record id="view_picking__search" model="ir.ui.view">
+    <record id="view_picking__search" model="ir.ui.view">
         <field name="name">crm_claim_rma.picking_in_search</field>
         <field name="model">stock.picking</field>
         <field name="inherit_id" ref="stock.view_picking_internal_search" />
         <field name="arch" type="xml">
-            <filter string="Picking Type" domain="[]" context="{'group_by':'picking_type_id'}" position="after">
+            <filter name="picking_type" domain="[]" context="{'group_by':'picking_type_id'}" position="after">
                 <separator/>
                 <filter string="RMA" icon="terp-accessories-archiver-minus" domain="[('claim_id', '!=', 'False')]" />
                 <field name="claim_id" string="RMA" invisible="True"/>
             </filter>
         </field>
-    </record>-->
+    </record>
 </odoo>

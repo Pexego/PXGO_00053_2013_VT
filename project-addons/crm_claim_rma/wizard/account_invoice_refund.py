@@ -26,20 +26,16 @@ class AccountInvoiceRefund(models.TransientModel):
 
     _inherit = "account.invoice.refund"
 
-    def compute_refund(self, cr, uid, ids, mode='refund', context=None):
-        if context is None:
-            context = {}
+    def compute_refund(self, mode='refund'):
+        context = self.env.context
         if context.get('invoice_ids', []) and context.get('invoice_ids')[0]:
             context['active_ids'] = context.get('invoice_ids')
         elif context['active_model'] == u'crm.claim':
             raise exceptions.UserError(_('The claim not have invoices to refund.'))
-        return super(AccountInvoiceRefund, self).compute_refund(
-            cr, uid, ids, mode=mode, context=context)
+        return super(AccountInvoiceRefund, self).compute_refund(mode=mode)
 
-    def _get_description(self, cr, uid, context=None):
-        if context is None:
-            context = {}
-        description = context.get('description') or ''
+    def _get_description(self):
+        description = self.env.context.get('description') or ''
         return description
 
     description = fields.Text(default=_get_description)

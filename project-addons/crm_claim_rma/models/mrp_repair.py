@@ -25,13 +25,14 @@ class MrpRepair(models.Model):
 
     _inherit = "mrp.repair"
 
-    @api.one
+    @api.multi
     @api.depends('claim_line_ids')
     def _get_claim_id(self):
-        if self.claim_line_ids:
-            self.claim_id = self.claim_line_ids[0].claim_id.id
-        else:
-            self.claim_id = False
+        for repair in self:
+            if repair.claim_line_ids:
+                repair.claim_id = repair.claim_line_ids[0].claim_id.id
+            else:
+                repair.claim_id = False
 
     claim_id = fields.Many2one("crm.claim", "Claim", compute=_get_claim_id,
                                readonly=True, store=True)

@@ -8,8 +8,10 @@
             <form string="Invoice repairs">
                 <separator string="Repairs" colspan="4"/>
                 <field name="repair_ids" colspan="4" nolabel="1"/>
-                <button string="Invoice" name="action_invoice" type="object" icon="gtk-ok"/>
-                <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                <footer>
+                    <button string="Invoice" name="action_invoice" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>

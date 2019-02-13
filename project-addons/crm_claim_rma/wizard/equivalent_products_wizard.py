@@ -19,7 +19,7 @@
 ##############################################################################
 
 
-from odoo import fields, models
+from odoo import fields, models, api
 
 
 class EquivalentProductsWizard(models.TransientModel):
@@ -28,8 +28,8 @@ class EquivalentProductsWizard(models.TransientModel):
     _description = "Wizard for change products in claim."
 
     product_tag_ids = fields.Many2many("product.tag",
-                                    "product_tag_wzf_equivalent_rel",
-                                    "wizard_id", "tag_id", "Tags")
+                                       "product_tag_wzf_equivalent_rel",
+                                       "wizard_id", "tag_id", "Tags")
     product_id = fields.Many2one('product.product', 'Product selected')
     line_id = fields.Many2one('claim.line', 'Line')
     real_stock = fields.Float("Real Stock", readonly=True)
@@ -42,28 +42,19 @@ class EquivalentProductsWizard(models.TransientModel):
             res['product_id'] = claim_line_id.product_id.id
             res['real_stock'] = claim_line_id.product_id.qty_available
             res['virtual_stock'] = claim_line_id.product_id.virtual_available
-            res['product_tag_ids'] = \
-                [(6, 0, claim_line_id.product_id.tag_ids.ids)]
+            res['product_tag_ids'] = [(6, 0, claim_line_id.product_id.tag_ids.ids)]
         return res
 
-    def onchange_product_id(self, cr, uid, ids, product_id, context=None):
-        if not product_id:
-            return {}
-        prod_obj = self.pool.get('product.product')
-        prod_id = prod_obj.browse(cr, uid, product_id)
-        virtual_stock = prod_id.virtual_available
-        real_stock = prod_id.qty_available
-        return {
-            'value': {'virtual_stock': virtual_stock,
-                      'real_stock': real_stock}
-        }
+    @api.onchange('product_id')
+    @api.multi
+    def onchange_product_id(self):
+        for prod in self:
+            self.virtual_stock = prod.virtual_available
+            self.real_stock = prod.qty_available
 
-    def select_product(self, cr, uid, ids, context=None):
-        wiz = self.browse(cr, uid, ids[0], context)
+    @api.multi
+    def select_product(self):
+        for wiz in self:
+            wiz.equivalent_product_id = wiz.product_id.id
 
-        order_line_obj = self.pool.get('claim.line')
-        order_line_obj.write(cr, uid,
-                             [wiz.line_id.id],
-                             {'equivalent_product_id': wiz.product_id.id},
-                             context)
 

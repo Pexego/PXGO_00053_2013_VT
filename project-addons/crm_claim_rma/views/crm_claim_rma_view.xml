@@ -204,7 +204,7 @@
     <field name="inherit_id" ref="crm_claim.crm_case_claims_tree_view"/>
     <field name="arch" type="xml">
         <field name="stage_id" position="after">
-            <!--TODO: Migrar<field name="section_id" />-->
+            <field name="team_id" />
             <field name="claim_type" />
             <field name="rma_cost" sum="Total cost"/>
         </field>
@@ -231,15 +231,15 @@
     <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
     <field name="arch" type="xml">
         <field name="partner_id" position="replace">
-            <field name="partner_id" string="Partner" on_change="onchange_partner_id(partner_id)" required="1" domain="[('is_company', '=', True)]"/>
+            <field name="partner_id" string="Partner" required="1" domain="[('is_company', '=', True)]"/>
             <field name="invoice_type"/>
-            <field name="invoice_id" on_change="onchange_invoice_id(invoice_id,warehouse_id,context)" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
+            <field name="invoice_id" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
             <group colspan="4" col="4">
                 <field name="invoice_method" attrs="{'invisible': [('invoice_type', '!=', 'invoice')]}" colspan="2"/>
                 <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" icon="gtk-execute" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>
             </group>
         </field>
-        <!--TODO:Migrar<page string="Follow Up" position="before">
+        <xpath expr="/form/sheet/group[3]/notebook/page[2]" position="before">
             <page string="Product Return">
                 <group name="Product Return">
                     <separator string="Product Return" colspan="4"/>
@@ -284,7 +284,7 @@
                 <separator colspan="2" string="Receptions / Deliveries"/>
                 <field name="picking_ids" colspan="4" readonly="1"/>
             </page>
-       </page>-->
+       </xpath>
     </field>
 </record>
 
@@ -365,7 +365,7 @@
                  <field name="supplier_number" attrs="{'invisible': [('claim_type','in', ['customer',])]}"/>
                 <field name="date"/>
             </field>
-            <!--TODO: Migrar<xpath expr="//sheet[@string='Claims']/group[1]" position="inside">
+            <xpath expr="/form/sheet/group[1]" position="inside">
                 <div class="oe_right oe_button_box" name="buttons">
                     <button class="oe_stat_button" name="%(act_crm_claim_rma_sale_orders)d" type="action"
                             string="Quotations and Sales"
@@ -403,7 +403,7 @@
                             context="{'search_default_claim_id': active_id,'search_default_user_id':False}"
                            />
                 </div>
-            </xpath>-->
+            </xpath>
         </field>
 </record>
 
@@ -417,9 +417,9 @@
         <field name="name" position="before">
             <field name="number"/>
         </field>
-        <!--TODO: Migrar<filter string="Stage" icon="terp-stage" domain="[]" context="{'group_by':'stage_id'}" position="before">
-            <filter string="Sales Team" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by':'section_id'}"/>
-        </filter>-->
+        <filter context="{'group_by':'stage_id'}" position="before">
+            <filter string="Sales Team" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by':'team_id'}"/>
+        </filter>
     </field>
 </record>
 
@@ -480,14 +480,16 @@
 
 
 <!-- Menu -->
-    <!--TODO: Migrar<record model="ir.actions.act_window" id="crm_claim.crm_case_categ_claim0">
+    <record model="ir.actions.act_window" id="crm_claim.crm_case_categ_claim0">
+        <field name="name">Customer Claims</field>
+        <field name="res_model">crm.claim</field>
         <field name="context">{"stage_type":'claim', "claim_type": 'customer'}</field>
         <field name="domain" eval="[('claim_type','=','customer')]" />
     </record>
 
 
     <menuitem name="Customer claims" id="crm_claim.menu_crm_case_claims"
-        parent="crm_claim.menu_aftersale" action="crm_claim.crm_case_categ_claim0" sequence="1"/>-->
+        parent="crm_claim.menu_aftersale" action="crm_claim.crm_case_categ_claim0" sequence="1"/>
 
     <record model="ir.actions.act_window" id="crm_case_categ_claim_supplier">
         <field name="name">Claims</field>

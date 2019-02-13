@@ -11,11 +11,13 @@
                         <!--<field name="tag_ids" widget="many2many_tags" domain="[('wiz_id', '=', active_id)]" on_change="onchange_tags(tag_ids)" />-->
                         <field name="product_tag_ids" widget="many2many_tags"/>
                         <!--<field name="product_id" required="1" on_change="onchange_product_id(product_id, product_ids)"/>-->
-                        <field name="product_id" required="1" on_change="onchange_product_id(product_id)"/>
+                        <field name="product_id" required="1"/>
                         <field name="real_stock"/>
                         <field name="virtual_stock"/>
-                        <button string="Select product" name="select_product" type="object" icon="gtk-ok"/>
-                        <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                        <footer>
+                            <button string="Select product" name="select_product" type="object"/>
+                            <button string="Cancel" special="cancel"/>
+                        </footer>
                         <!--<field name="product_ids" colspan="4" select="1" nolabel="1">
                             <tree string="Products">
                                 <field name="default_code"/>

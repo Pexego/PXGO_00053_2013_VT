@@ -42,8 +42,8 @@ class CrmClaimReport(models.Model):
     delay_close = fields.Float('Delay to close', digits=(16, 2), readonly=True,
                                group_operator="avg",
                                help="Number of Days to close the case")
-    stage_id = fields.Many2one ('crm.claim.stage', 'Stage', readonly=True)
-    categ_id = fields.Many2one('crm.case.categ', 'Category', readonly=True)
+    stage_id = fields.Many2one('crm.claim.stage', 'Stage', readonly=True)
+    categ_id = fields.Many2one('crm.claim.category', 'Category', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
     priority = fields.Selection(AVAILABLE_PRIORITIES, 'Priority')
     type_action = fields.Selection([('correction', 'Corrective Action'),

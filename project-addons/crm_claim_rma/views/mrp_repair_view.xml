@@ -30,9 +30,9 @@
             <field name="name" position="before">
                 <field name="claim_id"/>
             </field>
-            <!--TODO:Migrar<filter string="Company" position="after">
+            <filter context="{'group_by':'company_id'}" position="after">
                 <filter string="Claim" icon="terp-go-home" domain="[]" context="{'group_by':'claim_id'}"/>
-            </filter>-->
+            </filter>
         </field>
     </record>
 </odoo>

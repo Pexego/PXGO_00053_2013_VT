@@ -8,8 +8,10 @@
         <field name="arch" type="xml">
             <form string="Make repair">
                 <field name="line_id" invisible="1"/>
-                <button string="Make" name="make" type="object" icon="gtk-ok"/>
-                <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                <footer>
+                    <button string="Make" name="make" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>

@@ -7,8 +7,10 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Send to supplier">
-                <button string="Send" name="create_lines" type="object" icon="gtk-ok"/>
-                <button string="Cancel" special="cancel" icon="gtk-cancel"/>
+                <footer>
+                    <button string="Send" name="create_lines" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
             </form>
         </field>
     </record>

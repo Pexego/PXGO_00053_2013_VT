@@ -22,6 +22,7 @@
 
 from odoo import api, fields, models, exceptions
 
+
 class StockPicking(models.Model):
 
     _inherit = "stock.picking"
@@ -61,7 +62,7 @@ class StockMove(models.Model):
                             rma_cost += (move.picking_type_code == u'outgoing') \
                             and (standard_price * qty) or 0.0
                         claim_obj.rma_cost = rma_cost
-                    elif  move.location_dest_id == loc_lost:
+                    elif move.location_dest_id == loc_lost:
                         standard_price = claim_line_obj.product_id.standard_price
                         rma_cost = claim_obj.rma_cost
                         rma_cost += (move.picking_type_code == u'incoming') \
@@ -70,16 +71,14 @@ class StockMove(models.Model):
 
         return res
 
-    def create(self, cr, uid, vals, context=None):
-        move_id = super(StockMove, self
-                        ).create(cr, uid, vals, context=context)
+    @api.model
+    def create(self, vals):
+        move_id = super(StockMove, self).create(vals)
         if vals.get('picking_id'):
             picking_obj = self.pool.get('stock.picking')
-            picking = picking_obj.browse(cr, uid, vals['picking_id'],
-                                         context=context)
+            picking = picking_obj.browse(vals['picking_id'])
             if picking.claim_id and picking.picking_type_code == u'incoming':
-                self.write(cr, uid, move_id, {'state': 'confirmed'},
-                           context=context)
+                self.state = 'confirmed'
         return move_id
 
     @api.multi

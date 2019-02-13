@@ -23,7 +23,4 @@ from odoo import models, fields
 class StockReservation(models.Model):
     _inherit = "stock.reservation"
 
-    claim_id = fields.Many2one(
-            'crm.claim',
-            string='Claim',
-            ondelete='cascade')
+    claim_id = fields.Many2one('crm.claim', string='Claim', ondelete='cascade')

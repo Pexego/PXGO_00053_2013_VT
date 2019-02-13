@@ -52,9 +52,7 @@ class SubstateSubstate(models.Model):
 
     active = fields.Boolean('Active', default=True)
     name = fields.Char('Sub state', required=True)
-    substate_descr = fields.Text(
-            'Description',
-            help="To give more information about the sub state")
+    substate_descr = fields.Text('Description', help="To give more information about the sub state")
 
 
 class ClaimLine(models.Model):
@@ -71,14 +69,14 @@ class ClaimLine(models.Model):
         'not_define': "Not Defined"}
 
     # Method to calculate total amount of the line : qty*UP
-    def _line_total_amount(self, cr, uid, ids, field_name, arg, context=None):
-        res = {}
-        for line in self.browse(cr, uid, ids, context=context):
-            res[line.id] = (line.unit_sale_price *
-                            line.product_returned_quantity)
-        return res
+    @api.multi
+    def _line_total_amount(self):
+        for line in self:
+            line.return_value = (line.unit_sale_price *
+                                 line.product_returned_quantity)
 
-    def copy_data(self, cr, uid, id, default=None, context=None):
+    @api.multi
+    def copy_data(self, default=None):
         if default is None:
             default = {}
         std_default = {
@@ -87,8 +85,7 @@ class ClaimLine(models.Model):
             'refund_line_id': False,
         }
         std_default.update(default)
-        return super(ClaimLine, self).copy_data(
-            cr, uid, id, default=std_default, context=context)
+        return super(ClaimLine, self).copy_data(default=std_default)
 
     @api.model
     def get_warranty_return_partner(self):
@@ -211,18 +208,15 @@ class ClaimLine(models.Model):
             selection=MOVE_STATE_SELECTION)
     repair_id = fields.Many2one('mrp.repair', 'Repair')
     repair_state = fields.Selection(related='repair_id.state',
-                                       selection = REPAIR_SELECTION,
-                                       string='repair state', readonly=True)
+                                    selection=REPAIR_SELECTION,
+                                    string='repair state', readonly=True)
     supplier_id = fields.Many2one('res.partner', 'Supplier')
 
-    supplier_line_id = fields.Many2one('claim.line',
-                                            'Supplier claim line')
-    original_line_id = fields.Many2one('claim.line',
-                                            'original claim line',
-                                            readonly=True)
+    supplier_line_id = fields.Many2one('claim.line', 'Supplier claim line')
+    original_line_id = fields.Many2one('claim.line', 'original claim line', readonly=True)
 
     claim_type = fields.Selection(related='claim_id.claim_type',
-                                     string='Claim type', readonly=True)
+                                  string='Claim type', readonly=True)
 
     move_in_supplier_state = fields.Selection(
             related='supplier_line_id.move_in_customer_state',
@@ -258,10 +252,8 @@ class ClaimLine(models.Model):
             partners = self.product_id.seller_ids
         else:
             self.supplier_id = False
-            partners = self.env['res.partner'].search([('supplier', '=',
-                                                        True)])
-        return {'domain': {'partner_id': [('id', 'in', [x.id for x in
-                                                        partners])]}}
+            partners = self.env['res.partner'].search([('supplier', '=', True)])
+        return {'domain': {'partner_id': [('id', 'in', [x.id for x in partners])]}}
 
     @staticmethod
     def warranty_limit(start, warranty_duration):
@@ -319,30 +311,31 @@ class ClaimLine(models.Model):
             context=context)
         return True
 
-    def auto_set_warranty(self, cr, uid, ids, context):
+    @api.multi
+    def auto_set_warranty(self):
         """ Set warranty automatically
         if the user has not himself pressed on 'Calculate warranty state'
         button, it sets warranty for him"""
-        for line in self.browse(cr, uid, ids, context=context):
+        for line in self:
             if not line.warning:
-                self.set_warranty(cr, uid, [line.id], context=context)
+                line.set_warranty()
         return True
 
-    def get_destination_location(self, cr, uid, product_id,
-                                 warehouse_id, context=None):
+    @api.multi
+    def get_destination_location(self, product_id, warehouse_id):
         """Compute and return the destination location ID to take
         for a return. Always take 'Supplier' one when return type different
         from company."""
-        prod_obj = self.pool.get('product.product')
-        prod = prod_obj.browse(cr, uid, product_id, context=context)
-        wh_obj = self.pool.get('stock.warehouse')
-        wh = wh_obj.browse(cr, uid, warehouse_id, context=context)
-        location_dest_id = wh.lot_stock_id.id
-        if prod:
-            seller = prod.seller_id
-            if seller:
-                location_dest_id = seller.property_stock_supplier.id
-        return location_dest_id
+        for line in self:
+            prod_obj = self.env['product.product']
+            prod = prod_obj.browse(product_id)
+            wh_obj = self.env['stock.warehouse']
+            wh = wh_obj.browse(warehouse_id)
+            line.location_dest_id = wh.lot_stock_id.id
+            if prod:
+                seller = prod.seller_id
+                if seller:
+                    line.location_dest_id = seller.property_stock_supplier.id
 
     # Method to calculate warranty return address
     def set_warranty_return_address(self, cr, uid, ids, claim_line,
@@ -379,18 +372,18 @@ class ClaimLine(models.Model):
                    context=context)
         return True
 
-    def set_warranty(self, cr, uid, ids, context=None):
+    @api.multi
+    def set_warranty(self):
         """ Calculate warranty limit and address """
         return True
 
     def equivalent_products(self, cr, uid, ids, context=None):
         if not ids:
             return False
-        line = self.browse(cr, uid, ids[0], context)
-        wiz_obj = self.pool.get("equivalent.products.wizard")
-        context['line_id'] = line.id
-        wizard_id = wiz_obj.create(cr, uid, {'line_id': ids[0]},
-                                   context=context)
+        line = self.browse(ids[0])
+        wiz_obj = self.env['equivalent.products.wizard']
+        self.env.context['line_id'] = line.id
+        wizard_id = wiz_obj.create({'line_id': ids[0]})
         return {
             'name': _("Equivalent products"),
             'view_mode': 'form',
@@ -420,9 +413,9 @@ class CrmClaim(models.Model):
         else:
             return {'domain': {'partner_id': [('supplier', '=', True)]}}
 
-    def _get_sequence_number(self, cr, uid, context=None):
-        seq_obj = self.pool.get('ir.sequence')
-        res = seq_obj.get(cr, uid, 'crm.claim.rma', context=context) or '/'
+    def _get_sequence_number(self):
+        seq_obj = self.env['ir.sequence']
+        res = seq_obj.get('crm.claim.rma') or '/'
         return res
 
     @api.model
@@ -435,62 +428,54 @@ class CrmClaim(models.Model):
                 _('There is no warehouse for the current user\'s company.'))
         return wh_ids[0]
 
-    def create(self, cr, uid, vals, context=None):
+    @api.model
+    def create(self, vals):
         if ('number' not in vals) or (vals.get('number') == '/'):
-            vals['number'] = self._get_sequence_number(cr, uid,
-                                                       context=context)
-        new_id = super(CrmClaim, self).create(cr, uid, vals, context=context)
+            vals['number'] = self._get_sequence_number()
+        new_id = super(CrmClaim, self).create(vals)
         return new_id
 
-    def copy_data(self, cr, uid, id, default=None, context=None):
+    def copy_data(self, default=None):
         if default is None:
             default = {}
         std_default = {
             'invoice_ids': False,
             'picking_ids': False,
-            'number': self._get_sequence_number(cr, uid, context=context),
+            'number': self._get_sequence_number(),
         }
         std_default.update(default)
-        return super(CrmClaim, self).copy_data(
-            cr, uid, id, default=std_default, context=context)
+        return super(CrmClaim, self).copy_data(default=std_default)
 
     number = fields.Char(
             'Number', readonly=True,
             required=True,
             index=True, default='/',
             help="Company internal claim unique number")
-    categ_id = fields.Many2one('crm.case.categ', 'Category')
-    supplier_number = fields.Char(
-            'Supplier Number',
-            index=True,
-            help="Supplier claim number")
-    claim_type = fields.Selection(
-            [('customer', 'Customer'),
-             ('supplier', 'Supplier')],
-            string='Claim type',
-            required=True, default='customer',
-            help="Customer: from customer to company.\n "
-                 "Supplier: from company to supplier.")
-    claim_line_ids = fields.One2many(
-            'claim.line', 'claim_id',
-            string='Return lines')
+    categ_id = fields.Many2one('crm.claim.category', 'Category')
+    supplier_number = fields.Char('Supplier Number',
+                                  index=True,
+                                  help="Supplier claim number")
+    claim_type = fields.Selection([('customer', 'Customer'),
+                                   ('supplier', 'Supplier')],
+                                  string='Claim type',
+                                  required=True, default='customer',
+                                  help="Customer: from customer to company.\n "
+                                       "Supplier: from company to supplier.")
+    claim_line_ids = fields.One2many('claim.line', 'claim_id',
+                                     string='Return lines')
     planned_revenue = fields.Float('Expected revenue')
     planned_cost = fields.Float('Expected cost')
     real_revenue = fields.Float('Real revenue')
     real_cost = fields.Float('Real cost')
-    invoice_ids = fields.One2many(
-            'account.invoice', 'claim_id', 'Refunds')
+    invoice_ids = fields.One2many('account.invoice', 'claim_id', 'Refunds')
     picking_ids = fields.One2many('stock.picking', 'claim_id', 'RMA')
-    invoice_id = fields.Many2one(
-            'account.invoice', string='Invoice',
-            help='Related original Cusotmer invoice')
-    delivery_address_id = fields.Many2one(
-            'res.partner', string='Partner delivery address',
-            help="This address will be used to deliver repaired or replacement"
-                 "products.")
-    warehouse_id = fields.Many2one(
-            'stock.warehouse', string='Warehouse',
-            required=True, default=_get_default_warehouse)
+    invoice_id = fields.Many2one('account.invoice', string='Invoice',
+                                 help='Related original Cusotmer invoice')
+    delivery_address_id = fields.Many2one('res.partner', string='Partner delivery address',
+                                          help="This address will be used to deliver repaired or replacement"
+                                               "products.")
+    warehouse_id = fields.Many2one('stock.warehouse', string='Warehouse',
+                                   required=True, default=_get_default_warehouse)
     state_show_buttons = fields.Boolean(related='stage_id.show_buttons',
                                         store=True, string="show buttons",
                                         readonly=True)
@@ -509,32 +494,28 @@ class CrmClaim(models.Model):
          'Number/Reference must be unique per Company!'),
     ]
 
-    def write(self, cr, uid, ids, vals, context=None):
-        if context is None: context = {}
+    @api.multi
+    def write(self, vals):
         update_vals = {}
         if vals.get('partner_id', False) or vals.get('invoice_method', False):
-            for claim in self.browse(cr, uid, ids):
+            for claim in self:
                 if vals.get('partner_id', False) and vals['partner_id'] != \
                         claim.partner_id.id:
                     update_vals['partner_id'] = vals['partner_id']
                 if vals.get('invoice_method', False) and \
                         vals['invoice_method'] != claim.invoice_method:
                     update_vals['invoice_method'] = vals['invoice_method']
-
-        res = super(CrmClaim, self).write(cr, uid, ids, vals, context=context)
+        super(CrmClaim, self).write(vals)
         if update_vals:
-            for claim in self.browse(cr, uid, ids):
+            for claim in self:
                 for line in claim.claim_line_ids:
                     if line.repair_id and line.repair_id.state == 'draft':
                         line.repair_id.write(update_vals)
 
-        return res
-
-    def onchange_partner_address_id(self, cr, uid, ids, add, email=False,
-                                    context=None):
-        res = super(CrmClaim, self
-                    ).onchange_partner_address_id(cr, uid, ids, add,
-                                                  email=email)
+    #TODO:REVISAR ESTA FUNCION
+    @api.onchange('partner_address_id')
+    def onchange_partner_address_id(self, cr, uid, ids, add, email=False, context=None):
+        res = super(CrmClaim, self).onchange_partner_address_id(cr, uid, ids, add, email=email)
         if add:
             if (not res['value']['email_from']
                     or not res['value']['partner_phone']):
@@ -547,25 +528,20 @@ class CrmClaim(models.Model):
                         res['value']['partner_phone'] = other_add.phone
         return res
 
-    def onchange_invoice_id(self, cr, uid, ids, invoice_id, warehouse_id,
-                            context=None):
-        invoice_line_obj = self.pool.get('account.invoice.line')
-        invoice_obj = self.pool.get('account.invoice')
-        claim_line_obj = self.pool.get('claim.line')
-        invoice_line_ids = invoice_line_obj.search(
-            cr, uid,
-            [('invoice_id', '=', invoice_id)],
-            context=context)
+    #TODO:REVISAR ESTA FUNCION
+    @api.onchange('invoice_id')
+    def onchange_invoice_id(self):
+        invoice_line_obj = self.env['account.invoice.line']
+        invoice_obj = self.env['account.invoice']
+        claim_line_obj = self.env['claim.line']
+        invoice_line_ids = invoice_line_obj.search([('invoice_id', '=', self.invoice_id.id)])
         claim_lines = []
         value = {}
-        if not warehouse_id:
+        if not self.warehouse_id:
             warehouse_id = self._get_default_warehouse()
-        invoice_lines = invoice_line_obj.browse(cr, uid, invoice_line_ids,
-                                                context=context)
+        invoice_lines = invoice_line_obj.browse(invoice_line_ids)
         for invoice_line in invoice_lines:
-            location_dest_id = claim_line_obj.get_destination_location(
-                cr, uid, invoice_line.product_id.id,
-                warehouse_id, context=context)
+            location_dest_id = claim_line_obj.get_destination_location(invoice_line.product_id.id, self.warehouse_id)
             claim_lines.append({
                 'name': invoice_line.name,
                 'claim_origine': "none",
@@ -578,34 +554,28 @@ class CrmClaim(models.Model):
             })
         value = {'claim_line_ids': claim_lines}
         delivery_address_id = False
-        if invoice_id:
-            invoice = invoice_obj.browse(cr, uid, invoice_id, context=context)
+        if self.invoice_id:
+            invoice = invoice_obj.browse(self.invoice_id)
             delivery_address_id = invoice.partner_id.id
         value['delivery_address_id'] = delivery_address_id
 
         return {'value': value}
 
-    def message_get_reply_to(self, cr, uid, ids, context=None):
-        """ Override to get the reply_to of the parent project. """
-        return [claim.section_id.message_get_reply_to()[0]
-                if claim.section_id else False
-                for claim in self.browse(cr, SUPERUSER_ID, ids,
-                                         context=context)]
+    @api.model
+    def message_get_reply_to(self, res_ids, default=None):
+        claims = self.sudo().browse(res_ids)
+        aliases = self.env['crm.team'].message_get_reply_to(claims.mapped('team_id').ids, default=default)
+        return {claim.id: aliases.get(claim.team_id.id or 0, False) for claim in claims}
 
-    def message_get_suggested_recipients(self, cr, uid, ids, context=None):
-        recipients = super(CrmClaim, self
-                           ).message_get_suggested_recipients(cr, uid, ids,
-                                                              context=context)
+    @api.multi
+    def message_get_suggested_recipients(self):
+        recipients = super(CrmClaim, self).message_get_suggested_recipients()
         try:
-            for claim in self.browse(cr, uid, ids, context=context):
+            for claim in self:
                 if claim.partner_id:
-                    self._message_add_suggested_recipient(
-                        cr, uid, recipients, claim,
-                        partner=claim.partner_id, reason=_('Customer'))
+                    self._message_add_suggested_recipient(recipients, claim, partner=claim.partner_id, reason=_('Customer'))
                 elif claim.email_from:
-                    self._message_add_suggested_recipient(
-                        cr, uid, recipients, claim,
-                        email=claim.email_from, reason=_('Customer Email'))
+                    self._message_add_suggested_recipient(recipients, claim, email=claim.email_from, reason=_('Customer Email'))
         except Exception:
             # no read access rights -> just ignore suggested recipients
             # because this imply modifying followers
