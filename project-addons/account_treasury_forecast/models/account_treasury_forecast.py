@@ -172,7 +172,7 @@ class AccountTreasuryForecast(models.Model):
             new_line_ids = []
             temp_line_lst = temp_line_obj.search([('treasury_template_id', '=', record.template_id.id)])
             for line_o in temp_line_lst:
-                if record.start_date < line_o.date < record.end_date or not line_o.date and not line_o.paid:
+                if not line_o.date or record.start_date < line_o.date < record.end_date and not line_o.paid:
                     values = {
                         'name': line_o.name,
                         'date': line_o.date,
