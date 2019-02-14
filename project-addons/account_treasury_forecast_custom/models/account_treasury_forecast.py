@@ -1,13 +1,9 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-today OpenERP SA (<http://www.openerp.com>)
-#
 #    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as
-#    published by the Free Software Foundation, either version 3 of the
-#    License, or (at your option) any later version.
+#    it under the terms of the GNU Affero General Public License as published
+#    by the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
 #
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +14,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, tools, api, exceptions, _
+from odoo import models, fields, tools, api, exceptions, _
 import odoo.addons.decimal_precision as dp
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -31,14 +27,14 @@ PERIOD = [('days', 'Days'), ('months', 'Months')]
 
 
 class AccountTreasuryForecast(models.Model):
-    _inherit = "account.treasury.forecast"
+    _inherit = 'account.treasury.forecast'
 
     payment_mode_customer = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
     account_bank = fields.Many2one('res.partner.bank', 'Account bank',
                                    domain=lambda self: [('partner_id', '=', self.env.user.company_id.partner_id.id)])
     check_old_open_customer = fields.Boolean(string="Old (opened)")
     opened_start_date_customer = fields.Date(string="Start Date")
-    payment_mode_supplier = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
+    payment_mode_supplier = fields.Selection(PAYMENT_MODE, "Payment mode", default='both')
     check_old_open_supplier = fields.Boolean(string="Old (opened)")
     opened_start_date_supplier = fields.Date(string="Start Date")
     not_bankable_supplier = fields.Boolean(string="Without Bankable Suppliers")
@@ -170,7 +166,7 @@ class AccountTreasuryForecast(models.Model):
 
     @api.model
     def next_date_period(self, date_origin, period, quantity):
-        date = datetime.strptime(date_origin, "%Y-%m-%d")
+        date = datetime.strptime(date_origin, '%Y-%m-%d')
         if period == 'days':
             date_calculated = (datetime(date.year, date.month, date.day) + relativedelta(days=quantity))
         else:
@@ -226,10 +222,10 @@ class AccountTreasuryForecast(models.Model):
 
 
 class BankMaturity(models.Model):
-    _name = "bank.maturity"
+    _name = 'bank.maturity'
 
-    bank_account = fields.Many2one("res.partner.bank", string="Bank account",
-                                   domain=lambda self: [("partner_id", "=", self.env.user.company_id.partner_id.id)])
+    bank_account = fields.Many2one('res.partner.bank', string="Bank account",
+                                   domain=lambda self: [('partner_id', '=', self.env.user.company_id.partner_id.id)])
     bank_name = fields.Char("Bank", related='bank_account.bank_name', readonly=True)
     date_due = fields.Date(string="Due Date")
     amount = fields.Float(string="Amount", digits=dp.get_precision('Account'))
@@ -256,7 +252,7 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
     id_ref = fields.Char(string="Id Reference")
     concept = fields.Char(string="Concept")
     partner_name = fields.Char('Partner/Supplier')
-    bank_id = fields.Many2one('res.partner.bank', string='Bank Account')
+    bank_id = fields.Many2one('res.partner.bank', string="Bank Account")
     accumulative_balance = fields.Float(string="Accumulated", digits=dp.get_precision('Account'))
 
     def init(self):
@@ -264,7 +260,7 @@ class ReportAccountTreasuryForecastAnalysis(models.Model):
         self._cr.execute("""
             create or replace view report_account_treasury_forecast_analysis
                 as (
-                    SELECT          analysis.id,
+                    SELECT      analysis.id,
                                 analysis.treasury_id,
                                 analysis.id_ref,
                                 analysis.date,
