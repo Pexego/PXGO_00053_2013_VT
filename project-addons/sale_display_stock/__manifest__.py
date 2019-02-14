@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -21,7 +20,7 @@
 
 {
     "name": "Sale display stock",
-    "version": "1.0",
+    "version": "11.0",
     "author": "Pexego",
     'website': 'www.pexego.es',
     "category": "Sales",
@@ -35,8 +34,8 @@ Sales display stock
                 "product_virtual_stock_conservative",
                 "stock_reserve"],
     "data": [
-        "sale_view.xml",
-        "product_view.xml",
+        "views/sale_view.xml",
+        "views/product_view.xml",
         "report/sale_order_line_report.xml",
         "security/ir.model.access.csv",
         "security/sale_display_stock_security.xml"

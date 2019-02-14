@@ -157,9 +157,9 @@
                 <field name="company_id" position="attributes">
                     <attribute name="invisible">1</attribute>
                 </field>
-                <field name="company_id" position="after">
-                    <field name="invoice_type_id"/>
-                </field>
+                <!-- <field name="company_id" position="after">
+                    <field name="invoice_type_id"/> TODO: Migración
+                </field> -->
                 <!--TODO: Migrar<field name="residual" position="before">
                     <field name="payment_mode_id"/>
                     <field name="payment_term"/>

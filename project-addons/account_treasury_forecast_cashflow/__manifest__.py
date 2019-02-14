@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -17,26 +16,23 @@
 ##############################################################################
 
 {
-    "name": "Account Treasury Forecast Banking",
+    "name": "Account Treasury Forecast Cashflow",
     "version": "1.0",
-    "depends": ["account_treasury_forecast",
-                "account_payment_sale",
-                "account_payment_purchase"],
+    "depends": ["account_treasury_forecast"],
     "author": "OdooMRP team,"
               "AvanzOSC,"
               "Serv. Tecnol. Avanzados - Pedro M. Baeza",
-    "website": "http://www.avanzosc.es",
+    "website": "http://www.odoomrp.com",
     "category": "Accounting",
     "description": """
-    This module:
-    Sorts the treasury forecast records by payment mode.
-    Creates new Treasury Forecast Analysis Report.
+    This module adds two new treasury forecast types:
+        - Receivable payments
+        - Cash-Flow: Input and Output
     """,
     'data': [
-        'report/account_treasury_forecast_analysis_view.xml',
-        'views/account_treasury_forecast_template_view.xml',
-        'views/account_treasury_forecast_view.xml',
-        'security/ir.model.access.csv',
+        "views/account_treasury_forecast_template_view.xml",
+        "views/account_treasury_forecast_view.xml",
+        "security/ir.model.access.csv",
     ],
     'demo': [],
     'installable': True,

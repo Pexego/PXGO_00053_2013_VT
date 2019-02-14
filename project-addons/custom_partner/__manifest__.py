@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -29,9 +28,10 @@
     "depends": ['base', 'sale', 'l10n_es_partner', 'account',
                 'base_partner_sequence', 'stock', 'account_credit_control',
                 'purchase', 'purchase_advance_payment',
-                'account_due_list', 'rappel', 'product_brand', 'customer_lost'],
-    "data": ["partner_view.xml", "stock_view.xml",
-             "security/ir.model.access.csv", "sale_view.xml",
-             "data/custom_partner_data.xml", "rappel_view.xml"],
+                'account_due_list', 'customer_lost'],
+    "data": ["views/partner_view.xml",
+             # TODO: Migrar -> "views/stock_view.xml", "views/sale_view.xml",
+             "security/ir.model.access.csv",
+             "data/custom_partner_data.xml"],
     "installable": True
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
-
 
         <record model="ir.ui.view" id="account_treasury_forecast_invoice_tree_view">
             <field name="name">account.treasury.forecast.invoice.tree</field>
@@ -125,4 +124,4 @@
             parent="menu_account_treasury_forecast" groups="account.group_account_user"/>
 
     </data>
-</openerp>
+</odoo>

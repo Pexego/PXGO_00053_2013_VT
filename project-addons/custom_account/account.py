@@ -95,9 +95,9 @@ class AccountInvoice(models.Model):
     country_id = fields.Many2one('res.country', 'Country',
                                  related="partner_id.country_id",
                                  readonly=True, store=False)
-    invoice_type_id = fields. \
-        Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
-                 related="invoice_line_ids.picking_id.invoice_type_id")
+    # invoice_type_id = fields. \ TODO: Migración
+    #     Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
+    #              related="invoice_line_ids.picking_id.invoice_type_id")
     active = fields.Boolean(default=True)
     not_send_email = fields.Boolean("Not send email")
     total = fields.Float("Total Paid", compute="total_paid")
@@ -137,7 +137,7 @@ class AccountInvoice(models.Model):
     def _check_payments(self):
         res = ''
         for payment in self.payment_ids:
-            for payment_account in payment.move_id.line_id:
+            for payment_account in payment.move_id.line_ids:
                 if payment_account.account_id.id == self.payment_mode_id.transfer_account_id.id:
                     for reconcile_line in payment_account.full_reconcile_id.line_id:
                         if reconcile_line.move_id != payment.move_id and reconcile_line.credit != 0:
@@ -359,7 +359,7 @@ class AccountInvoice(models.Model):
             payment_move_lines = self._get_payment()
             res_payment = self._get_sum_payment_move_line(payment_move_lines,
                                                           self.type)
-            res_invoice = self._get_sum_invoice_move_line(self.move_id.line_id,
+            res_invoice = self._get_sum_invoice_move_line(self.move_id.line_ids,
                                                           self.type)
             lines = res_invoice['lines'] + res_payment['lines']
             if not self._lines_can_be_reconciled(lines):
@@ -381,9 +381,9 @@ class AccountInvoice(models.Model):
     def action_move_create(self):
         res = super(AccountInvoice, self).action_move_create()
         for inv in self:
-            inv.move_id.line_id.\
+            inv.move_id.line_ids.\
                 write({'blocked': inv.payment_mode_id.blocked or
-                       inv.payment_term.blocked})
+                       inv.payment_term_id.blocked})
             inv._reconcile_invoice()
         return res
 
@@ -393,13 +393,13 @@ class AccountInvoice(models.Model):
         if vals.get('payment_mode_id', False):
             for inv in self:
                 if inv.move_id:
-                    inv.move_id.line_id.\
+                    inv.move_id.line_ids.\
                         write({'blocked': inv.payment_mode_id.blocked})
-        elif vals.get('payment_term', False):
+        elif vals.get('payment_term_id', False):
             for inv in self:
                 if inv.move_id:
-                    inv.move_id.line_id.\
-                        write({'blocked': inv.payment_term.blocked})
+                    inv.move_id.line_ids.\
+                        write({'blocked': inv.payment_term_id.blocked})
         return res
 
     @api.multi

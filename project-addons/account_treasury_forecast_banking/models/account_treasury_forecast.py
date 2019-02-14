@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,40 +15,41 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class AccountTreasuryForecastInvoice(models.Model):
     _inherit = 'account.treasury.forecast.invoice'
 
-    payment_mode_id = fields.Many2one("account.payment.mode", string="Payment Mode",
+    payment_mode_id = fields.Many2one('account.payment.mode', string="Payment Mode",
                                       store=True,
                                       related="invoice_id.payment_mode_id")
     invoice_type = fields.Selection([('out_invoice', 'Customer Invoice'),
                                      ('in_invoice', 'Supplier Invoice'),
                                      ('out_refund', 'Customer Refund'),
                                      ('in_refund', 'Supplier Refund')],
-                                    string="Type", related="invoice_id.type")
-    payment_term_id = fields.Many2one("account.payment.term",
+                                    string="Type", related='invoice_id.type')
+    payment_term_id = fields.Many2one('account.payment.term',
                                       string="Payment Term",
-                                      related="invoice_id.payment_term_id")
+                                      related='invoice_id.payment_term_id')
 
 
 class AccountTreasuryForecastLine(models.Model):
     _inherit = 'account.treasury.forecast.line'
 
-    payment_mode_id = fields.Many2one("account.payment.mode", string="Payment Mode")
+    payment_mode_id = fields.Many2one('account.payment.mode', string="Payment Mode")
 
 
 class AccountTreasuryForecast(models.Model):
     _inherit = 'account.treasury.forecast'
 
-    @api.one
+    @api.multi
     def calculate_line(self):
-        treasury_line_obj = self.env["account.treasury.forecast.line"]
-        result = super(AccountTreasuryForecast, self).calculate_line()
-        line_lst = treasury_line_obj.search([("treasury_id", "=", self.id)])
-        for line_o in line_lst:
-            payment_mode_id = line_o.template_line_id.payment_mode_id.id
-            line_o.payment_mode_id = payment_mode_id
+        treasury_line_obj = self.env['account.treasury.forecast.line']
+        for record in self:
+            result = super(AccountTreasuryForecast, record).calculate_line()
+            line_lst = treasury_line_obj.search([('treasury_id', '=', record.id)])
+            for line_o in line_lst:
+                payment_mode_id = line_o.template_line_id.payment_mode_id.id
+                line_o.payment_mode_id = payment_mode_id
         return result

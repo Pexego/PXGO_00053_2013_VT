@@ -73,18 +73,18 @@ class sale_order(models.Model):
 
         return {'value': result.get('value',{}), 'warning':warning}
 
-    @api.one
-    @api.onchange('partner_id', 'section_id', 'payment_term')
-    def get_block_magreb (self):
+    # @api.one
+    # @api.onchange('partner_id', 'team_id', 'payment_term')
+    # def get_block_magreb (self):
 
-        if ((self.section_id.complete_name == 'Magreb'
-             and self.payment_term.name in ('Pago inmediato', 'Prepago'))
-            or (self.partner_id.section_id.name == 'Magreb'
-                and self.partner_id.property_payment_term_id.name in ('Pago inmediato', 'Prepago'))) \
-                and self.allow_confirm_blocked is False:
-            self.blocked_magreb = True
-        else:
-            self.blocked_magreb = False
+    #     if ((self.team_id.complete_name == 'Magreb' TODO: complete_name ya no existe.
+    #          and self.payment_term.name in ('Pago inmediato', 'Prepago'))
+    #         or (self.partner_id.team_id.name == 'Magreb'
+    #             and self.partner_id.property_payment_term_id.name in ('Pago inmediato', 'Prepago'))) \
+    #             and self.allow_confirm_blocked is False:
+    #         self.blocked_magreb = True
+    #     else:
+    #         self.blocked_magreb = False
 
     @api.multi
     def action_button_confirm(self):

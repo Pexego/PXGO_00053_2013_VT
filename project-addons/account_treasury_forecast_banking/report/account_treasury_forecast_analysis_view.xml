@@ -1,4 +1,4 @@
-<openerp>
+<odoo>
     <data>
 
         <record model="ir.ui.view" id="report_treasury_forecast_analysis_tree">
@@ -60,8 +60,9 @@
             <field name="view_mode">tree,form</field>
         </record>
 
-        <menuitem string="Treasury Analysis Report" parent="account_treasury_forecast.menu_account_treasury_forecast" action="action_treasury_forecast_analysis" id="menu_report_treasury_forecast_analysis" sequence="50"
-        groups="account.group_account_user"/>
+        <menuitem string="Treasury Analysis Report" parent="account_treasury_forecast.menu_account_treasury_forecast"
+                  action="action_treasury_forecast_analysis" id="menu_report_treasury_forecast_analysis" sequence="50"
+                  groups="account.group_account_user"/>
         
     </data>
-</openerp>
+</odoo>
