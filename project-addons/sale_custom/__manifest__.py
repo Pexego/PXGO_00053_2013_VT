@@ -16,12 +16,10 @@
         "sale_display_stock",
         "sale_margin_percentage",
         "partner_risk_advice",
-        "stock_reserve_sale"
+        'reserve_without_save_sale'
     ],
     "data": [
         'views/sale_view.xml',
-        'views/sale_report_xls_view.xml',
-        'wizard/sale_report_xls_wizard_view.xml',
         'wizard/sale_confirm_wizard_view.xml'
     ],
 }

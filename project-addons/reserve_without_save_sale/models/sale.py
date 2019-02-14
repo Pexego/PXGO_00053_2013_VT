@@ -23,6 +23,16 @@ class SaleOrder(models.Model):
         lines.stock_reserve()
         return True
 
+    def open_stock_reservation(self):
+        self.ensure_one()
+        action = self.env.ref('stock_reserve.action_stock_reservation_tree').read()[0]
+        action['domain'] = [('sale_id', 'in', self.ids)]
+        action['context'] = {'search_default_draft': 1,
+                             'search_default_reserved': 1,
+                             'search_default_waiting': 1,
+                            }
+        return action
+
 
 class SaleOrderLine(models.Model):
 
