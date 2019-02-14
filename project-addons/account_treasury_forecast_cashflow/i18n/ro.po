@@ -18,22 +18,22 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,amount:0
-#: field:account.treasury.forecast.cashflow.template,amount:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_amount
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_amount
 msgid "Amount"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: view:account.treasury.forecast.cashflow.template:account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_template_form_view
-#: view:account.treasury.forecast.cashflow.template:account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_template_tree_view
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_template_form_view
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_template_tree_view
 msgid "Cash Flow"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: view:account.treasury.forecast:account_treasury_forecast_cashflow.account_treasury_forecast_form_view_inh
-#: field:account.treasury.forecast,cashflow_ids:0
-#: view:account.treasury.forecast.template:account_treasury_forecast_cashflow.account_treasury_forecast_template_form_view_inh
-#: field:account.treasury.forecast.template,cashflow_ids:0
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow.account_treasury_forecast_form_view_inh
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_ids
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow.account_treasury_forecast_template_form_view_inh
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_template_cashflow_ids
 msgid "Cash-Flow"
 msgstr ""
 
@@ -48,26 +48,26 @@ msgid "Cash-Flow Records"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,create_uid:0
-#: field:account.treasury.forecast.cashflow.template,create_uid:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_create_uid
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_create_uid
 msgid "Created by"
 msgstr "Creat de"
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,create_date:0
-#: field:account.treasury.forecast.cashflow.template,create_date:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_create_date
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_create_date
 msgid "Created on"
 msgstr "Creat în"
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,date:0
-#: field:account.treasury.forecast.cashflow.template,date:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_date
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_date
 msgid "Date"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,name:0
-#: field:account.treasury.forecast.cashflow.template,name:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_name
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_name
 msgid "Description"
 msgstr ""
 
@@ -86,8 +86,8 @@ msgid "Error!:: If output cash-flow, amount must be negative"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,id:0
-#: field:account.treasury.forecast.cashflow.template,id:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_id
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_id
 msgid "ID"
 msgstr "ID"
 
@@ -98,20 +98,20 @@ msgid "Input"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,journal_id:0
-#: field:account.treasury.forecast.cashflow.template,journal_id:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_journal_id
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_journal_id
 msgid "Journal"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,write_uid:0
-#: field:account.treasury.forecast.cashflow.template,write_uid:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_write_uid
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_write_uid
 msgid "Last Updated by"
 msgstr "Ultima actualizare de"
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,write_date:0
-#: field:account.treasury.forecast.cashflow.template,write_date:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_write_date
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_write_date
 msgid "Last Updated on"
 msgstr "Ultima actualizare în"
 
@@ -122,30 +122,30 @@ msgid "Output"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast,receivable_line_ids:0
-#: field:account.treasury.forecast.template,receivable_line_ids:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_receivable_line_ids
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_template_receivable_line_ids
 msgid "Receivable Line"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: view:account.treasury.forecast:account_treasury_forecast_cashflow.account_treasury_forecast_form_view_inh
-#: view:account.treasury.forecast.template:account_treasury_forecast_cashflow.account_treasury_forecast_template_form_view_inh
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow.account_treasury_forecast_form_view_inh
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow.account_treasury_forecast_template_form_view_inh
 msgid "Receivable Payments"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: view:account.treasury.forecast.cashflow:account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_form_view
-#: view:account.treasury.forecast.cashflow:account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_tree_view
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_form_view
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_tree_view
 msgid "Recurring Payments"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,template_line_id:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_line_id
 msgid "Template Line"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,treasury_id:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_treasury_id
 msgid "Treasury"
 msgstr ""
 
@@ -170,12 +170,12 @@ msgid "Treasury Forecast Template"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow.template,treasury_template_id:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_treasury_template_id
 msgid "Treasury Template"
 msgstr ""
 
 #. module: account_treasury_forecast_cashflow
-#: field:account.treasury.forecast.cashflow,flow_type:0
-#: field:account.treasury.forecast.cashflow.template,flow_type:0
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_flow_type
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow.field_account_treasury_forecast_cashflow_template_flow_type
 msgid "Type"
 msgstr "Tip"

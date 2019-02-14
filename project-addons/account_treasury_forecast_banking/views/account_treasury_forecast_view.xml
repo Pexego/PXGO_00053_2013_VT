@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
 
         <record model="ir.ui.view" id="account_treasury_forecast_invoice_tree_view_inh">
@@ -37,4 +37,4 @@
         context="{'group_by':'payment_mode_id'}"/>
 
     </data>
-</openerp>
+</odoo>
