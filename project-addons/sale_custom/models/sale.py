@@ -1,35 +1,23 @@
-# -*- coding: utf-8 -*-
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, fields, exceptions, _
-from openerp.exceptions import except_orm
+from odoo import models, api, fields, exceptions, _
+from odoo.exceptions import UserError
 
 
 class SaleOrderLine(models.Model):
 
     _inherit = 'sale.order.line'
 
-    @api.multi
     def write(self, vals):
-        data = {}
         for line in self:
-            if vals.get('product_uom_qty', False) and line.product_id.pack_line_ids:
-                for subline in line.product_id.pack_line_ids:
-                    subproduct = subline.product_id
-                    quantity = subline.quantity * vals['product_uom_qty']
-                    subproduct_id = self.env['sale.order.line'].search([('product_id', '=', subproduct.id),
-                                                                        ('order_id', '=', line.order_id.id),
-                                                                        ('pack_parent_line_id', '=', line.id)])
-                    if subproduct_id:
-                        data = {'product_uom_qty': quantity}
-                        subproduct_id.write(data)
             if vals.get('product_id', False):
-                product = self.env['product.product'].browse(vals['product_id'])
+                product = self.env['product.product'].browse(
+                    vals['product_id'])
                 vals['name'] = product.name_get()[0][1]
                 if product.description_sale:
                     vals['name'] += '\n' + product.description_sale
-        return super(SaleOrderLine, self).write(vals)
+        return super().write(vals)
 
     @api.multi
     def product_id_change(self, pricelist, product, qty=0,
@@ -37,7 +25,7 @@ class SaleOrderLine(models.Model):
                           lang=False, update_tax=True, date_order=False, packaging=False, fiscal_position=False,
                           flag=False):
         if qty <= 0:
-            raise except_orm(_('Error'), _('Product quantity cannot be negative or zero'))
+            raise UserError(_('Error'), _('Product quantity cannot be negative or zero'))
 
         return super(SaleOrderLine, self).product_id_change(
             pricelist, product, qty=qty, uom=uom, qty_uos=qty_uos, uos=uos,

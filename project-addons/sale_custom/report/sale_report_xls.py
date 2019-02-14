@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 # © 2018 Visiotech
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
@@ -170,9 +169,9 @@ try:
                                          row_style=cell_style)
             row_pos += 1
             # Column headers
-            c_specs = map(lambda x: self.render(
+            c_specs = [self.render(
                 x, self.col_specs_lines_template, 'header',
-                render_space={'_': _p._}), wanted_list)
+                render_space={'_': _p._}) for x in wanted_list]
             row_data = self.xls_row_template(c_specs, [x[0] for x in c_specs])
             row_pos = self.xls_write_row(
                 ws, row_pos, row_data, row_style=self.rh_cell_style,
@@ -204,8 +203,7 @@ try:
                                                       wb)
 
                     cslt = self.col_specs_lines_template
-                    c_specs = map(lambda x: self.render(x, cslt, 'lines'),
-                                  wanted_list)
+                    c_specs = [self.render(x, cslt, 'lines') for x in wanted_list]
                     row_data = self.xls_row_template(c_specs,
                                                      [str(x[0]) for x in c_specs])
                     row_pos = self.xls_write_row(ws, row_pos, row_data)
