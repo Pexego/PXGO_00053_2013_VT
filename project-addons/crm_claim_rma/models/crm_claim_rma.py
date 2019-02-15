@@ -29,7 +29,7 @@ from odoo.tools import (DEFAULT_SERVER_DATE_FORMAT,
                            DEFAULT_SERVER_DATETIME_FORMAT)
 from odoo import SUPERUSER_ID, api
 
-REPAIR_SELECTION =[
+REPAIR_SELECTION = [
             ('draft', _('Quotation')),
             ('cancel', _('Cancelled')),
             ('confirmed', _('Confirmed')),
@@ -44,6 +44,7 @@ MOVE_STATE_SELECTION = [('draft', _('New')), ('cancel', _('Cancelled')),
                         ('waiting', _('Waiting Another Move')),
                         ('confirmed', _('Waiting Availability')),
                         ('assigned', _('Available')), ('done', _('Done'))]
+
 
 class SubstateSubstate(models.Model):
     """ To precise a state (state=refused; substates= reason 1, 2,...) """
@@ -255,61 +256,61 @@ class ClaimLine(models.Model):
             partners = self.env['res.partner'].search([('supplier', '=', True)])
         return {'domain': {'partner_id': [('id', 'in', [x.id for x in partners])]}}
 
-    @staticmethod
-    def warranty_limit(start, warranty_duration):
-        """ Take a duration in float, return the duration in relativedelta
+    # NO SE USA @staticmethod
+    # def warranty_limit(start, warranty_duration):
+    #     """ Take a duration in float, return the duration in relativedelta
+    #
+    #     ``relative_delta(months=...)`` only accepts integers.
+    #     We have to extract the decimal part, and then, extend the delta with
+    #     days.
+    #
+    #     """
+    #     decimal_part, months = math.modf(warranty_duration)
+    #     months = int(months)
+    #     # If we have a decimal part, we add the number them as days to
+    #     # the limit.  We need to get the month to know the number of
+    #     # days.
+    #     delta = relativedelta(months=months)
+    #     monthday = start + delta
+    #     __, days_month = calendar.monthrange(monthday.year, monthday.month)
+    #     # ignore the rest of the days (hours) since we expect a date
+    #     days = int(days_month * decimal_part)
+    #     return start + relativedelta(months=months, days=days)
 
-        ``relative_delta(months=...)`` only accepts integers.
-        We have to extract the decimal part, and then, extend the delta with
-        days.
-
-        """
-        decimal_part, months = math.modf(warranty_duration)
-        months = int(months)
-        # If we have a decimal part, we add the number them as days to
-        # the limit.  We need to get the month to know the number of
-        # days.
-        delta = relativedelta(months=months)
-        monthday = start + delta
-        __, days_month = calendar.monthrange(monthday.year, monthday.month)
-        # ignore the rest of the days (hours) since we expect a date
-        days = int(days_month * decimal_part)
-        return start + relativedelta(months=months, days=days)
-
-    # Method to calculate warranty limit
-    def set_warranty_limit(self, cr, uid, ids, claim_line, context=None):
-        date_invoice = claim_line.invoice_line_id.invoice_id.date_invoice
-        if not date_invoice:
-            raise exceptions.UserError(
-                _('Cannot find any date for invoice. '
-                  'Must be a validated invoice.'))
-        warning = _(self.WARRANT_COMMENT['not_define'])
-        date_inv_at_server = datetime.strptime(date_invoice,
-                                               DEFAULT_SERVER_DATE_FORMAT)
-        if claim_line.claim_id.claim_type == 'supplier':
-            suppliers = claim_line.product_id.seller_ids
-            if not suppliers:
-                raise exceptions.UserError(
-                    _('The product has no supplier configured.'))
-            supplier = suppliers[0]
-            warranty_duration = supplier.warranty_duration
-        else:
-            warranty_duration = claim_line.product_id.warranty
-        limit = self.warranty_limit(date_inv_at_server, warranty_duration)
-        # If waranty period was defined
-        if warranty_duration > 0:
-            claim_date = datetime.strptime(claim_line.claim_id.date,
-                                           DEFAULT_SERVER_DATETIME_FORMAT)
-            if limit < claim_date:
-                warning = _(self.WARRANT_COMMENT['expired'])
-            else:
-                warning = _(self.WARRANT_COMMENT['valid'])
-        self.write(
-            cr, uid, ids,
-            {'guarantee_limit': limit.strftime(DEFAULT_SERVER_DATE_FORMAT),
-             'warning': warning},
-            context=context)
-        return True
+    # NO SE USA # Method to calculate warranty limit
+    # def set_warranty_limit(self, cr, uid, ids, claim_line, context=None):
+    #     date_invoice = claim_line.invoice_line_id.invoice_id.date_invoice
+    #     if not date_invoice:
+    #         raise exceptions.UserError(
+    #             _('Cannot find any date for invoice. '
+    #               'Must be a validated invoice.'))
+    #     warning = _(self.WARRANT_COMMENT['not_define'])
+    #     date_inv_at_server = datetime.strptime(date_invoice,
+    #                                            DEFAULT_SERVER_DATE_FORMAT)
+    #     if claim_line.claim_id.claim_type == 'supplier':
+    #         suppliers = claim_line.product_id.seller_ids
+    #         if not suppliers:
+    #             raise exceptions.UserError(
+    #                 _('The product has no supplier configured.'))
+    #         supplier = suppliers[0]
+    #         warranty_duration = supplier.warranty_duration
+    #     else:
+    #         warranty_duration = claim_line.product_id.warranty
+    #     limit = self.warranty_limit(date_inv_at_server, warranty_duration)
+    #     # If waranty period was defined
+    #     if warranty_duration > 0:
+    #         claim_date = datetime.strptime(claim_line.claim_id.date,
+    #                                        DEFAULT_SERVER_DATETIME_FORMAT)
+    #         if limit < claim_date:
+    #             warning = _(self.WARRANT_COMMENT['expired'])
+    #         else:
+    #             warning = _(self.WARRANT_COMMENT['valid'])
+    #     self.write(
+    #         cr, uid, ids,
+    #         {'guarantee_limit': limit.strftime(DEFAULT_SERVER_DATE_FORMAT),
+    #          'warning': warning},
+    #         context=context)
+    #     return True
 
     @api.multi
     def auto_set_warranty(self):
@@ -337,66 +338,62 @@ class ClaimLine(models.Model):
                 if seller:
                     line.location_dest_id = seller.property_stock_supplier.id
 
-    # Method to calculate warranty return address
-    def set_warranty_return_address(self, cr, uid, ids, claim_line,
-                                    context=None):
-        """Return the partner to be used as return destination and
-        the destination stock location of the line in case of return.
-
-        We can have various case here:
-            - company or other: return to company partner or
-              crm_return_address_id if specified
-            - supplier: return to the supplier address
-
-        """
-        return_address = None
-        seller = claim_line.product_id.seller_id
-        if seller:
-            return_address_id = seller.warranty_return_address.id
-            return_type = seller.warranty_return_partner
-        else:
-            # when no supplier is configured, returns to the company
-            company = claim_line.claim_id.company_id
-            return_address = (company.crm_return_address_id or
-                              company.partner_id)
-            return_address_id = return_address.id
-            return_type = 'company'
-        location_dest_id = self.get_destination_location(
-            cr, uid, claim_line.product_id.id,
-            claim_line.claim_id.warehouse_id.id,
-            context=context)
-        self.write(cr, uid, ids,
-                   {'warranty_return_partner': return_address_id,
-                    'warranty_type': return_type,
-                    'location_dest_id': location_dest_id},
-                   context=context)
-        return True
+    # NO SE USA # Method to calculate warranty return address
+    # def set_warranty_return_address(self, cr, uid, ids, claim_line,
+    #                                 context=None):
+    #     """Return the partner to be used as return destination and
+    #     the destination stock location of the line in case of return.
+    #
+    #     We can have various case here:
+    #         - company or other: return to company partner or
+    #           crm_return_address_id if specified
+    #         - supplier: return to the supplier address
+    #
+    #     """
+    #     return_address = None
+    #     seller = claim_line.product_id.seller_id
+    #     if seller:
+    #         return_address_id = seller.warranty_return_address.id
+    #         return_type = seller.warranty_return_partner
+    #     else:
+    #         # when no supplier is configured, returns to the company
+    #         company = claim_line.claim_id.company_id
+    #         return_address = (company.crm_return_address_id or
+    #                           company.partner_id)
+    #         return_address_id = return_address.id
+    #         return_type = 'company'
+    #     location_dest_id = self.get_destination_location(
+    #         cr, uid, claim_line.product_id.id,
+    #         claim_line.claim_id.warehouse_id.id,
+    #         context=context)
+    #     self.write(cr, uid, ids,
+    #                {'warranty_return_partner': return_address_id,
+    #                 'warranty_type': return_type,
+    #                 'location_dest_id': location_dest_id},
+    #                context=context)
+    #     return True
 
     @api.multi
     def set_warranty(self):
         """ Calculate warranty limit and address """
         return True
 
-    def equivalent_products(self, cr, uid, ids, context=None):
-        if not ids:
-            return False
-        line = self.browse(ids[0])
-        wiz_obj = self.env['equivalent.products.wizard']
-        self.env.context['line_id'] = line.id
-        wizard_id = wiz_obj.create({'line_id': ids[0]})
-        return {
-            'name': _("Equivalent products"),
-            'view_mode': 'form',
-            'view_id': False,
-            'view_type': 'form',
-            'res_model': 'equivalent.products.wizard',
-            'res_id': wizard_id,
-            'type': 'ir.actions.act_window',
-            'nodestroy': True,
-            'target': 'new',
-            'domain': '[]',
-            'context': context
-        }
+    # def equivalent_products(self): NO SE USA
+    #     wiz_obj = self.env['equivalent.products.wizard']
+    #     self.env.context['line_id'] = self.id
+    #     wizard_id = wiz_obj.create({'line_id': self.ids[0]})
+    #     return {
+    #         'name': _("Equivalent products"),
+    #         'view_mode': 'form',
+    #         'view_id': False,
+    #         'view_type': 'form',
+    #         'res_model': 'equivalent.products.wizard',
+    #         'res_id': wizard_id,
+    #         'type': 'ir.actions.act_window',
+    #         'nodestroy': True,
+    #         'target': 'new',
+    #         'domain': '[]',
+    #     }
 
 
 # TODO add the option to split the claim_line in order to manage the same
@@ -435,6 +432,7 @@ class CrmClaim(models.Model):
         new_id = super(CrmClaim, self).create(vals)
         return new_id
 
+    @api.multi
     def copy_data(self, default=None):
         if default is None:
             default = {}
@@ -512,54 +510,54 @@ class CrmClaim(models.Model):
                     if line.repair_id and line.repair_id.state == 'draft':
                         line.repair_id.write(update_vals)
 
-    #TODO:REVISAR ESTA FUNCION
-    @api.onchange('partner_address_id')
-    def onchange_partner_address_id(self, cr, uid, ids, add, email=False, context=None):
-        res = super(CrmClaim, self).onchange_partner_address_id(cr, uid, ids, add, email=email)
-        if add:
-            if (not res['value']['email_from']
-                    or not res['value']['partner_phone']):
-                partner_obj = self.pool.get('res.partner')
-                address = partner_obj.browse(cr, uid, add, context=context)
-                for other_add in address.partner_id.address:
-                    if other_add.email and not res['value']['email_from']:
-                        res['value']['email_from'] = other_add.email
-                    if other_add.phone and not res['value']['partner_phone']:
-                        res['value']['partner_phone'] = other_add.phone
-        return res
+    # #NO SE USA
+    # @api.onchange('partner_address_id')
+    # def onchange_partner_address_id(self, cr, uid, ids, add, email=False, context=None):
+    #     res = super(CrmClaim, self).onchange_partner_address_id(cr, uid, ids, add, email=email)
+    #     if add:
+    #         if (not res['value']['email_from']
+    #                 or not res['value']['partner_phone']):
+    #             partner_obj = self.pool.get('res.partner')
+    #             address = partner_obj.browse(cr, uid, add, context=context)
+    #             for other_add in address.partner_id.address:
+    #                 if other_add.email and not res['value']['email_from']:
+    #                     res['value']['email_from'] = other_add.email
+    #                 if other_add.phone and not res['value']['partner_phone']:
+    #                     res['value']['partner_phone'] = other_add.phone
+    #     return res
 
-    #TODO:REVISAR ESTA FUNCION
-    @api.onchange('invoice_id')
-    def onchange_invoice_id(self):
-        invoice_line_obj = self.env['account.invoice.line']
-        invoice_obj = self.env['account.invoice']
-        claim_line_obj = self.env['claim.line']
-        invoice_line_ids = invoice_line_obj.search([('invoice_id', '=', self.invoice_id.id)])
-        claim_lines = []
-        value = {}
-        if not self.warehouse_id:
-            warehouse_id = self._get_default_warehouse()
-        invoice_lines = invoice_line_obj.browse(invoice_line_ids)
-        for invoice_line in invoice_lines:
-            location_dest_id = claim_line_obj.get_destination_location(invoice_line.product_id.id, self.warehouse_id)
-            claim_lines.append({
-                'name': invoice_line.name,
-                'claim_origine': "none",
-                'invoice_line_id': invoice_line.id,
-                'product_id': invoice_line.product_id.id,
-                'product_returned_quantity': invoice_line.quantity,
-                'unit_sale_price': invoice_line.price_unit,
-                'location_dest_id': location_dest_id,
-                'state': 'draft',
-            })
-        value = {'claim_line_ids': claim_lines}
-        delivery_address_id = False
-        if self.invoice_id:
-            invoice = invoice_obj.browse(self.invoice_id)
-            delivery_address_id = invoice.partner_id.id
-        value['delivery_address_id'] = delivery_address_id
-
-        return {'value': value}
+    # #NO SE USA
+    # @api.onchange('invoice_id')
+    # def onchange_invoice_id(self):
+    #     invoice_line_obj = self.env['account.invoice.line']
+    #     invoice_obj = self.env['account.invoice']
+    #     claim_line_obj = self.env['claim.line']
+    #     invoice_line_ids = invoice_line_obj.search([('invoice_id', '=', self.invoice_id.id)])
+    #     claim_lines = []
+    #     value = {}
+    #     if not self.warehouse_id:
+    #         warehouse_id = self._get_default_warehouse()
+    #     invoice_lines = invoice_line_obj.browse(invoice_line_ids)
+    #     for invoice_line in invoice_lines:
+    #         location_dest_id = claim_line_obj.get_destination_location(invoice_line.product_id.id, self.warehouse_id)
+    #         claim_lines.append({
+    #             'name': invoice_line.name,
+    #             'claim_origine': "none",
+    #             'invoice_line_id': invoice_line.id,
+    #             'product_id': invoice_line.product_id.id,
+    #             'product_returned_quantity': invoice_line.quantity,
+    #             'unit_sale_price': invoice_line.price_unit,
+    #             'location_dest_id': location_dest_id,
+    #             'state': 'draft',
+    #         })
+    #     value = {'claim_line_ids': claim_lines}
+    #     delivery_address_id = False
+    #     if self.invoice_id:
+    #         invoice = invoice_obj.browse(self.invoice_id)
+    #         delivery_address_id = invoice.partner_id.id
+    #     value['delivery_address_id'] = delivery_address_id
+    #
+    #     return {'value': value}
 
     @api.model
     def message_get_reply_to(self, res_ids, default=None):

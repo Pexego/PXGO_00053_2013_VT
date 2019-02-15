@@ -395,12 +395,12 @@
                     <button class="oe_inline oe_stat_button" icon="fa-truck" name="%(act_crm_claim_rma_picking_in)d" type="action"
                             string="Returned Products"
                             attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['supplier','other'])]}"
-                            context="{'search_default_claim_id': active_id,'search_default_user_id':False}"
+                            context="{'search_default_claim_id': id,'search_default_user_id':False}"
                            />
                     <button class="oe_inline oe_stat_button" icon="fa-truck" name="%(act_crm_claim_rma_picking_out)d" type="action"
                             string="Deliveries"
                             attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['supplier','other'])]}"
-                            context="{'search_default_claim_id': active_id,'search_default_user_id':False}"
+                            context="{'search_default_claim_id': id,'search_default_user_id':False}"
                            />
                 </div>
             </xpath>

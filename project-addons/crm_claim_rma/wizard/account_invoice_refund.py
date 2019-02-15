@@ -19,13 +19,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, _, exceptions, fields
+from odoo import models, _, exceptions, fields, api
 
 
 class AccountInvoiceRefund(models.TransientModel):
 
     _inherit = "account.invoice.refund"
 
+    @api.multi
     def compute_refund(self, mode='refund'):
         context = self.env.context
         if context.get('invoice_ids', []) and context.get('invoice_ids')[0]:
@@ -34,6 +35,7 @@ class AccountInvoiceRefund(models.TransientModel):
             raise exceptions.UserError(_('The claim not have invoices to refund.'))
         return super(AccountInvoiceRefund, self).compute_refund(mode=mode)
 
+    @api.model
     def _get_description(self):
         description = self.env.context.get('description') or ''
         return description
