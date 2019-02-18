@@ -75,8 +75,7 @@ class StockMove(models.Model):
     def create(self, vals):
         move_id = super(StockMove, self).create(vals)
         if vals.get('picking_id'):
-            picking_obj = self.pool.get('stock.picking')
-            picking = picking_obj.browse(vals['picking_id'])
+            picking = self.env['stock.picking'].browse(vals['picking_id'])
             if picking.claim_id and picking.picking_type_code == u'incoming':
                 self.state = 'confirmed'
         return move_id
