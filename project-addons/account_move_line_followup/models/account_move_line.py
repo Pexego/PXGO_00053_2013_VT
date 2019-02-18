@@ -38,9 +38,8 @@ class AccountMoveLine(models.Model):
 
     @api.model
     def cron_update_date_followup(self):
-        # Searching refund account move line
-        refund_aml = self.search([('reconcile_id', '=', False), ('account_id', '=', 443),
-                                  ('credit', '!=', 0), ('invoice.type', '=', 'out_refund')])
+        # Searching negative account move line
+        refund_aml = self.search([('reconcile_id', '=', False), ('account_id', '=', 443), ('credit', '!=', 0)])
 
         for aml in refund_aml:
             # Searching the most unfavorable maturity date on positive payments
