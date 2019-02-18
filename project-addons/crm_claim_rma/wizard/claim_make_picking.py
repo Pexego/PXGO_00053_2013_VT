@@ -23,7 +23,7 @@ from odoo import fields, models, _, exceptions, api
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
-
+#TODO: revisar este wizard al migrar crm_claim_rma_custom
 class ClaimMakePicking(models.TransientModel):
 
     _name = "claim_make_picking.wizard"

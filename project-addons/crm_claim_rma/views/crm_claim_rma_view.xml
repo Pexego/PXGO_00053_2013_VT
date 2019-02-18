@@ -365,9 +365,9 @@
                  <field name="supplier_number" attrs="{'invisible': [('claim_type','in', ['customer',])]}"/>
                 <field name="date"/>
             </field>
-            <xpath expr="/form/sheet/group[1]" position="inside">
+            <xpath expr="/form/sheet/group[1]" position="before">
                 <div class="oe_right oe_button_box" name="buttons">
-                    <button class="oe_stat_button" name="%(act_crm_claim_rma_sale_orders)d" type="action"
+                    <button class="oe_stat_button" name="%(act_crm_claim_rma_sale_orders)d" type="action" icon="fa-pencil-square-o"
                             string="Quotations and Sales"
                             attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['supplier','other'])]}"
                             context="{'search_default_partner_id': [partner_id],'search_default_user_id':False}"
