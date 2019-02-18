@@ -56,10 +56,10 @@ WARNING: Use with caution, this module is currently not yet completely debugged 
  'data': [
     'wizard/claim_make_picking_from_picking_view.xml',
     'wizard/claim_make_picking_view.xml',
-    'stock_view.xml',
-    'stock_data.xml',
-    'claim_rma_view.xml',
-    'mrp_repair_view.xml'
+    'views/stock_view.xml',
+    'data/stock_data.xml',
+    'views/claim_rma_view.xml',
+    'views/mrp_repair_view.xml'
  ],
  'installable': True,
  'application': True,
