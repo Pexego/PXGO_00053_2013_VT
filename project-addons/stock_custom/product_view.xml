@@ -73,7 +73,7 @@
             </field>
         </record>
 
-        <menuitem id="menu_products_stock_new" action="action_product_stock_new" parent="base.menu_product" groups="base.group_no_one" sequence="2"/>
+        <menuitem id="menu_products_stock_new" action="action_product_stock_new" parent="base.menu_product" groups="base.group_user" sequence="2"/>
 
     </data>
 </openerp>

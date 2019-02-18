@@ -389,29 +389,6 @@ class rappel(models.Model):
         super(rappel, ordered_rappels).compute_rappel()
 
 
-class RappelInvoice(models.TransientModel):
-
-    _inherit = "rappel.invoice.wzd"
-
-    @api.multi
-    def action_invoice(self):
-        res = super(RappelInvoice, self).action_invoice()
-        compute_rappel_obj = self.env["rappel.calculated"]
-        for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
-            if rappel.quantity <= 0:
-                continue
-            if rappel.invoice_id:
-                invoice = rappel.invoice_id
-                if not invoice.payment_mode_id \
-                        or not invoice.partner_bank_id \
-                        or not invoice.section_id:
-                    rappel.invoice_id.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
-                                             'partner_bank_id': rappel.partner_id.bank_ids and
-                                                                    rappel.partner_id.bank_ids[0].id or False,
-                                             'section_id': rappel.partner_id.section_id.id})
-        return res
-
-
 class RappelCurrentInfo(models.Model):
 
     _inherit = "rappel.current.info"
@@ -509,11 +486,29 @@ class ComputeRappelInvoice(models.TransientModel):
         res = super(ComputeRappelInvoice, self).action_invoice()
         compute_rappel_obj = self.env["rappel.calculated"]
         for rappel in compute_rappel_obj.browse(self.env.context["active_ids"]):
+            if rappel.quantity <= 0:
+                continue
             if rappel.invoice_id:
-                for line in rappel.invoice_id.invoice_line:
+                invoice_rappel = rappel.invoice_id
+                # Update description invoice lines
+                for line in invoice_rappel.invoice_line:
                     line.write({'name': u'%s (%s-%s)' %
                                         (rappel.rappel_id.description,
                                          rappel.date_start,
                                          rappel.date_end)})
+                # Update account data
+                if not invoice_rappel.payment_mode_id \
+                        or not invoice_rappel.partner_bank_id \
+                        or not invoice_rappel.section_id:
+                    partner_bank_id = False
+                    for banks in rappel.partner_id.bank_ids:
+                        for mandate in banks.mandate_ids:
+                            if mandate.state == 'valid':
+                                partner_bank_id = banks.id
+                                break
+                            else:
+                                partner_bank_id = False
+                    invoice_rappel.write({'payment_mode_id': rappel.partner_id.customer_payment_mode.id,
+                                          'partner_bank_id': partner_bank_id,
+                                          'section_id': rappel.partner_id.section_id.id})
         return res
-

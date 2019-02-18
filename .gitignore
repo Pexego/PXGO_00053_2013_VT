@@ -28,3 +28,4 @@ project-addons/asperience_edi/data_export
 .mr.developer.cfg
 eggs-custom
 cookies.data
+.vscode/
