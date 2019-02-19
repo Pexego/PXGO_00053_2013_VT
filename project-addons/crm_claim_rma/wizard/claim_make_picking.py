@@ -39,14 +39,11 @@ class ClaimMakePicking(models.TransientModel):
         context = self.env.context
         loc_id = False
         if context.get('picking_type') == 'out':
+            partner = self.env['res.partner'].browse(context.get('partner_id'))
             if context.get('type') == 'supplier':
-                loc_id = self.env['res.partner'].read(
-                    context.get('partner_id'),
-                    ['property_stock_supplier'])['property_stock_supplier'][0]
+                loc_id = partner.property_stock_supplier[0]
             elif context.get('type') == 'customer':
-                loc_id = self.env['res.partner'].read(
-                    context.get('partner_id'),
-                    ['property_stock_customer'])['property_stock_customer'][0]
+                loc_id = partner.property_stock_customer[0]
         elif context.get('picking_type') == 'in':
             # Add the case of return to supplier !
             line_ids = self._get_claim_lines()
@@ -64,9 +61,8 @@ class ClaimMakePicking(models.TransientModel):
         else:
             move_field = 'move_in_customer_id'
         good_lines = []
-        line_ids = line_obj.search(
-            [('claim_id', '=', context['active_id'])])
-        for line in line_obj.browse(line_ids):
+        line_ids = line_obj.search([('claim_id', '=', context['active_id'])])
+        for line in line_ids:
             if not line[move_field] or line[move_field].state == 'cancel':
                 good_lines.append(line.id)
         if not good_lines:
@@ -78,22 +74,20 @@ class ClaimMakePicking(models.TransientModel):
     def _get_source_loc(self):
         loc_id = False
         context = self.env.context
-        warehouse_obj = self.env['stock.warehouse']
-        warehouse_id = context.get('warehouse_id')
         if context.get('picking_type') == 'out':
+            warehouse = self.env['stock.warehouse'].browse(context.get('warehouse_id'))
             if context.get('type') == 'supplier':
-                loc_id = warehouse_obj.read(['lot_breakdown_id'])['lot_breakdown_id'][0]
+                loc_id = warehouse.lot_breakdown_id[0]
             if context.get('type') == 'customer':
-                loc_id = warehouse_obj.read(warehouse_id,['lot_rma_id'])['lot_rma_id'][0]
+                loc_id = warehouse.lot_rma_id[0]
 
         elif context.get('picking_type') == 'in':
+            partner = self.env['res.partner'].browse(context.get('partner_id'))
             if context.get('type') == 'supplier':
-                loc_id = self.env['res.partner'].read(context['partner_id'],
-                    ['property_stock_supplier'])['property_stock_supplier'][0]
+                loc_id = partner.property_stock_supplier[0]
 
             if context.get('type') == 'customer':
-                loc_id = self.env['res.partner'].read(context['partner_id'],
-                    ['property_stock_customer'])['property_stock_customer'][0]
+                loc_id = partner.property_stock_customer[0]
         return loc_id
 
     claim_line_source_location = fields.Many2one(
@@ -158,16 +152,16 @@ class ClaimMakePicking(models.TransientModel):
         qty = claim_line.product_returned_quantity
 
         move_id = move_obj.create(
-            {'name': claim_line.product_id.name_template,
+            {'name': claim_line.product_id.name,
              'priority': '0',
              'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
              'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
              'product_id': product.id,
-             'picking_type_id': type_ids and type_ids[0],
+             'picking_type_id': type_ids and type_ids[0].id,
              'product_uom_qty': claim_line.product_returned_quantity,
              'product_uom': claim_line.product_id.uom_id.id,
-             'partner_id': partner_id,
-             'picking_id': picking_id,
+             'partner_id': partner_id.id,
+             'picking_id': picking_id.id,
              'state': 'draft',
              'price_unit': claim_line.unit_sale_price,
              'company_id': claim.company_id.id,
@@ -190,7 +184,7 @@ class ClaimMakePicking(models.TransientModel):
             }
             reserve = reserv_obj.create(reserv_vals)
             reserv_obj.reserve([reserve])
-        self.env['claim.line'].write(claim_line.id, {write_field: move_id})
+        claim_line.write({write_field: move_id.id})
 
     # If "Create" button pressed
     def action_create_picking(self):
@@ -223,19 +217,17 @@ class ClaimMakePicking(models.TransientModel):
         # or if partner address is different
         if context.get('product_return'):
             common_dest_loc_id = self._get_common_dest_location_from_line(line_ids)
-            self.env['claim.line'].auto_set_warranty(line_ids)
+            self.env['claim.line'].browse(line_ids).auto_set_warranty()
             common_dest_partner_id = self._get_common_partner_from_line(line_ids)
         # create picking
-        type_ids = self.pool.get('stock.picking.type').search(
-            [('code', '=', p_type)], context=context)
-
+        type_ids = self.env['stock.picking.type'].search([('code', '=', p_type)])
         picking_id = picking_obj.create(
             {'origin': claim.number,
-             'picking_type_id': type_ids and type_ids[0],
+             'picking_type_id': type_ids and type_ids[0].id,
              'move_type': 'one',  # direct
              'state': 'draft',
              'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-             'partner_id': partner_id,
+             'partner_id': partner_id.id,
              'invoice_state': "none",
              'company_id': claim.company_id.id,
              'location_id': self.claim_line_source_location.id,
@@ -245,29 +237,26 @@ class ClaimMakePicking(models.TransientModel):
              })
         # Create picking lines
         for wizard_claim_line in self.claim_line_ids:
-            self.create_move(wizard_claim_line, p_type,
-                             picking_id, claim, note, write_field, context)
+            self.create_move(wizard_claim_line, p_type, picking_id, claim, note, write_field)
 
         #TODO: Migrar
         # ~ wf_service = netsvc.LocalService("workflow")
         # ~ if picking_id:
-            # ~ wf_service.trg_validate(uid, 'stock.picking',
-                                    # ~ picking_id, 'button_confirm', cr)
+            # ~ wf_service.trg_validate(uid, 'stock.picking', picking_id, 'button_confirm', cr)
             #picking_obj.action_assign(cr, uid, [picking_id])
-        claim_obj.write([claim.id], {'rma_cost': rma_cost})
         if picking_id:
             domain = ("[('picking_type_code', '=', '%s'), \
                        ('partner_id', '=', %s)]" %
-                      (p_type, partner_id))
+                      (p_type, partner_id.id))
 
             return {
                 'name': '%s' % name,
                 'view_type': 'form',
                 'view_mode': 'form',
-                'view_id': view_id,
+                'view_id': view_id.id,
                 'domain': domain,
                 'res_model': model,
-                'res_id': picking_id,
+                'res_id': picking_id.id,
                 'type': 'ir.actions.act_window',
             }
         else:
