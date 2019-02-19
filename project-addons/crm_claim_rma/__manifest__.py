@@ -78,7 +78,6 @@ Contributors:
                 'stock_reserve'
                 ],
     'data': ['wizard/claim_make_picking_view.xml',
-             'wizard/equivalent_products_wizard_view.xml',
              'wizard/claim_make_repair_view.xml',
              'wizard/claim_send_supplier_view.xml',
              'wizard/repair_invoice_view.xml',
