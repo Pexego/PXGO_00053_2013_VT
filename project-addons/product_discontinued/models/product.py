@@ -18,7 +18,7 @@ class ProductTemplate(models.Model):
                     item.sale_ok = False
                     item.purchase_ok = False
                 else:
-                    raise ValidationError(_("The product can not be discontinued. Currently exist stock or its status is not - End of lifecycle"))
+                    raise ValidationError(_("The product can not be discontinued. Currently exist stock or the status is not - End of lifecycle"))
             return True
 
     @api.multi
@@ -29,6 +29,5 @@ class ProductTemplate(models.Model):
                 if not item.discontinued:
                     item.sale_ok = True
                     if item.qty_available == 0:
-                        result = {'warning': {'title': _('Warning'), 'message': _('The product does not have stock, '
-                                          'please check !!!.')}}
+                        result = {'warning': {'title': _('Warning'), 'message': _('The product does not have stock.')}}
                         return result
