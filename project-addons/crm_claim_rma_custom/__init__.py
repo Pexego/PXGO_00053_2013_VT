@@ -18,10 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import account_invoice
-from . import crm_claim
-from . import partner
-from . import mrp_repair
-from . import stock
+from . import models
 from . import wizard
 from . import report
