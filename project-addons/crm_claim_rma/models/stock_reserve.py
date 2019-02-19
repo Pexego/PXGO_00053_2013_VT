@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
+#    Copyright (C) 2014 Pexego All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,23 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields
 
-from odoo import models, fields, api
 
+class StockReservation(models.Model):
+    _inherit = "stock.reservation"
 
-class MrpRepair(models.Model):
-
-    _inherit = "mrp.repair"
-
-    @api.one
-    @api.depends('claim_line_ids')
-    def _get_claim_id(self):
-        if self.claim_line_ids:
-            self.claim_id = self.claim_line_ids[0].claim_id.id
-        else:
-            self.claim_id = False
-
-    claim_id = fields.Many2one("crm.claim", "Claim", compute=_get_claim_id,
-                               readonly=True, store=True)
-    claim_line_ids = fields.One2many('claim.line', 'repair_id', 'Claims',
-                                     readonly=True)
+    claim_id = fields.Many2one('crm.claim', string='Claim', ondelete='cascade')

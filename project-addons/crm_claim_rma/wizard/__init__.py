@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -22,7 +21,6 @@
 ##############################################################################
 from . import claim_make_picking
 from . import account_invoice_refund
-from . import equivalent_products_wizard
 from . import claim_make_repair
 from . import claim_send_supplier
 from . import repair_invoice
