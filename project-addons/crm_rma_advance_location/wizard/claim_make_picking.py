@@ -31,9 +31,9 @@ class ClaimMakePicking(models.TransientModel):
         loc_id = super(ClaimMakePicking, self)._get_dest_loc()
         warehouse = self.env['stock.warehouse'].browse(self.env.context.get('warehouse_id'))
         if self.env.context.get('picking_type') == 'in':
-            loc_id = warehouse.lot_rma_id[0]
+            loc_id = warehouse.lot_rma_id
         elif self.env.context.get('picking_type') == 'loss':
-            loc_id = warehouse.lot_carrier_loss_id[0]
+            loc_id = warehouse.lot_carrier_loss_id
         return loc_id
 
     claim_line_dest_location = fields.Many2one("stock.location", default=_get_dest_loc)
