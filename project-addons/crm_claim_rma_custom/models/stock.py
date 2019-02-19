@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos
@@ -18,11 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
-class stock_picking(models.Model):
-    _inherit = "stock.picking"
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
 
     internal_notes = fields.Text("Internal Notes", copy=False)
     odoo_management = fields.Boolean("Odoo management", readonly=True,
@@ -36,7 +35,7 @@ class stock_picking(models.Model):
         default = default and default or {}
         if self.env.context.get('picking_type', '') == 'picking_input':
             default['not_sync'] = False
-        return super(stock_picking, self).copy(default)
+        return super(StockPicking, self).copy(default)
 
 
     # def action_assign(self, cr, uid, ids, context=None):
@@ -64,7 +63,7 @@ class stock_picking(models.Model):
                             elif not move.claim_line_id.repair_id:
                                 move.claim_line_id.substate_id = self.env.ref(
                                     'crm_claim_rma_custom.substate_checked')
-        return super(stock_picking, self).do_transfer()
+        return super(StockPicking, self).do_transfer()
 
 
 class StockLocation(models.Model):
@@ -80,12 +79,12 @@ class StockLocation(models.Model):
                                    "not will be synced with vstock")
 
 
-class stock_move(models.Model):
+class StockMove(models.Model):
     _inherit = 'stock.move'
 
     @api.multi
     def action_done(self):
-        res = super(stock_move, self).action_done()
+        res = super(StockMove, self).action_done()
         for move in self:
             if move.claim_line_id:
                 claim_line_obj = move.claim_line_id

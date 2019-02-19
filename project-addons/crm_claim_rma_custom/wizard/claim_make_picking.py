@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos
@@ -19,14 +18,14 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields, exceptions, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, api, fields, exceptions, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
 
 class ClaimMakePicking(models.TransientModel):
 
-    _inherit = "claim_make_picking.wizard"
+    _inherit = 'claim_make_picking.wizard'
 
     odoo_management = fields.Boolean('Management in Odoo')
     not_sync = fields.Boolean("Not sync", help="This picking not will be "

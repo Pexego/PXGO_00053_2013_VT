@@ -38,7 +38,6 @@
              'security/ir.model.access.csv',
              'wizard/claim_make_picking_view.xml',
              'views/stock_view.xml',
-             'wizard/equivalent_products_wizard_view.xml',
              'wizard/claim_make_picking_from_picking_view.xml',
              'wizard/crm_phonecall_view.xml',
              'wizard/email_template.xml',

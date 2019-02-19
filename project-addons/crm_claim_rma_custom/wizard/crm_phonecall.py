@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2017 Visiotech All Rights Reserved
@@ -19,9 +18,9 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields, exceptions, _
+from odoo import models, api, fields, exceptions, _
 from datetime import datetime
-from openerp.exceptions import except_orm, ValidationError
+from odoo.exceptions import except_orm, ValidationError
 import pytz
 
 
@@ -54,7 +53,7 @@ SCOPE = [('sales', 'Sales'),
 
 class CrmPhonecall(models.Model):
     """ Wizard for CRM phonecalls"""
-    _inherit = "crm.phonecall"
+    _inherit = 'crm.phonecall'
 
     local_tz = pytz.timezone('Europe/Madrid')
 

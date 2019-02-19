@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-
-        <record id="view_claim_picking_add_om" model="ir.ui.view">
-            <field name="name">claim_picking_add_om</field>
-            <field name="model">claim_make_picking.wizard</field>
-            <field name="inherit_id" ref="crm_claim_rma.view_claim_picking"/>
-            <field name="arch" type="xml">
-                <field name="claim_line_dest_location" position="after">
-                    <group>
-                        <field name="odoo_management"/>
-                        <field name="not_sync"/>
-                    </group>
-                </field>
+<odoo>
+    <record id="view_claim_picking_add_om" model="ir.ui.view">
+        <field name="name">claim_picking_add_om</field>
+        <field name="model">claim_make_picking.wizard</field>
+        <field name="inherit_id" ref="crm_claim_rma.view_claim_picking"/>
+        <field name="arch" type="xml">
+            <field name="claim_line_dest_location" position="after">
+                <group>
+                    <field name="odoo_management"/>
+                    <field name="not_sync"/>
+                </group>
             </field>
-        </record>
-
-    </data>
-</openerp>
+        </field>
+    </record>
+</odoo>

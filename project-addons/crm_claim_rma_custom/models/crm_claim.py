@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,22 +18,23 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 from datetime import datetime
-from openerp.exceptions import except_orm
+from odoo.exceptions import except_orm
 
 
-class equivalent_products_wizard(models.TransientModel):
-    _inherit = "equivalent.products.wizard"
+class EquivalentProductsWizard(models.TransientModel):
+    _inherit = 'equivalent.products.wizard'
 
     tag_ids = fields.Many2many('product.tag',
                                'equivalent_products_tag_rel2',
                                'prod_id', 'tag_id',
                                'Tags')
 
+
 class CrmClaimRma(models.Model):
-    _inherit = "crm.claim"
-    _order = "id desc"
+    _inherit = 'crm.claim'
+    _order = 'id desc'
 
     @api.one
     def _has_category(self, expected_category):
@@ -301,8 +301,8 @@ class CrmClaimRma(models.Model):
 
 
 class ClaimInvoiceLine(models.Model):
-    _name = "claim.invoice.line"
-    _rec_name = "product_description"
+    _name = 'claim.invoice.line'
+    _rec_name = 'product_description'
     _order = 'sequence,id'
 
     sequence = fields.Integer()
@@ -387,7 +387,7 @@ class ClaimInvoiceLine(models.Model):
 
 
 class CrmClaimLine(models.Model):
-    _inherit = "claim.line"
+    _inherit = 'claim.line'
 
     comercial = fields.Many2one("res.users", String="Comercial", related="claim_id.comercial")
     date_received = fields.Date(related="claim_id.date_received")

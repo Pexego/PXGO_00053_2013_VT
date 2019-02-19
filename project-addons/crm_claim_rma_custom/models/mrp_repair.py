@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,17 +18,17 @@
 #
 ##############################################################################
 
-from openerp import models, api
+from odoo import models, api
 
 
-class mrp_repair(models.Model):
-    _inherit = "mrp.repair"
+class MrpRepair(models.Model):
+    _inherit = 'mrp.repair'
 
-    _order = "id desc"
+    _order = 'id desc'
 
     @api.multi
     def action_repair_end(self):
-        res = super(mrp_repair, self).action_repair_end()
+        res = super(MrpRepair, self).action_repair_end()
         order_obj = self.browse(self.id)
         claim_line_obj = self.env['claim.line'].browse(self.claim_id.id)
         claim_obj = self.env['crm.claim'].browse(claim_line_obj.id)
@@ -47,7 +46,7 @@ class mrp_repair(models.Model):
 
     @api.multi
     def action_invoice_create(self, group=False):
-        res = super(mrp_repair, self).action_invoice_create(group=group)
+        res = super(MrpRepair, self).action_invoice_create(group=group)
         for repair_id in res:
             invoice = self.env['account.invoice'].browse(res[repair_id])
             repair = self.browse(repair_id)
@@ -76,12 +75,12 @@ class mrp_repair(models.Model):
     def write(self, data):
         if 'partner_id' in data:
             data['pricelist_id'] = self.calculate_pricelist(data)
-        res = super(mrp_repair, self).write(data)
+        res = super(MrpRepair, self).write(data)
         return res
 
     @api.model
     def create(self, data):
         data['pricelist_id'] = self.calculate_pricelist(data)
-        res = super(mrp_repair, self).create(data)
+        res = super(MrpRepair, self).create(data)
         return res
 
