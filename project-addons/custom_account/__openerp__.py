@@ -53,6 +53,7 @@
              'report/sale_report_view.xml',
              'voucher_view.xml',
              'account_treasury_forecast_view.xml',
-             'report/account_invoice_contact_report_view.xml'],
+             'report/account_invoice_contact_report_view.xml',
+             'security/custom_account_security.xml'],
     "installable": True
 }
