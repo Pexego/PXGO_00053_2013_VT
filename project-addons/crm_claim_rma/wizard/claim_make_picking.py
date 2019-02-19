@@ -41,9 +41,9 @@ class ClaimMakePicking(models.TransientModel):
         if context.get('picking_type') == 'out':
             partner = self.env['res.partner'].browse(context.get('partner_id'))
             if context.get('type') == 'supplier':
-                loc_id = partner.property_stock_supplier[0]
+                loc_id = partner.property_stock_supplier
             elif context.get('type') == 'customer':
-                loc_id = partner.property_stock_customer[0]
+                loc_id = partner.property_stock_customer
         elif context.get('picking_type') == 'in':
             # Add the case of return to supplier !
             line_ids = self._get_claim_lines()
@@ -77,17 +77,17 @@ class ClaimMakePicking(models.TransientModel):
         if context.get('picking_type') == 'out':
             warehouse = self.env['stock.warehouse'].browse(context.get('warehouse_id'))
             if context.get('type') == 'supplier':
-                loc_id = warehouse.lot_breakdown_id[0]
+                loc_id = warehouse.lot_breakdown_id
             if context.get('type') == 'customer':
-                loc_id = warehouse.lot_rma_id[0]
+                loc_id = warehouse.lot_rma_id
 
         elif context.get('picking_type') == 'in':
             partner = self.env['res.partner'].browse(context.get('partner_id'))
             if context.get('type') == 'supplier':
-                loc_id = partner.property_stock_supplier[0]
+                loc_id = partner.property_stock_supplier
 
             if context.get('type') == 'customer':
-                loc_id = partner.property_stock_customer[0]
+                loc_id = partner.property_stock_customer
         return loc_id
 
     claim_line_source_location = fields.Many2one(
@@ -117,7 +117,7 @@ class ClaimMakePicking(models.TransientModel):
             if line.location_dest_id.id not in line_location:
                 line_location.append(line.location_dest_id.id)
         if len(line_location) == 1:
-            loc_id = line_location[0]
+            loc_id = line_location
         return loc_id
 
     def _get_common_partner_from_line(self, line_ids):
