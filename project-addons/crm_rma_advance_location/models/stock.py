@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -22,19 +21,17 @@
 from odoo import fields, models
 
 
-class stock_warehouse(models.Model):
+class StockWarehouse(models.Model):
 
     _inherit = "stock.warehouse"
 
-    lot_rma_id = fields.Many2one('stock.location', 'Location RMA')
+    lot_rma_id = fields.Many2one('stock.location',
+                                 'Location RMA')
     lot_breakdown_id = fields.Many2one('stock.location',
-            'Location Breakdown')
-    lot_carrier_loss_id = fields.Many2one(
-            'stock.location',
-            'Location Carrier Loss')
-    lot_breakage_loss_id = fields.Many2one(
-            'stock.location',
-            'Location Breakage Loss')
-    lot_refurbish_id = fields.Many2one(
-            'stock.location',
-            'Location Refurbish')
+                                       'Location Breakdown')
+    lot_carrier_loss_id = fields.Many2one('stock.location',
+                                          'Location Carrier Loss')
+    lot_breakage_loss_id = fields.Many2one('stock.location',
+                                           'Location Breakage Loss')
+    lot_refurbish_id = fields.Many2one('stock.location',
+                                       'Location Refurbish')

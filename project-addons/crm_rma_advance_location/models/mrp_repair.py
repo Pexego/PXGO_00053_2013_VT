@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,19 +18,15 @@
 #
 ##############################################################################
 
-from openerp import models
+from odoo import models, api
 
 
 class MrpRepairLine(models.Model):
 
     _inherit = "mrp.repair.line"
 
-    def onchange_operation_type(self, cr, uid, ids, type, guarantee_limit,
-                                company_id=False, context=None):
-        res = super(MrpRepairLine, self).\
-            onchange_operation_type(cr, uid, ids, type, guarantee_limit,
-                                    company_id=company_id, context=context)
-        if type != "add" and context.get("cur_location_id", False):
-            res['value']['location_id'] = context['cur_location_id']
-
-        return res
+    @api.onchange('type', 'repair_id')
+    def onchange_operation_type(self):
+        super(MrpRepairLine, self).onchange_operation_type()
+        if self.type != "add" and self.env.context.get("cur_location_id", False):
+            self.location_id = self.env.context['cur_location_id']
