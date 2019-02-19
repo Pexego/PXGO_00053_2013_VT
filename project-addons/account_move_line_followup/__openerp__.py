@@ -6,8 +6,8 @@
     'license': 'AGPL-3',
     'author': 'Nadia Ferreyra',
     'category': 'Account',
-    'depends': ['account'],
-    'data': ['data/ir_cron.xml'],
+    'depends': ['account', 'cyc_view'],
+    'data': ['data/ir_cron.xml', 'data/ir_config_parameter.xml'],
     'description': '''Update follow-up data in account move lines''',
     'installable': True,
 }
