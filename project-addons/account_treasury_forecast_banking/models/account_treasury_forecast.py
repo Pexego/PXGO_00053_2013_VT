@@ -15,6 +15,7 @@
 #
 ##############################################################################
 
+import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api
 
 
@@ -43,6 +44,9 @@ class AccountTreasuryForecastLine(models.Model):
 class AccountTreasuryForecast(models.Model):
     _inherit = 'account.treasury.forecast'
 
+    not_bank_maturity = fields.Boolean(string="Without Bank Maturities",
+                                       help="It will be reflected in the treasury analysis")
+
     @api.multi
     def calculate_line(self):
         treasury_line_obj = self.env['account.treasury.forecast.line']
@@ -53,3 +57,27 @@ class AccountTreasuryForecast(models.Model):
                 payment_mode_id = line_o.template_line_id.payment_mode_id.id
                 line_o.payment_mode_id = payment_mode_id
         return result
+
+    @api.multi
+    def calc_final_amount(self):
+        for record in self:
+            super(AccountTreasuryForecast, record).calc_final_amount()
+            balance = record.final_amount
+            if not record.not_bank_maturity:
+                bank_maturities = self.env['bank.maturity'].search([('date_due', '>=', record.start_date),
+                                                                    ('date_due', '<=', record.end_date),
+                                                                    ('paid', '=', False)])
+                bank_amount = sum([x.amount for x in bank_maturities])
+                balance -= bank_amount
+                record.final_amount = balance
+
+
+class BankMaturity(models.Model):
+    _name = 'bank.maturity'
+
+    bank_account = fields.Many2one('res.partner.bank', string="Bank account",
+                                   domain=lambda self: [('partner_id', '=', self.env.user.company_id.partner_id.id)])
+    bank_name = fields.Char("Bank", related='bank_account.bank_name', readonly=True)
+    date_due = fields.Date(string="Due Date")
+    amount = fields.Float(string="Amount", digits=dp.get_precision('Account'))
+    paid = fields.Boolean(string="Paid")
