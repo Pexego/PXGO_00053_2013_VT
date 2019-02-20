@@ -441,9 +441,6 @@ class PaymentMode(models.Model):
     _inherit = 'account.payment.mode'
 
     blocked = fields.Boolean('No Follow-up')
-    treasury_forecast_type = fields.Selection([('debit_receipt', 'Debit receipt'),
-                                               ('transfer', 'Transfer')],
-                                              string='Treasury Module')
 
 
 class AccountPaymentTerm(models.Model):

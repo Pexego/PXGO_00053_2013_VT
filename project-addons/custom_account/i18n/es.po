@@ -595,31 +595,6 @@ msgid "Main supplier"
 msgstr "Proveedor principal"
 
 #. module: custom_account
-#: field:bank.maturity,bank_account:0
-msgid "Bank account"
-msgstr "Cuenta bancaria"
-
-#. module: custom_account
-#: field:bank.maturity,bank_name:0
-msgid "Bank"
-msgstr "Banco"
-
-#. module: custom_account
-#: field:bank.maturity,date_due:0
-msgid "Due Date"
-msgstr "Fecha vencimiento"
-
-#. module: custom_account
-#: field:bank.maturity,amount:0
-msgid "Amount"
-msgstr "Importe"
-
-#. module: custom_account
-#: field:bank.maturity,paid:0
-msgid "Paid"
-msgstr "Pagado"
-
-#. module: custom_account
 #: field:sale.order,ref_partner:0
 msgid "Client reference"
 msgstr "Referencia del cliente"
