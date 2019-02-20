@@ -21,9 +21,6 @@
                 <field name="odoo_management"/>
                 <field name="not_sync"/>
             </field>
-            <!--TODO: Migrar<button name="do_enter_transfer_details" position="replace">
-                <button name="do_enter_transfer_details" attrs="{'invisible': ['|',('state','not in',['assigned','partially_available']),('not_sync', '=',False)]}" string="Transfer" groups="stock.group_stock_user" type="object" class="oe_highlight"/>
-            </button>-->
         </field>
     </record>
 </odoo>

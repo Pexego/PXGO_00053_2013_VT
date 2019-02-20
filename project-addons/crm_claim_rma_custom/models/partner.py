@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from openerp import models, api
+from odoo import models, api
 
 
 class ResPartner(models.Model):

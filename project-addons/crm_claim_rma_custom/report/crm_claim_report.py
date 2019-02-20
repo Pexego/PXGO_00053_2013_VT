@@ -51,7 +51,7 @@ class CrmClaimCostReport(models.Model):
                     c.date_deadline as date_deadline,
                     c.user_id,
                     c.stage_id,
-                    c.section_id,
+                    c.team_id,
                     c.comercial as comercial_id,
                     c.partner_id,
                     c.company_id,
@@ -68,7 +68,7 @@ class CrmClaimCostReport(models.Model):
                 from
                     crm_claim c
                 group by c.date,\
-                        c.user_id,c.section_id, c.stage_id,c.claim_type,c.comercial,\
+                        c.user_id,c.team_id, c.stage_id,c.claim_type,c.comercial,\
                         c.categ_id,c.partner_id,c.company_id,c.create_date,
                         c.priority,c.type_action,c.date_deadline,c.date_closed,c.id
             )""")

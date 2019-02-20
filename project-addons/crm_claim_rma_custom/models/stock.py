@@ -37,15 +37,14 @@ class StockPicking(models.Model):
             default['not_sync'] = False
         return super(StockPicking, self).copy(default)
 
+    @api.multi
+    def action_assign(self):
+        res = super(StockPicking, self).action_assign()
+        for obj in self:
+            if obj.claim_id and obj.picking_type_code == "incoming":
+                obj.force_assign()
 
-    # def action_assign(self, cr, uid, ids, context=None):
-    #     res = super(stock_picking, self).action_assign(cr, uid, ids,
-    #                                                    context=context)
-    #     for obj in self.browse(cr, uid, ids):
-    #         if obj.claim_id and obj.picking_type_code == "incoming":
-    #             obj.force_assign()
-
-    #     return res TODO: Migrar
+        return res
 
     @api.model
     def do_transfer(self):
