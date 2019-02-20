@@ -19,9 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
-from datetime import datetime
-from openerp.exceptions import except_orm
+from openerp import models, api, _
 
 
 class CrmClaimRma(models.Model):

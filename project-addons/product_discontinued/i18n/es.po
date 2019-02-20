@@ -1,0 +1,33 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * product_discontinued
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-01-19 16:22+0000\n"
+"PO-Revision-Date: 2019-01-19 16:22+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_discontinued
+#: field:product.product,discontinued:0
+msgid "Discontinued"
+msgstr "Descatalogado"
+
+#. module: product_discontinued
+#: code:addons/product_discontinued/models/product.py:21
+#, python-format
+msgid "The product can not be discontinued. Currently exist stock or the status is not - End of lifecycle"
+msgstr "El producto no cumple los requisitos para ser descatalogado. Stock existente o su estado actual no es 'Fin de ciclo de vida' (Pestaña inventario)."
+
+#. module: product_discontinued
+#: code:addons/product_discontinued/models/product.py:33
+#, python-format
+msgid "The product does not have stock."
+msgstr "El producto no tiene stock."

@@ -54,12 +54,13 @@ class AccountInvoiceContactReport(models.Model):
     benefit = fields.Float('Benefit', readonly=True)
     brand_id = fields.Many2one('product.brand', 'Brand', readonly=True)
     product_id = fields.Many2one('product.product', 'Product', readonly=True)
+    company_id = fields.Many2one('res.company', 'Company', readonly=True)
 
     def _select(self):
         select_str = """
             SELECT  sub.id, sub.id_invoice, sub.number, sub.partner_id, sub.contact_id, 
                     sub.date, sub.date_due, sub.section_id, sub.period_id, sub.type, sub.state, sub.currency_id,
-                    sub.product_id, sub.brand_id,
+                    sub.product_id, sub.brand_id, sub.company_id,
                     sub.price_total / cr.rate as price_total, 
                     CASE WHEN sub.type IN ('out_refund') THEN -sub.benefit
                          WHEN sub.type IN ('out_invoice') THEN sub.benefit
@@ -71,7 +72,7 @@ class AccountInvoiceContactReport(models.Model):
         select_str = """
                 SELECT  ail.id, ai.id AS id_invoice, ai.number AS number, ai.partner_id, coalesce(rp_contact.id, ai.partner_id) AS contact_id,
                         ai.date_invoice AS date, ai.date_due, ai.section_id, ai.period_id, ai.type, ai.state, ai.currency_id,  
-                        ail.product_id, pt.product_brand_id AS brand_id,
+                        ail.product_id, pt.product_brand_id AS brand_id, ai.company_id, 
                         SUM(CASE
                                 WHEN ai.type::text = ANY (ARRAY['out_refund'::character varying::text, 'in_invoice'::character varying::text])
                                 THEN - ail.price_subtotal
@@ -97,7 +98,7 @@ class AccountInvoiceContactReport(models.Model):
     def _group_by(self):
         group_by_str = """
                 GROUP BY ail.id, ail.product_id, pt.product_brand_id, ai.id, ai.partner_id, coalesce(rp_contact.id, ai.partner_id), ai.number, ai.date_invoice, 
-                ai.section_id, ai.period_id, ai.currency_id, ai.type, ai.state
+                ai.section_id, ai.period_id, ai.currency_id, ai.type, ai.state, ai.company_id
         """
         return group_by_str
 

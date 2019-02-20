@@ -21,6 +21,11 @@ msgid "Associated Products"
 msgstr "Productos asociados"
 
 #. module: associated_products
+#: view:product.product:associated_products.product_add_associateds_products_form
+msgid "Equivalent Products"
+msgstr "Productos equivalentes"
+
+#. module: associated_products
 #: field:sale.order.line,assoc_line_ids:0
 msgid "Associated lines"
 msgstr "Associated lines"
@@ -29,6 +34,11 @@ msgstr "Associated lines"
 #: field:product.associated,associated_id:0
 msgid "Associated product"
 msgstr "Producto asociado"
+
+#. module: associated_products
+#: field:product.equivalent,equivalent_id:0
+msgid "AEquivalent product"
+msgstr "Producto equivalente"
 
 #. module: associated_products
 #: view:product.associated:associated_products.product_associated_form
@@ -76,6 +86,11 @@ msgstr "Producto"
 #: view:product.associated:associated_products.product_associated_tree_view
 msgid "Products Associated"
 msgstr "Productos asociados"
+
+#. module: associated_products
+#: view:product.equivalent:equivalent_products.product_equivalent_tree_view
+msgid "Equivalent Products"
+msgstr "Productos equivalentes"
 
 #. module: associated_products
 #: field:product.associated,quantity:0
