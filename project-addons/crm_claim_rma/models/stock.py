@@ -77,7 +77,7 @@ class StockMove(models.Model):
         if vals.get('picking_id'):
             picking = self.env['stock.picking'].browse(vals['picking_id'])
             if picking.claim_id and picking.picking_type_code == u'incoming':
-                self.state = 'confirmed'
+                move_id.state = 'confirmed'
         return move_id
 
     @api.multi

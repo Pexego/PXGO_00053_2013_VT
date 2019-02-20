@@ -21,7 +21,7 @@ msgid "Breakage Loss"
 msgstr "Pérdidas por roturas"
 
 #. module: crm_rma_advance_location
-#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -51,77 +51,77 @@ msgid "Create Products Loss"
 msgstr "Crear pérdida"
 
 #. module: crm_rma_advance_location
-#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
 msgid "Create picking"
 msgstr "Crear albarán"
 
 #. module: crm_rma_advance_location
-#: field:claim_make_picking_from_picking.wizard,create_uid:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: crm_rma_advance_location
-#: field:claim_make_picking_from_picking.wizard,create_date:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_create_date
 msgid "Created on"
 msgstr "Creado el"
 
 #. module: crm_rma_advance_location
-#: field:claim_make_picking_from_picking.wizard,picking_line_dest_location:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_picking_line_dest_location
 msgid "Dest. Location"
 msgstr "Ubic. destino"
 
 #. module: crm_rma_advance_location
-#: field:claim_make_picking_from_picking.wizard,id:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_id
 msgid "ID"
 msgstr "ID"
 
 #. module: crm_rma_advance_location
-#: field:claim_make_picking_from_picking.wizard,write_uid:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_write_uid
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
 
 #. module: crm_rma_advance_location
-#: field:claim_make_picking_from_picking.wizard,write_date:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_write_date
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
 
 #. module: crm_rma_advance_location
-#: field:stock.warehouse,lot_breakage_loss_id:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_stock_warehouse_lot_breakage_loss_id
 msgid "Location Breakage Loss"
 msgstr "Ubicación pérdidas rotura"
 
 #. module: crm_rma_advance_location
-#: field:stock.warehouse,lot_breakdown_id:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_stock_warehouse_lot_breakdown_id
 msgid "Location Breakdown"
 msgstr "Ubicación averías"
 
 #. module: crm_rma_advance_location
-#: field:stock.warehouse,lot_carrier_loss_id:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_stock_warehouse_lot_carrier_loss_id
 msgid "Location Carrier Loss"
 msgstr "Ubicación pérdidas transporte"
 
 #. module: crm_rma_advance_location
-#: field:stock.warehouse,lot_rma_id:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_stock_warehouse_lot_rma_id
 msgid "Location RMA"
 msgstr "Ubicación RMA"
 
 #. module: crm_rma_advance_location
-#: field:stock.warehouse,lot_refurbish_id:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_stock_warehouse_lot_refurbish_id
 msgid "Location Refurbish"
 msgstr "Ubicación reacondicionamiento"
 
 #. module: crm_rma_advance_location
-#: help:claim_make_picking_from_picking.wizard,picking_line_source_location:0
+#: model:ir.model.fields,help:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_picking_line_source_location
 msgid "Location where the returned products are from."
 msgstr "Ubicación desde donde se devolverán los productos."
 
 #. module: crm_rma_advance_location
-#: help:claim_make_picking_from_picking.wizard,picking_line_dest_location:0
+#: model:ir.model.fields,help:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_picking_line_dest_location
 msgid "Location where the system will stock the returned products."
 msgstr "Ubicación donde el sistema almacenará los productos devueltos."
 
 #. module: crm_rma_advance_location
-#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
 msgid "Locations"
 msgstr "Ubicaciones"
 
@@ -131,27 +131,27 @@ msgid "Mistake Loss"
 msgstr "Pérdidas por errores"
 
 #. module: crm_rma_advance_location
-#: view:crm.claim:crm_rma_advance_location.crm_claim_rma_form_view
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.crm_claim_rma_form_view
 msgid "New Product Loss"
 msgstr "Nuevo producto perdido"
 
 #. module: crm_rma_advance_location
-#: field:claim_make_picking_from_picking.wizard,picking_line_ids:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_picking_line_ids
 msgid "Picking lines"
 msgstr "Lineas albarán"
 
 #. module: crm_rma_advance_location
-#: view:stock.picking:crm_rma_advance_location.picking_in_form
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to Loss"
 msgstr "Producto a pérdidas"
 
 #. module: crm_rma_advance_location
-#: view:stock.picking:crm_rma_advance_location.picking_in_form
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to refurbish stock"
 msgstr "Producto a reacondicionamiento"
 
 #. module: crm_rma_advance_location
-#: view:stock.picking:crm_rma_advance_location.picking_in_form
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to stock"
 msgstr "Producto a existencias"
 
@@ -171,17 +171,17 @@ msgid "Repair Line"
 msgstr "Línea reparación"
 
 #. module: crm_rma_advance_location
-#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
 msgid "Select lines for picking"
 msgstr "Seleccione lineas para albaranar"
 
 #. module: crm_rma_advance_location
-#: view:claim_make_picking_from_picking.wizard:crm_rma_advance_location.view_claim_picking_from_picking
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
 msgid "Select lines to add in picking"
 msgstr "Seleccione lineas para añadir al albarán"
 
 #. module: crm_rma_advance_location
-#: field:claim_make_picking_from_picking.wizard,picking_line_source_location:0
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_picking_line_source_location
 msgid "Source Location"
 msgstr "Ubic. origen"
 
@@ -201,7 +201,7 @@ msgid "Wizard to create pickings from picking lines"
 msgstr "Asistente para crear albaranes desde lineas de albarán"
 
 #. module: crm_rma_advance_location
-#: view:mrp.repair:crm_rma_advance_location.view_repair_order_form_add_new_ctx
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.view_repair_order_form_add_new_ctx
 msgid "{'default_product_uom_qty': product_qty, 'cur_location_id': location_id}"
 msgstr "{'default_product_uom_qty': product_qty, 'cur_location_id': location_id}"
 
