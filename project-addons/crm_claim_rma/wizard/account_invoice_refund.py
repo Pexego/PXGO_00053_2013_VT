@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -20,27 +19,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, _, exceptions, fields
+from odoo import models, _, exceptions, fields, api
 
 
-class account_invoice_refund(models.TransientModel):
+class AccountInvoiceRefund(models.TransientModel):
 
     _inherit = "account.invoice.refund"
 
-    def compute_refund(self, cr, uid, ids, mode='refund', context=None):
-        if context is None:
-            context = {}
+    @api.multi
+    def compute_refund(self, mode='refund'):
+        context = self.env.context
         if context.get('invoice_ids', []) and context.get('invoice_ids')[0]:
             context['active_ids'] = context.get('invoice_ids')
         elif context['active_model'] == u'crm.claim':
             raise exceptions.UserError(_('The claim not have invoices to refund.'))
-        return super(account_invoice_refund, self).compute_refund(
-            cr, uid, ids, mode=mode, context=context)
+        return super(AccountInvoiceRefund, self).compute_refund(mode=mode)
 
-    def _get_description(self, cr, uid, context=None):
-        if context is None:
-            context = {}
-        description = context.get('description') or ''
+    @api.model
+    def _get_description(self):
+        description = self.env.context.get('description') or ''
         return description
 
     description = fields.Text(default=_get_description)

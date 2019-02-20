@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -23,7 +22,7 @@
 from odoo import fields, models, api
 
 
-class claim_make_repair(models.TransientModel):
+class ClaimMakeRepair(models.TransientModel):
 
     @api.model
     def get_line(self):

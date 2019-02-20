@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,19 +18,23 @@
 #
 ##############################################################################
 
-from openerp import models
+from odoo import models, fields, api
 
 
-class MrpRepairLine(models.Model):
+class MrpRepair(models.Model):
 
-    _inherit = "mrp.repair.line"
+    _inherit = "mrp.repair"
 
-    def onchange_operation_type(self, cr, uid, ids, type, guarantee_limit,
-                                company_id=False, context=None):
-        res = super(MrpRepairLine, self).\
-            onchange_operation_type(cr, uid, ids, type, guarantee_limit,
-                                    company_id=company_id, context=context)
-        if type != "add" and context.get("cur_location_id", False):
-            res['value']['location_id'] = context['cur_location_id']
+    @api.multi
+    @api.depends('claim_line_ids')
+    def _get_claim_id(self):
+        for repair in self:
+            if repair.claim_line_ids:
+                repair.claim_id = repair.claim_line_ids[0].claim_id.id
+            else:
+                repair.claim_id = False
 
-        return res
+    claim_id = fields.Many2one("crm.claim", "Claim", compute=_get_claim_id,
+                               readonly=True, store=True)
+    claim_line_ids = fields.One2many('claim.line', 'repair_id', 'Claims',
+                                     readonly=True)

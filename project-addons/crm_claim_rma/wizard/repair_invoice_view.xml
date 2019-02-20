@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+    <record id="mrp_repair_invoice_from_claim_view" model="ir.ui.view">
+        <field name="name">mrp.repair.invoice.from.claim.form</field>
+        <field name="model">mrp.repair.invoice.from.claim</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Invoice repairs">
+                <separator string="Repairs" colspan="4"/>
+                <field name="repair_ids" colspan="4" nolabel="1"/>
+                <footer>
+                    <button string="Invoice" name="action_invoice" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="mrp_repair_invoice_from_claim_view" model="ir.ui.view">
-            <field name="name">mrp.repair.invoice.from.claim.form</field>
-            <field name="model">mrp.repair.invoice.from.claim</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Invoice repairs">
-                    <separator string="Repairs" colspan="4"/>
-                    <field name="repair_ids" colspan="4" nolabel="1"/>
-                    <button string="Invoice" name="action_invoice" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                </form>
-            </field>
-        </record>
-
-        <act_window name="Invoice repairs"
-            res_model="mrp.repair.invoice.from.claim"
-            src_model="crm.claim"
-            view_id="mrp_repair_invoice_from_claim_view"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"
-            id="action_mrp_repair_invoice_from_claim_view"/>
-
-    </data>
-</openerp>
+    <act_window name="Invoice repairs"
+        res_model="mrp.repair.invoice.from.claim"
+        src_model="crm.claim"
+        view_id="mrp_repair_invoice_from_claim_view"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="action_mrp_repair_invoice_from_claim_view"/>
+</odoo>

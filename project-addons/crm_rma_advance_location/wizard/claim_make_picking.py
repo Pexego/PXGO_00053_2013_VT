@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #########################################################################
 #                                                                       #
 #                                                                       #
@@ -23,29 +22,18 @@
 from odoo import models, fields
 
 
-class claim_make_picking(models.TransientModel):
+class ClaimMakePicking(models.TransientModel):
 
-    _inherit = 'claim_make_picking.wizard'
+    _inherit = "claim_make_picking.wizard"
 
-    def _get_dest_loc(self, cr, uid, context=None):
+    def _get_dest_loc(self):
         """ Get default destination location """
-        loc_id = super(claim_make_picking, self)._get_dest_loc(cr, uid, context=context)
-        if context is None:
-            context = {}
-        warehouse_obj = self.pool.get('stock.warehouse')
-        warehouse_id = context.get('warehouse_id')
-        if context.get('picking_type') == 'in':
-            loc_id = warehouse_obj.read(
-                cr, uid,
-                warehouse_id,
-                ['lot_rma_id'],
-                context=context)['lot_rma_id'][0]
-        elif context.get('picking_type') == 'loss':
-            loc_id = warehouse_obj.read(
-                cr, uid,
-                warehouse_id,
-                ['lot_carrier_loss_id'],
-                context=context)['lot_carrier_loss_id'][0]
+        loc_id = super(ClaimMakePicking, self)._get_dest_loc()
+        warehouse = self.env['stock.warehouse'].browse(self.env.context.get('warehouse_id'))
+        if self.env.context.get('picking_type') == 'in':
+            loc_id = warehouse.lot_rma_id
+        elif self.env.context.get('picking_type') == 'loss':
+            loc_id = warehouse.lot_carrier_loss_id
         return loc_id
 
     claim_line_dest_location = fields.Many2one("stock.location", default=_get_dest_loc)
