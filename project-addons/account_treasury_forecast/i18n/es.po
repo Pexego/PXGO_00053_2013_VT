@@ -428,3 +428,126 @@ msgstr "Asistente para crear facturas"
 #: model:ir.ui.view,arch_db:account_treasury_forecast.wiz_create_invoice_form_view
 msgid "or"
 msgstr "o"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_check_old_open_customer
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_check_old_open_supplier
+msgid "Old (opened)"
+msgstr "Retrasadas (abiertas)"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_opened_start_date_customer
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_opened_start_date_supplier
+msgid "Start Date"
+msgstr "Fecha de inicio"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_payment_mode_customer
+msgid "Payment mode"
+msgstr "Modo de pago"
+
+#. module: account_treasury_forecast
+#: selection:account.treasury.forecast,payment_mode_customer:0
+#: selection:account.treasury.forecast,payment_mode_supplier:0
+msgid "Transfer"
+msgstr "Transferencia"
+
+#. module: account_treasury_forecast
+#: selection:account.treasury.forecast,payment_mode_customer:0
+#: selection:account.treasury.forecast,payment_mode_supplier:0
+msgid "Debit receipt"
+msgstr "Recibo Domiciliado"
+
+#. module: account_treasury_forecast
+#: selection:account.treasury.forecast,payment_mode_customer:0
+#: selection:account.treasury.forecast,payment_mode_supplier:0
+msgid "Both"
+msgstr "Ambos"
+
+#. module: account_treasury_forecast
+#: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view_add_filters
+msgid "Choose the payment mode"
+msgstr "Seleccione el modo de pago"
+
+#. module: account_treasury_forecast
+#: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view
+msgid "Payment mode"
+msgstr "Modo de pago"
+
+#. module: account_treasury_forecast
+#: model:ir.ui.view,arch_db:account_treasury_forecast.account_treasury_forecast_form_view
+msgid "Transfers filters"
+msgstr "Filtros para Transferencias"
+
+#. module: account_treasury_forecast
+#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:48
+#, python-format
+msgid "Error!:: You must select one option for payment mode fields."
+msgstr "¡Error!:: Debe seleccionar una opción en los campos de método de pago."
+
+#. module: account_treasury_forecast
+#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:57
+#, python-format
+msgid "Error!:: Start date of old opened invoices in customers must be lower than the start date specified before."
+msgstr "¡Error!:: La fecha de inicio de las facturas atrasadas en clientes tiene que ser menor que la fecha de inicio especificada anteriormente."
+
+#. module: account_treasury_forecast
+#: code:addons/account_treasury_forecast/models/account_treasury_forecast.py:67
+#, python-format
+msgid "Error!:: Start date of old opened invoices in suppliers must be lower than the start date specified before."
+msgstr "¡Error!:: La fecha de inicio de las facturas atrasadas en proveedores tiene que ser menor que la fecha de inicio especificada anteriormente."
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_payment_mode_treasury_forecast_type
+msgid "Treasury Module"
+msgstr "Módulo de tesorería (modo de pago)"
+
+#. module: account_treasury_forecast
+#: selection:account.payment.mode,treasury_forecast_type:0
+msgid "Debit receipt"
+msgstr "Recibo domiciliado"
+
+#. module: account_treasury_forecast
+#: selection:account.payment.mode,treasury_forecast_type:0
+msgid "Transfer"
+msgstr "Transferencia"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_final_amount
+msgid "Final Amount"
+msgstr "Importe final"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_account_bank
+msgid "Account bank"
+msgstr "Cuenta bancaria"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_not_bankable_supplier
+msgid "Without Bankable Suppliers"
+msgstr "Sin financiables"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_line_template_period_quantity
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_line_template_period_type
+msgid "Period"
+msgstr "Periodo"
+
+#. module: account_treasury_forecast
+#: selection:account.treasury.forecast.line.template,period_type:0
+msgid "Days"
+msgstr "Días"
+
+#. module: account_treasury_forecast
+#: selection:account.treasury.forecast.line.template,period_type:0
+msgid "Months"
+msgstr "Meses"
+
+#. module: account_treasury_forecast
+#: model:ir.model.fields,field_description:account_treasury_forecast.field_account_treasury_forecast_line_paid
+msgid "Paid"
+msgstr "Pagado"

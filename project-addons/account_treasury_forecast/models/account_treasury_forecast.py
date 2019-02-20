@@ -20,6 +20,12 @@
 
 import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, exceptions, _
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+PAYMENT_MODE = [('debit_receipt', 'Debit receipt'),
+                ('transfer', 'Transfer'),
+                ('both', 'Both')]
 
 
 class AccountTreasuryForecastInvoice(models.Model):
@@ -51,16 +57,15 @@ class AccountTreasuryForecast(models.Model):
     @api.multi
     def calc_final_amount(self):
         for treasury in self:
-            balance = 0
+            balance = treasury.start_amount
             for out_invoice in treasury.out_invoice_ids:
                 balance += out_invoice.total_amount
             for in_invoice in treasury.in_invoice_ids:
                 balance -= in_invoice.total_amount
-            for recurring_line in treasury.recurring_line_ids:
+            for recurring_line in treasury.recurring_line_ids.search([('paid', '=', False)]):
                 balance -= recurring_line.amount
             for variable_line in treasury.variable_line_ids:
                 balance -= variable_line.amount
-            balance += treasury.start_amount
             treasury.final_amount = balance
 
     name = fields.Char(string="Description", required=True)
@@ -92,6 +97,15 @@ class AccountTreasuryForecast(models.Model):
     variable_line_ids = fields.One2many(
         'account.treasury.forecast.line', 'treasury_id',
         string="Variable Lines", domain=[('line_type', '=', 'variable')])
+    payment_mode_customer = fields.Selection(PAYMENT_MODE, 'Payment mode', default='both')
+    account_bank = fields.Many2one('res.partner.bank', 'Account bank',
+                                   domain=lambda self: [('partner_id', '=', self.env.user.company_id.partner_id.id)])
+    check_old_open_customer = fields.Boolean(string="Old (opened)")
+    opened_start_date_customer = fields.Date(string="Start Date")
+    payment_mode_supplier = fields.Selection(PAYMENT_MODE, "Payment mode", default='both')
+    check_old_open_supplier = fields.Boolean(string="Old (opened)")
+    opened_start_date_supplier = fields.Date(string="Start Date")
+    not_bankable_supplier = fields.Boolean(string="Without Bankable Suppliers")
 
     @api.multi
     @api.constrains('end_date', 'start_date')
@@ -100,12 +114,24 @@ class AccountTreasuryForecast(models.Model):
             if record.start_date > record.end_date:
                 raise exceptions.Warning(_('Error!:: End date is lower than start date.'))
 
-    @api.multi
-    @api.constrains('check_draft', 'check_proforma', 'check_open')
+    @api.one
+    @api.constrains('payment_mode_customer', 'check_old_open_customer',
+                    'payment_mode_supplier', 'check_old_open_supplier',
+                    'opened_start_date_customer', 'opened_start_date_supplier', 'start_date')
     def check_filter(self):
-        for record in self:
-            if not record.check_draft and not record.check_proforma and not record.check_open:
-                raise exceptions.Warning(_('Error!:: There is no any filter checked.'))
+        if not self.payment_mode_customer or not self.payment_mode_supplier:
+            raise exceptions.Warning(
+                _('Error!:: You must select one option for payment mode fields.'))
+        elif self.payment_mode_customer != 'debit_receipt' and self.check_old_open_customer \
+                and self.opened_start_date_customer >= self.start_date:
+            raise exceptions.Warning(
+                _('Error!:: Start date of old opened invoices in customers must be lower '
+                  'than the start date specified before.'))
+        elif self.payment_mode_supplier != 'debit_receipt' and self.check_old_open_supplier \
+                and self.opened_start_date_supplier >= self.start_date:
+            raise exceptions.Warning(
+                _('Error!:: Start date of old opened invoices in suppliers must be lower '
+                  'than the start date specified before.'))
 
     @api.multi
     def restart(self):
@@ -128,20 +154,39 @@ class AccountTreasuryForecast(models.Model):
     def calculate_invoices(self):
         invoice_obj = self.env['account.invoice']
         treasury_invoice_obj = self.env['account.treasury.forecast.invoice']
+        new_invoice_ids = []
+        in_invoice_lst = []
+        out_invoice_lst = []
+
         for record in self:
-            new_invoice_ids = []
-            in_invoice_lst = []
-            out_invoice_lst = []
-            state = []
-            if record.check_draft:
-                state.append("draft")
-            if record.check_proforma:
-                state.append("proforma")
-            if record.check_open:
-                state.append("open")
-            invoice_ids = invoice_obj.search([('date_due', '>', record.start_date),
-                                              ('date_due', '<', record.end_date),
-                                              ('state', 'in', tuple(state))])
+
+            # CUSTOMER
+            search_filter_customer = ['&', ('type', 'in', ['out_invoice', 'out_refund'])]
+            if record.payment_mode_customer == 'debit_receipt':
+                search_filter_customer.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+                                               ('state', 'in', ['open', 'paid']),
+                                               ('date_due', '>=', record.start_date), ('date_due', '<=', record.end_date)])
+            else:
+                if record.payment_mode_customer == 'both':
+                    search_filter_customer.extend(['|',
+                                                   '&', ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+                                                   '&', ('state', 'in', ['open', 'paid']),
+                                                   '&', ('date_due', '>=', record.start_date),
+                                                   ('date_due', '<=', record.end_date)])
+
+                if record.account_bank:
+                    search_filter_customer.extend(['&', ('payment_mode_id.fixed_journal_id.bank_account_id',
+                                                         '=', record.account_bank.id)])
+
+                if record.check_old_open_customer:
+                    start_date = record.opened_start_date_customer
+                else:
+                    start_date = record.start_date
+
+                search_filter_customer.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
+                                               '&', ('state', '=', 'open'),
+                                               '&', ('date_due', '>=', start_date), ('date_due', '<=', record.end_date)])
+            invoice_ids = invoice_obj.search(search_filter_customer, order='date_due asc, id asc')
             for invoice_o in invoice_ids:
                 values = {
                     'invoice_id': invoice_o.id,
@@ -149,20 +194,80 @@ class AccountTreasuryForecast(models.Model):
                     'partner_id': invoice_o.partner_id.id,
                     'journal_id': invoice_o.journal_id.id,
                     'state': invoice_o.state,
-                    'base_amount': invoice_o.amount_untaxed,
-                    'tax_amount': invoice_o.amount_tax,
-                    'total_amount': invoice_o.amount_total,
-                    'residual_amount': invoice_o.residual,
+                    # TODO -> Pendiente migrar "custom_account"
+                    # 'base_amount': invoice_o.subtotal_wt_rect,
+                    # 'total_amount': invoice_o.total_wt_rect,
+                    'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
+                    'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
                 }
                 new_id = treasury_invoice_obj.create(values)
                 new_invoice_ids.append(new_id)
-                if invoice_o.type in ("out_invoice", "out_refund"):
-                    out_invoice_lst.append(new_id.id)
-                elif invoice_o.type in ("in_invoice", "in_refund"):
-                    in_invoice_lst.append(new_id.id)
+                out_invoice_lst.append(new_id.id)
+
+            # SUPPLIER
+            search_filter_supplier = ['&', '&', ('type', 'in', ['in_invoice', 'in_refund']),
+                                      ('partner_id.commercial_partner_id', '!=', 148435)]  # Omit AEAT invoices
+
+            if record.payment_mode_supplier == 'debit_receipt':
+                search_filter_supplier.extend([('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+                                               ('state', 'in', ['open', 'paid']),
+                                               ('date_due', '>=', record.start_date), ('date_due', '<=', record.end_date)])
+            else:
+                if record.payment_mode_supplier == 'both':
+                    search_filter_supplier.extend(['|',
+                                                   '&',
+                                                   ('payment_mode_id.treasury_forecast_type', '=', 'debit_receipt'),
+                                                   '&', ('state', 'in', ['open', 'paid']),
+                                                   '&', ('date_due', '>=', record.start_date),
+                                                   ('date_due', '<=', record.end_date)])
+
+                if record.check_old_open_supplier:
+                    start_date = record.opened_start_date_supplier
+                else:
+                    start_date = record.start_date
+
+                if record.not_bankable_supplier:
+                    id_currency_usd = record.env.ref("base.USD").id
+                    search_filter_supplier.extend(['&', '|',
+                                                   ('partner_id.property_product_pricelist_purchase.currency_id',
+                                                    '!=', id_currency_usd),
+                                                   ('partner_id.property_account_payable.code', '!=', '40000000')])
+
+                search_filter_supplier.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
+                                               '&', ('state', '=', 'open'),
+                                               '&', ('date_due', '>=', start_date), ('date_due', '<=', record.end_date)])
+
+            invoice_ids = invoice_obj.search(search_filter_supplier, order='date_due asc, id asc')
+            for invoice_o in invoice_ids:
+                values = {
+                    'invoice_id': invoice_o.id,
+                    'date_due': invoice_o.date_due,
+                    'partner_id': invoice_o.partner_id.id,
+                    'journal_id': invoice_o.journal_id.id,
+                    'state': invoice_o.state,
+                    # TODO -> Pendiente migrar "custom_account"
+                    # 'base_amount': invoice_o.subtotal_wt_rect,
+                    # 'total_amount': invoice_o.total_wt_rect,
+                    'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
+                    'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
+                }
+                new_id = treasury_invoice_obj.create(values)
+                new_invoice_ids.append(new_id)
+                in_invoice_lst.append(new_id.id)
+
             record.write({'out_invoice_ids': [(6, 0, out_invoice_lst)],
                           'in_invoice_ids': [(6, 0, in_invoice_lst)]})
+
         return new_invoice_ids
+
+    @api.model
+    def next_date_period(self, date_origin, period, quantity):
+        date = datetime.strptime(date_origin, '%Y-%m-%d')
+        if period == 'days':
+            date_calculated = (datetime(date.year, date.month, date.day) + relativedelta(days=quantity))
+        else:
+            date_calculated = (datetime(date.year, date.month, date.day) + relativedelta(months=quantity))
+        return date_calculated.strftime('%Y-%m-%d')
 
     @api.multi
     def calculate_line(self):
@@ -172,19 +277,34 @@ class AccountTreasuryForecast(models.Model):
             new_line_ids = []
             temp_line_lst = temp_line_obj.search([('treasury_template_id', '=', record.template_id.id)])
             for line_o in temp_line_lst:
-                if not line_o.date or record.start_date < line_o.date < record.end_date and not line_o.paid:
-                    values = {
-                        'name': line_o.name,
-                        'date': line_o.date,
-                        'line_type': line_o.line_type,
-                        'partner_id': line_o.partner_id.id,
-                        'template_line_id': line_o.id,
-                        'amount': line_o.amount,
-                        'treasury_id': record.id,
-                    }
-                    new_line_id = line_obj.create(values)
-                    new_line_ids.append(new_line_id)
+                if line_o.period_quantity and not line_o.paid:
+                    date_calculated = line_o.date
+                    if date_calculated:
+                        while date_calculated <= record.end_date:
+                            if record.start_date <= date_calculated <= record.end_date:
+                                values = {
+                                    'name': line_o.name,
+                                    'date': date_calculated,
+                                    'line_type': line_o.line_type,
+                                    'partner_id': line_o.partner_id.id,
+                                    'template_line_id': line_o.id,
+                                    'amount': line_o.amount,
+                                    'treasury_id': record.id,
+                                }
+                                new_line_id = line_obj.create(values)
+                                new_line_ids.append(new_line_id)
+                            date_calculated = record.next_date_period(date_calculated,
+                                                                      line_o.period_type,
+                                                                      line_o.period_quantity)
         return new_line_ids
+
+    @api.multi
+    def write(self, vals):
+        if 'check_old_open_customer' in vals and not vals['check_old_open_customer']:
+            vals['opened_start_date_customer'] = False
+        if 'check_old_open_supplier' in vals and not vals['check_old_open_supplier']:
+            vals['opened_start_date_supplier'] = False
+        return super(AccountTreasuryForecast, self).write(vals)
 
 
 class AccountTreasuryForecastLine(models.Model):
@@ -201,3 +321,4 @@ class AccountTreasuryForecastLine(models.Model):
                           digits=dp.get_precision('Account'))
     template_line_id = fields.Many2one('account.treasury.forecast.line.template', string="Template Line")
     treasury_id = fields.Many2one('account.treasury.forecast', string="Treasury")
+    paid = fields.Boolean(string="Paid")
