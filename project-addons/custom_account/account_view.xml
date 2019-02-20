@@ -239,7 +239,6 @@
             <field name="arch" type="xml">
                 <field name="payment_type" position="after">
                     <field name="blocked"/>
-                    <field name="treasury_forecast_type"/>
                 </field>
             </field>
         </record>-->

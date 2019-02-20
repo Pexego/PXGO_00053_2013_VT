@@ -1,5 +1,8 @@
 ##############################################################################
 #
+#    Avanzosc - Avanced Open Source Consulting
+#    Copyright (C) 2010 - 2011 Avanzosc <http://www.avanzosc.com>
+#
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
 #    published by the Free Software Foundation, either version 3 of the
@@ -15,30 +18,12 @@
 #
 ##############################################################################
 
-{
-    "name": "Account Treasury Forecast",
-    "version": "1.0",
-    "depends": [
-        "account",
-        "purchase",
-       # TODO -> Pendiente de migrar "custom_account"
-    ],
-    "author": "OdooMRP team,"
-              "AvanzOSC,"
-              "Serv. Tecnol. Avanzados - Pedro M. Baeza",
-    "website": "http://www.odoomrp.com",
-    "category": "Accounting",
-    "description": """
-        This module manages the treasury forecast.
-        Calculates the treasury forecast from supplier and customer invoices,
-        recurring payments and variable payments.
-    """,
-    'data': [
-        "security/ir.model.access.csv",
-        "wizard/wiz_create_invoice_view.xml",
-        "views/account_treasury_forecast_view.xml",
-        "views/account_treasury_forecast_template_view.xml",
-    ],
-    'demo': [],
-    'installable': True,
-}
+from odoo import models, fields
+
+
+class AccountPaymentMode(models.Model):
+
+    _inherit = 'account.payment.mode'
+
+    treasury_forecast_type = fields.Selection([('debit_receipt', 'Debit receipt'), ('transfer', 'Transfer')],
+                                              string="Treasury Module")

@@ -24,5 +24,23 @@
             </field>
         </record>
 
+         <record id="report_treasury_forecast_analysis_tree_add_fields" model="ir.ui.view">
+            <field name="name">report.treasury.forecast.analysis.tree.add_fields</field>
+            <field name="model">report.account.treasury.forecast.analysis</field>
+            <field name="inherit_id" ref="account_treasury_forecast_banking.report_treasury_forecast_analysis_tree"/>
+            <field name="arch" type="xml">
+                <tree position="attributes">
+                    <attribute name="decoration-danger">accumulative_balance&lt;0</attribute>
+                </tree>
+                <field name="date" position="after">
+                    <field name="concept"/>
+                    <field name="partner_name"/>
+                </field>
+                <field name="balance" position="after">
+                    <field name="accumulative_balance"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </odoo>
