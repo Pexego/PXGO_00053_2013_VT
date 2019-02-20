@@ -41,3 +41,23 @@ msgstr "Previsión de tesorería"
 msgid "Treasury Forecast Analysis"
 msgstr "Análisis de previsión de tesorería"
 
+#. module: account_treasury_forecast_cashflow_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow_banking.field_report_account_treasury_forecast_analysis_concept
+msgid "Concept"
+msgstr "Concepto"
+
+#. module: account_treasury_forecast_cashflow_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow_banking.field_report_account_treasury_forecast_analysis_partner_name
+msgid "Partner/Supplier"
+msgstr "Cliente/Proveedor"
+
+#. module: account_treasury_forecast_cashflow_banking
+#: model:ir.ui.view,arch_db:account_treasury_forecast_cashflow_banking.report_treasury_forecast_analysis_search
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow_banking.field_report_account_treasury_forecast_analysis_bank_id
+msgid "Bank Account"
+msgstr "Cuenta bancaria"
+
+#. module: account_treasury_forecast_cashflow_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_cashflow_banking.field_report_account_treasury_forecast_analysis_accumulative_balance
+msgid "Accumulated"
+msgstr "Acumulado"
