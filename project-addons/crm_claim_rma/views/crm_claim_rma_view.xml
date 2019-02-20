@@ -106,7 +106,7 @@
         <field name="model">claim.line</field>
         <field eval="99" name="priority"/>
         <field name="arch" type="xml">
-            <tree string="Returned lines">
+            <tree string="Returned lines" name="returned_lines">
                 <field name="claim_id"/>
                 <field name="product_id"/>
                 <!--button name="equivalent_products" string="Change product" type="object" icon="terp-gtk-jump-to-ltr"/-->
@@ -231,12 +231,13 @@
     <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
     <field name="arch" type="xml">
         <field name="partner_id" position="replace">
+            <!-- TODO: revisar este cachito, no sale bien -->
             <field name="partner_id" string="Partner" required="1" domain="[('is_company', '=', True)]"/>
             <field name="invoice_type"/>
             <field name="invoice_id" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
             <group colspan="4" col="4">
                 <field name="invoice_method" attrs="{'invisible': [('invoice_type', '!=', 'invoice')]}" colspan="2"/>
-                <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" icon="gtk-execute" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>
+                <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>
             </group>
         </field>
         <xpath expr="/form/sheet/group[3]/notebook/page[2]" position="before">
@@ -268,7 +269,7 @@
                                 'type': claim_type}"/>
 
                     <button name="%(account.action_account_invoice_refund)d" attrs="{'invisible': [('invoice_type', '=', 'invoice')]}"
-                            type='action' string='New Refund'  icon="gtk-execute"
+                            type='action' string='New Refund'
                             context="{
                                 'invoice_ids': [invoice_id],
                                 'claim_line_ids': claim_line_ids,
