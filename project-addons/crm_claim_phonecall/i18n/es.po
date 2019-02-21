@@ -101,6 +101,11 @@ msgid "End Call"
 msgstr "Finalizar llamada"
 
 #. module: crm_claim_phonecall
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view_sat
+msgid "End Call and Notify"
+msgstr "Finalizar llamada y notificar"
+
+#. module: crm_claim_phonecall
 #: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_call_type
 msgid "Duration (min)"
 msgstr "Duración (min)"
