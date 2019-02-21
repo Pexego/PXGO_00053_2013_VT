@@ -20,4 +20,3 @@
 
 from . import claim_make_picking
 from . import claim_make_picking_from_picking
-#TODO separar en nuevo modulo from . import crm_phonecall

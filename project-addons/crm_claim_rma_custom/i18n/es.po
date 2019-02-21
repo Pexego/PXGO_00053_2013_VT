@@ -31,11 +31,6 @@ msgid "Category"
 msgstr "Certificado"
 
 #. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_start_date
-msgid "Start Date"
-msgstr "Fecha de Inicio"
-
-#. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_equivalent_products_wizard_qty_available_external
 msgid "External Stock"
 msgstr "Stock alm. externo"
@@ -46,86 +41,16 @@ msgid "Tags"
 msgstr "Etiquetas"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:77
+#: code:addons/crm_claim_rma_custom/crm_claim.py:88
 #, python-format
 msgid "Warning!"
 msgstr "¡Advertencia!"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:78
+#: code:addons/crm_claim_rma_custom/crm_claim.py:89
 #, python-format
 msgid "One or more products aren't review yet!"
 msgstr "¡Algunos de los productos no se han revisado todavia!"
-
-#. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_partner_id
-msgid "Contact"
-msgstr "Cliente"
-
-#. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_name
-msgid "Call Summary"
-msgstr "Motivo de la llamada"
-
-#. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_call_type
-msgid "Call type"
-msgstr "Tipo de llamada"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Check Stock"
-msgstr "Consultar Stock/previsión"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Check Prices"
-msgstr "Consultar Precio"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Order/Budget"
-msgstr "Realizar pedido/ppto"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Counsel"
-msgstr "Asesoramiento"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Shipments status"
-msgstr "Estado de envíos"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Order Complain/Claim"
-msgstr "Queja/Reclamación Pedido"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "RMA Complain/Claim"
-msgstr "Queja/Reclamación RMA"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Tech Complain/Claim"
-msgstr "Queja/Reclamación Técnica"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Web Complain/Claim"
-msgstr "Queja/Reclamación Web"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Shipment Complain/Claim"
-msgstr "Queja/Reclamación Envío"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type:0
-msgid "Accounting Complain/Claim"
-msgstr "Queja/Reclamación Contable"
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.menu,name:0
@@ -136,16 +61,6 @@ msgstr "Nueva llamada"
 #: model:ir.actions.act_window,name:0
 msgid "New Call"
 msgstr "Nueva llamada"
-
-#. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_phonecall_custom_wizard_form_view
-msgid "Cancel Call"
-msgstr "Cancelar llamada"
-
-#. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_phonecall_custom_wizard_form_view
-msgid "End Call"
-msgstr "Finalizar llamada"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_aditional_notes
@@ -433,8 +348,8 @@ msgid "The incomimg pickings to this location not will be synced with vstock"
 msgstr "Los albaranes de entrada a esta ubicación no serán sincronizados con vstock"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:107
-#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking_from_picking.py:57
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:106
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking_from_picking.py:56
 #, python-format
 msgid "The origin location is not managed by Odoo."
 msgstr "La ubicación de origen no es gestionada por Odoo."
@@ -445,7 +360,7 @@ msgid "The outputs of this location are managed in Odoo, Vstock only will print 
 msgstr "Las salidas de esta ubicación se gestionan en Odoo, Vstock sólo imprimirá las etiquetas de envío."
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:117
+#: code:addons/crm_claim_rma_custom/crm_claim.py:149
 #, python-format
 msgid "There is at least one line of the claim with                            an incorrect invoice"
 msgstr "Hay al menos una linea de la reclamación con una factura incorrecta"
@@ -482,123 +397,6 @@ msgstr "Asistente para crear envíos desde la línea de reclamación"
 #: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_from_picking_wizard
 msgid "Wizard to create pickings from picking lines"
 msgstr "Asistente para crear albaranes desde lineas de albarán"
-
-#. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_phonecall_custom_call_type
-msgid "Duration (min)"
-msgstr "Duración (min)"
-
-#. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_partner_ref
-msgid "Ref. Contact"
-msgstr "Ref. Cliente"
-
-#. module: crm
-#: model:ir.model.fields,field_description:crm.field_crm_phonecall_date
-msgid "Date"
-msgstr "Fecha inicio"
-
-#. module: crm
-#: model:ir.ui.view,arch_db:crm.view_crm_case_phonecalls_filter_group_by
-msgid "Week"
-msgstr "Semana"
-
-#. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_crm_case_phonecalls_filter_group_by
-msgid "Day"
-msgstr "Día"
-
-#. module: crm_claim_rma_custom
-#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_phonecall_menu_sat
-msgid "Phone calls"
-msgstr "Llamadas telefónicas"
-
-#. module: crm_claim_rma_custom
-#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_phonecall_custom_wizard_action_sat
-msgid "New Call"
-msgstr "Nueva llamada"
-
-#. module: crm_claim_rma_custom
-#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_case_categ_phone_incoming0_sat
-msgid "Logged Calls"
-msgstr "Llamadas registradas"
-
-#. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_partner_country
-msgid "Country"
-msgstr "País"
-
-#. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_brand_id
-msgid "Brand"
-msgstr "Marca"
-
-#. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_call_type_sat
-msgid "Call type"
-msgstr "Tipo de llamada"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type_sat:0
-msgid "Check RMA status"
-msgstr "Consulta de estado de RMA"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type_sat:0
-msgid "Incidence with product"
-msgstr "Incidencia con producto"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type_sat:0
-msgid "Post-sale question on operation"
-msgstr "Consulta post-venta sobre funcionamiento"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type_sat:0
-msgid "Pre-sale query/advice"
-msgstr "Consulta pre-venta/asesoramiento"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type_sat:0
-msgid "SAT Complaint/claim"
-msgstr "Queja/reclamación SAT"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type_sat:0
-msgid "DDNS request for registration"
-msgstr "Petición de alta en DDNS"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type_sat:0
-msgid "Enquiry about courses/certificates"
-msgstr "Consulta sobre cursos/certificados"
-
-#. module: crm_claim_rma_custom
-#: selection:crm.phonecall,call_type_sat:0
-msgid "Others"
-msgstr "Otros"
-
-#. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_phonecall_custom_wizard_form_view_sat
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_case_inbound_phone_tree_view_sat
-msgid "Subject"
-msgstr "Asunto"
-
-#. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_phonecall_partner_salesperson
-msgid "Salesperson"
-msgstr "Comercial"
-
-#. module: crm_claim_rma_custom
-#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_case_categ_phone_incoming0_sat_partner
-msgid "SAT Calls"
-msgstr "Llamadas SAT"
-
-#. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_partners_form_crm_calls_sat
-#: selection:res.partner,sat_phonecall_count:0
-msgid "SAT Calls"
-msgstr "Llamadas SAT"
 
 #. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/crm_claim.py:105
@@ -656,3 +454,8 @@ msgstr "<p>Información de la llamada:</p>
 <li>Marca: ${object.brand_id.name or 'N/A'}</li>
 <li>Descripción: ${object.description or 'N/A'}</li>
 </ul>"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_case_claims_form_view_inherit
+msgid "Claim/Action Description"
+msgstr "Descripción de la reclamación/acción"

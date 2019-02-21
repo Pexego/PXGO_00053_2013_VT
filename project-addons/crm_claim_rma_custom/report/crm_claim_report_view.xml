@@ -17,10 +17,10 @@
             <field name="user_id" position="after">
                 <field name="comercial_id"/>
             </field>
-            <filter string="My Case(s)" position="attributes">
+            <filter domain="[('user_id','=',uid)]" position="attributes">
                 <attribute name="domain">['|',('user_id','=',uid),('comercial_id', '=', uid)]</attribute>
             </filter>
-            <filter string="Stage" position="after">
+            <filter context="{'group_by':'stage_id'}" position="after">
                 <filter string="Claim type" context="{'group_by':'claim_type'}"/>
                 <filter string="Priority" context="{'group_by':'priority'}"/>
             </filter>

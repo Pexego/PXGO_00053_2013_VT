@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -45,9 +44,7 @@
              'wizard/claim_make_picking_view.xml',
              'views/stock_view.xml',
              'wizard/claim_make_picking_from_picking_view.xml',
-             # TODO: separar en nuevo módulo 'wizard/crm_phonecall_view.xml',
-             # TODO: separar en nuevo modulo 'wizard/email_template.xml',
-             #TODO: Migrar'report/crm_claim_report_view.xml',
+             'report/crm_claim_report_view.xml',
              'data/stage_data.xml'],
     "installable": True
 }
