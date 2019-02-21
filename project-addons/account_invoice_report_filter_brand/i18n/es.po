@@ -16,10 +16,10 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: account_invoice_report_filter_brand
-#: model:ir.actions.act_window,name:account_invoice_report_filter_brand.action_account_invoice_report_all_filter
-#: model:ir.ui.menu,name:account_invoice_report_filter_brand.menu_action_account_invoice_report_all_filter
-msgid "Invoices Analysis filter brand"
-msgstr "Análisis de Facturas filtrado por marca"
+#: model:ir.actions.act_window,name:account_invoice_report_filter_brand.action_account_invoice_report_filter
+#: model:ir.ui.menu,name:account_invoice_report_filter_brand.menu_action_account_invoice_report_filter
+msgid "Invoices Analysis brand"
+msgstr "Análisis Facturas marca"
 
 
 #. module: account_invoice_report_filter_brand

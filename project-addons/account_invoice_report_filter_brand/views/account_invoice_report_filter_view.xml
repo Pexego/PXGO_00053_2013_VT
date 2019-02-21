@@ -2,8 +2,8 @@
 <openerp>
     <data>
         <!-- analisis de facturas filtrado por marcas -->
-        <record id="action_account_invoice_report_all_filter" model="ir.actions.act_window">
-            <field name="name">Invoices Analysis filter brand</field>
+        <record id="action_account_invoice_report_filter" model="ir.actions.act_window">
+            <field name="name">Invoices Analysis brand</field>
             <field name="res_model">account.invoice.report.filter</field>
             <field name="view_type">form</field>
             <field name="view_mode">graph</field>
@@ -12,8 +12,8 @@
             <field name="view_id" ref="account.view_account_invoice_report_graph"/>
         </record>
 
-        <menuitem action="action_account_invoice_report_all_filter" id="menu_action_account_invoice_report_all_filter"
-                  name="Invoices Analysis filter brand" parent="base.next_id_64"/>
+        <menuitem action="action_account_invoice_report_filter" id="menu_action_account_invoice_report_filter"
+                  name="Invoices Analysis brand" parent="base.next_id_64"/>
     </data>
 </openerp>
 
