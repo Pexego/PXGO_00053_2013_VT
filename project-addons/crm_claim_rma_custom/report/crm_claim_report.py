@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos
@@ -22,18 +21,18 @@
 from odoo import fields, models, tools
 
 
-class crm_claim_cost_report(models.Model):
+class CrmClaimCostReport(models.Model):
 
-    _inherit = "crm.claim.cost.report"
+    _inherit = 'crm.claim.cost.report'
 
     priority = fields.Selection([('1', 'High'), ('2', 'Critical')],
-                                     'Priority', readonly=True)
+                                'Priority', readonly=True)
     comercial_id = fields.Many2one("res.users", string="Comercial",
-                                        readonly=True)
+                                   readonly=True)
     claim_date = fields.Date('Claim Date', readonly=True)
     subject = fields.Selection([('return', 'Return'),
-                                     ('rma', 'RMA')], string='Claim Subject',
-                                    readonly=True)
+                                ('rma', 'RMA')], string='Claim Subject',
+                               readonly=True)
 
     def init(self):
 
@@ -51,7 +50,7 @@ class crm_claim_cost_report(models.Model):
                     c.date_deadline as date_deadline,
                     c.user_id,
                     c.stage_id,
-                    c.section_id,
+                    c.team_id,
                     c.comercial as comercial_id,
                     c.partner_id,
                     c.company_id,
@@ -68,7 +67,7 @@ class crm_claim_cost_report(models.Model):
                 from
                     crm_claim c
                 group by c.date,\
-                        c.user_id,c.section_id, c.stage_id,c.claim_type,c.comercial,\
+                        c.user_id,c.team_id, c.stage_id,c.claim_type,c.comercial,\
                         c.categ_id,c.partner_id,c.company_id,c.create_date,
                         c.priority,c.type_action,c.date_deadline,c.date_closed,c.id
             )""")

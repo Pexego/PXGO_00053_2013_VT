@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields, exceptions, _
+from odoo import models, api, fields, exceptions, _
 
 
 class ClaimMakePickingFromPicking(models.TransientModel):
 
-    _inherit = "claim_make_picking_from_picking.wizard"
+    _inherit = 'claim_make_picking_from_picking.wizard'
 
     odoo_management = fields.Boolean('Management in Odoo')
     not_sync = fields.Boolean("Not sync", help="This picking not will be "

@@ -1,33 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-
-        <record id="view_report_crm_claim_cost_filter_imp_fields" model="ir.ui.view">
-            <field name="name">crm.claim.report.select.imp_fields</field>
-            <field name="model">crm.claim.cost.report</field>
-            <field name="inherit_id" ref="crm_claim_rma.view_report_crm_claim_cost_filter"/>
-            <field name="arch" type="xml">
-                <filter name="Salesperson" position="attributes">
-                    <attribute name="context">{'group_by':'comercial_id'}</attribute>
-                </filter>
-                <filter name="Salesperson" position="after">
-                    <filter name="responsible" context="{'group_by': 'user_id'}" string="Responsible"/>
-                </filter>
-                <field name="user_id" position="attributes">
-                    <attributes name="string">Responsible</attributes>
-                </field>
-                <field name="user_id" position="after">
-                    <field name="comercial_id"/>
-                </field>
-                <filter string="My Case(s)" position="attributes">
-                    <attribute name="domain">['|',('user_id','=',uid),('comercial_id', '=', uid)]</attribute>
-                </filter>
-                <filter string="Stage" position="after">
-                    <filter string="Claim type" context="{'group_by':'claim_type'}"/>
-                    <filter string="Priority" context="{'group_by':'priority'}"/>
-                </filter>
+<odoo>
+    <record id="view_report_crm_claim_cost_filter_imp_fields" model="ir.ui.view">
+        <field name="name">crm.claim.report.select.imp_fields</field>
+        <field name="model">crm.claim.cost.report</field>
+        <field name="inherit_id" ref="crm_claim_rma.view_report_crm_claim_cost_filter"/>
+        <field name="arch" type="xml">
+            <filter name="Salesperson" position="attributes">
+                <attribute name="context">{'group_by':'comercial_id'}</attribute>
+            </filter>
+            <filter name="Salesperson" position="after">
+                <filter name="responsible" context="{'group_by': 'user_id'}" string="Responsible"/>
+            </filter>
+            <field name="user_id" position="attributes">
+                <attributes name="string">Responsible</attributes>
             </field>
-        </record>
-
-    </data>
-</openerp>
+            <field name="user_id" position="after">
+                <field name="comercial_id"/>
+            </field>
+            <filter domain="[('user_id','=',uid)]" position="attributes">
+                <attribute name="domain">['|',('user_id','=',uid),('comercial_id', '=', uid)]</attribute>
+            </filter>
+            <filter context="{'group_by':'stage_id'}" position="after">
+                <filter string="Claim type" context="{'group_by':'claim_type'}"/>
+                <filter string="Priority" context="{'group_by':'priority'}"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos
@@ -18,11 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
-class stock_picking(models.Model):
-    _inherit = "stock.picking"
+class StockPicking(models.Model):
+    _inherit = 'stock.picking'
 
     internal_notes = fields.Text("Internal Notes", copy=False)
     odoo_management = fields.Boolean("Odoo management", readonly=True,
@@ -36,17 +35,16 @@ class stock_picking(models.Model):
         default = default and default or {}
         if self.env.context.get('picking_type', '') == 'picking_input':
             default['not_sync'] = False
-        return super(stock_picking, self).copy(default)
+        return super(StockPicking, self).copy(default)
 
+    @api.multi
+    def action_assign(self):
+        res = super(StockPicking, self).action_assign()
+        for obj in self:
+            if obj.claim_id and obj.picking_type_code == "incoming":
+                obj.force_assign()
 
-    # def action_assign(self, cr, uid, ids, context=None):
-    #     res = super(stock_picking, self).action_assign(cr, uid, ids,
-    #                                                    context=context)
-    #     for obj in self.browse(cr, uid, ids):
-    #         if obj.claim_id and obj.picking_type_code == "incoming":
-    #             obj.force_assign()
-
-    #     return res TODO: Migrar
+        return res
 
     @api.model
     def do_transfer(self):
@@ -64,7 +62,7 @@ class stock_picking(models.Model):
                             elif not move.claim_line_id.repair_id:
                                 move.claim_line_id.substate_id = self.env.ref(
                                     'crm_claim_rma_custom.substate_checked')
-        return super(stock_picking, self).do_transfer()
+        return super(StockPicking, self).do_transfer()
 
 
 class StockLocation(models.Model):
@@ -80,12 +78,12 @@ class StockLocation(models.Model):
                                    "not will be synced with vstock")
 
 
-class stock_move(models.Model):
+class StockMove(models.Model):
     _inherit = 'stock.move'
 
     @api.multi
     def action_done(self):
-        res = super(stock_move, self).action_done()
+        res = super(StockMove, self).action_done()
         for move in self:
             if move.claim_line_id:
                 claim_line_obj = move.claim_line_id
