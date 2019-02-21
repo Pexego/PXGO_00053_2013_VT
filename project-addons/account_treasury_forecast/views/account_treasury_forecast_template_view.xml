@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
 
         <record model="ir.ui.view" id="account_treasury_forecast_line_template_tree_view">
@@ -9,6 +9,8 @@
                 <tree string="Treasury Forecast Line" editable="bottom">
                     <field name="date" />
                     <field name="line_type" />
+                    <field name="period_quantity" attrs="{'readonly':[('line_type', '!=', 'recurring')]}" />
+                    <field name="period_type" attrs="{'readonly':[('line_type', '!=', 'recurring')]}" />
                     <field name="name" />
                     <field name="partner_id" domain="[('supplier', '=', True)]"/>
                     <field name="invoice_id"/>
@@ -16,7 +18,7 @@
                     <field name="amount" />
                     <field name="paid" />
                     <button name="create_invoice" string="Create Invoice" type="object"
-                            icon="gtk-execute" attrs="{'invisible':[('invoice_id', '!=', False)]}"/>
+                            icon="fa-share" attrs="{'invisible':[('invoice_id', '!=', False)]}"/>
                 </tree>
             </field>
         </record>
@@ -91,7 +93,8 @@
             <field name="help">Treasury Forecast Template</field>
         </record>
 
-        <menuitem action="action_account_treasury_forecast_template" id="menu_account_treasury_forecast_template_form" sequence="8" parent="menu_account_treasury_forecast" groups="account.group_account_manager"/>
+        <menuitem action="action_account_treasury_forecast_template" id="menu_account_treasury_forecast_template_form"
+                  sequence="8" parent="menu_account_treasury_forecast" groups="account.group_account_manager"/>
 
     </data>
-</openerp>
+</odoo>

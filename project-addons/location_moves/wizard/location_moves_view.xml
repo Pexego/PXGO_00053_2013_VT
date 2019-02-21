@@ -1,46 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-        <record id="location_moves_form" model="ir.ui.view">
-            <field name="name">location.moves.form</field>
-            <field name="model">location.moves</field>
-            <field name="arch" type="xml">
-                <form string="Location moves">
-                    <group>
-                        <group colspan="4">
-                            <field name="product_id"/>
-                        </group>
-                        <group colspan="4">
-                            <group >
-                                <field name="qty"/>
-                            </group>
-                            <group>
-                                <field name="check_qty"/>
-                            </group>
-                        </group>
-                        <field name="move_type"/>
+    <record id="location_moves_form" model="ir.ui.view">
+        <field name="name">location.moves.form</field>
+        <field name="model">location.moves</field>
+        <field name="arch" type="xml">
+            <form string="Location moves">
+                <group>
+                    <group colspan="4">
+                        <field name="product_id"/>
                     </group>
-                    <newline/>
-                    <button string="create moves" name="create_moves" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                </form>
-            </field>
-        </record>
+                    <group colspan="4">
+                        <group >
+                            <field name="qty"/>
+                        </group>
+                        <group>
+                            <field name="check_qty"/>
+                        </group>
+                    </group>
+                    <field name="move_type"/>
+                </group>
+                <newline/>
+                <footer>
+                    <button string="create moves" name="create_moves" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <act_window name="create moves"
-            res_model="location.moves"
-            view_id="location_moves_form"
-            view_mode="form"
-            target="new"
-            id="act_location_moves"
-            context="{'manual': True}"/>
+    <act_window name="create moves"
+        res_model="location.moves"
+        view_id="location_moves_form"
+        view_mode="form"
+        target="new"
+        id="act_location_moves"
+        context="{'manual': True}"/>
 
-        <menuitem
-            id="menucreatemoves"
-            name="Create moves"
-            string="Create moves"
-            action="act_location_moves"
-            parent="stock.menu_warehouse_config"/>
+    <menuitem
+        id="menucreatemoves"
+        name="Create moves"
+        string="Create moves"
+        action="act_location_moves"
+        parent="stock.menu_warehouse_config"/>
 
 </odoo>
 

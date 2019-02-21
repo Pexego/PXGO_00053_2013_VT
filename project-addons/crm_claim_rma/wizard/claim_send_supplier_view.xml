@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<openerp>
-    <data>
+<odoo>
+    <record id="claim_send_supplier_view" model="ir.ui.view">
+        <field name="name">claim.send.supplier.form</field>
+        <field name="model">claim.send.supplier</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Send to supplier">
+                <footer>
+                    <button string="Send" name="create_lines" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="claim_send_supplier_view" model="ir.ui.view">
-            <field name="name">claim.send.supplier.form</field>
-            <field name="model">claim.send.supplier</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Send to supplier">
-                    <button string="Send" name="create_lines" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                </form>
-            </field>
-        </record>
-
-        <act_window name="Send to supplier"
-            res_model="claim.send.supplier"
-            src_model="claim.line"
-            view_id="claim_send_supplier_view"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"
-            id="action_send_line_to_supplier"/>
-
-    </data>
-</openerp>
+    <act_window name="Send to supplier"
+        res_model="claim.send.supplier"
+        src_model="claim.line"
+        view_id="claim_send_supplier_view"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="action_send_line_to_supplier"/>
+</odoo>
 

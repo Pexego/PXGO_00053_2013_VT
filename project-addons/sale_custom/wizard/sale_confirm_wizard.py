@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2018 Visiotech All Rights Reserved
@@ -18,16 +17,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, _
+from odoo import models
 
 
 class SaleConfirmWizard(models.TransientModel):
 
     _name = 'sale.confirm.wizard'
 
-    @api.multi
     def confirm_transfer(self):
-        context = self.env.context.copy()
-        context['confirmed'] = True
         self.env['sale.order'].browse(self.env.context['active_id']).\
-            with_context(context).action_risk_approval()
+            with_context(confirmed=True).action_risk_approval()

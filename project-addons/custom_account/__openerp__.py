@@ -36,7 +36,7 @@
                 'account_financial_risk', 'account_payment_order',
                 'sale_margin_percentage', 'account_banking_sepa_direct_debit',
                 'stock_reserve_sale', 'sales_team',
-                'custom_partner',
+                'custom_partner', 'account_payment_return',
                 #TODO: 'sale_quick_payment',
                 'account_credit_control',
                 #TODO: MIgrar'account_invoice_merge',
@@ -55,7 +55,6 @@
              'product_view.xml',
              'report/sale_report_view.xml',
              'voucher_view.xml',
-             'account_treasury_forecast_view.xml',
              #TODO: Migrar 'report/account_invoice_contact_report_view.xml'
              ],
     "installable": True

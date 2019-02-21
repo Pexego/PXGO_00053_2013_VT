@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,8 +15,10 @@
 #
 ##############################################################################
 
-import openerp.addons.decimal_precision as dp
-from openerp import models, fields, api, _
+import odoo.addons.decimal_precision as dp
+from odoo import models, fields, api, _
+
+PERIOD = [('days', 'Days'), ('months', 'Months')]
 
 
 class AccountTreasuryForecastTemplate(models.Model):
@@ -42,26 +43,29 @@ class AccountTreasuryForecastLineTemplate(models.Model):
     line_type = fields.Selection([('recurring', 'Recurring'),
                                   ('variable', 'Variable')],
                                  string="Treasury Line Type")
-    partner_id = fields.Many2one("res.partner", string="Partner")
-    journal_id = fields.Many2one("account.journal", string="Journal",
+    partner_id = fields.Many2one('res.partner', string="Partner")
+    journal_id = fields.Many2one('account.journal', string="Journal",
                                  domain=[("type", "=", "purchase")])
-    invoice_id = fields.Many2one("account.invoice", string="Invoice",
+    invoice_id = fields.Many2one('account.invoice', string="Invoice",
                                  domain=[("type", "=", "in_invoice")])
     amount = fields.Float(string="Amount",
                           digits=dp.get_precision('Account'))
     paid = fields.Boolean(string="Invoiced/Paid")
     treasury_template_id = fields.Many2one(
-        "account.treasury.forecast.template", string="Treasury Template")
+        'account.treasury.forecast.template', string="Treasury Template")
+    period_quantity = fields.Integer("Quantity", default=1)
+    period_type = fields.Selection(PERIOD, string="Period", default="months")
 
-    @api.one
+    @api.multi
     @api.onchange('invoice_id')
     def onchange_invoice(self):
-        if self.invoice_id:
-            self.journal_id = self.invoice_id.journal_id.id
-            self.partner_id = self.invoice_id.partner_id.id
-            self.amount = self.invoice_id.amount_total
-            self.date = self.invoice_id.date_invoice
-            self.paid = True
+        for record in self:
+            if record.invoice_id:
+                record.journal_id = record.invoice_id.journal_id.id
+                record.partner_id = record.invoice_id.partner_id.id
+                record.amount = record.invoice_id.amount_total
+                record.date = record.invoice_id.date_invoice
+                record.paid = True
 
     @api.multi
     def create_invoice(self):
