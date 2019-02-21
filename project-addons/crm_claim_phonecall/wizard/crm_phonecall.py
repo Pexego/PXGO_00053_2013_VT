@@ -74,15 +74,20 @@ class CrmPhonecall(models.Model):
     brand_id = fields.Many2one('product.brand', 'Brand')
     subject = fields.Char('Call Subject')
     email_sent = fields.Boolean('Email sent', default=False, readonly=True)
+    summary_id = fields.Many2one(comodel_name="crm.phonecall.summary",
+                                 string="Summary",
+                                 required=False,
+                                 ondelete="restrict")
 
     def utc_to_local(self, utc_dt):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
         return self.local_tz.normalize(local_dt)
 
-    @api.one
+    @api.multi
     def get_partner_ref(self):
-        if self.partner_id:
-            self.partner_ref = self.partner_id.ref
+        for call in self:
+            if call.partner_id:
+                call.partner_ref = call.partner_id.ref
 
     @api.model
     def create(self, datas):
@@ -100,9 +105,9 @@ class CrmPhonecall(models.Model):
             datas['call_type_sat'] = 'none'
         return super(CrmPhonecall, self).write(datas)
 
-    @api.one
+    @api.multi
     def send_email(self):
-
+        self.ensure_one()
         mail_pool = self.env['mail.mail']
         context = self._context.copy()
         context['base_url'] = self.env['ir.config_parameter'].get_param('web.base.url')
@@ -158,8 +163,6 @@ class CrmPhonecall(models.Model):
             'brand_id': self.brand_id.id
         }
         self.write(datas)
-
-
 
     @api.multi
     def end_call_notif(self):

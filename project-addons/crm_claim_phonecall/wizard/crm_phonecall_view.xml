@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <menuitem id="crm_phonecall_menu_sat" name="Phone Calls" parent="crm_claim_rma.menu_sat" sequence="10"/>
+    <menuitem id="crm_phonecall_menu_sat" name="Phone Calls" parent="crm_claim_rma.menu_sat" sequence="3"/>
 
-    <!--TODO: Migrar<record id="crm_phonecall_custom_call_type" model="ir.ui.view">
+    <record id="crm_phonecall_custom_call_type" model="ir.ui.view">
         <field name="name">crm.phonecall.custom.call.type</field>
         <field name="model">crm.phonecall</field>
-        <field name="inherit_id" ref="crm.crm_case_inbound_phone_tree_view"/>
+        <field name="inherit_id" ref="crm_phonecall.crm_case_inbound_phone_tree_view"/>
         <field name="arch" type="xml">
             <field name="name" position="attributes">
                 <attribute name="invisible">1</attribute>
@@ -18,12 +18,13 @@
             </field>
             <field name="user_id" position="after">
                 <field name="date"/>
-                <field name="duration" string="Duration (min)" widget="float_time" class="oe_inline" style="vertical-align:baseline"/>
+                <field name="duration" string="Duration (min)" widget="float_time" class="oe_inline" />
                 <field name="call_type"/>
                 <field name="description"/>
             </field>
         </field>
-    </record>-->
+    </record>
+
     <record id="crm_phonecall_custom_wizard_form_view" model="ir.ui.view">
         <field name="name">crm.phonecall.custom.wizard.form</field>
         <field name="model">crm.phonecall</field>
@@ -37,9 +38,7 @@
                     <field name="description"/>
                 </group>
                 <footer>
-                    <button name="end_call" type="object"
-                        string="End Call" class="oe_highlight"/>
-                    or
+                    <button name="end_call" type="object" string="End Call" class="oe_highlight"/>
                     <button string="Cancel Call" class="oe_link" special="cancel"/>
                 </footer>
             </form>
@@ -56,13 +55,13 @@
         <field name="view_id" ref="crm_phonecall_custom_wizard_form_view"/>
     </record>
 
-    <!--TODO: Migrar <menuitem id="crm_phonecall_custom_wizard_menu" action="crm_phonecall_custom_wizard_action"
-        parent="crm.menu_crm_case_phone" sequence="1"/>
+    <menuitem id="crm_phonecall_custom_wizard_menu" action="crm_phonecall_custom_wizard_action"
+        parent="crm_phonecall.menu_crm_case_phone" sequence="1"/>
 
     <record id="crm_phonecall_form_add_call_type" model="ir.ui.view">
         <field name="name">crm.phonecall.form.add.call.type</field>
         <field name="model">crm.phonecall</field>
-        <field name="inherit_id" ref="crm.crm_case_phone_form_view"/>
+        <field name="inherit_id" ref="crm_phonecall.crm_case_phone_form_view"/>
         <field name="arch" type="xml">
             <field name="priority" position="after">
                 <field name="call_type"/>
@@ -76,14 +75,14 @@
     <record id="view_crm_case_phonecalls_filter_group_by" model="ir.ui.view">
         <field name="name">crm.phonecall.form.add.group.by</field>
         <field name="model">crm.phonecall</field>
-        <field name="inherit_id" ref="crm.view_crm_case_phonecalls_filter"/>
+        <field name="inherit_id" ref="crm_phonecall.view_crm_case_phonecalls_filter"/>
         <field name="arch" type="xml">
-            <group string="Group By" position="inside">
+            <group position="inside">
                 <filter string="Week" domain="[]" context="{'group_by':'date:week'}"/>
                 <filter string="Day" domain="[]" context="{'group_by':'date:day'}"/>
             </group>
         </field>
-    </record>-->
+    </record>
 
     <!--New Phonecalls Wizard SAT-->
     <record id="crm_phonecall_custom_wizard_form_view_sat" model="ir.ui.view">
@@ -103,11 +102,8 @@
                     <field name="description"/>
                 </group>
                 <footer>
-                    <button name="end_call" type="object"
-                        string="End Call" class="oe_highlight"/>
-                    <button name="end_call_notif" type="object"
-                        string="End Call and Notify" class="oe_highlight"/>
-                    or
+                    <button name="end_call" type="object" string="End Call" class="oe_highlight"/>
+                    <button name="end_call_notif" type="object" string="End Call and Notify" class="oe_highlight"/>
                     <button string="Cancel Call" class="oe_link" special="cancel"/>
                 </footer>
             </form>
@@ -128,7 +124,7 @@
               parent="crm_phonecall_menu_sat" sequence="1"/>
 
     <!--Logged Phonecalls Tree View SAT-->
-    <!--TODO: Migrar<record model="ir.ui.view" id="crm_case_inbound_phone_tree_view_sat">
+    <record model="ir.ui.view" id="crm_case_inbound_phone_tree_view_sat">
         <field name="name">CRM - Logged Phone Calls Tree SAT</field>
         <field name="model">crm.phonecall</field>
         <field name="arch" type="xml">
@@ -142,7 +138,7 @@
                 <field name="brand_id" options="{'no_create': True}"/>
                 <field name="subject" string="Subject"/>
                 <field name="description"/>
-                <field name="duration" string="Duration (min)" widget="float_time" class="oe_inline" style="vertical-align:baseline"/>
+                <field name="duration" string="Duration (min)" widget="float_time" class="oe_inline" />
             </tree>
         </field>
     </record>
@@ -156,7 +152,7 @@
         <field name="domain">[('scope', '=', 'sat')]</field>
         <field name="context">{'search_default_state': 'done', 'default_state': 'done', 'search_default_user_id': uid,
                                'default_scope': 'sat'}</field>
-        <field name="search_view_id" ref="crm.view_crm_case_phonecalls_filter"/>
+        <field name="search_view_id" ref="crm_phonecall.view_crm_case_phonecalls_filter"/>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
             Click to log the summary of a phone call.
@@ -179,24 +175,22 @@
         <field name="view_id" ref="crm_case_inbound_phone_tree_view_sat"/>
         <field name="domain">[('scope', '=', 'sat')]</field>
         <field name="context">{'search_default_state': 'done', 'default_state': 'done', 'default_scope': 'sat'}</field>
-        <field name="search_view_id" ref="crm.view_crm_case_phonecalls_filter"/>
-    </record
+        <field name="search_view_id" ref="crm_phonecall.view_crm_case_phonecalls_filter"/>
+    </record>
 
     <record id="view_partners_form_crm_calls_sat" model="ir.ui.view">
         <field name="name">view.res.partner.form.crm.inherited.calls.sat</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="crm.view_partners_form_crm_calls"/>
+        <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <data>
-                <xpath expr="//div[@name='buttons']" position="inside">
-                    <button class="oe_inline oe_stat_button" type="action"
-                        name="%(crm_claim_rma_custom.crm_case_categ_phone_incoming0_sat_partner)d"
-                        icon="fa-phone"
-                        context="{'search_default_partner_id': active_id}">
-                        <field string="SAT Calls" name="sat_phonecall_count" widget="statinfo"/>
-                    </button>
-                </xpath>
-            </data>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_inline oe_stat_button" type="action"
+                    name="%(crm_claim_phonecall.crm_case_categ_phone_incoming0_sat_partner)d"
+                    icon="fa-phone"
+                    context="{'search_default_partner_id': active_id}">
+                    <field string="SAT Calls" name="sat_phonecall_count" widget="statinfo"/>
+                </button>
+            </xpath>
         </field>
-    </record>>-->
+    </record>
 </odoo>
