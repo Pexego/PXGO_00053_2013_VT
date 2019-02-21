@@ -3,6 +3,16 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 @import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,300,500,700");
 
+$gray-base:              #000;
+$gray-darker:            lighten($gray-base, 13.5%); // #222
+$gray-dark:              #666;   // #333
+$gray:                   #777; // #555
+$gray-light:             #AEA79F;   // #999
+$gray-lighter: lighten($gray-base, 93.5%); // #eee
+
+$brand-primary: #875a7b;
+$brand-secondary: #00A09D;
+
 /* FUENTES */
 body {
   font-family: "Open Sans", sans-serif;
@@ -395,4 +405,41 @@ $small-spinner-dimensions: $main-spinner-dimensions * 0.7;
   }
 }
 
+}
+
+/* --- TABLES --- */
+
+.o_list_view.table {
+    border: none;
+}
+.o_list_view.table thead,
+.o_list_view.table tfoot,
+.o_list_view.table th {
+    border: none;
+}
+
+
+.o_list_view.table thead {
+    background-color: #f1f1f1;
+}
+
+.o_list_view.table thead > tr > th.o_column_sortable:hover {
+    background-color: #D6D6D3;
+}
+
+.o_list_view.table tbody tr.o_group_header {
+    background-color: #dfdfdf;
+    background-image: none;
+    border-top: 1px solid red;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #ffffff;
+}
+
+.o_list_view tfoot {
+    background-color: $brand-primary;
+    color: #ffffff;
+    cursor: default;
+    font-weight: normal;
 }
