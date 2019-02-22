@@ -239,14 +239,14 @@ class AccountInvoice(models.Model):
     def onchange_partner_id(self, type, partner_id, date_invoice=False,
                             payment_term=False, partner_bank_id=False,
                             company_id=False):
-        result = super(AccountInvoice, self).onchange_partner_id(
-            type, partner_id, date_invoice=date_invoice,
-            payment_term=payment_term, partner_bank_id=partner_bank_id,
-            company_id=company_id)
+        result = super(AccountInvoice, self).onchange_partner_id(type, partner_id, date_invoice=date_invoice,
+                                                                 payment_term=payment_term,
+                                                                 partner_bank_id=partner_bank_id, company_id=company_id)
         if partner_id:
             partner = self.env["res.partner"].browse(partner_id)
             result['value']['attach_picking'] = partner.attach_picking
             result['value']['section_id'] = partner.section_id.id
+            result['value']['currency_id'] = partner.property_product_pricelist_purchase.currency_id.id
 
         return result
 
