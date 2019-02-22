@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
         <template id="report_translated">
             <t t-foreach="doc_ids" t-as="doc_id">
@@ -213,8 +213,8 @@
             file="crm_claim_summary_report.report_translated"
             report_type="qweb-pdf"/>
 
-        <!--TODO: Migrar<record id="claim_summary_report" model="ir.actions.report.xml">
-            <field name="paperformat_id" ref="report.paperformat_us"/>
-        </record>-->
+        <record id="claim_summary_report" model="ir.actions.report">
+            <field name="paperformat_id" ref="base.paperformat_us"/>
+        </record>
     </data>
-</openerp>
+</odoo>
