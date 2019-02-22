@@ -1,76 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data noupdate="1">
+<odoo noupdate="1">
+    <record id="seq_crm_claim_supplier" model="ir.sequence">
+        <field name="name">CRM Claim Supplier</field>
+        <field name="prefix">RMP-%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+        <field name="code">crm.claim.rma.supplier</field>
+    </record>
 
-        <!-- <record id="sequence_crm_claim_rma_supplier" model="ir.sequence">
-          <field name="code">crm.claim.rma.supplier2</field>
-          <field name="prefix">RMP-%(year)s/</field>
-          <field name="name">CRM Claim Supplier</field>
-          <field name="number_increment">1</field>
-          <field name="active" eval="True"/>
-          <field name="implementation">standard</field>
-          <field name="company_id">1</field>
-          <field name="padding">5</field>
-          <field name="number_next">1</field>
-        </record> -->
+    <record id="substate_due_receive" model="substate.substate">
+        <field name="name">Pte. de Recibir</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="seq_crm_claim_supplier" model="ir.sequence">
-            <field name="name">CRM Claim Supplier</field>
-            <field name="prefix">RMP-%(year)s/</field>
-            <field name="padding">5</field>
-            <field name="company_id" eval="False"/>
-            <field name="code">crm.claim.rma.supplier</field>
-        </record>
+    <record id="substate_received" model="substate.substate">
+        <field name="name">Recibido</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="substate_due_receive" model="substate.substate">
-            <field name="name">Pte. de Recibir</field>
-            <field name="active" eval="True"/>
-        </record>
+    <record id="substate_process" model="substate.substate">
+        <field name="name">En Proceso</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="substate_received" model="substate.substate">
-            <field name="name">Recibido</field>
-            <field name="active" eval="True"/>
-        </record>
+    <record id="substate_pending_shipping" model="substate.substate">
+        <field name="name">Pte. de Envío</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="substate_process" model="substate.substate">
-            <field name="name">En Proceso</field>
-            <field name="active" eval="True"/>
-        </record>
+    <record id="substate_pending_default" model="substate.substate">
+        <field name="name">Pte. por Impago</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="substate_pending_shipping" model="substate.substate">
-            <field name="name">Pte. de Envío</field>
-            <field name="active" eval="True"/>
-        </record>
+    <record id="substate_replaced" model="substate.substate">
+        <field name="name">Sustituido</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="substate_pending_default" model="substate.substate">
-            <field name="name">Pte. por Impago</field>
-            <field name="active" eval="True"/>
-        </record>
+    <record id="substate_checked" model="substate.substate">
+        <field name="name">Comprobado</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="substate_replaced" model="substate.substate">
-            <field name="name">Sustituido</field>
-            <field name="active" eval="True"/>
-        </record>
+    <record id="substate_returned" model="substate.substate">
+        <field name="name">Devuelto</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="substate_checked" model="substate.substate">
-            <field name="name">Comprobado</field>
-            <field name="active" eval="True"/>
-        </record>
+    <record id="substate_repaired" model="substate.substate">
+        <field name="name">Reparado</field>
+        <field name="active" eval="True"/>
+    </record>
 
-        <record id="substate_returned" model="substate.substate">
-            <field name="name">Devuelto</field>
-            <field name="active" eval="True"/>
-        </record>
-
-        <record id="substate_repaired" model="substate.substate">
-            <field name="name">Reparado</field>
-            <field name="active" eval="True"/>
-        </record>
-
-        <record id="substate_refund" model="substate.substate">
-            <field name="name">Abonado</field>
-            <field name="active" eval="True"/>
-        </record>
-
-    </data>
-</openerp>
+    <record id="substate_refund" model="substate.substate">
+        <field name="name">Abonado</field>
+        <field name="active" eval="True"/>
+    </record>
+</odoo>

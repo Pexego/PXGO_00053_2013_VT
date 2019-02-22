@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2018 Visiotech All Rights Reserved
@@ -21,7 +20,7 @@
 
 {
     'name': 'Crm Claim custom',
-    'version': '1.0',
+    'version': '11.0',
     'category': 'crm',
     'description': """Crm claim customizations:""",
     'author': 'Visiotech',

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos
@@ -19,4 +18,4 @@
 #
 ##############################################################################
 
-#TODO: Migrarfrom . import crm_claim_report
+from . import crm_claim_report
