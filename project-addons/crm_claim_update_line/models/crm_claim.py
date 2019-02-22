@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2018 Visiotech All Rights Reserved
@@ -19,11 +18,11 @@
 #
 ##############################################################################
 
-from openerp import models, api, _
+from odoo import models, api, _
 
 
 class CrmClaimRma(models.Model):
-    _inherit = "crm.claim"
+    _inherit = 'crm.claim'
 
     @api.multi
     def button_update_lines_wizard(self):

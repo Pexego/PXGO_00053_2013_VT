@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, api
+from odoo import models, api
 
 
 class ResPartner(models.Model):
 
-    _inherit = "res.partner"
+    _inherit = 'res.partner'
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):
