@@ -140,10 +140,10 @@
             </header>
             <sheet string="Claims">
                 <div class="oe_title">
-                        <group>
-                            <label for="name" class="oe_edit_only"/>
-                            <h1><field name="name"/></h1>
-                        </group>
+                    <group>
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name"/></h1>
+                    </group>
                 </div>
                 <group>
                     <group string="Returned good">
@@ -235,10 +235,8 @@
             <field name="partner_id" string="Partner" required="1" domain="[('is_company', '=', True)]"/>
             <field name="invoice_type"/>
             <field name="invoice_id" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
-            <group colspan="4" col="4">
-                <field name="invoice_method" attrs="{'invisible': [('invoice_type', '!=', 'invoice')]}" colspan="2"/>
-                <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>
-            </group>
+            <field name="invoice_method" attrs="{'invisible': [('invoice_type', '!=', 'invoice')]}" colspan="2"/>
+            <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>
         </field>
         <xpath expr="/form/sheet/group[3]/notebook/page[2]" position="before">
             <page string="Product Return">
@@ -254,6 +252,7 @@
                 <field name="state_show_buttons" invisible="1"/>
                 <group col="4" colspan="4" attrs="{'invisible':[('state_show_buttons', '=', False)]}">
                     <separator string="Action" colspan="4" name="action_sep"/>
+                    <field name="warehouse_id" invisible="1"/>
                     <button name="%(action_claim_picking_in)d"
                             string="New Products Return"
                             type="action" target="new"
@@ -354,19 +353,7 @@
                 <div class="oe_title">
                     <label for="number" class="oe_edit_only"/>
                     <h1><field name="number"/></h1>
-
                 </div>
-
-            </field>
-
-            <field name="date" position="replace">
-            </field>
-            <field name="user_id" position="before">
-                <field name="name" />
-                 <field name="supplier_number" attrs="{'invisible': [('claim_type','in', ['customer',])]}"/>
-                <field name="date"/>
-            </field>
-            <xpath expr="/form/sheet/group[1]" position="before">
                 <div class="oe_right oe_button_box" name="buttons">
                     <button class="oe_stat_button" name="%(act_crm_claim_rma_sale_orders)d" type="action" icon="fa-pencil-square-o"
                             string="Quotations and Sales"
@@ -404,7 +391,15 @@
                             context="{'search_default_claim_id': id,'search_default_user_id':False}"
                            />
                 </div>
-            </xpath>
+            </field>
+
+            <field name="date" position="replace">
+            </field>
+            <field name="user_id" position="before">
+                <field name="name" />
+                 <field name="supplier_number" attrs="{'invisible': [('claim_type','in', ['customer',])]}"/>
+                <field name="date"/>
+            </field>
         </field>
 </record>
 
