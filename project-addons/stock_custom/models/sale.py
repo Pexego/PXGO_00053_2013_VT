@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from openerp import models, api, fields, SUPERUSER_ID
-#TODO: Migrar
-# ~ from openerp.addons.connector.event import on_record_create
-# ~ from openerp.addons.connector.session import ConnectorSession
+from odoo import fields, models
+
 
 class SaleOrder(models.Model):
 
@@ -16,23 +13,21 @@ class SaleOrder(models.Model):
     is_some_reserved = fields.Boolean(compute='_compute_is_some_reserved',
                                       search='_search_is_some_reserved')
 
-    # TODO: Migrar
-    # ~ @api.multi
-    # ~ def action_ship_create(self):
-        # ~ res = super(SaleOrder, self).action_ship_create()
-        # ~ for sale in self:
-            # ~ sale.picking_ids.write({'commercial': sale.user_id.id})
-            # ~ session = ConnectorSession(self.env.cr, SUPERUSER_ID,
-                                       # ~ context=self.env.context)
-            # ~ for picking in sale.picking_ids:
-                # ~ if picking.state != 'cancel':
-                    # ~ for move in picking.move_lines:
-                        # ~ on_record_create.fire(session, 'stock.move',
-                                              # ~ move.id)
+    def _action_confirm(self):
+        res = super()._action_confirm()
+        for sale in self:
+            sale.picking_ids.write({'commercial': sale.user_id.id, 'internal_notes': sale.internal_notes})
+            # session = ConnectorSession(self.env.cr, SUPERUSER_ID,
+            #                            context=self.env.context)
+            # for picking in sale.picking_ids:
+            #     if picking.state != 'cancel':
+            #         for move in picking.move_lines:
+            #             on_record_create.fire(session, 'stock.move',
+            #                                   move.id)
+            # TODO: Migrar cuando se pueda probar http://odoo-connector.com/guides/migration_guide.html?highlight=fire#triggering-an-event
 
-        # ~ return res
+        return res
 
-    @api.multi
     def _search_is_all_reserved(self, operator, operand):
         self.env.cr.execute(
             """
@@ -54,19 +49,17 @@ WHERE A.order_id IS NULL
             """)
         orders = self.env.cr.fetchall()
         order_ids = [x[0] for x in orders]
-        if operator == '=' and operand == True:
+        if operator == '=' and operand is True:
             return [('id', 'in', order_ids)]
-        elif operator == '!=' and operand == True:
+        elif operator == '!=' and operand is True:
             return [('id', 'not in', order_ids)]
 
-    @api.multi
     def _compute_is_all_reserved(self):
         for order in self:
             if all([x.state == 'assigned'
                     for x in order.mapped('order_line.reservation_ids')]):
                 order.is_all_reserved = True
 
-    @api.multi
     def _search_is_some_reserved(self, operator, operand):
         self.env.cr.execute(
             """
@@ -88,12 +81,11 @@ WHERE A.order_id IS NOT NULL
             """)
         orders = self.env.cr.fetchall()
         order_ids = [x[0] for x in orders]
-        if operator == '=' and operand == True:
+        if operator == '=' and operand is True:
             return [('id', 'in', order_ids)]
-        elif operator == '!=' and operand == True:
+        elif operator == '!=' and operand is True:
             return [('id', 'not in', order_ids)]
 
-    @api.multi
     def _compute_is_some_reserved(self):
         for order in self:
             order.is_some_reserved = False
@@ -104,24 +96,25 @@ WHERE A.order_id IS NOT NULL
                     for x in order.mapped('order_line.reservation_ids')]):
                 order.is_some_reserved = False
 
-    def action_quotation_send_reserve(self, cr, uid, ids, context=None):
-        '''
-        This function opens a window to compose an email, with the edi sale template message loaded by default
-        '''
-        assert len(ids) == 1, 'This option should only be used for a single id at a time.'
-        ir_model_data = self.pool.get('ir.model.data')
+    def action_quotation_send_reserve(self):
+        """
+            This function opens a window to compose an email,
+            with the edi sale template message loaded by default.
+        """
+        self.ensure_one()
         try:
-            template_id = ir_model_data.get_object_reference(cr, uid, 'sale', 'email_template_edi_sale')[1]
+            template_id = self.env.ref('sale.email_template_edi_sale').id
         except ValueError:
             template_id = False
         try:
-            compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+            compose_form_id = self.env.ref(
+                'sale.email_compose_message_wizard_form').id
         except ValueError:
             compose_form_id = False
         ctx = dict()
         ctx.update({
             'default_model': 'sale.order',
-            'default_res_id': ids[0],
+            'default_res_id': self.id,
             'default_use_template': bool(template_id),
             'default_template_id': template_id,
             'default_composition_mode': 'comment',

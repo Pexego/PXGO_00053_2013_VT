@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos
@@ -18,77 +17,42 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, exceptions, api, _
+from odoo import api, exceptions, fields, models, _
 
 
-class StockQuant(models.Model):
-
-    _inherit = "stock.quant"
-
-    @api.model
-    def create(self, vals):
-        if vals.get('negative_move_id') and vals.get('lot_id'):
-            del vals['lot_id']
-        return super(StockQuant, self).create(vals)
-
-#TODO: Migrar
-# ~ class StockHistory(models.Model):
-    # ~ _inherit = 'stock.history'
-
-    # ~ brand_id = fields.Many2one(string="Brand", related='move_id.product_id.product_brand_id')
-    # ~ manufacturer = fields.Many2one(string="Manufacturer", related='move_id.product_id.manufacturer')
-
-
-class stock_picking(models.Model):
+class StockPicking(models.Model):
     _inherit = "stock.picking"
     _order = "priority desc, date desc, id desc"
 
-    internal_notes = fields.Text("Internal Notes")
+    internal_notes = fields.Text()
     commercial = fields.Many2one('res.users')
 
-    @api.multi
     def action_done(self):
-        packop = self.env["stock.pack.operation"]
         lot_obj = self.env["stock.production.lot"]
-        link_obj = self.env["stock.move.operation.link"]
-        for pick in self:
-            for move in pick.move_lines:
-                if move.lots_text:
-                    if move.linked_move_operation_ids:
-                        move.linked_move_operation_ids.unlink()
-                        move.refresh()
-                    txlots = move.lots_text.split(',')
-                    if len(txlots) != (move.qty_ready or move.product_uom_qty):
+        for picking in self:
+            for move_line in picking.move_line_ids:
+                if move_line.lots_text:
+                    txlots = move_line.lots_text.split(',')
+                    if len(txlots) != move_line.qty_done:
                         raise exceptions.Warning(_("The number of lots defined"
                                                    " are not equal to move"
                                                    " product quantity"))
                     while (txlots):
                         lot_name = txlots.pop()
-                        lots = lot_obj.search([("name", "=", lot_name),
-                                               ("product_id", "=",
-                                                move.product_id.id)])
-                        if lots:
-                            lot = lots[0]
-                        else:
+                        lot = lot_obj.search([("name", "=", lot_name),
+                                              ("product_id", "=",
+                                               move_line.product_id.id)],
+                                             limit=1)
+                        if not lot:
                             lot = lot_obj.create({'name': lot_name,
                                                   'product_id':
-                                                  move.product_id.id})
-                        op = packop.with_context(no_recompute=True).\
-                            create({'picking_id': move.picking_id.id,
-                                    'product_id': move.product_id.id,
-                                    'product_uom_id': move.product_uom.id,
-                                    'product_qty': 1.0,
-                                    'lot_id': lot.id,
-                                    'location_id': move.location_id.id,
-                                    'location_dest_id': move.
-                                    location_dest_id.id
-                                    })
-                        link_obj.create({'qty': 1.0,
-                                         'operation_id': op.id,
-                                         'move_id': move.id})
-                        move.refresh()
-
-        res =  super(stock_picking, self).action_done()
+                                                  move_line.product_id.id})
+                        if move_line.qty_done > 1:
+                            move_line.qty_done = move_line.qty_done - 1
+                            move_line.copy({'qty_done': 1, 'lot_id': lot.id})
+                        else:
+                            move_line.lot_id = lot
+        res = super().action_done()
         for picking in self:
             if picking.state == 'done' and picking.sale_id and \
                     picking.picking_type_code == 'outgoing':
@@ -99,44 +63,42 @@ class stock_picking(models.Model):
         return res
 
 
-class stock_move(models.Model):
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    lots_text = fields.Text('Lots', help="Value must be separated by commas")
+
+
+class StockMove(models.Model):
     _inherit = "stock.move"
 
     _order = 'date_expected asc, id'
 
-    lots_text = fields.Text('Lots', help="Value must be separated by commas")
-    real_stock = fields.Float('Real Stock', compute='_get_real_stock')
-    available_stock = fields.Float('Available Stock', compute="_get_available_stock")
-    user_id = fields.Many2one('res.users', compute='_get_responsible')
+    real_stock = fields.Float(compute='_compute_real_stock')
+    available_stock = fields.Float(compute="_compute_available_stock")
+    user_id = fields.Many2one('res.users', compute='_compute_responsible')
 
-    @api.one
-    def _get_responsible(self):
-        responsible = None
-        if self.picking_id:
-            responsible = self.picking_id.commercial.id
-        elif self.origin:
-            responsible = self.env['sale.order'].search([('name', '=', self.origin)]).user_id.id
-        self.user_id = responsible
+    def _compute_responsible(self):
+        for move in self:
+            responsible = None
+            if move.picking_id:
+                responsible = move.picking_id.commercial.id
+            elif move.origin:
+                responsible = move.env['sale.order'].search(
+                    [('name', '=', move.origin)]).user_id.id
+            move.user_id = responsible
 
-    @api.one
-    def _get_available_stock(self):
-        self.available_stock = self.product_id.virtual_stock_conservative
+    def _compute_available_stock(self):
+        for move in self:
+            move.available_stock = move.product_id.virtual_stock_conservative
 
-    @api.one
-    def _get_real_stock(self):
-        self.real_stock = self.product_id.qty_available
-
-    def _prepare_picking_assign(self, cr, uid, move, context=None):
-        res = super(stock_move, self)._prepare_picking_assign(cr, uid, move,
-                                                              context=context)
-        res['internal_notes'] = (move.procurement_id and
-                                 move.procurement_id.sale_line_id) and \
-            move.procurement_id.sale_line_id.order_id.internal_notes or ""
-        return res
+    def _compute_real_stock(self):
+        for move in self:
+            move.real_stock = move.product_id.qty_available
 
     @api.multi
-    def action_done(self):
-        res = super(stock_move, self).action_done()
+    def _action_done(self):
+        res = super()._action_done()
         stock_loc = self.env.ref("stock.stock_location_stock")
         for move in self:
             if move.location_dest_id == stock_loc:
@@ -157,7 +119,7 @@ class stock_move(models.Model):
                 confirmed_ids = self.\
                     search(domain, limit=None)
                 if confirmed_ids:
-                    confirmed_ids.action_assign()
+                    confirmed_ids._action_assign()
 
         return res
 
@@ -165,10 +127,8 @@ class stock_move(models.Model):
 class StockReturnPicking(models.TransientModel):
     _inherit = 'stock.return.picking'
 
-    @api.multi
     def _create_returns(self):
-        new_picking, pick_type_id = super(StockReturnPicking, self).\
-            _create_returns()
+        new_picking, pick_type_id = super()._create_returns()
         pick_type_obj = self.env["stock.picking.type"].browse(pick_type_id)
         if pick_type_obj.code == "incoming":
             pick_obj = self.env["stock.picking"].browse(new_picking)
@@ -176,18 +136,15 @@ class StockReturnPicking(models.TransientModel):
                 if move.warehouse_id.lot_stock_id == move.location_dest_id:
                     move.location_dest_id = \
                         move.warehouse_id.wh_input_stock_loc_id.id
-
         return new_picking, pick_type_id
 
 
 class StockReservation(models.Model):
     _inherit = 'stock.reservation'
 
-    next_reception_date = fields.Date('Next reception date',
-                                      compute='_get_next_reception')
+    next_reception_date = fields.Date(compute='_compute_next_reception_date')
 
-    @api.multi
-    def _get_next_reception(self):
+    def _compute_next_reception_date(self):
         for res in self:
             date_expected = False
             moves = self.env['stock.move'].search(
@@ -212,19 +169,22 @@ class StockReservation(models.Model):
             res.next_reception_date = date_expected
 
 
-class stock_production_lot(models.Model):
+class StockProductionLot(models.Model):
     _inherit = 'stock.production.lot'
 
-    partner_id = fields.Many2one('res.partner', string='Customer', compute='_get_partner_id', help='The last customer in possession of the product')
+    partner_id = fields.Many2one(
+        'res.partner', string='Customer',
+        compute='_compute_partner_id',
+        help='The last customer in possession of the product')
     lot_notes = fields.Text('Notes')
 
-    @api.multi
-    @api.depends('quant_ids')
-    def _get_partner_id(self):
+    def _compute_partner_id(self):
+        pass
         for lot in self:
-            quant = self.env['stock.quant'].search([('lot_id', '=', lot.id)], order="id desc", limit=1)
-            if quant and quant.history_ids:
-                lot.partner_id = quant.history_ids[0].partner_id.commercial_partner_id
+            move_line = self.env['stock.move.line'].search(
+                [('lot_id', '=', lot.id)], order="id desc", limit=1)
+            if move_line:
+                lot.partner_id = \
+                    move_line.picking_id.partner_id.commercial_partner_id
             else:
                 lot.partner_id = False
-

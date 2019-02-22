@@ -1,46 +1,31 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-from odoo import models, fields, api, _, exceptions
-
-from io import StringIO
-from datetime import datetime
+# © 2016 Comunitea
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+import seaborn as sns
+import pandas as pd
+from matplotlib import pyplot as plt
+from odoo import api, fields, models, _, exceptions
+from io import BytesIO
+from datetime import datetime, date
 from dateutil.relativedelta import relativedelta
 import time
 import base64
 import matplotlib
 matplotlib.use('Agg')
-from matplotlib import pyplot as plt
-import seaborn as sns
-import pandas as pd
 
 
 class ProductTemplate(models.Model):
 
     _inherit = 'product.template'
 
-    date_start = fields.Date("Start date", default=lambda *a: (datetime.now() - relativedelta(months=6)).strftime('%Y-%m-%d'))
+    date_start = fields.Date(
+        "Start date",
+        default=lambda *a: (datetime.now() - relativedelta(months=6)).strftime(
+            '%Y-%m-%d'))
     date_end = fields.Date("End Date", default=fields.Date.today)
     period = fields.Selection([('week', 'Week'),
-                                    ('month', 'Month'),
-                                    ('year', 'Year')
-                                    ], 'Time Period', default='month')
+                               ('month', 'Month'),
+                               ('year', 'Year')],
+                              'Time Period', default='month')
     analysis_type = fields.Selection([('average', 'Average'),
                                       ('end_of_period', 'End of period')],
                                      'Type of analysis', default='average')
@@ -51,24 +36,31 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
+    virtual_stock_cooked = fields.Float(
+        'Stock Available Cooking', compute="_compute_virtual_stock_cooked")
+    ref_visiotech = fields.Char('Visiotech reference')
+
     @api.model
     def _last_day_of_period(self, _date):
         if self.period == 'week':
-            period_end = (datetime(_date.year, _date.month, _date.day) + relativedelta(weeks=1))
+            period_end = (
+                date(_date.year, _date.month, _date.day) +
+                relativedelta(weeks=1))
         elif self.period == 'year':
-            period_end = (datetime(_date.year, 1, 1) + relativedelta(years=1))
+            period_end = (date(_date.year, 1, 1) + relativedelta(years=1))
         else:
-            period_end = (datetime(_date.year, _date.month, 1) + relativedelta(months=1))
+            period_end = (
+                date(_date.year, _date.month, 1) +
+                relativedelta(months=1))
         return period_end + relativedelta(days=-1)
 
-    @api.multi
     def _get_periods(self):
         """
         :return: A list of tuples with the first and last date
         """
         periods = []
-        end_date = datetime.strptime(self.date_end, "%Y-%m-%d")  # datetime(today.year, today.month, 1)
-        start_date = datetime.strptime(self.date_start, "%Y-%m-%d")  # datetime(today.year-1, today.month, 1)
+        end_date = fields.Date.from_string(self.date_end)
+        start_date = fields.Date.from_string(self.date_start)
 
         date_aux = start_date
         while date_aux < end_date:
@@ -79,14 +71,11 @@ class ProductProduct(models.Model):
 
         return periods
 
-    @api.multi
     def _get_stock_data(self):
         """
-        :return: A list of tuples with the total of stock grouped
+          :return: A list of tuples with the total of stock grouped
         """
         data = []
-        stock_inventory = self.env['stock.inventory.line']
-
         # LOCATIONS = REAL + EXTERNAL STOCK
         locations = [self.env.ref("stock.stock_location_stock").id,
                      self.env.ref("location_moves.stock_location_external").id]
@@ -99,7 +88,7 @@ class ProductProduct(models.Model):
             total_stock = 0
             if self.analysis_type == 'average':
                 for loc in locations:
-                    stock_data = stock_inventory.read_group(
+                    stock_data = self.env['stock.inventory.line'].read_group(
                         [('product_id', '=', self.id),
                          ('create_date', '>=', start_period),
                          ('create_date', '<=', end_period),
@@ -118,7 +107,7 @@ class ProductProduct(models.Model):
                     data.append([end_period_seconds, round(total_stock)])
             else:
                 for loc in locations:
-                    stock_data = stock_inventory.read_group(
+                    stock_data = self.env['stock.inventory.line'].read_group(
                         [('product_id', '=', self.id),
                          ('create_date', '>=', start_period),
                          ('create_date', '<=', end_period),
@@ -131,28 +120,31 @@ class ProductProduct(models.Model):
 
                 if total_stock:
                     data.append([end_period_seconds, total_stock])
-
         return data
 
-    @api.multi
     def action_create_graph(self):
-        if not self.date_start and not self.date_end and not self.period and not self.analysis_type:
-            self.date_start = (datetime.now() - relativedelta(months=6)).strftime('%Y-%m-%d')
-            self.date_end = datetime.now()
-            self.period = 'month'
-            self.analysis_type = 'average'
-        elif not self.date_start or not self.date_end or not self.period or not self.analysis_type:
-            raise exceptions.UserError(_('You must set all filter values'))
-        elif self.date_end < self.date_start:
-            raise exceptions.UserError(_('End date cannot be smaller than start date'))
+        for product in self:
+            if not product.date_start and not product.date_end and not \
+                        product.period and not product.analysis_type:
+                now = datetime.now()
+                product.date_start = (now - relativedelta(months=6)).strftime(
+                    '%Y-%m-%d')
+                product.date_end = now
+                product.period = 'month'
+                product.analysis_type = 'average'
+            elif not product.date_start or not product.date_end or not \
+                    product.period or not product.analysis_type:
+                raise exceptions.UserError(_('You must set all filter values'))
+            elif product.date_end < product.date_start:
+                raise exceptions.UserError(
+                    _('End date cannot be smaller than start date'))
+            product.run_scheduler_graphic()
 
-        self.run_scheduler_graphic()
-
-    @api.multi
     def run_scheduler_graphic(self):
         """
             Generate the graphs of stock and link it to the partner
         """
+        self.ensure_one()
         period_filter = self.period
         if period_filter == 'week':
             format_xlabel = "%y-W%W"
@@ -160,15 +152,17 @@ class ProductProduct(models.Model):
             format_xlabel = "%Y"
         else:
             format_xlabel = "%m-%y"
-        int_to_date = lambda x: \
-            datetime(time.localtime(x).tm_year, time.localtime(x).tm_mon,
-                     time.localtime(x).tm_mday).strftime(format_xlabel)
+
+        def int_to_date(x):
+            return datetime(
+                time.localtime(x).tm_year, time.localtime(x).tm_mon,
+                time.localtime(x).tm_mday).strftime(format_xlabel)
 
         data = self._get_stock_data()
         if data:
             # Get data
             df = pd.DataFrame()
-            df['Date'] = range(len(data))
+            df['Date'] = list(range(len(data)))
             df['Stock'] = [x[1] for x in data]
 
             min_stock = min(df['Stock'])
@@ -184,14 +178,20 @@ class ProductProduct(models.Model):
             # Create plot with points
             sns.despine()
             sns.set_style("darkgrid", {"axes.labelcolor": "#363737",
-                                       "ytick.color": "#59656d", "xtick.color": "#59656d"})
-            sns_plot = sns.lmplot('Date', 'Stock', data=df, fit_reg=False, size=5, aspect=1.7,
+                                       "ytick.color": "#59656d",
+                                       "xtick.color": "#59656d"})
+            sns_plot = sns.lmplot('Date', 'Stock', data=df, fit_reg=False,
+                                  height=5, aspect=1.7,
                                   scatter_kws={"color": "#A61D34", "s": 30})
 
             # Draw a line plot to join all points
-            sns_plot.map(plt.plot, "Date", "Stock", marker="o", ms=4, color='#A61D34')
-            plt.xticks(range(len(data)), [int_to_date(x[0]) for x in data])
-            [sns_plot.ax.text(p[0] - margin_x, p[1] + margin_y, '%d' % int(p[1]), color='grey', fontsize=9, ha="center")
+            sns_plot.map(plt.plot, "Date", "Stock", marker="o",
+                         ms=4, color='#A61D34')
+            plt.xticks(list(range(len(data))),
+                       [int_to_date(x[0]) for x in data])
+            [sns_plot.ax.text(p[0] - margin_x, p[1] + margin_y,
+                              '%d' % int(p[1]), color='grey',
+                              fontsize=9, ha="center")
              for p in zip(sns_plot.ax.get_xticks(), df['Stock'])]
 
             # Set axis config
@@ -199,7 +199,7 @@ class ProductProduct(models.Model):
             sns_plot.set_xticklabels(rotation=30)
 
             # Create the graphic with the data
-            io = StringIO()
+            io = BytesIO()
             sns_plot.savefig(io, format='png')
             io.seek(0)
             img_data = base64.b64encode(io.getvalue())
@@ -207,3 +207,42 @@ class ProductProduct(models.Model):
             self.write({'stock_graphic': img_data})
 
         return
+
+    def _compute_virtual_stock_cooked(self):
+        for product in self:
+            product.virtual_stock_cooked = product.qty_available_wo_wh +\
+                                            product.virtual_stock_conservative
+
+    def action_view_moves(self):
+        return {
+            'domain': "[('product_id','=', " + str(self.id) + ")]",
+            'name': _('Stock moves'),
+            'view_mode': 'tree,form',
+            'view_type': 'form',
+            'context': {'tree_view_ref': 'stock.view_move_tree',
+                        'search_default_groupby_dest_location_id': 1,
+                        'search_default_ready': 1,
+                        'search_default_future': 1},
+            'res_model': 'stock.move',
+            'type': 'ir.actions.act_window',
+        }
+
+    def get_stock_new(self):
+        category_id = self.env['product.category'].search(
+            [('name', '=', 'NUEVOS')])
+        products = self.env['product.product'].search(
+            [('categ_id', '=', category_id.id)])
+        ids_products = [x.id for x in products
+                        if x.qty_available_external > 0 or
+                        x.qty_available > 0]
+        return {
+            'domain': "[('id','in', " + str(ids_products) + ")]",
+            'name': _('Stock New'),
+            'view_mode': 'tree,form',
+            'view_type': 'form',
+            'context': {'tree_view_ref': 'product.product_product_tree_view',
+                        'readonly_by_pass': ['lst_price', 'list_price2',
+                                             'list_price3', 'list_price4']},
+            'res_model': 'product.product',
+            'type': 'ir.actions.act_window',
+        }

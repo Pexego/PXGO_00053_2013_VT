@@ -22,14 +22,10 @@
     'name': 'Stock valued picking',
     'version': '1.0',
     'category': 'stock',
-    'description': """""",
+    'description': """Cambiado por stock_picking_report_valued""",
     'author': 'Pexego',
     'website': '',
     "depends": ['sale', 'stock', 'sale_stock'],
-    "data": [
-        'report/valued_picking_report.xml',
-        # 'report/stock_report.xml',
-        'views/stock_view.xml',
-        'views/partner_view.xml'],
-    "installable": True
+    "data": [],
+    "installable": False
 }

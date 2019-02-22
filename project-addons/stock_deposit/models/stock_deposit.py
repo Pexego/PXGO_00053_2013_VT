@@ -77,8 +77,8 @@ class StockDeposit(models.Model):
                                       readonly=True)
     user_id = fields.Many2one('res.users', 'Comercial', required=False,
                               readonly=False, ondelete='cascade', index=1)
-    cost_subtotal = fields.Float('Cost', related='move_id.cost_subtotal',
-                                 store=True, readonly=True)
+    # cost_subtotal = fields.Float('Cost', related='move_id.cost_subtotal',
+    #                              store=True, readonly=True) TODO:Migrar.
 
     @api.multi
     def sale(self):

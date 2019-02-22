@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos
@@ -19,40 +18,63 @@
 #
 ##############################################################################
 
-from openerp import models
+from odoo import models
 import base64
 import os
 import logging
 import tempfile
 from contextlib import closing
+from PyPDF2 import PdfFileWriter, PdfFileReader
 
 _logger = logging.getLogger(__name__)
 
 
-class Report(models.Model):
+class IrActionsReport(models.Model):
 
-    _inherit = "report"
+    _inherit = "ir.actions.report"
 
-    def get_pdf(self, cr, uid, ids, report_name, html=None, data=None,
-                context=None):
-        res = super(Report, self).get_pdf(cr, uid, ids, report_name, html=html,
-                                          data=data, context=context)
-        if report_name == "stock_custom.report_picking_with_attachments":
-            attachments = self.pool["ir.attachment"].\
-                search(cr, uid, [("res_model", '=', "stock.picking"),
-                                 ("res_id", "in", ids),
-                                 ("to_print", "=", True)])
+    def _merge_pdf(self, documents):
+        """Merge PDF files into one.
+
+        :param documents: list of path of pdf files
+        :returns: path of the merged pdf
+        """
+        writer = PdfFileWriter()
+        streams = []
+        for document in documents:
+            pdfreport = open(document, 'rb')
+            streams.append(pdfreport)
+            reader = PdfFileReader(pdfreport)
+            for page in range(0, reader.getNumPages()):
+                writer.addPage(reader.getPage(page))
+
+        merged_file_fd, merged_file_path = tempfile.mkstemp(
+            suffix='.html', prefix='report.merged.tmp.')
+        with closing(os.fdopen(merged_file_fd, 'wb')) as merged_file:
+            writer.write(merged_file)
+
+        for stream in streams:
+            stream.close()
+
+        return merged_file_path
+
+    def render_qweb_pdf(self, res_ids=None, data=None):
+        res = super().render_qweb_pdf(res_ids, data)
+        if self.report_name == "stock_custom.report_picking_with_attachments":
+            attachments = self.env["ir.attachment"].search(
+                [("res_model", '=', "stock.picking"),
+                 ("res_id", "in", res_ids),
+                 ("to_print", "=", True)])
             if attachments:
-                pick = self.pool.get('stock.picking').browse(cr, uid, ids[0])
+                pick = self.env['stock.picking'].browse(res_ids[0])
                 if pick.partner_id and (pick.partner_id.not_print_picking or
                                         pick.partner_id.commercial_partner_id.
                                         not_print_picking):
                     pdfdatas = []
                 else:
-                    pdfdatas = [res]
+                    pdfdatas = [res[0]]
                 temporary_files = []
-                for attach in self.pool["ir.attachment"].browse(cr, uid,
-                                                                attachments):
+                for attach in attachments:
                     pdf = attach.datas
                     pdf = base64.decodestring(pdf)
                     pdfdatas.append(pdf)
@@ -62,7 +84,7 @@ class Report(models.Model):
                         pdfreport_fd, pdfreport_path = tempfile.\
                             mkstemp(suffix='.pdf', prefix='report.tmp.')
                         temporary_files.append(pdfreport_path)
-                        with closing(os.fdopen(pdfreport_fd, 'w')) as pdfr:
+                        with closing(os.fdopen(pdfreport_fd, 'wb')) as pdfr:
                             pdfr.write(pdfcontent)
                         pdfdocuments.append(pdfreport_path)
                     entire_report_path = self._merge_pdf(pdfdocuments)
@@ -79,6 +101,6 @@ class Report(models.Model):
                             _logger.error('Error when trying to remove '
                                           'file %s' % temporary_file)
 
-                    return content
+                    return content, 'pdf'
 
         return res

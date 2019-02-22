@@ -86,7 +86,7 @@
                 <field name="user_id"/>
                 <field name="product_uom_qty" sum="Total" />
                 <field name="product_uom" />
-                <field name="cost_subtotal" sum="Total cost"/>
+                <!-- TODO: Migrar <field name="cost_subtotal" sum="Total cost"/> -->
                 <field name="delivery_date" />
                 <field name="return_date" />
                 <field name="state" />
