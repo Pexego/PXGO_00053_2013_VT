@@ -3,6 +3,16 @@
 @import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
 @import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,300,500,700");
 
+$gray-base:              #000;
+$gray-darker:            lighten($gray-base, 13.5%); // #222
+$gray-dark:              #666;   // #333
+$gray:                   #777; // #555
+$gray-light:             #AEA79F;   // #999
+$gray-lighter: lighten($gray-base, 93.5%); // #eee
+
+$brand-primary: #875a7b;
+$brand-secondary: #00A09D;
+
 /* FUENTES */
 body {
   font-family: "Open Sans", sans-serif;
@@ -57,7 +67,7 @@ body.o_web_client {
   font-size: 12px;
 }
 body.o_web_client .navbar li > a {
-  padding: 14px 10px 14px 10px;
+  padding: 14px 12px 14px 12px;
   margin: 0 0 0 0;
   line-height: unset;
   text-transform: uppercase;
@@ -91,27 +101,29 @@ body.o_web_client .navbar-default .navbar-form {
   background-color: transparent !important;
 }
 .nav-pills > li > a:hover::after {
-  content: '❭  ';
+  content: '●  ';
   display: block;
   float: right;
 }
 .nav-pills > li.active > a,
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
-  color: #a3a3b7 !important;
-  background-color: #31314f !important;
+  color: white !important;
+  background-color: #7d7bad !important; /*lateral pulsado*/
   margin-left: 8px;
   margin-right: 8px;
+  border-radius: 4px;
   shadow-box: 0 1px 4px rgba(0, 0, 0, 0.2);
   font-weight: bold !important;
 }
 .nav-pills > li.active > a::after {
-  /*content: '❱  ';*/
+  /*content: '●  ';*/
   display: block;
   float: right;
   font-weight: bold;
   font-color: #3f3f66;
   text-indent: 6px;
+  font-size: 13.5px;
 }
 body.o_web_client .o_main .o_sub_menu {
   background-color: white;
@@ -122,7 +134,7 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
   color: #ffffff;
   /*color: #3f3f66;*/
   text-transform: uppercase;
-  -background-color: #717191; /*color submenu titulos*/
+  -background-color: #7d7bad; /*color submenu titulos fondo*/
   /*background-color: #efefef;*/
   padding: 4px 6px 4px 18px;
 }
@@ -131,6 +143,7 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
 
     color: #4c4c4c;
     text-indent: 6px;
+    font-size: 13.5px;
 
 }
 
@@ -307,7 +320,7 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     flex: 0 0 auto;
     text-align: center;
     position: relative;
-    background-color: #555487;
+    background-color: #f9f9f9;
     margin-top: -1px;
 
 }
@@ -320,18 +333,42 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
     height: 100%;
-    background-color: #555487;
+    background-color: #f9f9f9;
+
+}
+/* background footer menu laeral */
+.o_web_client > .o_main .o_sub_menu .o_sub_menu_footer {
+
+    -ms-flex: 0 0 auto;
+    -moz-flex: 0 0 auto;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 auto;
+    flex: 0 0 auto;
+    text-align: center;
+    background: #f9f9f9;
 
 }
 
 body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_section {
 
     margin: 10px 0 0 0;
-    color: #ffffff;
+    color: #7d7bad; /* color texto titulos submenu*/
     text-transform: uppercase;
     -background-color: #717191;
     padding: 4px 6px 4px 18px;
 
+}
+
+/* status bar */
+
+.o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled::after {
+    border-left-color: #7c7bad;
+}
+.o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled {
+    color: #f9f9f9;
+    font-size: 11px;
+    background-color: #7c7bad;
+    cursor: default;
 }
 
 $bg-color: #fff; //container background-color;
@@ -368,4 +405,41 @@ $small-spinner-dimensions: $main-spinner-dimensions * 0.7;
   }
 }
 
+}
+
+/* --- TABLES --- */
+
+.o_list_view.table {
+    border: none;
+}
+.o_list_view.table thead,
+.o_list_view.table tfoot,
+.o_list_view.table th {
+    border: none;
+}
+
+
+.o_list_view.table thead {
+    background-color: #f1f1f1;
+}
+
+.o_list_view.table thead > tr > th.o_column_sortable:hover {
+    background-color: #D6D6D3;
+}
+
+.o_list_view.table tbody tr.o_group_header {
+    background-color: #dfdfdf;
+    background-image: none;
+    border-top: 1px solid red;
+}
+
+.table-striped > tbody > tr:nth-of-type(2n+1) {
+    background-color: #ffffff;
+}
+
+.o_list_view tfoot {
+    background-color: $brand-primary;
+    color: #ffffff;
+    cursor: default;
+    font-weight: normal;
 }
