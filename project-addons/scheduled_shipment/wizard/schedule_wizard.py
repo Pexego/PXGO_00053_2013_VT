@@ -21,5 +21,5 @@ class StockScheduleWizard(models.TransientModel):
 
             picking = self.env['stock.picking'].browse(self.env.context['parent_obj'])
             picking.sale_id.scheduled_date = self.scheduled_date
-            # TODO: descomentar al migrar crm_claim_rma_custom pickig.not_sync = True
+            picking.not_sync = True
             picking._process_picking_scheduled_time()

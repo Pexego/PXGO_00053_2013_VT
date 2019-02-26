@@ -78,8 +78,7 @@ class StockPicking(models.Model):
     @api.multi
     def make_picking_sync(self):
         if self.state != 'cancel':
-            #self.not_sync = False
-            pass
+            self.not_sync = False
 
 
 class StockMove(models.Model):
@@ -90,8 +89,8 @@ class StockMove(models.Model):
         res = super(StockMove, self)._assign_picking()
         pickings = self.mapped('picking_id')
         for pick in pickings:
-            if pick.sale_id.scheduled_date:  # TODO: descomentar al migrar crm_claim_rma_custom and not pick.not_sync:
-               # pick.not_sync = True
+            if pick.sale_id.scheduled_date and not pick.not_sync:
+                pick.not_sync = True
                 pick.scheduled_picking = True
                 pick._process_picking_scheduled_time()
         return res
