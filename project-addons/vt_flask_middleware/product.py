@@ -72,6 +72,7 @@ class Product(SyncModel):
     discontinued = BooleanField()
     state = CharField(max_length=50)
     sale_in_groups_of = FloatField(default=1.0)
+    replacement_id = IntegerField()
 
     def __unicode__(self):
         return self.name
