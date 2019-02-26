@@ -38,9 +38,10 @@ class StockPickingReport(models.Model):
              SELECT min(l.id) as id,
                     l.product_id as product_id,
                     t.uom_id as product_uom,
-                    sum(l.product_uom_qty / u.factor * u2.factor)
+                    -- sum(l.product_uom_qty / u.factor * u2.factor)
+                    sum(l.product_uom_qty)
                         as product_uom_qty,
-                    -- sum(l.price_subtotal) as price_total,
+                    sum(l.sale_price_subtotal) as price_total,
                     count(*) as nbr,
                     s.date as date,
                     s.date_done as date_done,
@@ -57,7 +58,7 @@ class StockPickingReport(models.Model):
 
     def _from(self):
         from_str = """
-            stock_move l
+            stock_move_line l
                 left join stock_picking s on (l.picking_id = s.id)
                     left join res_partner r on (r.id = s.partner_id)
                     left join res_partner rp on
@@ -68,8 +69,9 @@ class StockPickingReport(models.Model):
                     left join stock_picking_type as pt on
                         (pt.id = s.picking_type_id)
                 left join stock_location sl on (sl.id = l.location_dest_id)
-                left join product_uom u on (u.id = l.product_uom)
-                left join product_uom u2 on (u2.id = t.uom_id)
+                left join stock_move sm on l.move_id = sm.id
+                left join product_uom u on (u.id = sm.product_uom)
+                -- left join product_uom u2 on (u2.id = sm.uom_id)
         """
 
         return from_str

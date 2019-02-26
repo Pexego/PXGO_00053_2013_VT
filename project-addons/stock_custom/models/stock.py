@@ -64,9 +64,22 @@ class StockPicking(models.Model):
 
 
 class StockMoveLine(models.Model):
+
     _inherit = 'stock.move.line'
 
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
+
+    sale_line = fields.Many2one('sale.order.line', store=True)
+    sale_price_unit = fields.Float(store=True)
+    sale_discount = fields.Float(store=True)
+    sale_tax_description = fields.Char(store=True)
+    sale_price_subtotal = fields.Monetary(store=True)
+    sale_price_tax = fields.Float(store=True)
+    sale_price_total = fields.Monetary(store=True)
+
+    @api.depends('sale_line', 'sale_line.currency_id', 'sale_line.tax_id')
+    def _compute_sale_order_line_fields(self):
+        return super()._compute_sale_order_line_fields()
 
 
 class StockMove(models.Model):
