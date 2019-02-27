@@ -122,10 +122,9 @@ class ClaimMakePicking(models.TransientModel):
             partner = self.env['res.partner'].browse(partner_id)
             claim = self.env['crm.claim'].browse(
                 self.env.context.get('active_id', False))
-            # TODO: migrar block_invoices
-            # if partner.commercial_partner_id.blocked_sales and not \
-            #         claim.allow_confirm_blocked:
-            #     raise exceptions.Warning(
-            #         _("Warning for %s") % partner.commercial_partner_id.name,
-            #          _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.'))
+            if partner.commercial_partner_id.blocked_sales and not \
+                    claim.allow_confirm_blocked:
+                raise exceptions.Warning(
+                    _("Warning for %s") % partner.commercial_partner_id.name,
+                    _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.'))
         return super(ClaimMakePicking, self).default_get(vals)
