@@ -28,7 +28,7 @@
     "certificate": "",
     "license": "",
     "depends": ["board", "account_payment_sale", "sale",
-                "stock_valued_picking"],
+                "stock_picking_report_valued"],
     "category": "Generic Modules/EDI",
     "complexity": "easy",
     "description": """

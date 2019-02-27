@@ -2,12 +2,12 @@
 
 <odoo>
 
-        <record id="equivalent_products_wizard" model="ir.ui.view">
+        <!-- <record id="equivalent_products_wizard" model="ir.ui.view">
             <field name="name">equivalent.products.wizard</field>
             <field name="model">sale.equivalent.products</field>
             <field name="arch" type="xml">
                 <form string="Equivalent products">
-                    <group>
+                    <group> TODO: Eliminado
                             <field name="tag_ids" widget="many2many_tags" domain="[('wiz_id', '=', active_id)]" on_change="onchange_tags(tag_ids)" />
                             <field name="product_id" required="1"/>
                             <field name="product_ids" colspan="4" select="1" nolabel="1">
@@ -24,7 +24,7 @@
                     </group>
                 </form>
             </field>
-        </record>
+        </record> -->
 
 </odoo>
 

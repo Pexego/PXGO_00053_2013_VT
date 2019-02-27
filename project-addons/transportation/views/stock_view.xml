@@ -32,7 +32,7 @@
                         <field name="total_cbm"/>
                     </group>
                 </group>
-                <field name="note" string="Note" placeholder="Add an internal note that will be printed on the Picking Operations sheet"/>
+                <!--TODO: Migrar<field name="note" string="Note" placeholder="Add an internal note that will be printed on the Picking Operations sheet"/>-->
                 </xpath>
             </field>
         </record>

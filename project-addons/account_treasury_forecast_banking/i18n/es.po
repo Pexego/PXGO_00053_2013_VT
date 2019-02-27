@@ -116,3 +116,43 @@ msgstr "Tipo"
 msgid "blue:invoice_type in ('out_refund','in_refund');black:invoice_type in ('out_invoice','in_invoice')"
 msgstr "blue:invoice_type in ('out_refund','in_refund');black:invoice_type in ('out_invoice','in_invoice')"
 
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_account_treasury_forecast_not_bank_maturity
+msgid "Without Bank Maturities"
+msgstr "Sin vencimientos bancarios"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,help:account_treasury_forecast_banking.field_account_treasury_forecast_not_bank_maturity
+msgid "It will be reflected in the treasury analysis"
+msgstr "Se reflejará en el análisis de la previsión"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.ui.menu,name:account_treasury_forecast_banking.menu_treasury_forecast_bank_maturity
+#: model:ir.actions.act_window,name:account_treasury_forecast_banking.action_treasury_forecast_bank_maturities
+msgid "Bank Maturities"
+msgstr "Vencimientos Bancarios"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_bank_account
+msgid "Bank account"
+msgstr "Cuenta bancaria"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_bank_name
+msgid "Bank"
+msgstr "Banco"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_date_due
+msgid "Due Date"
+msgstr "Fecha vencimiento"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_amount
+msgid "Amount"
+msgstr "Importe"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_paid
+msgid "Paid"
+msgstr "Pagado"

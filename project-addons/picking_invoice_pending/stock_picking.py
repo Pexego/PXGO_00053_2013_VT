@@ -117,121 +117,121 @@ class StockPicking(models.Model):
 
         return move_id
 
-    @api.multi
-    def write(self, vals):
-        res = super(StockPicking, self).write(vals)
-        if vals.get('date_done', False):
-            journal_obj = self.env['account.journal']
-            journal_id = journal_obj.search([('type', '=', 'sale')])[0].id
-            inv_type = 'out_invoice'
-            ctx = dict(self._context or {})
-            ctx['date_inv'] = False
-            ctx['inv_type'] = inv_type
-            templates = []
-            validate = True
-            for pick in self:
-                if (pick.picking_type_id.code == "incoming" and pick.move_lines
-                        and pick.move_lines[0].purchase_line_id and
-                        pick.invoice_state in ['invoiced', '2binvoiced'] and
-                        pick.company_id.required_invoice_pending_move and
-                        not pick.pending_stock_reverse_move_id):
-                    pick.refresh()
-                    if not pick.company_id.\
-                            property_pending_variation_account or not \
-                            pick.company_id.property_pending_stock_account:
-                        raise Warning(_("You need to configure the accounts "
-                                        "in the company for pending invoices"))
-                    if not pick.company_id.property_pending_stock_journal:
-                        raise Warning(_("You need to configure an account "
-                                        "journal in the company for pending "
-                                        "invoices"))
-                    debit_account = pick.company_id.\
-                        property_pending_variation_account
-                    credit_account = pick.company_id.\
-                        property_pending_stock_account
-                    change_date = vals['date_done']
-                    if pick.backorder_id:
-                        change_date = pick.backorder_id.date_done
-                    move_id = pick.account_pending_invoice(debit_account,
-                                                           credit_account,
-                                                           change_date)
-                    pick.pending_stock_reverse_move_id = move_id.id
+    # @api.multi
+    # def write(self, vals):
+    #     res = super(StockPicking, self).write(vals) TODO
+    #     if vals.get('date_done', False):
+    #         journal_obj = self.env['account.journal']
+    #         journal_id = journal_obj.search([('type', '=', 'sale')])[0].id
+    #         inv_type = 'out_invoice'
+    #         ctx = dict(self._context or {})
+    #         ctx['date_inv'] = False
+    #         ctx['inv_type'] = inv_type
+    #         templates = []
+    #         validate = True
+    #         for pick in self:
+    #             if (pick.picking_type_id.code == "incoming" and pick.move_lines
+    #                     and pick.move_lines[0].purchase_line_id and
+    #                     pick.invoice_state in ['invoiced', '2binvoiced'] and
+    #                     pick.company_id.required_invoice_pending_move and
+    #                     not pick.pending_stock_reverse_move_id):
+    #                 pick.refresh()
+    #                 if not pick.company_id.\
+    #                         property_pending_variation_account or not \
+    #                         pick.company_id.property_pending_stock_account:
+    #                     raise Warning(_("You need to configure the accounts "
+    #                                     "in the company for pending invoices"))
+    #                 if not pick.company_id.property_pending_stock_journal:
+    #                     raise Warning(_("You need to configure an account "
+    #                                     "journal in the company for pending "
+    #                                     "invoices"))
+    #                 debit_account = pick.company_id.\
+    #                     property_pending_variation_account
+    #                 credit_account = pick.company_id.\
+    #                     property_pending_stock_account
+    #                 change_date = vals['date_done']
+    #                 if pick.backorder_id:
+    #                     change_date = pick.backorder_id.date_done
+    #                 move_id = pick.account_pending_invoice(debit_account,
+    #                                                        credit_account,
+    #                                                        change_date)
+    #                 pick.pending_stock_reverse_move_id = move_id.id
 
-                if pick.state == 'done' and pick.invoice_state == '2binvoiced' and not pick.tests and \
-                        pick.invoice_type_id.name == 'Diaria' and pick.picking_type_id.code == 'outgoing':
-                    # Create invoice
-                    res = pick.with_context(ctx).action_invoice_create(journal_id=journal_id, group=False, type=inv_type)
-                    invoice_created = self.env['account.invoice'].browse(res)
-                    if not invoice_created:
-                        templates.append(self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices', False))
-                        validate = False
-                    elif not invoice_created.invoice_line_ids:
-                        # Invoice created without lines
-                        templates.append(
-                            self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices_empty_lines', False))
-                        # Do not validate it because it will generate an error
-                        validate = False
-                    if validate:
-                        # Validate invoice
-                        invoice_created.signal_workflow('invoice_open')
-                        if invoice_created.state in ('draft', 'cancel', 'proforma', 'proforma2'):
-                            templates.append(self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
+    #             if pick.state == 'done' and pick.invoice_state == '2binvoiced' and not pick.tests and \
+    #                     pick.invoice_type_id.name == 'Diaria' and pick.picking_type_id.code == 'outgoing':
+    #                 # Create invoice
+    #                 res = pick.with_context(ctx).action_invoice_create(journal_id=journal_id, group=False, type=inv_type)
+    #                 invoice_created = self.env['account.invoice'].browse(res)
+    #                 if not invoice_created:
+    #                     templates.append(self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices', False))
+    #                     validate = False
+    #                 elif not invoice_created.invoice_line_ids:
+    #                     # Invoice created without lines
+    #                     templates.append(
+    #                         self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices_empty_lines', False))
+    #                     # Do not validate it because it will generate an error
+    #                     validate = False
+    #                 if validate:
+    #                     # Validate invoice
+    #                     invoice_created.signal_workflow('invoice_open')
+    #                     if invoice_created.state in ('draft', 'cancel', 'proforma', 'proforma2'):
+    #                         templates.append(self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
 
-                    for tmpl in templates:
-                        ctx.update({
-                            'default_model': 'stock.picking',
-                            'default_res_id': pick.id,
-                            'default_use_template': bool(tmpl.id),
-                            'default_template_id': tmpl.id,
-                            'default_composition_mode': 'comment',
-                            'mark_so_as_sent': True
-                        })
-                        composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
-                        composer_id.with_context(ctx).send_mail()
+    #                 for tmpl in templates:
+    #                     ctx.update({
+    #                         'default_model': 'stock.picking',
+    #                         'default_res_id': pick.id,
+    #                         'default_use_template': bool(tmpl.id),
+    #                         'default_template_id': tmpl.id,
+    #                         'default_composition_mode': 'comment',
+    #                         'mark_so_as_sent': True
+    #                     })
+    #                     composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
+    #                     composer_id.with_context(ctx).send_mail()
 
-        return res
+    #     return res
 
-    @api.multi
-    def action_confirm(self):
-        res = super(StockPicking, self).action_confirm()
-        pick = self[0]
-        if not pick.company_id.\
-                property_pending_variation_account or not \
-                pick.company_id.property_pending_stock_account or not \
-                pick.company_id.property_pending_supplier_invoice_account:
-            raise Warning(_("You need to configure the accounts "
-                            "in the company for pending invoices"))
-        if not pick.company_id.property_pending_stock_journal:
-            raise Warning(_("You need to configure an account "
-                            "journal in the company for pending "
-                            "invoices"))
-        for pick in self:
-            if pick.picking_type_id.code == "incoming" and pick.move_lines \
-                    and pick.move_lines[0].purchase_line_id and \
-                    pick.invoice_state in ['invoiced', '2binvoiced'] and \
-                    pick.company_id.required_invoice_pending_move and \
-                    not pick.backorder_id and \
-                    not pick.pending_invoice_move_id and \
-                    not pick.pending_stock_move_id:
-                debit_account = pick.company_id.\
-                    property_pending_expenses_account
-                credit_account = pick.company_id.\
-                    property_pending_supplier_invoice_account
-                move_id = pick.account_pending_invoice(debit_account,
-                                                       credit_account,
-                                                       pick.create_date[:10])
-                pick.pending_invoice_move_id = move_id.id
+    # @api.multi
+    # def action_confirm(self):
+    #     res = super(StockPicking, self).action_confirm() TODO: Migrar
+    #     pick = self[0]
+    #     if not pick.company_id.\
+    #             property_pending_variation_account or not \
+    #             pick.company_id.property_pending_stock_account or not \
+    #             pick.company_id.property_pending_supplier_invoice_account:
+    #         raise Warning(_("You need to configure the accounts "
+    #                         "in the company for pending invoices"))
+    #     if not pick.company_id.property_pending_stock_journal:
+    #         raise Warning(_("You need to configure an account "
+    #                         "journal in the company for pending "
+    #                         "invoices"))
+    #     for pick in self:
+    #         if pick.picking_type_id.code == "incoming" and pick.move_lines \
+    #                 and pick.move_lines[0].purchase_line_id and \
+    #                 pick.invoice_state in ['invoiced', '2binvoiced'] and \
+    #                 pick.company_id.required_invoice_pending_move and \
+    #                 not pick.backorder_id and \
+    #                 not pick.pending_invoice_move_id and \
+    #                 not pick.pending_stock_move_id:
+    #             debit_account = pick.company_id.\
+    #                 property_pending_expenses_account
+    #             credit_account = pick.company_id.\
+    #                 property_pending_supplier_invoice_account
+    #             move_id = pick.account_pending_invoice(debit_account,
+    #                                                    credit_account,
+    #                                                    pick.create_date[:10])
+    #             pick.pending_invoice_move_id = move_id.id
 
-                debit_account = pick.company_id.\
-                    property_pending_stock_account
-                credit_account = pick.company_id.\
-                    property_pending_variation_account
-                move_id = pick.account_pending_invoice(debit_account,
-                                                       credit_account,
-                                                       pick.create_date[:10])
-                pick.pending_stock_move_id = move_id.id
+    #             debit_account = pick.company_id.\
+    #                 property_pending_stock_account
+    #             credit_account = pick.company_id.\
+    #                 property_pending_variation_account
+    #             move_id = pick.account_pending_invoice(debit_account,
+    #                                                    credit_account,
+    #                                                    pick.create_date[:10])
+    #             pick.pending_stock_move_id = move_id.id
 
-        return res
+    #     return res
 
     @api.multi
     def action_cancel(self):

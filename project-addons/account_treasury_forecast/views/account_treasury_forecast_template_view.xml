@@ -9,6 +9,8 @@
                 <tree string="Treasury Forecast Line" editable="bottom">
                     <field name="date" />
                     <field name="line_type" />
+                    <field name="period_quantity" attrs="{'readonly':[('line_type', '!=', 'recurring')]}" />
+                    <field name="period_type" attrs="{'readonly':[('line_type', '!=', 'recurring')]}" />
                     <field name="name" />
                     <field name="partner_id" domain="[('supplier', '=', True)]"/>
                     <field name="invoice_id"/>

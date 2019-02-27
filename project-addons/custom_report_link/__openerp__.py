@@ -28,6 +28,6 @@
     'website': 'www.comunitea.com',
     "depends": ['sale', 'purchase', 'account', 'stock',
                 'stock_reserve_sale', 'stock_custom'],
-    "data": ["stock_custom_report.xml"],
+    "data": [], #TODO:Migrar["stock_custom_report.xml"],
     "installable": True
 }

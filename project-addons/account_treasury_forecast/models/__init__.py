@@ -15,5 +15,6 @@
 #
 ##############################################################################
 
+from . import account_payment_mode
 from . import account_treasury_forecast_template
 from . import account_treasury_forecast
