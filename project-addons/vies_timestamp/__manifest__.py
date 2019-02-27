@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -26,7 +25,10 @@
     'description': """Adds a VIES validation timestamp when confirming sale orders. Needs installed 'suds' library before.""",
     'author': 'Alberto Luengo para Comunitea',
     'website': 'luengocabanillas.com',
-    "depends": ['sale', 'partner_risk__stock_reserve__rel'],
-    "data": ['views/sale_order_view.xml', 'views/fiscal_position_view.xml'],
+    "depends": ['sale',
+                # TODO migrar 'partner_risk__stock_reserve__rel'
+                ],
+    "data": ['views/sale_order_view.xml',
+             'views/fiscal_position_view.xml'],
     "installable": True
 }

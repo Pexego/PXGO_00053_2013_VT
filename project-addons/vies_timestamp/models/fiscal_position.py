@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos <www.comunitea.com>
@@ -19,11 +18,11 @@
 #
 ##############################################################################
 
-from openerp import fields, models
+from odoo import fields, models
 
 
 class AccountFiscalPosition(models.Model):
 
-    _inherit = "account.fiscal.position"
+    _inherit = 'account.fiscal.position'
 
     require_vies_validation = fields.Boolean("Require vies validation")

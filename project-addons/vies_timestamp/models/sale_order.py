@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-from openerp import fields, models, _, tools, api, exceptions
+from odoo import fields, models, _, tools, api, exceptions
 import time
 from urllib.request import getproxies
 
@@ -47,6 +46,7 @@ class SaleOrder(models.Model):
     def check_vat_ext(self):
         """
         """
+        # TODO: Probar esta función al migrar el módulo del que depende su activación
         date_now = time.strftime('%Y-%m-%d %H:%M:%S')
         result = True
         sale = self[0]
@@ -120,10 +120,11 @@ class SaleOrder(models.Model):
                                partner_ids=followers)
         return True
 
-    @api.multi
-    def action_risk_approval(self):
-        self.check_vat_ext()
-        return super(SaleOrder, self).action_risk_approval()
+    #TODO: migrar parter_risk__stock_reserve__rel
+    # @api.multi
+    # def action_risk_approval(self):
+    #     self.check_vat_ext()
+    #     return super(SaleOrder, self).action_risk_approval()
 
     @api.multi
     def action_cancel(self):

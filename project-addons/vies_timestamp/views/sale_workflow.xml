@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data noupdate="0">
-
-        <record id="sale.trans_draft_router" model="workflow.transition">
-            <field name="act_from" ref="partner_risk__stock_reserve__rel.act_risk_approval"/>
-            <field name="act_to" ref="sale.act_router"/>
-            <field name="signal"></field>
-            <field name="condition">not waiting_vies_validation</field>
-        </record>
-
-    </data>
-</openerp>
+<odoo noupdate="0">
+    <!--TODO Migrar parter_risk__stock_reserve__rel record id="sale.trans_draft_router" model="workflow.transition">
+        <field name="act_from" ref="partner_risk__stock_reserve__rel.act_risk_approval"/>
+        <field name="act_to" ref="sale.act_router"/>
+        <field name="signal"></field>
+        <field name="condition">not waiting_vies_validation</field>
+    </record-->
+</odoo>
