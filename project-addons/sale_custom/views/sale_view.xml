@@ -81,8 +81,10 @@
                 <xpath expr="//button[@name='open_stock_reservation']" position="after">
                     <button name="%(action_view_historical_orders)d" string="Partner Orders" class="oe_stat_button"
                             type="action" icon="fa-strikethrough" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve'])]}"/>
-                    <button name="button_notification" string="Avisos" class="oe_stat_button"
+                    <button name="button_notification" string="Warnings" class="oe_stat_button"
                             type="object" icon="fa-exclamation-triangle" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve', 'sent'])]}"/>
+                    <button name="button_notification_open_risk_window" string="Risk Information"
+                            class="oe_stat_button" type="object" icon="fa-bar-chart-o"/>
                 </xpath>
             </field>
         </record>
