@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,65 +18,53 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-
-from openerp import models, fields, api, exceptions
+from odoo import models, fields, api, exceptions
 from datetime import date
-from openerp.exceptions import ValidationError
+from odoo.exceptions import ValidationError
 
-class sale_order(models.Model):
 
-    _inherit = "sale.order"
+class SaleOrder(models.Model):
+
+    _inherit = 'sale.order'
 
     shipping_balance = fields.Boolean('shipping_balance')
-    amount_shipping_balance=fields.Float(related='partner_id.amount_shipping_balance')
+    amount_shipping_balance = fields.Float(related='partner_id.amount_shipping_balance')
 
     @api.constrains('state', 'amount_shipping_balance', 'amount_untaxed')
     def _check_amount_on_state(self):
         if self.amount_untaxed < 0:
             raise ValidationError("Total amount must be > 0")
 
-
     @api.multi
     def unlink(self):
-
-        res = sale_order._action_unlink_shipping(self)
-
+        res = SaleOrder._action_unlink_shipping(self)
         if res:
-            return super(sale_order, self).unlink()
-
+            return super(SaleOrder, self).unlink()
 
     @api.multi
     def action_cancel(self, group=False):
-        # import ipdb; ipdb.set_trace()
-        res = super(sale_order, self).action_cancel()
+        res = super(SaleOrder, self).action_cancel()
         if res:
-            return sale_order._action_unlink_shipping(self)
+            return SaleOrder._action_unlink_shipping(self)
 
-    @api.one
+    @api.multi
     def _action_unlink_shipping(self):
-
-        #res_id = self.id
-        #order_line = self.env['sale.order.line'].search(
-        #    [('order_id', '=', res_id), ('product_id.shipping_balance', '=', True)])
-        #if order_line:
-        #    order_line.unlink()
-        line2 = self.env['shipping.balance'].search([('sale_id', '=', self.id)])
-        if line2:
-            line2.unlink()
+        for order in self:
+            line2 = self.env['shipping.balance'].search([('sale_id', '=', order.id)])
+            if line2:
+                line2.unlink()
         return True
 
 
-class sale_order_line(models.Model):
+class SaleOrderLine(models.Model):
 
-    _inherit = "sale.order.line"
+    _inherit = 'sale.order.line'
 
     @api.multi
     def unlink(self):
-
         res_id = self.mapped('order_id.id')
 
-        res = super(sale_order_line, self).unlink()
+        res = super(SaleOrderLine, self).unlink()
         line2 = self.env['shipping.balance'].search([('sale_id', 'in', res_id)])
         if line2:
             line2.unlink()

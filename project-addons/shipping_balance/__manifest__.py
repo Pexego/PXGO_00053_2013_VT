@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -21,7 +20,7 @@
 
 {
     'name': "Product Ship Balance",
-    'version': '1.0',
+    'version': '11.0',
     'category': 'product',
     'description': """Adds shipping balance""",
     'author': 'Comunitea Servicios Tecnologicos',

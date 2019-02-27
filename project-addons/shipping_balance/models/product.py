@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,14 +18,13 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-
-from openerp import fields, models
+from odoo import fields, models
 
 
 class Product(models.Model):
 
-    _inherit = "product.product"
+    _inherit = 'product.product'
+
     shipping_balance = fields.Boolean("Shipping Balance", default=False)
     is_repair = fields.Boolean("Is Repair", default=False)
 
