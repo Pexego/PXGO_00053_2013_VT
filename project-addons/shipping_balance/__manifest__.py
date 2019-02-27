@@ -26,14 +26,14 @@
     'description': """Adds shipping balance""",
     'author': 'Comunitea Servicios Tecnologicos',
     'website': 'www.comunitea.com',
-    "depends" : ["base", "product", "mrp_repair", "sale", "account",
-                 "stock_reserve_sale", "sale_customer_discount"],
+    "depends": ["base", "product", "mrp_repair", "sale", "account",
+                "stock_reserve_sale", "sale_customer_discount"],
 
-    "data" : ["shipping_balance_view.xml",
+    "data": ["views/shipping_balance_view.xml",
               "wizard/shipping_balance_wizard.xml",
-              "partner_view.xml",
-              "sale_order.xml",
-              "product_view.xml",
+              "views/partner_view.xml",
+              "views/sale_order.xml",
+              "views/product_view.xml",
               "security/ir.model.access.csv"
              ],
     "installable": True
