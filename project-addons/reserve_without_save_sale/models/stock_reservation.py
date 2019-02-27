@@ -35,7 +35,7 @@ class StockReservation(models.Model):
     def create(self, vals):
         context2 = dict(self._context)
         context2.pop('default_state', False)
-        res = super(StockReservation, self.with_context(context2)).create()
+        res = super(StockReservation, self.with_context(context2)).create(vals)
         if vals.get('unique_js_id', False) and \
                 not vals.get('sale_line_id', False):
             with registry(self.env.cr.dbname).cursor() as new_cr:

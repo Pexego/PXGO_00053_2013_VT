@@ -199,13 +199,13 @@ class SaleOrder(models.Model):
 
         return res
 
-    def copy(self, cr, uid, id, default={}, context=None):
-        sale = self.browse(cr, uid, id, context)
-        if sale.client_order_ref:
-            default['client_order_ref'] = sale.client_order_ref + _(" (copy)")
-        result = super(SaleOrder, self).copy(cr, uid, id, default, context)
+    # def copy(self, cr, uid, id, default={}, context=None):
+    #     sale = self.browse(cr, uid, id, context) TODO: Migrar
+    #     if sale.client_order_ref:
+    #         default['client_order_ref'] = sale.client_order_ref + _(" (copy)")
+    #     result = super(SaleOrder, self).copy(cr, uid, id, default, context)
 
-        return result
+    #     return result
 
 
 class SaleOrderLine(models.Model):

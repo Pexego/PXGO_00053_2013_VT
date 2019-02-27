@@ -26,7 +26,7 @@
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
     'depends': ['base', 'sales_team', 'sale_stock', 'sale',
-                'email_template_followers', 'stock_valued_picking'],
+                'email_template_followers'],
     'data': ['wizard/stock_invoice_deposit.xml', 'wizard/stock_sale_deposit.xml',
               'views/stock_data.xml', 'views/stock_deposit.xml', 'views/res_partner_view.xml',
               'security/ir.model.access.csv', 'views/sale_view.xml',

@@ -46,27 +46,27 @@ class StockPicking(models.Model):
     with_productions = fields.Boolean("With productions", readonly=True,
                                       compute='_get_if_productions')
 
-    @api.multi
-    def write(self, vals):
-        res = super(StockPicking, self).write(vals)
-        production_obj = self.env['mrp.production']
-        if 'MO' in self.origin and vals.get('date_done', False) and self.state == 'done':
-            mrp_production = production_obj.search([('name', '=', self.origin)])
-            if mrp_production.picking_out.id == self.id:
-                # Create in picking
-                pick_in = self.create({'partner_id': self.partner_id.id,
-                                       'picking_type_id': self.env.ref('stock.picking_type_in').id,
-                                       'origin': self.origin})
-                # Update reference in_picking and the state
-                mrp_production.write({'state': 'in_production',
-                                      'picking_in': pick_in.id})
-                cost_moves = sum(self.move_lines.mapped('price_unit'))
-                for move in production_obj.search([('name', '=', self.origin)]).move_created_ids:
-                    move.write({'price_unit': cost_moves,
-                                'picking_id': pick_in.id})
-                pick_in.action_assign()
-            elif mrp_production.picking_in.id == self.id:
-                mrp_production.action_production_end()
-        return res
+    # @api.multi TODO: Migrar
+    # def write(self, vals):
+    #     res = super(StockPicking, self).write(vals)
+    #     production_obj = self.env['mrp.production']
+    #     if 'MO' in self.origin and vals.get('date_done', False) and self.state == 'done':
+    #         mrp_production = production_obj.search([('name', '=', self.origin)])
+    #         if mrp_production.picking_out.id == self.id:
+    #             # Create in picking
+    #             pick_in = self.create({'partner_id': self.partner_id.id,
+    #                                    'picking_type_id': self.env.ref('stock.picking_type_in').id,
+    #                                    'origin': self.origin})
+    #             # Update reference in_picking and the state
+    #             mrp_production.write({'state': 'in_production',
+    #                                   'picking_in': pick_in.id})
+    #             cost_moves = sum(self.move_lines.mapped('price_unit'))
+    #             for move in production_obj.search([('name', '=', self.origin)]).move_created_ids:
+    #                 move.write({'price_unit': cost_moves,
+    #                             'picking_id': pick_in.id})
+    #             pick_in.action_assign()
+    #         elif mrp_production.picking_in.id == self.id:
+    #             mrp_production.action_production_end()
+    #     return res
 
 
