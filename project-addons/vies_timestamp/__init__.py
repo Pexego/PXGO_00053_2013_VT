@@ -18,6 +18,4 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from . import sale_order
-from . import fiscal_position
+from. import models

@@ -21,12 +21,12 @@
 
 {
     'name': "VIES timestamp",
-    'version': '1.0',
+    'version': '11.0',
     'category': 'visiotech',
     'description': """Adds a VIES validation timestamp when confirming sale orders. Needs installed 'suds' library before.""",
     'author': 'Alberto Luengo para Comunitea',
     'website': 'luengocabanillas.com',
     "depends": ['sale', 'partner_risk__stock_reserve__rel'],
-    "data": ['sale_order_view.xml', 'fiscal_position_view.xml'],
+    "data": ['views/sale_order_view.xml', 'views/fiscal_position_view.xml'],
     "installable": True
 }
