@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="account_invoice_add_picking_attach" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="sale.account_invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="move_id" position="after">
+                    <field name="attach_picking"/>
+                    <field name="not_send_email"/>
+                </field>
+                <field name="team_id" position="attributes">
+                    <attribute name="readonly">True</attribute>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="required">True</attribute>
+                </field>
+                <field name="date_due" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="account_payment_line_create_form_add_scheme" model="ir.ui.view">
+            <field name="name">account_payment_line_create.form.add_scheme</field>
+            <field name="model">account.payment.line.create</field>
+            <field name="inherit_id" ref="account_payment_order.account_payment_line_create_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='move_line_ids']/tree/field[@name='account_id']" position="after">
+                    <field name="scheme"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="invoice_supplier_form_add_pick" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form.add_pick</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
+                    <field name="purchase_supplier_reference"/>
+                </xpath>
+                <field name="date_due" position="attributes">
+                    <attribute name="attrs">{}</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="invoice_form_add_pick" model="ir.ui.view">
+            <field name="name">account.invoice.form.add_pick</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
+                    <field name="sale_order_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="invoice_tree_add_invoice_type" model="ir.ui.view">
+            <field name="name">account.invoice.tree.add_invoice_type</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+                <field name="company_id" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="company_id" position="after">
+                    <field name="invoice_type_id"/>
+                </field>
+                <field name="amount_total_signed" position="before">
+                    <field name="payment_term_id"/>
+                </field>
+                <field name="state" position="after">
+                    <field name="total"/>
+                    <field name="last_payment"/>
+                </field>
+                <field name="commercial_partner_id" position="attributes">
+                    <attribute name="invisible">False</attribute>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="origin" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_account_invoice_filter_partner" model="ir.ui.view">
+            <field name="name">account.invoice.select.partner</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.view_account_invoice_filter"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="user_id" position="before">
+                    <field name="commercial_partner_id" string="Partner"/>
+                </field>
+                <filter name="unpaid" position="after">
+                    <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
+                </filter>
+            </field>
+        </record>
+
+         <record id="account.action_invoice_refund_out_tree" model="ir.actions.act_window">
+            <field name="context">{'default_type':'out_invoice', 'type':'out_invoice', 'journal_type': 'sale', 'search_default_without_ef':1}</field>
+        </record>
+
+        <record id="payment_mode_add_blocked_form" model="ir.ui.view">
+            <field name="name">payment.mode.form</field>
+            <field name="model">account.payment.mode</field>
+            <field name="inherit_id" ref="account_payment_mode.account_payment_mode_form"/>
+            <field name="arch" type="xml">
+                <field name="payment_type" position="after">
+                    <field name="blocked"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_payment_term_form_add_blocked" model="ir.ui.view">
+            <field name="name">account.payment.term.form.add_blocked</field>
+            <field name="model">account.payment.term</field>
+            <field name="inherit_id" ref="account.view_payment_term_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="blocked"/>
+                </field>
+            </field>
+        </record>
+
+</odoo>

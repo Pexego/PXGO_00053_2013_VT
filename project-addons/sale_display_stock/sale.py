@@ -48,19 +48,19 @@ class sale_order_line(models.Model):
                     product.qty_available_input_loc + product.qty_in_production
             sol.incoming_qty = incoming_qty
 
+#TODO: Migrar
+# ~ class SaleOrder(models.Model):
 
-class SaleOrder(models.Model):
+    # ~ _inherit = 'sale.order'
 
-    _inherit = 'sale.order'
-
-    @api.cr_uid_ids_context
-    def message_post(
-        self, cr, uid, thread_id, body='', subject=None, type='notification',
-        subtype=None, parent_id=False, attachments=None, context=None,
-        content_subtype='html', **kwargs):
-        context = dict(context)
-        context.pop('mail_post_autofollow', False)
-        return super(SaleOrder, self).message_post(
-            cr, uid, thread_id, body, subject, type,
-            subtype, parent_id, attachments, context, content_subtype,
-            **kwargs)
+    # ~ @api.cr_uid_ids_context
+    # ~ def message_post(
+        # ~ self, cr, uid, thread_id, body='', subject=None, type='notification',
+        # ~ subtype=None, parent_id=False, attachments=None, context=None,
+        # ~ content_subtype='html', **kwargs):
+        # ~ context = dict(context)
+        # ~ context.pop('mail_post_autofollow', False)
+        # ~ return super(SaleOrder, self).message_post(
+            # ~ cr, uid, thread_id, body, subject, type,
+            # ~ subtype, parent_id, attachments, context, content_subtype,
+            # ~ **kwargs)

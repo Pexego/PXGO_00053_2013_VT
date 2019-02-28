@@ -191,47 +191,48 @@ class StockPicking(models.Model):
 
         return res
 
-    @api.multi
-    def action_confirm(self):
-        res = super(StockPicking, self).action_confirm()
-        pick = self[0]
-        if not pick.company_id.\
-                property_pending_variation_account or not \
-                pick.company_id.property_pending_stock_account or not \
-                pick.company_id.property_pending_supplier_invoice_account:
-            raise Warning(_("You need to configure the accounts "
-                            "in the company for pending invoices"))
-        if not pick.company_id.property_pending_stock_journal:
-            raise Warning(_("You need to configure an account "
-                            "journal in the company for pending "
-                            "invoices"))
-        for pick in self:
-            if pick.picking_type_id.code == "incoming" and pick.move_lines \
-                    and pick.move_lines[0].purchase_line_id and \
-                    pick.invoice_state in ['invoiced', '2binvoiced'] and \
-                    pick.company_id.required_invoice_pending_move and \
-                    not pick.backorder_id and \
-                    not pick.pending_invoice_move_id and \
-                    not pick.pending_stock_move_id:
-                debit_account = pick.company_id.\
-                    property_pending_expenses_account
-                credit_account = pick.company_id.\
-                    property_pending_supplier_invoice_account
-                move_id = pick.account_pending_invoice(debit_account,
-                                                       credit_account,
-                                                       pick.create_date[:10])
-                pick.pending_invoice_move_id = move_id.id
+    #TODo: Migrar
+    # ~ @api.multi
+    # ~ def action_confirm(self):
+        # ~ res = super(StockPicking, self).action_confirm()
+        # ~ pick = self[0]
+        # ~ if not pick.company_id.\
+                # ~ property_pending_variation_account or not \
+                # ~ pick.company_id.property_pending_stock_account or not \
+                # ~ pick.company_id.property_pending_supplier_invoice_account:
+            # ~ raise Warning(_("You need to configure the accounts "
+                            # ~ "in the company for pending invoices"))
+        # ~ if not pick.company_id.property_pending_stock_journal:
+            # ~ raise Warning(_("You need to configure an account "
+                            # ~ "journal in the company for pending "
+                            # ~ "invoices"))
+        # ~ for pick in self:
+            # ~ if pick.picking_type_id.code == "incoming" and pick.move_lines \
+                    # ~ and pick.move_lines[0].purchase_line_id and \
+                    # ~ pick.invoice_state in ['invoiced', '2binvoiced'] and \
+                    # ~ pick.company_id.required_invoice_pending_move and \
+                    # ~ not pick.backorder_id and \
+                    # ~ not pick.pending_invoice_move_id and \
+                    # ~ not pick.pending_stock_move_id:
+                # ~ debit_account = pick.company_id.\
+                    # ~ property_pending_expenses_account
+                # ~ credit_account = pick.company_id.\
+                    # ~ property_pending_supplier_invoice_account
+                # ~ move_id = pick.account_pending_invoice(debit_account,
+                                                       # ~ credit_account,
+                                                       # ~ pick.create_date[:10])
+                # ~ pick.pending_invoice_move_id = move_id.id
 
-                debit_account = pick.company_id.\
-                    property_pending_stock_account
-                credit_account = pick.company_id.\
-                    property_pending_variation_account
-                move_id = pick.account_pending_invoice(debit_account,
-                                                       credit_account,
-                                                       pick.create_date[:10])
-                pick.pending_stock_move_id = move_id.id
+                # ~ debit_account = pick.company_id.\
+                    # ~ property_pending_stock_account
+                # ~ credit_account = pick.company_id.\
+                    # ~ property_pending_variation_account
+                # ~ move_id = pick.account_pending_invoice(debit_account,
+                                                       # ~ credit_account,
+                                                       # ~ pick.create_date[:10])
+                # ~ pick.pending_stock_move_id = move_id.id
 
-        return res
+        # ~ return res
 
     @api.multi
     def action_cancel(self):

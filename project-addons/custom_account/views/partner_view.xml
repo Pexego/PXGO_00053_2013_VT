@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="view_partner_picking_email_form" model="ir.ui.view">
+            <field name="name">res.partner.picking.email.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="mail.res_partner_view_form_inherit_mail"/>
+            <field name="arch" type="xml">
+                <field name="opt_out" position='before'>
+                    <field name="attach_picking"/>
+                </field>
+                <field name="title" position="after">
+                    <field name="dropship" attrs="{'invisible': [('type', '!=', 'delivery')]}"/>
+                </field>
+                <field name="email" position="after">
+                    <field name="email2" widget="email" attrs="{'invisible': [('is_company','=',False), ('dropship','=',True)]}"/>
+                    <field name="newsletter"/>
+                </field>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='email']" position="after">
+                    <field name="newsletter"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_simple_form_add_newsletter" model="ir.ui.view">
+            <field name="name">res.partner.simplified.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_simple_form"/>
+            <field name="arch" type="xml">
+                <field name="email" position="after">
+                    <field name="newsletter"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_inherit_followup_form" model="ir.ui.view">
+            <field name="name">res.partner.followup.form.inherit</field>
+            <field name="inherit_id" ref="account_credit_control.partner_followup_form_view"/>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml">
+                <field name="payment_responsible_id" position="before">
+                    <field name="not_send_following_email"/>
+                </field>
+            </field>
+        </record>
+
+</odoo>
