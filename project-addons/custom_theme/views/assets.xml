@@ -3,7 +3,8 @@
     <data>
         <template id="assets_backend" name="Assets" inherit_id="web.assets_backend">
             <xpath expr=".">
-                <link rel="stylesheet" href="/custom_theme/static/src/css/style.css"/>
+                <link rel="stylesheet" href="/custom_theme/static/src/css/style_light.css"/>
+                <!--link rel="stylesheet" href="/custom_theme/static/src/css/style_dark.css"/-->
             </xpath>
         </template>
     </data>

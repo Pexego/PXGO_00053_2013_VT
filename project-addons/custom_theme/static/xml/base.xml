@@ -8,14 +8,5 @@
             <br/>
             <div class="oe_throbber_message" style="color:white"></div>
         </div>
-        <!--div>
-            <div class="oe_blockui_spin" style="height: 50px">
-                <p style="text-align:center;"><img src="/custom_theme/static/img/LogoVisiotech1.png" style="animation: fa-spin 1s infinite steps(12);" /></p>
-                <p style="text-align:center;"><img src="/custom_theme/static/img/LogoVisiotech2.png" style="animation: fa-spin-inv 1s infinite steps(12);" /></p>
-                <div class="spinner spinner-1"></div>
-            </div>
-            <br/>
-            <div class="oe_throbber_message" style="color:white"></div>
-        </div-->
     </t>
 </templates>

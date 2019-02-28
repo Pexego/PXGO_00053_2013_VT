@@ -1,17 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700");
-@import url("https://fonts.googleapis.com/css?family=Muli:300,400,600,700");
-@import url("https://fonts.googleapis.com/css?family=Roboto:400,300,500,700");
-@import url("https://fonts.googleapis.com/css?family=Maven+Pro:400,300,500,700");
 
-$gray-base:              #000;
-$gray-darker:            lighten($gray-base, 13.5%); // #222
-$gray-dark:              #666;   // #333
-$gray:                   #777; // #555
-$gray-light:             #AEA79F;   // #999
-$gray-lighter: lighten($gray-base, 93.5%); // #eee
-
-$brand-primary: #875a7b;
-$brand-secondary: #00A09D;
 
 /* FUENTES */
 body {
@@ -21,12 +9,10 @@ body {
 }
 
 * {
-
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     -border-radius: 6px;
-
 }
 .o_web_client
 .navbar {
@@ -37,15 +23,11 @@ body {
 }
 .navbar-inverse .navbar-collapse,
 .navbar-inverse .navbar-form {
-
     border-color: #efefef;
-
 }
 .navbar-inverse {
-
     background-color: #222222;
     border-color: #efefef; /*borde de abajo de navbar*/
-
 }
 .navbar-inverse
 .navbar-nav > .active > a,
@@ -58,9 +40,7 @@ body {
 }
 .o_web_client > .o_main .o_sub_menu .o_sub_menu_content
 .oe_secondary_submenu {
-
     line-height: 2;
-
 }
 body.o_web_client {
   background-color: #f8f8f8;
@@ -97,7 +77,8 @@ body.o_web_client .navbar-default .navbar-form {
   background-color: transparent !important;
 }
 .nav-pills > li > a {
-  color: #a3a3b7 !important;
+  /*color: #a3a3b7 !important;*/
+  color: #ebebeb !important;
   background-color: transparent !important;
 }
 .nav-pills > li > a:hover::after {
@@ -109,7 +90,7 @@ body.o_web_client .navbar-default .navbar-form {
 .nav-pills > li.active > a:hover,
 .nav-pills > li.active > a:focus {
   color: white !important;
-  background-color: #7d7bad !important; /*lateral pulsado*/
+  background-color: #31314f !important; /*lateral pulsado*/
   margin-left: 8px;
   margin-right: 8px;
   border-radius: 4px;
@@ -121,7 +102,7 @@ body.o_web_client .navbar-default .navbar-form {
   display: block;
   float: right;
   font-weight: bold;
-  font-color: #3f3f66;
+  font-color: #31314f;
   text-indent: 6px;
   font-size: 13.5px;
 }
@@ -132,19 +113,18 @@ body.o_web_client .o_main .o_sub_menu {
 body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_section {
   margin: 10px 0 0 0;
   color: #ffffff;
-  /*color: #3f3f66;*/
   text-transform: uppercase;
   -background-color: #7d7bad; /*color submenu titulos fondo*/
-  /*background-color: #efefef;*/
   padding: 4px 6px 4px 18px;
 }
 
-.o_web_client > .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_submenu > li:not(.active) > a {
-
+.o_web_client > .o_main
+.o_sub_menu
+.o_sub_menu_content
+.oe_secondary_submenu > li:not(.active) > a {
     color: #4c4c4c;
     text-indent: 6px;
     font-size: 13.5px;
-
 }
 
 /* TABLES */
@@ -184,19 +164,15 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
 
 .o_searchview
 .o_searchview_facet {
-
     border: 1px solid #e9e9e9;
     background: #e9e9f1;
     border-radius: 5px;
-
 }
 .o_searchview
 .o_searchview_facet
 .o_searchview_facet_label {
-
     background-color: #7c7bad;
     border-radius: 4px;
-
 }
 
 /* MAIL THREAD */
@@ -206,30 +182,27 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
 .o_thread_message_core.o_mail_note, .o_mail_activity
 .o_thread_message
 .o_thread_message_core.o_mail_note {
-
     background-color: rgba(229, 229, 229, 0.5);
     padding-left: 9.6px;
     border-bottom: 1px solid #d9d7d7;
     border-radius: 8px;
-
 }
 
 /* FICHAS */
 
-.o_form_view .o_form_sheet_bg .o_form_sheet {
-
+.o_form_view
+.o_form_sheet_bg
+.o_form_sheet {
     margin: 12px;
     max-width: none;
     width: auto;
     border-radius: 8px;
     border-color: #ffffff;
-
 }
 
 /* TARJETAS KANBAN */
 .o_kanban_view.o_kanban_ungrouped
 .o_kanban_record {
-
     -ms-flex: 1 1 auto;
     -moz-flex: 1 1 auto;
     -webkit-box-flex: 1;
@@ -240,22 +213,18 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
     border-color: #ffffff;
-
 }
 .o_kanban_view
 .oe_kanban_card
 .o_kanban_image img, .o_kanban_view
 .o_kanban_record
 .o_kanban_image img {
-
     max-width: 100%;
     border-radius: 60px;
-
 }
 
 .o_kanban_view.o_kanban_ungrouped
 .o_kanban_record:hover {
-
     -ms-flex: 1 1 auto;
     -moz-flex: 1 1 auto;
     -webkit-box-flex: 1;
@@ -267,40 +236,33 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     border-radius: 6px;
     border-color: #f5f5f5;
     background-color: #f5f5f5;
-
 }
 
 .o_form_view
 .o_field_widget
 .o_kanban_view.o_kanban_ungrouped
 .o_kanban_record {
-
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-
 }
 
 .o_form_view
 .o_field_widget
 .o_kanban_view.o_kanban_ungrouped
 .o_kanban_record:hover {
-
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     background: #f5f5f5;
     border-color: #f5f5f5;
-
 }
 
 /*ficha imagen*/
 .o_form_view
 .oe_avatar > img {
-
     max-height: 90px;
     max-width: 90px;
     margin-bottom: 10px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
     border: none;
     border-radius: 60px;
-
 }
 
 .modal-content  {
@@ -311,8 +273,9 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
 }
 
 /* Background del logo */
-.o_web_client > .o_main .o_sub_menu .o_sub_menu_logo {
-
+.o_web_client > .o_main
+.o_sub_menu
+.o_sub_menu_logo {
     -ms-flex: 0 0 auto;
     -moz-flex: 0 0 auto;
     -webkit-box-flex: 0;
@@ -320,25 +283,26 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     flex: 0 0 auto;
     text-align: center;
     position: relative;
-    background-color: #f9f9f9;
+    background-color: #3f3f66;
     margin-top: -1px;
-
 }
 /* background del menu */
-.o_web_client > .o_main .o_sub_menu .o_sub_menu_content {
-
+.o_web_client > .o_main
+.o_sub_menu
+.o_sub_menu_content {
     -ms-flex: 1 1 auto;
     -moz-flex: 1 1 auto;
     -webkit-box-flex: 1;
     -webkit-flex: 1 1 auto;
     flex: 1 1 auto;
     height: 100%;
-    background-color: #f9f9f9;
+    background-color: #3f3f66;
 
 }
 /* background footer menu laeral */
-.o_web_client > .o_main .o_sub_menu .o_sub_menu_footer {
-
+.o_web_client > .o_main
+.o_sub_menu
+.o_sub_menu_footer {
     -ms-flex: 0 0 auto;
     -moz-flex: 0 0 auto;
     -webkit-box-flex: 0;
@@ -346,37 +310,34 @@ body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_sec
     flex: 0 0 auto;
     text-align: center;
     background: #f9f9f9;
-
 }
 
-body.o_web_client .o_main .o_sub_menu .o_sub_menu_content .oe_secondary_menu_section {
-
+body.o_web_client
+.o_main
+.o_sub_menu
+.o_sub_menu_content
+.oe_secondary_menu_section {
     margin: 10px 0 0 0;
     color: #7d7bad; /* color texto titulos submenu*/
     text-transform: uppercase;
     -background-color: #717191;
     padding: 4px 6px 4px 18px;
-
 }
 
 /* status bar */
 
-.o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled::after {
+.o_form_view
+.o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled::after {
     border-left-color: #7c7bad;
 }
-.o_form_view .o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled {
+.o_form_view
+.o_form_statusbar > .o_statusbar_status > .o_arrow_button.btn-primary.disabled {
     color: #f9f9f9;
     font-size: 11px;
     background-color: #7c7bad;
     cursor: default;
 }
 
-$bg-color: #fff; //container background-color;
-$basic-dark-color: #d3283f; //color of the spinner
-$border-width: 4px; //width of spinners border
-$basic-spinner-dimensions: 125px; //width and height of spinner
-$main-spinner-dimensions: $basic-spinner-dimensions - $border-width * 2; //width and height of bigger circle
-$small-spinner-dimensions: $main-spinner-dimensions * 0.7;
 
 /* ------------------------ ANIMACION LOADING ------------------------------ */
 
@@ -430,7 +391,7 @@ $small-spinner-dimensions: $main-spinner-dimensions * 0.7;
 .o_list_view.table tbody tr.o_group_header {
     background-color: #dfdfdf;
     background-image: none;
-    border-top: 1px solid red;
+    border-top: 1px solid white;
 }
 
 .table-striped > tbody > tr:nth-of-type(2n+1) {
@@ -438,7 +399,7 @@ $small-spinner-dimensions: $main-spinner-dimensions * 0.7;
 }
 
 .o_list_view tfoot {
-    background-color: $brand-primary;
+    background-color:  #875a7b;
     color: #ffffff;
     cursor: default;
     font-weight: normal;
