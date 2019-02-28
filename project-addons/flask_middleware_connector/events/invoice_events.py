@@ -49,8 +49,8 @@ class InvoiceExporter(Exporter):
                 'client_ref': invoice.name or "",
                 'date_invoice': invoice.date_invoice,
                 'date_due': invoice.date_due,
-                'subtotal_wt_rect': invoice.subtotal_wt_rect,
-                'total_wt_rect': invoice.total_wt_rect,
+                'subtotal_wt_rect': invoice.amount_untaxed_signed,
+                'total_wt_rect': invoice.amount_total_signed,
                 'pdf_file_data': result_encode,
                 'state': invoice.state_web, #Llamada a _get_state_web para evitar problemas en facturas que no tienen inicializado ese valor
                 'payment_mode_id': invoice.payment_mode_id.name,
@@ -74,7 +74,7 @@ class InvoiceAdapter(GenericAdapter):
 def delay_write_invoice(session, model_name, record_id, vals):
     invoice = session.env[model_name].browse(record_id)
     up_fields = ["number", "client_ref", "date_invoice", "state_web", "partner_id", "state",
-                 "date_due", "subtotal_wt_rect", "subtotal_wt_rect", "payment_ids", "payment_mode_id"]
+                 "date_due", "amount_untaxed_signed", "amount_total_signed", "payment_ids", "payment_mode_id"]
     if invoice.partner_id and invoice.commercial_partner_id.web and invoice.company_id.id == 1:
         if 'state' in vals or 'state_web' in vals:
             job = session.env['queue.job'].sudo().search([('func_string', 'not like', '%confirm_one_invoice%'),

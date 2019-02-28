@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
+#    Copyright (C) 2015 Comunitea All Rights Reserved
+#    @author Alberto Luengo Cabanillas
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,13 +19,16 @@
 ##############################################################################
 
 {
-    'name': 'Aspersia account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': '',
-    'author': '',
-    'website': '',
-    "depends": ['account'],
-    "data": [],
+    'name': "VIES timestamp",
+    'version': '11.0',
+    'category': 'visiotech',
+    'description': """Adds a VIES validation timestamp when confirming sale orders. Needs installed 'suds' library before.""",
+    'author': 'Alberto Luengo para Comunitea',
+    'website': 'luengocabanillas.com',
+    "depends": ['sale',
+                # TODO migrar 'partner_risk__stock_reserve__rel'
+                ],
+    "data": ['views/sale_order_view.xml',
+             'views/fiscal_position_view.xml'],
     "installable": True
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="view_order_product_search_add_brand" model="ir.ui.view">
             <field name="name">sale.report.search.add_brand</field>
@@ -20,5 +19,4 @@
             </field>
         </record>
 
-    </data>
-</openerp>
+</odoo>

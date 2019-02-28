@@ -66,15 +66,16 @@ class AccountInvoice(models.Model):
                 _('A refund has already been created for this claim !'))
         return [(0, 0, nline) for nline in new_lines]
 
-    @api.model
-    def _prepare_refund(self, invoice, date=None, period_id=None,
-                        description=None, journal_id=None):
-        result = super(AccountInvoice, self).\
-            _prepare_refund(invoice, date=date, period_id=period_id,
-                            description=description, journal_id=journal_id)
-        if self.env.context.get('claim_id'):
-            result['claim_id'] = self.env.context['claim_id']
-        return result
+    #TODO: Migrar
+    # ~ @api.model
+    # ~ def _prepare_refund(self, invoice, date=None, period_id=None,
+                        # ~ description=None, journal_id=None):
+        # ~ result = super(AccountInvoice, self).\
+            # ~ _prepare_refund(invoice, date=date, period_id=period_id,
+                            # ~ description=description, journal_id=journal_id)
+        # ~ if self.env.context.get('claim_id'):
+            # ~ result['claim_id'] = self.env.context['claim_id']
+        # ~ return result
 
 
 class AccountInvoiceLine(models.Model):

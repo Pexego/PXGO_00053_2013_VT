@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+      <record id="purchase_order_form_inherit" model="ir.ui.view">
+          <field name="name">purchase.order.form</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.purchase_order_form"/>
+          <field name="arch" type="xml">
+            <field name="picking_type_id" position="after">
+                <field name="remark" string="Remark"/>
+            </field>
+            <field name="picking_type_id" position="before">
+                <field name="telex_release"/>
+                <field name="manufacture_date"/>
+                <field name="end_manufacture"/>
+                <field name="prepared_merchandise_date"/>
+                <field name="estimated_arrival_date"/>
+            </field>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='company_id']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <field name="notes" position="after">
+                <field name="sale_notes" class="oe_inline" placeholder="Purchase Sale Notes" nolabel="1"/>
+            </field>
+          </field>
+      </record>
+
+      <record id="purchase_order_tree_inherit" model="ir.ui.view">
+          <field name="name">purchase.order.tree</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+          <field name="arch" type="xml">
+              <field name="date_planned" position="after">
+                  <field name="manufacture_date"/>
+                  <field name="prepared_merchandise_date"/>
+                  <field name="estimated_arrival_date"/>
+              </field>
+              <field name='company_id' position="attributes">
+                <attribute name="invisible">True</attribute>
+              </field>
+              <field name='origin' position="attributes">
+                <attribute name="invisible">True</attribute>
+              </field>
+              <field name="partner_id" position="after">
+                <field name="partner_ref"/>
+              </field>
+          </field>
+      </record>
+
+      <record id="view_purchase_order_filter_inherit_search" model="ir.ui.view">
+          <field name="name">purchase.order.list.select</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="partner_ref"/>
+              </xpath>
+          </field>
+      </record>
+
+      <record id="purchase_order_line_form_inv_comp" model="ir.ui.view">
+        <field name="name">purchase.order.line.form.inv_comp</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+        </field>
+      </record>
+
+</odoo>

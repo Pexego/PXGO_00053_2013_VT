@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015 Pexego All Rights Reserved
+#    Copyright (C) 2016 Comunitea Servicios Tecnológicos <www.comunitea.com>
+#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,14 +18,11 @@
 #
 ##############################################################################
 
-{
-    'name': 'Aspersia account custom',
-    'version': '1.0',
-    'category': 'account',
-    'description': '',
-    'author': '',
-    'website': '',
-    "depends": ['account'],
-    "data": [],
-    "installable": True
-}
+from odoo import fields, models
+
+
+class AccountFiscalPosition(models.Model):
+
+    _inherit = 'account.fiscal.position'
+
+    require_vies_validation = fields.Boolean("Require vies validation")

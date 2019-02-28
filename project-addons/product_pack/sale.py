@@ -34,12 +34,13 @@ class sale_order_line(models.Model):
     pack_child_line_ids = fields.One2many(
             'sale.order.line', 'pack_parent_line_id', 'Lines in pack')
 
-    def invoice_line_create(self, cr, uid, ids, context=None):
-        no_pack_ids = []
-        for line in self.browse(cr, uid, ids, context):
-            if not line.pack_depth > 0:
-                no_pack_ids.append(line.id)
-        return super(sale_order_line, self).invoice_line_create(cr, uid, no_pack_ids, context)
+    #TODO: Migrar
+    # ~ def invoice_line_create(self, cr, uid, ids, context=None):
+        # ~ no_pack_ids = []
+        # ~ for line in self.browse(cr, uid, ids, context):
+            # ~ if not line.pack_depth > 0:
+                # ~ no_pack_ids.append(line.id)
+        # ~ return super(sale_order_line, self).invoice_line_create(cr, uid, no_pack_ids, context)
 
     @api.multi
     def write(self, vals):
