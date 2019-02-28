@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -96,7 +95,7 @@ class ProductProduct(models.Model):
                     sec_prod = self.search(
                         [('default_code', '=',
                           code[1][code[1].index('?')+1:])])
-                prod_dict['name'] = first_prod.name + u' - ' + sec_prod.name
+                prod_dict['name'] = first_prod.name + ' - ' + sec_prod.name
                 prod_dict.update(self._update_product_prices(first_prod,
                                                              sec_prod,
                                                              product_mount))
