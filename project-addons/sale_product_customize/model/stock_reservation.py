@@ -69,5 +69,3 @@ class StockPicking(models.Model):
             # ~ elif mrp_production.picking_in.id == self.id:
                 # ~ mrp_production.action_production_end()
         # ~ return res
-
-

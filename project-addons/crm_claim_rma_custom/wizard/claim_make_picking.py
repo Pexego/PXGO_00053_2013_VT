@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos
@@ -19,14 +18,14 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields, exceptions, _
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from odoo import models, api, fields, exceptions, _
+from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
 
 class ClaimMakePicking(models.TransientModel):
 
-    _inherit = "claim_make_picking.wizard"
+    _inherit = 'claim_make_picking.wizard'
 
     odoo_management = fields.Boolean('Management in Odoo')
     not_sync = fields.Boolean("Not sync", help="This picking not will be "
@@ -53,10 +52,10 @@ class ClaimMakePicking(models.TransientModel):
     def create_move(self, claim_line, p_type, picking_id, claim,
                     note, write_field):
         type_ids = self.env['stock.picking.type'].search([('code', '=', p_type)]).ids
-        if claim_line.product_id.type == 'service' :
+        if claim_line.product_id.type == 'service':
             if claim_line.product_id.pack_line_ids:
                 partner_id = claim.delivery_address_id and \
-                    claim.delivery_address_id.id or partner_id.id
+                    claim.delivery_address_id.id or claim.partner_id.id
                 pack = claim_line.product_id.get_pack()
                 for product_id in pack:
                     product = self.env['product.product'].browse(product_id)
@@ -127,5 +126,5 @@ class ClaimMakePicking(models.TransientModel):
                     claim.allow_confirm_blocked:
                 raise exceptions.Warning(
                     _("Warning for %s") % partner.commercial_partner_id.name,
-                     _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.'))
+                    _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.'))
         return super(ClaimMakePicking, self).default_get(vals)

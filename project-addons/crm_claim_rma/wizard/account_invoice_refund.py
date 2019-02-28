@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2013 Camptocamp
@@ -23,20 +22,18 @@
 from odoo import models, _, exceptions, fields, api
 
 
-class account_invoice_refund(models.TransientModel):
+class AccountInvoiceRefund(models.TransientModel):
 
     _inherit = "account.invoice.refund"
 
-    #TODO: Migrar
-    # ~ def compute_refund(self, cr, uid, ids, mode='refund', context=None):
-        # ~ if context is None:
-            # ~ context = {}
-        # ~ if context.get('invoice_ids', []) and context.get('invoice_ids')[0]:
-            # ~ context['active_ids'] = context.get('invoice_ids')
-        # ~ elif context['active_model'] == u'crm.claim':
-            # ~ raise exceptions.UserError(_('The claim not have invoices to refund.'))
-        # ~ return super(account_invoice_refund, self).compute_refund(
-            # ~ cr, uid, ids, mode=mode, context=context)
+    @api.multi
+    def compute_refund(self, mode='refund'):
+        context = self.env.context
+        if context.get('invoice_ids', []) and context.get('invoice_ids')[0]:
+            context['active_ids'] = context.get('invoice_ids')
+        elif context['active_model'] == u'crm.claim':
+            raise exceptions.UserError(_('The claim not have invoices to refund.'))
+        return super(AccountInvoiceRefund, self).compute_refund(mode=mode)
 
     @api.model
     def _get_description(self):

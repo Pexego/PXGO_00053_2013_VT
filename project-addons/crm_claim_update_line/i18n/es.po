@@ -1,80 +1,97 @@
-#. module: crm_claim_custom_update_line
-#: view:crm.claim:crm_claim_rma_custom.inherit_crm_case_claims_form_view
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * crm_claim_update_line
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-20 19:52+0000\n"
+"PO-Revision-Date: 2019-02-20 19:52+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: crm_claim_update_line
+#: model:ir.ui.view,arch_db:crm_claim_update_line.crm_rma_advance_location_form_view_inherit
 msgid "Update RMA lines"
 msgstr "Actualizar Lineas RMA´s"
 
-#. module: crm_claim_custom_update_line
-#: view:crm_claim_update_lines.wizard:crm_claim_custom_update_line.view_crm_claim_update_lines_wizard
+#. module: crm_claim_update_line
+#: model:ir.ui.view,arch_db:crm_claim_update_line.view_crm_claim_update_lines_wizard
 msgid "Update data"
 msgstr "Actualizar datos"
 
-#. module: crm_claim_custom_update_line
-#: view:crm_claim_update_lines.wizard:crm_claim_custom_update_line.view_crm_claim_update_lines_wizard
+#. module: crm_claim_update_line
+#: model:ir.ui.view,arch_db:crm_claim_update_line.view_crm_claim_update_lines_wizard
 msgid "Update"
 msgstr "Actualizar"
 
-#. module: crm_claim_custom_update_line
-#: view:crm_claim_update_lines.wizard:crm_claim_custom_update_line.view_crm_claim_update_lines_wizard
+#. module: crm_claim_update_line
+#: model:ir.ui.view,arch_db:crm_claim_update_line.view_crm_claim_update_lines_wizard
 msgid "Cancel"
 msgstr "Cancelar"
 
-#. module: crm_claim_custom_update_line
-#: code:addons/ccrm_claim_custom_update_line/models/crm_claim.py:40
+#. module: crm_claim_update_line
+#: code:addons/ccrm_claim_update_line/models/crm_claim.py:40
 #, python-formats
 msgid "Data update in common in all RMA lines"
 msgstr "Actualización de datos en común en todas las lineas RMA´s"
 
-#. module: crm_claim_custom_update_line
-#: field:crm_claim_update_lines.wizard,substate_id:0
+#. module: crm_claim_update_line
+#: model:ir.model.fields,field_description:crm_claim_update_line.field_crm_claim_update_lines_wizard_substate_id
 msgid "substate_id_wizard"
 msgstr "Sub-estado"
 
-#. module: crm_claim_custom_update_line
-#: field:crm_claim_update_lines.wizard,invoice_id:0
+#. module: crm_claim_update_line
+#: model:ir.model.fields,field_description:crm_claim_update_line.field_crm_claim_update_lines_wizard_invoice_id
 msgid "invoice_id"
 msgstr "Factura"
 
-#. module: crm_claim_custom_update_line
-#: field:crm_claim_update_lines.wizard,claim_origine:0
+#. module: crm_claim_update_line
+#: model:ir.model.fields,field_description:crm_claim_update_line.field_crm_claim_update_lines_wizard_claim_origine
 msgid "Claim Subject"
 msgstr "Objeto de la reclamación"
 
-#. module: crm_claim_custom_update_line
+#. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Broken down product"
 msgstr "Producto Averiado"
 
-#. module: crm_claim_custom_update_line
+#. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Not appropiate product"
 msgstr "Producto no adecuado"
 
-#. module: crm_claim_custom_update_line
+#. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Order cancellation"
 msgstr "Cancelación de orden"
 
-#. module: crm_claim_custom_update_line
+#. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Damaged delivered product"
 msgstr "Producto enviado dañado"
 
-#. module: crm_claim_custom_update_line
+#. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Shipping error"
 msgstr "Error de envío"
 
-#. module: crm_claim_custom_update_line
+#. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Exchange request"
 msgstr "Solicitar cambio"
 
-#. module: crm_claim_custom_update_line
+#. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Lost during transport"
 msgstr "Perdido durante el transporte"
 
-#. module: crm_claim_custom_update_line
+#. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Other"
 msgstr "Otro"

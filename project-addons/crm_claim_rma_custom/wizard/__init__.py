@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos
@@ -20,6 +19,4 @@
 ##############################################################################
 
 from . import claim_make_picking
-from . import equivalent_products_wizard
 from . import claim_make_picking_from_picking
-from . import crm_phonecall

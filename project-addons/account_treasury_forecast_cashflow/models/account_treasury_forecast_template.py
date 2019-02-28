@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ##############################################################################
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -16,23 +15,21 @@
 #
 ##############################################################################
 
-import openerp.addons.decimal_precision as dp
-from openerp import models, fields, api, exceptions, _
+import odoo.addons.decimal_precision as dp
+from odoo import models, fields, api, exceptions, _
 
 
 class AccountTreasuryForecastTemplate(models.Model):
     _inherit = 'account.treasury.forecast.template'
 
-    receivable_line_ids = fields.One2many(
-        "account.treasury.forecast.line.template", "treasury_template_id",
-        string="Receivable Line", domain=[('line_type', '=', 'receivable')])
-    cashflow_ids = fields.One2many(
-        "account.treasury.forecast.cashflow.template", "treasury_template_id",
-        string="Cash-Flow")
+    receivable_line_ids = fields.One2many('account.treasury.forecast.line.template', 'treasury_template_id',
+                                          string="Receivable Line", domain=[('line_type', '=', 'receivable')])
+    cashflow_ids = fields.One2many('account.treasury.forecast.cashflow.template', 'treasury_template_id',
+                                   string="Cash-Flow")
 
 
 class AccountTreasuryForecastLineTemplate(models.Model):
-    _inherit = "account.treasury.forecast.line.template"
+    _inherit = 'account.treasury.forecast.line.template'
 
     line_type = fields.Selection([('recurring', 'Recurring'),
                                   ('variable', 'Variable'),
@@ -40,25 +37,26 @@ class AccountTreasuryForecastLineTemplate(models.Model):
 
 
 class AccountTreasuryForecastCashflowTemplate(models.Model):
-    _name = "account.treasury.forecast.cashflow.template"
+    _name = 'account.treasury.forecast.cashflow.template'
     _description = "Cash-Flow Record Template"
 
     name = fields.Char(string="Description")
     date = fields.Date(string="Date")
-    journal_id = fields.Many2one("account.journal", string="Journal")
+    journal_id = fields.Many2one('account.journal', string="Journal")
     amount = fields.Float(string="Amount",
                           digits=dp.get_precision("Account"))
     flow_type = fields.Selection([('in', 'Input'), ('out', 'Output')],
                                  string="Type")
-    treasury_template_id = fields.Many2one(
-        "account.treasury.forecast.template", string="Treasury Template")
+    treasury_template_id = fields.Many2one('account.treasury.forecast.template',
+                                           string="Treasury Template")
 
-    @api.one
+    @api.multi
     @api.constrains('flow_type', 'amount')
     def _check_amount(self):
-        if self.flow_type == 'in' and self.amount <= 0.0:
-            raise exceptions.Warning(_("Error!:: If input cash-flow, "
-                                       "amount must be positive"))
-        if self.flow_type == 'out' and self.amount >= 0.0:
-            raise exceptions.Warning(_("Error!:: If output cash-flow, "
-                                       "amount must be negative"))
+        for record in self:
+            if record.flow_type == 'in' and record.amount <= 0.0:
+                raise exceptions.Warning(_("Error!:: If input cash-flow, "
+                                           "amount must be positive"))
+            if record.flow_type == 'out' and record.amount >= 0.0:
+                raise exceptions.Warning(_("Error!:: If output cash-flow, "
+                                           "amount must be negative"))

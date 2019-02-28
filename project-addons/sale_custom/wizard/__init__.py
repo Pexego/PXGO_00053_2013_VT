@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2018 Visiotech All Rights Reserved
@@ -20,4 +19,3 @@
 ##############################################################################
 
 from . import sale_confirm_wizard
-from . import sale_report_xls_wizard

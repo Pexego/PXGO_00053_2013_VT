@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #########################################################################
 #                                                                       #
 #                                                                       #
@@ -25,14 +24,14 @@ from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
 
-class claim_make_picking_from_picking(models.TransientModel):
+class ClaimMakePickingFromPicking(models.TransientModel):
 
-    _name = 'claim_make_picking_from_picking.wizard'
-    _description = 'Wizard to create pickings from picking lines'
+    _name = "claim_make_picking_from_picking.wizard"
+    _description = "Wizard to create pickings from picking lines"
 
-    def _get_picking_lines(self, cr, uid, context):
-        return self.pool.get('stock.picking').read(cr, uid,
-            context['active_id'], ['move_lines'], context=context)['move_lines']
+    @api.model
+    def _get_picking_lines(self):
+        return self.env['stock.picking'].browse(self.env.context['active_id']).move_lines
 
     # Get default source location
     @api.model
@@ -47,58 +46,56 @@ class claim_make_picking_from_picking(models.TransientModel):
         if self.env.context.get('picking_type'):
             context_loc = self.env.context.get('picking_type')[8:]
             if context_loc != "input":
-                loc_field = 'lot_%s_id' % self.env.context.get('picking_type')[8:]
+                loc_field = 'lot_%s_id' % context_loc
             else:
                 loc_field = "wh_input_stock_loc_id"
-            loc_id = warehouse_id.read([loc_field])[loc_field][0]
+            loc_id = warehouse_id.read([loc_field])[0][loc_field][0]
         return loc_id
 
     picking_line_source_location = fields.Many2one('stock.location',
-            'Source Location',
-            help="Location where the returned products are from.",
-            required=True, default=_get_source_loc)
+                                                   'Source Location',
+                                                   help="Location where the returned products are from.",
+                                                   required=True, default=_get_source_loc)
     picking_line_dest_location = fields.Many2one('stock.location',
-            'Dest. Location',
-            help="Location where the system will stock the returned products.",
-            required=True, default=_get_dest_loc)
+                                                 'Dest. Location',
+                                                 help="Location where the system will stock the returned products.",
+                                                 required=True, default=_get_dest_loc)
     picking_line_ids = fields.Many2many('stock.move',
-            'claim_picking_line_picking',
-            'claim_picking_id',
-            'picking_line_id',
-            'Picking lines', default=_get_picking_lines)
+                                        'claim_picking_line_picking',
+                                        'claim_picking_id',
+                                        'picking_line_id',
+                                        'Picking lines', default=_get_picking_lines)
 
     @api.model
     def _get_default_warehouse(self):
-        warehouse_id=self.env['crm.claim']._get_default_warehouse()
+        warehouse_id = self.env['crm.claim']._get_default_warehouse()
         return warehouse_id
 
-    def action_cancel(self,cr,uid,ids,conect=None):
-        return {'type': 'ir.actions.act_window_close',}
+    @api.multi
+    def action_cancel(self):
+        return {'type': 'ir.actions.act_window_close'}
 
     # If "Create" button pressed
-    def action_create_picking_from_picking(self, cr, uid, ids, context=None):
-        picking_obj = self.pool.get('stock.picking')
-        move_obj = self.pool.get('stock.move')
-        view_obj = self.pool.get('ir.ui.view')
-        if context is None: context = {}
+    @api.multi
+    def action_create_picking_from_picking(self):
+        picking_obj = self.env['stock.picking']
+        view_obj = self.env['ir.ui.view']
+        context = self.env.context
         if context.get('p_type', False):
             p_type = context['p_type']
         else:
             p_type = 'internal'
-        type_ids = self.pool.get('stock.picking.type').search(cr, uid, [('code', '=', p_type)], context=context)
+        type_ids = self.env['stock.picking.type'].search([('code', '=', p_type)])
         if context.get('picking_type'):
             context_type = context.get('picking_type')[8:]
-            note = 'Internal picking from RMA to %s' %context_type
-            name = 'Internal picking to %s' %context_type
-        view_id = view_obj.search(cr, uid, [
-                                            ('xml_id', '=', 'view_picking_form'),
-                                            ('model', '=', 'stock.picking'),
-                                            ('type', '=', 'form'),
-                                            ('name', '=', 'stock.picking.form')
-                                            ], context=context)[0]
-        wizard = self.browse(cr, uid, ids[0], context=context)
-        prev_picking = picking_obj.browse(cr, uid,
-            context['active_id'], context=context)
+            note = 'Internal picking from RMA to %s' % context_type
+            name = 'Internal picking to %s' % context_type
+        view_id = view_obj.search([('xml_id', '=', 'view_picking_form'),
+                                   ('model', '=', 'stock.picking'),
+                                   ('type', '=', 'form'),
+                                   ('name', '=', 'stock.picking.form')])[0]
+        wizard = self
+        prev_picking = picking_obj.browse(context['active_id'])
         partner_id = prev_picking.partner_id.id
         # create picking
         '''picking_id = picking_obj.create(cr, uid, {
@@ -146,25 +143,25 @@ class claim_make_picking_from_picking(models.TransientModel):
             'move_lines': [],
             'location_id': wizard.picking_line_source_location.id,
             'location_dest_id': wizard.picking_line_dest_location.id,
-            'picking_type_id': type_ids and type_ids[0],
-            'note' : note,
+            'picking_type_id': type_ids and type_ids[0].id,
+            'note': note,
             'claim_id': prev_picking.claim_id.id,
             'partner_id': prev_picking.claim_id.company_id.partner_id.id
         }
-        picking_id = picking_obj.copy(cr, uid, prev_picking.id, default_picking_data, context)
+        picking_id = prev_picking.copy(default_picking_data)
         for wizard_picking_line in wizard.picking_line_ids:
             default_move_data = {
                 'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                 'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                 'partner_id': prev_picking.partner_id.id,
-                'picking_id': picking_id,
+                'picking_id': picking_id.id,
                 'company_id': prev_picking.company_id.id,
                 'location_id': wizard.picking_line_source_location.id,
                 'location_dest_id': wizard.picking_line_dest_location.id,
                 'note': note,
-                'picking_type_id': type_ids and type_ids[0],
+                'picking_type_id': type_ids and type_ids[0].id,
             }
-            move_id = move_obj.copy(cr, uid, wizard_picking_line.id, default_move_data, context)
+            move_id = wizard_picking_line.copy(default_move_data)
 
         #TODO: Migrar
         # ~ wf_service = netsvc.LocalService("workflow")
@@ -172,16 +169,14 @@ class claim_make_picking_from_picking(models.TransientModel):
             # ~ wf_service.trg_validate(uid,
                 # ~ 'stock.picking', picking_id,'button_confirm', cr)
             # ~ picking_obj.action_assign(cr, uid, [picking_id])
-        domain = "[('picking_type_code','=','%s'),('partner_id','=',%s)]"%(p_type, partner_id)
+        domain = "[('picking_type_code','=','%s'),('partner_id','=',%s)]" % (p_type, partner_id)
         return {
             'name': '%s' % name,
             'view_type': 'form',
             'view_mode': 'form',
-            'view_id': view_id,
-            'domain' : domain,
+            'view_id': view_id.id,
+            'domain': domain,
             'res_model': 'stock.picking',
-            'res_id': picking_id,
+            'res_id': picking_id.id,
             'type': 'ir.actions.act_window',
         }
-
-# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:

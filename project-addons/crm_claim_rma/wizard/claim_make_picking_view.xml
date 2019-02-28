@@ -4,68 +4,64 @@
   Copyright (C) 2011 Akretion Benoît GUILLOT <benoit.guillot@akretion.com>
   The licence is in the file __openerp__.py
 -->
-<openerp>
-    <data>
+<odoo>
+    <record id="view_claim_picking" model="ir.ui.view">
+        <field name="name">claim_picking</field>
+        <field name="model">claim_make_picking.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select exchange lines to add in picking">
+                <separator string="Locations" colspan="4"/>
+                <field name="claim_line_source_location" nolabel="1" />
+                <field name="claim_line_dest_location" nolabel="1" />
+                <separator string="Select lines for picking" colspan="4"/>
+                <field name="claim_line_ids" nolabel="1" colspan="4"/>
+                    <!--tree string="Returned lines">
+                        <field name="claim_id" invisible="1"/>
+                        <field name="product_id"/>
+                        <field name="equivalent_product_id" readonly="1"/>
+                        <field name="state"/>
+                        <field name="substate_id"/>
+                        <field name="name"/>
+                        <field name="prodlot_id"/>
+                        <field name="warning"/>
+                        <field name="warranty_type"/>
+                        <field name="warranty_return_partner"/>
+                        <button name="set_warranty" string="Compute Waranty" type="object" icon="gtk-justify-fill"/>
+                        <field name="product_returned_quantity"/>
+                        <field name="claim_origine"/>
+                        <field name="refund_line_id"/>
+                        <field name="move_in_id"/>
+                        <field name="move_out_id"/>
+                    </tree>
+                </field-->
+                <footer>
+                    <button name="action_create_picking" string="Create picking" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="view_claim_picking" model="ir.ui.view">
-            <field name="name">claim_picking</field>
-            <field name="model">claim_make_picking.wizard</field>
-            <field name="arch" type="xml">
-                <form string="Select exchange lines to add in picking">
-                    <separator string="Locations" colspan="4"/>
-                    <field name="claim_line_source_location" nolabel="1" />
-                    <field name="claim_line_dest_location" nolabel="1" />
-                    <separator string="Select lines for picking" colspan="4"/>
-                    <field name="claim_line_ids" nolabel="1" colspan="4"/>
-                        <!--tree string="Returned lines">
-                            <field name="claim_id" invisible="1"/>
-                            <field name="product_id"/>
-                            <field name="equivalent_product_id" readonly="1"/>
-                            <field name="state"/>
-                            <field name="substate_id"/>
-                            <field name="name"/>
-                            <field name="prodlot_id"/>
-                            <field name="warning"/>
-                            <field name="warranty_type"/>
-                            <field name="warranty_return_partner"/>
-                            <button name="set_warranty" string="Compute Waranty" type="object" icon="gtk-justify-fill"/>
-                            <field name="product_returned_quantity"/>
-                            <field name="claim_origine"/>
-                            <field name="refund_line_id"/>
-                            <field name="move_in_id"/>
-                            <field name="move_out_id"/>
-                        </tree>
-                    </field-->
-                    <footer>
-                        <button name="action_create_picking" string="Create picking" type="object" class="oe_highlight"/>
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </footer>
-                </form>
-            </field>
-        </record>
+    <record id="action_claim_picking_in" model="ir.actions.act_window">
+        <field name="name">Return Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">claim_make_picking.wizard</field>
+        <field name="src_model">crm.claim</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'picking_type': 'in','product_return': True}</field>
+    </record>
 
-        <record id="action_claim_picking_in" model="ir.actions.act_window">
-            <field name="name">Return Products</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">claim_make_picking.wizard</field>
-            <field name="src_model">crm.claim</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <field name="context">{'picking_type': 'in','product_return': True}</field>
-        </record>
+    <record id="action_claim_picking_out" model="ir.actions.act_window">
+        <field name="name">Create Outgoing Shipments</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">claim_make_picking.wizard</field>
+        <field name="src_model">crm.claim</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'picking_type': 'out'}</field>
+    </record>
 
-        <record id="action_claim_picking_out" model="ir.actions.act_window">
-            <field name="name">Create Outgoing Shipments</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">claim_make_picking.wizard</field>
-            <field name="src_model">crm.claim</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <field name="context">{'picking_type': 'out'}</field>
-        </record>
-
-    </data>
-</openerp>
+</odoo>
