@@ -1,0 +1,62 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* custom_financial_risk
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-01 13:45+0000\n"
+"PO-Revision-Date: 2019-03-01 13:45+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_financial_risk
+#: model:ir.model,name:custom_financial_risk.model_account_account
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: custom_financial_risk
+#: model:ir.model.fields,field_description:custom_financial_risk.field_account_account_circulating
+msgid "Circulating"
+msgstr "Circulante"
+
+#. module: custom_financial_risk
+#: model:ir.model,name:custom_financial_risk.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: custom_financial_risk
+#: model:ir.model.fields,field_description:custom_financial_risk.field_res_partner_risk_circulating_include
+#: model:ir.model.fields,field_description:custom_financial_risk.field_res_users_risk_circulating_include
+msgid "Include Circulating amount"
+msgstr "Incluir cantidad circulante"
+
+#. module: custom_financial_risk
+#: model:ir.model.fields,field_description:custom_financial_risk.field_res_partner_risk_circulating_limit
+#: model:ir.model.fields,field_description:custom_financial_risk.field_res_users_risk_circulating_limit
+msgid "Limit In Circulating amount"
+msgstr "Limitar cantidad circulante"
+
+#. module: custom_financial_risk
+#: model:ir.model.fields,help:custom_financial_risk.field_res_partner_risk_circulating_limit
+#: model:ir.model.fields,help:custom_financial_risk.field_res_users_risk_circulating_limit
+msgid "Set 0 if it is not locked"
+msgstr "Establece 0 si no está bloqueado"
+
+#. module: custom_financial_risk
+#: model:ir.model.fields,field_description:custom_financial_risk.field_res_partner_risk_circulating
+#: model:ir.model.fields,field_description:custom_financial_risk.field_res_users_risk_circulating
+msgid "Total Circulating amount"
+msgstr "Cantidad total circulante"
+
+#. module: custom_financial_risk
+#: model:ir.model.fields,help:custom_financial_risk.field_res_partner_risk_circulating
+#: model:ir.model.fields,help:custom_financial_risk.field_res_users_risk_circulating
+msgid "Total amount of circulating accounts"
+msgstr "Total amount of circulating accounts"
+
