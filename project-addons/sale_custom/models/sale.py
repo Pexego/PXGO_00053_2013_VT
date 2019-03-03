@@ -36,8 +36,7 @@ class SaleOrder(models.Model):
             TODO: Por qué es necesario?
         """
         val = super().onchange_partner_id()
-        new_partner = self.env['res.partner'].browse(self.partner_id)
-        for child in new_partner.child_ids:
+        for child in self.partner_id.child_ids:
             if child.default_shipping_address:
                 val['value']['partner_shipping_id'] = child.id
                 break

@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos
-#    $Omar Castiñeira Saavedra <omar@pcomunitea.com>$
+#    Copyright (C) 2016 Comunitea All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@comunitea.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,17 +17,22 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields, api, exceptions, _
 
-from openerp import models
 
-class PurchaseOrder(models.Model):
+class SaleOrder(models.Model):
 
-    _inherit = "purchase.order"
+    _inherit = 'sale.order'
 
-    def print_quotation(self, cr, uid, ids, context=None):
-        res = super(PurchaseOrder, self).print_quotation(cr, uid, ids,
-                                                         context=context)
-        return self.pool['report'].\
-            get_action(cr, uid, ids,
-                       'purchase.report_purchasequotation_custom',
-                       context=context)
+    invoice_type_id = fields.Many2one('res.partner.invoice.type', "Invoice type")
+
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        super(SaleOrder, self).onchange_partner_id()
+        for order in self:
+            if order.partner_id:
+                part = order.partner_id
+                self.invoice_type_id = part.invoice_type_id and part.invoice_type_id.id \
+                    or part.commercial_partner_id.invoice_type_id and part.commercial_partner_id.invoice_type_id.id \
+                    or False

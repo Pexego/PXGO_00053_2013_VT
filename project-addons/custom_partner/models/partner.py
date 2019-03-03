@@ -49,12 +49,11 @@ class ResPartner(models.Model):
     past_year_employees = fields.Integer("Past year employees", default=0)
     ref_supplier = fields.Char("Ref. Supplier", size=3)
 
-    # TODO -> Probar con la base de datos migrada
     @api.model
     def _calculate_annual_invoiced(self):
         partner_obj = self.env['res.partner']
         invoice_obj = self.env['account.invoice']
-        picking_obj = self.env['stock.picking']
+        order_obj = self.env['sale.order.line']
         partner_ids = partner_obj.search([('is_company', '=', True),
                                           ('child_ids', '!=', False),
                                           ('customer', '=', True)])
@@ -115,35 +114,20 @@ class ResPartner(models.Model):
                                                               ('state', '=', 'open'),
                                                               ('state', '=', 'paid')], ['type', 'amount_untaxed'])
 
-            picking_ids_year = picking_obj.search_read([('date_done', '>=', start_year),
-                                                        ('date_done', '<=', end_year),
-                                                        ('state', '=', 'done'),
-                                                        ('invoice_state', '=', '2binvoiced'),
-                                                        ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
+            o_lines = order_obj.search([('order_id.partner_id', 'child_of', [partner.id]),
+                                        ('order_id.state', '=', 'sale'),
+                                        ('qty_delivered', '>', 0)]).filtered(lambda l: l.qty_delivered > l.qty_invoiced)
 
-            picking_ids_past_year = picking_obj.search_read([('date_done', '>=', start_past_year),
-                                                             ('date_done', '<=', end_past_year),
-                                                             ('invoice_state', '=', '2binvoiced'),
-                                                             ('partner_id', 'child_of', [partner.id]),
-                                                             ('state', '=', 'done')], ['amount_untaxed'])
-
-            picking_ids_month = picking_obj.search_read([('date_done', '>=', start_month),
-                                                         ('date_done', '<=', end_month),
-                                                         ('state', '=', 'done'),
-                                                         ('invoice_state', '=', '2binvoiced'),
-                                                         ('partner_id', 'child_of', [partner.id])], ['amount_untaxed'])
-
-            picking_ids_past_month = picking_obj.search_read([('date_done', '>=', start_past_month),
-                                                              ('date_done', '<=', end_past_month),
-                                                              ('state', '=', 'done'),
-                                                              ('invoice_state', '=', '2binvoiced'),
-                                                              ('partner_id', 'child_of', [partner.id])],
-                                                             ['amount_untaxed'])
+            order_lines_year = o_lines.filtered(lambda l: start_year <= l.order_id.date_order <= end_year)
+            order_lines_past_year = o_lines.filtered(lambda l: start_past_year <= l.order_id.date_order <= end_year)
+            order_lines_month = o_lines.filtered(lambda l: start_month <= l.order_id.date_order <= end_month)
+            order_lines_past_month = o_lines.filtered(lambda l: start_past_month <= l.order_id.date_order <= end_past_month)
 
             annual_invoiced = 0.0
             past_year_invoiced = 0.0
             monthly_invoiced = 0.0
             past_month_invoiced = 0.0
+
             for invoice in invoice_ids_year:
                 if invoice['type'] == 'out_refund':
                     annual_invoiced -= invoice['amount_untaxed']
@@ -168,17 +152,10 @@ class ResPartner(models.Model):
                 else:
                     past_month_invoiced += invoice['amount_untaxed']
 
-            for picking in picking_ids_year:
-                annual_invoiced += picking['amount_untaxed']
-
-            for picking in picking_ids_month:
-                monthly_invoiced += picking['amount_untaxed']
-
-            for picking in picking_ids_past_year:
-                past_year_invoiced += picking['amount_untaxed']
-
-            for picking in picking_ids_past_month:
-                past_month_invoiced += picking['amount_untaxed']
+            annual_invoiced += sum(order_lines_year.mapped('price_subtotal'))
+            past_year_invoiced += sum(order_lines_past_year.mapped('price_subtotal'))
+            monthly_invoiced += sum(order_lines_month.mapped('price_subtotal'))
+            past_month_invoiced += sum(order_lines_past_month.mapped('price_subtotal'))
 
             vals = {'annual_invoiced': annual_invoiced, 'past_year_invoiced': past_year_invoiced,
                     'monthly_invoiced': monthly_invoiced, 'past_month_invoiced': past_month_invoiced}
@@ -189,7 +166,7 @@ class ResPartner(models.Model):
     def _unblock_invoices(self):
         date_limit = date.today() - timedelta(days=7)
         payment_term_ids = self.env['account.payment.term'].search([('blocked', '=', 'True')])
-        partner_ids = self.env['res.partner'].search([('property_payment_term_id', 'in', payment_term_ids.ids)])
+        partner_ids = self.env['res.partner'].search([('prnot_print_pickingoperty_payment_term_id', 'in', payment_term_ids.ids)])
         invoice_ids = self.env['account.invoice'].search([('date_due', '<=', date_limit),
                                                           ('state', '=', 'open'),
                                                           ('partner_id', 'child_of', partner_ids.ids),
@@ -212,8 +189,6 @@ class ResPartner(models.Model):
 
     @api.multi
     def _invoice_total_real(self):
-        # TODO -> Probar cuando la tabla res_currency_rate tenga datos
-        result = {}
         context = self.env.context
         account_invoice_report = self.env['account.invoice.report']
         user = self.env['res.users'].browse(self.env.uid)
@@ -257,9 +232,7 @@ class ResPartner(models.Model):
             # price_total is in the currency with rate = 1
             # total_invoice should be displayed in the current user's currency
             self.env.cr.execute(query, where_clause_params + [user_currency_id])
-            result[partner_id] = self.env.cr.fetchone()[0]
-
-        return result
+            partner_id.total_invoiced_real = self.env.cr.fetchone()[0]
 
     # TODO -> Migrar: mirar account_credit_control
     # ~ def _get_amounts_and_date(self, cr, uid, ids, name, arg, context=None):
@@ -300,21 +273,20 @@ class ResPartner(models.Model):
                                       # ~ string="Amount Due",
                                       # ~ search=_payment_due_search)
 
-    @api.one
+    @api.multi
     def _get_products_sold(self):
-        lines = self.env["sale.order.line"].read_group([('order_partner_id',
-                                                         '=', self.id)],
-                                                       ['product_id'],
-                                                       groupby="product_id")
-        self.sale_product_count = len(lines)
+        for partner in self:
+            lines = self.env['sale.order.line'].read_group([('order_partner_id', '=', partner.id)],
+                                                           ['product_id'],
+                                                           groupby="product_id")
+            partner.sale_product_count = len(lines)
 
-    @api.one
+    @api.multi
     def _sale_order_count(self):
-        self.sale_order_count = len(self.env["sale.order"].
-                                    search([('partner_id', 'child_of',
-                                             [self.id]),
-                                            ('state', 'not in',
-                                             ['draft', 'cancel', 'sent'])]))
+        for partner in self:
+            partner.sale_order_count = len(self.env["sale.order"].
+                                           search([('partner_id', 'child_of', [partner.id]),
+                                                   ('state', 'not in', ['draft', 'cancel', 'sent'])]))
 
     @api.multi
     def _get_growth_rate(self):
@@ -358,13 +330,10 @@ class ResPartner(models.Model):
                 for i_line in invoices_line:
                     lines = self.env['sale.order.line'].search([('invoice_lines', 'in', [i_line.id])], limit=1)
                     order_line = lines and lines[0] or False
-
-                    # TODO -> Migrar: depende de sale_margin_percentage
-                    """if order_line:
+                    if order_line:
                         o_line_data = order_line.read(['purchase_price'])[0]
-                        total_price += i_line.quantity * i_line.price_unit * \
-                                       ((100.0 - i_line.discount) / 100)
-                        total_cost += i_line.quantity * o_line_data['purchase_price']"""
+                        total_price += i_line.quantity * i_line.price_unit * ((100.0 - i_line.discount) / 100)
+                        total_cost += i_line.quantity * o_line_data['purchase_price']
 
                 if total_price:
                     margin_avg = (1 - total_cost / total_price) * 100.0
@@ -373,17 +342,17 @@ class ResPartner(models.Model):
 
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
-    sale_product_count = fields.Integer(compute=_get_products_sold,
+    sale_product_count = fields.Integer(compute='_get_products_sold',
                                         string="# Products sold",
                                         readonly=True)
-    sale_order_count = fields.Integer(compute="_sale_order_count",
+    sale_order_count = fields.Integer(compute='_sale_order_count',
                                       string='# of Sales Order')
     invoice_type_id = fields.Many2one('res.partner.invoice.type',
                                       'Invoice type')
     dropship = fields.Boolean("Dropship")
     send_followup_to_user = fields.Boolean("Send followup to sales agent")
     notified_creditoycaucion = fields.Date("Notified to Crédito y Caución")
-    is_accounting = fields.Boolean("Is Acounting", compute="_is_accounting")
+    is_accounting = fields.Boolean("Is Acounting", compute='_is_accounting')
     eur_currency = fields.Many2one('res.currency', default=lambda self: self.env.ref('base.EUR'))
     purchase_quantity = fields.Float("", compute='_get_purchased_quantity')
     att = fields.Char("A/A")
@@ -391,72 +360,82 @@ class ResPartner(models.Model):
     average_margin = fields.Float("Average Margin", readonly=True, compute='_get_average_margin')
 
     unreconciled_purchase_aml_ids = fields.One2many('account.move.line', 'partner_id',
-                                           domain=[('full_reconcile_id', '=', False),
-                                                   ('account_id.internal_type', '=', 'payable'), ('move_id.state', '!=', 'draft')])
+                                                    domain=[('full_reconcile_id', '=', False),
+                                                            ('account_id.internal_type', '=', 'payable'),
+                                                            ('move_id.state', '!=', 'draft')])
     _sql_constraints = [
         ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
     ]
 
-    @api.one
+    @api.multi
     def _is_accounting(self):
         accountant = self.env.ref('account.group_account_manager')
         is_accountant = self.env.user.id in accountant.users.ids
-
         if is_accountant:
-            self.is_accounting = True
+            for partner in self:
+                partner.is_accounting = True
         else:
-            self.is_accounting = False
+            for partner in self:
+                partner.is_accounting = False
 
     @api.multi
     def _get_purchased_quantity(self):
         for partner in self:
             lines = self.env['purchase.order.line'].search(
                 [('order_id.state', '=', 'approved'),
-                 ('invoiced', '=', False),
-                 ('order_id.partner_id', '=', partner.id)])
+                 ('order_id.partner_id', '=', partner.id),
+                 ('qty_received', '>', 0)]).filtered(lambda l: l.qty_received > l.qty_invoiced)
             purchases = self.env['purchase.order'].search([('id', 'in', lines.mapped('order_id.id'))])
             total = sum(purchases.mapped('amount_total'))
             partner.purchase_quantity = total
 
+    @api.multi
     @api.constrains('email_web')
     def check_unique_email_web(self):
-        if self.email_web:
-            ids = self.search([('email_web', '=ilike', self.email_web), ('id', '<>', self.id)])
-            if ids:
-                raise exceptions.ValidationError(_('Email web must be unique'))
+        for partner in self:
+            if partner.email_web:
+                ids = self.search([('email_web', '=ilike', partner.email_web), ('id', '<>', partner.id)])
+                if ids:
+                    raise exceptions.ValidationError(_('Email web must be unique'))
 
+    @api.multi
     @api.constrains('ref', 'is_company', 'active')
     def check_unique_ref(self):
-        if self.is_company and self.active:
-            ids = self.search([('ref', '=', self.ref),
-                               ('is_company', '=', True),
-                               ('id', '!=', self.id)])
-            if ids:
-                raise exceptions. \
-                    ValidationError(_('Partner ref must be unique'))
+        for partner in self:
+            if partner.is_company and partner.active:
+                ids = self.search([('ref', '=', partner.ref),
+                                   ('is_company', '=', True),
+                                   ('id', '!=', partner.id)])
+                if ids:
+                    raise exceptions. \
+                        ValidationError(_('Partner ref must be unique'))
 
+    @api.multi
     @api.constrains('child_ids', 'is_company', 'active')
     def check_unique_child_ids(self):
-        if self._context.get('install_mode'):
-            return
-        if self.is_company and self.active:
-            if not self.child_ids:
-                raise exceptions. \
-                    ValidationError(_('At least, a contact must be added'))
+        for partner in self:
+            if partner._context.get('install_mode'):
+                return
+            if partner.is_company and partner.active:
+                if not partner.child_ids:
+                    raise exceptions. \
+                        ValidationError(_('At least, a contact must be added'))
 
+    @api.multi
     @api.constrains('vat', 'is_company', 'supplier', 'customer', 'active')
     def check_unique_vat(self):
-        if self._context.get('install_mode'):
-            return
-        if self.is_company and self.active:
-            ids = self.search([('vat', '=', self.vat),
-                               ('is_company', '=', True),
-                               ('id', '!=', self.id),
-                               ('supplier', '=', self.supplier),
-                               ('customer', '=', self.customer)])
-            if ids:
-                raise exceptions. \
-                    ValidationError(_('VAT must be unique'))
+        for partner in self:
+            if partner._context.get('install_mode'):
+                return
+            if partner.is_company and partner.active:
+                ids = self.search([('vat', '=', partner.vat),
+                                   ('is_company', '=', True),
+                                   ('id', '!=', partner.id),
+                                   ('supplier', '=', partner.supplier),
+                                   ('customer', '=', partner.customer)])
+                if ids:
+                    raise exceptions. \
+                        ValidationError(_('VAT must be unique'))
 
     @api.multi
     def name_get(self):
@@ -492,7 +471,7 @@ class ResPartner(models.Model):
         for child in self.child_ids:
             if child.default_shipping_address:
                 if 'True' in vals_dict:
-                    raise Warning('Warning', 'Dos o mas direcciones marcadas como predeterminadas')
+                    raise Warning('Dos o mas direcciones marcadas como predeterminadas')
                 else:
                     vals_dict[str(child.default_shipping_address)] = child.id
 
@@ -509,7 +488,7 @@ class ResPartner(models.Model):
                     partner.lang = partner.parent_id.lang
         return res
 
-    # TODO: Migrar
+    # TODO: Migrar -> depende de credit_control (?)
     """def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
         today = time.strftime('%Y-%m-%d')
         moveline_obj = self.pool['account.move.line']
@@ -602,10 +581,9 @@ class ResPartner(models.Model):
                                 </table>
                                 <strong><center style="font-size: 18px">''' + _("Amount not due") +\
                                   ''' : %s </center></strong>''' % (total)
-        return followup_table"""
-
-    # TODO: Migrar
-    """def get_custom_followup_table_html(self, cr, uid, ids, context=None):
+        return followup_table
+        
+        def get_custom_followup_table_html(self, cr, uid, ids, context=None):
         ''' Build the html tables to be included in emails send to partners,
             when reminding them their overdue invoices.
             :param ids: [id] of the partner for whom we are building the tables
@@ -675,7 +653,6 @@ class ResPartner(models.Model):
 
     @api.multi
     def open_partner(self):
-
         self.ensure_one()
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
         record_url = base_url + '/web/?#id=' + str(self.id) + '&view_type=form&model=res.partner'
@@ -688,11 +665,10 @@ class ResPartner(models.Model):
 
     @api.multi
     def call_new_window(self):
-
         base_url = self.env['ir.config_parameter'].get_param('web.base.url')
         order_view_id = self.env.ref('custom_partner.crm_case_categ_phone_incoming3').id
-        record_url = base_url + '/web?#page=0&limit=80&view_type=list&model=crm.phonecall&action=' + str(order_view_id) + '&active_id=' + str(self.id)
-
+        record_url = base_url + '/web?#page=0&limit=80&view_type=list&model=crm.phonecall&action=' \
+                              + str(order_view_id) + '&active_id=' + str(self.id)
         return {
             'name': 'Phone Calls',
             'view_type': 'tree',
@@ -703,6 +679,7 @@ class ResPartner(models.Model):
             }
 
 
+# TODO: Probar parte relacionada con account
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
@@ -721,7 +698,7 @@ class AccountVoucher(models.Model):
     @api.multi
     def account_move_get(self):
 
-        move = super(AccountVoucher, self).account_move_get(self.id)
+        move = super(AccountVoucher, self).account_move_get()
         move['vref'] = self.reference
 
         return move

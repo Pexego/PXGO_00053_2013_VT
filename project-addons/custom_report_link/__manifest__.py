@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos
@@ -19,15 +18,21 @@
 #
 ##############################################################################
 
-from openerp import models
-
-class SaleOrder(models.Model):
-
-    _inherit = "sale.order"
-
-    def print_quotation(self, cr, uid, ids, context=None):
-        res = super(SaleOrder, self).print_quotation(cr, uid, ids,
-                                                     context=context)
-        return self.pool['report'].get_action(cr, uid, ids,
-                                              'sale.report_saleorder_custom',
-                                              context=context)
+{
+    'name': "Custom reports links",
+    'version': '11.0.1.0.0',
+    'category': 'Custom',
+    'description': """Customized report links""",
+    'author': 'Comunitea',
+    'website': 'www.comunitea.com',
+    "depends": ['sale', 'purchase', 'account', 'stock',
+                'stock_reserve_sale', 'stock_custom', 'sale_proforma_report'],
+    "data": [
+        "data/report_paperformat.xml",
+        "views/custom_layout.xml",
+        "views/stock_custom_report.xml",
+        "views/report_sale_order.xml",
+        "views/report_purchase_order.xml",
+        "views/report_invoice.xml"],
+    "installable": True
+}

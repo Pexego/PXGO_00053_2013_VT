@@ -15,6 +15,9 @@
                 <field name="partner_invoice_id" position="attributes">
                     <attribute name="domain">[('id', 'child_of', [partner_id])]</attribute>
                 </field>
+                <field name="fiscal_position_id" position="after">
+                    <field name="invoice_type_id"/>
+                </field>
             </field>
         </record>
 
@@ -26,6 +29,20 @@
                 <field name="amount_total" position="before">
                     <field name="amount_untaxed" sum="Untaxed"/>
                 </field>
+            </field>
+        </record>
+
+        <record id="sale_order_search_add_invoice_type" model="ir.ui.view">
+            <field name="name">sale.order.search.invoice.type</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="analytic_account_id" position="after">
+                    <field name="invoice_type_id"/>
+                </field>
+                <filter context="{'group_by':'date_order'}" position="after">
+                    <filter string="Invoice type" domain="[]" context="{'group_by':'invoice_type_id'}"/>
+                </filter>
             </field>
         </record>
 

@@ -53,7 +53,6 @@ class SaleOrderLine(models.Model):
                                  ondelete="restrict",
                                  default=_default_commission)
 
-    @api.one
     @api.onchange('agent')
     def onchange_agent(self):
         self.commission = self.agent.commission.id
