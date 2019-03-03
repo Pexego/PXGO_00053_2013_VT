@@ -45,11 +45,10 @@ class PartnerVisit(models.Model):
     confirm_done = fields.Boolean("Done", default=False)
 
     partner_pricelist = fields.Many2one(related='partner_id.property_product_pricelist')
-    # TODO -> depende de custom_partner
-    """partner_annual_invoiced = fields.Float(related='partner_id.annual_invoiced')
+    partner_annual_invoiced = fields.Float(related='partner_id.annual_invoiced')
     partner_past_year_invoiced = fields.Float(related='partner_id.past_year_invoiced')
     partner_monthly_invoiced = fields.Float(related='partner_id.monthly_invoiced')
-    partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced')"""
+    partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced')
 
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
     region_ids = fields.Many2many(related='area_id.commercial_region_ids')
