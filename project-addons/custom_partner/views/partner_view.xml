@@ -12,7 +12,6 @@
                     <field name="ref"/>
                     <field name="ref_supplier" attrs="{'invisible': [('supplier', '=', False)]}"/>
                     <field name="user_id"/>
-                    <field name="dropship" attrs="{'invisible': [('type', '!=', 'delivery')]}"/>
                 </field>
                 <field name="property_supplier_payment_term_id" position="before">
                     <field name="eur_currency" invisible="1"/>
