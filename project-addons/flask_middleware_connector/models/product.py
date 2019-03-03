@@ -62,9 +62,9 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     @api.one
-    @api.depends('pack_line_ids')
+    @api.depends('bom_ids')
     def compute_is_pack(self):
-        if self.pack_line_ids:
+        if self.bom_ids:
             self.is_pack = True
         else:
             self.is_pack = False

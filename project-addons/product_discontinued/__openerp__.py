@@ -4,7 +4,7 @@
     "version": "1.0",
     "category": "Products",
     "description": """
-This module allow to mark as discontinued any product, 
+This module allow to mark as discontinued any product,
 as long as some conditions will be fulfilled. At the same time
 the button commission_free will disappear of the view
     """,
@@ -12,7 +12,6 @@ the button commission_free will disappear of the view
     "depends": [
         "product",
         "sale",
-        "sale_commission",
         "sale_customer_discount"
     ],
     "data": [
