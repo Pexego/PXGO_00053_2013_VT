@@ -6,10 +6,6 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="prospective_customer.res_partner_add_prospective_form"/>
             <field name="arch" type="xml">
-                <field name="property_account_position_id" position="after">
-                    <field name="invoice_type_id" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}"/>
-                </field>
-                <field name="lang" position="replace"/>
                 <field name="user_id" position="replace"/>
                 <field name="ref" position="replace"/>
                 <field name="title" position="after">
@@ -21,7 +17,7 @@
                     <field name="eur_currency" invisible="1"/>
                     <field name="purchase_quantity" groups="purchase.group_purchase_user" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
                 </field>
-                <xpath expr="//page[@name='sales_purchases']/group">
+                <xpath expr="//page[@name='sales_purchases']/group" position="after">
                     <group string="Sale analysis" name="sale_analysis">
                         <field name="growth_rate"/>
                         <label for="average_margin" attrs="{'invisible': [('is_company', '!=', True)]}"/>
@@ -32,12 +28,6 @@
                         <field name="monthly_invoiced"/>
                         <field name="past_year_invoiced"/>
                         <field name="past_month_invoiced"/>
-                    </group>
-                    <group string="General Information" name="general_info">
-                        <field name="date" string="Created date" readonly="True"/>
-                        <field name="lang" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}"/>
-                        <field name="web" attrs="{'invisible': [('is_company', '!=', True)]}"/>
-                        <field name="email_web" attrs="{'invisible': [('web', '!=', True)], 'required': [('web', '=', True)]}"/>
                     </group>
                 </xpath>
                 <!-- TODO: Revisar si siguen existiendo estos campos-->
@@ -410,99 +400,6 @@
                 <xpath expr="//field[@name='child_ids']/form//field[@name='street2']" position="after">
                     <field name="att" placeholder="A/A"/>
                 </xpath>
-            </field>
-        </record>
-
-        <!--TODO Migrar: Falla al cargar las vistas (no encuentra dropship ni prospective incluso modificando la vista heredada)
-        <record id="view_partner_form_add_require" model="ir.ui.view">
-            <field name="name">res.partner.form.add_require</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="prospective_customer.res_partner_add_prospective_form"/>
-            <field name="arch" type="xml">
-                <field name="ref" position="attributes">
-                    <attribute name="readonly">True</attribute>
-                </field>
-                <field name="category_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-                <field name="street" position="attributes">
-                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-                 <field name="zip" position="attributes">
-                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-                <field name="city" position="attributes">
-                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-                <field name="state_id" position="attributes">
-                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False)]}</attribute>
-                </field>
-                <field name="country_id" position="attributes">
-                    <attribute name="attrs">{'required': ['|', ('is_company', '=', True), ('type', '=', 'delivery'),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-                <field name="email" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
-                </field>
-                <field name="phone" position="attributes">
-                    <attribute name="string">Phone/Mobile 1</attribute>
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
-                </field>
-                <field name="mobile" position="attributes">
-                    <attribute name="string">Phone/Mobile 2</attribute>
-                </field>
-                <field name="user_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
-                </field>
-                <field name="lang" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-            </field>
-        </record-->
-
-        <record id="view_partner_form_add_required_payment_mode" model="ir.ui.view">
-            <field name="name">res.partner.form.add_required_payment_mode</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="account_payment_partner.view_partner_property_form"/>
-            <field name="arch" type="xml">
-                <field name="customer_payment_mode_id" position="attributes">
-                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-            </field>
-        </record>
-
-        <record id="view_partner_form_add_required_payment_term" model="ir.ui.view">
-            <field name="name">res.partner.form.add_required_payment_term</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="account.view_partner_property_form"/>
-            <field name="arch" type="xml">
-                <field name="property_payment_term_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-                <field name="property_account_position_id" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-            </field>
-        </record>
-
-        <record id="view_partner_form_add_require_pricelist" model="ir.ui.view">
-            <field name="name">res.partner.form.add_require_pricelist</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="product.view_partner_property_form"/>
-            <field name="arch" type="xml">
-                <field name="property_product_pricelist" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
-                </field>
-            </field>
-        </record>
-
-        <record id="view_partner_form_add_require_comercial" model="ir.ui.view">
-            <field name="name">res.partner.form.add_require_comercial</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="l10n_es_partner.view_partner_form"/>
-            <field name="arch" type="xml">
-                <field name="comercial" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
-                </field>
             </field>
         </record>
 
