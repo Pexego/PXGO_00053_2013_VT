@@ -9,7 +9,7 @@
     'author': 'Pexego',
     'website': 'www.pexego.es',
     "depends": ['base', 'sale', 'stock', 'sale_stock', 'mrp', 'product',
-                'stock_reserve_sale', 'sale_commission', 'purchase',
+                'stock_reserve_sale', 'purchase',
                 'sale_customer_discount'],
     "data": ['view/sale_view.xml', 'view/product_view.xml',
              'view/stock_reserve_view.xml', 'view/mrp_production_view.xml',

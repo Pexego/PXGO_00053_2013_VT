@@ -26,6 +26,18 @@ class Partner(models.Model):
 
                 partner.pending_orders_amount = total
 
+    @api.one
+    def _is_accounting(self):
+
+        accountant = self.env.ref('account.group_account_manager')
+
+        is_accountant = self.env.user.id in accountant.users.ids
+
+        if is_accountant:
+            self.is_accounting = True
+        else:
+            self.is_accounting = False
+
     email2 = fields.Char('Second Email')
     not_send_following_email = fields.Boolean()
     unreconciled_purchase_aml_ids = fields.\
@@ -38,6 +50,8 @@ class Partner(models.Model):
     newsletter = fields.Boolean('Newsletter')
     pending_orders_amount = fields.Float(compute="_pending_orders_amount",
                                          string='Uninvoiced Orders')
+    is_accounting = fields.Boolean('Is Acounting', compute="_is_accounting")
+    risk_insurance_comment = fields.Text('Comments')
 
     @api.onchange("user_id")
     def on_change_user_id(self):
