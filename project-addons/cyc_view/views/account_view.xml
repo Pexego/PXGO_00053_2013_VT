@@ -1,0 +1,38 @@
+<odoo>
+    <record id="account_move_line_partner_tree_add_cyc" model="ir.ui.view">
+        <field name="name">account.move.line.partner.tree.add_cyc</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_tree"/>
+        <field name="arch" type="xml">
+            <field name="date_maturity" position="after">
+                <field name="cyc_notify_date"/>
+                <field name="cyc_limit_date_insolvency"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_move_line_form_add_cyc" model="ir.ui.view">
+        <field name="name">account.move.line.form.followup.add_cyc</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_form"/>
+        <field name="arch" type="xml">
+            <field name="date_maturity" position="after">
+                <field name="cyc_notify_date"/>
+                <field name="cyc_limit_date_insolvency"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Migrar<record id="view_partner_inherit_followup_form_add_cyc" model="ir.ui.view">
+        <field name="name">res.partner.followup.form.inherit.add_cyc</field>
+        <field name="inherit_id" ref="account_followup.view_partner_inherit_followup_form"/>
+        <field name="model">res.partner</field>
+        <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
+        <field name="arch" type="xml" >
+            <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name='date_maturity']" position="after">
+                <field name="cyc_notify_date"/>
+                <field name="cyc_limit_date_insolvency"/>
+            </xpath>
+        </field>
+    </record>-->
+</odoo>

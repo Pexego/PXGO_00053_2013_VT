@@ -16,30 +16,26 @@
 #    along with this program.  If not, see http://www.gnu.org/licenses/.
 #
 ##############################################################################
-
-
 from openerp import models, fields, api
 
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    @api.one
     @api.depends('company_credit_limit', 'insurance_credit_limit')
     def _credit_limit(self):
-        self.credit_limit = (self.company_credit_limit +
-                             self.insurance_credit_limit)
-    @api.one
+        for partner in self:
+            partner.credit_limit = (partner.company_credit_limit +
+                                    partner.insurance_credit_limit)
+
     def _is_accounting(self):
-
         accountant = self.env.ref('account.group_account_manager')
-
         is_accountant = self.env.user.id in accountant.users.ids
-
-        if is_accountant:
-            self.is_accounting = True
-        else:
-            self.is_accounting = False
+        for partner in self:
+            if is_accountant:
+                partner.is_accounting = True
+            else:
+                partner.is_accounting = False
 
     credit_limit = fields.Float('Credit Limit', store=True,
                                 compute=_credit_limit)
@@ -70,8 +66,3 @@ class ResPartner(models.Model):
     risk_insurance_comment = fields.Text('Comments')
 
     is_accounting = fields.Boolean('Is Acounting', compute="_is_accounting")
-
-
-
-
-

@@ -54,7 +54,7 @@
             <field name="context">{'search_default_thisyear':1,'search_default_month':1,'group_by':['country_id']}</field>
         </record>
 
-        <menuitem name="Cyc report" parent="account.account_reports_business_intelligence_menu"
+        <menuitem name="Cyc report" parent="account.menu_finance_reports"
             action="action_account_invoice_cyc" id="account_invoice_menu_cyc"/>
 
 </odoo>
