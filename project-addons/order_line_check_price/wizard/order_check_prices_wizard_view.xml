@@ -1,107 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-         <record id="sale_order_line_price_changes_tree" model="ir.ui.view">
-            <field name="name">sale.order.line.price.changes.tree</field>
-            <field name="model">sale.order.line</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <tree string="Sales Order Lines" create="false">
-                    <field name="product_id"/>
-                    <field name="name"/>
-                    <field name="price_unit"/>
-                    <field name="product_uom_qty"/>
-                    <field name="discount"/>
-                    <field name="price_subtotal"/>
-                    <field name="state" invisible="True"/>
-                    <field name="order_id"/>
-                    <field name="date_order"/>
-                    <field name="order_partner_id"/>
-                    <field name="salesman_id"/>
-                </tree>
-            </field>
-        </record>
+<odoo>
+    <record id="sale_order_line_price_changes_tree" model="ir.ui.view">
+        <field name="name">sale.order.line.price.changes.tree</field>
+        <field name="model">sale.order.line</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <tree string="Sales Order Lines" create="false">
+                <field name="product_id"/>
+                <field name="name"/>
+                <field name="price_unit"/>
+                <field name="product_uom_qty"/>
+                <field name="discount"/>
+                <field name="price_subtotal"/>
+                <field name="state" invisible="True"/>
+                <field name="order_id"/>
+                <field name="date_order"/>
+                <field name="order_partner_id"/>
+                <field name="salesman_id"/>
+            </tree>
+        </field>
+    </record>
 
-         <record id="sale_order_line_price_changes_search" model="ir.ui.view">
-            <field name="name">sale.order.line.price.changes.search</field>
-            <field name="model">sale.order.line</field>
-            <field name="arch" type="xml">
-                <search string="Sales Order Lines Search">
-                    <group string="Group By">
-                        <filter string="Order" domain="[]"
-                            name="groupby_order_id"
-                            context="{'group_by': 'order_id'}"/>
-                        <filter string="Salesperson" domain="[]"
-                            name="groupby_salesman_id"
-                            context="{'group_by': 'salesman_id'}"/>
-                        <filter string="Product" domain="[]"
-                            name="groupby_product_id"
-                            context="{'group_by': 'product_id'}"/>
-                        <filter string="Partner" domain="[]"
-                            name="groupby_order_partner_id"
-                            context="{'group_by': 'order_partner_id'}"/>
-                    </group>
-                </search>
-            </field>
-        </record>
+     <record id="sale_order_line_price_changes_search" model="ir.ui.view">
+        <field name="name">sale.order.line.price.changes.search</field>
+        <field name="model">sale.order.line</field>
+        <field name="arch" type="xml">
+            <search string="Sales Order Lines Search">
+                <group string="Group By">
+                    <filter string="Order" domain="[]"
+                        name="groupby_order_id"
+                        context="{'group_by': 'order_id'}"/>
+                    <filter string="Salesperson" domain="[]"
+                        name="groupby_salesman_id"
+                        context="{'group_by': 'salesman_id'}"/>
+                    <filter string="Product" domain="[]"
+                        name="groupby_product_id"
+                        context="{'group_by': 'product_id'}"/>
+                    <filter string="Partner" domain="[]"
+                        name="groupby_order_partner_id"
+                        context="{'group_by': 'order_partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
 
-         <record id="order_check_prices_wizard_form_warning" model="ir.ui.view">
-            <field name="name">order.check.prices.wizard.form.warning</field>
-            <field name="model">order.check.prices.wizard</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form name="result_info" string="Result info">
-                    <group>
-                        <field name="info" nolabel="1" colspan="4"/>
-                        <separator str="" colspan="4"/>
-                        <field name="warning" nolabel="1" colspan="4"/>
-                    </group>
-                    <footer>
-                        <button name="view_lines" string="View changes" type="object" class="oe_highlight"/>
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </footer>
-                </form>
-            </field>
-        </record>
+    <record id="order_check_prices_wizard_form_warning" model="ir.ui.view">
+        <field name="name">order.check.prices.wizard.form.warning</field>
+        <field name="model">order.check.prices.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form name="result_info" string="Result info">
+                <group>
+                    <field name="info" nolabel="1" colspan="4"/>
+                    <separator str="" colspan="4"/>
+                    <field name="warning" nolabel="1" colspan="4"/>
+                </group>
+                <footer>
+                    <button name="view_lines" string="View changes" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="order_check_prices_wizard_form" model="ir.ui.view">
-            <field name="name">order.check.prices.wizard.form</field>
-            <field name="model">order.check.prices.wizard</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form name="choose_period" string="Choose period">
-                    <group>
-                        <field name="date_start"/>
-                        <field name="date_end"/>
-                        <field name="brand_list" mode="tree">
-                            <tree string="Brands" editable="top">
-                                <field name="brand_id"/>
-                            </tree>
-                        </field>
-                    </group>
-                    <footer>
-                        <button name="search_order_price_changes" string="Search"
-                                type="object" class="oe_highlight"/>
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </footer>
-                </form>
-            </field>
-        </record>
+    <record id="order_check_prices_wizard_form" model="ir.ui.view">
+        <field name="name">order.check.prices.wizard.form</field>
+        <field name="model">order.check.prices.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form name="choose_period" string="Choose period">
+                <group>
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                    <field name="brand_list" mode="tree">
+                        <tree string="Brands" editable="top">
+                            <field name="brand_id"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button name="search_order_price_changes" string="Search"
+                            type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="action_review_changes_sale_price" model="ir.actions.act_window">
-            <field name="name">Order prices review</field>
-            <field name="res_model">order.check.prices.wizard</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="order_check_prices_wizard_form"/>
-            <field name="target">new</field>
-        </record>
+    <record id="action_review_changes_sale_price" model="ir.actions.act_window">
+        <field name="name">Order prices review</field>
+        <field name="res_model">order.check.prices.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="order_check_prices_wizard_form"/>
+        <field name="target">new</field>
+    </record>
 
-        <menuitem action="action_review_changes_sale_price" id="menu_review_changes_sale_prices"
-                  parent="base.next_id_64" sequence="100" groups="base.group_system"/>
+    <menuitem action="action_review_changes_sale_price" id="menu_review_changes_sale_prices"
+              parent="base.next_id_64" sequence="100" groups="base.group_system"/>
 
-
-    </data>
-</openerp>
+</odoo>

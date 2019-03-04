@@ -34,18 +34,18 @@ msgid "Order prices review"
 msgstr "Revisión precios pedidos"
 
 #. module: order_line_check_price
-#: view:order.check.prices.wizard:order_line_check_price.order_check_prices_wizard_form
+#: model:ir.ui.view,arch_db:order_line_check_price.order_check_prices_wizard_form
 msgid "Search"
 msgstr "Buscar"
 
 #. module: order_line_check_price
-#: view:order.check.prices.wizard:order_line_check_price.order_check_prices_wizard_form
-#: view:order.check.prices.wizard:order_line_check_price.order_check_prices_wizard_form_warning
+#: model:ir.ui.view,arch_db:order_line_check_price.order_check_prices_wizard_form
+#: model:ir.ui.view,arch_db:order_line_check_price.order_check_prices_wizard_form_warning
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: order_line_check_price
-#: view:order.check.prices.wizard:order_line_check_price.order_check_prices_wizard_form_warning
+#: model:ir.ui.view,arch_db:order_line_check_price.order_check_prices_wizard_form_warning
 msgid "View changes"
 msgstr "Ver cambios"
 
@@ -62,22 +62,22 @@ msgid "Check price changes"
 msgstr "Comprobar cambios en precios"
 
 #. module: order_line_check_price
-#: field:order.check.prices.wizard,date_start:0
+#: model:ir.model.fields,field_description:order_line_check_price.field_order_check_prices_wizard_date_start
 msgid "Date start"
 msgstr "Fecha inicio"
 
 #. module: order_line_check_price
-#: field:order.check.prices.wizard,date_end:0
+#: model:ir.model.fields,field_description:order_line_check_price.field_order_check_prices_wizard_date_end
 msgid "Date end"
 msgstr "Fecha fin"
 
 #. module: order_line_check_price
-#: field:order.check.prices.wizard,brand_list:0
+#: model:ir.model.fields,field_description:order_line_check_price.field_order_check_prices_wizard_brand_list
 msgid "Brands"
 msgstr "Marcas"
 
 #. module: order_line_check_price
-#: field:order.check.prices.wizard.brands,brand_id:0
+#: model:ir.model.fields,field_description:order_line_check_price.field_order_check_prices_wizard_brands_brand_id
 msgid "Brand"
 msgstr "Marca"
 
