@@ -31,6 +31,7 @@
     "depends": ['base',
                 'sale',
                 'customer_area',
+                'product_weight_net',
                 'stock',],
     "data": ['security/ir.model.access.csv',
              'wizard/picking_tracking_status_view.xml',

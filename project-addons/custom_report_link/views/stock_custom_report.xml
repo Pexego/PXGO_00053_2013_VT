@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="stock_custom.report_picking_with_attachments">
+        <t t-foreach="docs" t-as="o">
+            <t t-if="o.partner_id.valued_picking">
+                <t t-call="stock.report_picking_custom_valued"></t>
+            </t>
+            <t t-if="not o.partner_id.valued_picking">
+                <t t-call="stock.report_picking_custom"></t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -17,11 +17,10 @@
                     <field name="partner_ref"/>
                     <field name="partner_id"/>
                     <field name="partner_pricelist"/>
-                    <!-- TODO -> depende de custom_partner
                     <field name="partner_annual_invoiced"/>
                     <field name="partner_monthly_invoiced"/>
                     <field name="partner_past_year_invoiced"/>
-                    <field name="partner_past_month_invoiced"/>-->
+                    <field name="partner_past_month_invoiced"/>
                     <field name="user_id"/>
                     <field name="description"/>
                     <field name="salesperson_select"/>

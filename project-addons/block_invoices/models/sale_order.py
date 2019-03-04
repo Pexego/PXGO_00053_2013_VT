@@ -66,7 +66,7 @@ class SaleOrder(models.Model):
                             'lines.') % partner.name
             elif partner.defaulter:
                 message = _('Defaulter customer! Please contact the accounting department.')
-            elif partner.customer_payment_mode.name == 'Recibo domiciliado' and \
+            elif partner.customer_payment_mode_id.name == 'Recibo domiciliado' and \
                     len(partner.bank_ids) == 0:
                 message = _('Order blocked. The client has not bank account.')
 
@@ -77,4 +77,4 @@ class SaleOrder(models.Model):
             message = _('Order blocked. The accounting department must approve this order.')
             raise exceptions.Warning(message)
 
-        return super().action_button_confirm()
+        return super()._action_confirm()

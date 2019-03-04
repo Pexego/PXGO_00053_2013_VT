@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_custom_document">
+        <t t-call="custom_report_link.external_layout_custom_saleorder">
+            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.lang})" />
+            <div class="page">
+                <div class="oe_structure" />
+                <div class="row">
+                    <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
+                        <thead>
+                            <tr style="background-color:#A61D34; color:white;">
+                                <th width="15%" style="vertical-align:middle;">
+                                    <strong>Reference</strong>
+                                </th>
+                                <th width="40%" style="vertical-align:middle;">
+                                    <strong>Description</strong>
+                                </th>
+                                <th width="7%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Quantity</strong>
+                                </th>
+                                <th width="10%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Unit Price</strong>
+                                </th>
+                                <th width="8%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Discount</strong>
+                                </th>
+                                <th width="10%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Unit Cost</strong>
+                                </th>
+                                <th width="10%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Amount</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody" style="color:6D6E70;">
+                            <tr t-foreach="o.order_line" t-as="l">
+                                <td>
+                                    <span t-field="l.product_id.product_tmpl_id.name" />
+                                </td>
+                                <td style="font-size:10px">
+                                    <t t-if="l.product_id">
+                                        <span t-field="l.product_id.product_tmpl_id.description_sale" />
+                                    </t>
+                                    <t t-if="not l.product_id">
+                                        <span t-field="l.name" />
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.0f'% l.product_uom_qty" />
+                                    <span groups="product.group_uom" t-field="l.product_uom" />
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="l.price_unit" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                </td>
+                                <td class="text-center" groups="sale.group_discount_per_so_line">
+                                    <span t-esc="'%.1f'% l.discount" /> %
+
+                                </td>
+                                <td class="text-center">
+                                    <t t-if="l.discount">
+                                        <span t-esc="(l.price_unit*(1-(l.discount/100)))" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                    </t>
+                                    <t t-if="not l.discount">
+                                        <span t-field="l.price_unit" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                    </t>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="l.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="oe_structure" />
+            </div>
+        </t>
+    </template>
+
+    <template id="report_saleorder_custom">
+       <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="custom_report_link.report_saleorder_custom_document" t-lang="doc.partner_id.lang" />
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_report_saleorder"
+        string="Quotation / Order Custom 11"
+        model="sale.order"
+        report_type="qweb-pdf"
+        file="custom_report_link.report_saleorder_custom"
+        name="custom_report_link.report_saleorder_custom"
+        print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+    />
+
+    <record id="action_report_saleorder" model="ir.actions.report">
+        <field name="paperformat_id" ref="custom_report_link.paperformat_sale"/>
+    </record>
+
+
+    <template id="report_orderdeposit_custom_document">
+        <t t-call="custom_report_link.external_layout_custom_orderdeposit">
+            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.lang})" />
+            <div class="page">
+                <div class="oe_structure"/>
+                <div class="row">
+                    <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
+                        <thead>
+                            <tr style="background-color:#A61D34; color:white;">
+                                <th width="15%" style="vertical-align:middle;">
+                                    <strong>Reference</strong>
+                                </th>
+                                <th width="40%" style="vertical-align:middle;">
+                                    <strong>Description</strong>
+                                </th>
+                                <th width="7%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Quantity</strong>
+                                </th>
+                                <th width="10%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Unit Price</strong>
+                                </th>
+                                <th width="8%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Discount</strong>
+                                </th>
+                                <th width="10%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Unit Cost</strong>
+                                </th>
+                                <th width="10%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Amount</strong>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody" style="color:6D6E70;">
+                            <tr t-foreach="o.order_line" t-as="l">
+                                <t t-if="l.deposit">
+                                    <td>
+                                        <span t-field="l.product_id.product_tmpl_id.name"/>
+                                    </td>
+                                    <td style="font-size:10px">
+                                        <span t-field="l.product_id.product_tmpl_id.description_sale"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-esc="'%.0f'% l.product_uom_qty"/>
+                                        <span groups="product.group_uom" t-field="l.product_uom"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="l.price_unit" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                    </td>
+                                    <td class="text-center" groups="sale.group_discount_per_so_line">
+                                        <span t-esc="'%.1f'% l.discount"/>
+        %
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-if="l.discount">
+                                            <span t-esc="(l.price_unit*(1-(l.discount/100)))" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                        </t>
+                                        <t t-if="not l.discount">
+                                            <span t-field="l.price_unit" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                        </t>
+                                    </td>
+                                    <td class="text-center">
+                                        <t t-if="valued_report">
+                                            <span t-esc="(l.product_uom_qty*l.price_unit*(1-(l.discount/100)))" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                        </t>
+                                        <t t-if="not valued_report">
+                                            <span t-field="l.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                        </t>
+
+                                    </td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="oe_structure"/>
+            </div>
+        </t>
+
+    </template>
+
+    <template id="report_orderdeposit_custom">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="custom_report_link.report_orderdeposit_custom_document" t-lang="doc.partner_id.lang" />
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_report_orderdeposit_custom"
+        string="Depósito 11"
+        model="sale.order"
+        report_type="qweb-pdf"
+        file="custom_report_link.report_orderdeposit_custom"
+        name="custom_report_link.report_orderdeposit_custom"
+        print_report_name="'Deposito_%s' % object.name"
+    />
+
+    <record id="action_report_orderdeposit_custom" model="ir.actions.report">
+        <field name="paperformat_id" ref="custom_report_link.paperformat_sale"/>
+    </record>
+
+
+    <template id="report_orderdeposit_custom">
+        <t t-call="web.html_container">
+            <t t-set="valued_report" t-value="False"/>
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="custom_report_link.report_orderdeposit_custom_document" t-lang="doc.partner_id.lang" />
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_report_orderdeposit_custom"
+        string="Depósito 11"
+        model="sale.order"
+        report_type="qweb-pdf"
+        file="custom_report_link.report_orderdeposit_custom"
+        name="custom_report_link.report_orderdeposit_custom"
+        print_report_name="'Deposito_%s' % object.name"
+    />
+
+    <record id="action_report_orderdeposit_custom" model="ir.actions.report">
+        <field name="paperformat_id" ref="custom_report_link.paperformat_sale"/>
+    </record>
+
+
+    <template id="report_orderdeposit_custom_valued">
+        <t t-call="web.html_container">
+            <t t-set="valued_report" t-value="True"/>
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="custom_report_link.report_orderdeposit_custom_document" t-lang="doc.partner_id.lang" />
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_report_orderdeposit_custom_valued"
+        string="Depósito valorado 11"
+        model="sale.order"
+        report_type="qweb-pdf"
+        file="custom_report_link.report_orderdeposit_custom_valued"
+        name="custom_report_link.report_orderdeposit_custom_valued"
+        print_report_name="'Deposito_%s' % object.name"
+    />
+
+    <record id="action_report_orderdeposit_custom_valued" model="ir.actions.report">
+        <field name="paperformat_id" ref="custom_report_link.paperformat_sale"/>
+    </record>
+</odoo>

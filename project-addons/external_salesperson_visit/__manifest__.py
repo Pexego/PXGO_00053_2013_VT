@@ -29,9 +29,8 @@
     'depends': ['base',
                 'mail',
                 'crm',
-                'customer_area'
-                # TODO
-                # 'custom_partner',
+                'customer_area',
+                'custom_partner',
                 ],
     'data': ['views/partner_visit_view.xml',
              'data/email_template.xml',
