@@ -102,9 +102,9 @@ class SaleOrder(models.Model):
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        res = super().onchange_partner_id()
-        if self.partner_id and res.get('value', False):
-            self.partner_tags = [(6, 0, [self.partner_id.category_id.ids])]
+        super().onchange_partner_id()
+        if self.partner_id:
+            self.partner_tags = [(6, 0, self.partner_id.category_id.ids)]
             if self.partner_id.team_id:
                 self.team_id = self.partner_id.team_id.id
 
