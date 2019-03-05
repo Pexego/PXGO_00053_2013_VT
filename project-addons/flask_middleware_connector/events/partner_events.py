@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -18,9 +17,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp.addons.connector.event import on_record_create, on_record_write, \
-    on_record_unlink
-from openerp.addons.connector.queue.job import job
 from .utils import _get_exporter
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
@@ -29,6 +25,11 @@ from .rma_events import unlink_rma, unlink_rmaproduct, export_rma, export_rmapro
 from .invoice_events import unlink_invoice, export_invoice
 from .picking_events import export_picking, unlink_picking, export_pickingproduct, unlink_pickingproduct
 from .order_events import export_order, update_order, unlink_order, export_orderproduct, unlink_orderproduct
+
+from odoo.addons.component.core import Component
+from odoo.addons.component_event import skip_if
+from odoo.addons.queue_job.job import job
+from odoo import models
 
 @middleware
 class PartnerExporter(Exporter):

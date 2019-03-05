@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -19,17 +18,14 @@
 #
 ##############################################################################
 
-from openerp import models, api, SUPERUSER_ID
+from odoo import models, api, SUPERUSER_ID
 from ..events.product_events import on_stock_move_change
-from openerp.addons.connector.event import (on_record_create,
-                    on_record_write,
-                    on_record_unlink)
 from openerp.addons.connector.session import ConnectorSession
 
 
 class StockMove(models.Model):
 
-    _inherit = "stock.move"
+    _inherit = 'stock.move'
 
     #TODO: Debería ser al asignar un producto, al cancelarlo, al finalizarlo y al eliminar la reserve
     @api.multi
@@ -46,8 +42,7 @@ class StockMove(models.Model):
                 session = ConnectorSession(self.env.cr, SUPERUSER_ID,
                                            context=self.env.context)
                 if move.picking_id.id not in picking_done:
-                    on_record_write.fire(session, 'stock.picking',
-                                         move.picking_id.id, vals_picking)
+                    self._event('on_record_write').notify(res, fields=vals_picking.keys())
                     picking_done.append(move.picking_id.id)
 
             if vals.get('state', False) and vals["state"] != "draft":
