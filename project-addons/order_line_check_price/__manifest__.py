@@ -12,9 +12,10 @@
     "depends": [
         'base',
         'sale',
-        'purchase_proposal'
+        'product_brand'
     ],
     "data": [
-        'wizard/order_check_prices_wizard_view.xml'
+        'wizard/order_check_prices_wizard_view.xml',
+        'data/parameters.xml'
     ],
 }
