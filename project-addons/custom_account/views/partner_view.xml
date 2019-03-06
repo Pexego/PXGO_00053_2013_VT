@@ -79,6 +79,19 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="view_partner_form_add_risk_comment">
+            <field name="name">res.partner.form.risk_insurance</field>
+            <field name="model">res.partner</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="partner_risk_insurance.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="risk_insurance_coverage_percent" position="after">
+                    <field name="risk_insurance_comment" attrs="{'readonly':[('is_accounting','!=',True)]}" />
+                    <field name="is_accounting" invisible="1" />
+                </field>
+            </field>
+        </record>
+
         <record id="view_partner_form_add_required_payment_term" model="ir.ui.view">
             <field name="name">res.partner.form.add_required_payment_term</field>
             <field name="model">res.partner</field>

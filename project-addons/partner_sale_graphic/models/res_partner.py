@@ -53,9 +53,7 @@ class ResPartner(models.Model):
             end_month_seconds = time.mktime(month_period[1].timetuple())
             total_sale = self.env['sale.order'].read_group(
                 [('partner_id', 'child_of', self.id),
-                 ('state', 'not in', ['draft', 'sent', 'cancel', 'reserve',
-                                      'waiting_date', 'wait_risk',
-                                      'risk_approval']),
+                 ('state', 'not in', ['draft', 'sent', 'cancel', 'reserve']),
                  ('date_order', '>=', start_month),
                  ('date_order', '<=', end_month_str)],
                 ['amount_untaxed', 'partner_id'], ['partner_id'])
@@ -96,9 +94,7 @@ class ResPartner(models.Model):
             partner_ids = self.env['sale.order'].read_group(
                 [('date_order', '>=', first_date),
                  ('date_order', '<=', last_date),
-                 ('state', 'not in', ['draft', 'sent', 'cancel', 'reserve',
-                                      'waiting_date', 'wait_risk',
-                                      'risk_approval'])],
+                 ('state', 'not in', ['draft', 'sent', 'cancel', 'reserve'])],
                 ["partner_id"], groupby="partner_id")
             partners = self.browse([x["partner_id"][0] for x in partner_ids])
             partners = partners.mapped('commercial_partner_id')
