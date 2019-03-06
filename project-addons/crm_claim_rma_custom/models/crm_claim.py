@@ -265,6 +265,7 @@ class CrmClaimRma(models.Model):
 
             invoice_id.write({'origin_invoices_ids': [(6, 0, list(set(rectified_invoice_ids)))]})
             invoice_id.button_reset_taxes()
+            invoice_id.signal_workflow('invoice_open')
 
             data_pool = self.env['ir.model.data']
             action_id = data_pool.xmlid_to_res_id('account.action_invoice_tree3')

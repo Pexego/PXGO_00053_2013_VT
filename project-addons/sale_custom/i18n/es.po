@@ -54,3 +54,25 @@ msgstr "Por favor, valide la dirección de envío."
 #, python-format
 msgid "Please, introduce a shipping cost line."
 msgstr "Por favor, introduzca una línea de gastos de envío."
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_sales_partner
+msgid "Risk Information"
+msgstr "Riesgo Cliente"
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_sales_partner
+msgid "Warnings"
+msgstr "Avisos"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:108
+#, python-format
+msgid "Partner Risk Information"
+msgstr "Información del riesgo contable de una empresa"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:91
+#, python-format
+msgid "Warnings"
+msgstr "Avisos"
