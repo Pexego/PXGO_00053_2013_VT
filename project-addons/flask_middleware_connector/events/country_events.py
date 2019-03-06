@@ -57,7 +57,7 @@ class CountryListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['res.country']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         record.with_delay(priority=1).export_country()
 
     def on_record_write(self, record, fields=None):
@@ -78,6 +78,7 @@ class ResCountry(models.Model):
         # country_exporter = _get_exporter(session, model_name, record_id,
         #                                  CountryExporter)
         # return country_exporter.update(record_id, "insert")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
@@ -85,6 +86,7 @@ class ResCountry(models.Model):
         # country_exporter = _get_exporter(session, model_name, record_id,
         #                                  CountryExporter)
         # return country_exporter.update(record_id, "update")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
@@ -92,8 +94,9 @@ class ResCountry(models.Model):
         # country_exporter = _get_exporter(session, model_name, record_id,
         #                                  CountryExporter)
         # return country_exporter.delete(record_id)
+        return True
 
-
+# TODO: Migrar parte del adapter
 # @middleware
 # class CountryStateExporter(Exporter):
 #
@@ -119,12 +122,13 @@ class ResCountry(models.Model):
 #     _model_name = 'res.country.state'
 #     _middleware_model = 'countrystate'
 
+
 class CountryStateListener(Component):
     _name = 'country.state.event.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['res.country.state']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         record.with_delay(priority=1).export_country_state()
 
     def on_record_write(self, record, fields=None):
@@ -137,6 +141,7 @@ class CountryStateListener(Component):
     def on_record_unlink(self, record):
         record.with_delay(priority=5).unlink_country_state()
 
+
 class ResCountryState(models.Model):
     _inherit = 'res.country.state'
 
@@ -144,15 +149,16 @@ class ResCountryState(models.Model):
     def export_country_state(self):
         # country_state_exporter = _get_exporter(session, model_name, record_id, CountryStateExporter)
         # return country_state_exporter.update(record_id, "insert")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_country_state(self, fields):
         # country_state_exporter = _get_exporter(session, model_name, record_id, CountryStateExporter)
         # return country_state_exporter.update(record_id, "update")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_country_state(self):
         # country_state_exporter = _get_exporter(session, model_name, record_id, CountryStateExporter)
         # return country_state_exporter.delete(record_id)
+        return True

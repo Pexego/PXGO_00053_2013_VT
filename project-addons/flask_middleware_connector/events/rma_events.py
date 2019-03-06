@@ -27,8 +27,6 @@ from odoo.addons.component_event import skip_if
 from odoo.addons.queue_job.job import job
 from odoo import models
 
-import urllib2
-
 
 # @middleware
 # class RmaExporter(Exporter):
@@ -70,12 +68,13 @@ class CrmClaimListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['crm.claim']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         if record.partner_id and record.partner_id.web:
             record.with_delay(priority=1).export_rma()
 
     def on_record_write(self, record, fields):
         rma = record
+        model_name = 'crm.claim'
         up_fields = ["date", "date_received", "delivery_type", "delivery_address_id",
                      "partner_id", "stage_id", "number", "name"]
         job = self.env['queue.job'].sudo().search([('func_string', 'like', '%, ' + str(rma.id) + ')%'),
@@ -104,18 +103,21 @@ class CrmClaim(models.Model):
     def export_rma(self):
         # rma_exporter = _get_exporter(session, model_name, record_id, RmaExporter)
         # return rma_exporter.update(record_id, "insert")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_rma(self, fields):
         # rma_exporter = _get_exporter(session, model_name, record_id, RmaExporter)
         # return rma_exporter.update(record_id, "update")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_rma(self):
         # rma_exporter = _get_exporter(session, model_name, record_id, RmaExporter)
         # return rma_exporter.delete(record_id)
+        return True
 
 
 # Lanzadores para lineas de reclamacion en lineas, reclamaciones y albaranes.
@@ -164,7 +166,7 @@ class ClaimLineListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['claim.line']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         if record.claim_id.partner_id.web and \
                 (not record.equivalent_product_id) and \
                 record.web:
@@ -197,6 +199,7 @@ class ClaimLine(models.Model):
         # rmaproduct_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaProductExporter)
         # return rmaproduct_exporter.update(record_id, "insert")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
@@ -204,6 +207,7 @@ class ClaimLine(models.Model):
         # rmaproduct_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaProductExporter)
         # return rmaproduct_exporter.update(record_id, "update")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
@@ -211,6 +215,7 @@ class ClaimLine(models.Model):
         # rmaproduct_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaProductExporter)
         # return rmaproduct_exporter.delete(record_id)
+        return True
 
 
 
@@ -244,7 +249,7 @@ class SubstateListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['substate.substate']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         record.with_delay(priority=1).export_rma_status()
 
     def on_record_write(self, record, fields=None):
@@ -266,6 +271,7 @@ class SubstateSubstate(models.Model):
         # rma_status_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaStatusExporter)
         # return rma_status_exporter.update(record_id, "insert")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
@@ -273,6 +279,7 @@ class SubstateSubstate(models.Model):
         # rma_status_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaStatusExporter)
         # return rma_status_exporter.update(record_id, "update")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
@@ -280,6 +287,7 @@ class SubstateSubstate(models.Model):
         # rma_status_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaStatusExporter)
         # return rma_status_exporter.delete(record_id)
+        return True
 
 
 # @middleware
@@ -313,7 +321,7 @@ class ClaimStageListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['crm.claim.stage']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         record.with_delay(priority=1).export_rma_stage()
 
     def on_record_write(self, record, fields=None):
@@ -334,6 +342,7 @@ class CrmClaimStage(models.Model):
         # rma_stage_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaStageExporter)
         # return rma_stage_exporter.update(record_id, "insert")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
@@ -341,6 +350,7 @@ class CrmClaimStage(models.Model):
         # rma_stage_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaStageExporter)
         # return rma_stage_exporter.update(record_id, "update")
+        return True
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
@@ -348,3 +358,4 @@ class CrmClaimStage(models.Model):
         # rma_stage_exporter = _get_exporter(session, model_name, record_id,
         #                                     RmaStageExporter)
         # return rma_stage_exporter.delete(record_id)
+        return True

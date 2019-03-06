@@ -47,12 +47,13 @@ from odoo import models
 #     _model_name = 'res.users'
 #     _middleware_model = 'commercial'
 
+
 class CommercialListener(Component):
     _name = 'commercial.event.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['res.users']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         if record.web:
             record.with_delay(priority=1).export_commercial()
 
@@ -71,6 +72,7 @@ class CommercialListener(Component):
     def on_record_unlink(self, record):
         record.with_delay(priority=100).unlink_commercial()
 
+
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
@@ -79,17 +81,18 @@ class ResUsers(models.Model):
         # commercial_exporter = _get_exporter(session, model_name, record_id,
         #                                  CommercialExporter)
         # return commercial_exporter.update(record_id, "insert")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_commercial(self, fields):
         # commercial_exporter = _get_exporter(session, model_name, record_id,
         #                                  CommercialExporter)
         # return commercial_exporter.update(record_id, "update")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_commercial(self):
         # commercial_exporter = _get_exporter(session, model_name, record_id,
         #                                  CommercialExporter)
         # return commercial_exporter.delete(record_id)
+        return True

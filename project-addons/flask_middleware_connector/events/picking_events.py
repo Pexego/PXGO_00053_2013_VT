@@ -73,7 +73,7 @@ class PickingListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['stock.picking']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         picking = record
         if picking.partner_id.commercial_partner_id.web \
                 and picking.partner_id.commercial_partner_id.active \
@@ -128,6 +128,7 @@ class PickingListener(Component):
                 product.with_delay(priority=1, eta=120).unlink_pickingproduct()
             record.with_delay(priority=5, eta=120).unlink_picking()
 
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
 
@@ -136,22 +137,23 @@ class StockPicking(models.Model):
         # picking_exporter = _get_exporter(session, model_name, record_id,
         #                                  PickingExporter)
         # return picking_exporter.update(record_id, "insert")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_picking(self, fields):
         # picking_exporter = _get_exporter(session, model_name, record_id,
         #                                  PickingExporter)
         # return picking_exporter.update(record_id, "update")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_picking(self):
         # picking_exporter = _get_exporter(session, model_name, record_id,
         #                                  PickingExporter)
         # return picking_exporter.delete(record_id)
+        return True
 
-
+# TODO: Migrar parte del adapter
 # @middleware
 # class PickingProductExporter(Exporter):
 #
@@ -180,12 +182,13 @@ class StockPicking(models.Model):
 #     _model_name = 'stock.move'
 #     _middleware_model = 'pickingproduct'
 
+
 class StockMoveListener(Component):
     _name = 'stock.move.event.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['stock.move']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         move_line = record
         if move_line.picking_id.partner_id.commercial_partner_id.web \
                 and move_line.picking_id.partner_id.commercial_partner_id.active \
@@ -215,6 +218,7 @@ class StockMoveListener(Component):
                 and move_line.picking_id.company_id.id == 1:
             record.with_delay(priority=5, eta=240).unlink_pickingproduct()
 
+
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
@@ -223,17 +227,18 @@ class StockMove(models.Model):
         # picking_product_exporter = _get_exporter(session, model_name, record_id,
         #                                          PickingProductExporter)
         # return picking_product_exporter.update(record_id, "insert")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_pickingproduct(self, fields):
         # picking_product_exporter = _get_exporter(session, model_name, record_id,
         #                                          PickingProductExporter)
         # return picking_product_exporter.update(record_id, "update")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_pickingproduct(self):
         # picking_product_exporter = _get_exporter(session, model_name, record_id,
         #                                          PickingProductExporter)
         # return picking_product_exporter.delete(record_id)
+        return True

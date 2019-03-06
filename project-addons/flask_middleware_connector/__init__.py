@@ -20,6 +20,6 @@
 
 # from . import connector TODO: migrar
 # from . import backend TODO: migrar
-from . import events
 from . import models
+from . import events
 from . import wizard

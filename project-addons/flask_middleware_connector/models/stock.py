@@ -19,8 +19,8 @@
 ##############################################################################
 
 from odoo import models, api, SUPERUSER_ID
-from ..events.product_events import on_stock_move_change
-from openerp.addons.connector.session import ConnectorSession
+#from ..events.product_events import on_stock_move_change
+#from openerp.addons.connector.session import ConnectorSession
 
 
 class StockMove(models.Model):
@@ -39,15 +39,11 @@ class StockMove(models.Model):
                     vals_picking = {'state': vals['state']}
                 else:
                     vals_picking = {'state': move.picking_id.state}
-                session = ConnectorSession(self.env.cr, SUPERUSER_ID,
-                                           context=self.env.context)
                 if move.picking_id.id not in picking_done:
-                    self._event('on_record_write').notify(res, fields=vals_picking.keys())
+                    self._event('on_record_write').notify(self, fields=vals_picking.keys())
                     picking_done.append(move.picking_id.id)
 
-            if vals.get('state', False) and vals["state"] != "draft":
-                session = ConnectorSession(self.env.cr, SUPERUSER_ID,
-                                           context=self.env.context)
-                on_stock_move_change.fire(session, 'stock.move',
-                                          move.id)
+            # if vals.get('state', False) and vals["state"] != "draft":
+                # on_stock_move_change.fire(session, 'stock.move',
+                #                           move.id)
         return res

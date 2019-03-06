@@ -59,7 +59,7 @@ class RappelListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['rappel']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         record.with_delay(priority=1, eta=60).export_rappel()
 
     def on_record_write(self, record, fields=None):
@@ -71,6 +71,7 @@ class RappelListener(Component):
     def on_record_unlink(self, record):
         record.with_delay(priority=3, eta=120).unlink_rappel()
 
+
 class Rappel(models.Model):
     _inherit = 'rappel'
 
@@ -78,20 +79,21 @@ class Rappel(models.Model):
     def export_rappel(self):
         # rappel_exporter = _get_exporter(session, model_name, record_id, RappelExporter)
         # return rappel_exporter.update(record_id, "insert")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_rappel(self, fields):
         # rappel_exporter = _get_exporter(session, model_name, record_id, RappelExporter)
         # return rappel_exporter.update(record_id, "update")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_rappel(self):
         # rappel_exporter = _get_exporter(session, model_name, record_id, RappelExporter)
         # return rappel_exporter.delete(record_id)
+        return True
 
-
+# TODO: Migrar parte del adapter
 # @middleware
 # class RappelInfoExporter(Exporter):
 #
@@ -121,12 +123,13 @@ class Rappel(models.Model):
 #     _model_name = 'rappel.current.info'
 #     _middleware_model = 'rappelcustomerinfo'
 
+
 class RappelInfoListener(Component):
     _name = 'rappel.info.event.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['rappel.current.info']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         if record.partner_id.commercial_partner_id.web:
             record.with_delay(priority=1, eta=60).export_rappel_info()
 
@@ -138,6 +141,7 @@ class RappelInfoListener(Component):
         if record.partner_id.commercial_partner_id.web:
             record.with_delay(priority=3, eta=120).unlink_rappel_info()
 
+
 class RappelInfo(models.Model):
     _inherit = 'rappel.current.info'
 
@@ -145,19 +149,21 @@ class RappelInfo(models.Model):
     def export_rappel_info(self):
         # rappel_info_exporter = _get_exporter(session, model_name, record_id, RappelInfoExporter)
         # return rappel_info_exporter.update(record_id, "insert")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_rappel_info(self, fields):
         # rappel_info_exporter = _get_exporter(session, model_name, record_id, RappelInfoExporter)
         # return rappel_info_exporter.update(record_id, "update")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_rappel_info(self):
         # rappel_info_exporter = _get_exporter(session, model_name, record_id, RappelInfoExporter)
         # return rappel_info_exporter.delete(record_id)
+        return True
 
+# TODO: Migrar parte del adapter
 # @middleware
 # class RappelSectionExporter(Exporter):
 #
@@ -185,12 +191,13 @@ class RappelInfo(models.Model):
 #     _model_name = 'rappel.section'
 #     _middleware_model = 'rappelsection'
 
+
 class RappelSectionListener(Component):
     _name = 'rappel.section.event.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['rappel.section']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         record.with_delay(priority=1, eta=60).export_rappel_section()
 
     def on_record_write(self, record, fields=None):
@@ -207,14 +214,17 @@ class RappelSection(models.Model):
     def export_rappel_section(self):
         # rappel_section_exporter = _get_exporter(session, model_name, record_id, RappelSectionExporter)
         # return rappel_section_exporter.update(record_id, "insert")
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_rappel_section(self, fields):
         # rappel_section_exporter = _get_exporter(session, model_name, record_id, RappelSectionExporter)
         # return rappel_section_exporter.update(record_id, "update")
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_rappel_section(self):
         # rappel_section_exporter = _get_exporter(session, model_name, record_id, RappelSectionExporter)
         # return rappel_section_exporter.delete(record_id)
+        return True
 

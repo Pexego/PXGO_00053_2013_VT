@@ -67,23 +67,25 @@ from odoo import models
 #     _model_name = 'sale.order'
 #     _middleware_model = 'order'
 
+
 class SaleOrderListener(Component):
     _name = 'sale.order.event.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['sale.order']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         if record.partner_id.web or record.partner_id.commercial_partner_id.web:
             record.with_delay(priority=2, eta=80).export_order()
 
     def on_record_write(self, record, fields=None):
-        #He cogido order_line porque no entra amount_total ni amount_untaxed en el write
+        # He cogido order_line porque no entra amount_total ni amount_untaxed en el write
         up_fields = ["name", "state", "partner_id", "date_order", "client_order_ref",
                      "order_line", "partner_shipping_id", "delivery_type"]
+        model_name = 'sale.order'
         if record.partner_id.web or record.partner_id.commercial_partner_id.web:
             job = self.env['queue.job'].sudo().search([('func_string', 'like', '%, ' + str(record.id) + ')%'),
-                                                          ('model_name', '=', model_name)],
-                                                         order='date_created desc, id desc', limit=1)
+                                                      ('model_name', '=', model_name)],
+                                                      order='date_created desc, id desc', limit=1)
             if 'state' in fields and record.state == 'cancel':
                 record.with_delay(priority=7, eta=80).unlink_order()
             elif 'state' in fields and record.state in ('draft', 'reserve') and job.name and 'unlink' in job.name:
@@ -100,6 +102,7 @@ class SaleOrderListener(Component):
         if record.partner_id.web or record.partner_id.commercial_partner_id.web:
             record.with_delay(priority=7, eta=180).unlink_order()
 
+
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -108,21 +111,23 @@ class SaleOrder(models.Model):
         # order_exporter = _get_exporter(session, model_name, record_id,
         #                                OrderExporter)
         # return order_exporter.update(record_id, "insert")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_order(self, fields):
         # order_exporter = _get_exporter(session, model_name, record_id,
         #                                OrderExporter)
         # return order_exporter.update(record_id, "update")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_order(self):
         # order_exporter = _get_exporter(session, model_name, record_id,
         #                                OrderExporter)
         # return order_exporter.delete(record_id)
+        return True
 
+# TODO: Migrar parte del adapter
 # @middleware
 # class OrderProductExporter(Exporter):
 #
@@ -154,12 +159,13 @@ class SaleOrder(models.Model):
 #     _model_name = 'sale.order.line'
 #     _middleware_model = 'orderproduct'
 
+
 class SaleOrderLineListener(Component):
     _name = 'sale.order.line.event.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['sale.order.line']
 
-    def on_record_create(self, record):
+    def on_record_create(self, record, fields=None):
         if record.order_id.partner_id.web or record.order_id.partner_id.commercial_partner_id.web:
             record.with_delay(priority=2, eta=120).export_orderproduct()
 
@@ -177,6 +183,7 @@ class SaleOrderLineListener(Component):
         if record.order_id.partner_id.web or record.order_id.partner_id.commercial_partner_id.web:
             record.with_delay(priority=7, eta=180).unlink_orderproduct()
 
+
 class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
@@ -185,18 +192,19 @@ class SaleOrderLine(models.Model):
         # orderproduct_exporter = _get_exporter(session, model_name, record_id,
         #                                       OrderProductExporter)
         # return orderproduct_exporter.update(record_id, "insert")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_orderproduct(self, fields):
         # orderproduct_exporter = _get_exporter(session, model_name, record_id,
         #                                       OrderProductExporter)
         # return orderproduct_exporter.update(record_id, "update")
-
+        return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_orderproduct(self):
         # orderproduct_exporter = _get_exporter(session, model_name, record_id,
         #                                       OrderProductExporter)
         # return orderproduct_exporter.delete(record_id)
+        return True
 

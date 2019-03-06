@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-import openerp.addons.connector.backend as backend
+# import openerp.addons.connector.backend as backend
 
 middleware = backend.Backend('middleware')
 

@@ -18,8 +18,8 @@
 #
 ##############################################################################
 
-from openerp import models, fields
-from openerp.addons.connector.connector import ConnectorEnvironment
+from odoo import models, fields
+# from openerp.addons.connector.connector import ConnectorEnvironment
 
 
 def get_environment(session, model_name, backend_id):
