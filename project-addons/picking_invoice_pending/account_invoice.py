@@ -84,7 +84,7 @@ class AccountInvoice(models.Model):
                 # ~ for picking in pick_ids:
                     # ~ lines_to_reconcile = self.env['account.move.line']
                     # ~ if picking.pending_invoice_move_id:
-                        # ~ date = (inv.registration_date or
+                        # ~ date = (inv.date or
                                 # ~ inv.date_invoice or time.strftime('%Y-%m-%d'))
                         # ~ acc_id = inv.company_id.\
                             # ~ property_pending_supplier_invoice_account.id
