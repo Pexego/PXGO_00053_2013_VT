@@ -102,11 +102,30 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <field name="partner_shipping_id" position="after">
-                <field name="validated_dir" invisible="1"/>
-                <button name="validate_address"
+                <label for="validated_dir" string=" "/>
+                <div>
+                    <field name="validated_dir" invisible="1"/>
+                    <button name="validate_address"
                         string="Validate address" type="object"
                         class="oe_highlight"
                         attrs="{'invisible': [('validated_dir', '=', True)]}"/>
+                </div>
+            </field>
+            <field name="payment_term_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="payment_mode_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="fiscal_position_id" position="before">
+                <field name="payment_term_id"/>
+                <field name="payment_mode_id"/>
+            </field>
+            <field name="client_order_ref" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="pricelist_id" position="before">
+                <field name="client_order_ref"/>
             </field>
         </field>
     </record>
