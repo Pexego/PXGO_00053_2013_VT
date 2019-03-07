@@ -6,13 +6,13 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <field name="company_id" position="after">
-                <group colspan="4" col="4" groups="test_management.group_test_manager">
+            <group name="sales_person" position="after">
+                <group col="4" groups="test_management.group_test_manager">
                     <field name="tests"/>
                     <button name="set_tests" type="object" string="Set" attrs="{'invisible': ['|',('tests', '=', True),('state', 'in', ['cancel'])]}" colspan="1"/>
                     <button name="unset_tests" type="object" string="Unset" attrs="{'invisible': ['|',('tests', '=', False),('state', 'in', ['cancel'])]}" colspan="1"/>
                 </group>
-            </field>
+            </group>
         </field>
     </record>
 

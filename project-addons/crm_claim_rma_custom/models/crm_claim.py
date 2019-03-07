@@ -153,13 +153,14 @@ class CrmClaimRma(models.Model):
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        super(CrmClaimRma, self).onchange_partner_id()
+        result = super().onchange_partner_id()
         if self.partner_id:
             self.delivery_address_id = self.partner_id
             self.team_id = self.partner_id.team_id   # Get team_id from res.partner
             self.country = self.partner_id.country_id    # Get country_id from res.partner
             if self.partner_id.user_id:
                 self.comercial = self.partner_id.user_id.id
+        return result
 
     @api.onchange('name')
     def onchange_name(self):
