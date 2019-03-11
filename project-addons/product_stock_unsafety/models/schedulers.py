@@ -1,31 +1,11 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-from openerp.osv import osv
-from openerp.tools.translate import _
-import openerp
-from openerp import api
+# © 2019 Comunitea
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import models, _, api, registry
+from psycopg2 import OperationalError
 
 
-class procurement_order(osv.Model):
-    _inherit = 'procurement.order'
+class ProcurementGroup(models.Model):
+    _inherit = 'procurement.group'
 
     @api.multi
     def update_under_minimum(self, vals):
@@ -53,8 +33,9 @@ class procurement_order(osv.Model):
                 stock_unsafety.create(vals)
         return
 
-    def _procure_orderpoint_confirm(self, cr, uid, use_new_cursor=False,
-                                    company_id=False, context=None):
+    @api.model
+    def _procure_orderpoint_confirm(
+            self, use_new_cursor=False, company_id=False):
         '''
         Create procurement based on Orderpoint
         :param bool use_new_cursor: if set, use a dedicated cursor and
@@ -66,21 +47,16 @@ class procurement_order(osv.Model):
          create a purchase, ast would by default,
          creates a under minimum model.
         '''
-        if context is None:
-            context = {}
         if use_new_cursor:
-            cr = openerp.registry(cr.dbname).cursor()
-        orderpoint_obj = self.pool.get('stock.warehouse.orderpoint')
-        pull_obj = self.pool.get('procurement.rule')
-        bom_obj = self.pool.get('mrp.bom')
+            cr = registry(self._cr.dbname).cursor()
+            self = self.with_env(self.env(cr=cr))
 
         dom = company_id and [('company_id', '=', company_id)] or []
-        orderpoint_ids = orderpoint_obj.search(cr, uid, dom)
-        prev_ids = []
-        while orderpoint_ids:
-            ids = orderpoint_ids[:100]
-            del orderpoint_ids[:100]
-            for op in orderpoint_obj.browse(cr, uid, ids, context=context):
+        orderpoints = self.env['stock.warehouse.orderpoint'].search(dom)
+        while orderpoints:
+            orderpoints_step = orderpoints[:100]
+            del orderpoints[:100]
+            for op in orderpoints_step:
                 prod = op.product_id
                 if not prod.active or prod.replacement_id:
                     continue
@@ -90,22 +66,17 @@ class procurement_order(osv.Model):
                 product_route_ids = \
                     [x.id for x in
                      prod.route_ids + prod.categ_id.total_route_ids]
-                rule_ids = pull_obj.search(cr, uid,
-                                           domain + [('route_id', 'in',
-                                                      product_route_ids)],
-                                           order='route_sequence, sequence',
-                                           context=context)
-                if rule_ids:
+                rule = self.env['procurement.rule'].search(
+                    domain + [('route_id', 'in', product_route_ids)],
+                    order='route_sequence, sequence', limit=1)
+                if rule:
                     seller = False
                     bom_id = False
                     delay = 0
-                    rule = pull_obj.browse(cr, uid, rule_ids[0],
-                                           context=context)
                     if rule.action == 'manufacture':
                         product_type = 'manufacture'
-                        bom_id = bom_obj._bom_find(cr, uid, product_id=prod.id,
-                                                   properties=[],
-                                                   context=context)
+                        bom_id = self.env['mrp.bom']._bom_find(
+                            product=prod)
                         if not bom_id:
                             state = 'exception'
                         else:
@@ -131,7 +102,7 @@ class procurement_order(osv.Model):
                             'name': _('Minimum Stock Days'),
                             'supplier_id': seller and seller.name.id or False,
                             'orderpoint_id': op.id,
-                            'responsible': uid,
+                            'responsible': self.env.user.id,
                             'state': state,
                             'min_days_id': op.min_days_id.id,
                             'bom_id': bom_id,
@@ -144,17 +115,19 @@ class procurement_order(osv.Model):
                             round(daylysales * remaining_days)
 
                     # Creating or updating existing under minimum
-                    self.update_under_minimum(cr, uid, ids, vals,
-                                              context=context)
+                    self.update_under_minimum(vals)
 
+        try:
             if use_new_cursor:
-                cr.commit()
-            if prev_ids == ids:
-                break
+                self.env.cr.commit()
+        except OperationalError:
+            if use_new_cursor:
+                self.env.cr.rollback()
+                return
             else:
-                prev_ids = ids
+                raise
 
         if use_new_cursor:
-            cr.commit()
-            cr.close()
+            self.env.cr.commit()
+            self.env.cr.close()
         return {}

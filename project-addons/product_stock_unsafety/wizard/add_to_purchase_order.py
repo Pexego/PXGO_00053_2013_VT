@@ -1,25 +1,6 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-
-from openerp import models, fields, api, _
+# © 2019 Comunitea
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import models, fields, api
 
 
 class AddToPurchaseOrderWzd(models.TransientModel):
@@ -28,46 +9,39 @@ class AddToPurchaseOrderWzd(models.TransientModel):
 
     @api.model
     def _get_manufacturer(self):
-        product_obj = self.env["product.product"]
-        product = product_obj.browse(self.env.context['active_ids'])
+        product = self.env["product.product"].browse(
+            self.env.context['active_ids'])
         return product.product_tmpl_id.manufacturer
 
     purchase_id = fields.Many2one("purchase.order", "Purchase")
     purchase_id_wt_manufacturer = fields.Many2one("purchase.order", "Purchase")
     custom_purchase_qty = fields.Boolean('Custom purchase qty')
-    manufacturer = fields.Many2one('res.partner', 'Manufacturer', readonly=True, invisible=False,
-                                   default=_get_manufacturer)
+    manufacturer = fields.Many2one(
+        'res.partner', 'Manufacturer', readonly=True, invisible=False,
+        default=_get_manufacturer)
     purchase_qty = fields.Float("Qty. to purchase")
 
-    @api.multi
     def assign_purchase_order(self):
-        obj = self[0]
-        product_obj = self.env["product.product"]
-        purchase_line_obj = self.env["purchase.order.line"]
-        for product in product_obj.browse(self.env.context['active_ids']):
-            purchase = obj.purchase_id if obj.purchase_id else obj.purchase_id_wt_manufacturer
+        self.ensure_one()
+        for product in self.env["product.product"].browse(
+                self.env.context['active_ids']):
+            purchase = self.purchase_id if self.purchase_id else \
+                self.purchase_id_wt_manufacturer
             line_vals = {'order_id': purchase.id,
-                         'product_id': product.id,
-                         'price_unit': 0.0}
-            if obj.custom_purchase_qty:
-                purchase_qty = obj.purchase_qty
+                         'partner_id': purchase.partner_id.id,  # No calcula los related, tenemos que pasarlos en vals
+                         'product_id': product.id}
+            if self.custom_purchase_qty:
+                purchase_qty = self.purchase_qty
             else:
                 min_suggested_qty = product.min_suggested_qty
                 if min_suggested_qty < 0:
                     purchase_qty = -(product.min_suggested_qty)
                 else:
-                     purchase_qty = min_suggested_qty
-            line_vals.update(purchase_line_obj.
-                             onchange_product_id(purchase.pricelist_id.id,
-                                                 product.id, purchase_qty,
-                                                 product.uom_id.id,
-                                                 purchase.partner_id.id,
-                                                 purchase.date_order,
-                                                 purchase.fiscal_position.id,
-                                                 purchase.minimum_planned_date)
-                             ['value'])
-            if line_vals.get('taxes_id', False):
-                line_vals['taxes_id'] = [(6, 0, line_vals['taxes_id'])]
-            purchase_line_obj.create(line_vals)
+                    purchase_qty = min_suggested_qty
+            line_vals['product_uom_qty'] = purchase_qty
+            line_vals.update(
+                self.env['purchase.order.line'].play_onchanges(
+                    line_vals, ['product_id']))
+            self.env["purchase.order.line"].create(line_vals)
 
         return {'type': 'ir.actions.act_window_close'}
