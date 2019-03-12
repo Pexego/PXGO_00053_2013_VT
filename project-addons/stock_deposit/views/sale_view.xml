@@ -6,9 +6,9 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']/form//field[@name='state']" position="before">
-                <field name="deposit" />
+                <field name="deposit"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="after">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='no_rappel']" position="before">
                  <field name="deposit"/>
                  <field name="deposit_date" invisible="1"/>
             </xpath>
