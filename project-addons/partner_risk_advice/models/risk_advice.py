@@ -43,9 +43,6 @@ class RiskAdviceMail(models.Model):
             if partner.property_account_receivable_id:
                 accounts.append(partner.property_account_receivable_id.id)
 
-            if partner.property_account_payable_id:
-                accounts.append(partner.property_account_payable_id.id)
-
             circualting_acc_ids = self.env["account.account"].\
                 search([('circulating', '=', True)])
             if circualting_acc_ids:
