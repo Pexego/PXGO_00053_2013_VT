@@ -94,5 +94,5 @@ class ProductTagProductRel(SyncModel):
     MOD_NAME = 'producttagproductrel'
 
     def __unicode__(self):
-        return u"Product id: %s - Tag id: %s" % (self.odoo_id, self.producttag_id)
+        return "Product id: %s - Tag id: %s" % (self.odoo_id, self.producttag_id)
 
