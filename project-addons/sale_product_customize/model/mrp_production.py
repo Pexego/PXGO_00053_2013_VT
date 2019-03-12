@@ -62,12 +62,12 @@ class MrpProduction(models.Model):
 
         return res
 
-    def create(self, cr, uid, vals, context=None):
-        if context is None:
-            context = {}
-        context2 = dict(context)
-        context2.pop('default_state', False)
-        return super().create(cr, uid, vals, context=context2)
+    # def create(self, cr, uid, vals, context=None):
+    #     if context is None: TODO: Migrar
+    #         context = {}
+    #     context2 = dict(context)
+    #     context2.pop('default_state', False)
+    #     return super().create(cr, uid, vals, context=context2)
 
 
 class MrpBomLine(models.Model):
