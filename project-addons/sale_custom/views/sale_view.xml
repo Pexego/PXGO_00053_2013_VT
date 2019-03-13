@@ -169,13 +169,13 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
-                    <attribute name="readonly">{"always_reload": True}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
                 </field>
                 <field name="partner_shipping_id" position="attributes">
-                    <attribute name="readonly">{"always_reload": True}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
                 </field>
                 <field name="partner_invoice_id" position="attributes">
-                    <attribute name="readonly">{"always_reload": True}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
                 </field>
                 <header position="inside">
                     <button name="action_confirm" id="action_confirm"
