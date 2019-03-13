@@ -23,12 +23,11 @@ msgstr "Descatalogado"
 #. module: product_discontinued
 #: code:addons/product_discontinued/models/product.py:21
 #, python-format
-msgid "The product can not be discontinued. Currently exist stock or its status is not 'End of lifecycle' (Inventory Tab)"
-msgstr "El producto no cumple los requisitos para ser descatalogado. Stock existente o su estado actual no es "Fin de ciclo de vida" '
-                                            '(Pestaña inventario)."
+msgid "The product can not be discontinued. Currently exist stock or the status is not - End of lifecycle"
+msgstr "El producto no cumple los requisitos para ser descatalogado. Stock existente o su estado actual no es 'Fin de ciclo de vida' (Pestaña inventario)."
 
 #. module: product_discontinued
 #: code:addons/product_discontinued/models/product.py:33
 #, python-format
-msgid "The product does not have stock, please check !!!."
-msgstr "El producto no tiene stock, por favor revise !!!."
+msgid "The product does not have stock."
+msgstr "El producto no tiene stock."
