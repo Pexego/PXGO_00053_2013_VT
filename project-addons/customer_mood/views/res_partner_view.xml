@@ -22,9 +22,8 @@
                <field name="category_id" position="attributes">
                    <attribute name ="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
                </field>
-               <field name="category_id" position="before">
-                    <field name="mood_image" colspan="2" placeholder="Mood..." nolabel="1" class="oe_inline"/>
-
+               <field name="category_id" position="after">
+                    <field name="mood_image" colspan="2" placeholder="Mood..."/>
                 </field>
             </field>
         </record>
