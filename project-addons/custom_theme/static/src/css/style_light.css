@@ -388,7 +388,7 @@ body.o_web_client
 }
 
 .o_list_view tfoot {
-    background-color: #875a7b;
+    background-color: #e0e0e0;
     color: #ffffff;
     cursor: default;
     font-weight: normal;
