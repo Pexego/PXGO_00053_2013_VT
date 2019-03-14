@@ -50,7 +50,7 @@ class StockPicking(models.Model):
     # ~ def write(self, vals):
         # ~ res = super(StockPicking, self).write(vals)
         # ~ production_obj = self.env['mrp.production']
-        # ~ if 'MO' in self.origin and vals.get('date_done', False) and self.state == 'done':
+        # ~ if self.origin and 'MO' in self.origin and vals.get('date_done', False) and self.state == 'done':
             # ~ mrp_production = production_obj.search([('name', '=', self.origin)])
             # ~ if mrp_production.picking_out.id == self.id:
                 # ~ # Create in picking
