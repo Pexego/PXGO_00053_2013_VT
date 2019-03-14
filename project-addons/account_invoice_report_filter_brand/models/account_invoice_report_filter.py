@@ -19,8 +19,8 @@
 #
 ##############################################################################
 
-from openerp import SUPERUSER_ID
-from openerp import models, fields, api, tools
+from odoo import SUPERUSER_ID
+from odoo import models, fields, api, tools
 
 
 class AccountInvoiceReportFilter(models.Model):
@@ -46,7 +46,7 @@ class AccountInvoiceReportFilter(models.Model):
             )
             %s
             FROM (
-                %s 
+                %s
                 %s
                 %s
                 %s
@@ -55,7 +55,7 @@ class AccountInvoiceReportFilter(models.Model):
                 (cr.currency_id = sub.currency_id AND
                  cr.date_start <= COALESCE(sub.date, NOW()) AND
                  (cr.date_end IS NULL OR cr.date_end > COALESCE(sub.date, NOW())))
-            
+
         )""" % (
                     self._table,
                     self._select(), self._sub_select(), self._from(), self._where(cr), self._group_by()))

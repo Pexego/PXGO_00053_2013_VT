@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from openerp import models, api
+from odoo import models, api
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 

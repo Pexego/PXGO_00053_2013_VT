@@ -208,7 +208,7 @@ class CrmClaimRma(models.Model):
                 'currency_id':
                     claim_obj.partner_id.property_product_pricelist.currency_id.id,
                 'company_id': claim_obj.company_id.id,
-                'user_id': self.env.uid,
+                'user_id': self.env.user.id,
                 'team_id': claim_obj.partner_id.team_id.id,
                 'claim_id': claim_obj.id,
                 'type': 'out_refund',
