@@ -26,13 +26,16 @@
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
     "depends": ['sale', 'purchase', 'account', 'stock',
-                'stock_reserve_sale', 'stock_custom', 'sale_proforma_report'],
+                'stock_reserve_sale', 'stock_custom', 'sale_proforma_report',
+                'stock_picking_report_valued'],
     "data": [
         "data/report_paperformat.xml",
         "views/custom_layout.xml",
         "views/stock_custom_report.xml",
         "views/report_sale_order.xml",
         "views/report_purchase_order.xml",
+        "views/report_stock_picking.xml",
+        "views/report_stock_picking_valued.xml",
         "views/report_invoice.xml"],
     "installable": True
 }
