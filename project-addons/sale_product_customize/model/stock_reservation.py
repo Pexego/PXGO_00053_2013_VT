@@ -36,8 +36,7 @@ class StockPicking(models.Model):
     def _get_if_productions(self):
         with_prods = False
         for line in self.move_lines:
-            if line.procurement_id and line.procurement_id.sale_line_id \
-                    and line.procurement_id.sale_line_id.mrp_production_ids:
+            if line.sale_line_id and line.sale_line_id.mrp_production_ids:
                 with_prods = True
                 break
         self.with_productions = with_prods
