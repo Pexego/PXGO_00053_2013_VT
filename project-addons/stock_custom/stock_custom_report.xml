@@ -15,9 +15,5 @@
             file="stock_custom.report_picking_with_attachments"
         />
 
-    <record id="action_report_picking_attachments" model="ir.actions.report">
-        <field name="paperformat_id" ref="custom_report_link.paperformat_picking"/>
-    </record>
-
     </data>
 </openerp>
