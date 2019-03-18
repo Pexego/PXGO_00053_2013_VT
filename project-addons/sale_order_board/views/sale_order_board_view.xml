@@ -32,9 +32,13 @@
         <field name="inherit_id" ref="transportation.sale_order_add_transporter"/>
         <field name="arch" type="xml">
             <field name="service_id" position="after">
-                <button name="compute_variables"
+                <label for="service_id" string=" "/>
+                <div>
+                    <field name="service_id" invisible="1"/>
+                    <button name="compute_variables"
                         string="Calculate Shipping Prices" type="object"
                         class="oe_highlight"/>
+                </div>
             </field>
         </field>
     </record>

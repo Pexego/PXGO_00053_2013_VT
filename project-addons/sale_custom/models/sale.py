@@ -31,6 +31,17 @@ class SaleOrder(models.Model):
 
     validated_dir = fields.Boolean(default=False)
 
+    partner_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]},)
+    partner_invoice_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    partner_shipping_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    warehouse_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    picking_policy = fields.Selection(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+
     def onchange_partner_id(self):
         """
             TODO: Por qué es necesario?
