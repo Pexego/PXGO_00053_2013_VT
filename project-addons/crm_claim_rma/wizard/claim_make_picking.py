@@ -239,9 +239,6 @@ class ClaimMakePicking(models.TransientModel):
         for wizard_claim_line in self.claim_line_ids:
             self.create_move(wizard_claim_line, p_type, picking_id, claim, note, write_field)
 
-        import ipdb
-        ipdb.set_trace()
-
         if picking_id:
             picking_id.action_assign()
             picking_id.button_validate()
