@@ -12,7 +12,6 @@
                 </div>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='tax_id']" position="replace"></xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='deposit_date']" position="replace"></xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="replace"></xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="replace"></xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="after">
@@ -20,15 +19,15 @@
                 <field name="price_subtotal"/>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
-                <!--TODO: migrar modulo rappel field name="margin_perc_rappel" readonly="1"/-->
-                <field name="margin_perc" readonly="1" invisible="0"/>
+                <field name="margin_perc_rappel" readonly="1"/>
+                <field name="margin_perc" readonly="1" invisible="1"/>
                 <field name="tax_id" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
             </xpath>
             <field name="amount_untaxed" position="after">
-                <!--label for="margin_rappel"/>
+                <label for="margin_rappel"/>
                 <div>
-                    <field name="margin_rappel" class="oe_inline"/>%%
-                </div-->
+                    <field name="margin_rappel" class="oe_inline"/> %%
+                </div>
             </field>
         </field>
     </record>

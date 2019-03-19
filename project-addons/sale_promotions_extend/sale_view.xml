@@ -31,7 +31,7 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="after">
+                <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="before">
                     <field name="web_discount"/>
                 </xpath>
             </field>

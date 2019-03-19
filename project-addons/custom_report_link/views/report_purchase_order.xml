@@ -155,16 +155,16 @@
                     <!--<div class="col-xs-6">
                         <strong>Shipping address:</strong>
                         <div t-if="o.dest_address_id">
-                            <div t-field="o.dest_address_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: true}" />
+                            <div t-field="o.dest_address_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: true}" />
                         </div>
                         <div t-if="not o.dest_address_id and o.picking_type_id.warehouse_id">
                             <span t-field="o.picking_type_id.warehouse_id.name"/>
-                            <div t-field="o.picking_type_id.warehouse_id.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: true}"/>
+                            <div t-field="o.picking_type_id.warehouse_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: true}"/>
                         </div>
                     </div>-->
                     <div class="col-xs-6 row">
                         <span style="font-weight: bold; color:#A61D34">To: </span>
-                        <span t-field="o.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: true}"/>
+                        <span t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: true}"/>
                             <span>
                                 <!--Datos de un contacto -->
                                 <span t-field="o.partner_id.att"/>
@@ -174,7 +174,7 @@
                     </div>
                     <div class="col-xs-5 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#A61D34">
                         <br/><br/>
-                        <t t-if="o.write_date"><div>Date: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-field="o.write_date" t-field-options='{"widget": "date"}'/></div></t>
+                        <t t-if="o.write_date"><div>Date: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-field="o.write_date" t-options='{"widget": "date"}'/></div></t>
                         <t t-if="o.partner_id.vat"><div>VAT: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
                     </div>
                 </div>
@@ -206,7 +206,7 @@
                                 </t>
                                 <t t-set="totalQty" t-value="totalQty+order_line.product_qty"/>
                                 <t t-set="totalPrice" t-value="order_line.price_unit*order_line.product_qty"/>
-                                <td style="vertical-align:middle;"><span t-field="order_line.product_id.image_small" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"/></td>
+                                <td style="vertical-align:middle;"><span t-field="order_line.product_id.image_small" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"/></td>
                                 <td style="vertical-align:middle;"><span t-esc="seller_ref"/></td>
                                 <td style="vertical-align:middle;"><span t-field="order_line.product_id.name"/></td>
                                 <td style="font-size:10px; vertical-align:middle;"><span t-field="order_line.product_id.description_purchase"/></td>
@@ -215,7 +215,7 @@
                                     <span t-esc="'%.0f'% order_line.product_qty"/>
                                     <span t-field="order_line.product_uom" groups="product.group_uom"/>
                                 </td>
-                                <td class="text-center" style="vertical-align:middle;"><span t-field="order_line.price_unit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                                <td class="text-center" style="vertical-align:middle;"><span t-field="order_line.price_unit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
                                 <td class="text-center" style="vertical-align:middle;"><span t-esc="totalPrice" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
                             </tr>
                         </tbody>
@@ -233,7 +233,7 @@
                                 <tr class="border-grey">
                                     <td style="color:#A61D34;"><strong>Total Price</strong></td>
                                     <td class="text-right">
-                                        <span t-field="o.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                     </td>
                                 </tr>
                             </table>
