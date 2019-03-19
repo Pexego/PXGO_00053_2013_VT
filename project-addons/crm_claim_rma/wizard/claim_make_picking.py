@@ -239,14 +239,14 @@ class ClaimMakePicking(models.TransientModel):
         for wizard_claim_line in self.claim_line_ids:
             self.create_move(wizard_claim_line, p_type, picking_id, claim, note, write_field)
 
-        #TODO: Migrar
-        # ~ wf_service = netsvc.LocalService("workflow")
-        # ~ if picking_id:
-            # ~ wf_service.trg_validate(uid, 'stock.picking', picking_id, 'button_confirm', cr)
-            #picking_obj.action_assign(cr, uid, [picking_id])
+        import ipdb
+        ipdb.set_trace()
+
         if picking_id:
+            picking_id.action_assign()
+            picking_id.button_validate()
             domain = ("[('picking_type_code', '=', '%s'), \
-                       ('partner_id', '=', %s)]" %
+                                   ('partner_id', '=', %s)]" %
                       (p_type, partner_id.id))
 
             return {

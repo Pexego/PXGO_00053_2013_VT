@@ -40,6 +40,8 @@ class StockPicking(models.Model):
     @api.multi
     def action_assign(self):
         res = super(StockPicking, self).action_assign()
+        import ipdb
+        ipdb.set_trace()
         for obj in self:
             if obj.claim_id and obj.picking_type_code == "incoming":
                 obj.force_assign()
