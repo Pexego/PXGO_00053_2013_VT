@@ -131,7 +131,7 @@
                 <field name="write_date"/>
             </field>
             <field name="product_returned_quantity" position="after">
-                <button name="action_split" type="object" string="Split" icon="STOCK_CUT"
+                <button name="action_split" type="object" string="Split" icon="fa-cut"
                     attrs="{'invisible': ['|','|','|',('move_in_customer_state','!=',False),('move_out_customer_state','!=',False),('repair_id','!=',False),('product_returned_quantity','&lt;=',1.0)]}"/>
             </field>
             <button name="%(crm_claim_rma.action_claim_make_repair)d" position="replace">
