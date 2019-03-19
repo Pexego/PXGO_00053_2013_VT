@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+      <record id="view_order_form_inherit" model="ir.ui.view">
+          <field name="name">sale.order.form</field>
+          <field name="model">sale.order</field>
+          <field name="inherit_id" ref="sale.view_order_form"/>
+          <field name="arch" type="xml">
+            <field name="note" position="replace">
+              <group colspan="6" col="6">
+                    <field name="note" class="oe_inline" placeholder="Setup default terms and conditions in your sales settings ..." nolabel="1"/>
+                    <field name="internal_notes" class="oe_inline" placeholder="Internal Notes" nolabel="1"/>
+                    <field name="sale_notes" class="oe_inline" placeholder="Sale Order Internal Notes" nolabel="1"/>
+                </group>
+            </field>
+            <field name="partner_id" position="after">
+                <field name="partner_tags" widget="many2many_tags"/>
+                <field name="ref_partner" />
+            </field>
+          </field>
+      </record>
+
+        <record id="sale.action_orders" model="ir.actions.act_window">
+            <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel', 'reserve'))]</field>
+            <field name="context">{
+                    'search_default_my_sale_orders_filter': 1,
+                    'no_create': 1
+                }
+            </field>
+        </record>
+
+    <record id="action_order_line_wo_reserve" model="ir.actions.act_window">
+        <field name="name">Sale lines without reserve</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('reservation_ids','=', False),('order_id.state','=','reserve'),('product_id', '!=', False),('product_id.type', '!=', 'service')]</field>
+    </record>
+
+    <menuitem
+            action="action_order_line_wo_reserve" id="menu_order_line_wo_reserve"
+            parent="purchase.menu_procurement_management" sequence="101" groups="stock.group_stock_user"/>
+
+</odoo>

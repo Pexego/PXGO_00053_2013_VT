@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <record id="view_partner_valued_picking_not_print" model="ir.ui.view">
+        <field name="name">midban.view.partner.form.not_print</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="stock_picking_report_valued.view_partner_valued_picking"/>
+        <field name="arch" type="xml">
+            <field name="valued_picking" position="after">
+                <field name="not_print_picking"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

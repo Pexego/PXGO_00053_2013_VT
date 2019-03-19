@@ -6,16 +6,16 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']/form//field[@name='state']" position="before">
-                <field name="deposit" />
+                <field name="deposit"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="after">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='no_rappel']" position="before">
                  <field name="deposit"/>
                  <field name="deposit_date" invisible="1"/>
             </xpath>
         </field>
     </record>
 
-    <record id="view_order_form_deposit_button" model="ir.ui.view">
+    <!-- TODO:Migrar <record id="view_order_form_deposit_button" model="ir.ui.view">
         <field name="name">sale.order.form</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
@@ -33,5 +33,5 @@
                 </button>
             </div>
         </field>
-    </record>
+    </record> -->
 </odoo>

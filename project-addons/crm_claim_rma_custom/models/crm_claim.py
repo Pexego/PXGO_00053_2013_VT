@@ -153,13 +153,14 @@ class CrmClaimRma(models.Model):
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        super(CrmClaimRma, self).onchange_partner_id()
+        result = super().onchange_partner_id()
         if self.partner_id:
             self.delivery_address_id = self.partner_id
             self.team_id = self.partner_id.team_id   # Get team_id from res.partner
             self.country = self.partner_id.country_id    # Get country_id from res.partner
             if self.partner_id.user_id:
                 self.comercial = self.partner_id.user_id.id
+        return result
 
     @api.onchange('name')
     def onchange_name(self):
@@ -184,7 +185,8 @@ class CrmClaimRma(models.Model):
             if not invoice:
                 raise exceptions.Warning(_("Any line to invoice"))
 
-            domain_journal = [('type', '=', 'sale_refund')]
+            # TODO-> Revisar: antes sale_refund
+            domain_journal = [('type', '=', 'sale')]
             acc_journal_obj = self.env['account.journal']
             acc_journal_ids = acc_journal_obj.search(domain_journal)
             partner_bank_id = False
@@ -200,19 +202,19 @@ class CrmClaimRma(models.Model):
                 'fiscal_position_id':
                     claim_obj.partner_id.property_account_position_id.id,
                 'date_invoice': datetime.now().strftime('%Y-%m-%d'),
-                'journal_id': acc_journal_ids[0],
+                'journal_id': acc_journal_ids[0].id,
                 'account_id':
                     claim_obj.partner_id.property_account_receivable_id.id,
                 'currency_id':
                     claim_obj.partner_id.property_product_pricelist.currency_id.id,
                 'company_id': claim_obj.company_id.id,
-                'user_id': self.uid,
+                'user_id': self.env.user.id,
                 'team_id': claim_obj.partner_id.team_id.id,
                 'claim_id': claim_obj.id,
                 'type': 'out_refund',
                 'payment_term_id': claim_obj.partner_id.property_payment_term_id.id,
                 'payment_mode_id':
-                    claim_obj.partner_id.customer_payment_mode.id,
+                    claim_obj.partner_id.customer_payment_mode_id.id,
                 'partner_bank_id': partner_bank_id
             }
             inv_obj = self.env['account.invoice']
@@ -225,7 +227,7 @@ class CrmClaimRma(models.Model):
                 if line.invoice_id:
                     rectified_invoice_ids.append(line.invoice_id.id)
                 if line.product_id:
-                    account_id = line.product_id.property_account_income.id
+                    account_id = line.product_id.property_account_income_id.id
                     if not account_id:
                         account_id = \
                             line.product_id.categ_id. \
@@ -264,7 +266,8 @@ class CrmClaimRma(models.Model):
                 line.invoiced = True
 
             invoice_id.write({'origin_invoices_ids': [(6, 0, list(set(rectified_invoice_ids)))]})
-            invoice_id.button_reset_taxes()
+            invoice_id.compute_taxes()
+            invoice_id.action_invoice_open()
 
             data_pool = self.env['ir.model.data']
             action_id = data_pool.xmlid_to_res_id('account.action_invoice_tree3')

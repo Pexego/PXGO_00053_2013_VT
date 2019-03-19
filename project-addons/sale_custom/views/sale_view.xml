@@ -18,6 +18,17 @@
             </xpath>
         </field>
     </record>
+
+    <record id="view_order_line_tree_avoid_create_product" model="ir.ui.view">
+        <field name="name">view.order.line.tree.avoid.create.product</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
+            </xpath>
+        </field>
+    </record>
 <!--
     <record id="action_view_historical_orders" model="ir.actions.server">
         <field name="name">Historical Partner Orders View</field>
@@ -81,6 +92,8 @@
                         type="object" icon="fa-strikethrough" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve'])]}"/>
                 <button name="button_notification" string="Avisos" class="oe_stat_button"
                         type="object" icon="fa-exclamation-triangle" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve', 'sent'])]}"/>
+                <button name="button_notification_open_risk_window" string="Risk Information"
+                            class="oe_stat_button" type="object" icon="fa-bar-chart-o"/>
             </xpath>
         </field>
     </record>
@@ -91,12 +104,87 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <field name="partner_shipping_id" position="after">
-                <field name="validated_dir" invisible="1"/>
-                <button name="validate_address"
+                <label for="validated_dir" string=" "/>
+                <div>
+                    <field name="validated_dir" invisible="1"/>
+                    <button name="validate_address"
                         string="Validate address" type="object"
                         class="oe_highlight"
                         attrs="{'invisible': [('validated_dir', '=', True)]}"/>
+                </div>
+            </field>
+            <field name="payment_term_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="payment_mode_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="fiscal_position_id" position="before">
+                <field name="payment_term_id"/>
+                <field name="payment_mode_id"/>
+            </field>
+            <field name="client_order_ref" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="pricelist_id" position="before">
+                <field name="client_order_ref"/>
             </field>
         </field>
     </record>
+
+    <record id="action_orders_reserve" model="ir.actions.act_window">
+        <field name="name">Sales Reserved</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar,graph</field>
+        <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+        <field name="domain">[('state','in',('reserve',))]</field>
+        <field name="context">{
+                'search_default_my_sale_orders_filter': 1,
+                'default_state': 'reserve',
+            }
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to create a sale with reserved goods that can be converted into a sales
+            order.
+            </p><p>
+            OpenERP will help you efficiently handle the complete sales flow:
+            quotation, sales order, delivery, invoicing and payment.
+            </p>
+        </field>
+    </record>
+
+    <record id="sale.action_quotations" model="ir.actions.act_window">
+        <field name="context">{
+                'search_default_my_sale_orders_filter': 1,
+            }
+        </field>
+    </record>
+
+    <menuitem action="action_orders_reserve" id="menu_sale_order_reserve" parent="sale.sale_order_menu" sequence="1" groups="sales_team.group_sale_salesman,sales_team.group_sale_manager"/>
+
+    <record id="view_order_form_imp_ship_addr" model="ir.ui.view">
+            <field name="name">sale.order.form.reserve.edit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </field>
+                <field name="partner_shipping_id" position="attributes">
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </field>
+                <field name="partner_invoice_id" position="attributes">
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </field>
+                <header position="inside">
+                    <button name="action_confirm" id="action_confirm"
+                        string="Confirm Sale" class="btn-primary" type="object"
+                        attrs="{'invisible': [('state', 'not in', ['reserve'])]}"/>
+                </header>
+            </field>
+        </record>
+
 </odoo>

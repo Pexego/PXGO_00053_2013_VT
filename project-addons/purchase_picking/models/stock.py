@@ -50,8 +50,8 @@ class StockContainer(models.Model):
             if container.move_ids:
                 for move in container.move_ids:
                     if move.picking_id:
-                        if not min_date or min_date < move.picking_id.min_date:
-                            min_date = move.picking_id.min_date
+                        if not min_date or min_date < move.picking_id.scheduled_date:
+                            min_date = move.picking_id.scheduled_date
                 if min_date:
                     container.date_expected = min_date
 

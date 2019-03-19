@@ -468,7 +468,7 @@ msgstr "Etiquetas"
 #. module: sale_promotions_extend
 #: field:sale.order.line,web_discount:0
 msgid "Web discount"
-msgstr "Descuento web"
+msgstr "Dto. web"
 
 #. module: openerp_sale_promotions
 #: selection:promos.rules.conditions.exps,attribute:0

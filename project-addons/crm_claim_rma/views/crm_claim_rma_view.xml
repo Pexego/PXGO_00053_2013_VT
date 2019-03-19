@@ -231,7 +231,6 @@
     <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
     <field name="arch" type="xml">
         <field name="partner_id" position="replace">
-            <!-- TODO: revisar este cachito, no sale bien -->
             <field name="partner_id" string="Partner" required="1" domain="[('is_company', '=', True)]"/>
             <field name="invoice_type"/>
             <field name="invoice_id" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
@@ -250,32 +249,34 @@
                     <field name="claim_line_ids" nolabel="1" colspan="4" editable="top"/>
                 </group>
                 <field name="state_show_buttons" invisible="1"/>
-                <group col="4" colspan="4" attrs="{'invisible':[('state_show_buttons', '=', False)]}">
+                <group attrs="{'invisible':[('state_show_buttons', '=', False)]}">
                     <separator string="Action" colspan="4" name="action_sep"/>
-                    <field name="warehouse_id" invisible="1"/>
-                    <button name="%(action_claim_picking_in)d"
-                            string="New Products Return"
-                            type="action" target="new"
-                            context="{'warehouse_id': warehouse_id,
-                                'partner_id': partner_id,
-                                'type': claim_type}"/>
+                    <div>
+                        <field name="warehouse_id" invisible="1"/>
+                        <button name="%(action_claim_picking_in)d"
+                                string="New Products Return"
+                                type="action" target="new"
+                                context="{'warehouse_id': warehouse_id,
+                                    'partner_id': partner_id,
+                                    'type': claim_type}"/>
 
-                    <button name="%(action_claim_picking_out)d"
-                            string="New Delivery"
-                            type="action" target="new"
-                            context="{'warehouse_id': warehouse_id,
-                                'partner_id': partner_id,
-                                'type': claim_type}"/>
+                        <button name="%(action_claim_picking_out)d"
+                                string="New Delivery"
+                                type="action" target="new"
+                                context="{'warehouse_id': warehouse_id,
+                                    'partner_id': partner_id,
+                                    'type': claim_type}"/>
 
-                    <button name="%(account.action_account_invoice_refund)d" attrs="{'invisible': [('invoice_type', '=', 'invoice')]}"
-                            type='action' string='New Refund'
-                            context="{
-                                'invoice_ids': [invoice_id],
-                                'claim_line_ids': claim_line_ids,
-                                'description': name,
-                                'claim_id': id,
-                                'type': claim_type
-                                }"/>
+                        <button name="%(account.action_account_invoice_refund)d" attrs="{'invisible': [('invoice_type', '=', 'invoice')]}"
+                                type='action' string='New Refund'
+                                context="{
+                                    'invoice_ids': [invoice_id],
+                                    'claim_line_ids': claim_line_ids,
+                                    'description': name,
+                                    'claim_id': id,
+                                    'type': claim_type
+                                    }"/>
+                    </div>
                 </group>
             </page>
             <page string="Generated Documents">
@@ -395,7 +396,7 @@
 
             <field name="date" position="replace">
             </field>
-            <field name="user_id" position="before">
+            <field name="priority" position="before">
                 <field name="name" />
                  <field name="supplier_number" attrs="{'invisible': [('claim_type','in', ['customer',])]}"/>
                 <field name="date"/>

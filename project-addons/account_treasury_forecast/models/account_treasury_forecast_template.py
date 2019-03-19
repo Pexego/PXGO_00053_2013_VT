@@ -18,6 +18,8 @@
 import odoo.addons.decimal_precision as dp
 from odoo import models, fields, api, _
 
+PERIOD = [('days', 'Days'), ('months', 'Months')]
+
 
 class AccountTreasuryForecastTemplate(models.Model):
     _name = 'account.treasury.forecast.template'
@@ -51,6 +53,8 @@ class AccountTreasuryForecastLineTemplate(models.Model):
     paid = fields.Boolean(string="Invoiced/Paid")
     treasury_template_id = fields.Many2one(
         'account.treasury.forecast.template', string="Treasury Template")
+    period_quantity = fields.Integer("Quantity", default=1)
+    period_type = fields.Selection(PERIOD, string="Period", default="months")
 
     @api.multi
     @api.onchange('invoice_id')

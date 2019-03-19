@@ -1,23 +1,5 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2014 Pexego All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# © 2019 Comunitea
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from openerp import models, fields, api
 
 
@@ -34,22 +16,26 @@ class MrpProduction(models.Model):
                               relation="sale.order", string="Sale",
                               readonly=True)
     production_name = fields.Char("Production ref", readonly=True)
-    picking_out = fields.Many2one('stock.picking', "Out picking", readonly=True)
-    picking_in = fields.Many2one('stock.picking', "In picking", readonly=True)
+    picking_out = fields.Many2one(
+        'stock.picking', "Out picking", readonly=True)
+    picking_in = fields.Many2one(
+        'stock.picking', "In picking", readonly=True)
 
-    @api.one
     def action_assign(self):
-        super(MrpProduction, self).action_assign()
-        for move in self.move_lines:
-            if move.state == 'confirmed':
-                reserv_dict = {
-                    'date_validity': False,
-                    'name': u"{} ({})".format(self.name, move.name),
-                    'mrp_id': self.id,
-                    'move_id': move.id
-                }
-                reservation = self.env['stock.reservation'].create(reserv_dict)
-                reservation.reserve()
+        res = super().action_assign()
+        for production in self:
+            for move in production.move_lines:
+                if move.state == 'confirmed':
+                    reserv_dict = {
+                        'date_validity': False,
+                        'name': "{} ({})".format(production.name, move.name),
+                        'mrp_id': production.id,
+                        'move_id': move.id
+                    }
+                    reservation = self.env['stock.reservation'].create(
+                        reserv_dict)
+                    reservation.reserve()
+        return res
 
     @api.multi
     def action_production_end(self):
@@ -59,11 +45,11 @@ class MrpProduction(models.Model):
                 quant_ids = t_quant.browse(move.quant_ids.ids)
                 quant_ids.write({'cost': move.price_unit})
                 # move.update_product_price()
-        return super(MrpProduction, self).action_production_end()
+        return super().action_production_end()
 
     @api.multi
     def action_confirm(self):
-        res = super(MrpProduction, self).action_confirm()
+        res = super().action_confirm()
         picking_obj = self.env['stock.picking']
         # Create out picking
         pick_out = picking_obj.create({'partner_id': self.company_id.partner_id.id,
@@ -76,12 +62,12 @@ class MrpProduction(models.Model):
 
         return res
 
-    def create(self, cr, uid, vals, context=None):
-        if context is None:
-            context = {}
-        context2 = dict(context)
-        context2.pop('default_state', False)
-        return super(MrpProduction, self).create(cr, uid, vals, context=context2)
+    # def create(self, cr, uid, vals, context=None):
+    #     if context is None: TODO: Migrar
+    #         context = {}
+    #     context2 = dict(context)
+    #     context2.pop('default_state', False)
+    #     return super().create(cr, uid, vals, context=context2)
 
 
 class MrpBomLine(models.Model):

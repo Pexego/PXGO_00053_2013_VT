@@ -159,7 +159,7 @@ class ProductOutletWizard(models.TransientModel):
 
         move_out._action_confirm()
         move_out._action_assign()
-        #TODO: migrar crm_claim_rma_custom move_out.picking_id.not_sync = True
-        #TODO: migrar crm_claim_rma_custom move_out.picking_id.odoo_management = True
+        move_out.picking_id.not_sync = True
+        move_out.picking_id.odoo_management = True
         move_in._action_confirm()
         return {'type': 'ir.actions.act_window_close'}

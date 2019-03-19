@@ -13,23 +13,21 @@ class ProductTemplate(models.Model):
     @api.constrains('discontinued')
     def allow_discontinued(self):
         for item in self:
-            if item.discontinued:
+            if item.product_tmpl_id and item.discontinued:
                 if (item.state == 'end' and item.qty_available == 0):
                     item.sale_ok = False
                     item.purchase_ok = False
                 else:
-                    raise ValidationError(_('El producto no cumple los requisitos para ser descatalogado. '
-                                            'Stock existente o su estado actual no es "Fin de ciclo de vida" '
-                                            '(Pestaña inventario).'))
-        return True
+                    raise ValidationError(_("The product can not be discontinued. Currently exist stock or the status is not - End of lifecycle"))
+            return True
 
     @api.multi
     @api.onchange('discontinued')
     def warning_catalog(self):
         for item in self:
-            if not item.discontinued:
-                item.sale_ok = True
-                if item.qty_available == 0:
-                    result = {'warning': {'title': _('Warning'), 'message': _('El producto no tiene stock, por favor '
-                                          'revise !!!')}}
-                    return result
+            if item.product_tmpl_id:
+                if not item.discontinued:
+                    item.sale_ok = True
+                    if item.qty_available == 0:
+                        result = {'warning': {'title': _('Warning'), 'message': _('The product does not have stock.')}}
+                        return result

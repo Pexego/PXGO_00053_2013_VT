@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="account_invoice_report_add_filters" model="ir.ui.view">
             <field name="name">account.invoice.report.search</field>
@@ -27,17 +26,7 @@
         </record>
 
         <record id="account.action_account_invoice_report_all" model="ir.actions.act_window">
-            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
+            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
         </record>
 
-        <!--TODO: Migrar<record id="view_account_invoice_report_graph_remove_period" model="ir.ui.view">
-         <field name="name">account.invoice.report.graph.remove.period</field>
-         <field name="model">account.invoice.report</field>
-         <field name="inherit_id" ref="account.view_account_invoice_report_graph"/>
-         <field name="arch" type="xml">
-             <field name="period_id" position="replace"/>
-        </field>
-        </record>-->
-
-    </data>
-</openerp>
+</odoo>

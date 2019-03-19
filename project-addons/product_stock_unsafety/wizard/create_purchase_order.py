@@ -1,25 +1,6 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos
-#    $Omar Castiñeira Saavedra <omar@comunitea.com>$
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-
-from openerp import models, fields, api, _
+# © 2019 Comunitea
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import models, fields, api, _
 
 
 class CreatePurchaseFromUnsafetyWzd(models.TransientModel):
@@ -30,10 +11,9 @@ class CreatePurchaseFromUnsafetyWzd(models.TransientModel):
     def default_get(self, fields_list):
         defaults = super(CreatePurchaseFromUnsafetyWzd, self).\
             default_get(fields_list)
-        if self.env.context.get('active_ids', False):
-            unsafety_obj = self.env["product.stock.unsafety"]
-            for unsafety in unsafety_obj.\
-                    browse(self.env.context['active_ids']):
+        if self.env.context.get('active_id', False):
+            for unsafety in self.env["product.stock.unsafety"].browse(
+                    self.env.context['active_id']):
                 if unsafety.supplier_id:
                     defaults['supplier_id'] = unsafety.supplier_id.id
                     defaults['warehouse_id'] = unsafety.orderpoint_id.\
@@ -47,43 +27,30 @@ class CreatePurchaseFromUnsafetyWzd(models.TransientModel):
     warehouse_id = fields.Many2one("stock.warehouse", "Warehouse",
                                    required=True)
 
-    @api.multi
     def create_purchase_order(self):
-        obj = self[0]
-        purchase_obj = self.env["purchase.order"]
-        purchase_line_obj = self.env["purchase.order.line"]
-        unsafety_obj = self.env["product.stock.unsafety"]
-        view_obj = self.env["ir.ui.view"]
-        purchase_vals = {'partner_id': obj.supplier_id.id,
-                         'picking_type_id': obj.warehouse_id.in_type_id.id,
-                         'location_id': obj.warehouse_id.
-                         wh_input_stock_loc_id.id}
-        purchase_vals.update(purchase_obj.
-                             onchange_partner_id(obj.supplier_id.id)['value'])
-        purchase = purchase_obj.create(purchase_vals)
-        for line in unsafety_obj.browse(self.env.context['active_ids']):
+        self.ensure_one()
+        purchase_vals = {'partner_id': self.supplier_id.id,
+                         'picking_type_id': self.warehouse_id.in_type_id.id}
+        purchase_vals.update(
+                self.env['purchase.order'].play_onchanges(
+                    purchase_vals, ['partner_id']))
+        purchase = self.env["purchase.order"].create(purchase_vals)
+        for line in self.env["product.stock.unsafety"].browse(
+                self.env.context['active_ids']):
             line_vals = {'order_id': purchase.id,
-                         'product_id': line.product_id.id,
-                         'price_unit': 0.0}
-            line_vals.update(purchase_line_obj.
-                             onchange_product_id(purchase.pricelist_id.id,
-                                                 line.product_id.id,
-                                                 line.product_qty,
-                                                 line.product_id.uom_id.id,
-                                                 purchase.partner_id.id,
-                                                 purchase.date_order,
-                                                 purchase.fiscal_position.id,
-                                                 purchase.minimum_planned_date)
-                             ['value'])
-            if line_vals.get('taxes_id', False):
-                line_vals['taxes_id'] = [(6, 0, line_vals['taxes_id'])]
-            purchase_line_obj.create(line_vals)
+                         'partner_id': purchase.partner_id.id,  # No calcula los related, tenemos que pasarlos en vals
+                         'product_id': line.product_id.id}
+            line_vals.update(
+                self.env['purchase.order.line'].play_onchanges(
+                    line_vals, ['product_id']))
+            self.env["purchase.order.line"].create(line_vals)
             line.purchase_id = purchase.id
             line.state = "in_action"
-            line.supplier_id = obj.supplier_id.id
+            line.supplier_id = self.supplier_id.id
 
-        view = view_obj.search([('model', '=', "purchase.order"),
-                                ('type', '=', 'form')])[0]
+        view = self.env["ir.ui.view"].search(
+            [('model', '=', "purchase.order"),
+             ('type', '=', 'form')], limit=1)
         return {'name': _("Purchase Order"),
                 'view_type': 'form',
                 'view_mode': 'form',
