@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -21,12 +20,13 @@
 
 {
     'name': "Flask middleware connector",
-    'version': '1.0',
+    'version': '11.0',
     'category': 'Connector',
     'description': """Connect to Visiotech flask middleware using Odoo connector""",
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
-    "depends": ['base', 'product', 'connector', 'stock', 'custom_partner', 'crm_claim_rma', 'product_virtual_stock_conservative', 'mrp'],
+    "depends": ['base', 'product', 'connector', 'queue_job', 'stock', 'custom_partner',
+                'crm_claim_rma_custom', 'product_virtual_stock_conservative', 'mrp', 'rappel'],
     # "data": ["views/middleware_view.xml", "views/product_view.xml", 'views/res_users.xml', TODO
     #          "views/product_brand.xml", "views/claim_line_view.xml", "security/ir.model.access.csv"],
     "installable": True

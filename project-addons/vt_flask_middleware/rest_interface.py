@@ -20,7 +20,7 @@ class ApiResource(RestResource):
     def check_delete(self, obj):
         return False
 
-for mod_class in MODELS_CLASS.keys():
+for mod_class in list(MODELS_CLASS.keys()):
     api.register(MODELS_CLASS[mod_class], ApiResource)
 
 api.register(SyncLog, ApiResource)
