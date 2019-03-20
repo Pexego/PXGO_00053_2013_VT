@@ -1,264 +1,245 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-    <template id="report_translated_custom">
+    <template id="report_claim_custom">
        <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
-                <t t-call="custom_report_link.summary_report_custom" t-lang="doc.partner_id.lang" />
+                <t t-call="custom_report_link.report_claim_custom_document" t-lang="doc.partner_id.lang" />
             </t>
         </t>
     </template>
 
-    <template id="summary_report_custom">
-            <t t-set="body_classname" t-value="'container'"/>
-            <t t-foreach="docs" t-as="doc">
-                <t t-call="custom_report_link.layout_custom">
-                    <t t-set="page_copy_title" t-value="'customer'"/>
-                    <t t-call="custom_report_link.claim_copy_page_custom"/>
-                </t>
-            </t>
-    </template>
 
-    <template id="layout_custom" inherit_id="web.layout" primary="True">
-            <!-- Add report attributes -->
-            <xpath expr="//html" position="attributes">
-                <attribute name="t-att-data-report-margin-top">data_report_margin_top if data_report_margin_top else None</attribute>
-                <attribute name="t-att-data-report-header-spacing">data_report_header_spacing if data_report_header_spacing else None</attribute>
-                <attribute name="t-att-data-report-dpi">data_report_dpi if data_report_dpi else None</attribute>
-            </xpath>
-            <!-- Add report style -->
-            <xpath expr="//head" position="inside">
-                <link href="/web/static/lib/bootstrap/css/bootstrap.css" rel="stylesheet"/>
-                <link href="/website/static/src/css/website.css" rel="stylesheet"/>
-                <link href="/web/static/lib/fontawesome/css/font-awesome.css" rel="stylesheet"/>
-                <style type="text/css">
-                    <!-- <t t-call="report.style"/> -->
-                     .customer-claim-data p {
-                        white-space: nowrap;
-                        width: auto;
-                        padding-right: 0px;
-                     }
-                    .body-product-info, .company-info{
-                        font-size:10px;
-                    }
-                    .page-copy-title {
-                        border: 1px solid black;
-                        font-size: 12px;
-                    }
-
-                    .page-summary-report, .table-product-info{
-                        padding-top: 25px;
-                    }
-
-                    .customer-claim-data  span{
-                        font-size: 12px;
-                        width: auto;
-                        padding-right: 20px;
-                        padding-left: 1px;
-                    }
-                    .customer-claim-data  p {
-                        padding-right: 0px;
-                        font-size: 12px;
-                        width: auto;
-
-                    }
-                    strong &gt; span {
-                        padding-right: 0px;
-                    }
-                    .company-info td + td {
-                        text-align:right;
-                    }
-                    .image2div {
-                        max-width: 100%;
-                        max-height: auto;
-                    }
-                </style>
-            </xpath>
-            <!-- Remove conflicting style -->
-            <!--<xpath expr="//head/link[@href='/web/static/src/css/full.css']" position="replace"/> -->
-            <xpath position="attributes" expr="."><attribute name="t-name">crm_claim_summary_report.layout_custom</attribute></xpath>
-    </template>
-
-
-    <template id="claim_copy_page_custom">
-        <t t-call="custom_report_link.claim_external_layout_custom">
-            <div class="page page-summary-report">
-                <t t-set="claim" t-value="doc"/>
-                <t t-call="custom_report_link.page_summary_report_custom"/>
-            </div>
-        </t>
-    </template>
-
-
-    <template id="page_summary_report_custom">
-            <div class="row">
-            <!-- Claim important information -->
-                <div style="font-size:18px; font-weight: bold; color:#6D6E70">
-                    Claim No.<span>: </span><span style="color:#939597;" t-field="claim.number"/>
-                </div>
-            </div>
-            <br/>
-            <div class="row">
-                <div class="pull-left">
-                    <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
-                    <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
-                    <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
-                </div>
-                 <div class="pull-left">
-                    <div style="width: 0.08in; height: 0.32in; background-color: white;"/>
-                </div>
-                <div style="font-size:23px; font-weight: bold; color:#6D6E70;">
-                    <span t-field="claim.name"/>
-                </div>
-                <span t-if="claim.name=='rma'">
-                    <div class="pull-right" style="width: 8.4in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
-                </span>
-                <span t-if="claim.name=='return'">
-                    <div class="pull-right" style="width: 7.7in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
-                </span>
-                <br/><br/>
-            </div>
-            <div class="row" style="font-size:12px;">
-                <div class="col-xs-2" style="text-align:right;">
-                    <t t-if="claim.partner_id.customer">
-                        <p class="row" style="color:#A61D34;"><strong>Customer Name<span>:</span></strong></p>
-                    </t>
-                        <p class="row" style="color:#A61D34;"><strong>Delivery Address<span>: </span></strong></p>
-                </div>
-                <!-- DATA -->
-                <div class="col-xs-10" style="color:#6D6E70">
-
-                    <t t-if="claim.partner_id and claim.partner_id.customer">
-                        <t t-if="claim.delivery_address_id.parent_id">
-                            <p t-field="claim.delivery_address_id.parent_id.name"/>
-                        </t>
-                        <t t-if="not claim.delivery_address_id.parent_id">
-                            <p t-field="claim.delivery_address_id.name"/>
-                        </t>
-                    </t>
-
-                    <t t-if="claim.partner_id">
-                        <p style="white-space: nowrap;">
-                                <t t-if="claim.partner_id.street">
-                                    <span t-field="claim.delivery_address_id.street"/>,
-                                </t>
-                                <t t-if="claim.partner_id.street2">
-                                    <span t-field="claim.delivery_address_id.street2"/>,
-                                </t>
-                                <t t-if="claim.partner_id.city">
-                                    <span t-field="claim.delivery_address_id.city"/>,
-                                </t>
-                                <t t-if="claim.partner_id.state_id.name">
-                                    <span t-field="claim.delivery_address_id.state_id.name"/>
-                                </t>
-                                <t t-if="claim.partner_id.zip">
-                                    <span t-field="claim.delivery_address_id.zip"/>
-                                </t>
-                                <t t-if="claim.partner_id.country_id.name">
-                                    <span t-field="claim.delivery_address_id.country_id.name"/>
-                                </t>
+    <template id="report_claim_custom_document">
+        <t t-set="body_classname" t-value="'container'"/>
+        <t t-foreach="docs" t-as="doc">
+            <t t-set="page_copy_title" t-value="'customer'"/>
+            <t t-call="custom_report_link.claim_external_layout_custom">
+                <div class="page page-summary-report">
+                    <t t-set="claim" t-value="doc"/>
+                    <div class="row">
+                        <!-- Claim important information -->
+                        <div style="font-size:18px; font-weight: bold; color:#6D6E70">
+                            Claim No.
+                            <span>:</span>
+                            <span style="color:#939597;" t-field="claim.number"/>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="pull-left">
+                            <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
+                            <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                            <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
+                        </div>
+                        <div class="pull-left">
+                            <div style="width: 0.08in; height: 0.32in; background-color: white;"/>
+                        </div>
+                        <div style="font-size:23px; font-weight: bold; color:#6D6E70;">
+                            <span t-field="claim.name"/>
+                        </div>
+                        <span t-if="claim.name=='rma'">
+                            <div class="pull-right"
+                                 style="width: 8.4in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                        </span>
+                        <span t-if="claim.name=='return'">
+                            <div class="pull-right"
+                                 style="width: 7.7in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                        </span>
+                        <br/>
+                        <br/>
+                    </div>
+                    <div class="row" style="font-size:12px;">
+                        <div class="col-xs-2" style="text-align:right;">
+                            <t t-if="claim.partner_id.customer">
+                                <p class="row" style="color:#A61D34;">
+                                    <strong>Customer Name
+                                        <span>:</span>
+                                    </strong>
+                                </p>
+                            </t>
+                            <p class="row" style="color:#A61D34;">
+                                <strong>Delivery Address
+                                    <span>:</span>
+                                </strong>
                             </p>
-                    </t>
-                </div>
-            </div>
-            <div class="row" style="font-size:12px;">
-                <div class="col-xs-2" style="text-align:right; color:#A61D34;">
-                    <t t-if="claim.email_from">
-                        <p class="row"><strong>Email<span>: </span></strong></p>
-                    </t>
-                    <t t-if="claim.date">
-                        <p class="row"><strong>Claim Date<span>: </span></strong> </p>
-                    </t>
-                </div>
-                <!-- DATA -->
-                <div class="col-xs-2" style="color:#6D6E70">
-                    <t t-if="claim.delivery_address_id.email">
+                        </div>
+                        <!-- DATA -->
+                        <div class="col-xs-10" style="color:#6D6E70">
 
-                        <p t-esc="claim.delivery_address_id.email.rsplit(';', 1)[0]" style="white-space: nowrap;"/>
+                            <t t-if="claim.partner_id and claim.partner_id.customer">
+                                <t t-if="claim.delivery_address_id.parent_id">
+                                    <p t-field="claim.delivery_address_id.parent_id.name"/>
+                                </t>
+                                <t t-if="not claim.delivery_address_id.parent_id">
+                                    <p t-field="claim.delivery_address_id.name"/>
+                                </t>
+                            </t>
 
-                    </t>
-                    <t t-if="not claim.delivery_address_id.email">
-                        <p style="white-space: nowrap;">Not Available</p>
-                    </t>
-                    <t t-if="claim.date">
-                        <p t-field="claim.date" t-field-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}" style="font-size:12px; white-space: nowrap;"/>
-                    </t>
-                </div>
-                <div class="col-xs-2" style="text-align:right; color:#A61D34;">
-                    <t t-if="claim.email_from">
-                        <p class="row"><strong>Phone Number<span>: </span></strong></p>
-                    </t>
-                    <t t-if="claim.date">
-                        <p class="row"><strong>Date Deadline<span>: </span></strong> </p>
-                    </t>
-                </div>
-                <!-- DATA -->
-                <div class="col-xs-2" style="color:#6D6E70">
-                    <t t-if="claim.delivery_address_id.phone">
+                            <t t-if="claim.partner_id">
+                                <p style="white-space: nowrap;">
+                                    <t t-if="claim.partner_id.street">
+                                        <span t-field="claim.delivery_address_id.street"/>,
+                                    </t>
+                                    <t t-if="claim.partner_id.street2">
+                                        <span t-field="claim.delivery_address_id.street2"/>,
+                                    </t>
+                                    <t t-if="claim.partner_id.city">
+                                        <span t-field="claim.delivery_address_id.city"/>,
+                                    </t>
+                                    <t t-if="claim.partner_id.state_id.name">
+                                        <span t-field="claim.delivery_address_id.state_id.name"/>
+                                    </t>
+                                    <t t-if="claim.partner_id.zip">
+                                        <span t-field="claim.delivery_address_id.zip"/>
+                                    </t>
+                                    <t t-if="claim.partner_id.country_id.name">
+                                        <span t-field="claim.delivery_address_id.country_id.name"/>
+                                    </t>
+                                </p>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="row" style="font-size:12px;">
+                        <div class="col-xs-2" style="text-align:right; color:#A61D34;">
+                            <t t-if="claim.email_from">
+                                <p class="row">
+                                    <strong>Email
+                                        <span>:</span>
+                                    </strong>
+                                </p>
+                            </t>
+                            <t t-if="claim.date">
+                                <p class="row">
+                                    <strong>Claim Date
+                                        <span>:</span>
+                                    </strong>
+                                </p>
+                            </t>
+                        </div>
+                        <!-- DATA -->
+                        <div class="col-xs-2" style="color:#6D6E70">
+                            <t t-if="claim.delivery_address_id.email">
 
-                        <p t-field="claim.delivery_address_id.phone" style="white-space: nowrap;"/>
+                                <p t-esc="claim.delivery_address_id.email.rsplit(';', 1)[0]"
+                                   style="white-space: nowrap;"/>
 
-                    </t>
-                    <t t-if="not claim.delivery_address_id.phone">
-                        <p style=" white-space: nowrap;">Not Available</p>
-                    </t>
-                    <t t-if="claim.date">
-                        <p t-field="claim.date_deadline" t-field-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}" style="white-space: nowrap;"/>
-                    </t>
-                </div>
-                <div class="col-xs-2" style="text-align:right; color:#A61D34;">
-                    <t t-if="claim.comercial">
-                        <p class="row"><strong>Responsible<span>: </span></strong></p>
-                    </t>
-                    <t t-if="claim.date">
-                        <p class="row"> <strong>Print Date<span>: </span></strong> </p>
-                    </t>
-                </div>
+                            </t>
+                            <t t-if="not claim.delivery_address_id.email">
+                                <p style="white-space: nowrap;">Not Available</p>
+                            </t>
+                            <t t-if="claim.date">
+                                <p t-field="claim.date" t-field-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"
+                                   style="font-size:12px; white-space: nowrap;"/>
+                            </t>
+                        </div>
+                        <div class="col-xs-2" style="text-align:right; color:#A61D34;">
+                            <t t-if="claim.email_from">
+                                <p class="row">
+                                    <strong>Phone Number
+                                        <span>:</span>
+                                    </strong>
+                                </p>
+                            </t>
+                            <t t-if="claim.date">
+                                <p class="row">
+                                    <strong>Date Deadline
+                                        <span>:</span>
+                                    </strong>
+                                </p>
+                            </t>
+                        </div>
+                        <!-- DATA -->
+                        <div class="col-xs-2" style="color:#6D6E70">
+                            <t t-if="claim.delivery_address_id.phone">
 
-                <div class="col-xs-2"  style="color:#6D6E70; padding-right:5px; text-align:left;">
-                    <t t-if="claim.comercial">
-                        <p t-field="claim.comercial.name" style="white-space: nowrap;"/>
-                    </t>
-                    <t t-if="claim.date">
-                        <p t-esc="time.strftime('%d/%m/%Y')" t-field-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}" style="white-space: nowrap;"/>
-                    </t>
+                                <p t-field="claim.delivery_address_id.phone" style="white-space: nowrap;"/>
+
+                            </t>
+                            <t t-if="not claim.delivery_address_id.phone">
+                                <p style=" white-space: nowrap;">Not Available</p>
+                            </t>
+                            <t t-if="claim.date">
+                                <p t-field="claim.date_deadline"
+                                   t-field-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"
+                                   style="white-space: nowrap;"/>
+                            </t>
+                        </div>
+                        <div class="col-xs-2" style="text-align:right; color:#A61D34;">
+                            <t t-if="claim.comercial">
+                                <p class="row">
+                                    <strong>Responsible
+                                        <span>:</span>
+                                    </strong>
+                                </p>
+                            </t>
+                            <t t-if="claim.date">
+                                <p class="row">
+                                    <strong>Print Date
+                                        <span>:</span>
+                                    </strong>
+                                </p>
+                            </t>
+                        </div>
+
+                        <div class="col-xs-2" style="color:#6D6E70; padding-right:5px; text-align:left;">
+                            <t t-if="claim.comercial">
+                                <p t-field="claim.comercial.name" style="white-space: nowrap;"/>
+                            </t>
+                            <t t-if="claim.date">
+                                <p t-esc="time.strftime('%d/%m/%Y')"
+                                   t-field-options="{&quot;format&quot;: &quot;dd/MM/yyyy&quot;}"
+                                   style="white-space: nowrap;"/>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="row table-product-info">
+                        <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
+                            <thead>
+                                <tr style="font-weight: bold; background-color:#A61D34; color:white;">
+                                    <th width="10%" style="vertical-align:middle;">Product</th>
+                                    <th width="10%" style="vertical-align:middle;">Replacement Product</th>
+                                    <th width="7%" class="text-center" style="vertical-align:middle;">Quantity</th>
+                                    <!--<th>Type</th>
+                                    <th>Serial/Lot</th>-->
+                                    <th width="25%" style="vertical-align:middle;">Description</th>
+                                    <th width="48%" style="vertical-align:middle;">Internal Description</th>
+                                </tr>
+                            </thead>
+                            <tbody class="body-product-info" style="font-size:12px; color:#6D6E70;">
+                                <tr t-foreach="[x for x in claim.claim_line_ids if x.printable]" t-as="line_id">
+                                    <td class="col-xs-2">
+                                        <span t-field="line_id.product_id.name"/>
+                                    </td>
+                                    <td class="col-xs-2">
+                                        <span t-field="line_id.equivalent_product_id"/>
+                                    </td>
+                                    <td class="col-xs-1 text-center">
+                                        <span t-field="line_id.product_returned_quantity"/>
+                                    </td>
+                                    <!--<td class="col-xs-2"><span t-field="line_id.claim_origine"/></td>
+                                    <td class="col-xs-1"><span t-field="line_id.prodlot_id.ref"/></td>-->
+                                    <td class="col-xs-2" style="font-size:11px">
+                                        <span t-field="line_id.name"/>
+                                    </td>
+                                    <td class="col-xs-3" style="font-size:11px">
+                                        <span t-field="line_id.internal_description"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            </div>
-            <div class="row table-product-info">
-                <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
-                    <thead>
-                        <tr style="font-weight: bold; background-color:#A61D34; color:white;">
-                            <th width="10%" style="vertical-align:middle;">Product</th>
-                            <th width="10%" style="vertical-align:middle;">Replacement Product</th>
-                            <th width="7%" class="text-center" style="vertical-align:middle;">Quantity</th>
-                            <!--<th>Type</th>
-                            <th>Serial/Lot</th>-->
-                            <th width="25%" style="vertical-align:middle;">Description</th>
-                            <th width="48%" style="vertical-align:middle;">Internal Description</th>
-                        </tr>
-                    </thead>
-                    <tbody class="body-product-info" style="font-size:12px; color:#6D6E70;">
-                        <tr t-foreach="[x for x in claim.claim_line_ids if x.printable]" t-as="line_id">
-                            <td class="col-xs-2"><span t-field="line_id.product_id.name"/></td>
-                            <td class="col-xs-2"><span t-field="line_id.equivalent_product_id"/></td>
-                            <td class="col-xs-1 text-center"><span t-field="line_id.product_returned_quantity"/></td>
-                            <!--<td class="col-xs-2"><span t-field="line_id.claim_origine"/></td>
-                            <td class="col-xs-1"><span t-field="line_id.prodlot_id.ref"/></td>-->
-                            <td class="col-xs-2" style="font-size:11px"><span t-field="line_id.name"/></td>
-                            <td class="col-xs-3" style="font-size:11px"><span t-field="line_id.internal_description"/></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </template>
+            </t>
+        </t>
+    </template>
 
     <report
         id="action_report_crm_claim"
-        string="claim 11"
+        string="Resumen de Reclamación"
         model="crm.claim"
         report_type="qweb-pdf"
-        file="custom_report_link.report_translated_custom"
-        name="custom_report_link.report_translated_custom"
+        file="custom_report_link.report_claim_custom"
+        name="custom_report_link.report_claim_custom"
     />
 
     <record id="action_report_crm_claim" model="ir.actions.report">
