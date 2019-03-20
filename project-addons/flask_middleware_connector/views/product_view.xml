@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
-
-        <!--TODO: Migrar<record id="product_add_webservice_data" model="ir.ui.view">
-            <field name="name">product.product.form</field>
-            <field name="model">product.product</field>
-            <field name="inherit_id" ref="product.product_normal_form_view"/>
-            <field name="arch" type="xml">
-                <group name="sale_condition" position="inside">
-                    <field name="web"/>
-                    <field name="show_stock_outside"/>
-                </group>
-            </field>
-        </record>-->
-
-    </data>
+    <record id="product_add_webservice_data" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <group name="sale_condition" position="inside">
+                <field name="web"/>
+                <field name="show_stock_outside"/>
+            </group>
+        </field>
+    </record>
 </openerp>

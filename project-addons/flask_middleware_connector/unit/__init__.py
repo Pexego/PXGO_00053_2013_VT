@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -19,4 +18,4 @@
 #
 ##############################################################################
 
-from . import backend_adapter
+# from . import backend_adapter

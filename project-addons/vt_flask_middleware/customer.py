@@ -71,5 +71,5 @@ class CustomerTagCustomerRel(SyncModel):
     MOD_NAME = 'customertagcustomerrel'
 
     def __unicode__(self):
-        return u"Customer id: %s - Tag id: %s" % (self.odoo_id, self.customertag_id)
+        return "Customer id: %s - Tag id: %s" % (self.odoo_id, self.customertag_id)
 
