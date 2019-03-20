@@ -83,7 +83,7 @@
             <tree string="Returned lines" editable="bottom">
                 <field name="product_id"/>
                 <!--button name="equivalent_products" string="Change product" type="object"/-->
-                <!--field name="equivalent_product_id" readonly="1"/-->
+                <field name="equivalent_product_id" readonly="1"/>
                 <field name="name"/>
                 <field name="product_returned_quantity"/>
                 <field name="prodlot_id" domain="[('product_id', '=', product_id)]" context="{'product_id': product_id}"/>
@@ -110,7 +110,7 @@
                 <field name="claim_id"/>
                 <field name="product_id"/>
                 <!--button name="equivalent_products" string="Change product" type="object" icon="terp-gtk-jump-to-ltr"/-->
-                <!--field name="equivalent_product_id" readonly="1"/-->
+                <field name="equivalent_product_id" readonly="1"/>
                 <field name="name"/>
                 <field name="product_returned_quantity"/>
                 <field name="prodlot_id" domain="[('product_id', '=', product_id)]"/>
@@ -151,7 +151,7 @@
                         <field name="product_id"/>
                         <!--button name="equivalent_products" string="Change product" type="object"/-->
                         <newline/>
-                        <!--field name="equivalent_product_id" readonly="1"/-->
+                        <field name="equivalent_product_id" readonly="1"/>
                         <field name="supplier_id" domain="[('supplier', '=', True)]"/>
                         <field name="prodlot_id"/>
                         <!--field name="unit_sale_price"/-->
@@ -211,6 +211,8 @@
         <field name="name" position="before">
             <field name="number" />
         </field>
+        <field name="activity_date_deadline" position="replace"/>
+        <field name="activity_summary" position="replace"/>
     </field>
 </record>
 
