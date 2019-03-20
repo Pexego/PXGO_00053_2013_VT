@@ -92,6 +92,8 @@
                         type="object" icon="fa-strikethrough" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve'])]}"/>
                 <button name="button_notification" string="Avisos" class="oe_stat_button"
                         type="object" icon="fa-exclamation-triangle" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve', 'sent'])]}"/>
+                <button name="button_notification_open_risk_window" string="Risk Information"
+                            class="oe_stat_button" type="object" icon="fa-bar-chart-o"/>
             </xpath>
         </field>
     </record>
@@ -169,13 +171,13 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
-                    <attribute name="readonly">{"always_reload": True}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
                 </field>
                 <field name="partner_shipping_id" position="attributes">
-                    <attribute name="readonly">{"always_reload": True}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
                 </field>
                 <field name="partner_invoice_id" position="attributes">
-                    <attribute name="readonly">{"always_reload": True}</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
                 </field>
                 <header position="inside">
                     <button name="action_confirm" id="action_confirm"

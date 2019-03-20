@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="account_invoice_filter_brand_report_all_rule" model="ir.rule">
+            <field name="name">invoice report filter see all</field>
+            <field ref="model_account_invoice_report_filter" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('base.group_system'))]"/>
+        </record>
+
+        <record id="account_invoice_filter_brand_report_commercial_rule" model="ir.rule">
+            <field name="name">invoice report filter commercial</field>
+            <field ref="model_account_invoice_report_filter" name="model_id"/>
+            <field name="domain_force">[('section_id','=',user.default_section_id.id),('section_id','!=',False)]</field>
+        </record>
+
+        <record id="account_invoice_filter_brand_report_external_commercial_rule" model="ir.rule">
+            <field name="name">invoice report filter external commercial </field>
+            <field ref="model_account_invoice_report_filter" name="model_id"/>
+            <field name="domain_force">[('area_id.id','=',user.area_ids.ids),('section_id','!=',False)]</field>
+        </record>
+    </data>
+</openerp>

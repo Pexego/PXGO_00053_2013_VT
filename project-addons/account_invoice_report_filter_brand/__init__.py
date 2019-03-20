@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
+#    Copyright (C) 2018 Visiotech All Rights Reserved
+#    $Anthonny Contreras Vargas <acontreras@visiotechsecurity.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -18,20 +19,5 @@
 #
 ##############################################################################
 
-{
-    'name': "Customer area",
-    'version': '1.0',
-    'category': 'sale',
-    'description': """Add area to partner""",
-    'author': 'Pexego Sistemas Informáticos',
-    'website': 'www.pexego.es',
-    "depends": ['base',
-                'sale'],
-    "data": ['views/res_partner_view.xml',
-              'views/partner_area_view.xml',
-              'report/sale_report_view.xml',
-              'views/sale_view.xml',
-              'security/ir.model.access.csv',
-              'views/res_users_view.xml'],
-    "installable": True
-}
+from . import models
+

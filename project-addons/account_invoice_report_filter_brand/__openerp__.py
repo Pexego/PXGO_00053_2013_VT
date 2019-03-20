@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2016 Comunitea Servicios Tecnológicos
-#    $Omar Castiñeira Saavedra <omar@pcomunitea.com>$
+#    Copyright (C) 2018 Visiotech All Rights Reserved
+#    $Anthonny Contreras Vargas <acontreras@visiotechsecurity.com>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -19,23 +20,16 @@
 ##############################################################################
 
 {
-    'name': "Custom reports links",
-    'version': '11.0.1.0.0',
-    'category': 'Custom',
-    'description': """Customized report links""",
-    'author': 'Comunitea',
-    'website': 'www.comunitea.com',
-    "depends": ['sale', 'purchase', 'account', 'stock',
-                'stock_reserve_sale', 'stock_custom', 'sale_proforma_report',
-                'stock_picking_report_valued'],
-    "data": [
-        "data/report_paperformat.xml",
-        "views/custom_layout.xml",
-        "views/stock_custom_report.xml",
-        "views/report_sale_order.xml",
-        "views/report_purchase_order.xml",
-        "views/report_stock_picking.xml",
-        "views/report_stock_picking_valued.xml",
-        "views/report_invoice.xml"],
+    'name': 'Account Invoice Report Filter Brand',
+    'version': '1.0',
+    'category': 'account invoice report',
+    'description': """Account Invoice Report Filter Brand:""",
+    'author': 'Visiotech',
+    'website': '',
+    "depends": ['account', 'custom_account'],
+    "data": ['security/ir.model.access.csv',
+             'security/account_invoice_report_filter_security.xml',
+             'views/account_invoice_report_filter_view.xml'
+             ],
     "installable": True
 }
