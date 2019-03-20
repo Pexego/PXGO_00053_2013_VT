@@ -34,9 +34,9 @@ class SyncLog(BaseModel):
                           'operation': self.operation,
                           'odoo_id': self.odoo_id}]}
         try:
-            print "DATA: ", data
+            print("DATA: ", data)
             resp = requests.post(url, data=json.dumps(data), timeout=180)
-            print "RESP: ", resp
+            print("RESP: ", resp)
             if resp.status_code == 200:
                 self.sync = True
                 self.to_sync = False
@@ -67,7 +67,7 @@ class SyncLog(BaseModel):
                                  'operation': record.operation,
                                  'odoo_id': record.odoo_id})
         try:
-            print "DATA: ", data
+            print("DATA: ", data)
             cookies_file = open('cookies.data', 'w+b')
             try:
                 cookies = requests.utils.cookiejar_from_dict(pickle.load(cookies_file))
@@ -77,7 +77,7 @@ class SyncLog(BaseModel):
                                  timeout=6*len(objs), cookies=cookies)
             pickle.dump(requests.utils.dict_from_cookiejar(resp.cookies), cookies_file)
             cookies_file.close()
-            print "RESP: ", resp
+            print("RESP: ", resp)
             if resp.status_code == 200:
                 sync = True
                 to_sync = False

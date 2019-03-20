@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class ProductTemplate(models.Model):
 
-    _inherit = "product.template"
+    _inherit = 'product.template'
 
 
     web = fields.Selection([('not_published', 'Not published'),
@@ -59,7 +58,7 @@ class ProductTemplate(models.Model):
 
 class ProductProduct(models.Model):
 
-    _inherit = "product.product"
+    _inherit = 'product.product'
 
     @api.one
     @api.depends('bom_ids')

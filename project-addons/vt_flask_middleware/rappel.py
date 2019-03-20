@@ -29,7 +29,7 @@ class RappelCustomerInfo(SyncModel):
     MOD_NAME = 'rappelcustomerinfo'
 
     def __unicode__(self):
-        return u"Customer: %s - Rappel: %s" % (self.partner_id, self.rappel_id)
+        return "Customer: %s - Rappel: %s" % (self.partner_id, self.rappel_id)
 
 
 class RappelSection(SyncModel):
@@ -43,4 +43,4 @@ class RappelSection(SyncModel):
     MOD_NAME = 'rappelsection'
 
     def __unicode__(self):
-        return u"Rappel: %s - Percentage %s" % (self.rappel_id, self.percent)
+        return "Rappel: %s - Percentage %s" % (self.rappel_id, self.percent)
