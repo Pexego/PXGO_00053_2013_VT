@@ -131,11 +131,11 @@
                 <field name="write_date"/>
             </field>
             <field name="product_returned_quantity" position="after">
-                <button name="action_split" type="object" string="Split" icon="STOCK_CUT"
+                <button name="action_split" type="object" string="Split" icon="fa-cut"
                     attrs="{'invisible': ['|','|','|',('move_in_customer_state','!=',False),('move_out_customer_state','!=',False),('repair_id','!=',False),('product_returned_quantity','&lt;=',1.0)]}"/>
             </field>
             <button name="%(crm_claim_rma.action_claim_make_repair)d" position="replace">
-                <button name="create_repair" type="object" icon="gtk-execute" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
+                <button name="create_repair" type="object" icon="fa-wrench" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
             </button>
             <field name="product_id" position="attributes">
                 <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>

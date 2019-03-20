@@ -65,7 +65,12 @@
                 <field name="user_id" position="attributes">
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
-            </field>
+                <field name="website" position="before">
+                    <field name="area_id"
+                       attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)], 'invisible':[('customer', '=', False)]}"
+                       options="{'no_quick_create':True,'no_create_edit':True}"/>
+                    </field>
+                </field>
         </record>
 
         <record id="view_partner_form_add_required_payment_mode" model="ir.ui.view">
