@@ -1236,4 +1236,103 @@ SWIFT/BIC: BESCPTPL
 
     </template>
 
+    <template id="claim_external_layout_custom">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc" />
+        </t>
+        <!-- Multicompany -->
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <t t-if="not company.id">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+
+         <div class="header row">
+                <t t-set="lang" t-value="'undefined'"/>
+                <t t-if="o.partner_id.parent_id is Number">
+                    <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
+                </t>
+                <t t-if="o.partner_id.parent_id is not Number">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                </t>
+                <t t-if="not lang">
+                    <t t-set="lang" t-value="'undefined'"/>
+                </t>
+                <div class="row" style="margin-bottom: 2%">
+                    <div class="pull-left">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 1%"/>
+                    </div>
+                    <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 4%;">
+                        <div t-if="not claim.claim_type">RMA Receipt</div>
+                        <div t-if="company.vat">
+                            <strong>TIN</strong> <span t-field="company.vat"/>
+                        </div>
+                        <div t-if="company.phone">
+                            <strong>Phone</strong>
+                            <t t-if="lang == 'es_ES'">0034 911883615</t>
+                            <t t-if="lang == 'en_US'">0034 911883615</t>
+                            <t t-if="lang == 'fr_FR'">+33434226281</t>
+                            <t t-if="lang == 'it_IT'">0694803224</t>
+                            <t t-if="lang == 'pt_PT'">0034 911883615</t>
+                        </div>
+                        <div t-if="company.id">
+                            <strong>Fax</strong>
+                            <span t-field="company.id"/>
+                        </div>
+                        <div t-if="company.email">
+                            <strong>Email</strong>
+                            <t t-if="lang == 'es_ES'">
+                                <span>sat@visiotechsecurity.com</span>
+                            </t>
+                            <t t-if="lang == 'en_US'">
+                                <span>sat@visiotechsecurity.com</span>
+                            </t>
+                            <t t-if="lang == 'fr_FR'">
+                                <span>sav@visiotechsecurity.com</span>
+                            </t>
+                            <t t-if="lang == 'it_IT'">
+                                <span>satitalia@visiotechsecurity.com</span>
+                            </t>
+                            <t t-if="lang == 'pt_PT'">
+                                <span>sat@visiotechsecurity.com</span>
+                            </t>
+                        </div>
+                        <div t-if="company.website">
+                            <strong>Website</strong>
+                            <span t-field="company.website"/>
+                        </div>
+                        <br/>
+                        <div style="font-size:11px; color:#A61D34">
+                            <t t-call="crm_claim_summary_report.template_page_copy_title"/>
+                        </div>
+                    </div>
+                </div>
+         </div>
+
+        <div class="article">
+            <t t-raw="0" />
+        </div>
+
+        <div class="footer rma-page-note" t-if="page_copy_title">
+
+                <div class="pull-left col-xs-6" style="color:#6D6E70">
+                    <p style="font-size: 10pt;">
+                        ATTENTION
+                        -Please check the material received with this RMA document. Claims concerning this will only be accepted
+                         during 48 hours after the reception.
+                    </p>
+                </div>
+
+                <div class="pull-right col-xs-6" style="color:#6D6E70;">
+                    <p style="font-size: 7pt;"><b>IMPORTANT NOTE</b><span>: </span><span t-field="company.rma_footer_note"/>
+                    </p>
+                </div>
+        </div>
+
+    </template>
+
 </odoo>
