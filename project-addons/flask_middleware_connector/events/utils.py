@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from ..connector import get_environment
 
 def _get_exporter(session, model_name, record_id, class_exporter):

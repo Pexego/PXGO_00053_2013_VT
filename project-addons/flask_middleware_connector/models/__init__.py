@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea All Rights Reserved
@@ -23,7 +22,7 @@ from . import product
 from . import res_partner
 from . import res_users
 from . import stock
-from . import middleware
+# from . import middleware
 from . import product_brand
-from . import queue_job
+# from . import queue_job
 from . import account_invoice

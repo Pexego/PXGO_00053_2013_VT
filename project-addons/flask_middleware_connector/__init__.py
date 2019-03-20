@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -21,6 +20,6 @@
 
 # from . import connector TODO: migrar
 # from . import backend TODO: migrar
-# from . import events TODO: migrar
-# from . import models TODO: migrar
-# from . import wizard TODO: migrar
+from . import models
+from . import events
+from . import wizard
