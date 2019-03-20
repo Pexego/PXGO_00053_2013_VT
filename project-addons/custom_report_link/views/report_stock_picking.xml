@@ -105,4 +105,9 @@
     <record id="report_picking_custom_action" model="ir.actions.report">
         <field name="paperformat_id" ref="custom_report_link.paperformat_picking"/>
     </record>
+
+     <record id="stock_custom.action_report_picking_attachments" model="ir.actions.report">
+        <field name="paperformat_id" ref="custom_report_link.paperformat_picking"/>
+    </record>
+
 </odoo>

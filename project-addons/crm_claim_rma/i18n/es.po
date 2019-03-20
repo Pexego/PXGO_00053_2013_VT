@@ -358,7 +358,7 @@ msgstr "Facturas de cliente"
 #: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view2
 #: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_rma_refunds_out
 msgid "Customer Refunds"
-msgstr "Facturas rectificativas de cliente"
+msgstr "Facturas rect. de cliente"
 
 #. module: crm_claim_rma
 #: model:crm.case.categ,name:crm_claim_rma.categ_claim11
