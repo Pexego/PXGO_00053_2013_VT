@@ -37,6 +37,8 @@
         "views/report_stock_picking.xml",
         "views/report_stock_picking_valued.xml",
         "views/report_invoice.xml",
-        "views/report_claim.xml"],
+        "views/report_claim.xml",
+        "views/report_stock_picking_v.xml",
+        "views/report_stock_picking_valued_v.xml"],
     "installable": True
 }
