@@ -14,9 +14,11 @@
                 <field name="temp_unique_js_id" invisible="1"/>
             </xpath>
             <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
-                <attribute name="attrs">{'invisible': [('state', 'not in', ['reserve'])]}</attribute>
+                <attribute name="attrs"></attribute>
+                <attribute name="invisible">True</attribute>
             </xpath>
-            <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+
+            <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
                 <attribute name="attrs"></attribute>
                 <attribute name="invisible">True</attribute>
             </xpath>
