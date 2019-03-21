@@ -104,7 +104,8 @@ class StockReservation(models.Model):
 
     def release(self):
         res = super().release()
-        self.message_post(body=_("Reserva liberada."))
+        for reserve in self:
+            reserve.message_post(body=_("Reserva liberada."))
         return res
 
     @api.model

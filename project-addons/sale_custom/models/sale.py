@@ -132,3 +132,40 @@ class SaleOrder(models.Model):
                     raise exceptions.Warning(message)
 
         return super().action_confirm()
+
+
+class MailMail(models.Model):
+    _inherit = 'mail.mail'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(MailMail, self).create(vals)
+
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(StockMove, self).create(vals)
+
+
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(StockMoveLine, self).create(vals)
+
