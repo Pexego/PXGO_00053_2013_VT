@@ -13,7 +13,7 @@
                             <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
                         </t>
 
-                    <div class="page" t-if="o.picking_type_id.code != 'outgoing' or o.has_packs"  >
+                    <div class="page">
                         <div class="row">
                             <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
                                     <thead>
