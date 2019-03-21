@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-import openerp.addons.connector.backend as backend
+# import openerp.addons.connector.backend as backend
 
 middleware = backend.Backend('middleware')
 

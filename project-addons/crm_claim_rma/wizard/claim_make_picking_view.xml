@@ -11,8 +11,10 @@
         <field name="arch" type="xml">
             <form string="Select exchange lines to add in picking">
                 <separator string="Locations" colspan="4"/>
-                <field name="claim_line_source_location" nolabel="1" />
-                <field name="claim_line_dest_location" nolabel="1" />
+                <group>
+                    <field name="claim_line_source_location" colspan="4" nolabel="1"/>
+                    <field name="claim_line_dest_location" colspan="4" nolabel="1"/>
+                </group>
                 <separator string="Select lines for picking" colspan="4"/>
                 <field name="claim_line_ids" nolabel="1" colspan="4"/>
                     <!--tree string="Returned lines">

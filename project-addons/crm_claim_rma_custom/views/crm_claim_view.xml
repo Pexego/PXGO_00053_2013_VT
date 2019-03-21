@@ -131,11 +131,11 @@
                 <field name="write_date"/>
             </field>
             <field name="product_returned_quantity" position="after">
-                <button name="action_split" type="object" string="Split" icon="STOCK_CUT"
+                <button name="action_split" type="object" string="Split" icon="fa-cut"
                     attrs="{'invisible': ['|','|','|',('move_in_customer_state','!=',False),('move_out_customer_state','!=',False),('repair_id','!=',False),('product_returned_quantity','&lt;=',1.0)]}"/>
             </field>
             <button name="%(crm_claim_rma.action_claim_make_repair)d" position="replace">
-                <button name="create_repair" type="object" icon="gtk-execute" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
+                <button name="create_repair" type="object" icon="fa-wrench" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
             </button>
             <field name="product_id" position="attributes">
                 <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
@@ -253,6 +253,15 @@
         </field>
     </record>
 
+    <record model="ir.ui.view" id="crm_claim_add_seq_tree_view_inh_code_del">
+        <field name="name">crm.claim.add.seq.tree.view.inh.code.del</field>
+        <field name="model">crm.claim</field>
+        <field name="inherit_id" ref="crm_claim_code.crm_claim_add_seq_tree_view_inh" />
+        <field name="arch" type="xml">
+            <field name="code" position="replace"/>
+        </field>
+    </record>
+
     <record model="ir.actions.act_window" id="crm_claim_rma.crm_case_categ_claim_supplier">
         <field name="name">Claims</field>
         <field name="res_model">crm.claim</field>
@@ -282,6 +291,22 @@
             <p class="oe_view_nocontent_create">
                 Record and track your customers' claims. Claims may be linked to a sales order or a lot.You can send emails with attachments and keep the full history for a claim (emails sent, intervention type and so on).Claims may automatically be linked to an email address using the mail gateway module.
             </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="crm_case_claims_tree_view">
+        <field name="name">CRM - Claims Tree</field>
+        <field name="model">crm.claim</field>
+        <field name="arch" type="xml">
+            <tree string="Claims">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="date"/>
+                <field name="stage_id"/>
+                <field name="activity_date_deadline"/>
+                <field name="activity_summary"/>
+            </tree>
         </field>
     </record>
 

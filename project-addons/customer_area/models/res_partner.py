@@ -23,7 +23,7 @@ from odoo import modules
 import base64
 
 
-class res_partner(models.Model):
+class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     area_id = fields.Many2one('res.partner.area', 'Area')
@@ -44,12 +44,11 @@ class res_partner(models.Model):
     @api.onchange('area_id')
     def change_sales_team(self):
         if self.area_id:
-            # TODO: revisar cuando el campo team_id esté en la vista de res_partner
             self.team_id = self.area_id.sales_team.id
 
 
-class res_partner_area(models.Model):
-    _name = "res.partner.area"
+class ResPartnerArea(models.Model):
+    _name = 'res.partner.area'
 
     name = fields.Char('Name', size=64, required=True)
     code = fields.Char('Code', size=15)
@@ -58,8 +57,8 @@ class res_partner_area(models.Model):
                                              'area_id', 'commercial_region_id', 'Commercial Regions')
 
 
-class res_partner_area_region(models.Model):
-    _name = "res.partner.area.region"
+class ResPartnerAreaRegion(models.Model):
+    _name = 'res.partner.area.region'
     _description = "Commercial Region"
 
     name = fields.Char('Name', size=64, required=True)

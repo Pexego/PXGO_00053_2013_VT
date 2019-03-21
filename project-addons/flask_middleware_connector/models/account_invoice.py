@@ -1,9 +1,9 @@
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class AccountInvoice(models.Model):
 
-    _inherit = "account.invoice"
+    _inherit = 'account.invoice'
 
     orders = fields.Char('Orders', compute='get_orders', readonly=True, store=False)
 
