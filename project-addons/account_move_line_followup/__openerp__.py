@@ -7,7 +7,9 @@
     'author': 'Nadia Ferreyra',
     'category': 'Account',
     'depends': ['account', 'cyc_view'],
-    'data': ['data/ir_cron.xml', 'data/ir_config_parameter.xml'],
+    'data': ['data/ir_cron.xml',
+             'data/ir_config_parameter.xml',
+             'views/partner_view.xml'],
     'description': '''Update follow-up data in account move lines''',
     'installable': True,
 }
