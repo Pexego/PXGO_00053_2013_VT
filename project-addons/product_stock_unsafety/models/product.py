@@ -131,3 +131,4 @@ class ProductProduct(models.Model):
         'Next incoming date', compute='_get_next_incoming_date')
     min_suggested_qty = fields.Integer(
         'Min qty suggested', compute='_get_min_suggested_qty')
+    seller_id = fields.Many2one('res.partner', related='seller_ids.name', string='Main Supplier')
