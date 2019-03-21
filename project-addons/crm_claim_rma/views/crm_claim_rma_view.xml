@@ -91,7 +91,7 @@
                 <field name="repair_id" readonly="1"/>
                 <field name="repair_state"/>
                 <field name="state" readonly="1"/>
-                <field name="substate_id" widget="selection"/>
+                <field name="substate_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
                 <field name="move_in_customer_state"/>
                 <field name="move_out_customer_state"/>
                 <field name="supplier_id"/>
@@ -118,7 +118,7 @@
                 <field name="repair_id" readonly="1"/>
                 <field name="repair_state"/>
                 <field name="state" readonly="1"/>
-                <field name="substate_id"/>
+                <field name="substate_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
                 <field name="move_in_customer_state"/>
                 <field name="move_out_customer_state"/>
                 <field name="supplier_id"/>
@@ -188,7 +188,7 @@
                 <separator string="State" colspan="4"/>
                 <group col="6" colspan="4">
                     <field name="state"/>
-                    <field name="substate_id" widget='selection' />
+                    <field name="substate_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
                     <field name="last_state_change"/>
                 </group>
             </sheet>
