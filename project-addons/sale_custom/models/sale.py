@@ -31,6 +31,17 @@ class SaleOrder(models.Model):
 
     validated_dir = fields.Boolean(default=False)
 
+    partner_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]},)
+    partner_invoice_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    partner_shipping_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    warehouse_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    picking_policy = fields.Selection(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+
     def onchange_partner_id(self):
         """
             TODO: Por qué es necesario?
@@ -121,3 +132,40 @@ class SaleOrder(models.Model):
                     raise exceptions.Warning(message)
 
         return super().action_confirm()
+
+
+class MailMail(models.Model):
+    _inherit = 'mail.mail'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(MailMail, self).create(vals)
+
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(StockMove, self).create(vals)
+
+
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(StockMoveLine, self).create(vals)
+
