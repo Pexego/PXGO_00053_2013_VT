@@ -55,3 +55,7 @@ msgstr "Margen"
 msgid "Margin based on the coupon rappel"
 msgstr "Margen calculado con el vale ahorro"
 
+#. module: sale_margin_percentage
+#: view:sale.order:sale_margin_percentage.view_order_tree_add_margin
+msgid "margin (%)"
+msgstr "margen (%)"
