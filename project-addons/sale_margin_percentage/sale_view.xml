@@ -36,5 +36,16 @@
             </field>
         </record>
 
+        <record id="view_order_tree_add_margin" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="custom_partner.view_order_tree_add_amount_untaxed"/>
+            <field name="arch" type="xml">
+                <field name="amount_untaxed" position="after">
+                    <field name="margin"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>
