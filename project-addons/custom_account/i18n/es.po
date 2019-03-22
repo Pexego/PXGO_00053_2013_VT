@@ -175,6 +175,11 @@ msgid "It indicates that Telex release is necessary"
 msgstr "Indica que 'Telex release' es necesario"
 
 #. module: custom_account
+#: help:purchase.order,minimum_planned_date:0
+msgid "This is computed as the minimum scheduled date of all purchase order lines' products."
+msgstr "Campo calculado como la fecha mínima de llegada de las líneas de compra"
+
+#. module: custom_account
 #: model:ir.model,name:custom_account.model_account_move_line
 msgid "Journal Items"
 msgstr "Apuntes contables"
