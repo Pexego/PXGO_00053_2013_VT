@@ -45,6 +45,8 @@
                 <field name="relation"/>
                 <field name="margin"/>
                 <field name="pricelist_to_compare_price"/>
+                <field name="product_tmpl_id" invisible="1"/>
+                <field name="product_id" invisible="1"/>
             </xpath>
         </field>
     </record>
