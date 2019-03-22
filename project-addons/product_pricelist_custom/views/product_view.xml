@@ -26,10 +26,10 @@
                <group name="relations">
                    <separator string="Relations"/>
                    <group colspan="8" col="8">
-                       <field name="relation_pvd_pvi_a" readonly="True" coslpan="2"/>
-                       <field name="relation_pvd_pvi_b" readonly="True" coslpan="2"/>
-                       <field name="relation_pvd_pvi_c" readonly="True" coslpan="2"/>
-                       <field name="relation_pvd_pvi_d" readonly="True" coslpan="2"/>
+                       <field name="relation_pvd_pvi_a" readonly="True" colspan="2"/>
+                       <field name="relation_pvd_pvi_b" readonly="True" colspan="2"/>
+                       <field name="relation_pvd_pvi_c" readonly="True" colspan="2"/>
+                       <field name="relation_pvd_pvi_d" readonly="True" colspan="2"/>
                    </group>
                </group>
            </div>
