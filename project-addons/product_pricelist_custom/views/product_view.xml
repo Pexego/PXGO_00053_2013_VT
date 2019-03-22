@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <field name="company_id" position="after">
                 <field name="sequence"/>
-                <field name="pricelist_compare_default"/>
+                <field name="pricelist_related_default"/>
                 <field name="base_pricelist"/>
             </field>
         </field>
@@ -23,10 +23,15 @@
                 <attribute name="context">{'default_applied_on': '0_product_variant'}</attribute>
             </field>
             <div name="pricelist_item" position="after">
-               <div name="relations">
-                    <separator string="Relations"/>
-                    <field name="relation_pvd_pvi_a" readonly="True"/>
-               </div>
+               <group name="relations">
+                   <separator string="Relations"/>
+                   <group colspan="8" col="8">
+                       <field name="relation_pvd_pvi_a" readonly="True" coslpan="2"/>
+                       <field name="relation_pvd_pvi_b" readonly="True" coslpan="2"/>
+                       <field name="relation_pvd_pvi_c" readonly="True" coslpan="2"/>
+                       <field name="relation_pvd_pvi_d" readonly="True" coslpan="2"/>
+                   </group>
+               </group>
            </div>
             <xpath expr="//field[@name='item_ids']/tree/field[@name='pricelist_id']" position="attributes">
                 <attribute name="readonly">True</attribute>
@@ -40,11 +45,13 @@
             <xpath expr="//field[@name='item_ids']/tree/field[@name='date_end']" position="attributes">
                 <attribute name="invisible">True</attribute>
             </xpath>
+             <xpath expr="//field[@name='item_ids']/tree/field[@name='pricelist_id']" position="replace">
+                <field name="name_pricelist"/>
+             </xpath>
             <xpath expr="//field[@name='item_ids']/tree/field[@name='fixed_price']" position="after">
-                <field name="pricelist_to_compare" readonly="True"/>
-                <field name="relation"/>
+                <field name="pricelist_related" readonly="True"/>
                 <field name="margin"/>
-                <field name="pricelist_to_compare_price"/>
+                <field name="pricelist_related_price"/>
                 <field name="product_tmpl_id" invisible="1"/>
                 <field name="product_id" invisible="1"/>
             </xpath>
