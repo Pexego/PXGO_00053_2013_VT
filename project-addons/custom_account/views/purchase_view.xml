@@ -6,7 +6,8 @@
           <field name="model">purchase.order</field>
           <field name="inherit_id" ref="purchase.purchase_order_form"/>
           <field name="arch" type="xml">
-            <field name="picking_type_id" position="after">
+            <field name="date_order" position="after">
+                <field name="date_planned"/>
                 <field name="remark" string="Remark"/>
             </field>
             <field name="picking_type_id" position="before">
@@ -33,7 +34,6 @@
               <field name="date_planned" position="after">
                   <field name="manufacture_date"/>
                   <field name="prepared_merchandise_date"/>
-                  <field name="estimated_arrival_date"/>
               </field>
               <field name='company_id' position="attributes">
                 <attribute name="invisible">True</attribute>

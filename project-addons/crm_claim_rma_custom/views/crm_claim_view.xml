@@ -127,7 +127,7 @@
                 <attribute name="context">{'search_product_id': product_id}</attribute>
             </field>
             <field name="internal_description" position="after">
-                <field name="substate_id" widget="selection"/>
+                <field name="substate_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
                 <field name="write_date"/>
             </field>
             <field name="product_returned_quantity" position="after">
@@ -143,7 +143,7 @@
             <field name="claim_origine" position="after">
                 <!-- <field name="invoice_id"/> -->
                 <field name="partner_id" invisible="1"/>
-                <field name="invoice_id" domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
+                <field name="invoice_id" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
             </field>
         </field>
     </record>
