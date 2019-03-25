@@ -86,6 +86,7 @@ class PickingListener(Component):
         picking = record
         up_fields = ["date_done", "move_type", "carrier_name", "carrier_tracking_ref",
                      "state", "not_sync", "company_id", "partner_id"]
+        model_name = 'stock.picking'
         if picking.partner_id.commercial_partner_id.web \
                 and picking.partner_id.commercial_partner_id.active \
                 and picking.picking_type_id.code == 'outgoing' \
@@ -189,34 +190,34 @@ class StockMoveListener(Component):
     _apply_on = ['stock.move']
 
     def on_record_create(self, record, fields=None):
-        move_line = record
-        if move_line.picking_id.partner_id.commercial_partner_id.web \
-                and move_line.picking_id.partner_id.commercial_partner_id.active \
-                and move_line.picking_id.picking_type_id.code == 'outgoing' \
-                and not move_line.picking_id.not_sync \
-                and move_line.picking_id.company_id.id == 1:
-            record.with_delay(priority=1, eta=180).export_pickingproduct()
+        for move_line in record:
+            if move_line.picking_id.partner_id.commercial_partner_id.web \
+                    and move_line.picking_id.partner_id.commercial_partner_id.active \
+                    and move_line.picking_id.picking_type_id.code == 'outgoing' \
+                    and not move_line.picking_id.not_sync \
+                    and move_line.picking_id.company_id.id == 1:
+                record.with_delay(priority=1, eta=180).export_pickingproduct()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["parent_id", "product_uom_qty", "product_id", "picking_id"]
-        move_line = record
-        if move_line.picking_id.partner_id.commercial_partner_id.web \
-                and move_line.picking_id.partner_id.commercial_partner_id.active \
-                and move_line.picking_id.picking_type_id.code == 'outgoing'\
-                and not move_line.picking_id.not_sync \
-                and move_line.picking_id.company_id.id == 1:
-            for field in up_fields:
-                if field in fields:
-                    record.with_delay(priority=2, eta=240).update_pickingproduct(fields=fields)
+        for move_line in record:
+            if move_line.picking_id.partner_id.commercial_partner_id.web \
+                    and move_line.picking_id.partner_id.commercial_partner_id.active \
+                    and move_line.picking_id.picking_type_id.code == 'outgoing'\
+                    and not move_line.picking_id.not_sync \
+                    and move_line.picking_id.company_id.id == 1:
+                for field in up_fields:
+                    if field in fields:
+                        record.with_delay(priority=2, eta=240).update_pickingproduct(fields=fields)
 
     def on_record_unlink(self, record):
-        move_line = record
-        if move_line.picking_id.partner_id.commercial_partner_id.web \
-                and move_line.picking_id.partner_id.commercial_partner_id.active \
-                and move_line.picking_id.picking_type_id.code == 'outgoing' \
-                and not move_line.picking_id.not_sync \
-                and move_line.picking_id.company_id.id == 1:
-            record.with_delay(priority=5, eta=240).unlink_pickingproduct()
+        for move_line in record:
+            if move_line.picking_id.partner_id.commercial_partner_id.web \
+                    and move_line.picking_id.partner_id.commercial_partner_id.active \
+                    and move_line.picking_id.picking_type_id.code == 'outgoing' \
+                    and not move_line.picking_id.not_sync \
+                    and move_line.picking_id.company_id.id == 1:
+                record.with_delay(priority=5, eta=240).unlink_pickingproduct()
 
 
 class StockMove(models.Model):
