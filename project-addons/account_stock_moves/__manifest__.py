@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>).
+#    Copyright (C) 2015 Comunitea.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -17,20 +17,18 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import fields, models
 
+{
+    'name': 'Accounting stock movements',
+    'version': '11.0.0.0.1',
+    'author': 'OpenERP SA, Veritos',
+    'webbsite': 'https://www.odoo.com',
+    'description': """""",
+    'depends': ['purchase', 'stock_account'],
+    'category': 'Accounting & Finance',
+    'data': [],
+    'auto_install': False,
+    'installable': True,
+}
 
-class product_category(models.Model):
-    _inherit = "product.category"
-    property_account_creditor_price_difference_categ = fields.Many2one(
-            'account.account', string="Price Difference Account",
-            company_dependent=True,
-            help="This account will be used to value price difference between purchase price and cost price.")
-
-
-class product_template(models.Model):
-    _inherit = "product.template"
-
-    property_account_creditor_price_difference = fields.Many2one(
-            'account.account', string="Price Difference Account", company_dependent=True,
-            help="This account will be used to value price difference between purchase price and cost price.")
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
