@@ -460,4 +460,26 @@
             </field>
         </record>
 
+        <menuitem id="contacts.menu_localisation" name="Localization"
+            parent="crm.crm_menu_config" sequence="5"/>
+
+        <menuitem id="contacts.menu_partner_category_form"
+            action="base.action_partner_category_form"
+            name="Contact Tags"
+            sequence="1" parent="crm.crm_menu_config"/>
+
+        <menuitem id="contacts.menu_partner_title_contact"
+            action="base.action_partner_title_contact"
+            name="Contact Titles" parent="crm.crm_menu_config"
+            sequence="3"/>
+
+        <menuitem id="contacts.res_partner_industry_menu" name="Sectors of Activity"
+            action="base.res_partner_industry_action" parent="crm.crm_menu_config"
+            sequence="4"/>
+
+        <menuitem id="contacts.menu_config_bank_accounts"
+            name="Bank Accounts"
+            parent="crm.crm_menu_config"
+            sequence="6"/>
+
 </odoo>
