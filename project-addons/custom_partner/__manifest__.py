@@ -28,7 +28,7 @@
     "depends": ['base', 'sale', 'l10n_es_partner', 'account',
                 'base_partner_sequence', 'stock', 'account_credit_control',
                 'purchase', 'prospective_customer',
-                'account_due_list', 'customer_lost', 'sale_margin_percentage'],
+                'account_due_list', 'customer_lost', 'sale_margin_percentage', 'contacts'],
     "data": ["views/partner_view.xml",
              "views/sale_view.xml",
              "security/ir.model.access.csv",
