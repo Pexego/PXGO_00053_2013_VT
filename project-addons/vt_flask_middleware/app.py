@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Main application object and shared configuration.
 Contains singleton objects that need to be imported by several modules.
