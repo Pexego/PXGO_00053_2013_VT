@@ -4,6 +4,7 @@ from odoo import api, models
 
 from odoo.addons.component.core import Component
 from odoo.addons.queue_job.job import job
+from datetime import datetime
 
 
 class PickingListener(Component):
@@ -94,6 +95,18 @@ class StockPicking(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.delete(self)
         return True
+
+    def button_validate(self):
+        if self.claim_id:
+            if self.picking_type_code == 'incoming':
+                field = 'date_in'
+            else:
+                field = 'date_out'
+            products = [x.product_id.id for x in self.item_ids]
+            for claim_line in self.claim_id.claim_line_ids:
+                if claim_line.product_id.id in products:
+                    claim_line[field] = datetime.now()
+        return super().button_validate()
 
 
 class StockMoveListener(Component):
