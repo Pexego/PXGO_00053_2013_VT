@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Database management and base model
 using Peewee <https://github.com/coleifer/peewee> as ORM.

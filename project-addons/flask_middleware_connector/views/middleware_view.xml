@@ -46,7 +46,7 @@
 
     <menuitem name="Middleware Backends" parent="connector.menu_connector"
         action="action_middleware_backend" id="menu_middleware_backend"/>
-
+<!--
     <record id="middleware_backend_export_form" model="ir.ui.view">
         <field name="name">middleware.backend.export.form</field>
         <field name="model">middleware.backend.export</field>
@@ -79,5 +79,5 @@
     </record>
 
     <menuitem id="middleware_backend_export_menu" action="middleware_backend_export_action"
-        parent="connector.menu_connector"/>
+        parent="connector.menu_connector"/> -->
 </odoo>
