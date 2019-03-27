@@ -4,16 +4,34 @@
 
 <openerp>
     <data>
-        <record id="action_product_customizable" model="ir.actions.server">
+
+        <record id="action_product_customizable_form" model="ir.actions.act_window">
             <field name="name">Customizable Products</field>
-            <field name="type">ir.actions.server</field>
-            <field name="model_id" ref="model_product_product"/>
-            <field name="code">
-                action = self.get_customizable_products(cr, uid, context.get('active_ids', []), context=context)
-            </field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.product</field>
+            <field name="views">[[False, "tree"], [False, "form"]]</field>
+            <field name="domain">[("tag_ids.name", "=", 'Personalizable')]</field>
         </record>
 
-        <menuitem id="menu_products_customizable" action="action_product_customizable" parent="base.menu_product" groups="base.group_user" sequence="2"/>
+        <menuitem
+                id="menu_products_customizable"
+                action="action_product_customizable_form"
+                parent="sale.product_menu_catalog"
+                groups="base.group_no_one"
+                sequence="2"
+        />
+
+        <!--<record id="action_product_customizable" model="ir.actions.server">-->
+            <!--<field name="name">Customizable Products</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="model_product_product"/>-->
+            <!--<field name="code">-->
+                <!--action = self.get_customizable_products()-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <!--<menuitem id="menu_products_customizable" action="action_product_customizable" parent="sale.prod_config_main"-->
+                  <!--groups="base.group_user" sequence="2"/>-->
 
     </data>
 </openerp>
