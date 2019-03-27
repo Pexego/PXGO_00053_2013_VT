@@ -258,7 +258,7 @@
         </record>
 
         <menuitem id="res_partner_web" name="Web customers" string="Web customers"
-            action="action_view_web_customers"  parent="sale.sale_menu_root" sequence="4"/>
+            action="action_view_web_customers"  parent="prospective_customer.crm_menu_partners" sequence="4"/>
 
         <record id="purchase.act_res_partner_2_supplier_invoices" model="ir.actions.act_window">
             <field name="name">Supplier Invoices</field>
