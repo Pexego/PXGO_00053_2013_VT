@@ -68,11 +68,13 @@ class rappel_calculated(models.Model):
                         account_id = fpos.map_account(account_id)
                         taxes_ids = fpos.map_tax(taxes_ids)
                     tax_ids = [(6, 0, [x.id for x in taxes_ids])]
+                    ctx = dict(rp.rappel_id._context or {})
+                    ctx['lang'] = rp.partner_id.lang
                     invoice_line_obj.create({'product_id': rappel_product.id,
-                                             'name': u'%s (%s-%s)' %
-                                                     (rp.rappel_id.description,
-                                                      rp.date_start,
-                                                      rp.date_end),
+                                             'name': u'%s (%s - %s)' %
+                                                     (rp.rappel_id.with_context(ctx).description,
+                                                      datetime.strptime(rp.date_start, "%Y-%m-%d").strftime('%d/%m/%Y'),
+                                                      datetime.strptime(rp.date_end, "%Y-%m-%d").strftime('%d/%m/%Y')),
                                              'invoice_id': invoice.id,
                                              'account_id': account_id.id,
                                              'invoice_line_tax_id': tax_ids,
@@ -492,10 +494,12 @@ class ComputeRappelInvoice(models.TransientModel):
                 invoice_rappel = rappel.invoice_id
                 # Update description invoice lines
                 for line in invoice_rappel.invoice_line:
-                    line.write({'name': u'%s (%s-%s)' %
-                                        (rappel.rappel_id.description,
-                                         rappel.date_start,
-                                         rappel.date_end)})
+                    ctx = dict(rappel.rappel_id._context or {})
+                    ctx['lang'] = rappel.partner_id.lang
+                    line.write({'name': u'%s (%s - %s)' %
+                                        (rappel.rappel_id.with_context(ctx).description,
+                                         datetime.strptime(rappel.date_start, "%Y-%m-%d").strftime('%d/%m/%Y'),
+                                         datetime.strptime(rappel.date_end, "%Y-%m-%d").strftime('%d/%m/%Y'))})
                 # Update account data
                 if not invoice_rappel.payment_mode_id \
                         or not invoice_rappel.partner_bank_id \
