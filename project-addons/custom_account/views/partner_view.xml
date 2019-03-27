@@ -65,7 +65,7 @@
                 <field name="user_id" position="attributes">
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)]}</attribute>
                 </field>
-                <field name="website" position="before">
+                <field name="category_id" position="before">
                     <field name="area_id"
                        attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False)], 'invisible':[('customer', '=', False)]}"
                        options="{'no_quick_create':True,'no_create_edit':True}"/>
