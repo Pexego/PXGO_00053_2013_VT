@@ -101,9 +101,35 @@ class SaleOrder(models.Model):
 
     validated_dir = fields.Boolean(default=False)
 
-    @api.one
+    @api.multi
     def validate_address(self):
-        self.validated_dir = True
+        self.validated_dir = True   # Validate the address to not break with flow
+
+        listFields = []             # Dictionary to control all fields of address
+        fields = {'Street': self.partner_shipping_id.street,
+                  'Zip': self.partner_shipping_id.zip,
+                  'City': self.partner_shipping_id.city,
+                  'Estate': self.partner_shipping_id.state_id.id,
+                  'Country': self.partner_shipping_id.country_id.id}
+
+        if not all(fields.values()):
+            warning = _('Warning! the address is incorrect, the following fields are empty:\n')  # warning message
+
+            for key, value in fields.items():  # Rebuilt the list of fields
+                if not value:
+                    listFields.append(_(key))
+
+            warning += ', '.join(listFields)   # Separate by commas
+
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'action_warn',
+                'name': _('Aviso'),
+                'params': {
+                    'title': _('Aviso'),       # Send the view warning
+                    'text': _(warning),
+                    'sticky': True
+                }}
 
     @api.multi
     def action_button_confirm(self):
