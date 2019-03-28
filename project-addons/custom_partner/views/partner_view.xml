@@ -404,7 +404,8 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="vat" position="after">
+
+                <field name="vat" position="replace">
                     <field name="att"/> <!-- TODO Ya no existe campo use_parent_address: attrs="{'readonly': [('use_parent_address','=',True)]}"/> -->
                 </field>
                 <xpath expr="//field[@name='child_ids']/form//field[@name='street2']" position="after">
