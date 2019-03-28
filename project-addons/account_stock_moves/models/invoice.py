@@ -23,8 +23,8 @@ class AccountInvoice(models.Model):
                         qty = move.product_qty
                         total_qty += qty
                         if move.product_id.cost_method in ['average', 'fifo'] \
-                                and move._get_price_unit():
-                            price_unit = move._get_price_unit()
+                                and move.price_unit:
+                            price_unit = move.price_unit
                             moves_price += price_unit * qty
                         else:
                             price_unit = move.product_id.standard_price
@@ -60,13 +60,14 @@ class AccountInvoice(models.Model):
             acc = fpos.map_account(acc).id
             a = i_line.product_id.product_tmpl_id.\
                 get_product_accounts(fiscal_pos=fpos)['stock_input'].id
-            if 'price_move' in line and line['price_move'] != \
-                    i_line.price_subtotal and acc:
-                if tools.float_compare(i_line.invoice_id.currency_id.id,
-                                       company_currency.id, 2):
+            if 'price_move' in line and acc and \
+                    tools.float_compare(line['price_move'],
+                                        i_line.price_subtotal, 2):
+                if i_line.invoice_id.currency_id.id != \
+                        company_currency.id:
                     price_subtotal = i_line.invoice_id.currency_id.\
                         with_context(date=line['create_date']).\
-                        compute(line['price_move'], company_currency,
+                        compute(i_line.price_subtotal, company_currency,
                                 round=True)
                 else:
                     price_subtotal = i_line.price_subtotal
