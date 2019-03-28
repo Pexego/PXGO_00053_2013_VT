@@ -88,12 +88,29 @@ class SaleOrder(models.Model):
         view_id = self.env.ref('sale_custom.view_warning_form').id  # Id asociado a esa vista
 
         return {
-            'name': 'Avisos',
+            'name': _('Warnings'),
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'res.partner',
             'view_id': view_id,
             'res_id': res_partner_id.id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'flags': {'form': {'options': {'mode': 'view'}}}
+        }
+
+    @api.multi
+    def button_notification_open_risk_window(self):
+        partner_id = self.partner_id
+        view_id = self.env.ref('nan_partner_risk.open_risk_window_view').id
+
+        return {
+            'name': _('Partner Risk Information'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'res.partner',
+            'view_id': view_id,
+            'res_id': partner_id.id,
             'type': 'ir.actions.act_window',
             'target': 'new',
             'flags': {'form': {'options': {'mode': 'view'}}}

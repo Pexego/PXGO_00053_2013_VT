@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_partner_inherit_followup_form_2" model="ir.ui.view">
+            <field name="name">res.partner.followup.form.inherit.2</field>
+            <field name="inherit_id" ref="custom_partner.view_partner_inherit_followup_form_add_send_email"/>
+            <field name="model">res.partner</field>
+            <field name="arch" type="xml" >
+                <field name="notified_creditoycaucion" position="after">
+                    <field name="worst_cyc_notify_date" readonly="True"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>
