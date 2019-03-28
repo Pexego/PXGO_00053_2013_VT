@@ -743,3 +743,8 @@ msgstr "Marca"
 msgid "Product"
 msgstr "Producto"
 
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_required_payment_term
+msgid "VAT"
+msgstr "NIF"
+
