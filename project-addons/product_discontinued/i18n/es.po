@@ -17,6 +17,7 @@ msgstr ""
 
 #. module: product_discontinued
 #: field:product.product,discontinued:0
+#: model:ir.model.fields,field_description:product_discontinued.field_product_template_discontinued
 msgid "Discontinued"
 msgstr "Descatalogado"
 

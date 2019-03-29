@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 {
     "name": "Discontinued Product",
     "version": "1.0",
