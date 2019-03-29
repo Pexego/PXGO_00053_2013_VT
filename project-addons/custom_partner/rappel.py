@@ -339,6 +339,7 @@ class rappel(models.Model):
         partner_obj = self.env['res.partner']
         rappel_obj = self.env['rappel']
         partner_rappel_obj = self.env['res.partner.rappel.rel']
+        account_invoice = self.env['account.invoice']
 
         now = datetime.now()
         now_str = now.strftime("%Y-%m-%d")
@@ -350,18 +351,43 @@ class rappel(models.Model):
         
         for rappel in discount_voucher_rappels:
             pricelist_ids = tuple(rappel.pricelist_ids.ids)
-            partner_pricelist = tuple(partner_obj.search([('property_product_pricelist', 'in', pricelist_ids),
-                                                          ('prospective', '=', False), ('active', '=', True),
-                                                          ('is_company', '=', True), ('parent_id', '=', False)]).ids)
-            partner_rappel = tuple(partner_rappel_obj.search([('rappel_id', '=', rappel.id),
-                                                              '|', ('date_end', '=', False),
-                                                              ('date_end', '>=', now_str),
-                                                              ('date_start', '<=', now_str)]).mapped('partner_id.id'))
+            product_rappel = rappel.product_id
+            # Clientes que ya pertenecen al rappel:
+            partner_rappel_list = tuple(partner_rappel_obj.search([('rappel_id', '=', rappel.id),
+                                                                   ('date_start', '<=', now_str),
+                                                                   '|', ('date_end', '=', False),
+                                                                   ('date_end', '>=', now_str)]).mapped('partner_id.id'))
+            partner_to_check = tuple()
+            if pricelist_ids:
+                # Rappels dependientes de tarifas
+                # Clientes que deberian pertenecer al rappel:
+                partner_to_check = tuple(partner_obj.search([('property_product_pricelist', 'in', pricelist_ids),
+                                                             ('prospective', '=', False), ('active', '=', True),
+                                                             ('is_company', '=', True), ('parent_id', '=', False)]).ids)
+
+                # Clientes a los que ya no les corresponde el rappel (solo para cambios de tarifa)
+                #      - Se actualiza fecha fin con la fecha actual
+                remove_partners = set(partner_rappel_list) - set(partner_to_check)
+                if remove_partners:
+                    vals = {'date_end': yesterday_str}
+                    partner_to_update = partner_rappel_obj.search([('rappel_id', '=', rappel.id),
+                                                                   ('partner_id', 'in', tuple(remove_partners)),
+                                                                   '|', ('date_end', '=', False),
+                                                                   ('date_end', '>', now),
+                                                                   ('date_start', '<=', now_str)])
+                    partner_to_update.write(vals)
+
+            elif product_rappel:
+                # Rappel que depende de un producto concreto (y no de la tarifa)
+                # Clientes que deberian pertenecer al rappel:
+                partner_to_check = tuple(account_invoice.search([('date_invoice', '>=', now_str),
+                                                                 ('invoice_line.product_id', '=',
+                                                                  product_rappel.id)]).mapped('partner_id.id'))
 
             #  Clientes que faltan en el rappel -> Se crean dos entradas en el rappel:
             #      - Una para liquidar en el mes actual
             #      - Otra que empiece en fecha 1 del mes siguiente
-            add_partners = set(partner_pricelist) - set(partner_rappel)
+            add_partners = set(partner_to_check) - set(partner_rappel_list)
             if add_partners:
                 new_line1 = {'rappel_id': rappel.id, 'periodicity': 'monthly',
                              'date_start': now_str, 'date_end': end_actual_month}
@@ -371,16 +397,6 @@ class rappel(models.Model):
                     partner_rappel_obj.create(new_line1)
                     new_line2.update({'partner_id': partner})
                     partner_rappel_obj.create(new_line2)
-
-            # Clientes a los que ya no les corresponde el rappel -> Se actualiza fecha fin con la fecha actual
-            remove_partners = set(partner_rappel) - set(partner_pricelist)
-            if remove_partners:
-                vals = {'date_end': yesterday_str}
-                partner_to_update = partner_rappel_obj.search([('rappel_id', '=', rappel.id),
-                                                               ('partner_id', 'in', tuple(remove_partners)),
-                                                               '|', ('date_end', '=', False),
-                                                               ('date_end', '>', now), ('date_start', '<=', now_str)])
-                partner_to_update.write(vals)
 
     @api.model
     def compute_rappel(self):
