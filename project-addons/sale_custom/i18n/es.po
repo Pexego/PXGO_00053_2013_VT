@@ -76,3 +76,39 @@ msgstr "Información del riesgo contable de una empresa"
 #, python-format
 msgid "Warnings"
 msgstr "Avisos"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:118
+#, python-format
+msgid "Warning! the address is incorrect, the following fields are empty:\n"
+msgstr "Aviso! la dirección es incorrecta, faltan los siguentes campos:\n"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:107
+#, python-format
+msgid "Street"
+msgstr "Calle"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:108
+#, python-format
+msgid "Zip"
+msgstr "Código postal"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:109
+#, python-format
+msgid "City"
+msgstr "Ciudad"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:110
+#, python-format
+msgid "Estate"
+msgstr "Provincia"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:111
+#, python-format
+msgid "Country"
+msgstr "País"
