@@ -103,78 +103,45 @@ class PartnerListener(Component):
             "property_product_pricelist", "lang", "sync", "type", "parent_id",
             "is_company", "email", "active", "prospective", "phone", "mobile"
         ]
-        if partner.is_company:
-            if 'web' in fields and record.web and \
-                    (partner.active or partner.prospective) and \
-                    partner.is_company:
-                self.export_partner_data(record)
+        if 'web' in fields and record.web and \
+                (partner.active or partner.prospective):
+            self.export_partner_data(record)
 
-            elif "web" in fields and not record.web:
-                record.with_delay(priority=1, eta=60).unlink_partner
+        elif "web" in fields and not record.web:
+            record.with_delay(priority=1, eta=60).unlink_partner
 
-            elif partner.web and ('active' in fields or
-                                  'prospective' in fields) and not \
-                    (partner.active or partner.prospective):
-                record.with_delay(priority=1, eta=60).unlink_partner
+        elif partner.web and ('active' in fields or
+                                'prospective' in fields) and not \
+                (partner.active or partner.prospective):
+            record.with_delay(priority=1, eta=60).unlink_partner
 
-            elif partner.web and partner.is_company:
-                if 'category_id' in fields:
+        elif partner.web:
+            if 'category_id' in fields:
+                partner.with_delay(
+                    priority=5, eta=60).unlink_partner_tag_rel()
+
+                partner.with_delay(
+                    priority=10, eta=120).export_partner_tag_rel()
+            for field in up_fields:
+                if field in fields:
                     partner.with_delay(
-                        priority=5, eta=60).unlink_partner_tag_rel()
-
-                    partner.with_delay(
-                        priority=10, eta=120).export_partner_tag_rel()
-                for field in up_fields:
-                    if field in fields:
-                        partner.with_delay(
-                            priority=2, eta=120).update_partner(fields)
-                        if 'street' in fields or \
-                                'zip' in fields or \
-                                'city' in fields or \
-                                'country_id' in fields or \
-                                'state_id' in fields:
-                            sales = self.env['sale.order'].search([
-                                ('partner_id', '=', partner.id),
-                                '|',
-                                ('state', '!=', 'cancel'),
-                                ('state', '!=', 'done'),
-                                ('company_id', '=', 1)
-                            ])
-                            for sale in sales:
-                                sale.with_delay(
-                                    priority=5, eta=180).update_order()
-                        break
-        else:
-            if partner.commercial_partner_id and \
-                    partner.commercial_partner_id.web and \
-                    partner.commercial_partner_id.active:
-                if 'active' in fields and fields.get('active', False):
-                    partner.with_delay(priority=10, eta=120).export_partner()
-                elif 'active' in fields and not partner.active:
-                    partner.with_delay(priority=1, eta=60).unlink_partner()
-                else:
-                    for field in up_fields:
-                        if field in fields:
-                            if partner.active:
-                                partner.with_delay(
-                                    priority=3, eta=180).update_partner()
-
-                            if 'street' in fields or \
-                                    'zip' in fields or \
-                                    'city' in fields or \
-                                    'country_id' in fields or \
-                                    'state_id' in fields:
-                                sales = self.env['sale.order'].search([
-                                    ('partner_shipping_id', '=', partner.id),
-                                    '|',
-                                    ('state', '!=', 'cancel'),
-                                    ('state', '!=', 'done'),
-                                    ('company_id', '=', 1)
-                                ])
-                                for sale in sales:
-                                    sale.with_delay(
-                                        priority=5, eta=180).update_order()
-                            break
+                        priority=2, eta=120).update_partner()
+                    if 'street' in fields or \
+                            'zip' in fields or \
+                            'city' in fields or \
+                            'country_id' in fields or \
+                            'state_id' in fields:
+                        sales = self.env['sale.order'].search([
+                            ('partner_id', '=', partner.id),
+                            '|',
+                            ('state', '!=', 'cancel'),
+                            ('state', '!=', 'done'),
+                            ('company_id', '=', 1)
+                        ])
+                        for sale in sales:
+                            sale.with_delay(
+                                priority=5, eta=180).update_order()
+                    break
 
     def on_record_unlink(self, record):
         if record.web:
@@ -289,14 +256,14 @@ class PricelistListener(Component):
             [('property_product_pricelist', '=',
               record.pricelist_id.id), ('web', '=', True)])
         for partner in partners:
-            partner.with_delay().update_partner
+            partner.with_delay().update_partner()
 
     def on_record_write(self, record, fields=None):
         partners = self.env['res.partner'].search(
             [('property_product_pricelist', '=',
               record.pricelist_id.id), ('web', '=', True)])
         for partner in partners:
-            partner.with_delay().update_partner
+            partner.with_delay().update_partner()
 
 
 class PartnerCategoryListener(Component):
