@@ -171,7 +171,7 @@
             <field name="inherit_id" ref="mail_tracking.view_partner_form" />
             <field name="arch" type="xml">
                 <field name="email_score" position="replace"/>
-                <field name="email_bounced" position="replace"/>
+                    <field name="email_bounced" position="replace"/>
             </field>
         </record>
 
