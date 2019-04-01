@@ -748,3 +748,8 @@ msgstr "Producto"
 msgid "VAT"
 msgstr "NIF"
 
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
+msgid " Set date to all order lines"
+msgstr " Asignar fecha a todas las lineas del pedido de compra"
+
