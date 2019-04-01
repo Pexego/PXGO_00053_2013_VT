@@ -97,7 +97,9 @@
                 <field name="partner_shipping_id" position="after">
                     <field name="validated_dir" invisible="1"/>
                     <label for="validate_address"/>
-                    <button name="validate_address" string="Validate address" type="object" class="oe_highlight"/>
+                    <button name="validate_address"
+                            string="Validate address" type="object" class="oe_highlight"
+                            attrs="{'invisible': [('validated_dir', '=', True)]}"/>
                 </field>
             </field>
         </record>
