@@ -120,7 +120,7 @@ def unlink(user_id, password, model, odoo_id):
                 producttagproductrel.delete_instance()
         elif model == 'order':
             for order in Order.select().where(
-                Order.partner_id == rec.id):
+                   Order.partner_id == rec.id):
                 order.delete_instance()
         rec.delete_instance()
     return True

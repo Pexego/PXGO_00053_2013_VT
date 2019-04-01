@@ -1160,21 +1160,21 @@
                   </thead>
                   <tbody style="font-size:12px; color:#6D6E70;">
                         <tr>
-                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': 'monetary_widget'}"/></td>
+                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                             <td></td>
                             <td></td>
-                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': 'monetary_widget'}"/></td>
+                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                             <t t-if="o.amount_untaxed > 0">
                                 <td><span t-esc="'%.1f'%((o.amount_tax/o.amount_untaxed) * 100)"/></td>
                             </t>
                             <t t-if="o.amount_untaxed &lt;= 0">
                                 <td><span>0</span></td>
                             </t>
-                            <td><span t-esc="(total_tax + o.amount_tax)" t-esc-options="{'widget': 'monetary', 'display_currency': 'monetary_widget'}"/></td>
+                            <td><span t-esc="(total_tax + o.amount_tax)" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                             <!--<td><span t-field="o.amount_tax"/></td>-->
                             <td></td>
                             <td></td>
-                            <td><strong t-esc="((total_price + total_tax) + o.amount_total)" t-esc-options="{'widget': 'monetary', 'display_currency': 'monetary_widget'}"/></td>
+                            <td><strong t-esc="((total_price + total_tax) + o.amount_total)" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                             <!--<td><span t-field="o.amount_total"/></td>-->
                         </tr>
                   </tbody>

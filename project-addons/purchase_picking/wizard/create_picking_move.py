@@ -104,29 +104,27 @@ class CreatePickingMove(models.TransientModel):
                 else:
                     move.move_id.date_expected = self.date_picking
                 all_moves += move.move_id
-        picking_ids = self.env['stock.picking']
+        partners = all_moves.mapped('partner_id')
+        if len(partners) > 1:
+            partner = self.env.ref('purchase_picking.partner_multisupplier').id
+        else:
+            partner = partners[0].id
 
-        for moves in all_moves:
-            partner = moves.partner_id.id
-            for move in all_moves[1:]:
-                if move.partner_id.id != partner:
-                    partner = self.env.ref('purchase_picking.partner_multisupplier').id
-                    break
-            picking_vals = {
-                'partner_id': partner,
-                'picking_type_id': type_id.id,
-                'move_lines': [(6, 0, [x.id for x in all_moves])],
-                'origin': ', '.join(all_moves.mapped('purchase_line_id.order_id.name')),
-                'min_date': self.date_picking,
-                'location_id': type_id.default_location_src_id.id,
-                'location_dest_id': type_id.default_location_dest_id.id,
-                'temp': True
-            }
-            picking_ids += self.env['stock.picking'].create(picking_vals)
-            picking_ids.action_confirm()
+        picking_vals = {
+            'partner_id': partner,
+            'picking_type_id': type_id.id,
+            'move_lines': [(6, 0, [x.id for x in all_moves])],
+            'origin': ', '.join(all_moves.mapped('purchase_line_id.order_id.name')),
+            'min_date': self.date_picking,
+            'location_id': type_id.default_location_src_id.id,
+            'location_dest_id': type_id.default_location_dest_id.id,
+            'temp': True
+        }
+        picking_id = self.env['stock.picking'].create(picking_vals)
+        picking_id.action_confirm()
 
         all_moves._force_assign()
         context2 = dict(context)
-        context2['picking_ids'] = picking_ids.ids
+        context2['picking_ids'] = [picking_id.id]
         return self.with_context(context2)._view_picking()
 
