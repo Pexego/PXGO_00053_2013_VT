@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Authors: Santiago Argüeso
@@ -25,7 +24,7 @@
     'description': "Allow to account invoices when transfering incoming "
                    "pickings, when invoice is validated previous account move "
                    "is reverted.",
-    'version': '1.0',
+    'version': '11.0.0.0.1',
     'author': 'Pexego',
     'category': 'Finance',
     'website': 'http://www.pexego.es',
@@ -34,9 +33,10 @@
                 'account_reversal',
                 'stock',
                 'purchase_discount',
-                'custom_account'],
-    'data': ['res_company_view.xml',
-             'stock_picking_view.xml',
+                'custom_account',
+                'purchase_stock_picking_invoice_link'],
+    'data': ['views/res_company_view.xml',
+             'views/stock_picking_view.xml',
              'email_template.xml'],
     'active': False,
     'installable': True,

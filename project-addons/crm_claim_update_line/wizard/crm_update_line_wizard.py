@@ -25,7 +25,7 @@ from odoo import models, api, fields
 class CrmClaimUpdateLines(models.TransientModel):
     _name = 'crm_claim_update_lines.wizard'
 
-    substate_id = fields.Many2one('substate.substate', string='substate_id', default='')
+    substate_id = fields.Many2one('substate.substate', string='substate_id')
     invoice_id = fields.Many2one('account.invoice', string='invoice_id')
     partner_id = fields.Many2one('res_partner', readonly=True)
     claim_origine = fields.Selection([('broken_down', 'Broken down product'),

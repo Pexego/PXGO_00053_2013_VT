@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Main web page controller.
 Handles database connections, login, errors and basic routes.
@@ -32,9 +31,7 @@ log.addHandler(h)
 # Main script body
 ###############################################################################
 
-if __name__ == "__main__":
-    # This code is only executed if the cowlab.py file is directly called from
-    # python and not imported from another python file / console.
+def run_middleware():
     scheduler = BackgroundScheduler()
     scheduler.add_job(cron.check_sync_data, 'interval', minutes=1)
     # Explicitly kick off the background thread
@@ -42,3 +39,9 @@ if __name__ == "__main__":
 
     atexit.register(lambda: scheduler.shutdown(wait=False))
     app.run(host="0.0.0.0")
+
+
+if __name__ == "__main__":
+    # This code is only executed if the cowlab.py file is directly called from
+    # python and not imported from another python file / console.
+    run_middleware()

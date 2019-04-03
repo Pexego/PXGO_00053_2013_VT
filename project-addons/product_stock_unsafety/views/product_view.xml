@@ -33,7 +33,7 @@
                 <tree string="Products">
                     <field name="default_code"/>
                     <field name="product_brand_id"/>
-                    <!--TODO: MIgrar<field name="seller_id"/>-->
+                    <field name="seller_id"/>
                     <field name="manufacturer_pref" string="Supplier/Supplier Product Code"/>
                     <field name="categ_id"/>
                     <field name="qty_in_production"/>
@@ -48,7 +48,7 @@
                     <field name="biggest_sale_qty"/>
                     <field name="remaining_days_sale"/>
                     <field name="min_suggested_qty"/>
-                    <button name="%(action_add_to_purchase_order_wzd)d" type="action" string="Add to purchase order" icon="gtk-execute"/>
+                    <button name="%(action_add_to_purchase_order_wzd)d" type="action" string="Add to purchase order" icon="fa-shopping-cart"/>
                 </tree>
             </field>
         </record>
@@ -64,9 +64,9 @@
             <field name="domain">[('custom', '=', False),('type', '!=', 'service')]</field>
         </record>
 
-        <!--TODO: MIgrar<menuitem
+        <menuitem
             action="purchase_product_remaining_stock_days" id="menu_product_remaining_stock_days"
-            parent="purchase.menu_procurement_management_product" sequence="99" />-->
+            parent="purchase.menu_procurement_management" sequence="99" />
 
     </data>
 </openerp>

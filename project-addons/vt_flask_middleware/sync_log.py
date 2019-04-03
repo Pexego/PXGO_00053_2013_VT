@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from peewee import CharField, IntegerField, DateTimeField, BooleanField
 from app import app
 from database import BaseModel
@@ -9,12 +8,14 @@ import hmac
 import time
 import hashlib
 
+
 def _get_signature():
-        key = r"Z%z^Q%\*v165a"
-        key += time.strftime("%d-%m-%y")
-        key += r"p2s69\aNz-u}"
-        b = bytes(key)
-        return hmac.new(b, "Hola, soy Odoo", hashlib.sha256).hexdigest()
+    key = r"Z%z^Q%\*v165a"
+    key += time.strftime("%d-%m-%y")
+    key += r"p2s69\aNz-u}"
+    b = bytes(key, encoding='utf8')
+    msg = bytes("Hola, soy Odoo", encoding='utf8')
+    return hmac.new(b, msg, hashlib.sha256).hexdigest()
 
 
 class SyncLog(BaseModel):
@@ -34,9 +35,9 @@ class SyncLog(BaseModel):
                           'operation': self.operation,
                           'odoo_id': self.odoo_id}]}
         try:
-            print("DATA: ", data)
+            print(("DATA: ", data))
             resp = requests.post(url, data=json.dumps(data), timeout=180)
-            print("RESP: ", resp)
+            print(("RESP: ", resp))
             if resp.status_code == 200:
                 self.sync = True
                 self.to_sync = False
@@ -67,7 +68,7 @@ class SyncLog(BaseModel):
                                  'operation': record.operation,
                                  'odoo_id': record.odoo_id})
         try:
-            print("DATA: ", data)
+            print(("DATA: ", data))
             cookies_file = open('cookies.data', 'w+b')
             try:
                 cookies = requests.utils.cookiejar_from_dict(pickle.load(cookies_file))
@@ -77,7 +78,7 @@ class SyncLog(BaseModel):
                                  timeout=6*len(objs), cookies=cookies)
             pickle.dump(requests.utils.dict_from_cookiejar(resp.cookies), cookies_file)
             cookies_file.close()
-            print("RESP: ", resp)
+            print(("RESP: ", resp))
             if resp.status_code == 200:
                 sync = True
                 to_sync = False

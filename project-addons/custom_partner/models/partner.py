@@ -363,9 +363,11 @@ class ResPartner(models.Model):
                                                     domain=[('full_reconcile_id', '=', False),
                                                             ('account_id.internal_type', '=', 'payable'),
                                                             ('move_id.state', '!=', 'draft')])
-    _sql_constraints = [
-        ('email_web_uniq', 'unique(email_web)', 'Email web field, must be unique')
-    ]
+
+    @api.model
+    def _commercial_fields(self):
+        res = super()._commercial_fields()
+        return res + ['web', 'email_web']
 
     @api.multi
     def _is_accounting(self):
@@ -393,8 +395,11 @@ class ResPartner(models.Model):
     @api.constrains('email_web')
     def check_unique_email_web(self):
         for partner in self:
-            if partner.email_web:
-                ids = self.search([('email_web', '=ilike', partner.email_web), ('id', '<>', partner.id)])
+            if partner.email_web and partner.is_company:
+                # Solo comprobamos para compañías, ya que se arrastra a contactos.
+                ids = self.search(
+                    [('email_web', '=ilike', partner.email_web),
+                     ('id', '!=', partner.id), ('is_company', '=', True)])
                 if ids:
                     raise exceptions.ValidationError(_('Email web must be unique'))
 
@@ -582,7 +587,7 @@ class ResPartner(models.Model):
                                 <strong><center style="font-size: 18px">''' + _("Amount not due") +\
                                   ''' : %s </center></strong>''' % (total)
         return followup_table
-        
+
         def get_custom_followup_table_html(self, cr, uid, ids, context=None):
         ''' Build the html tables to be included in emails send to partners,
             when reminding them their overdue invoices.
