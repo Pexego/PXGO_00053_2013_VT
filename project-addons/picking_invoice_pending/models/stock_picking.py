@@ -144,19 +144,19 @@ class StockPicking(models.Model):
     @api.multi
     def action_confirm(self):
         res = super().action_confirm()
-        pick = self[0]
-        if not pick.company_id.\
-                property_pending_variation_account or not \
-                pick.company_id.property_pending_stock_account or not \
-                pick.company_id.property_pending_supplier_invoice_account:
-            raise Warning(_("You need to configure the accounts "
-                            "in the company for pending invoices"))
-        if not pick.company_id.property_pending_stock_journal:
-            raise Warning(_("You need to configure an account "
-                            "journal in the company for pending "
-                            "invoices"))
         for pick in self:
-            if pick.picking_type_id.code == "incoming" and pick.move_lines \
+            if not pick.company_id. \
+                    property_pending_variation_account or not \
+                    pick.company_id.property_pending_stock_account or not \
+                    pick.company_id.property_pending_supplier_invoice_account:
+                raise Warning(_("You need to configure the accounts "
+                                "in the company for pending invoices"))
+            if not pick.company_id.property_pending_stock_journal:
+                raise Warning(_("You need to configure an account "
+                                "journal in the company for pending "
+                                "invoices"))
+
+            if pick.pickiwng_type_id.code == "incoming" and pick.move_lines \
                     and pick.move_lines[0].purchase_line_id and \
                     pick.company_id.required_invoice_pending_move and \
                     not pick.backorder_id and \
