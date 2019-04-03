@@ -144,8 +144,6 @@ class StockPicking(models.Model):
     @api.multi
     def action_confirm(self):
         res = super().action_confirm()
-        import ipdb
-        ipdb.set_trace()
         for pick in self:
             if not pick.company_id. \
                     property_pending_variation_account or not \
