@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
-        <!--TODO: Migrar<template id="crm_claim_summary_report.layout" inherit_id="web.layout" primary="True">
+        <template id="crm_claim_summary_report.layout" inherit_id="web.layout" primary="True">
             <xpath expr="//html" position="attributes">
                 <attribute name="t-att-data-report-margin-top">data_report_margin_top if data_report_margin_top else None</attribute>
                 <attribute name="t-att-data-report-header-spacing">data_report_header_spacing if data_report_header_spacing else None</attribute>
@@ -54,8 +54,8 @@
                     }
                 </style>
             </xpath>
-            <xpath expr="//head/link[@href='/web/static/src/css/full.css']" position="replace"></xpath>
-        </template>-->
+            <!--xpath expr="//head/link[@href='/web/static/src/css/full.css']" position="replace"></xpath-->
+        </template>
 
         <template id="crm_claim_summary_report.html_container">
             <t t-set="body_classname" t-value="'container'"/>
@@ -210,4 +210,4 @@
         </template>
 
     </data>
-</openerp>
+</odoo>
