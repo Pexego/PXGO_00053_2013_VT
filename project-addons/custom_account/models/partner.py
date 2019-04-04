@@ -8,6 +8,9 @@ class Partner(models.Model):
 
     _inherit = "res.partner"
 
+    def check_vat_partner(self):
+        self.check_vat()
+
     @api.multi
     def _pending_orders_amount(self):
         web_user = self.env['ir.config_parameter'].get_param('web.user.buyer')

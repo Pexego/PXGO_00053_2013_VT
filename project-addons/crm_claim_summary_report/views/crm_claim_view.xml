@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
-
-        <record model="ir.ui.view" id="crm_claim_line_tree_add_pritable">
-            <field name="name">CRM - Claims Tree invisible states</field>
-            <field name="model">claim.line</field>
-            <field name="inherit_id" ref="crm_claim_rma.crm_claim_line_tree_view"/>
-            <field name="arch" type="xml">
-                <field name="internal_description" position="after">
-                    <field name="printable"/>
-                </field>
+<odoo>
+    <record model="ir.ui.view" id="crm_claim_line_tree_add_pritable">
+        <field name="name">CRM - Claims Tree invisible states</field>
+        <field name="model">claim.line</field>
+        <field name="inherit_id" ref="crm_claim_rma.crm_claim_line_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="internal_description" position="after">
+                <field name="printable"/>
             </field>
-        </record>
-
-    </data>
-</openerp>
+        </field>
+    </record>
+</odoo>

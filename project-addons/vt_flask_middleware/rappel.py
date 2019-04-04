@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 from peewee import CharField, IntegerField, FloatField, ForeignKeyField
 from database import SyncModel

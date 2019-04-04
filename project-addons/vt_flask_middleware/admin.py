@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Admin dashboard.
 Configures the admin interface.
@@ -38,6 +37,7 @@ def init_db():
     for mod_class in sorted(DEPENDENT_CLASSES.keys()):
         if not MODELS_CLASS[mod_class].table_exists():
             MODELS_CLASS[mod_class].create_table()
+
 
 init_db()
 

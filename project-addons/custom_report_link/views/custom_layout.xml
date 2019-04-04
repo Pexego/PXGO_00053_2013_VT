@@ -1160,21 +1160,21 @@
                   </thead>
                   <tbody style="font-size:12px; color:#6D6E70;">
                         <tr>
-                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': 'monetary_widget'}"/></td>
+                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                             <td></td>
                             <td></td>
-                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': 'monetary_widget'}"/></td>
+                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                             <t t-if="o.amount_untaxed > 0">
                                 <td><span t-esc="'%.1f'%((o.amount_tax/o.amount_untaxed) * 100)"/></td>
                             </t>
                             <t t-if="o.amount_untaxed &lt;= 0">
                                 <td><span>0</span></td>
                             </t>
-                            <td><span t-esc="(total_tax + o.amount_tax)" t-esc-options="{'widget': 'monetary', 'display_currency': 'monetary_widget'}"/></td>
+                            <td><span t-esc="(total_tax + o.amount_tax)" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                             <!--<td><span t-field="o.amount_tax"/></td>-->
                             <td></td>
                             <td></td>
-                            <td><strong t-esc="((total_price + total_tax) + o.amount_total)" t-esc-options="{'widget': 'monetary', 'display_currency': 'monetary_widget'}"/></td>
+                            <td><strong t-esc="((total_price + total_tax) + o.amount_total)" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                             <!--<td><span t-field="o.amount_total"/></td>-->
                         </tr>
                   </tbody>
@@ -1233,6 +1233,626 @@ SWIFT/BIC: BESCPTPL
                 <label><t t-raw="company.name"></t> <span t-field="company.report_footer"/></label>
             </div>
         </div>
+
+    </template>
+
+    <template id="claim_external_layout_custom">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc" />
+        </t>
+        <!-- Multicompany -->
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <t t-if="not company.id">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+
+         <div class="header row">
+                <t t-set="lang" t-value="'undefined'"/>
+                <t t-if="o.partner_id.parent_id is Number">
+                    <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
+                </t>
+                <t t-if="o.partner_id.parent_id is not Number">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                </t>
+                <t t-if="not lang">
+                    <t t-set="lang" t-value="'undefined'"/>
+                </t>
+                <div class="row" style="margin-bottom: 2%">
+                    <div class="pull-left">
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 1%"/>
+                    </div>
+                    <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 4%;">
+                        <div t-if="not claim.claim_type">RMA Receipt</div>
+                        <div t-if="company.vat">
+                            <strong>TIN</strong> <span t-field="company.vat"/>
+                        </div>
+                        <div t-if="company.phone">
+                            <strong>Phone</strong>
+                            <t t-if="lang == 'es_ES'">0034 911883615</t>
+                            <t t-if="lang == 'en_US'">0034 911883615</t>
+                            <t t-if="lang == 'fr_FR'">+33434226281</t>
+                            <t t-if="lang == 'it_IT'">0694803224</t>
+                            <t t-if="lang == 'pt_PT'">0034 911883615</t>
+                        </div>
+                        <div t-if="company.id">
+                            <strong>Fax</strong>
+                            <span t-field="company.id"/>
+                        </div>
+                        <div t-if="company.email">
+                            <strong>Email</strong>
+                            <t t-if="lang == 'es_ES'">
+                                <span>sat@visiotechsecurity.com</span>
+                            </t>
+                            <t t-if="lang == 'en_US'">
+                                <span>sat@visiotechsecurity.com</span>
+                            </t>
+                            <t t-if="lang == 'fr_FR'">
+                                <span>sav@visiotechsecurity.com</span>
+                            </t>
+                            <t t-if="lang == 'it_IT'">
+                                <span>satitalia@visiotechsecurity.com</span>
+                            </t>
+                            <t t-if="lang == 'pt_PT'">
+                                <span>sat@visiotechsecurity.com</span>
+                            </t>
+                        </div>
+                        <div t-if="company.website">
+                            <strong>Website</strong>
+                            <span t-field="company.website"/>
+                        </div>
+                        <br/>
+                        <div style="font-size:11px; color:#A61D34">
+                            <t t-call="crm_claim_summary_report.template_page_copy_title"/>
+                        </div>
+                    </div>
+                </div>
+         </div>
+
+        <div class="article">
+            <t t-raw="0" />
+        </div>
+
+        <div class="footer rma-page-note" t-if="page_copy_title">
+
+                <div class="pull-left col-xs-6" style="color:#6D6E70">
+                    <p style="font-size: 10pt;">
+                        ATTENTION
+                        -Please check the material received with this RMA document. Claims concerning this will only be accepted
+                         during 48 hours after the reception.
+                    </p>
+                </div>
+
+                <div class="pull-right col-xs-6" style="color:#6D6E70;">
+                    <p style="font-size: 7pt;"><b>IMPORTANT NOTE</b><span>: </span><span t-field="company.rma_footer_note"/>
+                    </p>
+                </div>
+        </div>
+
+    </template>
+
+    <template id="external_layout_custom_picking_v">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc" />
+        </t>
+        <!-- Multicompany -->
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <t t-if="not company.id">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+
+        <div class="header">
+        <t t-set="lang" t-value="'undefined'"/>
+        <t t-if="o.partner_id.commercial_partner_id.id">
+            <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
+        </t>
+        <t t-if="not lang">
+            <t t-set="lang" t-value="'undefined'"/>
+        </t>
+        <div class="row" style="margin-bottom: 2%">
+            <div class="pull-left">
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 180px; margin-bottom: 2%; margin-left: -6%"/>
+            </div>
+            <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70">
+                <br/>
+                <address t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;]}"/>
+                <span>CIF: ESB80645518</span>
+            </div>
+        </div>
+        <div class="row">
+            <div style="font-size:23px; font-weight: bold; color:#939597;">
+                <div class="pull-left">
+                    <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
+                    <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                    <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
+                </div>
+                <div class="pull-left">
+                    <div style="width: 0.08in; height: 0.32in; background-color: white;"/>
+                </div>
+                <div>
+                    <span t-if="o.partner_id">
+                        <div style="font-size:23px;">Picking</div>
+                        <span t-if=" lang != 'fr_FR'">
+                            <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                        </span>
+                        <span t-if="lang == 'fr_FR'">
+                            <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div style="font-size:11px; color:#6D6E70" class="row">
+            <br/>
+            <div class="col-xs-4 row" t-if="o.partner_id" name="partner_header">
+                <span t-if="o.picking_type_id.code=='incoming'"><strong>Supplier Address:</strong></span>
+                <span t-if="o.picking_type_id.code=='internal'"><strong>Warehouse Address:</strong></span>
+                <span t-if="o.picking_type_id.code=='outgoing'"><strong>Client:</strong></span>
+                <div t-field="o.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;]}"/>
+            </div>
+            <div class="col-xs-4" t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
+                <span><strong>Delivery Address:</strong></span>
+                <div t-field="o.move_lines[0].partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
+            </div>
+            <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
+                <span><strong>Warehouse Address:</strong></span>
+                <div t-field="o.picking_type_id.warehouse_id.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
+            </div>
+            <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#A61D34">
+                <br/>
+                <t t-if="o.date"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date" t-field-options='{"widget": "date"}'/></div></t>
+                <t t-if="o.name"><div>Picking: <strong style="color:#6D6E70" t-field="o.name"/></div></t>
+                <t t-if="o.partner_id.vat"><div>C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
+                <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.client_order_ref"><div>Client order: <span style="font-weight: normal; color:#6D6E70" t-field="o.move_lines[0].sale_line_id.order_id.client_order_ref"/></div></t>
+                <t t-if="o.origin"><div>Visiotech order: <span style="font-weight: normal; color:#6D6E70" t-field="o.origin"/></div></t>
+            </div>
+        </div>
+    </div>
+
+        <div class="article">
+            <t t-raw="0" />
+        </div>
+
+        <div class="footer">
+        <t t-set="lang" t-value="'undefined'"/>
+        <t t-if="o.partner_id.parent_id.id">
+            <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
+        </t>
+        <t t-if="not o.partner_id.parent_id.id">
+            <t t-set="lang" t-value="o.partner_id.lang"/>
+        </t>
+        <!-- Calcular la divisa del widget para tener en cuenta casos en los que es null y que no dé error al general el informe -->
+        <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id.id"/>
+        <t t-if="monetary_widget">
+            <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id"/>
+        </t>
+        <t t-if="not monetary_widget">
+            <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
+        </t>
+
+        <t t-set="total_price" t-value="0"/>
+        <t t-set="total_tax" t-value="0"/>
+          <t t-foreach="o.move_lines" t-as="move">
+              <t t-if="move.sale_line_id.pack_components is True and move.procurement_id.sale_line_id.pack_parent_line_id.product_id.product_tmpl_id.type == 'service'">
+                  <tr>
+                      <tr t-if="last_pack != move.procurement_id.sale_line_id.pack_parent_line_id.product_id">
+                          <t t-set="current_total_price" t-value="(move.procurement_id.sale_line_id.pack_parent_line_id.price_unit*(1-(move.procurement_id.sale_line_id.pack_parent_line_id.discount/100)))*move.procurement_id.sale_line_id.pack_parent_line_id.product_uom_qty"/>
+                          <t t-set="total_price" t-value="total_price + current_total_price"/>
+                          <t t-set="product_tax" t-value="move.procurement_id.sale_line_id.tax_id.amount"/>
+                          <t t-set="total_tax" t-value="total_tax + (product_tax * current_total_price)"/>
+                      </tr>
+                </tr>
+            </t>
+          </t>
+         <br/>
+          <div class="row" t-if="o.partner_id.parent_id.valued_picking == False or o.partner_id.valued_picking == False or o.picking_type_id.code != 'outgoing' or o.has_packs">
+              <table class="table table-condensed">
+                  <thead>
+                    <tr style="font-size:12px; color:#A61D34">
+                        <th><strong>TOTAL PRICE.</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>AMOUNT</strong></th>
+                        <th><strong>BASE PRICE</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>IVA</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>REC.</strong></th>
+                        <th><strong>TOTAL</strong></th>
+                    </tr>
+                  </thead>
+                  <tbody style="font-size:12px; color:#6D6E70;">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                  </tbody>
+              </table>
+              <br/><br/><br/><br/><br/><br/>
+          </div>
+          <div class="row" t-if="o.partner_id.parent_id.valued_picking == True and o.partner_id.valued_picking == True and o.partner_id.valued_picking == True and o.picking_type_id.code == 'outgoing' and o.has_packs == False">
+              <table class="table table-condensed">
+                  <thead>
+                    <tr style="font-size:12px; color:#A61D34">
+                        <th><strong>TOTAL PRICE.</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>AMOUNT</strong></th>
+                        <th><strong>BASE PRICE</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>IVA</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>REC.</strong></th>
+                        <th><strong>TOTAL</strong></th>
+                    </tr>
+                  </thead>
+                  <tbody style="font-size:12px; color:#6D6E70;">
+                        <tr>
+                            <!--<td><span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.sale_id.pricelist_id.currency_id&quot;}"/></td>-->
+                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                            <td></td>
+                            <td></td>
+                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                            <!--<td><span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.sale_id.pricelist_id.currency_id&quot;}"/></td>-->
+                            <t t-if="o.amount_untaxed > 0">
+                                <td><span t-esc="'%.1f'%((o.amount_tax/o.amount_untaxed) * 100)"/></td>
+                            </t>
+                            <t t-if="o.amount_untaxed &lt;= 0">
+                                <td><span>0</span></td>
+                            </t>
+                            <td><span t-esc="(total_tax + o.amount_tax)" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                            <!--<td><span t-field="o.amount_tax"/></td>-->
+                            <td></td>
+                            <td></td>
+                            <td><strong t-esc="((total_price + total_tax) + o.amount_total)" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                            <!--<td><span t-field="o.amount_total"/></td>-->
+                        </tr>
+                  </tbody>
+              </table>
+              <div style="font-size:13px; color:#A61D34">
+                <div class="pull-left col-xs-6 row">
+                    <t t-if="o.move_lines and o.move_lines and o.move_lines[0].procurement_id.sale_line_id.order_id.note">
+                        <strong>Terms and Conditions:</strong>
+                        <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2" t-field="o.move_lines[0].procurement_id.sale_line_id.order_id.note"/>
+                    </t>
+                </div>
+
+                <div class="pull-right col-xs-5 row">
+                    <strong>Bank Account:</strong>
+                    <t t-if="lang == 'es_ES'">
+                        <pre style="font-size:12px; color:#6D6E70">
+Sabadell Atlantico
+IBAN ES52 0081 0530 5900 0109 8214
+BIC: BSABESBB
+                        </pre>
+                    </t>
+                    <t t-if="lang == 'en_US'">
+                        <pre style="font-size:12px; color:#6D6E70">
+CAIXABANC
+IBAN ES46 2100 1726 5902 0032 1288
+BIC: CAIXESBBXXX
+                        </pre>
+                    </t>
+                    <t t-if="lang == 'fr_FR'">
+                        <pre style="font-size:12px; color:#6D6E70">
+Banco Popular Español
+IBAN ES11 0075 0240 1006 0056 6137
+BIC: POPUESMM
+                        </pre>
+                    </t>
+                    <t t-if="lang == 'it_IT'">
+                        <pre style="font-size:12px; color:#6D6E70">
+CAIXABANC
+IBAN ES46 2100 1726 5902 0032 1288
+BIC: CAIXESBBXXX
+                        </pre>
+                    </t>
+                    <t t-if="lang == 'pt_PT'">
+                        <pre style="font-size:12px; color:#6D6E70">
+NOVOBANCO
+Nº: 0001 1726 6211
+NIB: 0007 0000 00117266211 23
+IBAN PT50 0007 0000 0011 7266 2112 3
+SWIFT/BIC: BESCPTPL
+                        </pre>
+                    </t>
+                </div>
+            </div>
+            </div>
+            <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
+                <label><t t-raw="company.name"></t> R.M. de Madrid: Tomo 6811, Libro 0, Folio 206, Seccion 8, Hoja M-110924, Ins 1 .- CIF: B80645518<!--<t t-raw="company.initiating_party_identifier"></t>--></label>
+            </div>
+        </div>
+
+    </template>
+
+    <template id="external_layout_custom_picking_valued">
+        <t t-if="not o and doc">
+            <t t-set="o" t-value="doc" />
+        </t>
+        <!-- Multicompany -->
+        <t t-if="o and 'company_id' in o">
+            <t t-set="company" t-value="o.company_id"/>
+        </t>
+        <t t-if="not o or not 'company_id' in o">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+        <t t-if="not company.id">
+            <t t-set="company" t-value="res_company"/>
+        </t>
+
+        <div class="header">
+        <t t-set="lang" t-value="'undefined'"/>
+        <t t-if="o.partner_id.commercial_partner_id.id">
+            <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
+        </t>
+        <t t-if="not lang">
+            <t t-set="lang" t-value="'undefined'"/>
+        </t>
+        <div class="row" style="margin-bottom: 2%">
+            <div class="pull-left">
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 180px; margin-bottom: 2%; margin-left: -6%"/>
+            </div>
+            <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70">
+                <br/>
+                <address t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;]}"/>
+                <span>CIF: ESB80645518</span>
+            </div>
+        </div>
+        <div class="row">
+            <div style="font-size:23px; font-weight: bold; color:#939597;">
+                <div class="pull-left">
+                    <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
+                    <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                    <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
+                </div>
+                <div class="pull-left">
+                    <div style="width: 0.08in; height: 0.32in; background-color: white;"/>
+                </div>
+                <div>
+                    <span t-if="o.partner_id">
+                        <div style="font-size:23px;">Picking</div>
+                        <span t-if=" lang != 'fr_FR'">
+                            <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                        </span>
+                        <span t-if="lang == 'fr_FR'">
+                            <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div style="font-size:11px; color:#6D6E70" class="row">
+            <br/>
+            <div class="col-xs-4 row" t-if="o.partner_id" name="partner_header">
+                <span t-if="o.picking_type_id.code=='incoming'"><strong>Supplier Address:</strong></span>
+                <span t-if="o.picking_type_id.code=='internal'"><strong>Warehouse Address:</strong></span>
+                <span t-if="o.picking_type_id.code=='outgoing'"><strong>Client:</strong></span>
+                <div t-field="o.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;]}"/>
+            </div>
+            <div class="col-xs-4" t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
+                <span><strong>Delivery Address:</strong></span>
+                <div t-field="o.move_lines[0].partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
+            </div>
+            <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
+                <span><strong>Warehouse Address:</strong></span>
+                <div t-field="o.picking_type_id.warehouse_id.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
+            </div>
+            <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#A61D34">
+                <br/>
+                <t t-if="o.date"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date" t-field-options='{"widget": "date"}'/></div></t>
+                <t t-if="o.name"><div>Picking: <strong style="color:#6D6E70" t-field="o.name"/></div></t>
+                <t t-if="o.partner_id.vat"><div>C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
+                <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.client_order_ref"><div>Client order: <span style="font-weight: normal; color:#6D6E70" t-field="o.move_lines[0].sale_line_id.order_id.client_order_ref"/></div></t>
+                <t t-if="o.origin"><div>Visiotech order: <span style="font-weight: normal; color:#6D6E70" t-field="o.origin"/></div></t>
+            </div>
+        </div>
+    </div>
+
+        <div class="article">
+            <t t-raw="0" />
+        </div>
+
+        <div class="footer"><!--
+        <t t-if="o.partner_id.parent_id.lang == 'es_ES'">
+            <pre>
+                Este albarán solo recoge el material enviado por nuestro almacén, conceptos asociados a servicios como los gastos de envío no aparecen aquí detallados pero pueden ser consultados en la correspondiente factura. Tenga en cuenta que los kits o packs aparecen desglosados en sus componentes
+            </pre>
+        </t>
+        <t t-if="o.partner_id.parent_id.lang == 'en_US'">
+            <pre>
+                This delivery note only includes the material sent out by our warehouse. Concepts associated to services such as shipping costs are not listed here but can be consulted in the corresponding invoice. Please note that the kits and packs are separated into their components
+            </pre>
+        </t>
+        <t t-if="o.partner_id.parent_id.lang == 'fr_FR'">
+            <pre>
+                Sur ce bordereau de livraison est noté uniquement le matériel envoyé par notre entrepôt. Des concepts liés au service comme les frais d'envoie ne figurent pas ici, mais vous pouvez les consulter sur les prochaines factures. Il faut tenir en  compte que les kits et les packs sont détaillés dans ses composants
+            </pre>
+        </t>
+        <t t-if="o.partner_id.parent_id.lang == 'it_IT'">
+            <pre>
+                Questo documento di trasporto indica unicamente il materiale inviato dai nostri magazzini,  mentre le voci associate ai servizi correlati, come le spese di spedizione, non sono indicate e  possono essere consultate nella fattura corrispondente. Consideri che i kit o pack sono dettagliati nei pezzi che li compongono
+            </pre>
+        </t>
+        <t t-if="o.partner_id.parent_id.lang == 'pt_PT'">
+            <pre>
+            </pre>
+        </t>-->
+
+        <!-- Obtener el idioma del cliente dependiendo de si es un contacto o una empresa -->
+        <t t-set="lang" t-value="'undefined'"/>
+        <t t-if="o.partner_id.parent_id.id">
+            <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
+        </t>
+        <t t-if="not o.partner_id.parent_id.id">
+            <t t-set="lang" t-value="o.partner_id.lang"/>
+        </t>
+        <!-- Calcular la divisa del widget para tener en cuenta casos en los que es null y que no dé error al general el informe -->
+        <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id.id"/>
+        <t t-if="monetary_widget">
+            <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id"/>
+        </t>
+        <t t-if="not monetary_widget">
+            <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
+        </t>
+        <!-- Obtener las diferentes tasas del pedido asociado -->
+        <t t-set="taxes" t-value="{}"/>
+        <t t-foreach="o.move_lines" t-as="l">
+            <t t-foreach="l.sale_line_id.tax_id" t-as="t">
+                  <t t-if="t in taxes">
+                         <t t-esc="taxes.update({t:(taxes[t] + l.price_subtotal)})"/>
+                  </t>
+                  <t t-if="t not in taxes">
+                       <t t-esc="taxes.update({t:l.price_subtotal})"/>
+                  </t>
+            </t>
+        </t>
+        <t t-set="last_pack" t-value="empty"/>
+        <t t-set="total_price" t-value="0"/>
+        <t t-set="total_tax" t-value="0"/>
+          <t t-foreach="o.move_lines" t-as="move">
+              <t t-if="move.sale_line_id.pack_components is True and move.sale_line_id.pack_parent_line_id.product_id.product_tmpl_id.type == 'service'">
+                  <tr>
+                      <tr t-if="last_pack != move.sale_line_id.pack_parent_line_id.product_id">
+                          <t t-set="current_total_price" t-value="(move.sale_line_id.pack_parent_line_id.price_unit*(1-(move.sale_line_id.pack_parent_line_id.discount/100)))*move.sale_line_id.pack_parent_line_id.product_uom_qty"/>
+                          <t t-set="total_price" t-value="total_price + current_total_price"/>
+                          <t t-set="product_tax" t-value="move.sale_line_id.tax_id.amount"/>
+                          <t t-set="total_tax" t-value="total_tax + (product_tax * current_total_price)"/>
+                          <t t-set="last_pack" t-value="move.sale_line_id.pack_parent_line_id.product_id"/>
+                      </tr>
+                </tr>
+            </t>
+          </t>
+          <div class="row">
+              <table class="table table-condensed">
+                  <thead>
+                    <tr style="font-size:12px; color:#A61D34">
+                        <th><strong>TOTAL PRICE.</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>AMOUNT</strong></th>
+                        <th><strong>BASE PRICE</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>IVA</strong></th>
+                        <th><strong>%</strong></th>
+                        <th><strong>REC.</strong></th>
+                        <th><strong>TOTAL</strong></th>
+                    </tr>
+                  </thead>
+                  <tbody style="font-size:12px; color:#6D6E70;">
+                        <tr>
+                            <!--<td><span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.sale_id.pricelist_id.currency_id&quot;}"/></td>-->
+                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                            <td></td>
+                            <td></td>
+                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                            <!--<td><span t-field="o.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.sale_id.pricelist_id.currency_id&quot;}"/></td>-->
+                             <t t-set="check_iva" t-value="0"/>
+                              <t t-set="iva" t-value="0"/>
+                              <t t-set="amount_tax" t-value="0"/>
+                              <t t-foreach="list(taxes.keys())" t-as="t">
+                                   <t t-if="'RE' not in t.base_code_id.code">
+                                        <t t-set="iva" t-value="iva + t.amount"/>
+                                        <t t-set="amount_tax" t-value="amount_tax + taxes[t] * t.amount"/>
+                                        <t t-set="check_iva" t-value="1"/>
+                                   </t>
+                              </t>
+                              <t t-if="check_iva">
+                                    <td><span t-esc="'%.1f'% (iva * 100)"/></td>
+                                    <td><span t-esc="amount_tax" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                              </t>
+                              <t t-if="not check_iva">
+                                <td></td>
+                                <td></td>
+                              </t>
+                              <t t-set="recharge" t-value="0"/>
+                              <t t-set="amount_tax" t-value="0"/>
+                              <t t-foreach="list(taxes.keys())" t-as="t">
+                                  <t t-if="'RE' in t.base_code_id.code">
+                                        <t t-set="recharge" t-value="recharge + t.amount"/>
+                                        <t t-set="amount_tax" t-value="amount_tax + taxes[t] * t.amount"/>
+                                   </t>
+                              </t>
+                              <t t-if="recharge">
+                                    <td><span t-esc="'%.1f'% (recharge * 100)"/></td>
+                                    <td><span t-esc="amount_tax" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                              </t>
+                              <t t-if="not recharge">
+                                <td></td>
+                                <td></td>
+                              </t>
+                            <td><strong t-esc="((total_price + total_tax) + o.amount_total)" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;monetary_widget&quot;}"/></td>
+                            <!--<td><span t-field="o.amount_total"/></td>-->
+                        </tr>
+                  </tbody>
+              </table>
+          </div>
+          <div style="font-size:13px; color:#A61D34">
+                <div class="pull-left col-xs-6 row">
+                    <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.note">
+                        <strong>Terms and Conditions:</strong>
+                        <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2" t-field="o.move_lines[0].sale_line_id.order_id.note"/>
+                    </t>
+                </div>
+
+                <div class="pull-right col-xs-5 row">
+                    <strong>Bank Account:</strong>
+                    <t t-if="lang == 'es_ES'">
+                        <pre style="font-size:12px; color:#6D6E70">
+Sabadell Atlantico
+IBAN ES52 0081 0530 5900 0109 8214
+BIC: BSABESBB
+                        </pre>
+                    </t>
+                    <t t-if="lang == 'en_US'">
+                        <pre style="font-size:12px; color:#6D6E70">
+CAIXABANC
+IBAN ES46 2100 1726 5902 0032 1288
+BIC: CAIXESBBXXX
+                        </pre>
+                    </t>
+                    <t t-if="lang == 'fr_FR'">
+                        <pre style="font-size:12px; color:#6D6E70">
+Banco Popular Español
+IBAN ES11 0075 0240 1006 0056 6137
+BIC: POPUESMM
+                        </pre>
+                    </t>
+                    <t t-if="lang == 'it_IT'">
+                        <pre style="font-size:12px; color:#6D6E70">
+CAIXABANC
+IBAN ES46 2100 1726 5902 0032 1288
+BIC: CAIXESBBXXX
+                        </pre>
+                    </t>
+                    <t t-if="lang == 'pt_PT'">
+                        <pre style="font-size:12px; color:#6D6E70">
+NOVOBANCO
+Nº: 0001 1726 6211
+NIB: 0007 0000 00117266211 23
+IBAN PT50 0007 0000 0011 7266 2112 3
+SWIFT/BIC: BESCPTPL
+                        </pre>
+                    </t>
+                </div>
+        </div>
+        <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
+            <label><t t-raw="company.name"></t> R.M. de Madrid: Tomo 6811, Libro 0, Folio 206, Seccion 8, Hoja M-110924, Ins 1 .- CIF: B80645518<!--<t t-raw="company.initiating_party_identifier"></t>--></label>
+        </div>
+    </div>
 
     </template>
 

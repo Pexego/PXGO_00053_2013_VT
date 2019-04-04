@@ -27,7 +27,7 @@
     'website': 'www.comunitea.com',
     "depends": ['sale', 'purchase', 'account', 'stock',
                 'stock_reserve_sale', 'stock_custom', 'sale_proforma_report',
-                'stock_picking_report_valued'],
+                'stock_picking_report_valued', 'crm_claim', 'product'],
     "data": [
         "data/report_paperformat.xml",
         "views/custom_layout.xml",
@@ -36,6 +36,10 @@
         "views/report_purchase_order.xml",
         "views/report_stock_picking.xml",
         "views/report_stock_picking_valued.xml",
-        "views/report_invoice.xml"],
+        "views/report_invoice.xml",
+        "views/report_claim.xml",
+        "views/report_stock_picking_v.xml",
+        "views/report_stock_picking_valued_v.xml",
+        "views/report_overdue.xml"],
     "installable": True
 }

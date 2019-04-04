@@ -33,8 +33,23 @@
             </field>
         </record>
 
+        <!-- TODO:poner este invisible <menuitem id="crm.res_partner_menu_crm"
+            parent="crm_menu_root"
+            action="base.action_partner_form"
+            sequence="2"/>-->
+
+        <menuitem id="crm_menu_partners"
+            name="Partners"
+            parent="crm.crm_menu_root"
+            sequence="0"/>
+
+        <menuitem id="sale.res_partner_menu"
+            parent="crm_menu_partners"
+            action="base.action_partner_form"
+            sequence="3" groups="sales_team.group_sale_salesman"/>
+
         <menuitem id="res_partner_prospective" name="Prospective customers" string="Prospective customers"
-                  action="action_view_prospective_customers"  parent="sale.sale_order_menu" sequence="4"/>
+                  action="action_view_prospective_customers"  parent="crm_menu_partners" sequence="4"/>
 
     </data>
 </odoo>

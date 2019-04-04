@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 
 def parse_many2one_vals(model, vals):

@@ -47,4 +47,20 @@
         <field name="header_spacing">80</field>
         <field name="dpi">90</field>
     </record>
+
+    <record id="paperformat_claim" model="report.paperformat">
+        <field name="name">European A4 claim</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">25</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">35</field>
+        <field name="dpi">90</field>
+    </record>
 </odoo>
