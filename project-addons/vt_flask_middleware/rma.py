@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from peewee import CharField, FloatField, IntegerField, ForeignKeyField, \
     DateTimeField
 from app import app

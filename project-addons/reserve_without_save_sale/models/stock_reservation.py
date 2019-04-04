@@ -94,10 +94,16 @@ class StockReservation(models.Model):
         The reservation is done using the default UOM of the product.
         A date until which the product is reserved can be specified.
         """
+        current_sale_line_id = self.sale_line_id.id
         self.refresh()
         res = super().reserve()
         self.refresh()
-        for reservation in self:
+        for move in res:
+            reservation = self.env['stock.reservation'].search(
+                [('move_id', '=', move.id)])
+            if not reservation:
+                reservation = self.env['stock.reservation'].create(
+                    {'move_id': move.id, 'sale_line_id': current_sale_line_id})
             reservation.message_post(
                 body=_("Reserva modificada. Estado '%s'") % reservation.state)
         return res
