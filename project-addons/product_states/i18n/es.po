@@ -77,3 +77,8 @@ msgstr "{'readonly':[('state2', '!=', 'published')]}"
 msgid "Sale Conditions"
 msgstr "Condiciones de venta"
 
+#. module: product_states
+#: selection:product.template,state:0
+msgid "Make to order"
+msgstr "Bajo Pedido"
+

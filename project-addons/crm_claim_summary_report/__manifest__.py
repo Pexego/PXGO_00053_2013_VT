@@ -1,9 +1,7 @@
-
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2004-2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Marta Vázquez Rodríguez$ <marta@pexego.es>
+#    Copyright 2015 Vauxoo
+#    Author : Osval Reyes <osval@vauxoo.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -21,31 +19,25 @@
 ##############################################################################
 
 {
-    "name": "Promotions Extend",
-    "version": "1.0",
-    "author": "Pexego",
-    'website': 'www.pexego.es',
-    "category": "Generic Modules/Sales & Purchases",
-    "description": """
-Promotions extend
-========================================
-Features:
-1. Lets you apply discounts by product tags.
-""",
-    "depends": ["base",
-                "commercial_rules",
-                "equivalent_products",
-                "stock_reserve_sale",
-                "product_brand",
-                "sale_product_customize"],
-    "data": [
-        "sale_view.xml",
-        "rule.xml",
-        "product_view.xml"
-
+    'name': 'CRM Claim Summary Report',
+    'category': 'Customer Relationship Management',
+    'author': 'Vauxoo, Odoo Community Association (OCA),',
+    'website': 'www.vauxoo.com',
+    'license': 'AGPL-3',
+    'version': '11.0',
+    'depends': [
+        'crm_claim_rma',
+        'crm_claim_rma_custom'
     ],
-    "demo": [],
+    'demo': [
+        'demo/res_company.xml',
+    ],
+    'data': [
+        'views/res_company.xml',
+        'views/crm_claim_view.xml',
+        'reports/claim_summary_report_layouts.xml',
+        'reports/claim_summary_report.xml',
+    ],
+    'installable': True,
     'auto_install': False,
-    "installable": True,
-    'images': [],
 }
