@@ -44,6 +44,11 @@ msgid "Prospective customers"
 msgstr "Clientes potenciales"
 
 #. module: prospective_customer
+#: model:ir.ui.menu,name:prospective_customer.crm_menu_partners
+msgid "Partners"
+msgstr "Clientes"
+
+#. module: prospective_customer
 #: model:ir.model,name:prospective_customer.model_sale_order
 msgid "Sales Order"
 msgstr "Pedido de venta"

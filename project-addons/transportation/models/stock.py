@@ -165,22 +165,17 @@ class StockMove(models.Model):
 
     _inherit = 'stock.move'
 
-    # @api.multi
-    # @api.depends('product_id', 'product_uom_qty', 'product_uom', 'weight_st', 'weight_net_st')
-    # def cal_move_weight(self): TODO: Migrar
-    #     for move in self:
-    #         weight = weight_net = 0.00
-    #         if move.product_id.weight > 0.00:
-    #             converted_qty = move.product_qty
-    #             weight = (converted_qty * move.product_id.weight)
-    #             if move.product_id.weight_net > 0.00:
-    #                 weight_net = (converted_qty * move.product_id.weight_net)
-    #         if move.weight_st:
-    #             weight = move.weight_st
-    #         if move.weight_net_st:
-    #             weight_net = move.weight_net_st
-    #         move.weight = weight
-    #         move.weight_net = weight_net
+    @api.multi
+    @api.depends('product_id', 'product_uom_qty', 'product_uom', 'weight_st', 'weight_net_st')
+    def _cal_move_weight(self):
+        for move in self.filtered(lambda moves: moves.product_id.weight > 0.00):
+            move.weight = (move.product_qty * move.product_id.weight)
+            move.weight_net = (move.product_qty * move.product_id.weight_net)
+            if move.weight_st:
+                move.weight = move.weight_st
+            if move.weight_net_st:
+                move.weight_net = move.weight_net_st
+
 
     @api.model
     def _get_default_uom(self):
@@ -189,10 +184,10 @@ class StockMove(models.Model):
                                                 uom_categ_id.id),
                                                ('factor', '=', 1)])[0]
 
-    weight = fields.Float('Weight', compute='cal_move_weight',
+    weight = fields.Float('Weight', compute='_cal_move_weight',
                           digits=dp.get_precision('Stock Weight'),
                           store=True, readonly=False)
-    weight_net = fields.Float('Net weight', compute='cal_move_weight',
+    weight_net = fields.Float('Net weight', compute='_cal_move_weight',
                               digits=dp.get_precision('Stock Weight'),
                               store=True, readonly=False)
     weight_st = fields.Float(digits=dp.get_precision('Stock Weight'))

@@ -743,3 +743,13 @@ msgstr "Marca"
 msgid "Product"
 msgstr "Producto"
 
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_required_payment_term
+msgid "VAT"
+msgstr "NIF"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
+msgid " Set date to all order lines"
+msgstr " Asignar fecha a todas las lineas del pedido de compra"
+

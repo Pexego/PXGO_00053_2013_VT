@@ -16,27 +16,27 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.minimal_layout
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.minimal_layout
 msgid "<!DOCTYPE html>"
 msgstr "<!DOCTYPE html>"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.template_page_copy_title
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.template_page_copy_title
 msgid "COPY FOR INTERNAL SUPPORT"
 msgstr "COPIA PARA SOPORTE INTERNO"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.template_page_copy_title
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.template_page_copy_title
 msgid "CUSTOMER COPY"
 msgstr "COPIA DEL CLIENTE"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Claim Date"
 msgstr "Fecha de Reclamo"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Claim No."
 msgstr "No. de Reclamo"
 
@@ -51,155 +51,155 @@ msgid "Companies"
 msgstr "Compañías"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Customer Name"
 msgstr "Nombre del Cliente"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.product_on_claim
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
 msgid "Customer description"
 msgstr "Descripción del cliente"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Date Deadline"
 msgstr "Fecha Límite"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Delivery Address"
 msgstr "Dirección de Entrega"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Description"
 msgstr "Descripción"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.external_layout_header
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Email"
 msgstr "Email"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.external_layout_header
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
 msgid "Fax"
 msgstr "Fax"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.external_layout_footer
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_footer
 msgid "IMPORTANT NOTE"
 msgstr "NOTA IMPORTANTE"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.product_on_claim
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
 msgid "Internal Code"
 msgstr "Código"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Internal Description"
 msgstr "Descripción interna"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.external_layout_header
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
 msgid "Phone"
 msgstr "Telef"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Phone Number"
 msgstr "No. Telf"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Print Date"
 msgstr "Fecha de Impresión"
 
 #. module: crm_claim_summary_report
-#: field:claim.line,printable:0
+#: model:ir.model.fields,field_description:crm_claim_summary_report.field_claim_line_printable
 msgid "Printable"
 msgstr "Imprimible"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.product_on_claim
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
 msgid "Priority"
 msgstr "Prioridad"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
-#: view:website:crm_claim_summary_report.product_on_claim
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
 msgid "Product"
 msgstr "Producto"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Quantity"
 msgstr "Cantidad"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.product_on_claim
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
 msgid "RMA No."
 msgstr "Reclamo No."
 
 #. module: crm_claim_summary_report
-#: field:res.company,rma_footer_note:0
+#: model:ir.model.fields,field_description:crm_claim_summary_report.field_res_company_rma_footer_note
 msgid "RMA Note"
 msgstr "Nota de RMA"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.external_layout_header
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
 msgid "RMA Receipt"
 msgstr "Recepción de Reclamo"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
-#: view:website:crm_claim_summary_report.product_on_claim
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
 msgid "Responsible"
 msgstr "Responsable"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Serial/Lot"
 msgstr "Lote/No. Serial"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.product_on_claim
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
 msgid "Serial/Lot Number"
 msgstr "No. de Serial"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.external_layout_header
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
 msgid "TIN"
 msgstr "NIF"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Type"
 msgstr "Tipo"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.external_layout_header
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
 msgid "Website"
 msgstr "Sitio web"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.layout
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.layout
 msgid "crm_claim_summary_report.layout"
 msgstr "crm_claim_summary_report.layout"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.layout
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.layout
 msgid "data_report_dpi if data_report_dpi else None"
 msgstr "data_report_dpi if data_report_dpi else None"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.layout
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.layout
 msgid "data_report_header_spacing if data_report_header_spacing else None"
 msgstr "data_report_header_spacing if data_report_header_spacing else None"
 
 #. module: crm_claim_summary_report
-#: view:website:crm_claim_summary_report.layout
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.layout
 msgid "data_report_margin_top if data_report_margin_top else None"
 msgstr "data_report_margin_top if data_report_margin_top else None"
 
