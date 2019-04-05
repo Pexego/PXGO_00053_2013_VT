@@ -21,6 +21,10 @@
                 <field name="odoo_management"/>
                 <field name="not_sync"/>
             </field>
+            <button name="button_validate" position="replace">
+                <button name="button_validate" attrs="{'invisible': ['|',('state','not in',['assigned','partially_available','confirmed']),('not_sync', '=',False)]}"
+                        string="Transfer" groups="stock.group_stock_user" type="object" class="oe_highlight"/>
+            </button>
         </field>
     </record>
 </odoo>

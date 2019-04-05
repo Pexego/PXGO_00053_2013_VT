@@ -269,11 +269,11 @@ msgid "Commercial region"
 msgstr "Región comercial"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_visit_count:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_visit_count
 msgid "Visits"
 msgstr "Visitas Realizadas"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_visit_current_year:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_visit_current_year
 msgid "Current year visits"
 msgstr "Visitas año actual"
