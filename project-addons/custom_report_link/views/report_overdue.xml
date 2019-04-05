@@ -145,7 +145,7 @@
 
     <report
         id="action_report_overdue_custom"
-        string="pagos pendientes 11"
+        string="Pagos pendientes"
         model="res.partner"
         report_type="qweb-pdf"
         file="custom_report_link.report_overduecustom"
