@@ -10,15 +10,18 @@ class ProductTemplate(models.Model):
     @api.constrains('discontinued')
     def allow_discontinued(self):
         for item in self:
-            if (item.qty_available != 0):
-                if item.discontinued:   # and if (item.state != 'end' or item.qty_available != 0):
+            if (item.qty_available != 0) or item.state != 'end':
+                if item.discontinued:
                     raise ValidationError(_(
                         "The product can not be discontinued. Currently exist stock or the status is not - End of lifecycle"))
-            elif item.qty_available == 0 and (item.product_variant_count is 0):
+            elif item.qty_available == 0:
                 if item.discontinued:
                     item.sale_ok = False
                     item.purchase_ok = False
 
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
     @api.multi
     @api.onchange('discontinued')
     def warning_catalog(self):
@@ -27,11 +30,10 @@ class ProductTemplate(models.Model):
                 if not item.discontinued:
                     item.sale_ok = True
             elif item.qty_available == 0:
-                if item.discontinued:
+                if item.discontinued and item.product_variant_count is 0:
                     item.sale_ok = False
                     item.purchase_ok = False
-                if item.product_variant_count is 1:
-                    if not item.discontinued:
-                        item.sale_ok = True
-                        result = {'warning': {'title': _('Warning'), 'message': _('The product does not have stock.')}}
-                        return result
+                if not item.discontinued and item.product_variant_count is 1:
+                    item.sale_ok = True
+                    result = {'warning': {'title': _('Warning'), 'message': _('The product does not have stock.')}}
+                    return result
