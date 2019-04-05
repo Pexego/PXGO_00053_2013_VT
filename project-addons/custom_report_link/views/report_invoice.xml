@@ -199,7 +199,7 @@
 
     <report
         id="action_report_invoice_custom"
-        string="Invoice 11"
+        string="Facturas"
         model="account.invoice"
         report_type="qweb-pdf"
         file="custom_report_link.report_invoice_custom"

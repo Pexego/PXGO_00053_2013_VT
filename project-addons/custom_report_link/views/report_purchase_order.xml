@@ -102,7 +102,7 @@
 
     <report
         id="action_report_purchasequotation_customr"
-        string="Request for Quotation 11"
+        string="Solicitud de presupuesto"
         model="purchase.order"
         report_type="qweb-pdf"
         file="custom_report_link.report_purchasequotation_custom"
@@ -279,7 +279,7 @@
 
     <report
         id="action_report_purchaseorder_custom"
-        string="Purchase Order 11"
+        string="Pedido de compra"
         model="purchase.order"
         report_type="qweb-pdf"
         file="custom_report_link.report_purchaseorder_custom"

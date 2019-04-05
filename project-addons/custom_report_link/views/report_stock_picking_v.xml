@@ -193,7 +193,7 @@
 
     <report
         id="report_picking_custo_action"
-        string="Albarán 11v"
+        string="Albarán"
         model="stock.picking"
         report_type="qweb-pdf"
         file="custom_report_link.report_picking_custom_v"
