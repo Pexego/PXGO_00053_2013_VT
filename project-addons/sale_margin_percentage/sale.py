@@ -123,7 +123,7 @@ class sale_order(models.Model):
                 if line.price_unit > 0:
                     margin += line.margin or 0.0
                 else:
-                    margin += line.price_unit
+                    margin += line.price_unit * ((100.0 - line.discount) / 100.0)
                 sale_price += line.price_subtotal or 0.0
         if sale_price:
             self.margin = round((margin * 100) / sale_price, 2)
@@ -139,7 +139,7 @@ class sale_order(models.Model):
                 if line.price_unit > 0:
                     margin_rappel += line.margin_rappel or 0.0
                 else:
-                    margin_rappel += line.price_unit
+                    margin_rappel += line.price_unit * ((100.0 - line.discount) / 100.0)
                 sale_price += line.price_subtotal or 0.0
         if sale_price:
             self.margin_rappel = round((margin_rappel * 100) / sale_price, 2)
