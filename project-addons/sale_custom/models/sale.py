@@ -43,16 +43,12 @@ class SaleOrder(models.Model):
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
 
     def onchange_partner_id(self):
-        """
-            TODO: Por qué es necesario?
-        """
-        val = super().onchange_partner_id()
+        # Load the favorite shipping address
+        super().onchange_partner_id()
         for child in self.partner_id.child_ids:
             if child.default_shipping_address:
-                val['value']['partner_shipping_id'] = child.id
+                self.partner_shipping_id = child.id
                 break
-
-        return val
 
     def open_historical_orders(self):
         self.ensure_one()

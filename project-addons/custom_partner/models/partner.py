@@ -340,6 +340,8 @@ class ResPartner(models.Model):
 
                 partner.average_margin = margin_avg
 
+
+
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
     sale_product_count = fields.Integer(compute='_get_products_sold',
@@ -713,3 +715,18 @@ class ProductSupplierInfo(models.Model):
     _inherit = 'product.supplierinfo'
 
     ref_supplier = fields.Char("Ref. Supplier", related='name.ref_supplier', readonly=True)
+
+
+class Followers(models.Model):
+    _inherit = 'mail.followers'
+
+    @api.model
+    def create(self, vals):
+        if 'res_model' in vals and 'res_id' in vals and 'partner_id' in vals:
+            dups = self.env['mail.followers'].search([('res_model', '=', vals.get('res_model')),
+                                           ('res_id', '=', vals.get('res_id')),
+                                           ('partner_id', '=', vals.get('partner_id'))])
+            if len(dups):
+                for p in dups:
+                    p.sudo().unlink()
+        return super(Followers, self).create(vals)
