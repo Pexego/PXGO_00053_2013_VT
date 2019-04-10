@@ -340,16 +340,6 @@ class ResPartner(models.Model):
 
                 partner.average_margin = margin_avg
 
-    @api.model
-    def create(self, vals):
-        res = super(ResPartner, self).create(vals)
-        subtype_ids = self.env['mail.message.subtype'].search(
-            [('res_model', '=', 'res.partner')]).ids
-        res.message_subscribe(
-            partner_ids=[res.name_id.partner_id.id],
-            subtype_ids=subtype_ids)
-        return res
-
 
 
     web = fields.Boolean("Web", help="Created from web", copy=False)
@@ -725,3 +715,18 @@ class ProductSupplierInfo(models.Model):
     _inherit = 'product.supplierinfo'
 
     ref_supplier = fields.Char("Ref. Supplier", related='name.ref_supplier', readonly=True)
+
+
+class Followers(models.Model):
+    _inherit = 'mail.followers'
+
+    @api.model
+    def create(self, vals):
+        if 'res_model' in vals and 'res_id' in vals and 'partner_id' in vals:
+            dups = self.env['mail.followers'].search([('res_model', '=', vals.get('res_model')),
+                                           ('res_id', '=', vals.get('res_id')),
+                                           ('partner_id', '=', vals.get('partner_id'))])
+            if len(dups):
+                for p in dups:
+                    p.sudo().unlink()
+        return super(Followers, self).create(vals)
