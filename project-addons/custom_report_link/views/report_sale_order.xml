@@ -86,7 +86,7 @@
 
     <report
         id="action_report_saleorder"
-        string="Quotation / Order Custom 11"
+        string="Presupuesto / Pedido"
         model="sale.order"
         report_type="qweb-pdf"
         file="custom_report_link.report_saleorder_custom"
@@ -189,7 +189,7 @@
 
     <report
         id="action_report_orderdeposit_custom"
-        string="Depósito 11"
+        string="Depósito"
         model="sale.order"
         report_type="qweb-pdf"
         file="custom_report_link.report_orderdeposit_custom"
@@ -213,7 +213,7 @@
 
     <report
         id="action_report_orderdeposit_custom"
-        string="Depósito 11"
+        string="Depósito"
         model="sale.order"
         report_type="qweb-pdf"
         file="custom_report_link.report_orderdeposit_custom"
@@ -237,7 +237,7 @@
 
     <report
         id="action_report_orderdeposit_custom_valued"
-        string="Depósito valorado 11"
+        string="Depósito valorado"
         model="sale.order"
         report_type="qweb-pdf"
         file="custom_report_link.report_orderdeposit_custom_valued"

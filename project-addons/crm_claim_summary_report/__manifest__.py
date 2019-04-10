@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2015 Vauxoo
@@ -25,7 +24,7 @@
     'author': 'Vauxoo, Odoo Community Association (OCA),',
     'website': 'www.vauxoo.com',
     'license': 'AGPL-3',
-    'version': '8.0.1.0.0',
+    'version': '11.0',
     'depends': [
         'crm_claim_rma',
         'crm_claim_rma_custom'

@@ -156,7 +156,7 @@ class StockPicking(models.Model):
                                 "journal in the company for pending "
                                 "invoices"))
 
-            if pick.pickiwng_type_id.code == "incoming" and pick.move_lines \
+            if pick.picking_type_id.code == "incoming" and pick.move_lines \
                     and pick.move_lines[0].purchase_line_id and \
                     pick.company_id.required_invoice_pending_move and \
                     not pick.backorder_id and \
