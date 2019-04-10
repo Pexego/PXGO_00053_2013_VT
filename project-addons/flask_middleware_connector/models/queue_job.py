@@ -27,7 +27,9 @@ class QueueJob(models.Model):
 
     @api.model
     def create(self, vals):
-        res = super(QueueJob, self).create(vals)
+        ctx = dict(self.env.context)
+        ctx['tracking_disable'] = True
+        res = super(QueueJob, self.with_context(ctx)).create(vals)
         if not res.active:
             res.active = True
         return res
