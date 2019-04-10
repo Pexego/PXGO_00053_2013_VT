@@ -340,6 +340,18 @@ class ResPartner(models.Model):
 
                 partner.average_margin = margin_avg
 
+    @api.model
+    def create(self, vals):
+        res = super(ResPartner, self).create(vals)
+        subtype_ids = self.env['mail.message.subtype'].search(
+            [('res_model', '=', 'res.partner')]).ids
+        res.message_subscribe(
+            partner_ids=[res.name_id.partner_id.id],
+            subtype_ids=subtype_ids)
+        return res
+
+
+
     web = fields.Boolean("Web", help="Created from web", copy=False)
     email_web = fields.Char("Email Web")
     sale_product_count = fields.Integer(compute='_get_products_sold',
