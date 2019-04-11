@@ -37,3 +37,15 @@ class AccountInvoice(models.Model):
                         [('refund_line_id', 'in', invoice_line_ids)])
                     claim_lines.write({'substate_id': substate_id})
         return res
+
+    @api.model
+    def name_search(self, name, args=None, operator='ilike', limit=100):
+        # Override this function to allow search partial number
+        args = args or []
+        recs = self.browse()
+        if name:
+            recs = self.search([('number', operator, name)] + args, limit=limit)
+        if not recs:
+            recs = self.search([('name', operator, name)] + args, limit=limit)
+
+        return recs.name_get()
