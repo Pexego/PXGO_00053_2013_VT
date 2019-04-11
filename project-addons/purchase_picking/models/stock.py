@@ -114,7 +114,7 @@ class StockPicking(models.Model):
             if pick.temp:
                 for move in pick.move_lines:
                     if move.state == "assigned":
-                        move.do_unreserve()
+                        move._do_unreserve()
                     move.state = "draft"
                     move.picking_id = False
         return super(StockPicking, self).action_cancel()
