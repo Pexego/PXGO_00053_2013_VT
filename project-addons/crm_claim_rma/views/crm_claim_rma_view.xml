@@ -222,7 +222,7 @@
         <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
         <field name="arch" type="xml">
             <field name="categ_id" position="replace">
-                <field name="categ_id" options="{'no_create': True, 'no_open': True}" domain="[('object_id.model', '=', 'crm.claim')]"/>
+                <field name="categ_id" options="{'no_create': True, 'no_open': True}"/>
             </field>
         </field>
     </record>
