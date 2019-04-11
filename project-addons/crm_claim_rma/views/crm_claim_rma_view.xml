@@ -400,7 +400,7 @@
             </field>
             <field name="priority" position="before">
                 <field name="name" />
-                 <field name="supplier_number" attrs="{'invisible': [('claim_type','in', ['customer',])]}"/>
+                <field name="supplier_number" attrs="{'invisible': [('claim_type','in', ['customer',])]}"/>
                 <field name="date"/>
             </field>
         </field>
