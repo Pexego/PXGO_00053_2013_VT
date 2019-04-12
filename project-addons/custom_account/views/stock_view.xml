@@ -8,14 +8,17 @@
           <field name="arch" type="xml">
             <field name="note" position="replace">
               <group colspan="6" col="6">
-                    <field name="note" class="oe_inline" placeholder="Setup default terms and conditions in your sales settings ..." nolabel="1"/>
-                    <field name="internal_notes" class="oe_inline" placeholder="Internal Notes" nolabel="1"/>
-                    <field name="sale_notes" class="oe_inline" placeholder="Sale Order Internal Notes" nolabel="1"/>
+                    <field name="note" placeholder="Setup default terms and conditions in your sales settings ..." nolabel="1"/>
+                    <field name="internal_notes" placeholder="Internal Notes" nolabel="1"/>
+                    <field name="sale_notes" placeholder="Sale Order Internal Notes" nolabel="1"/>
                 </group>
             </field>
             <field name="partner_id" position="after">
                 <field name="partner_tags" widget="many2many_tags"/>
                 <field name="ref_partner" />
+            </field>
+            <field name="validity_date" position="attributes">
+                <attribute name="invisible">1</attribute>
             </field>
           </field>
       </record>
