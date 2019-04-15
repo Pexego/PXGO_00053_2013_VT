@@ -92,3 +92,8 @@ msgstr "Información del riesgo contable de una empresa"
 #, python-format
 msgid "Warnings"
 msgstr "Avisos"
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_inherit_sale_stock_change_string
+msgid "Pickings"
+msgstr "Albaranes"

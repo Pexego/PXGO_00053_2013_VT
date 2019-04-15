@@ -186,5 +186,17 @@
                 </header>
             </field>
         </record>
+    view_order_form_inherit_sale_stock
+
+    <record id="view_order_form_inherit_sale_stock_change_string" model="ir.ui.view">
+        <field name="name">sale.order.form.change.button.string</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+        <field name="arch" type="xml">
+            <field name="delivery_count" position="attributes">
+                <attribute name="string">Pickings</attribute>
+            </field>
+        </field>
+    </record>
 
 </odoo>
