@@ -22,7 +22,7 @@
             </t>
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: -6%" />
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%" />
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70">
                     <br />
@@ -35,7 +35,7 @@
                 <div style="font-size:23px; font-weight: bold; color:#939597;">
                     <div class="pull-left">
                         <div style="width: 0.1in; height: 0.07in; background-color: white;" />
-                        <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;" />
+                        <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;" />
                         <div style="width: 0.1in; height: 0.09in; background-color: white;" />
                     </div>
                     <div class="pull-left">
@@ -45,33 +45,33 @@
                         <span t-if="o.state not in ['draft','sent'] and o.proforma == False">
                             <div style="font-size:23px;">Order</div>
                             <span t-if="lang != 'fr_FR' and lang !='de_DE'">
-                                <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;" />
+                                <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                             </span>
                             <span t-if="lang == 'fr_FR'">
-                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;" />
+                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                             </span>
                             <span t-if="lang == 'de_DE'">
-                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;" />
+                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                             </span>
                         </span>
                         <span t-if="o.state in ['draft','sent'] and o.proforma == False">
                             <div style="font-size:23px;">Quotation</div>
                             <span t-if="lang == 'en_US' or lang == 'it_IT' or lang == 'undefined'">
-                                <div class="pull-right" style="width: 7.6in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;" />
+                                <div class="pull-right" style="width: 7.6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                             </span>
                             <span t-if="lang == 'es_ES'">
-                                <div class="pull-right" style="width: 7.4in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;" />
+                                <div class="pull-right" style="width: 7.4in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                             </span>
                             <span t-if="lang == 'de_DE'">
-                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;" />
+                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                             </span>
                             <span t-if="lang == 'fr_FR' or lang == 'pt_PT'">
-                                <div class="pull-right" style="width: 8.1in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;" />
+                                <div class="pull-right" style="width: 8.1in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                             </span>
                         </span>
                         <span t-if="o.proforma == True">
                             <div style="font-size:23px;">Factura Proforma</div>
-                            <div class="pull-right" style="width: 6.6in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;" />
+                            <div class="pull-right" style="width: 6.6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                         </span>
                     </div>
                 </div>
@@ -93,7 +93,7 @@
                     </span>
                     <div t-field="o.partner_shipping_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': True}" />
                 </div>
-                <div class="col-xs-4 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#A61D34">
+                <div class="col-xs-4 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#da1f2e">
                     <br />
                     <br />
                     <t t-if="o.date_order">
@@ -157,7 +157,7 @@
             <div class="row">
                 <table class="table table-condensed">
                     <thead>
-                        <tr style="font-size:12px; color:#A61D34">
+                        <tr style="font-size:12px; color:#da1f2e">
                             <th>
                                 <strong>TOTAL PRICE.</strong>
                             </th>
@@ -234,7 +234,7 @@
                     </tbody>
                 </table>
             </div>
-            <div style="font-size:13px; color:#A61D34">
+            <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left col-xs-6 row">
                     <p style="font-size:12px; color:#6D6E70;" t-field="o.note" />
                     <div>
@@ -337,7 +337,7 @@
 
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-left: -6%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70">
                     <br/>
@@ -349,7 +349,7 @@
                 <div style="font-size:23px; font-weight: bold; color:#939597;">
                     <div class="pull-left">
                         <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
-                        <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                        <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
                         <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
                     </div>
                     <div class="pull-left">
@@ -357,7 +357,7 @@
                     </div>
                     <div>
                         <div style="font-size:23px;">Deposit</div>
-                            <div class="pull-right" style="width: 7.7in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 7.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                     </div>
                 </div>
             </div>
@@ -372,7 +372,7 @@
                     <span><strong>Shipping address:</strong></span>
                     <div t-field="o.partner_shipping_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
                 </div>
-                <div class="col-xs-4 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#A61D34">
+                <div class="col-xs-4 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#da1f2e">
                     <br/><br/>
                     <t t-if="o.date_order"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date_order" t-options="{'format': 'dd/MM/yyyy'}"/></div></t>
                     <t t-if="o.partner_id.vat"><div>C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
@@ -416,7 +416,7 @@
             <div class="row">
                 <table class="table table-condensed">
                     <thead>
-                        <tr style="font-size:12px; color:#A61D34">
+                        <tr style="font-size:12px; color:#da1f2e">
                             <th>
                                 <strong>TOTAL PRICE.</strong>
                             </th>
@@ -504,7 +504,7 @@
                     </tbody>
                 </table>
             </div>
-            <div style="font-size:13px; color:#A61D34">
+            <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left col-xs-6 row">
                     <t t-if="o.note">
                         <strong>Terms and Conditions:</strong>
@@ -587,7 +587,7 @@
         <div class="header">
             <div class="row">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: -6%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70">
                     <br/>
@@ -637,7 +637,7 @@
 
             <div class="row" style="margin-bottom: 2%">
                     <div class="pull-left">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: -6%"/>
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
                     </div>
                     <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70">
                         <br/>
@@ -649,7 +649,7 @@
                 <div style="font-size:23px; font-weight: bold; color:#939597;">
                     <div class="pull-left">
                         <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
-                        <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                        <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
                         <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
                     </div>
                     <div class="pull-left">
@@ -659,81 +659,81 @@
                     <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
                         <div>Invoice</div>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 7in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang != 'de_DE'">
-                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">
                         <div>PRO-FORMA</div>
-                        <div class="pull-right" style="width: 7.1in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                        <div class="pull-right" style="width: 7.1in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                     </span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'draft'">
                         <!-- Comprobacion del idioma (debido a la longitud de la traduccion) -->
                         <div>Draft Invoice</div>
                         <span t-if="lang == 'pt_PT'">
-                            <div class="pull-right" style="width: 5.7in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 5.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'es_ES' or lang == 'it_IT' or lang == 'fr_FR'">
-                            <div class="pull-right" style="width: 6.2in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 6.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'en_US' or lang == 'undefined'">
-                            <div class="pull-right" style="width: 6.75in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 6.75in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">
                         <div>Cancelled Invoice</div>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang != 'de_DE'">
-                            <div class="pull-right" style="width: 6in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'out_refund'">
                         <div>Refund</div>
                         <span t-if="lang != 'en_US' and lang != 'pt_PT' and lang !='fr_FR'">
-                            <div class="pull-right" style="width: 5.7in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 5.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'fr_FR'">
-                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     <span t-if="lang == 'pt_PT'">
-                            <div class="pull-right" style="width: 7in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'en_US' or lang == 'undefined'">
-                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'in_refund'">
                         <div>Supplier Refund</div>
                         <span t-if="lang == 'pt_PT' or lang == 'es_ES' or lang == 'fr_FR'">
-                            <div class="pull-right" style="width: 3.5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 3.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'it_IT' or lang == 'en_US' or lang == 'undefined'">
-                            <div class="pull-right" style="width: 6.25in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 6.25in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'in_invoice'">
                         <div>Supplier Invoice</div>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang != 'it_IT' and lang != 'en_US'">
-                            <div class="pull-right" style="width: 5.2in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 5.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'it_IT' or lang == 'en_US' or lang == 'undefined'">
-                            <div class="pull-right" style="width: 6.2in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 6.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
 
                     </span>
@@ -746,10 +746,10 @@
                 </div>
                 <div class="pull-right text-right">
                     <br/>
-                    <t t-if="o.date_invoice"><div style="font-size:14px; font-weight: bold; color:#A61D34">Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice"/></div></t>
-                    <t t-if="o.number"><div style="font-size:14px; font-weight: bold; color:#A61D34">Invoice: <strong style="color:#6D6E70" t-field="o.number"/></div></t>
-                    <t t-if="o.partner_id.commercial_partner_id.vat"><div style="font-size:14px; font-weight: bold; color:#A61D34">C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.commercial_partner_id.vat"/></div></t>
-                    <t t-if="o.type == 'out_refund' and o.claim_id"><div style="font-size:14px; font-weight: bold; color:#A61D34">Claim: <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/></div></t>
+                    <t t-if="o.date_invoice"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice"/></div></t>
+                    <t t-if="o.number"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Invoice: <strong style="color:#6D6E70" t-field="o.number"/></div></t>
+                    <t t-if="o.partner_id.commercial_partner_id.vat"><div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.commercial_partner_id.vat"/></div></t>
+                    <t t-if="o.type == 'out_refund' and o.claim_id"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Claim: <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/></div></t>
                 </div>
             </div>
         </div>
@@ -770,7 +770,7 @@
                 <br/>
                 <table class="table table-condensed">
                     <thead>
-                        <tr style="font-size:12px; color:#A61D34">
+                        <tr style="font-size:12px; color:#da1f2e">
                             <th><strong>BASE</strong></th>
                             <th><strong>%</strong></th>
                             <th><strong>IVA</strong></th>
@@ -872,7 +872,7 @@
                     </tbody>
                 </table>
             </div>
-            <div style="font-size:13px; color:#A61D34">
+            <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left row col-xs-6">
                     <p t-if="o.comment">
                         <strong>Comment:</strong>
@@ -975,9 +975,9 @@
                     <p style="font-size: 11px; font-weight: normal;">
                         <span style="font-weight: bold;">PLEASE REMEMBER to include your sales order and/or invoice number on your bank transfers. This ensures your payment is processed correctly.</span>
                         <br/>
-                        For more information regarding your invoice contact: <span style="color:#A61D34;">finance@visiotechsecurity.com</span>
+                        For more information regarding your invoice contact: <span style="color:#da1f2e;">finance@visiotechsecurity.com</span>
                     </p><br/>
-                    <p style="font-size: 10px; font-weight: normal;">Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style="color:#A61D34;">https://www.visiotechsecurity.com/en/login?view=registration</span></p>
+                    <p style="font-size: 10px; font-weight: normal;">Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style="color:#da1f2e;">https://www.visiotechsecurity.com/en/login?view=registration</span></p>
                     <t t-raw="company.name"></t> <span t-field="company.report_footer"/>
                 </label>
             </div>
@@ -1015,7 +1015,7 @@
             </t>
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-left: -6%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70">
                     <br/>
@@ -1027,7 +1027,7 @@
                 <div style="font-size:23px; font-weight: bold; color:#939597;">
                     <div class="pull-left">
                         <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
-                        <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                        <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
                         <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
                     </div>
                     <div class="pull-left">
@@ -1037,13 +1037,13 @@
                         <span t-if="o.partner_id">
                             <div style="font-size:23px;">Picking</div>
                             <span t-if=" lang != 'fr_FR' and lang != 'de_DE'">
-                                <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'fr_FR'">
-                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'de_DE'">
-                                <div class="pull-right" style="width: 7.4in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                <div class="pull-right" style="width: 7.4in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                         </span>
                     </div>
@@ -1065,7 +1065,7 @@
                     <span><strong>Warehouse Address:</strong></span>
                     <div t-field="o.picking_type_id.warehouse_id.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
                 </div>
-                <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#A61D34">
+                <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#da1f2e">
                     <br/>
                     <t t-if="o.date"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date" t-options='{"widget": "date"}'/></div></t>
                     <t t-if="o.name"><div>Picking: <strong style="color:#6D6E70" t-field="o.name"/></div></t>
@@ -1115,7 +1115,7 @@
           <div class="row" t-if="o.partner_id.parent_id.valued_picking == False or o.partner_id.valued_picking == False or o.picking_type_id.code != 'outgoing' or o.has_phantom_bom">
               <table class="table table-condensed">
                   <thead>
-                    <tr style="font-size:12px; color:#A61D34">
+                    <tr style="font-size:12px; color:#da1f2e">
                         <th><strong>TOTAL PRICE.</strong></th>
                         <th><strong>%</strong></th>
                         <th><strong>AMOUNT</strong></th>
@@ -1146,7 +1146,7 @@
           <div class="row" t-if="o.partner_id.parent_id.valued_picking == True and o.partner_id.valued_picking == True and o.partner_id.valued_picking == True and o.picking_type_id.code == 'outgoing' and o.has_phantom_bom == False">
               <table class="table table-condensed">
                   <thead>
-                    <tr style="font-size:12px; color:#A61D34">
+                    <tr style="font-size:12px; color:#da1f2e">
                         <th><strong>TOTAL PRICE.</strong></th>
                         <th><strong>%</strong></th>
                         <th><strong>AMOUNT</strong></th>
@@ -1179,7 +1179,7 @@
                         </tr>
                   </tbody>
               </table>
-              <div style="font-size:13px; color:#A61D34">
+              <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left col-xs-6 row">
                     <t t-if="o.move_lines and o.move_lines and o.move_lines[0].sale_line_id.order_id.note">
                         <strong>Terms and Conditions:</strong>
@@ -1264,7 +1264,7 @@ SWIFT/BIC: BESCPTPL
                 </t>
                 <div class="row" style="margin-bottom: 2%">
                     <div class="pull-left">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 1%"/>
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
                     </div>
                     <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 4%;">
                         <div t-if="not claim.claim_type">RMA Receipt</div>
@@ -1306,7 +1306,7 @@ SWIFT/BIC: BESCPTPL
                             <span t-field="company.website"/>
                         </div>
                         <br/>
-                        <div style="font-size:11px; color:#A61D34">
+                        <div style="font-size:11px; color:#da1f2e">
                             <t t-call="crm_claim_summary_report.template_page_copy_title"/>
                         </div>
                     </div>
@@ -1360,7 +1360,7 @@ SWIFT/BIC: BESCPTPL
         </t>
         <div class="row" style="margin-bottom: 2%">
             <div class="pull-left">
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 180px; margin-bottom: 2%; margin-left: -6%"/>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
             </div>
             <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70">
                 <br/>
@@ -1372,7 +1372,7 @@ SWIFT/BIC: BESCPTPL
             <div style="font-size:23px; font-weight: bold; color:#939597;">
                 <div class="pull-left">
                     <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
-                    <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                    <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
                     <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
                 </div>
                 <div class="pull-left">
@@ -1382,10 +1382,10 @@ SWIFT/BIC: BESCPTPL
                     <span t-if="o.partner_id">
                         <div style="font-size:23px;">Picking</div>
                         <span t-if=" lang != 'fr_FR'">
-                            <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'fr_FR'">
-                            <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                 </div>
@@ -1407,7 +1407,7 @@ SWIFT/BIC: BESCPTPL
                 <span><strong>Warehouse Address:</strong></span>
                 <div t-field="o.picking_type_id.warehouse_id.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
             </div>
-            <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#A61D34">
+            <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#da1f2e">
                 <br/>
                 <t t-if="o.date"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date" t-field-options='{"widget": "date"}'/></div></t>
                 <t t-if="o.name"><div>Picking: <strong style="color:#6D6E70" t-field="o.name"/></div></t>
@@ -1457,7 +1457,7 @@ SWIFT/BIC: BESCPTPL
           <div class="row" t-if="o.partner_id.parent_id.valued_picking == False or o.partner_id.valued_picking == False or o.picking_type_id.code != 'outgoing' or o.has_packs">
               <table class="table table-condensed">
                   <thead>
-                    <tr style="font-size:12px; color:#A61D34">
+                    <tr style="font-size:12px; color:#da1f2e">
                         <th><strong>TOTAL PRICE.</strong></th>
                         <th><strong>%</strong></th>
                         <th><strong>AMOUNT</strong></th>
@@ -1488,7 +1488,7 @@ SWIFT/BIC: BESCPTPL
           <div class="row" t-if="o.partner_id.parent_id.valued_picking == True and o.partner_id.valued_picking == True and o.partner_id.valued_picking == True and o.picking_type_id.code == 'outgoing' and o.has_packs == False">
               <table class="table table-condensed">
                   <thead>
-                    <tr style="font-size:12px; color:#A61D34">
+                    <tr style="font-size:12px; color:#da1f2e">
                         <th><strong>TOTAL PRICE.</strong></th>
                         <th><strong>%</strong></th>
                         <th><strong>AMOUNT</strong></th>
@@ -1523,7 +1523,7 @@ SWIFT/BIC: BESCPTPL
                         </tr>
                   </tbody>
               </table>
-              <div style="font-size:13px; color:#A61D34">
+              <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left col-xs-6 row">
                     <t t-if="o.move_lines and o.move_lines and o.move_lines[0].procurement_id.sale_line_id.order_id.note">
                         <strong>Terms and Conditions:</strong>
@@ -1605,7 +1605,7 @@ SWIFT/BIC: BESCPTPL
         </t>
         <div class="row" style="margin-bottom: 2%">
             <div class="pull-left">
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 180px; margin-bottom: 2%; margin-left: -6%"/>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
             </div>
             <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70">
                 <br/>
@@ -1617,7 +1617,7 @@ SWIFT/BIC: BESCPTPL
             <div style="font-size:23px; font-weight: bold; color:#939597;">
                 <div class="pull-left">
                     <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
-                    <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                    <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
                     <div style="width: 0.1in; height: 0.08in; background-color: white;"/>
                 </div>
                 <div class="pull-left">
@@ -1627,10 +1627,10 @@ SWIFT/BIC: BESCPTPL
                     <span t-if="o.partner_id">
                         <div style="font-size:23px;">Picking</div>
                         <span t-if=" lang != 'fr_FR'">
-                            <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'fr_FR'">
-                            <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                            <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                 </div>
@@ -1652,7 +1652,7 @@ SWIFT/BIC: BESCPTPL
                 <span><strong>Warehouse Address:</strong></span>
                 <div t-field="o.picking_type_id.warehouse_id.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
             </div>
-            <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#A61D34">
+            <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#da1f2e">
                 <br/>
                 <t t-if="o.date"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date" t-field-options='{"widget": "date"}'/></div></t>
                 <t t-if="o.name"><div>Picking: <strong style="color:#6D6E70" t-field="o.name"/></div></t>
@@ -1740,7 +1740,7 @@ SWIFT/BIC: BESCPTPL
           <div class="row">
               <table class="table table-condensed">
                   <thead>
-                    <tr style="font-size:12px; color:#A61D34">
+                    <tr style="font-size:12px; color:#da1f2e">
                         <th><strong>TOTAL PRICE.</strong></th>
                         <th><strong>%</strong></th>
                         <th><strong>AMOUNT</strong></th>
@@ -1800,7 +1800,7 @@ SWIFT/BIC: BESCPTPL
                   </tbody>
               </table>
           </div>
-          <div style="font-size:13px; color:#A61D34">
+          <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left col-xs-6 row">
                     <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.note">
                         <strong>Terms and Conditions:</strong>

@@ -16,7 +16,7 @@
                             <div class="row">
                             <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
                                 <thead>
-                                    <tr style="background-color:#A61D34; color:white;">
+                                    <tr style="background-color:#da1f2e; color:white;">
                                         <th width="15%" style="vertical-align:middle;"><strong>Reference</strong></th>
                                         <th width="40%" style="vertical-align:middle;"><strong>Description</strong></th>
                                         <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>

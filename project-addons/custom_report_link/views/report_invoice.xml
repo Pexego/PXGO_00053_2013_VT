@@ -6,7 +6,7 @@
             <div class="page">
                 <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
                     <thead>
-                        <tr style="font-size:12px; background-color:#A61D34; color:white;">
+                        <tr style="font-size:12px; background-color:#da1f2e; color:white;">
                             <th width="22%" style="vertical-align:middle;"><strong>Reference</strong></th>
                             <th width="40%" style="vertical-align:middle;"><strong>Description</strong></th>
                             <th width="4%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
@@ -43,14 +43,14 @@
                                                 <t t-if="control == 0">
                                                     <t t-if="aux == 1">
                                                         <td colspan="2" style="font-weight: bold; color:#6D6E70;">
-                                                            Order <span style="color:#A61D34;" t-field="p.name"/>
+                                                            Order <span style="color:#da1f2e;" t-field="p.name"/>
                                                         </td>
                                                         <t t-set="control" t-value="1"/>
                                                     </t>
                                                     <t t-if="aux == 0">
                                                         <td colspan="2" style="font-weight: bold; color:#6D6E70;">
                                                             Order
-                                                                <span style="color:#A61D34;">
+                                                                <span style="color:#da1f2e;">
                                                                     <span t-field="p.name"/> / <span t-field="o.name"/>
                                                                 </span>
                                                         </td>
@@ -62,7 +62,7 @@
                                                 <!--<strong>YES</strong><strong t-raw="l1"/>-->
                                                 <t t-if="control == 0">
                                                     <td colspan="2" style="font-weight: bold; color:#6D6E70;">
-                                                        Order <span style="color:#A61D34;">
+                                                        Order <span style="color:#da1f2e;">
                                                                 <span t-field="p.name"/> / <span t-field="l1.sale_order_id.client_order_ref"/>
                                                               </span>
                                                     </td>
