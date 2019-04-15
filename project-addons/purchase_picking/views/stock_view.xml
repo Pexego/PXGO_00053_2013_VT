@@ -39,6 +39,9 @@
                 <field name="usage" invisible="1"/>
                 <field name="shipping_identifier" attrs="{'required':[('usage', '=', 'supplier'), ('picking_type_code', '=', 'incoming')], 'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
             </field>
+            <button name="button_scrap" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </button>
         </field>
     </record>
 
