@@ -404,6 +404,11 @@ msgid "Global data"
 msgstr "Datos globales"
 
 #. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.partner_view_add_sale_analysis
+msgid "Sale analysis"
+msgstr "Análisis de ventas"
+
+#. module: custom_partner
 #: model:ir.ui.view,arch_db:custom_partner.view_res_partner_filter_add_comercial
 msgid "No current month sales"
 msgstr "Sin ventas este mes"
