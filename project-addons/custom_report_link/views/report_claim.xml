@@ -28,7 +28,7 @@
                     <div class="row">
                         <div class="pull-left">
                             <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
-                            <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                            <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
                             <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
                         </div>
                         <div class="pull-left">
@@ -39,11 +39,11 @@
                         </div>
                         <span t-if="claim.name=='rma'">
                             <div class="pull-right"
-                                 style="width: 8.4in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                 style="width: 8.4in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="claim.name=='return'">
                             <div class="pull-right"
-                                 style="width: 7.7in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                 style="width: 7.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <br/>
                         <br/>
@@ -51,13 +51,13 @@
                     <div class="row" style="font-size:12px;">
                         <div class="col-xs-2" style="text-align:right;">
                             <t t-if="claim.partner_id.customer">
-                                <p class="row" style="color:#A61D34;">
+                                <p class="row" style="color:#da1f2e;">
                                     <strong>Customer Name
                                         <span>:</span>
                                     </strong>
                                 </p>
                             </t>
-                            <p class="row" style="color:#A61D34;">
+                            <p class="row" style="color:#da1f2e;">
                                 <strong>Delivery Address
                                     <span>:</span>
                                 </strong>
@@ -100,7 +100,7 @@
                         </div>
                     </div>
                     <div class="row" style="font-size:12px;">
-                        <div class="col-xs-2" style="text-align:right; color:#A61D34;">
+                        <div class="col-xs-2" style="text-align:right; color:#da1f2e;">
                             <t t-if="claim.email_from">
                                 <p class="row">
                                     <strong>Email
@@ -132,7 +132,7 @@
                                    style="font-size:12px; white-space: nowrap;"/>
                             </t>
                         </div>
-                        <div class="col-xs-2" style="text-align:right; color:#A61D34;">
+                        <div class="col-xs-2" style="text-align:right; color:#da1f2e;">
                             <t t-if="claim.email_from">
                                 <p class="row">
                                     <strong>Phone Number
@@ -164,7 +164,7 @@
                                    style="white-space: nowrap;"/>
                             </t>
                         </div>
-                        <div class="col-xs-2" style="text-align:right; color:#A61D34;">
+                        <div class="col-xs-2" style="text-align:right; color:#da1f2e;">
                             <t t-if="claim.comercial">
                                 <p class="row">
                                     <strong>Responsible
@@ -195,7 +195,7 @@
                     <div class="row table-product-info">
                         <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
                             <thead>
-                                <tr style="font-weight: bold; background-color:#A61D34; color:white;">
+                                <tr style="font-weight: bold; background-color:#da1f2e; color:white;">
                                     <th width="10%" style="vertical-align:middle;">Product</th>
                                     <th width="10%" style="vertical-align:middle;">Replacement Product</th>
                                     <th width="7%" class="text-center" style="vertical-align:middle;">Quantity</th>
