@@ -17,7 +17,7 @@
                     <field name="eur_currency" invisible="1"/>
                     <field name="purchase_quantity" groups="purchase.group_purchase_user" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
                 </field>
-                <xpath expr="//page[@name='sales_purchases']/group" position="after">
+                <xpath expr="//page[@name='sales_purchases']/group[2]" position="after">
                     <group string="Sale analysis" name="sale_analysis">
                         <field name="growth_rate"/>
                         <label for="average_margin" attrs="{'invisible': [('is_company', '!=', True)]}"/>
