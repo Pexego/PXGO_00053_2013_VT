@@ -20,7 +20,7 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    scheduled_date = fields.Datetime('Scheduled Date')
+    scheduled_date = fields.Datetime('Scheduled shipping date')
 
     @api.multi
     def write(self, vals):
