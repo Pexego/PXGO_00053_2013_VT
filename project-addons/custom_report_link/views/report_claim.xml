@@ -132,7 +132,7 @@
                                    style="font-size:12px; white-space: nowrap;"/>
                             </t>
                         </div>
-                        <div class="col-xs-2" style="text-align:right; color:#da1f2e;">
+                        <div class="col-xs-2" style="text-align:right; color:#da1f2e; margin-left: 5%;">
                             <t t-if="claim.email_from">
                                 <p class="row">
                                     <strong>Phone Number
@@ -240,6 +240,7 @@
         report_type="qweb-pdf"
         file="custom_report_link.report_claim_custom"
         name="custom_report_link.report_claim_custom"
+        print_report_name="(object.number)"
     />
 
     <record id="action_report_crm_claim" model="ir.actions.report">
