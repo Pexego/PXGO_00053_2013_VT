@@ -132,7 +132,7 @@
                     <div style="font-size:23px; font-weight: bold; color:#939597;">
                         <div class="pull-left">
                             <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
-                            <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                            <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
                             <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
                         </div>
                         <div class="pull-left">
@@ -141,10 +141,10 @@
                         <div>
                             <div style="font-size:23px;">Purchase Order <span t-field="o.name"/>/<span t-field="o.partner_ref"></span></div>
                             <span t-if="lang != 'fr_FR'">
-                                <div class="pull-right" style="width: 4.3in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                <div class="pull-right" style="width: 4.3in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'fr_FR'">
-                                <div class="pull-right" style="width: 4.3in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                <div class="pull-right" style="width: 4.3in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                         </div>
                     </div>
@@ -163,7 +163,7 @@
                         </div>
                     </div>-->
                     <div class="col-xs-6 row">
-                        <span style="font-weight: bold; color:#A61D34">To: </span>
+                        <span style="font-weight: bold; color:#da1f2e">To: </span>
                         <span t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: true}"/>
                             <span>
                                 <!--Datos de un contacto -->
@@ -172,7 +172,7 @@
                                 <span t-field="o.partner_id.email"/>
                             </span>
                     </div>
-                    <div class="col-xs-5 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#A61D34">
+                    <div class="col-xs-5 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#da1f2e">
                         <br/><br/>
                         <t t-if="o.write_date"><div>Date: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-field="o.write_date" t-options='{"widget": "date"}'/></div></t>
                         <t t-if="o.partner_id.vat"><div>VAT: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
@@ -183,7 +183,7 @@
                 <div class="row">
                     <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
                         <thead>
-                            <tr style="background-color:#A61D34; color:white;">
+                            <tr style="background-color:#da1f2e; color:white;">
                                 <th width="6%" class="text-center"></th>
                                 <th width="14%" style="vertical-align:middle;"><strong>Supplier Model</strong></th>
                                 <th width="14%" style="vertical-align:middle;"><strong>Visiotech Model</strong></th>
@@ -225,13 +225,13 @@
                         <div class="col-xs-4 pull-right" style="font-size:13px;">
                             <table class="table table-condensed" style="color:6D6E70;">
                                 <tr class="border-black">
-                                    <td style="color:#A61D34;"><strong>Total Qty</strong></td>
+                                    <td style="color:#da1f2e;"><strong>Total Qty</strong></td>
                                     <td class="text-right">
                                         <span t-esc="'%.0f'% totalQty"/>
                                     </td>
                                 </tr>
                                 <tr class="border-grey">
-                                    <td style="color:#A61D34;"><strong>Total Price</strong></td>
+                                    <td style="color:#da1f2e;"><strong>Total Price</strong></td>
                                     <td class="text-right">
                                         <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                     </td>
@@ -240,7 +240,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="font-size:13px; color:#A61D34">
+                <div class="row" style="font-size:13px; color:#da1f2e">
                     <div class="col-xs-6">
                         <p t-if="o.notes">
                         <strong>Notes: </strong><pre style="font-size:13px; color:#6D6E70;" t-field="o.notes"/>

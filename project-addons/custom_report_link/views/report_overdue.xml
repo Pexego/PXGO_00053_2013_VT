@@ -16,7 +16,7 @@
                     <div style="font-size:23px; font-weight: bold; color:#939597;">
                         <div class="pull-left">
                             <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
-                            <div style="width: 0.1in; height: 0.19in; background-color: #A61D34;"/>
+                            <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
                             <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
                         </div>
                         <div class="pull-left">
@@ -25,10 +25,10 @@
                         <div>
                             <div style="font-size:23px;">Account statement</div>
                             <span t-if="lang != 'fr_FR'">
-                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'fr_FR'">
-                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #A61D34;"/>
+                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                         <span t-field="o.vat"/>
                     </div>
                     <br/>
-                    <div class="col-xs-5 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#A61D34">
+                    <div class="col-xs-5 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#da1f2e">
                         <div>Date: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-esc="Date"/></div>
                         <div>
                             <t t-if="o.ref">Customer ref:
@@ -61,7 +61,7 @@
                     <div class="row">
                         <table class="table table-condensed" t-foreach="Lines[o.id]" t-as="currency" style="font-size:12px; margin-top: 5%;">
                             <thead>
-                                <tr style="background-color:#A61D34; color:white;">
+                                <tr style="background-color:#da1f2e; color:white;">
                                     <th width="10%" class="text-center" style="vertical-align:middle;">Date</th>
                                     <th width="18%" style="vertical-align:middle;">Description</th>
                                     <th width="23%" style="vertical-align:middle;">Ref</th>
@@ -99,7 +99,7 @@
                                 </tr>
                                 <tr class="border-black">
                                     <td colspan="3"/>
-                                    <td class="text-right" style="color:#A61D34;"> <strong>Sub-Total:</strong></td>
+                                    <td class="text-right" style="color:#da1f2e;"> <strong>Sub-Total:</strong></td>
                                     <td class="text-center"> <span t-esc="Totals[o.id][currency]['due']" t-options="{'widget': 'monetary', 'display_currency': currency}"/></td>
                                     <td class="text-center"> <span t-esc="Totals[o.id][currency]['paid']" t-options="{'widget': 'monetary', 'display_currency': currency}"/></td>
                                     <td class="text-center"> <span t-esc="Totals[o.id][currency]['mat']" t-options="{'widget': 'monetary', 'display_currency': currency}"/></td>
@@ -107,7 +107,7 @@
 
                                 <tr class="border-grease">
                                     <td colspan="3"/>
-                                    <td class="text-right" style="color:#A61D34;"><strong>Balance:</strong></td>
+                                    <td class="text-right" style="color:#da1f2e;"><strong>Balance:</strong></td>
                                     <td class="text-center"><strong style="color:6D6E70;" t-esc="Totals[o.id][currency]['due'] - Totals[o.id][currency]['paid']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
                                     </td>
                                     <td/>
@@ -120,7 +120,7 @@
 
                     <t t-if="Lines[o.id]">
                         <div class="row" style="font-size:13px;" t-foreach="Lines[o.id]" t-as="currency">
-                            <strong style="color:#A61D34;">Total amount due:</strong>
+                            <strong style="color:#da1f2e;">Total amount due:</strong>
                             <strong style="color:6D6E70;" t-esc="Totals[o.id][currency]['total']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
                         </div>
 
