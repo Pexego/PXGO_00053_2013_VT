@@ -16,7 +16,7 @@ class ComputeRappelInvoice(models.TransientModel):
             if rappel.invoice_id:
                 invoice_rappel = rappel.invoice_id
                 # Update description invoice lines
-                for line in invoice_rappel.invoice_line:
+                for line in invoice_rappel.invoice_line_ids:
                     line.write(
                         {'name': '{} ({}-{})'.format(
                             rappel.rappel_id.description,
@@ -36,7 +36,7 @@ class ComputeRappelInvoice(models.TransientModel):
                                 partner_bank_id = False
                     invoice_rappel.write(
                         {'payment_mode_id':
-                         rappel.partner_id.customer_payment_mode.id,
+                         rappel.partner_id.customer_payment_mode_id.id,
                          'partner_bank_id': partner_bank_id,
                          'team_id': rappel.partner_id.team_id.id})
         return res
