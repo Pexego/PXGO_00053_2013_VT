@@ -30,6 +30,7 @@
                 'product',
                 'stock',
                 'equivalent_products',
+                'sale_customer_discount',
                 'product_outlet'],
     "data": ['wizard/product_outlet_wizard_view.xml',
              'outlet_loss.xml',
