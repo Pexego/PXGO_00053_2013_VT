@@ -151,6 +151,7 @@
         file="custom_report_link.report_overduecustom"
         name="custom_report_link.report_overduecustom"
         attachment_use="True"
+        print_report_name="time.strftime('%Y-%m-%d') + object.name"
     />
 
 
