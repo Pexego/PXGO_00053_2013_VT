@@ -20,6 +20,8 @@
                         </tree>
                     </field>
                 </group>
+                <footer>
+                </footer>
             </form>
         </field>
     </record>

@@ -38,6 +38,8 @@
             action="base.action_partner_form"
             sequence="2"/>-->
 
+        <menuitem id="crm.crm_menu_root" name="CRM" action="base.action_partner_form"/>
+
         <menuitem id="crm_menu_partners"
             name="Partners"
             parent="crm.crm_menu_root"
