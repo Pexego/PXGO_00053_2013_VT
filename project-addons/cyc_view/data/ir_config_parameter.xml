@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data noupdate="1">
         <record id="param_notification_period_days_cyc" model="ir.config_parameter">
             <field name="key">notification.period.days.cyc</field>
             <field name="value">120</field>
         </record>
     </data>
-</openerp>
+</odoo>
