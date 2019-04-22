@@ -17,9 +17,11 @@ class ComputeRappelInvoice(models.TransientModel):
                 invoice_rappel = rappel.invoice_id
                 # Update description invoice lines
                 for line in invoice_rappel.invoice_line_ids:
+                    ctx = dict(rappel.rappel_id._context or {})
+                    ctx['lang'] = rappel.partner_id.lang
                     line.write(
-                        {'name': '{} ({}-{})'.format(
-                            rappel.rappel_id.description,
+                        {'name': '{} ({} - {})'.format(
+                            rappel.rappel_id.with_context(ctx).description,
                             rappel.date_start,
                             rappel.date_end)})
                 # Update account data

@@ -47,9 +47,11 @@ class RappelCalculated(models.Model):
                         account_id = fpos.map_account(account_id)
                         taxes_ids = fpos.map_tax(taxes_ids)
                     tax_ids = [(6, 0, [x.id for x in taxes_ids])]
+                    ctx = dict(rp.rappel_id._context or {})
+                    ctx['lang'] = rp.partner_id.lang
                     invoice_line_obj.create({'product_id': rappel_product.id,
-                                             'name': '{} ({}-{})'.format(
-                                                            rp.rappel_id.name,
+                                             'name': '{} ({} - {})'.format(
+                                                            rp.rappel_id.with_context(ctx).description,
                                                             rp.date_start,
                                                             rp.date_end),
                                              'invoice_id': invoice.id,

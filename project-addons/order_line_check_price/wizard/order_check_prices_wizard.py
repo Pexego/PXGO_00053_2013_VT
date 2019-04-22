@@ -55,31 +55,17 @@ class OrderCheckPricesWizard(models.TransientModel):
         ctx['search_default_groupby_order_id'] = True
 
         lines_with_changes = []
-        product_tmpl_obj = self.env['product.template']
-        # TODO -> Revisar, ya no existe modelo product.price.type
-        # price_type_obj = self.env['product.price.type']
         brand_filter = self.brand_list.mapped('brand_id').ids
-        ids_order_line = self.env['sale.order.line'].search([('order_id.date_order', '>=', self.date_start),
-                                                             ('order_id.date_order', '<=', self.date_end),
+        ids_order_line = self.env['sale.order.line'].search([('date_order', '>=', self.date_start),
+                                                             ('date_order', '<=', self.date_end),
                                                              ('order_id.state', 'in',
                                                               ('progress', 'done', 'shipping_except')),
                                                              ('product_id.product_brand_id', 'in', brand_filter)])
 
         for line in ids_order_line:
-            real_actual_price = 0
-            product = line.product_id
-            partner = line.order_id.partner_id
-            partner_pricelist = partner.property_product_pricelist
+            real_actual_price = line.order_id.pricelist_id.get_product_price_rule(
+                line.product_id, line.product_uom_qty or 1.0, line.order_id.partner_id)[0]
 
-            # TODO -> Migrar, revisar funcionamiento actual de las tarifas
-            """ 
-            for rules in partner_pricelist.version_id:
-                for item in rules.items_id:
-                    if (item.categ_id and item.categ_id.id == product.categ_id.id) or not item.categ_id:
-                        field_price_product = price_type_obj.browse([item.base])
-                        real_actual_price = product_tmpl_obj._price_get([product],
-                                                                        field_price_product.field)[product.id]
-            """
             if round(line.price_unit, 2) < round(real_actual_price, 2):
                 lines_with_changes.append(line.id)
 

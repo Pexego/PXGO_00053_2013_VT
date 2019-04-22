@@ -1574,7 +1574,7 @@ SWIFT/BIC: BESCPTPL
             </div>
             </div>
             <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
-                <label><t t-raw="company.name"></t> R.M. de Madrid: Tomo 6811, Libro 0, Folio 206, Seccion 8, Hoja M-110924, Ins 1 .- CIF: B80645518<!--<t t-raw="company.initiating_party_identifier"></t>--></label>
+                 <label><t t-raw="company.name"></t> <span t-field="company.report_footer"/></label>
             </div>
         </div>
 
@@ -1850,7 +1850,7 @@ SWIFT/BIC: BESCPTPL
                 </div>
         </div>
         <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
-            <label><t t-raw="company.name"></t> R.M. de Madrid: Tomo 6811, Libro 0, Folio 206, Seccion 8, Hoja M-110924, Ins 1 .- CIF: B80645518<!--<t t-raw="company.initiating_party_identifier"></t>--></label>
+             <label><t t-raw="company.name"></t> <span t-field="company.report_footer"/></label>
         </div>
     </div>
 
