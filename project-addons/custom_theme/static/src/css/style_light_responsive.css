@@ -8,6 +8,71 @@ body {
   overflow-x: hidden;
 }
 
+/* NAVBAR */
+
+.navbar-default {
+
+    color: #fff;
+    background-color: #616186;
+    border-color: #616186;
+
+}
+header > .main-nav ul.nav > li > a {
+    color: #fff;
+}
+/* _header drawer_ */
+.panel-default > .panel-heading {
+
+    background-color: #fff;
+    border-color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.075)
+
+}
+/* _drawer animation_ */
+.drawer--left
+.drawer-nav {
+
+    left: -16.25rem;
+    -webkit-transition: left .2s cubic-bezier(0,.41,.75,1.08) !important;
+    transition: left .2s cubic-bezier(0.190, 1.000, 0.220, 1.000) !important;
+
+}
+/* _drawer background_ */
+.app-drawer-nav {
+    background-color: rgba(255,255,255,0.9) !important;
+}
+
+/* _active_ */
+.navbar-default
+.navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+
+    color: #fff;
+    background-color: #474661;
+
+}
+/* _hover_ */
+.navbar-default
+.navbar-nav > li > a:hover,
+.navbar-default
+.navbar-nav > li > a:focus {
+
+    color: #fff;
+    background-color: #474661;
+
+}
+/* _app button_ */
+header > .main-nav > .container-fluid > .navbar-header > .drawer-toggle > i.fa,
+header > .main-nav > .container-fluid > .navbar-header .navbar-toggle > i.fa,
+header > .main-nav > .container-fluid > .navbar-header > .drawer-toggle div.fa,
+header > .main-nav > .container-fluid > .navbar-header .navbar-toggle div.fa {
+
+    padding: 17px 14px 16px;
+    color: #fff;
+
+}
+
 /* GENERAL LOOK */
 * {
     -webkit-box-sizing: border-box;
