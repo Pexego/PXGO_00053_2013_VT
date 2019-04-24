@@ -49,35 +49,36 @@
             <form string="status Warnings">
                 <group colspan="2" col="2">
                     <separator string="Warning on the Sales Order" colspan="4"/>
-                        <field name="sale_warn" nolabel="1" />
+                        <field name="sale_warn" nolabel="1" readonly="1"/>
                         <field name="sale_warn_msg" colspan="3" nolabel="1"
                                 attrs="{'required':[('sale_warn','!=','no-message')],'readonly':[('sale_warn','=','no-message')]}"/>
                 </group>
                 <group colspan="2" col="2">
                     <separator string="Warning on the Purchase Order" colspan="4"/>
-                    <field name="purchase_warn" nolabel="1" />
+                    <field name="purchase_warn" nolabel="1" readonly="1"/>
                     <field name="purchase_warn_msg" colspan="3" nolabel="1"
                             attrs="{'required':[('purchase_warn','!=','no-message')],'readonly':[('purchase_warn','=','no-message')]}"/>
                     </group>
                     <group colspan="2" col="2">
                     <separator string="Warning on the Picking" colspan="4"/>
-                    <field name="picking_warn" nolabel="1" />
+                    <field name="picking_warn" nolabel="1" readonly="1"/>
                     <field name="picking_warn_msg" colspan="3" nolabel="1"
                             attrs="{'required':[('picking_warn','!=','no-message')],'readonly':[('picking_warn','=','no-message')]}"/>
                 </group>
                 <group colspan="2" col="2">
                     <separator string="Warning on the Invoice" colspan="4"/>
-                    <field name="invoice_warn" nolabel="1" />
+                    <field name="invoice_warn" nolabel="1" readonly="1"/>
                     <field name="invoice_warn_msg" colspan="3" nolabel="1"
                             attrs="{'required':[('invoice_warn','!=','no-message')],'readonly':[('invoice_warn','=','no-message')]}"/>
                 </group>
 
                     <group colspan="2" col="2">
                     <separator string="Warnign on the RMA" colspan="4"/>
-                        <field name="rma_warn" nolabel="1"/>
+                        <field name="rma_warn" nolabel="1" readonly="1"/>
                         <field name="rma_warn_msg" colspan="3" nolabel="1"
                                 attrs="{'required':[('rma_warn','!=','no-message')],'readonly':[('rma_warn','=','no-message')]}"/>
                 </group>
+                <footer></footer>
             </form>
         </field>
     </record>
