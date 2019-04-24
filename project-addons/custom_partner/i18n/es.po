@@ -429,3 +429,7 @@ msgstr "Referencia de pago"
 msgid "Email web must be unique"
 msgstr "El email web debe ser único"
 
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_change_string
+msgid "Orders"
+msgstr "Pedidos"
