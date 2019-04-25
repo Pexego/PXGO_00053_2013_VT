@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
-    <data>
+<odoo>
 
-        <!--TODO: MIgrar<record id="product_add_remaining_days" model="ir.ui.view">
+        <record id="product_add_remaining_days" model="ir.ui.view">
             <field name="name">product.product.form.add_remaining_days</field>
             <field name="model">product.product</field>
-            <field name="inherit_id" ref="purchase_proposal.product_add_proposal_data"/>
+            <field name="inherit_id" ref="purchase_proposal.product_product_form_view_add_ref_manufacturer"/>
             <field name="arch" type="xml">
                 <field name="last_sixty_days_sales" position="before">
                     <field name="remaining_days_sale"/>
                     <field name="replacement_id"/>
                 </field>
             </field>
-        </record>-->
+        </record>
 
         <record id="product_add_joking_index" model="ir.ui.view">
             <field name="name">product.product.form.add_joking_index</field>
@@ -68,5 +67,4 @@
             action="purchase_product_remaining_stock_days" id="menu_product_remaining_stock_days"
             parent="purchase.menu_procurement_management" sequence="99" />
 
-    </data>
-</openerp>
+</odoo>
