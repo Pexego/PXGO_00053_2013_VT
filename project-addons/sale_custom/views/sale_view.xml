@@ -29,6 +29,17 @@
             </xpath>
         </field>
     </record>
+
+    <record id="view_order_tree_add_date" model="ir.ui.view">
+            <field name="name">sale.order.tree.add.date</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="confirmation_date" position="before">
+                    <field name="date_order"/>
+                </field>
+            </field>
+        </record>
 <!--
     <record id="action_view_historical_orders" model="ir.actions.server">
         <field name="name">Historical Partner Orders View</field>
