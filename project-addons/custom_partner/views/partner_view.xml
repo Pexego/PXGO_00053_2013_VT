@@ -190,6 +190,18 @@
                         </group>
                     </page>
                 </page>
+                <page name="accounting" position="inside">
+                    <field name="bank_ids" context="{'default_partner_id': active_id, 'form_view_ref': 'base.view_partner_bank_form'}">
+                        <tree string="Bank Details">
+                            <field name="sequence" invisible="1"/>
+                            <field name="acc_number"/>
+                            <field name="bank_name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="partner_id"/>
+                        </tree>
+                    </field>
+                </page>
+
             </field>
         </record>
 
