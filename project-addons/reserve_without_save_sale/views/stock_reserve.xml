@@ -41,7 +41,6 @@
             </field>
         </field>
     </record>
-    view_stock_reservation_search
 
     <record id="view_stock_reservation_search_add_waiting" model="ir.ui.view">
         <field name="name">stock.reservation.inherit.view.search.add.waiting</field>
@@ -51,7 +50,7 @@
             <filter name="cancel" position="before">
                 <filter name="waiting" string="Waiting"
                         domain="[('state', '=', 'confirmed')]"
-                        help="Moves are waiting for product."/>
+                        help="Moves are waiting for product"/>
             </filter>
         </field>
     </record>

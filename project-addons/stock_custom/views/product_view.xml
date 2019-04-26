@@ -76,7 +76,7 @@
             </field>
             <field name="name" position="after">
                 <field name="tag_ids" string="Tag"/>
-                <!--TODO: MIgrar<field name="seller_id" string="Main Supplier"/>-->
+                <field name="seller_id" string="Main Supplier"/>
             </field>
             <field name="categ_id" position="attributes">
                 <attribute name="filter_domain"></attribute>
