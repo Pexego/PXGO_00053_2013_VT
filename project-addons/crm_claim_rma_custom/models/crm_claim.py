@@ -256,9 +256,7 @@ class CrmClaimRma(models.Model):
                     'account_analytic_id': False
                 }
                 if line.tax_ids:
-                    fiscal_position = claim_obj.partner_id. \
-                        property_account_position_id
-                    taxes_ids = fp_obj.map_tax(fiscal_position,line.tax_ids)
+                    taxes_ids = fp_obj.map_tax(line.tax_ids)
                     vals['invoice_line_tax_ids'] = [(6, 0, taxes_ids)]
                 line_obj = self.env['account.invoice.line']
                 line_obj.create(vals)
