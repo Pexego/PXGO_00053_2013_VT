@@ -471,6 +471,17 @@
             </field>
         </record>
 
+        <record id="res_partner_view_buttons_change_string" model="ir.ui.view">
+            <field name="name">res.partner.view.buttons.change.string</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="sale.res_partner_view_buttons"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button/field[@name='sale_order_count']" position="attributes">
+                    <attribute name="string">Orders</attribute>
+                </xpath>
+            </field>
+        </record>
+
         <menuitem id="contacts.menu_localisation" name="Localization"
             parent="crm.crm_menu_config" sequence="5"/>
 
