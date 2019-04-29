@@ -91,11 +91,11 @@
                       <group>
                           <button name="calculate_invoices" type="object"
                             string="Calculate"
-                            attrs="{'invisible': [('invoice_ids', '!=', [])]}"/>
-                      </group>
+                            attrs="{'invisible': [('invoice_ids', '!=', [])]}" colspan="2"/>
                           <button name="make_refund_invoice"
                               attrs="{'invisible': [('claim_inv_line_ids', '=', [])]}"
-                              type="object" string="New Refund"/>
+                              type="object" string="New Refund" class="btn-primary" colspan="2"/>
+                      </group>
                     </group>
                 </page>
             </xpath>
