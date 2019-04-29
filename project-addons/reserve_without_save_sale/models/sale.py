@@ -7,7 +7,15 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    state = fields.Selection(selection_add=[('reserve', 'Reserved')])
+    # state = fields.Selection(selection_add=[('reserve', 'Reserved')])
+    state = fields.Selection([
+        ('draft', 'Quotation'),
+        ('sent', 'Quotation Sent'),
+        ('reserve', 'Reserved'),
+        ('sale', 'Sales Order'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled'),
+    ])
 
     @api.multi
     @api.depends('state',
