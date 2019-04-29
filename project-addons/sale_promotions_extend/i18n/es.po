@@ -593,3 +593,8 @@ msgstr "No aplicar promociones"
 #: help:sale.order,no_promos:0
 msgid "Reload the prices after marking this check"
 msgstr "Recalcular precio final después de marcar el check"
+
+#. module: sale_promotions_extend
+#: view:sale.order:sale_promotions_extend.view_sale_promo_form2_remove_button_good
+msgid "Apply Promotions"
+msgstr "Aplicar promociones"
