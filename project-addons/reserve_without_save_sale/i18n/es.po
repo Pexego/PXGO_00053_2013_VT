@@ -27,3 +27,8 @@ msgstr "Esperando"
 #: model:ir.ui.view,arch_db:reserve_without_save_sale.view_stock_reservation_search_add_waiting
 msgid "Moves are waiting for product"
 msgstr "Movimientos esperando por productos"
+
+#. module: reserve_without_save_sale
+#: selection:sale.order,state:0
+msgid "Done"
+msgstr "Tramitado"
