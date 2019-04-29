@@ -195,10 +195,10 @@
                             </t>
                             <t t-if="check_iva">
                                 <td>
-                                    <span t-esc="'%.1f'% (iva * 100)" />
+                                    <span t-esc="'%.1f'% (iva)" />
                                 </td>
                                 <td>
-                                    <span t-esc="amount_tax" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                    <span t-esc="amount_tax/100" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
                                 </td>
                             </t>
                             <t t-if="not check_iva">
