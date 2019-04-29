@@ -257,7 +257,7 @@ class CrmClaimRma(models.Model):
                 }
                 if line.tax_ids:
                     taxes_ids = fp_obj.map_tax(line.tax_ids)
-                    vals['invoice_line_tax_ids'] = [(6, 0, taxes_ids)]
+                    vals['invoice_line_tax_ids'] = [(6, 0, taxes_ids.ids)]
                 line_obj = self.env['account.invoice.line']
                 line_obj.create(vals)
 
@@ -268,10 +268,9 @@ class CrmClaimRma(models.Model):
             invoice_id.action_invoice_open()
 
             data_pool = self.env['ir.model.data']
-            action_id = data_pool.xmlid_to_res_id('account.action_invoice_tree3')
+            action_id = data_pool.xmlid_to_res_id('crm_claim_rma.act_crm_claim_rma_refunds_out')
             if action_id:
-                action_pool = self.pool['ir.actions.act_window']
-                action = action_pool.read(action_id)
+                action = self.env.ref('crm_claim_rma.act_crm_claim_rma_refunds_out').read()[0]
                 action['domain'] = "[('id','in', [" + str(invoice_id.id) + "])]"
                 return action
 
