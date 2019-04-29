@@ -16,6 +16,9 @@
             <xpath expr="//field[@name='order_line']/tree/field[@name='margin_perc']" position="after">
                 <field name="tax_id" widget="many2many_tags" required="1" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
             </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='no_rappel']" position="after">
+                <field name="invoice_status"/>
+            </xpath>
         </field>
     </record>
 
