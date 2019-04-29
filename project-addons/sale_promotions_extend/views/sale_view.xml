@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="commercial_rules.view_sale_promo_form" />
         <field name="arch" type="xml">
             <button name="apply_commercial_rules" position="replace">
-                <button name="apply_commercial_rules" type="object" states="draft,reserve" string="Compute final price" />
+                <button name="apply_commercial_rules" type="object" states="draft,reserve" string="Apply Promotions" />
             </button>
         </field>
     </record>
@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
             <button name="action_cancel" position="before">
                 <group colspan="4" col="13">
-                    <button name="apply_commercial_rules" type="object" states="draft" string="Apply Promotions" />
+                    <button name="apply_commercial_rules" type="object" states="draft,reserve" string="Apply Promotions" />
                 </group>
             </button>
         </field>
