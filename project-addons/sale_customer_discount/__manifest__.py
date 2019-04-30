@@ -36,7 +36,7 @@ Sales customer discount
     "depends": ["base", "product", "stock_account",
                 "purchase"],
     "data": [
-        "views/product_view.xml",
+        # "views/product_view.xml",
     ],
     "demo": [],
     'auto_install': False,
