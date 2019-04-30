@@ -1,0 +1,1120 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* custom_report_link
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-04-29 15:06+0000\n"
+"PO-Revision-Date: 2019-04-29 15:06+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "+33434226281"
+msgstr "+33434226281"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "0034 911883615"
+msgstr "0034 911883615"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "0694803224"
+msgstr "0694803224"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<b>IMPORTANT NOTE</b><span>: </span>"
+msgstr "<b>IMPORTANT NOTE</b><span>: </span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+msgid "<span style=\"font-weight: bold; color:#da1f2e\">To: </span>"
+msgstr "<span style=\"font-weight: bold; color:#da1f2e\">To: </span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
+"                        <br/>\n"
+"                        For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
+msgstr "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
+"                        <br/>\n"
+"                        For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<span>\n"
+"                        <strong>Shipping address:</strong>\n"
+"                    </span>"
+msgstr "<span>\n"
+"                        <strong>Shipping address:</strong>\n"
+"                    </span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<span><strong>Delivery Address:</strong></span>"
+msgstr "<span><strong>Dirección de Envío:</strong></span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+msgid "<span><strong>Shipping address:</strong></span>"
+msgstr "<span><strong>Shipping address:</strong></span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<span><strong>Warehouse Address:</strong></span>"
+msgstr "<span><strong>Dirección de almacén:</strong></span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<span>CIF: ESB80645518</span>"
+msgstr "<span>CIF: ESB80645518</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<span>Factura Proforma: </span>"
+msgstr "<span>Factura Proforma: </span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "<span>To: </span>"
+msgstr "<span>To: </span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<span>sat@visiotechsecurity.com</span>"
+msgstr "<span>sat@visiotechsecurity.com</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<span>satitalia@visiotechsecurity.com</span>"
+msgstr "<span>satitalia@visiotechsecurity.com</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<span>sav@visiotechsecurity.com</span>"
+msgstr "<span>sav@visiotechsecurity.com</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "<strong style=\"color:#da1f2e;\">Total amount due:</strong>"
+msgstr "<strong style=\"color:#da1f2e;\">Total amount due:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "<strong style=\"color:6D6E70;\">There is nothing due with this customer.</strong>"
+msgstr "<strong style=\"color:6D6E70;\">There is nothing due with this customer.</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+msgid "<strong>AMOUNT</strong>"
+msgstr "<strong>AMOUNT</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_orderdeposit_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+msgid "<strong>Amount</strong>"
+msgstr "<strong>Importe</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+msgid "<strong>BASE PRICE</strong>"
+msgstr "<strong>BASE PRICE</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<strong>BASE</strong>"
+msgstr "<strong>BASE</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "<strong>Balance:</strong>"
+msgstr "<strong>Balance:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>Bank Account:</strong>"
+msgstr "<strong>Cuenta bancaria:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Claim Date\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+msgstr "<strong>Claim Date\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<strong>Client:</strong>"
+msgstr "<strong>Client:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<strong>Comment:</strong>"
+msgstr "<strong>Comentario:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Customer Name\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+msgstr "<strong>Customer Name\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Date Deadline\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+msgstr "<strong>Date Deadline\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Delivery Address\n"
+"                                    <span>:</span>\n"
+"                                </strong>"
+msgstr "<strong>Delivery Address\n"
+"                                    <span>:</span>\n"
+"                                </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+msgid "<strong>Delivery Note</strong>"
+msgstr "<strong>Delivery Note</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_orderdeposit_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+msgid "<strong>Description</strong>"
+msgstr "<strong>Descripción</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<strong>Destination Account:</strong>"
+msgstr "<strong>Destination Account:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_orderdeposit_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+msgid "<strong>Discount</strong>"
+msgstr "<strong>Dto</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "<strong>EAN-13</strong>"
+msgstr "<strong>EAN-13</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Email\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+msgstr "<strong>Email\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<strong>Email</strong>"
+msgstr "<strong>Email</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<strong>Fax</strong>"
+msgstr "<strong>Fax</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<strong>Fiscal Position Remark:</strong>"
+msgstr "<strong>Posición fiscal:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>IVA</strong>"
+msgstr "<strong>IVA</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>Invoice address</strong>"
+msgstr "<strong>Invoice address</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>Invoice and shipping address</strong>"
+msgstr "<strong>Invoice and shipping address</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+msgid "<strong>Notes: </strong>"
+msgstr "<strong>Notes: </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "<strong>Order Qty</strong>"
+msgstr "<strong>Order Qty</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>Payment Mode:</strong>"
+msgstr "<strong>Modo de pago:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>Payment Term:</strong>"
+msgstr "<strong>Payment Term:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Phone Number\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+msgstr "<strong>Phone Number\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<strong>Phone</strong>"
+msgstr "<strong>Teléfono</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<strong>Price (ex tax)</strong>"
+msgstr "<strong>PRECIO BASE</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Print Date\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+msgstr "<strong>Print Date\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_orderdeposit_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+msgid "<strong>Quantity</strong>"
+msgstr "<strong>Cantidad</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>Quotation: </strong>"
+msgstr "<strong>Quotation: </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>REC.</strong>"
+msgstr "<strong>REC.</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<strong>RET.</strong>"
+msgstr "<strong>RET.</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_orderdeposit_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+msgid "<strong>Reference</strong>"
+msgstr "<strong>Referencia</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<strong>Responsible\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+msgstr "<strong>Responsible\n"
+"                                        <span>:</span>\n"
+"                                    </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+msgid "<strong>Sin Pack</strong>"
+msgstr "<strong>Sin Pack</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "<strong>Sub-Total:</strong>"
+msgstr "<strong>Sub-Total:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<strong>Supplier Address:</strong>"
+msgstr "<strong>Supplier Address:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "<strong>Supplier Model</strong>"
+msgstr "<strong>Supplier Model</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<strong>TIN</strong>"
+msgstr "<strong>TIN</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>TOTAL PRICE.</strong>"
+msgstr "<strong>PRECIO TOTAL.</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>TOTAL</strong>"
+msgstr "<strong>TOTAL</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<strong>Taxes Amount</strong>"
+msgstr "<strong>Importe Impuesto</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<strong>Taxes</strong>"
+msgstr "<strong>Impuesto</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<strong>Terms and Conditions:</strong>"
+msgstr "<strong>Terminos y Condiciones:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "<strong>Total Price</strong>"
+msgstr "<strong>Precio Total</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "<strong>Total Qty</strong>"
+msgstr "<strong>Total Qty</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_orderdeposit_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+msgid "<strong>Unit Cost</strong>"
+msgstr "<strong>Coste Ud</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_orderdeposit_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+msgid "<strong>Unit Price</strong>"
+msgstr "<strong>Precio Unidad</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "<strong>Visiotech Model</strong>"
+msgstr "<strong>Visiotech Model</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>Visiotech order: </strong>"
+msgstr "<strong>Visiotech order: </strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "<strong>Warehouse Address:</strong>"
+msgstr "<strong>Warehouse Address:</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "<strong>Website</strong>"
+msgstr "<strong>Website</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "ATTENTION\n"
+"                        -Please check the material received with this RMA document. Claims concerning this will only be accepted\n"
+"                         during 48 hours after the reception."
+msgstr "ATTENTION\n"
+"                        -Please check the material received with this RMA document. Claims concerning this will only be accepted\n"
+"                         during 48 hours after the reception."
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Account statement"
+msgstr "Account statement"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.report_picking_custom_action
+msgid "Albarán"
+msgstr "Albarán"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.report_picking_custom_valued_action
+msgid "Albarán valorado"
+msgstr "Albarán valorado"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "Banco Popular Español\n"
+"                            IBAN ES11 0075 0240 1006 0056 6137\n"
+"                            BIC: POPUESMM"
+msgstr "Banco Popular Español\n"
+"                            IBAN ES11 0075 0240 1006 0056 6137\n"
+"                            BIC: POPUESMM"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+msgid "Banco Popular Español\n"
+"            IBAN ES11 0075 0240 1006 0056 6137\n"
+"            BIC: POPUESMM"
+msgstr "Banco Popular Español\n"
+"            IBAN ES11 0075 0240 1006 0056 6137\n"
+"            BIC: POPUESMM"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+msgid "Banco Popular Español\n"
+"IBAN ES11 0075 0240 1006 0056 6137\n"
+"BIC: POPUESMM"
+msgstr "Banco Popular Español\n"
+"IBAN ES11 0075 0240 1006 0056 6137\n"
+"BIC: POPUESMM"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    CAIXABANK\n"
+"                    IBAN ES46 2100 1726 5902 0032 1288\n"
+"                    BIC: CAIXESBBXXX"
+msgstr "Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    CAIXABANK\n"
+"                    IBAN ES46 2100 1726 5902 0032 1288\n"
+"                    BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        CAIXABANK\n"
+"        IBAN ES46 2100 1726 5902 0032 1288\n"
+"        BIC: CAIXESBBXXX"
+msgstr "Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        CAIXABANK\n"
+"        IBAN ES46 2100 1726 5902 0032 1288\n"
+"        BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    Sabadell Atlantico\n"
+"                    IBAN ES52 0081 0530 5900 0109 8214\n"
+"                    BIC: BSABESBB"
+msgstr "Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    Sabadell Atlantico\n"
+"                    IBAN ES52 0081 0530 5900 0109 8214\n"
+"                    BIC: BSABESBB"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        Sabadell Atlantico\n"
+"        IBAN ES52 0081 0530 5900 0109 8214\n"
+"        BIC: BSABESBB"
+msgstr "Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        Sabadell Atlantico\n"
+"        IBAN ES52 0081 0530 5900 0109 8214\n"
+"        BIC: BSABESBB"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    CAIXABANK\n"
+"                    IBAN ES46 2100 1726 5902 0032 1288\n"
+"                    BIC: CAIXESBBXXX"
+msgstr "Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    CAIXABANK\n"
+"                    IBAN ES46 2100 1726 5902 0032 1288\n"
+"                    BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        CAIXABANK\n"
+"        IBAN ES46 2100 1726 5902 0032 1288\n"
+"        BIC: CAIXESBBXXX"
+msgstr "Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        CAIXABANK\n"
+"        IBAN ES46 2100 1726 5902 0032 1288\n"
+"        BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    NOVOBANCO\n"
+"                    Nº: 0001 1726 6211\n"
+"                    NIB: 0007 0000 00117266211 23\n"
+"                    IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"                    SWIFT/BIC: BESCPTPL"
+msgstr "Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    NOVOBANCO\n"
+"                    Nº: 0001 1726 6211\n"
+"                    NIB: 0007 0000 00117266211 23\n"
+"                    IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"                    SWIFT/BIC: BESCPTPL"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        NOVOBANCO\n"
+"        Nº: 0001 1726 6211\n"
+"        NIB: 0007 0000 00117266211 23\n"
+"        IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"        SWIFT/BIC: BESCPTPL"
+msgstr "Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        NOVOBANCO\n"
+"        Nº: 0001 1726 6211\n"
+"        NIB: 0007 0000 00117266211 23\n"
+"        IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"        SWIFT/BIC: BESCPTPL"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    Banco Popular Español\n"
+"                    IBAN ES11 0075 0240 1006 0056 6137\n"
+"                    BIC: POPUESMM"
+msgstr "Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    Banco Popular Español\n"
+"                    IBAN ES11 0075 0240 1006 0056 6137\n"
+"                    BIC: POPUESMM"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        Banco Popular Español\n"
+"        IBAN ES11 0075 0240 1006 0056 6137\n"
+"        BIC: POPUESMM"
+msgstr "Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        Banco Popular Español\n"
+"        IBAN ES11 0075 0240 1006 0056 6137\n"
+"        BIC: POPUESMM"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "C.I.F.:"
+msgstr "C.I.F.:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "CAIXABANC\n"
+"                            IBAN ES46 2100 1726 5902 0032 1288\n"
+"                            BIC: CAIXESBBXXX"
+msgstr "CAIXABANC\n"
+"                            IBAN ES46 2100 1726 5902 0032 1288\n"
+"                            BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+msgid "CAIXABANC\n"
+"            IBAN ES46 2100 1726 5902 0032 1288\n"
+"            BIC: CAIXESBBXXX"
+msgstr "CAIXABANC\n"
+"            IBAN ES46 2100 1726 5902 0032 1288\n"
+"            BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+msgid "CAIXABANC\n"
+"IBAN ES46 2100 1726 5902 0032 1288\n"
+"BIC: CAIXESBBXXX"
+msgstr "CAIXABANC\n"
+"IBAN ES46 2100 1726 5902 0032 1288\n"
+"BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "CIF:"
+msgstr "CIF:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Cancelled Invoice"
+msgstr "Factura cancelada"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "Claim No.\n"
+"                            <span>:</span>"
+msgstr "Claim No.\n"
+"                            <span>:</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Claim:"
+msgstr "Claim:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Client order:"
+msgstr "Client order:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Customer ref:"
+msgstr "Ref. cliente:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Date"
+msgstr "Fecha"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "Date:"
+msgstr "Fecha:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+msgid "Deposit"
+msgstr "Deposito"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.action_report_orderdeposit_custom
+msgid "Depósito"
+msgstr "Depósito Valorado"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.action_report_orderdeposit_custom_valued
+msgid "Depósito valorado"
+msgstr "Depósito valorado"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Description"
+msgstr "Descripción"
+
+#. module: custom_report_link
+#: model:ir.model.fields,field_description:custom_report_link.field_report_custom_report_link_report_overduecustom_display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Draft Invoice"
+msgstr "Factura borrador"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Due"
+msgstr "Vencido"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Factura Proforma"
+msgstr "Factura Proforma"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.action_report_invoice_custom
+msgid "Facturas"
+msgstr "Facturas"
+
+#. module: custom_report_link
+#: model:ir.model.fields,field_description:custom_report_link.field_report_custom_report_link_report_overduecustom_id
+msgid "ID"
+msgstr "ID"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    CAIXABANK\n"
+"                    IBAN ES46 2100 1726 5902 0032 1288\n"
+"                    BIC: CAIXESBBXXX"
+msgstr "INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"                    CAIXABANK\n"
+"                    IBAN ES46 2100 1726 5902 0032 1288\n"
+"                    BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        BANCA: CAIXABANK\n"
+"        IBAN ES46 2100 1726 5902 0032 1288\n"
+"        BIC: CAIXESBBXXX"
+msgstr "INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
+"        BANCA: CAIXABANK\n"
+"        IBAN ES46 2100 1726 5902 0032 1288\n"
+"        BIC: CAIXESBBXXX"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "Internal Description"
+msgstr "Descripción interna"
+
+#. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_account_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Invoice:"
+msgstr "Invoice:"
+
+#. module: custom_report_link
+#: model:ir.model.fields,field_description:custom_report_link.field_report_custom_report_link_report_overduecustom___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_claim_line
+msgid "List of product to return"
+msgstr "Listado de productos a devolver"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Maturity Date"
+msgstr "Maturity Date"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "NOVOBANCO\n"
+"                            Nº: 0001 1726 6211\n"
+"                            NIB: 0007 0000 00117266211 23\n"
+"                            IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"                            SWIFT/BIC: BESCPTPL"
+msgstr "NOVOBANCO\n"
+"                            Nº: 0001 1726 6211\n"
+"                            NIB: 0007 0000 00117266211 23\n"
+"                            IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"                            SWIFT/BIC: BESCPTPL"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+msgid "NOVOBANCO\n"
+"            Nº: 0001 1726 6211\n"
+"            NIB: 0007 0000 00117266211 23\n"
+"            IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"            SWIFT/BIC: BESCPTPL"
+msgstr "NOVOBANCO\n"
+"            Nº: 0001 1726 6211\n"
+"            NIB: 0007 0000 00117266211 23\n"
+"            IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"            SWIFT/BIC: BESCPTPL"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+msgid "NOVOBANCO\n"
+"Nº: 0001 1726 6211\n"
+"NIB: 0007 0000 00117266211 23\n"
+"IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"SWIFT/BIC: BESCPTPL"
+msgstr "NOVOBANCO\n"
+"Nº: 0001 1726 6211\n"
+"NIB: 0007 0000 00117266211 23\n"
+"IBAN PT50 0007 0000 0011 7266 2112 3\n"
+"SWIFT/BIC: BESCPTPL"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+msgid "No Pack"
+msgstr "No Pack"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "Not Available"
+msgstr "Not Available"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "Notes:"
+msgstr "Notes:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+msgid "Order"
+msgstr "Pedido"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+msgid "Others"
+msgstr "Otros"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Overdue amount"
+msgstr "Overdue amount"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "PRO-FORMA"
+msgstr "PROFORMA"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+msgid "Pack:"
+msgstr "Pack:"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.action_report_overdue_custom
+msgid "Pagos pendientes"
+msgstr "Pagos pendientes"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Paid"
+msgstr "Pagado"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.action_report_purchaseorder_custom
+msgid "Pedido de compra"
+msgstr "Pedido de compra"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "Picking"
+msgstr "Albarán"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "Picking:"
+msgstr "Picking:"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.action_report_saleorder
+msgid "Presupuesto / Pedido"
+msgstr "Presupuesto / Pedido11"
+
+#. module: custom_report_link
+#: model:ir.model.fields,field_description:custom_report_link.field_claim_line_printable_test
+msgid "Printable"
+msgstr "Imprimible"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "Product"
+msgstr "Producto"
+
+#. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_purchase_order
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+msgid "Purchase Order"
+msgstr "Pedido de compra"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_sale_order
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Quotation"
+msgstr "Presupuesto"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
+msgid "RMA Receipt"
+msgstr "Recepción de Reclamo"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
+msgid "Ref"
+msgstr "Ref."
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Refund"
+msgstr "Factura rectificativa"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
+msgstr "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "Replacement Product"
+msgstr "Replacement Product"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "Request for Quotation"
+msgstr "Solicitud de presupuesto"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.action_report_crm_claim
+msgid "Resumen de Reclamación"
+msgstr "Resumen de Reclamación"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "Sabadell Atlantico\n"
+"                            IBAN ES52 0081 0530 5900 0109 8214\n"
+"                            BIC: BSABESBB"
+msgstr "Sabadell Atlantico\n"
+"                            IBAN ES52 0081 0530 5900 0109 8214\n"
+"                            BIC: BSABESBB"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+msgid "Sabadell Atlantico\n"
+"            IBAN ES52 0081 0530 5900 0109 8214\n"
+"            BIC: BSABESBB"
+msgstr "Sabadell Atlantico\n"
+"            IBAN ES52 0081 0530 5900 0109 8214\n"
+"            BIC: BSABESBB"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+msgid "Sabadell Atlantico\n"
+"IBAN ES52 0081 0530 5900 0109 8214\n"
+"BIC: BSABESBB"
+msgstr "Sabadell Atlantico\n"
+"IBAN ES52 0081 0530 5900 0109 8214\n"
+"BIC: BSABESBB"
+
+#. module: custom_report_link
+#: model:ir.actions.report,name:custom_report_link.action_report_purchasequotation_customr
+msgid "Solicitud de presupuesto"
+msgstr "Solicitud de presupuesto"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Supplier Invoice"
+msgstr "Supplier Invoice"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Supplier Refund"
+msgstr "Supplier Refund"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "The final shipping method (by sea or air) and quantity will be defined after merchandise is ready to be shipped.\n"
+"    Pls. ask shipping information before cargo is released.\n"
+"\n"
+"    Remarks:\n"
+"    <strong>1, Pls. show out P.O. No. on every document (C/I, P/L, P/I, and etc...).</strong>\n"
+"    2, Pls follow our general shipping mark format.\n"
+"    3, Delivery time need to be confirmed within one week after this P.O. received."
+msgstr "The final shipping method (by sea or air) and quantity will be defined after merchandise is ready to be shipped.\n"
+"    Pls. ask shipping information before cargo is released.\n"
+"\n"
+"    Remarks:\n"
+"    <strong>1, Pls. show out P.O. No. on every document (C/I, P/L, P/I, and etc...).</strong>\n"
+"    2, Pls follow our general shipping mark format.\n"
+"    3, Delivery time need to be confirmed within one week after this P.O. received."
+
+#. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_stock_picking
+msgid "Transfer"
+msgstr "Transfer"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+msgid "VAT:"
+msgstr "NIF:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+msgid "Visiotech order:"
+msgstr "Visiotech order:"
+
+#. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_report_custom_report_link_report_overcustom
+msgid "report.custom_report_link.report_overcustom"
+msgstr "report.custom_report_link.report_overcustom"
+
+#. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_report_custom_report_link_report_overduecustom
+msgid "report.custom_report_link.report_overduecustom"
+msgstr "report.custom_report_link.report_overduecustom"
