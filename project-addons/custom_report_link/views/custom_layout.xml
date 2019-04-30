@@ -250,52 +250,52 @@
                     <strong>Bank Account:</strong>
                     <t t-if="lang == 'es_ES'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    Sabadell Atlantico
-                    IBAN ES52 0081 0530 5900 0109 8214
-                    BIC: BSABESBB
+    Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
+    Sabadell Atlantico
+    IBAN ES52 0081 0530 5900 0109 8214
+    BIC: BSABESBB
                         </pre>
                     </t>
                     <t t-if="lang == 'en_US'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    CAIXABANK
-                    IBAN ES46 2100 1726 5902 0032 1288
-                    BIC: CAIXESBBXXX
+    Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
+    CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'fr_FR'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    Banco Popular Español
-                    IBAN ES11 0075 0240 1006 0056 6137
-                    BIC: POPUESMM
+    Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
+    Banco Popular Español
+    IBAN ES11 0075 0240 1006 0056 6137
+    BIC: POPUESMM
                         </pre>
                     </t>
                     <t t-if="lang == 'pt_PT'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    NOVOBANCO
-                    Nº: 0001 1726 6211
-                    NIB: 0007 0000 00117266211 23
-                    IBAN PT50 0007 0000 0011 7266 2112 3
-                    SWIFT/BIC: BESCPTPL
+    Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
+    NOVOBANCO
+    Nº: 0001 1726 6211
+    NIB: 0007 0000 00117266211 23
+    IBAN PT50 0007 0000 0011 7266 2112 3
+    SWIFT/BIC: BESCPTPL
                         </pre>
                     </t>
                     <t t-if="lang == 'it_IT'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    CAIXABANK
-                    IBAN ES46 2100 1726 5902 0032 1288
-                    BIC: CAIXESBBXXX
+    INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
+    CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'de_DE'">
                         <pre style="font-size:12px; color:#6D6E70">
-                    Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    CAIXABANK
-                    IBAN ES46 2100 1726 5902 0032 1288
-                    BIC: CAIXESBBXXX
+    Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
+    CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                 </div>
@@ -1823,39 +1823,39 @@ SWIFT/BIC: BESCPTPL
                     <strong>Bank Account:</strong>
                     <t t-if="lang == 'es_ES'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            Sabadell Atlantico
-                            IBAN ES52 0081 0530 5900 0109 8214
-                            BIC: BSABESBB
+            Sabadell Atlantico
+            IBAN ES52 0081 0530 5900 0109 8214
+            BIC: BSABESBB
                         </pre>
                     </t>
                     <t t-if="lang == 'en_US'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            CAIXABANC
-                            IBAN ES46 2100 1726 5902 0032 1288
-                            BIC: CAIXESBBXXX
+            CAIXABANC
+            IBAN ES46 2100 1726 5902 0032 1288
+            BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'fr_FR'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            Banco Popular Español
-                            IBAN ES11 0075 0240 1006 0056 6137
-                            BIC: POPUESMM
+            Banco Popular Español
+            IBAN ES11 0075 0240 1006 0056 6137
+            BIC: POPUESMM
                         </pre>
                     </t>
                     <t t-if="lang == 'it_IT'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            CAIXABANC
-                            IBAN ES46 2100 1726 5902 0032 1288
-                            BIC: CAIXESBBXXX
+            CAIXABANC
+            IBAN ES46 2100 1726 5902 0032 1288
+            BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'pt_PT'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            NOVOBANCO
-                            Nº: 0001 1726 6211
-                            NIB: 0007 0000 00117266211 23
-                            IBAN PT50 0007 0000 0011 7266 2112 3
-                            SWIFT/BIC: BESCPTPL
+            NOVOBANCO
+            Nº: 0001 1726 6211
+            NIB: 0007 0000 00117266211 23
+            IBAN PT50 0007 0000 0011 7266 2112 3
+            SWIFT/BIC: BESCPTPL
                         </pre>
                     </t>
                 </div>
