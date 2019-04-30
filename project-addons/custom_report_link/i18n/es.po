@@ -33,7 +33,7 @@ msgstr "0694803224"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
 msgid "<b>IMPORTANT NOTE</b><span>: </span>"
-msgstr "<b>IMPORTANT NOTE</b><span>: </span>"
+msgstr "<b>NOTA IMPORTANTE</b><span>: </span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -88,7 +88,7 @@ msgstr "<span>Factura Proforma: </span>"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "<span>To: </span>"
-msgstr "<span>To: </span>"
+msgstr "<span>Para: </span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
@@ -158,7 +158,7 @@ msgstr "<strong>Cuenta bancaria:</strong>"
 msgid "<strong>Claim Date\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
-msgstr "<strong>Claim Date\n"
+msgstr "<strong>Fecha de Reclamación\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
 
@@ -166,7 +166,7 @@ msgstr "<strong>Claim Date\n"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 msgid "<strong>Client:</strong>"
-msgstr "<strong>Client:</strong>"
+msgstr "<strong>Cliente:</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
@@ -178,7 +178,7 @@ msgstr "<strong>Comentario:</strong>"
 msgid "<strong>Customer Name\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
-msgstr "<strong>Customer Name\n"
+msgstr "<strong>Nombre del Cliente\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
 
@@ -187,7 +187,7 @@ msgstr "<strong>Customer Name\n"
 msgid "<strong>Date Deadline\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
-msgstr "<strong>Date Deadline\n"
+msgstr "<strong>Fecha Límite\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
 
@@ -196,7 +196,7 @@ msgstr "<strong>Date Deadline\n"
 msgid "<strong>Delivery Address\n"
 "                                    <span>:</span>\n"
 "                                </strong>"
-msgstr "<strong>Delivery Address\n"
+msgstr "<strong>Dirección de Entrega\n"
 "                                    <span>:</span>\n"
 "                                </strong>"
 
@@ -277,7 +277,7 @@ msgstr "<strong>Invoice address</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "<strong>Invoice and shipping address</strong>"
-msgstr "<strong>Invoice and shipping address</strong>"
+msgstr "<strong>Dirección de facturación y de envío</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -288,7 +288,7 @@ msgstr "<strong>Notes: </strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "<strong>Order Qty</strong>"
-msgstr "<strong>Order Qty</strong>"
+msgstr "<strong>Unidades</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
@@ -302,14 +302,14 @@ msgstr "<strong>Modo de pago:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "<strong>Payment Term:</strong>"
-msgstr "<strong>Payment Term:</strong>"
+msgstr "<strong>Plazo de pago:</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "<strong>Phone Number\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
-msgstr "<strong>Phone Number\n"
+msgstr "<strong>No. Telf.\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
 
@@ -328,7 +328,7 @@ msgstr "<strong>PRECIO BASE</strong>"
 msgid "<strong>Print Date\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
-msgstr "<strong>Print Date\n"
+msgstr "<strong>Fecha de Impresión\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
 
@@ -373,7 +373,7 @@ msgstr "<strong>Referencia</strong>"
 msgid "<strong>Responsible\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
-msgstr "<strong>Responsible\n"
+msgstr "<strong>Responsable\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
 
@@ -397,12 +397,12 @@ msgstr "<strong>Supplier Address:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "<strong>Supplier Model</strong>"
-msgstr "<strong>Supplier Model</strong>"
+msgstr "<strong>Referencia Proveedor</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
 msgid "<strong>TIN</strong>"
-msgstr "<strong>TIN</strong>"
+msgstr "<strong>NIF</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
@@ -448,7 +448,7 @@ msgstr "<strong>Precio Total</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "<strong>Total Qty</strong>"
-msgstr "<strong>Total Qty</strong>"
+msgstr "<strong>Unidades Totales</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_orderdeposit_custom_document
@@ -473,7 +473,7 @@ msgstr "<strong>Precio Unidad</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "<strong>Visiotech Model</strong>"
-msgstr "<strong>Visiotech Model</strong>"
+msgstr "<strong>Referencia Visiotech</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
@@ -490,7 +490,7 @@ msgstr "<strong>Warehouse Address:</strong>"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
 msgid "<strong>Website</strong>"
-msgstr "<strong>Website</strong>"
+msgstr "<strong>Sitio Web</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
@@ -498,13 +498,13 @@ msgid "ATTENTION\n"
 "                        -Please check the material received with this RMA document. Claims concerning this will only be accepted\n"
 "                         during 48 hours after the reception."
 msgstr "ATTENTION\n"
-"                        -Please check the material received with this RMA document. Claims concerning this will only be accepted\n"
-"                         during 48 hours after the reception."
+"                        -Por favor, compruebe la mercancía recibida con este documento de RMA. Sólo se aceptarán\n"
+"                         reclamaciones a este respecto durante las 48 horas siguientes a la recepción."
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
 msgid "Account statement"
-msgstr "Account statement"
+msgstr "Estado De Cuenta"
 
 #. module: custom_report_link
 #: model:ir.actions.report,name:custom_report_link.report_picking_custom_action
@@ -715,7 +715,7 @@ msgstr "Factura cancelada"
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "Claim No.\n"
 "                            <span>:</span>"
-msgstr "Claim No.\n"
+msgstr "No. de Reclamación.\n"
 "                            <span>:</span>"
 
 #. module: custom_report_link
@@ -729,7 +729,7 @@ msgstr "Claim:"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "Client order:"
-msgstr "Client order:"
+msgstr "Pedido Cliente:"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
@@ -909,7 +909,7 @@ msgstr "Not Available"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "Notes:"
-msgstr "Notes:"
+msgstr "Notas:"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
@@ -984,7 +984,7 @@ msgstr "Producto"
 #: model:ir.model,name:custom_report_link.model_purchase_order
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 msgid "Purchase Order"
-msgstr "Pedido de compra"
+msgstr "Orden de compra"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
@@ -1020,7 +1020,7 @@ msgstr "Remember that you can now download your invoices directly from our websi
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "Replacement Product"
-msgstr "Replacement Product"
+msgstr "Producto de Reemplazo"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
@@ -1107,7 +1107,7 @@ msgstr "NIF:"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 msgid "Visiotech order:"
-msgstr "Visiotech order:"
+msgstr "Pedido Visiotech:"
 
 #. module: custom_report_link
 #: model:ir.model,name:custom_report_link.model_report_custom_report_link_report_overcustom
