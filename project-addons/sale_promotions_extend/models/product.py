@@ -29,7 +29,7 @@ class ProductTag(models.Model):
         tagsb = []
 
         for t in self:
-            tagsb.append(t.id)
+            tagsb.append(t.name)
             if t.parent_id:
                 tagsa = t.parent_id._get_tag_recursivity([t.parent_id.id])
                 if tagsa:
