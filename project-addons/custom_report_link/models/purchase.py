@@ -10,4 +10,4 @@ class PurchaseOrder(models.Model):
     def print_quotation(self):
         super().print_quotation()
         return self.env.ref(
-            'purchase.report_purchasequotation_custom').report_action(self)
+            'custom_report_link.action_report_purchaseorder_custom').report_action(self)
