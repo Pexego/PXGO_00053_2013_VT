@@ -56,6 +56,7 @@ class SaleOrder(models.Model):
         action['context'] = {'search_default_draft': 1,
                              'search_default_reserved': 1,
                              'search_default_waiting': 1,
+                             'search_default_partially_available': 1,
                             }
         return action
 
