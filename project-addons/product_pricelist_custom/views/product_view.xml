@@ -91,4 +91,40 @@
         </field>
     </record>
 
+     <!--record id="product_template_form_view_add_discount" model="ir.ui.view">
+        <field name="name">product.template.form.view.add.discount</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='general_information']/group" position="after">
+                <separator string="Pricing"/>
+                <field name="item_ids" nolabel="1" context="{'default_applied_on' :'0_product_variant'}">
+                    <tree string="Pricelist Items" editable="bottom">
+                        <field name="name_pricelist"/>
+                        <field name="fixed_price" string="Price" required='1'/>
+                        <field name="pricelist_related" readonly="True"/>
+                        <field name="margin"/>
+                        <field name="pricelist_related_price"/>
+                        <field name="applied_on" invisible="1"/>
+                    </tree>
+                </field>
+                <group name="relations">
+                    <separator string="Relations"/>
+                    <group colspan="8" col="8">
+                        <field name="relation_pvd_pvi_a" readonly="True" colspan="2"/>
+                        <field name="relation_pvd_pvi_b" readonly="True" colspan="2"/>
+                        <field name="relation_pvd_pvi_c" readonly="True" colspan="2"/>
+                        <field name="relation_pvd_pvi_d" readonly="True" colspan="2"/>
+                    </group>
+                </group>
+                <group name="costs">
+                    <separator string="Costs"/>
+                    <group colspan="8" col="8">
+                        <field name="standard_price" string="Cost Price" colspan="2"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+     </record-->
+
 </odoo>
