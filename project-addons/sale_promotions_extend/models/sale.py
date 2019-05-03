@@ -12,7 +12,7 @@ class SaleOrderLine(models.Model):
             if line.product_id and line.product_id.tag_ids:
                 tags = line.product_id.tag_ids._get_tag_recursivity()
                 for tag in tags:
-                    stream.append(tag.name)
+                    stream.append(tag)
             if stream:
                 line.product_tags = stream
             else:
