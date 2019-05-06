@@ -390,7 +390,7 @@
                     <field name="category_id"/>
                     <field name="annual_invoiced"/>
                     <field name="last_sale_date"/>
-                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
+                    <button name="open_partner" type="object" string="" icon="fa-window-restore" help="Open partner in new tab"/>
                 </field>
             </field>
         </record>
@@ -402,7 +402,7 @@
             <field eval="8" name="priority"/>
             <field name="arch" type="xml">
                  <field name="parent_id" invisible="1" position="after">
-                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
+                    <button name="open_partner" type="object" string="" icon="fa-window-restore" help="Open partner in new tab"/>
                  </field>
             </field>
         </record>
