@@ -36,6 +36,21 @@ msgid "Relations"
 msgstr "Relaciones tarifas base"
 
 #. module: product_pricelist_custom
+#: model:ir.ui.view,arch_db:product_pricelist_custom.product_template_form_add_relation_pricelist
+msgid "Pricing"
+msgstr "Precios"
+
+#. module: product_pricelist_custom
+#: model:ir.ui.view,arch_db:product_pricelist_custom.product_template_form_add_relation_pricelist
+msgid "Costs"
+msgstr "Costes"
+
+#. module: product_pricelist_custom
+#: model:ir.ui.view,arch_db:product_pricelist_custom.product_template_form_add_relation_pricelist
+msgid "Cost Price"
+msgstr "Precio de coste"
+
+#. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_a
 msgid "PVD/PVI A relation"
 msgstr "Relación PVD/PVI A"

@@ -48,6 +48,9 @@ class ResPartner(models.Model):
     current_employees = fields.Integer("Current year employees", default=0)
     past_year_employees = fields.Integer("Past year employees", default=0)
     ref_supplier = fields.Char("Ref. Supplier", size=3)
+    unreconciled_aml_ids = fields.One2many('account.move.line', 'partner_id',
+                                           domain=['&', ('full_reconcile_id', '=', False), '&', ('account_id.deprecated','=', False),
+                                                   '&', ('account_id.internal_type', '=', 'receivable'), ('parent_state', '!=', 'draft')])
 
     @api.model
     def _calculate_annual_invoiced(self):
