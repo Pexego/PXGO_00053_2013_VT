@@ -10,7 +10,7 @@
     "depends": ['base', 'sale', 'stock', 'sale_stock', 'stock_account',
                 'sale_margin_percentage',
                 'purchase_last_price_info',
-                'sale_customer_discount', 'mrp'],
+                'product_pricelist_custom', 'mrp'],
     "data": ['views/product_view.xml', 'data/ir.cron.xml',
              'security/ir.model.access.csv'],
     "installable": True

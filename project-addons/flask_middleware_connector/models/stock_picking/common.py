@@ -102,7 +102,7 @@ class StockPicking(models.Model):
                 field = 'date_in'
             else:
                 field = 'date_out'
-            products = [x.product_id.id for x in self.item_ids]
+            products = [x.product_id.id for x in self.move_lines]
             for claim_line in self.claim_id.claim_line_ids:
                 if claim_line.product_id.id in products:
                     claim_line[field] = datetime.now()

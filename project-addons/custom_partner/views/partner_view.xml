@@ -314,26 +314,34 @@
                         </tree>
                     </field>
                 </field>
-                <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name ='company_id']" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </xpath>
-                <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name ='blocked']" position="before">
-                    <field name="ref_line" readonly="True"/>
-                </xpath>
             </field>
         </record>-->
 
-        <!-- TODO: Migrar<record id="view_partner_inherit_followup_form_add_invoice" model="ir.ui.view">
-            <field name="name">res.partner.followup.form.inherit.add_invoice</field>
-            <field name="inherit_id" ref="account_followup.view_partner_inherit_followup_form"/>
+         <!--TODO: Lo dejo comentado por si lo quieren en modo botón o en modo pestaña. record id="view_partner_inherit_followup_form" model="ir.ui.view">
+            <field name="name">res.partner.followup.form.inherit</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="model">res.partner</field>
-            <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
             <field name="arch" type="xml" >
-                <xpath expr="//field[@name='unreconciled_aml_ids']/tree/field[@name ='move_id']" position="after">
-                    <field name="stored_invoice_id"/>
-                </xpath>
+                <page name="sales_purchases" position="after">
+                    <page string="Customer situation" name="followup_tab">
+                        <field name="unreconciled_aml_ids">
+                            <tree string="Account Move line" editable="bottom" create="false" delete="false"
+                                  decoration-danger = "(not date_maturity or date_maturity&lt;=current_date) and balance&gt;0">
+                                <field name="date" readonly="True"/>
+                                <field name="move_id" readonly="True"/>
+                                <field name="invoice_id"/>
+                                <field name="ref_line" readonly="True"/>
+                                <field name="blocked"/>
+                                <field name="date_maturity" readonly="True"/>
+                                <field name="matched_debit_ids" readonly="True"/>
+                                <field name="matched_credit_ids" readonly="True"/>
+                                <field name="balance" readonly="True"/>
+                            </tree>
+                        </field>
+                    </page>
+                </page>
             </field>
-        </record>-->
+        </record-->
 
         <record id="warning_non_active_client" model="ir.ui.view">
             <field name="name">res.partner.warning.non.active.client</field>
@@ -382,7 +390,7 @@
                     <field name="category_id"/>
                     <field name="annual_invoiced"/>
                     <field name="last_sale_date"/>
-                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
+                    <button name="open_partner" type="object" string="" icon="fa-window-restore" help="Open partner in new tab"/>
                 </field>
             </field>
         </record>
@@ -394,7 +402,7 @@
             <field eval="8" name="priority"/>
             <field name="arch" type="xml">
                  <field name="parent_id" invisible="1" position="after">
-                    <button name="open_partner" type="object" string="" icon="gtk-redo" help="Open partner in new tab"/>
+                    <button name="open_partner" type="object" string="" icon="fa-window-restore" help="Open partner in new tab"/>
                  </field>
             </field>
         </record>
