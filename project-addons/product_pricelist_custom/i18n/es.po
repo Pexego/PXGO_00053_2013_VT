@@ -31,22 +31,22 @@ msgid "Margin (%)"
 msgstr "Margen (%)"
 
 #. module: product_pricelist_custom
-#: model:ir.ui.view,arch_db:product_pricelist_custom.product_normal_form_view_add_discount
+#: model:ir.ui.view,arch_db:product_pricelist_custom.product_template_form_add_relation_pricelist
 msgid "Relations"
 msgstr "Relaciones tarifas base"
 
 #. module: product_pricelist_custom
-#: model:ir.ui.view,arch_db:product_pricelist_custom.product_normal_form_view_add_discount
+#: model:ir.ui.view,arch_db:product_pricelist_custom.product_template_form_add_relation_pricelist
 msgid "Pricing"
 msgstr "Precios"
 
 #. module: product_pricelist_custom
-#: model:ir.ui.view,arch_db:product_pricelist_custom.product_normal_form_view_add_discount
+#: model:ir.ui.view,arch_db:product_pricelist_custom.product_template_form_add_relation_pricelist
 msgid "Costs"
 msgstr "Costes"
 
 #. module: product_pricelist_custom
-#: model:ir.ui.view,arch_db:product_pricelist_custom.product_normal_form_view_add_discount
+#: model:ir.ui.view,arch_db:product_pricelist_custom.product_template_form_add_relation_pricelist
 msgid "Cost Price"
 msgstr "Precio de coste"
 
