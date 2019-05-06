@@ -10,4 +10,4 @@ class AccountInvoice(models.Model):
     def invoice_print(self):
         super().invoice_print()
         return self.env.ref(
-            'account.report_invoice_custom').report_action(self)
+            'custom_report_link.action_report_invoice_custom').report_action(self)

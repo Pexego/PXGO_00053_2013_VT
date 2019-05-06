@@ -32,3 +32,8 @@ msgstr "Movimientos esperando por productos"
 #: selection:sale.order,state:0
 msgid "Done"
 msgstr "Tramitado"
+
+#. module: reserve_without_save_sale
+#: model:ir.ui.view,arch_db:reserve_without_save_sale.view_stock_reservation_search_add_waiting
+msgid "Partially available"
+msgstr "Parcialmente disponible"

@@ -51,6 +51,8 @@
                 <filter name="waiting" string="Waiting"
                         domain="[('state', '=', 'confirmed')]"
                         help="Moves are waiting for product"/>
+                <filter name="partially_available" string="Partially available"
+                        domain="[('state', '=', 'partially_available')]"/>
             </filter>
         </field>
     </record>
@@ -65,6 +67,7 @@
                 <attribute name="decoration-muted">state == 'cancel'</attribute>
                 <attribute name="decoration-danger">state == 'confirmed'</attribute>
                 <attribute name="decoration-success">state == 'assigned'</attribute>
+                <attribute name="decoration-warning">state == 'partially_available'</attribute>
             </xpath>
         </field>
     </record>

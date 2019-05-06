@@ -250,52 +250,52 @@
                     <strong>Bank Account:</strong>
                     <t t-if="lang == 'es_ES'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    Sabadell Atlantico
-                    IBAN ES52 0081 0530 5900 0109 8214
-                    BIC: BSABESBB
+    Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
+    Sabadell Atlantico
+    IBAN ES52 0081 0530 5900 0109 8214
+    BIC: BSABESBB
                         </pre>
                     </t>
                     <t t-if="lang == 'en_US'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    CAIXABANK
-                    IBAN ES46 2100 1726 5902 0032 1288
-                    BIC: CAIXESBBXXX
+    Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
+    CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'fr_FR'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    Banco Popular Español
-                    IBAN ES11 0075 0240 1006 0056 6137
-                    BIC: POPUESMM
+    Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
+    Banco Popular Español
+    IBAN ES11 0075 0240 1006 0056 6137
+    BIC: POPUESMM
                         </pre>
                     </t>
                     <t t-if="lang == 'pt_PT'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    NOVOBANCO
-                    Nº: 0001 1726 6211
-                    NIB: 0007 0000 00117266211 23
-                    IBAN PT50 0007 0000 0011 7266 2112 3
-                    SWIFT/BIC: BESCPTPL
+    Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
+    NOVOBANCO
+    Nº: 0001 1726 6211
+    NIB: 0007 0000 00117266211 23
+    IBAN PT50 0007 0000 0011 7266 2112 3
+    SWIFT/BIC: BESCPTPL
                         </pre>
                     </t>
                     <t t-if="lang == 'it_IT'">
                         <pre style="font-size:12px; color:#6D6E70;">
-                    INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    CAIXABANK
-                    IBAN ES46 2100 1726 5902 0032 1288
-                    BIC: CAIXESBBXXX
+    INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
+    CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'de_DE'">
                         <pre style="font-size:12px; color:#6D6E70">
-                    Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
-                    CAIXABANK
-                    IBAN ES46 2100 1726 5902 0032 1288
-                    BIC: CAIXESBBXXX
+    Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
+    CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                 </div>
@@ -786,7 +786,7 @@
                             <t t-if="o.amount_untaxed != 0.00">
                                 <t t-foreach="o.tax_line_ids" t-as="t">
                                     <tr style="color:#6D6E70">
-                                        <t t-if="'IVA' in t.tax_id.tax_group_id.name and t.tax_id.tax_group_id != env.ref('l10n_es.tax_group_iva_0')">
+                                        <t t-if="'IVA' in t.name and t.tax_id.tax_group_id != env.ref('l10n_es.tax_group_iva_0')">
                                             <t t-if="o.type == 'out_refund'">
                                                 <td><span t-esc="-t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                                             </t>
@@ -794,11 +794,12 @@
                                                 <td><span t-field="t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
                                             </t>
                                             <t t-if="t.base != 0">
-                                                <td><span t-esc="(t.amount*100)/t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-
+                                                <!-- <td><span t-esc="(t.amount*100)/t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td> -->
+                                                <td><span/></td>
                                             </t>
                                             <t t-if="t.base == 0">
-                                                <td><span t-esc="0" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                                <!-- <td><span t-esc="0" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td> -->
+                                                <td><span/></td>
                                             </t>
                                             <t t-if="o.type == 'out_refund'">
                                                 <td><span t-esc="-t.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
@@ -810,7 +811,13 @@
                                             <td><span></span></td>
                                             <td><span></span></td>
                                             <td><span></span></td>
-                                            <td><span></span></td>
+                                            <t t-if="o.type == 'out_refund'">
+                                                <td><strong t-esc="-o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                            </t>
+                                            <t t-if="o.type != 'out_refund'">
+                                                <td><strong t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                            </t>
+
                                         </t>
                                         <t t-if="t.tax_id.tax_group_id in (env.ref('l10n_es.tax_group_recargo_1-4'), env.ref('l10n_es.tax_group_recargo_0-5'), env.ref('l10n_es.tax_group_recargo_5-2'))">
                                             <t t-if="o.type == 'out_refund'">
@@ -835,7 +842,12 @@
                                             </t>
                                             <td><span></span></td>
                                             <td><span></span></td>
-                                            <td><span></span></td>
+                                            <t t-if="o.type == 'out_refund'">
+                                                <td><strong t-esc="-o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                            </t>
+                                            <t t-if="o.type != 'out_refund'">
+                                                <td><strong t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                            </t>
                                         </t>
                                     </tr>
                                 </t>
@@ -843,22 +855,22 @@
                         </t>
                         <tr style="color:#6D6E70">
                             <t t-if="o.type == 'out_refund'">
-                                <td><span t-esc="-o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                <!-- <td><span t-esc="-o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td> -->
+                                <td><span/></td>
                             </t>
                             <t t-if="o.type != 'out_refund'">
-                                <td><span t-field="o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                                <!-- <td><span t-field="o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td> -->
+                                <td><span/></td>
                             </t>
                             <td><span></span></td>
                             <td>
-                                <t t-set="iva_value" t-value="sum(o.tax_line_ids.filtered(lambda r: 'IVA' in r.tax_id.tax_group_id.name).mapped('amount'))"/>
-                                <span t-if="iva_value" t-esc="iva_value"
-                                        t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                <t t-set="iva_value" t-value="sum(o.tax_line_ids.filtered(lambda r: 'IVA' in r.name).mapped('amount'))"/>
+                                <!-- <span t-if="iva_value" t-esc="iva_value" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/> -->
                             </td>
                             <td><span></span></td>
                             <td>
-                                <t t-set="recargo_value" t-value="sum(o.tax_line_ids.filtered(lambda r: 'Recargo' in r.tax_id.tax_group_id.name).mapped('amount'))"/>
-                                <span t-if="recargo_value" t-esc="recargo_value"
-                                        t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                <t t-set="recargo_value" t-value="sum(o.tax_line_ids.filtered(lambda r: 'Recargo' in r.name).mapped('amount'))"/>
+                                <span t-if="recargo_value" t-esc="recargo_value" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                             </td>
                             <td><span></span></td>
                             <td><span></span></td>
@@ -918,52 +930,52 @@
                     <strong>Destination Account:</strong>
                     <t t-if="lang == 'es_ES'">
                         <pre style="font-size:12px; color:#6D6E70;">
-        Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
-        Sabadell Atlantico
-        IBAN ES52 0081 0530 5900 0109 8214
-        BIC: BSABESBB
+    Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
+    Sabadell Atlantico
+    IBAN ES52 0081 0530 5900 0109 8214
+    BIC: BSABESBB
                         </pre>
                     </t>
                     <t t-if="lang == 'en_US'">
                         <pre style="font-size:12px; color:#6D6E70">
-        Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
-        CAIXABANK
-        IBAN ES46 2100 1726 5902 0032 1288
-        BIC: CAIXESBBXXX
+    Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
+    CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'fr_FR'">
                         <pre style="font-size:12px; color:#6D6E70">
-        Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
-        Banco Popular Español
-        IBAN ES11 0075 0240 1006 0056 6137
-        BIC: POPUESMM
+    Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
+    Banco Popular Español
+    IBAN ES11 0075 0240 1006 0056 6137
+    BIC: POPUESMM
                         </pre>
                     </t>
                     <t t-if="lang == 'pt_PT'">
                         <pre style="font-size:12px; color:#6D6E70">
-        Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
-        NOVOBANCO
-        Nº: 0001 1726 6211
-        NIB: 0007 0000 00117266211 23
-        IBAN PT50 0007 0000 0011 7266 2112 3
-        SWIFT/BIC: BESCPTPL
+    Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
+    NOVOBANCO
+    Nº: 0001 1726 6211
+    NIB: 0007 0000 00117266211 23
+    IBAN PT50 0007 0000 0011 7266 2112 3
+    SWIFT/BIC: BESCPTPL
                         </pre>
                     </t>
                     <t t-if="lang == 'it_IT'">
                         <pre style="font-size:12px; color:#6D6E70;">
-        INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
-        BANCA: CAIXABANK
-        IBAN ES46 2100 1726 5902 0032 1288
-        BIC: CAIXESBBXXX
+    INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
+    BANCA: CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'de_DE'">
                         <pre style="font-size:12px; color:#6D6E70">
-        Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
-        CAIXABANK
-        IBAN ES46 2100 1726 5902 0032 1288
-        BIC: CAIXESBBXXX
+    Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
+    CAIXABANK
+    IBAN ES46 2100 1726 5902 0032 1288
+    BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     </t>
@@ -1668,7 +1680,6 @@ SWIFT/BIC: BESCPTPL
         </div>
 
 
-        <!-- EMPIEZA DESDE AQUI EL CODIGO DE ANTHONNY -->
         <div class="footer"><!--
         <t t-if="o.partner_id.parent_id.lang == 'es_ES'">
             <pre>
@@ -1812,39 +1823,39 @@ SWIFT/BIC: BESCPTPL
                     <strong>Bank Account:</strong>
                     <t t-if="lang == 'es_ES'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            Sabadell Atlantico
-                            IBAN ES52 0081 0530 5900 0109 8214
-                            BIC: BSABESBB
+            Sabadell Atlantico
+            IBAN ES52 0081 0530 5900 0109 8214
+            BIC: BSABESBB
                         </pre>
                     </t>
                     <t t-if="lang == 'en_US'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            CAIXABANC
-                            IBAN ES46 2100 1726 5902 0032 1288
-                            BIC: CAIXESBBXXX
+            CAIXABANC
+            IBAN ES46 2100 1726 5902 0032 1288
+            BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'fr_FR'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            Banco Popular Español
-                            IBAN ES11 0075 0240 1006 0056 6137
-                            BIC: POPUESMM
+            Banco Popular Español
+            IBAN ES11 0075 0240 1006 0056 6137
+            BIC: POPUESMM
                         </pre>
                     </t>
                     <t t-if="lang == 'it_IT'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            CAIXABANC
-                            IBAN ES46 2100 1726 5902 0032 1288
-                            BIC: CAIXESBBXXX
+            CAIXABANC
+            IBAN ES46 2100 1726 5902 0032 1288
+            BIC: CAIXESBBXXX
                         </pre>
                     </t>
                     <t t-if="lang == 'pt_PT'">
                         <pre style="font-size:12px; color:#6D6E70">
-                            NOVOBANCO
-                            Nº: 0001 1726 6211
-                            NIB: 0007 0000 00117266211 23
-                            IBAN PT50 0007 0000 0011 7266 2112 3
-                            SWIFT/BIC: BESCPTPL
+            NOVOBANCO
+            Nº: 0001 1726 6211
+            NIB: 0007 0000 00117266211 23
+            IBAN PT50 0007 0000 0011 7266 2112 3
+            SWIFT/BIC: BESCPTPL
                         </pre>
                     </t>
                 </div>
