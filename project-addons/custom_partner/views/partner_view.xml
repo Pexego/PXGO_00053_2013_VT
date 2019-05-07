@@ -343,7 +343,7 @@
             <field name="view_mode">tree</field>
             <field name="view_id" ref="view_partner_situation_tree"/>
             <field name="domain">[('full_reconcile_id', '=', False),('account_id.deprecated','=', False),
-                ('account_id.internal_type', '=', 'receivable'), ('parent_state', '!=', 'draft')]</field>
+                ('account_id.internal_type', '=', 'receivable')]</field>
         </record>
 
         <record id="res_partner_view_buttons_add_followup" model="ir.ui.view">
