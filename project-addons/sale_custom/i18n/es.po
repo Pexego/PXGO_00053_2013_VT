@@ -97,3 +97,10 @@ msgstr "Avisos"
 #: view:sale.order:sale_custom.view_order_form_inherit_sale_stock_change_string
 msgid "Pickings"
 msgstr "Albaranes"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_partner_situation_tree_sale
+#: model:ir.actions.act_window,name:sale_custom.partner_situation_action_sale
+#: model:ir.ui.view,arch_db:sale_custom.sale_order_view_buttons_add_followup
+msgid "Customer situation"
+msgstr "Situación del cliente"
