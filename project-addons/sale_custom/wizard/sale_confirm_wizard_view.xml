@@ -12,7 +12,7 @@
                         </p>
                     </group>
                     <footer>
-                        <button string="Okey!" special="cancel" icon="gtk-ok"/>
+                        <button string="Okey!" special="cancel" icon="fa-check-square"/>
                     </footer>
                 </form>
             </field>
