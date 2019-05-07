@@ -20,7 +20,6 @@
               'views/partner_view.xml',
               'views/product_view.xml',
               'views/sale_view.xml',
-              # 'views/stock_landed_costs_view.xml', TODO: Pendiente pmp_landed_costs
               'security/ir.model.access.csv'],
     'installable': True
 }
