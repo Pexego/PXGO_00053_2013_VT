@@ -436,5 +436,8 @@ msgstr "Pedidos"
 
 #. module: custom_partner
 #: model:ir.ui.view,arch_db:custom_partner.view_partner_inherit_followup_form
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_situation_tree
+#: model:ir.actions.act_window,name:custom_partner.partner_situation_action
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_followup
 msgid "Customer situation"
-msgstr "Situación de cliente"
+msgstr "Situación del cliente"
