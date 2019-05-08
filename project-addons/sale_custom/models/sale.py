@@ -127,6 +127,8 @@ class SaleOrder(models.Model):
                     message = _('Please, introduce a shipping cost line.')
                     raise exceptions.Warning(message)
 
+            self.apply_commercial_rules()
+
         return super().action_confirm()
 
 
