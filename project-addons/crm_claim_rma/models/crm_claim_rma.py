@@ -271,6 +271,24 @@ class ClaimLine(models.Model):
         """ Calculate warranty limit and address """
         return True
 
+    @api.multi
+    def equivalent_products(self):
+        view = self.env.ref('crm_claim_rma.equivalent_products_wizard')
+        wiz = self.env['equivalent.products.wizard'].with_context(claim_line=self.id).create({'line_id': self.id})
+
+        return {
+            'name': _("Equivalent products"),
+            'type': 'ir.actions.act_window',
+            'view_mode': 'form',
+            'view_id': view.id,
+            'view_type': 'form',
+            'res_model': 'equivalent.products.wizard',
+            'res_id': wiz.id,
+            'nodestroy': True,
+            'target': 'new',
+            'domain': '[]',
+        }
+
 
 # TODO add the option to split the claim_line in order to manage the same
 # product separately

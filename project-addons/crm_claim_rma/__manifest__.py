@@ -89,7 +89,8 @@ Contributors:
              'views/crm_claim_rma_data.xml',
              'report/crm_claim_report_view.xml',
              'views/stock_reserve_view.xml',
-             'views/mrp_repair_view.xml'
+             'views/mrp_repair_view.xml',
+             'wizard/equivalent_products_wizard_view.xml'
              ],
     'test': ['test/test_invoice_refund.yml'],
     'images': ['images/product_return.png',
