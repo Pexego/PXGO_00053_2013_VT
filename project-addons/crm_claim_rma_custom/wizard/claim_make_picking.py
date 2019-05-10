@@ -83,7 +83,7 @@ class ClaimMakePicking(models.TransientModel):
                             'product_uom': product.uom_id.id,
                             'product_uom_qty': pack[product.id] * claim_line.product_returned_quantity,
                             'date_validity': False,
-                            'name': u"{} ({})".format(claim_line.claim_id.number, product.name_template),
+                            'name': u"{}".format(claim_line.claim_id.number),
                             'location_id': self.claim_line_source_location.id,
                             'location_dest_id': self.claim_line_dest_location.id,
                             'move_id': move.id,
