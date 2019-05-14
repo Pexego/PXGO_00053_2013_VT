@@ -28,13 +28,13 @@ class AccountInvoiceReportFilter(models.Model):
     _name = 'account.invoice.report.filter'
     _inherit = 'account.invoice.report'
 
-    def _where(self, cr):
-        parameters = self.pool.get('ir.config_parameter').get_param(cr, SUPERUSER_ID, 'search.default.brands')
-        return "WHERE pb.name NOT IN " + str(tuple(parameters.encode('utf8').split(',')))
+    def _where(self):
+        parameters = self.env['ir.config_parameter'].sudo().get_param('search.default.brands')
+        return "WHERE pb.name NOT IN " + str(tuple(parameters.split(',')))
 
-    def init(self, cr):
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""CREATE or REPLACE VIEW %s as (
+    def init(self):
+        tools.drop_view_if_exists(self._cr, self._table)
+        self._cr.execute("""CREATE or REPLACE VIEW %s as (
             WITH currency_rate (currency_id, rate, date_start, date_end) AS (
                 SELECT r.currency_id, r.rate, r.name AS date_start,
                     (SELECT name FROM res_currency_rate r2
@@ -58,5 +58,5 @@ class AccountInvoiceReportFilter(models.Model):
 
         )""" % (
                     self._table,
-                    self._select(), self._sub_select(), self._from(), self._where(cr), self._group_by()))
+                    self._select(), self._sub_select(), self._from(), self._where(), self._group_by()))
 
