@@ -308,6 +308,7 @@ class rappel(models.Model):
                                      'rappel_id', 'product_pricelist_id', 'Pricelist')
     description = fields.Char('Description', translate=True)
     sequence = fields.Integer('Sequence', default=100)
+    partner_add_conditions = fields.Char('Add partner conditions')
 
     @api.multi
     def get_products(self):
@@ -336,10 +337,10 @@ class rappel(models.Model):
 
     @api.model
     def update_partner_rappel_pricelist(self):
-        partner_obj = self.env['res.partner']
         rappel_obj = self.env['rappel']
         partner_rappel_obj = self.env['res.partner.rappel.rel']
         account_invoice = self.env['account.invoice']
+        partner_obj_str = "self.env['res.partner']"
 
         now = datetime.now()
         now_str = now.strftime("%Y-%m-%d")
@@ -357,32 +358,41 @@ class rappel(models.Model):
                                                                    ('date_start', '<=', now_str),
                                                                    '|', ('date_end', '=', False),
                                                                    ('date_end', '>=', now_str)]).mapped('partner_id.id'))
-            partner_to_check = tuple()
+
+            # Clientes que deberian pertenecer al rappel:
+            partner_filter = []
             if pricelist_ids:
                 # Rappels dependientes de tarifas
-                # Clientes que deberian pertenecer al rappel:
-                partner_to_check = tuple(partner_obj.search([('property_product_pricelist', 'in', pricelist_ids),
-                                                             ('prospective', '=', False), ('active', '=', True),
-                                                             ('is_company', '=', True), ('parent_id', '=', False)]).ids)
+                partner_filter.extend(["('property_product_pricelist', 'in', pricelist_ids)"])
 
-                # Clientes a los que ya no les corresponde el rappel (solo para cambios de tarifa)
-                #      - Se actualiza fecha fin con la fecha actual
-                remove_partners = set(partner_rappel_list) - set(partner_to_check)
-                if remove_partners:
-                    vals = {'date_end': yesterday_str}
-                    partner_to_update = partner_rappel_obj.search([('rappel_id', '=', rappel.id),
-                                                                   ('partner_id', 'in', tuple(remove_partners)),
-                                                                   '|', ('date_end', '=', False),
-                                                                   ('date_end', '>', now),
-                                                                   ('date_start', '<=', now_str)])
-                    partner_to_update.write(vals)
+            if rappel.partner_add_conditions:
+                partner_filter.extend([rappel.partner_add_conditions])
 
-            elif product_rappel:
-                # Rappel que depende de un producto concreto (y no de la tarifa)
-                # Clientes que deberian pertenecer al rappel:
-                partner_to_check = tuple(account_invoice.search([('date_invoice', '>=', now_str),
-                                                                 ('invoice_line.product_id', '=',
-                                                                  product_rappel.id)]).mapped('partner_id.id'))
+            if product_rappel:
+                # Rappel que depende de la compra de un producto concreto
+                partner_product = account_invoice.search([('invoice_line.product_id', '=', product_rappel.id),
+                                                          ('state', 'in', ['open', 'paid'])]).mapped('partner_id.id')
+                partner_filter.extend(["('id', 'in', partner_product)"])
+
+            if partner_filter:
+                partner_filter.extend(["('prospective', '=', False), ('active', '=', True), "
+                                      "('is_company', '=', True), ('parent_id', '=', False)"])
+                partner_filter = ', '.join(partner_filter)
+                partner_to_check = tuple(eval(partner_obj_str + ".search([" + partner_filter + "])").ids)
+            else:
+                partner_to_check = tuple()
+
+            # Clientes a los que ya no les corresponde el rappel (cumplen las condiciones anteriores)
+            #      - Se actualiza fecha fin con la fecha actual
+            remove_partners = set(partner_rappel_list) - set(partner_to_check)
+            if remove_partners:
+                vals = {'date_end': yesterday_str}
+                partner_to_update = partner_rappel_obj.search([('rappel_id', '=', rappel.id),
+                                                               ('partner_id', 'in', tuple(remove_partners)),
+                                                               '|', ('date_end', '=', False),
+                                                               ('date_end', '>', now),
+                                                               ('date_start', '<=', now_str)])
+                partner_to_update.write(vals)
 
             #  Clientes que faltan en el rappel -> Se crean dos entradas en el rappel:
             #      - Una para liquidar en el mes actual
