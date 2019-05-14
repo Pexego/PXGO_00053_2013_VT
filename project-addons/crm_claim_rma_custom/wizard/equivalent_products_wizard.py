@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class EquivalentProductsWizard(models.TransientModel):
@@ -17,8 +17,12 @@ class EquivalentProductsWizard(models.TransientModel):
             res['virtual_stock_conservative'] = claim_line_id.product_id.virtual_stock_conservative
         return res
 
-    def onchange_product_id(self):
-        super(EquivalentProductsWizard, self).onchange_product_id()
+    @api.onchange('product_id')
+    def onchange_product(self):
+        # super(EquivalentProductsWizard, self).onchange_product()
         self.kitchen_stock = self.product_id.qty_available_wo_wh
         self.virtual_stock_conservative = self.product_id.virtual_stock_conservative
         self.qty_available_external = self.product_id.qty_available_external
+        self.virtual_stock = self.product_id.virtual_available
+        self.real_stock = self.product_id.qty_available
+        self.product_tag_ids = self.product_id.tag_ids
