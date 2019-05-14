@@ -19,20 +19,10 @@
         <field name="model">product.template</field>
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
+            <field name="standard_price" position="replace"/>
             <field name="item_ids" position="attributes">
                 <attribute name="context">{'default_applied_on': '0_product_variant'}</attribute>
             </field>
-            <div name="pricelist_item" position="after">
-               <group name="relations">
-                   <separator string="Relations"/>
-                   <group colspan="8" col="8">
-                       <field name="relation_pvd_pvi_a" readonly="True" colspan="2"/>
-                       <field name="relation_pvd_pvi_b" readonly="True" colspan="2"/>
-                       <field name="relation_pvd_pvi_c" readonly="True" colspan="2"/>
-                       <field name="relation_pvd_pvi_d" readonly="True" colspan="2"/>
-                   </group>
-               </group>
-           </div>
             <xpath expr="//field[@name='item_ids']/tree/field[@name='pricelist_id']" position="attributes">
                 <attribute name="readonly">True</attribute>
             </xpath>
@@ -54,6 +44,40 @@
                 <field name="pricelist_related_price"/>
                 <field name="product_tmpl_id" invisible="1"/>
                 <field name="product_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='item_ids']" position="replace"/>
+            <div name="pricelist_item" position="replace"/>
+            <xpath expr="//page[@name='general_information']/group" position="after">
+                <group>
+                    <separator string="Pricing"/>
+                    <group colspan="8" col="8">
+                        <field name="item_ids" nolabel="1">
+                            <tree string="Pricelist Items" editable="bottom">
+                                <field name="name_pricelist"/>
+                                <field name="fixed_price" string="Price" required='1'/>
+                                <field name="pricelist_related" readonly="True"/>
+                                <field name="margin"/>
+                                <field name="pricelist_related_price"/>
+                                <field name="applied_on" invisible="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+                <group name="relations">
+                   <separator string="Relations"/>
+                   <group colspan="8" col="8">
+                       <field name="relation_pvd_pvi_a" readonly="True" colspan="2"/>
+                       <field name="relation_pvd_pvi_b" readonly="True" colspan="2"/>
+                       <field name="relation_pvd_pvi_c" readonly="True" colspan="2"/>
+                       <field name="relation_pvd_pvi_d" readonly="True" colspan="2"/>
+                   </group>
+               </group>
+                <group name="costs">
+                    <separator string="Costs"/>
+                    <group colspan="8" col="8">
+                        <field name="standard_price" string="Cost Price" colspan="2"/>
+                    </group>
+                </group>
             </xpath>
         </field>
     </record>

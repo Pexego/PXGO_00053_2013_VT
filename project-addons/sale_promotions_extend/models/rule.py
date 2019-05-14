@@ -72,7 +72,7 @@ class PromotionsRulesConditionsExprs(models.Model):
         elif attribute == 'order_pricelist':
             return """order.pricelist_id.name %s %s""" % (comparator, value)
         elif attribute == 'web_discount':
-            return "kwargs[%s]" % attribute
+            return "kwargs['%s']" % attribute
         else:
             return super().serialise(attribute, comparator, value)
 

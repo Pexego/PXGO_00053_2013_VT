@@ -149,7 +149,7 @@
                             </t>
                         </div>
                         <!-- DATA -->
-                        <div class="col-xs-2" style="color:#6D6E70">
+                        <div class="col-xs-2" style="color:#6D6E70; margin-left: -2%;">
                             <t t-if="claim.delivery_address_id.phone">
 
                                 <p t-field="claim.delivery_address_id.phone" style="white-space: nowrap;"/>
@@ -164,7 +164,7 @@
                                    style="white-space: nowrap;"/>
                             </t>
                         </div>
-                        <div class="col-xs-2" style="text-align:right; color:#da1f2e;">
+                        <div class="col-xs-2" style="text-align:right; color:#da1f2e; margin-left: -7%;">
                             <t t-if="claim.comercial">
                                 <p class="row">
                                     <strong>Responsible

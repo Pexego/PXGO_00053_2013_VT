@@ -18,6 +18,8 @@
 #
 ##############################################################################
 from odoo import api, exceptions, fields, models, _
+from collections import defaultdict
+from odoo.tools import float_is_zero
 
 
 class StockPicking(models.Model):
@@ -133,7 +135,12 @@ class StockMove(models.Model):
                     search(domain, limit=None)
                 if confirmed_ids:
                     confirmed_ids._action_assign()
+        return res
 
+    def _action_done(self):
+        res = super()._action_done()
+        for line in self:
+            line.product_id.product_tmpl_id.recalculate_standard_price_2()
         return res
 
 
@@ -201,3 +208,14 @@ class StockProductionLot(models.Model):
                     move_line.picking_id.partner_id.commercial_partner_id
             else:
                 lot.partner_id = False
+
+
+class StockLandedCost(models.Model):
+
+    _inherit = 'stock.landed.cost'
+
+    def button_validate(self):
+        res = super().button_validate()
+        valuation_lines = self.valuation_adjustment_lines.filtered(lambda line: line.move_id)
+        valuation_lines.mapped('move_id.product_id.product_tmpl_id').recalculate_standard_price_2()
+        return res

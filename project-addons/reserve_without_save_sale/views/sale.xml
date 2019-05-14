@@ -23,7 +23,7 @@
                 <attribute name="invisible">True</attribute>
             </xpath>
             <button name="action_cancel" position="attributes">
-                <attribute name="states">draft,sent,reserve</attribute>
+                <attribute name="states">draft,sent,reserve,sale</attribute>
             </button>
             <button name="print_quotation" position="after">
                 <button name="print_quotation" string="Print" type="object" states="reserve" class="o_sale_print"/>

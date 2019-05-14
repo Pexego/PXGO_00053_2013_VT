@@ -11,7 +11,7 @@
                 'custom_account', 'picking_incidences',
                 'reserve_without_save_sale', 'sale_display_stock',
                 'stock_reserve_sale', 'product_brand',
-                'product_stock_unsafety', 'stock'],
+                'product_stock_unsafety', 'stock', 'stock_landed_costs'],
     'data': ['views/ir_attachment_view.xml',
               'stock_custom_report.xml',
               'report/stock_report.xml',
@@ -20,7 +20,6 @@
               'views/partner_view.xml',
               'views/product_view.xml',
               'views/sale_view.xml',
-              'views/stock_landed_costs_view.xml',
               'security/ir.model.access.csv'],
     'installable': True
 }

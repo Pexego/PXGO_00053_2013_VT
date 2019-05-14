@@ -7,7 +7,15 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    state = fields.Selection(selection_add=[('reserve', 'Reserved')])
+    # state = fields.Selection(selection_add=[('reserve', 'Reserved')])
+    state = fields.Selection([
+        ('draft', 'Quotation'),
+        ('sent', 'Quotation Sent'),
+        ('reserve', 'Reserved'),
+        ('sale', 'Sales Order'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled'),
+    ])
 
     @api.multi
     @api.depends('state',
@@ -48,6 +56,7 @@ class SaleOrder(models.Model):
         action['context'] = {'search_default_draft': 1,
                              'search_default_reserved': 1,
                              'search_default_waiting': 1,
+                             'search_default_partially_available': 1,
                             }
         return action
 

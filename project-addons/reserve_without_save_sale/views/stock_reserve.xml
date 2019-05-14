@@ -42,4 +42,34 @@
         </field>
     </record>
 
+    <record id="view_stock_reservation_search_add_waiting" model="ir.ui.view">
+        <field name="name">stock.reservation.inherit.view.search.add.waiting</field>
+        <field name="model">stock.reservation</field>
+        <field name="inherit_id" ref="stock_reserve.view_stock_reservation_search"/>
+        <field name="arch" type="xml">
+            <filter name="cancel" position="before">
+                <filter name="waiting" string="Waiting"
+                        domain="[('state', '=', 'confirmed')]"
+                        help="Moves are waiting for product"/>
+                <filter name="partially_available" string="Partially available"
+                        domain="[('state', '=', 'partially_available')]"/>
+            </filter>
+        </field>
+    </record>
+
+    <record id="view_stock_reservation_tree_add_color" model="ir.ui.view">
+        <field name="name">stock.reservation.inherit.view.search.add.color</field>
+        <field name="model">stock.reservation</field>
+        <field name="inherit_id" ref="stock_reserve.view_stock_reservation_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-info">state == 'draft'</attribute>
+                <attribute name="decoration-muted">state == 'cancel'</attribute>
+                <attribute name="decoration-danger">state == 'confirmed'</attribute>
+                <attribute name="decoration-success">state == 'assigned'</attribute>
+                <attribute name="decoration-warning">state == 'partially_available'</attribute>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>

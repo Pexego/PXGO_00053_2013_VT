@@ -13,6 +13,9 @@
                 <button class="oe_inline oe_stat_button" name="action_view_moves"
                     string="Stock moves" type="object" icon="fa-cubes" attrs="{'invisible':[('type', '=', 'service')]}"/>
             </xpath>
+            <field name="company_id" position="after">
+                <field name="standard_price_2" readonly="True"/>
+            </field>
             <notebook position="inside">
                 <page string="Stock graphic" attrs="{'invisible': [('type','!=','product')]}">
                     <group string="Filters" class="oe_inline">
@@ -73,7 +76,7 @@
             </field>
             <field name="name" position="after">
                 <field name="tag_ids" string="Tag"/>
-                <!--TODO: MIgrar<field name="seller_id" string="Main Supplier"/>-->
+                <field name="seller_id" string="Main Supplier"/>
             </field>
             <field name="categ_id" position="attributes">
                 <attribute name="filter_domain"></attribute>

@@ -9,4 +9,4 @@ class StockPicking(models.Model):
 
     def do_print_picking(self):
         super().do_print_picking()
-        return self.env.ref('stock.report_picking_custom').report_action(self)
+        return self.env.ref('custom_report_link.report_picking_custom_action').report_action(self)

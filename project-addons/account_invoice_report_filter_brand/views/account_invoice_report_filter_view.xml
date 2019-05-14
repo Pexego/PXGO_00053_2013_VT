@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+
         <!-- analisis de facturas filtrado por marcas -->
         <record id="action_account_invoice_report_filter" model="ir.actions.act_window">
             <field name="name">Invoices Analysis brand</field>
@@ -13,9 +13,8 @@
         </record>
 
         <menuitem action="action_account_invoice_report_filter" id="menu_action_account_invoice_report_filter"
-                  name="Invoices Analysis brand" parent="base.next_id_64"/>
-    </data>
-</openerp>
+                  name="Invoices Analysis brand" parent="account.account_reports_management_menu"/>
+</odoo>
 
 
 

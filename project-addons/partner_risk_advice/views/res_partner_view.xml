@@ -4,9 +4,9 @@
     <record model="ir.ui.view" id="view_partner_form_risk_advice">
         <field name="name">res.partner.form.risk_advice</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="account.partner_view_buttons" />
+        <field name="inherit_id" ref="sale.res_partner_view_buttons" />
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='invoice_warn']/.." position="after">
+            <xpath expr="//field[@name='sale_warn']/.." position="after">
                 <group colspan="2" col="2">
                     <separator string="Warnign on the RMA" colspan="4"/>
                         <field name="rma_warn" nolabel="1"/>
