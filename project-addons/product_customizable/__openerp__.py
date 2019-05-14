@@ -8,7 +8,8 @@ This module will filter automatically the customizable products and show them tr
     """,
     "author": "David Mora",
     "depends": [
-        "product"
+        "product",
+        "sale"
     ],
     "data": [
         "views/product_customizable_view.xml"
