@@ -24,8 +24,6 @@ class EquivalentProductsWizard(models.TransientModel):
 
     @api.onchange('product_id')
     def onchange_product_id(self):
-        import ipdb
-        ipdb.set_trace()
         self.virtual_stock = self.product_id.virtual_available
         self.real_stock = self.product_id.qty_available
         self.product_tag_ids = self.product_id.tag_ids
