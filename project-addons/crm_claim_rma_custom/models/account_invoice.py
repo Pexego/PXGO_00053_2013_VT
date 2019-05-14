@@ -28,7 +28,7 @@ class AccountInvoice(models.Model):
     def write(self, vals):
         res = super(AccountInvoice, self).write(vals)
         if 'state' in vals.keys():
-            if vals['state'] == 'paid':
+            if vals['state'] == 'open':
                 for invoice in self:
                     invoice_line_ids = [x.id for x in invoice.invoice_line_ids]
                     substate_id = self.env.ref(
