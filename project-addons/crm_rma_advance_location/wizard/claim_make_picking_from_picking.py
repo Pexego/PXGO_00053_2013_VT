@@ -49,7 +49,7 @@ class ClaimMakePickingFromPicking(models.TransientModel):
                 loc_field = 'lot_%s_id' % context_loc
             else:
                 loc_field = "wh_input_stock_loc_id"
-            loc_id = warehouse_id.read([loc_field])[0]['id']
+            loc_id = warehouse_id.read([loc_field])[0][loc_field][0]
         return loc_id
 
     picking_line_source_location = fields.Many2one('stock.location',
