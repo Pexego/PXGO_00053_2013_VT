@@ -18,7 +18,7 @@
                     <field name="past_month_invoiced"/>
                 </field>
                 <field name="active" position="after">
-                    <field name="web" attrs="{'invisible': [('is_company', '!=', True)]}"/>
+                    <field name="web" attrs="{'invisible': [('is_company', '!=', True)], 'readonly': [('prospective', '=', True)]}"/>
                     <field name="email_web" attrs="{'invisible': [('web', '!=', True)], 'required': [('web', '=', True)]}"/>
                 </field>
                 <field name="property_account_position" position="after">
@@ -482,7 +482,7 @@
             <field name="inherit_id" ref="product.view_partner_property_form"/>
             <field name="arch" type="xml">
                 <field name="property_product_pricelist" position="attributes">
-                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
+                    <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)], 'readonly': [('prospective', '=', True)]}</attribute>
                 </field>
             </field>
         </record>
