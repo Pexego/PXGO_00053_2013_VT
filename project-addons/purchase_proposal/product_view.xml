@@ -83,7 +83,9 @@
             <field name="inherit_id" ref="sale_customer_discount.product_normal_form_view_add_discount"/>
             <field name="arch" type="xml">
                 <field name="standard_price" position="after">
-                    <field name="pvm_price"/>
+                    <field name="pvm_price" string="PVMA Price"/>
+                    <field name="pvm_price_2"/>
+                    <field name="pvm_price_3"/>
                 </field>
             </field>
         </record>

@@ -19,37 +19,73 @@
 #
 ##############################################################################
 from openerp import models, fields, api
-import datetime
 
 
 class ProductTemplate(models.Model):
 
     _inherit = 'product.template'
 
+    @api.multi
+    def _get_pvm_price(self, context=None):
+        return self.env['product.template'].with_context(context).browse(self.id).price
+
     @api.onchange("standard_price")
     @api.depends("standard_price")
     @api.multi
     def _get_pvm(self):
-        pricelist = self.env['product.pricelist'].search_read([('name', '=', 'PVM')], ['id'])
+        pricelist = self.env['product.pricelist'].search_read([('name', '=', 'PVMA')], ['id', 'name'])
+        new_ctx = dict(self._context)
         if pricelist:
             pricelist_id = pricelist[0]['id']
             new_ctx = dict(self._context)
             new_ctx.update({
                 'pricelist': pricelist_id
             })
-            for product in self:
-                product_final = self.env['product.template'].with_context(new_ctx).browse(product.id)
-                # esto no se si funciona sino habría que volver a instanciar los self.ids
-                # con el contexto en un browse o usar api.one pero así nos evitamos que en
-                # una entrada múltiple haya que hacer el search_read en tarifas en cada entrada.
-                product.pvm_price = product_final.price
-                # este campo es calculado y nos devuelve el precio del prodiucto según la tarifa
-                # en contexto, acepta también otros parámetros
-        else:
-            for product in self:
-                product.pvm_price = 0.0
+        for product in self:
+            price_final = product._get_pvm_price(new_ctx)
+            # esto no se si funciona sino habria que volver a instanciar los self.ids
+            # con el contexto en un browse o usar api.one pero asi nos evitamos que en
+            # una entrada multiple haya que hacer el search_read en tarifas en cada entrada.
+            product.pvm_price = price_final
+            # este campo es calculado y nos devuelve el precio del producto segun la tarifa
+            # en contexto, acepta tambien otros parametros
 
-    pvm_price = fields.Float("PVM Price", readonly=True, store=True, compute='_get_pvm')
+    @api.onchange("standard_price")
+    @api.depends("standard_price")
+    @api.multi
+    def _get_pvm_b(self):
+        pricelist = self.env['product.pricelist'].search_read([('name', '=', 'PVMB')], ['id', 'name'])
+        new_ctx = dict(self._context)
+        if pricelist:
+            pricelist_id = pricelist[0]['id']
+            new_ctx = dict(self._context)
+            new_ctx.update({
+                'pricelist': pricelist_id
+            })
+        for product in self:
+            price_final = product._get_pvm_price(new_ctx)
+            product.pvm_price_2 = price_final
+
+    @api.onchange("standard_price")
+    @api.depends("standard_price")
+    @api.multi
+    def _get_pvm_c(self):
+        pricelist = self.env['product.pricelist'].search_read([('name', '=', 'PVMC')], ['id', 'name'])
+        new_ctx = dict(self._context)
+        if pricelist:
+            pricelist_id = pricelist[0]['id']
+            new_ctx = dict(self._context)
+            new_ctx.update({
+                'pricelist': pricelist_id
+            })
+        for product in self:
+            price_final = product._get_pvm_price(new_ctx)
+            product.pvm_price_3 = price_final
+
+    # Esto en la v11 desaparecera
+    pvm_price = fields.Float("PVMA Price", readonly=True, store=True, compute='_get_pvm')
+    pvm_price_2 = fields.Float("PVMB Price", readonly=True, store=True, compute='_get_pvm_b')
+    pvm_price_3 = fields.Float("PVMB Price", readonly=True, store=True, compute='_get_pvm_c')
 
 
 class ProductProduct(models.Model):
@@ -70,93 +106,66 @@ class ProductProduct(models.Model):
 
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
-        base = datetime.datetime.today()
-        sixty_date = (base - datetime.timedelta(days=60)).\
-            strftime("%Y-%m-%d %H:%M:%S")
+        query = """select pp.id,(select sum(product_uom_qty) from stock_move
+ sm inner join stock_picking_type spt on spt.id = sm.picking_type_id inner
+ join procurement_order po on po.id = sm.procurement_id where date >=
+ (select min(t.datum) from (select product_id,datum from stock_days_positive
+ where product_id = pp.id order by datum desc limit 60) as t) and
+ sm.state = 'done' and sm.product_id = pp.id and spt.code = 'outgoing' and
+ po.sale_line_id is not null), (select min(t2.datum) from (select product_id,
+ datum from stock_days_positive where product_id = pp.id order by datum desc
+ limit 60) as t2) from product_product pp inner join product_template pt on
+ pt.id = pp.product_tmpl_id where pt.type != 'service'"""
+        picking_type_obj = self.env['stock.picking.type']
+        picking_type_ids = picking_type_obj.search([('code', '=', 'outgoing')])
         if not records:
             self.average_margin_last_sales()
-            products = self.search([('type', '!=', 'service')])
-            product_ids = products.ids
         else:
-            product_ids = records
+            query += " and pp.id in (%s) " % \
+                ",".join([str(x) for x in records])
         move_obj = self.env['stock.move']
-        sline_obj = self.env['sale.order.line']
-        for product_id in product_ids:
-            self.env.cr.execute("select min(t.datum) from (select product_id,"
-                                "datum from stock_days_positive where "
-                                "product_id = %s order by datum desc "
-                                "limit 60) as t" % (product_id))
-            days_data = self.env.cr.fetchone()
-            if days_data:
-                product = self.browse(product_id)
-                picking_type_obj = self.env['stock.picking.type']
-                picking_type_ids = picking_type_obj.search([('code', '=', 'outgoing')])
-
-                moves = move_obj.search([('date', '>=', days_data[0]),
+        self._cr.execute(query)
+        data = self._cr.fetchall()
+        for product_data in data:
+            if product_data[1]:
+                moves = move_obj.search([('date', '>=', product_data[2]),
                                          ('state', '=', 'done'),
-                                         ('product_id', '=', product.id),
+                                         ('product_id', '=', product_data[0]),
                                          ('picking_type_id', 'in',
                                           picking_type_ids.ids),
                                          ('procurement_id.sale_line_id', '!=',
-                                          False)])
-                biggest_move_qty = 0.0
-                biggest_order = False
-                qty = 0.0
-                for move in moves:
-                    qty += move.product_uom_qty
-                    if move.product_uom_qty > biggest_move_qty:
-                        biggest_move_qty = move.product_uom_qty
-                        biggest_order = \
-                            move.procurement_id.sale_line_id.order_id.id
-
-
-
-                sale_lines = sline_obj.search([('date_order', '>=',
-                                                sixty_date),
-                                               ('order_id.state', '=',
-                                                'history'),
-                                               ('product_id', '=',
-                                                product_id)])
-                for line in sale_lines:
-                    qty += line.product_uom_qty
-                    if line.product_uom_qty > biggest_move_qty:
-                        biggest_move_qty = line.product_uom_qty
-                        biggest_order = \
-                            line.order_id.id
-
-
-                vals = {'last_sixty_days_sales': qty,
-                        'biggest_sale_qty': biggest_move_qty,
-                        'biggest_sale_id': biggest_order}
-
-                product.write(vals)
+                                          False)],
+                                        order="product_uom_qty desc", limit=1)
+                biggest_move_qty = moves[0].product_uom_qty
+                biggest_order = \
+                    moves[0].procurement_id.sale_line_id.order_id.id
+                self._cr.execute("update product_product set biggest_sale_id ="
+                                 " %s, biggest_sale_qty = %s, "
+                                 "last_sixty_days_sales = %s where id = %s" %
+                                 (biggest_order, biggest_move_qty,
+                                  product_data[1], product_data[0]))
+            else:
+                self._cr.execute("update product_product set biggest_sale_id ="
+                                 " null, biggest_sale_qty = %s, "
+                                 "last_sixty_days_sales = %s where id = %s" %
+                                 (0.0, 0.0, product_data[0]))
 
     @api.model
     def average_margin_last_sales(self, ids=False):
-        if not ids:
-            sql_sentence = """
-                SELECT DISTINCT product_id
-                    FROM sale_order_line
-                    WHERE state not in ('draft', 'cancel', 'exception')
-                    AND product_id IS NOT NULL
-            """
-            self.env.cr.execute(sql_sentence)
-            res = self.env.cr.fetchall()
-            product_ids = [x[0] for x in res]
-        else:
-            product_ids = ids
-        for product_id in self.browse(product_ids):
-            sale_order_line_obj = self.env['sale.order.line']
-            domain = [('product_id', '=', product_id.id), ('state', 'not in', ('draft', 'cancel', 'exception'))]
-            sales_obj = sale_order_line_obj.search(domain, limit=100,
-                                                   order='date_order desc')
-            margin_perc_sum = 0
-            qty_sum = 0
-            for line in sales_obj:
-                margin_perc_sum += (line.margin_perc * line.product_uom_qty)
-                qty_sum += line.product_uom_qty
-            if qty_sum:
-                product_id.average_margin = margin_perc_sum / qty_sum
+        query = """select id, (select case when sum(product_uom_qty) > 0
+ then sum(margin_perc * product_uom_qty) / sum(product_uom_qty) else 0.0 end
+ from (select * from sale_order_line where state not in ('draft', 'cancel',
+ 'exception') and product_id = product_product.id order by date_order desc
+ limit 100) as t) from product_product"""
+        if ids:
+            query += " where id in (%s) " % ",".join([str(x) for x in ids])
+        self._cr.execute(query)
+        data = self._cr.fetchall()
+        for product_data in data:
+            if product_data[1]:
+                self._cr.execute("update product_product set average_margin = "
+                                 "%s where id = %s" %
+                                 (product_data[1], product_data[0]))
 
     @api.multi
     def average_margin_compute(self):

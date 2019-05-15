@@ -139,13 +139,15 @@ class ProductTemplate(models.Model):
 
     @api.one
     def _get_outgoing_picking_qty(self):
-        moves = self.env['stock.move'].search(
-            [('product_id', 'in', self.product_variant_ids.ids),
-             ('state', 'in', ('confirmed', 'assigned')),
-             ('picking_id.picking_type_code', '=', 'outgoing'),
-             ('procurement_id.sale_line_id', '!=', False)])
-        self.outgoing_picking_reserved_qty = sum(moves.mapped(
-            'product_uom_qty'))
+        self._cr.execute("""select sum(product_uom_qty) from stock_move sm
+ inner join procurement_order po on po.id = sm.procurement_id
+ inner join stock_picking_type spt on spt.id = sm.picking_type_id
+ where sm.state in ('confirmed', 'assigned') and spt.code = 'outgoing'
+ and po.sale_line_id is not null and sm.product_id in (%s)""" %
+                         (",".join([str(x) for x in self.
+                                    product_variant_ids.ids])))
+        data = self._cr.fetchone()
+        self.outgoing_picking_reserved_qty = data[0] or 0.0
 
 
 class ProductProduct(models.Model):
