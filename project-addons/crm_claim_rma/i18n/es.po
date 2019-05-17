@@ -401,8 +401,9 @@ msgstr "Entregas"
 #. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_name
 #: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_substate_descr
-msgid "Description"
-msgstr "Descripción"
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_tree_view
+msgid "Customer description"
+msgstr "Descripción del cliente"
 
 #. module: crm_claim_rma
 #: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_claim_line_dest_location
