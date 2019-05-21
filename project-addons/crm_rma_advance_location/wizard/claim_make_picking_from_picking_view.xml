@@ -11,8 +11,10 @@
         <field name="arch" type="xml">
             <form string="Select lines to add in picking">
                 <separator string="Locations" colspan="4"/>
-                <field name="picking_line_source_location" nolabel="1" />
-                <field name="picking_line_dest_location" nolabel="1" />
+                <group>
+                    <field name="picking_line_source_location" nolabel="1" colspan="4"/>
+                    <field name="picking_line_dest_location" nolabel="1" colspan="4" />
+                </group>
                 <separator string="Select lines for picking" colspan="4"/>
                 <field name="picking_line_ids" nolabel="1" colspan="4"/>
                 <footer>

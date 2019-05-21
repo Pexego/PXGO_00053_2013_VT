@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="assets_backend" name="Assets" inherit_id="web.assets_backend">
+            <xpath expr=".">
+                <link rel="stylesheet" href="/custom_theme/static/src/css/style_light_responsive.css"/>
+                <!--link rel="stylesheet" href="/custom_theme/static/src/css/style_dark.css"/-->
+                <link rel="stylesheet" href="/web_responsive/static/src/less/variables.less"/>
+                <link rel="stylesheet" href="/web_responsive/static/src/less/app_drawer.less"/>
+            </xpath>
+        </template>
+    </data>
+</odoo>

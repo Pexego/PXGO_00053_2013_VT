@@ -1,13 +1,18 @@
 <?xml version="1.0"?>
 <odoo>
 
-    <!--TODO: Migrar<record model="ir.ui.view" id="view_partner_form_risk_advice">
+    <record model="ir.ui.view" id="view_partner_form_risk_advice">
         <field name="name">res.partner.form.risk_advice</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="warning.view_partner_warning_form" />
+        <field name="inherit_id" ref="sale.res_partner_view_buttons" />
         <field name="arch" type="xml">
-            <xpath expr="//separator[@string='Warning on the Invoice']/.." position="after">
-                <separator string="Risk Advice" colspan="2"/>
+            <xpath expr="//field[@name='sale_warn']/.." position="after">
+                <group colspan="2" col="2">
+                    <separator string="Warnign on the RMA" colspan="4"/>
+                        <field name="rma_warn" nolabel="1"/>
+                        <field name="rma_warn_msg" colspan="3" nolabel="1"
+                                attrs="{'required':[('rma_warn','!=','no-message')],'readonly':[('rma_warn','=','no-message')]}"/>
+                </group>
                 <field name="risk_advice_ids">
                     <tree editable="top">
                         <field name="days_after"/>
@@ -17,20 +22,5 @@
             </xpath>
         </field>
     </record>
-    <record id="view_partner_warning_form_rma" model="ir.ui.view">
-            <field name="name">res.partner.warning.form.rma.inherit</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="warning.view_partner_warning_form"/>
-            <field name="arch" type="xml">
-                <xpath expr="//separator[@string='Warning on the Invoice']/.." position="after">
-                    <group colspan="2" col="2">
-                        <separator string="Warnign on the RMA" colspan="4"/>
-                            <field name="rma_warn" nolabel="1"/>
-                            <field name="rma_warn_msg" colspan="3" nolabel="1"
-                                   attrs="{'required':[('rma_warn','!=','no-message')],'readonly':[('rma_warn','=','no-message')]}"/>
-                    </group>
-                </xpath>
-            </field>
-        </record>-->
 
 </odoo>

@@ -404,6 +404,11 @@ msgid "Global data"
 msgstr "Datos globales"
 
 #. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.partner_view_add_sale_analysis
+msgid "Sale analysis"
+msgstr "Análisis de ventas"
+
+#. module: custom_partner
 #: model:ir.ui.view,arch_db:custom_partner.view_res_partner_filter_add_comercial
 msgid "No current month sales"
 msgstr "Sin ventas este mes"
@@ -424,3 +429,15 @@ msgstr "Referencia de pago"
 msgid "Email web must be unique"
 msgstr "El email web debe ser único"
 
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_change_string
+msgid "Orders"
+msgstr "Pedidos"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_inherit_followup_form
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_situation_tree
+#: model:ir.actions.act_window,name:custom_partner.partner_situation_action
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_followup
+msgid "Customer situation"
+msgstr "Situación del cliente"

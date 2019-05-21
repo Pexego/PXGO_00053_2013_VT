@@ -14,14 +14,16 @@
                 <field name="temp_unique_js_id" invisible="1"/>
             </xpath>
             <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
-                <attribute name="attrs">{'invisible': [('state', 'not in', ['reserve'])]}</attribute>
+                <attribute name="attrs"></attribute>
+                <attribute name="invisible">True</attribute>
             </xpath>
-            <xpath expr="//button[@name='action_confirm'][1]" position="attributes">
+
+            <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
                 <attribute name="attrs"></attribute>
                 <attribute name="invisible">True</attribute>
             </xpath>
             <button name="action_cancel" position="attributes">
-                <attribute name="states">draft,sent,reserve</attribute>
+                <attribute name="states">draft,sent,reserve,sale</attribute>
             </button>
             <button name="print_quotation" position="after">
                 <button name="print_quotation" string="Print" type="object" states="reserve" class="o_sale_print"/>

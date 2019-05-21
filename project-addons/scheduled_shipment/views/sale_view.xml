@@ -35,6 +35,9 @@
                 <field name="priority" position="after">
                     <field name="scheduled_shipping_date"/>
                 </field>
+                <field name="scheduled_date" position="before">
+                    <field name="date"/>
+                </field>
             </field>
         </record>
 

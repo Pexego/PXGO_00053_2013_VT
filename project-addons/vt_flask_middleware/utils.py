@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 
 def parse_many2one_vals(model, vals):
@@ -9,7 +8,7 @@ def parse_many2one_vals(model, vals):
         Si hay algún foreignkey que no sea un modelo con odoo_id fallaria.
     """
     from peewee import ForeignKeyField, DateTimeField
-    for field_name in vals.keys():
+    for field_name in list(vals.keys()):
         field = eval('model.%s' % field_name)
         if isinstance(field, DateTimeField):
             if not vals[field_name]:

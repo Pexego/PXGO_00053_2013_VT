@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 User model and helper functions.
 
@@ -71,6 +70,8 @@ class Product(SyncModel):
     is_pack = BooleanField()
     discontinued = BooleanField()
     state = CharField(max_length=50)
+    sale_in_groups_of = FloatField(default=1.0)
+    replacement_id = IntegerField()
 
     def __unicode__(self):
         return self.name
@@ -94,5 +95,5 @@ class ProductTagProductRel(SyncModel):
     MOD_NAME = 'producttagproductrel'
 
     def __unicode__(self):
-        return u"Product id: %s - Tag id: %s" % (self.odoo_id, self.producttag_id)
+        return "Product id: %s - Tag id: %s" % (self.odoo_id, self.producttag_id)
 

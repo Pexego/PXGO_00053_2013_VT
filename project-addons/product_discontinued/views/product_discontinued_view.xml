@@ -1,33 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
-        <record id="product_template_form_view_discontinued" model="ir.ui.view">
-            <field name="name">product.template.common.form.discontinued</field>
+        <record id="view_product_form_discontinued" model="ir.ui.view">
+            <field name="name">product.form.discontinued</field>
             <field name="model">product.template</field>
-            <field name="inherit_id" ref="sale_commission.product_template_form_view_commission" />
+            <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
-                <label for="commission_free" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </label>
-                <field name="commission_free" position="attributes">
-                    <attribute name="invisible">1</attribute>
-                </field>
-            </field>
-        </record>
-
-        <record id="view_product_appear_field" model="ir.ui.view">
-            <field name="name">product.appear.field</field>
-            <field name="model">product.product</field>
-            <field name="inherit_id" ref="sale_customer_discount.product_normal_form_view_add_discount"/>
-            <field name="arch" type="xml">
-                <xpath expr="//field[@name='purchase_ok']/.." position="after">
+                <div name="options" position="inside">
                     <div>
                         <field name="discontinued"/>
                         <label for="discontinued"/>
                     </div>
-                </xpath>
+                </div>
             </field>
         </record>
     </data>
-</openerp>
+</odoo>
+

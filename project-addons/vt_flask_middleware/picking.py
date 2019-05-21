@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from peewee import CharField, IntegerField, DateTimeField, ForeignKeyField, TextField, BooleanField
 from app import app
 from customer import Customer
@@ -23,7 +22,7 @@ class Picking(SyncModel):
     MOD_NAME = 'picking'
 
     def __unicode__(self):
-        return u'%s - %s' % (self.name, self.origin)
+        return '%s - %s' % (self.name, self.origin)
 
 
 class PickingProduct(SyncModel):
@@ -35,4 +34,4 @@ class PickingProduct(SyncModel):
     MOD_NAME = 'pickingproduct'
 
     def __unicode__(self):
-        return u'%s - %s' % (self.product_id, self.picking_id)
+        return '%s - %s' % (self.product_id, self.picking_id)

@@ -24,3 +24,4 @@ from . import account_invoice_refund
 from . import claim_make_repair
 from . import claim_send_supplier
 from . import repair_invoice
+from . import equivalent_products_wizard

@@ -13,6 +13,8 @@
     "depends": [
         "base",
         "sale",
+        "purchase",
+        "sale_stock",
         "sale_display_stock",
         "sale_margin_percentage",
         "partner_risk_advice",

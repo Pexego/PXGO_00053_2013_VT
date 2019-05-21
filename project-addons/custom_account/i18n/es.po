@@ -175,6 +175,11 @@ msgid "It indicates that Telex release is necessary"
 msgstr "Indica que 'Telex release' es necesario"
 
 #. module: custom_account
+#: help:purchase.order,minimum_planned_date:0
+msgid "This is computed as the minimum scheduled date of all purchase order lines' products."
+msgstr "Campo calculado como la fecha mínima de llegada de las líneas de compra"
+
+#. module: custom_account
 #: model:ir.model,name:custom_account.model_account_move_line
 msgid "Journal Items"
 msgstr "Apuntes contables"
@@ -737,4 +742,14 @@ msgstr "Marca"
 #: field:account.invoice.contact.report,product_id:0
 msgid "Product"
 msgstr "Producto"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_required_payment_term
+msgid "VAT"
+msgstr "NIF"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
+msgid " Set date to all order lines"
+msgstr " Asignar fecha a todas las lineas del pedido de compra"
 

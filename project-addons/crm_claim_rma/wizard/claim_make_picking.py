@@ -176,14 +176,14 @@ class ClaimMakePicking(models.TransientModel):
                 'product_uom': claim_line.product_id.uom_id.id,
                 'product_uom_qty': claim_line.product_returned_quantity,
                 'date_validity': False,
-                'name': u"{} ({})".format(claim_line.claim_id.number, claim_line.product_id.name_template),
+                'name': u"{}".format(claim_line.claim_id.number),
                 'location_id': self.claim_line_source_location.id,
                 'location_dest_id': self.claim_line_dest_location.id,
-                'move_id': move_id,
+                'move_id': move_id.id,
                 'claim_id': claim_line.claim_id.id,
             }
             reserve = reserv_obj.create(reserv_vals)
-            reserv_obj.reserve([reserve])
+            reserve.reserve()
         claim_line.write({write_field: move_id.id})
 
     # If "Create" button pressed
@@ -239,14 +239,11 @@ class ClaimMakePicking(models.TransientModel):
         for wizard_claim_line in self.claim_line_ids:
             self.create_move(wizard_claim_line, p_type, picking_id, claim, note, write_field)
 
-        #TODO: Migrar
-        # ~ wf_service = netsvc.LocalService("workflow")
-        # ~ if picking_id:
-            # ~ wf_service.trg_validate(uid, 'stock.picking', picking_id, 'button_confirm', cr)
-            #picking_obj.action_assign(cr, uid, [picking_id])
         if picking_id:
+            picking_id.action_assign()
+            picking_id.button_validate()
             domain = ("[('picking_type_code', '=', '%s'), \
-                       ('partner_id', '=', %s)]" %
+                                   ('partner_id', '=', %s)]" %
                       (p_type, partner_id.id))
 
             return {

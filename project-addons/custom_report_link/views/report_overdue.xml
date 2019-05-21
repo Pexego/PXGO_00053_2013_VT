@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_report_link.report_overduecustom_document">
+        <t t-call="custom_report_link.external_layout_custom">
+            <div class="page">
+                <div class="oe_structure"></div>
+                <t t-set="lang" t-value="'undefined'"/>
+                <t t-if="o.commercial_partner_id.id">
+                    <t t-set="lang" t-value="o.commercial_partner_id.lang"/>
+                </t>
+                <t t-if="not lang">
+                    <t t-set="lang" t-value="'undefined'"/>
+                </t>
+
+                <div class="row">
+                    <div style="font-size:23px; font-weight: bold; color:#939597;">
+                        <div class="pull-left">
+                            <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
+                            <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
+                            <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
+                        </div>
+                        <div class="pull-left">
+                            <div style="width: 0.08in; height: 0.32in; background-color: white;"/>
+                        </div>
+                        <div>
+                            <div style="font-size:23px;">Account statement</div>
+                            <span t-if="lang != 'fr_FR'">
+                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            </span>
+                            <span t-if="lang == 'fr_FR'">
+                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="font-size:13px; color:#6D6E70" class="row">
+                    <br/>
+                    <div class="col-xs-6 row">
+                        <span t-field="o.name"/><br/>
+                        <span t-raw="o.contact_address.replace('\n\n', '\n').replace('\n', '&lt;br&gt;')"/>
+                        <span t-field="o.vat"/>
+                    </div>
+                    <br/>
+                    <div class="col-xs-5 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#da1f2e">
+                        <div>Date: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-esc="Date"/></div>
+                        <div>
+                            <t t-if="o.ref">Customer ref:
+                                <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-field="o.ref"/>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+                <br/><br/><br/>
+
+                <t t-if="Lines[o.id]">
+                    <div style="font-weight: normal; font-size:13px; color:#6D6E70" class="row">
+                        <span t-field="res_company.with_context(lang=o.lang).overdue_msg"/>
+                    </div>
+
+                    <div class="row">
+                        <table class="table table-condensed" t-foreach="Lines[o.id]" t-as="currency" style="font-size:12px; margin-top: 5%;">
+                            <thead>
+                                <tr style="background-color:#da1f2e; color:white;">
+                                    <th width="10%" class="text-center" style="vertical-align:middle;">Date</th>
+                                    <th width="18%" style="vertical-align:middle;">Description</th>
+                                    <th width="23%" style="vertical-align:middle;">Ref</th>
+                                    <th width="15%" class="text-center" style="vertical-align:middle;">Maturity Date</th>
+                                    <th width="12%" class="text-center" style="vertical-align:middle;">Due</th>
+                                    <th width="12%" class="text-center" style="vertical-align:middle;">Paid</th>
+                                    <th width="10%" class="text-center" style="vertical-align:middle;">Overdue amount
+                                    </th>
+                                </tr>
+                            </thead>
+                            <!-- Hasta aqui ya ha pintado la cabecera y sigue poner los valores para cada dia dentro de la tabla-->
+                            <tbody style="color:6D6E70;">
+                                <tr t-foreach="Lines[o.id][currency]" t-as="line">
+                                    <td class="text-center" style="vertical-align:middle;">
+                                        <span t-esc="line['date']"/>
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        <span t-esc="line['name']"/>
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        <span t-esc="line['ref']"/>
+                                    </td>
+                                    <td class="text-center" style="vertical-align:middle;">
+                                        <span t-esc="line['date_maturity']"/>
+                                    </td>
+                                    <td class="text-center" style="vertical-align:middle;">
+                                        <span t-esc="line['debit']"/>
+                                    </td>
+                                    <td class="text-center" style="vertical-align:middle;">
+                                        <span t-esc="line['credit']"/>
+                                    </td>
+                                    <td class="text-center" style="vertical-align:middle;">
+                                        <span t-esc="line['debit'] - line['credit']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td colspan="3"/>
+                                    <td class="text-right" style="color:#da1f2e;"> <strong>Sub-Total:</strong></td>
+                                    <td class="text-center"> <span t-esc="Totals[o.id][currency]['due']" t-options="{'widget': 'monetary', 'display_currency': currency}"/></td>
+                                    <td class="text-center"> <span t-esc="Totals[o.id][currency]['paid']" t-options="{'widget': 'monetary', 'display_currency': currency}"/></td>
+                                    <td class="text-center"> <span t-esc="Totals[o.id][currency]['mat']" t-options="{'widget': 'monetary', 'display_currency': currency}"/></td>
+                                </tr>
+
+                                <tr class="border-grease">
+                                    <td colspan="3"/>
+                                    <td class="text-right" style="color:#da1f2e;"><strong>Balance:</strong></td>
+                                    <td class="text-center"><strong style="color:6D6E70;" t-esc="Totals[o.id][currency]['due'] - Totals[o.id][currency]['paid']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                    </td>
+                                    <td/>
+                                    <td/>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    </t>
+
+                    <t t-if="Lines[o.id]">
+                        <div class="row" style="font-size:13px;" t-foreach="Lines[o.id]" t-as="currency">
+                            <strong style="color:#da1f2e;">Total amount due:</strong>
+                            <strong style="color:6D6E70;" t-esc="Totals[o.id][currency]['total']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                        </div>
+
+                        <div class="row" style="font-size:13px;" t-if="not Lines[o.id]">
+                            <strong style="color:6D6E70;">There is nothing due with this customer.</strong>
+                        </div>
+                    </t>
+
+            </div>
+
+        </t>
+    </template>
+
+
+    <template id="report_overduecustom">
+       <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="custom_report_link.report_overduecustom_document" t-lang="o.lang" />
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_report_overdue_custom"
+        string="Pagos pendientes"
+        model="res.partner"
+        report_type="qweb-pdf"
+        file="custom_report_link.report_overduecustom"
+        name="custom_report_link.report_overduecustom"
+        attachment_use="True"
+        print_report_name="time.strftime('%Y-%m-%d') + object.name"
+    />
+
+
+    <record id="action_report_overdue_custom" model="ir.actions.report">
+        <field name="paperformat_id" ref=""/>
+    </record>
+</odoo>
+

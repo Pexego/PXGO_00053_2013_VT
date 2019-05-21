@@ -163,12 +163,10 @@ class ClaimMakePickingFromPicking(models.TransientModel):
             }
             move_id = wizard_picking_line.copy(default_move_data)
 
-        #TODO: Migrar
-        # ~ wf_service = netsvc.LocalService("workflow")
-        # ~ if picking_id:
-            # ~ wf_service.trg_validate(uid,
-                # ~ 'stock.picking', picking_id,'button_confirm', cr)
-            # ~ picking_obj.action_assign(cr, uid, [picking_id])
+        if picking_id:
+            picking_id.action_assign()
+            picking_id.button_validate()
+
         domain = "[('picking_type_code','=','%s'),('partner_id','=',%s)]" % (p_type, partner_id)
         return {
             'name': '%s' % name,

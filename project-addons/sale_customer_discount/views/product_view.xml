@@ -92,7 +92,6 @@
                         <label for="margin_pvi4"/><div><field name="margin_pvi4" class="oe_inline"/> %% </div>
 
                         <field name="standard_price"/>
-                        <field name="cost_method"/>
                         <field name="commercial_cost"/>
                      </group>
                 </xpath>

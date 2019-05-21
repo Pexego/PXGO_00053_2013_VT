@@ -91,11 +91,12 @@
                       <group>
                           <button name="calculate_invoices" type="object"
                             string="Calculate"
-                            attrs="{'invisible': [('invoice_ids', '!=', [])]}"/>
-                      </group>
+                            attrs="{'invisible': [('invoice_ids', '!=', [])]}" colspan="2"/>
+                          <separator/>
                           <button name="make_refund_invoice"
                               attrs="{'invisible': [('claim_inv_line_ids', '=', [])]}"
-                              type="object" string="New Refund"/>
+                              type="object" string="New Refund" class="btn-primary" colspan="2"/>
+                      </group>
                     </group>
                 </page>
             </xpath>
@@ -127,15 +128,15 @@
                 <attribute name="context">{'search_product_id': product_id}</attribute>
             </field>
             <field name="internal_description" position="after">
-                <field name="substate_id" widget="selection"/>
+                <field name="substate_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
                 <field name="write_date"/>
             </field>
             <field name="product_returned_quantity" position="after">
-                <button name="action_split" type="object" string="Split" icon="STOCK_CUT"
+                <button name="action_split" type="object" string="Split" icon="fa-cut"
                     attrs="{'invisible': ['|','|','|',('move_in_customer_state','!=',False),('move_out_customer_state','!=',False),('repair_id','!=',False),('product_returned_quantity','&lt;=',1.0)]}"/>
             </field>
             <button name="%(crm_claim_rma.action_claim_make_repair)d" position="replace">
-                <button name="create_repair" type="object" icon="gtk-execute" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
+                <button name="create_repair" type="object" icon="fa-wrench" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
             </button>
             <field name="product_id" position="attributes">
                 <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
@@ -143,7 +144,7 @@
             <field name="claim_origine" position="after">
                 <!-- <field name="invoice_id"/> -->
                 <field name="partner_id" invisible="1"/>
-                <field name="invoice_id" domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
+                <field name="invoice_id" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
             </field>
         </field>
     </record>
@@ -219,19 +220,23 @@
         <field name="inherit_id" ref="crm_claim.crm_case_claims_form_view"/>
         <field name="arch" type="xml">
 
-          <field name="priority" position="replace">
+            <field name="user_id" position="replace"/>
+            <field name="priority" position="replace">
               <field name="priority"/>
-          </field>
+            </field>
+            <field name="date_deadline" position="after">
+                <field name="user_id"/>
+            </field>
 
-          <xpath expr="/form/sheet/group/notebook/page/separator" position="replace"/>
-          <field name="description" position="attributes">
+            <xpath expr="/form/sheet/group/notebook/page/separator" position="replace"/>
+            <field name="description" position="attributes">
               <attribute name='invisible'>1</attribute>
-          </field>
+            </field>
 
-          <xpath expr="//sheet/group/notebook" position="after">
+            <xpath expr="//sheet/group/notebook" position="after">
               <separator colspan="4" string="Claim/Action Description" groups="base.group_user"/>
               <field name="description" colspan="4" nolabel="1"/>
-          </xpath>
+            </xpath>
         </field>
     </record>
 
@@ -250,6 +255,15 @@
                 <field name="date_received" string="Received date"/>
             </field>
 
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="crm_claim_add_seq_tree_view_inh_code_del">
+        <field name="name">crm.claim.add.seq.tree.view.inh.code.del</field>
+        <field name="model">crm.claim</field>
+        <field name="inherit_id" ref="crm_claim_code.crm_claim_add_seq_tree_view_inh" />
+        <field name="arch" type="xml">
+            <field name="code" position="replace"/>
         </field>
     </record>
 
@@ -282,6 +296,22 @@
             <p class="oe_view_nocontent_create">
                 Record and track your customers' claims. Claims may be linked to a sales order or a lot.You can send emails with attachments and keep the full history for a claim (emails sent, intervention type and so on).Claims may automatically be linked to an email address using the mail gateway module.
             </p>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="crm_case_claims_tree_view">
+        <field name="name">CRM - Claims Tree</field>
+        <field name="model">crm.claim</field>
+        <field name="arch" type="xml">
+            <tree string="Claims">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="user_id"/>
+                <field name="date"/>
+                <field name="stage_id"/>
+                <field name="activity_date_deadline"/>
+                <field name="activity_summary"/>
+            </tree>
         </field>
     </record>
 

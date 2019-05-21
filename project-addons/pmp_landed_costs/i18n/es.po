@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-23 11:12+0000\n"
-"PO-Revision-Date: 2016-05-23 11:12+0000\n"
+"POT-Creation-Date: 2019-05-06 16:17+0000\n"
+"PO-Revision-Date: 2019-05-06 16:17+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,15 +16,14 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: pmp_landed_costs
-#: code:addons/pmp_landed_costs/stock_landed_costs.py:124
-#, python-format
-msgid "Error!"
-msgstr "¡Error!"
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_container_ids
+msgid "Containers"
+msgstr "Contenedores"
 
 #. module: pmp_landed_costs
-#: field:stock.valuation.adjustment.lines,new_standard_price:0
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_new_unit_cost
 msgid "New standard price"
-msgstr "Nuevo precio de coste de quant"
+msgstr "Nuevo precio de coste de producto"
 
 #. module: pmp_landed_costs
 #: model:ir.model,name:pmp_landed_costs.model_product_product
@@ -37,9 +36,9 @@ msgid "Product Template"
 msgstr "Plantilla de producto"
 
 #. module: pmp_landed_costs
-#: field:stock.valuation.adjustment.lines,standard_price:0
-msgid "Standard price"
-msgstr "Precio de coste de quant"
+#: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
+msgid "Qty."
+msgstr "Cant."
 
 #. module: pmp_landed_costs
 #: model:ir.model,name:pmp_landed_costs.model_stock_landed_cost
@@ -62,19 +61,28 @@ msgid "Stock Valuation Adjustment Lines"
 msgstr "Líneas de ajuste de valorización de existencias"
 
 #. module: pmp_landed_costs
-#: field:product.product,tariff:0
-#: field:stock.valuation.adjustment.lines,tariff:0
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_product_product_tariff
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_tariff
 msgid "Tariff"
 msgstr "Arancel"
 
 #. module: pmp_landed_costs
-#: code:addons/pmp_landed_costs/stock_landed_costs.py:124
+#: code:addons/pmp_landed_costs/models/stock_landed_costs.py:129
 #, python-format
-msgid "You cannot validate a landed cost which has no valid valuation lines."
-msgstr "No se puede validar un costo en puerto que no tiene líneas de valoración válidos."
+msgid "The selected picking does not contain any move that would be impacted by landed costs. Landed costs are only possible for products configured in real time valuation with real price costing method. Please make sure it is the case, or you selected the correct picking"
+msgstr "El albarán seleccionado no contiene ningún movimiento que pueda verse afectado por los costes en destino. Los coste en destino son sólo posibles para productos configurados con valoración en tiempo real y precio real como método de coste. Por favor, asegúrese de que es el caso, o seleccione el albarán correcto"
 
 #. module: pmp_landed_costs
-#: selection:product.template,split_method:0
-#: selection:stock.landed.cost.lines,split_method:0
-msgid "By tariff"
-msgstr "Por arancel"
+#: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
+msgid "Total."
+msgstr "Total."
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
+msgid "Volume"
+msgstr "Volumen"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
+msgid "Weight"
+msgstr "Peso"

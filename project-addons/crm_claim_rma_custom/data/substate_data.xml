@@ -28,11 +28,6 @@
         <field name="active" eval="True"/>
     </record>
 
-    <record id="substate_pending_default" model="substate.substate">
-        <field name="name">Pte. por Impago</field>
-        <field name="active" eval="True"/>
-    </record>
-
     <record id="substate_replaced" model="substate.substate">
         <field name="name">Sustituido</field>
         <field name="active" eval="True"/>

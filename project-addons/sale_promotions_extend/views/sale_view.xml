@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="view_sale_promo_form2_remove_button_good">
+        <field name="name">sale.order.promo.form2.remove.button.good</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="commercial_rules.view_sale_promo_form" />
+        <field name="arch" type="xml">
+            <button name="apply_commercial_rules" position="replace">
+                <button name="apply_commercial_rules" type="object" states="draft,reserve" string="Apply Promotions" class="btn-primary"/>
+            </button>
+        </field>
+    </record>
+
+    <record id="view_sale_promo_web_discount" model="ir.ui.view">
+        <field name="name">sale.order.promo.web.discount</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="before">
+                <field name="web_discount"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_order_no_promos" model="ir.ui.view">
+        <field name="name">sale.order.no.promos</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="model">sale.order</field>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="no_promos"/>
+            </field>
+        </field>
+    </record>
+</odoo>

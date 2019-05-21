@@ -65,3 +65,7 @@ msgstr "Beneficio"
 msgid "Cost Price"
 msgstr "Precio de coste"
 
+#. module: sale_margin_percentage
+#: view:sale.order:sale_margin_percentage.view_order_tree_add_margin
+msgid "margin (%)"
+msgstr "margen (%)"

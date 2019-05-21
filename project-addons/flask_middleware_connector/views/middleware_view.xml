@@ -1,85 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-        <record id="middleware_backend_form" model="ir.ui.view">
-            <field name="name">middleware.backend.form</field>
-            <field name="model">middleware.backend</field>
-            <field name="arch" type="xml">
-                <form string="Middleware backend">
-                    <group colspan="4" col="4">
-                        <field name="name"/>
-                        <field name="version"/>
-                        <field name="location" colspan="4"/>
-                        <field name="username"/>
-                        <field name="password"/>
-                        <field name="warehouse_id"/>
-                        <field name="default_lang_id"/>
-                        <field name="product_stock_field_id"/>
-                        <!--field name="price_unit_field_id"/-->
-                        <button name="export_current_web_data" type="object" string="Export current data" icon="gtk-execute"/>
-                    </group>
-                </form>
-            </field>
-        </record>
-
-        <record id="middleware_backend_tree" model="ir.ui.view">
-            <field name="name">middleware.backend.tree</field>
-            <field name="model">middleware.backend</field>
-            <field name="arch" type="xml">
-                <tree string="Middleware backend">
+    <record id="middleware_backend_form" model="ir.ui.view">
+        <field name="name">middleware.backend.form</field>
+        <field name="model">middleware.backend</field>
+        <field name="arch" type="xml">
+            <form string="Middleware backend">
+                <group colspan="4" col="4">
                     <field name="name"/>
                     <field name="version"/>
                     <field name="location" colspan="4"/>
+                    <field name="username"/>
+                    <field name="password"/>
                     <field name="warehouse_id"/>
-                    <field name="product_stock_field_id"/>
                     <field name="default_lang_id"/>
-                </tree>
-            </field>
-        </record>
+                    <field name="product_stock_field_id"/>
+                    <!--field name="price_unit_field_id"/-->
+                    <button name="export_current_web_data" type="object" string="Export current data" icon="gtk-execute"/>
+                </group>
+            </form>
+        </field>
+    </record>
 
-        <record model="ir.actions.act_window" id="action_middleware_backend">
-            <field name="name">Middleware Backends</field>
-            <field name="res_model">middleware.backend</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="middleware_backend_tree"/>
-        </record>
+    <record id="middleware_backend_tree" model="ir.ui.view">
+        <field name="name">middleware.backend.tree</field>
+        <field name="model">middleware.backend</field>
+        <field name="arch" type="xml">
+            <tree string="Middleware backend">
+                <field name="name"/>
+                <field name="version"/>
+                <field name="location" colspan="4"/>
+                <field name="warehouse_id"/>
+                <field name="product_stock_field_id"/>
+                <field name="default_lang_id"/>
+            </tree>
+        </field>
+    </record>
 
-        <menuitem name="Middleware Backends" parent="connector.menu_connector"
-            action="action_middleware_backend" id="menu_middleware_backend"/>
+    <record model="ir.actions.act_window" id="action_middleware_backend">
+        <field name="name">Middleware Backends</field>
+        <field name="res_model">middleware.backend</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="middleware_backend_tree"/>
+    </record>
 
-        <record id="middleware_backend_export_form" model="ir.ui.view">
-            <field name="name">middleware.backend.export.form</field>
-            <field name="model">middleware.backend.export</field>
-            <field name="arch" type="xml">
-                <form string="Export Wizard">
-                    <group>
-                        <field name="type_export"/>
-                        <field name="mode_export"/>
-                        <field name="start_date" attrs="{'invisible': [('type_export', 'not in', ('order', 'pickings', 'rmas', 'invoices'))], 'required': [('type_export', 'in', ('order', 'pickings', 'rmas', 'invoices'))]}"/>
-                        <field name="finish_date" attrs="{'invisible': [('type_export', 'not in', ('order', 'pickings', 'rmas', 'invoices'))], 'required': [('type_export', 'in', ('order', 'pickings', 'rmas', 'invoices'))]}"/>
-                        <field name="model_ids"/>
-                    </group>
-                    <footer>
-                        <button name="do_export" type="object"
-                            string="Start" class="oe_highlight"/>
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel"/>
-                    </footer>
-                </form>
-            </field>
-        </record>
-
-        <record id="middleware_backend_export_action" model="ir.actions.act_window">
-            <field name="name">Export Wizard Form</field>
-            <field name="res_model">middleware.backend.export</field>
-            <field name="view_mode">form</field>
-            <field name="view_type">form</field>
-            <field name="target">new</field>
-            <field name="view_id" ref="middleware_backend_export_form"/>
-        </record>
-
-        <menuitem id="middleware_backend_export_menu" action="middleware_backend_export_action"
-            parent="connector.menu_connector"/>
-
+    <menuitem name="Middleware Backends" parent="connector.menu_connector"
+        action="action_middleware_backend" id="menu_middleware_backend"/>
 </odoo>

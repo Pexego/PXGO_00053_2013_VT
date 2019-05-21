@@ -1,44 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-        <record id="add_to_purchase_order_wzd_form" model="ir.ui.view">
-            <field name="name">add.to.purchase.order.wzd.form</field>
-            <field name="model">add.to.purchase.order.wzd</field>
-            <field name="arch" type="xml">
-                <form string="Add to purchase order">
-                    <group>
-                        <field name="purchase_id" domain="[('state', '=', 'draft'), ('partner_id', '=', manufacturer)]"
-                               attrs="{'invisible':[('manufacturer', '=', False)], 'required':[('manufacturer', '!=', False)]}"/>
-                        <field name="purchase_id_wt_manufacturer" domain="[('state', '=', 'draft')]"
-                               attrs="{'invisible':[('manufacturer', '!=', False)], 'required':[('manufacturer', '=', False)]}"/>
-                        <field name="custom_purchase_qty"/>
-                        <field name="manufacturer"/>
-                        <field name="purchase_qty" attrs="{'invisible': [('custom_purchase_qty', '=', False)], 'required': [('custom_purchase_qty', '=', True)]}"/>
-                    </group>
-                    <button string="Add to purchase" name="assign_purchase_order" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                </form>
-            </field>
-        </record>
+    <record id="add_to_purchase_order_wzd_form" model="ir.ui.view">
+        <field name="name">add.to.purchase.order.wzd.form</field>
+        <field name="model">add.to.purchase.order.wzd</field>
+        <field name="arch" type="xml">
+            <form string="Add to purchase order">
+                <group>
+                    <field name="purchase_id" domain="[('state', '=', 'draft'), ('partner_id', '=', manufacturer)]"
+                            attrs="{'invisible':[('manufacturer', '=', False)], 'required':[('manufacturer', '!=', False)]}"/>
+                    <field name="purchase_id_wt_manufacturer" domain="[('state', '=', 'draft')]"
+                            attrs="{'invisible':[('manufacturer', '!=', False)], 'required':[('manufacturer', '=', False)]}"/>
+                    <field name="custom_purchase_qty"/>
+                    <field name="manufacturer"/>
+                    <field name="purchase_qty" attrs="{'invisible': [('custom_purchase_qty', '=', False)], 'required': [('custom_purchase_qty', '=', True)]}"/>
+                </group>
+                <footer>
+                    <button string="Add to purchase" name="assign_purchase_order" type="object" icon="fa-check" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="action_add_to_purchase_order_wzd" model="ir.actions.act_window">
-            <field name="name">Add to purchase order</field>
-            <field name="type">ir.actions.act_window</field>
-            <field name="res_model">add.to.purchase.order.wzd</field>
-            <field name="view_id" ref="add_to_purchase_order_wzd_form"/>
-            <field name="view_type">form</field>
-            <field name="view_mode">form</field>
-            <field name="target">new</field>
-            <field name="context">{'form_view_ref': False}</field>
-        </record>
+    <record id="action_add_to_purchase_order_wzd" model="ir.actions.act_window">
+        <field name="name">Add to purchase order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">add.to.purchase.order.wzd</field>
+        <field name="view_id" ref="add_to_purchase_order_wzd_form"/>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'form_view_ref': False}</field>
+    </record>
 
-        <act_window name="Buy all"
-            res_model="add.to.purchase.order.wzd"
-            src_model="product.product"
-            view_id="add_to_purchase_order_wzd_form"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"
-            id="add_multiple_to_purchase_order_wzd_form"/>
+    <act_window name="Buy all"
+        res_model="add.to.purchase.order.wzd"
+        src_model="product.product"
+        view_id="add_to_purchase_order_wzd_form"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="add_multiple_to_purchase_order_wzd_form"/>
 
 </odoo>

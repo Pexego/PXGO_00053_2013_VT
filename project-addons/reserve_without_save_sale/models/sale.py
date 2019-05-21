@@ -7,7 +7,33 @@ class SaleOrder(models.Model):
 
     _inherit = 'sale.order'
 
-    state = fields.Selection(selection_add=[('reserve', 'Reserved')])
+    # state = fields.Selection(selection_add=[('reserve', 'Reserved')])
+    state = fields.Selection([
+        ('draft', 'Quotation'),
+        ('sent', 'Quotation Sent'),
+        ('reserve', 'Reserved'),
+        ('sale', 'Sales Order'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled'),
+    ])
+
+    @api.multi
+    @api.depends('state',
+                 'order_line.reservation_ids',
+                 'order_line.is_stock_reservable')
+    def _compute_stock_reservation(self):
+        for sale in self:
+            has_stock_reservation = False
+            is_stock_reservable = False
+            for line in sale.order_line:
+                if line.reservation_ids:
+                    has_stock_reservation = True
+                if line.is_stock_reservable:
+                    is_stock_reservable = True
+            if sale.state not in ('draft', 'sent', 'reserve'):
+                is_stock_reservable = False
+            sale.is_stock_reservable = is_stock_reservable
+            sale.has_stock_reservation = has_stock_reservation
 
     @api.model
     def create(self, vals):
@@ -30,6 +56,7 @@ class SaleOrder(models.Model):
         action['context'] = {'search_default_draft': 1,
                              'search_default_reserved': 1,
                              'search_default_waiting': 1,
+                             'search_default_partially_available': 1,
                             }
         return action
 
@@ -44,6 +71,20 @@ class SaleOrderLine(models.Model):
                                 related='product_id.reservation_count',
                                 digits=dp.get_precision('Product Unit \
                                                   of Measure'))
+
+
+    @api.multi
+    @api.depends('state', 'product_id', 'reservation_ids')
+    def _compute_is_stock_reservation(self):
+        for line in self:
+            reservable = False
+            if (not (line.state not in ('draft', 'reserve') or
+                     line._get_procure_method() == 'make_to_order' or
+                     not line.product_id or
+                     line.product_id.type == 'service') and
+                    not line.reservation_ids):
+                reservable = True
+            line.is_stock_reservable = reservable
 
     def _test_block_on_reserve(self, vals):
         super()._test_block_on_reserve(vals)

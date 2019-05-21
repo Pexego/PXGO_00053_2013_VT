@@ -1,35 +1,6 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2018 Visiotech All Rights Reserved
-#    $Jesus Garcia Manzanas <jgmanzanas@visiotechsecurity.com>$
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
-
-from openerp import models, fields, api, _
-from openerp.addons.connector.session import ConnectorSession
-from ..events.partner_events import export_partner, update_partner, export_partner_tag, update_partner_tag, export_partner_tag_rel, update_partner_tag_rel
-from ..events.product_events import update_product, export_product, export_product_tag, update_product_tag, export_product_tag_rel
-from ..events.rma_events import export_rma, export_rmaproduct, update_rma, update_rmaproduct
-from ..events.invoice_events import export_invoice, update_invoice
-from ..events.picking_events import export_picking, update_picking, export_pickingproduct, update_pickingproduct
-from .. events.order_events import export_order, export_orderproduct, update_order, update_orderproduct
-from .. events.rappel_events import export_rappel, update_rappel
-from .. events.rappel_events import export_rappel_section, update_rappel_section
-from .. events.country_events import export_country_state, update_country_state
+# © 2019 Comunitea
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import models, fields, api, _
 
 
 class MiddlewareBackend(models.TransientModel):
@@ -66,14 +37,12 @@ class MiddlewareBackend(models.TransientModel):
 
     start_date = fields.Date('Start Date',
                              default=fields.Date.context_today)
-    finish_date = fields.Date('Finish Date', 
+    finish_date = fields.Date('Finish Date',
                               default=fields.Date.context_today)
     model_ids = fields.Char('Ids')
 
     @api.multi
     def do_export(self):
-        session = ConnectorSession(self.env.cr, self.env.uid,
-                                   context=self.env.context)
         if self.model_ids:
             object_ids = list(map(int, self.model_ids.split(',')))
 
@@ -91,14 +60,14 @@ class MiddlewareBackend(models.TransientModel):
                                               ('is_company', '=', False)])
             if self.mode_export == 'export':
                 for partner in partner_ids:
-                    export_partner.delay(session, "res.partner", partner.id)
+                    partner.with_delay().export_partner()
                 for contact in contact_ids:
-                    export_partner.delay(session, "res.partner", contact.id)
+                    contact.with_delay().export_partner()
             else:
                 for partner in partner_ids:
-                    update_partner.delay(session, "res.partner", partner.id)
+                    partner.with_delay().update_partner()
                 for contact in contact_ids:
-                    update_partner.delay(session, "res.partner", contact.id)
+                    contact.with_delay().update_partner()
         elif self.type_export == 'invoices':
             if object_ids:
                 invoices = self.env['account.invoice'].browse(object_ids)
@@ -112,10 +81,10 @@ class MiddlewareBackend(models.TransientModel):
                             ('date_invoice', '<=', self.finish_date)])
             if self.mode_export == 'export':
                 for invoice in invoices:
-                    export_invoice.delay(session, 'account.invoice', invoice.id)
+                    invoice.with_delay().export_invoice()
             else:
                 for invoice in invoices:
-                    update_invoice.delay(session, 'account.invoice', invoice.id)
+                    invoice.with_delay().update_invoice
         elif self.type_export == 'pickings':
             if object_ids:
                 picking_ids = self.env['stock.picking'].browse(object_ids)
@@ -134,14 +103,14 @@ class MiddlewareBackend(models.TransientModel):
                                                   ('picking_type_id.code', '=', 'outgoing')])
             if self.mode_export == 'export':
                 for picking in picking_ids:
-                    export_picking.delay(session, 'stock.picking', picking.id)
+                    picking.with_delay().export_picking()
                     for line in picking.move_lines:
-                        export_pickingproduct.delay(session, 'stock.move', line.id)
+                        line.with_delay().export_pickingproduct()
             else:
                 for picking in picking_ids:
-                    update_picking.delay(session, 'stock.picking', picking.id)
+                    picking.with_delay().update_picking
                     for line in picking.move_lines:
-                        update_pickingproduct.delay(session, 'stock.move', line.id)
+                        line.with_delay().update_pickingproduct()
 
         elif self.type_export == 'rmas':
             rma_obj = self.env['crm.claim']
@@ -154,14 +123,14 @@ class MiddlewareBackend(models.TransientModel):
                                        ('date', '<=', self.finish_date)])
             if self.mode_export == 'export':
                 for rma in rmas:
-                    export_rma.delay(session, 'crm.claim', rma.id)
+                    rma.with_delay().export_rma()
                     for line in rma.claim_line_ids:
-                        export_rmaproduct.delay(session, 'claim.line', line.id)
+                        line.with_delay().export_rmaproduct()
             else:
                 for rma in rmas:
-                    update_rma.delay(session, 'crm.claim', rma.id)
+                    rma.with_delay().update_rma()
                     for line in rma.claim_line_ids:
-                        update_rmaproduct.delay(session, 'claim.line', line.id)
+                        line.with_delay().update_rmaproduct()
 
         elif self.type_export == 'products':
             product_obj = self.env['product.product']
@@ -171,10 +140,10 @@ class MiddlewareBackend(models.TransientModel):
                 product_ids = product_obj.search([])
             if self.mode_export == 'export':
                 for product in product_ids:
-                    export_product.delay(session, 'product.product', product.id)
+                    product.with_delay().export_product()
             else:
                 for product in product_ids:
-                    update_product.delay(session, 'product.product', product.id)
+                    product.with_delay().update_product()
             product.web = 'published'
 
         elif self.type_export == 'tags':
@@ -186,10 +155,10 @@ class MiddlewareBackend(models.TransientModel):
                 tag_ids = tag_obj.search([('active', '=', True)])
             if self.mode_export == 'export':
                 for tag in tag_ids:
-                    export_partner_tag.delay(session, 'res.partner.category', tag.id)
+                    tag.with_delay().export_partner_tag()
             else:
                 for tag in tag_ids:
-                    update_partner_tag.delay(session, 'res.partner.category', tag.id)
+                    tag.with_delay().update_partner_tag()
 
         elif self.type_export == 'customer_tags_rel':
             partner_obj = self.env['res.partner']
@@ -202,11 +171,11 @@ class MiddlewareBackend(models.TransientModel):
             if self.mode_export == 'export':
                 for partner in partner_ids:
                     for category in partner.category_id:
-                        export_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner.id, category.id)
+                        category.with_delay().export_partner_tag_rel()
             else:
                 for partner in partner_ids:
                     for category in partner.category_id:
-                        update_partner_tag_rel.delay(session, 'res.partner.res.partner.category.rel', partner.id, category.id)
+                        category.with_delay().update_partner_tag_rel()
 
         elif self.type_export == 'order':
             if object_ids:
@@ -216,21 +185,21 @@ class MiddlewareBackend(models.TransientModel):
                 partner_ids = partner_obj.search([('is_company', '=', True),
                                                   ('web', '=', True),
                                                   ('customer', '=', True)])
-                sales = session.env['sale.order'].search([('partner_id', 'child_of', partner_ids.ids),
+                sales = self.env['sale.order'].search([('partner_id', 'child_of', partner_ids.ids),
                                                           ('state', 'in', ['done', 'progress', 'draft', 'reserve']),
                                                           ('date_order', '>=', self.start_date),
                                                           ('date_order', '<=', self.finish_date),
                                                           ('company_id', '=', 1)])
             if self.mode_export == 'export':
                 for sale in sales:
-                    export_order.delay(session, 'sale.order', sale.id)
+                    sale.with_delay().export_order()
                     for line in sale.order_line:
-                        export_orderproduct.delay(session, 'sale.order.line', line.id)
+                        line.with_delay().export_orderproduct()
             else:
                 for sale in sales:
-                    update_order.delay(session, 'sale.order', sale.id)
+                    sale.with_delay().update_order()
                     for line in sale.order_line:
-                        update_orderproduct.delay(session, 'sale.order.line', line.id)
+                        line.with_delay().update_orderproduct()
 
         elif self.type_export == 'rappel':
             rappel_obj = self.env['rappel']
@@ -240,10 +209,10 @@ class MiddlewareBackend(models.TransientModel):
                 rappel_ids = rappel_obj.search([])
             if self.mode_export == 'export':
                 for rappel in rappel_ids:
-                    export_rappel.delay(session, 'rappel', rappel.id)
+                    rappel.with_delay().export_rappel()
             else:
                 for rappel in rappel_ids:
-                    update_rappel.delay(session, 'rappel', rappel.id)
+                    rappel.with_delay().update_rappel()
 
         elif self.type_export == 'rappelsection':
             rappel_section_obj = self.env['rappel.section']
@@ -253,10 +222,10 @@ class MiddlewareBackend(models.TransientModel):
                 rappel_section_ids = rappel_section_obj.search([])
             if self.mode_export == 'export':
                 for section in rappel_section_ids:
-                    export_rappel_section.delay(session, 'rappel.section', section.id)
+                    section.with_delay().export_rappel_section()
             else:
                 for section in rappel_section_ids:
-                    update_rappel_section.delay(session, 'rappel.section', section.id)
+                    section.with_delay().update_rappel_section()
 
         elif self.type_export == 'countrystate':
             country_state_obj = self.env['res.country.state']
@@ -266,10 +235,10 @@ class MiddlewareBackend(models.TransientModel):
                 country_state_ids = country_state_obj.search([])
             if self.mode_export == 'export':
                 for section in country_state_ids:
-                    export_country_state.delay(session, 'res.country.state', section.id)
+                    section.with_delay().export_country_state()
             else:
                 for section in country_state_ids:
-                    update_country_state.delay(session, 'res.country.state', section.id)
+                    section.with_delay().update_country_state
 
         elif self.type_export == 'producttag':
             product_tag_obj = self.env['product.tag']
@@ -279,10 +248,10 @@ class MiddlewareBackend(models.TransientModel):
                 product_tag_ids = product_tag_obj.search([])
             if self.mode_export == 'export':
                 for tag in product_tag_ids:
-                    export_product_tag.delay(session, 'product.tag', tag.id)
+                    tag.with_delay().export_product_tag()
             else:
                 for tag in product_tag_ids:
-                    update_product_tag.delay(session, 'product.tag', tag.id)
+                    tag.with_delay().update_product_tag()
 
         elif self.type_export == 'producttagproductrel':
             product_obj = self.env['product.product']
@@ -294,4 +263,4 @@ class MiddlewareBackend(models.TransientModel):
             if self.mode_export == 'export':
                 for product in product_ids:
                     for tag in product.tag_ids:
-                        export_product_tag_rel.delay(session, 'product.tag.rel', product.id, tag.id)
+                        tag.with_delay().export_product_tag_rel()

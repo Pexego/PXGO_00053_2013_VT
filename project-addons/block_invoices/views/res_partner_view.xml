@@ -2,7 +2,7 @@
 <odoo>
     <record model="ir.ui.view" id="view_partner_form_add_block_sales_field">
         <field name="name">view.partner.form.add.block.sales.field</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="inherit_id" ref="custom_account.view_partner_form_add_risk_comment"/>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
             <xpath expr="//notebook/page[@name='sales_purchases']/group[1]" position="before">

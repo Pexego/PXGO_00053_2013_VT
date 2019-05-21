@@ -31,18 +31,24 @@ class SaleOrder(models.Model):
 
     validated_dir = fields.Boolean(default=False)
 
-    def onchange_partner_id(self):
-        """
-            TODO: Por qué es necesario?
-        """
-        val = super().onchange_partner_id()
-        new_partner = self.env['res.partner'].browse(self.partner_id)
-        for child in new_partner.child_ids:
-            if child.default_shipping_address:
-                val['value']['partner_shipping_id'] = child.id
-                break
+    partner_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]},)
+    partner_invoice_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    partner_shipping_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    warehouse_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    picking_policy = fields.Selection(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
 
-        return val
+    def onchange_partner_id(self):
+        # Load the favorite shipping address
+        super().onchange_partner_id()
+        for child in self.partner_id.child_ids:
+            if child.default_shipping_address:
+                self.partner_shipping_id = child.id
+                break
 
     def open_historical_orders(self):
         self.ensure_one()
@@ -69,16 +75,32 @@ class SaleOrder(models.Model):
     def button_notification(self):
 
         res_partner_id = self.partner_id
-        view_id = self.env.ref(
-            'sale_custom.view_warning_form').id  # Id asociado a esa vista
+        view_id = self.env.ref('sale_custom.view_warning_form').id  # Id asociado a esa vista
 
         return {
-            'name': 'Avisos',
+            'name': _('Warnings'),
             'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'res.partner',
             'view_id': view_id,
             'res_id': res_partner_id.id,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+            'flags': {'form': {'options': {'mode': 'view'}}}
+        }
+
+    @api.multi
+    def button_notification_open_risk_window(self):
+        partner_id = self.partner_id
+        view_id = self.env.ref('nan_partner_risk.open_risk_window_view').id
+
+        return {
+            'name': _('Partner Risk Information'),
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'res.partner',
+            'view_id': view_id,
+            'res_id': partner_id.id,
             'type': 'ir.actions.act_window',
             'target': 'new',
             'flags': {'form': {'options': {'mode': 'view'}}}
@@ -105,4 +127,43 @@ class SaleOrder(models.Model):
                     message = _('Please, introduce a shipping cost line.')
                     raise exceptions.Warning(message)
 
+            self.apply_commercial_rules()
+
         return super().action_confirm()
+
+
+class MailMail(models.Model):
+    _inherit = 'mail.mail'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(MailMail, self).create(vals)
+
+
+class StockMove(models.Model):
+    _inherit = 'stock.move'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(StockMove, self).create(vals)
+
+
+class StockMoveLine(models.Model):
+    _inherit = 'stock.move.line'
+
+    # This allows to save the sale order with the state reserve
+    @api.model
+    def create(self, vals):
+        context = dict(self.env.context)
+        context.pop('default_state', False)
+        self = self.with_context(context)
+        return super(StockMoveLine, self).create(vals)
+
