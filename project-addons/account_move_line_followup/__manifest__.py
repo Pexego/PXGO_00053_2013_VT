@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 
 {
     'name': 'Update follow-up data in account move lines',
@@ -6,8 +5,13 @@
     'license': 'AGPL-3',
     'author': 'Nadia Ferreyra',
     'category': 'Account',
-    'depends': ['account', 'cyc_view'],
-    'data': ['data/ir_cron.xml', 'data/ir_config_parameter.xml'],
+    'depends': ['account',
+                'account_credit_control',
+                'cyc_view',
+                'custom_account'],
+    'data': ['data/ir_cron.xml',
+             'data/credit_control_data.xml',
+             'views/partner_view.xml'],
     'description': '''Update follow-up data in account move lines''',
     'installable': True,
 }

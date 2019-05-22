@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+
+    <!--Cron -->
+    <record forcecreate="True" id="ir_cron_execute_credit_control" model="ir.cron">
+        <field name="name">Execute credit control</field>
+        <field eval="True" name="active"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">weeks</field>
+        <field name="numbercall">-1</field>
+        <field eval="False" name="doall"/>
+        <field name="state">code</field>
+        <field name="model_id" ref="account_credit_control.model_credit_control_run"/>
+        <field name="code">model.run_credit_control_cron()</field>
+    </record>
+
+     <!--Email template -->
+    <record id="email_template_credit_control_base" model="mail.template">
+        <field name="name">Credit Control Email Custom</field>
+        <field name="email_from">${user.company_id.email or ''}</field>
+        <field name="subject">Credit Control: (${object.current_policy_level.name or 'n/a'})
+        </field>
+        <field name="email_to">${object.get_email() or  ''}</field>
+        <field name="model_id" ref="model_credit_control_communication"/>
+        <field name="auto_delete" eval="True"/>
+        <field name="lang">
+            ${object.get_contact_address().lang or 'en_US'}
+        </field>
+        <field name="body_html"><![CDATA[
+            Dear ${object.contact_address.name or ''}
+            <br/>
+            <br>
+            % if object.get_followup_table_html_due():
+                <br> ${object.get_followup_table_html_due() | safe}
+            % endif
+            <br>
+            % if object.get_followup_table_html_not_due():
+                <br> ${object.get_followup_table_html_not_due() | safe}
+            % endif
+            <br/>
+            ${object.current_policy_level.custom_mail_text | safe}
+            ]]></field>
+    </record>
+
+</odoo>

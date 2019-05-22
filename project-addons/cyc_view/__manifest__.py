@@ -12,6 +12,7 @@
                 'account_credit_control', 'partner_risk_insurance'],
     "data": ['views/account_invoice_cyc_view.xml',
              'security/ir.model.access.csv',
-             'views/account_view.xml'],
+             'views/account_view.xml',
+             'data/ir_config_parameter.xml'],
     "installable": True
 }
