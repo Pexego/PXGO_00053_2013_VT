@@ -15,7 +15,7 @@ class StockLandedCost(models.Model):
                  search([('code', '=', 'APUR')]))
 
     container_ids = fields.Many2many('stock.container', string='Containers',
-                                     compute='_get_container')
+                                     compute='_get_container', inverse='_set_pickings')
 
     @api.multi
     def _get_container(self):
@@ -29,6 +29,17 @@ class StockLandedCost(models.Model):
                 res.append(move_id.container_id.id)
 
             cost.container_ids = res
+
+    @api.multi
+    def _set_pickings(self):
+        for cost in self:
+            if not cost.picking_ids:
+                res = []
+                for container in cost.container_ids:
+                    for picking in container.picking_ids:
+                        res.append(picking.id)
+                cost.picking_ids = res
+
 
     @api.multi
     def compute_landed_cost(self):
