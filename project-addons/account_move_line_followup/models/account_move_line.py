@@ -25,16 +25,11 @@ class AccountMoveLine(models.Model):
                                             ('account_id', '=', 443),
                                             ('debit', '!=', 0)],
                                            ['date_maturity'],
-                                           # TODO: Migrar -> ['date_maturity', 'followup_line_id', 'followup_date'],
                                            limit=1, order="date_maturity asc")
             # Updating maturity date and follow-up data
             if aml_partner:
                 aml_partner_data = aml_partner[0]
                 aml.write({'date_maturity': aml_partner_data['date_maturity']})
-                # TODO: Migar -> Añadir campos followup al write
-                #  'followup_line_id': aml_partner_data['followup_line_id'] and
-                #                     aml_partner_data['followup_line_id'][0] or False,
-                #  'followup_date': aml_partner_data['followup_date']})
 
         # Search all partner to update new field 'worst cyc notify date'
         all_partner = self.env['res.partner'].search([('customer', '=', True), ('active', '=', True),
