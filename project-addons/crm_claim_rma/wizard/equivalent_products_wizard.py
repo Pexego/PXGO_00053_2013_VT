@@ -22,14 +22,6 @@ class EquivalentProductsWizard(models.TransientModel):
             res['product_tag_ids'] = [(6, 0, claim_line_id.product_id.tag_ids.ids)]
         return res
 
-    @api.onchange('product_id')
-    def onchange_product_id(self):
-        import ipdb
-        ipdb.set_trace()
-        self.virtual_stock = self.product_id.virtual_available
-        self.real_stock = self.product_id.qty_available
-        self.product_tag_ids = self.product_id.tag_ids
-
     @api.multi
     def select_product(self):
         self.line_id.equivalent_product_id = self.product_id
