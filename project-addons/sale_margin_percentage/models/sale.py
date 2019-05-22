@@ -159,7 +159,7 @@ class SaleOrder(models.Model):
                         sale.total_purchase += cost_price * \
                             line.product_uom_qty
 
-    total_purchase = fields.Float(compute='get_total_price_purchase',
+    total_purchase = fields.Float(compute='_get_total_price_purchase',
                                   string='Price purchase', readonly=True)
     margin = fields.Float(compute='_product_margin', string='Margin',
                           help="It gives profitability by calculating"

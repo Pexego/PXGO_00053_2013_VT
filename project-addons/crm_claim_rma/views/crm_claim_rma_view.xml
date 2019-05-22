@@ -84,7 +84,7 @@
                 <field name="product_id"/>
                 <button name="equivalent_products" string="Change product" type="object" icon="fa-retweet"/>
                 <field name="equivalent_product_id" readonly="1"/>
-                <field name="name"/>
+                <field name="name" string="Customer description"/>
                 <field name="product_returned_quantity"/>
                 <field name="prodlot_id" domain="[('product_id', '=', product_id)]" context="{'product_id': product_id}"/>
                 <field name="claim_origine"/>

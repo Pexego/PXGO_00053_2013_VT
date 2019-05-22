@@ -94,7 +94,7 @@ class ClaimLine(models.Model):
         result = seller.get_warranty_return_partner()
         return result
 
-    name = fields.Char('Description', required=True)
+    name = fields.Char('Customer description', required=True)
     claim_origine = fields.Selection(
             [('broken_down', 'Broken down product'),
              ('not_appropiate', 'Not appropiate product'),
