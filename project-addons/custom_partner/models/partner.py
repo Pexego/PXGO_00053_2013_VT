@@ -369,7 +369,7 @@ class ResPartner(models.Model):
     @api.model
     def _commercial_fields(self):
         res = super()._commercial_fields()
-        return res + ['web', 'email_web']
+        return res + ['web']
 
     @api.multi
     def _is_accounting(self):
