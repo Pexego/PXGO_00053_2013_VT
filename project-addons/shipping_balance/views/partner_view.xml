@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_ship_balance_form" model="ir.ui.view">
+        <field name="name">res.partner.ship.balance.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_inline oe_stat_button" icon="fa-euro" type="action"
+                        name="%(action_tree_shipping_balance_from_partner)d">
+                        <field string="Shipping Balance" name="amount_shipping_balance" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>
