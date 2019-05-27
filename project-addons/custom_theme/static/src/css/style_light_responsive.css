@@ -277,3 +277,18 @@ header > .main-nav > .container-fluid > .navbar-header .navbar-toggle div.fa {
     cursor: default;
     font-weight: normal;
 }
+
+/* Notifications */
+
+.o_notification_manager
+.o_notification.o_error {
+
+    border-radius: 8px;
+
+}
+.o_notification_manager
+.o_notification {
+
+    border-radius: 8px;
+
+}
