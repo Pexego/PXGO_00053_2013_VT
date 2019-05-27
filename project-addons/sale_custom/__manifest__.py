@@ -18,7 +18,8 @@
         "sale_display_stock",
         "sale_margin_percentage",
         "partner_risk_advice",
-        'reserve_without_save_sale'
+        "reserve_without_save_sale",
+        "web_notify"
     ],
     "data": [
         'views/sale_view.xml',

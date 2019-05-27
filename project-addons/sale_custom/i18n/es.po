@@ -104,3 +104,39 @@ msgstr "Albaranes"
 #: model:ir.ui.view,arch_db:sale_custom.sale_order_view_buttons_add_followup
 msgid "Customer situation"
 msgstr "Situación del cliente"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:118
+#, python-format
+msgid "The address is incorrect, the following fields are empty:\n"
+msgstr "La dirección es incorrecta, faltan los siguentes campos:\n"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:107
+#, python-format
+msgid "Street"
+msgstr "Calle"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:108
+#, python-format
+msgid "Zip"
+msgstr "Código postal"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:109
+#, python-format
+msgid "City"
+msgstr "Ciudad"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:110
+#, python-format
+msgid "State"
+msgstr "Provincia"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:111
+#, python-format
+msgid "Country"
+msgstr "País"
