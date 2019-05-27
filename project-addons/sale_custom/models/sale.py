@@ -146,6 +146,10 @@ class SaleOrder(models.Model):
 
             self.apply_commercial_rules()
 
+            if not sale.is_all_reserved and 'confirmed' not in self.env.context:
+                self.env.user.notify_warning(title="Please consider that!",
+                                             message="Some of the products of this order aren't available now",
+                                             sticky=True)
         return super().action_confirm()
 
 

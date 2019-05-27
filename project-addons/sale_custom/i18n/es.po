@@ -32,16 +32,6 @@ msgstr "La cantidad de un producto no puede ser negativo o cero"
 msgid "Partner Orders"
 msgstr "Pedidos Cliente"
 
-#. module: sale_custom
-#: model:ir.ui.view,arch_db:sale_custom.sale_confirm_wizard_form_wizard
-msgid "Some of the products of this order aren't available now. Please consider that!"
-msgstr "Algunos de los productos no estan disponibles actualmente. Por favor, tengalo en cuenta!"
-
-
-#. module: sale_custom
-#: model:ir.ui.view,arch_db:sale_custom.sale_confirm_wizard_form_wizard
-msgid "Sale Confirm"
-msgstr "Confirmar Tramitacion"
 
 #. module: sale_custom
 #: code:addons/sale_custom/sale.py:133
@@ -106,37 +96,49 @@ msgid "Customer situation"
 msgstr "Situación del cliente"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:118
+#: code:addons/sale_custom/sale.py:120
 #, python-format
 msgid "The address is incorrect, the following fields are empty:\n"
 msgstr "La dirección es incorrecta, faltan los siguentes campos:\n"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:107
+#: code:addons/sale_custom/sale.py:113
 #, python-format
 msgid "Street"
 msgstr "Calle"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:108
+#: code:addons/sale_custom/sale.py:114
 #, python-format
 msgid "Zip"
 msgstr "Código postal"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:109
+#: code:addons/sale_custom/sale.py:115
 #, python-format
 msgid "City"
 msgstr "Ciudad"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:110
+#: code:addons/sale_custom/sale.py:116
 #, python-format
 msgid "State"
 msgstr "Provincia"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:111
+#: code:addons/sale_custom/sale.py:117
 #, python-format
 msgid "Country"
 msgstr "País"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:150
+#, python-format
+msgid "Please consider that!"
+msgstr "¡Por favor, téngalo en cuenta!"
+
+#. module: sale_custom
+#: code:addons/sale_custom/sale.py:151
+#, python-format
+msgid "Some of the products of this order aren't available now"
+msgstr "Algunos de los productos no estan disponibles actualmente"
