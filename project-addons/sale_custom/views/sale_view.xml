@@ -256,4 +256,6 @@
         </field>
     </record>
 
+    <menuitem id="sale.sale_menu_root" action="action_orders_reserve"/>
+
 </odoo>
