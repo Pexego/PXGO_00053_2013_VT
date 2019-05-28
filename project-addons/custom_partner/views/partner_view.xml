@@ -325,13 +325,20 @@
                       decoration-danger = "(not date_maturity or date_maturity&lt;=current_date) and balance&gt;0">
                     <field name="date" readonly="True"/>
                     <field name="move_id" readonly="True"/>
-                    <field name="invoice_id"/>
+                    <field name="invoice_id" readonly="True"/>
                     <field name="ref_line" readonly="True"/>
                     <field name="blocked"/>
                     <field name="date_maturity" readonly="True"/>
-                    <field name="matched_debit_ids" readonly="True"/>
-                    <field name="matched_credit_ids" readonly="True"/>
-                    <field name="balance" readonly="True"/>
+                    <field name="matched_debit_ids" invisible="True"/>
+                    <field name="matched_credit_ids" invisible="True"/>
+                    <field name="full_reconcile_id" invisible="True"/>
+                    <button name="open_reconcile_view"
+                        type="object"
+                        icon="fa-adjust"
+                        string="Partial reconciliation"
+                        attrs="{'invisible': ['|', ('full_reconcile_id', '!=', False), '&amp;', ('matched_debit_ids', '=', []),('matched_credit_ids', '=', [])]}">
+                    </button>
+                    <field name="balance" readonly="True" sum="Total balance"/>
                 </tree>
             </field>
         </record>
