@@ -103,7 +103,8 @@ class ResPartner(models.Model):
             if data:
                 fig, ax = plt.subplots(figsize=(10, 6))
                 x_pos = list(range(len(data)))
-                rects1 = ax.bar(x_pos, [x[1] for x in data], 0.25, color='r')
+                rects1 = ax.bar(x_pos, [x[1] for x in data], 0.25, color="#7c7bad",
+                                edgecolor="#7c7bad")
                 ax.set_ylabel(_("Amount total"))
                 ax.set_xlabel(_("Date"))
                 ax.margins(0.04)
