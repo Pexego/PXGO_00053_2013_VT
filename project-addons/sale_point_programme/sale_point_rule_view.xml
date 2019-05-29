@@ -12,6 +12,8 @@
                 <field name="date_end"/>
                 <field name="category_id"/>
                 <field name="product_id"/>
+                <field name="product_brand_id"/>
+                <field name="modality"/>
                 <field name="attribute"/>
                 <field name="operator"/>
                 <field name="value"/>
