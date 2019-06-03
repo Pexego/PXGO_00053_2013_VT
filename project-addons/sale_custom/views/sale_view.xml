@@ -256,6 +256,43 @@
         </field>
     </record>
 
+     <!-- Financial Risk Partner wizard in sale order-->
+    <record id="view_financial_risk_res_partner_wizard" model="ir.ui.view">
+        <field name="name">res.partner.financial_risk.sale.form</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <form name="financial_risk" string="Financial Risk">
+                <group name="risk_general" col="3">
+                    <group string="General Limits" name="risk_include" class="o_group_col_6">
+                        <group col="3" class="oe_subtotal_footer" style="float: left !important;">
+                            <field name="risk_sale_order_include" readonly="True" class="oe_left_padding_15"/>
+                            <field name="risk_sale_order" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_invoice_draft_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_invoice_draft" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_invoice_open_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_invoice_open" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_invoice_unpaid_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_invoice_unpaid" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_account_amount_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_account_amount" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_account_amount_unpaid_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_account_amount_unpaid" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_circulating_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_circulating" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_total" colspan="3" class="oe_subtotal_footer_separator oe_label_to_left"/>
+                        </group>
+                    </group>
+                </group>
+                <group string="Info" class="o_group_col_6">
+                    <field name="credit_limit" widget="monetary" readonly="True" class="oe_label_to_left"/>
+                    <field name="credit_policy" readonly="True" class="oe_label_to_left"/>
+                    <field name="risk_exception" readonly="True" class="oe_label_to_left"/>
+                </group>
+                <footer></footer>
+            </form>
+        </field>
+    </record>
+
     <menuitem id="sale.sale_menu_root" action="action_orders_reserve"/>
 
 </odoo>

@@ -92,7 +92,7 @@ class SaleOrder(models.Model):
     @api.multi
     def button_notification_open_risk_window(self):
         partner_id = self.partner_id
-        view_id = self.env.ref('nan_partner_risk.open_risk_window_view').id
+        view_id = self.env.ref('sale_custom.view_financial_risk_res_partner_wizard').id
 
         return {
             'name': _('Partner Risk Information'),
