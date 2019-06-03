@@ -33,6 +33,8 @@ for fidelization programmes""",
                 'prospective_customer'],
     "data": ['partner_point_bag_view.xml',
              'sale_point_rule_view.xml',
+             'sale_participations_cron.xml',
+             'template_participations.xml',
              'partner_view.xml',
              'security/ir.model.access.csv'],
     "installable": True
