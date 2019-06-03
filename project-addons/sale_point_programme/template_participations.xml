@@ -8,27 +8,27 @@
             <field name="email_cc">${(object.user_id.email or object.company_id.email or 'noreply@localhost')|safe}</field>
             <field name="email_to">${(object.email or object.company_id.email or 'noreply@localhost')|safe}</field>
             <field name="reply_to">${(object.user_id.email or object.company_id.email or 'noreply@localhost')|safe}</field>
-            <field name="subject">Visiotech - Draw participation</field>
+            <field name="subject">AJAX lottery</field>
             <field name="model_id" ref="base.model_res_partner"/>
             <field name="partner_to">${ctx.get('partner_id') or ''}</field>
             <field name="lang">${object.lang}</field>
             <field name="auto_delete" eval="False"/>
             <field name="body_html"><![CDATA[
 
-                    <p>Dear user,<br/><br/>
-                    For each 500 EUR purchasing AJAX products you get one participation for a draw of Ajax products, it will be carry out in the next days.<br/>
-                    By your today purchase it has been assigned following participations:
+                    <p>Dear customer,<br/><br/>
+                    Visiotech is running an Ajax contest in June and July 2019.<br/>
+                    For every 500€ you buy of Ajax products through Visiotech during these months, you will get one ticket for the lottery. On August 1, 2019 there will be a draw for various prizes among all the entries.<br/><br/>
+                    For your purchases today you have been assigned the following tickets:
                         <div style="margin: 20px;">
                         % for line in ctx['values']:
                             % if (ctx['values'][line])
-                                Purchase order <b>${line}</b>, participation(s) <b>${ctx['values'][line]}</b>.<br/>
+                                Order <b>${line}</b>, ticket(s) <b>${ctx['values'][line]}</b>.<br/>
                             % endif
                         % endfor
                         </div>
-                        <br>
 
-                        <P>If you have any question, do not hesitate to contact us.</p>
-                        <P>Thank you for choosing VISIOTECH.</p>
+                        <P>If you have any question, do not hesitate to contact us.<br/>
+                        Thank you for choosing VISIOTECH.</p>
                         <br>
                         <div style="width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
                             <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;">
