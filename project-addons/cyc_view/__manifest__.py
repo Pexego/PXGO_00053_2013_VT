@@ -9,7 +9,7 @@
     'author': 'Comunitea',
     'website': '',
     "depends": ['account', 'account_payment_partner', 'customer_area',
-                'account_credit_control', 'partner_risk_insurance'],
+                'account_credit_control', 'partner_risk_insurance', 'custom_partner'],
     "data": ['views/account_invoice_cyc_view.xml',
              'security/ir.model.access.csv',
              'views/account_view.xml',
