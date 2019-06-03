@@ -1,7 +1,7 @@
 ##############################################################################
 #
-#    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
-#    $Kiko Sanchez <kiko@comunitea.com>$
+#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
+#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -13,11 +13,27 @@
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #    GNU Affero General Public License for more details.
 #
-#
 #    You should have received a copy of the GNU Affero General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
 
-from . import models
-from . import wizard
+{
+    'name': "Product Ship Balance",
+    'version': '11.0',
+    'category': 'product',
+    'description': """Adds shipping balance""",
+    'author': 'Comunitea Servicios Tecnologicos',
+    'website': 'www.comunitea.com',
+    "depends": ["base", "product", "mrp_repair", "sale", "account",
+                "stock_reserve_sale", "sale_customer_discount"],
+
+    "data": ["views/shipping_balance_view.xml",
+              "wizard/shipping_balance_wizard.xml",
+              "views/partner_view.xml",
+              "views/sale_order.xml",
+              "views/product_view.xml",
+              "security/ir.model.access.csv"
+             ],
+    "installable": True
+}

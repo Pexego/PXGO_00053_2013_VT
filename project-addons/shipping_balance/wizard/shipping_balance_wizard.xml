@@ -1,42 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
-
-        <record id="shipping_balance_wizard_view" model="ir.ui.view">
-             <field name="name">Shipping Balance Wizard</field>
-             <field name="model">shipping.balance.wizard</field>
-             <field name="arch" type="xml">
-                <form string="Shipping Balance Wizard">
+<odoo>
+    <record id="shipping_balance_wizard_view" model="ir.ui.view">
+         <field name="name">Shipping Balance Wizard</field>
+         <field name="model">shipping.balance.wizard</field>
+         <field name="arch" type="xml">
+            <form string="Shipping Balance Wizard">
+                <group>
                     <group>
-                        <group>
-                            <label string="How much from shipping balance"/>
-                            <field name="amount_ok" nolabel="1"/>
-                        </group>
-                        <group>
-
-                        </group>
-
+                        <label string="How much from shipping balance"/>
+                        <field name="amount_ok" nolabel="1"/>
                     </group>
-                    <footer>
-                        <button name="create_shipping_line_ok" string="OK" type="object" class="oe_highlight"/>
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel"/>
-                    </footer>
-                </form>
-             </field>
-         </record>
+                </group>
+                <footer>
+                    <button name="create_shipping_line_ok" string="OK" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+         </field>
+     </record>
 
-        <record id="action_shipping_balance_wizard" model="ir.actions.act_window">
-             <field name="name">Invoice Session</field>
-             <field name="res_model">shipping.balance.wizard</field>
-             <field name="src_model">sale.order</field>
-             <field name="type">ir.actions.act_window</field>
-             <field name="view_type">form</field>
-             <field name="view_mode">form</field>
-             <field name="view_id" ref="shipping_balance_wizard_view"/>
-            <field name="context">{}</field>
-             <field name="target">new</field>
-       </record>
-
-    </data>
-</openerp>
+    <record id="action_shipping_balance_wizard" model="ir.actions.act_window">
+         <field name="name">Invoice Session</field>
+         <field name="res_model">shipping.balance.wizard</field>
+         <field name="src_model">sale.order</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">form</field>
+         <field name="view_id" ref="shipping_balance_wizard_view"/>
+        <field name="context">{}</field>
+         <field name="target">new</field>
+   </record>
+</odoo>

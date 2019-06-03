@@ -139,7 +139,8 @@ class StockMove(models.Model):
 
     def _action_done(self):
         res = super()._action_done()
-        self.product_id.product_tmpl_id.recalculate_standard_price_2()
+        for line in self:
+            line.product_id.product_tmpl_id.recalculate_standard_price_2()
         return res
 
 

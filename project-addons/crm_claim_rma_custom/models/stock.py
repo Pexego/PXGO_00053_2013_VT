@@ -47,7 +47,7 @@ class StockPicking(models.Model):
         return res
 
     @api.model
-    def do_transfer(self):
+    def action_done(self):
         for picking in self:
             if picking.claim_id:
                 for move in picking.move_lines:
@@ -62,7 +62,7 @@ class StockPicking(models.Model):
                             elif not move.claim_line_id.repair_id:
                                 move.claim_line_id.substate_id = self.env.ref(
                                     'crm_claim_rma_custom.substate_checked')
-        return super(StockPicking, self).do_transfer()
+        return super(StockPicking, self).action_done()
 
 
 class StockLocation(models.Model):

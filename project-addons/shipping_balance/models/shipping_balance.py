@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,29 +18,28 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import fields, models, api
+from odoo.exceptions import ValidationError
 
 
-from openerp import fields, models, api
-
-from openerp.exceptions import ValidationError
-
-class Shipping_Balance(models.Model):
+class ShippingBalance(models.Model):
 
     _name = 'shipping.balance'
 
     partner_id = fields.Many2one('res.partner', 'Partner')
     repair_id = fields.Many2one('mrp.repair', required=False)
     sale_id = fields.Many2one('sale.order', required=False)
-    amount = fields.Float ('Amount', default=0)
+    amount = fields.Float('Amount', default=0)
     aproved_ok = fields.Boolean("Aproved", default=True, help="Must be aproved before use")
-    balance = fields.Boolean ("Balance", help="True > positive")
-    final_id=fields.Char("Refers to", compute ="get_refer_to")
+    balance = fields.Boolean("Balance", help="True > positive")
+    final_id = fields.Char("Refers to", compute="get_refer_to")
 
-    @api.one
+    @api.multi
     def get_refer_to(self):
-        if self.balance == False:
-            self.final_id=self.sale_id.name
-        else:
-            self.final_id=self.repair_id.name
+        for shipping in self:
+            if not shipping.balance:
+                shipping.final_id = shipping.sale_id.name
+            else:
+                shipping.final_id = shipping.repair_id.name
         return True
 

@@ -82,9 +82,9 @@
         <field name="arch" type="xml">
             <tree string="Returned lines" editable="bottom">
                 <field name="product_id"/>
-                <!--button name="equivalent_products" string="Change product" type="object"/-->
+                <button name="equivalent_products" string="Change product" type="object" icon="fa-retweet"/>
                 <field name="equivalent_product_id" readonly="1"/>
-                <field name="name"/>
+                <field name="name" string="Customer description"/>
                 <field name="product_returned_quantity"/>
                 <field name="prodlot_id" domain="[('product_id', '=', product_id)]" context="{'product_id': product_id}"/>
                 <field name="claim_origine"/>
@@ -109,7 +109,7 @@
             <tree string="Returned lines" name="returned_lines">
                 <field name="claim_id"/>
                 <field name="product_id"/>
-                <!--button name="equivalent_products" string="Change product" type="object" icon="terp-gtk-jump-to-ltr"/-->
+                <button name="equivalent_products" string="Change product" type="object" icon="fa-retweet"/>
                 <field name="equivalent_product_id" readonly="1"/>
                 <field name="name"/>
                 <field name="product_returned_quantity"/>
@@ -149,7 +149,7 @@
                     <group string="Returned good">
                         <field name="product_returned_quantity"/>
                         <field name="product_id"/>
-                        <!--button name="equivalent_products" string="Change product" type="object"/-->
+                        <button name="equivalent_products" string="Change product" type="object"/>
                         <newline/>
                         <field name="equivalent_product_id" readonly="1"/>
                         <field name="supplier_id" domain="[('supplier', '=', True)]"/>

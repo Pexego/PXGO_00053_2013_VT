@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,19 +18,20 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from odoo import models, fields, api, exceptions
+from odoo.exceptions import ValidationError
 
-from openerp import models, fields, api, exceptions
-from openerp.exceptions import ValidationError
 
-class mrp_repair_fees(models.Model):
+class MrpRepairFees(models.Model):
 
-    _inherit ="mrp.repair.fee"
+    _inherit = 'mrp.repair.fee'
 
     @api.multi
     @api.constrains('product_id')
     def _check_duplicate_fees(self):
 
-        line2 = self.env['mrp.repair.fee'].search([('repair_id', '=', self.repair_id.id),('product_id.shipping_balance','=','true')])
+        line2 = self.env['mrp.repair.fee'].search([('repair_id', '=', self.repair_id.id),
+                                                   ('product_id.shipping_balance', '=', 'true')])
         if len(line2) > 1:
             raise ValidationError("Shipping Balance must be unique")
 
@@ -53,26 +53,26 @@ class mrp_repair_fees(models.Model):
     @api.multi
     def write(self, data):
         data_mod = self.order_repair(data)
-        res = super(mrp_repair_fees, self).write(data_mod)
+        res = super(MrpRepairFees, self).write(data_mod)
         return res
 
     @api.model
     def create(self, data):
         data_mod = self.order_repair(data)
-        res = super(mrp_repair_fees, self).create(data_mod)
+        res = super(MrpRepairFees, self).create(data_mod)
         return res
 
 
-class mrp_repair(models.Model):
+class MrpRepair(models.Model):
 
-    _inherit = "mrp.repair"
+    _inherit = 'mrp.repair'
 
     shipping_balance = fields.Boolean("Shipping Balance", default=False)
 
     @api.multi
     def action_invoice_create(self, group=False):
 
-        res = super(mrp_repair, self).action_invoice_create(group)
+        res = super(MrpRepair, self).action_invoice_create(group)
         for repair in self:
             for line in repair.fees_lines:
                 if line.product_id.shipping_balance:
@@ -88,10 +88,8 @@ class mrp_repair(models.Model):
                         line2.unlink()
                     else:
                         self.env['shipping.balance'].create(shipping_vals)
-                    repair.shipping_balance=True
+                    repair.shipping_balance = True
         return res
-
-
 
     @api.multi
     def unlink(self):
@@ -100,5 +98,4 @@ class mrp_repair(models.Model):
         if line2:
             line2.unlink()
 
-
-        res = super(mrp_repair, self).unlink()
+        res = super(MrpRepair, self).unlink()

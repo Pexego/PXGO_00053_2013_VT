@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="equivalent_products_wizard" model="ir.ui.view">
+        <field name="name">equivalent.products.wizard</field>
+        <field name="model">equivalent.products.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Equivalent products">
+                <group>
+                    <field name="product_tag_ids" widget="many2many_tags"/>
+                    <field name="product_id" required="1"/>
+                    <field name="real_stock"/>
+                    <field name="virtual_stock"/>
+                </group>
+                <footer>
+                    <button string="Select product" name="select_product" type="object" class="oe_highlight"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

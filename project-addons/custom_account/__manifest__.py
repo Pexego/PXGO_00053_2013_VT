@@ -31,7 +31,6 @@
              'views/account_payment.xml',
              'views/purchase_view.xml',
              'report/sale_report_view.xml',
-             'data/custom_account_data.xml',
              ],
     "installable": True
 }

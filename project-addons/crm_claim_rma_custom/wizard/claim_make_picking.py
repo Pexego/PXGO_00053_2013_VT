@@ -83,7 +83,7 @@ class ClaimMakePicking(models.TransientModel):
                             'product_uom': product.uom_id.id,
                             'product_uom_qty': pack[product.id] * claim_line.product_returned_quantity,
                             'date_validity': False,
-                            'name': u"{} ({})".format(claim_line.claim_id.number, product.name_template),
+                            'name': u"{}".format(claim_line.claim_id.number),
                             'location_id': self.claim_line_source_location.id,
                             'location_dest_id': self.claim_line_dest_location.id,
                             'move_id': move.id,
@@ -125,6 +125,5 @@ class ClaimMakePicking(models.TransientModel):
             if partner.commercial_partner_id.blocked_sales and not \
                     claim.allow_confirm_blocked:
                 raise exceptions.Warning(
-                    _("Warning for %s") % partner.commercial_partner_id.name,
                     _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.'))
         return super(ClaimMakePicking, self).default_get(vals)

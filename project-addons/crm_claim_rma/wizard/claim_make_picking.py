@@ -176,14 +176,14 @@ class ClaimMakePicking(models.TransientModel):
                 'product_uom': claim_line.product_id.uom_id.id,
                 'product_uom_qty': claim_line.product_returned_quantity,
                 'date_validity': False,
-                'name': u"{} ({})".format(claim_line.claim_id.number, claim_line.product_id.name_template),
+                'name': u"{}".format(claim_line.claim_id.number),
                 'location_id': self.claim_line_source_location.id,
                 'location_dest_id': self.claim_line_dest_location.id,
-                'move_id': move_id,
+                'move_id': move_id.id,
                 'claim_id': claim_line.claim_id.id,
             }
             reserve = reserv_obj.create(reserv_vals)
-            reserv_obj.reserve([reserve])
+            reserve.reserve()
         claim_line.write({write_field: move_id.id})
 
     # If "Create" button pressed
