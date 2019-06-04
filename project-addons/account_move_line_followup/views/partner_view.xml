@@ -4,14 +4,71 @@
 
         <record id="view_partner_inherit_followup_form_2" model="ir.ui.view">
             <field name="name">res.partner.followup.form.inherit.2</field>
-            <field name="inherit_id" ref="account_credit_control.partner_followup_form_view"/>
             <field name="model">res.partner</field>
-            <field name="arch" type="xml" >
-                <field name="payment_next_action_date" position="after">
+            <field name="inherit_id" ref="account_credit_control.partner_followup_form_view"/>
+            <field name="arch" type="xml">
+                <field name="payment_next_action" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </field>
+                <field name="payment_next_action_date" position="replace">
+                    <field name="latest_followup_level_id"/>
+                    <field name="manual_followup"/>
+                    <field name="payment_amount_due"/>
+                    <field name="payment_amount_overdue"/>
+                    <field name="payment_earliest_due_date"/>
                     <field name="worst_cyc_notify_date" readonly="True"/>
                 </field>
             </field>
         </record>
+
+        <record id="customer_followup_tree_add_fields" model="ir.ui.view">
+            <field name="name">res.partner.followup.inherit.tree.add_fields</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account_credit_control.customer_followup_tree"/>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="editable">bottom</attribute>
+                </xpath>
+                <field name="payment_responsible_id" position="after">
+                    <field name="manual_followup"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- New Menu: Customer with positive amount due -->
+        <record id="customer_followup_tree_with_debt" model="ir.ui.view">
+            <field name="name">res.partner.followup.tree.debt</field>
+            <field name="model">res.partner</field>
+            <field name="priority" eval="20"/>
+            <field name="groups_id" eval="[(4, ref('account_credit_control.group_account_credit_control_manager')), (4, ref('account_credit_control.group_account_credit_control_user'))]"/>
+            <field name="arch" type="xml">
+                <tree string="Customer Followup" create="false" delete="false">
+                    <field name="display_name"/>
+                    <field name="payment_responsible_id"/>
+                    <field name="latest_followup_level_id"/>
+                    <field name="manual_followup"/>
+                    <field name="payment_amount_due"/>
+                    <field name="payment_amount_overdue"/>
+                    <field name="payment_earliest_due_date"/>
+                </tree>
+            </field>
+        </record>
+        <record id="action_customer_followup_debt" model="ir.actions.act_window">
+            <field name="name">Customer Follow-Ups</field>
+            <field name="view_id" ref="customer_followup_tree_with_debt"/>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('payment_amount_due', '>', 0.0)]</field>
+            <field name="context">{}</field>
+        </record>
+        <menuitem
+                name="Customer Follow-Ups"
+                parent="account_credit_control.base_credit_control_menu"
+                action="action_customer_followup_debt"
+                sequence="40"
+                id="credit_control_customer_followup_action_menu"/>
 
     </data>
 </odoo>
