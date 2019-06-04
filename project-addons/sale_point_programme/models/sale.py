@@ -27,8 +27,7 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
-
-        res = super(SaleOrder, self).action_confirm()
+        res = super().action_confirm()
         rule_obj = self.env['sale.point.programme.rule']
         bag_obj = self.env['res.partner.point.programme.bag']
         for order in self:
