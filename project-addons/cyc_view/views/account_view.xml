@@ -23,4 +23,16 @@
         </field>
     </record>
 
+        <record id="view_partner_situation_tree_add_cyc" model="ir.ui.view">
+        <field name="name">account.move.line.form.situation.add_cyc</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="custom_partner.view_partner_situation_tree"/>
+        <field name="arch" type="xml">
+            <field name="date_maturity" position="after">
+                <field name="cyc_notify_date"/>
+                <field name="cyc_limit_date_insolvency"/>
+            </field>
+        </field>
+    </record>
+
 </odoo>

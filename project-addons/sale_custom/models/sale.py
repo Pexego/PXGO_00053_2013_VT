@@ -107,8 +107,25 @@ class SaleOrder(models.Model):
         }
 
     def validate_address(self):
-        self.ensure_one()
-        self.validated_dir = True
+        self.validated_dir = True   # Validate the address to not break with flow
+
+        listFields = []             # Dictionary to control all fields of address
+        fields = {'Street': self.partner_shipping_id.street,
+                  'Zip': self.partner_shipping_id.zip,
+                  'City': self.partner_shipping_id.city,
+                  'State': self.partner_shipping_id.state_id.id,
+                  'Country': self.partner_shipping_id.country_id.id}
+
+        if not all(fields.values()):
+            warning = _('The address is incorrect, the following fields are empty:\n')  # warning message
+
+            for key, value in fields.items():  # Rebuilt the list of fields
+                if not value:
+                    listFields.append(_(key))
+
+            warning += ', '.join(listFields)   # Separate by commas
+
+            self.env.user.notify_warning(message=warning, sticky=True)
 
     def action_confirm(self):
         user_buyer = self.env['ir.config_parameter'].get_param(
@@ -129,6 +146,10 @@ class SaleOrder(models.Model):
 
             self.apply_commercial_rules()
 
+            if not sale.is_all_reserved and 'confirmed' not in self.env.context:
+                self.env.user.notify_warning(title="Please consider that!",
+                                             message="Some of the products of this order aren't available now",
+                                             sticky=True)
         return super().action_confirm()
 
 
