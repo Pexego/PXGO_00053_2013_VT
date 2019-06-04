@@ -62,6 +62,7 @@ class StockPicking(models.Model):
                     ref('stock_custom.picking_done_template')
                 picking_template.with_context(
                     lang=picking.partner_id.lang).send_mail(picking.id)
+            picking.sale_id.state = 'done'
         return res
 
 
