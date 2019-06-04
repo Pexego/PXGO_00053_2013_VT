@@ -2,8 +2,8 @@ from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 
 
-class ProductTemplate(models.Model):
-    _inherit = 'product.template'
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
     discontinued = fields.Boolean(string="Discontinued", default=False, help="If marked, product not more available")
 
     @api.multi
@@ -20,8 +20,6 @@ class ProductTemplate(models.Model):
                     item.purchase_ok = False
 
 
-class ProductProduct(models.Model):
-    _inherit = 'product.product'
     @api.multi
     @api.onchange('discontinued')
     def warning_catalog(self):
