@@ -9,7 +9,7 @@
             <field name="note" position="replace">
               <group colspan="6" col="6">
                     <field name="note" placeholder="Setup default terms and conditions in your sales settings ..." nolabel="1"/>
-                    <field name="internal_notes" placeholder="Internal Notes" nolabel="1"/>
+                    <field name="internal_notes" placeholder="Notes for warehouse" nolabel="1"/>
                     <field name="sale_notes" placeholder="Sale Order Internal Notes" nolabel="1"/>
                 </group>
             </field>
