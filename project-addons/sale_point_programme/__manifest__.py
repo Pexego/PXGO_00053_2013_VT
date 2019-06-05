@@ -32,6 +32,8 @@ for fidelization programmes""",
                 'product'],
     "data": ['views/partner_point_bag_view.xml',
              'views/sale_point_rule_view.xml',
+             'views/sale_participations_cron.xml',
+             'views/template_participations.xml',
              'views/partner_view.xml',
              'security/ir.model.access.csv'],
     "installable": True

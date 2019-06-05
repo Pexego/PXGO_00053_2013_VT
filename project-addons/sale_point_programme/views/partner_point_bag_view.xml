@@ -11,6 +11,7 @@
                     <field name="order_id"/>
                     <field name="name"/>
                     <field name="points"/>
+                    <field name="email_sent"/>
                 </tree>
             </field>
         </record>
@@ -27,6 +28,7 @@
                             <field name="point_rule_id"/>
                             <field name="order_id"/>
                             <field name="partner_id"/>
+                            <field name="email_sent"/>
                         </group>
                     </sheet>
                 </form>

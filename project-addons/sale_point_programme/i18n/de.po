@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-05 11:13+0000\n"
-"PO-Revision-Date: 2019-06-05 11:13+0000\n"
+"POT-Creation-Date: 2019-06-05 11:38+0000\n"
+"PO-Revision-Date: 2019-06-05 11:38+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -69,26 +69,25 @@ msgid "\n"
 "            "
 msgstr "\n"
 "\n"
-"                    <p>Estimado cliente,<br/><br/>\n"
-"                    Visiotech está realizando un concurso los meses de Junio y Julio 2019. Por cada 500€ de compras en productos Ajax a través de Visiotech, obtendrá una participación.  El día 1 de Agosto 2019 se realizará el sorteo de diversos premios entre todas las participaciones.<br/>\n"
-"                    Por sus compras del día de hoy, se le han asignado las siguientes participaciones:\n"
-"                        <div style=\"margin: 20px;\">\n"
-"                        % for line in ctx['values']:\n"
-"                            % if (ctx['values'][line])\n"
-"                                Pedido <b>${line}</b>, participación(es) <b>${ctx['values'][line]}</b>.<br/>\n"
-"                            % endif\n"
-"                        % endfor\n"
-"                        </div>\n"
-"                        <br>\n"
+"                    <p>Sehr geehrter Kunde,<br/><br/>\n"
+"    Visiotech veranstaltet in den Monaten Juni und Juli 2019 einen Wettbewerb.<br/>\n"
+"    Für jeden Einkauf von Ajax-Produkten über Visiotech in Höhe von 500 € erhalten Sie einen Beteiligung. Am 1. August 2019 werden die verschiedene Preise unter allen Teilnehmern verlost.<br/><br/>\n"
+"    Für seine heutigen Einkäufe wurden ihm folgende Teilnahmen zugeteilt:\n"
+"<div style=\"margin: 20px;\">\n"
+"    % for line in ctx['values']:\n"
+"    % if (ctx['values'][line])\n"
+"    Bestellung <b>${line}</b>, Teilnahme (n) <b>${ctx['values'][line]}</b>.<br/>\n"
+"    % endif\n"
+"    % endfor\n"
+"</div>\n"
 "\n"
-"                        <P>Si tiene alguna pregunta, no dude en contactar con nosotros.</p>\n"
-"                        <P>Gracias por escoger VISIOTECH.</p>\n"
-"                        <br>\n"
-"                        <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
-"                            <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
-"                                <strong style=\"text-transform:uppercase;\">VISIOTECH</strong></h3>\n"
-"                        </div>\n"
-"                        <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"<P>Mit freundlichen Grüssen.</p>\n"
+"<br>\n"
+"<div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"    <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"        <strong style=\"text-transform:uppercase;\">VISIOTECH</strong></h3>\n"
+"</div>\n"
+"<div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
 "                            <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
 "                            % if object.company_id.street:\n"
 "                                ${object.company_id.street}<br>\n"
@@ -103,17 +102,17 @@ msgstr "\n"
 "                                ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br>\n"
 "                            % endif\n"
 "                            </span>\n"
-"                            % if object.company_id.phone:\n"
-"                                <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
-"                                    Teléfono:&nbsp; ${object.company_id.phone}\n"
-"                                </div>\n"
-"                            % endif\n"
-"                            % if object.company_id.website:\n"
-"                                <div>\n"
-"                                    Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
-"                                </div>\n"
-"                            %endif\n"
-"                            </div>\n"
+"    % if object.company_id.phone:\n"
+"    <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"        Teléfono:&nbsp; ${object.company_id.phone}\n"
+"    </div>\n"
+"    % endif\n"
+"    % if object.company_id.website:\n"
+"    <div>\n"
+"        Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"    </div>\n"
+"    %endif\n"
+"</div>"\n"
 "\n"
 "                    \n"
 "            "
@@ -121,38 +120,38 @@ msgstr "\n"
 #. module: sale_point_programme
 #: model:mail.template,subject:sale_point_programme.template_participations
 msgid "AJAX lottery"
-msgstr "Sorteo AJAX"
+msgstr "Verlosung Ajax"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_active
 msgid "Active"
-msgstr "Activo"
+msgstr "Aktiv"
 
 #. module: sale_point_programme
 #: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
 msgid "Actives"
-msgstr "Activas"
+msgstr "Actives"
 
 #. module: sale_point_programme
 #: selection:sale.point.programme.rule,attribute:0
 msgid "Amount untaxed"
-msgstr "Base imponible"
+msgstr "Amount untaxed"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_attribute
 msgid "Attribute to value"
-msgstr "Atributo a valorar"
+msgstr "Attribute to value"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_product_brand_id
 msgid "Brand"
-msgstr "Marca"
+msgstr "Marke"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_category_id
 #: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
 msgid "Category"
-msgstr "Certificado"
+msgstr "Kategorie"
 
 #. module: sale_point_programme
 #: model:ir.model,name:sale_point_programme.model_res_partner
@@ -163,62 +162,62 @@ msgstr "Contact"
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_create_uid
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_create_uid
 msgid "Created by"
-msgstr "Creado por"
+msgstr "Erstellt von"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_create_date
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_create_date
 msgid "Created on"
-msgstr "Creado el"
+msgstr "Angelegt am"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_name
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_name
 msgid "Description"
-msgstr "Descripción"
+msgstr "Beschreibung"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_display_name
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_display_name
 msgid "Display Name"
-msgstr "Nombre a mostrar"
+msgstr "Anzeigename"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_email_sent
 msgid "Email sent"
-msgstr "Email enviado"
+msgstr "Email sent"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_date_end
 msgid "End date"
-msgstr "Fecha final"
+msgstr "Enddatum"
 
 #. module: sale_point_programme
 #: code:addons/sale_point_programme/models/sale_point_rule.py:54
 #, python-format
 msgid "End date is less than start date"
-msgstr "La fecha fin es menor que la fecha de inicio"
+msgstr "End date is less than start date"
 
 #. module: sale_point_programme
 #: selection:sale.point.programme.rule,operator:0
 msgid "Equal"
-msgstr "Igual"
+msgstr "Equal"
 
 #. module: sale_point_programme
 #: selection:sale.point.programme.rule,operator:0
 msgid "For each"
-msgstr "Para cada"
+msgstr "For each"
 
 #. module: sale_point_programme
 #: selection:sale.point.programme.rule,operator:0
 msgid "Greater than"
-msgstr "Mayor que"
+msgstr "Greater than"
 
 #. module: sale_point_programme
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
 #: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
 msgid "Group By"
-msgstr "Agrupar por"
+msgstr "Gruppieren nach"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_id
@@ -230,24 +229,24 @@ msgstr "ID"
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag___last_update
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule___last_update
 msgid "Last Modified on"
-msgstr "Última modificación en"
+msgstr "Zuletzt geändert am"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_write_uid
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_write_uid
 msgid "Last Updated by"
-msgstr "Última actualización por"
+msgstr "Zuletzt aktualisiert durch"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_write_date
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_write_date
 msgid "Last Updated on"
-msgstr "Fecha última actualización"
+msgstr "Zuletzt aktualisiert am"
 
 #. module: sale_point_programme
 #: selection:sale.point.programme.rule,operator:0
 msgid "Less than"
-msgstr "Menor que"
+msgstr "Less than"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_modality
@@ -257,18 +256,18 @@ msgstr "Modality"
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_operator
 msgid "Operator"
-msgstr "Operador"
+msgstr "Operator"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_partner_id
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
 msgid "Partner"
-msgstr "Empresa"
+msgstr "Partner"
 
 #. module: sale_point_programme
 #: model:ir.ui.menu,name:sale_point_programme.point_programme_menu
 msgid "Point programmes"
-msgstr "Programas puntos"
+msgstr "Point programmes"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_points
@@ -278,7 +277,7 @@ msgstr "Programas puntos"
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_form
 #: model:ir.ui.view,arch_db:sale_point_programme.view_partner_form_add_points_widget
 msgid "Points"
-msgstr "Puntos"
+msgstr "Points"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_points
@@ -288,13 +287,13 @@ msgstr "Points / Participations"
 #. module: sale_point_programme
 #: model:ir.actions.act_window,name:sale_point_programme.action_points_rules
 msgid "Points Reward Rules"
-msgstr "Reglas recompensa puntos"
+msgstr "Points Reward Rules"
 
 #. module: sale_point_programme
 #: model:ir.ui.menu,name:sale_point_programme.points_rules_menu
 #: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_tree
 msgid "Points reward rules"
-msgstr "Reglas recompensa puntos"
+msgstr "Points reward rules"
 
 #. module: sale_point_programme
 #: model:ir.actions.act_window,name:sale_point_programme.action_open_partner_points
@@ -302,66 +301,66 @@ msgstr "Reglas recompensa puntos"
 #: model:ir.ui.menu,name:sale_point_programme.points_traceability_menu
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_tree
 msgid "Points traceability"
-msgstr "Trazabilidad puntos"
+msgstr "Points traceability"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_product_id
 #: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
 msgid "Product"
-msgstr "Producto"
+msgstr "Produkt"
 
 #. module: sale_point_programme
 #: selection:sale.point.programme.rule,attribute:0
 msgid "Product qty."
-msgstr "Cant. producto"
+msgstr "Product qty."
 
 #. module: sale_point_programme
 #: model:ir.model,name:sale_point_programme.model_sale_order
 msgid "Quotation"
-msgstr "Presupuesto"
+msgstr "Quotation"
 
 #. module: sale_point_programme
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
 #: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_form
 msgid "Reward rule"
-msgstr "Regla recompensa"
+msgstr "Reward rule"
 
 #. module: sale_point_programme
 #: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
 msgid "Reward rules"
-msgstr "Reglas recompensa"
+msgstr "Reward rules"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_point_rule_id
 msgid "Rule"
-msgstr "Regla"
+msgstr "Regel"
 
 #. module: sale_point_programme
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
 msgid "Sale"
-msgstr "Venta"
+msgstr "Verkauf"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_order_id
 msgid "Sale order"
-msgstr "Orden de venta"
+msgstr "Sale order"
 
 #. module: sale_point_programme
 #: model:ir.actions.server,name:sale_point_programme.points_and_participations_cron_ir_actions_server
 #: model:ir.cron,cron_name:sale_point_programme.points_and_participations_cron
 #: model:ir.cron,name:sale_point_programme.points_and_participations_cron
 msgid "Send email participations / points"
-msgstr "Envío email participaciones / puntos"
+msgstr "Send email participations / points"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_date_start
 msgid "Start date"
-msgstr "Fecha de inicio"
+msgstr "Anfangsdatum"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_value
 msgid "Value"
-msgstr "Valor"
+msgstr "Wert"
 
 #. module: sale_point_programme
 #: selection:sale.point.programme.rule,modality:0
