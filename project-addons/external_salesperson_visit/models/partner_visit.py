@@ -44,11 +44,11 @@ class PartnerVisit(models.Model):
     add_user_email = fields.Many2one('res.users', "CC to")
     confirm_done = fields.Boolean("Done", default=False)
 
-    partner_pricelist = fields.Many2one(related='partner_id.property_product_pricelist')
-    partner_annual_invoiced = fields.Float(related='partner_id.annual_invoiced')
-    partner_past_year_invoiced = fields.Float(related='partner_id.past_year_invoiced')
-    partner_monthly_invoiced = fields.Float(related='partner_id.monthly_invoiced')
-    partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced')
+    partner_pricelist = fields.Many2one(related='partner_id.property_product_pricelist', readonly=True)
+    partner_annual_invoiced = fields.Float(related='partner_id.annual_invoiced', readonly=True)
+    partner_past_year_invoiced = fields.Float(related='partner_id.past_year_invoiced', readonly=True)
+    partner_monthly_invoiced = fields.Float(related='partner_id.monthly_invoiced', readonly=True)
+    partner_past_month_invoiced = fields.Float(related='partner_id.past_month_invoiced', readonly=True)
 
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)
     region_ids = fields.Many2many(related='area_id.commercial_region_ids')
