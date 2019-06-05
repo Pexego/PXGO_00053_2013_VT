@@ -14,7 +14,7 @@
             <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="replace">
             </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='margin_perc']" position="after">
-                <field name="tax_id" widget="many2many_tags" required="1" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
+                <field name="tax_id" widget="many2many_tags" required="1"/>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='no_rappel']" position="after">
                 <field name="invoice_status"/>
@@ -128,7 +128,8 @@
                     <button name="validate_address"
                         string="Validate address" type="object"
                         class="oe_highlight"
-                        attrs="{'invisible': [('validated_dir', '=', True)]}"/>
+                        attrs="{'invisible': [('validated_dir', '=', True)]}"
+                        icon="fa-check-circle"/>
                 </div>
             </field>
             <field name="payment_term_id" position="attributes">
