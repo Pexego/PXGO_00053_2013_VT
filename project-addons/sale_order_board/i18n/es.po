@@ -53,7 +53,7 @@ msgstr "de los productos del pedido no tienen marcados los pesos, tenga en cuent
 #. module: sale_order_board
 #: model:ir.ui.view,arch_db:sale_order_board.view_price_calc
 msgid "Calculate Shipping Prices"
-msgstr "Calculo de Envio"
+msgstr "Cálculo de Envío"
 
 
 

@@ -37,7 +37,8 @@
                     <field name="service_id" invisible="1"/>
                     <button name="compute_variables"
                         string="Calculate Shipping Prices" type="object"
-                        class="oe_highlight"/>
+                        class="oe_highlight"
+                        icon="fa-truck"/>
                 </div>
             </field>
         </field>
