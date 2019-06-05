@@ -31,8 +31,7 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
-
-        res = super(SaleOrder, self).action_confirm()
+        res = super().action_confirm()
 
         if self:
             for line in self.order_line:

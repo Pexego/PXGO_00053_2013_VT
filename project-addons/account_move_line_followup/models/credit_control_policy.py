@@ -31,9 +31,22 @@ class CreditControlLine(models.Model):
 
     @api.model
     def create(self, vals):
-        if vals.get('channel', False) and vals['channel'] == 'manual_management':
-            vals.update({'manual_followup': True})
-        return super().create(vals)
+        line = super(CreditControlLine, self).create(vals)
+        if line.channel == 'manual_action':
+            line.manual_followup = True
+        return line
+
+    @api.multi
+    def write(self, values):
+        if 'manual_followup' in values:
+            manual_followup_partner = self.partner_id.manual_followup
+            res = super(CreditControlLine, self).write(values)
+            # Put partner.manual_followup with the original value (do not update according to the credit line channel)
+            # It will be updated in _generate_comm_from_credit_lines_custom function when necessary
+            self.partner_id.manual_followup = manual_followup_partner
+        else:
+            res = super(CreditControlLine, self).write(values)
+        return res
 
 
 class CreditControlRun(models.Model):
@@ -45,13 +58,31 @@ class CreditControlRun(models.Model):
         cron = self.create({'date': fields.Date.today()})
         cron.generate_credit_lines()
         cron.set_to_ready_lines()
-        cron.run_channel_action()
+        cron.run_channel_action_custom()
 
 
 class CreditCommunication(models.TransientModel):
+
     _inherit = "credit.control.communication"
 
     move_line_ids = fields.Many2many('account.move.line', rel='comm_aml_rel', string="Account Move Lines")
+
+    @api.multi
+    def run_channel_action_custom(self):
+        self.ensure_one()
+        lines = self.line_ids.filtered(lambda x: x.state == 'to_be_sent' and x.channel != 'letter')
+        if lines:
+            comm_obj = self.env['credit.control.communication']
+            comms_email = comm_obj._generate_comm_from_credit_lines_custom(lines)
+            comms_email._generate_emails()
+
+    @api.model
+    def _clean_all_partner_followup(self):
+        all_partner = self.env['res.partner'].search([('customer', '=', True), ('active', '=', True),
+                                                      ('prospective', '=', False), ('is_company', '=', True),
+                                                      ('parent_id', '=', False), ('child_ids', '!=', False),
+                                                      ('latest_followup_level_id', '!=', False)])
+        all_partner.write({'latest_followup_level_id': False})
 
     @api.model
     @api.returns('account.move.line')
@@ -72,17 +103,20 @@ class CreditCommunication(models.TransientModel):
         return move_lines
 
     @api.model
-    def _generate_comm_from_credit_lines(self, lines, days_delay=6):
-        comms = super()._generate_comm_from_credit_lines(lines)
-
+    def _generate_comm_from_credit_lines_custom(self, lines):
         new_comms = self.browse()
         partner_obj = self.env['res.partner']
         policy_level_obj = self.env['credit.control.policy.level']
 
+        self._clean_all_partner_followup()
+
+        # Get the maximum level of all credit lines group by partner
         sql = (
-            """ SELECT ccl.partner_id, max(ccl.level) as level, ccl.policy_id, ccl.currency_id
+            """ SELECT ccl.partner_id, ccl.policy_id, ccl.currency_id, 
+                       max(ccl.level) as level
                 FROM credit_control_line ccl
                 JOIN credit_control_policy_level ccpl ON ccpl.id = ccl.policy_level_id
+                LEFT JOIN credit_control_policy_level ccpl_email ON ccpl_email.id = ccl.policy_level_id AND ccpl_email.channel = 'email'
                 JOIN account_move_line aml ON aml.id = ccl.move_line_id
                 WHERE ccl.id in %s AND COALESCE(aml.full_reconcile_id, 0) = 0 
                 GROUP BY ccl.partner_id, ccl.policy_id, ccl.currency_id
@@ -98,22 +132,35 @@ class CreditCommunication(models.TransientModel):
             partner = partner_obj.browse([group['partner_id']])
             global_balance = partner.credit - partner.debit
             if global_balance >= 5 and not partner.not_send_following_email:
-
+                # Maximum level partner
                 partner_policy_level = policy_level_obj.search_read([('policy_id', '=', group['policy_id']),
                                                                      ('level', '=', group['level'])],
-                                                                    ['id'], limit=1)
-                data['partner_id'] = group['partner_id']
-                data['current_policy_level'] = partner_policy_level[0]['id']
-                data['currency_id'] = group['currency_id'] or company_currency.id
-                comm = self.create(data)
+                                                                    ['id', 'channel'], limit=1)[0]
+                send_email = True
+                if partner_policy_level['channel'] == 'email' and partner.manual_followup:
+                    # It probably means that last followup credit line was a manual level, but it's already reconciled
+                    partner.manual_followup = False
+                elif partner_policy_level['channel'] == 'manual_action':
+                    send_email = False
+                    partner.manual_followup = True
 
-                move_lines = comm._get_unreconciled_move_lines()
+                partner_policy_level_id = partner_policy_level[0]['id']
+                # Update partner latest_followup_level_id to the new level communication
+                partner.latest_followup_level_id = partner_policy_level_id
 
-                balance = sum(move_lines.mapped('balance'))
-                if balance >= 5:
-                    data['move_line_ids'] = [(6, 0, move_lines.ids)]
-                    comm.write(data)
-                    new_comms += comm
+                if send_email:
+                    data['partner_id'] = group['partner_id']
+                    data['current_policy_level'] = partner_policy_level_id
+                    data['currency_id'] = group['currency_id'] or company_currency.id
+                    comm = self.create(data)
+
+                    move_lines = comm._get_unreconciled_move_lines()
+
+                    balance = sum(move_lines.mapped('balance'))
+                    if balance >= 5:
+                        data['move_line_ids'] = [(6, 0, move_lines.ids)]
+                        comm.write(data)
+                        new_comms += comm
         return new_comms
 
     @api.multi

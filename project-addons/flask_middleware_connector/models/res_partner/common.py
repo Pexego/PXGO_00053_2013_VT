@@ -111,7 +111,7 @@ class PartnerListener(Component):
             record.with_delay(priority=1, eta=60).unlink_partner
 
         elif partner.web and ('active' in fields or
-                                'prospective' in fields) and not \
+                              'prospective' in fields) and not \
                 (partner.active or partner.prospective):
             record.with_delay(priority=1, eta=60).unlink_partner
 
@@ -252,16 +252,32 @@ class PricelistListener(Component):
     _apply_on = ['product.pricelist.item']
 
     def on_record_create(self, record, fields=None):
+        field = self.env['ir.model.fields'].\
+            search([('name', '=', 'property_product_pricelist'),
+                    ('model', '=', 'res.partner')], limit=1)
+        properties = self.env['ir.property'].\
+            search([('fields_id', '=', field.id),
+                    ('value_reference', '=', 'product.pricelist,' +
+                     str(record.pricelist_id.id)),
+                    ('res_id', '!=', False)])
         partners = self.env['res.partner'].search(
-            [('property_product_pricelist', '=',
-              record.pricelist_id.id), ('web', '=', True)])
+            [('id', 'in', [int(x.res_id.split(',')[1]) for x in properties]),
+             ('web', '=', True)])
         for partner in partners:
             partner.with_delay().update_partner()
 
     def on_record_write(self, record, fields=None):
+        field = self.env['ir.model.fields'].\
+            search([('name', '=', 'property_product_pricelist'),
+                    ('model', '=', 'res.partner')], limit=1)
+        properties = self.env['ir.property'].\
+            search([('fields_id', '=', field.id),
+                    ('value_reference', '=', 'product.pricelist,' +
+                     str(record.pricelist_id.id)),
+                    ('res_id', '!=', False)])
         partners = self.env['res.partner'].search(
-            [('property_product_pricelist', '=',
-              record.pricelist_id.id), ('web', '=', True)])
+            [('id', 'in', [int(x.res_id.split(',')[1]) for x in properties]),
+             ('web', '=', True)])
         for partner in partners:
             partner.with_delay().update_partner()
 
