@@ -229,7 +229,7 @@ class AccountTreasuryForecast(models.Model):
                 if record.not_bankable_supplier:
                     id_currency_usd = record.env.ref("base.USD").id
                     search_filter_supplier.extend(['&', '|',
-                                                   ('partner_id.property_product_pricelist_purchase.currency_id',
+                                                   ('partner_id.property_purchase_currency_id',
                                                     '!=', id_currency_usd),
                                                    ('partner_id.property_account_payable.code', '!=', '40000000')])
 

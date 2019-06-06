@@ -60,22 +60,33 @@ class Rappel(models.Model):
 
         discount_voucher_rappels = self.env['rappel'].search(
             [('discount_voucher', '=', True)])
+        field = self.env['ir.model.fields'].\
+            search([('name', '=', 'property_product_pricelist'),
+                    ('model', '=', 'res.partner')], limit=1)
 
         for rappel in discount_voucher_rappels:
             pricelist_ids = tuple(rappel.pricelist_ids.ids)
             product_rappel = rappel.product_id
             # Clientes que ya pertenecen al rappel:
-            partner_rappel_list = tuple(partner_rappel_obj.search([('rappel_id', '=', rappel.id),
-                                                                   ('date_start', '<=', now_str),
-                                                                   '|', ('date_end', '=', False),
-                                                                   ('date_end', '>=', now_str)]).mapped(
-                'partner_id.id'))
+            partner_rappel_list = tuple(partner_rappel_obj.
+                                        search([('rappel_id', '=', rappel.id),
+                                                ('date_start', '<=', now_str),
+                                                '|', ('date_end', '=', False),
+                                                ('date_end', '>=', now_str)]).
+                                        mapped('partner_id.id'))
             partner_to_check = tuple()
             if pricelist_ids:
+                properties = self.env['ir.property'].\
+                    search([('fields_id', '=', field.id),
+                            ('value_reference', 'in',
+                             ['product.pricelist,' +
+                              str(x.pricelist_id.id) for x in pricelist_ids]),
+                            ('res_id', '!=', False)])
                 # Rappels dependientes de tarifas
                 # Clientes que deberian pertenecer al rappel:
                 partner_to_check = tuple(self.env['res.partner'].search([
-                    ('property_product_pricelist', 'in', pricelist_ids),
+                    ('id', 'in',
+                     [int(x.res_id.split(',')[1]) for x in properties]),
                     ('prospective', '=', False), ('active', '=', True),
                     ('is_company', '=', True), ('parent_id', '=', False)]).ids)
 
