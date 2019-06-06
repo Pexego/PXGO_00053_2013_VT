@@ -39,6 +39,25 @@ class ResPartnerInvoiceType(models.Model):
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
+    @api.model
+    def _search_pricelist_name(self, operator, operand):
+        pricelists = self.env['product.pricelist'].\
+            search([('name', operator, operand)])
+        if pricelists:
+            field = self.env['ir.model.fields'].\
+                search([('name', '=', 'property_product_pricelist'),
+                        ('model', '=', 'res.partner')], limit=1)
+            properties = self.env['ir.property'].\
+                search([('fields_id', '=', field.id),
+                        ('value_reference', 'in',
+                         ['product.pricelist,' + str(x.id) for
+                          x in pricelists]), ('res_id', '!=', False)])
+            partners = self.env['res.partner'].search(
+                [('id', 'in',
+                  [int(x.res_id.split(',')[1]) for x in properties])])
+            return [('id', 'in', partners.ids)]
+        return [('id', '=', False)]
+
     annual_invoiced = fields.Float("Annual invoiced", readonly=True, store=True, default=0.0)
     past_year_invoiced = fields.Float("Past year invoiced", readonly=True, store=True, default=0.0)
     monthly_invoiced = fields.Float("Monthly invoiced", readonly=True, store=True, default=0.0)
@@ -48,6 +67,8 @@ class ResPartner(models.Model):
     current_employees = fields.Integer("Current year employees", default=0)
     past_year_employees = fields.Integer("Past year employees", default=0)
     ref_supplier = fields.Char("Ref. Supplier", size=3)
+    property_product_pricelist = fields.\
+        Many2one(search="_search_pricelist_name")
 
     @api.model
     def _calculate_annual_invoiced(self):
