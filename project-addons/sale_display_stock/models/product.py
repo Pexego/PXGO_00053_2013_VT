@@ -157,6 +157,18 @@ class ProductTemplate(models.Model):
             product.outgoing_picking_reserved_qty = sum(moves.mapped(
                 'product_uom_qty'))
 
+    @api.multi
+    def _get_outgoing_picking_qty(self):
+        for product in self:
+            self._cr.execute("""select sum(product_uom_qty) from stock_move sm
+                             inner join procurement_order po on po.id = sm.procurement_id
+                             inner join stock_picking_type spt on spt.id = sm.picking_type_id
+                             where sm.state in ('confirmed', 'assigned') and spt.code = 'outgoing'
+                             and po.sale_line_id is not null and sm.product_id in (%s)""" %
+                             (",".join([str(x) for x in product.
+                                        product_variant_ids.ids])))
+            data = self._cr.fetchone()
+            product.outgoing_picking_reserved_qty = data[0] or 0.0
 
 class ProductProduct(models.Model):
 
