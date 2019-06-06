@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record id="points_and_participations_cron" model="ir.cron">
+            <field name="name">Email participaciones cliente</field>
+            <field name="active" eval="False"/>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="nextcall">2019-06-03 23:30:00</field>
+            <field name="model" eval="'sale.order'"/>
+            <field name="function" eval="'send_participations'"/>
+            <field name="priority" eval="8"/>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,357 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sale_point_programme
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-06-03 15:26+0000\n"
+"PO-Revision-Date: 2019-06-03 15:26+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_point_programme
+#: model:email.template,body_html:sale_point_programme.template_participations
+msgid "\n"
+"\n"
+"                    <p>Dear customer,<br/><br/>\n"
+"                    Visiotech is running an Ajax contest in June and July 2019.<br/>\n"
+"                    For every 500€ you buy of Ajax products through Visiotech during these months, you will get one ticket for the lottery. On August 1, 2019 there will be a draw for various prizes among all the entries.<br/><br/>\n"
+"                    For your purchases today you have been assigned the following tickets:\n"
+"                        <div style=\"margin: 20px;\">\n"
+"                        % for line in ctx['values']:\n"
+"                            % if (ctx['values'][line])\n"
+"                                Order <b>${line}</b>, ticket(s) <b>${ctx['values'][line]}</b>.<br/>\n"
+"                            % endif\n"
+"                        % endfor\n"
+"                        </div>\n"
+"\n"
+"                        <P>If you have any question, do not hesitate to contact us.<br/>\n"
+"                        Thank you for choosing VISIOTECH.</p>\n"
+"                        <br>\n"
+"                        <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"                            <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"                                <strong style=\"text-transform:uppercase;\">VISIOTECH</strong></h3>\n"
+"                        </div>\n"
+"                        <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"                            <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"                            % if object.company_id.street:\n"
+"                                ${object.company_id.street}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.street2:\n"
+"                                ${object.company_id.street2}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.city or object.company_id.zip:\n"
+"                                ${object.company_id.zip} ${object.company_id.city}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.country_id:\n"
+"                                ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br>\n"
+"                            % endif\n"
+"                            </span>\n"
+"                            % if object.company_id.phone:\n"
+"                                <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                                    Teléfono:&nbsp; ${object.company_id.phone}\n"
+"                                </div>\n"
+"                            % endif\n"
+"                            % if object.company_id.website:\n"
+"                                <div>\n"
+"                                    Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"                                </div>\n"
+"                            %endif\n"
+"                            </div>\n"
+"\n"
+"                    \n"
+"            "
+msgstr "\n"
+"\n"
+"                    <p>Dear customer,<br/><br/>\n"
+"                    Visiotech organise un concours pour les mois de juin et juillet 2019. Pour tout achat de produits Ajax auprès de Visiotech, par tranche de 500€, vous obtiendrez une participation au tirage au sort.<br/>\n"
+"                    Le tirage aura lieu le 1er août 2019, plusieurs lots sont en jeu.<br/><br/>\n"
+"                     Pour vos achats d'aujourd'hui, vous avez obtenu:\n"
+"                        <div style=\"margin: 20px;\">\n"
+"                        % for line in ctx['values']:\n"
+"                            % if (ctx['values'][line])\n"
+"                                Commande <b>${line}</b>, participation (s) <b>${ctx['values'][line]}</b>.<br/>\n"
+"                            % endif\n"
+"                        % endfor\n"
+"                        </div>\n"
+"\n"
+"                        <P>N'hésitez pas à nous contacter pour toute information complémentaire.<br/>\n"
+"                        Merci d'avoir choisi VISIOTECH.</p>\n"
+"                        <br>\n"
+"                        <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"                            <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"                                <strong style=\"text-transform:uppercase;\">VISIOTECH</strong></h3>\n"
+"                        </div>\n"
+"                        <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"                            <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"                            % if object.company_id.street:\n"
+"                                ${object.company_id.street}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.street2:\n"
+"                                ${object.company_id.street2}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.city or object.company_id.zip:\n"
+"                                ${object.company_id.zip} ${object.company_id.city}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.country_id:\n"
+"                                ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br>\n"
+"                            % endif\n"
+"                            </span>\n"
+"                            % if object.company_id.phone:\n"
+"                                <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                                    Teléfono:&nbsp; ${object.company_id.phone}\n"
+"                                </div>\n"
+"                            % endif\n"
+"                            % if object.company_id.website:\n"
+"                                <div>\n"
+"                                    Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"                                </div>\n"
+"                            %endif\n"
+"                            </div>\n"
+"\n"
+"                    \n"
+"            "
+
+#. module: sale_point_programme
+#: model:email.template,subject:sale_point_programme.template_participations
+msgid "AJAX lottery"
+msgstr "Tirage au sort AJAX"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,active:0
+msgid "Active"
+msgstr "Active"
+
+#. module: sale_point_programme
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
+msgid "Actives"
+msgstr "Actives"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,attribute:0
+msgid "Amount untaxed"
+msgstr "Amount untaxed"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,attribute:0
+msgid "Attribute to value"
+msgstr "Attribute to value"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,product_brand_id:0
+msgid "Brand"
+msgstr "Brand"
+
+#. module: sale_point_programme
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
+#: field:sale.point.programme.rule,category_id:0
+msgid "Category"
+msgstr "Category"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,create_uid:0
+#: field:sale.point.programme.rule,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,create_date:0
+#: field:sale.point.programme.rule,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,name:0
+#: field:sale.point.programme.rule,name:0
+msgid "Description"
+msgstr "Description"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,display_name:0
+#: field:sale.point.programme.rule,display_name:0
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,date_end:0
+msgid "End date"
+msgstr "End date"
+
+#. module: sale_point_programme
+#: code:addons/sale_point_programme/sale_point_rule.py:53
+#, python-format
+msgid "End date is less than start date"
+msgstr "End date is less than start date"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Equal"
+msgstr "Equal"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "For each"
+msgstr "For each"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Greater than"
+msgstr "Greater than"
+
+#. module: sale_point_programme
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
+msgid "Group By"
+msgstr "Group By"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,id:0
+#: field:sale.point.programme.rule,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,__last_update:0
+#: field:sale.point.programme.rule,__last_update:0
+msgid "Last Modified on"
+msgstr "Last Modified on"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,write_uid:0
+#: field:sale.point.programme.rule,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,write_date:0
+#: field:sale.point.programme.rule,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Less than"
+msgstr "Less than"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,modality:0
+msgid "Modality"
+msgstr "Modality"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,operator:0
+msgid "Operator"
+msgstr "Operator"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_res_partner
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+#: field:res.partner.point.programme.bag,partner_id:0
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: sale_point_programme
+#: model:ir.ui.menu,name:sale_point_programme.point_programme_menu
+msgid "Point programmes"
+msgstr "Point programmes"
+
+#. module: sale_point_programme
+#: view:res.partner:sale_point_programme.view_partner_form_add_points_widget
+#: field:res.partner,points_in_bag:0
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_form
+#: field:res.partner.point.programme.bag,points:0
+msgid "Points"
+msgstr "Points"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,points:0
+msgid "Points / Participations"
+msgstr "Points / Participations"
+
+#. module: sale_point_programme
+#: model:ir.actions.act_window,name:sale_point_programme.action_points_rules
+msgid "Points Reward Rules"
+msgstr "Points Reward Rules"
+
+#. module: sale_point_programme
+#: model:ir.ui.menu,name:sale_point_programme.points_rules_menu
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_tree
+msgid "Points reward rules"
+msgstr "Points reward rules"
+
+#. module: sale_point_programme
+#: model:ir.actions.act_window,name:sale_point_programme.action_open_partner_points
+#: model:ir.actions.act_window,name:sale_point_programme.action_points_tracebility
+#: model:ir.ui.menu,name:sale_point_programme.points_traceability_menu
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_tree
+msgid "Points traceability"
+msgstr "Points traceability"
+
+#. module: sale_point_programme
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
+#: field:sale.point.programme.rule,product_id:0
+msgid "Product"
+msgstr "Product"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,attribute:0
+msgid "Product qty."
+msgstr "Product qty."
+
+#. module: sale_point_programme
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_form
+msgid "Reward rule"
+msgstr "Reward rule"
+
+#. module: sale_point_programme
+#: view:sale.point.programme.rule:sale_point_programme.sale_point_programme_rule_filter
+msgid "Reward rules"
+msgstr "Reward rules"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,point_rule_id:0
+msgid "Rule"
+msgstr "Rule"
+
+#. module: sale_point_programme
+#: view:res.partner.point.programme.bag:sale_point_programme.res_partner_point_programme_bag_filter
+msgid "Sale"
+msgstr "Sale"
+
+#. module: sale_point_programme
+#: field:res.partner.point.programme.bag,order_id:0
+msgid "Sale order"
+msgstr "Sale order"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_sale_order
+msgid "Sales Order"
+msgstr "Commande client"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,date_start:0
+msgid "Start date"
+msgstr "Start date"
+
+#. module: sale_point_programme
+#: field:sale.point.programme.rule,value:0
+msgid "Value"
+msgstr "Value"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,modality:0
+msgid "participations"
+msgstr "participations"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,modality:0
+msgid "points"
+msgstr "points"

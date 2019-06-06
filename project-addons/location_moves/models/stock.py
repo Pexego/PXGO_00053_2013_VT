@@ -142,6 +142,11 @@ class StockLotacion(models.Model):
                            'stock.stock_location_stock', True, check_qty,
                            assign)
 
+    def move_stock_external(self, product_id, qty, check_qty, assign=True):
+        self.location_move(product_id, 'stock.stock_location_stock', qty,
+                           'stock_location_external', False, check_qty,
+                           assign)
+
     def move_beach_external(self, product_id, qty, check_qty, assign=False):
         self.location_move(product_id, 'stock.stock_location_company', qty,
                            'stock_location_external', False, check_qty,

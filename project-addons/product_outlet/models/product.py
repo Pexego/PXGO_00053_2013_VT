@@ -51,19 +51,18 @@ class ProductProduct(models.Model):
                                                              order="id desc")
         for product_o in outlet_products:
             origin_product = product_o.normal_product_id
-            origin_percent = (1 - product_o.categ_id.percent / 100)
-            price_outlet = origin_product.list_price * origin_percent
-            price_outlet2 = origin_product.list_price2 * origin_percent
-            price_outlet3 = origin_product.list_price3 * origin_percent
-            price_outlet4 = origin_product.list_price4 * origin_percent
-            price_outlet_pvd = origin_product.pvd1_price * origin_percent
-            price_outlet_pvd2 = origin_product.pvd2_price * origin_percent
-            price_outlet_pvd3 = origin_product.pvd3_price * origin_percent
-            price_outlet_pvd4 = origin_product.pvd4_price * origin_percent
-            price_outlet_pvi = origin_product.pvi1_price * origin_percent
-            price_outlet_pvi2 = origin_product.pvi2_price * origin_percent
-            price_outlet_pvi3 = origin_product.pvi3_price * origin_percent
-            price_outlet_pvi4 = origin_product.pvi4_price * origin_percent
+            price_outlet = origin_product.list_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet2 = origin_product.list_price2 * (1 - product_o.categ_id.percent / 100)
+            price_outlet3 = origin_product.list_price3 * (1 - product_o.categ_id.percent / 100)
+            price_outlet4 = origin_product.list_price4 * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvd = origin_product.pvd1_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvd2 = origin_product.pvd2_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvd3 = origin_product.pvd3_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvd4 = origin_product.pvd4_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvi = origin_product.pvi1_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvi2 = origin_product.pvi2_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvi3 = origin_product.pvi3_price * (1 - product_o.categ_id.percent / 100)
+            price_outlet_pvi4 = origin_product.pvi4_price * (1 - product_o.categ_id.percent / 100)
 
             if round(product_o.list_price, 2) != round(price_outlet, 2) or \
                     round(product_o.list_price2, 2) != round(price_outlet2, 2) or \

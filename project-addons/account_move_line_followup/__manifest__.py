@@ -11,6 +11,7 @@
                 'custom_account'],
     'data': ['data/ir_cron.xml',
              'data/credit_control_data.xml',
+             'data/ir_config_parameter.xml',
              'views/partner_view.xml'],
     'description': '''Update follow-up data in account move lines''',
     'installable': True,

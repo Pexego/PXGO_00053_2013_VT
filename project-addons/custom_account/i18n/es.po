@@ -753,3 +753,15 @@ msgstr "NIF"
 msgid " Set date to all order lines"
 msgstr " Asignar fecha a todas las lineas del pedido de compra"
 
+#. module: custom_account
+#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
+#: field:account.invoice.report,brand_name:0
+msgid "Brand name"
+msgstr "Nombre de la marca"
+
+
+#. module: custom_account
+#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
+#: field:account.invoice.report,area_id:0
+msgid "Area"
+msgstr "Zona"
