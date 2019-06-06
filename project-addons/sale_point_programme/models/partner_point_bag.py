@@ -30,3 +30,4 @@ class PartnerPointProgrammeBag(models.Model):
     order_id = fields.Many2one('sale.order', 'Sale order', readonly=True)
     points = fields.Integer('Points', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
+    email_sent = fields.Boolean('Email sent', default=False)
