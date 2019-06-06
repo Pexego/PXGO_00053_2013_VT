@@ -56,6 +56,15 @@ class ProductProduct(models.Model):
     ]
 
     @api.multi
+    def copy(self, default=None):
+        if default is None: default = {}
+        if not default.get('default_code', False):
+            prod = self.browse(self.id)
+            default['default_code'] = ("%s (copy)") % (prod.default_code)
+            default['name'] = ("%s (copy)") % (prod.name)
+        return super(ProductProduct, self).copy(default)
+
+    @api.multi
     def name_get(self):
         partner_id = self.env.context.get('partner_id', False)
         if partner_id:
