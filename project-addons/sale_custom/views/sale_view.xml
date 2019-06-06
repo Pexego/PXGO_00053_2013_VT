@@ -126,7 +126,7 @@
                 <div>
                     <field name="validated_dir" invisible="1"/>
                     <button name="validate_address"
-                        string="Validate address" type="object"
+                        string="  Validate address" type="object"
                         class="oe_highlight"
                         attrs="{'invisible': [('validated_dir', '=', True)]}"
                         icon="fa-check-circle"/>
