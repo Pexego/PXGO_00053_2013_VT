@@ -273,9 +273,9 @@ header > .main-nav > .container-fluid > .navbar-header .navbar-toggle div.fa {
 
 .o_list_view tfoot {
     background-color: #e0e0e0;
-    color: #ffffff;
+    color: #828282;
     cursor: default;
-    font-weight: normal;
+    font-weight: bold;
 }
 
 /* Notifications */

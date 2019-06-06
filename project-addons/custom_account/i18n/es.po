@@ -141,8 +141,8 @@ msgstr "Fecha estimada de llegada"
 #. module: custom_account
 #: view:sale.order:custom_account.view_order_form_inherit
 #: field:sale.order,internal_notes:0
-msgid "Internal Notes"
-msgstr "Notas internas"
+msgid "Notes for warehouse"
+msgstr "Notas para almacén"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_invoice
@@ -753,3 +753,15 @@ msgstr "NIF"
 msgid " Set date to all order lines"
 msgstr " Asignar fecha a todas las lineas del pedido de compra"
 
+#. module: custom_account
+#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
+#: field:account.invoice.report,brand_name:0
+msgid "Brand name"
+msgstr "Nombre de la marca"
+
+
+#. module: custom_account
+#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
+#: field:account.invoice.report,area_id:0
+msgid "Area"
+msgstr "Zona"
