@@ -28,7 +28,7 @@
             <field name="arch" type="xml">
                 <field name="amount_total" position="before">
                     <field name="amount_untaxed" sum="Untaxed"/>
-		    <field name="margin_rappel" string="margin (%)"/>
+		            <field name="margin_rappel" string="margin (%)"/>
                 </field>
             </field>
         </record>
