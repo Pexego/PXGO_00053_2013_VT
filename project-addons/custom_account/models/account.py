@@ -13,6 +13,23 @@ class AccountMoveLine(models.Model):
     pner_vat = fields.Char("CIF/NIF/VAT", related="partner_id.vat",
                            readonly=True)
 
+    last_rec_date = fields.Date(
+        compute='_compute_last_rec_date',
+        store=True,
+        index=True,
+        string='Last reconciliation date',
+        help="The date of the last reconciliation (full) "
+             "account move line."
+    )
+
+    @api.depends('full_reconcile_id.reconciled_line_ids.date')
+    def _compute_last_rec_date(self):
+        for line in self:
+            if line.full_reconcile_id:
+                move_lines = line.full_reconcile_id.reconciled_line_ids
+                last_line = move_lines.sorted(lambda l: l.date)[-1]
+                line.last_rec_date = last_line.date
+
 
 class AccountInvoiceLine(models.Model):
 
