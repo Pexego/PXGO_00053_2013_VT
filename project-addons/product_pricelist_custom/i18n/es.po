@@ -16,14 +16,14 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_pricelist_custom
-#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_pricelist_related
-msgid "Related Pricelist"
-msgstr "Tarifa relacionada"
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_pricelist_calculated
+msgid "Calculated Pricelist"
+msgstr "Tarifa calculada"
 
 #. module: product_pricelist_custom
-#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_pricelist_related_price
-msgid "Price related pricelist"
-msgstr "Precio tarifa relacionada"
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_pricelist_calculated_price
+msgid "Price calculated"
+msgstr "Precio calculado"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_item_margin
