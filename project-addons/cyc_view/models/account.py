@@ -20,7 +20,9 @@ class AccountMoveLine(models.Model):
             if invoice and invoice.type == 'out_invoice' and vals.get('date_maturity', False):
                 date_maturity = vals['date_maturity']
                 cyc_days = self.env['ir.config_parameter'].get_param('notification.period.days.cyc')
-                limit_date = datetime.strptime(date_maturity, "%Y-%m-%d") + relativedelta(days=int(cyc_days))
+                if not isinstance(date_maturity, datetime):
+                    date_maturity = datetime.strptime(date_maturity, "%Y-%m-%d")
+                limit_date = date_maturity + relativedelta(days=int(cyc_days))
                 limit_date_format = limit_date.strftime("%Y-%m-%d")
                 # Update cyc limit date with a predefined margin of days
                 vals.update({'cyc_limit_date_insolvency': limit_date_format})

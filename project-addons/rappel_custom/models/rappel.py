@@ -80,7 +80,7 @@ class Rappel(models.Model):
                     search([('fields_id', '=', field.id),
                             ('value_reference', 'in',
                              ['product.pricelist,' +
-                              str(x.pricelist_id.id) for x in pricelist_ids]),
+                              str(x) for x in pricelist_ids]),
                             ('res_id', '!=', False)])
                 # Rappels dependientes de tarifas
                 # Clientes que deberian pertenecer al rappel:
