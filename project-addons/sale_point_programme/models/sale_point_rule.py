@@ -29,8 +29,7 @@ class SalePointProgrammeRule(models.Model):
     date_start = fields.Date('Start date')
     date_end = fields.Date('End date')
     points = fields.Integer('Points / Participations', required=True)
-    modality = fields.Selection([('point', 'points'), ('participation', 'participations')], 'Modality', default='point',
-                                required=True)
+    modality = fields.Selection([('point', 'points'), ('participation', 'participations')], 'Modality', default='point',required=True)
     category_id = fields.Many2one('product.category', 'Category')
     product_id = fields.Many2one('product.product', 'Product')
     product_brand_id = fields.Many2one('product.brand', 'Brand')

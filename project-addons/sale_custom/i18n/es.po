@@ -53,8 +53,8 @@ msgstr "Pedidos"
 
 #. module: sale_custom
 #: model:ir.ui.view,arch_db:sale_custom.view_order_form_imp_ship_addr_val
-msgid "Validate address"
-msgstr "Validar dirección"
+msgid "  Validate address"
+msgstr "  Validar dirección"
 
 #. module: sale_custom
 #: model:ir.ui.view,arch_db:sale_custom.view_order_form_imp_ship_addr

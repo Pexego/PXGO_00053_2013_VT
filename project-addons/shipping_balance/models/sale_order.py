@@ -30,7 +30,7 @@ class SaleOrder(models.Model):
     shipping_balance = fields.Boolean('shipping_balance')
     amount_shipping_balance = fields.Float(related='partner_id.amount_shipping_balance')
 
-    @api.constrains('state', 'amount_shipping_balance', 'amount_untaxed')
+    @api.constrains('state', 'amount_untaxed')
     def _check_amount_on_state(self):
         if self.amount_untaxed < 0:
             raise ValidationError("Total amount must be > 0")

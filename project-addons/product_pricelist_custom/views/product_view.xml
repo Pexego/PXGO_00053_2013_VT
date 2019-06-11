@@ -38,13 +38,6 @@
              <xpath expr="//field[@name='item_ids']/tree/field[@name='pricelist_id']" position="replace">
                 <field name="name_pricelist"/>
              </xpath>
-            <xpath expr="//field[@name='item_ids']/tree/field[@name='fixed_price']" position="after">
-                <field name="pricelist_related" readonly="True"/>
-                <field name="margin"/>
-                <field name="pricelist_related_price"/>
-                <field name="product_tmpl_id" invisible="1"/>
-                <field name="product_id" invisible="1"/>
-            </xpath>
             <xpath expr="//field[@name='item_ids']" position="replace"/>
             <div name="pricelist_item" position="replace"/>
             <xpath expr="//page[@name='general_information']/group" position="after">
@@ -52,13 +45,16 @@
                     <separator string="Pricing"/>
                     <group colspan="8" col="8">
                         <field name="item_ids" nolabel="1">
-                            <tree string="Pricelist Items" editable="bottom">
+                            <tree string="Pricelist Items"
+                                  editable="bottom" create="false" delete="false">
                                 <field name="name_pricelist"/>
                                 <field name="fixed_price" string="Price" required='1'/>
-                                <field name="pricelist_related" readonly="True"/>
                                 <field name="margin"/>
-                                <field name="pricelist_related_price"/>
+                                <field name="pricelist_calculated" readonly="True"/>
+                                <field name="pricelist_calculated_price"/>
                                 <field name="applied_on" invisible="1"/>
+                                <field name="product_tmpl_id" invisible="1"/>
+                                <field name="product_id" invisible="1"/>
                             </tree>
                         </field>
                     </group>

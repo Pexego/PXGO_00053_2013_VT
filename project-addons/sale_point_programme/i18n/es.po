@@ -252,7 +252,7 @@ msgstr "Menor que"
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_modality
 msgid "Modality"
-msgstr "Modality"
+msgstr "Modalidad"
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_operator
@@ -277,13 +277,13 @@ msgstr "Programas puntos"
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
 #: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_form
 #: model:ir.ui.view,arch_db:sale_point_programme.view_partner_form_add_points_widget
-msgid "Points"
-msgstr "Puntos"
+msgid "Points / Participations"
+msgstr "Puntos / Participación  "
 
 #. module: sale_point_programme
 #: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_points
 msgid "Points / Participations"
-msgstr "Points / Participations"
+msgstr "Puntos / Participaciones"
 
 #. module: sale_point_programme
 #: model:ir.actions.act_window,name:sale_point_programme.action_points_rules

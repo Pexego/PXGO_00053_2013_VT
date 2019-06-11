@@ -17,7 +17,7 @@ class AccountInvoice(models.Model):
         """
         for invoice in self:
             # Compruebo la empresa actual y su padre...
-            for partner in self.partner_id.get_partners_to_check():
+            for partner in invoice.partner_id.get_partners_to_check():
                 if partner.blocked_sales and not invoice.allow_confirm_blocked:
                     message = _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.')
                     raise exceptions.Warning(message)

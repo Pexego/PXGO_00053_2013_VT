@@ -61,6 +61,6 @@ class RappelCalculated(models.Model):
                                              'quantity': 1})
                     rp.invoice_id = invoice.id
 
-        invoice.button_reset_taxes()
+        invoice.compute_taxes()
         invoice.action_invoice_open()
         return True

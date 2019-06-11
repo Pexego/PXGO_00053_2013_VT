@@ -25,20 +25,23 @@ class SaleOrder(models.Model):
     @api.multi
     def write(self, vals):
         # If order is in a finished state, don't check scheduled date
-        if self.state not in ('progress', 'manual', 'shipping_except', 'invoice_except', 'done', 'history', 'cancel'):
-            if 'scheduled_date' in vals:
-                scheduled_date = vals['scheduled_date']
-            else:
-                scheduled_date = self.scheduled_date
+        for sale in self:
+            if sale.state not in ('progress', 'manual', 'shipping_except',
+                                  'invoice_except', 'done', 'history',
+                                  'cancel'):
+                if 'scheduled_date' in vals:
+                    scheduled_date = vals['scheduled_date']
+                else:
+                    scheduled_date = sale.scheduled_date
 
-            if scheduled_date:
-                date_now = str(datetime.now())
-                difference = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f') - \
-                    datetime.strptime(scheduled_date, '%Y-%m-%d %H:%M:%S')
-                difference = difference.total_seconds() / float(60)
-                if difference > 0:
-                    raise ValidationError(_("Scheduled date must be bigger than current date"))
-        return super(SaleOrder, self).write(vals)
+                if scheduled_date:
+                    date_now = str(datetime.now())
+                    difference = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f') - \
+                        datetime.strptime(scheduled_date, '%Y-%m-%d %H:%M:%S')
+                    difference = difference.total_seconds() / float(60)
+                    if difference > 0:
+                        raise ValidationError(_("Scheduled date must be bigger than current date"))
+        return super().write(vals)
 
 
 class StockPicking(models.Model):

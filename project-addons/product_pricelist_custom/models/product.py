@@ -31,25 +31,28 @@ class ProductPricelistItem(models.Model):
 
     _inherit = 'product.pricelist.item'
 
-    pricelist_related = fields.Many2one('product.pricelist', string="Related Pricelist")
-    pricelist_related_price = fields.Float("Price related pricelist", compute='_get_pricelist_related_price')
+    pricelist_calculated = fields.Many2one('product.pricelist', string="Calculated Pricelist")
+    pricelist_calculated_price = fields.Float("Price calculated", compute='_get_pricelist_calculated_price')
     margin = fields.Float("Margin (%)", compute='_get_margin', readonly=True, store=True)
     name_pricelist = fields.Char(related='pricelist_id.name', readonly=True)
 
     @api.multi
     @api.depends('fixed_price')
-    def _get_pricelist_related_price(self):
+    def _get_pricelist_calculated_price(self):
         for item in self:
             product_id = item.product_tmpl_id or item.product_id.product_tmpl_id
-            if product_id and item.pricelist_related and not item.pricelist_related.base_pricelist:
+            if product_id and item.pricelist_calculated and not item.pricelist_calculated.base_pricelist:
                 rule = self.env['product.pricelist.item'].search([
-                    ('pricelist_id', '=', item.pricelist_related.id),
+                    ('pricelist_id', '=', item.pricelist_calculated.id),
                     ('applied_on', '=', '3_global')])
-                if rule and rule.base == 'pricelist' and rule.base_pricelist_id:
-                    item.pricelist_related_price = item.fixed_price * (1 - rule.price_discount / 100)
+                if rule:
+                    if rule.base == 'pricelist' and rule.base_pricelist_id:
+                        item.pricelist_calculated_price = item.fixed_price * (1 - rule.price_discount / 100)
+                    elif rule.base == 'standard_price':
+                        item.pricelist_calculated_price = product_id.standard_price * (1 - rule.price_discount / 100)
 
     @api.multi
-    @api.depends('fixed_price')
+    @api.depends('fixed_price', 'product_id.standard_price')
     def _get_margin(self):
         for item in self:
             product_id = item.product_tmpl_id or item.product_id.product_tmpl_id
@@ -125,7 +128,7 @@ class ProductProduct(models.Model):
         items = []
         for pricelist in base_pricelists:
             items.append((0, 0, {'pricelist_id': pricelist.id,
-                                 'pricelist_related': pricelist.pricelist_related_default and
+                                 'pricelist_calculated': pricelist.pricelist_related_default and
                                                          pricelist.pricelist_related_default.id or False,
                                  'product_id': product_id.id}))
 

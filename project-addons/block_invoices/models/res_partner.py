@@ -34,7 +34,7 @@ class ResPartner(models.Model):
         # limite, de tipo 'receivable'
         cust_account = self.env['account.account'].search(
             [('company_id', '=', self.env.user.company_id.id),
-             ('type', '=', 'internal_type'),
+             ('internal_type', '=', 'receivable'),
              ('code', 'like', '430%')])
         move_lines = self.env['account.move.line'].search(
             [('account_id', 'in', cust_account._ids),
@@ -42,7 +42,7 @@ class ResPartner(models.Model):
              ('full_reconcile_id', '=', False)])
         if len(move_lines) > 0:
             for move_line in move_lines:
-                if move_line.partner_id not in visited_partner_ids:
+                if move_line.partner_id.id not in visited_partner_ids:
                     visited_partner_ids.append(move_line.partner_id.id)
                     move_line.partner_id.check_customer_block_state()
         other_partner_ids = self.env['res.partner'].search(
