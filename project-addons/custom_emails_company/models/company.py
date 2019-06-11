@@ -10,5 +10,4 @@ class ResCompany(models.Model):
                               help="link to the profile in the web", translate=True)
     url_products = fields.Text(string="web products", default='https://www.visiotechsecurity.com/en/',
                                help="link to section products", translate=True)
-    url_contact = fields.Text(string="contact number", default='63625481',
-                               help="Number contact depend on the country", translate=True)
+    url_contact = fields.Text(string="contact number", help="Number contact depend on the country", translate=True)
