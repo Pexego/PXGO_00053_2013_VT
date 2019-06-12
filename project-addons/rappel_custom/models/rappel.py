@@ -20,6 +20,7 @@ class Rappel(models.Model):
                                      'Pricelist')
     description = fields.Char(translate=True)
     sequence = fields.Integer(default=100)
+    partner_add_conditions = fields.Char('Add partner conditions')
 
     def get_products(self):
         product_obj = self.env['product.product']
@@ -53,13 +54,11 @@ class Rappel(models.Model):
         now = datetime.now()
         now_str = now.strftime("%Y-%m-%d")
         yesterday_str = (now - relativedelta(days=1)).strftime("%Y-%m-%d")
-        end_actual_month = now.strftime("%Y-%m") + '-' + str(
-            monthrange(now.year, now.month)[1])
-        start_next_month = (
-            now + relativedelta(months=1)).strftime("%Y-%m") + '-01'
+        end_actual_month = now.strftime("%Y-%m") + '-' + str(monthrange(now.year, now.month)[1])
+        start_next_month = (now + relativedelta(months=1)).strftime("%Y-%m") + '-01'
 
-        discount_voucher_rappels = self.env['rappel'].search(
-            [('discount_voucher', '=', True)])
+        discount_voucher_rappels = self.env['rappel'].search([('discount_voucher', '=', True)])
+
         field = self.env['ir.model.fields'].\
             search([('name', '=', 'property_product_pricelist'),
                     ('model', '=', 'res.partner')], limit=1)
@@ -74,40 +73,50 @@ class Rappel(models.Model):
                                                 '|', ('date_end', '=', False),
                                                 ('date_end', '>=', now_str)]).
                                         mapped('partner_id.id'))
-            partner_to_check = tuple()
+
+            # Clientes que deberian pertenecer al rappel:
+            partner_filter = []
             if pricelist_ids:
-                properties = self.env['ir.property'].\
+                # Rappels dependientes de tarifas
+                properties = self.env['ir.property']. \
                     search([('fields_id', '=', field.id),
                             ('value_reference', 'in',
                              ['product.pricelist,' +
                               str(x) for x in pricelist_ids]),
                             ('res_id', '!=', False)])
-                # Rappels dependientes de tarifas
-                # Clientes que deberian pertenecer al rappel:
-                partner_to_check = tuple(self.env['res.partner'].search([
-                    ('id', 'in',
-                     [int(x.res_id.split(',')[1]) for x in properties]),
-                    ('prospective', '=', False), ('active', '=', True),
-                    ('is_company', '=', True), ('parent_id', '=', False)]).ids)
 
-                # Clientes a los que ya no les corresponde el rappel (solo para cambios de tarifa)
-                #      - Se actualiza fecha fin con la fecha actual
-                remove_partners = set(partner_rappel_list) - set(partner_to_check)
-                if remove_partners:
-                    vals = {'date_end': yesterday_str}
-                    partner_to_update = partner_rappel_obj.search([('rappel_id', '=', rappel.id),
-                                                                   ('partner_id', 'in', tuple(remove_partners)),
-                                                                   '|', ('date_end', '=', False),
-                                                                   ('date_end', '>', now),
-                                                                   ('date_start', '<=', now_str)])
-                    partner_to_update.write(vals)
+                partner_filter.extend(["('id', 'in', [int(x.res_id.split(',')[1]) for x in properties])"])
 
-            elif product_rappel:
-                # Rappel que depende de un producto concreto (y no de la tarifa)
-                # Clientes que deberian pertenecer al rappel:
-                partner_to_check = tuple(self.env['account.invoice'].search([
-                    ('date_invoice', '>=', now_str),
-                    ('invoice_line.product_id', '=', product_rappel.id)]).mapped('partner_id.id'))
+            if rappel.partner_add_conditions:
+                # Rappels que depende de otros parámetros del cliente
+                partner_filter.extend([rappel.partner_add_conditions])
+
+            if product_rappel:
+                # Rappel que depende de la compra de un producto concreto
+                partner_product = self.env['account.invoice'].search([
+                    ('invoice_line.product_id', '=', product_rappel.id),
+                    ('state', 'in', ['open', 'paid'])]).mapped('partner_id.id')
+                partner_filter.extend(["('id', 'in', partner_product)"])
+
+            if partner_filter:
+                partner_filter.extend(["('prospective', '=', False), ('active', '=', True), "
+                                       "('is_company', '=', True), ('parent_id', '=', False)"])
+                partner_filter = ', '.join(partner_filter)
+                partner_to_check = tuple(eval("self.env['res.partner'].search([" + partner_filter + "])").ids)
+            else:
+                partner_to_check = tuple()
+
+            # Clientes a los que ya no les corresponde el rappel (cumplen las condiciones anteriores)
+            #      - Se actualiza fecha fin con la fecha actual
+            remove_partners = set(partner_rappel_list) - set(partner_to_check)
+            if remove_partners:
+                vals = {'date_end': yesterday_str}
+                partner_to_update = partner_rappel_obj.search([('rappel_id', '=', rappel.id),
+                                                               ('partner_id', 'in', tuple(remove_partners)),
+                                                               '|', ('date_end', '=', False),
+                                                               ('date_end', '>', now),
+                                                               ('date_start', '<=', now_str)])
+                partner_to_update.write(vals)
 
             #  Clientes que faltan en el rappel -> Se crean dos entradas en
             #  el rappel:
@@ -126,7 +135,6 @@ class Rappel(models.Model):
                     partner_rappel_obj.create(new_line1)
                     new_line2.update({'partner_id': partner})
                     partner_rappel_obj.create(new_line2)
-
 
     @api.model
     def compute_rappel(self):
