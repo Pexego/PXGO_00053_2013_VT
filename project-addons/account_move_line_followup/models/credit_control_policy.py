@@ -60,13 +60,6 @@ class CreditControlRun(models.Model):
         cron.set_to_ready_lines()
         cron.run_channel_action_custom()
 
-
-class CreditCommunication(models.TransientModel):
-
-    _inherit = "credit.control.communication"
-
-    move_line_ids = fields.Many2many('account.move.line', rel='comm_aml_rel', string="Account Move Lines")
-
     @api.multi
     def run_channel_action_custom(self):
         self.ensure_one()
@@ -75,6 +68,12 @@ class CreditCommunication(models.TransientModel):
             comm_obj = self.env['credit.control.communication']
             comms_email = comm_obj._generate_comm_from_credit_lines_custom(lines)
             comms_email._generate_emails()
+
+class CreditCommunication(models.TransientModel):
+
+    _inherit = "credit.control.communication"
+
+    move_line_ids = fields.Many2many('account.move.line', rel='comm_aml_rel', string="Account Move Lines")
 
     @api.model
     def _clean_all_partner_followup(self):
@@ -144,7 +143,7 @@ class CreditCommunication(models.TransientModel):
                     send_email = False
                     partner.manual_followup = True
 
-                partner_policy_level_id = partner_policy_level[0]['id']
+                partner_policy_level_id = partner_policy_level['id']
                 # Update partner latest_followup_level_id to the new level communication
                 partner.latest_followup_level_id = partner_policy_level_id
 
