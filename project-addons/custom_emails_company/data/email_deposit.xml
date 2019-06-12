@@ -3,7 +3,7 @@
     <data noupdate="0">
 
         <!--Email template -->
-        <record id="email_template_edi_deposit_custom" model="mail.template">
+        <record id="stock_deposit.stock_deposit_advise_partner" model="mail.template">
             <field name="name">Deposit advise partners_11</field>
             <field name="email_from">${(object.user_id.email or user.company_id.email or 'noreply@localhost')|safe}</field>
             <field name="subject">Depósito vencido ${object.sale_id.name}</field>
@@ -12,8 +12,6 @@
             <field name="lang">${object.partner_id.lang}</field>
             <field name="body_html"><![CDATA[
 <!DOCTYPE html>
-
-                        <!--INICIO CONTENIDO-->
 
                     <head>
                         <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
@@ -36,10 +34,6 @@
                         </div>
                     </body>
 
-
-
-
-                        <!--FIN CONTENIDO-->
 
 ]]>
             </field>
