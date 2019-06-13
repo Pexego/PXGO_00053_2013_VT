@@ -7,8 +7,8 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     def action_invoice_open(self):
+        res = super(AccountInvoice, self).action_invoice_open()
         for invoice in self:
-            res = super(AccountInvoice, invoice).action_invoice_open()
             if not invoice.not_send_email and invoice.type == 'out_invoice':
                 try:
                     template = invoice.env.ref('account.email_template_edi_invoice')
