@@ -1,6 +1,7 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models
+from datetime import datetime
 
 
 class RappelCalculated(models.Model):
@@ -52,8 +53,8 @@ class RappelCalculated(models.Model):
                     invoice_line_obj.create({'product_id': rappel_product.id,
                                              'name': '{} ({} - {})'.format(
                                                             rp.rappel_id.with_context(ctx).description,
-                                                            rp.date_start,
-                                                            rp.date_end),
+                                                            datetime.strptime(rp.date_start, "%Y-%m-%d").strftime('%d/%m/%Y'),
+                                                            datetime.strptime(rp.date_end, "%Y-%m-%d").strftime('%d/%m/%Y')),
                                              'invoice_id': invoice.id,
                                              'account_id': account_id.id,
                                              'invoice_line_tax_id': tax_ids,

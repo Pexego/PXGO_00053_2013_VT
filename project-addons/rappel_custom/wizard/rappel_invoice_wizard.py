@@ -1,6 +1,7 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models
+from datetime import datetime
 
 
 class ComputeRappelInvoice(models.TransientModel):
@@ -22,8 +23,8 @@ class ComputeRappelInvoice(models.TransientModel):
                     line.write(
                         {'name': '{} ({} - {})'.format(
                             rappel.rappel_id.with_context(ctx).description,
-                            rappel.date_start,
-                            rappel.date_end)})
+                            datetime.strptime(rappel.date_start, "%Y-%m-%d").strftime('%d/%m/%Y'),
+                            datetime.strptime(rappel.date_end, "%Y-%m-%d").strftime('%d/%m/%Y'))})
                 # Update account data
                 if not invoice_rappel.payment_mode_id \
                         or not invoice_rappel.partner_bank_id \

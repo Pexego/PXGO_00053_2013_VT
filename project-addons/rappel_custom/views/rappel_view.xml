@@ -18,11 +18,13 @@
             <field name="inherit_id" ref="rappel.rappel_form"/>
             <field name="arch" type="xml">
                 <field name="global_application" position="after">
-                    <separator colspan="4" attrs="{'invisible':[('global_application','=', True)]}"/>
-                    <label colspan="4" string="You must fill in only one of the following fields to define the validity area of rappel:"
-                           attrs="{'invisible':[('global_application','=', True)]}"
-                           style="color: red;"/>
-                    <separator colspan="4" attrs="{'invisible':[('global_application','=', True)]}"/>
+                    <div colspan="2">
+                        <separator attrs="{'invisible':[('global_application','=', True)]}"/>
+                        <label string="You must fill in only one of the following fields to define the validity area of rappel:"
+                               attrs="{'invisible':[('global_application','=', True)]}"
+                               style="color: red;"/>
+                        <separator attrs="{'invisible':[('global_application','=', True)]}"/>
+                    </div>
                 </field>
                 <field name="product_id" position="after">
                     <field name="brand_ids" attrs="{'invisible':[('global_application','=', True)]}"/>
@@ -31,6 +33,7 @@
                     <field name="description"/>
                     <field name="sequence" groups="base.group_system"/>
                     <field name="discount_voucher" groups="base.group_system"/>
+                    <field name="partner_add_conditions" groups="base.group_system"/>
                     <field name="pricelist_ids" groups="base.group_system"
                            attrs="{'invisible':[('discount_voucher','=', False)]}"/>
                 </field>
