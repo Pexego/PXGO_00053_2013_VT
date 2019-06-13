@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!--Email template -->
+        <record id="account.email_template_edi_invoice" model="mail.template">
+            <field name="name">Invoice - Send by Email_11</field>
+            <field name="email_from">contabilidad@visiotech.es</field>
+            <field name="subject">${'VISIOTECH'} - Factura (Ref ${object.number or 'n/a'})</field>
+<!--            <field name="partner_to">${(object.partner_id.email2 or object.partner_id.email)|safe}</field>-->
+            <field name="email_to">${(object.partner_id.email2 or object.partner_id.email)|safe}</field>
+            <field name="model_id" ref="account.model_account_invoice"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="report_template" ref="custom_report_link.action_report_invoice_custom"/>
+            <field name="report_name">Factura_${(object.number or '').replace('/','_')}_${object.state == 'draft' and 'borrador' or ''}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<!DOCTYPE html>
+
+
+            <p>Dear ${object.partner_id.name},</p>
+
+            <p>Please find attached the original invoice for the shipped order.</p>
+
+            <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                &nbsp;&nbsp;<strong>REFERENCES</strong><br />
+                &nbsp;&nbsp;Invoice number: <strong>${object.number}</strong><br />
+                % if object.type == "out_invoice":
+                &nbsp;&nbsp;Invoice total: <strong>${object.amount_total} ${object.currency_id.name}</strong><br>
+                % endif
+                % if object.type == "out_refund":
+                &nbsp;&nbsp;Invoice total: <strong>-${object.amount_total} ${object.currency_id.name}</strong><br>
+                % endif
+                &nbsp;&nbsp;Invoice date: ${object.date_invoice}<br />
+                % if object.origin:
+                &nbsp;&nbsp;Order reference: ${object.origin}<br />
+                % endif
+                % if object.user_id:
+                &nbsp;&nbsp;Your contact: <a href="mailto:${object.user_id.email or ''}?subject=Invoice%20${object.number}">${object.user_id.name}</a>
+                % endif
+            </p>
+
+            <br/><p>Amounts credited to your account will appear with an invoice number prefixed with <b>R</b>
+            <p>Remember that you can now download your invoices directly from our website.  If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <a href="https://www.visiotechsecurity.com/en/login?view=registration">https://www.visiotechsecurity.com/en/login?view=registration</a></p>
+            <p>If you have any question, do not hesitate to contact us.</p>
+            <p>Thank you for choosing VISIOTECH</p>
+            </div>
+
+]]>
+            </field>
+        </record>
+        </data>
+</odoo>
