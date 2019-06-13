@@ -9,7 +9,7 @@ to the customers.
     """,
     "author": "David Mora",
     "depends": [
-        'base', 'portal', 'custom_report_link'
+        'base', 'portal', 'custom_report_link', 'account_banking_sepa_mail', 'stock_deposit'
     ],
     "data": [
         'data/email_albaran.xml',
