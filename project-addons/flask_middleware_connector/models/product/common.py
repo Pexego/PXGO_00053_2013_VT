@@ -81,7 +81,7 @@ class ProductListener(Component):
             "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
-            "discontinued", "state",
+            "discontinued", "state", "item_ids",
         ]
         for field in up_fields:
             if field in fields:
@@ -108,6 +108,17 @@ class ProductListener(Component):
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
+
+    @api.multi
+    def get_product_price_with_pricelist(self, pricelist_name):
+        id_pricelist = self.env['product.pricelist'].search([('name', '=', pricelist_name)]).id
+        for product in self:
+            if id_pricelist:
+                price = product.with_context(pricelist=id_pricelist).price
+                price = round(price, 2)
+            else:
+                price = 0
+            return price
 
     @api.depends('bom_ids')
     def _compute_is_pack(self):

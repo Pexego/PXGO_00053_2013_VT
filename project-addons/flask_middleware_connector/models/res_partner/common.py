@@ -246,42 +246,6 @@ class ResPartner(models.Model):
         return True
 
 
-class PricelistListener(Component):
-    _name = 'pricelist.event.listener'
-    _inherit = 'base.event.listener'
-    _apply_on = ['product.pricelist.item']
-
-    def on_record_create(self, record, fields=None):
-        field = self.env['ir.model.fields'].\
-            search([('name', '=', 'property_product_pricelist'),
-                    ('model', '=', 'res.partner')], limit=1)
-        properties = self.env['ir.property'].\
-            search([('fields_id', '=', field.id),
-                    ('value_reference', '=', 'product.pricelist,' +
-                     str(record.pricelist_id.id)),
-                    ('res_id', '!=', False)])
-        partners = self.env['res.partner'].search(
-            [('id', 'in', [int(x.res_id.split(',')[1]) for x in properties]),
-             ('web', '=', True)])
-        for partner in partners:
-            partner.with_delay().update_partner()
-
-    def on_record_write(self, record, fields=None):
-        field = self.env['ir.model.fields'].\
-            search([('name', '=', 'property_product_pricelist'),
-                    ('model', '=', 'res.partner')], limit=1)
-        properties = self.env['ir.property'].\
-            search([('fields_id', '=', field.id),
-                    ('value_reference', '=', 'product.pricelist,' +
-                     str(record.pricelist_id.id)),
-                    ('res_id', '!=', False)])
-        partners = self.env['res.partner'].search(
-            [('id', 'in', [int(x.res_id.split(',')[1]) for x in properties]),
-             ('web', '=', True)])
-        for partner in partners:
-            partner.with_delay().update_partner()
-
-
 class PartnerCategoryListener(Component):
     _name = 'partner.category.event.listener'
     _inherit = 'base.event.listener'
