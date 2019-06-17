@@ -1,7 +1,7 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models, fields, api
-
+from odoo.tools.profiler import profile
 
 class ProductProduct(models.Model):
 
@@ -35,76 +35,71 @@ class ProductProduct(models.Model):
     security_margin = fields.Integer()
     average_margin = fields.Float("Average Margin Last Sales", readonly=True)
     ref_manufacturer = fields.Char(related='manufacturer_pref', readonly=True)
-
+    @profile
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
+        import ipdb
+        ipdb.set_trace()
+        query = """select pp.id,(select sum(product_uom_qty) from stock_move
+     sm inner join stock_picking_type spt on spt.id = sm.picking_type_id inner
+     join procurement_order po on po.id = sm.procurement_id where date >=
+     (select min(t.datum) from (select product_id,datum from stock_days_positive
+     where product_id = pp.id order by datum desc limit 60) as t) and
+     sm.state = 'done' and sm.product_id = pp.id and spt.code = 'outgoing' and
+     po.sale_line_id is not null), (select min(t2.datum) from (select product_id,
+     datum from stock_days_positive where product_id = pp.id order by datum desc
+     limit 60) as t2) from product_product pp inner join product_template pt on
+     pt.id = pp.product_tmpl_id where pt.type != 'service'"""
+        picking_type_obj = self.env['stock.picking.type']
+        picking_type_ids = picking_type_obj.search([('code', '=', 'outgoing')])
         if not records:
             self.average_margin_last_sales()
-            products = self.search([('type', '!=', 'service')])
-            product_ids = products.ids
         else:
-            product_ids = records
-        for product_id in product_ids:
-            self.env.cr.execute("select min(t.datum) from (select product_id,"
-                                "datum from stock_days_positive where "
-                                "product_id = %s order by datum desc "
-                                "limit 60) as t" % (product_id))
-            days_data = self.env.cr.fetchone()
-            if days_data:
-                product = self.browse(product_id)
-                picking_type_ids = self.env['stock.picking.type'].search(
-                    [('code', '=', 'outgoing')])
-
-                moves = self.env['stock.move'].search(
-                    [('date', '>=', days_data[0]),
-                     ('state', '=', 'done'),
-                     ('product_id', '=', product.id),
-                     ('picking_type_id', 'in', picking_type_ids.ids),
-                     ('sale_line_id', '!=', False)])
-                biggest_move_qty = 0.0
-                biggest_order = False
-                qty = 0.0
-                for move in moves:
-                    qty += move.product_uom_qty
-                    if move.product_uom_qty > biggest_move_qty:
-                        biggest_move_qty = move.product_uom_qty
-                        biggest_order = \
-                            move.sale_line_id.order_id.id
-
-                vals = {'last_sixty_days_sales': qty,
-                        'biggest_sale_qty': biggest_move_qty,
-                        'biggest_sale_id': biggest_order}
-
-                product.write(vals)
+            query += " and pp.id in (%s) " % \
+                     ",".join([str(x) for x in records])
+        move_obj = self.env['stock.move']
+        self._cr.execute(query)
+        data = self._cr.fetchall()
+        for product_data in data:
+            if product_data[1]:
+                moves = move_obj.search([('date', '>=', product_data[2]),
+                                         ('state', '=', 'done'),
+                                         ('product_id', '=', product_data[0]),
+                                         ('picking_type_id', 'in',
+                                          picking_type_ids.ids),
+                                         ('procurement_id.sale_line_id', '!=',
+                                          False)],
+                                        order="product_uom_qty desc", limit=1)
+                biggest_move_qty = moves[0].product_uom_qty
+                biggest_order = \
+                    moves[0].procurement_id.sale_line_id.order_id.id
+                self._cr.execute("update product_product set biggest_sale_id ="
+                                 " %s, biggest_sale_qty = %s, "
+                                 "last_sixty_days_sales = %s where id = %s" %
+                                 (biggest_order, biggest_move_qty,
+                                  product_data[1], product_data[0]))
+            else:
+                self._cr.execute("update product_product set biggest_sale_id ="
+                                 " null, biggest_sale_qty = %s, "
+                                 "last_sixty_days_sales = %s where id = %s" %
+                                 (0.0, 0.0, product_data[0]))
 
     @api.model
     def average_margin_last_sales(self, ids=False):
-        if not ids:
-            sql_sentence = """
-                SELECT DISTINCT product_id
-                    FROM sale_order_line
-                    WHERE state not in ('draft', 'cancel', 'exception')
-                    AND product_id IS NOT NULL
-            """
-            self.env.cr.execute(sql_sentence)
-            res = self.env.cr.fetchall()
-            product_ids = [x[0] for x in res]
-        else:
-            product_ids = ids
-        for product_id in self.browse(product_ids):
-            sale_lines = self.env['sale.order.line'].search(
-                [('product_id', '=', product_id.id),
-                 ('state', 'not in',
-                 ('draft', 'cancel', 'exception'))],
-                limit=100,
-                order='date_order desc')
-            margin_perc_sum = 0
-            qty_sum = 0
-            for line in sale_lines:
-                margin_perc_sum += (line.margin_perc * line.product_uom_qty)
-                qty_sum += line.product_uom_qty
-            if qty_sum:
-                product_id.average_margin = margin_perc_sum / qty_sum
+        query = """select id, (select case when sum(product_uom_qty) > 0
+     then sum(margin_perc * product_uom_qty) / sum(product_uom_qty) else 0.0 end
+     from (select * from sale_order_line where state not in ('draft', 'cancel',
+     'exception') and product_id = product_product.id order by date_order desc
+     limit 100) as t) from product_product"""
+        if ids:
+            query += " where id in (%s) " % ",".join([str(x) for x in ids])
+        self._cr.execute(query)
+        data = self._cr.fetchall()
+        for product_data in data:
+            if product_data[1]:
+                self._cr.execute("update product_product set average_margin = "
+                                 "%s where id = %s" %
+                                 (product_data[1], product_data[0]))
 
     @api.multi
     def average_margin_compute(self):
