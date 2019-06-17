@@ -38,15 +38,13 @@ class ProductProduct(models.Model):
     @profile
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
-        import ipdb
-        ipdb.set_trace()
         query = """select pp.id,(select sum(product_uom_qty) from stock_move
      sm inner join stock_picking_type spt on spt.id = sm.picking_type_id inner
-     join procurement_order po on po.id = sm.procurement_id where date >=
+     join procurement_group po on po.id = sm.group_id where date >=
      (select min(t.datum) from (select product_id,datum from stock_days_positive
      where product_id = pp.id order by datum desc limit 60) as t) and
      sm.state = 'done' and sm.product_id = pp.id and spt.code = 'outgoing' and
-     po.sale_line_id is not null), (select min(t2.datum) from (select product_id,
+     po.sale_id is not null), (select min(t2.datum) from (select product_id,
      datum from stock_days_positive where product_id = pp.id order by datum desc
      limit 60) as t2) from product_product pp inner join product_template pt on
      pt.id = pp.product_tmpl_id where pt.type != 'service'"""
@@ -67,12 +65,12 @@ class ProductProduct(models.Model):
                                          ('product_id', '=', product_data[0]),
                                          ('picking_type_id', 'in',
                                           picking_type_ids.ids),
-                                         ('procurement_id.sale_line_id', '!=',
+                                         ('group_id.sale_id', '!=',
                                           False)],
                                         order="product_uom_qty desc", limit=1)
                 biggest_move_qty = moves[0].product_uom_qty
                 biggest_order = \
-                    moves[0].procurement_id.sale_line_id.order_id.id
+                    moves[0].group_id.sale_id.id
                 self._cr.execute("update product_product set biggest_sale_id ="
                                  " %s, biggest_sale_qty = %s, "
                                  "last_sixty_days_sales = %s where id = %s" %
