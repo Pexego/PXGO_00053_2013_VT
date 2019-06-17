@@ -1,7 +1,6 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models, fields, api
-from odoo.tools.profiler import profile
 
 class ProductProduct(models.Model):
 
@@ -35,7 +34,7 @@ class ProductProduct(models.Model):
     security_margin = fields.Integer()
     average_margin = fields.Float("Average Margin Last Sales", readonly=True)
     ref_manufacturer = fields.Char(related='manufacturer_pref', readonly=True)
-    @profile
+
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
         query = """select pp.id,(select sum(product_uom_qty) from stock_move
