@@ -31,7 +31,7 @@ class ProductTag(models.Model):
         for t in self:
             tagsb.append(t.name)
             if t.parent_id:
-                tagsa = t.parent_id._get_tag_recursivity([t.parent_id.id])
+                tagsa = t.parent_id._get_tag_recursivity()
                 if tagsa:
                     tags = list(set(tagsa + tagsb))
         if tags:
