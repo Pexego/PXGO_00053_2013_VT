@@ -27,7 +27,7 @@ import json
 import re
 import ast
 import base64
-
+import unidecode
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -217,6 +217,30 @@ class SaleOrder(models.Model):
                                         "Weight": str(float(package_weight) - p * 30)
                                     }
                                 })
+                            elif float(package_weight) - package_w == 0:
+                                rate_request['RateRequest']['Shipment']['Package'].append({
+                                    "PackagingType": {
+                                        "Code": "02",
+                                        "Description": "Rate"
+                                    },
+                                    "Dimensions": {
+                                        "UnitOfMeasurement": {
+                                            "Code": dimension_measure_code,
+                                            "Description": dimension_measure_description
+                                        },
+                                        "Length": str(package_length),
+                                        "Width": str(package_width),
+                                        "Height": str(package_height)
+                                    },
+                                    "PackageWeight": {
+                                        "UnitOfMeasurement": {
+                                            "Code": weight_measure_code,
+                                            "Description": weight_measure_description
+                                        },
+                                        "Weight": "30.0"
+                                    }
+                                })
+                                break
 
                         url = order.env['ir.config_parameter'].get_param('url.prod.ups.api.request')
                         json_request = rate_request
@@ -339,7 +363,7 @@ class SaleOrder(models.Model):
                     auth = str(account_user) + ":" + str(account_password)
                     auth = auth.encode("utf-8")
                     byte_auth = bytearray(auth)
-                    authentication = base64.b64encode(byte_auth)
+                    authentication = base64.b64encode(byte_auth).decode("utf-8")
                     headers = {'content-type': 'text/xml', 'Authorization': 'Basic %s' % str(authentication)}
                     now = datetime.now()
                     rate_request = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -350,12 +374,12 @@ class SaleOrder(models.Model):
                             <rateId>rate1</rateId>
                             <sender>
                                 <country><![CDATA[""" + sender_country + """]]></country>
-                                <town><![CDATA[""" + sender_town + """]]></town>
+                                <town><![CDATA[""" + unidecode.unidecode(sender_town) + """]]></town>
                                 <postcode>""" + str(sender_postcode) + """</postcode>
                             </sender>
                             <delivery>
                                 <country><![CDATA[""" + delivery_country + """]]></country>
-                                <town><![CDATA[""" + delivery_town + """]]></town>
+                                <town><![CDATA[""" + unidecode.unidecode(delivery_town) + """]]></town>
                                 <postcode>""" + str(delivery_postcode) + """</postcode>
                             </delivery>
                             <collectionDateTime>""" + now.strftime('%Y-%m-%dT%H:%M:%S') + """</collectionDateTime>
