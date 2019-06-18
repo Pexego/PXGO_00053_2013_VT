@@ -39,6 +39,9 @@
             <field name="company_id" position="after">
                 <field name="commercial"/>
             </field>
+            <xpath expr="//sheet/notebook/page[2]/button[@name='put_in_pack']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
         </field>
     </record>
 
