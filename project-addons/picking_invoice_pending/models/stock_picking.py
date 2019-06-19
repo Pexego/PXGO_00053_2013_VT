@@ -108,11 +108,11 @@ class StockPicking(models.Model):
     def write(self, vals):
         res = super().write(vals)
         if vals.get('date_done'):
-            inv_type = 'out_invoice'
             ctx = dict(self._context or {})
-            ctx['date_inv'] = False
-            ctx['inv_type'] = inv_type
+            ctx['bypass_risk'] = True
             for pick in self:
+                templates = []
+                validate = True
                 if (pick.picking_type_id.code == "incoming" and pick.move_lines
                         and pick.move_lines[0].purchase_line_id and
                         pick.company_id.required_invoice_pending_move and
@@ -138,6 +138,45 @@ class StockPicking(models.Model):
                                                            credit_account,
                                                            change_date)
                     pick.pending_stock_reverse_move_id = move_id.id
+
+                if pick.state == 'done' and pick.picking_type_code == 'outgoing':
+                    sale_id = pick.sale_id
+                    if (sale_id.invoice_status == 'to invoice'
+                        and sale_id.invoice_type_id.name == 'Diaria'
+                            and not sale_id.tests):
+                        # Create invoice
+                        id_invoice = sale_id.action_invoice_create()
+                        invoice_created = self.env['account.invoice'].with_context(ctx).browse(id_invoice)
+                        if not invoice_created:
+                            templates.append(
+                                self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices', False))
+                            validate = False
+                        elif not invoice_created.invoice_line_ids:
+                            # Invoice created without lines
+                            templates.append(
+                                self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices_empty_lines',
+                                             False))
+                            # Do not validate it because it will generate an error
+                            validate = False
+                        if validate:
+                            # Validate invoice
+                            invoice_created.compute_taxes()
+                            invoice_created.action_invoice_open()
+                            if invoice_created.state in ('draft', 'cancel', 'proforma', 'proforma2'):
+                                templates.append(
+                                    self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
+
+                        for tmpl in templates:
+                            ctx.update({
+                                'default_model': 'stock.picking',
+                                'default_res_id': pick.id,
+                                'default_use_template': bool(tmpl.id),
+                                'default_template_id': tmpl.id,
+                                'default_composition_mode': 'comment',
+                                'mark_so_as_sent': True
+                            })
+                            composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
+                            composer_id.with_context(ctx).send_mail()
 
         return res
 
