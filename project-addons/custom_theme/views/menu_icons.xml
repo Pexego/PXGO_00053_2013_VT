@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <menuitem id="crm.crm_menu_root" web_icon="custom_theme,static/description/CRM_Icon_2.png"/>
+        <menuitem id="calendar.mail_menu_calendar" web_icon="custom_theme,static/description/Calendar_Icon_2.png"/>
+        <menuitem id="sale.sale_menu_root" web_icon="custom_theme,static/description/Sales_Icon_2.png"/>
+        <menuitem id="queue_job.menu_queue_job_root" web_icon="custom_theme,static/description/Queue_Icon_2.png"/>
+        <menuitem id="purchase.menu_purchase_root" web_icon="custom_theme,static/description/Purchases_Icon_2.png"/>
+        <menuitem id="stock.menu_stock_root" web_icon="custom_theme,static/description/Warehouse_Icon_2.png"/>
+        <menuitem id="account.menu_finance" web_icon="custom_theme,static/description/Invoicing_Icon_2.png"/>
+        <menuitem id="base.menu_management" web_icon="custom_theme,static/description/Modules_Icon_2.png"/>
+        <menuitem id="mrp.menu_mrp_root" web_icon="custom_theme,static/description/Production_Icon_2.png"/>
+    </data>
+</odoo>

@@ -28,7 +28,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="model">sale.order</field>
         <field name="arch" type="xml">
-            <field name="origin" position="after">
+            <field name="company_id" position="after">
                 <field name="no_promos"/>
             </field>
         </field>
