@@ -254,7 +254,6 @@
                 <group attrs="{'invisible':[('state_show_buttons', '=', False)]}">
                     <separator string="Action" colspan="4" name="action_sep"/>
                     <div>
-                        <field name="warehouse_id" invisible="1"/>
                         <button name="%(action_claim_picking_in)d"
                                 string="New Products Return"
                                 type="action" target="new"

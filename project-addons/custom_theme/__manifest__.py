@@ -5,9 +5,19 @@
     "category": "Theme/Backend",
     "data": [
         "views/assets.xml",
+        "views/menu_icons.xml",
     ],
     "depends": [
-        "web"
+        "web",
+        "crm",
+        "calendar",
+        "sale",
+        "queue_job",
+        "purchase",
+        "stock",
+        "account",
+        "base",
+        "mrp",
     ],
     'qweb': [
         "static/xml/base.xml",
