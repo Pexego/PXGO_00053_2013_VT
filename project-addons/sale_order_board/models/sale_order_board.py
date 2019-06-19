@@ -27,7 +27,7 @@ import json
 import re
 import ast
 import base64
-
+import unidecode
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -65,11 +65,11 @@ class SaleOrder(models.Model):
                        'products_wo_weight': products_wo_weight})
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
-                    service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.ups.api.request'))
-                    user_id = order.env['ir.config_parameter'].get_param('user.ups.api.request')
-                    password_id = order.env['ir.config_parameter'].get_param('password.ups.api.request')
-                    access_id = order.env['ir.config_parameter'].get_param('access.ups.api.request')
-                    shipper_number = order.env['ir.config_parameter'].get_param('shipper.number.ups.api.request')
+                    service_codes = ast.literal_eval(order.env['ir.config_parameter'].sudo().get_param('service.codes.ups.api.request'))
+                    user_id = order.env['ir.config_parameter'].sudo().get_param('user.ups.api.request')
+                    password_id = order.env['ir.config_parameter'].sudo().get_param('password.ups.api.request')
+                    access_id = order.env['ir.config_parameter'].sudo().get_param('access.ups.api.request')
+                    shipper_number = order.env['ir.config_parameter'].sudo().get_param('shipper.number.ups.api.request')
 
                     shipper_name = "Visiotech"
                     shipper = order.env['res.company'].browse(1).partner_id
@@ -217,8 +217,32 @@ class SaleOrder(models.Model):
                                         "Weight": str(float(package_weight) - p * 30)
                                     }
                                 })
+                            elif float(package_weight) - package_w == 0:
+                                rate_request['RateRequest']['Shipment']['Package'].append({
+                                    "PackagingType": {
+                                        "Code": "02",
+                                        "Description": "Rate"
+                                    },
+                                    "Dimensions": {
+                                        "UnitOfMeasurement": {
+                                            "Code": dimension_measure_code,
+                                            "Description": dimension_measure_description
+                                        },
+                                        "Length": str(package_length),
+                                        "Width": str(package_width),
+                                        "Height": str(package_height)
+                                    },
+                                    "PackageWeight": {
+                                        "UnitOfMeasurement": {
+                                            "Code": weight_measure_code,
+                                            "Description": weight_measure_description
+                                        },
+                                        "Weight": "30.0"
+                                    }
+                                })
+                                break
 
-                        url = order.env['ir.config_parameter'].get_param('url.prod.ups.api.request')
+                        url = order.env['ir.config_parameter'].sudo().get_param('url.prod.ups.api.request')
                         json_request = rate_request
                         response = requests.session().post(url, data=json.dumps(json_request))
                         if response.status_code != 200:
@@ -241,14 +265,14 @@ class SaleOrder(models.Model):
                                 new.write({'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'SEUR':
-                    account_code = order.env['ir.config_parameter'].get_param('account.code.seur.api.request')
-                    user_id = order.env['ir.config_parameter'].get_param('user.seur.api.request')
-                    password_id = order.env['ir.config_parameter'].get_param('password.seur.api.request')
+                    account_code = order.env['ir.config_parameter'].sudo().get_param('account.code.seur.api.request')
+                    user_id = order.env['ir.config_parameter'].sudo().get_param('user.seur.api.request')
+                    password_id = order.env['ir.config_parameter'].sudo().get_param('password.seur.api.request')
                     destination_city = order.partner_shipping_id.city
                     destination_postal_code = order.partner_shipping_id.zip
-                    url = order.env['ir.config_parameter'].get_param('url.seur.api.request')
-                    list_services = ast.literal_eval(order.env['ir.config_parameter'].get_param('services.seur.api.request'))
-                    list_products = order.env['ir.config_parameter'].get_param('products.seur.api.request')
+                    url = order.env['ir.config_parameter'].sudo().get_param('url.seur.api.request')
+                    list_services = ast.literal_eval(order.env['ir.config_parameter'].sudo().get_param('services.seur.api.request'))
+                    list_products = order.env['ir.config_parameter'].sudo().get_param('products.seur.api.request')
 
                     for service_id, service_name in list_services.items():
                         service_code = service_id
@@ -318,14 +342,14 @@ class SaleOrder(models.Model):
                             new.write({'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'TNT':
-                    service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.tnt.api.request'))
-                    account_number = order.env['ir.config_parameter'].get_param('account.number.tnt.api.request')
-                    account_country = order.env['ir.config_parameter'].get_param('account.country.tnt.api.request')
-                    #account_user_test = order.env['ir.config_parameter'].get_param('account.user.test.tnt.api.request')
-                    account_user = order.env['ir.config_parameter'].get_param('account.user.tnt.api.request')
-                    #account_password_test = order.env['ir.config_parameter'].get_param('account.password.test.tnt.api.request')
-                    account_password = order.env['ir.config_parameter'].get_param('account.password.tnt.api.request')
-                    url = order.env['ir.config_parameter'].get_param('url.tnt.api.request')
+                    service_codes = ast.literal_eval(order.env['ir.config_parameter'].sudo().get_param('service.codes.tnt.api.request'))
+                    account_number = order.env['ir.config_parameter'].sudo().get_param('account.number.tnt.api.request')
+                    account_country = order.env['ir.config_parameter'].sudo().get_param('account.country.tnt.api.request')
+                    #account_user_test = order.env['ir.config_parameter'].sudo().get_param('account.user.test.tnt.api.request')
+                    account_user = order.env['ir.config_parameter'].sudo().get_param('account.user.tnt.api.request')
+                    #account_password_test = order.env['ir.config_parameter'].sudo().get_param('account.password.test.tnt.api.request')
+                    account_password = order.env['ir.config_parameter'].sudo().get_param('account.password.tnt.api.request')
+                    url = order.env['ir.config_parameter'].sudo().get_param('url.tnt.api.request')
 
                     sender = order.env['res.company'].browse(1).partner_id
                     sender_country = sender.country_id.code
@@ -339,7 +363,7 @@ class SaleOrder(models.Model):
                     auth = str(account_user) + ":" + str(account_password)
                     auth = auth.encode("utf-8")
                     byte_auth = bytearray(auth)
-                    authentication = base64.b64encode(byte_auth)
+                    authentication = base64.b64encode(byte_auth).decode("utf-8")
                     headers = {'content-type': 'text/xml', 'Authorization': 'Basic %s' % str(authentication)}
                     now = datetime.now()
                     rate_request = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -350,12 +374,12 @@ class SaleOrder(models.Model):
                             <rateId>rate1</rateId>
                             <sender>
                                 <country><![CDATA[""" + sender_country + """]]></country>
-                                <town><![CDATA[""" + sender_town + """]]></town>
+                                <town><![CDATA[""" + unidecode.unidecode(sender_town) + """]]></town>
                                 <postcode>""" + str(sender_postcode) + """</postcode>
                             </sender>
                             <delivery>
                                 <country><![CDATA[""" + delivery_country + """]]></country>
-                                <town><![CDATA[""" + delivery_town + """]]></town>
+                                <town><![CDATA[""" + unidecode.unidecode(delivery_town) + """]]></town>
                                 <postcode>""" + str(delivery_postcode) + """</postcode>
                             </delivery>
                             <collectionDateTime>""" + now.strftime('%Y-%m-%dT%H:%M:%S') + """</collectionDateTime>

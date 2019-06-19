@@ -647,7 +647,7 @@ class ResPartner(models.Model):
     @api.multi
     def open_partner(self):
         self.ensure_one()
-        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         record_url = base_url + '/web/?#id=' + str(self.id) + '&view_type=form&model=res.partner'
         return {
             'type': 'ir.actions.act_url',
@@ -658,7 +658,7 @@ class ResPartner(models.Model):
 
     @api.multi
     def call_new_window(self):
-        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         order_view_id = self.env.ref('custom_partner.crm_case_categ_phone_incoming3').id
         record_url = base_url + '/web?#page=0&limit=80&view_type=list&model=crm.phonecall&action=' \
                               + str(order_view_id) + '&active_id=' + str(self.id)

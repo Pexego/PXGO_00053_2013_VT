@@ -110,7 +110,7 @@ class CrmPhonecall(models.Model):
         self.ensure_one()
         mail_pool = self.env['mail.mail']
         context = self._context.copy()
-        context['base_url'] = self.env['ir.config_parameter'].get_param('web.base.url')
+        context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
         template_id = self.env.ref('crm_claim_rma_custom.email_template_call_sat')
 

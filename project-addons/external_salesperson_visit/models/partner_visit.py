@@ -132,7 +132,7 @@ class PartnerVisit(models.Model):
     def send_email(self):
         mail_pool = self.env['mail.mail']
         context = self._context.copy()
-        context['base_url'] = self.env['ir.config_parameter'].get_param('web.base.url')
+        context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
         if self.visit_state == 'log':
             template_id = self.env.ref('external_salesperson_visit.email_template_logged_visits', False)

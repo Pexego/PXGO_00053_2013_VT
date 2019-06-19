@@ -19,7 +19,7 @@ class AccountMoveLine(models.Model):
             invoice = self.env.context.get('invoice', False)
             if invoice and invoice.type == 'out_invoice' and vals.get('date_maturity', False):
                 date_maturity = vals['date_maturity']
-                cyc_days = self.env['ir.config_parameter'].get_param('notification.period.days.cyc')
+                cyc_days = self.env['ir.config_parameter'].sudo().get_param('notification.period.days.cyc')
                 if not isinstance(date_maturity, datetime):
                     date_maturity = datetime.strptime(date_maturity, "%Y-%m-%d")
                 limit_date = date_maturity + relativedelta(days=int(cyc_days))
@@ -34,7 +34,7 @@ class AccountMoveLine(models.Model):
     def write(self, vals, context=None, check=True, update_check=True):
         if vals.get('date_maturity') and self.account_id.id == 443 and self.debit > 0\
                 and self.invoice and self.invoice.type == 'out_invoice':
-            cyc_days = self.env['ir.config_parameter'].get_param('notification.period.days.cyc')
+            cyc_days = self.env['ir.config_parameter'].sudo().get_param('notification.period.days.cyc')
             limit_date = datetime.strptime(vals['date_maturity'], "%Y-%m-%d") + relativedelta(days=int(cyc_days))
             limit_date_format = limit_date.strftime("%Y-%m-%d")
             vals.update({'cyc_limit_date_insolvency': limit_date_format})
