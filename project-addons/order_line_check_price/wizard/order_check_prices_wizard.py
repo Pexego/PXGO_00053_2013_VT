@@ -33,7 +33,7 @@ class OrderCheckPricesWizard(models.TransientModel):
     def _get_default_brands(self):
         brand_lines = []
         product_brand_obj = self.env['product.brand']
-        brand_param = self.env['ir.config_parameter'].get_param('search.default.brands')
+        brand_param = self.env['ir.config_parameter'].sudo().get_param('search.default.brands')
         if brand_param:
             for brand in brand_param.split(','):
                 product_brand_default = product_brand_obj.search([('name', '=', brand)])

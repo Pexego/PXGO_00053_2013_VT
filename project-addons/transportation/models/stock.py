@@ -60,8 +60,8 @@ class StockPicking(models.Model):
         # carrier_ref = self.carrier_tracking_ref
         # carrier = self.carrier_name
         # status_list = self.env['picking.tracking.status.list']
-        # url = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking')
-        # password = self.env['ir.config_parameter'].get_param('url.visiotech.web.tracking.pass')
+        # url = self.env['ir.config_parameter'].sudo().get_param('url.visiotech.web.tracking')
+        # password = self.env['ir.config_parameter'].sudo().get_param('url.visiotech.web.tracking.pass')
         # language = self.env.user.lang or u'es_ES'
         # if 'Correos' in carrier:
         #     carrier_ref = carrier_ref[-13:]

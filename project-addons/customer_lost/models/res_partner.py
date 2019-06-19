@@ -36,8 +36,8 @@ class ResPartner(models.Model):
         """
             Devuelve los meses configurados en los parametros en una tupla.
         """
-        months_min_sale = self.env['ir.config_parameter'].get_param('min.months.last.purchase')
-        months_max_sale = self.env['ir.config_parameter'].get_param('max.months.last.purchase')
+        months_min_sale = self.env['ir.config_parameter'].sudo().get_param('min.months.last.purchase')
+        months_max_sale = self.env['ir.config_parameter'].sudo().get_param('max.months.last.purchase')
         if not months_min_sale or not months_max_sale:
             return False, False
         else:

@@ -13,7 +13,7 @@ class Partner(models.Model):
 
     @api.multi
     def _pending_orders_amount(self):
-        web_user = self.env['ir.config_parameter'].get_param('web.user.buyer')
+        web_user = self.env['ir.config_parameter'].sudo().get_param('web.user.buyer')
         if self.env.user.email != web_user:
             for partner in self:
                 total = 0.0

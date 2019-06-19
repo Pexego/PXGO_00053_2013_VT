@@ -59,7 +59,7 @@ class SaleOrder(models.Model):
              ('partner_id', 'child_of', [partner_id]),
              ('state', 'not in', ['cancel', 'draft', 'sent'])],
             limit=1, order='date_order DESC').id
-        base_url = self.env['ir.config_parameter'].get_param('web.base.url')
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         record_url = base_url + '/web/?#id=' + str(last_order) + \
             '&view_type=form&model=sale.order&action=' + \
             str(order_view_id) + '&active_id=' + str(partner_id)
@@ -128,7 +128,7 @@ class SaleOrder(models.Model):
             self.env.user.notify_warning(message=warning, sticky=True)
 
     def action_confirm(self):
-        user_buyer = self.env['ir.config_parameter'].get_param(
+        user_buyer = self.env['ir.config_parameter'].sudo().get_param(
             'web.user.buyer')
         for sale in self:
             if not sale.validated_dir and sale.create_uid.email == user_buyer:

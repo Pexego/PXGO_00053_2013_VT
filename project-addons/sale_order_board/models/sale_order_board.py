@@ -65,11 +65,11 @@ class SaleOrder(models.Model):
                        'products_wo_weight': products_wo_weight})
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
-                    service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.ups.api.request'))
-                    user_id = order.env['ir.config_parameter'].get_param('user.ups.api.request')
-                    password_id = order.env['ir.config_parameter'].get_param('password.ups.api.request')
-                    access_id = order.env['ir.config_parameter'].get_param('access.ups.api.request')
-                    shipper_number = order.env['ir.config_parameter'].get_param('shipper.number.ups.api.request')
+                    service_codes = ast.literal_eval(order.env['ir.config_parameter'].sudo().get_param('service.codes.ups.api.request'))
+                    user_id = order.env['ir.config_parameter'].sudo().get_param('user.ups.api.request')
+                    password_id = order.env['ir.config_parameter'].sudo().get_param('password.ups.api.request')
+                    access_id = order.env['ir.config_parameter'].sudo().get_param('access.ups.api.request')
+                    shipper_number = order.env['ir.config_parameter'].sudo().get_param('shipper.number.ups.api.request')
 
                     shipper_name = "Visiotech"
                     shipper = order.env['res.company'].browse(1).partner_id
@@ -242,7 +242,7 @@ class SaleOrder(models.Model):
                                 })
                                 break
 
-                        url = order.env['ir.config_parameter'].get_param('url.prod.ups.api.request')
+                        url = order.env['ir.config_parameter'].sudo().get_param('url.prod.ups.api.request')
                         json_request = rate_request
                         response = requests.session().post(url, data=json.dumps(json_request))
                         if response.status_code != 200:
@@ -265,14 +265,14 @@ class SaleOrder(models.Model):
                                 new.write({'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'SEUR':
-                    account_code = order.env['ir.config_parameter'].get_param('account.code.seur.api.request')
-                    user_id = order.env['ir.config_parameter'].get_param('user.seur.api.request')
-                    password_id = order.env['ir.config_parameter'].get_param('password.seur.api.request')
+                    account_code = order.env['ir.config_parameter'].sudo().get_param('account.code.seur.api.request')
+                    user_id = order.env['ir.config_parameter'].sudo().get_param('user.seur.api.request')
+                    password_id = order.env['ir.config_parameter'].sudo().get_param('password.seur.api.request')
                     destination_city = order.partner_shipping_id.city
                     destination_postal_code = order.partner_shipping_id.zip
-                    url = order.env['ir.config_parameter'].get_param('url.seur.api.request')
-                    list_services = ast.literal_eval(order.env['ir.config_parameter'].get_param('services.seur.api.request'))
-                    list_products = order.env['ir.config_parameter'].get_param('products.seur.api.request')
+                    url = order.env['ir.config_parameter'].sudo().get_param('url.seur.api.request')
+                    list_services = ast.literal_eval(order.env['ir.config_parameter'].sudo().get_param('services.seur.api.request'))
+                    list_products = order.env['ir.config_parameter'].sudo().get_param('products.seur.api.request')
 
                     for service_id, service_name in list_services.items():
                         service_code = service_id
@@ -342,14 +342,14 @@ class SaleOrder(models.Model):
                             new.write({'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'TNT':
-                    service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.tnt.api.request'))
-                    account_number = order.env['ir.config_parameter'].get_param('account.number.tnt.api.request')
-                    account_country = order.env['ir.config_parameter'].get_param('account.country.tnt.api.request')
-                    #account_user_test = order.env['ir.config_parameter'].get_param('account.user.test.tnt.api.request')
-                    account_user = order.env['ir.config_parameter'].get_param('account.user.tnt.api.request')
-                    #account_password_test = order.env['ir.config_parameter'].get_param('account.password.test.tnt.api.request')
-                    account_password = order.env['ir.config_parameter'].get_param('account.password.tnt.api.request')
-                    url = order.env['ir.config_parameter'].get_param('url.tnt.api.request')
+                    service_codes = ast.literal_eval(order.env['ir.config_parameter'].sudo().get_param('service.codes.tnt.api.request'))
+                    account_number = order.env['ir.config_parameter'].sudo().get_param('account.number.tnt.api.request')
+                    account_country = order.env['ir.config_parameter'].sudo().get_param('account.country.tnt.api.request')
+                    #account_user_test = order.env['ir.config_parameter'].sudo().get_param('account.user.test.tnt.api.request')
+                    account_user = order.env['ir.config_parameter'].sudo().get_param('account.user.tnt.api.request')
+                    #account_password_test = order.env['ir.config_parameter'].sudo().get_param('account.password.test.tnt.api.request')
+                    account_password = order.env['ir.config_parameter'].sudo().get_param('account.password.tnt.api.request')
+                    url = order.env['ir.config_parameter'].sudo().get_param('url.tnt.api.request')
 
                     sender = order.env['res.company'].browse(1).partner_id
                     sender_country = sender.country_id.code
