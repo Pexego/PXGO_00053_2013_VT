@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+         <record id="send_partner_followup_view" model="ir.ui.view">
+               <field name="name">send_partner_followup</field>
+               <field name="model">wiz.send.followup.partner</field>
+               <field name="arch" type="xml">
+                    <form string="Send Partner Followup">
+                            <field name="company_id" invisible="1"/>
+                            <field name="level_id"
+                                   domain="[('policy_id.company_id', '=', company_id),
+                                            ('channel', '=', 'email')]"
+                                   options='{"create":False,"create_edit": False,"no_open": True}'/> 
+                             <button string="Preview" name="preview_partner_followup_email"
+                                    icon="fa-envelope" type="object" colspan="2"/>
+                    </form>
+               </field>
+          </record>
+
+          <record id="action_send_partner_followup" model="ir.actions.act_window">
+                 <field name="name">Send Partner Followup</field>
+                 <field name="res_model">wiz.send.followup.partner</field>
+                 <field name="type">ir.actions.act_window</field>
+                 <field name="view_type">form</field>
+                 <field name="view_mode">form</field>
+                 <field name="view_id" ref="send_partner_followup_view"/>
+                 <field name="target">new</field>
+           </record>
+
+          <record id="view_partner_inherit_followup_form_3" model="ir.ui.view">
+                <field name="name">res.partner.followup.form.inherit.3</field>
+                <field name="model">res.partner</field>
+                <field name="inherit_id" ref="account_move_line_followup.view_partner_inherit_followup_form_2"/>
+                <field name="arch" type="xml">
+                    <field name="worst_cyc_notify_date" position="after">
+                        <separator/>
+                        <button string="Send followup email" name="%(action_send_partner_followup)d"
+                                type="action" colspan="2"/>
+                    </field>
+                </field>
+           </record>
+
+    </data>
+</odoo>

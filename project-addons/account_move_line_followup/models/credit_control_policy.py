@@ -69,6 +69,7 @@ class CreditControlRun(models.Model):
             comms_email = comm_obj._generate_comm_from_credit_lines_custom(lines)
             comms_email._generate_emails()
 
+
 class CreditCommunication(models.TransientModel):
 
     _inherit = "credit.control.communication"
