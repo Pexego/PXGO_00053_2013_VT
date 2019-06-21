@@ -94,8 +94,6 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def _get_avail_conservative(self):
-        import ipdb
-        ipdb.set_trace()
         for product in self:
             pack_stock = 0
             first_subproduct = True
