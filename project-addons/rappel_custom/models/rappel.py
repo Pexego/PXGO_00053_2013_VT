@@ -93,9 +93,9 @@ class Rappel(models.Model):
 
             if product_rappel:
                 # Rappel que depende de la compra de un producto concreto
-                partner_product = self.env['account.invoice'].search([
-                    ('invoice_line.product_id', '=', product_rappel.id),
-                    ('state', 'in', ['open', 'paid'])]).mapped('partner_id.id')
+                partner_product = self.env['account.invoice.line'].search([
+                    ('product_id', '=', product_rappel.id),
+                    ('invoice_id.state', 'in', ['open', 'paid'])]).mapped('invoice_id.partner_id.id')
                 partner_filter.extend(["('id', 'in', partner_product)"])
 
             if partner_filter:
