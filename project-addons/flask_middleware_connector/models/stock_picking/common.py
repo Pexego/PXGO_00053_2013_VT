@@ -147,10 +147,10 @@ class StockMoveListener(Component):
     def on_stock_move_change(self, record):
         if record.product_id.show_stock_outside:
             record.product_id.with_delay(priority=2, eta=30).update_product()
-        #TODO: Migrar
-        # ~ is_pack = session.env['product.pack.line'].search([('product_id', '=', move.product_id.id)])
-        # ~ for pack in is_pack:
-            # ~ update_product.delay(session, "product.product", pack.parent_product_id.id, priority=2, eta=30)
+
+        packs = self.env['mrp.bom.line'].search([('product_id', '=', record.product_id.id)]).mapped('bom_id')
+        for pack in packs:
+            pack.product_tmpl_id.product_variant_ids.with_delay(priority=2, eta=30).update_product()
 
 
 class StockMove(models.Model):
