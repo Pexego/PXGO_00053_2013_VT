@@ -12,7 +12,7 @@ product_ids = []
 move_lines_data = []
 account_610_amount = 0.0
 for i, row in enumerate(worksheet.get_rows()):
-    if i <= offset or not row[1].value.strip():
+    if i < offset or not row[1].value.strip():
         continue
     product = session.env['product.product'].with_context(to_date='2019-05-07',company_owned=True).search([('default_code', '=', row[1].value.strip())])
     if product:
