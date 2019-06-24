@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--Communication Form View -->
+        <record model="ir.ui.view" id="partner_credit_control_communications_form">
+            <field name="name">Credit Control Communication Form</field>
+            <field name="model">credit.control.communication</field>
+            <field name="arch" type="xml">
+                <form string="Communication" create="false" edit="false">
+                    <sheet>
+                        <div>
+                            <group name="form_data">
+                                <field name="current_policy_level"/>
+                                <field name="report_date"/>
+                                <field name="move_line_ids"/>
+                            </group>
+                        </div>
+                    </sheet>
+                    <div class="oe_chatter">
+                      <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                      <field name="message_ids" widget="mail_thread"/>
+                  </div>
+                </form>
+            </field>
+        </record>
+
+        <!--Communication Form Tree -->
+        <record model="ir.ui.view" id="partner_credit_control_communications_tree">
+            <field name="name">Credit Control Communication Tree</field>
+            <field name="model">credit.control.communication</field>
+            <field name="arch" type="xml">
+                <tree string="Communications" create="false" edit="false">
+                    <field name="report_date"/>
+                    <field name="current_policy_level"/>
+                    <field name="email_type"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="partner_credit_control_communications_action">
+            <field name="name">Credit Control Communication</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">credit.control.communication</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+    </data>
+</odoo>
