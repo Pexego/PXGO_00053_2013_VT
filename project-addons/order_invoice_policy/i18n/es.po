@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#       * sale_order_invoice_policy
+#       * order_invoice_policy
 #
 msgid ""
 msgstr ""
@@ -15,28 +15,28 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#. module: sale_order_invoice_policy
+#. module: order_invoice_policy
 #: model:ir.model.fields,field_description:sale_stock.field_sale_order_picking_policy
 msgid "Shipping Policy"
 msgstr "Política de entrega"
 
-#. module: sale_order_invoice_policy
-#: model:ir.model.fields,field_description:sale_order_invoice_policy.field_sale_order_order_invoice_policy
-#: model:ir.ui.view,arch_db:sale_order_invoice_policy.view_order_form_invoice_policy
+#. module: order_invoice_policy
+#: model:ir.model.fields,field_description:order_invoice_policy.field_sale_order_order_invoice_policy
+#: model:ir.ui.view,arch_db:order_invoice_policy.view_order_form_invoice_policy
 msgid "Invoicing Policy"
 msgstr "Política de facturación"
 
-#. module: sale_order_invoice_policy
+#. module: order_invoice_policy
 #: selection:sale.order,order_invoice_policy:0
 msgid "Defined by Product"
 msgstr "Definido por Producto"
 
-#. module: sale_order_invoice_policy
+#. module: order_invoice_policy
 #: selection:sale.order,order_invoice_policy:0
 msgid "Before Delivery"
 msgstr "Antes de la Entrega"
 
-#. module: sale_order_invoice_policy
-#: model:ir.ui.view,arch_db:sale_order_invoice_policy.view_order_form_invoice_policy
+#. module: order_invoice_policy
+#: model:ir.ui.view,arch_db:order_invoice_policy.view_order_form_invoice_policy
 msgid "Change policy"
 msgstr "Cambiar política"
