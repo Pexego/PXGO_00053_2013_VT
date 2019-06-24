@@ -9,7 +9,7 @@
                 <field name="order_invoice_policy"/>
                     <button name="change_order_invoice_policy" string="Change policy"
                             type="object" groups="sale_order_invoice_policy.group_change_order_invoice_policy"
-                            attrs="{'invisible': ['|', ('invoice_status', '=', 'invoiced'), ('state', 'in', ['done'])]}"/>
+                            attrs="{'invisible': ['|', ('invoice_status', '=', 'invoiced'), ('state', 'not in', ['sale'])]}"/>
             </xpath>
         </field>
     </record>
