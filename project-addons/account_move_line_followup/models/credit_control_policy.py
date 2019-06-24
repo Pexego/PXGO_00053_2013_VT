@@ -67,13 +67,26 @@ class CreditControlRun(models.Model):
         if lines:
             comm_obj = self.env['credit.control.communication']
             comms_email = comm_obj._generate_comm_from_credit_lines_custom(lines)
-            comms_email._generate_emails()
+            for comm in comms_email:
+                email = comm._generate_emails()
+                # Associate communication_id to generated email
+                email.write({'model': 'credit.control.communication',
+                             'res_id': comm.id})
+                # Send email
+                email.send()
+
 
 class CreditCommunication(models.TransientModel):
 
-    _inherit = "credit.control.communication"
+    _name = 'credit.control.communication'
+    _inherit = ['credit.control.communication', 'mail.thread']
+    _order = 'report_date desc, id desc'
 
     move_line_ids = fields.Many2many('account.move.line', rel='comm_aml_rel', string="Account Move Lines")
+    email_type = fields.Selection([
+        ('automatic', 'Automatic email'),
+        ('manual', 'Manual email')],
+        "Email Type")
 
     @api.model
     def _clean_all_partner_followup(self):
@@ -151,6 +164,7 @@ class CreditCommunication(models.TransientModel):
                     data['partner_id'] = group['partner_id']
                     data['current_policy_level'] = partner_policy_level_id
                     data['currency_id'] = group['currency_id'] or company_currency.id
+                    data['email_type'] = 'automatic'
                     comm = self.create(data)
 
                     move_lines = comm._get_unreconciled_move_lines()
