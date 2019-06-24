@@ -38,9 +38,16 @@ class ResPartner(models.Model):
             partner.payment_amount_overdue = amount_overdue
             partner.payment_earliest_due_date = worst_due_date
 
+    @api.multi
+    def _communications_count(self):
+        communications_obj = self.env['credit.control.communication']
+        for partner in self:
+            partner.communications_count = communications_obj.search_count([('partner_id', 'child_of', [partner.id])])
+
+    communications_count = fields.Integer(string="Communication", compute='_communications_count')
+
     payment_amount_due = fields.Float(compute='_get_amounts_and_date', string="Amount Due", store=True, readonly=True)
     payment_amount_overdue = fields.Float(compute='_get_amounts_and_date', string="Amount Overdue", readonly=True)
     payment_earliest_due_date = fields.Date(compute='_get_amounts_and_date', string="Worst Due Date", readonly=True)
     latest_followup_level_id = fields.Many2one('credit.control.policy.level', "Latest Follow-up Level", readonly=True)
-
 

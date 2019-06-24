@@ -77,4 +77,6 @@
         </field>
       </record>
 
+    <menuitem id="purchase.menu_purchase_root" action="purchase.purchase_form_action"/>
+
 </odoo>
