@@ -61,3 +61,9 @@ msgstr "Enviar email deuda"
 msgid "Send Partner Followup"
 msgstr "Enviar seguimiento deuda"
 
+#. module: account_move_line_followup
+#: model:ir.actions.act_window,name:account_move_line_followup.action_customer_followup_debt
+#: model:ir.ui.menu,name:account_move_line_followup.credit_control_customer_followup_action_menu
+msgid "Customer Follow-Ups"
+msgstr "Foto deuda"
+
