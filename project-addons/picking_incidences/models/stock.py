@@ -67,21 +67,6 @@ class StockPicking(models.Model):
                 self.state = 'partially_available'
 
     @api.multi
-    def write(self, vals):
-        res = super(StockPicking, self).write(vals)
-        if vals.get('with_incidences', False):
-            for pick in self:
-                no_incidence = True
-                for move in pick.move_lines:
-                    if not move.qty_ready or move.qty_ready > \
-                            move.reserved_availability:
-                        no_incidence = False
-                        break
-                if no_incidence:
-                    pick.with_incidences = False
-        return res
-
-    @api.multi
     def _create_backorder(self, backorder_moves=[]):
         bck_id = super(StockPicking, self)._create_backorder(backorder_moves=backorder_moves)
         if bck_id:

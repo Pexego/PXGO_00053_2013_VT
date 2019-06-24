@@ -41,13 +41,13 @@ msgid "Tags"
 msgstr "Etiquetas"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:88
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:88
 #, python-format
 msgid "Warning!"
 msgstr "¡Advertencia!"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:89
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:89
 #, python-format
 msgid "One or more products aren't review yet!"
 msgstr "¡Algunos de los productos no se han revisado todavia!"
@@ -94,7 +94,7 @@ msgid "Calculate"
 msgstr "Calcular"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:330
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:330
 #, python-format
 msgid "Cannot delete an invoiced line"
 msgstr "No puede borrar una linea facturada."
@@ -266,7 +266,7 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:316
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:316
 #, python-format
 msgid "Partner not selected"
 msgstr "Cliente no seleccionado"
@@ -322,7 +322,7 @@ msgid "Responsible"
 msgstr "Responsable"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:296
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:296
 #, python-format
 msgid "Selected product is not                                                     in the invoice"
 msgstr "El producto seleccionado no está en la factura"
@@ -360,7 +360,7 @@ msgid "The outputs of this location are managed in Odoo, Vstock only will print 
 msgstr "Las salidas de esta ubicación se gestionan en Odoo, Vstock sólo imprimirá las etiquetas de envío."
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:149
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:149
 #, python-format
 msgid "There is at least one line of the claim with                            an incorrect invoice"
 msgstr "Hay al menos una linea de la reclamación con una factura incorrecta"
@@ -399,13 +399,13 @@ msgid "Wizard to create pickings from picking lines"
 msgstr "Asistente para crear albaranes desde lineas de albarán"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:105
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:105
 #, python-format
 msgid "Warning!"
 msgstr "¡Advertencia!"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:106
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:93
 #, python-format
 msgid "One or more products aren't pending shipping yet!"
 msgstr "¡Algunos de los productos no están pendientes de envío todavia!"
@@ -416,7 +416,7 @@ msgid "Claim Subject"
 msgstr "Objeto de la reclamación"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/crm_claim.py:372
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:372
 #, python-format
 msgid "Quantity cannot be bigger than the quantity specified on invoice"
 msgstr "La cantidad no puede ser mayor que la cantidad especificada en la factura"
