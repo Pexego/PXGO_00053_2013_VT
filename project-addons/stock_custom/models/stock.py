@@ -79,6 +79,7 @@ class StockMoveLine(models.Model):
     sale_price_subtotal = fields.Monetary(store=True)
     sale_price_tax = fields.Float(store=True)
     sale_price_total = fields.Monetary(store=True)
+    date_expected = fields.Datetime(related='move_id.date_expected', string="Date Expected")
 
     @api.depends('sale_line', 'sale_line.currency_id', 'sale_line.tax_id')
     def _compute_sale_order_line_fields(self):

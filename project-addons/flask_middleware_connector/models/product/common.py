@@ -87,16 +87,16 @@ class ProductListener(Component):
             if field in fields:
                 record.with_delay(priority=2, eta=30).update_product()
                 break
-        #TODO: Migrar
-        # ~ is_pack = session.env['product.pack.line'].search([('product_id', '=', record_id)])
-        # ~ for pack in is_pack:
-            # ~ min_stock = False
-            # ~ for product in pack.parent_product_id.pack_line_ids:
-                # ~ product_stock_qty = product.product_id.virtual_available_wo_incoming
-                # ~ if not min_stock or min_stock > product_stock_qty:
-                    # ~ min_stock = product_stock_qty
-            # ~ if min_stock:
-                # ~ update_product.delay(session, model_name, pack.parent_product_id.id, priority=2, eta=30)
+
+        packs = self.env['mrp.bom.line'].search([('product_id', '=', record.id)]).mapped('bom_id')
+        for pack in packs:
+            min_stock = False
+            for line in pack.bom_line_ids:
+                product_stock_qty = line.product_id.virtual_available_wo_incoming
+                if not min_stock or min_stock > product_stock_qty:
+                    min_stock = product_stock_qty
+            if min_stock:
+                pack.product_tmpl_id.product_variant_ids.with_delay(priority=2, eta=30).update_product()
 
         if 'tag_ids' in fields:
             record.with_delay(priority=5, eta=60).unlink_product_tag_rel()

@@ -19,4 +19,18 @@
       </tree>
     </field>
   </record>
+
+      <record id="view_claim_res_partner_button" model="ir.ui.view">
+        <field name="name">res.partner.claim.button</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="crm_claim.view_claim_res_partner_info_form"/>
+        <field name="arch" type="xml">
+           <xpath expr="//button[@name='%(crm_claim.crm_claim_category_claim0)d']" position="attributes">
+             <attribute name="icon">fa-wrench</attribute>
+           </xpath>
+           <field name="claim_count" position="attributes">
+             <attribute name="string">RMAs</attribute>
+           </field>
+        </field>
+    </record>
 </odoo>

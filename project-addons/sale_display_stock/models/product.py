@@ -24,7 +24,7 @@ import odoo.addons.decimal_precision as dp
 
 
 class ProductTemplate(models.Model):
-    _inherit = "product.template"
+    _inherit = 'product.template'
 
     @api.multi
     def _get_no_wh_internal_stock(self):
@@ -73,47 +73,48 @@ class ProductTemplate(models.Model):
             pack_stock = 0
             first_subproduct = True
             product_product_obj = self.env['product.product'].search([('product_tmpl_id', '=', product.id)])
-            # if product_product_obj.pack_line_ids:
-            #     for subproduct in product_product_obj.pack_line_ids:
-            #         subproduct_quantity_next = subproduct.quantity
-            #         if subproduct_quantity_next:
-            #             result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
-            #             subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
-            #             pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
-            #             if first_subproduct:
-            #                 pack_stock = pack_stock_next
-            #                 first_subproduct = False TODO: Migrar
-            #             else:
-            #                 if pack_stock_next < pack_stock:
-            #                     pack_stock = pack_stock_next
-            #     product.virtual_stock_conservative = pack_stock
-            # else:
-            product.virtual_stock_conservative = product.qty_available - product.outgoing_qty - \
-                                                product.qty_available_wo_wh - product.qty_available_input_loc
+            if product_product_obj.bom_ids:
+                for bom in product.bom_ids:
+                    for subproduct in bom.bom_line_ids:
+                        subproduct_quantity_next = subproduct.product_qty
+                        if subproduct_quantity_next:
+                            result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
+                            subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
+                            pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
+                            if first_subproduct:
+                                pack_stock = pack_stock_next
+                                first_subproduct = False
+                            else:
+                                if pack_stock_next < pack_stock:
+                                    pack_stock = pack_stock_next
+                    product.virtual_stock_conservative = pack_stock
+            else:
+                product.virtual_stock_conservative = product.qty_available - product.outgoing_qty - \
+                                                    product.qty_available_wo_wh - product.qty_available_input_loc
 
-    #TODO: Migrar
-    # ~ @api.multi
-    # ~ def _get_avail_conservative(self):
-        # ~ for product in self:
-            # ~ pack_stock = 0
-            # ~ first_subproduct = True
-            # ~ product_product_obj = self.env['product.product'].search([('product_tmpl_id', '=', product.id)])
-            # ~ if product_product_obj.pack_line_ids:
-                # ~ for subproduct in product_product_obj.pack_line_ids:
-                    # ~ subproduct_quantity_next = subproduct.quantity
-                    # ~ if subproduct_quantity_next:
-                        # ~ result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
-                        # ~ subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
-                        # ~ pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
-                        # ~ if first_subproduct:
-                            # ~ pack_stock = pack_stock_next
-                            # ~ first_subproduct = False
-                        # ~ else:
-                            # ~ if pack_stock_next < pack_stock:
-                                # ~ pack_stock = pack_stock_next
-                # ~ product.virtual_available_wo_incoming = pack_stock
-            # ~ else:
-                # ~ product.virtual_available_wo_incoming = product.qty_available - product.outgoing_qty
+    @api.multi
+    def _get_avail_conservative(self):
+        for product in self:
+            pack_stock = 0
+            first_subproduct = True
+            product_product_obj = self.env['product.product'].search([('product_tmpl_id', '=', product.id)])
+            if product_product_obj.bom_ids:
+                for bom in product.bom_ids:
+                    for subproduct in bom.bom_line_ids:
+                        subproduct_quantity_next = subproduct.product_qty
+                        if subproduct_quantity_next:
+                            result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
+                            subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
+                            pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
+                            if first_subproduct:
+                                pack_stock = pack_stock_next
+                                first_subproduct = False
+                            else:
+                                if pack_stock_next < pack_stock:
+                                    pack_stock = pack_stock_next
+                    product.virtual_available_wo_incoming = pack_stock
+            else:
+                product.virtual_available_wo_incoming = product.qty_available - product.outgoing_qty
 
     @api.multi
     def _get_avail_conservative(self):
@@ -160,27 +161,28 @@ class ProductTemplate(models.Model):
 
 class ProductProduct(models.Model):
 
-    _inherit = "product.product"
+    _inherit = 'product.product'
 
     @api.multi
     def _stock_conservative(self):
         for product in self:
             pack_stock = 0
             first_subproduct = True
-            # if product.pack_line_ids:
-            #     for subproduct in product.pack_line_ids:
-            #         subproduct_quantity_next = subproduct.quantity
-            #         if subproduct_quantity_next:
-            #             result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
-            #             subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
-            #             pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
-            #             if first_subproduct:
-            #                 pack_stock = pack_stock_next
-            #                 first_subproduct = False
-            #             else:
-            #                 if pack_stock_next < pack_stock:
-            #                     pack_stock = pack_stock_next
-            #     product.virtual_stock_conservative = pack_stock TODO: Migrar
-            # else:
-            product.virtual_stock_conservative = product.qty_available - product.outgoing_qty - \
+            if product.bom_ids:
+                for bom in product.bom_ids:
+                    for subproduct in bom.bom_line_ids:
+                        subproduct_quantity_next = subproduct.product_qty
+                        if subproduct_quantity_next:
+                            result = subproduct.product_id._compute_quantities_dict(False, False, False)[subproduct.product_id.id]
+                            subproduct_stock_next = result['qty_available'] - result['outgoing_qty']
+                            pack_stock_next = math.floor(subproduct_stock_next / subproduct_quantity_next)
+                            if first_subproduct:
+                                pack_stock = pack_stock_next
+                                first_subproduct = False
+                            else:
+                                if pack_stock_next < pack_stock:
+                                    pack_stock = pack_stock_next
+                    product.virtual_stock_conservative = pack_stock
+            else:
+                product.virtual_stock_conservative = product.qty_available - product.outgoing_qty - \
                                                 product.qty_available_wo_wh - product.qty_available_input_loc
