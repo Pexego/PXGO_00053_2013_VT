@@ -16,6 +16,9 @@
                 <field name="date_order"/>
                 <field name="user_id"/>
             </field>
+            <field name="product_uom_qty" position="before">
+                <field name="string_availability_info"/>
+            </field>
 
         </field>
     </record>
