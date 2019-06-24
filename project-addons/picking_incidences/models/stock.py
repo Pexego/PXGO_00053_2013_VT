@@ -122,8 +122,8 @@ class StockPicking(models.Model):
             new_moves = self.env['stock.move'].browse(new_moves)
             bcko = self._create_backorder_incidences(new_moves)
             new_moves.write({'qty_ready': 0.0})
-            self.do_unreserve()
-            self.action_assign()
+            #self.do_unreserve()
+            #self.action_assign()
             #self.recheck_availability()
         self.message_post(body=_("User %s accepted ready quantities.") %
                           (self.env.user.name))
