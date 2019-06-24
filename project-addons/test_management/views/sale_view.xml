@@ -6,7 +6,7 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <group name="sales_person" position="after">
+            <group name="technical" position="after">
                 <group col="4" groups="test_management.group_test_manager">
                     <field name="tests"/>
                     <button name="set_tests" type="object" string="Set" attrs="{'invisible': ['|',('tests', '=', True),('state', 'in', ['cancel'])]}" colspan="1"/>
