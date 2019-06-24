@@ -240,4 +240,8 @@
         </field>
     </record>
 
+    <record id="stock.stock_move_line_action" model="ir.actions.act_window">
+        <field name="context">{'search_default_todo': 1}</field>
+    </record>
+
 </odoo>
