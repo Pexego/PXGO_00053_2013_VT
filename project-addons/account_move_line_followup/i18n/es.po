@@ -20,3 +20,44 @@ msgstr ""
 msgid "Worst C&C notify date"
 msgstr "Peor fecha notificación C&C"
 
+#. module: account_move_line_followup
+#: model:ir.model.fields,field_description:account_move_line_followup.field_credit_control_communication_move_line_ids
+msgid "Account Move Lines"
+msgstr "Apuntes contables"
+
+#. module: account_move_line_followup
+#: model:ir.model.fields,field_description:account_move_line_followup.field_credit_control_communication_email_type
+msgid "Email Type"
+msgstr "Tipo Email"
+
+#. module: account_move_line_followup
+#: selection:credit.control.communication,email_type:0
+msgid "Automatic email"
+msgstr "Email automático"
+
+#. module: account_move_line_followup
+#: selection:credit.control.communication,email_type:0
+msgid "Manual email"
+msgstr "Email manual"
+
+#. module: account_move_line_followup
+#: model:ir.model.fields,field_description:account_move_line_followup.field_wiz_send_followup_partner_level_id
+msgid "Followup Level"
+msgstr "Nivel de seguimiento"
+
+#. module: account_move_line_followup
+#: model:ir.ui.view,arch_db:account_move_line_followup.view_partners_form_add_communication_button
+msgid "Debt communications"
+msgstr "Comunicación deuda"
+
+#. module: account_move_line_followup
+#: model:ir.ui.view,arch_db:account_move_line_followup.view_partner_inherit_followup_form_3
+msgid "Send debt email"
+msgstr "Enviar email deuda"
+
+#. module: account_move_line_followup
+#: model:ir.ui.view,arch_db:account_move_line_followup.send_partner_followup_view
+#: model:ir.actions.act_window,name:account_move_line_followup.action_send_partner_followup
+msgid "Send Partner Followup"
+msgstr "Enviar seguimiento deuda"
+
