@@ -209,7 +209,6 @@ class ClaimMakePicking(models.TransientModel):
                                    ('type', '=', 'form'),
                                    ])[0]
         claim = claim_obj.browse(context['active_id'])
-        rma_cost = claim.rma_cost
         partner_id = claim.delivery_address_id
         line_ids = [x.id for x in self.claim_line_ids]
         # In case of product return, we don't allow one picking for various
