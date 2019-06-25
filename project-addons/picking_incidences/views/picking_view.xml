@@ -41,6 +41,9 @@
                 <xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']" position="after">
                     <field name="qty_confirmed"/>
                 </xpath>
+                <xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']" position="attributes">
+                    <attribute name="string">Qty ordered</attribute>
+                </xpath>
             </field>
         </record>
 

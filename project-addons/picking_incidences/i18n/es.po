@@ -87,6 +87,11 @@ msgid "Qty ready"
 msgstr "Cant. preparada"
 
 #. module: picking_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_move_picking_tree_add_ready_qty
+msgid "Qty ordered"
+msgstr "Cant. pedida"
+
+#. module: picking_incidences
 #: model:ir.model,name:picking_incidences.model_stock_move
 msgid "Stock Move"
 msgstr "Movimiento de existencias"
