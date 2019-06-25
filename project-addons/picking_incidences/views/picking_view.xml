@@ -31,11 +31,18 @@
                 <xpath expr="//field[@name='move_lines']/tree/field[@name='product_id']" position="after">
                     <field name="location_id"/>
                     <field name="location_dest_id"/>
-                    <field name="qty_ready"/>
-                    <field name="qty_confirmed"/>
                 </xpath>
                 <xpath expr="//field[@name='move_lines']/tree/field[@name='quantity_done']" position="after">
                     <field name="state"/>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']/tree/field[@name='quantity_done']" position="attributes">
+                    <attribute name="string">Qty ready</attribute>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']" position="after">
+                    <field name="qty_confirmed"/>
+                </xpath>
+                <xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']" position="attributes">
+                    <attribute name="string">Qty ordered</attribute>
                 </xpath>
             </field>
         </record>
@@ -46,7 +53,6 @@
         <field name="inherit_id" ref="stock.view_move_picking_form"/>
         <field name="arch" type="xml">
             <field name="product_tmpl_id" position="before">
-                <field name="qty_ready"/>
                 <field name="qty_confirmed"/>
             </field>
         </field>
