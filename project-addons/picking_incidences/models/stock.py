@@ -57,14 +57,24 @@ class StockPicking(models.Model):
 
     state = fields.Selection(selection_add=[('partially_available', 'Partially Available')])
 
+    @api.multi
+    def _compute_show_check_availability(self):
+        for picking in self:
+            res = super(StockPicking, picking)._compute_show_check_availability()
+            if not res and picking.state == 'partially_available':
+                picking.show_check_availability = picking.is_locked
+
     @api.depends('move_type', 'move_lines.state', 'move_lines.picking_id')
     @api.one
     def _compute_state(self):
         super(StockPicking, self)._compute_state()
-        if self.state == 'assigned':
+        if self.state not in ('draft', 'done', 'cancel'):
             relevant_move_state = self.move_lines._get_relevant_state_among_moves()
             if relevant_move_state == 'partially_available':
                 self.state = 'partially_available'
+            elif relevant_move_state == 'confirmed':
+                if any(move.state == 'assigned' for move in self.move_lines):
+                    self.state = 'partially_available'
 
     @api.multi
     def _create_backorder(self, backorder_moves=[]):
@@ -97,7 +107,6 @@ class StockPicking(models.Model):
                 backorder_picking.write({'partial_picking': True, 'date_done': False})
                 backorders |= backorder_picking
         return backorders
-
 
     @api.multi
     def action_accept_ready_qty(self):
