@@ -301,4 +301,8 @@
 
     <menuitem id="sale.sale_menu_root" action="action_orders_reserve"/>
 
+    <record id="sale.action_order_report_all" model="ir.actions.act_window">
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
 </odoo>

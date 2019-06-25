@@ -116,7 +116,7 @@
 
                 <filter name="not_cancelled" string="Not cancelled" domain="[('state', '!=', 'cancel')]"/>
                 <filter icon="terp-camera_test" string="Ready" name="ready" domain="[('state','=','assigned')]" help="Stock moves that are Available (Ready to process)"/>
-                <filter icon="terp-stock" string="To Do" name="future" domain="[('state','in',('assigned','confirmed','waiting'))]" help="Stock moves that are Confirmed, Available or Waiting"/>
+                <filter icon="terp-stock" string="To Do" name="future" domain="[('state','in',('assigned','confirmed','waiting','partially_available'))]" help="Stock moves that are Confirmed, Available or Waiting"/>
                 <filter icon="terp-dialog-close" string="Done" name="done" domain="[('state','=','done')]" help="Stock moves that have been processed"/>
                 <separator/>
                 <filter icon="terp-go-today" string="Today" domain="[('date','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59))), ('date','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]" help="Orders processed Today or planned for Today"/>

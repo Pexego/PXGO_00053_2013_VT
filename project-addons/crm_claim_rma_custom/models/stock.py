@@ -78,33 +78,3 @@ class StockLocation(models.Model):
                                    "not will be synced with vstock")
 
 
-class StockMove(models.Model):
-    _inherit = 'stock.move'
-
-    @api.multi
-    def action_done(self):
-        res = super(StockMove, self).action_done()
-        for move in self:
-            if move.claim_line_id:
-                claim_line_obj = move.claim_line_id
-                if claim_line_obj.claim_type == u'supplier':
-                    qty = claim_line_obj.product_returned_quantity
-                    loc_lost = self.env.ref('crm_rma_advance_location.stock_location_carrier_loss')
-                    claim_obj = claim_line_obj.claim_id
-                    if claim_line_obj.equivalent_product_id:
-                        rma_cost = claim_obj.rma_cost
-                        if move.location_dest_id == loc_lost:
-                            standard_price = claim_line_obj.product_id.standard_price
-                            rma_cost += (move.picking_type_code == u'incoming') and (standard_price * qty) or 0.0
-                        else:
-                            standard_price = claim_line_obj.equivalent_product_id.standard_price
-                            rma_cost += (move.picking_type_code == u'outgoing') and (standard_price * qty) or 0.0
-                        claim_obj.rma_cost = rma_cost
-                    elif move.location_dest_id == loc_lost:
-                        standard_price = claim_line_obj.product_id.standard_price
-                        rma_cost = claim_obj.rma_cost
-                        rma_cost += (move.picking_type_code == u'incoming') and (standard_price * qty) or 0.0
-                        claim_obj.rma_cost = rma_cost
-
-        return res
-
