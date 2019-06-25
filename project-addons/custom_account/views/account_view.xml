@@ -88,6 +88,18 @@
             </field>
         </record>
 
+        <record id="invoice_supplier_tree_add_account_date" model="ir.ui.view">
+            <field name="name">account.invoice.tree.account_date</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+            <field name="arch" type="xml">
+                <field name="date_invoice" position="after">
+                    <field name="date"/>
+                </field>
+            </field>
+        </record>
+
+
         <record id="view_account_invoice_filter_partner" model="ir.ui.view">
             <field name="name">account.invoice.select.partner</field>
             <field name="model">account.invoice</field>
