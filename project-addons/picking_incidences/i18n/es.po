@@ -82,7 +82,7 @@ msgid "Qty confirmed"
 msgstr "Cant. confirmada"
 
 #. module: picking_incidences
-#: model:ir.model.fields,field_description:picking_incidences.field_stock_move_qty_ready
+#: model:ir.ui.view,arch_db:picking_incidences.view_move_picking_tree_add_ready_qty
 msgid "Qty ready"
 msgstr "Cant. preparada"
 

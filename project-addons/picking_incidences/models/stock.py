@@ -109,10 +109,10 @@ class StockPicking(models.Model):
                 # ignore stock moves cancelled or already done
                 continue
             precision = move.product_uom.rounding
-            remaining_qty = move.product_uom_qty - move.qty_ready
+            remaining_qty = move.product_uom_qty - move.quantity_done
             remaining_qty = float_round(remaining_qty,
                                         precision_rounding=precision)
-            if not move.qty_ready:
+            if not move.quantity_done:
                 new_moves.append(move.id)
             elif float_compare(remaining_qty, 0, precision_rounding=precision) > 0 and \
                  float_compare(remaining_qty, move.product_qty, precision_rounding=precision) < 0:
@@ -121,7 +121,7 @@ class StockPicking(models.Model):
         if new_moves:
             new_moves = self.env['stock.move'].browse(new_moves)
             bcko = self._create_backorder_incidences(new_moves)
-            new_moves.write({'qty_ready': 0.0})
+            new_moves.write({'quantity_done': 0.0})
             #self.do_unreserve()
             #self.action_assign()
             #self.recheck_availability()
