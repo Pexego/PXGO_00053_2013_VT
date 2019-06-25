@@ -27,6 +27,16 @@ class WebsiteReservation(http.Controller):
                 'price_unit': float(post['price_unit']),
                 'unique_js_id': post['unique_js_id']
             }
+            if post.get('order_id'):
+                sale = request.env['sale.order'].browse(int(post['order_id']))
+                if not sale.procurement_group_id:
+                    group_id = self.env['procurement.group'].create({
+                            'name': sale.name,
+                            'move_type': sale.picking_policy,
+                            'sale_id': sale.id,
+                            'partner_id': sale.partner_shipping_id.id})
+                    sale.procurement_group_id = group_id.id
+                vals['group_id'] = sale.procurement_group_id.id
             new_reservation = request.env['stock.reservation'].create(vals)
             new_reservation.reserve()
             line_ids = request.env['sale.order.line'].search(

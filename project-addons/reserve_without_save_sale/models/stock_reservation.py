@@ -106,6 +106,7 @@ class StockReservation(models.Model):
                     {'move_id': move.id, 'sale_line_id': current_sale_line_id})
             reservation.message_post(
                 body=_("Reserva modificada. Estado '%s'") % reservation.state)
+        res.mapped('picking_id').not_sync = True
         return res
 
     def release(self):
