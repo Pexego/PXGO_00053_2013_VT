@@ -20,6 +20,9 @@
         <field name="inherit_id" ref="product.product_template_form_view"/>
         <field name="arch" type="xml">
             <field name="standard_price" position="replace"/>
+            <xpath expr="//group[@name='group_standard_price']/label" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             <field name="item_ids" position="attributes">
                 <attribute name="context">{'default_applied_on': '0_product_variant'}</attribute>
             </field>
@@ -71,7 +74,9 @@
                 <group name="costs">
                     <separator string="Costs"/>
                     <group colspan="8" col="8">
-                        <field name="standard_price" string="Cost Price" colspan="2"/>
+                        <label for="standard_price" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/>
+                        <field name="standard_price" colspan="2" widget='monetary' options="{'currency_field': 'cost_currency_id', 'field_digits': True}"/>
+                        <field name="standard_price_2" readonly="True" colspan="2" widget='monetary' options="{'currency_field': 'cost_currency_id', 'field_digits': True}"/>
                     </group>
                 </group>
             </xpath>

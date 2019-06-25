@@ -47,11 +47,10 @@
 
     <record id="product_add_proposal_data2" model="ir.ui.view">
         <field name="name">product.product.form2</field>
-        <field name="model">product.product</field>
-        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product_pricelist_custom.product_template_form_add_relation_pricelist"/>
         <field name="arch" type="xml">
-            <field name="lst_price" position="replace"/>
-            <field name='standard_price' position="after">
+            <field name="standard_price_2" position="after">
                 <field name="average_margin"/>
                 <button name="average_margin_compute" string="Calculate Average Margin Last Sales" type="object" group="sales_team.group_sale_salesman"/>
             </field>

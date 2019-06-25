@@ -107,6 +107,14 @@ class ProductProduct(models.Model):
         self.compute_last_sixty_days_sales(records=self.ids)
 
 
+class ProductTemplate(models.Model):
+
+    _inherit = "product.template"
+
+    average_margin = fields.Float("Average Margin Last Sales", readonly=True,
+                                  related="product_variant_ids.average_margin")
+
+
 class SaleOrderLine(models.Model):
 
     _inherit = "sale.order.line"

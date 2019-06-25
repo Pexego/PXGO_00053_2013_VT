@@ -10,7 +10,7 @@
     'depends': ['base', 'stock_picking_report_valued', 'base_report_to_printer',
                 'custom_account', 'picking_incidences',
                 'reserve_without_save_sale', 'sale_display_stock',
-                'stock_reserve_sale', 'product_brand',
+                'stock_reserve_sale', 'product_brand', 'sale_customer_discount',
                 'product_stock_unsafety', 'stock', 'stock_landed_costs'],
     'data': ['views/ir_attachment_view.xml',
               'stock_custom_report.xml',

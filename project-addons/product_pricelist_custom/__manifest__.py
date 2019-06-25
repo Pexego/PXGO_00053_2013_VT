@@ -7,9 +7,9 @@
     "category": "Product",
     "description": """
     Product Pricelist Customizations
-    Add margins and relations on product pricelist 
+    Add margins and relations on product pricelist
 """,
-    "depends": ["base", "product"],
+    "depends": ["base", "product", "sale_customer_discount"],
     "data": [
         "views/product_view.xml",
     ],

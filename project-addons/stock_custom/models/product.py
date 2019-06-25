@@ -31,21 +31,6 @@ class ProductTemplate(models.Model):
                                       ('end_of_period', 'End of period')],
                                      'Type of analysis', default='average')
     stock_graphic = fields.Binary("Graph")
-    standard_price_2 = fields.Float(
-        digits=dp.get_precision('Product Price'),
-        string="Cost Price 2", company_dependent=True)
-
-    def recalculate_standard_price_2(self):
-        for product in self:
-            moves = self.env['stock.move'].search(
-                [('product_id', 'in', product.product_variant_ids._ids),
-                ('remaining_qty', '>', 0)])
-            if sum(moves.mapped('remaining_qty')) != 0:
-                standard_price_2 = sum(moves.mapped('remaining_value')) / sum(moves.mapped('remaining_qty'))
-                dp = self.env['decimal.precision'].search([('name', '=', 'Product Price')])
-                standard_price_2 = round(standard_price_2, dp.digits)
-                if standard_price_2 != round(product.standard_price_2, dp.digits):
-                    product.standard_price_2 = standard_price_2
 
 
 class ProductProduct(models.Model):

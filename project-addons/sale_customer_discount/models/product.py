@@ -22,60 +22,83 @@ from odoo import models, fields, api
 import odoo.addons.decimal_precision as dp
 
 
+class ProductTemplate(models.Model):
+
+    _inherit = "product.template"
+
+    standard_price_2 = fields.Float(
+        digits=dp.get_precision('Product Price'),
+        string="Cost Price 2", company_dependent=True)
+
+    def recalculate_standard_price_2(self):
+        for product in self:
+            moves = self.env['stock.move'].search(
+                [('product_id', 'in', product.product_variant_ids._ids),
+                ('remaining_qty', '>', 0)])
+            if sum(moves.mapped('remaining_qty')) != 0:
+                standard_price_2 = sum(moves.mapped('remaining_value')) / sum(moves.mapped('remaining_qty'))
+                dp = self.env['decimal.precision'].search([('name', '=', 'Product Price')])
+                standard_price_2 = round(standard_price_2, dp.digits)
+                if standard_price_2 != round(product.standard_price_2, dp.digits):
+                    product.standard_price_2 = standard_price_2 or product.standard_price
+            else:
+                product.standard_price_2 = product.standard_price
+
+
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     @api.depends('list_price', 'pvd1_relation', 'pvd2_relation', 'pvd3_relation', 'pvd4_relation',
-                 'standard_price', 'pvi1_price', 'pvi2_price', 'pvi3_price', 'pvi4_price')
+                 'standard_price_2', 'pvi1_price', 'pvi2_price', 'pvi3_price', 'pvi4_price')
     def _get_margins(self):
         for product in self:
             if product.list_price and product.pvd1_relation:
                 product.margin_pvd1 = \
-                    (1 - (product.standard_price /
+                    (1 - (product.standard_price_2 /
                         (product.list_price * product.pvd1_relation))) * 100.0
 
             if product.list_price2 and product.pvd2_relation:
                 product.margin_pvd2 = \
-                    (1 - (product.standard_price /
+                    (1 - (product.standard_price_2 /
                         (product.list_price2 * product.pvd2_relation))) * \
                     100.0
 
             if product.list_price3 and product.pvd3_relation:
                 product.margin_pvd3 = \
-                    (1 - (product.standard_price /
+                    (1 - (product.standard_price_2 /
                          (product.list_price3 * product.pvd3_relation))) * \
                     100.0
 
             if product.list_price4 and product.pvd4_relation:
                 product.margin_pvd4 = \
-                    (1 - (product.standard_price /
+                    (1 - (product.standard_price_2 /
                         (product.list_price4 * product.pvd4_relation))) * \
                     100.0
 
             if product.pvi1_price:
                 product.margin_pvi1 = \
-                    (1 - (product.standard_price / product.pvi1_price)) * 100.0
+                    (1 - (product.standard_price_2 / product.pvi1_price)) * 100.0
                 if product.pvd1_price:
                     product.margin_pvd_pvi_1 = \
                         ((product.pvd1_price - product.pvi1_price) / product.pvd1_price) * 100
 
             if product.pvi2_price:
                 product.margin_pvi2 = \
-                    (1 - (product.standard_price / product.pvi2_price)) * 100.0
+                    (1 - (product.standard_price_2 / product.pvi2_price)) * 100.0
                 if product.pvd2_price:
                     product.margin_pvd_pvi_2 = \
                         ((product.pvd2_price - product.pvi2_price) / product.pvd2_price) * 100
 
             if product.pvi3_price:
                 product.margin_pvi3 = \
-                    (1 - (product.standard_price / product.pvi3_price)) * 100.0
+                    (1 - (product.standard_price_2 / product.pvi3_price)) * 100.0
                 if product.pvd3_price:
                     product.margin_pvd_pvi_3 = \
                         ((product.pvd3_price - product.pvi3_price) / product.pvd3_price) * 100
 
             if product.pvi4_price:
                 product.margin_pvi4 = \
-                    (1 - (product.standard_price / product.pvi4_price)) * 100.0
+                    (1 - (product.standard_price_2 / product.pvi4_price)) * 100.0
                 if product.pvd4_price:
                     product.margin_pvd_pvi_4 = \
                         ((product.pvd4_price - product.pvi4_price) / product.pvd4_price) * 100
@@ -155,7 +178,7 @@ class ProductProduct(models.Model):
         pvd1_relation = 0.5
         if self.pvd1_price:
             self.lst_price = (1.0 / pvd1_relation) * self.pvd1_price
-            self.margin_pvd1 = (1 - (self.standard_price / self.pvd1_price)) * 100.0
+            self.margin_pvd1 = (1 - (self.standard_price_2 / self.pvd1_price)) * 100.0
             self.margin_pvd_pvi_1 = ((self.pvd1_price - self.pvi1_price) / self.pvd1_price) * 100
         else:
             self.lst_price = 0
@@ -167,7 +190,7 @@ class ProductProduct(models.Model):
         pvd2_relation = 0.5
         if self.pvd2_price:
             self.list_price2 = (1.0 / pvd2_relation) * self.pvd2_price
-            self.margin_pvd2 = (1 - (self.standard_price / self.pvd2_price)) * 100.0
+            self.margin_pvd2 = (1 - (self.standard_price_2 / self.pvd2_price)) * 100.0
             self.margin_pvd_pvi_2 = ((self.pvd2_price - self.pvi2_price) / self.pvd2_price) * 100
         else:
             self.list_price2 = 0
@@ -179,7 +202,7 @@ class ProductProduct(models.Model):
         pvd3_relation = 0.5
         if self.pvd3_price:
             self.list_price3 = (1.0 / pvd3_relation) * self.pvd3_price
-            self.margin_pvd3 = (1 - (self.standard_price / self.pvd3_price)) * 100.0
+            self.margin_pvd3 = (1 - (self.standard_price_2 / self.pvd3_price)) * 100.0
             self.margin_pvd_pvi_3 = ((self.pvd3_price - self.pvi3_price) / self.pvd3_price) * 100
         else:
             self.list_price3 = 0
@@ -191,7 +214,7 @@ class ProductProduct(models.Model):
         pvd4_relation = 0.5
         if self.pvd4_price:
             self.list_price4 = (1.0 / pvd4_relation) * self.pvd4_price
-            self.margin_pvd4 = (1 - (self.standard_price / self.pvd4_price)) * 100.0
+            self.margin_pvd4 = (1 - (self.standard_price_2 / self.pvd4_price)) * 100.0
             self.margin_pvd_pvi_4 = ((self.pvd4_price - self.pvi4_price) / self.pvd4_price) * 100
         else:
             self.list_price4 = 0
@@ -206,7 +229,7 @@ class ProductProduct(models.Model):
             self.margin_pvd_pvi_1 = 0
 
         if self.pvi1_price:
-            self.margin_pvi1 = (1 - (self.standard_price / self.pvi1_price)) * 100.0
+            self.margin_pvi1 = (1 - (self.standard_price_2 / self.pvi1_price)) * 100.0
         else:
             self.margin_pvi1 = 0
 
@@ -218,7 +241,7 @@ class ProductProduct(models.Model):
             self.margin_pvd_pvi_2 = 0
 
         if self.pvi2_price:
-            self.margin_pvi2 = (1 - (self.standard_price / self.pvi2_price)) * 100.0
+            self.margin_pvi2 = (1 - (self.standard_price_2 / self.pvi2_price)) * 100.0
         else:
             self.margin_pvi2 = 0
 
@@ -230,7 +253,7 @@ class ProductProduct(models.Model):
             self.margin_pvd_pvi_3 = 0
 
         if self.pvi3_price:
-            self.margin_pvi3 = (1 - (self.standard_price / self.pvi3_price)) * 100.0
+            self.margin_pvi3 = (1 - (self.standard_price_2 / self.pvi3_price)) * 100.0
         else:
             self.margin_pvi3 = 0
 
@@ -242,6 +265,6 @@ class ProductProduct(models.Model):
             self.margin_pvd_pvi_4 = 0
 
         if self.pvi4_price:
-            self.margin_pvi4 = (1 - (self.standard_price / self.pvi4_price)) * 100.0
+            self.margin_pvi4 = (1 - (self.standard_price_2 / self.pvi4_price)) * 100.0
         else:
             self.margin_pvi4 = 0
