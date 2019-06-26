@@ -95,7 +95,7 @@
                                                 <span t-field="l1.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                             </td>
                                             <t t-if="l1.product_id.type != 'service'">
-                                                <td class="text-center"><span t-field="l1.origin"/></td>
+                                                <td class="text-center"><span t-esc="', '.join(l1.move_line_ids.mapped('picking_id.name'))"/></td>
                                             </t>
                                             <t t-if="l1.product_id.type == 'service'">
                                                 <td class="text-center"></td>
