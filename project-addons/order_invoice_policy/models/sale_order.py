@@ -11,19 +11,25 @@ class SaleOrder(models.Model):
         string='Invoicing Policy',
         required=True,
         readonly=True,
+        states={'sale': [('readonly', False)],
+                'done': [('readonly', False)]},
+        groups="order_invoice_policy.group_change_order_invoice_policy",
         default='by_product'
     )
 
-    @api.multi
-    def change_order_invoice_policy(self):
-        self.ensure_one()
-        if self.order_invoice_policy == 'by_product':
-            self.order_invoice_policy = 'prepaid'
-            for line in self.order_line:
-                line.qty_to_invoice = line.product_uom_qty - line.qty_invoiced
-        else:
-            self.order_invoice_policy = 'by_product'
-            for line in self.order_line:
-                if line.product_id.invoice_policy != 'order':
-                    line.qty_to_invoice = line.qty_delivered - line.qty_invoiced
+
+class SaleOrderLine(models.Model):
+    _inherit = 'sale.order.line'
+
+    @api.depends('order_id.order_invoice_policy')
+    def _get_to_invoice_qty(self):
+        lines = self.filtered(lambda sol: sol.order_id.state in ['sale', 'done']
+                                          and sol.order_id.order_invoice_policy == 'prepaid'
+                                          and 'assigned' in sol.move_ids.mapped('state'))
+        for line in lines:
+            # Allow to invoice only quantity with stock (reserved)
+            line.qty_to_invoice = sum(line.move_ids.filtered(lambda mv: mv.state == 'assigned').mapped('product_qty')) \
+                                  - line.qty_delivered - line.qty_invoiced
+
+        super(SaleOrderLine, self - lines)._get_to_invoice_qty()
 
