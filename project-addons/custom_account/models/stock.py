@@ -1,6 +1,7 @@
 # Copyright 2019 Omar Castiñeira, Comunitea Servicios Tecnológicos S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models, fields, api
+from odoo.tools import float_round
 
 
 class StockMove(models.Model):
@@ -14,7 +15,6 @@ class StockMove(models.Model):
                 move.state = "draft"
         return super().unlink()
 
-    #TODO: Probar funcionalmente
     @api.multi
     def _prepare_account_move_line(self, qty, cost, credit_account_id,
                                    debit_account_id):
@@ -24,7 +24,14 @@ class StockMove(models.Model):
                 self.picking_id.picking_type_id.code == "incoming" and \
                 self.picking_id.backorder_id:
             ctx['force_period_date'] = self.picking_id.backorder_id.date_done
-
+        if not cost and not ctx.get('force_valuation_amount') and \
+                (self.product_id.standard_price or
+                 self.product_id.standard_price_2):
+            curr_rounding = self.company_id.currency_id.rounding
+            ctx['force_valuation_amount'] = \
+                float_round((self.product_id.standard_price or
+                             self.product_id.standard_price_2) *
+                            self.product_qty, precision_rounding=curr_rounding)
         res = super(StockMove, self.with_context(ctx)).\
             _prepare_account_move_line(qty, cost, credit_account_id,
                                        debit_account_id)
@@ -57,7 +64,8 @@ class ProductProduct(models.Model):
 
     @api.multi
     def copy(self, default=None):
-        if default is None: default = {}
+        if default is None:
+            default = {}
         if not default.get('default_code', False):
             prod = self.browse(self.id)
             default['default_code'] = ("%s (copy)") % (prod.default_code)

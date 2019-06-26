@@ -18,8 +18,6 @@
 #
 ##############################################################################
 from odoo import api, exceptions, fields, models, _
-from collections import defaultdict
-from odoo.tools import float_is_zero
 
 
 class StockPicking(models.Model):
@@ -79,7 +77,8 @@ class StockMoveLine(models.Model):
     sale_price_subtotal = fields.Monetary(store=True)
     sale_price_tax = fields.Float(store=True)
     sale_price_total = fields.Monetary(store=True)
-    date_expected = fields.Datetime(related='move_id.date_expected', string="Date Expected")
+    date_expected = fields.Datetime(related='move_id.date_expected',
+                                    string="Date Expected")
 
     @api.depends('sale_line', 'sale_line.currency_id', 'sale_line.tax_id')
     def _compute_sale_order_line_fields(self):
@@ -118,6 +117,9 @@ class StockMove(models.Model):
         res = super()._action_done()
         stock_loc = self.env.ref("stock.stock_location_stock")
         for move in self:
+            if (move.location_id.usage in ('supplier', 'production')) and \
+                    (move.product_id.cost_method == 'fifo'):
+                move.product_id.product_tmpl_id.recalculate_standard_price_2()
             if move.location_dest_id == stock_loc:
                 domain = [('state', '=', 'confirmed'),
                           ('picking_type_code', '=', 'outgoing'),
@@ -139,10 +141,10 @@ class StockMove(models.Model):
                     confirmed_ids._action_assign()
         return res
 
-    def _action_done(self):
-        res = super()._action_done()
-        for line in self:
-            line.product_id.product_tmpl_id.recalculate_standard_price_2()
+    def _get_price_unit(self):
+        res = super()._get_price_unit()
+        if not res:
+            res = self.product_id.standard_price_2
         return res
 
 
@@ -218,6 +220,8 @@ class StockLandedCost(models.Model):
 
     def button_validate(self):
         res = super().button_validate()
-        valuation_lines = self.valuation_adjustment_lines.filtered(lambda line: line.move_id)
-        valuation_lines.mapped('move_id.product_id.product_tmpl_id').recalculate_standard_price_2()
+        valuation_lines = self.valuation_adjustment_lines.\
+            filtered(lambda line: line.move_id)
+        valuation_lines.mapped('move_id.product_id.product_tmpl_id').\
+            recalculate_standard_price_2()
         return res

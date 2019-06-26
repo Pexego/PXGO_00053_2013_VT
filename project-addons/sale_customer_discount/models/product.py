@@ -41,6 +41,8 @@ class ProductTemplate(models.Model):
                 standard_price_2 = round(standard_price_2, dp.digits)
                 if standard_price_2 != round(product.standard_price_2, dp.digits):
                     product.standard_price_2 = standard_price_2 or product.standard_price
+                elif not standard_price_2:
+                    product.standard_price_2 = product.standard_price
             else:
                 product.standard_price_2 = product.standard_price
 
