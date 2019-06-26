@@ -39,7 +39,7 @@
                 <field name="model">res.partner</field>
                 <field name="inherit_id" ref="account_move_line_followup.view_partner_inherit_followup_form_2"/>
                 <field name="arch" type="xml">
-                    <field name="worst_cyc_notify_date" position="after">
+                    <field name="notified_creditoycaucion" position="after">
                         <separator/>
                         <button string="Send debt email" name="%(action_send_partner_followup)d"
                                 type="action" colspan="2"/>
