@@ -22,9 +22,9 @@
             </t>
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%" />
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%" />
                 </div>
-                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70">
+                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                     <br />
                     <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}" />
                     CIF: <span t-esc="company.vat"/>
@@ -337,9 +337,9 @@
 
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
-                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70">
+                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                     <br/>
                     <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
                     CIF: <span t-field="company.vat"/>
@@ -512,7 +512,7 @@
                     </t>
                     <div t-if="valued_report">
                         <strong>Payment Mode:</strong>
-                        <span style="font-size:12px; color:#6D6E70;" t-field="o.payment_mode_id"/>
+                        <span style="font-size:12px; color:#6D6E70;" t-field="o.payment_mode_id.note"/>
                     </div>
                     <div t-if="valued_report">
                         <strong>Payment Term:</strong>
@@ -587,9 +587,9 @@
         <div class="header">
             <div class="row">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
-                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70">
+                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                     <br/>
                     <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
                         CIF: <span t-esc="company.vat"/>
@@ -637,9 +637,9 @@
 
             <div class="row" style="margin-bottom: 2%">
                     <div class="pull-left">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                     </div>
-                    <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70">
+                    <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                         <br/>
                         <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
                         CIF: <span t-esc="company.vat"/>
@@ -917,6 +917,7 @@
                     <t t-if="'Recibo domiciliado' in o.expiration_dates_str">
                         <t t-if="o.payment_mode_id.note">
                             <strong>Payment Mode:</strong>
+
                             <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2" t-field="o.payment_mode_id.note"/>
                         </t>
                         <t t-if="o.partner_bank_id">
@@ -1027,9 +1028,9 @@
             </t>
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
-                <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70">
+                <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 2%">
                     <br/>
                     <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
                     CIF: <span t-field="company.vat"/>
@@ -1276,7 +1277,7 @@ SWIFT/BIC: BESCPTPL
                 </t>
                 <div class="row" style="margin-bottom: 2%">
                     <div class="pull-left">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
+                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                     </div>
                     <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 4%;">
                         <div t-if="not claim.claim_type">RMA Receipt</div>
@@ -1372,9 +1373,9 @@ SWIFT/BIC: BESCPTPL
         </t>
         <div class="row" style="margin-bottom: 2%">
             <div class="pull-left">
-                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
+                <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
             </div>
-            <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70">
+            <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 2%">
                 <br/>
                 <address t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;]}"/>
                 <span>CIF: ESB80645518</span>
@@ -1617,9 +1618,9 @@ SWIFT/BIC: BESCPTPL
             </t>
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-left: 6%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
-                <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70">
+                <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 2%">
                     <br/>
                     <address t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;]}"/>
                     <span>CIF: ESB80645518</span>
