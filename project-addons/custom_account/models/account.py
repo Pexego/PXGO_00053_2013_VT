@@ -289,3 +289,18 @@ class InvoiceMerge(models.TransientModel):
                     raise exceptions.Warning(
                         _('Not all invoices are of the same invoice type!'))
         return res
+
+
+class AccountPayment(models.Model):
+    _inherit = "account.payment"
+
+    def _create_payment_entry(self, amount):
+        res = super()._create_payment_entry(amount)
+
+        if 'RCONF' in self.journal_id.code or 'RPAG' in self.journal_id.code:
+            lines = self.mapped('move_line_ids')
+            for line in lines:
+                if not line.full_reconcile_id:
+                    line.write({'blocked': True})
+
+        return res

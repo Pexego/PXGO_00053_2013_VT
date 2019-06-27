@@ -203,7 +203,7 @@ msgstr "<strong>Dirección de Entrega\n"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
 msgid "<strong>Delivery Note</strong>"
-msgstr "<strong>Delivery Note</strong>"
+msgstr "<strong>Albarán</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document

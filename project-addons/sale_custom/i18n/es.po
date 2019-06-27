@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:29
+#: code:addons/sale_custom/models/sale.py:29
 #, python-format
 msgid "Error"
 msgstr "Error"
@@ -34,13 +34,13 @@ msgstr "Pedidos Cliente"
 
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:133
+#: code:addons/sale_custom/models/sale.py:133
 #, python-format
 msgid "Please, validate shipping address."
 msgstr "Por favor, valide la dirección de envío."
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:121
+#: code:addons/sale_custom/models/sale.py:121
 #, python-format
 msgid "Please, introduce a shipping cost line."
 msgstr "Por favor, introduzca una línea de gastos de envío."
@@ -72,13 +72,13 @@ msgid "Warnings"
 msgstr "Avisos"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:108
+#: code:addons/sale_custom/models/sale.py:108
 #, python-format
 msgid "Partner Risk Information"
 msgstr "Información del riesgo contable de una empresa"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:91
+#: code:addons/sale_custom/models/sale.py:91
 #, python-format
 msgid "Warnings"
 msgstr "Avisos"
@@ -96,49 +96,49 @@ msgid "Customer situation"
 msgstr "Situación del cliente"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:120
+#: code:addons/sale_custom/models/sale.py:120
 #, python-format
 msgid "The address is incorrect, the following fields are empty:\n"
 msgstr "La dirección es incorrecta, faltan los siguentes campos:\n"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:113
+#: code:addons/sale_custom/models/sale.py:113
 #, python-format
 msgid "Street"
 msgstr "Calle"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:114
+#: code:addons/sale_custom/models/sale.py:114
 #, python-format
 msgid "Zip"
 msgstr "Código postal"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:115
+#: code:addons/sale_custom/models/sale.py:115
 #, python-format
 msgid "City"
 msgstr "Ciudad"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:116
+#: code:addons/sale_custom/models/sale.py:116
 #, python-format
 msgid "State"
 msgstr "Provincia"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:117
+#: code:addons/sale_custom/models/sale.py:117
 #, python-format
 msgid "Country"
 msgstr "País"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:150
+#: code:addons/sale_custom/models/sale.py:151
 #, python-format
 msgid "Please consider that!"
 msgstr "¡Por favor, téngalo en cuenta!"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:151
+#: code:addons/sale_custom/models/sale.py:150
 #, python-format
-msgid "Some of the products of this order aren't available now"
-msgstr "Algunos de los productos no estan disponibles actualmente"
+msgid "Some of the products of this order {} aren't available now"
+msgstr "Algunos de los productos del pedido {} no estan disponibles actualmente"
