@@ -168,7 +168,7 @@ class StockLotacion(models.Model):
                     get_quantity_source_location(source_location, product_id):
                 raise Warning("Check qty in source location")
 
-        type_id = self.env['stock.picking.type'].search([('code', '=', 'internal')])
+        type_id = self.env.ref('stock.picking_type_internal')
         pick_vals = {
             'partner_id': self.env.user.company_id.partner_id.id,
             'picking_type_id': type_id.id,
