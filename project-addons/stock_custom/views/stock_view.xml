@@ -237,6 +237,7 @@
             <field name="qty_done" position="before">
                 <field name="picking_id"/>
                 <field name="date_expected"/>
+                <field name="product_uom_qty"/>
             </field>
         </field>
     </record>
