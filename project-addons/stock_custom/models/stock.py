@@ -30,28 +30,26 @@ class StockPicking(models.Model):
     def action_done(self):
         lot_obj = self.env["stock.production.lot"]
         for picking in self:
-            for move_line in picking.move_line_ids:
-                if move_line.lots_text:
-                    txlots = move_line.lots_text.split(',')
-                    if len(txlots) != move_line.qty_done:
+            for move in picking.move_lines:
+                if move.lots_text:
+                    txlots = move.lots_text.split(',')
+                    if len(txlots) != len(move.move_line_ids):
                         raise exceptions.Warning(_("The number of lots defined"
                                                    " are not equal to move"
                                                    " product quantity"))
+                    cont = 0
                     while (txlots):
                         lot_name = txlots.pop()
                         lot = lot_obj.search([("name", "=", lot_name),
                                               ("product_id", "=",
-                                               move_line.product_id.id)],
+                                               move.product_id.id)],
                                              limit=1)
                         if not lot:
                             lot = lot_obj.create({'name': lot_name,
                                                   'product_id':
-                                                  move_line.product_id.id})
-                        if move_line.qty_done > 1:
-                            move_line.qty_done = move_line.qty_done - 1
-                            move_line.copy({'qty_done': 1, 'lot_id': lot.id})
-                        else:
-                            move_line.lot_id = lot
+                                                  move.product_id.id})
+                            move.move_line_ids[cont].lot_id = lot
+                            cont += 1
         res = super().action_done()
         for picking in self:
             if picking.state == 'done' and picking.sale_id and \
@@ -67,8 +65,6 @@ class StockPicking(models.Model):
 class StockMoveLine(models.Model):
 
     _inherit = 'stock.move.line'
-
-    lots_text = fields.Text('Lots', help="Value must be separated by commas")
 
     sale_line = fields.Many2one('sale.order.line', store=True)
     sale_price_unit = fields.Float(store=True)
@@ -93,6 +89,7 @@ class StockMove(models.Model):
     real_stock = fields.Float(compute='_compute_real_stock')
     available_stock = fields.Float(compute="_compute_available_stock")
     user_id = fields.Many2one('res.users', compute='_compute_responsible')
+    lots_text = fields.Text('Lots', help="Value must be separated by commas")
 
     def _compute_responsible(self):
         for move in self:
