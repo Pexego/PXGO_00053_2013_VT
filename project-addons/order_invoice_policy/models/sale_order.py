@@ -29,7 +29,7 @@ class SaleOrderLine(models.Model):
         for line in lines:
             # Allow to invoice only quantity with stock (reserved)
             line.qty_to_invoice = sum(line.move_ids.filtered(lambda mv: mv.state == 'assigned').mapped('product_qty')) \
-                                  - line.qty_delivered - line.qty_invoiced
+                                  - (line.qty_invoiced - line.qty_delivered)
 
         super(SaleOrderLine, self - lines)._get_to_invoice_qty()
 
