@@ -26,7 +26,7 @@ class GeneralLedgerXslx(models.AbstractModel):
                 'field': 'taxes_description',
                 'width': 15},
             5: {'header': _('Partner'), 'field': 'partner', 'width': 25},
-            6: {'header': _('Ref'), 'field': 'ref', 'width': 40},
+            6: {'header': _('Reference'), 'field': 'ref', 'width': 40},
             7: {'header': _('Label'), 'field': 'label', 'width': 40},
             8: {'header': _('Cost center'),
                 'field': 'cost_center',
