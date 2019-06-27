@@ -7,9 +7,6 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='sale_pay']/field[@name='invoice_status']" position="after">
                 <field name="order_invoice_policy"/>
-                <button name="change_order_invoice_policy" string="Change policy"
-                        type="object" groups="order_invoice_policy.group_change_order_invoice_policy"
-                        attrs="{'invisible': ['|', ('invoice_status', '=', 'invoiced'), ('state', '!=', 'sale')]}"/>
             </xpath>
         </field>
     </record>

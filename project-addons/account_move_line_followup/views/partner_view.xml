@@ -17,6 +17,8 @@
                     <field name="payment_amount_overdue"/>
                     <field name="payment_earliest_due_date"/>
                     <field name="worst_cyc_notify_date" readonly="True"/>
+                    <field name="notified_creditoycaucion" attrs="{'readonly':[('is_accounting','!=',True)]}" />
+                    <field name="is_accounting" invisible="1" />
                 </field>
             </field>
         </record>
