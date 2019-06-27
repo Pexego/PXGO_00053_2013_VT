@@ -15,13 +15,13 @@ class CalcCicleSupplierProduct(models.TransientModel):
         """Set the cicle of a product depends of the first supplier"""
         vals = {'order_cycle': self.order_cycle}
         products_data = self.env['purchase.order.line'].read_group(
-            [('invoiced', '=', True),
+            [('order_id.invoice_status', '=', 'invoiced'),
              ('order_id.partner_id', '=', self.supplier_id.id)],
             ['product_id'], ['product_id'])
         for product_data in products_data:
             purchase = self.env['purchase.order.line'].search(
                 [('product_id', '=', product_data['product_id'][0]),
-                 ('invoiced', '=', True)],
+                 ('order_id.invoice_status', '=', 'invoiced')],
                 order='id desc', limit=1)
             if self.supplier_id.id == purchase.order_id.partner_id.id:
                 product = purchase.product_id

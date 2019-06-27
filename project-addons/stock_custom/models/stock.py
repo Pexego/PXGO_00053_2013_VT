@@ -90,6 +90,7 @@ class StockMove(models.Model):
     available_stock = fields.Float(compute="_compute_available_stock")
     user_id = fields.Many2one('res.users', compute='_compute_responsible')
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
+    sale_id = fields.Many2one('sale.order', related='sale_line_id.order_id', readonly=True)
 
     def _compute_responsible(self):
         for move in self:
