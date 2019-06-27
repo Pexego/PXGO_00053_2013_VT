@@ -16,3 +16,9 @@ class StockMove(models.Model):
     def _compute_has_reservations(self):
         for move in self:
             move.has_reservations = any(move.reservation_ids)
+
+    def _assign_picking(self):
+        no_pick_moves = self.\
+            filtered(lambda x: x.location_dest_id.id == self.env.
+                     ref('stock_reserve.stock_location_reservation').id)
+        return super(StockMove, self - no_pick_moves)._assign_picking()
