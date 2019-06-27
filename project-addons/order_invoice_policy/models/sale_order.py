@@ -13,7 +13,6 @@ class SaleOrder(models.Model):
         readonly=True,
         states={'sale': [('readonly', False)],
                 'done': [('readonly', False)]},
-        groups="order_invoice_policy.group_change_order_invoice_policy",
         default='by_product'
     )
 
