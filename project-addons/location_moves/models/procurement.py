@@ -18,23 +18,21 @@
 #
 ##############################################################################
 
-from openerp import models, api
+from odoo import models, api
 
-class ProcurementOrder(models.Model):
 
-    _inherit = "procurement.order"
+class ProcurementGroup(models.Model):
+    _inherit = 'procurement.group'
 
     @api.model
-    def run_scheduler(self, use_new_cursor=False, company_id = False):
-        res = super(ProcurementOrder, self).\
-            run_scheduler(use_new_cursor=use_new_cursor,
-                          company_id=company_id)
+    def _run_scheduler_tasks(self, use_new_cursor=False, company_id=False):
+        super()._run_scheduler_tasks(use_new_cursor=use_new_cursor,
+                                     company_id=company_id)
         pick_ids = self.env["stock.picking"].\
-            search([("picking_type_code", "=", "internal"),
+            search([("picking_type_id", "=",
+                     self.env.ref('stock.picking_type_internal').id),
                     ("state", "=", "assigned")])
         for pick in pick_ids:
             pick.action_done()
         if use_new_cursor:
             self.env.cr.commit()
-
-        return res

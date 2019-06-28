@@ -31,6 +31,8 @@ class StockPicking(models.Model):
         lot_obj = self.env["stock.production.lot"]
         for picking in self:
             for move in picking.move_lines:
+                if move.state == 'assigned' and not move.quantity_done:
+                    move.quantity_done = move.product_uom_qty
                 if move.lots_text:
                     txlots = move.lots_text.split(',')
                     if len(txlots) != len(move.move_line_ids):
@@ -118,22 +120,26 @@ class StockMove(models.Model):
                     (move.product_id.cost_method == 'fifo'):
                 move.product_id.product_tmpl_id.recalculate_standard_price_2()
             if move.location_dest_id == stock_loc:
-                domain = [('state', '=', 'confirmed'),
+                domain = [('state', 'in', ['confirmed',
+                                           'partially_available']),
                           ('picking_type_code', '=', 'outgoing'),
                           ('product_id', '=', move.product_id.id)]
                 reserve_ids = self.env["stock.reservation"].\
                     search([('product_id', '=', move.product_id.id),
-                            ('state', '=', 'confirmed'),
+                            ('state', 'in', ['confirmed',
+                                             'partially_available']),
                             ('sale_line_id', '!=', False)])
                 if reserve_ids:
-                    reserve_move_ids = [x.move_id.id for x in reserve_ids]
-                    domain = [('state', '=', 'confirmed'),
+                    reserve_move_ids = reserve_ids.mapped('move_id').ids
+                    domain = [('state', 'in', ['confirmed',
+                                               'partially_available']),
                               ('product_id', '=', move.product_id.id),
                               '|', ('picking_type_code', '=', 'outgoing'),
                               ('id', 'in', reserve_move_ids)]
 
                 confirmed_ids = self.\
-                    search(domain, limit=None)
+                    search(domain, limit=None,
+                           order="has_reservations desc, picking_id, sequence, id")
                 if confirmed_ids:
                     confirmed_ids._action_assign()
         return res
@@ -169,7 +175,8 @@ class StockReservation(models.Model):
         for res in self:
             date_expected = False
             moves = self.env['stock.move'].search(
-                [('state', 'in', ('waiting', 'confirmed', 'assigned')),
+                [('state', 'in', ('waiting', 'confirmed', 'assigned',
+                                  'partially_available')),
                  ('product_id', '=', res.product_id.id),
                  ('location_id', '=',
                   res.sale_id.warehouse_id.wh_input_stock_loc_id.id),
@@ -179,7 +186,8 @@ class StockReservation(models.Model):
             if not moves:
                 supp_id = self.env.ref('stock.stock_location_suppliers').id
                 moves = self.env['stock.move'].search(
-                    [('state', 'in', ('waiting', 'confirmed', 'assigned')),
+                    [('state', 'in', ('waiting', 'confirmed', 'assigned',
+                                      'partially_available')),
                      ('product_id', '=', res.product_id.id),
                      ('location_id', '=', supp_id),
                      ('location_dest_id', 'child_of',

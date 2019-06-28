@@ -36,6 +36,8 @@ class StockReservation(models.Model):
         context2 = dict(self._context)
         context2.pop('default_state', False)
         res = super(StockReservation, self.with_context(context2)).create(vals)
+        if vals.get('sequence') and res.move_id:
+            res.move_id.sequence = vals['sequence']
         if vals.get('unique_js_id', False) and \
                 not vals.get('sale_line_id', False):
             with registry(self.env.cr.dbname).cursor() as new_cr:
@@ -53,28 +55,33 @@ class StockReservation(models.Model):
         return res
 
     def write(self, vals):
-        if vals.get('sequence', False) and self._context.get('first', False):
-            old_sequences = {}
-            for reservation in self:
-                old_sequences[reservation.id] = reservation.sequence
+        if vals.get('sequence', False):
+            old_sequence = self.sequence
             res = super().write(vals)
-            self.with_context(sequences=old_sequences).reassign()
+            self.refresh()
+            self.with_context(old_sequence=old_sequence).reassign()
         else:
             res = super().write(vals)
+        if vals.get('sequence'):
+            for reserve in self:
+                reserve.move_id.sequence = vals['sequence']
+        elif vals.get('move_id'):
+            for reserve in self:
+                reserve.move_id.sequence = reserve.sequence
         return res
 
-    def reassign(self):
-        for reservation in self:
-            old_sequence = self._context.get('sequences', False)
-            if old_sequence:
-                sequence = min(
-                    old_sequence[reservation.id], reservation.sequence)
-            else:
-                sequence = reservation.sequence
-            reserv_ids = self.search(
-                [('sequence', '>=', sequence),
-                 ('product_id', '=', reservation.product_id.id),
-                 ('state', 'in', ['draft', 'confirmed', 'assigned'])])
+    def reassign(self, old_sequence=False):
+        self.ensure_one()
+        if self.env.context.get('old_sequence'):
+            sequence = min(self.env.context['old_sequence'],
+                           self.sequence)
+        else:
+            sequence = self.sequence
+        reserv_ids = self.search(
+            [('sequence', '>=', sequence),
+             ('product_id', '=', self.product_id.id),
+             ('state', 'in', ['draft', 'confirmed', 'assigned',
+                              'partially_available'])])
         # Undo all reserves in reservations under the first sequence
         reserv_ids.do_complete_release()
         reserv_ids.reserve()
@@ -94,19 +101,21 @@ class StockReservation(models.Model):
         The reservation is done using the default UOM of the product.
         A date until which the product is reserved can be specified.
         """
-        current_sale_line_id = self.sale_line_id.id
-        self.refresh()
-        res = super().reserve()
-        self.refresh()
-        for move in res:
-            reservation = self.env['stock.reservation'].search(
-                [('move_id', '=', move.id)])
-            if not reservation:
-                reservation = self.env['stock.reservation'].create(
-                    {'move_id': move.id, 'sale_line_id': current_sale_line_id})
-            reservation.message_post(
-                body=_("Reserva modificada. Estado '%s'") % reservation.state)
-        return res
+        moves = self.env['stock.move']
+        for reserve in self:
+            current_sale_line_id = reserve.sale_line_id.id
+            res = super(StockReservation, reserve).reserve()
+            reserve.refresh()
+            moves |= res
+            for move in res:
+                reservation = self.env['stock.reservation'].search(
+                    [('move_id', '=', move.id)])
+                if not reservation:
+                    reservation = self.env['stock.reservation'].create(
+                        {'move_id': move.id, 'sale_line_id': current_sale_line_id})
+                reservation.message_post(
+                    body=_("Reserva modificada. Estado '%s'") % reservation.state)
+        return moves
 
     def release(self):
         res = super().release()
