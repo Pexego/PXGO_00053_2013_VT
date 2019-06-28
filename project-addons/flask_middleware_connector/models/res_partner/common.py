@@ -233,7 +233,7 @@ class ResPartner(models.Model):
         with backend.work_on('res.partner') as work:
             exporter = work.component(usage='record.exporter')
             for category in self.category_id:
-                return exporter.insert_category_rel(self, category)
+                exporter.insert_category_rel(self, category)
         return True
 
     @job(retry_pattern={
@@ -242,7 +242,7 @@ class ResPartner(models.Model):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on('res.partner') as work:
             exporter = work.component(usage='record.exporter')
-            return exporter.delete_category_rel(self.category_id)
+            return exporter.delete_category_rel(self.id)
         return True
 
 
