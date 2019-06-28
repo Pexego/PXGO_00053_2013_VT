@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Author: Jesus Garcia Manzanas
@@ -19,13 +18,14 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _, exceptions
+from odoo import models, fields
+from odoo.addons import decimal_precision as dp
 
 
 class PickingRatedWizard(models.TransientModel):
     _name = 'picking.rated.wizard'
 
-    total_weight = fields.Char('Total Weight (Kgs)', readonly=True)
+    total_weight = fields.Char('Total Weight (Kgs)', readonly=True, digits=dp.get_precision('Stock Weight'))
     products_wo_weight = fields.Char('', readonly=True)
     data = fields.One2many('picking.rated.wizard.tree', 'wizard_id', string='Shipping Data', readonly=True)
 

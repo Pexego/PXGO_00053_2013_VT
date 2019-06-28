@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_crm_claim_update_lines_wizard" model="ir.ui.view">
+        <field name="name">crm_claim_update_lines_view</field>
+        <field name="model">crm_claim_update_lines.wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <separator string="Update data" colspan="4"/>
+                <group>
+                    <field name="claim_origine"/>
+                    <field name="partner_id" invisible="1"/>
+                    <field name="invoice_id" domain="[('partner_id', 'child_of', [partner_id]),('state', '!=', 'draft')]"/>
+                    <field name="substate_id"/>
+                </group>
+
+                <footer>
+                    <button name="button_update_lines" string="Update" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
+

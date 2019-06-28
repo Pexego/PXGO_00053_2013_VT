@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- © 2016 Comunitea
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+
+<odoo>
+
+    <record id="product_form_view_move_button" model="ir.ui.view">
+        <field name="name">product.product.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_inline oe_stat_button" name="action_view_moves"
+                    string="Stock moves" type="object" icon="fa-cubes" attrs="{'invisible':[('type', '=', 'service')]}"/>
+            </xpath>
+            <notebook position="inside">
+                <page string="Stock graphic" attrs="{'invisible': [('type','!=','product')]}">
+                    <group string="Filters" class="oe_inline">
+                        <field name="date_start" />
+                        <field name="date_end" />
+                        <field name="period" />
+                        <field name="analysis_type" />
+                        <button name="action_create_graph" type="object" string="Refresh graph" />
+                        <label colspan="4" string="(By default, the graph shows the analysis per month of the daily stock average of the last 6 months)" />
+                    </group>
+                    <group string="Stock graphic">
+                        <field name="stock_graphic" widget="'image'" readonly="1" />
+                    </group>
+                </page>
+            </notebook>
+        </field>
+    </record>
+
+    <record id="view_stock_product_tree" model="ir.ui.view">
+        <field name="name">product.stock.tree.inherit</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <field name="price" position="after">
+                <field name="virtual_stock_cooked"/>
+                <field name="incoming_qty"/>
+                <field name="qty_in_production"/>
+                <field name="joking_index"/>
+            </field>
+            <field name="barcode" position="after">
+                <field name="categ_id"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_add_visiotech_reference" model="ir.ui.view">
+        <field name="name">product.product.form.add_visiotech_reference</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product_stock_unsafety.product_add_joking_index"/>
+        <field name="arch" type="xml">
+            <field name="joking_index" position="before">
+                <field name="ref_visiotech"/>
+            </field>
+        </field>
+    </record>
+
+    <delete model="ir.ui.view" id="product_brand.product_search_form_view"/>
+
+    <record id="product_add_tags_search" model="ir.ui.view">
+        <field name="name">product.add.tags.search</field>
+        <field name="model">product.product</field>
+        <field name="priority">16</field>
+        <field name="inherit_id" ref="product.product_search_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="attributes">
+                <attribute name="filter_domain">['|', '|', '|', ('default_code', 'ilike', self), ('name','ilike',self),
+                                                                ('ref_manufacturer','ilike',self), ('ref_visiotech','ilike',self)]</attribute>
+            </field>
+            <field name="name" position="after">
+                <field name="tag_ids" string="Tag"/>
+                <field name="seller_id" string="Main Supplier"/>
+            </field>
+            <field name="categ_id" position="attributes">
+                <attribute name="filter_domain"></attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="action_product_stock_new" model="ir.actions.server">
+        <field name="name">Stock New</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_product_product"/>
+        <field name="code">
+            action = self.get_stock_new(cr, uid, context.get('active_ids', []), context=context)
+        </field>
+    </record>
+
+    <menuitem id="menu_products_stock_new" action="action_product_stock_new"
+        parent="sale.menu_product" groups="base.group_no_one" sequence="2"/>
+</odoo>

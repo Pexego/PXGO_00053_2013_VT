@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Invoice model and helper functions.
 
@@ -29,4 +28,4 @@ class Invoice(SyncModel):
     MOD_NAME = 'invoice'
 
     def __unicode__(self):
-        return u"%s - %s" % (self.odoo_id, self.number)
+        return "%s - %s" % (self.odoo_id, self.number)

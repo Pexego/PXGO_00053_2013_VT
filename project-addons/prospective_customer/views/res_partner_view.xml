@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_partner_add_prospective_form" model="ir.ui.view">
+            <field name="name">res.partner.prospective.form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='sale']/field[@name='customer']" position="after">
+                    <field name="prospective" attrs="{'invisible':[('customer', '=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_view_prospective_customers" model="ir.actions.act_window">
+            <field name="name">Prospective customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{'default_prospective':1, 'default_active':0, 'default_customer': 1, 'default_is_company': 1}</field>
+            <field name="domain">[('prospective', '=', 1), ('active','=',0), ('customer','=',1)]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a prospective customer in your address book.
+              </p><p>
+                OpenERP helps you easily track all activities related to
+                a customer; discussions, history of business opportunities,
+                documents, etc.
+              </p>
+            </field>
+        </record>
+
+        <!-- TODO:poner este invisible <menuitem id="crm.res_partner_menu_crm"
+            parent="crm_menu_root"
+            action="base.action_partner_form"
+            sequence="2"/>-->
+
+        <menuitem id="crm.crm_menu_root" name="CRM" action="base.action_partner_form"/>
+
+        <menuitem id="crm_menu_partners"
+            name="Partners"
+            parent="crm.crm_menu_root"
+            sequence="0"/>
+
+        <menuitem id="sale.res_partner_menu"
+            parent="crm_menu_partners"
+            action="base.action_partner_form"
+            sequence="3" groups="sales_team.group_sale_salesman"/>
+
+        <menuitem id="res_partner_prospective" name="Prospective customers" string="Prospective customers"
+                  action="action_view_prospective_customers"  parent="crm_menu_partners" sequence="4"/>
+
+    </data>
+</odoo>

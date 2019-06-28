@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_order_form_imp_ship_addr" model="ir.ui.view">
+            <field name="name">sale.order.form.imp_ship_addr</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_shipping_id" position="attributes">
+                    <attribute name="context">{'show_address':1, 'default_type':'delivery', 'default_dropship': True, 'default_not_print_picking': True, 'default_parent_id': partner_id}</attribute>
+                    <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </field>
+                <field name="partner_invoice_id" position="attributes">
+                    <attribute name="domain">[('id', 'child_of', [partner_id])]</attribute>
+                </field>
+                <field name="fiscal_position_id" position="after">
+                    <field name="invoice_type_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_order_tree_add_amount_untaxed" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="amount_total" position="before">
+                    <field name="amount_untaxed" sum="Untaxed"/>
+		            <field name="margin_rappel" string="margin (%)"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="sale_order_search_add_invoice_type" model="ir.ui.view">
+            <field name="name">sale.order.search.invoice.type</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="analytic_account_id" position="after">
+                    <field name="invoice_type_id"/>
+                </field>
+                <filter context="{'group_by':'date_order'}" position="after">
+                    <filter string="Invoice type" domain="[]" context="{'group_by':'invoice_type_id'}"/>
+                </filter>
+            </field>
+        </record>
+
+    </data>
+</openerp>

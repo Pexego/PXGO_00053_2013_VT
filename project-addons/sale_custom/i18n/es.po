@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:29
+#: code:addons/sale_custom/models/sale.py:29
 #, python-format
 msgid "Error"
 msgstr "Error"
@@ -28,29 +28,117 @@ msgid "Product quantity cannot be negative or zero"
 msgstr "La cantidad de un producto no puede ser negativo o cero"
 
 #. module: sale_custom
-#: view:sale.order:sale_custom.view_order_form_sales_partner
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_sales_partner
 msgid "Partner Orders"
 msgstr "Pedidos Cliente"
 
-#. module: sale_custom
-#: view:sale.confirm.wizard:sale_custom.sale_confirm_wizard_form_wizard
-msgid "Some of the products of this order aren't available now. Please consider that!"
-msgstr "Algunos de los productos no estan disponibles actualmente. Por favor, tengalo en cuenta!"
-
 
 #. module: sale_custom
-#: view:sale.confirm.wizard:sale_custom.sale_confirm_wizard_form_wizard
-msgid "Sale Confirm"
-msgstr "Confirmar Tramitacion"
-
-#. module: sale_custom
-#: code:addons/sale_custom/sale.py:133
+#: code:addons/sale_custom/models/sale.py:133
 #, python-format
 msgid "Please, validate shipping address."
 msgstr "Por favor, valide la dirección de envío."
 
 #. module: sale_custom
-#: code:addons/sale_custom/sale.py:121
+#: code:addons/sale_custom/models/sale.py:121
 #, python-format
 msgid "Please, introduce a shipping cost line."
 msgstr "Por favor, introduzca una línea de gastos de envío."
+
+#. module: sale_custom
+#: model:ir.actions.act_window,name:sale_custom.action_orders_reserve
+#: model:ir.ui.menu,name:sale_custom.menu_sale_order_reserve
+msgid "Sales Reserved"
+msgstr "Pedidos"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_imp_ship_addr_val
+msgid "  Validate address"
+msgstr "  Validar dirección"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_imp_ship_addr
+msgid "Confirm Sale"
+msgstr "Confirmar Venta"
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_sales_partner
+msgid "Risk Information"
+msgstr "Riesgo Cliente"
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_sales_partner
+msgid "Warnings"
+msgstr "Avisos"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:108
+#, python-format
+msgid "Partner Risk Information"
+msgstr "Información del riesgo contable de una empresa"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:91
+#, python-format
+msgid "Warnings"
+msgstr "Avisos"
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_inherit_sale_stock_change_string
+msgid "Pickings"
+msgstr "Albaranes"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_partner_situation_tree_sale
+#: model:ir.actions.act_window,name:sale_custom.partner_situation_action_sale
+#: model:ir.ui.view,arch_db:sale_custom.sale_order_view_buttons_add_followup
+msgid "Customer situation"
+msgstr "Situación del cliente"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:120
+#, python-format
+msgid "The address is incorrect, the following fields are empty:\n"
+msgstr "La dirección es incorrecta, faltan los siguentes campos:\n"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:113
+#, python-format
+msgid "Street"
+msgstr "Calle"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:114
+#, python-format
+msgid "Zip"
+msgstr "Código postal"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:115
+#, python-format
+msgid "City"
+msgstr "Ciudad"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:116
+#, python-format
+msgid "State"
+msgstr "Provincia"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:117
+#, python-format
+msgid "Country"
+msgstr "País"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:151
+#, python-format
+msgid "Please consider that!"
+msgstr "¡Por favor, téngalo en cuenta!"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:150
+#, python-format
+msgid "Some of the products of this order {} aren't available now"
+msgstr "Algunos de los productos del pedido {} no estan disponibles actualmente"

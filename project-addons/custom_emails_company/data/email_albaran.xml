@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!--Email template -->
+        <record id="email_template_edi_albaran_custom" model="mail.template">
+            <field name="name">Albarán - Send by Email_11</field>
+            <field name="email_from">${object.create_uid.login}</field>
+            <field name="email_to">${object.partner_id.id}</field>
+            <field name="subject">VISIOTECH ${object.state in ('draft', 'sent') and 'Quotation' or 'Order'} (Ref ${object.name or 'n/a' })</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="report_template" ref="custom_report_link.report_picking_custom_action"/>
+            <field name="report_name">Albarán_${(object.name or '').replace('/','_')}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<!DOCTYPE html>
+
+
+                        <!--INICIO CONTENIDO-->
+
+                        <div>
+
+                            <p>Hello ${object.partner_id.name},</p>
+
+                            <p>Here is your ${object.state in ('draft', 'sent') and 'quotation' or 'order confirmation'} from VISIOTECH: </p>
+
+                            <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                               &nbsp;&nbsp;<strong>REFERENCES</strong><br />
+                               &nbsp;&nbsp;Order number: <strong>${object.name}</strong><br />
+                               &nbsp;&nbsp;Order date: ${object.date_order}<br />
+                               % if object.origin:
+                               &nbsp;&nbsp;Order reference: ${object.origin}<br />
+                               % endif
+                               % if object.client_order_ref:
+                               &nbsp;&nbsp;Your reference: ${object.client_order_ref}<br />
+                               % endif
+                               % if object.user_id:
+                               &nbsp;&nbsp;Your contact: <a href="mailto:${object.user_id.email or ''}?subject=Order%20${object.name}">${object.user_id.name}</a>
+                               % endif
+                            </p>
+
+                            <br/>
+                            <p>If you have any question, do not hesitate to contact us.</p>
+                            <p>Thank you for choosing VISIOTECH</p>
+                        </div>
+
+
+                        <!--FIN CONTENIDO-->
+
+]]>
+            </field>
+        </record>
+
+        <!--Email template -->
+        <record id="email_template_edi_albaran_valued_custom" model="mail.template">
+            <field name="name">Albarán Valorado - Send by Email_11</field>
+            <field name="email_from">${object.create_uid.login}</field>
+            <field name="email_to">${object.partner_id.id}</field>
+            <field name="subject">VISIOTECH ${object.state in ('draft', 'sent') and 'Quotation' or 'Order'} (Ref ${object.name or 'n/a' })</field>
+            <field name="partner_to">${object.partner_id.id}</field>
+            <field name="model_id" ref="stock.model_stock_picking"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="report_template" ref="custom_report_link.report_picking_custom_valued_action"/>
+            <field name="report_name">Albarán Valorado_${(object.name or '').replace('/','_')}</field>
+            <field name="lang">${object.partner_id.lang}</field>
+            <field name="body_html"><![CDATA[
+<!DOCTYPE html>
+
+
+                        <!--INICIO CONTENIDO-->
+
+                        <div>
+
+                            <p>Hello ${object.partner_id.name},</p>
+
+                            <p>Here is your ${object.state in ('draft', 'sent') and 'quotation' or 'order confirmation'} from VISIOTECH: </p>
+
+                            <p style="border-left: 1px solid #8e0000; margin-left: 30px;">
+                               &nbsp;&nbsp;<strong>REFERENCES</strong><br />
+                               &nbsp;&nbsp;Order number: <strong>${object.name}</strong><br />
+                               &nbsp;&nbsp;Order date: ${object.date_order}<br />
+                               % if object.origin:
+                               &nbsp;&nbsp;Order reference: ${object.origin}<br />
+                               % endif
+                               % if object.client_order_ref:
+                               &nbsp;&nbsp;Your reference: ${object.client_order_ref}<br />
+                               % endif
+                               % if object.user_id:
+                               &nbsp;&nbsp;Your contact: <a href="mailto:${object.user_id.email or ''}?subject=Order%20${object.name}">${object.user_id.name}</a>
+                               % endif
+                            </p>
+
+                            <br/>
+                            <p>If you have any question, do not hesitate to contact us.</p>
+                            <p>Thank you for choosing VISIOTECH</p>
+                        </div>
+
+
+                        <!--FIN CONTENIDO-->
+
+]]>
+            </field>
+        </record>
+        </data>
+</odoo>

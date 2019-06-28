@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Admin dashboard.
 Configures the admin interface.
@@ -32,12 +31,13 @@ def init_db():
         User.create(username='admin',
                     password=make_password('admin'),
                     admin=True)
-    for mod_class in MASTER_CLASSES.keys():
+    for mod_class in list(MASTER_CLASSES.keys()):
         if not MODELS_CLASS[mod_class].table_exists():
             MODELS_CLASS[mod_class].create_table()
     for mod_class in sorted(DEPENDENT_CLASSES.keys()):
         if not MODELS_CLASS[mod_class].table_exists():
             MODELS_CLASS[mod_class].create_table()
+
 
 init_db()
 

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_parnter_add_sale_graphic_form" model="ir.ui.view">
+        <field name="name">res.partner.add.sale.graphic.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page string="Sales graphic" attrs="{'invisible': ['|',('customer','=',False), ('parent_id', '!=', False)]}">
+                    <button name="action_create_graph" type="object" string="Refresh graph"/>
+                    <field name="sale_graphic" widget='image' readonly="1"/>
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

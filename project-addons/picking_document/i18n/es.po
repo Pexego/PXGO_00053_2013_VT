@@ -16,51 +16,51 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: picking_document
-#: field:stock.document,create_uid:0
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_create_uid
 msgid "Created by"
 msgstr "Created by"
 
 #. module: picking_document
-#: field:stock.document,create_date:0
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_create_date
 msgid "Created on"
 msgstr "Created on"
 
 #. module: picking_document
-#: field:stock.document,description:0
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_description
 msgid "Description"
 msgstr "Descripción"
 
 #. module: picking_document
 #: model:ir.ui.menu,name:picking_document.menu_document
-#: view:stock.document:picking_document.document_filter
-#: view:stock.document:picking_document.document_form
+#: model:ir.ui.view,arch_db:picking_document.document_filter
+#: model:ir.ui.view,arch_db:picking_document.document_form
 msgid "Document"
 msgstr "Documento"
 
 #. module: picking_document
-#: view:stock.document:picking_document.document_tree
-#: view:stock.picking:picking_document.picking_add_documents
-#: field:stock.picking,document_ids:0
+#: model:ir.ui.view,arch_db:picking_document.document_tree
+#: model:ir.ui.view,arch_db:picking_document.picking_add_documents
+#: model:ir.model.fields,field_description:picking_document.field_stock_picking_document_ids
 msgid "Documents"
 msgstr "Documentos"
 
 #. module: picking_document
-#: field:stock.document,id:0
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_id
 msgid "ID"
 msgstr "ID"
 
 #. module: picking_document
-#: field:stock.document,write_uid:0
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_write_uid
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
 #. module: picking_document
-#: field:stock.document,write_date:0
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_write_date
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
 #. module: picking_document
-#: field:stock.document,name:0
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_name
 msgid "Name"
 msgstr "Nombre"
 
@@ -70,7 +70,7 @@ msgid "Picking List"
 msgstr "Albarán"
 
 #. module: picking_document
-#: field:stock.document,picking_ids:0
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_picking_ids
 msgid "Pickings"
 msgstr "Albaranes"
 

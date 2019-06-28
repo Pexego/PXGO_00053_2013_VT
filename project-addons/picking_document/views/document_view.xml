@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <record id="document_tree" model="ir.ui.view">
+            <field name="name">document.tree</field>
+            <field name="model">stock.document</field>
+            <field name="arch" type="xml">
+                <tree string="Documents">
+                    <field name="name"/>
+                    <field name="description"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="document_form" model="ir.ui.view">
+            <field name="name">document.form</field>
+            <field name="model">stock.document</field>
+            <field name="arch" type="xml">
+                <form string="Document">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="description"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="document_filter" model="ir.ui.view">
+            <field name="name">document.filter</field>
+            <field name="model">stock.document</field>
+            <field name="arch" type="xml">
+                <search string="Document">
+                   <field name="name"/>
+               </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_document">
+            <field name="name">document</field>
+            <field name="res_model">stock.document</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="document_filter"/>
+        </record>
+
+        <menuitem name="Documents" parent="stock.menu_stock_config_settings" action="action_document" id="menu_document"/>
+
+</odoo>

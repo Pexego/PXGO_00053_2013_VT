@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
-        <record id="create_production_order_wzd_form" model="ir.ui.view">
-            <field name="name">create.production.order.wzd.form</field>
-            <field name="model">create.production.order.wzd</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Create production order">
-                    <label string="A production order will be created for selected products"/>
-                    <button string="Create production" name="create_production_order" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                </form>
-            </field>
-        </record>
+    <record id="create_production_order_wzd_form" model="ir.ui.view">
+        <field name="name">create.production.order.wzd.form</field>
+        <field name="model">create.production.order.wzd</field>
+        <field name="arch" type="xml">
+            <form string="Create production order">
+                <label string="A production order will be created for selected products"/>
+                <footer>
+                    <button string="Create production" name="create_production_order" type="object" icon="fa-check" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <act_window name="Create production order"
-            res_model="create.production.order.wzd"
-            src_model="product.stock.unsafety"
-            view_id="create_production_order_wzd_form"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"
-            id="create_production_order_wzd_action"/>
+    <act_window name="Create production order"
+        res_model="create.production.order.wzd"
+        src_model="product.stock.unsafety"
+        view_id="create_production_order_wzd_form"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="create_production_order_wzd_action"/>
 
-    </data>
-</openerp>
+</odoo>

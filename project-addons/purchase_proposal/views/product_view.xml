@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="product_product_form_view_add_ref_manufacturer" model="ir.ui.view">
+        <field name="name">product.product.form.view.add.ref.manufacturer</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+                <field name="ref_manufacturer"/>
+            </field>
+            <group name="sale" position="inside">
+                <group>
+                    <label for="order_cycle" />
+                    <div class="o_row">
+                        <field name="order_cycle"/> <span>days</span>
+                    </div>
+                    <label for="transport_time" />
+                    <div class="o_row">
+                        <field name="transport_time"/> <span>days</span>
+                    </div>
+                    <label for="security_margin" />
+                    <div class="o_row">
+                        <field name="security_margin"/> <span>days</span>
+                    </div>
+                    <field name="last_sixty_days_sales"/>
+
+                    <button name="action_compute_last_sixty_days_sales" string="Compute sale in last sixty days with stock" type="object" group="sales_team.group_sale_salesman"/>
+
+                    <field name="biggest_sale_id" group="sales_team.group_sale_salesman"/>
+                    <field name="biggest_sale_qty"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="product_last_purchase_info_form_view_group">
+        <field name="name">product.last.purchase.info.form.group</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="purchase_last_price_info.product_last_purchase_info_form_view" />
+        <field name="arch" type="xml">
+            <group name="last_purchase_info" position="attributes">
+                <attribute name="groups">purchase.group_purchase_user</attribute>
+            </group>
+        </field>
+    </record>
+
+    <record id="product_add_proposal_data2" model="ir.ui.view">
+        <field name="name">product.product.form2</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product_pricelist_custom.product_template_form_add_relation_pricelist"/>
+        <field name="arch" type="xml">
+            <field name="standard_price_2" position="after">
+                <field name="average_margin"/>
+                <button name="average_margin_compute" string="Calculate Average Margin Last Sales" type="object" group="sales_team.group_sale_salesman"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

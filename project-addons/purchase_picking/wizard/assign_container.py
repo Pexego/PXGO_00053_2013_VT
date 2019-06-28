@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos S.L.
@@ -20,11 +19,12 @@
 ##############################################################################
 
 
-from openerp import models, fields, api
+from odoo import models, fields, api
+
 
 class AssignContainerWzd(models.TransientModel):
 
-    _name = "assign.container.wzd"
+    _name = 'assign.container.wzd'
 
     container_id = fields.Many2one("stock.container", "Container",
                                    required=True)

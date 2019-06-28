@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+    <record id="assign_purchase_order_wzd_form" model="ir.ui.view">
+        <field name="name">assign.purchase.order.wzd.form</field>
+        <field name="model">assign.purchase.order.wzd</field>
+        <field name="arch" type="xml">
+            <form string="Assign purchase order">
+                <group>
+                    <field name="purchase_id" required="True"/>
+                </group>
+                <footer>
+                    <button string="Assign purchase" name="assign_purchase_order" type="object" icon="fa-check" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
 
-        <record id="assign_purchase_order_wzd_form" model="ir.ui.view">
-            <field name="name">assign.purchase.order.wzd.form</field>
-            <field name="model">assign.purchase.order.wzd</field>
-            <field name="type">form</field>
-            <field name="arch" type="xml">
-                <form string="Assign purchase order">
-                    <group>
-                        <field name="purchase_id" required="True"/>
-                    </group>
-                    <button string="Assign purchase" name="assign_purchase_order" type="object" icon="gtk-ok"/>
-                    <button string="Cancel" special="cancel" icon="gtk-cancel"/>
-                </form>
-            </field>
-        </record>
+    <act_window name="Assign purchase order"
+        res_model="assign.purchase.order.wzd"
+        src_model="product.stock.unsafety"
+        view_id="assign_purchase_order_wzd_form"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="assign_purchase_order_wzd_form_action"/>
 
-        <act_window name="Assign purchase order"
-            res_model="assign.purchase.order.wzd"
-            src_model="product.stock.unsafety"
-            view_id="assign_purchase_order_wzd_form"
-            view_mode="form"
-            target="new"
-            key2="client_action_multi"
-            id="assign_purchase_order_wzd_form_action"/>
-
-    </data>
-</openerp>
+</odoo>

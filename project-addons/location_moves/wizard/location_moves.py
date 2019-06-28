@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -20,12 +19,12 @@
 ##############################################################################
 
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
-class location_moves(models.TransientModel):
+class LocationMoves(models.TransientModel):
 
-    _name = 'location.moves'
+    _name = "location.moves"
 
     product_id = fields.Many2one('product.product', 'Product', required=True)
     qty = fields.Float('Qty', required=True)
@@ -58,6 +57,7 @@ class location_moves(models.TransientModel):
          ('sat_stock', 'SAT -> Stock'),
          ('stock_sat', 'Stock -> SAT'),
          ('external_stock', 'External -> Stock'),
+         ('stock_external', 'Stock -> External'),
          ('beach_external', 'Beach -> External'),
          ],
         'Move type', required=True)
@@ -90,6 +90,7 @@ class location_moves(models.TransientModel):
             'cooked_quality': loc_obj.move_cooked_quality,
             'marketing_product': loc_obj.move_marketing_product,
             'external_stock': loc_obj.move_external_stock,
+            'stock_external': loc_obj.move_stock_external,
             'beach_external': loc_obj.move_beach_external
         }
         types[self.move_type](self.product_id.id, self.qty, self.check_qty)

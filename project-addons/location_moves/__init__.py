@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -19,5 +18,5 @@
 #
 ##############################################################################
 
-import stock, wizard
-import procurement
+from . import models
+from . import wizard

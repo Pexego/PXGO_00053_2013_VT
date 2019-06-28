@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
 
         <record id="account_invoice_report_add_filters" model="ir.ui.view">
             <field name="name">account.invoice.report.search</field>
@@ -13,37 +12,22 @@
                 <field name="user_id" position="before">
                     <field name="commercial_partner_id" string="Partner"/>
                 </field>
-                <xpath expr="//filter[@string='Invoice']" position="attributes">
-                    <attribute name="domain">[('type','=',('out_invoice','in_invoice')),('state', '!=', 'cancel')]</attribute>
-                </xpath>
-                <xpath expr="//filter[@string='Refund']" position="attributes">
-                    <attribute name="domain">[('type','in',('out_refund','in_refund')),('state', '!=', 'cancel')]</attribute>
-                </xpath>
-                <xpath expr="//filter[@string='Partner']" position="attributes">
+                <filter name="partner_id" position="attributes">
                     <attribute name="invisible">True</attribute>
-                </xpath>
-                <filter string="Partner" name="partner_id" position="after">
+                </filter>
+                <filter name="partner_id" position="after">
                     <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
                     <filter string="Partner" context="{'group_by':'commercial_partner_id'}"/>
                     <filter string="country" name="country_id" context="{'group_by':'country_id'}"/>
                     <filter string="Payment mode" name="payment_mode_id" context="{'group_by':'payment_mode_id'}"/>
                     <filter string="Brand name" name="brand_name" context="{'group_by':'brand_name'}"/>
+                    <filter string="Area" name="area" context="{'group_by': 'area_id'}"/>
                 </filter>
             </field>
         </record>
 
         <record id="account.action_account_invoice_report_all" model="ir.actions.act_window">
-            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
+            <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
         </record>
 
-        <record id="view_account_invoice_report_graph_remove_period" model="ir.ui.view">
-         <field name="name">account.invoice.report.graph.remove.period</field>
-         <field name="model">account.invoice.report</field>
-         <field name="inherit_id" ref="account.view_account_invoice_report_graph"/>
-         <field name="arch" type="xml">
-             <field name="period_id" position="replace"/>
-        </field>
-        </record>
-
-    </data>
-</openerp>
+</odoo>

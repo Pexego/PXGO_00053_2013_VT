@@ -16,17 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_states
-#: selection:product.template,state2:0
+#: selection:product.product,state2:0
 msgid "Active"
 msgstr "Activo"
 
 #. module: product_states
-#: view:product.template:product_states.product_add_states
+#: model:ir.ui.view,arch_db:product_states.product_add_states
 msgid "Edition"
 msgstr "Edición"
 
 #. module: product_states
-#: selection:product.template,state2:0
+#: selection:product.product,state2:0
 msgid "In edition"
 msgstr "En edición"
 
@@ -36,22 +36,22 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: product_states
-#: view:product.template:product_states.product_add_states
+#: model:ir.ui.view,arch_db:product_states.product_add_states
 msgid "Publish"
 msgstr "Publicar"
 
 #. module: product_states
-#: selection:product.template,state2:0
+#: selection:product.product,state2:0
 msgid "Published"
 msgstr "Publicado"
 
 #. module: product_states
-#: view:product.product:product_states.product_add_states
+#: model:ir.ui.view,arch_db:product_states.product_add_states
 msgid "Sales"
 msgstr "Ventas"
 
 #. module: product_states
-#: field:product.template,state2:0
+#: model:ir.model.fields,field_description:product_states.field_product_product_state2
 msgid "Status"
 msgstr "Estado"
 
@@ -68,12 +68,17 @@ msgid "The product %s is in edition state"
 msgstr "El producto %s está en edición"
 
 #. module: product_states
-#: view:product.product:product_states.product_add_states
+#: model:ir.ui.view,arch_db:product_states.product_add_states
 msgid "{'readonly':[('state2', '!=', 'published')]}"
 msgstr "{'readonly':[('state2', '!=', 'published')]}"
 
 #. module: product_states
-#: view:product.template:product.product_template_form_view
+#: model:ir.ui.view,arch_db:product_states.product_template_form_view
 msgid "Sale Conditions"
 msgstr "Condiciones de venta"
+
+#. module: product_states
+#: selection:product.template,state:0
+msgid "Make to order"
+msgstr "Bajo Pedido"
 

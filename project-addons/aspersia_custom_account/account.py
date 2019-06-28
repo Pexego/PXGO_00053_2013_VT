@@ -31,37 +31,10 @@ class AccountInvoice(models.Model):
 
     _inherit = 'account.invoice'
 
-    subtotal_wt_rect = fields.Float("Subtotal",
-                                    compute="get_subtotal_wt_rect", store=True)
-    total_wt_rect = fields.Float("Total",
-                                 compute="get_total_wt_rect", store=True)
-
     @api.multi
     def invoice_validate(self):
         res = super(AccountInvoice, self).invoice_validate()
         for inv in self:
-            for line in inv.invoice_line:
+            for line in inv.invoice_line_ids:
                 line.write({'cost_unit': line.product_id.standard_price})
         return res
-
-    @api.multi
-    @api.depends('type', 'amount_untaxed')
-    def get_subtotal_wt_rect(self):
-        for invoice in self:
-            if 'refund' in invoice.type:
-                invoice_wt_rect = -invoice.amount_untaxed
-            else:
-                invoice_wt_rect = invoice.amount_untaxed
-
-            invoice.subtotal_wt_rect = invoice_wt_rect
-
-    @api.multi
-    @api.depends('type', 'amount_total')
-    def get_total_wt_rect(self):
-        for invoice in self:
-            if 'refund' in invoice.type:
-                invoice_wt_rect = - invoice.amount_total
-            else:
-                invoice_wt_rect = invoice.amount_total
-
-            invoice.total_wt_rect = invoice_wt_rect

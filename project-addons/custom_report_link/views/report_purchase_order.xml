@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_purchasequotation_custom_document">
+        <t t-call="custom_report_link.external_layout_custom">
+            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>
+            <div class="page">
+                <div class="oe_structure"></div>
+
+                <div class="row mt32 mb32">
+                    <div class="col-xs-6">
+                        <span>Date: <span t-field="o.write_date"></span></span>
+                    </div>
+                    <div class="col-xs-5 col-xs-offset-1">
+                        <span>To: </span><div t-field="o.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax'], 'no_marker': true}"/>
+                            <p t-if="o.partner_id.vat">VAT: <span t-field="o.partner_id.vat"/></p>
+                    </div>
+                </div>
+
+                <h2>Request for Quotation <span t-field="o.name"/>/<span t-field="o.partner_ref"></span></h2>
+
+                <t t-set="totalQty" t-value="0"/>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th class="text-center"><strong>Supplier Model</strong></th>
+                            <th class="text-center"><strong>Visiotech Model</strong></th>
+                            <th class="text-center"><strong>EAN-13</strong></th>
+                            <th class="text-center"><strong>Order Qty</strong></th>
+                            <th class="text-center"><strong>Unit Price</strong></th>
+                            <th class="text-center"><strong>Total Price</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-foreach="o.order_line" t-as="order_line">
+                            <t t-set="totalQty" t-value="totalQty+order_line.product_qty"/>
+                            <t t-set="totalPrice" t-value="order_line.price_unit*order_line.product_qty"/>
+                            <td class="text-center"><span t-field="order_line.product_id.product_tmpl_id.manufacturer_pref"/></td>
+                            <td class="text-center"><span t-field="order_line.name"/></td>
+                            <td class="text-center"><span t-field="order_line.product_id.barcode"/></td>
+                            <td class="text-center">
+                                <span t-field="order_line.product_qty"/>
+                                <span t-field="order_line.product_uom" groups="product.group_uom"/>
+                            </td>
+                            <td class="text-center"><span t-field="order_line.price_unit"/></td>
+                            <td class="text-center"><span t-esc="totalPrice"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-xs-4 pull-right">
+                        <table class="table table-condensed">
+                            <tr class="border-black">
+                                <td><strong>Total Qty</strong></td>
+                                <td class="text-right">
+                                    <span t-esc="totalQty" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                            <tr class="border-black">
+                                <td><strong>Total Price</strong></td>
+                                <td class="text-right">
+                                    <span t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <pre><strong>Notes: <p t-field="o.notes"/></strong></pre>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-1"/>
+                    <div class="col-xs-10">
+    <t t-if="o.partner_id.lang == 'en_US'">
+                        <pre>
+    The final shipping method (by sea or air) and quantity will be defined after merchandise is ready to be shipped.
+    Pls. ask shipping information before cargo is released.
+
+    Remarks:
+    <strong>1, Pls. show out P.O. No. on every document (C/I, P/L, P/I, and etc...).</strong>
+    2, Pls follow our general shipping mark format.
+    3, Delivery time need to be confirmed within one week after this P.O. received.
+                        </pre>
+    </t>
+                    </div>
+                </div>
+                </div>
+        </t>
+
+    </template>
+
+    <template id="report_purchasequotation_custom">
+       <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="custom_report_link.report_purchasequotation_custom_document" t-lang="doc.partner_id.lang" />
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_report_purchasequotation_customr"
+        string="Solicitud de presupuesto"
+        model="purchase.order"
+        report_type="qweb-pdf"
+        file="custom_report_link.report_purchasequotation_custom"
+        name="custom_report_link.report_purchasequotation_custom"
+        print_report_name="'Request for Quotation - %s' % (object.name)"
+    />
+
+
+    <template id="report_purchaseorder_custom_document">
+        <t t-call="custom_report_link.external_layout_custom">
+            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>
+            <div class="page">
+                <div class="oe_structure"></div>
+
+                <t t-set="lang" t-value="'undefined'"/>
+                <t t-if="o.partner_id.parent_id is Number">
+                    <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
+                </t>
+                <t t-if="o.partner_id.parent_id is not Number">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                </t>
+                <t t-if="not lang">
+                    <t t-set="lang" t-value="'undefined'"/>
+                </t>
+
+                <div class="row">
+                    <div style="font-size:23px; font-weight: bold; color:#939597;">
+                        <div class="pull-left">
+                            <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
+                            <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
+                            <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
+                        </div>
+                        <div class="pull-left">
+                            <div style="width: 0.08in; height: 0.32in; background-color: white;"/>
+                        </div>
+                        <div>
+                            <div style="font-size:23px;">Purchase Order <span t-field="o.name"/>/<span t-field="o.partner_ref"></span></div>
+                            <span t-if="lang != 'fr_FR'">
+                                <div class="pull-right" style="width: 4.3in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            </span>
+                            <span t-if="lang == 'fr_FR'">
+                                <div class="pull-right" style="width: 4.3in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="font-size:13px; color:#6D6E70" class="row">
+                    <br/>
+                    <!--<div class="col-xs-6">
+                        <strong>Shipping address:</strong>
+                        <div t-if="o.dest_address_id">
+                            <div t-field="o.dest_address_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: true}" />
+                        </div>
+                        <div t-if="not o.dest_address_id and o.picking_type_id.warehouse_id">
+                            <span t-field="o.picking_type_id.warehouse_id.name"/>
+                            <div t-field="o.picking_type_id.warehouse_id.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;, &quot;fax&quot;], &quot;no_marker&quot;: true}"/>
+                        </div>
+                    </div>-->
+                    <div class="col-xs-6 row">
+                        <span style="font-weight: bold; color:#da1f2e">To: </span>
+                        <span t-field="o.partner_id" t-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;], &quot;no_marker&quot;: true}"/>
+                            <span>
+                                <!--Datos de un contacto -->
+                                <span t-field="o.partner_id.att"/>
+                                        <t t-if="o.partner_id.att and o.partner_id.email"> - </t>
+                                <span t-field="o.partner_id.email"/>
+                            </span>
+                    </div>
+                    <div class="col-xs-5 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#da1f2e">
+                        <br/><br/>
+                        <t t-if="o.write_date"><div>Date: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-field="o.write_date" t-options='{"widget": "date"}'/></div></t>
+                        <t t-if="o.partner_id.vat"><div>VAT: <span style="font-weight: normal; font-size:13px; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
+                    </div>
+                </div>
+
+                <t t-set="totalQty" t-value="0"/>
+                <div class="row">
+                    <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
+                        <thead>
+                            <tr style="background-color:#da1f2e; color:white;">
+                                <th width="6%" class="text-center"></th>
+                                <th width="14%" style="vertical-align:middle;"><strong>Supplier Model</strong></th>
+                                <th width="14%" style="vertical-align:middle;"><strong>Visiotech Model</strong></th>
+                                <th width="30%" style="vertical-align:middle;"><strong>Description</strong></th>
+                                <th width="10%" class="text-center" style="vertical-align:middle;"><strong>EAN-13</strong></th>
+                                <th width="8%" class="text-center" style="vertical-align:middle;"><strong>Order Qty</strong></th>
+                                <th width="8%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
+                                <th width="10%" class="text-center" style="vertical-align:middle;"><strong>Total Price</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody style="color:6D6E70;">
+                            <tr t-foreach="o.order_line" t-as="order_line">
+                                <t t-set="seller_ref" t-value="null"/>
+                                <!--t t-raw="order_line.product_id.seller_ids"></t>
+                                <t t-raw="o.partner_id"></t-->
+                                <t t-foreach="order_line.product_id.seller_ids" t-as="seller_line">
+                                    <t t-if="seller_line.name.id == o.partner_id.id">
+                                        <t t-set="seller_ref" t-value="seller_line.product_code"/>
+                                    </t>
+                                </t>
+                                <t t-set="totalQty" t-value="totalQty+order_line.product_qty"/>
+                                <t t-set="totalPrice" t-value="order_line.price_unit*order_line.product_qty"/>
+                                <td style="vertical-align:middle;"><span t-field="order_line.product_id.image_small" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"/></td>
+                                <td style="vertical-align:middle;"><span t-esc="seller_ref"/></td>
+                                <td style="vertical-align:middle;"><span t-field="order_line.product_id.name"/></td>
+                                <td style="font-size:10px; vertical-align:middle;"><span t-field="order_line.product_id.description_purchase"/></td>
+                                <td class="text-center" style="vertical-align:middle;"><span t-field="order_line.product_id.barcode"/></td>
+                                <td class="text-center" style="vertical-align:middle;">
+                                    <span t-esc="'%.0f'% order_line.product_qty"/>
+                                    <span t-field="order_line.product_uom" groups="product.group_uom"/>
+                                </td>
+                                <td class="text-center" style="vertical-align:middle;"><span t-field="order_line.price_unit" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                                <td class="text-center" style="vertical-align:middle;"><span t-esc="totalPrice" t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row">
+                        <div class="col-xs-4 pull-right" style="font-size:13px;">
+                            <table class="table table-condensed" style="color:6D6E70;">
+                                <tr class="border-black">
+                                    <td style="color:#da1f2e;"><strong>Total Qty</strong></td>
+                                    <td class="text-right">
+                                        <span t-esc="'%.0f'% totalQty"/>
+                                    </td>
+                                </tr>
+                                <tr class="border-grey">
+                                    <td style="color:#da1f2e;"><strong>Total Price</strong></td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="font-size:13px; color:#da1f2e">
+                    <div class="col-xs-6">
+                        <p t-if="o.notes">
+                        <strong>Notes: </strong><pre style="font-size:13px; color:#6D6E70;" t-field="o.notes"/>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-1"/>
+                    <div class="col-xs-10">
+    <t t-if="o.partner_id.lang == 'en_US'">
+                        <pre  style="font-size:13px; color:#6D6E70;">
+    The final shipping method (by sea or air) and quantity will be defined after merchandise is ready to be shipped.
+    Pls. ask shipping information before cargo is released.
+
+    Remarks:
+    <strong>1, Pls. show out P.O. No. on every document (C/I, P/L, P/I, and etc...).</strong>
+    2, Pls follow our general shipping mark format.
+    3, Delivery time need to be confirmed within one week after this P.O. received.
+                        </pre>
+    </t>
+                    </div>
+                </div>
+                </div>
+        </t>
+
+    </template>
+
+
+    <template id="report_purchaseorder_custom">
+       <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="custom_report_link.report_purchaseorder_custom_document" t-lang="doc.partner_id.lang" />
+            </t>
+        </t>
+    </template>
+
+    <report
+        id="action_report_purchaseorder_custom"
+        string="Pedido de compra"
+        model="purchase.order"
+        report_type="qweb-pdf"
+        file="custom_report_link.report_purchaseorder_custom"
+        name="custom_report_link.report_purchaseorder_custom"
+        print_report_name="'Purchase order - %s' % (object.name)"
+    />
+</odoo>

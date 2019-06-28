@@ -19,10 +19,10 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions, _
 from datetime import datetime, time
-from openerp.exceptions import ValidationError
-import openerp.addons.decimal_precision as dp
+from odoo.exceptions import ValidationError
+import odoo.addons.decimal_precision as dp
 
 
 class product_devaluation_account_wizard(models.TransientModel):
@@ -31,8 +31,6 @@ class product_devaluation_account_wizard(models.TransientModel):
     name = fields.Char('Account Ref', readonly=True, default=lambda self:
     self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].product_id.name)
     account_move_id = fields.Integer("Account ID")
-    period_id = fields.Many2one('account.period', 'Period', default=lambda self:
-        self.env['account.period'].find(time())[0].id)
     journal_id = fields.Many2one('account.journal', 'Journal', default=lambda self:
         self.env['product.devaluation'].browse(self.env.context.get('active_ids', False))[0].
         product_id.categ_id.devaluation_journal_id or self.env.user.company_id.devaluation_journal_id, required=True)
@@ -90,7 +88,6 @@ class product_devaluation_account_wizard(models.TransientModel):
                         devaluation_account_credit_id.id or \
                         company.devaluation_account_credit_id.id
 
-                # ipdb.set_trace()
                 values = {
                     'name': line.product_id.name + '/' + str('0' * (4 - len(str(line.product_id.id)))) + str(
                         line.product_id.id),
@@ -107,7 +104,6 @@ class product_devaluation_account_wizard(models.TransientModel):
                     'account_id': account_id,
                     'state': 'draft',
                 }
-                # ipdb.set_trace()
                 res = self.env['account.move.line'].create(values)
 
                 values['debit'] = credit

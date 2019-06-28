@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+    <record model="ir.ui.view" id="crm_rma_advance_location_form_view_inherit">
+        <field name="name">Claims Form wizard</field>
+        <field name="model">crm.claim</field>
+        <field name="inherit_id" ref="crm_rma_advance_location.crm_claim_rma_form_view"/>
+        <field name="arch" type="xml">
+
+          <xpath expr="//button[@name='%(crm_rma_advance_location.action_claim_picking_loss)d']" position="after">
+                <button name="button_update_lines_wizard" type="object" string="Update RMA lines"
+                 attrs="{'invisible': [('claim_line_ids', '=', [])]}"/>
+          </xpath>
+
+        </field>
+    </record>
+</odoo>

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from peewee import CharField, FloatField, IntegerField, ForeignKeyField, \
     DateTimeField
 from app import app
@@ -48,7 +47,7 @@ class Rma(SyncModel):
     MOD_NAME = 'rma'
 
     def __unicode__(self):
-        return u"%s - %s" % (self.odoo_id, self.number)
+        return "%s - %s" % (self.odoo_id, self.number)
 
 
 class RmaProduct(SyncModel):
@@ -70,4 +69,4 @@ class RmaProduct(SyncModel):
     MOD_NAME = 'rmaproduct'
 
     def __unicode__(self):
-        return u"%s - %s" % (self.reference, self.product_id)
+        return "%s - %s" % (self.reference, self.product_id)

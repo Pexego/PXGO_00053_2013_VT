@@ -16,27 +16,27 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_pricelist:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_pricelist
 msgid "Sale Pricelist"
 msgstr "Tarifa de venta"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_annual_invoiced:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_annual_invoiced
 msgid "Annual invoiced"
 msgstr "Facturación anual"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_monthly_invoiced:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_monthly_invoiced
 msgid "Monthly invoiced"
 msgstr "Facturación mensual"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_past_year_invoiced:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_past_year_invoiced
 msgid "Past year invoiced"
 msgstr "Facturación año anterior"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_past_month_invoiced:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_past_month_invoiced
 msgid "Past Month invoiced"
 msgstr "Facturación mes anterior"
 
@@ -58,18 +58,18 @@ msgid "Scheduled Visits"
 msgstr "Visitas planificadas"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,create_date:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_create_date
 msgid "Creation Date"
 msgstr "Fecha de creación"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,visit_date:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_visit_date
 msgid "Visit Date"
 msgstr "Fecha de visita"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,user_id:0
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_user_id
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "External salesperson"
 msgstr "Comercial externo"
 
@@ -79,7 +79,7 @@ msgid "Partner"
 msgstr "Cliente"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_address:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_address
 msgid "Address"
 msgstr "Dirección"
 
@@ -89,12 +89,12 @@ msgid "Company"
 msgstr "Empresa"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,description:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_description
 msgid "Summary"
 msgstr "Resumen"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,visit_state:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_visit_state
 msgid "Status"
 msgstr "Estado"
 
@@ -109,23 +109,23 @@ msgid "Schedule"
 msgstr "Programada"
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_form_view
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_form_view
 msgid "Visit Summary"
 msgstr "Resumen de la visita"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,confirm_done:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_confirm_done
 msgid "Done"
 msgstr "Realizada"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,email_sent:0
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_email_sent
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Email sent"
 msgstr "Email enviado"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,salesperson_select:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_salesperson_select
 msgid "Notify to"
 msgstr "Notificar a"
 
@@ -136,129 +136,144 @@ msgid "Notify by email"
 msgstr "Notificar por email"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:61
-#: code:addons/external_salesperson_visit/partner_visit.py:63
+#: code:addons/external_salesperson_visit/models/partner_visit.py:61
+#: code:addons/external_salesperson_visit/models/partner_visit.py:63
 #, python-format
 msgid "Invalid date"
 msgstr "Fecha no válida"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:61
+#: code:addons/external_salesperson_visit/models/partner_visit.py:61
 #, python-format
 msgid "Date must be lower than current date in a logged visit"
 msgstr "La fecha debe ser menor que la actual en una visita realizada"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:63
+#: code:addons/external_salesperson_visit/models/partner_visit.py:63
 #, python-format
 msgid "Date must be bigger than current date in a scheduled visit"
 msgstr "La fecha debe ser mayor que la actual en una visita programada"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:67
-#: code:addons/external_salesperson_visit/partner_visit.py:77
+#: code:addons/external_salesperson_visit/models/partner_visit.py:67
+#: code:addons/external_salesperson_visit/models/partner_visit.py:77
 #, python-format
 msgid "Invalid Action"
 msgstr "Acción no válida"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:67
-#: code:addons/external_salesperson_visit/partner_visit.py:77
+#: code:addons/external_salesperson_visit/models/partner_visit.py:67
+#: code:addons/external_salesperson_visit/models/partner_visit.py:77
 #, python-format
 msgid "You cannot confirm the visit because schedule date is after current date"
 msgstr "No puede confirmar la visita porque la fecha es posterior a la actual"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:134
+#: code:addons/external_salesperson_visit/models/partner_visit.py:157
 #, python-format
 msgid "Email Error"
 msgstr "Error Email"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:134
+#: code:addons/external_salesperson_visit/models/partner_visit.py:157
 #, python-format
 msgid "Email has not been sent"
 msgstr "El email no ha sido enviado"
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Group By"
 msgstr "Agrupar por"
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_id
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_form_view
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Partner"
 msgstr "Cliente"
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Salesperson to notify"
 msgstr "Comercial a notificar"
 
 #. module: external_salesperson_visit
-#: field:res.partner,add_user_email:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_add_user_email
 msgid "CC to"
 msgstr "Con copia a"
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Month"
 msgstr "Mes"
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Week"
 msgstr "Semana"
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Day"
 msgstr "Día"
 
 #. module: external_salesperson_visit
-#: view:res.partner:external_salesperson_visit.view_partners_form_visits
-#: field:res.partner,visit_count:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_res_partner_visit_count
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_res_users_visit_count
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_form_view
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_tree_view
+#: model:ir.ui.view,arch_db:external_salesperson_visit.view_partners_form_visits
 msgid "Visits"
 msgstr "Visitas"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,partner_ref:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_ref
 msgid "Ref. Contact"
 msgstr "Ref. Cliente"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:108
+#: code:addons/external_salesperson_visit/models/partner_visit.py:117
 #, python-format
 msgid "Warning"
 msgstr "Aviso"
 
 #. module: external_salesperson_visit
-#: code:addons/external_salesperson_visit/partner_visit.py:109
+#: code:addons/external_salesperson_visit/models/partner_visit.py:118
 #, python-format
 msgid "CC user has been changed. Remember that it is necessary to click on \"Notify by email\" button to send email"
 msgstr "Se ha modificado el usuario CC. Recuerde que para que reciba el correo debe presionar el botón \"Notificar por email\""
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
-msgid "Prospective Customs"
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
+msgid "Prospective Customers"
 msgstr "Clientes potenciales"
 
 #. module: external_salesperson_visit
 #: view:partner.visit:external_salesperson_visit.partner_visit_search
-msgid "Active Customs"
+msgid "Active Customers"
 msgstr "Clientes activos"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,area_id:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_area_id
 msgid "Area"
 msgstr "Zona"
 
 #. module: external_salesperson_visit
-#: field:partner.visit,region_ids:0
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_region_ids
 msgid "Commercial Regions"
 msgstr "Regiones comercial"
 
 #. module: external_salesperson_visit
-#: view:partner.visit:external_salesperson_visit.partner_visit_search
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Commercial region"
 msgstr "Región comercial"
+
+#. module: external_salesperson_visit
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_visit_count
+msgid "Visits"
+msgstr "Visitas Realizadas"
+
+#. module: external_salesperson_visit
+#: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_visit_current_year
+msgid "Current year visits"
+msgstr "Visitas año actual"

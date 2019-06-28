@@ -1,107 +1,308 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- © 2016 Comunitea
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
 
-<openerp>
-    <data>
+    <record id="sale_order_line_tree_reorganize" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_margin_percentage.sale_margin_percentage_sale_order"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
+                <attribute name="readonly">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="replace">
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='margin_perc']" position="after">
+                <field name="tax_id" widget="many2many_tags" required="1" options="{'no_create': True}"
+                    domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
+                    attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree/field[@name='no_rappel']" position="after">
+                <field name="invoice_status"/>
+            </xpath>
+        </field>
+    </record>
 
-        <record id="sale_order_line_tree_reorganize" model="ir.ui.view">
-            <field name="name">sale.order.form</field>
+    <record id="view_order_line_tree_avoid_create_product" model="ir.ui.view">
+        <field name="name">view.order.line.tree.avoid.create.product</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="attributes">
+                <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
+            </xpath>
+            <button name="action_done" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </button>
+        </field>
+    </record>
+
+    <record id="view_order_tree_add_date" model="ir.ui.view">
+            <field name="name">sale.order.tree.add.date</field>
             <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale_margin_percentage.sale_margin_percentage_sale_order"/>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
             <field name="arch" type="xml">
-                <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
-                    <attribute name="readonly">1</attribute>
-                </xpath>
-                <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="replace">
-                </xpath>
-                <xpath expr="//field[@name='order_line']/tree/field[@name='margin_perc']" position="after">
-                    <field name="tax_id" widget="many2many_tags" required="1" domain="[('parent_id','=',False),('type_tax_use','&lt;&gt;','purchase')]"/>
-                </xpath>
-            </field>
-        </record>
-
-         <record id="action_view_historical_orders" model="ir.actions.server">
-            <field name="name">Historical Partner Orders View</field>
-            <field name="type">ir.actions.server</field>
-            <field name="model_id" ref="model_sale_order"/>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree</field>
-            <field name="code">
-                action = self.open_historical_orders(cr, uid, context.get('active_ids', []), context=context)
-            </field>
-        </record>
-
-        <!-- Vista de avisos para los pedidos-->
-        <record id="view_warning_form" model="ir.ui.view">
-            <field name="name">warning.form.inherit</field>
-            <field name="model">res.partner</field>
-            <field name="arch" type="xml">
-                <form string="status Warnings">
-                    <group colspan="2" col="2">
-                        <separator string="Warning on the Sales Order" colspan="4"/>
-                            <field name="sale_warn" nolabel="1" />
-                            <field name="sale_warn_msg" colspan="3" nolabel="1"
-                                    attrs="{'required':[('sale_warn','!=','no-message')],'readonly':[('sale_warn','=','no-message')]}"/>
-                    </group>
-                    <group colspan="2" col="2">
-                        <separator string="Warning on the Purchase Order" colspan="4"/>
-                        <field name="purchase_warn" nolabel="1" />
-                        <field name="purchase_warn_msg" colspan="3" nolabel="1"
-                                attrs="{'required':[('purchase_warn','!=','no-message')],'readonly':[('purchase_warn','=','no-message')]}"/>
-                      </group>
-                      <group colspan="2" col="2">
-                        <separator string="Warning on the Picking" colspan="4"/>
-                        <field name="picking_warn" nolabel="1" />
-                        <field name="picking_warn_msg" colspan="3" nolabel="1"
-                                attrs="{'required':[('picking_warn','!=','no-message')],'readonly':[('picking_warn','=','no-message')]}"/>
-                    </group>
-                    <group colspan="2" col="2">
-                        <separator string="Warning on the Invoice" colspan="4"/>
-                        <field name="invoice_warn" nolabel="1" />
-                        <field name="invoice_warn_msg" colspan="3" nolabel="1"
-                                attrs="{'required':[('invoice_warn','!=','no-message')],'readonly':[('invoice_warn','=','no-message')]}"/>
-                    </group>
-
-                     <group colspan="2" col="2">
-                        <separator string="Warnign on the RMA" colspan="4"/>
-                            <field name="rma_warn" nolabel="1"/>
-                            <field name="rma_warn_msg" colspan="3" nolabel="1"
-                                   attrs="{'required':[('rma_warn','!=','no-message')],'readonly':[('rma_warn','=','no-message')]}"/>
-                    </group>
-                </form>
-            </field>
-        </record>
-
-        <record id="view_order_form_sales_partner" model="ir.ui.view">
-            <field name="name">partner.sale.order.history</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
-            <field name="arch" type="xml">
-                <xpath expr="//button[@name='open_stock_reservation']" position="after">
-                    <button name="%(action_view_historical_orders)d" string="Partner Orders" class="oe_stat_button"
-                            type="action" icon="fa-strikethrough" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve'])]}"/>
-                    <button name="button_notification" string="Avisos" class="oe_stat_button"
-                            type="object" icon="fa-exclamation-triangle" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve', 'sent'])]}"/>
-                </xpath>
-            </field>
-        </record>
-
-        <record id="view_order_form_imp_ship_addr_val" model="ir.ui.view">
-            <field name="name">sale.order.form.imp_ship_addr_val</field>
-            <field name="model">sale.order</field>
-            <field name="inherit_id" ref="sale.view_order_form"/>
-            <field name="arch" type="xml">
-                <field name="partner_shipping_id" position="after">
-                    <field name="validated_dir" invisible="1"/>
-                    <label for="compute_variables"/>
-                    <button name="validate_address"
-                            string="Validate address" type="object"
-                            class="oe_highlight"
-                            attrs="{'invisible': [('validated_dir', '=', True)]}"/>
+                <field name="confirmation_date" position="before">
+                    <field name="date_order"/>
                 </field>
             </field>
         </record>
+<!--
+    <record id="action_view_historical_orders" model="ir.actions.server">
+        <field name="name">Historical Partner Orders View</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_sale_order"/>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+        <field name="code">
+            action = self.open_historical_orders(cr, uid, context.get('active_ids', []), context=context)
+        </field>
+    </record> -->
 
-    </data>
-</openerp>
+    <!-- Vista de avisos para los pedidos-->
+    <record id="view_warning_form" model="ir.ui.view">
+        <field name="name">warning.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <form string="status Warnings">
+                <group colspan="2" col="2">
+                    <separator string="Warning on the Sales Order" colspan="4"/>
+                        <field name="sale_warn" nolabel="1" readonly="1"/>
+                        <field name="sale_warn_msg" colspan="3" nolabel="1"
+                                attrs="{'required':[('sale_warn','!=','no-message')],'readonly':[('sale_warn','=','no-message')]}"/>
+                </group>
+                <group colspan="2" col="2">
+                    <separator string="Warning on the Purchase Order" colspan="4"/>
+                    <field name="purchase_warn" nolabel="1" readonly="1"/>
+                    <field name="purchase_warn_msg" colspan="3" nolabel="1"
+                            attrs="{'required':[('purchase_warn','!=','no-message')],'readonly':[('purchase_warn','=','no-message')]}"/>
+                    </group>
+                    <group colspan="2" col="2">
+                    <separator string="Warning on the Picking" colspan="4"/>
+                    <field name="picking_warn" nolabel="1" readonly="1"/>
+                    <field name="picking_warn_msg" colspan="3" nolabel="1"
+                            attrs="{'required':[('picking_warn','!=','no-message')],'readonly':[('picking_warn','=','no-message')]}"/>
+                </group>
+                <group colspan="2" col="2">
+                    <separator string="Warning on the Invoice" colspan="4"/>
+                    <field name="invoice_warn" nolabel="1" readonly="1"/>
+                    <field name="invoice_warn_msg" colspan="3" nolabel="1"
+                            attrs="{'required':[('invoice_warn','!=','no-message')],'readonly':[('invoice_warn','=','no-message')]}"/>
+                </group>
+
+                    <group colspan="2" col="2">
+                    <separator string="Warnign on the RMA" colspan="4"/>
+                        <field name="rma_warn" nolabel="1" readonly="1"/>
+                        <field name="rma_warn_msg" colspan="3" nolabel="1"
+                                attrs="{'required':[('rma_warn','!=','no-message')],'readonly':[('rma_warn','=','no-message')]}"/>
+                </group>
+                <footer></footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_order_form_sales_partner" model="ir.ui.view">
+        <field name="name">partner.sale.order.history</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="reserve_without_save_sale.sale_line_add_auxiliar_field"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='open_stock_reservation']" position="after">
+                <button name="open_historical_orders" string="Partner Orders" class="oe_stat_button"
+                        type="object" icon="fa-strikethrough" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve'])]}"/>
+                <button name="button_notification" string="Avisos" class="oe_stat_button"
+                        type="object" icon="fa-exclamation-triangle" attrs="{'invisible': ['|', ('partner_id', '=', False), ('state', 'not in', ['draft', 'reserve', 'sent'])]}"/>
+                <button name="button_notification_open_risk_window" string="Risk Information"
+                            class="oe_stat_button" type="object" icon="fa-bar-chart-o"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_order_form_imp_ship_addr_val" model="ir.ui.view">
+        <field name="name">sale.order.form.imp_ship_addr_val</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_shipping_id" position="after">
+                <label for="validated_dir" string=" "/>
+                <div>
+                    <field name="validated_dir" invisible="1"/>
+                    <button name="validate_address"
+                        string="  Validate address" type="object"
+                        class="oe_highlight"
+                        attrs="{'invisible': [('validated_dir', '=', True)]}"
+                        icon="fa-check-circle"/>
+                </div>
+            </field>
+            <field name="payment_term_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="payment_mode_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="fiscal_position_id" position="before">
+                <field name="payment_term_id"/>
+                <field name="payment_mode_id"/>
+            </field>
+            <field name="client_order_ref" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="pricelist_id" position="before">
+                <field name="client_order_ref"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="action_orders_reserve" model="ir.actions.act_window">
+        <field name="name">Sales Reserved</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar,graph</field>
+        <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+        <field name="domain">[('state','in',('reserve',))]</field>
+        <field name="context">{
+                'search_default_my_sale_orders_filter': 1,
+                'default_state': 'reserve',
+            }
+        </field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+            Click to create a sale with reserved goods that can be converted into a sales
+            order.
+            </p><p>
+            OpenERP will help you efficiently handle the complete sales flow:
+            quotation, sales order, delivery, invoicing and payment.
+            </p>
+        </field>
+    </record>
+
+    <record id="sale.action_quotations" model="ir.actions.act_window">
+        <field name="context">{
+                'search_default_my_sale_orders_filter': 1,
+            }
+        </field>
+    </record>
+
+    <menuitem action="action_orders_reserve" id="menu_sale_order_reserve" parent="sale.sale_order_menu" sequence="1" groups="sales_team.group_sale_salesman,sales_team.group_sale_manager"/>
+
+    <record id="view_order_form_imp_ship_addr" model="ir.ui.view">
+            <field name="name">sale.order.form.reserve.edit</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </field>
+                <field name="partner_shipping_id" position="attributes">
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </field>
+                <field name="partner_invoice_id" position="attributes">
+                    <attribute name="options">{"always_reload": True}</attribute>
+                </field>
+                <header position="inside">
+                    <button name="action_confirm" id="action_confirm"
+                        string="Confirm Sale" class="btn-primary" type="object"
+                        attrs="{'invisible': [('state', 'not in', ['reserve'])]}"/>
+                </header>
+            </field>
+        </record>
+
+    <record id="view_order_form_inherit_sale_stock_change_string" model="ir.ui.view">
+        <field name="name">sale.order.form.change.button.string</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+        <field name="arch" type="xml">
+            <field name="delivery_count" position="attributes">
+                <attribute name="string">Pickings</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_partner_situation_tree_sale">
+        <field name="name">Partner Situation</field>
+        <field name="model">account.move.line</field>
+        <field name="arch" type="xml">
+            <tree string="Account Move line" editable="bottom" create="false" delete="false"
+                  decoration-danger = "(not date_maturity or date_maturity&lt;=current_date) and balance&gt;0">
+                <field name="date" readonly="True"/>
+                <field name="move_id" readonly="True"/>
+                <field name="invoice_id"/>
+                <field name="ref_line" readonly="True"/>
+                <field name="blocked"/>
+                <field name="date_maturity" readonly="True"/>
+                <field name="matched_debit_ids" readonly="True"/>
+                <field name="matched_credit_ids" readonly="True"/>
+                <field name="balance" readonly="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="partner_situation_action_sale">
+        <field name="name">Customer Situation</field>
+        <field name="res_model">account.move.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_partner_situation_tree_sale"/>
+        <field name="domain">[('full_reconcile_id', '=', False),('account_id.deprecated','=', False),
+            ('account_id.internal_type', '=', 'receivable')]</field>
+    </record>
+
+    <record id="sale_order_view_buttons_add_followup" model="ir.ui.view">
+        <field name="name">sale_order.view.buttons.add_followup</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_inline oe_stat_button" type="action" name="%(partner_situation_action_sale)d"
+                    string="Customer situation"
+                    icon="fa-thermometer-half"
+                    context="{'search_default_partner_id': partner_id}"/>
+            </xpath>
+        </field>
+    </record>
+
+     <!-- Financial Risk Partner wizard in sale order-->
+    <record id="view_financial_risk_res_partner_wizard" model="ir.ui.view">
+        <field name="name">res.partner.financial_risk.sale.form</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <form name="financial_risk" string="Financial Risk">
+                <group name="risk_general" col="3">
+                    <group string="General Limits" name="risk_include" class="o_group_col_6">
+                        <group col="3" class="oe_subtotal_footer" style="float: left !important;">
+                            <field name="risk_sale_order_include" readonly="True" class="oe_left_padding_15"/>
+                            <field name="risk_sale_order" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_invoice_draft_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_invoice_draft" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_invoice_open_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_invoice_open" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_invoice_unpaid_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_invoice_unpaid" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_account_amount_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_account_amount" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_account_amount_unpaid_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_account_amount_unpaid" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_circulating_include" readonly="True" class="oe_label_to_left"/>
+                            <field name="risk_circulating" nolabel="1" class="oe_left_padding_15"/>
+                            <field name="risk_total" colspan="3" class="oe_subtotal_footer_separator oe_label_to_left"/>
+                        </group>
+                    </group>
+                </group>
+                <group string="Info" class="o_group_col_6">
+                    <field name="credit_limit" widget="monetary" readonly="True" class="oe_label_to_left"/>
+                    <field name="credit_policy" readonly="True" class="oe_label_to_left"/>
+                    <field name="risk_exception" readonly="True" class="oe_label_to_left"/>
+                </group>
+                <footer></footer>
+            </form>
+        </field>
+    </record>
+
+    <menuitem id="sale.sale_menu_root" action="action_orders_reserve"/>
+
+    <record id="sale.action_order_report_all" model="ir.actions.act_window">
+        <field name="view_mode">pivot,graph</field>
+    </record>
+
+</odoo>

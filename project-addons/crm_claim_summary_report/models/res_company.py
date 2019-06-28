@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright 2015 Vauxoo
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-from openerp import fields, models
+from odoo import fields, models
 
 
 class ResCompany(models.Model):

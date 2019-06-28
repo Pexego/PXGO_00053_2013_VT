@@ -16,27 +16,27 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: shipping_balance
-#: field:shipping.balance,amount:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_amount
 msgid "Amount"
 msgstr "Importe"
 
 #. module: shipping_balance
-#: view:shipping.balance:shipping_balance.shipping_balance_search_filter
+#: model:ir.ui.view,arch_db:shipping_balance.shipping_balance_search_filter
 msgid "Amounts"
 msgstr "Importes"
 
 #. module: shipping_balance
-#: field:shipping.balance,aproved_ok:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_aproved_ok
 msgid "Aproved"
 msgstr "Aprobada"
 
 #. module: shipping_balance
-#: field:shipping.balance,balance:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_balance
 msgid "Balance"
 msgstr "Balance"
 
 #. module: shipping_balance
-#: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
+#: model:ir.ui.view,arch_db:shipping_balance.shipping_balance_wizard_view
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -46,30 +46,30 @@ msgid "Claim"
 msgstr "Reclamación"
 
 #. module: shipping_balance
-#: field:shipping.balance,create_uid:0
-#: field:shipping.balance.wizard,create_uid:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_create_uid
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_wizard_create_uid
 msgid "Created by"
 msgstr "Created by"
 
 #. module: shipping_balance
-#: field:shipping.balance,create_date:0
-#: field:shipping.balance.wizard,create_date:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_create_date
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_wizard_create_date
 msgid "Created on"
 msgstr "Created on"
 
 #. module: shipping_balance
-#: view:shipping.balance:shipping_balance.shipping_balance_search_filter
+#: model:ir.ui.view,arch_db:shipping_balance.shipping_balance_search_filter
 msgid "Group By"
 msgstr "Agrupado Por"
 
 #. module: shipping_balance
-#: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
+#: model:ir.ui.view,arch_db:shipping_balance.shipping_balance_wizard_view
 msgid "How much from shipping balance"
 msgstr "Importe a aplicar"
 
 #. module: shipping_balance
-#: field:shipping.balance,id:0
-#: field:shipping.balance.wizard,id:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_id
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_wizard_id
 msgid "ID"
 msgstr "ID"
 
@@ -79,31 +79,31 @@ msgid "Invoice Session"
 msgstr "Invoice Session"
 
 #. module: shipping_balance
-#: field:shipping.balance,write_uid:0
-#: field:shipping.balance.wizard,write_uid:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_write_uid
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_wizard_write_uid
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
 #. module: shipping_balance
-#: field:shipping.balance,write_date:0
-#: field:shipping.balance.wizard,write_date:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_write_date
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_wizard_write_date
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
 #. module: shipping_balance
-#: field:res.partner,shipping_balance_ids:0
+#: model:ir.model.fields,field_description:shipping_balance.field_res_partner_shipping_balance_ids
 msgid "Listado Saldos de Envíos"
 msgstr "Balance de Gastos de Transporte"
 
 #. module: shipping_balance
-#: help:shipping.balance,aproved_ok:0
+#: model:ir.model.fields,help:shipping_balance.field_shipping_balance_aproved_ok
 msgid "Must be aproved before use"
 msgstr "Debe ser aprobado antes de aplicarlo"
 
 #. module: shipping_balance
 #: model:ir.model,name:shipping_balance.model_res_partner
-#: view:shipping.balance:shipping_balance.shipping_balance_search_filter
-#: field:shipping.balance,partner_id:0
+#: model:ir.ui.view,arch_db:shipping_balance.shipping_balance_search_filter
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_partner_id
 msgid "Partner"
 msgstr "Empresa"
 
@@ -123,12 +123,12 @@ msgid "Repair Order"
 msgstr "Orden de Reparación"
 
 #. module: shipping_balance
-#: field:shipping.balance,repair_id:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_repair_id
 msgid "Repair id"
 msgstr "Repair id"
 
 #. module: shipping_balance
-#: field:shipping.balance,sale_id:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_sale_id
 msgid "Sale id"
 msgstr "Sale id"
 
@@ -147,39 +147,39 @@ msgstr "Línea Pedido de Venta"
 #: model:ir.actions.act_window,name:shipping_balance.action_tree_shipping_balance_from_partner_ok
 #: model:ir.actions.act_window,name:shipping_balance.action_tree_shipping_balance_from_sale
 #: model:ir.model,name:shipping_balance.model_shipping_balance_wizard_apply
-#: field:mrp.repair,shipping_balance:0
-#: field:product.product,shipping_balance:0
-#: view:res.partner:shipping_balance.view_partner_ship_balance_form
-#: view:sale.order:shipping_balance.view_order_form_shipping_balance
+#: model:ir.model.fields,field_description:shipping_balance.field_mrp_repair_shipping_balance
+#: model:ir.model.fields,field_description:shipping_balance.field_product_product_shipping_balance
+#: model:ir.ui.view,arch_db:shipping_balance.view_partner_ship_balance_form
+#: model:ir.ui.view,arch_db:shipping_balance.view_order_form_shipping_balance
 msgid "Shipping Balance"
 msgstr "Costes de Transporte"
 
 #. module: shipping_balance
-#: field:shipping.balance.wizard,amount_ok:0
+#: model:ir.model.fields,field_description:shipping_balance.field_shipping_balance_wizard_amount_ok
 msgid "Shipping Balance OK"
 msgstr "Costes de Transporte OK"
 
 #. module: shipping_balance
-#: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
+#: model:ir.ui.view,arch_db:shipping_balance.shipping_balance_wizard_view
 msgid "Shipping Balance Wizard"
 msgstr "Aplicar Descuento por Coste de Transporte"
 
 #. module: shipping_balance
-#: help:shipping.balance,balance:0
+#: model:ir.model.fields,help:shipping_balance.field_shipping_balance_balance
 msgid "True > positive"
 msgstr "True > positive"
 
 #. module: shipping_balance
-#: view:shipping.balance.wizard:shipping_balance.shipping_balance_wizard_view
+#: model:ir.ui.view,arch_db:shipping_balance.shipping_balance_wizard_view
 msgid "or"
 msgstr "or"
 
 #. module: shipping_balance
-#: field:sale.order,shipping_balance:0
+#: model:ir.model.fields,field_description:shipping_balance.field_sale_order_shipping_balance
 msgid "shipping_balance"
 msgstr "shipping_balance"
 
 #. module: shipping_balance
-#: field:product.product,is_repair:0
+#: model:ir.model.fields,field_description:shipping_balance.field_product_product_is_repair
 msgid "Is Repair"
 msgstr "Es reparación"

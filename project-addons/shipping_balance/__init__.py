@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -20,9 +19,5 @@
 #
 ##############################################################################
 
-
-import product, partner, shipping_balance
-
-from . import mrp_repair
-from . import sale_order
+from . import models
 from . import wizard

@@ -16,17 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: picking_incidences
-#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_picking_form_add_incidences
 msgid "Accept ready qtys."
 msgstr "Aceptar cantidad preparada"
 
 #. module: picking_incidences
-#: field:stock.picking,block_picking:0
+#: model:ir.model.fields,field_description:picking_incidences.field_stock_picking_block_picking
 msgid "Albarán procesado Vstock"
 msgstr "Albarán procesado Vstock"
 
 #. module: picking_incidences
-#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_picking_form_add_incidences
 msgid "Are you sure? Backorder will be created with remaining quantities"
 msgstr "¿Está seguro? Un albarán con las cantidades pendientes será creado."
 
@@ -40,7 +40,7 @@ msgstr "No puede asignar más cantidad de las reservada."
 #: code:addons/picking_incidences/stock.py:132
 #, python-format
 msgid "Cannot cancel an incoming picking with incidences. You can only process it."
-msgstr "No puede cancelar un albarán de entrada con incidencias. Sólo puede procearlo."
+msgstr "No puede cancelar un albarán de entrada con incidencias. Sólo puede procesarlo."
 
 #. module: picking_incidences
 #: code:addons/picking_incidences/stock.py:42
@@ -62,12 +62,12 @@ msgid "Cannot process picking with incidences. Please fix or ignore it."
 msgstr "No puede procesar un albarán con incidencias. Por favor arréglelo o ignórelo."
 
 #. module: picking_incidences
-#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_picking_form_add_incidences
 msgid "Confirm assignation"
 msgstr "Confirmar asignación"
 
 #. module: picking_incidences
-#: view:stock.picking:picking_incidences.view_picking_form_add_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_picking_form_add_incidences
 msgid "Copy reserved qty. to confirmed qty."
 msgstr "Copiar cant. reservada a cant. confirmada"
 
@@ -77,14 +77,19 @@ msgid "Picking List"
 msgstr "Albarán"
 
 #. module: picking_incidences
-#: field:stock.move,qty_confirmed:0
+#: model:ir.model.fields,field_description:picking_incidences.field_stock_move_qty_confirmed
 msgid "Qty confirmed"
 msgstr "Cant. confirmada"
 
 #. module: picking_incidences
-#: field:stock.move,qty_ready:0
+#: model:ir.ui.view,arch_db:picking_incidences.view_move_picking_tree_add_ready_qty
 msgid "Qty ready"
 msgstr "Cant. preparada"
+
+#. module: picking_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_move_picking_tree_add_ready_qty
+msgid "Qty ordered"
+msgstr "Cant. pedida"
 
 #. module: picking_incidences
 #: model:ir.model,name:picking_incidences.model_stock_move
@@ -104,6 +109,11 @@ msgid "User %s accepted ready quantities."
 msgstr "El usuario %s ha aceptado las cantidades preparadas."
 
 #. module: picking_incidences
-#: field:stock.picking,with_incidences:0
+#: model:ir.model.fields,field_description:picking_incidences.field_stock_picking_with_incidences
 msgid "With incidences"
 msgstr "Con incidencias"
+
+#. module: picking_incidences
+#: selection:stock.picking,state:0
+msgid "Partially Available"
+msgstr "Parcialmente disponible"

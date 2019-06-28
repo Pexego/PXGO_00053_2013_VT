@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="account_treasury_forecast_cashflow_tree_view_inh">
+            <field name="name">account.treasury.forecast.cashflow.tree.inh</field>
+            <field name="inherit_id" ref="account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_tree_view" />
+            <field name="model">account.treasury.forecast.cashflow</field>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="after">
+                    <field name="payment_mode_id"/>
+                </field>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="account_treasury_forecast_cashflow_form_view_inh">
+            <field name="name">account.treasury.forecast.cashflow.form.inh</field>
+            <field name="inherit_id" ref="account_treasury_forecast_cashflow.account_treasury_forecast_cashflow_form_view" />
+            <field name="model">account.treasury.forecast.cashflow</field>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="after">
+                    <field name="payment_mode_id"/>
+                </field>
+            </field>
+        </record>
+
+         <record id="report_treasury_forecast_analysis_tree_add_fields" model="ir.ui.view">
+            <field name="name">report.treasury.forecast.analysis.tree.add_fields</field>
+            <field name="model">report.account.treasury.forecast.analysis</field>
+            <field name="inherit_id" ref="account_treasury_forecast_banking.report_treasury_forecast_analysis_tree"/>
+            <field name="arch" type="xml">
+                <tree position="attributes">
+                    <attribute name="decoration-danger">accumulative_balance&lt;0</attribute>
+                </tree>
+                <field name="date" position="after">
+                    <field name="concept"/>
+                    <field name="partner_name"/>
+                </field>
+                <field name="balance" position="after">
+                    <field name="accumulative_balance"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</odoo>

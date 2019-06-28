@@ -1,0 +1,384 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sale_point_programme
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-06-05 11:20+0000\n"
+"PO-Revision-Date: 2019-06-05 11:20+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_point_programme
+#: model:mail.template,body_html:sale_point_programme.template_participations
+msgid "\n"
+"\n"
+"                    <p>Dear customer,<br/><br/>\n"
+"                    Visiotech is running an Ajax contest in June and July 2019.<br/>\n"
+"                    For every 500€ you buy of Ajax products through Visiotech during these months, you will get one ticket for the lottery. On August 1, 2019 there will be a draw for various prizes among all the entries.<br/><br/>\n"
+"                    For your purchases today you have been assigned the following tickets:\n"
+"                        <div style=\"margin: 20px;\">\n"
+"                        % for line in ctx['values']:\n"
+"                            % if (ctx['values'][line])\n"
+"                                Order <b>${line}</b>, ticket(s) <b>${ctx['values'][line]}</b>.<br/>\n"
+"                            % endif\n"
+"                        % endfor\n"
+"                        </div>\n"
+"\n"
+"                        <P>If you have any question, do not hesitate to contact us.<br/>\n"
+"                        Thank you for choosing VISIOTECH.</p>\n"
+"                        <br>\n"
+"                        <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"                            <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"                                <strong style=\"text-transform:uppercase;\">VISIOTECH</strong></h3>\n"
+"                        </div>\n"
+"                        <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"                            <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"                            % if object.company_id.street:\n"
+"                                ${object.company_id.street}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.street2:\n"
+"                                ${object.company_id.street2}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.city or object.company_id.zip:\n"
+"                                ${object.company_id.zip} ${object.company_id.city}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.country_id:\n"
+"                                ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br>\n"
+"                            % endif\n"
+"                            </span>\n"
+"                            % if object.company_id.phone:\n"
+"                                <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                                    Teléfono:&nbsp; ${object.company_id.phone}\n"
+"                                </div>\n"
+"                            % endif\n"
+"                            % if object.company_id.website:\n"
+"                                <div>\n"
+"                                    Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"                                </div>\n"
+"                            %endif\n"
+"                            </div>\n"
+"\n"
+"                    \n"
+"            "
+msgstr "\n"
+"\n"
+"                    <p>Cher client,<br/><br/>\n"
+"                    Visiotech organise un concours pour les mois de juin et juillet 2019. Pour tout achat de produits Ajax auprès de Visiotech, par tranche de 500€, vous obtiendrez une participation au tirage au sort.<br/>\n"
+"                    Le tirage aura lieu le 1er août 2019, plusieurs lots sont en jeu.<br/><br/>\n"
+"                     Pour vos achats d'aujourd'hui, vous avez obtenu:\n"
+"                        <div style=\"margin: 20px;\">\n"
+"                        % for line in ctx['values']:\n"
+"                            % if (ctx['values'][line])\n"
+"                                Commande <b>${line}</b>, participation(s) <b>${ctx['values'][line]}</b>.<br/>\n"
+"                            % endif\n"
+"                        % endfor\n"
+"                        </div>\n"
+"\n"
+"                        <P>N'hésitez pas à nous contacter pour toute information complémentaire.<br/>\n"
+"                        Merci d'avoir choisi VISIOTECH.</p>\n"
+"                        <br>\n"
+"                        <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"                            <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"                                <strong style=\"text-transform:uppercase;\">VISIOTECH</strong></h3>\n"
+"                        </div>\n"
+"                        <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"                            <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"                            % if object.company_id.street:\n"
+"                                ${object.company_id.street}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.street2:\n"
+"                                ${object.company_id.street2}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.city or object.company_id.zip:\n"
+"                                ${object.company_id.zip} ${object.company_id.city}<br>\n"
+"                            % endif\n"
+"                            % if object.company_id.country_id:\n"
+"                                ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br>\n"
+"                            % endif\n"
+"                            </span>\n"
+"                            % if object.company_id.phone:\n"
+"                                <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                                    Teléfono:&nbsp; ${object.company_id.phone}\n"
+"                                </div>\n"
+"                            % endif\n"
+"                            % if object.company_id.website:\n"
+"                                <div>\n"
+"                                    Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"                                </div>\n"
+"                            %endif\n"
+"                            </div>\n"
+"\n"
+"                    \n"
+"            "
+
+#. module: sale_point_programme
+#: model:mail.template,subject:sale_point_programme.template_participations
+msgid "AJAX lottery"
+msgstr "Tirage au sort AJAX"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_active
+msgid "Active"
+msgstr "Actif"
+
+#. module: sale_point_programme
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
+msgid "Actives"
+msgstr "Actives"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,attribute:0
+msgid "Amount untaxed"
+msgstr "Amount untaxed"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_attribute
+msgid "Attribute to value"
+msgstr "Attribute to value"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_product_brand_id
+msgid "Brand"
+msgstr "Marque"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_category_id
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
+msgid "Category"
+msgstr "Catégorie"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_res_partner
+msgid "Contact"
+msgstr "Contact"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_create_uid
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_create_uid
+msgid "Created by"
+msgstr "Créé par"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_create_date
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_create_date
+msgid "Created on"
+msgstr "Créé le"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_name
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_name
+msgid "Description"
+msgstr "Description"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_display_name
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_display_name
+msgid "Display Name"
+msgstr "Nom affiché"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_email_sent
+msgid "Email sent"
+msgstr "Email sent"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_date_end
+msgid "End date"
+msgstr "Date de fin"
+
+#. module: sale_point_programme
+#: code:addons/sale_point_programme/models/sale_point_rule.py:54
+#, python-format
+msgid "End date is less than start date"
+msgstr "End date is less than start date"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Equal"
+msgstr "Equal"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "For each"
+msgstr "For each"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Greater than"
+msgstr "Greater than"
+
+#. module: sale_point_programme
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
+msgid "Group By"
+msgstr "Grouper par"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_id
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_id
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag___last_update
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule___last_update
+msgid "Last Modified on"
+msgstr "Dernière modification le"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_write_uid
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_write_uid
+msgid "Last Updated by"
+msgstr "Dernière mise à jour par"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_write_date
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_write_date
+msgid "Last Updated on"
+msgstr "Dernière mise à jour le"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,operator:0
+msgid "Less than"
+msgstr "Less than"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_modality
+msgid "Modality"
+msgstr "Modality"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_operator
+msgid "Operator"
+msgstr "Opérateur"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_partner_id
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+msgid "Partner"
+msgstr "Partenaire"
+
+#. module: sale_point_programme
+#: model:ir.ui.menu,name:sale_point_programme.point_programme_menu
+msgid "Point programmes"
+msgstr "Point programmes"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_points
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_points_in_bag
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_users_points_in_bag
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_form
+#: model:ir.ui.view,arch_db:sale_point_programme.view_partner_form_add_points_widget
+msgid "Points"
+msgstr "Points"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_points
+msgid "Points / Participations"
+msgstr "Points / Participations"
+
+#. module: sale_point_programme
+#: model:ir.actions.act_window,name:sale_point_programme.action_points_rules
+msgid "Points Reward Rules"
+msgstr "Points Reward Rules"
+
+#. module: sale_point_programme
+#: model:ir.ui.menu,name:sale_point_programme.points_rules_menu
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_tree
+msgid "Points reward rules"
+msgstr "Points reward rules"
+
+#. module: sale_point_programme
+#: model:ir.actions.act_window,name:sale_point_programme.action_open_partner_points
+#: model:ir.actions.act_window,name:sale_point_programme.action_points_tracebility
+#: model:ir.ui.menu,name:sale_point_programme.points_traceability_menu
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_tree
+msgid "Points traceability"
+msgstr "Points traceability"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_product_id
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
+msgid "Product"
+msgstr "Article"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,attribute:0
+msgid "Product qty."
+msgstr "Product qty."
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_sale_order
+msgid "Quotation"
+msgstr "Quotation"
+
+#. module: sale_point_programme
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_form
+msgid "Reward rule"
+msgstr "Reward rule"
+
+#. module: sale_point_programme
+#: model:ir.ui.view,arch_db:sale_point_programme.sale_point_programme_rule_filter
+msgid "Reward rules"
+msgstr "Reward rules"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_point_rule_id
+msgid "Rule"
+msgstr "Règle"
+
+#. module: sale_point_programme
+#: model:ir.ui.view,arch_db:sale_point_programme.res_partner_point_programme_bag_filter
+msgid "Sale"
+msgstr "Vente"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_order_id
+msgid "Sale order"
+msgstr "Sale order"
+
+#. module: sale_point_programme
+#: model:ir.actions.server,name:sale_point_programme.points_and_participations_cron_ir_actions_server
+#: model:ir.cron,cron_name:sale_point_programme.points_and_participations_cron
+#: model:ir.cron,name:sale_point_programme.points_and_participations_cron
+msgid "Send email participations / points"
+msgstr "Send email participations / points"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_date_start
+msgid "Start date"
+msgstr "Date de début"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_value
+msgid "Value"
+msgstr "Value"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,modality:0
+msgid "participations"
+msgstr "participations"
+
+#. module: sale_point_programme
+#: selection:sale.point.programme.rule,modality:0
+msgid "points"
+msgstr "points"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_res_partner_point_programme_bag
+msgid "res.partner.point.programme.bag"
+msgstr "res.partner.point.programme.bag"
+
+#. module: sale_point_programme
+#: model:ir.model,name:sale_point_programme.model_sale_point_programme_rule
+msgid "sale.point.programme.rule"
+msgstr "sale.point.programme.rule"

@@ -16,44 +16,44 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: sale_order_board
-#: field:picking.rated.wizard,total_weight:0
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_total_weight
 msgid "Total Weight (Kgs)"
 msgstr "Peso Total (Kgs)"
 
 #. module: sale_order_board
-#: field:picking.rated.wizard,data:0
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_data
 msgid "Shipping Data"
 msgstr "Calculo del envio"
 
 #. module: sale_order_board
-#: view:picking.rated.wizard:sale_order_board.view_order_request_info
+#: model:ir.ui.view,arch_db:sale_order_board.view_order_request_info
 msgid "Shipping Data Information"
 msgstr "Informacion de envio"
 
 #. module: sale_order_board
-#: field:picking.rated.wizard.tree,service:0
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_service
 msgid "Service"
 msgstr "Servicio"
 
 #. module: sale_order_board
-#: field:picking.rated.wizard.tree,amount:0
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_amount
 msgid "Amount"
 msgstr "Total"
 
 #. module: sale_order_board
-#: field:picking.rated.wizard.tree,currency:0
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_currency
 msgid "Currency"
 msgstr "Divisa"
 
 #. module: sale_order_board
-#: field:picking.rated.wizard,products_wo_weight:0
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_products_wo_weight
 msgid "of the product(s) of the order don't have set the weights, please take the shipping cost as an aproximation"
 msgstr "de los productos del pedido no tienen marcados los pesos, tenga en cuenta que el coste de envio es una aproximacion"
 
 #. module: sale_order_board
-#: view:sale.order:sale_order_board.view_price_calc
-msgid "Calculate Shipping Prices"
-msgstr "Calculo de Envio"
+#: model:ir.ui.view,arch_db:sale_order_board.view_price_calc
+msgid "  Calculate Shipping Prices"
+msgstr "  Cálculo de Envío"
 
 
 

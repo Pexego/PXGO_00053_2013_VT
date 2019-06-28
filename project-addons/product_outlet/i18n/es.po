@@ -16,17 +16,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_outlet
-#: view:product.outlet.wizard:product_outlet.product_outlet_wizard_form
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_wizard_form
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,create_uid:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_create_uid
 msgid "Created by"
 msgstr "Created by"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,create_date:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_create_date
 msgid "Created on"
 msgstr "Created on"
 
@@ -36,12 +36,12 @@ msgid "First"
 msgstr "First"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,id:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_id
 msgid "ID"
 msgstr "ID"
 
 #. module: product_outlet
-#: field:product.product,is_outlet:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_product_is_outlet
 msgid "Is outlet"
 msgstr "Es outlet"
 
@@ -51,17 +51,17 @@ msgid "Last"
 msgstr "Last"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,write_uid:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_write_uid
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,write_date:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_write_date
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,all_product:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_all_product
 msgid "Move all to outlet."
 msgstr "Mover todo el stock a outlet."
 
@@ -76,7 +76,7 @@ msgid "O2"
 msgstr "O2"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,location_orig_id:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_location_orig_id
 msgid "Orig. location"
 msgstr "Ubicación origen"
 
@@ -87,18 +87,18 @@ msgid "Outlet"
 msgstr "Outlet"
 
 #. module: product_outlet
-#: field:product.product,outlet_product_ids:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_product_outlet_product_ids
 msgid "Outlet products"
 msgstr "Productos outlet"
 
 #. module: product_outlet
 #: model:ir.model,name:product_outlet.model_product_product
-#: field:product.outlet.wizard,product_id:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_product_id
 msgid "Product"
 msgstr "Producto"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,qty:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_qty
 msgid "Quantity"
 msgstr "Cantidad"
 
@@ -109,12 +109,12 @@ msgid "Quantity error"
 msgstr "Error de cantidad"
 
 #. module: product_outlet
-#: view:product.outlet.wizard:product_outlet.product_outlet_wizard_form
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_wizard_form
 msgid "Send outlet"
 msgstr "Enviar outlet"
 
 #. module: product_outlet
-#: view:product.outlet.wizard:product_outlet.product_outlet_wizard_form
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_wizard_form
 msgid "Send product to wizard"
 msgstr "Send product to wizard"
 
@@ -124,7 +124,7 @@ msgid "Send to outlet"
 msgstr "Enviar a outlet"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,state:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_state
 msgid "State"
 msgstr "State"
 
@@ -135,17 +135,17 @@ msgid "This product is already in outlet category."
 msgstr "Este producto está en la categoría outlet."
 
 #. module: product_outlet
-#: field:product.outlet.wizard,warehouse_id:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_warehouse_id
 msgid "Warehouse"
 msgstr "Almacén"
 
 #. module: product_outlet
-#: field:product.outlet.wizard,categ_id:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_categ_id
 msgid "category"
 msgstr "Categoría"
 
 #. module: product_outlet
-#: field:product.product,normal_product_id:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_product_normal_product_id
 msgid "normal product"
 msgstr "Producto normal"
 
@@ -162,15 +162,6 @@ msgid "the amount entered is greater than the quantity available in stock."
 msgstr "La cantidad introducida es mayor que la cantidad disponible."
 
 #. module: product_outlet
-#: field:product.category,percent:0
+#: model:ir.model.fields,field_description:product_outlet.field_product_category_percent
 msgid "Outlet Percent"
 msgstr "Porcentaje de Outlet"
-
-#. module: product_outlet
-#: help::product.category,percent:0
-msgid "This outlet percent will be used when a product moves to an outlet category"
-msgstr "Este porcentaje de outlet será utilizado cuando un producto se envía a una categoria outlet"
-
-#. module: product_outlet
-msgid "Error ! The outlet percent values must be between 0 and 100"
-msgstr "Error ! El valor del procentaje de outlet debe de estar entre 0 y 100"

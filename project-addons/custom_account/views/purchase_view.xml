@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+      <record id="purchase_order_form_inherit" model="ir.ui.view">
+          <field name="name">purchase.order.form</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.purchase_order_form"/>
+          <field name="arch" type="xml">
+                <field name="date_order" position="after">
+                    <label for="date_planned"/>
+                    <div>
+                        <field name="date_planned" required="1" attrs="{'readonly': [('state', 'not in', ('draft', 'sent'))]}"/>
+                        <button name="action_set_date_planned" type="object"
+                            states="draft,sent"
+                            string=" Set date to all order lines"
+                            help="This changes the scheduled date of all order lines to the given date"
+                            class="fa fa-calendar o_icon_button oe_edit_only"/>
+                    </div>
+                    <field name="remark" string="Remark"/>
+                </field>
+                <field name="picking_type_id" position="before">
+                    <field name="telex_release"/>
+                    <field name="manufacture_date"/>
+                    <field name="end_manufacture"/>
+                    <field name="prepared_merchandise_date"/>
+                    <field name="estimated_arrival_date"/>
+                </field>
+                <xpath expr="//field[@name='order_line']/tree/field[@name='company_id']" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </xpath>
+                <field name="notes" position="after">
+                    <field name="sale_notes" class="oe_inline" placeholder="Purchase Sale Notes" nolabel="1"/>
+                </field>
+          </field>
+      </record>
+
+      <record id="purchase_order_tree_inherit" model="ir.ui.view">
+          <field name="name">purchase.order.tree</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+          <field name="arch" type="xml">
+              <field name="date_planned" position="after">
+                  <field name="manufacture_date"/>
+                  <field name="prepared_merchandise_date"/>
+              </field>
+              <field name='company_id' position="attributes">
+                <attribute name="invisible">True</attribute>
+              </field>
+              <field name='origin' position="attributes">
+                <attribute name="invisible">True</attribute>
+              </field>
+              <field name="partner_id" position="after">
+                <field name="partner_ref"/>
+              </field>
+          </field>
+      </record>
+
+      <record id="view_purchase_order_filter_inherit_search" model="ir.ui.view">
+          <field name="name">purchase.order.list.select</field>
+          <field name="model">purchase.order</field>
+          <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+          <field name="arch" type="xml">
+              <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="partner_ref"/>
+              </xpath>
+          </field>
+      </record>
+
+      <record id="purchase_order_line_form_inv_comp" model="ir.ui.view">
+        <field name="name">purchase.order.line.form.inv_comp</field>
+        <field name="model">purchase.order.line</field>
+        <field name="inherit_id" ref="purchase.purchase_order_line_form2"/>
+        <field name="arch" type="xml">
+            <field name="company_id" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+        </field>
+      </record>
+
+    <menuitem id="purchase.menu_purchase_root" action="purchase.purchase_form_action"/>
+
+</odoo>

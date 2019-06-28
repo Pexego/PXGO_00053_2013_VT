@@ -1,0 +1,158 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* account_treasury_forecast_banking
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0rc1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-09-09 10:30+0000\n"
+"PO-Revision-Date: 2014-09-09 13:02+0100\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.actions.act_window,name:account_treasury_forecast_banking.action_treasury_forecast_analysis
+#: model:ir.ui.menu,name:account_treasury_forecast_banking.menu_report_treasury_forecast_analysis
+msgid "Account Treasury Forecast Analysis"
+msgstr "Análisis de previsión de tesorería"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_report_account_treasury_forecast_analysis_balance
+msgid "Balance"
+msgstr "Balance"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.actions.act_window,name:account_treasury_forecast_banking.act_treasury_forecast_2_report
+#: model:ir.ui.view,arch_db:account_treasury_forecast_banking.report_treasury_forecast_analysis_form
+#: model:ir.ui.view,arch_db:account_treasury_forecast_banking.report_treasury_forecast_analysis_search
+#: model:ir.ui.view,arch_db:account_treasury_forecast_banking.report_treasury_forecast_analysis_tree
+msgid "Breakdown Balance"
+msgstr "Desglose del balance"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_report_account_treasury_forecast_analysis_credit
+msgid "Credit"
+msgstr "Haber"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.ui.view,arch_db:account_treasury_forecast_banking.report_treasury_forecast_analysis_search
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_report_account_treasury_forecast_analysis_date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_report_account_treasury_forecast_analysis_debit
+msgid "Debit"
+msgstr "Debe"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_report_account_treasury_forecast_analysis_id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_treasury_forecast_banking
+#: selection:report.account.treasury.forecast.analysis,type:0
+msgid "Input"
+msgstr "Entrada"
+
+#. module: account_treasury_forecast_banking
+#: selection:report.account.treasury.forecast.analysis,type:0
+msgid "Output"
+msgstr "Salida"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_account_treasury_forecast_invoice_payment_mode_id
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_account_treasury_forecast_line_payment_mode_id
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_account_treasury_forecast_line_template_payment_mode_id
+#: model:ir.ui.view,arch_db:account_treasury_forecast_banking.report_treasury_forecast_analysis_search
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_report_account_treasury_forecast_analysis_payment_mode_id
+msgid "Payment Mode"
+msgstr "Modo de pago"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_report_account_treasury_forecast_analysis_treasury_id
+msgid "Treasury"
+msgstr "Previsión"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model,name:account_treasury_forecast_banking.model_account_treasury_forecast
+#: model:ir.ui.view,arch_db:account_treasury_forecast_banking.report_treasury_forecast_analysis_search
+msgid "Treasury Forecast"
+msgstr "Previsión de tesorería"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model,name:account_treasury_forecast_banking.model_report_account_treasury_forecast_analysis
+msgid "Treasury Forecast Analysis"
+msgstr "Análisis de previsión de tesorería"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model,name:account_treasury_forecast_banking.model_account_treasury_forecast_invoice
+msgid "Treasury Forecast Invoice"
+msgstr "Factura de previsión de tesorería"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model,name:account_treasury_forecast_banking.model_account_treasury_forecast_line
+msgid "Treasury Forecast Line"
+msgstr "Línea de previsión de tesorería"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model,name:account_treasury_forecast_banking.model_account_treasury_forecast_line_template
+msgid "Treasury Forecast Line Template"
+msgstr "Línea de plantilla de previsión de tesorería"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.ui.view,arch_db:account_treasury_forecast_banking.report_treasury_forecast_analysis_search
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_report_account_treasury_forecast_analysis_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.ui.view,arch_db:account_treasury_forecast_banking.account_treasury_forecast_invoice_tree_view_inh
+msgid "blue:invoice_type in ('out_refund','in_refund');black:invoice_type in ('out_invoice','in_invoice')"
+msgstr "blue:invoice_type in ('out_refund','in_refund');black:invoice_type in ('out_invoice','in_invoice')"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_account_treasury_forecast_not_bank_maturity
+msgid "Without Bank Maturities"
+msgstr "Sin vencimientos bancarios"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,help:account_treasury_forecast_banking.field_account_treasury_forecast_not_bank_maturity
+msgid "It will be reflected in the treasury analysis"
+msgstr "Se reflejará en el análisis de la previsión"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.ui.menu,name:account_treasury_forecast_banking.menu_treasury_forecast_bank_maturity
+#: model:ir.actions.act_window,name:account_treasury_forecast_banking.action_treasury_forecast_bank_maturities
+msgid "Bank Maturities"
+msgstr "Vencimientos Bancarios"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_bank_account
+msgid "Bank account"
+msgstr "Cuenta bancaria"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_bank_name
+msgid "Bank"
+msgstr "Banco"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_date_due
+msgid "Due Date"
+msgstr "Fecha vencimiento"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_amount
+msgid "Amount"
+msgstr "Importe"
+
+#. module: account_treasury_forecast_banking
+#: model:ir.model.fields,field_description:account_treasury_forecast_banking.field_bank_maturity_paid
+msgid "Paid"
+msgstr "Pagado"

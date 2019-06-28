@@ -25,7 +25,7 @@
     'description': '',
     'author': '',
     'website': '',
-    "depends": ['report', 'account'],
-    "data": ['account_view.xml'],
+    "depends": ['account'],
+    "data": [],
     "installable": True
 }

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+        <menuitem name="Transportation" parent="sale.menu_sale_config" id="menu_transportation_sale"/>
+
+        <!-- Transporter views -->
+        <record id="transporter_tree" model="ir.ui.view">
+            <field name="name">transportation.transporter.tree</field>
+            <field name="model">transportation.transporter</field>
+            <field name="arch" type="xml">
+                <tree string="Transporters">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="transporter_form" model="ir.ui.view">
+            <field name="name">transportation.transporter.form</field>
+            <field name="model">transportation.transporter</field>
+            <field name="arch" type="xml">
+                <form string="Transporter">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="partner_id"/>
+                            <field name="service_ids">
+                                <tree string="Service">
+                                    <field name="name"/>
+                                </tree>
+                                <form string="Service">
+                                    <field name="name"/>
+                                </form>
+
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="transporter_filter" model="ir.ui.view">
+            <field name="name">transportation.transporter.search</field>
+            <field name="model">transportation.transporter</field>
+            <field name="arch" type="xml">
+                <search string="Transporter">
+                   <field name="name"/>
+                   <field name="partner_id"/>
+                   <field name="service_ids"/>
+               </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_transporter">
+            <field name="name">Transporter</field>
+            <field name="res_model">transportation.transporter</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="transporter_filter"/>
+        </record>
+
+        <menuitem name="Transporter" parent="menu_transportation_sale" action="action_transporter"
+         id="menu_transporter_sale" sequence="1"/>
+
+
+
+        <!-- Transportation services views -->
+        <record id="transportation_service_tree" model="ir.ui.view">
+            <field name="name">transportation.service.tree</field>
+            <field name="model">transportation.service</field>
+            <field name="arch" type="xml">
+                <tree string="Transportation services">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="transportation_service_form" model="ir.ui.view">
+            <field name="name">transportation.service.form</field>
+            <field name="model">transportation.service</field>
+            <field name="arch" type="xml">
+                <form string="Transportation services">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="transporter_ids">
+                                <tree string="Transporter">
+                                    <field name="name"/>
+                                </tree>
+                                <form string="Transporter">
+                                    <field name="name"/>
+                                    <field name="partner_id"/>
+                                </form>
+                            </field>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="transportation_service_filter" model="ir.ui.view">
+            <field name="name">transportation.service.search</field>
+            <field name="model">transportation.service</field>
+            <field name="arch" type="xml">
+                <search string="Transportation services">
+                   <field name="name"/>
+                   <field name="transporter_ids"/>
+               </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_transportation_service">
+            <field name="name">Transportation services</field>
+            <field name="res_model">transportation.service</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="transportation_service_filter"/>
+        </record>
+
+        <menuitem name="Transportation services" parent="menu_transportation_sale"
+         action="action_transportation_service" id="menu_transportation_service_sale" sequence="2"/>
+
+</odoo>

@@ -1,0 +1,23 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * product_customizable
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-02-06 16:22+0000\n"
+"PO-Revision-Date: 2019-02-06 16:22+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_customizable
+#: model:ir.actions.server,name:product_customizable.action_product_customizable
+#: model:ir.ui.menu,name:product_customizable.menu_products_customizable
+#: code:addons/product_customizable/models/product_customizable.py:20
+msgid "Customizable"
+msgstr "Personalizables"

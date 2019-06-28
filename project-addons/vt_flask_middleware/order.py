@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from peewee import CharField, IntegerField, DateTimeField, ForeignKeyField, DecimalField, BooleanField
 from app import app
 from customer import Customer
@@ -25,7 +24,7 @@ class Order(SyncModel):
     MOD_NAME = 'order'
 
     def __unicode__(self):
-        return u'%s' % self.name
+        return '%s' % self.name
 
 
 class OrderProduct(SyncModel):
@@ -43,4 +42,4 @@ class OrderProduct(SyncModel):
     MOD_NAME = 'orderproduct'
 
     def __unicode__(self):
-        return u'%s - %s' % (self.product_id, self.order_id)
+        return '%s - %s' % (self.product_id, self.order_id)

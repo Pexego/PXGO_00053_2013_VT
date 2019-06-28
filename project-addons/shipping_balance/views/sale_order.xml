@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_order_form_shipping_balance" model="ir.ui.view">
+        <field name="name">sale.order.shipping.balance.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button
+                        class="oe_stat_button"
+                        icon="fa-euro"
+                        type="action"
+                        name="%(action_shipping_balance_wizard)d"
+                        attrs="{'invisible':['|', ('amount_shipping_balance','=', 0), ('state','not in',['draft','sent','reserve'])]}"
+                        >
+                        <field string="Shipping Balance" name="amount_shipping_balance" widget="statinfo"/>
+                    </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

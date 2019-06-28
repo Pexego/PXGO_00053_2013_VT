@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -18,10 +17,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-import account_invoice
-import crm_claim
-import partner
-import mrp_repair
-import stock
+from . import models
 from . import wizard
 from . import report

@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+     <record model="ir.ui.view" id="partner_view_add_sale_analysis">
+            <field name="name">partner.view.sale.analysis</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="prospective_customer.res_partner_add_prospective_form"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="replace"/>
+                <field name="ref" position="replace"/>
+                <field name="title" position="after">
+                    <field name="ref"/>
+                    <field name="ref_supplier" attrs="{'invisible': [('supplier', '=', False)]}"/>
+                    <field name="user_id"/>
+                </field>
+                <field name="property_supplier_payment_term_id" position="before">
+                    <field name="eur_currency" invisible="1"/>
+                    <field name="purchase_quantity" groups="purchase.group_purchase_user" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
+                </field>
+                <xpath expr="//page[@name='sales_purchases']/group[2]" position="after">
+                    <group string="Sale analysis" name="sale_analysis">
+                        <field name="growth_rate"/>
+                        <label for="average_margin" attrs="{'invisible': [('is_company', '!=', True)]}"/>
+                        <div attrs="{'invisible': [('is_company', '!=', True)]}">
+                            <field name="average_margin" class="oe_inline"/> %%
+                        </div>
+                        <field name="annual_invoiced"/>
+                        <field name="monthly_invoiced"/>
+                        <field name="past_year_invoiced"/>
+                        <field name="past_month_invoiced"/>
+                    </group>
+                </xpath>
+                <!-- TODO: Revisar si siguen existiendo estos campos-->
+                <!--field name="debit" position="attributes">
+                    <attribute name="widget">monetary</attribute>
+                    <attribute name="options">{'currency_field': 'eur_currency'}</attribute>
+                </field>
+                <field name="credit" position="attributes">
+                    <attribute name="widget">monetary</attribute>
+                    <attribute name="options">{'currency_field': 'eur_currency'}</attribute>
+                </field-->
+
+            </field>
+        </record>
+
+        <record id="view_res_partner_filter_add_comercial" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="replace">
+                   <field name="name"
+                       filter_domain="['|','|','|',('display_name','ilike',self),('ref','=',self),('email','ilike',self),('comercial', 'ilike', self)]"/>
+                    <field name="vat"/>
+                    <field name="email"/>
+                    <field name="email_web"/>
+                    <field name="zip"/>
+                    <field name="phone"/>
+                </field>
+                <filter name="supplier" position="after">
+                    <separator/>
+                    <filter string="No current month sales"
+                           domain="[['past_month_invoiced', '>', 0], ['monthly_invoiced', '=', 0]]"
+                           help="Customers with previous month sales (but no sales action in current month)"/>
+                </filter>
+            </field>
+        </record>
+
+        <record id="sale.act_res_partner_2_sale_order" model="ir.actions.act_window">
+            <field name="name">Sales</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'search_default_partner_id': active_id, 'default_state': 'reserve'}</field>
+            <field name="domain">[('state', 'not in', ['cancel', 'draft', 'sent'])]</field>
+            <field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation or sales order for this customer.
+              </p><p>
+                Odoo will help you efficiently handle the complete sale flow:
+                quotation, sales order, delivery, invoicing and
+                payment.
+              </p><p>
+                The social feature helps you organize discussions on each sales
+                order, and allow your customer to keep track of the evolution
+                of the sales order.
+              </p>
+            </field>
+        </record>
+
+        <record id="act_res_partner_2_sale_quotations" model="ir.actions.act_window">
+            <field name="name">Quotations</field>
+            <field name="res_model">sale.order</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'search_default_partner_id': active_id}</field>
+            <field name="domain">[('state', 'in', ['cancel','draft','sent'])]</field>
+            <field name="groups_id" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create a quotation or sales order for this customer.
+              </p><p>
+                Odoo will help you efficiently handle the complete sale flow:
+                quotation, sales order, delivery, invoicing and
+                payment.
+              </p><p>
+                The social feature helps you organize discussions on each sales
+                order, and allow your customer to keep track of the evolution
+                of the sales order.
+              </p>
+            </field>
+        </record>
+
+        <record id="act_res_partner_2_stock_picking" model="ir.actions.act_window">
+            <field name="name">Pickings</field>
+            <field name="res_model">stock.picking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="context">{'search_default_partner_id': active_id}</field>
+            <field name="domain">[('state', '=', 'done')]</field>
+        </record>
+
+        <record id="res_partner_view_buttons_add_quotations" model="ir.ui.view">
+            <field name="name">res.partner.view.buttons.add_quotations</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="priority" eval="20"/>
+            <field name="groups_id" eval="[(4, ref('base.group_partner_manager'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_inline oe_stat_button" type="action" name="%(act_res_partner_2_sale_quotations)d"
+                        attrs="{'invisible': [('customer', '=', False)]}" string="Quotations"
+                        icon="fa-strikethrough"/>
+                    <button class="oe_inline oe_stat_button" type="action" name="%(act_res_partner_2_stock_picking)d"
+                        attrs="{'invisible': [('customer', '=', False)]}" string="Pickings"
+                        icon="fa-pencil-square-o" groups="stock.group_stock_user"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="act_res_partner_2_sale_order_line" model="ir.actions.act_window">
+            <field name="name">Quotations and Sales Lines</field>
+            <field name="res_model">sale.order.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{'search_default_order_partner_id': active_id, 'group_by': ['state','product_id']}</field>
+            <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="res_partner_view_buttons_add_products_no" model="ir.ui.view">
+            <field name="name">res.partner.view.buttons.add_products_no</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="groups_id" eval="[(4, ref('base.group_user'))]"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_inline oe_stat_button" type="action"
+                            name="%(act_res_partner_2_sale_order_line)d"
+                        attrs="{'invisible': [('customer', '=', False)]}"
+                        icon="fa-strikethrough">
+                        <field string="Products sold" name="sale_product_count" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="res_partner_view_delete_email" model="ir.ui.view">
+            <field name="name">res.partner.view.delete.email</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="mail_tracking.view_partner_form" />
+            <field name="arch" type="xml">
+                <field name="email_score" position="replace"/>
+                    <field name="email_bounced" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_partner_warning_form_add_global_data" model="ir.ui.view">
+            <field name="name">res.partner.warning.form.inherit.global.data</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <page name="accounting" position="after">
+                    <page name='global_data' string="Global data" attrs="{'invisible': [('customer', '=', False)]}">
+                        <group colspan="4" col="4">
+                            <field name="current_global_invoiced" readonly="1"/>
+                            <field name="current_employees" readonly="1"/>
+                            <field name="past_year_global_invoiced" readonly="1"/>
+                            <field name="past_year_employees" readonly="1"/>
+                        </group>
+                    </page>
+                </page>
+            </field>
+        </record>
+
+        <record id="base.action_partner_form" model="ir.actions.act_window">
+            <field name="name">Customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{"search_default_customer":1, 'default_customer': 1, 'default_supplier': 0, 'default_is_company': 1, 'default_lang': 0, 'default_property_product_pricelist': 0}</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a contact in your address book.
+              </p><p>
+                Odoo helps you easily track all activities related to
+                a customer; discussions, history of business opportunities,
+                documents, etc.
+              </p>
+            </field>
+        </record>
+
+        <record id="base.action_partner_supplier_form" model="ir.actions.act_window">
+            <field name="name">Suppliers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="context">{'search_default_supplier': 1,'default_customer': 0,'default_supplier': 1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a contact in your address book.
+              </p><p>
+                Odoo helps you easily track all activities related to
+                a supplier: discussions, history of purchases,
+                documents, etc.
+              </p>
+            </field>
+        </record>
+
+        <record id="base.action_partner_form_view1" model="ir.actions.act_window.view">
+            <field eval="2" name="sequence"/>
+            <field name="view_mode">kanban</field>
+            <field name="view_id" ref="base.res_partner_kanban_view"/>
+            <field name="act_window_id" ref="base.action_partner_form"/>
+        </record>
+        <record id="base.action_partner_form_view2" model="ir.actions.act_window.view">
+            <field eval="1" name="sequence"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="base.view_partner_form"/>
+            <field name="act_window_id" ref="base.action_partner_form"/>
+        </record>
+        <record id="base.action_partner_tree_view1" model="ir.actions.act_window.view">
+            <field name="sequence" eval="0"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="base.view_partner_tree"/>
+            <field name="act_window_id" ref="base.action_partner_form"/>
+        </record>
+
+        <record id="action_view_web_customers" model="ir.actions.act_window">
+            <field name="name">Web customers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="context">{"'default_web':1, 'default_active':0}</field>
+            <field name="domain">[('web', '=', 1),('active','=',0),('customer','=',1)]</field>
+            <field name="search_view_id" ref="base.view_res_partner_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to add a web customer in your address book.
+              </p>
+            </field>
+        </record>
+
+        <menuitem id="res_partner_web" name="Web customers" string="Web customers"
+            action="action_view_web_customers"  parent="prospective_customer.crm_menu_partners" sequence="4"/>
+
+        <record id="purchase.act_res_partner_2_supplier_invoices" model="ir.actions.act_window">
+            <field name="name">Supplier Invoices</field>
+            <field name="model">account.invoice</field>
+            <field name="domain">['|', ('type','=','in_invoice'),('type','=','in_refund')]</field>
+        </record>
+
+        <record id="res_partner_custom_view_purchase_account_buttons" model="ir.ui.view">
+            <field name="name">res.partner.custom.view.purchase.account.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="purchase.res_partner_view_purchase_account_buttons"/>
+            <field name="arch" type="xml">
+                <field name="supplier_invoice_count" position="attributes">
+                        <attribute name="name">supplier_all_invoice_count</attribute>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="view_partner_situation_tree">
+            <field name="name">Partner Situation</field>
+            <field name="model">account.move.line</field>
+            <field name="arch" type="xml">
+                <tree string="Account Move line" editable="bottom" create="false" delete="false"
+                      decoration-danger = "(not date_maturity or date_maturity&lt;=current_date) and balance&gt;0">
+                    <field name="date" readonly="True"/>
+                    <field name="move_id" readonly="True"/>
+                    <field name="invoice_id" readonly="True"/>
+                    <field name="ref_line" readonly="True"/>
+                    <field name="blocked"/>
+                    <field name="date_maturity" readonly="True"/>
+                    <field name="matched_debit_ids" invisible="True"/>
+                    <field name="matched_credit_ids" invisible="True"/>
+                    <field name="full_reconcile_id" invisible="True"/>
+                    <button name="open_reconcile_view"
+                        type="object"
+                        icon="fa-adjust"
+                        string="Partial reconciliation"
+                        attrs="{'invisible': ['|', ('full_reconcile_id', '!=', False), '&amp;', ('matched_debit_ids', '=', []),('matched_credit_ids', '=', [])]}">
+                    </button>
+                    <field name="balance" readonly="True" sum="Total balance"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="partner_situation_action">
+            <field name="name">Customer Situation</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_partner_situation_tree"/>
+            <field name="domain">[('full_reconcile_id', '=', False),('account_id.deprecated','=', False),
+                ('account_id.internal_type', '=', 'receivable')]</field>
+        </record>
+
+        <record model="ir.actions.act_window" id="supplier_situation_action">
+            <field name="name">Supplier Situation</field>
+            <field name="res_model">account.move.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_partner_situation_tree"/>
+            <field name="domain">[('full_reconcile_id', '=', False),('account_id.deprecated','=', False),
+                ('account_id.internal_type', '=', 'payable'), ('account_id.not_payment_followup', '=', False)]</field>
+        </record>
+
+        <record id="res_partner_view_buttons_add_followup" model="ir.ui.view">
+            <field name="name">res.partner.view.buttons.add_followup</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='button_box']" position="inside">
+                    <button class="oe_inline oe_stat_button" type="action" name="%(partner_situation_action)d"
+                        string="Customer Situation"
+                        icon="fa-thermometer-half"
+                        context="{'search_default_partner_id': active_id}"
+                        attrs="{'invisible': [('customer','=', False)]}"/>
+                    <button class="oe_inline oe_stat_button" type="action" name="%(supplier_situation_action)d"
+                        string="Supplier Situation"
+                        icon="fa-thermometer-half"
+                        context="{'search_default_partner_id': active_id}"
+                        attrs="{'invisible': [('supplier','=', False)]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="warning_non_active_client" model="ir.ui.view">
+            <field name="name">res.partner.warning.non.active.client</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <h2 style="color: red;font-weight: bold;font-size: 20px" attrs="{'invisible': [('active', '=', True)]}">The client is innactive</h2>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_partner_tree_custom_color" model="ir.ui.view">
+            <field name="name">res.partner.tree.custom.color</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="decoration-danger">active==False</attribute>
+                    <attribute name="decoration-info">active==True</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_partner_tree_custom" model="ir.ui.view">
+            <field name="name">res.partner.tree.custom</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_tree"/>
+            <field name="arch" type="xml">
+                <field name="display_name" position="before">
+                    <field name="ref"/>
+                </field>
+                <field name="email" position="before">
+                    <field name="state_id"/>
+                </field>
+                <field name="email" position="after">
+                    <field name="property_product_pricelist"/>
+                    <field name="area_id"/>
+                    <field name="team_id"/>
+                    <field name="active" invisible="1"/>
+                </field>
+                <field name="user_id" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </field>
+                <field name="user_id" position="after">
+                    <field name="category_id"/>
+                    <field name="annual_invoiced"/>
+                    <field name="last_sale_date"/>
+                    <button name="open_partner" type="object" string="" icon="fa-window-restore" help="Open partner in new tab"/>
+                </field>
+            </field>
+        </record>
+
+          <record id="view_partner_tree" model="ir.ui.view">
+            <field name="name">res.partner.tree</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="customer_lost.view_partner_tree"/>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                 <field name="parent_id" invisible="1" position="after">
+                    <button name="open_partner" type="object" string="" icon="fa-window-restore" help="Open partner in new tab"/>
+                 </field>
+            </field>
+        </record>
+
+        <record id="view_partner_form_add_att" model="ir.ui.view">
+            <field name="name">res.partner.form.add_att</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+
+                <field name="vat" position="replace">
+                    <field name="att"/> <!-- TODO Ya no existe campo use_parent_address: attrs="{'readonly': [('use_parent_address','=',True)]}"/> -->
+                </field>
+                <xpath expr="//field[@name='child_ids']/form//field[@name='street2']" position="after">
+                    <field name="att" placeholder="A/A"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="partner_view_buttons_override">
+            <field name="name">partner.view.buttons.override</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.partner_view_buttons"/>
+            <field name="arch" type="xml">
+                <field name="total_invoiced" position="replace">
+                    <field name="total_invoiced_real" widget="monetary"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="crm_case_categ_phone_incoming3">
+            <field name="name">Logged Calls</field>
+            <field name="res_model">crm.phonecall</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,calendar</field>
+            <field name="view_id" ref="crm_phonecall.crm_case_inbound_phone_tree_view"/>
+            <field name="domain">[]</field>
+            <field name="context">{'search_default_partner_id': active_id, 'default_duration': 1.0, 'search_default_user_id': uid, 'search_default_state': 'done', 'default_state': 'done', 'default_scope': 'sales'}</field>
+            <field name="search_view_id" ref="crm_phonecall.view_crm_case_phonecalls_filter"/>
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to log the summary of a phone call.
+              </p><p>
+                Odoo allows you to log inbound calls on the fly to track the
+                history of the communication with a customer or to inform another
+                team member.
+              </p><p>
+                In order to follow up on the call, you can trigger a request for
+                another call, a meeting or an opportunity.
+              </p>
+            </field>
+        </record>
+
+        <record id="custom_call_button" model="ir.ui.view">
+            <field name="name">custom.call.button</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="crm_phonecall.view_partners_form_crm_calls"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='%(crm_phonecall.crm_case_categ_phone_incoming0)d']" position="attributes">
+                    <attribute name="name">call_new_window</attribute>
+                    <attribute name="type">object</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_supplierinfo_tree_view_add_ref" model="ir.ui.view">
+            <field name="name">product.supplier.add.ref</field>
+            <field name="model">product.supplierinfo</field>
+            <field name="inherit_id" ref="product.product_supplierinfo_tree_view"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="ref_supplier"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="res_partner_view_buttons_change_string" model="ir.ui.view">
+            <field name="name">res.partner.view.buttons.change.string</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="sale.res_partner_view_buttons"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button/field[@name='sale_order_count']" position="attributes">
+                    <attribute name="string">Orders</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <menuitem id="contacts.menu_localisation" name="Localization"
+            parent="crm.crm_menu_config" sequence="5"/>
+
+        <menuitem id="contacts.menu_partner_category_form"
+            action="base.action_partner_category_form"
+            name="Contact Tags"
+            sequence="1" parent="crm.crm_menu_config"/>
+
+        <menuitem id="contacts.menu_partner_title_contact"
+            action="base.action_partner_title_contact"
+            name="Contact Titles" parent="crm.crm_menu_config"
+            sequence="3"/>
+
+        <menuitem id="contacts.res_partner_industry_menu" name="Sectors of Activity"
+            action="base.res_partner_industry_action" parent="crm.crm_menu_config"
+            sequence="4"/>
+
+        <menuitem id="contacts.menu_config_bank_accounts"
+            name="Bank Accounts"
+            parent="crm.crm_menu_config"
+            sequence="6"/>
+
+</odoo>

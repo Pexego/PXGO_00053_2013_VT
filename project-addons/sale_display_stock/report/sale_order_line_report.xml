@@ -1,59 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
-    <data>
+<odoo>
+    <record id="sale_order_line_report_tree" model="ir.ui.view">
+        <field name="name">sale.order.line.report.tree</field>
+        <field name="model">sale.order.line.report</field>
+        <field name="arch" type="xml">
+            <tree string="Sale line report">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="product_qty"/>
+                <field name="uom"/>
+                <field name="price_unit"/>
+                <field name="discount"/>
+                <field name="qty_stock"/>
+                <field name="qty_kitchen"/>
+                <field name="order_id"/>
+                <field name="salesman_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
 
-        <record id="sale_order_line_report_tree" model="ir.ui.view">
-            <field name="name">sale.order.line.report.tree</field>
-            <field name="model">sale.order.line.report</field>
-            <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <tree string="Sale line report">
-                    <field name="name"/>
-                    <field name="product_id"/>
-                    <field name="partner_id"/>
-                    <field name="product_qty"/>
-                    <field name="uom"/>
-                    <field name="price_unit"/>
-                    <field name="discount"/>
-                    <field name="qty_stock"/>
-                    <field name="qty_kitchen"/>
-                    <field name="order_id"/>
-                    <field name="salesman_id"/>
-                    <field name="state"/>
-                </tree>
-            </field>
-        </record>
+    <record id="sale_order_line_report_filter" model="ir.ui.view">
+        <field name="name">sale.order.line.report</field>
+        <field name="model">sale.order.line.report</field>
+        <field name="arch" type="xml">
+            <search string="">
+               <field name="name"/>
+               <field name="product_id"/>
+               <field name="salesman_id"/>
+               <group expand="0" string="Group By">
+                    <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    <filter string="Order" domain="[]" context="{'group_by':'order_id'}"/>
+                    <filter string="Salesperson" domain="[]" context="{'group_by':'salesman_id'}"/>
+                    <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                </group>
+           </search>
+        </field>
+    </record>
 
-        <record id="sale_order_line_report_filter" model="ir.ui.view">
-            <field name="name">sale.order.line.report</field>
-            <field name="model">sale.order.line.report</field>
-            <field name="type">search</field>
-            <field name="arch" type="xml">
-                <search string="">
-                   <field name="name"/>
-                   <field name="product_id"/>
-                   <field name="salesman_id"/>
-                   <group expand="0" string="Group By">
-                        <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
-                        <filter string="Order" domain="[]" context="{'group_by':'order_id'}"/>
-                        <filter string="Salesperson" domain="[]" context="{'group_by':'salesman_id'}"/>
-                        <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
-                        <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
-                    </group>
-               </search>
-            </field>
-        </record>
+    <record model="ir.actions.act_window" id="action_sale_order_line_report">
+        <field name="name">Sale lines report</field>
+        <field name="res_model">sale.order.line.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="sale_order_line_report_tree"/>
+        <field name="search_view_id" ref="sale_order_line_report_filter"/>
+    </record>
 
-        <record model="ir.actions.act_window" id="action_sale_order_line_report">
-            <field name="name">Sale lines report</field>
-            <field name="res_model">sale.order.line.report</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="sale_order_line_report_tree"/>
-            <field name="search_view_id" ref="sale_order_line_report_filter"/>
-        </record>
-
-        <menuitem name="Sale lines report" parent="base.menu_sales" action="action_sale_order_line_report" id="sale_order_line_report_menu"/>
-
-    </data>
-</openerp>
+    <menuitem name="Sale lines report" parent="sale.menu_sale_report" action="action_sale_order_line_report" id="sale_order_line_report_menu"/>
+</odoo>

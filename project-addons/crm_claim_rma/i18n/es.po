@@ -1,0 +1,1544 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * crm_claim_rma
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-03-30 16:44+0000\n"
+"PO-Revision-Date: 2016-03-30 16:44+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_email
+msgid "# Emails"
+msgstr "# Emails"
+
+#. module: crm_claim_rma
+#: model:ir.actions.act_window,help:crm_claim_rma.crm_case_categ_claim_supplier
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                    Record and track your suppliers' claims. Claims may be linked to a sales order or a lot.You can send emails with attachments and keep the full history for a claim (emails sent, intervention type and so on).Claims may automatically be linked to an email address using the mail gateway module.\n"
+"                </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                    Registre y siga las reclamaciones a sus proveedores. Las reclamaciones puede asociarse a pedidos de ventas o a lotes. Puede enviar emails con adjuntos y mantener el historial completo de una reclamación (emails enviados, tipos de intervenciones y cualquier otra cosa). Las reclamaciones pueden automáticamente ser asociadas a una dirección de email usando el módulo de pasarela de correo.\n"
+"                </p>\n"
+"            "
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/wizard/claim_make_picking.py:74
+#, python-format
+msgid "A picking has already been created for this claim."
+msgstr "Ya se ha creado un albarán para esta reclamación."
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/account_invoice.py:67
+#, python-format
+msgid "A refund has already been created for this claim !"
+msgstr "¡Ya se ha creado un abono para esta reclamación!"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+msgid "Action"
+msgstr "Acción"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_type_action
+msgid "Action Type"
+msgstr "Tipo acción"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_active
+msgid "Active"
+msgstr "Activo"
+
+#. module: crm_claim_rma
+#: model:crm.case.section,name:crm_claim_rma.section_after_sales_service
+msgid "After Sales Service"
+msgstr "Servicio Post-venta"
+
+#. module: crm_claim_rma
+#: selection:crm.claim,invoice_method:0
+msgid "After repair"
+msgstr "Después de la reparación"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/wizard/repair_invoice.py:39
+#: code:addons/crm_claim_rma/wizard/repair_invoice.py:55
+#, python-format
+msgid "Any repair to invoice in this claim"
+msgstr "Ninguna reparación para facturar en esta reclamación"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:48
+#: selection:claim.line,move_in_customer_state:0
+#: selection:claim.line,move_in_supplier_state:0
+#: selection:claim.line,move_out_customer_state:0
+#: selection:claim.line,move_out_supplier_state:0
+#, python-format
+msgid "Available"
+msgstr "Disponible"
+
+#. module: crm_claim_rma
+#: selection:crm.claim,invoice_method:0
+msgid "Before repair"
+msgstr "Antes de la reparación"
+
+#. module: crm_claim_rma
+#: selection:claim.line,applicable_guarantee:0
+msgid "Brand manufacturer"
+msgstr "Fabricante"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Broken down product"
+msgstr "Producto averiado"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim12
+msgid "Buyer Cancelled"
+msgstr "Cancelado por el comprador"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_crm_claim_cost_report
+msgid "CRM Claim cost Report"
+msgstr "Informe de costes de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.claim_make_repair_wizard
+#: model:ir.ui.view,arch_db:crm_claim_rma.claim_send_supplier_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_claim_picking
+#: model:ir.ui.view,arch_db:crm_claim_rma.equivalent_products_wizard
+#: model:ir.ui.view,arch_db:crm_claim_rma.mrp_repair_invoice_from_claim_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:36
+#: code:addons/crm_claim_rma/crm_claim_rma.py:45
+#: selection:claim.line,move_in_customer_state:0
+#: selection:claim.line,move_in_supplier_state:0
+#: selection:claim.line,move_out_customer_state:0
+#: selection:claim.line,move_out_supplier_state:0
+#: selection:claim.line,repair_state:0
+#, python-format
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:320
+#, python-format
+msgid "Cannot find any date for invoice. Must be a validated invoice."
+msgstr "No se puede encontrar una fecha para la factura. Debe ser una fecha validada."
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_categ_id
+msgid "Category"
+msgstr "Categoría"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_form_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_tree_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_tree_view2
+msgid "Change product"
+msgstr "Cambiar producto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_account_invoice_claim_id
+#: model:ir.model,name:crm_claim_rma.model_crm_claim
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_repair_order_form_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_mrp_repair_claim_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_stock_picking_claim_id
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_stock_reservation_form
+#: model:ir.model.fields,field_description:crm_claim_rma.field_stock_reservation_claim_id
+msgid "Claim"
+msgstr "Reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_claim_date
+msgid "Claim Date"
+msgstr "Fecha de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_form_view
+#: model:ir.model.fields,field_description:crm_claim_rma.field_stock_move_claim_line_id
+msgid "Claim Line"
+msgstr "Línea de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "Claim Month"
+msgstr "Mes de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_claim_origine
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_subject
+msgid "Claim Subject"
+msgstr "Objeto de la reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_claim_descr
+msgid "Claim description"
+msgstr "Descripción de la reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_substates
+msgid "Claim line substates"
+msgstr "Sub-estados de la reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_claim_line_ids
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_case_claim_lines_customer
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_case_claim_lines_supplier
+msgid "Claim lines"
+msgstr "Líneas de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "Claim n°"
+msgstr "Reclamación nº"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_crm_claim_stage
+msgid "Claim stages"
+msgstr "Etapas de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_claim_type
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_claim_type
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_claim_type
+msgid "Claim type"
+msgstr "Tipo de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_form_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_case_claims_filter
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_graph
+#: model:ir.actions.act_window,name:crm_claim_rma.crm_case_categ_claim_supplier
+#: model:ir.model.fields,field_description:crm_claim_rma.field_mrp_repair_claim_line_ids
+msgid "Claims"
+msgstr "Reclamaciones"
+
+#. module: crm_claim_rma
+#: model:ir.actions.act_window,name:crm_claim_rma.action_report_crm_claim_cost
+msgid "Claims Analysis"
+msgstr "Análisis de reclamaciones"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_date_closed
+msgid "Close Date"
+msgstr "Fecha de cierre"
+
+#. module: crm_claim_rma
+#: selection:claim.line,applicable_guarantee:0
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_company_id
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_repair_order_form_filter
+msgid "Company"
+msgstr "Compañia"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_crm_claim_number
+msgid "Company internal claim unique number"
+msgstr "Número único de reclamación interno en la compañia"
+
+#. module: crm_claim_rma
+#: model:ir.ui.menu,name:crm_claim_rma.sat_config
+msgid "Config"
+msgstr "Configuración"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:37
+#: selection:claim.line,repair_state:0
+#: selection:claim.line,state:0
+#, python-format
+msgid "Confirmed"
+msgstr "Confirmada"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_partner_contact_tree
+msgid "Contacts"
+msgstr "Contactos"
+
+#. module: crm_claim_rma
+#: selection:crm.claim.cost.report,type_action:0
+msgid "Corrective Action"
+msgstr "Acción correctiva"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim14
+msgid "Could Not Ship"
+msgstr "No pudo enviarse"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_create_date
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+#. module: crm_claim_rma
+#: model:ir.actions.act_window,name:crm_claim_rma.action_claim_picking_out
+msgid "Create Outgoing Shipments"
+msgstr "Crear envíos salientes"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_claim_picking
+msgid "Create picking"
+msgstr "Crear envío/recepción"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_tree_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_tree_view2
+msgid "Create repair"
+msgstr "Crear reparación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_create_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_repair_create_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_send_supplier_create_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_create_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_create_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_tag_wizard_create_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_mrp_repair_invoice_from_claim_create_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_create_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_repair_create_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_send_supplier_create_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_create_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_create_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_tag_wizard_create_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_mrp_repair_invoice_from_claim_create_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: crm_claim_rma
+#: selection:crm.claim.cost.report,priority:0
+msgid "Critical"
+msgstr "Crítica"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "Current"
+msgstr "Actual"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:662
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_partner_id
+#: selection:crm.claim,claim_type:0
+#: selection:crm.claim.cost.report,claim_type:0
+#, python-format
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:666
+#, python-format
+msgid "Customer Email"
+msgstr "Email de cliente"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view2
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_rma_invoice_out
+msgid "Customer Invoices"
+msgstr "Facturas de cliente"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view2
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_rma_refunds_out
+msgid "Customer Refunds"
+msgstr "Facturas rect. de cliente"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim11
+msgid "Customer Return"
+msgstr "Devolución de cliente"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_crm_claim_claim_type
+msgid "Customer: from customer to company.\n"
+" Supplier: from company to supplier."
+msgstr "Cliente: del cliente a la compañía.\n"
+"Proveedor: de la compañía al proveedor."
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Damaged delivered product"
+msgstr "Producto enviado dañado"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_date_deadline
+msgid "Deadline"
+msgstr "Fecha límite"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_delay_close
+msgid "Delay to close"
+msgstr "Reatraso en cerrar"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim20
+msgid "Delivered Late by Carrier"
+msgstr "Entregado con retraso por el transportista"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view2
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_rma_picking_out
+msgid "Deliveries"
+msgstr "Entregas"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_name
+#: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_substate_descr
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_tree_view
+msgid "Customer description"
+msgstr "Descripción del cliente"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_claim_line_dest_location
+msgid "Dest. Location"
+msgstr "Localizalización de destino"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim15
+msgid "Different Item"
+msgstr "Artículo diferente"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:48
+#: selection:claim.line,move_in_customer_state:0
+#: selection:claim.line,move_in_supplier_state:0
+#: selection:claim.line,move_out_customer_state:0
+#: selection:claim.line,move_out_supplier_state:0
+#, python-format
+msgid "Done"
+msgstr "Realizado"
+
+#. module: crm_claim_rma
+#: selection:claim.line,state:0
+msgid "Draft"
+msgstr "Borrador"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "Draft and Open Claims"
+msgstr "Reclamaciones abiertas o en borrador"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/wizard/equivalent_products_wizard.py:131
+#: code:addons/crm_claim_rma/wizard/equivalent_products_wizard.py:146
+#, python-format
+msgid "El producto no es equivalente"
+msgstr "El producto no es equivalente"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:438
+#: model:ir.ui.view,arch_db:crm_claim_rma.equivalent_products_wizard
+#, python-format
+msgid "Equivalent products"
+msgstr "Productos equivalentes"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:319
+#: code:addons/crm_claim_rma/crm_claim_rma.py:329
+#: code:addons/crm_claim_rma/wizard/account_invoice_refund.py:37
+#: code:addons/crm_claim_rma/wizard/claim_make_picking.py:73
+#: code:addons/crm_claim_rma/wizard/equivalent_products_wizard.py:130
+#: code:addons/crm_claim_rma/wizard/equivalent_products_wizard.py:145
+#, python-format
+msgid "Error"
+msgstr "Error"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:481
+#, python-format
+msgid "Error!"
+msgstr "Error"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Exchange request"
+msgstr "Solicitar cambio"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_planned_cost
+msgid "Expected cost"
+msgstr "Coste estimado"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_planned_revenue
+msgid "Expected revenue"
+msgstr "Expectativa de ingreso"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "Extended Filters..."
+msgstr "Filtros extendidos..."
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+msgid "Follow Up"
+msgstr "Seguimiento"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim13
+msgid "General Adjustement"
+msgstr "Ajuste General"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+msgid "Generated Documents"
+msgstr "Documentos generados"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "Group By"
+msgstr "Agrupar por"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "Group By..."
+msgstr "Agrupar por..."
+
+#. module: crm_claim_rma
+#: model:ir.actions.act_window,help:crm_claim_rma.action_report_crm_claim_cost
+msgid "Have a general overview of all claims processed in the system by sorting them with specific criteria."
+msgstr "Obtenga una visión global de todas las reclamaciones procesadas en el sistema ordenándolas con criterios específicos."
+
+#. module: crm_claim_rma
+#: selection:crm.claim.cost.report,priority:0
+msgid "High"
+msgstr "Alta"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_repair_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_send_supplier_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_tag_wizard_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_mrp_repair_invoice_from_claim_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_id
+msgid "ID"
+msgstr "ID"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_warning
+msgid "If warranty has expired"
+msgstr "Si la garantía ha vencido"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "In Progress"
+msgstr "En progreso"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "In Progress Claims"
+msgstr "Reclamaciones en progreso"
+
+#. module: crm_claim_rma
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_rma_picking_in
+msgid "Incoming Shipment and Returns"
+msgstr "Envíos entrantes y Devoluciones"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_internal_description
+msgid "Internal Description"
+msgstr "Descripción interna"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_invoice_id
+#: selection:crm.claim,invoice_type:0
+#: model:ir.model,name:crm_claim_rma.model_account_invoice
+#: model:ir.ui.view,arch_db:crm_claim_rma.mrp_repair_invoice_from_claim_view
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:41
+#: selection:claim.line,repair_state:0
+#, python-format
+msgid "Invoice Exception"
+msgstr "Excepción factura"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_invoice_line_id
+#: model:ir.model,name:crm_claim_rma.model_account_invoice_line
+msgid "Invoice Line"
+msgstr "Línea de factura"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_account_invoice_refund
+msgid "Invoice Refund"
+msgstr "Abono factura"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_invoice_method
+msgid "Invoice method"
+msgstr "Método facturación"
+
+#. module: crm_claim_rma
+#: model:ir.actions.act_window,name:crm_claim_rma.action_mrp_repair_invoice_from_claim_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.mrp_repair_invoice_from_claim_view
+msgid "Invoice repairs"
+msgstr "Facturar reparaciones"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_invoice_type
+msgid "Invoice type"
+msgstr "Tipo facturación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_write_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_repair_write_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_send_supplier_write_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_write_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_write_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_tag_wizard_write_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_mrp_repair_invoice_from_claim_write_uid
+#: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_write_uid
+msgid "Last Updated by"
+msgstr "Últ. actualización por"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_write_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_repair_write_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_send_supplier_write_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_write_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_write_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_tag_wizard_write_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_mrp_repair_invoice_from_claim_write_date
+#: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_write_date
+msgid "Last Updated on"
+msgstr "Últ. actualización en"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_last_state_change
+msgid "Last change"
+msgstr "Última modificación"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Legal retractation"
+msgstr "Retractación legal"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_repair_line_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_line_id
+msgid "Line"
+msgstr "Linea"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_form_view
+msgid "Linked Document"
+msgstr "Documento relacionado"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_claim_line
+msgid "List of product to return"
+msgstr "Listado de productos a devolver"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_make_picking_wizard_claim_line_source_location
+msgid "Location where the returned products are from."
+msgstr "Localización desde la que vienen los productos devueltos."
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_make_picking_wizard_claim_line_dest_location
+msgid "Location where the system will stock the returned products."
+msgstr "Localización en la que el sistema almacenará los productos devueltos."
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_claim_picking
+msgid "Locations"
+msgstr "Localizaciones"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Lost during transport"
+msgstr "Perdido durante el transporte"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.claim_make_repair_wizard
+msgid "Make"
+msgstr "Crear"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.claim_make_repair_wizard
+#: model:ir.actions.act_window,name:crm_claim_rma.action_claim_make_repair
+msgid "Make repair"
+msgstr "Reparar"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim17
+msgid "Merchandise Not As Described"
+msgstr "El producto no se corresponde con la descripción"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim16
+msgid "Merchandise Not Received"
+msgstr "Mercancía no recibida"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim21
+msgid "Missed Fulfilment Promise"
+msgstr "Incumplimiento de la respuesta"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "Month of claim"
+msgstr "Mes de la reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "More"
+msgstr "Más"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_claim_descr
+msgid "More precise description of the problem"
+msgstr "Descripción detallada del problema"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_in_customer_id
+msgid "Move Line from customer picking in"
+msgstr "Movimiento entrada"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_out_customer_id
+msgid "Move Line from customer picking out"
+msgstr "Movimiento salida"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "My Case(s)"
+msgstr "Mi(s) Caso(s)"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "My Company"
+msgstr "Mi compañía"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "My Sales Team(s)"
+msgstr "Mi equipo de ventas"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_tag_wizard_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:45
+#: selection:claim.line,move_in_customer_state:0
+#: selection:claim.line,move_in_supplier_state:0
+#: selection:claim.line,move_out_customer_state:0
+#: selection:claim.line,move_out_supplier_state:0
+#, python-format
+msgid "New"
+msgstr "Nuevo"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+msgid "New Delivery"
+msgstr "Nueva entrega"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+msgid "New Products Return"
+msgstr "Nueva entrada de productos"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+msgid "New Refund"
+msgstr "Nuevo abono"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim10
+msgid "No Inventory"
+msgstr "Sin Stock"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Not appropiate product"
+msgstr "Producto no adecuado"
+
+#. module: crm_claim_rma
+#: selection:crm.claim,invoice_method:0
+msgid "Not invoice"
+msgstr "No facturable"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Not specified"
+msgstr "No especificado"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_number
+msgid "Number"
+msgstr "Número"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_crm_claim_cost_report_delay_close
+msgid "Number of Days to close the case"
+msgstr "Numero de días para cerrar el caso"
+
+#. module: crm_claim_rma
+#: sql_constraint:crm.claim:0
+msgid "Number/Reference must be unique per Company!"
+msgstr "El número/referencia debe ser único por compañía"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Order cancellation"
+msgstr "Cancelación de orden"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Other"
+msgstr "Otro"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_delay_expected
+msgid "Overpassed Deadline"
+msgstr "Fecha límite sobrepasada"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_delivery_address_id
+msgid "Partner delivery address"
+msgstr "Dirección de envio"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_stock_picking
+msgid "Picking List"
+msgstr "Albarán"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_picking__search
+msgid "Picking Type"
+msgstr "Tipo de albarán"
+
+#. module: crm_claim_rma
+#: selection:crm.claim.cost.report,type_action:0
+msgid "Preventive Action"
+msgstr "Acción preventiva"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim18
+msgid "Pricing Error"
+msgstr "Error de precio"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_priority
+msgid "Priority"
+msgstr "Prioridad"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_form_view
+msgid "Problem"
+msgstr "Problema"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+msgid "Product Return"
+msgstr "Entrada de producto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_product_id
+msgid "Product selected"
+msgstr "Producto seleccionado"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.equivalent_products_wizard
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_product_ids
+msgid "Products"
+msgstr "Productos"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_product_returned_quantity
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_product_returned_quantity
+msgid "Quantity of product returned"
+msgstr "Cantidad de producto devuelto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_return_value
+msgid "Quantity returned * Unit sold price"
+msgstr "Cantidad devuelta * precio de venta unitario"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:35
+#: selection:claim.line,repair_state:0
+#, python-format
+msgid "Quotation"
+msgstr "Presupuesto"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view2
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_rma_sale_orders
+msgid "Quotations and Sales"
+msgstr "Presupuestos y pedidos"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_picking_ids
+#: selection:crm.claim.cost.report,subject:0
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_picking__search
+msgid "RMA"
+msgstr "RMA"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_rma_cost
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_nbr
+msgid "RMA cost"
+msgstr "Coste RMA"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:39
+#: selection:claim.line,repair_state:0
+#, python-format
+msgid "Ready to Repair"
+msgstr "Listo para reparar"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_real_stock
+msgid "Real Stock"
+msgstr "Stock real"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_real_cost
+msgid "Real cost"
+msgstr "Coste real"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_real_revenue
+msgid "Real revenue"
+msgstr "Ingreso real"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+msgid "Receptions / Deliveries"
+msgstr "Recepciones / Entregas"
+
+#. module: crm_claim_rma
+#: selection:crm.claim,invoice_type:0
+msgid "Refund"
+msgstr "Abono"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_refund_line_id
+msgid "Refund Line"
+msgstr "Linea de Abono"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_invoice_ids
+msgid "Refunds"
+msgstr "Abonos"
+
+#. module: crm_claim_rma
+#: selection:claim.line,state:0
+msgid "Refused"
+msgstr "Rechazado"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_claim_id
+msgid "Related claim"
+msgstr "Reclamación relacionada"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_crm_claim_invoice_id
+msgid "Related original Cusotmer invoice"
+msgstr "Factura de cliente original relacionada"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_repair_id
+msgid "Repair"
+msgstr "Reparación"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_mrp_repair
+msgid "Repair Order"
+msgstr "Orden reparación"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:42
+#: selection:claim.line,repair_state:0
+#, python-format
+msgid "Repaired"
+msgstr "Reparado"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.mrp_repair_invoice_from_claim_view
+#: model:ir.model.fields,field_description:crm_claim_rma.field_mrp_repair_invoice_from_claim_repair_ids
+msgid "Repairs"
+msgstr "Reparaciones"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_equivalent_product_id
+msgid "Replacement"
+msgstr "Reemplazo"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_user_id
+msgid "Responsible"
+msgstr "Responsable"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "Responsible User"
+msgstr "Usuario responsable"
+
+#. module: crm_claim_rma
+#: selection:crm.claim.cost.report,subject:0
+msgid "Return"
+msgstr "Devolución"
+
+#. module: crm_claim_rma
+#: model:ir.actions.act_window,name:crm_claim_rma.action_claim_picking_in
+msgid "Return Products"
+msgstr "Productos devueltos"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_location_dest_id
+msgid "Return Stock Location"
+msgstr "Ubicación de existencias para devolución"
+
+#. module: crm_claim_rma
+#: model:ir.ui.menu,name:crm_claim_rma.menu_crm_case_claims_claim_lines_cust
+msgid "Return customer lines"
+msgstr "Lineas de cliente"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_claim_line_ids
+msgid "Return lines"
+msgstr "Líneas de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.ui.menu,name:crm_claim_rma.menu_crm_case_claims_claim_lines_sup
+msgid "Return supplier lines"
+msgstr "Lineas de proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view2
+msgid "Returned Products"
+msgstr "Entradas"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_form_view
+msgid "Returned good"
+msgstr "Mercancía devuelta"
+
+#. module: crm_claim_rma
+#: model:ir.ui.menu,name:crm_claim_rma.menu_crm_case_claims_claim_line_substates
+msgid "Returned line substates"
+msgstr "Sub-estados para lineas devueltas"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_tree_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_tree_view2
+msgid "Returned lines"
+msgstr "Líneas devueltas"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_product_id
+msgid "Returned product"
+msgstr "Productos devueltos"
+
+#. module: crm_claim_rma
+#: model:ir.ui.menu,name:crm_claim_rma.menu_sat
+msgid "SAT"
+msgstr "SAT"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_case_claims_filter
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "Sales Team"
+msgstr "Equipo de ventas"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "Salesperson"
+msgstr "Vendedor"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+msgid "Search"
+msgstr "Buscar"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "Search Claims"
+msgstr "Buscar reclamaciones"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_team_id
+msgid "Team"
+msgstr "Equipo"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_substate_id
+msgid "Select a sub state to precise the standard state. Example 1: state = refused; substate could be warranty over, not in warranty, no problem,... . Example 2: state = to treate; substate could be to refund, to exchange, to repair,..."
+msgstr "Seleccione un sub-estado para detallar el estado estandar. Por ejemplo: Estado = rechazado; Sub-estado, garantía agotada, fuera de garantía, sin problema..."
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_claim_picking
+msgid "Select exchange lines to add in picking"
+msgstr "Seleccionar las líneas de cambio para añadir envío"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_claim_picking
+msgid "Select lines for picking"
+msgstr "Seleccionar líneas para recogida/envío"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.equivalent_products_wizard
+msgid "Select product"
+msgstr "Seleccionar producto"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.claim_send_supplier_view
+msgid "Send"
+msgstr "Enviar"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.claim_send_supplier_view
+#: model:ir.actions.act_window,name:crm_claim_rma.action_send_line_to_supplier
+msgid "Send to supplier"
+msgstr "Enviar a proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_prodlot_id
+msgid "Serial/Lot n°"
+msgstr "N° de serie/lote:"
+
+#. module: crm_claim_rma
+#: model:crm.case.categ,name:crm_claim_rma.categ_claim19
+msgid "Shipping Address Undeliverable"
+msgstr "Dirección de envío inexistente"
+
+#. module: crm_claim_rma
+#: selection:claim.line,claim_origine:0
+msgid "Shipping error"
+msgstr "Error de envío"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_stage_show_buttons
+msgid "Show buttons"
+msgstr "Mostrar botones"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/wizard/claim_send_supplier.py:52
+#, python-format
+msgid "Some of the selected lines not have supplier.\n"
+"Lines: "
+msgstr "Algunas de las lineas seleccionadas no tienen proveedor.\n"
+"Lineas: "
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_claim_line_source_location
+msgid "Source Location"
+msgstr "Localización de origen"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_case_claims_filter
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_stage_id
+msgid "Stage"
+msgstr "Etapa"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_form_view
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_state
+msgid "State"
+msgstr "Estado"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento de existencias"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_stock_reservation
+msgid "Stock Reservation"
+msgstr "Reserva de stock"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_substate_id
+#: model:ir.model.fields,field_description:crm_claim_rma.field_substate_substate_name
+msgid "Sub state"
+msgstr "Sub-estado"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+#: model:ir.ui.view,arch_db:crm_claim_rma.substate_form
+#: model:ir.ui.view,arch_db:crm_claim_rma.substate_search
+msgid "Substate"
+msgstr "Sub-estado"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.substate_tree
+msgid "Substates"
+msgstr "Sub-estados"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+#: selection:claim.line,applicable_guarantee:0
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_supplier_id
+#: selection:crm.claim,claim_type:0
+#: selection:crm.claim.cost.report,claim_type:0
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view2
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_rma_invoice_in
+msgid "Supplier Invoices"
+msgstr "Facturas de proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_supplier_number
+msgid "Supplier Number"
+msgstr "Nº proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view2
+#: model:ir.actions.act_window,name:crm_claim_rma.act_crm_claim_rma_refunds_in
+msgid "Supplier Refunds"
+msgstr "Facturas rectificativas de proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_supplier_line_id
+msgid "Supplier claim line"
+msgstr "Linea de reclamación de proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_crm_claim_supplier_number
+msgid "Supplier claim number"
+msgstr "Nº reclamación proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.ui.menu,name:crm_claim_rma.menu_crm_case_claims_supplier
+msgid "Supplier claims"
+msgstr "Reclamaciones de proveedor"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/wizard/claim_send_supplier.py:51
+#, python-format
+msgid "Supplier error"
+msgstr "Error de proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_tag_ids
+msgid "Tags"
+msgstr "Tags"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_equivalent_tag_wizard
+msgid "Tags for equivalent products wizard"
+msgstr "Tags para productos equivalentes en wizard"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/wizard/account_invoice_refund.py:37
+#, python-format
+msgid "The claim not have invoices to refund."
+msgstr "La reclamación no tiene factura para rectificar."
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_invoice_line_id
+msgid "The invoice line related to the returned product"
+msgstr "La línea de factura relacionada con el producto devuelto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_move_in_customer_id
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_move_out_customer_id
+msgid "The move line related to the returned product"
+msgstr "El movimiento asociado al producto devuelto"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:330
+#, python-format
+msgid "The product has no supplier configured."
+msgstr "El producto no tiene proveedor configurado."
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_refund_line_id
+msgid "The refund line related to the returned product"
+msgstr "La línea de abono relacionada con el producto devuelto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_location_dest_id
+msgid "The return stock location of the returned product"
+msgstr "La ubicación de existencias para el producto devuelto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_prodlot_id
+msgid "The serial/lot of the returned product"
+msgstr "Nº de serie/lote del producto devuelto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_guarantee_limit
+msgid "The warranty limit is computed as: invoice date + warranty defined on selected product."
+msgstr "El límite de la garantía se calcula como: fecha de factura + garantía seleccionada en el producto seleccionado."
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:482
+#, python-format
+msgid "There is no warehouse for the current user's company."
+msgstr "No hay almacén definido para la compañía del usuario actual"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_crm_claim_delivery_address_id
+msgid "This address will be used to deliver repaired or replacementproducts."
+msgstr "Esta dirección será usada para entregar los productos reparados o substituidos."
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:40
+#: selection:claim.line,repair_state:0
+#, python-format
+msgid "To be Invoiced"
+msgstr "Para ser facturado"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_claim_origine
+msgid "To describe the line product problem"
+msgstr "Para describir el problema de la línea de producto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_substate_substate_substate_descr
+msgid "To give more information about the sub state"
+msgstr "Permite ampliar la información del sub-estado"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_claim_id
+msgid "To link to the case.claim object"
+msgstr "Para enlazar con el objeto case.claim"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_last_state_change
+msgid "To set the last state / substate change"
+msgstr "Para definir el último cambio de estado / sub-estado"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_case_claims_tree_view
+msgid "Total cost"
+msgstr "Coste total"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_return_value
+msgid "Total return"
+msgstr "Total devuelto"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:38
+#: selection:claim.line,repair_state:0
+#, python-format
+msgid "Under Repair"
+msgstr "En reparación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_unit_sale_price
+msgid "Unit sale price"
+msgstr "Precio de venta unitario"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_unit_sale_price
+msgid "Unit sale price of the product. Auto filled if retrun done by invoice selection. Be careful and check the automatic value as don't take into account previous refunds, invoice discount, can be for 0 if product for free,..."
+msgstr "Precio de venta unitario del producto. Auto-completado si la devolución se realizó por selección de factura. Tenga cuidado y compruebe el valor automático, ya que no tiene en cuenta facturas rectificativas previas, descuento de facturas, puede ser 0 si el producto es gratuito, etc..."
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_cost_report_user_id
+msgid "User"
+msgstr "Responsable"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_products_wizard_virtual_stock
+msgid "Virtual Stock"
+msgstr "Stock virtual "
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:46
+#: selection:claim.line,move_in_customer_state:0
+#: selection:claim.line,move_in_supplier_state:0
+#: selection:claim.line,move_out_customer_state:0
+#: selection:claim.line,move_out_supplier_state:0
+#, python-format
+msgid "Waiting Another Move"
+msgstr "Esperando otro movimiento"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:47
+#: selection:claim.line,move_in_customer_state:0
+#: selection:claim.line,move_in_supplier_state:0
+#: selection:claim.line,move_out_customer_state:0
+#: selection:claim.line,move_out_supplier_state:0
+#, python-format
+msgid "Waiting Availability"
+msgstr "Esperando Disponibilidad"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_warehouse_id
+msgid "Warehouse"
+msgstr "Almacén"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_warning
+msgid "Warranty"
+msgstr "Garantía"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_warranty_return_partner
+msgid "Warranty Address"
+msgstr "Dirección de garantía"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_guarantee_limit
+msgid "Warranty limit"
+msgstr "Límite de la garantía"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_applicable_guarantee
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_warranty_type
+msgid "Warranty type"
+msgstr "Tipo de garantía"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_warranty_return_partner
+msgid "Where the customer has to send back the product(s)"
+msgstr "Dirección a la que el cliente debe remitir el producto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_warranty_type
+msgid "Who is in charge of the warranty return treatment towards the end customer. Company will use the current company delivery or default address and so on for supplier and brand manufacturer. Does not necessarily mean that the warranty to be applied is the one of the return partner (ie: can be returned to the company and be under the brand warranty"
+msgstr "Especifica quién es el responsable del tratamiento de la devolución de garantía para el cliente final. La compañía utilizará la dirección por defecto o la dirección de envío de la compañía, y así sucesivamente por proveedor y marca del fabricante. No significa necesariamente que la garantía que se aplica es el de la empresa que hace la devolución (es decir: se puede devolver a la empresa y estar bajo la garantía de la marca)"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_equivalent_tag_wizard_wiz_id
+msgid "Wizard"
+msgstr "Asistente"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_equivalent_products_wizard
+msgid "Wizard for change products in claim."
+msgstr "Asistente para cambiar los productos en la reclamación."
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_claim_make_picking_wizard
+msgid "Wizard to create pickings from claim lines"
+msgstr "Asistente para crear envíos desde la línea de reclamación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_stage_closed
+msgid "closed"
+msgstr "Cerrado"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_line_form_view
+msgid "create repair"
+msgstr "Crear reparación"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:341
+#, python-format
+msgid "expired"
+msgstr "expirado"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.substate_search
+msgid "inactive"
+msgstr "Inactivo"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:322
+#, python-format
+msgid "not_define"
+msgstr "sin_definir"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_claim_picking
+msgid "or"
+msgstr "o"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_original_line_id
+msgid "original claim line"
+msgstr "Linea de reclamación original"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_in_customer_state
+msgid "picking in state"
+msgstr "Estado de recepción"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_out_customer_state
+msgid "picking out state"
+msgstr "Estado de envío"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_repair_state
+msgid "repair state"
+msgstr "Estado de reparación"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_crm_claim_state_show_buttons
+msgid "show buttons"
+msgstr "Mostrar botones"
+
+#. module: crm_claim_rma
+#: model:ir.model,name:crm_claim_rma.model_substate_substate
+msgid "substate that precise a given state"
+msgstr "Los sub-estados necesitan un estado padre"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_in_supplier_state
+msgid "supplier picking in state"
+msgstr "Estado de la recepción de proveedor"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_out_supplier_state
+msgid "supplier picking out state"
+msgstr "Estado del envio a proveedor"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/crm_claim_rma.py:343
+#, python-format
+msgid "valid"
+msgstr "válido"
+
+#. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
+msgid "without supplier RMA"
+msgstr "Sin RMA de proveedor"

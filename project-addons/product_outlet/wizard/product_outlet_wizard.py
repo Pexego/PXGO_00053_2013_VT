@@ -1,44 +1,10 @@
-# -*- coding: utf-8 -*-
-##############################################################################
-#
-#    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
-#    $Jesús Ventosinos Mayor <jesus@pexego.es>$
-#
-#    This program is free software: you can redistribute it and/or modify
-#    it under the terms of the GNU Affero General Public License as published
-#    by the Free Software Foundation, either version 3 of the License, or
-#    (at your option) any later version.
-#
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU Affero General Public License for more details.
-#
-#    You should have received a copy of the GNU Affero General Public License
-#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
-##############################################################################
+# © 2014 Pexego Sistemas Informáticos
+# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+from odoo import models, fields, api, exceptions, _
 
-from openerp import models, fields, api, exceptions, _
 
-class ProductCategory(models.Model):
-
-    _inherit = 'product.category'
-
-    percent = fields.Float(string="Outlet Percent",
-                           help="This outlet percent will be used when a product moves to an outlet category")
-
-    @api.one
-    @api.constrains('percent')
-    def check_length(self):
-        percent = self.percent
-        if (percent > 100) | (percent < 0):
-            raise exceptions. \
-                ValidationError(_('Error ! The outlet percent values must be between 0 and 100'))
-        return True
-
-class product_outlet_wizard(models.TransientModel):
-    _name = "product.outlet.wizard"
+class ProductOutletWizard(models.TransientModel):
+    _name = 'product.outlet.wizard'
 
     @api.model
     def _get_default_warehouse(self):
@@ -47,7 +13,7 @@ class product_outlet_wizard(models.TransientModel):
             search([('company_id', '=', company_id)])
         if not warehouse_ids:
             return False
-        return warehouse_ids[0]
+        return warehouse_ids[0].id
 
     @api.model
     def _get_default_location(self):
@@ -56,7 +22,7 @@ class product_outlet_wizard(models.TransientModel):
             search([('company_id', '=', company_id)])
         if not warehouse_ids:
             return False
-        return warehouse_ids[0].lot_rma_id
+        return warehouse_ids[0].lot_rma_id.id
 
     qty = fields.Float('Quantity')
     product_id = fields.Many2one('product.product', 'Product',
@@ -76,11 +42,10 @@ class product_outlet_wizard(models.TransientModel):
     percent = fields.Float(string="Percent",
                            help="This percent will be used when a product moves to an outlet category")
 
-    @api.multi
-    def onchange_percent(self, category_id):
+    @api.onchange('categ_id')
+    def onchange_percent(self):
         if self.state == 'last':
-            percent = self.env['product.category'].browse(category_id).percent
-            return {'value': {'percent': percent}}
+            self.percent = self.env['product.category'].browse(self.categ_id).percent
 
     @api.onchange('warehouse_id')
     def onchange_warehouse(self):
@@ -101,21 +66,19 @@ class product_outlet_wizard(models.TransientModel):
             res.append((categ.id, categ.name))
         return res
 
-    @api.multi
     def make_move(self):
         outlet_categ_id = \
             self.env.ref('product_outlet.product_category_outlet')
+        loss_location = self.env.\
+            ref('product_outlet.stock_location_outlet_changes')
         stock_location = self.location_orig_id
-        outlet_location = self.env.ref('product_outlet.stock_location_outlet')
         move_obj = self.env['stock.move']
         categ_obj = self.env['product.category']
         outlet_tag = self.env.ref('product_outlet.tag_outlet')
 
-        ctx = dict(self.env.context)
-        ctx['warehouse_id'] = self.warehouse_id.id
-        ctx['location'] = self.location_orig_id.id
-        product = self.env['product.product']. \
-            with_context(ctx).browse(self.product_id.id)
+        product = self.with_context(
+            warehouse_id=self.warehouse_id.id,
+            location_id=self.location_orig_id.id).product_id
         if self.state == 'first':
             self.qty = product.qty_available
             self.state = 'last'
@@ -135,7 +98,7 @@ class product_outlet_wizard(models.TransientModel):
                 _('the amount entered is greater than the quantity '
                   'available in stock.'))
         if product.categ_id == outlet_categ_id or \
-                        product.categ_id.parent_id == outlet_categ_id:
+                product.categ_id.parent_id == outlet_categ_id:
             raise exceptions.except_orm(
                 _('product error'),
                 _('This product is already in outlet category.'))
@@ -173,8 +136,7 @@ class product_outlet_wizard(models.TransientModel):
 
         move_in = move_obj.create({'product_id': new_product.id,
                                    'product_uom_qty': self.qty,
-                                   'location_id':
-                                       new_product.property_stock_inventory.id,
+                                   'location_id': loss_location.id,
                                    'location_dest_id':
                                        self.warehouse_id.wh_input_stock_loc_id.id,
                                    'product_uom': new_product.uom_id.id,
@@ -186,8 +148,7 @@ class product_outlet_wizard(models.TransientModel):
         move_out = move_obj.create({'product_id': product.id,
                                     'product_uom_qty': self.qty,
                                     'location_id': stock_location.id,
-                                    'location_dest_id':
-                                        product.property_stock_inventory.id,
+                                    'location_dest_id': loss_location.id,
                                     'product_uom': product.uom_id.id,
                                     'picking_type_id':
                                         self.warehouse_id.out_type_id.id,
@@ -196,9 +157,9 @@ class product_outlet_wizard(models.TransientModel):
                                         self.env.user.company_id.partner_id.id,
                                     'name': "OUTLET"})
 
-        move_out.action_confirm()
-        move_out.action_assign()
+        move_out._action_confirm()
+        move_out._action_assign()
         move_out.picking_id.not_sync = True
         move_out.picking_id.odoo_management = True
-        move_in.action_confirm()
+        move_in._action_confirm()
         return {'type': 'ir.actions.act_window_close'}

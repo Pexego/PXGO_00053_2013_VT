@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_form_add_tests" model="ir.ui.view">
+        <field name="name">sale.order.form.add_tests</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <group name="technical" position="after">
+                <group col="4" groups="test_management.group_test_manager">
+                    <field name="tests"/>
+                    <button name="set_tests" type="object" string="Set" attrs="{'invisible': ['|',('tests', '=', True),('state', 'in', ['cancel'])]}" colspan="1"/>
+                    <button name="unset_tests" type="object" string="Unset" attrs="{'invisible': ['|',('tests', '=', False),('state', 'in', ['cancel'])]}" colspan="1"/>
+                </group>
+            </group>
+        </field>
+    </record>
+
+    <!-- sale.order inherit search view -->
+    <record id="view_sales_order_filter" model="ir.ui.view">
+        <field name="name">sale.order.inherit.view.search</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+        <field name="arch" type="xml">
+            <filter name="activities_upcoming_all" position="after">
+                <filter string="To Invoice" name="to_invoice_tests" domain="[('invoice_status', '=', 'to_invoice'),('tests', '=', False)]"/>
+                <filter string="To Invoice Tests" name="to_invoice_tests" domain="[('invoice_status', '=', 'to_invoice'),('tests', '=', True)]" groups="test_management.group_test_manager"/>
+            </filter>
+
+        </field>
+    </record>
+</odoo>

@@ -20,5 +20,5 @@
 #
 ###############################################################################
 from . import models
-from . import report
+#TODO: Migrara a report_xlsx from . import report
 from . import wizard

@@ -33,7 +33,7 @@ msgid "Partner"
 msgstr "Empresa"
 
 #. module: prospective_customer
-#: field:res.partner,prospective:0
+#: model:ir.model.fields,field_description:prospective_customer.field_res_partner_prospective
 msgid "Prospective"
 msgstr "Potencial"
 
@@ -44,23 +44,28 @@ msgid "Prospective customers"
 msgstr "Clientes potenciales"
 
 #. module: prospective_customer
+#: model:ir.ui.menu,name:prospective_customer.crm_menu_partners
+msgid "Partners"
+msgstr "Clientes"
+
+#. module: prospective_customer
 #: model:ir.model,name:prospective_customer.model_sale_order
 msgid "Sales Order"
 msgstr "Pedido de venta"
 
 #. module: prospective_customer
-#: view:sale.order:prospective_customer.sale_order_add_prospective_form
+#: model:ir.ui.view,arch_db:prospective_customer.sale_order_add_prospective_form
 msgid "[ ('customer', '=', True), '|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
 msgstr "[ ('customer', '=', True), '|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
 
 #. module: prospective_customer
-#: view:calendar.event:prospective_customer.calendar_event_add_prospective
-#: view:crm.lead:prospective_customer.crm_lead_add_prospective_customer_form
-#: view:crm.lead:prospective_customer.crm_opportunity_add_prospective_form
-#: view:crm.lead2opportunity.partner:prospective_customer.crm_lead2oppportunity_add_prospective_form
-#: view:crm.make.sale:prospective_customer.crm_make_sale_add_prospective
-#: view:crm.phonecall:prospective_customer.crm_phonecall_add_prospective_customer_form
-#: view:crm.phonecall:prospective_customer.crm_phonecall_add_prospective_customer_tree
+#: model:ir.ui.view,arch_db:prospective_customer.calendar_event_add_prospective
+#: model:ir.ui.view,arch_db:prospective_customer.crm_lead_add_prospective_customer_form
+#: model:ir.ui.view,arch_db:prospective_customer.crm_opportunity_add_prospective_form
+#: model:ir.ui.view,arch_db:prospective_customer.crm_lead2oppportunity_add_prospective_form
+#: model:ir.ui.view,arch_db:prospective_customer.crm_make_sale_add_prospective
+#: model:ir.ui.view,arch_db:prospective_customer.crm_phonecall_add_prospective_customer_form
+#: model:ir.ui.view,arch_db:prospective_customer.crm_phonecall_add_prospective_customer_tree
 msgid "['|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
 msgstr "['|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
 

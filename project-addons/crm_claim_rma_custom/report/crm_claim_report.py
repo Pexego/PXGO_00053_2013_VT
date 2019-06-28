@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea Servicios Tecnológicos
@@ -19,33 +18,30 @@
 #
 ##############################################################################
 
-from openerp.osv import fields, osv
-from openerp import tools
+from odoo import fields, models, tools
 
 
-class crm_claim_cost_report(osv.osv):
+class CrmClaimCostReport(models.Model):
 
-    _inherit = "crm.claim.cost.report"
+    _inherit = 'crm.claim.cost.report'
 
-    _columns = {
-        'priority': fields.selection([('1', 'High'), ('2', 'Critical')],
-                                     'Priority', readonly=True),
-        'comercial_id': fields.many2one("res.users", string="Comercial",
-                                        readonly=True),
-        'claim_date': fields.date('Claim Date', readonly=True),
-        'subject': fields.selection([('return', 'Return'),
-                                     ('rma', 'RMA')], string='Claim Subject',
-                                    readonly=True),
-    }
+    priority = fields.Selection([('1', 'High'), ('2', 'Critical')],
+                                'Priority', readonly=True)
+    comercial_id = fields.Many2one("res.users", string="Comercial",
+                                   readonly=True)
+    claim_date = fields.Date('Claim Date', readonly=True)
+    subject = fields.Selection([('return', 'Return'),
+                                ('rma', 'RMA')], string='Claim Subject',
+                               readonly=True)
 
-    def init(self, cr):
+    def init(self):
 
         """ Display Number of cases And Section Name
         @param cr: the current row, from the database cursor,
          """
 
-        tools.drop_view_if_exists(cr, 'crm_claim_cost_report')
-        cr.execute("""
+        tools.drop_view_if_exists(self._cr, 'crm_claim_cost_report')
+        self._cr.execute("""
             create or replace view crm_claim_cost_report as (
                 select
                     min(c.id) as id,
@@ -54,7 +50,7 @@ class crm_claim_cost_report(osv.osv):
                     c.date_deadline as date_deadline,
                     c.user_id,
                     c.stage_id,
-                    c.section_id,
+                    c.team_id,
                     c.comercial as comercial_id,
                     c.partner_id,
                     c.company_id,
@@ -71,7 +67,7 @@ class crm_claim_cost_report(osv.osv):
                 from
                     crm_claim c
                 group by c.date,\
-                        c.user_id,c.section_id, c.stage_id,c.claim_type,c.comercial,\
+                        c.user_id,c.team_id, c.stage_id,c.claim_type,c.comercial,\
                         c.categ_id,c.partner_id,c.company_id,c.create_date,
                         c.priority,c.type_action,c.date_deadline,c.date_closed,c.id
             )""")

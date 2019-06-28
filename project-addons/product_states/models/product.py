@@ -18,45 +18,22 @@
 #
 ##############################################################################
 
-from odoo import fields, models, api, fields, _
+from odoo import fields, models
 
 
 class ProductTemplate(models.Model):
 
-    _inherit = "product.template"
+    _inherit = 'product.template'
 
-    state2 = fields.Selection([
-            ('active', 'Active'),
-            ('edition', 'In edition'),
-            ('published', 'Published')], 'Status',
-            readonly=True, required=True, default='active')
     sale_ok = fields.Boolean(
         'Can be Sold', default=False,
         help="Specify if the product can be selected in a sales order line.")
 
-
-    @api.multi
-    def signal_edition(self):
-        self.write({'state2': 'edition'})
-        for product in self:
-            vals = {
-                'body':
-                _(u'The product %s is in edition state') % product.name,
-                'model': 'product.template',
-                'res_id': product.id,
-                'type': 'comment'
-            }
-            self.env['mail.message'].create(vals)
-
-    @api.multi
-    def signal_publish(self):
-        self.write({'state2': 'published', 'sale_ok': True})
-        for product in self:
-            vals = {
-                'body':
-                _(u'The product %s has been published') % product.name,
-                'model': 'product.template',
-                'res_id': product.id,
-                'type': 'comment'
-            }
-            self.env['mail.message'].create(vals)
+    state = fields.Selection(selection=[('draft', 'In Development'),
+                                        ('sellable', 'Normal'),
+                                        ('end', 'End of Lifecycle'),
+                                        ('obsolete', 'Obsolete'),
+                                        ('make_to_order', 'Make to order')],
+                             string='Status',
+                             default='sellable',
+                             index=True)

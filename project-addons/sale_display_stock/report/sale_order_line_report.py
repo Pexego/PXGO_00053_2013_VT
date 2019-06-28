@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea All Rights Reserved
@@ -18,10 +17,10 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, tools
+from odoo import models, fields, tools
 
 
-class sale_order_line_report(models.Model):
+class SaleOrderLineReport(models.Model):
 
     _name = 'sale.order.line.report'
     _auto = False
@@ -30,7 +29,7 @@ class sale_order_line_report(models.Model):
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
     product_qty = fields.Float('Quantity', readonly=True)
     uom = fields.Many2one('product.uom', 'UoM', readonly=True)
-    price_unit =  fields.Float('Price unit', readonly=True)
+    price_unit = fields.Float('Price unit', readonly=True)
     discount = fields.Float('Discount', readonly=True)
     salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
     state = fields.Char('State', readonly=True)
@@ -41,9 +40,9 @@ class sale_order_line_report(models.Model):
     qty_stock = fields.Float('Stock qty', group_operator="avg", readonly=True)
     company_id = fields.Many2one("res.company", "Company", readonly=True)
 
-    def init(self, cr):
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""
+    def init(self):
+        tools.drop_view_if_exists(self._cr, self._table)
+        self._cr.execute("""
 CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.name as name,
        sol.order_partner_id as partner_id,
@@ -60,7 +59,7 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        stck.qty AS qty_stock
 FROM   sale_order_line sol
        LEFT JOIN (SELECT product_id,
-                          Sum(qty) AS qty
+                          Sum(quantity) AS qty
                    FROM   stock_quant
                    WHERE  location_id IN (SELECT res_id
                                           FROM   ir_model_data
@@ -69,7 +68,7 @@ FROM   sale_order_line sol
                    GROUP  BY product_id) q_kt
                ON sol.product_id = q_kt.product_id
        LEFT JOIN (SELECT product_id,
-                          Sum(qty) AS qty
+                          Sum(quantity) AS qty
                    FROM   stock_quant
                    WHERE  location_id IN (SELECT loc.id
                                           FROM   stock_location loc
@@ -85,7 +84,7 @@ FROM   sale_order_line sol
                                          stock.parent_right)
                    GROUP  BY product_id) stck
                ON sol.product_id = stck.product_id
-WHERE  q_kt.qty > 0 and sol.id in (select sale_line_id from procurement_order po where po.state not in ('done', 'cancel'))
+WHERE  q_kt.qty > 0
 GROUP BY sol.id, sol.name, sol.order_partner_id, sol.product_uom_qty,
          sol.product_uom, sol.price_unit, sol.discount, sol.company_id,
          sol.salesman_id, sol.state, sol.order_id, q_kt.product_id, q_kt.qty, stck.qty)

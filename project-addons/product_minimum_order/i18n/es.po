@@ -16,12 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: product_minimum_order
-#: field:product.product,sale_in_groups_of:0
+#: model:ir.model.fields,field_description:product_minimum_order.field_product_product_sale_in_groups_of
 msgid "Sale in groups of"
 msgstr "Se vende en grupos de"
 
 #. module: product_minimum_order
-#: code:addons/product_minimum_order/models/sale_order.py:25
+#: code:addons/product_minimum_order/models/sale_order.py:27
 #, python-format
 msgid "The product %s can only be sold in groups of %s"
 msgstr "El producto %s puede ser vendido en grupos de %s"

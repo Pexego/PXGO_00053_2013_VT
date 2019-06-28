@@ -20,12 +20,11 @@
 ##############################################################################
 
 
-from openerp.osv import fields, orm
+from odoo import fields, models, _, exceptions, api
 from lxml import etree
-from openerp.tools.translate import _
 
 
-class sale_equivalent_products(orm.TransientModel):
+class sale_equivalent_products(models.TransientModel):
 
     _name = "sale.equivalent.products"
     _description = "Wizard for change products in sale order line"
@@ -55,51 +54,39 @@ class sale_equivalent_products(orm.TransientModel):
             res[wiz.id] = list(product_ids)
         return res
 
-    _columns = {
-        'line_id': fields.many2one('sale.order.line', 'Line'),
-        'tag_ids': fields.one2many('sale.equivalent.tag', 'wiz_id', 'Tags'),
-        'product_ids': fields.function(_get_products, type='one2many',
-                                       relation='product.product',
-                                       string='Products'),
-        'product_id': fields.many2one('product.product', 'Product selected'),
-    }
+    line_id = fields.Many2one('sale.order.line', 'Line')
+    tag_ids = fields.One2many('sale.equivalent.tag', 'wiz_id', 'Tags')
+    product_ids = fields.One2many('product.product', compute="_get_products",
+                                  string='Products')
+    product_id = fields.Many2one('product.product', 'Product selected')
 
-
-    def fields_view_get(self, cr, uid, view_id=None, view_type='form',
-                        context=None, toolbar=False, submenu=False):
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form',
+                        toolbar=False, submenu=False):
         """
             se añade domain al campo product_id.
         """
-        product_obj = self.pool.get('product.product')
-        if context is None:
-            context = {}
-        line_id = context.get('line_id', False)
-        res = super(sale_equivalent_products, self).fields_view_get(cr, uid,
-                                                                    view_id,
+        product_obj = self.env['product.product']
+        line_id = self.env.context.get('line_id', False)
+        res = super(sale_equivalent_products, self).fields_view_get(view_id,
                                                                     view_type,
-                                                                    context,
                                                                     toolbar,
                                                                     submenu)
         if line_id:
             # se buscan productos con los mismos tags que el de la linea
-            product_ids = set(product_obj.search(cr, uid,
-                                                 [('sale_ok', '=', True)],
-                                                 context=context))
-            line = self.pool.get('sale.order.line').browse(cr, uid, line_id,
-                                                           context)
+            product_ids = set(product_obj.search([('sale_ok', '=', True)]))
+            line = self.env['sale.order.line'].browse(line_id)
             product = line.product_id
             for tag in product.tag_ids:
-                products = product_obj.search(cr, uid,
-                                              [('tag_ids', 'in', [tag.id]),
-                                               ('sale_ok', '=', True)],
-                                              context=context)
-                product_ids = product_ids & set(products)
+                products = product_obj.search([('tag_ids', 'in', [tag.id]),
+                                               ('sale_ok', '=', True)])
+                product_ids |= products
 
             # se añade a la vista el domain
             doc = etree.XML(res['arch'])
             for node in doc.xpath("//field[@name='product_id']"):
                 node.set('domain', "[('id', 'in', " +
-                         str(list(product_ids)) + ")]")
+                         str(list(product_ids.ids)) + ")]")
             res['arch'] = etree.tostring(doc)
 
         return res
@@ -119,8 +106,7 @@ class sale_equivalent_products(orm.TransientModel):
         wiz = self.browse(cr, uid, ids[0], context)
 
         if wiz.product_id.id not in [x.id for x in wiz.product_ids]:
-            raise orm.except_orm(_('Error'),
-                                 _('El producto no es equivalente'))
+            raise exceptions.UserError(_('El producto no es equivalente'))
         order_line_obj = self.pool.get('sale.order.line')
         order_line_obj.write(cr, uid,
                              [wiz.line_id.id],
@@ -154,12 +140,10 @@ class sale_equivalent_products(orm.TransientModel):
         }
 
 
-class sale_equivalent_tag(orm.TransientModel):
+class sale_equivalent_tag(models.TransientModel):
 
     _name = "sale.equivalent.tag"
     _description = "Tags for equivalent products wizard"
 
-    _columns = {
-        'wiz_id': fields.many2one('sale.equivalent.products', 'Wizard'),
-        'name': fields.char('Name', size=64),
-    }
+    wiz_id = fields.Many2one('sale.equivalent.products', 'Wizard')
+    name = fields.Char('Name', size=64)
