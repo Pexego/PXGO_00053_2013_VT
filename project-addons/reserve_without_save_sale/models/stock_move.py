@@ -5,7 +5,7 @@ from odoo import api, fields, models
 class StockMove(models.Model):
 
     _inherit = "stock.move"
-    _order = 'has_reservations desc, picking_id, sequence, id'
+    _order = 'has_reservations desc, sequence, picking_id, id'
 
     reservation_ids = fields.One2many("stock.reservation", "move_id",
                                       "Reservations", readonly=True)
@@ -26,7 +26,7 @@ class StockMove(models.Model):
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):
         if self.env.context.get('bypass_order'):
-            order = 'has_reservations desc, picking_id, sequence, id'
+            order = 'has_reservations desc, sequence, picking_id, id'
         return super().search(args, offset=offset, limit=limit, order=order,
                               count=count)
 
