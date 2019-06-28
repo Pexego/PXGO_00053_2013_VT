@@ -248,7 +248,7 @@ class PromotionsRulesActions(models.Model):
         vals = {
             'order_id': order.id,
             'sequence': sequence,
-            # 'product_id':product_id.id,
+            'product_id': self.env.ref('commercial_rules.product_discount').id,
             'name': '%s (%s)' % (
                      product_id.default_code,
                      self.promotion.name),
