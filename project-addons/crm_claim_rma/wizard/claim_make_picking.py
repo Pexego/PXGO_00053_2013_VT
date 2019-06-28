@@ -240,7 +240,8 @@ class ClaimMakePicking(models.TransientModel):
 
         if picking_id:
             picking_id.action_assign()
-            picking_id.button_validate()
+            # if we validate the picking, it fails because there is no quantity available
+            #picking_id.button_validate()
             domain = ("[('picking_type_code', '=', '%s'), \
                                    ('partner_id', '=', %s)]" %
                       (p_type, partner_id.id))

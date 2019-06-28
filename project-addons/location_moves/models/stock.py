@@ -181,17 +181,13 @@ class StockLotacion(models.Model):
             'product_id': product.id,
             'picking_type_id': type_id.id,
             'product_uom': product.uom_id.id,
-            'product_uos': product.uom_id.id,
             'product_uom_qty': qty,
-            'product_uos_qty': qty,
             'location_id': source_location.id,
             'location_dest_id': dest_location.id,
             'picking_id': picking.id,
             'partner_id': picking.partner_id.id,
-            'move_dest_id': False,
             'state': 'draft',
             'company_id': self.env.user.company_id.id,
-            'invoice_state': 'none',
         }
         new_move = self.env['stock.move'].create(move_template)
         if send_message:
@@ -206,7 +202,7 @@ class StockLotacion(models.Model):
         product_uom = product_id.uom_id
         reservations = self.env['stock.reservation'].search(
             [('product_id', '=', product_id.id),
-             ('state', '=', 'confirmed')])
+             ('state', 'in', ['confirmed', 'partially_available'])])
         reservation_index = 0
 
         reservation_used = 0

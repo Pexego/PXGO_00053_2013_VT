@@ -190,7 +190,7 @@ class StockReservation(models.Model):
         product_uom = product_id.uom_id
         reservations = self.search(
             [('product_id', '=', product_id.id),
-             ('state', '=', 'confirmed')])
+             ('state', 'in', ['confirmed', 'partially_available'])])
         moves = self.env['stock.move'].search(
             [('product_id', '=', product_id.id),
              ('state', '=', 'draft'),
@@ -226,9 +226,7 @@ class StockReservation(models.Model):
 
     @api.multi
     def reassign(self):
-        context = dict(self.env.context)
-        context.pop('first', False)
         res = super(StockReservation, self).reassign()
         for reservation in self:
-            self.with_context(context).reassign_reservation_dates(reservation.product_id)
+            reservation.reassign_reservation_dates(reservation.product_id)
         return res

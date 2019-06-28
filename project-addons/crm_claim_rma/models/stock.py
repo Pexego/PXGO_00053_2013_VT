@@ -81,9 +81,8 @@ class StockMove(models.Model):
                 if 'date_expected' in vals.keys():
                     reservations = self.env['stock.reservation'].search(
                         [('product_id', '=', pick.product_id.id),
-                         ('state', '=', 'confirmed')])
-                    # no se necesita hacer browse.
-                    # reservations = self.env['stock.reservation'].browse(reservation_ids)
+                         ('state', 'in', ['confirmed',
+                                          'partially_available'])])
                     for reservation in reservations:
                         reservation.date_planned = pick.date_expected
                         if not reservation.claim_id:
