@@ -16,37 +16,32 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: customer_mood
-#: field:mood,create_uid:0
+#: model:ir.model.fields,field_description:customer_mood.field_mood_create_uid
 msgid "Created by"
 msgstr "Created by"
 
 #. module: customer_mood
-#: field:mood,create_date:0
+#: model:ir.model.fields,field_description:customer_mood.field_mood_create_date
 msgid "Created on"
 msgstr "Created on"
 
 #. module: customer_mood
-#: field:sale.order,customer_mood:0
+#: model:ir.model.fields,field_description:customer_mood.field_sale_order_customer_mood
 msgid "Customer Mood"
 msgstr "Estado de ánimo"
 
 #. module: customer_mood
-#: field:mood,id:0
+#: model:ir.model.fields,field_description:customer_mood.field_mood_id
 msgid "ID"
 msgstr "ID"
 
 #. module: customer_mood
-#: field:mood,image:0
-msgid "Image"
-msgstr "Imagen"
-
-#. module: customer_mood
-#: field:mood,write_uid:0
+#: model:ir.model.fields,field_description:customer_mood.field_mood_write_uid
 msgid "Last Updated by"
 msgstr "Last Updated by"
 
 #. module: customer_mood
-#: field:mood,write_date:0
+#: model:ir.model.fields,field_description:customer_mood.field_mood_write_date
 msgid "Last Updated on"
 msgstr "Last Updated on"
 
@@ -56,28 +51,28 @@ msgid "Manage the moods"
 msgstr "Gestione los estados de ánimo."
 
 #. module: customer_mood
-#: field:res.partner,mood_image:0
-#: field:res.partner,selected_image:0
+#: model:ir.model.fields,field_description:customer_mood.field_res_partner_mood_image
+#: model:ir.model.fields,field_description:customer_mood.field_res_partner_selected_image
 msgid "Mood"
 msgstr "Estado de ánimo"
 
 #. module: customer_mood
-#: view:res.partner:customer_mood.view_partner_form_add_mood
-#: view:res.partner:customer_mood.view_partner_simple_form_add_mood
+#: model:ir.ui.view,arch_db:customer_mood.view_partner_form_add_mood
+#: model:ir.ui.view,arch_db:customer_mood.view_partner_simple_form_add_mood
 msgid "Mood..."
 msgstr "Estado de ánimo"
 
 #. module: customer_mood
 #: model:ir.actions.act_window,name:customer_mood.action_mood
 #: model:ir.ui.menu,name:customer_mood.menu_mood
-#: view:mood:customer_mood.view_mood_form
-#: view:mood:customer_mood.view_mood_tree
+#: model:ir.ui.view,arch_db:customer_mood.view_mood_form
+#: model:ir.ui.view,arch_db:customer_mood.view_mood_tree
 msgid "Moods"
 msgstr "Estados de ánimo"
 
 #. module: customer_mood
-#: view:mood:customer_mood.view_mood_form
-#: field:mood,name:0
+#: model:ir.ui.view,arch_db:customer_mood.view_mood_form
+#: model:ir.model.fields,field_description:customer_mood.field_mood_name
 msgid "Name"
 msgstr "Nombre"
 
@@ -91,13 +86,4 @@ msgstr "Empresa"
 msgid "Sales Order"
 msgstr "Pedido de venta"
 
-#. module: customer_mood
-#: field:mood,image_small:0
-msgid "Small-sized image"
-msgstr "Imagen pequeña"
-
-#. module: customer_mood
-#: help:mood,image:0
-msgid "This field contains the image used to                                      set the mood, limited to 1024x1024px"
-msgstr "Este campo contiene la imágen usada para establecer el estado de animo, limitado a 1024x1024px"
 
