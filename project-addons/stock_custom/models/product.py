@@ -31,6 +31,8 @@ class ProductTemplate(models.Model):
                                       ('end_of_period', 'End of period')],
                                      'Type of analysis', default='average')
     stock_graphic = fields.Binary("Graph")
+    name = fields.Char(translate=False)
+    description_sale = fields.Text(translate=False)
 
 
 class ProductProduct(models.Model):
