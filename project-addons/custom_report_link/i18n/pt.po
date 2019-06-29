@@ -955,7 +955,7 @@ msgstr "Creditar"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
-msgstr "Relembramos que já podem fazer o download das faturas a partir do nosso site. Caso ainda não tenha acesso, pode solicitar o seu usuário/password através do seu comercial habitual ou do seguinte link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
+msgstr "Relembramos que já podem fazer o download das faturas a partir do nosso site. Caso ainda não tenha acesso, pode solicitar o seu usuário/password através do seu comercial habitual ou do seguinte link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/pt/login?view=registration</span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
