@@ -47,7 +47,7 @@ msgid "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales 
 "                        For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
 msgstr "<span style=\"font-weight: bold;\">RECUERDE indicar el número de pedido o factura como concepto al realizar el pago por transferencia.</span>\n"
 "                        <br/>\n"
-"                        Para cualquier consulta sobre esta factura contacte con: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
+"                        Para cualquier consulta sobre esta factura contacte con: <span style=\"color:#da1f2e;\">contabilidad@visiotechsecurity.com</span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
@@ -227,7 +227,7 @@ msgstr "<strong>Cuenta Destino:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
 msgid "<strong>Discount</strong>"
-msgstr "<strong>Dto</strong>"
+msgstr "<strong>Descuento</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -309,7 +309,7 @@ msgstr "<strong>Plazo de pago:</strong>"
 msgid "<strong>Phone Number\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
-msgstr "<strong>No. Telf.\n"
+msgstr "<strong>No. Tel.\n"
 "                                        <span>:</span>\n"
 "                                    </strong>"
 
@@ -391,7 +391,7 @@ msgstr "<strong>Sub-Total:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 msgid "<strong>Supplier Address:</strong>"
-msgstr "<strong>Supplier Address:</strong>"
+msgstr "<strong>Dirección de proveedor:</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -423,12 +423,12 @@ msgstr "<strong>TOTAL</strong>"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 msgid "<strong>Taxes Amount</strong>"
-msgstr "<strong>Importe Impuesto</strong>"
+msgstr "<strong>Importe Impuestos</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 msgid "<strong>Taxes</strong>"
-msgstr "<strong>Impuesto</strong>"
+msgstr "<strong>Impuestos</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
@@ -436,7 +436,7 @@ msgstr "<strong>Impuesto</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 msgid "<strong>Terms and Conditions:</strong>"
-msgstr "<strong>Terminos y Condiciones:</strong>"
+msgstr "<strong>Términos y Condiciones:</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -456,7 +456,7 @@ msgstr "<strong>Unidades Totales</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
 msgid "<strong>Unit Cost</strong>"
-msgstr "<strong>Coste Ud</strong>"
+msgstr "<strong>Coste Ud.</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
@@ -467,7 +467,7 @@ msgstr "<strong>Coste Ud</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
 msgid "<strong>Unit Price</strong>"
-msgstr "<strong>Precio Unidad</strong>"
+msgstr "<strong>Precio Ud.</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -756,7 +756,7 @@ msgstr "Fecha:"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
 msgid "Deposit"
-msgstr "Deposito"
+msgstr "Depósito"
 
 #. module: custom_report_link
 #: model:ir.actions.report,name:custom_report_link.action_report_orderdeposit_custom
@@ -855,7 +855,7 @@ msgstr "Listado de productos a devolver"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
 msgid "Maturity Date"
-msgstr "Maturity Date"
+msgstr "Fecha de vencimiento"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
@@ -1000,7 +1000,7 @@ msgstr "Presupuesto"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
 msgid "RMA Receipt"
-msgstr "Recepción de Reclamo"
+msgstr "Recepción de RMA"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
@@ -1015,7 +1015,7 @@ msgstr "Factura rectificativa"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
-msgstr "Les recordamos que ya pueden descargarse las facturas desde nuestra página web. En el caso de que no tenga acceso, puede solicitar su usuario/contraseña a través de su comercial habitual o del siguiente enlace: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
+msgstr "Les recordamos que ya pueden descargarse las facturas desde nuestra página web. En el caso de que no tenga acceso, puede solicitar su usuario/contraseña a través de su comercial habitual o del siguiente enlace: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/es/login?view=registration</span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
@@ -1067,12 +1067,12 @@ msgstr "Solicitud de presupuesto"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Supplier Invoice"
-msgstr "Supplier Invoice"
+msgstr "Factura de proveedor"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Supplier Refund"
-msgstr "Supplier Refund"
+msgstr "Rectificativa de proveedor"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
