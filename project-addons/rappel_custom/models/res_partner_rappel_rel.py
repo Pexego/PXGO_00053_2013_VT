@@ -126,17 +126,13 @@ class ResPartnerRappelRel(models.Model):
 
                 if self.partner_id.invoice_type_id.name in \
                         ('Mensual', 'Quincenal', 'Semanal') and total_est:
-                    rappel_info,
-                    goal_percentage,
-                    total_rappel = self.compute_total(
+                    rappel_info, goal_percentage, total_rappel = self.compute_total(
                         rappel, total_est, rappel_info, True)
                 else:
                     rappel_info['amount_est'] = 0.0
 
                 if total:
-                    rappel_info,
-                    goal_percentage,
-                    total_rappel = self.compute_total(
+                    rappel_info, goal_percentage, total_rappel = self.compute_total(
                         rappel, total, rappel_info, False)
                 else:
                     rappel_info['amount'] = 0.0
