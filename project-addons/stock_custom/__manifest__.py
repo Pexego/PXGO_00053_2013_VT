@@ -15,7 +15,6 @@
     'data': ['views/ir_attachment_view.xml',
               'stock_custom_report.xml',
               'report/stock_report.xml',
-              'data/email_template.xml',
               'views/stock_view.xml',
               'views/partner_view.xml',
               'views/product_view.xml',

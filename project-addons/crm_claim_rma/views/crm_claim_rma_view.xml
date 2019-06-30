@@ -235,6 +235,7 @@
         <field name="partner_id" position="replace">
             <field name="partner_id" string="Partner" required="1" domain="[('is_company', '=', True)]"/>
             <field name="invoice_type"/>
+	    <field name="warehouse_id" invisible="1"/>
             <field name="invoice_id" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
             <field name="invoice_method" attrs="{'invisible': [('invoice_type', '!=', 'invoice')]}" colspan="2"/>
             <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>

@@ -25,8 +25,8 @@
     'description': """Customized report links""",
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
-    "depends": ['sale', 'purchase', 'account', 'stock',
-                'stock_reserve_sale', 'stock_custom', 'sale_proforma_report',
+    "depends": ['sale', 'purchase', 'account', 'stock_custom',
+                'stock_reserve_sale', 'sale_proforma_report',
                 'stock_picking_report_valued', 'crm_claim', 'product'],
     "data": [
         "data/report_paperformat.xml",
