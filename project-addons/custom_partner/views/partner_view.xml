@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-     <record model="ir.ui.view" id="partner_view_add_sale_analysis">
+        <record model="ir.ui.view" id="partner_view_add_sale_analysis">
             <field name="name">partner.view.sale.analysis</field>
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="prospective_customer.res_partner_add_prospective_form"/>
@@ -12,10 +12,6 @@
                     <field name="ref"/>
                     <field name="ref_supplier" attrs="{'invisible': [('supplier', '=', False)]}"/>
                     <field name="user_id"/>
-                </field>
-                <field name="property_supplier_payment_term_id" position="before">
-                    <field name="eur_currency" invisible="1"/>
-                    <field name="purchase_quantity" groups="purchase.group_purchase_user" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
                 </field>
                 <xpath expr="//page[@name='sales_purchases']/group[2]" position="after">
                     <group string="Sale analysis" name="sale_analysis">
@@ -40,6 +36,17 @@
                     <attribute name="options">{'currency_field': 'eur_currency'}</attribute>
                 </field-->
 
+            </field>
+        </record>
+        <record id="view_partner_property_form_2" model="ir.ui.view">
+            <field name="name">partner.property.supplier.2</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_supplier_payment_term_id" position="before">
+                <field name="eur_currency" invisible="1"/>
+                <field name="purchase_quantity" groups="purchase.group_purchase_user" widget="monetary" options="{'currency_field': 'supplier_currency'}"/>
+            </field>
             </field>
         </record>
 

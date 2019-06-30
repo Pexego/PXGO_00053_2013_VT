@@ -13,9 +13,6 @@
                 <field name="title" position="after">
                     <field name="dropship" attrs="{'invisible': [('type', '!=', 'delivery')]}"/>
                 </field>
-                <field name="property_account_position_id" position="after">
-                    <field name="invoice_type_id" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}"/>
-                </field>
                 <field name="email" position="after">
                     <field name="email2" widget="email" attrs="{'invisible': [('is_company','=',False), ('dropship','=',True)]}"/>
                     <field name="newsletter"/>
@@ -109,6 +106,7 @@
                     <attribute name="attrs">{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}</attribute>
                 </field>
                 <field name="property_account_position_id" position="after">
+                    <field name="invoice_type_id" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}"/>
                     <label for="vat" string="VAT"/>
                     <div>
                         <field name="vat"/>

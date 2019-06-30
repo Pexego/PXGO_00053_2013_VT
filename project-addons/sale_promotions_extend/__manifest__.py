@@ -21,8 +21,8 @@ Features:
     "data": [
         "views/sale_view.xml",
         "views/rule.xml",
-        "views/product_view.xml"
-
+        "views/product_view.xml",
+        'security/ir.model.access.csv'
     ],
     "demo": [],
     'auto_install': False,
