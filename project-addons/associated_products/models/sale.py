@@ -41,7 +41,7 @@ class SaleOrderLine(models.Model):
             product = product_obj.browse(product_id)
             for associated in product.associated_product_ids:
                 qty = line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.uom_id)
-                tax_ids = fiscal_obj.map_tax(line.order_id.fiscal_position_id, associated.associated_id.taxes_id)
+                tax_ids = fiscal_obj.map_tax(associated.associated_id.taxes_id)
                 pricelist = line.order_id.pricelist_id.id
                 price = pricelist_obj.price_get(associated.associated_id.id,
                                                 associated.quantity * qty,
@@ -55,7 +55,7 @@ class SaleOrderLine(models.Model):
                     'product_id': associated.associated_id.id,
                     'original_line_id': line.id,
                     'customer_lead': associated.associated_id.sale_delay or 0.0,
-                    'tax_id': [(6, 0, tax_ids)],
+                    'tax_id': [(6, 0, tax_ids.ids)],
                     # TODO: migrar junto con módulo commision_report
                     # 'agent': line.agent.id,
                     # 'commission': line.commission.id
@@ -75,7 +75,7 @@ class SaleOrderLine(models.Model):
                     self.unlink([x.id for x in line.assoc_line_ids])
                 for associated in line.product_id.associated_product_ids:
                     qty = line.product_uom._compute_quantity(line.product_uom_qty, line.product_id.uom_id)
-                    tax_ids = fiscal_obj.map_tax(line.order_id.fiscal_position_id, associated.associated_id.taxes_id)
+                    tax_ids = fiscal_obj.map_tax(associated.associated_id.taxes_id)
                     pricelist = line.order_id.pricelist_id.id
                     price = pricelist_obj.price_get([pricelist],
                                                     associated.associated_id.id,
@@ -93,7 +93,7 @@ class SaleOrderLine(models.Model):
                      'product_id': associated.associated_id.id,
                      'original_line_id': line.id,
                      'customer_lead': associated.associated_id.sale_delay or 0.0,
-                     'tax_id': [(6, 0, tax_ids)],
+                     'tax_id': [(6, 0, tax_ids.ids)],
                      # TODO: migrar junto con módulo commision_report
                      # 'agent': line.agent.id,
                      # 'commission': line.commission.id
