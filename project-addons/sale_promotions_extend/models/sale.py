@@ -41,7 +41,7 @@ class SaleOrder(models.Model):
             res = super(SaleOrder, order).apply_commercial_rules()
         else:
             self.clear_existing_promotion_lines()
-            self.env['promos.rules'].apply_special_promotions()
+            self.env['promos.rules'].apply_special_promotions(self)
             res = False
 
         if order.state == 'reserve':
