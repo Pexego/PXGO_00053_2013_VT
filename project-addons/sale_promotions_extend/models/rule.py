@@ -277,7 +277,7 @@ class PromotionsRules(models.Model):
             #If evaluates to true
             if result:
                 try:
-                    promotion_rule.execute_actions(promotion_rule, order)
+                    promotion_rule.execute_actions(order)
                 except Exception as e:
                     raise except_orm("Promotions", ustr(e))
                 #If stop further is true
