@@ -72,6 +72,12 @@ class SaleOrder(models.Model):
         }
 
     @api.multi
+    def recalculate_line_prices(self):
+        for order in self:
+            for line in order.order_line:
+                line._onchange_discount()
+
+    @api.multi
     def button_notification(self):
 
         res_partner_id = self.partner_id
