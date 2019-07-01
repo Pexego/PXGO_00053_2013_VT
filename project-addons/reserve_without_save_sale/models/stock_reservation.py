@@ -147,6 +147,6 @@ class StockReservation(models.Model):
                                                ('reservation_ids', '=',
                                                 False)])
         if moves:
-            moves.action_cancel()
+            moves._action_cancel()
 
         return True
