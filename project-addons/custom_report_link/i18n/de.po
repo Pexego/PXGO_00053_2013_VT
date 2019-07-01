@@ -955,7 +955,7 @@ msgstr "Gutschrift"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
-msgstr "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
+msgstr "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/de/login?view=registration</span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document

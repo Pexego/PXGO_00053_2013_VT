@@ -279,7 +279,7 @@ msgstr "<strong>IVA</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "<strong>Invoice address</strong>"
-msgstr "<strong>Invoice address</strong>"
+msgstr "<strong>Indirizzo di fatturazione</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
@@ -389,7 +389,7 @@ msgstr "<strong>Responsible\n"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
 msgid "<strong>Sin Pack</strong>"
-msgstr "<strong>Sin Pack</strong>"
+msgstr "<strong>Senza Pack</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
@@ -449,13 +449,13 @@ msgstr "<strong>Imposte</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 msgid "<strong>Terms and Conditions:</strong>"
-msgstr "<strong>Terms and Conditions:</strong>"
+msgstr "<strong>Termini e Condizioni:</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "<strong>Total Price</strong>"
-msgstr "<strong>Total Price</strong>"
+msgstr "<strong>Prezzo totale</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -499,7 +499,7 @@ msgstr "<strong>Ordine Visiotech: </strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 msgid "<strong>Warehouse Address:</strong>"
-msgstr "<strong>Warehouse Address:</strong>"
+msgstr "<strong>Indirizzo di magazzino:</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
@@ -668,7 +668,7 @@ msgstr "Numero di Reclamo.\n"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Claim:"
-msgstr "Claim:"
+msgstr "Reclamo:"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
@@ -710,12 +710,12 @@ msgstr "Deposit"
 #. module: custom_report_link
 #: model:ir.actions.report,name:custom_report_link.action_report_orderdeposit_custom
 msgid "Depósito"
-msgstr "Depósito"
+msgstr "Deposito"
 
 #. module: custom_report_link
 #: model:ir.actions.report,name:custom_report_link.action_report_orderdeposit_custom_valued
 msgid "Depósito valorado"
-msgstr "Depósito valorado"
+msgstr "Deposito valorado"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
@@ -746,7 +746,7 @@ msgstr "Factura Proforma"
 #. module: custom_report_link
 #: model:ir.actions.report,name:custom_report_link.action_report_invoice_custom
 msgid "Facturas"
-msgstr "Facturas"
+msgstr "Fatture"
 
 #. module: custom_report_link
 #: model:ir.model.fields,field_description:custom_report_link.field_report_custom_report_link_report_overduecustom_id
@@ -804,7 +804,7 @@ msgstr "List of product to return"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
 msgid "Maturity Date"
-msgstr "Maturity Date"
+msgstr "Data di scadenza"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
@@ -842,7 +842,7 @@ msgstr "No Pack"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "Not Available"
-msgstr "Not Available"
+msgstr "Non Disponibile"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
@@ -955,7 +955,7 @@ msgstr "Rimborso"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
-msgstr "Le ricordiamo che ora le fatture possono essere scaricate dal nostro sito web. Nel caso in cui non disponga dell'accesso web, è possibile richiedere il suo nome utente / password contattando direttamente il suo commerciale di riferimento o dal seguente link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
+msgstr "Le ricordiamo che ora le fatture possono essere scaricate dal nostro sito web. Nel caso in cui non disponga dell'accesso web, è possibile richiedere il suo nome utente / password contattando direttamente il suo commerciale di riferimento o dal seguente link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/it/login?view=registration</span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document

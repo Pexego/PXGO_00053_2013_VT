@@ -49,7 +49,8 @@ class SaleOrder(models.Model):
         sales = sale_obj.\
             search([('invoice_status', '=', 'to invoice'),
                     ('invoice_type_id.name', '=', 'Diaria'),
-                    ('tests', '=', False)],
+                    ('tests', '=', False),
+                    ('picking_ids.state', 'in', ['done'])],
                    order='confirmation_date')
 
         # Create invoice

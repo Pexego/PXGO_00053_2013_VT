@@ -19,7 +19,9 @@
         "sale_margin_percentage",
         "partner_risk_advice",
         "reserve_without_save_sale",
-        "web_notify"
+        "web_notify",
+        "sale_financial_risk",
+        "custom_financial_risk"
     ],
     "data": [
         'views/sale_view.xml'
