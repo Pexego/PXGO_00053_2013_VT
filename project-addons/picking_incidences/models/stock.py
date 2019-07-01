@@ -37,13 +37,13 @@ class StockMove(models.Model):
               digits=dp.get_precision('Product Unit of Measure'))
 
     @api.multi
-    def action_cancel(self):
+    def _action_cancel(self):
         for move in self:
             if move.picking_id and move.picking_id.block_picking:
                 raise exceptions.\
                     Warning(_("Cannot cancel this move because it is being "
                               "processed in Vstock."))
-        return super(StockMove, self).action_cancel()
+        return super()._action_cancel()
 
 
 class StockPicking(models.Model):
