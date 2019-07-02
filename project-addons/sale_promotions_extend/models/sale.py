@@ -71,5 +71,7 @@ class SaleOrder(models.Model):
                             'old_discount': 0.00,
                             'accumulated_promo': False})
             elif line.accumulated_promo:
-                line.write({'accumulated_promo': False})
+                line.write({'discount': line.old_discount,
+                            'old_discount': 0.00,
+                            'accumulated_promo': False})
         return res
