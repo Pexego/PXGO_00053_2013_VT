@@ -151,6 +151,15 @@ class StockMove(models.Model):
             res = self.product_id.standard_price_2
         return res
 
+    def action_do_unreserve(self):
+        for move in self:
+            if not move.mapped('move_line_ids'):
+                move.state = 'confirmed'
+        return self._do_unreserve()
+
+    def action_force_assign(self):
+        return self._force_assign()
+
 
 class StockReturnPicking(models.TransientModel):
     _inherit = 'stock.return.picking'
