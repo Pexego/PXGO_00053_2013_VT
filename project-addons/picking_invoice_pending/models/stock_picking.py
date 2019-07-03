@@ -161,7 +161,11 @@ class StockPicking(models.Model):
                         if validate:
                             # Validate invoice
                             invoice_created.compute_taxes()
-                            invoice_created.action_invoice_open()
+                            try:
+                                invoice_created.action_invoice_open()
+                            except:
+                                pass
+                            invoice_created.refresh()
                             if invoice_created.state in ('draft', 'cancel', 'proforma', 'proforma2'):
                                 templates.append(
                                     self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
