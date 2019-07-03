@@ -54,7 +54,7 @@ class SaleOrder(models.Model):
                    order='confirmation_date')
 
         # Create invoice
-        res = sales.action_invoice_create(grouped=True)
+        res = sales.action_invoice_create()
         invoices_created = self.env['account.invoice'].with_context(ctx).\
             browse(res)
         if len(sales) != len(res):
