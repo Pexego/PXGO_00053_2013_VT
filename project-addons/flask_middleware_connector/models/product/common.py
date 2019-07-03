@@ -109,17 +109,6 @@ class ProductListener(Component):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    @api.multi
-    def get_product_price_with_pricelist(self, pricelist_name):
-        id_pricelist = self.env['product.pricelist'].search([('name', '=', pricelist_name)]).id
-        for product in self:
-            if id_pricelist:
-                price = product.with_context(pricelist=id_pricelist).price
-                price = round(price, 2)
-            else:
-                price = 0
-            return price
-
     @api.depends('bom_ids')
     def _compute_is_pack(self):
         for product in self:

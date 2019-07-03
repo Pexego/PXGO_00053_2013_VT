@@ -155,8 +155,7 @@ class SaleOrder(models.Model):
             if not sale.is_all_reserved and 'confirmed' not in self.env.context:
                 message = "Some of the products of this order {} aren't available now".format(self.name)
                 self.env.user.notify_info(title="Please consider that!",
-                                             message=message,
-                                             sticky=True)
+                                          message=message)
         return super().action_confirm()
 
 
