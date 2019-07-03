@@ -46,6 +46,9 @@
                 <field name="confirmation_date" position="before">
                     <field name="date_order"/>
                 </field>
+                <field name="state" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </field>
             </field>
         </record>
 <!--
@@ -149,6 +152,13 @@
             </field>
             <field name="pricelist_id" position="before">
                 <field name="client_order_ref"/>
+            </field>
+            <button name="action_unlock" position="attributes">
+                <attribute name="groups">sales_team.group_sale_salesman</attribute>
+                <attribute name="string">Cancel</attribute>
+            </button>
+            <field name="confirmation_date" position="before">
+                <field name="date_order"/>
             </field>
         </field>
     </record>
