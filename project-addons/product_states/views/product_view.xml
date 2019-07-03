@@ -33,4 +33,15 @@
             </group>
         </field>
     </record>
+
+     <record id="product_change_purchase_page" model="ir.ui.view">
+        <field name="name">product.change.purchase.page</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="purchase.view_product_supplier_inherit"/>
+        <field name="arch" type="xml">
+            <page name="purchase" position="attributes">
+                <attribute name="attrs">{'invisible': 0}</attribute>
+            </page>
+        </field>
+    </record>
 </odoo>
