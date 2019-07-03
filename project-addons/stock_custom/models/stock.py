@@ -94,6 +94,12 @@ class StockMove(models.Model):
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
     sale_id = fields.Many2one('sale.order', related='sale_line_id.order_id', readonly=True)
 
+    def _compute_is_initial_demand_editable(self):
+        super()._compute_is_initial_demand_editable()
+        for move in self:
+            if move.picking_id.state == 'draft':
+                move.is_initial_demand_editable = True
+
     def _compute_responsible(self):
         for move in self:
             responsible = None
