@@ -42,6 +42,10 @@
             <xpath expr="//sheet/notebook/page[2]/button[@name='put_in_pack']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
+            <xpath expr="//field[@name='move_lines']/tree/button[@name='action_show_details']" position="after">
+                <button name="action_force_assign" type="object" strng="Force Reserve" icon="fa-forward" attrs="{'invisible': [('state', 'not in', ('confirmed', 'waiting', 'partially_available'))]}"  options='{"warn": true}' groups="stock_custom.group_stock_force_availability"/>
+                <button name="action_do_unreserve" type="object" string="Unreserve" icon="fa-undo" attrs="{'invisible': [('state', 'not in', ('assigned', 'partially_available'))]}"  options='{"warn": true}'/>
+            </xpath>
         </field>
     </record>
 
