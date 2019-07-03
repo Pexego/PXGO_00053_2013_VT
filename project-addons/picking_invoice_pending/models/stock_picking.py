@@ -158,17 +158,9 @@ class StockPicking(models.Model):
                                              False))
                             # Do not validate it because it will generate an error
                             validate = False
-                        # ~ if validate:
-                            # ~ # Validate invoice
-                            # ~ invoice_created.compute_taxes()
-                            # ~ try:
-                                # ~ invoice_created.action_invoice_open()
-                            # ~ except:
-                                # ~ pass
-                            # ~ invoice_created.refresh()
-                            # ~ if invoice_created.state in ('draft', 'cancel', 'proforma', 'proforma2'):
-                                # ~ templates.append(
-                                    # ~ self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
+                        if validate:
+                            invoice_created.invoice_created_from_picking = True
+                            invoice_created.compute_taxes()
 
                         for tmpl in templates:
                             ctx.update({

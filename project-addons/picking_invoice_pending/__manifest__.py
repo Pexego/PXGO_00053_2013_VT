@@ -37,7 +37,8 @@
                 'purchase_stock_picking_invoice_link'],
     'data': ['views/res_company_view.xml',
              'views/stock_picking_view.xml',
-             'email_template.xml'],
+             'data/email_template.xml',
+             'data/cron.xml'],
     'active': False,
     'installable': True,
 }
