@@ -45,6 +45,8 @@ class MiddlewareBackend(models.TransientModel):
     def do_export(self):
         if self.model_ids:
             object_ids = list(map(int, self.model_ids.split(',')))
+        else:
+            object_ids = False
 
         if self.type_export == 'partner':
             partner_obj = self.env['res.partner']
