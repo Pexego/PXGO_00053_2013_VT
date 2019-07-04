@@ -25,7 +25,8 @@ class SaleOrderListener(Component):
                                                       order='date_created desc, id desc', limit=1)
             if 'state' in fields and record.state == 'cancel':
                 record.with_delay(priority=7, eta=80).unlink_order()
-            elif 'state' in fields and record.state in ('draft', 'reserve') and job.name and 'unlink' in job.name:
+            elif 'state' in fields and record.state in ('draft', 'reserve') \
+                    and job.name and 'unlink' in job.name and record.write_date == record.create_date:
                 record.with_delay(priority=2, eta=80).export_order()
                 for line in record.order_line:
                     line.with_delay(priority=2, eta=120).export_orderproduct()

@@ -299,3 +299,15 @@ header > .main-nav > .container-fluid > .navbar-header .navbar-toggle div.fa {
     border-radius: 16px;
 
 }
+
+body .text-danger {
+
+    color: #ed2a27;
+
+}
+
+body .text-warning {
+
+    color: #ec9636;
+
+}

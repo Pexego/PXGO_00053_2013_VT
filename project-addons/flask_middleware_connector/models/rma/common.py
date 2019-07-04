@@ -22,7 +22,9 @@ class CrmClaimListener(Component):
                      "partner_id", "stage_id", "number", "name"]
         job = self.env['queue.job'].sudo().search([('func_string', 'like', '%, ' + str(rma.id) + ')%'),
                                                       ('model_name', '=', model_name)], order='date_created desc', limit=1)
-        if record.partner_id and rma.partner_id.web and ((job.name and 'unlink' in job.name) or not job.name):
+        if record.partner_id and rma.partner_id.web \
+                and ((job.name and 'unlink' in job.name) or not job.name) \
+                and record.write_date == record.create_date:
             record.with_delay(priority=1).export_rma()
             for line in rma.claim_line_ids:
                 line.with_delay(priority=10, eta=120).export_rmaproduct()
