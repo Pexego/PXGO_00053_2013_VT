@@ -33,3 +33,44 @@ class AccountAccount(models.Model):
 
     not_payment_followup = fields.\
         Boolean("Don't show on supplier payment follow-ups")
+
+
+class AccountPayment(models.Model):
+
+    _inherit = "account.payment"
+
+    @api.depends('invoice_ids', 'currency_id', 'payment_date')
+    def _get_current_exchange_rate(self):
+        for payment in self:
+            if payment.invoice_ids and payment.journal_id and \
+                    payment.invoice_ids[0].currency_id != \
+                    payment.journal_id.company_id.currency_id:
+                payment.current_exchange_rate = payment.journal_id.company_id.\
+                    currency_id.with_context(date=self.payment_date).\
+                    _get_conversion_rate(payment.journal_id.
+                                         company_id.currency_id,
+                                         payment.invoice_ids[0].currency_id)
+            else:
+                payment.current_exchange_rate = 1.0
+
+    current_exchange_rate = fields.Float("Exchange rate computed",
+                                         compute="_get_current_exchange_rate",
+                                         digits=(16, 6), readonly=True,
+                                         help="Currency rate used to convert "
+                                              "to company currency")
+    force_exchange_rate = fields.Float("Force exchange rate", digits=(16, 6))
+
+    @api.multi
+    def post(self):
+        for rec in self:
+            ctx = self.env.context.copy()
+            if rec.invoice_ids and \
+                    all([x.currency_id == rec.invoice_ids[0].currency_id
+                         for x in rec.invoice_ids]):
+                invoice_currency = rec.invoice_ids[0].currency_id
+                if invoice_currency != \
+                        rec.invoice_ids[0].company_id.currency_id and \
+                        rec.force_exchange_rate:
+                    ctx['force_from_rate'] = rec.force_exchange_rate
+            super(AccountPayment, rec.with_context(ctx)).post()
+        return True

@@ -25,7 +25,7 @@ class AccountInvoice(models.Model):
 
     _inherit = "account.invoice"
 
-    invoice_created_from_picking = fields.Boolean(readonly=True)
+    invoice_created_from_picking = fields.Boolean(readonly=True, copy=False)
 
     @api.multi
     def action_cancel(self):
@@ -62,5 +62,6 @@ class AccountInvoice(models.Model):
     def validate_invoices_created_from_picking(self):
         invoices = self.env['account.invoice'].with_context(bypass_risk=True).\
             search([('invoice_created_from_picking', '=', True),
-                    ('state', '=', 'draft')])
+                    ('state', '=', 'draft'),
+                    ('number', '=', False)])
         invoices.action_invoice_open()

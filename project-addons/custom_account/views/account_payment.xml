@@ -29,4 +29,16 @@
             </field>
         </record>
 
+        <record id="view_account_payment_invoice_form_add_exchange_rate" model="ir.ui.view">
+            <field name="name">account.payment.invoice.form.add_exchange_rate</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_invoice_form"/>
+            <field name="arch" type="xml">
+                <field name="communication" position="after">
+                    <field name="current_exchange_rate"/>
+                    <field name="force_exchange_rate" attrs="{'invisible': [('current_exchange_rate', '=', 1)]}"/>
+                </field>
+            </field>
+        </record>
+
 </odoo>
