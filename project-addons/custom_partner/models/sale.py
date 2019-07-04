@@ -50,15 +50,24 @@ class SaleOrder(models.Model):
             search([('invoice_status', '=', 'to invoice'),
                     ('invoice_type_id.name', '=', 'Diaria'),
                     ('tests', '=', False),
-                    ('picking_ids.state', 'in', ['done'])],
+                    '|', ('picking_ids.state', 'in', ['done']),
+                    ('picking_ids', '=', False)],
                    order='confirmation_date')
 
         # Create invoice
-        res = sales.action_invoice_create()
-        invoices_created = self.env['account.invoice'].with_context(ctx).\
-            browse(res)
+        res = []
+        for sale in sales:
+            try:
+                invoices = sale.action_invoice_create()
+                res.extend(invoices)
+            except:
+                print("No invoiceable lines on sale {}".format(sale.name))
+                pass
+
         if len(sales) != len(res):
             templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
+        invoices_created = self.env['account.invoice'].with_context(ctx).\
+            browse(res)
         if len(res) != len(invoices_created.mapped('invoice_line_ids.invoice_id.id')):
             # There are invoices created without lines
             templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices_empty_lines', False))

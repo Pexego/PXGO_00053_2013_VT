@@ -41,7 +41,6 @@ class StockPicking(models.Model):
     def account_pending_invoice(self, debit_account, credit_account, date):
         self.ensure_one()
         move_obj = self.env['account.move']
-        move_line_obj = self.env['account.move.line']
         lines = {}
 
         origin = self.name
@@ -139,19 +138,25 @@ class StockPicking(models.Model):
                                                            change_date)
                     pick.pending_stock_reverse_move_id = move_id.id
 
-                if pick.state == 'done' and pick.picking_type_code == 'outgoing':
+                if pick.state == 'done' and \
+                        pick.picking_type_code == 'outgoing':
                     sale_id = pick.sale_id
                     if (sale_id.invoice_status == 'to invoice'
                         and sale_id.invoice_type_id.name == 'Diaria'
                             and not sale_id.tests):
                         # Create invoice
-                        id_invoice = sale_id.action_invoice_create()
-                        invoice_created = self.env['account.invoice'].with_context(ctx).browse(id_invoice)
+                        try:
+                            id_invoice = sale_id.action_invoice_create()
+                            invoice_created = self.env['account.invoice'].\
+                                with_context(ctx).browse(id_invoice)
+                        except:
+                            invoice_created = False
                         if not invoice_created:
                             templates.append(
                                 self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices', False))
                             validate = False
-                        elif not invoice_created.invoice_line_ids:
+                        elif invoice_created and \
+                                not invoice_created.invoice_line_ids:
                             # Invoice created without lines
                             templates.append(
                                 self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices_empty_lines',
@@ -171,7 +176,8 @@ class StockPicking(models.Model):
                                 'default_composition_mode': 'comment',
                                 'mark_so_as_sent': True
                             })
-                            composer_id = self.env['mail.compose.message'].with_context(ctx).create({})
+                            composer_id = self.env['mail.compose.message'].\
+                                with_context(ctx).create({})
                             composer_id.with_context(ctx).send_mail()
 
         return res
