@@ -25,7 +25,7 @@ class Order(SyncModel):
 
     def __unicode__(self):
         return '%s' % self.name
-
+    
 
 class OrderProduct(SyncModel):
     odoo_id = IntegerField(unique=True)
