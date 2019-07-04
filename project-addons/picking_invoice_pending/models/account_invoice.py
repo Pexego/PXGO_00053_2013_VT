@@ -25,11 +25,12 @@ class AccountInvoice(models.Model):
 
     _inherit = "account.invoice"
 
+    invoice_created_from_picking = fields.Boolean(readonly=True)
+
     @api.multi
     def action_cancel(self):
         ret = super().action_cancel()
         if ret:
-            move_line_obj = self.env['account.move.line']
             for inv in self:
                 for picking in inv.picking_ids:
                     if picking.pending_invoice_move_id:
@@ -56,3 +57,10 @@ class AccountInvoice(models.Model):
                             create_reversals(date, reconcile=True)
 
         return ret
+
+    @api.model
+    def validate_invoices_created_from_picking(self):
+        invoices = self.env['account.invoice'].with_context(bypass_risk=True).\
+            search([('invoice_created_from_picking', '=', True),
+                    ('state', '=', 'draft')])
+        invoices.action_invoice_open()
