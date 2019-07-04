@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-28 10:22+0000\n"
-"PO-Revision-Date: 2016-03-28 10:22+0000\n"
+"POT-Creation-Date: 2019-07-04 18:02+0000\n"
+"PO-Revision-Date: 2019-07-04 18:02+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,39 +16,28 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_account
-#: code:addons/custom_account/stock.py:198
+#: code:addons/custom_account/models/account_payment_order.py:16
 #, python-format
-msgid " (copy)"
-msgstr " (copia)"
+msgid "\n"
+"Missing SEPA Direct Debit mandate on the bank payment line with partner '%s' (reference '%s')."
+msgstr "\n"
+"No se ha encontrado un mandato sepa en la line bancaria de la empresa '%s' (referencia '%s')."
 
 #. module: custom_account
-#: field:res.partner,email2:0
-msgid "Second Email"
-msgstr "Correo Contabilidad"
-
-#. module: custom_account
-#: code:addons/custom_account/report/account_invoice_report.py:31
+#: code:addons/custom_account/models/account_payment_order.py:21
 #, python-format
-msgid "Brand name"
-msgstr "Marca"
+msgid "\n"
+"The SEPA Direct Debit mandate with reference '%s' for partner '%s' has expired."
+msgstr "\n"
+"El mandato SEPA con referencia '%s' para la empresaa '%s' ha expirado."
 
 #. module: custom_account
-#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
-#: field:account.invoice.report,branch:0
-msgid "Branch"
-msgstr "Marca"
-
-#. module: custom_account
-#: field:payment.mode,blocked:0
-#: field:account.payment.term,blocked:0
-msgid "No Follow-up"
-msgstr "Sin seguimiento"
-
-#. module: custom_account
-#: code:addons/custom_account/stock.py:86
+#: code:addons/custom_account/models/account_payment_order.py:27
 #, python-format
-msgid "%s (copy)"
-msgstr "%s (copia)"
+msgid "\n"
+"The mandate with reference '%s' for partner '%s' has type set to 'One-Off' and it has a last debit date set to '%s', so we can't use it."
+msgstr "\n"
+"El mandato con referencia '%s' para la empresa '%s' es de 'Un sólo uso' y tiene como fecha de último cobro '%s', así que no puede usarlo."
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_banking_mandate
@@ -56,47 +45,155 @@ msgid "A generic banking mandate"
 msgstr "Un mandato bancario genérico"
 
 #. module: custom_account
-#: field:account.invoice,active:0
-#: field:account.invoice.line,active:0
+#: model:ir.model,name:custom_account.model_account_account
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_account_bank
+msgid "Account bank"
+msgstr "Cuenta bancaria"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_account_voucher
+msgid "Accounting Voucher"
+msgstr "Comprobantes contables"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_report_account_treasury_forecast_analysis_accumulative_balance
+msgid "Accumulated"
+msgstr "Acumulado"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_active
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_line_active
 msgid "Active"
 msgstr "Activo"
 
 #. module: custom_account
-#: field:account.invoice,attach_picking:0
-#: field:res.partner,attach_picking:0
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_amount
+msgid "Amount"
+msgstr "Importe"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_area_id
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+msgid "Area"
+msgstr "Zona"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_attach_picking
+#: model:ir.model.fields,field_description:custom_account.field_res_partner_attach_picking
 msgid "Attach picking"
-msgstr "Enviar albarán por email"
+msgstr "Adjuntar albarán"
 
 #. module: custom_account
-#: selection:account.move.line,scheme:0
-msgid "Basic (CORE)"
-msgstr "Básico (CORE)"
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_bank_name
+msgid "Bank"
+msgstr "Banco"
 
 #. module: custom_account
-#: field:sale.report,benefit:0
+#: model:ir.model.fields,field_description:custom_account.field_report_account_treasury_forecast_analysis_bank_id
+msgid "Bank Account"
+msgstr "Cuenta bancaria"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_bank_account
+msgid "Bank account"
+msgstr "Cuenta bancaria"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_benefit
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_benefit
 msgid "Benefit"
 msgstr "Beneficio"
 
 #. module: custom_account
-#: field:sale.report,brand_id:0
+#: selection:account.treasury.forecast,payment_mode_customer:0
+#: selection:account.treasury.forecast,payment_mode_supplier:0
+msgid "Both"
+msgstr "Ambos"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_brand_id
 msgid "Brand"
 msgstr "Marca"
 
 #. module: custom_account
-#: view:sale.report:custom_account.view_order_product_search_add_brand
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_brand_name
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+msgid "Brand name"
+msgstr "Nombre de la marca"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_order_product_search_add_brand
 msgid "Brand of Product"
 msgstr "Marca del producto"
 
 #. module: custom_account
-#: field:sale.report,cost_price:0
+#: model:ir.model.fields,field_description:custom_account.field_account_move_line_pner_vat
+msgid "CIF/NIF/VAT"
+msgstr "CIF/NIF/VAT"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_order_ref_partner
+msgid "Client reference"
+msgstr "Referencia del cliente"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_commercial_region_ids
+msgid "Commercial Regions"
+msgstr "Regiones comerciales"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_report_account_treasury_forecast_analysis_concept
+msgid "Concept"
+msgstr "Concepto"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_account_invoice_confirm
+msgid "Confirm the selected invoices"
+msgstr "Confirmar las facturas seleccionadas"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_res_partner
+msgid "Contact"
+msgstr "Contactos"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_cost_price
 msgid "Cost Price"
 msgstr "Precio coste"
 
 #. module: custom_account
-#: view:account.invoice:custom_account.view_account_invoice_filter_add_country_grp
-#: field:account.invoice,country_id:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_country_id
 msgid "Country"
 msgstr "País"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_picking_email_form
+msgid "Created date"
+msgstr "Fecha de alta"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_account_invoice_refund
+msgid "Credit Note"
+msgstr "Rectificativa"
+
+#. module: custom_account
+#: model:ir.model.fields,help:custom_account.field_account_payment_current_exchange_rate
+msgid "Currency rate used to convert to company currency"
+msgstr "Tasa de cambio usada para convertir a la moneda de la compañía"
 
 #. module: custom_account
 #: sql_constraint:sale.order:0
@@ -104,45 +201,91 @@ msgid "Customer ref must be unique by partner"
 msgstr "La referencia de cliente debe ser única por empresa"
 
 #. module: custom_account
-#: help:purchase.order,manufacture_date:0
+#: model:ir.model.fields,help:custom_account.field_purchase_order_manufacture_date
 msgid "Date when it was manufactured"
 msgstr "Fecha en la que fue fabricado"
 
 #. module: custom_account
-#: help:purchase.order,prepared_merchandise_date:0
+#: model:ir.model.fields,help:custom_account.field_purchase_order_prepared_merchandise_date
 msgid "Date when the merchandise was prepared"
-msgstr "Fecha en la mercancía fue preparada"
+msgstr "Fecha en la que la mercancía fue preparada"
 
 #. module: custom_account
-#: help:purchase.order,estimated_arrival_date:0
+#: model:ir.model.fields,help:custom_account.field_purchase_order_estimated_arrival_date
 msgid "Date when the merchandise will arrive approximately"
 msgstr "Fecha en la que la mercancía llegará aproximadamente."
 
 #. module: custom_account
-#: model:ir.model,name:custom_account.model_email_template
+#: selection:account.treasury.forecast.line.template,period_type:0
+msgid "Days"
+msgstr "Días"
+
+#. module: custom_account
+#: selection:account.payment.mode,treasury_forecast_type:0
+#: selection:account.treasury.forecast,payment_mode_customer:0
+#: selection:account.treasury.forecast,payment_mode_supplier:0
+msgid "Debit receipt"
+msgstr "Recibo domiciliado"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_account_not_payment_followup
+msgid "Don't show on supplier payment follow-ups"
+msgstr "No mostrar en el seguimiento de pagos a proveedores"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_date_due
+msgid "Due Date"
+msgstr "Fecha vencimiento"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_mail_template
 msgid "Email Templates"
 msgstr "Plantillas email"
 
 #. module: custom_account
-#: field:purchase.order,end_manufacture:0
+#: model:ir.model.fields,field_description:custom_account.field_purchase_order_end_manufacture
 msgid "Ending Date Of Manufacture"
 msgstr "Fecha fin producción"
 
 #. module: custom_account
-#: selection:account.move.line,scheme:0
-msgid "Enterprise (B2B)"
-msgstr "Empresas (B2B)"
-
-#. module: custom_account
-#: field:purchase.order,estimated_arrival_date:0
+#: model:ir.model.fields,field_description:custom_account.field_purchase_order_estimated_arrival_date
 msgid "Estimated Arrival Date"
 msgstr "Fecha estimada de llegada"
 
 #. module: custom_account
-#: view:sale.order:custom_account.view_order_form_inherit
-#: field:sale.order,internal_notes:0
-msgid "Notes for warehouse"
-msgstr "Notas para almacén"
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_current_exchange_rate
+msgid "Exchange rate computed"
+msgstr "Tasa de cambio calculada"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_force_exchange_rate
+msgid "Force exchange rate"
+msgstr "Forzar tasa de cambio"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_picking_email_form
+msgid "General Information"
+msgstr "Información general"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_id
+msgid "ID"
+msgstr "ID (identificación)"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_report_account_treasury_forecast_analysis_id_ref
+msgid "Id Reference"
+msgstr "Referencia"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_order_internal_notes
+msgid "Internal Notes"
+msgstr "Notas internas"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_invoice
@@ -155,9 +298,9 @@ msgid "Invoice Line"
 msgstr "Línea de factura"
 
 #. module: custom_account
-#: field:account.invoice,invoice_type_id:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_invoice_type_id
 msgid "Invoice type"
-msgstr "Tipo factura"
+msgstr "Tipo facturación"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_invoice_report
@@ -165,114 +308,245 @@ msgid "Invoices Statistics"
 msgstr "Estadísticas de facturas"
 
 #. module: custom_account
-#: field:payment.line,is_refund:0
-msgid "Is refund"
-msgstr "Es abono"
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_line_is_refund
+msgid "Is Refund"
+msgstr "En un abono"
 
 #. module: custom_account
-#: help:purchase.order,telex_release:0
+#: model:ir.model.fields,help:custom_account.field_purchase_order_telex_release
 msgid "It indicates that Telex release is necessary"
-msgstr "Indica que 'Telex release' es necesario"
+msgstr "Indica que el Telex release en necesario"
 
 #. module: custom_account
-#: help:purchase.order,minimum_planned_date:0
-msgid "This is computed as the minimum scheduled date of all purchase order lines' products."
-msgstr "Campo calculado como la fecha mínima de llegada de las líneas de compra"
+#: model:ir.model.fields,help:custom_account.field_account_treasury_forecast_not_bank_maturity
+msgid "It will be reflected in the treasury analysis"
+msgstr "Será reflejado en el análisis de tesorería"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_account_journal
+msgid "Journal"
+msgstr "Diario"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_move_line
-msgid "Journal Items"
+msgid "Journal Item"
 msgstr "Apuntes contables"
 
 #. module: custom_account
-#: field:purchase.order,manufacture_date:0
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_last_payment
+msgid "Last Payment"
+msgstr "Último Pago"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización de"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_main_supplier
+msgid "Main supplier"
+msgstr "Proveedor principal"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_purchase_order_manufacture_date
 msgid "Manufacture Date"
 msgstr "Fecha fabricación"
 
 #. module: custom_account
-#: field:account.invoice.line,move_id:0
-msgid "Move"
-msgstr "Movimiento"
+#: model:ir.model,name:custom_account.model_invoice_merge
+msgid "Merge Partner Invoice"
+msgstr "Fusionar factura de empresa"
 
 #. module: custom_account
-#: field:account.invoice.line,picking_id:0
-msgid "Picking"
-msgstr "Albarán"
+#: selection:account.treasury.forecast.line.template,period_type:0
+msgid "Months"
+msgstr "Meses"
 
 #. module: custom_account
-#: view:product.product:custom_account.product_form_view_procurement_button
-msgid "Moves"
-msgstr "Pendiente de recibir"
-
-#. module: custom_account
-#: field:payment.line,partner_name:0
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_line_partner_name
 msgid "Name"
 msgstr "Nombre"
 
 #. module: custom_account
-#: field:res.partner,newsletter:0
+#: model:ir.model.fields,field_description:custom_account.field_res_partner_newsletter
 msgid "Newsletter"
 msgstr "Newsletter"
 
 #. module: custom_account
-#: field:account.invoice,not_send_email:0
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_mode_blocked
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_term_blocked
+msgid "No Follow-up"
+msgstr "Sin seguimiento"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_res_partner_not_send_following_email
+msgid "Not Send Following Email"
+msgstr "No enviar email de seguimiento"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account.py:287
+#, python-format
+msgid "Not all invoices are at the same sales team!"
+msgstr "¡No todas las facturas tienen el mismo equipo de ventas!"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account.py:284
+#, python-format
+msgid "Not all invoices are at the same salesperson!"
+msgstr "¡No todas las facturas tienen el mismo comercial!"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account.py:290
+#, python-format
+msgid "Not all invoices are of the same invoice type!"
+msgstr "¡No todas las facturas tienen la misma forma de facturación!"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account.py:278
+#, python-format
+msgid "Not all invoices have the same payment term!"
+msgstr "¡No todas las facturas tiene la misma forma de pago!"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account.py:281
+#, python-format
+msgid "Not all invoices use the same payment mode!"
+msgstr "¡No todas las facturas usan el mismo modo de pago!"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_line_not_change_date
+msgid "Not change date"
+msgstr "No cambiar fecha"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_not_send_email
 msgid "Not send email"
 msgstr "No enviar email"
 
 #. module: custom_account
-#: field:res.partner,not_send_following_email:0
-msgid "Not send following email"
-msgstr "No enviar email de seguimiento"
+#: model:ir.ui.view,arch_db:custom_account.view_order_form_inherit
+msgid "Notes for warehouse"
+msgstr "Notas para almacén"
 
 #. module: custom_account
-#: field:account.invoice.report,number:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_number
 msgid "Number"
 msgstr "Número"
 
 #. module: custom_account
-#: view:sale.report:custom_account.view_order_product_search_add_brand
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_check_old_open_customer
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_check_old_open_supplier
+msgid "Old (opened)"
+msgstr "Retrasadas (abiertas)"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_line_paid
+#: model:ir.model.fields,field_description:custom_account.field_bank_maturity_paid
+msgid "Paid"
+msgstr "Pagado"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_order_product_search_add_brand
 msgid "Parent Category"
 msgstr "Categoría padre"
 
 #. module: custom_account
-#: field:sale.report,parent_category_id:0
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_parent_category_id
 msgid "Parent categ."
 msgstr "Categ. padre"
 
 #. module: custom_account
-#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
-#: model:ir.model,name:custom_account.model_res_partner
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+#: model:ir.ui.view,arch_db:custom_account.view_account_invoice_filter_partner
 msgid "Partner"
 msgstr "Empresa"
 
 #. module: custom_account
-#: field:sale.report,partner_ref:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_contact_id
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_filter_contact_id
+msgid "Partner Contact"
+msgstr "Contacto"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_partner_ref
 msgid "Partner ref"
 msgstr "Ref. empresa"
 
 #. module: custom_account
-#: view:sale.report:custom_account.view_order_product_search_add_brand
+#: model:ir.ui.view,arch_db:custom_account.view_order_product_search_add_brand
 msgid "Partner ref."
 msgstr "Ref. empresa"
 
 #. module: custom_account
-#: field:account.journal,payment_method_ids:0
-msgid "Payment methods related"
-msgstr "Métodos de pago relacionados"
+#: model:ir.model.fields,field_description:custom_account.field_report_account_treasury_forecast_analysis_partner_name
+msgid "Partner/Supplier"
+msgstr "Cliente/Proveedor"
 
 #. module: custom_account
-#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
-#: field:account.invoice.report,payment_mode_id:0
+#: model:ir.model,name:custom_account.model_account_payment_line
+msgid "Payment Lines"
+msgstr "Lineas de pago"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_account_payment_mode
+msgid "Payment Modes"
+msgstr "Modos de pago"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_account_payment_order
+msgid "Payment Order"
+msgstr "Orden de pago"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_account_payment_term
+msgid "Payment Terms"
+msgstr "Plazos de pago"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_payment_mode_id
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_payment_mode_customer
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_payment_mode_supplier
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
 msgid "Payment mode"
 msgstr "Modo de pago"
 
 #. module: custom_account
-#: field:account.invoice.report,benefit:0
-msgid "Benefit"
-msgstr "Beneficio"
+#: model:ir.model,name:custom_account.model_payment_return
+msgid "Payment return"
+msgstr "Devolución de cobro"
 
 #. module: custom_account
-#: field:purchase.order,prepared_merchandise_date:0
+#: model:ir.model,name:custom_account.model_account_payment
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_line_template_period_type
+msgid "Period"
+msgstr "Periodo"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_picking_email_form
+msgid "Phone/Mobile 1"
+msgstr "Telefono/Móvil 1"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_picking_email_form
+msgid "Phone/Mobile 2"
+msgstr "Telefono/Móvil 2"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_purchase_order_prepared_merchandise_date
 msgid "Prepared Merchandise Date"
 msgstr "Fecha mercancía lista"
 
@@ -280,6 +554,16 @@ msgstr "Fecha mercancía lista"
 #: model:ir.model,name:custom_account.model_product_product
 msgid "Product"
 msgstr "Producto"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_product_template
+msgid "Product Template"
+msgstr "Plantilla de producto"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_line_cost_unit
+msgid "Product cost price"
+msgstr "Coste unitario"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_purchase_order
@@ -292,42 +576,75 @@ msgid "Purchase Order Line"
 msgstr "Línea pedido de compra"
 
 #. module: custom_account
-#: view:product.product:custom_account.product_form_view_sale_order_button_add_quotations
-#: view:product.template:custom_account.product_template_form_view_sale_order_button_add_quotations
-msgid "Quotations"
-msgstr "Presupuestos"
+#: model:ir.model.fields,field_description:custom_account.field_purchase_order_sale_notes
+#: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
+msgid "Purchase Sale Notes"
+msgstr "Notas de la venta"
 
 #. module: custom_account
-#: field:account.voucher,amount_with_currency_rate:0
-msgid "Rate amount"
-msgstr "Importe en tasa"
+#: model:ir.model,name:custom_account.model_purchase_report
+msgid "Purchases Orders"
+msgstr "Pedidos de compras"
 
 #. module: custom_account
-#: help:account.invoice.line,purchase_supplier_reference:0
-msgid "Reference of the sales order or bid sent by your supplier. It's mainly used to do the matching when you receive the products as this reference is usually written on the delivery order sent by your supplier."
-msgstr "Referencia de las ventas enviadas por su proveedor. Es usado principalmente para reconocer los productos al recibirlos, esta referencia es escrita habitualmente en el albarán enviado por su proveedor."
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_line_template_period_quantity
+msgid "Quantity"
+msgstr "Cantidad"
 
 #. module: custom_account
-#: field:account.invoice.line,sale_order_id:0
+#: model:ir.model,name:custom_account.model_stock_quant
+msgid "Quants"
+msgstr "Quants"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_sale_order
+msgid "Quotation"
+msgstr "Presupuesto"
+
+#. module: custom_account
+#: model:ir.model.fields,help:custom_account.field_account_invoice_line_purchase_supplier_reference
+msgid "Reference of the sales order or bid sent by the vendor. It's used to do the matching when you receive the products as this reference is usually written on the delivery order sent by your vendor."
+msgstr "Referencia del pedido de venta o la oferta enviada por el proveedor. Se utiliza para hacer la correspondencia cuando usted recibe los productos, esta referencia se suele escribir en la orden de entrega enviado por el proveedor."
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_picking_ids
+msgid "Related Pickings"
+msgstr "Albaranes relacionados"
+
+#. module: custom_account
+#: model:ir.model.fields,help:custom_account.field_account_invoice_picking_ids
+msgid "Related pickings (only when the invoice has been generated from a sale order)."
+msgstr "Albaranes relacionados (sólo cuando la factura ha sido generada desde una venta)."
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_purchase_order_remark
+#: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
+msgid "Remark"
+msgstr "Remark"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account.py:221
+#, python-format
+msgid "Remember to change due date in associated payment(s)"
+msgstr "Recuerde cambiar la fecha de vencimientos en los pagos relacionados"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_line_sale_order_id
 msgid "Sale"
 msgstr "Venta"
 
-#: field:account.invoice.line,sale_order_line_ids:0
-msgid "Sale Lines"
-msgstr "Lineas venta"
-
 #. module: custom_account
-#: view:sale.order:custom_account.view_order_form_inherit
+#: model:ir.ui.view,arch_db:custom_account.view_order_form_inherit
 msgid "Sale Order Internal Notes"
 msgstr "Notas internas pedido"
 
 #. module: custom_account
-#: field:account.invoice,sale_order_ids:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_sale_order_ids
 msgid "Sale Orders"
-msgstr "Pedidos de venta"
+msgstr "Pedidos de Venta"
 
 #. module: custom_account
-#: field:sale.order,sale_notes:0
+#: model:ir.model.fields,field_description:custom_account.field_sale_order_sale_notes
 msgid "Sale internal notes"
 msgstr "Notas internas pedido"
 
@@ -336,16 +653,6 @@ msgstr "Notas internas pedido"
 #: model:ir.ui.menu,name:custom_account.menu_order_line_wo_reserve
 msgid "Sale lines without reserve"
 msgstr "Lineas venta sin reserva"
-
-#. module: custom_account
-#: view:product.product:custom_account.product_form_view_procurement_button
-msgid "Sales"
-msgstr "Pedidos"
-
-#. module: custom_account
-#: model:ir.model,name:custom_account.model_sale_order
-msgid "Sales Order"
-msgstr "Pedido de venta"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_sale_order_line
@@ -358,54 +665,70 @@ msgid "Sales Orders Statistics"
 msgstr "Estadísticas pedidos de venta"
 
 #. module: custom_account
-#: view:account.invoice:custom_account.view_account_invoice_filter_add_country_grp
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_partner_commercial
 msgid "Salesperson"
 msgstr "Comercial"
 
 #. module: custom_account
-#: field:account.move.line,scheme:0
+#: model:ir.model.fields,field_description:custom_account.field_account_move_line_scheme
 msgid "Scheme"
 msgstr "Esquema"
 
 #. module: custom_account
-#: field:account.move.line,partner_vat:0
-msgid "CIF/NIF/VAT"
-msgstr "CIF/NIF/VAT"
+#: model:ir.model.fields,field_description:custom_account.field_res_partner_email2
+msgid "Second Email"
+msgstr "Correo Contabilidad"
 
 #. module: custom_account
-#: field:account.banking.mandate,default:0
-msgid "Set default"
-msgstr "Por defecto"
+#: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
+msgid "Set date to all order lines"
+msgstr "Asigna fecha a todas las lineas del pedido de compra"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_order_form_inherit
+msgid "Setup default terms and conditions in your sales settings ..."
+msgstr "Configure los términos y condiciones predeterminados en su configuración de ventas..."
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_opened_start_date_customer
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_opened_start_date_supplier
+msgid "Start Date"
+msgstr "Fecha inicial"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_state_name
+msgid "State Name"
+msgstr "Provincia"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_state_web
+msgid "State web"
+msgstr "Estado web"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_stock_move
 msgid "Stock Move"
-msgstr "Movimiento de existencias"
+msgstr "Movimiento de stock"
 
 #. module: custom_account
-#: field:account.invoice.line,purchase_supplier_reference:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_line_purchase_supplier_reference
 msgid "Supplier reference"
 msgstr "Ref. proveedor"
 
 #. module: custom_account
-#: field:sale.order,partner_tags:0
+#: model:ir.model.fields,field_description:custom_account.field_sale_order_partner_tags
 msgid "Tags"
 msgstr "Etiquetas"
 
 #. module: custom_account
-#: help:account.move.line,partner_vat:0
-msgid "Tax Identification Number. Check the box if this contact is subjected to taxes. Used by the some of the legal statements."
-msgstr "Número de identificación fiscal. Marque la casilla si su contacto está sujeto a impuestos. Usado por alguno de los requirimientos legales."
+#: model:ir.model.fields,help:custom_account.field_account_move_line_pner_vat
+msgid "Tax Identification Number. Fill it if the company is subjected to taxes. Used by the some of the legal statements."
+msgstr "Número de identificación fiscal. Llénelo si la compañía esta sujeta a impuestos. Usado por algunos documentos legales."
 
 #. module: custom_account
-#: field:purchase.order,telex_release:0
+#: model:ir.model.fields,field_description:custom_account.field_purchase_order_telex_release
 msgid "Telex Release"
 msgstr "Telex Release"
-
-#. module: custom_account
-#: view:sale.order:custom_account.view_order_form_inherit
-msgid "Terms and conditions..."
-msgstr "Términos y condiciones..."
 
 #. module: custom_account
 #: sql_constraint:product.product:0
@@ -413,335 +736,67 @@ msgid "The code of product must be unique."
 msgstr "El código del producto debe ser único."
 
 #. module: custom_account
-#: help:account.invoice,partner_commercial:0
+#: model:ir.model.fields,help:custom_account.field_account_invoice_partner_commercial
 msgid "The internal user that is in charge of communicating with this contact if any."
-msgstr "El usuario interno que está a cargo de la comunicación con este contacto si hay alguno."
+msgstr "El usuario interno encargado de comunicarse con este contacto si lo hubiese."
 
 #. module: custom_account
-#: code:addons/custom_account/purchase.py:37
-#, python-format
-msgid "Unable to cancel the purchase order %s."
-msgstr "No se puede cancelar el pedido de compra %s."
+#: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
+msgid "This changes the scheduled date of all order lines to the given date"
+msgstr "Actualiza la fecha programada de todas las lineas del pedido a esta fecha."
 
 #. module: custom_account
-#: view:account.invoice:custom_account.view_account_invoice_filter_ef
-#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
-msgid "Without ef"
-msgstr "Sin ef"
+#: model:ir.model.fields,help:custom_account.field_account_invoice_sale_order_ids
+msgid "This is the list of sale orders linked to this invoice. "
+msgstr "Esta es la lista de ventas enlazadas con esta factura. "
 
 #. module: custom_account
-#: code:addons/custom_account/purchase.py:38
-#, python-format
-msgid "You have already received some goods for it.  "
-msgstr "Ya se ha recibido alguna mercancía de él."
-
-#. module: custom_account
-#: constraint:product.product:0
-msgid "You provided an invalid \"EAN13 Barcode\" reference. You may use the \"Internal Reference\" field instead."
-msgstr "Ha introducido un código EAN13 no válido. Debe usar el campo \"Referencia interna\" en su lugar."
-
-#. module: custom_account
-#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
-msgid "country"
-msgstr "País"
-
-#. module: custom_account
-#: field:account.invoice,picking_ids:0
-msgid "pickings"
-msgstr "albaranes"
-
-#. module: custom_account
-#: field:account.invoice,last_payment:0
-msgid "Last Payment"
-msgstr "Último Pago"
-
-#. module: custom_account
-#: field:account.invoice,total:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_total
 msgid "Total Paid"
 msgstr "Total Pagado"
 
 #. module: custom_account
-#: field:account.invoice,partner_commercial:0
-msgid "Commercial"
-msgstr "Comercial"
+#: selection:account.payment.mode,treasury_forecast_type:0
+#: selection:account.treasury.forecast,payment_mode_customer:0
+#: selection:account.treasury.forecast,payment_mode_supplier:0
+msgid "Transfer"
+msgstr "Transferencia"
 
 #. module: custom_account
-#: field:account.invoice,subtotal_wt_rect:0
-msgid "Subtotal"
-msgstr "Subtotal"
+#: model:ir.model,name:custom_account.model_account_treasury_forecast
+msgid "Treasury Forecast"
+msgstr "Previsión de tesorería"
 
 #. module: custom_account
-#: field:account.invoice,total_wt_rect:0
-msgid "Total"
-msgstr "Total"
-
-#. module: sale_quick_payment
-#: field:pay.sale.order,amount:0
-msgid "Amount"
-msgstr "Importe"
-
-#. module: sale_quick_payment
-#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
-msgid "Date"
-msgstr "Fecha"
-
-#. module: sale_quick_payment
-#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
-#: field:pay.sale.order,description:0
-msgid "Description"
-msgstr "Descripción"
-
-#. module: sale_quick_payment
-#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
-msgid "Paid Amount"
-msgstr "Importe pagado"
-
-#. module: sale_quick_payment
-#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
-msgid "Pay"
-msgstr "Pagar"
-
-#. module: sale_quick_payment
-#: model:ir.actions.act_window,name:sale_quick_payment.open_pay_sale_order
-#: view:pay.sale.order:sale_quick_payment.pay_sale_order_view
-msgid "Pay Sale Order"
-msgstr "Pagar pedido venta"
-
-#. module: sale_quick_payment
-#: field:pay.sale.order,date:0
-msgid "Payment Date"
-msgstr "Fecha de pago"
-
-#. module: sale_quick_payment
-#: view:sale.order:sale_quick_payment.sale_order_view_form
-msgid "Register Payments"
-msgstr "Registrar pagos"
-
-#. module: sale_quick_payment
-#: model:sale.exception,name:sale_quick_payment.must_be_paid
-msgid "Sale order must be paid before validation"
-msgstr "La venta debe ser pagada antes de la validación"
-
-#. module: sale_quick_payment
-#: model:sale.exception,description:sale_quick_payment.must_be_paid
-msgid "The sale order must be paid before the validation. Please fix it"
-msgstr "La venta debe ser pagada antes de la validación."
-
-#. module: sale_quick_payment
-#: model:ir.model,name:sale_quick_payment.model_pay_sale_order
-msgid "Wizard to generate a payment from the sale order"
-msgstr "Asistente para generar un pago desde el pedido"
+#: model:ir.model,name:custom_account.model_report_account_treasury_forecast_analysis
+msgid "Treasury Forecast Analysis"
+msgstr "Análisis de previsión de tesorería"
 
 #. module: custom_account
-#: field:purchase.order,sale_notes:0
-msgid "Purchase Order Notes"
-msgstr "Notas pedido de compra"
+#: model:ir.model,name:custom_account.model_account_treasury_forecast_line
+msgid "Treasury Forecast Line"
+msgstr "Línea de previsión de tesorería"
 
 #. module: custom_account
-#: code:addons/custom_account/account.py:490
+#: model:ir.model,name:custom_account.model_account_treasury_forecast_line_template
+msgid "Treasury Forecast Line Template"
+msgstr "Línea de plantilla de previsión de tesorería"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_mode_treasury_forecast_type
+msgid "Treasury Module"
+msgstr "Módulo de tesorería (modo de pago)"
+
+#. module: custom_account
+#: code:addons/custom_account/models/purchase.py:16
 #, python-format
-msgid "Not all invoices have the same payment term!"
-msgstr "¡No todas las facturas tienen el mismo plazo de pago!"
+msgid "Unable to cancel purchase order %s as some receptions have already been done."
+msgstr "No es posible cancelar la compra %s porque algunas recepciones ya han sido finalizadas."
 
 #. module: custom_account
-#: code:addons/custom_account/account.py:493
-#, python-format
-msgid "Not all invoices use the same payment mode!"
-msgstr "¡No todas las facturas tienen el mismo modo de pago!"
-
-#. module: custom_account
-#: code:addons/custom_account/account.py:496
-#, python-format
-msgid "Not all invoices are at the same salesperson!"
-msgstr "¡No todas las facturas tienen el mismo comercial asignado!"
-
-#. module: custom_account
-#: code:addons/custom_account/account.py:499
-#, python-format
-msgid "Not all invoices are at the same sales team!"
-msgstr "¡No todas las facturas pertenecen al mismo equipo de ventas!"
-
-#. module: custom_account
-#: code:addons/custom_account/account.py:502
-#, python-format
-msgid "Not all invoices are of the same invoice type!"
-msgstr "¡No todas las facturas son del mismo tipo de facturación!"
-
-#. module: custom_account
-#: field:account.invoice.report,area_id:0
-msgid "Area"
-msgstr "Zona"
-
-#. module: custom_account
-#: field:account.invoice.report,commercial_region_ids:0
-msgid "Commercial Regions"
-msgstr "Regiones comerciales"
-
-#. module: custom_account
-#: code:addons/custom_account/account.py:397
-#, python-format
-msgid "Warning"
-msgstr "Aviso"
-
-#. module: custom_account
-#: code:addons/custom_account/account.py:398
-#, python-format
-msgid "Remember to change due date in associated payment(s)"
-msgstr "Recuerde cambiar la fecha de vencimiento en el(los) efecto(s) asociado(s)"
-
-#. module: custom_account
-#: field:account.account,not_payment_followup:0
-msgid "Don't show on supplier payment follow-ups"
-msgstr "No mostrar en el seguimiento de pagos a proveedores"
-
-#. module: custom_account
-#: field:sale.report,main_supplier:0
-msgid "Main supplier"
-msgstr "Proveedor principal"
-
-#. module: custom_account
-#: field:sale.order,ref_partner:0
-msgid "Client reference"
-msgstr "Referencia del cliente"
-
-#. module: custom_account
-#: code:addons/custom_account/wizard/account_payment_banking.py:36
-#, python-format
-msgid "\nMissing SEPA Direct Debit mandate on the bank payment line with partner '%s' (reference '%s')."
-msgstr "\nFalta el mandato de adeudo directo SEPA en la linea de pago bancario con la empresa '%s' (referencia '%s')."
-
-#. module: custom_account
-#: code:addons/custom_account/wizard/account_payment_banking.py:40
-#, python-format
-msgid "\nThe SEPA Direct Debit mandate with reference '%s' for partner '%s' has expired."
-msgstr "\nEl mandato de adeudo directo SEPA con referencia '%s' para la empresa '%s' ha expirado."
-
-#. module: custom_account
-#: code:addons/custom_account/wizard/account_payment_banking.py:45
-#, python-format
-msgid "\nThe mandate with reference '%s' for partner '%s' has type set to 'One-Off' and it has a last debit date set to '%s', so we can't use it."
-msgstr "\nEl mandato con referencia '%s' para la empresa '%s' tipo como 'Único', ya tiene como fecha de último cobro '%s', por lo que no se puede usar."
-
-#. module: custom_account
-#: model:ir.actions.act_window,name:custom_account.action_account_invoice_contact_report
-#: model:ir.ui.menu,name:custom_account.menu_action_account_invoice_contact_report
-msgid "Invoices Contact Analysis"
-msgstr "Análisis de facturas (contactos)"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,number:0
-msgid "Number"
-msgstr "Número"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,date:0
-msgid "Date"
-msgstr "Fecha"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,period_id:0
-msgid "Period"
-msgstr "Período"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,partner_id:0
-msgid "Partner Company"
-msgstr "Empresa matriz"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,contact_id:0
-msgid "Partner contact"
-msgstr "Contacto"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,currency_id:0
-msgid "Currency"
-msgstr "Divisa"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,type:0
-msgid "Type"
-msgstr "Tipo"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,state:0
-msgid "State"
-msgstr "Estado"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,price_total:0
-msgid "Total Without Tax"
-msgstr "Total base"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,benefit:0
-msgid "Benefit"
-msgstr "Beneficio"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "This Year"
-msgstr "Este año"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Customer"
-msgstr "Cliente"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Supplier"
-msgstr "Proveedor"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Invoice"
-msgstr "Factura"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Refund"
-msgstr "Factura rectificativa"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Sales Team"
-msgstr "Equipo de ventas"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Without ef"
-msgstr "Sin ef"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Status"
-msgstr "Estado"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Company"
-msgstr "Compañía"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Period"
-msgstr "Período"
-
-#. module: custom_account
-#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
-msgid "Due Month"
-msgstr "Mes de vencimiento"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,brand_id:0
-msgid "Brand"
-msgstr "Marca"
-
-#. module: custom_account
-#: field:account.invoice.contact.report,product_id:0
-msgid "Product"
-msgstr "Producto"
+#: model:ir.model.fields,field_description:custom_account.field_res_partner_pending_orders_amount
+msgid "Uninvoiced Orders"
+msgstr "Ventas no facturadas"
 
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_required_payment_term
@@ -749,19 +804,38 @@ msgid "VAT"
 msgstr "NIF"
 
 #. module: custom_account
-#: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
-msgid " Set date to all order lines"
-msgstr " Asignar fecha a todas las lineas del pedido de compra"
+#: model:ir.model,name:custom_account.model_account_voucher_line
+msgid "Voucher Lines"
+msgstr "Líneas de comprobante"
 
 #. module: custom_account
-#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
-#: field:account.invoice.report,brand_name:0
-msgid "Brand name"
-msgstr "Nombre de la marca"
-
+#: code:addons/custom_account/models/account.py:219
+#, python-format
+msgid "Warning"
+msgstr "Aviso"
 
 #. module: custom_account
-#: view:account.invoice.report:custom_account.account_invoice_report_add_filters
-#: field:account.invoice.report,area_id:0
-msgid "Area"
-msgstr "Zona"
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_not_bank_maturity
+msgid "Without Bank Maturities"
+msgstr "Sin vencimientos bancarios"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_not_bankable_supplier
+msgid "Without Bankable Suppliers"
+msgstr "Sin financiables"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+#: model:ir.ui.view,arch_db:custom_account.view_account_invoice_filter_partner
+msgid "Without ef"
+msgstr "Sin ef"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_bank_maturity
+msgid "bank.maturity"
+msgstr "bank.maturity"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+msgid "country"
+msgstr "País"
