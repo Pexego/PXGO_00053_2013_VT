@@ -105,7 +105,7 @@ class ProductTemplate(models.Model):
                         subproduct_quantity_next = subproduct.product_qty
                         if subproduct_quantity_next:
                             subproduct_stock_next = \
-                                subproduct.product_id.product.qty_available - \
+                                subproduct.product_id.qty_available - \
                                 subproduct.product_id.outgoing_qty - \
                                 subproduct.product_id.qty_available_wo_wh - \
                                 subproduct.product_id.qty_available_input_loc
