@@ -3,6 +3,7 @@
 
 from odoo import models, api, fields, exceptions, _
 from odoo.exceptions import UserError
+from odoo.tools import float_compare
 
 
 class SaleOrderLine(models.Model):
@@ -23,6 +24,49 @@ class SaleOrderLine(models.Model):
     def product_id_change_check_zero_quantity(self):
         if self.product_uom_qty <= 0:
             raise UserError(_('Product quantity cannot be negative or zero'))
+
+    @api.onchange('product_uom_qty', 'product_uom', 'route_id')
+    def _onchange_product_id_check_availability(self):
+        if not self.product_id or not self.product_uom_qty or not \
+                self.product_uom:
+            self.product_packaging = False
+            return {}
+        if self.product_id.type == 'product':
+            precision = self.env['decimal.precision'].\
+                precision_get('Product Unit of Measure')
+            product = self.product_id.with_context(
+                warehouse=self.order_id.warehouse_id.id,
+                lang=self.order_id.partner_id.lang or self.env.user.lang or
+                'en_US'
+            )
+            product_qty = self.product_uom.\
+                _compute_quantity(self.product_uom_qty, self.product_id.uom_id)
+            if float_compare(product.virtual_stock_conservative, product_qty,
+                             precision_digits=precision) == -1:
+                is_available = self._check_routing()
+                if not is_available:
+                    message =  \
+                        _('You plan to sell %s %s but you only have %s %s '
+                          'available in %s warehouse.') % \
+                        (self.product_uom_qty, self.product_uom.name,
+                         product.virtual_stock_conservative,
+                         product.uom_id.name, self.order_id.warehouse_id.name)
+                    if float_compare(product.virtual_stock_conservative,
+                                     self.product_id.
+                                     virtual_stock_conservative,
+                                     precision_digits=precision) == -1:
+                        message += \
+                            _('\nThere are %s %s available accross all '
+                              'warehouses.') % \
+                            (self.product_id.virtual_stock_conservative,
+                             product.uom_id.name)
+
+                    warning_mess = {
+                        'title': _('Not enough inventory!'),
+                        'message': message
+                    }
+                    return {'warning': warning_mess}
+        return {}
 
 
 class SaleOrder(models.Model):
