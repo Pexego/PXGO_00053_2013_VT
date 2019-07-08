@@ -41,3 +41,9 @@ class AccountInvoice(models.Model):
                     'message': message
                     }
             return {'warning': warning}
+
+    @api.model
+    def _prepare_refund(self, invoice, date_invoice=None, date=None, description=None, journal_id=None):
+        values = super()._prepare_refund(invoice, date_invoice, date, description, journal_id)
+        values.update({'allow_confirm_blocked': self.allow_confirm_blocked})
+        return values
