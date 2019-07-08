@@ -16,9 +16,6 @@ class AccountInvoice(models.Model):
         de facturas para controlar el bloqueo de ventas a clientes
         """
         for invoice in self:
-            orig_invoice = self.env['account.invoice'].browse(self.env.context['active_ids'][0])
-            if orig_invoice.allow_confirm_blocked is True:
-                self.allow_confirm_blocked = True
             # Compruebo la empresa actual y su padre...
             for partner in invoice.partner_id.get_partners_to_check():
                 if partner.blocked_sales and not invoice.allow_confirm_blocked:
@@ -44,3 +41,9 @@ class AccountInvoice(models.Model):
                     'message': message
                     }
             return {'warning': warning}
+
+    @api.model
+    def _prepare_refund(self, invoice, date_invoice=None, date=None, description=None, journal_id=None):
+        values = super()._prepare_refund(invoice, date_invoice, date, description, journal_id)
+        values.update({'allow_confirm_blocked': self.allow_confirm_blocked})
+        return values
