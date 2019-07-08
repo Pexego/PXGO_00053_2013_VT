@@ -19,8 +19,8 @@ class ResPartner(models.Model):
     def _risk_field_list(self):
         res = super()._risk_field_list()
         res.append(
-            ('risk_circulating_include', 'risk_circulating_limit',
-             'risk_circulating'))
+            ('risk_circulating', 'risk_circulating_limit',
+             'risk_circulating_include'))
         return res
 
     def _compute_risk_circulating(self):
