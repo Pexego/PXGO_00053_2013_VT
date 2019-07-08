@@ -16,6 +16,9 @@ class AccountInvoice(models.Model):
         de facturas para controlar el bloqueo de ventas a clientes
         """
         for invoice in self:
+            orig_invoice = self.env['account.invoice'].browse(self.env.context['active_ids'][0])
+            if orig_invoice.allow_confirm_blocked is True:
+                self.allow_confirm_blocked = True
             # Compruebo la empresa actual y su padre...
             for partner in invoice.partner_id.get_partners_to_check():
                 if partner.blocked_sales and not invoice.allow_confirm_blocked:
