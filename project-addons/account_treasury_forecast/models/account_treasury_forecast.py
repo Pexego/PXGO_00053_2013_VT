@@ -231,7 +231,7 @@ class AccountTreasuryForecast(models.Model):
                     search_filter_supplier.extend(['&', '|',
                                                    ('partner_id.property_purchase_currency_id',
                                                     '!=', id_currency_usd),
-                                                   ('partner_id.property_account_payable.code', '!=', '40000000')])
+                                                   ('partner_id.property_account_payable_id.code', '!=', '40000000')])
 
                 search_filter_supplier.extend(['&', ('payment_mode_id.treasury_forecast_type', '=', 'transfer'),
                                                '&', ('state', '=', 'open'),
