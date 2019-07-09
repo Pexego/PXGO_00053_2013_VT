@@ -221,6 +221,12 @@ class AccountInvoice(models.Model):
                 _('Remember to change due date in associated payment(s)')
             }}
 
+    def _prepare_invoice_line_from_po_line(self, line):
+        data = super()._prepare_invoice_line_from_po_line(line)
+        if self.currency_id != line.order_id.currency_id:
+            self.currency_id = line.order_id.currency_id
+        return data
+
 
 class PaymentMode(models.Model):
 

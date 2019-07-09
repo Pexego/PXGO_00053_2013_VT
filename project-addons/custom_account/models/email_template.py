@@ -9,7 +9,6 @@ class EmailTemplate(models.Model):
 
     _inherit = 'mail.template'
 
-    #TODO: Probar funcionalmente
     @api.multi
     def generate_email(self, res_ids, fields=None):
         res = super().generate_email(res_ids, fields=fields)
@@ -27,10 +26,11 @@ class EmailTemplate(models.Model):
             attachments_list = multi_mode and res[res_id]['attachments'] or \
                 res['attachments']
             for picking in invoice.picking_ids:
-                pdf = self.env.ref('stock.action_report_picking').\
+                pdf = self.env.\
+                    ref('custom_report_link.report_picking_custom_action').\
                     render_qweb_pdf([picking.id])[0]
                 pdf = base64.b64encode(pdf)
-                report_name = 'stock.' + picking.name.replace('/', '')
+                report_name = picking.name.replace('/', '')
                 ext = ".pdf"
                 if not report_name.endswith(ext):
                     report_name += ext
