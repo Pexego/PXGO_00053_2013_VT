@@ -20,7 +20,7 @@
         <field name="arch" type="xml">
             <field name="move_id" position="before">
                 <field name="blocked" invisible="1"/>
-                <field name="allow_confirm_blocked" attrs="{'invisible': [('blocked', '!=', True)]}" groups="account.group_account_manager"/>
+                <field name="allow_confirm_blocked" attrs="{'invisible': [('blocked', '!=', True)]}"/>
             </field>
         </field>
     </record>
