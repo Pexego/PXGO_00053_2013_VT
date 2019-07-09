@@ -171,16 +171,21 @@ msgid "Product"
 msgstr "Producto"
 
 #. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price1
+msgid "Sale Price 1"
+msgstr "PVP_A"
+
+#. module: sale_customer_discount
 #: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price2
-msgid "Sale Price"
+msgid "Sale Price 2"
 msgstr "PVP_B"
 
 #. module: sale_customer_discount
 #: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price3
-msgid "Sale Price 2"
+msgid "Sale Price 3"
 msgstr "PVP_C"
 
 #. module: sale_customer_discount
 #: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price4
-msgid "Sale Price 3"
+msgid "Sale Price 4"
 msgstr "PVP_D"
