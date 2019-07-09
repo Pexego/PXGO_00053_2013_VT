@@ -71,6 +71,9 @@
                     </group>
                 </group>
             </group>
+            <page name="purchase" position="attributes">
+                <attribute name="groups">purchase.group_purchase_manager</attribute>
+            </page>
         </field>
     </record>
 
