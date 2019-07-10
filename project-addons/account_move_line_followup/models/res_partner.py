@@ -34,9 +34,9 @@ class ResPartner(models.Model):
                     if date_maturity <= current_date:
                         amount_overdue += aml.balance
 
-            partner.payment_amount_due = amount_due
             partner.payment_amount_overdue = amount_overdue
             partner.payment_earliest_due_date = worst_due_date
+            partner.write({'payment_amount_due': amount_due})
 
     @api.multi
     def _communications_count(self):

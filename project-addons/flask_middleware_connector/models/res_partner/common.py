@@ -108,12 +108,12 @@ class PartnerListener(Component):
             self.export_partner_data(record)
 
         elif "web" in fields and not record.web:
-            record.with_delay(priority=1, eta=60).unlink_partner
+            record.with_delay(priority=1, eta=60).unlink_partner()
 
         elif partner.web and ('active' in fields or
                               'prospective' in fields) and not \
                 (partner.active or partner.prospective):
-            record.with_delay(priority=1, eta=60).unlink_partner
+            record.with_delay(priority=1, eta=60).unlink_partner()
 
         elif partner.web:
             if 'category_id' in fields:
