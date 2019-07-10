@@ -112,9 +112,11 @@ class StockReservation(models.Model):
                     [('move_id', '=', move.id)])
                 if not reservation:
                     reservation = self.env['stock.reservation'].create(
-                        {'move_id': move.id, 'sale_line_id': current_sale_line_id})
+                        {'move_id': move.id, 'sale_line_id':
+                         current_sale_line_id})
                 reservation.message_post(
-                    body=_("Reserva modificada. Estado '%s'") % reservation.state)
+                    body=_("Reserva modificada. Estado '%s'") %
+                    reservation.state)
         return moves
 
     def release(self):
@@ -125,7 +127,6 @@ class StockReservation(models.Model):
 
     @api.model
     def delete_orphan_reserves(self):
-        # TODO: pendiente de migrar sale_product_customize
         now = fields.Datetime.now()
         d = datetime.strptime(now, '%Y-%m-%d %H:%M:%S') + \
             timedelta(minutes=-30)
@@ -148,5 +149,21 @@ class StockReservation(models.Model):
                                                 False)])
         if moves:
             moves._action_cancel()
+
+        reserves = self.search([('create_date', '<=', last_date),
+                                ('sale_line_id', '!=', False),
+                                ('partner_id', '=', False),
+                                ('move_id.state', 'not in', ['done',
+                                                             'cancel'])])
+        reserves_to_delete = self.env['stock.reservation']
+        for reserve in reserves:
+            check_other_reserves = self.\
+                search([('sale_line_id', '=', reserve.sale_line_id.id),
+                        ('partner_id', '!=', False),
+                        ('move_id.state', 'not in', ['done', 'cancel'])])
+            if check_other_reserves:
+                reserves_to_delete |= reserve
+        if reserves_to_delete:
+            reserves_to_delete.unlink()
 
         return True
