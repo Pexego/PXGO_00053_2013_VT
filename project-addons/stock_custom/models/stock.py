@@ -31,7 +31,8 @@ class StockPicking(models.Model):
         lot_obj = self.env["stock.production.lot"]
         for picking in self:
             for move in picking.move_lines:
-                if move.state == 'assigned' and not move.quantity_done:
+                if not move.lots_text and move.state == 'assigned' and \
+                        not move.quantity_done:
                     move.quantity_done = move.product_uom_qty
                 if move.lots_text:
                     txlots = move.lots_text.split(',')
@@ -51,6 +52,7 @@ class StockPicking(models.Model):
                                                   'product_id':
                                                   move.product_id.id})
                             move.move_line_ids[cont].lot_id = lot
+                            move.move_line_ids[cont].qty_done = 1.0
                             cont += 1
         res = super().action_done()
         for picking in self:
