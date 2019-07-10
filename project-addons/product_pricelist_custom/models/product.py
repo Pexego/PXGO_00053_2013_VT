@@ -148,7 +148,7 @@ class ProductProduct(models.Model):
 
     @api.multi
     def write(self, vals):
-        super().write(vals)
+        res = super().write(vals)
         if 'item_ids' in vals:
             prices = {
                 'list_price1': self.get_product_price_with_pricelist('PVPA'),
@@ -167,9 +167,8 @@ class ProductProduct(models.Model):
                 'pvm2_price': self.get_product_price_with_pricelist('PVMB'),
                 'pvm3_price': self.get_product_price_with_pricelist('PVMC')
             }
-            vals.update(prices)
-
-        return super().write(vals)
+            res = super().write(prices)
+        return res
 
 
 class ProductTemplate(models.Model):
