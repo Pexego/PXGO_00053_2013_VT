@@ -106,3 +106,8 @@ msgstr "Tiempo de transporte"
 #: view:product.product:purchase_proposal.product_add_proposal_data
 msgid "days"
 msgstr "días"
+
+#. module: purchase_proposal
+#: model:ir.actions.act_window,name:purchase_proposal.action_purchase_line_product_tree_2
+msgid "Purchases"
+msgstr "Compras"
