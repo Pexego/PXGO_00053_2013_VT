@@ -25,6 +25,9 @@
                     <field name="prepared_merchandise_date"/>
                     <field name="estimated_arrival_date"/>
                 </field>
+                <xpath expr="//field[@name='order_line']/tree" position="attributes">
+                    <attribute name="limit">1000</attribute>
+                </xpath>
                 <xpath expr="//field[@name='order_line']/tree/field[@name='company_id']" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </xpath>

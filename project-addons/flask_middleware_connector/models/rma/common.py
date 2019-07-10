@@ -15,7 +15,7 @@ class CrmClaimListener(Component):
         if record.partner_id and record.partner_id.web:
             record.with_delay(priority=1).export_rma()
 
-    def on_record_write(self, record, fields):
+    def on_record_write(self, record, fields=None):
         rma = record
         model_name = 'crm.claim'
         up_fields = ["date", "date_received", "delivery_type", "delivery_address_id",
@@ -34,7 +34,7 @@ class CrmClaimListener(Component):
         elif rma.partner_id.web:
             for field in up_fields:
                 if field in fields:
-                    record.with_delay(priority=5, eta=120).update_rma()
+                    record.with_delay(priority=5, eta=120).update_rma(fields=fields)
                     break
 
     def on_record_unlink(self, record):
