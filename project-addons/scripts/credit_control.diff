@@ -1,0 +1,13 @@
+diff --git a/sale_financial_risk/models/sale.py b/sale_financial_risk/models/sale.py
+index 7ec6122..95d7ada 100644
+--- a/sale_financial_risk/models/sale.py
++++ b/sale_financial_risk/models/sale.py
+@@ -19,7 +19,7 @@ class SaleOrder(models.Model):
+                     partner.risk_sale_order_limit):
+                 exception_msg = _(
+                     "This sale order exceeds the sales orders risk.\n")
+-            elif partner.risk_sale_order_include and (
++            elif partner.risk_sale_order_include and partner.credit_limit and (
+                     (partner.risk_total + self.amount_total) >
+                     partner.credit_limit):
+                 exception_msg = _(

@@ -1,0 +1,14 @@
+diff --git a/purchase_stock_picking_invoice_link/models/account_invoice.py b/purchase_stock_picking_invoice_link/models/account_invoice.py
+index 03472cb..f0a543e 100644
+--- a/purchase_stock_picking_invoice_link/models/account_invoice.py
++++ b/purchase_stock_picking_invoice_link/models/account_invoice.py
+@@ -16,7 +16,8 @@ class AccountInvoice(models.Model):
+         move_ids = moves._get_moves()
+         vals['move_line_ids'] = [(6, 0, move_ids.ids)]
+         pickings = move_ids.mapped('picking_id')
+-        pickings.invoice_ids = [(4, self.id)]
++        if pickings:
++            pickings.invoice_ids = [(4, self.id)]
+         return vals
+ 
+ 
