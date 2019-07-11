@@ -22,9 +22,9 @@
             <xpath expr="//field[@name='order_line']/tree//field[@name='name']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', '=', 'purchase')]}</attribute>
             </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='date_planned']" position="attributes">
+            <!--xpath expr="//field[@name='order_line']/tree//field[@name='date_planned']" position="attributes">
                 <attribute name="invisible">1</attribute>
-            </xpath>
+            </xpath-->
              <xpath expr="//field[@name='order_line']/tree//field[@name='account_analytic_id']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
