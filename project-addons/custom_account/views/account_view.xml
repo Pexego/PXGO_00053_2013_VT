@@ -47,6 +47,18 @@
             </field>
         </record>
 
+        <record id="invoice_supplier_tree" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.currency.tree</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_tree"/>
+            <field name="arch" type="xml">
+                <!-- It makes no sense to do the sum of multiple currencies, but, used just when it is a group of same currency-->
+                <field name="amount_total_signed" position="attributes">
+                    <attribute name="sum">Amount</attribute>
+                </field>
+            </field>
+        </record>
+
         <record id="invoice_form_add_pick" model="ir.ui.view">
             <field name="name">account.invoice.form.add_pick</field>
             <field name="model">account.invoice</field>
