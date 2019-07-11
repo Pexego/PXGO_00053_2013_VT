@@ -353,3 +353,8 @@ msgstr "El último cliente en posesión del producto"
 #: model:ir.model.fields,field_description:stock_custom.field_stock_move_line_date_expected
 msgid "Date Expected"
 msgstr "Fecha prevista"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_move_line_tree_add_date
+msgid "Ordered Qty"
+msgstr "Cantidad pedida"
