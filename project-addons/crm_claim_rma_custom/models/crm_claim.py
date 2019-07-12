@@ -263,8 +263,7 @@ class CrmClaimRma(models.Model):
 
                 line.invoiced = True
 
-            invoice_id.write({'origin_invoices_ids': [(6, 0, list(set(rectified_invoice_ids)))],
-                              'allow_confirm_blocked': claim_obj.allow_confirm_blocked})
+            invoice_id.write({'origin_invoices_ids': [(6, 0, list(set(rectified_invoice_ids)))]})
             invoice_id.compute_taxes()
             invoice_id.action_invoice_open()
 
