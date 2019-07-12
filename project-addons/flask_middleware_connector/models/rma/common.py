@@ -15,7 +15,7 @@ class CrmClaimListener(Component):
         if record.partner_id and record.partner_id.web:
             record.with_delay(priority=1).export_rma()
 
-    def on_record_write(self, record, fields):
+    def on_record_write(self, record, fields=None):
         rma = record
         model_name = 'crm.claim'
         up_fields = ["date", "date_received", "delivery_type", "delivery_address_id",
@@ -34,7 +34,7 @@ class CrmClaimListener(Component):
         elif rma.partner_id.web:
             for field in up_fields:
                 if field in fields:
-                    record.with_delay(priority=5, eta=120).update_rma()
+                    record.with_delay(priority=5, eta=120).update_rma(fields=fields)
                     break
 
     def on_record_unlink(self, record):
@@ -55,7 +55,7 @@ class CrmClaim(models.Model):
 
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def update_rma(self, fields):
+    def update_rma(self, fields=None):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
@@ -130,7 +130,7 @@ class ClaimLine(models.Model):
         return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def update_rmaproduct(self, fields):
+    def update_rmaproduct(self, fields=None):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')

@@ -29,6 +29,8 @@ class PurchaseOrder(models.Model):
 
     picking_created = fields.Boolean('Picking created', compute='is_picking_created')
 
+    date_planned = fields.Datetime(string='Scheduled Date', compute='', store=True, index=True)
+
     @api.multi
     def test_moves_done(self):
         '''PO is done at the delivery side if all the incoming shipments
@@ -80,6 +82,12 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
+    #
+    # @api.depends('order_id.date_planned')
+    # def _computedate(self):
+    #     self.date_planned = self.order_id.date_planned
+    #
+    # date_planned = fields.Datetime(string='Scheduled Date',compute='_computedate', required=True, index=True)
 
     @api.multi
     def _prepare_stock_moves(self, picking):
