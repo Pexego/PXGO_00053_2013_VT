@@ -82,12 +82,15 @@ class PurchaseOrder(models.Model):
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
-    #
-    # @api.depends('order_id.date_planned')
-    # def _computedate(self):
-    #     self.date_planned = self.order_id.date_planned
-    #
-    # date_planned = fields.Datetime(string='Scheduled Date',compute='_computedate', required=True, index=True)
+
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        super().onchange_product_id()
+        product_lang = self.product_id.with_context(
+            lang=self.partner_id.lang,
+            partner_id=self.partner_id.id,
+        )
+        self.name = '[%s] %s' % (product_lang.ref_manufacturer or product_lang.display_name, product_lang.display_name)
 
     @api.multi
     def _prepare_stock_moves(self, picking):
