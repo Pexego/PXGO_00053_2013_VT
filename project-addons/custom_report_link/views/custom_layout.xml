@@ -914,7 +914,7 @@
                         }
                     </script>
 
-                    <t t-if="'Recibo domiciliado' in o.expiration_dates_str">
+                    <t t-if="'Recibo domiciliado' in o.payment_mode_id.name">
                         <t t-if="o.payment_mode_id.note">
                             <strong>Payment Mode:</strong>
 
