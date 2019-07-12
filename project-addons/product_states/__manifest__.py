@@ -25,7 +25,7 @@
     'description': """Adds states to the product""",
     'author': 'Pexego Sistemas Informáticos',
     'website': 'www.pexego.es',
-    "depends": ["base", "product", "sale_stock", "stock", "purchase", "product_manufacturer"],
+    "depends": ["base", "product", "sale_stock", "stock", "purchase", "product_manufacturer", "mrp"],
     "data": ["views/product_view.xml"],
     "installable": True
 }
