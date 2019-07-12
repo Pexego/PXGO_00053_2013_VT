@@ -91,7 +91,7 @@
         report_type="qweb-pdf"
         file="custom_report_link.report_saleorder_custom"
         name="custom_report_link.report_saleorder_custom"
-        print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)"
+        print_report_name="(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or '%s_%s' % (object.name, object.partner_id.name)"
     />
 
     <record id="action_report_saleorder" model="ir.actions.report">

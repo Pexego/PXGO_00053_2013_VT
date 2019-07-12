@@ -72,7 +72,7 @@
                 </group>
             </group>
             <page name="purchase" position="attributes">
-                <attribute name="groups">purchase.group_purchase_manager</attribute>
+                <attribute name="groups">purchase.group_purchase_manager,mrp.group_mrp_user</attribute>
             </page>
         </field>
     </record>
