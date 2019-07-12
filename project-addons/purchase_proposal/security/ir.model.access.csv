@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_stock_days_positive,access_stock_days_positive,model_stock_days_positive,,1,1,1,1
+access_stock_history,access_stock_history,model_stock_history,base.group_user,1,0,0,0
