@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-04 18:02+0000\n"
-"PO-Revision-Date: 2019-07-04 18:02+0000\n"
+"POT-Creation-Date: 2019-07-14 10:02+0000\n"
+"PO-Revision-Date: 2019-07-14 10:02+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -71,9 +71,21 @@ msgid "Active"
 msgstr "Activo"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_amount_selected
+msgid "Active amount"
+msgstr "Importe seleccionado"
+
+#. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_amount
+#: model:ir.ui.view,arch_db:custom_account.invoice_supplier_tree
 msgid "Amount"
 msgstr "Importe"
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/reconline_payment_with_statement_lines_wzd.py:36
+#, python-format
+msgid "Amounts have to be the same"
+msgstr "Los importes tienen que ser los mismos"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_area_id
@@ -98,9 +110,19 @@ msgid "Bank Account"
 msgstr "Cuenta bancaria"
 
 #. module: custom_account
+#: model:ir.model,name:custom_account.model_bank_payment_line
+msgid "Bank Payment Lines"
+msgstr "Líneas de pago bancario"
+
+#. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_bank_account
 msgid "Bank account"
 msgstr "Cuenta bancaria"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_bank_statement_id
+msgid "Bank statement"
+msgstr "Extracto bancario"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_benefit
@@ -134,6 +156,11 @@ msgstr "Marca del producto"
 #: model:ir.model.fields,field_description:custom_account.field_account_move_line_pner_vat
 msgid "CIF/NIF/VAT"
 msgstr "CIF/NIF/VAT"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.wizard_reconcile_payment_statement_line_form
+msgid "Cancel"
+msgstr "Cancelar"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_sale_order_ref_partner
@@ -172,6 +199,7 @@ msgstr "País"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_create_uid
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
@@ -182,6 +210,7 @@ msgstr "Fecha de alta"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_create_date
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_create_date
 msgid "Created on"
 msgstr "Creado en"
 
@@ -189,6 +218,11 @@ msgstr "Creado en"
 #: model:ir.model,name:custom_account.model_account_invoice_refund
 msgid "Credit Note"
 msgstr "Rectificativa"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_currency_id
+msgid "Currency"
+msgstr "Moneda"
 
 #. module: custom_account
 #: model:ir.model.fields,help:custom_account.field_account_payment_current_exchange_rate
@@ -229,6 +263,7 @@ msgstr "Recibo domiciliado"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_display_name
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -274,6 +309,7 @@ msgstr "Información general"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_id
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_id
 msgid "ID"
 msgstr "ID (identificación)"
 
@@ -310,7 +346,7 @@ msgstr "Estadísticas de facturas"
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_payment_line_is_refund
 msgid "Is Refund"
-msgstr "En un abono"
+msgstr "Es un abono"
 
 #. module: custom_account
 #: model:ir.model.fields,help:custom_account.field_purchase_order_telex_release
@@ -324,6 +360,7 @@ msgstr "Será reflejado en el análisis de tesorería"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_journal
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_journal_id
 msgid "Journal"
 msgstr "Diario"
 
@@ -334,6 +371,7 @@ msgstr "Apuntes contables"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity___last_update
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line___last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
@@ -344,13 +382,27 @@ msgstr "Último Pago"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_write_uid
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_write_uid
 msgid "Last Updated by"
 msgstr "Última actualización de"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_write_date
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_write_date
 msgid "Last Updated on"
 msgstr "Última actualización en"
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/reconline_payment_with_statement_lines_wzd.py:47
+#, python-format
+msgid "Lines selected of serveral payment dates"
+msgstr "Lineas seleccionadas de varias fechas de pago"
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/reconline_payment_with_statement_lines_wzd.py:43
+#, python-format
+msgid "Lines selected of serveral payment orders"
+msgstr "Lineas seleccionadas de varias órdenes de cobro"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_sale_report_main_supplier
@@ -371,6 +423,12 @@ msgstr "Fusionar factura de empresa"
 #: selection:account.treasury.forecast.line.template,period_type:0
 msgid "Months"
 msgstr "Meses"
+
+#. module: custom_account
+#: code:addons/custom_account/models/payment_return.py:39
+#, python-format
+msgid "Move lines: %s"
+msgstr "Apuntes: %s"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_payment_line_partner_name
@@ -394,31 +452,31 @@ msgid "Not Send Following Email"
 msgstr "No enviar email de seguimiento"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:287
+#: code:addons/custom_account/models/account.py:293
 #, python-format
 msgid "Not all invoices are at the same sales team!"
 msgstr "¡No todas las facturas tienen el mismo equipo de ventas!"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:284
+#: code:addons/custom_account/models/account.py:290
 #, python-format
 msgid "Not all invoices are at the same salesperson!"
 msgstr "¡No todas las facturas tienen el mismo comercial!"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:290
+#: code:addons/custom_account/models/account.py:296
 #, python-format
 msgid "Not all invoices are of the same invoice type!"
 msgstr "¡No todas las facturas tienen la misma forma de facturación!"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:278
+#: code:addons/custom_account/models/account.py:284
 #, python-format
 msgid "Not all invoices have the same payment term!"
 msgstr "¡No todas las facturas tiene la misma forma de pago!"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:281
+#: code:addons/custom_account/models/account.py:287
 #, python-format
 msgid "Not all invoices use the same payment mode!"
 msgstr "¡No todas las facturas usan el mismo modo de pago!"
@@ -448,6 +506,11 @@ msgstr "Número"
 #: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_check_old_open_supplier
 msgid "Old (opened)"
 msgstr "Retrasadas (abiertas)"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.bank_payment_line_search_add_filters
+msgid "Order"
+msgstr "Pedido"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_line_paid
@@ -526,6 +589,11 @@ msgid "Payment return"
 msgstr "Devolución de cobro"
 
 #. module: custom_account
+#: model:ir.model,name:custom_account.model_payment_return_line
+msgid "Payment return lines"
+msgstr "Líneas de la devolución"
+
+#. module: custom_account
 #: model:ir.model,name:custom_account.model_account_payment
 msgid "Payments"
 msgstr "Pagos"
@@ -599,7 +667,22 @@ msgstr "Quants"
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_sale_order
 msgid "Quotation"
-msgstr "Presupuesto"
+msgstr "Ventas"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.wizard_reconcile_payment_statement_line_form
+msgid "Reconcile"
+msgstr "Conciliar"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.wizard_reconcile_payment_statement_line_form
+msgid "Reconcile payments with statement lines"
+msgstr "Conciliar pagos con lineas de extracto"
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.action_reconcile_bank_lines_w_statements
+msgid "Reconcile with statements"
+msgstr "Conciliar con extractos"
 
 #. module: custom_account
 #: model:ir.model.fields,help:custom_account.field_account_invoice_line_purchase_supplier_reference
@@ -671,6 +754,7 @@ msgstr "Comercial"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_move_line_scheme
+#: model:ir.model.fields,field_description:custom_account.field_bank_payment_line_mandate_scheme
 msgid "Scheme"
 msgstr "Esquema"
 
@@ -704,6 +788,16 @@ msgstr "Provincia"
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_state_web
 msgid "State web"
 msgstr "Estado web"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_bank_statement_line_id
+msgid "Statement line"
+msgstr "Linea extracto"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_statement_line_amount
+msgid "Statement line amount"
+msgstr "Importe linea extracto"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_stock_move
@@ -799,6 +893,11 @@ msgid "Uninvoiced Orders"
 msgstr "Ventas no facturadas"
 
 #. module: custom_account
+#: model:ir.model.fields,help:custom_account.field_wizard_reconcile_payment_statement_line_currency_id
+msgid "Utility field to express amount currency"
+msgstr "Campo útil para expresar importe en divisa."
+
+#. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_required_payment_term
 msgid "VAT"
 msgstr "NIF"
@@ -839,3 +938,8 @@ msgstr "bank.maturity"
 #: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
 msgid "country"
 msgstr "País"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_wizard_reconcile_payment_statement_line
+msgid "wizard.reconcile.payment.statement.line"
+msgstr "wizard.reconcile.payment.statement.line"
