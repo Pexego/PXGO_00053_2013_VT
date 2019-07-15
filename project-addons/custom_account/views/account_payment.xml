@@ -19,6 +19,23 @@
             </field>
         </record>
 
+        <record id="bank_payment_line_search_add_filters" model="ir.ui.view">
+        <field name="name">bank.payment.line.search.add.filters</field>
+        <field name="model">bank.payment.line</field>
+        <field name="inherit_id" ref="account_payment_order.bank_payment_line_search"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="order_id"/>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="mandate_scheme"/>
+            </field>
+            <filter name="partner_groupby" position="after">
+                <filter name="order_groupby" string="Order" context="{'group_by': 'order_id'}"/>
+            </filter>
+        </field>
+    </record>
+
         <record id="view_account_form_not_payments_followup" model="ir.ui.view">
             <field name="model">account.account</field>
             <field name="inherit_id" ref="account.view_account_form"/>

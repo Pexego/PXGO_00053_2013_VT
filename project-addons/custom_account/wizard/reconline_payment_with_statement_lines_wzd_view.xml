@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wizard_reconcile_payment_statement_line_form" model="ir.ui.view">
+           <field name="name">wizard.reconcile.payment.statement.line.form</field>
+           <field name="model">wizard.reconcile.payment.statement.line</field>
+           <field name="arch" type="xml">
+                <form string="Reconcile payments with statement lines">
+                    <group>
+                        <field name="journal_id" domain="[('type', '=', 'bank')]" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="bank_statement_id" domain="[('journal_id', '=', journal_id),('state', '=', 'open')]" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="bank_statement_line_id" domain="[('statement_id', '=', bank_statement_id),('journal_entry_ids', '=', False)]" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="currency_id" invisible="1"/>
+                        <newline/>
+                        <field name="amount_selected"/>
+                        <field name="statement_line_amount"/>
+                    </group>
+                    <footer>
+                        <button string="Reconcile" name="action_reconcile" icon="fa-check" type="object" colspan="2"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+           </field>
+      </record>
+
+       <act_window
+            id="action_reconcile_bank_lines_w_statements"
+            name="Reconcile with statements"
+            res_model="wizard.reconcile.payment.statement.line"
+            src_model="bank.payment.line"
+            view_id="wizard_reconcile_payment_statement_line_form"
+            view_mode="form"
+            key2="client_action_multi"
+            target="new"/>
+
+</odoo>

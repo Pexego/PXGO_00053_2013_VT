@@ -51,3 +51,16 @@ class PaymentOrderLine(models.Model):
                                 banking_mandate_valid[0]['partner_bank_id'][0],
                             })
         return super().create(vals)
+
+
+class BankPaymentLine(models.Model):
+
+    _inherit = "bank.payment.line"
+
+    mandate_id = fields.Many2one("account.banking.mandate", "Mandate",
+                                 related="payment_line_ids.mandate_id",
+                                 readonly=True)
+    mandate_scheme = fields.Selection([('CORE', 'Basic (CORE)'),
+                                       ('B2B', 'Enterprise (B2B)')],
+                                      string='Scheme', readonly=True,
+                                      related="mandate_id.scheme")
