@@ -38,7 +38,7 @@ class RappelCalculated(models.Model):
             for rp in self.browse(rappels_to_invoice):
                 if not rp.invoice_id:
                     rappel_product = rp.rappel_id.type_id.product_id
-                    account_id = rappel_product.property_account_income
+                    account_id = rappel_product.property_account_income_id
                     if not account_id:
                         account_id = rappel_product.categ_id. \
                             property_account_income_categ_id
