@@ -141,19 +141,6 @@ class AccountInvoice(models.Model):
 
     @api.model
     def create(self, vals):
-        onchanges = {
-            '_onchange_partner_id': ['partner_bank_id']
-        }
-        for onchange_method, changed_fields in list(onchanges.items()):
-            if any(f not in vals or vals[f] == False for f in changed_fields):
-                invoice = self.new(vals)
-                getattr(invoice, onchange_method)()
-                for field in changed_fields:
-                    if field not in vals or not vals[field] and invoice[field]:
-                        vals[field] = invoice._fields[field].convert_to_write(
-                            invoice[field], invoice,
-                        )
-
         if vals.get('partner_id', False):
             partner = self.env["res.partner"].browse(vals["partner_id"])
             if partner.commercial_partner_id.attach_picking:
@@ -172,12 +159,6 @@ class AccountInvoice(models.Model):
             self.team_id = p.commercial_partner_id.team_id.id
             self.currency_id = p.commercial_partner_id.\
                 property_purchase_currency_id.id or self.env.user.company_id.currency_id.id
-            bank_ids = p.commercial_partner_id.bank_ids.filtered("active")
-            bank_id = bank_ids[0].id if bank_ids else False
-            self.partner_bank_id = bank_id
-            domain = {'partner_bank_id': [('id', 'in', bank_ids.ids)]}
-            if domain:
-                result['domain'] = domain
         return result
 
     @api.multi
