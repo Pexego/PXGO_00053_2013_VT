@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-14 10:02+0000\n"
-"PO-Revision-Date: 2019-07-14 10:02+0000\n"
+"POT-Creation-Date: 2019-07-16 19:17+0000\n"
+"PO-Revision-Date: 2019-07-16 19:17+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account_payment_order.py:16
+#: code:addons/custom_account/models/account_payment_order.py:17
 #, python-format
 msgid "\n"
 "Missing SEPA Direct Debit mandate on the bank payment line with partner '%s' (reference '%s')."
@@ -24,7 +24,7 @@ msgstr "\n"
 "No se ha encontrado un mandato sepa en la line bancaria de la empresa '%s' (referencia '%s')."
 
 #. module: custom_account
-#: code:addons/custom_account/models/account_payment_order.py:21
+#: code:addons/custom_account/models/account_payment_order.py:22
 #, python-format
 msgid "\n"
 "The SEPA Direct Debit mandate with reference '%s' for partner '%s' has expired."
@@ -32,7 +32,7 @@ msgstr "\n"
 "El mandato SEPA con referencia '%s' para la empresaa '%s' ha expirado."
 
 #. module: custom_account
-#: code:addons/custom_account/models/account_payment_order.py:27
+#: code:addons/custom_account/models/account_payment_order.py:29
 #, python-format
 msgid "\n"
 "The mandate with reference '%s' for partner '%s' has type set to 'One-Off' and it has a last debit date set to '%s', so we can't use it."
@@ -55,9 +55,19 @@ msgid "Account bank"
 msgstr "Cuenta bancaria"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_dst_account_id
+msgid "Account dest."
+msgstr "Cuenta destino"
+
+#. module: custom_account
 #: model:ir.model,name:custom_account.model_account_voucher
 msgid "Accounting Voucher"
 msgstr "Comprobantes contables"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_dst_date
+msgid "Accounting date"
+msgstr "Fecha contable"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_report_account_treasury_forecast_analysis_accumulative_balance
@@ -86,6 +96,12 @@ msgstr "Importe"
 #, python-format
 msgid "Amounts have to be the same"
 msgstr "Los importes tienen que ser los mismos"
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:18
+#, python-format
+msgid "Any entry selected"
+msgstr "Ningún apunte seleccionado"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_area_id
@@ -158,6 +174,7 @@ msgid "CIF/NIF/VAT"
 msgstr "CIF/NIF/VAT"
 
 #. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.wizard_reclassify_move_line_balance_form
 #: model:ir.ui.view,arch_db:custom_account.wizard_reconcile_payment_statement_line_form
 msgid "Cancel"
 msgstr "Cancelar"
@@ -199,6 +216,7 @@ msgstr "País"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_create_uid
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_create_uid
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_create_uid
 msgid "Created by"
 msgstr "Creado por"
@@ -210,6 +228,7 @@ msgstr "Fecha de alta"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_create_date
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_create_date
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_create_date
 msgid "Created on"
 msgstr "Creado en"
@@ -263,6 +282,7 @@ msgstr "Recibo domiciliado"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_display_name
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_display_name
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
@@ -309,6 +329,7 @@ msgstr "Información general"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_id
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_id
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_id
 msgid "ID"
 msgstr "ID (identificación)"
@@ -360,6 +381,7 @@ msgstr "Será reflejado en el análisis de tesorería"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_journal
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_journal_id
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_journal_id
 msgid "Journal"
 msgstr "Diario"
@@ -371,6 +393,7 @@ msgstr "Apuntes contables"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity___last_update
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance___last_update
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line___last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
@@ -382,12 +405,14 @@ msgstr "Último Pago"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_write_uid
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_write_uid
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_write_uid
 msgid "Last Updated by"
 msgstr "Última actualización de"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_write_date
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_write_date
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_write_date
 msgid "Last Updated on"
 msgstr "Última actualización en"
@@ -506,6 +531,12 @@ msgstr "Número"
 #: model:ir.model.fields,field_description:custom_account.field_account_treasury_forecast_check_old_open_supplier
 msgid "Old (opened)"
 msgstr "Retrasadas (abiertas)"
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:20
+#, python-format
+msgid "Only can select one entry to reclassify."
+msgstr "Sólo puede seleccionar un apunte para reclasificar."
 
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.bank_payment_line_search_add_filters
@@ -668,6 +699,18 @@ msgstr "Quants"
 #: model:ir.model,name:custom_account.model_sale_order
 msgid "Quotation"
 msgstr "Ventas"
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.action_reclassify_entry_wzd
+#: model:ir.ui.view,arch_db:custom_account.wizard_reclassify_move_line_balance_form
+msgid "Reclassify"
+msgstr "Reclasificar"
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:36
+#, python-format
+msgid "Reclassify: "
+msgstr "Reclasificación: "
 
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.wizard_reconcile_payment_statement_line_form
@@ -930,6 +973,12 @@ msgid "Without ef"
 msgstr "Sin ef"
 
 #. module: custom_account
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:29
+#, python-format
+msgid "You are trying to reclassify one entry that are already reconciled!"
+msgstr "¡Está intentando reclasificar un apunte que ya está conciliado!"
+
+#. module: custom_account
 #: model:ir.model,name:custom_account.model_bank_maturity
 msgid "bank.maturity"
 msgstr "bank.maturity"
@@ -938,6 +987,11 @@ msgstr "bank.maturity"
 #: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
 msgid "country"
 msgstr "País"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_wizard_reclassify_move_line_balance
+msgid "wizard.reclassify.move.line.balance"
+msgstr "wizard.reclassify.move.line.balance"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_wizard_reconcile_payment_statement_line
