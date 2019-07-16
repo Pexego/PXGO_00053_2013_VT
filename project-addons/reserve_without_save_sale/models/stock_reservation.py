@@ -129,7 +129,7 @@ class StockReservation(models.Model):
     def delete_orphan_reserves(self):
         now = fields.Datetime.now()
         d = datetime.strptime(now, '%Y-%m-%d %H:%M:%S') + \
-            timedelta(minutes=-30)
+            timedelta(minutes=-10)
         last_date = datetime.strftime(d, '%Y-%m-%d %H:%M:%S')
         reserves = self.search([('create_date', '<=', last_date),
                                 ('sale_line_id', '=', False),
