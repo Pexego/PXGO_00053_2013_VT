@@ -5,7 +5,7 @@ from odoo import api, fields, models
 class StockMove(models.Model):
 
     _inherit = "stock.move"
-    _order = 'has_reservations desc, sequence, picking_id, id'
+    _order = 'has_reservations, sequence, picking_id, id'
 
     reservation_ids = fields.One2many("stock.reservation", "move_id",
                                       "Reservations", readonly=True)
@@ -25,8 +25,9 @@ class StockMove(models.Model):
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):
-        if self.env.context.get('bypass_order'):
-            order = 'has_reservations desc, sequence, picking_id, id'
+        if self.env.context.get('reverse_order'):
+            order = \
+                'has_reservations,sequence desc,picking_id desc,id desc'
         return super().search(args, offset=offset, limit=limit, order=order,
                               count=count)
 
@@ -36,6 +37,6 @@ class ProcurementGroup(models.Model):
 
     @api.model
     def _run_scheduler_tasks(self, use_new_cursor=False, company_id=False):
-        super(ProcurementGroup, self.with_context(bypass_order=True)).\
+        super(ProcurementGroup, self.with_context(reverse_order=True)).\
             _run_scheduler_tasks(use_new_cursor=use_new_cursor,
                                  company_id=company_id)

@@ -133,22 +133,9 @@ class StockMove(models.Model):
                                            'partially_available']),
                           ('picking_type_code', '=', 'outgoing'),
                           ('product_id', '=', move.product_id.id)]
-                reserve_ids = self.env["stock.reservation"].\
-                    search([('product_id', '=', move.product_id.id),
-                            ('state', 'in', ['confirmed',
-                                             'partially_available']),
-                            ('sale_line_id', '!=', False)])
-                if reserve_ids:
-                    reserve_move_ids = reserve_ids.mapped('move_id').ids
-                    domain = [('state', 'in', ['confirmed',
-                                               'partially_available']),
-                              ('product_id', '=', move.product_id.id),
-                              '|', ('picking_type_code', '=', 'outgoing'),
-                              ('id', 'in', reserve_move_ids)]
-
                 confirmed_ids = self.\
                     search(domain, limit=None,
-                           order="has_reservations desc, sequence, picking_id, id")
+                           order="has_reservations,sequence,picking_id,id")
                 if confirmed_ids:
                     confirmed_ids._action_assign()
         return res
