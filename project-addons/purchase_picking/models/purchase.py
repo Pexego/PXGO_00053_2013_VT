@@ -83,15 +83,6 @@ class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
 
-    @api.onchange('product_id')
-    def onchange_product_id(self):
-        super().onchange_product_id()
-        product_lang = self.product_id.with_context(
-            lang=self.partner_id.lang,
-            partner_id=self.partner_id.id,
-        )
-        self.name = '[%s] %s' % (product_lang.ref_manufacturer or product_lang.display_name, product_lang.display_name)
-
     @api.multi
     def _prepare_stock_moves(self, picking):
         res = super(PurchaseOrderLine, self)._prepare_stock_moves(picking)
