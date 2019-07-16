@@ -142,3 +142,8 @@ msgstr "¡Por favor, téngalo en cuenta!"
 #, python-format
 msgid "Some of the products of this order {} aren't available now"
 msgstr "Algunos de los productos del pedido {} no estan disponibles actualmente"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_tree_add_date
+msgid "Invoice type"
+msgstr "Tipo de facturación"
