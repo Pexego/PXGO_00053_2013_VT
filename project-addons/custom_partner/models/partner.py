@@ -676,25 +676,7 @@ class ResPartner(models.Model):
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
-    ref_line = fields.Char("Payment Reference", related='move_id.vref')
-
-
-class AccountMove(models.Model):
-    _inherit = 'account.move'
-
-    vref = fields.Char("Reference")
-
-
-class AccountVoucher(models.Model):
-    _inherit = 'account.voucher'
-
-    @api.multi
-    def account_move_get(self):
-
-        move = super(AccountVoucher, self).account_move_get()
-        move['vref'] = self.reference
-
-        return move
+    ref_line = fields.Char("Payment Reference", related='move_id.ref')
 
 
 class ProductSupplierInfo(models.Model):
