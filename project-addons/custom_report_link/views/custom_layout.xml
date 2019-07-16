@@ -920,9 +920,9 @@
 
                             <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2" t-field="o.payment_mode_id.note"/>
                         </t>
-                        <t t-if="o.partner_bank_id">
+                        <t t-if="o.mandate_id">
                             <strong>Bank Account:</strong>
-                            <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2" id ="bankAcc" t-field="o.partner_bank_id.acc_number"/>
+                            <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2" id ="bankAcc" t-field="o.mandate_id.partner_bank_id.acc_number"/>
                         </t>
                         <script>shortText1()</script>
                     </t>

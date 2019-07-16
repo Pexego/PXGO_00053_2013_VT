@@ -7,3 +7,4 @@ from . import payment
 from . import purchase
 from . import stock
 from . import email_template
+from . import account_banking_mandate
