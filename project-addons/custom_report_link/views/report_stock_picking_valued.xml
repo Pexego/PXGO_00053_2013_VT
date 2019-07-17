@@ -76,7 +76,7 @@
                                               <td class="text-center"><span t-field="move.sale_line_id.price_unit" t-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
                                               <td class="text-center"><span t-esc="'%.1f'% move.sale_line_id.discount"/> %</td>
                                               <td class="text-center"><span t-esc="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))" t-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
-                                              <td class="text-center"><span t-field="move.sale_line_id.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
+                                              <td class="text-center"><span t-esc="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.product_uom_qty" t-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
                                           </t>
                                       </tr>
                                 </tbody>
