@@ -1639,10 +1639,10 @@ SWIFT/BIC: BESCPTPL
                     <div>
                         <span t-if="o.partner_id">
                             <div style="font-size:23px;">Picking</div>
-                            <span t-if=" lang != 'fr_FR'">
+                            <span t-if=" lang != 'fr_FR' and lang != 'de_DE'">
                                 <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
-                            <span t-if="lang == 'fr_FR'">
+                            <span t-if="lang == 'fr_FR' or lang == 'de_DE'">
                                 <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                         </span>
@@ -1859,6 +1859,12 @@ SWIFT/BIC: BESCPTPL
             </t>
             <t t-if="lang == 'pt_PT'">
                 <p style="font-size:12px; color:#6D6E70;">
+                    Esta guia de transporte somente reflete o material físico enviado pelo nosso armazém, referências relacionadas com serviços, como os gastos de envio, não aparecem na guia de transporte, mas podem ser consultadas na fatura correspondente ao pedido. Deve-se ter em conta que os kits ou pacotes aparecem desglosados
+                </p>
+            </t>
+            <t t-if="lang == 'de_DE'">
+                <p style="font-size:12px; color:#6D6E70;">
+                    Mit diesem Lieferschein wird nur das von unserem Lager gelieferte Material aufgeschlüsselt. Konzepte im Zusammenhang mit Dienstleistungen wie Versandkosten sind hier nicht aufgeführt, können jedoch in der entsprechenden Rechnung eingesehen werden. Denken Sie daran, dass die Kits oder Packs in ihre Bestandteile zerlegt sind
                 </p>
             </t>
 
