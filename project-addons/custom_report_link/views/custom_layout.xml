@@ -1681,40 +1681,8 @@ SWIFT/BIC: BESCPTPL
         </div>
 
 
-        <div class="footer"><!--
-        <t t-if="o.partner_id.parent_id.lang == 'es_ES'">
-            <pre>
-                Este albarán solo recoge el material enviado por nuestro almacén, conceptos asociados a servicios como los gastos de envío no aparecen aquí detallados pero pueden ser consultados en la correspondiente factura. Tenga en cuenta que los kits o packs aparecen desglosados en sus componentes
-            </pre>
-        </t>
-        <t t-if="o.partner_id.parent_id.lang == 'en_US'">
-            <pre>
-                This delivery note only includes the material sent out by our warehouse. Concepts associated to services such as shipping costs are not listed here but can be consulted in the corresponding invoice. Please note that the kits and packs are separated into their components
-            </pre>
-        </t>
-        <t t-if="o.partner_id.parent_id.lang == 'fr_FR'">
-            <pre>
-                Sur ce bordereau de livraison est noté uniquement le matériel envoyé par notre entrepôt. Des concepts liés au service comme les frais d'envoie ne figurent pas ici, mais vous pouvez les consulter sur les prochaines factures. Il faut tenir en  compte que les kits et les packs sont détaillés dans ses composants
-            </pre>
-        </t>
-        <t t-if="o.partner_id.parent_id.lang == 'it_IT'">
-            <pre>
-                Questo documento di trasporto indica unicamente il materiale inviato dai nostri magazzini,  mentre le voci associate ai servizi correlati, come le spese di spedizione, non sono indicate e  possono essere consultate nella fattura corrispondente. Consideri che i kit o pack sono dettagliati nei pezzi che li compongono
-            </pre>
-        </t>
-        <t t-if="o.partner_id.parent_id.lang == 'pt_PT'">
-            <pre>
-            </pre>
-        </t>-->
+        <div class="footer">
 
-            <!-- Obtener el idioma del cliente dependiendo de si es un contacto o una empresa -->
-            <t t-set="lang" t-value="'undefined'"/>
-            <t t-if="o.partner_id.parent_id.id">
-                <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
-            </t>
-            <t t-if="not o.partner_id.parent_id.id">
-                <t t-set="lang" t-value="o.partner_id.lang"/>
-            </t>
             <!-- Calcular la divisa del widget para tener en cuenta casos en los que es null y que no dé error al general el informe -->
             <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id.id"/>
             <t t-if="monetary_widget">
@@ -1724,95 +1692,90 @@ SWIFT/BIC: BESCPTPL
                 <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
             </t>
 
-        <t t-set="taxes" t-value="{}"/>
-        <t t-set="last_pack" t-value="empty"/>
-        <t t-set="total_price" t-value="0"/>
-        <t t-set="total_tax" t-value="0"/>
+            <t t-set="taxes" t-value="{}"/>
+            <t t-set="last_pack" t-value="empty"/>
+            <t t-set="total_tax" t-value="0"/>
 
-        <t t-foreach="o.move_lines" t-as="move">
+            <t t-foreach="o.move_lines" t-as="move">
 
-            <!-- Obtener las diferentes tasas del pedido asociado si es un pack -->
-            <t t-if="move.phantom_bom_component is True">
-                <tr>
-                    <tr t-if="last_pack != move.sale_line_id.product_id">
-                        <t t-set="current_total_price" t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.sale_line_id.product_uom_qty"/>
-                        <t t-set="total_price" t-value="total_price + current_total_price"/>
-
-                        <t t-foreach="move.sale_line_id.tax_id" t-as="t">
-
-                            <t t-if="t in taxes">
-                                <t t-esc="taxes.update({t:(taxes[t] + move.sale_line_id.price_subtotal + total_price)})"/>
+                <!-- Obtener las diferentes tasas del pedido asociado si es un pack -->
+                <t t-if="move.phantom_bom_component is True">
+                    <tr>
+                        <tr t-if="last_pack != move.sale_line_id.product_id">
+                            <t t-set="current_total_price" t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.sale_line_id.product_uom_qty"/>
+                            <t t-foreach="move.sale_line_id.tax_id" t-as="t">
+                                <t t-if="t in taxes">
+                                    <t t-esc="taxes.update({t:(taxes[t] + current_total_price)})"/>
+                                </t>
+                                <t t-if="t not in taxes">
+                                    <t t-esc="taxes.update({t:current_total_price})"/>
+                                </t>
                             </t>
-                            <t t-if="t not in taxes">
-                                <t t-esc="taxes.update({t:move.sale_line_id.price_subtotal + total_price})"/>
-                            </t>
-                        </t>
 
-                        <t t-set="product_tax" t-value="move.sale_line_id.tax_id.amount"/>
-                        <t t-set="total_tax" t-value="total_tax + (product_tax * current_total_price)"/>
-                        <t t-set="last_pack" t-value="move.sale_line_id.product_id"/>
+                            <t t-set="product_tax" t-value="move.sale_line_id.tax_id.amount"/>
+                            <t t-set="total_tax" t-value="total_tax + (product_tax * current_total_price)"/>
+                            <t t-set="last_pack" t-value="move.sale_line_id.product_id"/>
+                        </tr>
                     </tr>
-                </tr>
-            </t>
+                </t>
 
-            <!-- Obtener las diferentes tasas del pedido asociado si no es un pack -->
+                <!-- Obtener las diferentes tasas del pedido asociado si no es un pack -->
 
-            <t t-if="move.phantom_bom_component is False ">
+                <t t-if="move.phantom_bom_component is False ">
 
-                <t t-foreach="move.sale_line_id.tax_id" t-as="t">
-                    <t t-if="t in taxes">
-                        <t t-esc="taxes.update({t:(taxes[t] + move.sale_line_id.price_subtotal)})"/>
-                    </t>
-                    <t t-if="t not in taxes">
-                        <t t-esc="taxes.update({t:move.sale_line_id.price_subtotal})"/>
+                    <t t-foreach="move.sale_line_id.tax_id" t-as="t">
+                        <t t-if="t in taxes">
+                            <t t-esc="taxes.update({t:(taxes[t] + move.sale_line_id.price_subtotal)})"/>
+                        </t>
+                        <t t-if="t not in taxes">
+                            <t t-esc="taxes.update({t:move.sale_line_id.price_subtotal})"/>
+                        </t>
                     </t>
                 </t>
             </t>
-        </t>
 
-        <div class="row">
-            <table class="table table-condensed">
-                <thead>
-                    <tr style="font-size:12px; color:#da1f2e">
-                        <th><strong>Taxes</strong></th>
-                        <th><strong>Price (ex tax)</strong></th>
-                        <th><strong>Taxes Amount</strong></th>
-                        <th><strong>TOTAL</strong></th>
-                    </tr>
-                </thead>
-                <tbody style="font-size:12px; color:#6D6E70;">
-
-
-                    <t t-set="final_price" t-value="0"/>
-                    <t t-foreach="taxes" t-as="t">
-                        <tr>
-                            <td><span t-esc="t.name"/></td>
-                            <td><span t-esc="t_value" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
-                            <td><span t-esc="(t.amount * t_value)/100" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
-
-                            <t t-set="partial_price" t-value="(((t.amount * t_value)/100) + t_value)" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
-                            <t t-set="final_price" t-value="final_price + partial_price"/>
-
-                            <t t-if="len(taxes) == 1">
-                                <td><strong t-esc="partial_price" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}" /></td>
-                            </t>
-                            <t t-if="len(taxes) != 1">
-                                <t><td/></t>
-                            </t>
+            <div class="row">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr style="font-size:12px; color:#da1f2e">
+                            <th><strong>Taxes</strong></th>
+                            <th><strong>Price (ex tax)</strong></th>
+                            <th><strong>Taxes Amount</strong></th>
+                            <th><strong>TOTAL</strong></th>
                         </tr>
-                    </t>
+                    </thead>
+                    <tbody style="font-size:12px; color:#6D6E70;">
 
-                    <tr style="color:#6D6E70">
-                        <t><td/></t>
-                        <t><td/></t>
-                        <t><td/></t>
-                        <td><strong t-esc="final_price"  t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
-                    </tr>
 
-                </tbody>
-            </table>
-        </div>
-            <div style="font-size:13px; color:#da1f2e">
+                        <t t-set="final_price" t-value="0"/>
+                        <t t-foreach="taxes" t-as="t">
+                            <tr>
+                                <td><span t-esc="t.name"/></td>
+                                <td><span t-esc="t_value" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
+                                <td><span t-esc="(t.amount * t_value)/100" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
+
+                                <t t-set="partial_price" t-value="(((t.amount * t_value)/100) + t_value)" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
+                                <t t-set="final_price" t-value="final_price + partial_price"/>
+
+                                <t t-if="len(taxes) == 1">
+                                    <td><strong t-esc="partial_price" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}" /></td>
+                                </t>
+                                <t t-if="len(taxes) != 1">
+                                    <t><td/></t>
+                                </t>
+                            </tr>
+                        </t>
+                        <tr style="color:#6D6E70">
+                            <t><td/></t>
+                            <t><td/></t>
+                            <t><td/></t>
+                            <td><strong t-esc="final_price"  t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+            <!--div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left col-xs-6 row">
                     <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.note">
                         <strong>Terms and Conditions:</strong>
@@ -1863,7 +1826,42 @@ SWIFT/BIC: BESCPTPL
             </div>
             <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
                 <label><t t-raw="company.name"/> <span t-field="company.report_footer"/></label>
-            </div>
+            </div-->
+
+            <!-- Obtener el idioma del cliente dependiendo de si es un contacto o una empresa -->
+            <t t-set="lang" t-value="'undefined'"/>
+            <t t-if="o.partner_id.parent_id.id">
+                <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
+            </t>
+            <t t-if="not o.partner_id.parent_id.id">
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+            </t>
+
+            <t t-if="lang == 'es_ES'">
+                <p style="font-size:12px; color:#6D6E70;">
+                    Este albarán solo recoge el material enviado por nuestro almacén, conceptos asociados a servicios como los gastos de envío no aparecen aquí detallados pero pueden ser consultados en la correspondiente factura. Tenga en cuenta que los kits o packs aparecen desglosados en sus componentes
+                </p>
+            </t>
+            <t t-if="lang == 'en_US'">
+                <p style="font-size:12px; color:#6D6E70;">
+                    This delivery note only includes the material sent out by our warehouse. Concepts associated to services such as shipping costs are not listed here but can be consulted in the corresponding invoice. Please note that the kits and packs are separated into their components
+                </p>
+            </t>
+            <t t-if="lang == 'fr_FR'">
+                 <p style="font-size:12px; color:#6D6E70;">
+                    Sur ce bordereau de livraison est noté uniquement le matériel envoyé par notre entrepôt. Des concepts liés au service comme les frais d'envoie ne figurent pas ici, mais vous pouvez les consulter sur les prochaines factures. Il faut tenir en  compte que les kits et les packs sont détaillés dans ses composants
+                </p>
+            </t>
+            <t t-if="lang == 'it_IT'">
+                <p style="font-size:12px; color:#6D6E70;">
+                    Questo documento di trasporto indica unicamente il materiale inviato dai nostri magazzini,  mentre le voci associate ai servizi correlati, come le spese di spedizione, non sono indicate e  possono essere consultate nella fattura corrispondente. Consideri che i kit o pack sono dettagliati nei pezzi che li compongono
+                </p>
+            </t>
+            <t t-if="lang == 'pt_PT'">
+                <p style="font-size:12px; color:#6D6E70;">
+                </p>
+            </t>
+
         </div>
 
 
