@@ -52,7 +52,7 @@ class ProductPricelistItem(models.Model):
                         item.pricelist_calculated_price = product_id.standard_price * (1 - rule.price_discount / 100)
 
     @api.multi
-    @api.depends('fixed_price', 'product_id.standard_price_2')
+    @api.depends('fixed_price', 'product_id.standard_price_2', 'product_tmpl_id.standard_price_2')
     def _get_margin(self):
         for item in self:
             product_id = item.product_tmpl_id or item.product_id.product_tmpl_id
