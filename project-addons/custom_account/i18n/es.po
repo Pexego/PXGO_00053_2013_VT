@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-16 19:17+0000\n"
-"PO-Revision-Date: 2019-07-16 19:17+0000\n"
+"POT-Creation-Date: 2019-07-19 14:09+0000\n"
+"PO-Revision-Date: 2019-07-19 14:09+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -92,13 +92,30 @@ msgid "Amount"
 msgstr "Importe"
 
 #. module: custom_account
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:45
+#, python-format
+msgid "Amount to classify cannot be higher than selected amount"
+msgstr "El importe a reclasificar no puede ser mayor al importe seleccionado"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_amount
+msgid "Amount to reclassify"
+msgstr "Importe a reclasificar"
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:43
+#, python-format
+msgid "Amount to reclassify must be positive"
+msgstr "El importe a reclasificar tiene que ser positivo"
+
+#. module: custom_account
 #: code:addons/custom_account/wizard/reconline_payment_with_statement_lines_wzd.py:36
 #, python-format
 msgid "Amounts have to be the same"
 msgstr "Los importes tienen que ser los mismos"
 
 #. module: custom_account
-#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:18
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:37
 #, python-format
 msgid "Any entry selected"
 msgstr "Ningún apunte seleccionado"
@@ -239,6 +256,7 @@ msgid "Credit Note"
 msgstr "Rectificativa"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_currency_id
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_currency_id
 msgid "Currency"
 msgstr "Moneda"
@@ -533,7 +551,7 @@ msgid "Old (opened)"
 msgstr "Retrasadas (abiertas)"
 
 #. module: custom_account
-#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:20
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:39
 #, python-format
 msgid "Only can select one entry to reclassify."
 msgstr "Sólo puede seleccionar un apunte para reclasificar."
@@ -707,7 +725,7 @@ msgid "Reclassify"
 msgstr "Reclasificar"
 
 #. module: custom_account
-#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:36
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:103
 #, python-format
 msgid "Reclassify: "
 msgstr "Reclasificación: "
@@ -807,6 +825,11 @@ msgid "Second Email"
 msgstr "Correo Contabilidad"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_selected_amount
+msgid "Selected amount"
+msgstr "Importe seleccionado"
+
+#. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
 msgid "Set date to all order lines"
 msgstr "Asigna fecha a todas las lineas del pedido de compra"
@@ -876,6 +899,12 @@ msgstr "El código del producto debe ser único."
 #: model:ir.model.fields,help:custom_account.field_account_invoice_partner_commercial
 msgid "The internal user that is in charge of communicating with this contact if any."
 msgstr "El usuario interno encargado de comunicarse con este contacto si lo hubiese."
+
+#. module: custom_account
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:58
+#, python-format
+msgid "The line selected has not amount to reclassify"
+msgstr "La linea seleccionada no tiene importe para reclasificar"
 
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.purchase_order_form_inherit
@@ -973,7 +1002,7 @@ msgid "Without ef"
 msgstr "Sin ef"
 
 #. module: custom_account
-#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:29
+#: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:55
 #, python-format
 msgid "You are trying to reclassify one entry that are already reconciled!"
 msgstr "¡Está intentando reclasificar un apunte que ya está conciliado!"

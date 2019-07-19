@@ -10,6 +10,9 @@
                         <field name="journal_id" options="{'no_create': True, 'no_open': True}"/>
                         <field name="dst_date"/>
                         <field name="dst_account_id" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="currency_id" force_save="1" invisible="1"/>
+                        <field name="selected_amount" force_save="1" />
+                        <field name="amount"/>
                     </group>
                     <footer>
                         <button string="Reclassify" name="action_reclassify" icon="fa-check" type="object" colspan="2"/>
