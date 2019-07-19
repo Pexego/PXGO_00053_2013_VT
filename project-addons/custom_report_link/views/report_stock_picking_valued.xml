@@ -91,7 +91,7 @@
     <template id="report_picking_custom_valued">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
-                <t t-call="custom_report_link.report_picking_custom_valued_data" t-lang="doc.partner_id.lang" />
+                <t t-call="custom_report_link.report_picking_custom_valued_data" t-lang="doc.partner_id.commercial_partner_id.lang" />
             </t>
         </t>
     </template>
