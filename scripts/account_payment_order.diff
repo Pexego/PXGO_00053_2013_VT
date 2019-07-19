@@ -1,0 +1,13 @@
+diff --git a/account_payment_order/models/account_payment_order.py b/account_payment_order/models/account_payment_order.py
+index 2a402c1..fd53aa5 100644
+--- a/account_payment_order/models/account_payment_order.py
++++ b/account_payment_order/models/account_payment_order.py
+@@ -280,7 +280,7 @@ class AccountPaymentOrder(models.Model):
+                             payline.ml_maturity_date,
+                             requested_date))
+                 # Write requested_date on 'date' field of payment line
+-                payline.date = requested_date
++                payline.write({'date': requested_date})
+                 # Group options
+                 if order.payment_mode_id.group_lines:
+                     hashcode = payline.payment_line_hashcode()
