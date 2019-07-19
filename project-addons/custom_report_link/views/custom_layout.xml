@@ -1775,7 +1775,7 @@ SWIFT/BIC: BESCPTPL
                     </tbody>
                 </table>
             </div>
-            <!--div style="font-size:13px; color:#da1f2e">
+            <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left col-xs-6 row">
                     <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.note">
                         <strong>Terms and Conditions:</strong>
@@ -1783,7 +1783,7 @@ SWIFT/BIC: BESCPTPL
                     </t>
                 </div>
 
-                <div class="pull-right col-xs-5 row">
+                <!--div class="pull-right col-xs-5 row">
                     <strong>Bank Account:</strong>
                     <t t-if="lang == 'es_ES'">
                         <pre style="font-size:12px; color:#6D6E70">
@@ -1822,12 +1822,9 @@ SWIFT/BIC: BESCPTPL
             SWIFT/BIC: BESCPTPL
                         </pre>
                     </t>
-                </div>
+                </div!-->
             </div>
-            <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
-                <label><t t-raw="company.name"/> <span t-field="company.report_footer"/></label>
-            </div-->
-
+        <div class="pull-right col-xs-6 row">
             <!-- Obtener el idioma del cliente dependiendo de si es un contacto o una empresa -->
             <t t-set="lang" t-value="'undefined'"/>
             <t t-if="o.partner_id.parent_id.id">
@@ -1867,6 +1864,12 @@ SWIFT/BIC: BESCPTPL
                     Mit diesem Lieferschein wird nur das von unserem Lager gelieferte Material aufgeschlüsselt. Konzepte im Zusammenhang mit Dienstleistungen wie Versandkosten sind hier nicht aufgeführt, können jedoch in der entsprechenden Rechnung eingesehen werden. Denken Sie daran, dass die Kits oder Packs in ihre Bestandteile zerlegt sind
                 </p>
             </t>
+            </div>
+
+            <!--p class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
+                <label><t t-raw="company.name"/> <span t-field="company.report_footer"/></label>
+            </p-->
+
 
         </div>
 

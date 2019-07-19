@@ -7,7 +7,11 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
+                <button name="toggle_active" position="attributes">
+                <attribute name="invisible">True</attribute>
+                </button>
                 <xpath expr="//group[@name='sale']/field[@name='customer']" position="after">
+                    <field name="active"/>
                     <field name="prospective" attrs="{'invisible':[('customer', '=', False)]}"/>
                 </xpath>
             </field>
