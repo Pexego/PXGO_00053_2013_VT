@@ -697,6 +697,34 @@ class AccountVoucher(models.Model):
         return move
 
 
+class AccountPaymentOrder(models.Model):
+    _inherit = 'account.payment.order'
+
+    @api.multi
+    def _prepare_move(self, bank_lines=None):
+        vals = super()._prepare_move(bank_lines=bank_lines)
+        vals['vref'] = self.description
+        return vals
+
+    @api.multi
+    def _prepare_move_line_offsetting_account(
+            self, amount_company_currency, amount_payment_currency,
+            bank_lines):
+        vals = super().\
+            _prepare_move_line_offsetting_account(amount_company_currency,
+                                                  amount_payment_currency,
+                                                  bank_lines)
+        journal = False
+        if self.payment_mode_id.offsetting_account == 'bank_account':
+            journal = self.journal_id
+        elif self.payment_mode_id.offsetting_account == 'transfer_account':
+            journal = self.payment_mode_id.transfer_journal_id
+        if journal and ('RCONF' in journal.code or 'RPAG' in journal.code):
+            vals['blocked'] = True
+
+        return vals
+
+
 class ProductSupplierInfo(models.Model):
     _inherit = 'product.supplierinfo'
 
