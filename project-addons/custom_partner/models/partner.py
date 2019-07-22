@@ -690,11 +690,20 @@ class AccountVoucher(models.Model):
 
     @api.multi
     def account_move_get(self):
-
         move = super(AccountVoucher, self).account_move_get()
         move['vref'] = self.reference
 
         return move
+
+
+class AccountPayment(models.Model):
+    _inherit = 'account.payment'
+
+    def _get_move_vals(self, journal=None):
+        move = super()._get_move_vals(journal=journal)
+        move['vref'] = self.communication or ''
+        return move
+
 
 
 class AccountPaymentOrder(models.Model):
