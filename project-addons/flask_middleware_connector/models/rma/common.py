@@ -88,7 +88,7 @@ class ClaimLineListener(Component):
                      "name", "move_out_customer_state",
                      "internal_description", "product_returned_quantity",
                      "equivalent_product_id", "prodlot_id", "invoice_id"]
-        if record.web:
+        if 'web' in fields and record.web:
             record.with_delay(priority=10, eta=120).export_rmaproduct()
         elif not record.web:
             record.with_delay(priority=20, eta=180).unlink_rmaproduct()
