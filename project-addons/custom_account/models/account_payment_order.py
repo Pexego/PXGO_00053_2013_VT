@@ -11,26 +11,28 @@ class AccountPaymentOrder(models.Model):
     def generate_payment_file(self):
         self.ensure_one()
         errors = ""
-        for line in self.bank_line_ids:
-            if not line.mandate_id:
-                errors += _("\nMissing SEPA Direct Debit mandate on the "
-                            "bank payment line with partner '%s' "
-                            "(reference '%s').") % (line.partner_id.name,
-                                                    line.name)
-            elif line.mandate_id.state != 'valid':
-                errors += _("\nThe SEPA Direct Debit mandate with reference "
-                            "'%s' for partner '%s' has expired.") % (
-                    line.mandate_id.unique_mandate_reference,
-                    line.mandate_id.partner_id.name)
-            elif line.mandate_id.type == 'oneoff':
-                if line.mandate_id.last_debit_date:
-                    errors += _("\nThe mandate with reference '%s' for partner"
-                                " '%s' has type set to 'One-Off' and it has a "
-                                "last debit date set to '%s', so we can't use "
-                                "it.") % (
+        if self.payment_mode_id.payment_method_id.mandate_required:
+            for line in self.bank_line_ids:
+                if not line.mandate_id:
+                    errors += _("\nMissing SEPA Direct Debit mandate on the"
+                                " bank payment line with partner '%s' "
+                                "(reference '%s').") % (line.partner_id.name,
+                                                        line.name)
+                elif line.mandate_id.state != 'valid':
+                    errors += _("\nThe SEPA Direct Debit mandate with "
+                                "reference '%s' for partner '%s' has "
+                                "expired.") % (
                         line.mandate_id.unique_mandate_reference,
-                        line.mandate_id.partner_id.name,
-                        line.mandate_id.last_debit_date)
+                        line.mandate_id.partner_id.name)
+                elif line.mandate_id.type == 'oneoff':
+                    if line.mandate_id.last_debit_date:
+                        errors += _("\nThe mandate with reference '%s' for "
+                                    "partner '%s' has type set to 'One-Off' "
+                                    "and it has a last debit date set to "
+                                    "'%s', so we can't use it.") % (
+                            line.mandate_id.unique_mandate_reference,
+                            line.mandate_id.partner_id.name,
+                            line.mandate_id.last_debit_date)
         if errors:
             raise UserError(errors)
         return super().generate_payment_file()

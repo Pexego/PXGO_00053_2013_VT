@@ -432,6 +432,7 @@
 
                 <field name="vat" position="replace">
                     <field name="att"/> <!-- TODO Ya no existe campo use_parent_address: attrs="{'readonly': [('use_parent_address','=',True)]}"/> -->
+                    <field name="team_id" invisible="1" force_save="1"/>
                 </field>
                 <xpath expr="//field[@name='child_ids']/form//field[@name='street2']" position="after">
                     <field name="att" placeholder="A/A"/>

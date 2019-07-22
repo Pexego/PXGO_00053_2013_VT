@@ -76,7 +76,7 @@
                                               <td class="text-center"><span t-field="move.sale_line_id.price_unit" t-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
                                               <td class="text-center"><span t-esc="'%.1f'% move.sale_line_id.discount"/> %</td>
                                               <td class="text-center"><span t-esc="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))" t-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
-                                              <td class="text-center"><span t-field="move.sale_line_id.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
+                                              <td class="text-center"><span t-esc="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.product_uom_qty" t-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
                                           </t>
                                       </tr>
                                 </tbody>
@@ -91,7 +91,7 @@
     <template id="report_picking_custom_valued">
         <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
-                <t t-call="custom_report_link.report_picking_custom_valued_data" t-lang="doc.partner_id.lang" />
+                <t t-call="custom_report_link.report_picking_custom_valued_data" t-lang="doc.partner_id.commercial_partner_id.lang" />
             </t>
         </t>
     </template>

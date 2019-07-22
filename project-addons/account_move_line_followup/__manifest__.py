@@ -13,7 +13,10 @@
              'data/credit_control_data.xml',
              'views/credit_control_communication_view.xml',
              'views/partner_view.xml',
-             'wizard/wiz_send_followup_partner_view.xml'],
+             'wizard/wiz_send_followup_partner_view.xml',
+             "security/account_security.xml",
+             "security/ir.model.access.csv",
+             ],
     'description': '''Update follow-up data in account move lines''',
     'installable': True,
 }

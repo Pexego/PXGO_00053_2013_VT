@@ -76,7 +76,7 @@ class CreditControlRun(models.Model):
                 email.send()
 
 
-class CreditCommunication(models.TransientModel):
+class CreditCommunication(models.Model):
 
     _name = 'credit.control.communication'
     _inherit = ['credit.control.communication', 'mail.thread']
