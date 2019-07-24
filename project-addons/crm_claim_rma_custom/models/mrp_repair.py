@@ -37,7 +37,7 @@ class MrpRepair(models.Model):
             for operation in order_obj.operations.ids:
                 operation_obj = order_obj.operations.browse(operation)
                 if operation_obj.type == u'add':
-                    if not operation_obj.to_invoice:
+                    if operation_obj.state != '2binvoiced':
                         product_obj = self.env['product.product'].\
                             browse(operation_obj.product_id.id)
                         claim_obj.rma_cost += product_obj.standard_price

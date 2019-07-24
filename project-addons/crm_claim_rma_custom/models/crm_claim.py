@@ -212,7 +212,7 @@ class CrmClaimRma(models.Model):
                 'team_id': claim_obj.partner_id.team_id.id,
                 'claim_id': claim_obj.id,
                 'type': 'out_refund',
-                'payment_term_id': claim_obj.partner_id.property_payment_term_id.id,
+                'payment_term_id': False,  # Pago inmediato en rectificativas claim_obj.partner_id.property_payment_term_id.id,
                 'payment_mode_id':
                     claim_obj.partner_id.customer_payment_mode_id.id,
                 'partner_bank_id': partner_bank_id
