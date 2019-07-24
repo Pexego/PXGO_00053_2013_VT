@@ -146,7 +146,7 @@ class AccountInvoice(models.Model):
             if partner.commercial_partner_id.attach_picking:
                 vals["attach_picking"] = \
                     partner.commercial_partner_id.attach_picking
-            if vals["type"] == "out_refund":
+            if vals.get('type', False) == "out_refund":
                 # vencimiento inmediato en rectificativas
                 vals["payment_term_id"] = False
                 vals["date_due"] = fields.Date.today()
