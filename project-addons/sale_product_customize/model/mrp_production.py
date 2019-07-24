@@ -24,7 +24,7 @@ class MrpProduction(models.Model):
     def action_assign(self):
         res = super().action_assign()
         for production in self:
-            for move in production.move_lines:
+            for move in production.move_raw_ids:
                 if move.state == 'confirmed':
                     reserv_dict = {
                         'date_validity': False,
@@ -122,7 +122,7 @@ class MrpProductProduce(models.TransientModel):
             "Production Id should be specified in context as a Active ID."
         production = self.env['mrp.production'].browse(production_id)
         if not self.lot_id and self.final_lot:
-            for line in self.consume_lines:
+            for line in self.produce_line_ids:
                 if line.final_lot and line.lot_id:
                     self.lot_id = self.env['stock.production.lot'].create(
                         {'name': line.lot_id.name,
@@ -130,19 +130,19 @@ class MrpProductProduce(models.TransientModel):
         super(MrpProductProduce, self).do_produce()
         return True
 
-# TODO: Migrar
-    # ~ @api.one
-    # ~ @api.depends('consume_lines')
-    # ~ def _get_final_lot(self):
-        # ~ final_lot = False
-        # ~ production = self.env['mrp.production'].browse(
-            # ~ self.env.context.get('active_id'))
-        # ~ for line in self.consume_lines:
-            # ~ if line.final_lot:
-                # ~ final_lot = True
-        # ~ if production.final_prod_lot:
-            # ~ final_lot = True
-        # ~ self.final_lot = final_lot
+
+    @api.one
+    @api.depends('produce_line_ids')
+    def _get_final_lot(self):
+        final_lot = False
+        production = self.env['mrp.production'].browse(
+            self.env.context.get('active_id'))
+        for line in self.produce_line_ids:
+            if line.final_lot:
+                final_lot = True
+        if production.final_prod_lot:
+            final_lot = True
+        self.final_lot = final_lot
 
 
 # TODO: Migrar
