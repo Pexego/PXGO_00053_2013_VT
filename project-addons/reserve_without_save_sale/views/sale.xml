@@ -83,4 +83,18 @@
             </xpath>
     </template>
 
+    <record id="view_order_form_visibility_reserve_button" model="ir.ui.view">
+        <field name="name">sale.order.form.reserve.button</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree//button[@name='%(stock_reserve_sale.action_sale_stock_reserve)d']" position="attributes">
+                <attribute name="groups">base.group_system</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//button[@name='release_stock_reservation']" position="attributes">
+                <attribute name="groups">base.group_system</attribute>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>
