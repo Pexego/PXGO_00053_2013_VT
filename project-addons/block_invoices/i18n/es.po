@@ -113,8 +113,8 @@ msgstr "¡Cliente moroso! Por favor, contacte con el departamento de contabilida
 #. module: block_invoices
 #: code:addons/block_invoices/sale_order.py:73
 #, python-format
-msgid "Order blocked. The accounting department must approve this order."
-msgstr "Pedido bloqueado. Contabilidad debe aprobar este pedido."
+msgid "Order blocked. Approve pending"
+msgstr "Pedido bloqueado. Pendiente de aprobación"
 
 #. module: block_invoices
 #: code:addons/block_invoices/sale_order.py:73

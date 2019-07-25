@@ -70,7 +70,7 @@ class SaleOrder(models.Model):
                 raise exceptions.Warning(message)
 
         if self.blocked_magreb and self.allow_confirm_blocked is False:
-            message = _('Order blocked. The accounting department must approve this order.')
+            message = _('Order blocked. Approve pending')
             raise exceptions.Warning(message)
 
         return super()._action_confirm()
