@@ -166,6 +166,7 @@ class AccountInvoice(models.Model):
             if self.type == "out_refund":
                 self.payment_term_id = False
                 self.date_due = fields.Date.today()
+                self.payment_mode_id = self.partner_id.commercial_partner_id.customer_payment_mode_id
         return result
 
     @api.multi
