@@ -46,11 +46,7 @@ class SaleOrder(models.Model):
 
     @api.onchange('partner_id', 'team_id', 'payment_term_id')
     def onchange_block_magrep(self):
-        if ((self.team_id.name == 'Magreb' and
-                self.payment_term_id.name in ('Pago inmediato', 'Prepago')) or
-                (self.partner_id.team_id.name == 'Magreb' and
-                 self.partner_id.property_payment_term_id.name in
-                 ('Pago inmediato', 'Prepago'))) \
+        if (self.team_id.name == 'Magreb' or self.partner_id.team_id.name == 'Magreb') \
                 and self.allow_confirm_blocked is False:
             self.blocked_magreb = True
         else:
