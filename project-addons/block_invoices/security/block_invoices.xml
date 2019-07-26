@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="res.groups" id="group_unblock_magreb">
+        <field name="name">Magreb unblock</field>
+    </record>
+</odoo>
