@@ -14,8 +14,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
             # Compruebo la empresa actual y su padre...
             for partner in order.partner_id.get_partners_to_check():
                 if partner.blocked_sales and not order.allow_confirm_blocked:
-                    title = _("Warning for %s") % partner.name
-                    message = _('Customer blocked by lack of payment. \
-                        Check the maturity dates of their account move lines.')
-                    raise exceptions.UserError(title, message)
+                    message = _('Customer %s blocked by lack of payment. \
+                        Check the maturity dates of their account move lines.') % partner.name
+                    raise exceptions.UserError(message)
         return super().create_invoices()
