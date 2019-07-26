@@ -6,7 +6,7 @@
     'category': 'sale',
     'description': """""",
     'author': 'Visiotech',
-    "depends": ['base', 'sale'],
+    "depends": ['base', 'sale', 'sale_stock'],
     "data": ['security/sale_security.xml',
              'views/sale_order_view.xml'],
     "installable": True

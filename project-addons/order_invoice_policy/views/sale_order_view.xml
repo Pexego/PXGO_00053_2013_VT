@@ -7,8 +7,43 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='sale_pay']/field[@name='invoice_status']" position="after">
                 <field name="order_invoice_policy" groups="order_invoice_policy.group_change_order_invoice_policy"/>
+                <field name="invoice_status_2"/>
+            </xpath>
+            <xpath expr="//group[@name='sale_pay']/field[@name='invoice_status']" position="attributes">
+                    <attribute name="invisible">True</attribute>
             </xpath>
         </field>
+    </record>
+
+    <record id="sale_order_view_tree_invoice_status" model="ir.ui.view">
+        <field name="name">sale.order.tree.invoice.status.2</field>
+        <field name="model">sale.order</field>
+        <field name="priority">2</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="invoice_status" position="replace">
+                <field name="invoice_status_2"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="sale.action_orders_to_invoice" model="ir.actions.act_window">
+         <field name="name">Orders to Invoice</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">sale.order</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">tree,form,calendar,graph,pivot,kanban</field>
+         <field name="context">{'create': False}</field>
+         <field name="domain">[('invoice_status_2','=','to_invoice')]</field>
+         <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+         <field name="help" type="html">
+          <p>
+            You will find here all orders that are ready to be invoiced.
+          </p><p>
+            You can select all orders and invoice them in batch, or check
+            every order and invoice them one by one.
+          </p>
+         </field>
     </record>
 </odoo>
 
