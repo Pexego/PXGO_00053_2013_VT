@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='sale_pay']/field[@name='invoice_status']" position="after">
                 <field name="order_invoice_policy" groups="order_invoice_policy.group_change_order_invoice_policy"/>
-                <field name="invoice_status_2"/>
+                <field name="invoice_status_2" states="sale,done"/>
             </xpath>
             <xpath expr="//group[@name='sale_pay']/field[@name='invoice_status']" position="attributes">
                     <attribute name="invisible">True</attribute>
