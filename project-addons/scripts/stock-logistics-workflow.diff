@@ -8,7 +8,8 @@ index 03472cb..f0a543e 100644
          pickings = move_ids.mapped('picking_id')
 -        pickings.invoice_ids = [(4, self.id)]
 +        if pickings:
-+            pickings.invoice_ids = [(4, self.id)]
++            for pick in pickings:
++               pickings.invoice_ids = [(4, self.id)]
          return vals
  
  
