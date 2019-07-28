@@ -40,3 +40,33 @@ msgstr "Antes de la Entrega"
 #: model:ir.ui.view,arch_db:order_invoice_policy.view_order_form_invoice_policy
 msgid "Change policy"
 msgstr "Cambiar política"
+
+#. module: order_invoice_policy
+#: model:ir.model.fields,field_description:order_invoice_policy.field_sale_order_invoice_status_2
+msgid "Invoice Status"
+msgstr "Estado factura"
+
+#. module: order_invoice_policy
+#: selection:sale.order,invoice_status_2:0
+msgid "Nothing to Invoice"
+msgstr "Nada que facturar"
+
+#. module: order_invoice_policy
+#: selection:sale.order,invoice_status_2:0
+msgid "To Invoice"
+msgstr "Para facturar"
+
+#. module: order_invoice_policy
+#: selection:sale.order,invoice_status_2:0
+msgid "Fully Invoiced"
+msgstr "Facturado"
+
+#. module: order_invoice_policy
+#: selection:sale.order,invoice_status_2:0
+msgid "Partially invoiced"
+msgstr "Parcialmente facturado"
+
+#. module: order_invoice_policy
+#: selection:sale.order.line,invoice_status:0
+msgid "Cancelled"
+msgstr "Cancelado"
