@@ -121,3 +121,8 @@ msgstr "Pedido bloqueado. Pendiente de aprobación"
 #, python-format
 msgid "Order blocked. The client has not bank account."
 msgstr "Pedido bloqueado. El cliente no tiene cuenta bancaria."
+
+#. module: block_invoices
+#: view:sale.order:block_invoices.view_order_add_allow_confirm_form
+msgid "Approve Order"
+msgstr "Aprobar pedido"
