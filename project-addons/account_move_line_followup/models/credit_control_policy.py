@@ -73,7 +73,7 @@ class CreditControlRun(models.Model):
                 email.write({'model': 'credit.control.communication',
                              'res_id': comm.id})
                 # Send email
-                email.send()
+                email.send(auto_commit=True)
 
 
 class CreditCommunication(models.Model):
