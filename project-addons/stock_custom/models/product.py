@@ -1,8 +1,8 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 import odoo.addons.decimal_precision as dp
-import seaborn as sns
-import pandas as pd
+# import seaborn as sns
+# import pandas as pd
 from matplotlib import pyplot as plt
 from odoo import api, fields, models, _, exceptions
 from io import BytesIO
@@ -143,73 +143,73 @@ class ProductProduct(models.Model):
                     _('End date cannot be smaller than start date'))
             product.run_scheduler_graphic()
 
-    def run_scheduler_graphic(self):
-        """
-            Generate the graphs of stock and link it to the partner
-        """
-        self.ensure_one()
-        period_filter = self.period
-        if period_filter == 'week':
-            format_xlabel = "%y-W%W"
-        elif period_filter == 'year':
-            format_xlabel = "%Y"
-        else:
-            format_xlabel = "%m-%y"
-
-        def int_to_date(x):
-            return datetime(
-                time.localtime(x).tm_year, time.localtime(x).tm_mon,
-                time.localtime(x).tm_mday).strftime(format_xlabel)
-
-        data = self._get_stock_data()
-        if data:
-            # Get data
-            df = pd.DataFrame()
-            df['Date'] = list(range(len(data)))
-            df['Stock'] = [x[1] for x in data]
-
-            min_stock = min(df['Stock'])
-            max_stock = max(df['Stock'])
-            if min_stock != max_stock:
-                margin_y = (max_stock - min_stock) / 30
-                offset_axis = (max_stock - min_stock) / 10
-            else:
-                margin_y = max_stock / 100
-                offset_axis = max_stock / 10
-            margin_x = 0
-
-            # Create plot with points
-            sns.despine()
-            sns.set_style("darkgrid", {"axes.labelcolor": "#363737",
-                                       "ytick.color": "#59656d",
-                                       "xtick.color": "#59656d"})
-            sns_plot = sns.lmplot('Date', 'Stock', data=df, fit_reg=False,
-                                  height=5, aspect=1.7,
-                                  scatter_kws={"color": "#A61D34", "s": 30})
-
-            # Draw a line plot to join all points
-            sns_plot.map(plt.plot, "Date", "Stock", marker="o",
-                         ms=4, color='#A61D34')
-            plt.xticks(list(range(len(data))),
-                       [int_to_date(x[0]) for x in data])
-            [sns_plot.ax.text(p[0] - margin_x, p[1] + margin_y,
-                              '%d' % int(p[1]), color='grey',
-                              fontsize=9, ha="center")
-             for p in zip(sns_plot.ax.get_xticks(), df['Stock'])]
-
-            # Set axis config
-            plt.ylim(min_stock - offset_axis, max_stock + offset_axis)
-            sns_plot.set_xticklabels(rotation=30)
-
-            # Create the graphic with the data
-            io = BytesIO()
-            sns_plot.savefig(io, format='png')
-            io.seek(0)
-            img_data = base64.b64encode(io.getvalue())
-            plt.close()
-            self.write({'stock_graphic': img_data})
-
-        return
+    # def run_scheduler_graphic(self):
+    #     """
+    #         Generate the graphs of stock and link it to the partner
+    #     """
+    #     self.ensure_one()
+    #     period_filter = self.period
+    #     if period_filter == 'week':
+    #         format_xlabel = "%y-W%W"
+    #     elif period_filter == 'year':
+    #         format_xlabel = "%Y"
+    #     else:
+    #         format_xlabel = "%m-%y"
+    #
+    #     def int_to_date(x):
+    #         return datetime(
+    #             time.localtime(x).tm_year, time.localtime(x).tm_mon,
+    #             time.localtime(x).tm_mday).strftime(format_xlabel)
+    #
+    #     data = self._get_stock_data()
+    #     if data:
+    #         # Get data
+    #         df = pd.DataFrame()
+    #         df['Date'] = list(range(len(data)))
+    #         df['Stock'] = [x[1] for x in data]
+    #
+    #         min_stock = min(df['Stock'])
+    #         max_stock = max(df['Stock'])
+    #         if min_stock != max_stock:
+    #             margin_y = (max_stock - min_stock) / 30
+    #             offset_axis = (max_stock - min_stock) / 10
+    #         else:
+    #             margin_y = max_stock / 100
+    #             offset_axis = max_stock / 10
+    #         margin_x = 0
+    #
+    #         # Create plot with points
+    #         sns.despine()
+    #         sns.set_style("darkgrid", {"axes.labelcolor": "#363737",
+    #                                    "ytick.color": "#59656d",
+    #                                    "xtick.color": "#59656d"})
+    #         sns_plot = sns.lmplot('Date', 'Stock', data=df, fit_reg=False,
+    #                               height=5, aspect=1.7,
+    #                               scatter_kws={"color": "#A61D34", "s": 30})
+    #
+    #         # Draw a line plot to join all points
+    #         sns_plot.map(plt.plot, "Date", "Stock", marker="o",
+    #                      ms=4, color='#A61D34')
+    #         plt.xticks(list(range(len(data))),
+    #                    [int_to_date(x[0]) for x in data])
+    #         [sns_plot.ax.text(p[0] - margin_x, p[1] + margin_y,
+    #                           '%d' % int(p[1]), color='grey',
+    #                           fontsize=9, ha="center")
+    #          for p in zip(sns_plot.ax.get_xticks(), df['Stock'])]
+    #
+    #         # Set axis config
+    #         plt.ylim(min_stock - offset_axis, max_stock + offset_axis)
+    #         sns_plot.set_xticklabels(rotation=30)
+    #
+    #         # Create the graphic with the data
+    #         io = BytesIO()
+    #         sns_plot.savefig(io, format='png')
+    #         io.seek(0)
+    #         img_data = base64.b64encode(io.getvalue())
+    #         plt.close()
+    #         self.write({'stock_graphic': img_data})
+    #
+    #     return
 
     def _compute_virtual_stock_cooked(self):
         for product in self:
