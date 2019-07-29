@@ -86,7 +86,7 @@ class MiddlewareBackend(models.TransientModel):
                     invoice.with_delay().export_invoice()
             else:
                 for invoice in invoices:
-                    invoice.with_delay().update_invoice
+                    invoice.with_delay().update_invoice()
         elif self.type_export == 'pickings':
             if object_ids:
                 picking_ids = self.env['stock.picking'].browse(object_ids)
@@ -110,7 +110,7 @@ class MiddlewareBackend(models.TransientModel):
                         line.with_delay().export_pickingproduct()
             else:
                 for picking in picking_ids:
-                    picking.with_delay().update_picking
+                    picking.with_delay().update_picking()
                     for line in picking.move_lines:
                         line.with_delay().update_pickingproduct()
 

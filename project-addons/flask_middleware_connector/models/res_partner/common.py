@@ -264,7 +264,7 @@ class PartnerCategoryListener(Component):
             partner_ids = self.env['res.partner'].search(
                 [('is_company', '=', True), ('web', '=', True),
                  ('customer', '=', True), ('category_id', 'in', record.id)])
-            record.with_delay(priority=3, eta=120).unlink_partner_tag
+            record.with_delay(priority=3, eta=120).unlink_partner_tag()
 
             for partner in partner_ids:
                 partner.with_delay(
