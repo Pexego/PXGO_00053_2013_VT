@@ -1712,7 +1712,7 @@ SWIFT/BIC: BESCPTPL
                                 </t>
                             </t>
 
-                            <t t-set="product_tax" t-value="move.sale_line_id.tax_id.amount"/>
+                            <t t-set="product_tax" t-value="sum(move.sale_line_id.tax_id.mapped('amount'))"/>
                             <t t-set="total_tax" t-value="total_tax + (product_tax * current_total_price)"/>
                             <t t-set="last_pack" t-value="move.sale_line_id.product_id"/>
                         </tr>
