@@ -746,7 +746,7 @@
                 </div>
                 <div class="pull-right text-right">
                     <br/>
-                    <t t-if="o.date_invoice"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice"/></div></t>
+                    <t t-if="o.date_invoice"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice" t-options='{"format": "dd/MM/yyyy"}'/></div></t>
                     <t t-if="o.number"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Invoice: <strong style="color:#6D6E70" t-field="o.number"/></div></t>
                     <t t-if="o.partner_id.commercial_partner_id.vat"><div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.commercial_partner_id.vat"/></div></t>
                     <t t-if="o.type == 'out_refund' and o.claim_id"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Claim: <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/></div></t>
