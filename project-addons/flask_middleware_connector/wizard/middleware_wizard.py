@@ -86,7 +86,7 @@ class MiddlewareBackend(models.TransientModel):
                     invoice.with_delay().export_invoice()
             else:
                 for invoice in invoices:
-                    invoice.with_delay().update_invoice()
+                    invoice.with_delay().update_invoice(fields=None)
         elif self.type_export == 'pickings':
             if object_ids:
                 picking_ids = self.env['stock.picking'].browse(object_ids)
@@ -110,9 +110,9 @@ class MiddlewareBackend(models.TransientModel):
                         line.with_delay().export_pickingproduct()
             else:
                 for picking in picking_ids:
-                    picking.with_delay().update_picking()
+                    picking.with_delay().update_picking(fields=None)
                     for line in picking.move_lines:
-                        line.with_delay().update_pickingproduct()
+                        line.with_delay().update_pickingproduct(fields=None)
 
         elif self.type_export == 'rmas':
             rma_obj = self.env['crm.claim']
@@ -132,7 +132,7 @@ class MiddlewareBackend(models.TransientModel):
                 for rma in rmas:
                     rma.with_delay().update_rma()
                     for line in rma.claim_line_ids:
-                        line.with_delay().update_rmaproduct()
+                        line.with_delay().update_rmaproduct(fields=None)
 
         elif self.type_export == 'products':
             product_obj = self.env['product.product']
@@ -146,7 +146,6 @@ class MiddlewareBackend(models.TransientModel):
             else:
                 for product in product_ids:
                     product.with_delay().update_product()
-            product.web = 'published'
 
         elif self.type_export == 'tags':
 
@@ -199,9 +198,9 @@ class MiddlewareBackend(models.TransientModel):
                         line.with_delay().export_orderproduct()
             else:
                 for sale in sales:
-                    sale.with_delay().update_order()
+                    sale.with_delay().update_order(fields=None)
                     for line in sale.order_line:
-                        line.with_delay().update_orderproduct()
+                        line.with_delay().update_orderproduct(fields=None)
 
         elif self.type_export == 'rappel':
             rappel_obj = self.env['rappel']
@@ -214,7 +213,7 @@ class MiddlewareBackend(models.TransientModel):
                     rappel.with_delay().export_rappel()
             else:
                 for rappel in rappel_ids:
-                    rappel.with_delay().update_rappel()
+                    rappel.with_delay().update_rappel(fields=None)
 
         elif self.type_export == 'rappelsection':
             rappel_section_obj = self.env['rappel.section']
@@ -227,7 +226,7 @@ class MiddlewareBackend(models.TransientModel):
                     section.with_delay().export_rappel_section()
             else:
                 for section in rappel_section_ids:
-                    section.with_delay().update_rappel_section()
+                    section.with_delay().update_rappel_section(fields=None)
 
         elif self.type_export == 'countrystate':
             country_state_obj = self.env['res.country.state']
@@ -240,7 +239,7 @@ class MiddlewareBackend(models.TransientModel):
                     section.with_delay().export_country_state()
             else:
                 for section in country_state_ids:
-                    section.with_delay().update_country_state
+                    section.with_delay().update_country_state(fields=None)
 
         elif self.type_export == 'producttag':
             product_tag_obj = self.env['product.tag']
@@ -253,7 +252,7 @@ class MiddlewareBackend(models.TransientModel):
                     tag.with_delay().export_product_tag()
             else:
                 for tag in product_tag_ids:
-                    tag.with_delay().update_product_tag()
+                    tag.with_delay().update_product_tag(fields=None)
 
         elif self.type_export == 'producttagproductrel':
             product_obj = self.env['product.product']
