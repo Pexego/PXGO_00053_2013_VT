@@ -23,7 +23,7 @@ class SaleOrder(models.Model):
         ('partially_invoiced', 'Partially invoiced')
         ], string='Invoice Status', compute='_get_invoice_status_2', store=True, readonly=True)
 
-    @api.depends('state', 'order_line.invoice_status')
+    @api.depends('state', 'order_line.invoice_status', 'force_invoiced')
     def _get_invoice_status_2(self):
         """
         Compute the invoice status (2) of a SO. Possible statuses:
@@ -36,6 +36,8 @@ class SaleOrder(models.Model):
         for order in self:
             if order.state not in ('sale', 'done'):
                 invoice_status = 'no'
+            elif order.force_invoiced:
+                invoice_status = 'invoiced'
             elif any(line.invoice_status == 'to invoice'
                      for line in order.order_line.filtered(lambda p: p.product_id.type == 'product')) or \
                     all(line.invoice_status == 'to invoice' and line.product_id.type == 'service'
