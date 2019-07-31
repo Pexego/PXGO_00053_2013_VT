@@ -37,6 +37,14 @@ class StockPicking(models.Model):
         fields.Many2one('account.move', 'Account pending stock move',
                         readonly=True, copy=False)
 
+    @api.model
+    def create(self, vals):
+        # force the location that we've introduced by hand
+        if vals.get('move_lines', False):
+            vals['location_dest_id'] = vals['move_lines'][0][2]['location_dest_id']
+        res = super().create(vals)
+        return res
+
     @api.multi
     def account_pending_invoice(self, debit_account, credit_account, date):
         self.ensure_one()
