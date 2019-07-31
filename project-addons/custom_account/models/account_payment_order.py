@@ -36,3 +36,12 @@ class AccountPaymentOrder(models.Model):
         if errors:
             raise UserError(errors)
         return super().generate_payment_file()
+
+    @api.onchange('payment_mode_id')
+    def payment_mode_id_change(self):
+        res = super().payment_mode_id_change()
+        if self.payment_mode_id.name in ('Confirming', 'Pagaré-Talón'):
+            self.not_send_emails = True
+        else:
+            self.not_send_emails = False
+        return res
