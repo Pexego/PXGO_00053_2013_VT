@@ -9,4 +9,5 @@ class SaleOrder(models.Model):
         for order in self:
             if order.partner_id.prospective:
                 order.partner_id.write({'active': True, 'prospective': False})
-        super().action_confirm()
+        res = super().action_confirm()
+        return res
