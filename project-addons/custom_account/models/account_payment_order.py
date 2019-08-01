@@ -65,6 +65,10 @@ class AccountPaymentOrder(models.Model):
                 })
                 mail_id = template.with_context(ctx).send_mail(order.id)
                 mail_ids += mail_pool.browse(mail_id)
+            order.not_send_emails = True
+            super().send_mail()
+            order.not_send_emails = False
+
         if mail_ids:
             mail_ids.send()
 
