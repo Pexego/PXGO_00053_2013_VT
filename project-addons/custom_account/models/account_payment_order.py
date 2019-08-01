@@ -76,8 +76,5 @@ class AccountPaymentOrder(models.Model):
     @api.onchange('payment_mode_id')
     def payment_mode_id_change(self):
         res = super().payment_mode_id_change()
-        if self.payment_mode_id.name in ('Confirming', 'Pagaré-Talón'):
-            self.not_send_emails = True
-        else:
-            self.not_send_emails = False
+        self.not_send_emails = self.payment_mode_id.not_send_emails
         return res

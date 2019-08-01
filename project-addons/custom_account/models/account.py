@@ -241,6 +241,7 @@ class PaymentMode(models.Model):
     _inherit = 'account.payment.mode'
 
     blocked = fields.Boolean('No Follow-up')
+    not_send_emails = fields.Boolean('Not send emails')
 
 
 class AccountPaymentTerm(models.Model):

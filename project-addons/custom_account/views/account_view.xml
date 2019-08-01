@@ -140,6 +140,7 @@
             <field name="arch" type="xml">
                 <field name="payment_type" position="after">
                     <field name="blocked"/>
+                    <field name="not_send_emails"/>
                 </field>
             </field>
         </record>
