@@ -34,6 +34,8 @@ class ProductTemplate(models.Model):
     name = fields.Char(translate=False)
     description_sale = fields.Text(translate=False)
 
+    property_valuation = fields.Selection(default='real_time')
+
 
 class ProductProduct(models.Model):
 

@@ -36,3 +36,45 @@ class AccountPaymentOrder(models.Model):
         if errors:
             raise UserError(errors)
         return super().generate_payment_file()
+
+    @api.multi
+    def send_mail(self):
+        mail_pool = self.env['mail.mail']
+        mail_ids = self.env['mail.mail']
+        for order in self:
+            if order.not_send_emails:
+                continue
+
+            for line in order.bank_line_ids:
+                if order.payment_type == 'inbound':
+                    template = self.env.ref(
+                        'account_banking_sepa_mail.payment_order_advise_partner',
+                        False)
+                if order.payment_type == 'outbound':
+                    template = self.env.ref(
+                        'account_banking_sepa_mail.payment_order_advise_supplier',
+                        False)
+                ctx = dict(self._context)
+                ctx.update({
+                    'partner_id': line.partner_id.id,
+                    'partner_email': line.partner_id.email,
+                    # we add the email2, means the accounting email to use it later on the template
+                    'partner_email2': line.partner_id.email2,
+                    'partner_name': line.partner_id.name,
+                    'obj': line
+                })
+                mail_id = template.with_context(ctx).send_mail(order.id)
+                mail_ids += mail_pool.browse(mail_id)
+            order.not_send_emails = True
+            super().send_mail()
+            order.not_send_emails = False
+
+        if mail_ids:
+            mail_ids.send()
+
+
+    @api.onchange('payment_mode_id')
+    def payment_mode_id_change(self):
+        res = super().payment_mode_id_change()
+        self.not_send_emails = self.payment_mode_id.not_send_emails
+        return res
