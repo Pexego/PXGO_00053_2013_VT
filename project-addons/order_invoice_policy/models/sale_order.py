@@ -63,11 +63,27 @@ class SaleOrderLine(models.Model):
         lines = self.filtered(lambda sol: sol.order_id.state in ['sale', 'done']
                                           and sol.order_id.order_invoice_policy == 'prepaid'
                                           and 'assigned' in sol.move_ids.mapped('state'))
+        # Permitir facturar antes de entrega lo que esté reservado
         for line in lines:
-            # Allow to invoice only quantity with stock (reserved)
-            line.qty_to_invoice = sum(line.move_ids.filtered(lambda mv: mv.state == 'assigned').mapped('product_qty')) \
-                                  - (line.qty_invoiced - line.qty_delivered)
-
+            pack = self.env['mrp.bom']._bom_find(product=line.product_id)
+            if pack and pack.type == 'phantom':
+                # Calcular cantidad del pack a facturar
+                moves_pack = lines.move_ids.filtered(lambda mv: 'assigned' in mv.state)
+                quantities = line._get_bom_component_qty(pack)
+                assign_components_qty = {}
+                for move in moves_pack:
+                    quantities_uom = self.env['product.uom'].browse(quantities[move.product_id.id]['uom'])
+                    pack_qty = move.product_uom._compute_quantity(move.product_uom_qty, quantities_uom)
+                    if move.location_dest_id.usage == "customer":
+                        if not move.origin_returned_move_id or \
+                                (move.origin_returned_move_id and move.to_refund):
+                            if move.product_id.id not in assign_components_qty:
+                                assign_components_qty[move.product_id.id] = 0.0
+                            assign_components_qty[move.product_id.id] += pack_qty
+                assign_qty = line.get_pack_quantity(assign_components_qty, quantities)
+            else:
+                assign_qty = sum(line.move_ids.filtered(lambda mv: mv.state == 'assigned').mapped('product_qty'))
+            line.qty_to_invoice = assign_qty - (line.qty_invoiced - line.qty_delivered)
         super(SaleOrderLine, self - lines)._get_to_invoice_qty()
 
     @api.depends('move_ids.state')
@@ -83,4 +99,24 @@ class SaleOrderLine(models.Model):
                     and line.move_ids \
                     and all(move.state == 'cancel' for move in line.move_ids):
                 line.invoice_status = 'cancel'
+
+    def _get_invoice_qty(self):
+        super()._get_invoice_qty()
+        for line in self:
+            pack = self.env['mrp.bom']._bom_find(product=line.product_id)
+            if pack and pack.type == 'phantom':
+                # Si es un pack, recalcular lo facturado sin redondear
+                # (por si se entrega una parte de los pack de x unidades de un producto)
+                qty_invoiced = 0.0
+                for invoice_line in line.invoice_lines:
+                    if invoice_line.invoice_id.state != 'cancel':
+                        if invoice_line.invoice_id.type == 'out_invoice':
+                            qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity,
+                                                                                  line.product_uom,
+                                                                                  round=False)
+                        elif invoice_line.invoice_id.type == 'out_refund':
+                            qty_invoiced -= invoice_line.uom_id._compute_quantity(invoice_line.quantity,
+                                                                                  line.product_uom,
+                                                                                  round=False)
+                line.qty_invoiced = qty_invoiced
 
