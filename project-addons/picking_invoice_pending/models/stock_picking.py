@@ -41,7 +41,8 @@ class StockPicking(models.Model):
     def create(self, vals):
         # force the location that we've introduced by hand
         if vals.get('move_lines', False):
-            vals['location_dest_id'] = vals['move_lines'][0][2]['location_dest_id']
+            if vals.get('picking_type_id', False) != 1:  # TODO: temporal. Analizar este caso mejor/ en albaranes de entrada el formato del vals es diferente
+                vals['location_dest_id'] = vals['move_lines'][0][2]['location_dest_id']
         res = super().create(vals)
         return res
 
