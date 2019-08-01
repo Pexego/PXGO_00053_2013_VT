@@ -39,11 +39,11 @@ class SaleOrder(models.Model):
             elif order.force_invoiced:
                 invoice_status = 'invoiced'
             elif any(line.invoice_status == 'to invoice'
-                     for line in order.order_line.filtered(lambda p: p.product_id.type == 'product')) or \
+                     for line in order.order_line.filtered(lambda p: p.product_id.type in ['product', 'consu'])) or \
                     all(line.invoice_status == 'to invoice' and line.product_id.type == 'service'
                         for line in order.order_line):
                 invoice_status = 'to_invoice'
-            elif all(line.invoice_status in ('invoiced', 'cancel') for line in order.order_line):
+            elif all(line.invoice_status in ('invoiced', 'cancel', 'upselling') for line in order.order_line):
                 invoice_status = 'invoiced'
             elif any(line.invoice_status == 'invoiced' for line in order.order_line):
                 invoice_status = 'partially_invoiced'

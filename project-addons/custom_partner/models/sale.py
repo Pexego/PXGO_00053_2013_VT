@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, fields, api, exceptions, _
+from odoo import models, fields, api
 
 
 class SaleOrder(models.Model):
@@ -47,11 +47,9 @@ class SaleOrder(models.Model):
 
         # Sales to Invoice
         sales = sale_obj.\
-            search([('invoice_status', '=', 'to invoice'),
+            search([('invoice_status_2', '=', 'to_invoice'),
                     ('invoice_type_id.name', '=', 'Diaria'),
-                    ('tests', '=', False),
-                    '|', ('picking_ids.state', 'in', ['done']),
-                    ('picking_ids', '=', False)],
+                    ('tests', '=', False)],
                    order='confirmation_date')
 
         # Create invoice
@@ -62,6 +60,11 @@ class SaleOrder(models.Model):
                 res.extend(invoices)
             except:
                 print("No invoiceable lines on sale {}".format(sale.name))
+                invoices = self.env['account.invoice'].\
+                    search([('state', '=', 'draft'),
+                            ('origin', '=', sale.name)])
+                if invoices:
+                    invoices.unlink()
                 pass
 
         if len(sales) != len(res):
@@ -81,19 +84,19 @@ class SaleOrder(models.Model):
                     'proforma' in invoice_states or \
                     'proforma2' in invoice_states:
                 templates.append(self.env.ref('picking_invoice_pending.alert_cron_validate_invoices', False))
-
-        for tmpl in templates:
-            ctx.update({
-                'default_model': 'account.invoice',
-                'default_res_id': invoices_created[0].id,
-                'default_use_template': bool(tmpl.id),
-                'default_template_id': tmpl.id,
-                'default_composition_mode': 'comment',
-                'mark_so_as_sent': True
-            })
-            composer_id = self.env['mail.compose.message'].with_context(ctx).\
-                create({})
-            composer_id.with_context(ctx).send_mail()
+        if invoices_created:
+            for tmpl in templates:
+                ctx.update({
+                    'default_model': 'account.invoice',
+                    'default_res_id': invoices_created[0].id,
+                    'default_use_template': bool(tmpl.id),
+                    'default_template_id': tmpl.id,
+                    'default_composition_mode': 'comment',
+                    'mark_so_as_sent': True
+                })
+                composer_id = self.env['mail.compose.message'].\
+                    with_context(ctx).create({})
+                composer_id.with_context(ctx).send_mail()
 
         return True
 

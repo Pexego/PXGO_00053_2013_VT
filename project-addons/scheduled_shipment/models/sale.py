@@ -26,8 +26,7 @@ class SaleOrder(models.Model):
     def write(self, vals):
         # If order is in a finished state, don't check scheduled date
         for sale in self:
-            if sale.state not in ('progress', 'manual', 'shipping_except',
-                                  'invoice_except', 'done', 'history',
+            if sale.state not in ('sale','done', 'history',
                                   'cancel'):
                 if 'scheduled_date' in vals:
                     scheduled_date = vals['scheduled_date']

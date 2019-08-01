@@ -10,7 +10,7 @@ class AccountInvoice(models.Model):
         layout = \
             'account.mail_template_data_notification_email_account_invoice'
         for invoice in self:
-            if not invoice.not_send_email and invoice.type == 'out_invoice':
+            if not invoice.not_send_email and invoice.type in ('out_invoice', 'out_refund'):
                 try:
                     template = invoice.env.\
                         ref('account.email_template_edi_invoice')

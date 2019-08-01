@@ -108,13 +108,19 @@ class ProductProduct(models.Model):
 
     @api.multi
     def get_product_price_with_pricelist(self, pricelist_name):
-        id_pricelist = self.env['product.pricelist'].search([('name', '=', pricelist_name)]).id
+        pricelist = self.env['product.pricelist'].search([('name', '=', pricelist_name)])
+        price = 0
         for product in self:
-            if id_pricelist:
-                price = product.with_context(pricelist=id_pricelist).price
-                price = round(price, 2)
-            else:
-                price = 0
+            if pricelist:
+                price_items = self.env['product.pricelist.item'].search([('product_id', '=', product.id)])
+                if pricelist.base_pricelist:
+                    item = price_items.filtered(lambda x: x.pricelist_id.id == pricelist.id)
+                    if item:
+                        price = round(item.fixed_price, 2)
+                else:
+                    item = price_items.filtered(lambda x: x.pricelist_calculated.id == pricelist.id)
+                    if item:
+                        price = round(item.pricelist_calculated_price, 2)
             return price
 
     relation_pvd_pvi_a = fields.Float(compute='_get_margins_relation',
