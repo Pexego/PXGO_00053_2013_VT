@@ -34,12 +34,7 @@ class ProductTemplate(models.Model):
     name = fields.Char(translate=False)
     description_sale = fields.Text(translate=False)
 
-    property_valuation = fields.Selection([
-        ('manual_periodic', 'Periodic (manual)'),
-        ('real_time', 'Perpetual (automated)')], string='Inventory Valuation',
-        company_dependent=True, copy=True, default='real_time',
-        help="""Manual: The accounting entries to value the inventory are not posted automatically.
-            Automated: An accounting entry is automatically created to value the inventory when a product enters or leaves the company.""")
+    property_valuation = fields.Selection(default='real_time')
 
 
 class ProductProduct(models.Model):
