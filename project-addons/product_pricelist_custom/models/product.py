@@ -35,6 +35,7 @@ class ProductPricelistItem(models.Model):
     pricelist_calculated_price = fields.Float("Price calculated", compute='_get_pricelist_calculated_price')
     margin = fields.Float("Margin (%)", compute='_get_margin', readonly=True, store=True)
     name_pricelist = fields.Char(related='pricelist_id.name', readonly=True)
+    base = fields.Selection(selection_add=[('standard_price_2', 'Cost 2')])
 
     @api.multi
     @api.depends('fixed_price')
@@ -50,6 +51,8 @@ class ProductPricelistItem(models.Model):
                         item.pricelist_calculated_price = item.fixed_price * (1 - rule.price_discount / 100)
                     elif rule.base == 'standard_price':
                         item.pricelist_calculated_price = product_id.standard_price * (1 - rule.price_discount / 100)
+                    elif rule.base == 'standard_price_2':
+                        item.pricelist_calculated_price = product_id.standard_price_2 * (1 - rule.price_discount / 100)
 
     @api.multi
     @api.depends('fixed_price', 'product_id.standard_price_2', 'product_tmpl_id.standard_price_2')
