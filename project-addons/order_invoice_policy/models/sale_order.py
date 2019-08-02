@@ -68,7 +68,7 @@ class SaleOrderLine(models.Model):
             pack = self.env['mrp.bom']._bom_find(product=line.product_id)
             if pack and pack.type == 'phantom':
                 # Calcular cantidad del pack a facturar
-                moves_pack = lines.move_ids.filtered(lambda mv: 'assigned' in mv.state)
+                moves_pack = line.move_ids.filtered(lambda mv: 'assigned' in mv.state)
                 quantities = line._get_bom_component_qty(pack)
                 assign_components_qty = {}
                 for move in moves_pack:
