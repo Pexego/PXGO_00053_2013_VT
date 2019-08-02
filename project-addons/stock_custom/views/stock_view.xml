@@ -126,8 +126,8 @@
                 <filter string="Today" domain="[('date','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59))), ('date','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]" help="Orders processed Today or planned for Today"/>
                 <field name="product_id"/>
                 <field name="name" string="Location" filter_domain="['|',('location_id','ilike',self),('location_dest_id','ilike',self)]"/>
-                <field name="partner_id" string="Partner"  filter_domain="[('picking_id.partner_id','child_of',self)]"/>
-                <field name="container_id" string="Container"  filter_domain="[('picking_id.container_id.name','ilike',self)]"/>
+                <field name="partner_id" string="Partner" filter_domain="[('picking_id.partner_id','child_of',self)]"/>
+                <field name="container_id" string="Container" filter_domain="[('container_id.name','ilike',self)]"/>
                 <group expand="0" string="Group By">
                     <filter string="Product" name="by_product" domain="[]"  context="{'group_by':'product_id'}"/>
                     <filter string="Picking" name="groupby_picking_id" domain="[]"  context="{'group_by':'picking_id'}"/>
