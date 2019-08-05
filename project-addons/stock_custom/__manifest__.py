@@ -7,7 +7,7 @@
     'description': """This module adds associated products""",
     'author': 'Comunitea',
     'website': '',
-    'depends': ['base', 'stock_picking_report_valued', 'base_report_to_printer',
+    'depends': ['base', 'stock_picking_report_valued', 
                 'custom_account', 'picking_incidences',
                 'reserve_without_save_sale', 'sale_display_stock',
                 'stock_reserve_sale', 'product_brand', 'sale_customer_discount',
