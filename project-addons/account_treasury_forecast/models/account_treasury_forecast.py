@@ -194,9 +194,8 @@ class AccountTreasuryForecast(models.Model):
                     'partner_id': invoice_o.partner_id.id,
                     'journal_id': invoice_o.journal_id.id,
                     'state': invoice_o.state,
-                    # TODO -> Pendiente migrar "custom_account"
-                    # 'base_amount': invoice_o.subtotal_wt_rect,
-                    # 'total_amount': invoice_o.total_wt_rect,
+                    'base_amount': invoice_o.amount_untaxed_signed,
+                    'total_amount': invoice_o.amount_total_signed,
                     'tax_amount': -invoice_o.amount_tax if 'refund' in invoice_o.type else invoice_o.amount_tax,
                     'residual_amount': -invoice_o.residual if 'refund' in invoice_o.type else invoice_o.residual,
                 }
