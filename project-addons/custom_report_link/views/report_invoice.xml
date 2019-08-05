@@ -24,7 +24,7 @@
                                 <tr style="font-size:14px">
                                     <t t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
                                         <t t-if="l1.sale_order_id.name == p.name">
-                                            <t t-if='not l1.sale_order_id.client_order_ref'>
+                                            <t t-if="not l1.sale_order_id.client_order_ref">
                                                 <!--<strong t-raw="l1"/>
                                                 <strong t-raw="l1.move_id"/>
                                                 <strong t-raw="l1"/>
@@ -51,14 +51,14 @@
                                                         <td colspan="2" style="font-weight: bold; color:#6D6E70;">
                                                             Order
                                                                 <span style="color:#da1f2e;">
-                                                                    <span t-field="p.name"/> / <span t-field="o.name"/>
+                                                                    <span t-field="p.name"/>
                                                                 </span>
                                                         </td>
                                                         <t t-set="control" t-value="1"/>
                                                     </t>
                                                 </t>
                                             </t>
-                                            <t t-if='l1.sale_order_id.client_order_ref'>
+                                            <t t-if="l1.sale_order_id.client_order_ref">
                                                 <!--<strong>YES</strong><strong t-raw="l1"/>-->
                                                 <t t-if="control == 0">
                                                     <td colspan="2" style="font-weight: bold; color:#6D6E70;">
