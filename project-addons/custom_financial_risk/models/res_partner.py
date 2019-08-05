@@ -14,6 +14,11 @@ class ResPartner(models.Model):
         compute='_compute_risk_circulating',
         string='Total Circulating amount',
         help='Total amount of circulating accounts')
+    risk_invoice_draft = fields.Monetary(store=False)
+    risk_invoice_open = fields.Monetary(store=False)
+    risk_invoice_unpaid = fields.Monetary(store=False)
+    risk_account_amount = fields.Monetary(store=False)
+    risk_account_amount_unpaid = fields.Monetary(store=False)
 
     @api.model
     def _risk_field_list(self):
