@@ -49,7 +49,8 @@ class ProductPricelistItem(models.Model):
                 if rule:
                     if rule.base == 'pricelist' and rule.base_pricelist_id:
                         item.pricelist_calculated_price = item.fixed_price * (1 - rule.price_discount / 100)
-                    elif rule.base == 'standard_price':
+                    elif rule.base == 'standard_price' or \
+                            (rule.base == 'standard_price_2' and not product_id.standard_price_2):
                         item.pricelist_calculated_price = product_id.standard_price * (1 - rule.price_discount / 100)
                     elif rule.base == 'standard_price_2':
                         item.pricelist_calculated_price = product_id.standard_price_2 * (1 - rule.price_discount / 100)
@@ -178,6 +179,14 @@ class ProductProduct(models.Model):
                 'pvm3_price': self.get_product_price_with_pricelist('PVMC')
             }
             res = super().write(prices)
+        return res
+
+    @api.multi
+    def price_compute(self, price_type, uom=False, currency=False, company=False):
+        res = super().price_compute(price_type,  uom=uom, currency=currency, company=company)
+        if price_type == 'standard_price_2' and self.id in res and res[self.id] == 0:
+            # If cost(2) is 0, recalculate price with cost(1)
+            res = self.price_compute('standard_price', uom=uom, currency=currency, company=company)
         return res
 
 
