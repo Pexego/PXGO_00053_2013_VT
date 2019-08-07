@@ -76,9 +76,15 @@ class ProductProduct(models.Model):
     def name_get(self):
         partner = self.env['res.partner'].browse(self.env.context.get('partner_id', False))
         result = []
-        if partner.supplier:
+        if partner and partner.supplier:
             for record in self:
                 result.append((record.id, "[%s] %s" % ((record.ref_manufacturer or record.default_code), record.default_code)))
+        elif partner:
+            for record in self:
+                result.append((record.id, "%s" % record.default_code))
+        elif self.env.context.get('partner', False):
+            for record in self:
+                result.append((record.id, "%s" % record.default_code))
         else:
             for record in self:
                 result.append((record.id, "%s" % record.default_code))
