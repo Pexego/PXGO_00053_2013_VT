@@ -41,10 +41,7 @@
                             <field name="commercial_cost"/>
                         </group>
                         <group>
-                            <field name="lst_price" readonly="True"/>
-                            <field name="list_price2" readonly="True"/>
-                            <field name="list_price3" readonly="True"/>
-                            <field name="list_price4" readonly="True"/>
+                            <field name="price_unit" readonly="True"/>
                         </group>
                         <group>
                             <label for="date_move" string="Outlet on"/>
