@@ -79,12 +79,6 @@ class ProductProduct(models.Model):
         if partner and partner.supplier:
             for record in self:
                 result.append((record.id, "[%s] %s" % ((record.ref_manufacturer or record.default_code), record.default_code)))
-        # elif partner:
-        #     for record in self:
-        #         result.append((record.id, "%s" % record.default_code))
-        # elif self.env.context.get('partner', False):
-        #     for record in self:
-        #         result.append((record.id, "%s" % record.default_code))
         else:
             for record in self:
                 result.append((record.id, "%s" % record.default_code))
