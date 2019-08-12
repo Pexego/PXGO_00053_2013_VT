@@ -13,37 +13,39 @@ class CrmClaimListener(Component):
 
     def on_record_create(self, record, fields=None):
         if record.partner_id and record.partner_id.web:
+            record.in_web = True
             record.with_delay(priority=1).export_rma()
 
     def on_record_write(self, record, fields=None):
         rma = record
-        model_name = 'crm.claim'
         up_fields = ["date", "date_received", "delivery_type", "delivery_address_id",
                      "partner_id", "stage_id", "number", "name"]
-        job = self.env['queue.job'].sudo().search([('func_string', 'like', '%, ' + str(rma.id) + ')%'),
-                                                      ('model_name', '=', model_name)], order='date_created desc', limit=1)
-        if record.partner_id and rma.partner_id.web \
-                and ((job.name and 'unlink' in job.name) or not job.name) \
-                and record.write_date == record.create_date:
-            record.with_delay(priority=1).export_rma()
+
+        if rma.partner_id and rma.partner_id.web and not rma.in_web:
+            rma.in_web = True
+            rma.with_delay(priority=1).export_rma()
             for line in rma.claim_line_ids:
                 line.with_delay(priority=10, eta=120).export_rmaproduct()
-        elif 'partner_id' in fields and not record.partner_id or \
-                record. partner_id and not rma.partner_id.web:
-            record.with_delay(priority=6, eta=120).unlink_rma()
+        elif 'partner_id' in fields and (not rma.partner_id or (rma.partner_id and not rma.partner_id.web)):
+            rma.in_web = False
+            rma.with_delay(priority=6, eta=120).unlink_rma()
         elif rma.partner_id.web:
             for field in up_fields:
                 if field in fields:
-                    record.with_delay(priority=5, eta=120).update_rma(fields=fields)
+                    rma.with_delay(priority=5, eta=120).update_rma(fields=fields)
                     break
 
     def on_record_unlink(self, record):
         if record.partner_id and record.partner_id.web:
+            record.in_web = False
             record.with_delay(priority=25, eta=120).unlink_rma()
 
 
 class CrmClaim(models.Model):
     _inherit = 'crm.claim'
+
+    # This field is used to check if the object has been sent to the web or not
+    in_web = fields.Boolean(default=False)
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def export_rma(self):
@@ -53,7 +55,6 @@ class CrmClaim(models.Model):
             return exporter.update(self, 'insert')
         return True
 
-
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def update_rma(self, fields=None):
         backend = self.env["middleware.backend"].search([])[0]
@@ -61,7 +62,6 @@ class CrmClaim(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.update(self, 'update')
         return True
-
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def unlink_rma(self):

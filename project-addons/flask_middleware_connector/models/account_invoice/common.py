@@ -13,29 +13,24 @@ class InvoiceListener(Component):
 
     def on_record_write(self, record, fields=None):
         invoice = record
-        model_name = 'account.invoice'
         up_fields = ["number", "client_ref", "date_invoice", "state_web", "partner_id", "state",
                      "date_due", "amount_untaxed_signed", "amount_total_signed", "payment_ids", "payment_mode_id"]
+
         if invoice.partner_id and invoice.commercial_partner_id.web and invoice.company_id.id == 1:
             if 'state' in fields or 'state_web' in fields:
-                job = self.env['queue.job'].sudo().search([('func_string', 'not like', '%confirm_one_invoice%'),
-                                                          ('func_string', 'like', '%' + str(invoice.id) + ',)%'),
-                                                          ('model_name', '=', model_name)], order='date_created desc',
-                                                          limit=1)
-                if job:
-                    if invoice.state_web == 'open' and 'unlink_invoice' in job[0].func_string:
-                        record.with_delay(priority=5, eta=120).export_invoice()
-                    elif invoice.state_web in ('paid', 'returned', 'remitted'):
-                        record.with_delay(priority=10, eta=120).update_invoice(fields=fields)
-                    elif invoice.state_web == 'cancel' and 'unlink_invoice' not in job[0].func_string:
-                        record.with_delay(priority=15, eta=120).unlink_invoice()
-                    elif invoice.state_web == 'open':
-                        for field in up_fields:
-                            if field in fields:
-                                record.with_delay(priority=10, eta=120).update_invoice(fields=fields)
-                                break
-                elif invoice.state_web == 'open':
+                if invoice.state_web == 'open' and not invoice.in_web:
+                    invoice.in_web = True
                     record.with_delay(priority=5, eta=120).export_invoice()
+                elif invoice.state_web in ('paid', 'returned', 'remitted'):
+                    record.with_delay(priority=10, eta=120).update_invoice(fields=fields)
+                elif invoice.state_web == 'cancel' and invoice.in_web:
+                    invoice.in_web = False
+                    record.with_delay(priority=15, eta=120).unlink_invoice()
+                elif invoice.state_web == 'open':
+                    for field in up_fields:
+                        if field in fields:
+                            record.with_delay(priority=10, eta=120).update_invoice(fields=fields)
+                            break
             elif invoice.state in ('open', 'paid'):
                 for field in up_fields:
                     if field in fields:
@@ -47,6 +42,8 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     orders = fields.Char(compute='_compute_orders', readonly=True, store=False)
+    # This field is used to check if the object has been sent to the web or not
+    in_web = fields.Boolean(default=False)
 
     @api.multi
     def _compute_orders(self):
