@@ -74,22 +74,23 @@ class ProductTemplate(models.Model):
             first_subproduct = True
             if product.bom_ids:
                 for bom in product.bom_ids:
-                    for subproduct in bom.bom_line_ids:
-                        subproduct_quantity_next = subproduct.product_qty
-                        if subproduct_quantity_next:
-                            subproduct_stock_next = \
-                                subproduct.product_id.qty_available - \
-                                subproduct.product_id.outgoing_qty
-                            pack_stock_next = math.\
-                                floor(subproduct_stock_next /
-                                      subproduct_quantity_next)
-                            if first_subproduct:
-                                pack_stock = pack_stock_next
-                                first_subproduct = False
-                            else:
-                                if pack_stock_next < pack_stock:
+                    if bom.type == 'phantom':
+                        for subproduct in bom.bom_line_ids:
+                            subproduct_quantity_next = subproduct.product_qty
+                            if subproduct_quantity_next:
+                                subproduct_stock_next = \
+                                    subproduct.product_id.qty_available - \
+                                    subproduct.product_id.outgoing_qty
+                                pack_stock_next = math.\
+                                    floor(subproduct_stock_next /
+                                          subproduct_quantity_next)
+                                if first_subproduct:
                                     pack_stock = pack_stock_next
-                    product.virtual_stock_conservative = pack_stock
+                                    first_subproduct = False
+                                else:
+                                    if pack_stock_next < pack_stock:
+                                        pack_stock = pack_stock_next
+                        product.virtual_stock_conservative = pack_stock
             else:
                 product.virtual_stock_conservative = \
                     product.qty_available - product.outgoing_qty
@@ -101,24 +102,25 @@ class ProductTemplate(models.Model):
             first_subproduct = True
             if product.bom_ids:
                 for bom in product.bom_ids:
-                    for subproduct in bom.bom_line_ids:
-                        subproduct_quantity_next = subproduct.product_qty
-                        if subproduct_quantity_next:
-                            subproduct_stock_next = \
-                                subproduct.product_id.qty_available - \
-                                subproduct.product_id.outgoing_qty - \
-                                subproduct.product_id.qty_available_wo_wh - \
-                                subproduct.product_id.qty_available_input_loc
-                            pack_stock_next = math.\
-                                floor(subproduct_stock_next /
-                                      subproduct_quantity_next)
-                            if first_subproduct:
-                                pack_stock = pack_stock_next
-                                first_subproduct = False
-                            else:
-                                if pack_stock_next < pack_stock:
+                    if bom.type == 'phantom':
+                        for subproduct in bom.bom_line_ids:
+                            subproduct_quantity_next = subproduct.product_qty
+                            if subproduct_quantity_next:
+                                subproduct_stock_next = \
+                                    subproduct.product_id.qty_available - \
+                                    subproduct.product_id.outgoing_qty - \
+                                    subproduct.product_id.qty_available_wo_wh - \
+                                    subproduct.product_id.qty_available_input_loc
+                                pack_stock_next = math.\
+                                    floor(subproduct_stock_next /
+                                          subproduct_quantity_next)
+                                if first_subproduct:
                                     pack_stock = pack_stock_next
-                    product.virtual_available_wo_incoming = pack_stock
+                                    first_subproduct = False
+                                else:
+                                    if pack_stock_next < pack_stock:
+                                        pack_stock = pack_stock_next
+                        product.virtual_available_wo_incoming = pack_stock
             else:
                 product.virtual_available_wo_incoming = \
                     product.qty_available - product.outgoing_qty - \
@@ -175,22 +177,23 @@ class ProductProduct(models.Model):
             first_subproduct = True
             if product.bom_ids:
                 for bom in product.bom_ids:
-                    for subproduct in bom.bom_line_ids:
-                        subproduct_quantity_next = subproduct.product_qty
-                        if subproduct_quantity_next:
-                            subproduct_stock_next = \
-                                subproduct.product_id.qty_available - \
-                                subproduct.product_id.outgoing_qty
-                            pack_stock_next = math.\
-                                floor(subproduct_stock_next /
-                                      subproduct_quantity_next)
-                            if first_subproduct:
-                                pack_stock = pack_stock_next
-                                first_subproduct = False
-                            else:
-                                if pack_stock_next < pack_stock:
+                    if bom.type == 'phantom':
+                        for subproduct in bom.bom_line_ids:
+                            subproduct_quantity_next = subproduct.product_qty
+                            if subproduct_quantity_next:
+                                subproduct_stock_next = \
+                                    subproduct.product_id.qty_available - \
+                                    subproduct.product_id.outgoing_qty
+                                pack_stock_next = math.\
+                                    floor(subproduct_stock_next /
+                                          subproduct_quantity_next)
+                                if first_subproduct:
                                     pack_stock = pack_stock_next
-                    product.virtual_stock_conservative = pack_stock
+                                    first_subproduct = False
+                                else:
+                                    if pack_stock_next < pack_stock:
+                                        pack_stock = pack_stock_next
+                        product.virtual_stock_conservative = pack_stock
             else:
                 product.virtual_stock_conservative = \
                     product.qty_available - product.outgoing_qty
