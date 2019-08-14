@@ -76,7 +76,7 @@
                             <tbody style="color:6D6E70;">
                                 <tr t-foreach="Lines[o.id][currency]" t-as="line">
                                     <td class="text-center" style="vertical-align:middle;">
-                                        <span t-esc="line['date']"/>
+                                        <span t-esc="datetime.datetime.strptime(line['date'], '%Y-%m-%d').strftime('%d/%m/%Y')"/>
                                     </td>
                                     <td style="vertical-align:middle;">
                                         <span t-esc="line['name']"/>
@@ -85,7 +85,7 @@
                                         <span t-esc="line['ref']"/>
                                     </td>
                                     <td class="text-center" style="vertical-align:middle;">
-                                        <span t-esc="line['date_maturity']"/>
+                                        <span t-esc="datetime.datetime.strptime(line['date_maturity'], '%Y-%m-%d').strftime('%d/%m/%Y')"/>
                                     </td>
                                     <td class="text-center" style="vertical-align:middle;">
                                         <span t-esc="line['debit']"/>
