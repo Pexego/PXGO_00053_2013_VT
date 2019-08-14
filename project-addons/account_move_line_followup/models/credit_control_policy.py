@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models, _
 from dateutil.relativedelta import relativedelta
+import datetime
 
 
 class CreditControlPolicy(models.Model):
@@ -199,9 +200,9 @@ class CreditCommunication(models.Model):
                 strbegin = "<TD>"
                 strend = "</TD>"
                 date = aml['date_maturity'] or aml['date']
-                followup_table += "<TR>" + strbegin + str(aml['date']) + strend + \
+                followup_table += "<TR>" + strbegin + datetime.datetime.strptime(aml['date'], '%Y-%m-%d').strftime('%d/%m/%Y') + strend + \
                                   strbegin + (aml['ref'] or '') + strend + \
-                                  strbegin + str(date) + strend + strbegin + \
+                                  strbegin + str(datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%d/%m/%Y')) + strend + strbegin + \
                                   str(aml['balance']) + strend + "</TR>"
 
         return followup_table, total
