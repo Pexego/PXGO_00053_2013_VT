@@ -189,14 +189,6 @@ class CrmClaimRma(models.Model):
             domain_journal = [('type', '=', 'sale')]
             acc_journal_obj = self.env['account.journal']
             acc_journal_ids = acc_journal_obj.search(domain_journal)
-            partner_bank_id = False
-            for banks in claim_obj.partner_id.bank_ids:
-                for mandate in banks.mandate_ids:
-                    if mandate.state == 'valid':
-                        partner_bank_id = banks.id
-                        break
-                    else:
-                        partner_bank_id = False
             header_vals = {
                 'partner_id': claim_obj.partner_id.id,
                 'fiscal_position_id':
@@ -215,7 +207,7 @@ class CrmClaimRma(models.Model):
                 'payment_term_id': False,  # Pago inmediato en rectificativas claim_obj.partner_id.property_payment_term_id.id,
                 'payment_mode_id':
                     claim_obj.partner_id.customer_payment_mode_id.id,
-                'partner_bank_id': partner_bank_id
+                'mandate_id': claim_obj.partner_id.valid_mandate_id.id
             }
             inv_obj = self.env['account.invoice']
             invoice_id = inv_obj.create(header_vals)

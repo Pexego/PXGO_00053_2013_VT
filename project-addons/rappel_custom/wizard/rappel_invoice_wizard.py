@@ -16,10 +16,12 @@ class ComputeRappelInvoice(models.TransientModel):
                 continue
             if rappel.invoice_id:
                 invoice_rappel = rappel.invoice_id
+                invoice_rappel.compute_taxes()
+                partner = rappel.partner_id
                 # Update description invoice lines
                 for line in invoice_rappel.invoice_line_ids:
                     ctx = dict(rappel.rappel_id._context or {})
-                    ctx['lang'] = rappel.partner_id.lang
+                    ctx['lang'] = partner.lang
                     line.write(
                         {'name': '{} ({} - {})'.format(
                             rappel.rappel_id.with_context(ctx).description,
@@ -27,19 +29,11 @@ class ComputeRappelInvoice(models.TransientModel):
                             datetime.strptime(rappel.date_end, "%Y-%m-%d").strftime('%d/%m/%Y'))})
                 # Update account data
                 if not invoice_rappel.payment_mode_id \
-                        or not invoice_rappel.partner_bank_id \
+                        or not invoice_rappel.mandate_id \
                         or not invoice_rappel.team_id:
-                    partner_bank_id = False
-                    for banks in rappel.partner_id.bank_ids:
-                        for mandate in banks.mandate_ids:
-                            if mandate.state == 'valid':
-                                partner_bank_id = banks.id
-                                break
-                            else:
-                                partner_bank_id = False
                     invoice_rappel.write(
                         {'payment_mode_id':
-                         rappel.partner_id.customer_payment_mode_id.id,
-                         'partner_bank_id': partner_bank_id,
-                         'team_id': rappel.partner_id.team_id.id})
+                         partner.customer_payment_mode_id.id,
+                         'mandate_id': partner.valid_mandate_id.id,
+                         'team_id': partner.team_id.id})
         return res
