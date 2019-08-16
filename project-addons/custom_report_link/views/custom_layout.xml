@@ -1505,7 +1505,7 @@ SWIFT/BIC: BESCPTPL
                         <t t-set="final_price" t-value="0"/>
                         <t t-foreach="taxes" t-as="t">
                             <tr>
-                                <td><span t-esc="t.name"/></td>
+                                <td><span t-esc="t.amount"/>%</td>
                                 <td><span t-esc="t_value" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
                                 <td><span t-esc="(t.amount * t_value)/100" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
 
