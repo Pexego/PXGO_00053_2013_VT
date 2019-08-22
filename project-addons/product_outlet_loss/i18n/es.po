@@ -173,10 +173,10 @@ msgid "Qty from stock"
 msgstr "Cantidad a Mover"
 
 #. module: product_outlet_loss
-#: code:addons/product_outlet_loss/wizard/product_outlet_wizard.py:97
+#: code:addons/product_outlet_loss/wizard/product_outlet_wizard.py:58
 #, python-format
-msgid "Qty to outlet must be <= qty available"
-msgstr "La cantidad que se mueve a outlet debe ser menor o igual a la cantidad siponible en Existencias"
+msgid "Qty to outlet must be <= qty available on the location"
+msgstr "La cantidad que se mueve a outlet debe ser menor o igual a la cantidad disponible en la ubicación"
 
 #. module: product_outlet_loss
 #: code:addons/product_outlet_loss/wizard/product_outlet_wizard.py:99
