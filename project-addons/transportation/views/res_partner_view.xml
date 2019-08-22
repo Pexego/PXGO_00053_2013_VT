@@ -8,10 +8,8 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <field name="company_id" position="after">
-                    <!-- TODO: añadir al migrar custom_partner field name="transporter_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('dropship', '=', False),('prospective', '=', False)]}"/>
-                    <field name="service_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('dropship', '=', False),('prospective', '=', False)]}"/-->
-                    <field name="transporter_id" attrs="{'required': [('is_company', '=', True),('customer','=', True)]}"/>
-                    <field name="service_id" attrs="{'required': [('is_company', '=', True),('customer','=', True)]}"/>
+                    <field name="transporter_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
+                    <field name="service_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
                 </field>
             </field>
         </record>
