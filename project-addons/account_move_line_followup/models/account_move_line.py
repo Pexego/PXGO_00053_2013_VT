@@ -1,6 +1,6 @@
 
 from odoo import models, api, fields
-
+from datetime import datetime
 
 class ResPartner(models.Model):
 
@@ -17,6 +17,7 @@ class AccountMoveLine(models.Model):
     def cron_update_date_followup(self):
         # Searching negative account move line
         refund_aml = self.search([('full_reconcile_id', '=', False), ('account_id', '=', 443), ('credit', '!=', 0)])
+        today = datetime.now().strftime("%Y-%m-%d")
 
         for aml in refund_aml:
             # Searching the most unfavorable maturity date on positive payments
@@ -30,6 +31,8 @@ class AccountMoveLine(models.Model):
             if aml_partner:
                 aml_partner_data = aml_partner[0]
                 aml.write({'date_maturity': aml_partner_data['date_maturity']})
+            else:
+                aml.write({'date_maturity': today})
 
         # Search all partner to update new field 'worst cyc notify date'
         all_partner = self.env['res.partner'].search([('customer', '=', True), ('active', '=', True),
