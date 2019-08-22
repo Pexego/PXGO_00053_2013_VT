@@ -75,10 +75,9 @@ class ProductOutletWizard(models.TransientModel):
         move_obj = self.env['stock.move']
         categ_obj = self.env['product.category']
         outlet_tag = self.env.ref('product_outlet.tag_outlet')
-
         product = self.with_context(
-            warehouse_id=self.warehouse_id.id,
-            location_id=self.location_orig_id.id).product_id
+            warehouse=self.warehouse_id.id,
+            location=self.location_orig_id.id).product_id
         if self.state == 'first':
             self.qty = product.qty_available
             self.state = 'last'

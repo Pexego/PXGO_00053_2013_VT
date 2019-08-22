@@ -49,7 +49,8 @@ class ProductPricelistItem(models.Model):
                 if rule:
                     if rule.base == 'pricelist' and rule.base_pricelist_id:
                         item.pricelist_calculated_price = item.fixed_price * (1 - rule.price_discount / 100)
-                    elif rule.base == 'standard_price':
+                    elif rule.base == 'standard_price' or \
+                            (rule.base == 'standard_price_2' and not product_id.standard_price_2):
                         item.pricelist_calculated_price = product_id.standard_price * (1 - rule.price_discount / 100)
                     elif rule.base == 'standard_price_2':
                         item.pricelist_calculated_price = product_id.standard_price_2 * (1 - rule.price_discount / 100)
@@ -126,6 +127,27 @@ class ProductProduct(models.Model):
                         price = round(item.pricelist_calculated_price, 2)
             return price
 
+    @api.multi
+    def get_list_updated_prices(self):
+        prices = {
+            'list_price1': self.get_product_price_with_pricelist('PVPA'),
+            'list_price2': self.get_product_price_with_pricelist('PVPB'),
+            'list_price3': self.get_product_price_with_pricelist('PVPC'),
+            'list_price4': self.get_product_price_with_pricelist('PVPD'),
+            'pvd1_price': self.get_product_price_with_pricelist('PVDA'),
+            'pvd2_price': self.get_product_price_with_pricelist('PVDB'),
+            'pvd3_price': self.get_product_price_with_pricelist('PVDC'),
+            'pvd4_price': self.get_product_price_with_pricelist('PVDD'),
+            'pvi1_price': self.get_product_price_with_pricelist('PVIA'),
+            'pvi2_price': self.get_product_price_with_pricelist('PVIB'),
+            'pvi3_price': self.get_product_price_with_pricelist('PVIC'),
+            'pvi4_price': self.get_product_price_with_pricelist('PVID'),
+            'pvm1_price': self.get_product_price_with_pricelist('PVMA'),
+            'pvm2_price': self.get_product_price_with_pricelist('PVMB'),
+            'pvm3_price': self.get_product_price_with_pricelist('PVMC')
+            }
+        return prices
+
     relation_pvd_pvi_a = fields.Float(compute='_get_margins_relation',
                                       string='PVD/PVI A relation',
                                       digits=(5, 2), readonly=True)
@@ -160,24 +182,16 @@ class ProductProduct(models.Model):
     def write(self, vals):
         res = super().write(vals)
         if 'item_ids' in vals:
-            prices = {
-                'list_price1': self.get_product_price_with_pricelist('PVPA'),
-                'list_price2': self.get_product_price_with_pricelist('PVPB'),
-                'list_price3': self.get_product_price_with_pricelist('PVPC'),
-                'list_price4': self.get_product_price_with_pricelist('PVPD'),
-                'pvd1_price': self.get_product_price_with_pricelist('PVDA'),
-                'pvd2_price': self.get_product_price_with_pricelist('PVDB'),
-                'pvd3_price': self.get_product_price_with_pricelist('PVDC'),
-                'pvd4_price': self.get_product_price_with_pricelist('PVDD'),
-                'pvi1_price': self.get_product_price_with_pricelist('PVIA'),
-                'pvi2_price': self.get_product_price_with_pricelist('PVIB'),
-                'pvi3_price': self.get_product_price_with_pricelist('PVIC'),
-                'pvi4_price': self.get_product_price_with_pricelist('PVID'),
-                'pvm1_price': self.get_product_price_with_pricelist('PVMA'),
-                'pvm2_price': self.get_product_price_with_pricelist('PVMB'),
-                'pvm3_price': self.get_product_price_with_pricelist('PVMC')
-            }
-            res = super().write(prices)
+            prices_to_update = self.get_list_updated_prices()
+            res = super().write(prices_to_update)
+        return res
+
+    @api.multi
+    def price_compute(self, price_type, uom=False, currency=False, company=False):
+        res = super().price_compute(price_type,  uom=uom, currency=currency, company=company)
+        if price_type == 'standard_price_2' and self.id in res and res[self.id] == 0:
+            # If cost(2) is 0, recalculate price with cost(1)
+            res = self.price_compute('standard_price', uom=uom, currency=currency, company=company)
         return res
 
 

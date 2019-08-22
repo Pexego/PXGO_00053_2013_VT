@@ -74,26 +74,13 @@ class ProductProduct(models.Model):
 
     @api.multi
     def name_get(self):
-        partner_id = self.env.context.get('partner_id', False)
-        if partner_id:
-            partner_ids = \
-                [partner_id,
-                 self.env['res.partner'].browse(partner_id).
-                 commercial_partner_id.id]
-        else:
-            partner_ids = []
+        partner = self.env['res.partner'].browse(self.env.context.get('partner_id', False))
         result = []
-        for record in self:
-            default = True
-            if partner_ids:
-                supplier_info = self.env['product.supplierinfo'].sudo().\
-                    search([('product_tmpl_id', '=',
-                             record.product_tmpl_id.id),
-                            ('name', 'in', partner_ids)])
-                if supplier_info:
-                    result.extend(super(ProductProduct, record).name_get())
-                    default = False
-            if default:
+        if partner and partner.supplier:
+            for record in self:
+                result.append((record.id, "[%s] %s" % ((record.ref_manufacturer or record.default_code), record.default_code)))
+        else:
+            for record in self:
                 result.append((record.id, "%s" % record.default_code))
         return result
 

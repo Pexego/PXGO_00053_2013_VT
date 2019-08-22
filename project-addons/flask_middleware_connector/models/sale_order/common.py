@@ -20,17 +20,13 @@ class SaleOrderListener(Component):
                      "order_line", "partner_shipping_id", "delivery_type"]
         model_name = 'sale.order'
         if record.partner_id.web or record.partner_id.commercial_partner_id.web:
-            job = self.env['queue.job'].sudo().search([('func_string', 'like', '%, ' + str(record.id) + ')%'),
-                                                      ('model_name', '=', model_name)],
-                                                      order='date_created desc, id desc', limit=1)
             if 'state' in fields and record.state == 'cancel':
                 record.with_delay(priority=7, eta=80).unlink_order()
-            elif 'state' in fields and record.state in ('draft', 'reserve') \
-                    and job.name and 'unlink' in job.name and record.write_date == record.create_date:
+            elif 'state' in fields and record.state == 'draft':
                 record.with_delay(priority=2, eta=80).export_order()
                 for line in record.order_line:
-                    line.with_delay(priority=2, eta=120).export_orderproduct()
-            elif record.state in ('draft', 'reserve', 'progress', 'done', 'shipping_except', 'invoice_except'):
+                    line.with_delay(priority=2, eta=100).export_orderproduct()
+            elif record.state != 'cancel':
                 for field in up_fields:
                     if field in fields:
                         record.with_delay(priority=5, eta=80).update_order(fields=fields)
@@ -38,7 +34,7 @@ class SaleOrderListener(Component):
 
     def on_record_unlink(self, record):
         if record.partner_id.web or record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=7, eta=180).unlink_order()
+            record.with_delay(priority=7, eta=120).unlink_order()
 
 
 class SaleOrder(models.Model):
