@@ -160,6 +160,8 @@ class CrmClaimRma(models.Model):
             self.country = self.partner_id.country_id    # Get country_id from res.partner
             if self.partner_id.user_id:
                 self.comercial = self.partner_id.user_id.id
+            if self.partner_id.rma_warn_msg:
+                self.description = self.partner_id.rma_warn_msg
         return result
 
     @api.onchange('name')
