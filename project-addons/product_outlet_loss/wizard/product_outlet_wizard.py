@@ -55,8 +55,8 @@ class ProductOutletWizard(models.TransientModel):
         if self.state == "first":
             res = super(ProductOutletWizard, self).make_move()
         else:
-            if self.product_id.qty_available < self.qty:
-                raise ValidationError(_("Qty to outlet must be <= qty available"))
+            if self.product_id.with_context({'location': self.location_orig_id.id, 'warehouse': self.warehouse_id.id}).qty_available < self.qty:
+                raise ValidationError(_("Qty to outlet must be <= qty available on the location"))
             if self.qty <= 0:
                 raise ValidationError(_("Qty to outlet must be >=0"))
             category_selected = self.env['product.category'].browse(int(self.categ_id))

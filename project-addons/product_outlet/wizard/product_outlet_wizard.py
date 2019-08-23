@@ -51,7 +51,7 @@ class ProductOutletWizard(models.TransientModel):
     def onchange_warehouse(self):
         if self.warehouse_id:
             product = self.env['product.product']. \
-                with_context(warehouse_id=self.warehouse_id.id). \
+                with_context(warehouse=self.warehouse_id.id). \
                 browse(self.env.context['active_id'])
             self.qty = product.qty_available
         else:
