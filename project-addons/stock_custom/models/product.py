@@ -1,6 +1,5 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-import odoo.addons.decimal_precision as dp
 import seaborn as sns
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -251,3 +250,13 @@ class ProductProduct(models.Model):
             'res_model': 'product.product',
             'type': 'ir.actions.act_window',
         }
+
+
+class StockQuantityHistory(models.TransientModel):
+    _inherit = 'stock.quantity.history'
+
+    def open_table(self):
+        res = super().open_table()
+        if res.get('domain'):
+            res['domain'] = "[('type', '=', 'product')]"
+        return res
