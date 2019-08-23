@@ -13,6 +13,9 @@ class PaymentReturn(models.Model):
         for return_line in self.line_ids:
             for move_line in return_line.move_line_ids:
                 move_line.blocked = True
+                # Actualizar referencia de pago del apunte asociado a la(s)
+                # factura(s) devueltas con la referencia de la devolución
+                move_line.mapped('matched_debit_ids.origin_returned_move_ids').write({'ref_line': self.name})
 
         return res
 

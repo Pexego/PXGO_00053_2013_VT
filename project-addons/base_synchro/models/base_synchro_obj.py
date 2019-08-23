@@ -43,6 +43,7 @@ class BaseSynchroObj(models.Model):
                               'IDs Affected', ondelete='cascade')
     avoid_ids = fields.One2many('base.synchro.obj.avoid', 'obj_id',
                                 'Fields Not Sync.')
+    context = fields.Text('Context', help="Dictionary format. Used on create/write")
 
     @api.model
     def get_ids(self, obj, dt, domain=None, action=None):

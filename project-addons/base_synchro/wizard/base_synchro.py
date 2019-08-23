@@ -60,6 +60,7 @@ class BaseSynchro(models.TransientModel):
     def synchronize(self, server, object):
         pool = self
         sync_ids = []
+        ctx = self.env.context.copy()
         pool1 = RPCProxy(server)
         pool2 = pool
         dt = object.synchronize_date
@@ -67,6 +68,8 @@ class BaseSynchro(models.TransientModel):
         model_obj = object.model_id.model
         module_id = module.search([("name", "ilike", "base_synchro"),
                                    ('state', '=', 'installed')])
+        if object.context:
+            ctx.update(dict(eval(object.context)))
         if not module_id:
             raise Warning(_('''If your Synchronization direction is/
                           download or both, please install
@@ -104,35 +107,36 @@ class BaseSynchro(models.TransientModel):
                 del value['create_date']
             if 'write_date' in value:
                 del value['write_date']
-            for key, val in value.items():
-                if isinstance(val, tuple):
-                    value.update({key: val[0]})
-            value = self.data_transform(pool_src, pool_dest,
-                                        object.model_id.model, value, action,
-                                        destination_inverted)
-            id2 = self.get_id(object.id, id, action)
-
             # Filter fields to not sync
             for field in object.avoid_ids:
                 if field.name in value:
                     del value[field.name]
+
+            for key, val in value.items():
+                if isinstance(val, tuple):
+                    value.update({key: val[0]})
+
+            value = self.data_transform(pool_src, pool_dest,
+                                        object.model_id.model, value, action,
+                                        destination_inverted)
+            id2 = self.get_id(object.id, id, action)
             if id2:
                 _logger.debug("Updating model %s [%d]", object.model_id.name,
                               id2)
                 if not destination_inverted:
-                    pool = pool_dest.env[object.model_id.model]
+                    pool = pool_dest.env[object.model_id.model].with_context(ctx)
                     pool.browse([id2]).write(value)
                 else:
-                    pool_dest.get(object.model_id.model).write([id2], value)
+                    pool_dest.get(object.model_id.model).with_context(ctx).write([id2], value)
                 self.report_total += 1
                 self.report_write += 1
             else:
                 _logger.debug("Creating model %s", object.model_id.name)
                 if not destination_inverted:
-                    idnew = pool_dest.env[object.model_id.model].create(value)
+                    idnew = pool_dest.env[object.model_id.model].with_context(ctx).create(value)
                     new_id = idnew.id
                 else:
-                    idnew = pool_dest.get(object.model_id.model).create(value)
+                    idnew = pool_dest.get(object.model_id.model).with_context(ctx).create(value)
                     new_id = idnew
                 self.env['base.synchro.obj.line'].create({
                     'obj_id': object.id,
@@ -206,9 +210,14 @@ class BaseSynchro(models.TransientModel):
             fields = pool_src.env[obj].fields_get()
         _logger.debug("Transforming data")
         for f in fields:
+            if f not in data:
+                continue
             ftype = fields[f]['type']
             if ftype in ('function', 'one2many', 'one2one'):
                 _logger.debug("Field %s of type %s, discarded.", f, ftype)
+                del data[f]
+            elif fields[f].get('compute'):
+                _logger.debug("Field %s with compute function, discarded.", f)
                 del data[f]
             elif ftype == 'many2one':
                 _logger.debug("Field %s is many2one", f)
