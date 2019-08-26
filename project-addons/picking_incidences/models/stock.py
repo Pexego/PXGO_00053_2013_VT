@@ -98,9 +98,11 @@ class StockPicking(models.Model):
                     'move_line_ids': [],
                     'backorder_id': picking.id
                 })
-                picking.message_post(
-                    _('The backorder <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a> has been created.') % (
-                        backorder_picking.id, backorder_picking.name))
+                import ipdb
+                ipdb.set_trace()
+                # picking.message_post(
+                #     _('The backorder <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a> has been created.') % (
+                #         backorder_picking.id, backorder_picking.name))
                 moves_to_backorder.write({'picking_id': backorder_picking.id})
                 moves_to_backorder.mapped('move_line_ids').write({'picking_id': backorder_picking.id})
                 backorder_picking.action_assign()
