@@ -98,8 +98,6 @@ class StockPicking(models.Model):
                     'move_line_ids': [],
                     'backorder_id': picking.id
                 })
-                import ipdb
-                ipdb.set_trace()
                 # picking.message_post(
                 #     _('The backorder <a href=# data-oe-model=stock.picking data-oe-id=%d>%s</a> has been created.') % (
                 #         backorder_picking.id, backorder_picking.name))
