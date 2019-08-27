@@ -258,5 +258,5 @@ class StockQuantityHistory(models.TransientModel):
     def open_table(self):
         res = super().open_table()
         if res.get('domain'):
-            res['domain'] = "[('type', '=', 'product')]"
+            res['domain'] = "[('type', '=', 'product'), ('qty_available', '!=', 0)]"
         return res
