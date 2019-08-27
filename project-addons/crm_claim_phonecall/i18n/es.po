@@ -136,6 +136,11 @@ msgid "Phone calls"
 msgstr "Llamadas telefónicas"
 
 #. module: crm_claim_phonecall
+#: model:ir.ui.menu,name:crm_claim_phonecall.crm_phonecall_new_call_direct
+msgid "New Call"
+msgstr "Nueva llamada"
+
+#. module: crm_claim_phonecall
 #: model:ir.actions.act_window,name:crm_claim_phonecall.crm_phonecall_custom_wizard_action_sat
 msgid "New Call"
 msgstr "Nueva llamada"
