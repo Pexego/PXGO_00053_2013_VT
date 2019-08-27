@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <menuitem id="crm_phonecall_menu_sat" name="Phone Calls" parent="crm_claim_rma.menu_sat" sequence="3"/>
+    <menuitem id="crm_phonecall_new_call_direct" name="New Call" parent="crm_claim_rma.menu_sat" action="crm_claim_phonecall.crm_phonecall_custom_wizard_action_sat" sequence="4"/>
 
     <record id="crm_phonecall_custom_call_type" model="ir.ui.view">
         <field name="name">crm.phonecall.custom.call.type</field>
