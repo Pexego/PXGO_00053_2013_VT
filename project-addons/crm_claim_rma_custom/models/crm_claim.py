@@ -380,6 +380,14 @@ class CrmClaimLine(models.Model):
         if 'repair_id' in vals.keys():
             vals['substate_id'] = self.env.ref(
                 'crm_claim_rma_custom.substate_repaired').id
+        if 'refund_line_id' in vals.keys():
+            vals['substate_id'] = self.env.ref(
+                'crm_claim_rma_custom.substate_refund').id
+        if 'equivalent_product_id' in vals.keys():
+            vals['substate_id'] = self.env.ref(
+                'crm_claim_rma_custom.substate_replaced').id
+
+
         return super(CrmClaimLine, self).write(vals)
 
     @api.multi
