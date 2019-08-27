@@ -18,8 +18,7 @@ class PartnerListener(Component):
         sales = self.env['sale.order'].search(
             [('partner_id', 'child_of', [record.id]),
                 ('company_id', '=', 1),
-                ('state', 'in',
-                 ['done', 'progress', 'draft', 'reserve'])])
+                ('state', 'in', ['done', 'sale'])])
         for sale in sales:
             sale.with_delay(priority=5, eta=120).export_order()
             for line in sale.order_line:
