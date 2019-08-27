@@ -187,7 +187,7 @@ class MiddlewareBackend(models.TransientModel):
                                                   ('web', '=', True),
                                                   ('customer', '=', True)])
                 sales = self.env['sale.order'].search([('partner_id', 'child_of', partner_ids.ids),
-                                                          ('state', 'in', ['done', 'progress', 'draft', 'reserve']),
+                                                          ('state', 'in', ['done', 'sale']),
                                                           ('date_order', '>=', self.start_date),
                                                           ('date_order', '<=', self.finish_date),
                                                           ('company_id', '=', 1)])
