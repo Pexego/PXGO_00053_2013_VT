@@ -235,7 +235,6 @@
         <field name="partner_id" position="replace">
             <field name="partner_id" string="Partner" required="1" domain="[('is_company', '=', True)]"/>
             <field name="invoice_type"/>
-	    <field name="warehouse_id" invisible="1"/>
             <field name="invoice_id" domain="['|',('commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" attrs="{'invisible': [('invoice_type', '!=', 'refund')]}"/>
             <field name="invoice_method" attrs="{'invisible': [('invoice_type', '!=', 'invoice')]}" colspan="2"/>
             <button type="action" name="%(action_mrp_repair_invoice_from_claim_view)d" string="Invoice" colspan="2" attrs="{'invisible': ['|',('invoice_type', '!=', 'invoice'),('invoice_method','=','none')]}"/>
@@ -360,37 +359,37 @@
                 <div class="oe_right oe_button_box" name="buttons">
                     <button class="oe_stat_button" name="%(act_crm_claim_rma_sale_orders)d" type="action" icon="fa-pencil-square-o"
                             string="Quotations and Sales"
-                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['supplier','other'])]}"
+                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','!=',%(crm_claim_type.crm_claim_type_customer)d)]}"
                             context="{'search_default_partner_id': [partner_id],'search_default_user_id':False}"
                            />
                     <button class="oe_inline oe_stat_button" icon="fa-pencil-square-o" name="%(act_crm_claim_rma_invoice_out)d" type="action"
                             string="Customer Invoices"
-                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['supplier','other'])]}"
+                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','!=',%(crm_claim_type.crm_claim_type_customer)d)]}"
                             context="{'search_default_partner_id': [partner_id],'search_default_user_id':False}"
                            />
                     <button class="oe_inline oe_stat_button" icon="fa-pencil-square-o" name="%(act_crm_claim_rma_refunds_out)d" type="action"
                             string="Customer Refunds"
-                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['supplier','other'])]}"
+                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','!=',%(crm_claim_type.crm_claim_type_customer)d)]}"
                             context="{'search_default_partner_id': [partner_id],'search_default_user_id':False}"
                            />
                     <button class="oe_inline oe_stat_button" icon="fa-pencil-square-o" name="%(act_crm_claim_rma_invoice_in)d" type="action"
                             string="Supplier Invoices"
-                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['customer','other'])]}"
+                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','!=',%(crm_claim_type.crm_claim_type_supplier)d)]}"
                             context="{'search_default_partner_id': [partner_id],'search_default_user_id':False}"
                            />
                     <button class="oe_inline oe_stat_button" icon="fa-truck" name="%(act_crm_claim_rma_refunds_in)d" type="action"
                             string="Supplier Refunds"
-                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['customer','other'])]}"
+                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','!=',%(crm_claim_type.crm_claim_type_supplier)d)]}"
                             context="{'search_default_partner_id': [partner_id],'search_default_user_id':False}"
                            />
                     <button class="oe_inline oe_stat_button" icon="fa-truck" name="%(act_crm_claim_rma_picking_in)d" type="action"
                             string="Returned Products"
-                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['supplier','other'])]}"
+                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','!=',%(crm_claim_type.crm_claim_type_customer)d)]}"
                             context="{'search_default_claim_id': id,'search_default_user_id':False}"
                            />
                     <button class="oe_inline oe_stat_button" icon="fa-truck" name="%(act_crm_claim_rma_picking_out)d" type="action"
                             string="Deliveries"
-                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','in', ['supplier','other'])]}"
+                            attrs="{'invisible': ['|',('partner_id','=', False),('claim_type','!=',%(crm_claim_type.crm_claim_type_customer)d)]}"
                             context="{'search_default_claim_id': id,'search_default_user_id':False}"
                            />
                 </div>
@@ -400,7 +399,7 @@
             </field>
             <field name="priority" position="before">
                 <field name="name" />
-                <field name="supplier_number" attrs="{'invisible': [('claim_type','in', ['customer',])]}"/>
+                <field name="supplier_number" attrs="{'invisible': [('claim_type','!=',%(crm_claim_type.crm_claim_type_supplier)d)]}"/>
                 <field name="date"/>
             </field>
         </field>
@@ -482,8 +481,10 @@
     <record model="ir.actions.act_window" id="crm_claim.crm_case_categ_claim0">
         <field name="name">Customer Claims</field>
         <field name="res_model">crm.claim</field>
-        <field name="context">{"stage_type":'claim', "claim_type": 'customer'}</field>
-        <field name="domain" eval="[('claim_type','=','customer')]" />
+         <field name="context" eval="{'stage_type': 'claim',
+                                     'claim_type': ref('crm_claim_type.crm_claim_type_customer'),
+                                     'default_claim_type': ref('crm_claim_type.crm_claim_type_customer')}"/>
+        <field name="domain" eval="[('claim_type','=',ref('crm_claim_type.crm_claim_type_customer'))]" />
     </record>
 
 
@@ -496,8 +497,10 @@
         <field name="view_type">form</field>
         <field name="view_mode">tree,calendar,form</field>
         <field name="view_id" ref="crm_case_claims_tree_view"/>
-        <field name="context">{"stage_type":'claim', "claim_type": 'supplier'}</field>
-        <field name="domain" eval="[('claim_type','=','supplier')]" />
+        <field name="context" eval="{'stage_type': 'claim',
+                                     'claim_type': ref('crm_claim_type.crm_claim_type_supplier'),
+                                     'default_claim_type': ref('crm_claim_type.crm_claim_type_supplier')}"/>
+        <field name="domain" eval="[('claim_type','=',ref('crm_claim_type.crm_claim_type_supplier'))]" />
         <field name="search_view_id" ref="crm_claim.view_crm_case_claims_filter"/>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
@@ -515,7 +518,7 @@
         <field name="res_model">claim.line</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain" eval="[('claim_type','=','customer')]" />
+        <field name="domain" eval="[('claim_type','=',ref('crm_claim_type.crm_claim_type_customer'))]" />
         <field name="context">{}</field>
         <field name="view_id" ref="crm_claim_line_tree_view2"/>
         <field name="search_view_id" ref="view_crm_claim_lines_filter"/>
@@ -526,7 +529,7 @@
         <field name="res_model">claim.line</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain" eval="[('claim_type','=','supplier')]" />
+        <field name="domain" eval="[('claim_type','=',ref('crm_claim_type.crm_claim_type_supplier'))]" />
         <field name="context">{}</field>
         <field name="view_id" ref="crm_claim_line_tree_view"/>
         <field name="search_view_id" ref="view_crm_claim_lines_filter"/>

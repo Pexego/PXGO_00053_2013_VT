@@ -61,7 +61,7 @@
         <field name="arch" type="xml">
             <field name="rma_cost" position="after">
                 <field name="date_received"/>
-                <field name="allow_confirm_blocked" attrs="{'invisible': [('claim_type', '!=', 'customer')]}" groups="account.group_account_manager"/>
+                <field name="allow_confirm_blocked" attrs="{'invisible': [('claim_type', '!=', %(crm_claim_type.crm_claim_type_customer)d)]}" groups="account.group_account_manager"/>
             </field>
             <field name="email_from" position="after">
                 <field name="comercial"/>
@@ -109,9 +109,6 @@
       <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
       <field name="arch" type="xml">
           <field name="invoice_id" position="replace"/>
-          <field name="partner_id" position="before">
-              <field name="claim_type" invisible="1"/>
-          </field>
       </field>
     </record>
 
@@ -267,30 +264,16 @@
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="crm_claim_rma.crm_case_categ_claim_supplier">
-        <field name="name">Claims</field>
-        <field name="res_model">crm.claim</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,calendar,form</field>
-        <field name="view_id" ref="crm_claim_rma.crm_case_claims_tree_view"/>
-        <field name="context">{"search_default_user_id":uid, "stage_type":'claim', "claim_type": 'supplier', "default_claim_type": 'supplier'}</field>
-        <field name="domain" eval="[('claim_type','=','supplier')]" />
-        <field name="search_view_id" ref="crm_claim.view_crm_case_claims_filter"/>
-        <field name="help" type="html">
-            <p class="oe_view_nocontent_create">
-                Record and track your suppliers' claims. Claims may be linked to a sales order or a lot.You can send emails with attachments and keep the full history for a claim (emails sent, intervention type and so on).Claims may automatically be linked to an email address using the mail gateway module.
-            </p>
-        </field>
-    </record>
-
     <record model="ir.actions.act_window" id="crm_case_categ_claim_sort">
         <field name="name">Received Claims</field>
         <field name="res_model">crm.claim</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,calendar,form</field>
         <field name="view_id" ref="crm_case_claims_tree_view_received"/>
-        <field name="domain">[('claim_type', '=', 'customer')]</field>
-        <field name="context">{"stage_type":'claim', "claim_type": 'customer'}</field>
+        <field name="context" eval="{'stage_type': 'claim',
+                                     'claim_type': ref('crm_claim_type.crm_claim_type_customer'),
+                                     'default_claim_type': ref('crm_claim_type.crm_claim_type_customer')}"/>
+        <field name="domain" eval="[('claim_type','=',ref('crm_claim_type.crm_claim_type_customer'))]"/>
         <field name="search_view_id" ref="crm_claim.view_crm_case_claims_filter"/>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">

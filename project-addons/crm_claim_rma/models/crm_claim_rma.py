@@ -216,7 +216,7 @@ class ClaimLine(models.Model):
     supplier_line_id = fields.Many2one('claim.line', 'Supplier claim line')
     original_line_id = fields.Many2one('claim.line', 'original claim line', readonly=True)
 
-    claim_type = fields.Selection(related='claim_id.claim_type',
+    claim_type = fields.Many2one(related='claim_id.claim_type',
                                   string='Claim type', readonly=True)
 
     move_in_supplier_state = fields.Selection(
@@ -299,10 +299,16 @@ class CrmClaim(models.Model):
 
     @api.onchange('claim_type')
     def onchange_claim_type(self):
-        if self.claim_type == 'customer':
-            return {'domain': {'partner_id': [('customer', '=', True)]}}
+        customer_type = self.env.ref('crm_claim_type.crm_claim_type_customer')
+        supplier_type = self.env.ref('crm_claim_type.crm_claim_type_supplier')
+        if self.claim_type.id == customer_type.id:
+            return {'domain': {'partner_id': [('customer', '=', True),
+                                              ('is_company', '=', True)]}}
+        elif self.claim_type.id == supplier_type.id:
+            return {'domain': {'partner_id': [('supplier', '=', True),
+                                              ('is_company', '=', True)]}}
         else:
-            return {'domain': {'partner_id': [('supplier', '=', True)]}}
+            return {}
 
     def _get_sequence_number(self):
         seq_obj = self.env['ir.sequence']
@@ -347,12 +353,11 @@ class CrmClaim(models.Model):
     supplier_number = fields.Char('Supplier Number',
                                   index=True,
                                   help="Supplier claim number")
-    claim_type = fields.Selection([('customer', 'Customer'),
-                                   ('supplier', 'Supplier')],
-                                  string='Claim type',
-                                  required=True, default='customer',
-                                  help="Customer: from customer to company.\n "
-                                       "Supplier: from company to supplier.")
+    claim_type = fields.Many2one('crm.claim.type',
+                                 string='Claim type',
+                                 required=True,
+                                 help="Customer: from customer to company.\n "
+                                      "Supplier: from company to supplier.")
     claim_line_ids = fields.One2many('claim.line', 'claim_id',
                                      string='Return lines')
     planned_revenue = fields.Float('Expected revenue')
