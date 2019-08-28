@@ -36,6 +36,8 @@ class test_lp_1282584(common.TransactionCase):
         ClaimLine = self.registry('claim.line')
         Claim = self.registry('crm.claim')
 
+        customer_type = self.ref('crm_claim_type.crm_claim_type_customer').id
+
         self.product_id = self.ref('product.product_product_4')
 
         self.partner_id = self.ref('base.res_partner_12')
@@ -46,7 +48,7 @@ class test_lp_1282584(common.TransactionCase):
             {
                 'name': 'TEST CLAIM',
                 'number': 'TEST CLAIM',
-                'claim_type': 'customer',
+                'claim_type': customer_type,
                 'delivery_address_id': self.partner_id,
             })
 

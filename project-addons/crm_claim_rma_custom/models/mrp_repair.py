@@ -32,8 +32,8 @@ class MrpRepair(models.Model):
         order_obj = self.browse(self.id)
         claim_line_obj = self.env['claim.line'].browse(self.claim_id.id)
         claim_obj = self.env['crm.claim'].browse(claim_line_obj.id)
-
-        if claim_obj.claim_type == u'customer':
+        customer_type = self.env.ref('crm_claim_type.crm_claim_type_customer').id
+        if claim_obj.claim_type.id == customer_type:
             for operation in order_obj.operations.ids:
                 operation_obj = order_obj.operations.browse(operation)
                 if operation_obj.type == u'add':

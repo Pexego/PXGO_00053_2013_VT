@@ -38,11 +38,13 @@ class ClaimMakePicking(models.TransientModel):
         lines, or if different, return None."""
         context = self.env.context
         loc_id = False
+        supplier_type = self.env.ref('crm_claim_type.crm_claim_type_supplier').id
+        customer_type = self.env.ref('crm_claim_type.crm_claim_type_customer').id
         if context.get('picking_type') == 'out':
             partner = self.env['res.partner'].browse(context.get('partner_id'))
-            if context.get('type') == 'supplier':
+            if context.get('type') == supplier_type:
                 loc_id = partner.property_stock_supplier
-            elif context.get('type') == 'customer':
+            elif context.get('type') == customer_type:
                 loc_id = partner.property_stock_customer
         elif context.get('picking_type') == 'in':
             # Add the case of return to supplier !
@@ -74,19 +76,21 @@ class ClaimMakePicking(models.TransientModel):
     def _get_source_loc(self):
         loc_id = False
         context = self.env.context
+        supplier_type = self.env.ref('crm_claim_type.crm_claim_type_supplier').id
+        customer_type = self.env.ref('crm_claim_type.crm_claim_type_customer').id
         if context.get('picking_type') == 'out':
             warehouse = self.env['stock.warehouse'].browse(context.get('warehouse_id'))
-            if context.get('type') == 'supplier':
+            if context.get('type') == supplier_type:
                 loc_id = warehouse.lot_breakdown_id
-            if context.get('type') == 'customer':
+            if context.get('type') == customer_type:
                 loc_id = warehouse.lot_rma_id
 
         elif context.get('picking_type') == 'in':
             partner = self.env['res.partner'].browse(context.get('partner_id'))
-            if context.get('type') == 'supplier':
+            if context.get('type') == supplier_type:
                 loc_id = partner.property_stock_supplier
 
-            if context.get('type') == 'customer':
+            if context.get('type') == customer_type:
                 loc_id = partner.property_stock_customer
         return loc_id
 

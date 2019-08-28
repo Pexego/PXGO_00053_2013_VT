@@ -56,9 +56,8 @@ class CrmClaimReport(models.Model):
     email = fields.Integer('# Emails', readonly=True)
     subject = fields.Char('Claim Subject', readonly=True)
     nbr = fields.Float('RMA cost', readonly=True)
-    claim_type = fields.Selection([('customer', 'Customer'),
-                                   ('supplier', 'Supplier')],
-                                  string='Claim type', readonly=True)
+    claim_type = fields.Many2one('crm.claim.type',
+                                 string='Claim type', readonly=True)
 
     def init(self):
 
