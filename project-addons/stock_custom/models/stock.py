@@ -63,6 +63,10 @@ class StockPicking(models.Model):
                 picking_template.with_context(
                     lang=picking.partner_id.lang).send_mail(picking.id)
 
+            picking_states = picking.sale_id.picking_ids.mapped('state')
+            if all(state in ('done', 'cancel') for state in picking_states) \
+                    and not all(state == 'cancel' for state in picking_states):
+                picking.sale_id.action_done()
         return res
 
 
