@@ -32,7 +32,8 @@
              'views/purchase_view.xml',
              'report/sale_report_view.xml',
              'wizard/reconline_payment_with_statement_lines_wzd_view.xml',
-             'wizard/reclassify_move_line_balance_wizard_view.xml'
+             'wizard/reclassify_move_line_balance_wizard_view.xml',
+             'wizard/wzd_remove_partners_from_payment_order_view.xml'
              ],
     "installable": True
 }

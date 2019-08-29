@@ -8,6 +8,43 @@ class AccountPaymentOrder(models.Model):
     _inherit = 'account.payment.order'
 
     @api.multi
+    def draft2open(self):
+        for order in self:
+            group_paylines = {}
+            incorrect_partners = []
+            for payline in order.payment_line_ids:
+                if order.payment_mode_id.group_lines:
+                    hashcode = payline.payment_line_hashcode()
+                else:
+                    # Use line ID as hascode, which actually means no grouping
+                    hashcode = payline.id
+                if hashcode in group_paylines:
+                    group_paylines[hashcode]['paylines'] += payline
+                    group_paylines[hashcode]['total'] +=\
+                        payline.amount_currency
+                else:
+                    group_paylines[hashcode] = {
+                        'paylines': payline,
+                        'total': payline.amount_currency,
+                    }
+            for paydict in list(group_paylines.values()):
+                # Block if a bank payment line is <= 0
+                if paydict['total'] <= 0:
+                    incorrect_partners.\
+                        append(paydict['paylines'][0].partner_id.id)
+            if incorrect_partners:
+                incorrect_partners = list(set(incorrect_partners))
+                wzd = self.env['wzd.remove.partner.payment.order'].\
+                    create({'partner_ids': [(6, 0, incorrect_partners)]})
+                result = self.env['ir.actions.act_window'].\
+                    for_xml_id('custom_account',
+                               'action_wzd_remove_partner_payment_order')
+                result['res_id'] = wzd.id
+                result['target'] = 'new'
+                return result
+        return super().draft2open()
+
+    @api.multi
     def generate_payment_file(self):
         self.ensure_one()
         errors = ""
@@ -71,7 +108,6 @@ class AccountPaymentOrder(models.Model):
 
         if mail_ids:
             mail_ids.send()
-
 
     @api.onchange('payment_mode_id')
     def payment_mode_id_change(self):
