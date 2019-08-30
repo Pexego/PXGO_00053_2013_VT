@@ -315,7 +315,8 @@
                         string="Partial reconciliation"
                         attrs="{'invisible': ['|', ('full_reconcile_id', '!=', False), '&amp;', ('matched_debit_ids', '=', []),('matched_credit_ids', '=', [])]}">
                     </button>
-                    <field name="balance" readonly="True" sum="Total balance"/>
+                    <field name="residual_balance" readonly="True" sum="Total balance"/>
+                    <field name="balance" readonly="True" invisible="1"/>
                 </tree>
             </field>
         </record>
@@ -327,7 +328,7 @@
             <field name="view_mode">tree</field>
             <field name="view_id" ref="view_partner_situation_tree"/>
             <field name="domain">[('full_reconcile_id', '=', False),('account_id.deprecated','=', False),
-                ('account_id.internal_type', '=', 'receivable')]</field>
+                ('account_id.internal_type', '=', 'receivable'), '|',('invoice_id.state', '!=', 'paid'),('invoice_id', '=', False)]</field>
         </record>
 
         <record model="ir.actions.act_window" id="supplier_situation_action">
