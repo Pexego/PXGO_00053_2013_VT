@@ -1,0 +1,78 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * product_versions
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-10-21 13:08+0000\n"
+"PO-Revision-Date: 2016-10-21 13:08+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_name
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_display_name
+msgid "Display Name"
+msgstr "Nome"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_id
+msgid "ID"
+msgstr "ID"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version___last_update
+msgid "Last Modified on"
+msgstr "Últ. aggiornamento il"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_write_uid
+msgid "Last Updated by"
+msgstr "Últ. aggiornamento per"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_write_date
+msgid "Last Updated on"
+msgstr "Últ. aggiornamento il"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_product_tmpl_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: product_versions
+#: model:ir.model,name:product_versions.model_product_template
+msgid "Product Template"
+msgstr "Modello di prodotto"
+
+#. module: product_versions
+#: model:ir.model.fields,field_description:product_versions.field_product_version_version
+msgid "Version"
+msgstr "Versione"
+
+#. module: product_versions
+#: model:ir.ui.view,arch_db:product_versions.product_template_form_view_add_versions_pag
+#: model:ir.ui.view,arch_db:product_versions.product_template_form_view_add_versions_page
+#: model:ir.model.fields,field_description:product_versions.field_product_template_version_ids
+msgid "Versions"
+msgstr "Versioni"

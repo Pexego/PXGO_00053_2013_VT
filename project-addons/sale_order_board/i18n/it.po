@@ -1,0 +1,59 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * sale_order_board
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-04-05 13:26+0000\n"
+"PO-Revision-Date: 2018-04-05 13:26+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_total_weight
+msgid "Total Weight (Kgs)"
+msgstr "Peso Totale (Kgs)"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_data
+msgid "Shipping Data"
+msgstr "Calcolo della spedizione"
+
+#. module: sale_order_board
+#: model:ir.ui.view,arch_db:sale_order_board.view_order_request_info
+msgid "Shipping Data Information"
+msgstr "Informazioni de spedizione"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_service
+msgid "Service"
+msgstr "Servizio"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_amount
+msgid "Amount"
+msgstr "Totale"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_currency
+msgid "Currency"
+msgstr "Valuta"
+
+#. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_products_wo_weight
+msgid "of the product(s) of the order don't have set the weights, please take the shipping cost as an aproximation"
+msgstr "dei prodotti dell'ordine non hanno i pesi contrassegnati, si ricorda che il costo di spedizione è approssimativo "
+
+#. module: sale_order_board
+#: model:ir.ui.view,arch_db:sale_order_board.view_price_calc
+msgid "  Calculate Shipping Prices"
+msgstr "  Calcolo della spedizione"
+
+
+

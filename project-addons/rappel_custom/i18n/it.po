@@ -1,0 +1,56 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * rappel_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-10-31 08:30+0000\n"
+"PO-Revision-Date: 2018-10-31 08:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: rappel_custom
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_calculated_goal_percentage
+msgid "Goal Percentage"
+msgstr "Tasso di conformità"
+
+#. module: rappel_custom
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_brand_ids
+msgid "Brand"
+msgstr "Marca"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.rappel_form_add_brand
+msgid "You must fill in only one of the following fields to define the validity area of rappel:"
+msgstr "È necessario inserire solo uno dei seguenti dati per definire l'ambito di validità del rappel: "
+
+#. module: rappel_custom
+#: model:ir.model.fields,help:rappel_custom.field_rappel_current_info_curr_qty_pickings
+msgid "Qty estimation in pickings pending to be invoiced (shipping cost and product with no-rappel check in the order are not verified)"
+msgstr "Importo stimato nelle note di consegna in attesa di fatturazione (i costi di spedizione e i prodotti con l'assegno non di sconto nell'ordine non sono verificati) "
+
+#. module: rappel_custom
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_current_info_curr_qty_pickings
+msgid "Qty pending invoice"
+msgstr "Quant. in attesa di fatturazione"
+
+#. module: rappel_custom
+#: model:ir.ui.view,arch_db:rappel_custom.view_rappel_current_info_tree_add_qty_picking
+msgid "Curr. qty invoiced"
+msgstr "Quant. att. fatturata"
+
+#. module: rappel_custom
+#: model:ir.model.fields,field_description:rappel_custom.field_rappel_current_info_amount_est
+msgid "Estimated amount"
+msgstr "Importo stimato"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_rappel_description
+msgid "Description"
+msgstr "Descrizione"

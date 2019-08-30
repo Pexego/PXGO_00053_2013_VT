@@ -1,0 +1,600 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* openerp_sale_promotions
+#	* sale_promotions_extend
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-31 15:32+0000\n"
+"PO-Revision-Date: 2017-01-31 15:32+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.actions,action_type:0
+msgid "Action"
+msgstr "Azione"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+#: field:promos.rules,actions:0
+msgid "Actions"
+msgstr "Azioni"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,active:0
+msgid "Active"
+msgstr "Attivo"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules,logic:0
+msgid "All"
+msgstr "Tutto"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules,logic:0
+msgid "Any"
+msgstr "Nessuno"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+msgid "Applicable Period"
+msgstr "Periodo applicable"
+
+#. module: openerp_sale_promotions
+#: help:promos.rules,partner_categories:0
+msgid "Applicable to all if none is selected"
+msgstr "Applicabile in tutto se nulla è selezionato"
+
+#. module: openerp_sale_promotions
+#: view:sale.order:openerp_sale_promotions.view_sale_promo_form2
+msgid "Apply Promotions"
+msgstr "Applicare promozioni"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.actions,arguments:0
+msgid "Arguments"
+msgstr "Argomenti"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.conditions.exps,attribute:0
+msgid "Attribute"
+msgstr "Attributo"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: code:addons/openerp_sale_promotions/models/rules.py:76
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:65
+#, python-format
+msgid "Buy X get Y free"
+msgstr "Compra X y ed ottieni Y gratis"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: code:addons/openerp_sale_promotions/models/rules.py:76
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:65
+#, python-format
+msgid "AxB on product tag"
+msgstr "AxB nel tag del prodotto"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.conditions.exps,comparator:0
+msgid "Comparator"
+msgstr "Confrontare"
+
+#. module: sale_promotions_extend
+#: view:sale.order:sale_promotions_extend.view_sale_promo_form2_remove_button
+msgid "Compute final price"
+msgstr "Calcolare prezzo finale"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Compute sub total excluding products"
+msgstr "Calcola totale escludendo prodotti"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Compute sub total of products"
+msgstr "Calcola totale dei prodotti"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+msgid "Conditions"
+msgstr "Condizioni"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,coupon_code:0
+msgid "Coupon Code"
+msgstr "Codice cupon"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+msgid "Coupon/Voucher Settings"
+msgstr "Configurazione dei coupon"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,create_uid:0
+#: field:promos.rules.actions,create_uid:0
+#: field:promos.rules.conditions.exps,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,create_date:0
+#: field:promos.rules.actions,create_date:0
+#: field:promos.rules.conditions.exps,create_date:0
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Custom domain expression"
+msgstr "Custom domain expression"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+#: field:promos.rules,description:0
+msgid "Description"
+msgstr "Descrizione"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:60
+#, python-format
+msgid "Discount % on Brand"
+msgstr "Sconto % sulla marca"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:61
+#, python-format
+msgid "Discount % on Brand accumulated"
+msgstr "Sconto accumulato % sulla marca"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:59
+#, python-format
+msgid "Discount % on Categ accumulated"
+msgstr "Descuento accumulato % sulla categoria"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:58
+#, python-format
+msgid "Discount % on Category"
+msgstr "Sconto % sulla categoria"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: code:addons/openerp_sale_promotions/models/rules.py:72
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:54
+#, python-format
+msgid "Discount % on Product"
+msgstr "Sconto % sul prodotto producto"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:55
+#, python-format
+msgid "Discount % on Product accumulated"
+msgstr "Sconto accumulato % sul prodotto"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: code:addons/openerp_sale_promotions/models/rules.py:74
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:63
+#, python-format
+msgid "Discount % on Sub Total"
+msgstr "Sconto % sul totale"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:56
+#, python-format
+msgid "Discount % on Tag"
+msgstr "Sconto % sul tag"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:57
+#, python-format
+msgid "Discount % on Tag accumulated"
+msgstr "Sconto % sul en tag"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,display_name:0
+#: field:promos.rules.actions,display_name:0
+#: field:promos.rules.conditions.exps,display_name:0
+msgid "Display Name"
+msgstr "Display Name"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.conditions.exps,serialised_expr:0
+msgid "Expression"
+msgstr "Expressione"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+#: view:promos.rules.conditions.exps:openerp_sale_promotions.view_promotion_cond_expr_form
+#: view:promos.rules.conditions.exps:openerp_sale_promotions.view_promotion_cond_expr_tree
+msgid "Expressions"
+msgstr "Expressioni"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: model:ir.model,name:openerp_sale_promotions.model_promos_rules_conditions_exps
+#: model:ir.model,name:sale_promotions_extend.model_promos_rules_conditions_exps
+msgid "Expressions for conditions"
+msgstr "Espressini per le condizioni"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,expressions:0
+msgid "Expressions/Conditions"
+msgstr "Espressioni/Condizioni"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules,expected_logic_result:0
+msgid "False"
+msgstr "Falso"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: code:addons/openerp_sale_promotions/models/rules.py:73
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:62
+#, python-format
+msgid "Fixed amount on Product"
+msgstr "Quantità fissa del prodotto"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: code:addons/openerp_sale_promotions/models/rules.py:75
+#: selection:promos.rules.actions,action_type:0
+#: code:addons/sale_promotions_extend/rule.py:64
+#, python-format
+msgid "Fixed amount on Sub Total"
+msgstr "Importo fisso in totale"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,from_date:0
+msgid "From Date"
+msgstr "Da"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,id:0
+#: field:promos.rules.actions,id:0
+#: field:promos.rules.conditions.exps,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: openerp_sale_promotions
+#: help:sale.order.line,promotion_line:0
+msgid "Indicates if the line was created by promotions"
+msgstr "Indica se questa linea è creata dalle promozioni "
+
+#. module: sale_promotions_extend
+#: field:product.brand,code:0
+#: field:product.category,code:0
+msgid "Internal code"
+msgstr "Codice interno"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,__last_update:0
+#: field:promos.rules.actions,__last_update:0
+#: field:promos.rules.conditions.exps,__last_update:0
+msgid "Last Modified on"
+msgstr "Ultima modifica il"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,write_uid:0
+#: field:promos.rules.actions,write_uid:0
+#: field:promos.rules.conditions.exps,write_uid:0
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento di"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,write_date:0
+#: field:promos.rules.actions,write_date:0
+#: field:promos.rules.conditions.exps,write_date:0
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,logic:0
+msgid "Logic"
+msgstr "Logica"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,coupon_used:0
+msgid "Number of Coupon Uses"
+msgstr "Numero di utilizzi per coupon"
+
+#. module: openerp_sale_promotions
+#: field:sale.order.line,old_discount:0
+msgid "Old discount"
+msgstr "Sconto antico"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: selection:promos.rules.conditions.exps,attribute:0
+#: code:addons/sale_promotions_extend/rule.py:50
+#, python-format
+msgid "Order Pricelist"
+msgstr "Tariffa dell'ordine"
+
+#. module: openerp_sale_promotions
+#: field:sale.order.line,orig_qty:0
+msgid "Original qty"
+msgstr "Quantità originale"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,expected_logic_result:0
+msgid "Output"
+msgstr "Uscita"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+#: field:promos.rules,partner_categories:0
+msgid "Partner Categories"
+msgstr "Categorie dei clienti"
+
+#. module: sale_promotions_extend
+#: model:ir.model,name:sale_promotions_extend.model_product_category
+msgid "Product Category"
+msgstr "Categoria de prodotto"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.actions,product_code:0
+msgid "Product Code"
+msgstr "Codigo prodotto"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Product Code in order"
+msgstr "Codigo prodotto in ordine"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Product Discount combination"
+msgstr "Combinazione di sconti sul prodotto"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Product Quantity combination"
+msgstr "Combinazione quantità prodotto"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Product SubTotal combination"
+msgstr "Combinazione del totale"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Product UnitPrice combination"
+msgstr "Combinazione prezzo unità del prodotto"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Product Weight combination"
+msgstr "Combinazione peso del prodotto"
+
+#. module: openerp_sale_promotions
+#: field:sale.order,coupon_code:0
+msgid "Promo Coupon Code"
+msgstr "Codigo coupon della promozione"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,name:0
+msgid "Promo Name"
+msgstr "Nome"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.actions,promotion:0
+#: field:promos.rules.conditions.exps,promotion:0
+msgid "Promotion"
+msgstr "Promozione"
+
+#. module: openerp_sale_promotions
+#: field:sale.order.line,promotion_line:0
+msgid "Promotion Line"
+msgstr "Lineaa di promozione"
+
+#. module: openerp_sale_promotions
+#: model:ir.actions.act_window,name:openerp_sale_promotions.act_promotion_rules
+#: model:ir.model,name:openerp_sale_promotions.model_promos_rules
+#: model:ir.ui.menu,name:openerp_sale_promotions.promos
+msgid "Promotion Rules"
+msgstr "Regole di promozione"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_tree
+msgid "Promotions"
+msgstr "Promozioni"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: model:ir.model,name:openerp_sale_promotions.model_promos_rules_actions
+#: model:ir.model,name:sale_promotions_extend.model_promos_rules_actions
+msgid "Promotions actions"
+msgstr "Azioni di promozione"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: model:ir.model,name:openerp_sale_promotions.model_sale_order
+#: model:ir.model,name:sale_promotions_extend.model_sale_order
+msgid "Sales Order"
+msgstr "Ordine di vendita"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: model:ir.model,name:openerp_sale_promotions.model_sale_order_line
+#: model:ir.model,name:sale_promotions_extend.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Linea ordine d'acquisto"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,sequence:0
+#: field:promos.rules.actions,sequence:0
+#: field:promos.rules.conditions.exps,sequence:0
+msgid "Sequence"
+msgstr "Sequenza"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,stop_further:0
+msgid "Stop Checks"
+msgstr "Finalizzare processo"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.conditions.exps,stop_further:0
+msgid "Interrompere ulteriori controlli"
+msgstr "Finalizzare comprobación"
+
+#. module: openerp_sale_promotions
+#: help:promos.rules,stop_further:0
+msgid "Stops further promotions being checked"
+msgstr "Finalizzare promozioni"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Tag in order"
+msgstr "Tag sull'ordine"
+
+#. module: sale_promotions_extend
+#: field:sale.order.line,product_tags:0
+msgid "Tags"
+msgstr "Etichette"
+
+#. module: sale_promotions_extend
+#: field:sale.order.line,web_discount:0
+msgid "Web discount"
+msgstr "Dto. web"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Tax Amount"
+msgstr "Tasse"
+
+#. module: openerp_sale_promotions
+#: help:promos.rules,coupon_used:0
+msgid "The number of times this coupon has been used."
+msgstr "Il numero di coupon è già stato utilizzato."
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,to_date:0
+msgid "To Date"
+msgstr "Fino"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Total Amount"
+msgstr "Quantità Totale"
+
+#. module: openerp_sale_promotions
+#: selection:promos.rules,expected_logic_result:0
+msgid "True"
+msgstr "Vero"
+
+#. modules: openerp_sale_promotions, sale_promotions_extend
+#: code:addons/openerp_sale_promotions/models/rules.py:42
+#: selection:promos.rules.conditions.exps,attribute:0
+#: code:addons/sale_promotions_extend/rule.py:37
+#, python-format
+msgid "Untaxed Total"
+msgstr "Base imponibile"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,uses_per_coupon:0
+msgid "Uses per Coupon"
+msgstr "Usi dei coupon"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules,uses_per_partner:0
+msgid "Uses per Partner"
+msgstr "Usi per cliente"
+
+#. module: openerp_sale_promotions
+#: field:promos.rules.conditions.exps,value:0
+msgid "Value"
+msgstr "Valore"
+
+#. module: openerp_sale_promotions
+#: code:addons/openerp_sale_promotions/models/rules.py:61
+#: selection:promos.rules.conditions.exps,comparator:0
+#, python-format
+msgid "equals"
+msgstr "è uguale a"
+
+#. module: openerp_sale_promotions
+#: view:promos.rules:openerp_sale_promotions.view_promotion_rules_form
+msgid "expressions are"
+msgstr "le espressioni sono"
+
+#. module: openerp_sale_promotions
+#: code:addons/openerp_sale_promotions/models/rules.py:63
+#: selection:promos.rules.conditions.exps,comparator:0
+#, python-format
+msgid "greater than"
+msgstr "maggiore di"
+
+#. module: openerp_sale_promotions
+#: code:addons/openerp_sale_promotions/models/rules.py:64
+#: selection:promos.rules.conditions.exps,comparator:0
+#, python-format
+msgid "greater than or equal to"
+msgstr "maggiore o uguale a"
+
+#. module: openerp_sale_promotions
+#: code:addons/openerp_sale_promotions/models/rules.py:67
+#: selection:promos.rules.conditions.exps,comparator:0
+#, python-format
+msgid "is in"
+msgstr "è in"
+
+#. module: openerp_sale_promotions
+#: code:addons/openerp_sale_promotions/models/rules.py:68
+#: selection:promos.rules.conditions.exps,comparator:0
+#, python-format
+msgid "is not in"
+msgstr "non è in"
+
+#. module: openerp_sale_promotions
+#: code:addons/openerp_sale_promotions/models/rules.py:65
+#: selection:promos.rules.conditions.exps,comparator:0
+#, python-format
+msgid "less than"
+msgstr "minore di"
+
+#. module: openerp_sale_promotions
+#: code:addons/openerp_sale_promotions/models/rules.py:66
+#: selection:promos.rules.conditions.exps,comparator:0
+#, python-format
+msgid "less than or equal to"
+msgstr "minore o iguale a"
+
+#. module: openerp_sale_promotions
+#: code:addons/openerp_sale_promotions/models/rules.py:62
+#: selection:promos.rules.conditions.exps,comparator:0
+#, python-format
+msgid "not equal to"
+msgstr "non è uguale a"
+
+#. module: sale_promotions_extend
+#: field:promos.rules,special_promo:0
+msgid "Special Promo"
+msgstr "Promo speciale"
+
+#. module: sale_promotions_extend
+#: field:sale.order,no_promos:0
+msgid "Not apply promotions"
+msgstr "Non applicare promozioni"
+
+#. module: sale_promotions_extend
+#: help:sale.order,no_promos:0
+msgid "Reload the prices after marking this check"
+msgstr "Ricalcola il prezzo finale dopo aver controllato"
+
+#. module: sale_promotions_extend
+#: view:sale.order:sale_promotions_extend.view_sale_promo_form2_remove_button_good
+msgid "Apply Promotions"
+msgstr "Applicare promozioni"

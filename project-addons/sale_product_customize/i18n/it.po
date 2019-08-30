@@ -1,0 +1,320 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * sale_product_customize
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-07 11:08+0000\n"
+"PO-Revision-Date: 2016-01-07 11:08+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_product_customize
+#: field:product.product,can_mount_ids:0
+msgid "Can mount"
+msgstr "Può essere montato"
+
+#. module: sale_product_customize
+#: view:product.product:sale_product_customize.product_add_mounted_products
+msgid "Can mount products"
+msgstr "Prodotto che può essere montato"
+
+#. module: sale_product_customize
+#: view:mrp.customization.wizard:sale_product_customize.mrp_customization_form
+msgid "Cancel"
+msgstr "Cancellare"
+
+#. module: sale_product_customize
+#: field:mrp.customize.type,code:0
+msgid "Code"
+msgstr "Codice"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_stock_move_consume
+msgid "Consume Products"
+msgstr "Consuma prodotti"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,create_uid:0
+#: field:mrp.customize.type,create_uid:0
+#: field:product.product.mount,create_uid:0
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,create_date:0
+#: field:mrp.customize.type,create_date:0
+#: field:product.product.mount,create_date:0
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: sale_product_customize
+#: field:product.template,custom:0
+msgid "Custom"
+msgstr "Personalizzato"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,customization_type_ids:0
+msgid "Customization types"
+msgstr "Tipi di personalizzazione"
+
+#. module: sale_product_customize
+#: field:sale.order.line,customization_types:0
+msgid "Customizations"
+msgstr "Person."
+
+#. module: sale_product_customize
+#: model:ir.actions.act_window,name:sale_product_customize.product_template_action_customizations
+#: model:ir.ui.menu,name:sale_product_customize.menu_mrp_product_custom_form
+msgid "Customizations"
+msgstr "Personalizzazione"
+
+#. module: sale_product_customize
+#: model:ir.actions.act_window,name:sale_product_customize.action_mrp_customize_type
+#: model:ir.ui.menu,name:sale_product_customize.menu_customize_type
+#: view:mrp.customize.type:sale_product_customize.mrp_customize_type_form
+#: view:mrp.customize.type:sale_product_customize.mrp_customize_type_tree
+msgid "Customize type"
+msgstr "Tipi di personalizzazione"
+
+#. module: sale_product_customize
+#: field:product.product.mount,name:0
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/model/sale.py:60
+#: code:addons/sale_product_customize/model/sale.py:71
+#, python-format
+msgid "Error"
+msgstr "Errore"
+
+#. module: sale_product_customize
+#: field:mrp.production,final_prod_lot:0
+msgid "Final lot"
+msgstr "Lotto finale"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,id:0
+#: field:mrp.customize.type,id:0
+#: field:product.product.mount,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,write_uid:0
+#: field:mrp.customize.type,write_uid:0
+#: field:product.product.mount,write_uid:0
+msgid "Last Updated by"
+msgstr "Ult. aggiornamento di"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,write_date:0
+#: field:mrp.customize.type,write_date:0
+#: field:product.product.mount,write_date:0
+msgid "Last Updated on"
+msgstr "Ult. aggiornamento il"
+
+#. module: sale_product_customize
+#: view:mrp.customization.wizard:sale_product_customize.mrp_customization_form
+msgid "Make"
+msgstr "Creare"
+
+#. module: sale_product_customize
+#: view:mrp.customization.wizard:sale_product_customize.mrp_customization_form
+msgid "Make customization"
+msgstr "Personalizza"
+
+#. module: sale_product_customize
+#: model:ir.actions.act_window,name:sale_product_customize.action_customization_wizard
+#: model:ir.ui.menu,name:sale_product_customize.menu_action_customization_wizard
+msgid "Make customizations"
+msgstr "Creare personalizzazione"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_mrp_production
+msgid "Manufacturing Order"
+msgstr "Orden di produzione"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,can_mount_id:0
+#: field:sale.order.line,can_mount_id:0
+msgid "Mount"
+msgstr "Monta"
+
+#. module: sale_product_customize
+#: field:mrp.customize.type,name:0
+msgid "Name"
+msgstr "Nome"
+
+#. module: sale_product_customize
+#: field:mrp.customize.type,aux_product:0
+msgid "Needs another product"
+msgstr "Necessita un atro prodotto"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/model/sale.py:61
+#: code:addons/sale_product_customize/model/sale.py:72
+#, python-format
+msgid "One of the products not have default code"
+msgstr "Uno dei prodotti non ha riferimento interno"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/model/sale.py:78
+#, python-format
+msgid "Partner reference"
+msgstr "Referimento del cliente"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_stock_picking
+msgid "Picking List"
+msgstr "Bolla"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_product_product
+#: field:mrp.customization.wizard,product_id:0
+#: field:product.product.mount,head_product_id:0
+#: field:product.product.mount,product_id:0
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_mrp_product_produce
+msgid "Product Produce"
+msgstr "Fabbricare prodotto"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_mrp_product_produce_line
+msgid "Product Produce Consume lines"
+msgstr "Linee di consumo dei prodotti realizzati"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_product_template
+msgid "Product Template"
+msgstr "Modello di prodotto"
+
+#. module: sale_product_customize
+#: field:stock.reservation,mrp_id:0
+msgid "Production"
+msgstr "Produzione"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,name:0
+msgid "Production name"
+msgstr "Nome produzione"
+
+#. module: sale_product_customize
+#: field:mrp.production,production_name:0
+msgid "Production ref"
+msgstr "Rif. produzione"
+
+#. module: sale_product_customize
+#: field:sale.order.line,mrp_production_ids:0
+msgid "Productions"
+msgstr "Produzioni"
+
+#. module: sale_product_customize
+#: field:product.product.mount,qty:0
+msgid "Qty."
+msgstr "Quant."
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,qty:0
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,partner_id:0
+msgid "Related partner"
+msgstr "Partner collegato"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,requires_mount:0
+#: field:sale.order.line,requires_mount:0
+msgid "Requires mount"
+msgstr "Assemblaggio richiesto"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,requires_partner:0
+msgid "Requires partner"
+msgstr "Partner richiesto"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_sale_order
+msgid "Sales Order"
+msgstr "Ordine di vendita"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Linea ordine cliente"
+
+#. module: sale_product_customize
+#: field:mrp.bom.line,final_lot:0
+msgid "Same final product lot"
+msgstr "Stesso lotto finale"
+
+#. module: sale_product_customize
+#: model:ir.model,name:sale_product_customize.model_stock_reservation
+msgid "Stock Reservation"
+msgstr "Riserva di stock"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/model/sale.py:79
+#: code:addons/sale_product_customize/wizard/mrp_customization_wizard.py:93
+#, python-format
+msgid "The partner %s not have reference"
+msgstr "Il cliente% i non ha riferimenti"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/wizard/mrp_customization_wizard.py:87
+#, python-format
+msgid "The product to mount not have default code"
+msgstr "Il prodotto da assemblare non ha riferimenti"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/wizard/mrp_customization_wizard.py:82
+#, python-format
+msgid "This product not have default code"
+msgstr "Il prodotto non ha riferimenti"
+
+#. module: sale_product_customize
+#: field:mrp.production,type_ids:0
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sale_product_customize
+#: field:mrp.customization.wizard,product_uom:0
+msgid "UoM"
+msgstr "UdM"
+
+#. module: sale_product_customize
+#: field:stock.move.consume,final_lot:0
+msgid "final lot"
+msgstr "Lotto finale"
+
+#. module: sale_product_customize
+#: field:mrp.production,sale_line_id:0
+msgid "order line"
+msgstr "Linea di vendita"
+
+#. module: sale_product_customize
+#: selection:product.template,state:0
+msgid "Make to order"
+msgstr "Su richiesta"
+
+#. module: sale_product_customize
+#: field:mrp.production,picking_out:0
+msgid "Out picking"
+msgstr "Bolla di uscita"
+
+#. module: sale_product_customize
+#: field:mrp.production,picking_in:0
+msgid "In picking"
+msgstr "Bolla d' entrata"

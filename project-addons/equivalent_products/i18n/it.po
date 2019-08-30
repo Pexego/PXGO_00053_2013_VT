@@ -1,0 +1,203 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * equivalent_products
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:16+0000\n"
+"PO-Revision-Date: 2014-12-17 16:16+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: equivalent_products
+#: model:ir.actions.act_window,help:equivalent_products.product_tag_action
+msgid "<p>\n"
+"                Here is a list of all your products classified by Tags. You\n"
+"                can click a tag to get the list of all products linked to\n"
+"                this tag or to a child of this tag.\n"
+"              </p>\n"
+"            "
+msgstr "<p> Ecco un elenco di tutti i tuoi prodotti classificati in base alle etichette. Puoi fare clic su una etichetta per ottenere l'elenco di tutti i prodotti relazionati.</p>            "
+
+#. module: equivalent_products
+#: model:ir.ui.view,arch_db:equivalent_products.equivalent_products_wizard
+msgid "Cancel"
+msgstr "Cancellare"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_child_id
+msgid "Child tags"
+msgstr "Etichette figlie"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_create_uid
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_create_uid
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_tag_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_create_date
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_create_date
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_tag_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: equivalent_products
+#: code:addons/equivalent_products/wizard/sale_equivalent_products_wizard.py:123
+#, python-format
+msgid "El producto no es equivalente"
+msgstr "Il prodotto non è equivalente"
+
+#. module: equivalent_products
+#: code:addons/equivalent_products/sale.py:44
+#: model:ir.ui.view,arch_db:equivalent_products.equivalent_products_wizard
+#, python-format
+msgid "Equivalent products"
+msgstr "Prodotti equivalenti"
+
+#. module: equivalent_products
+#: code:addons/equivalent_products/wizard/sale_equivalent_products_wizard.py:122
+#, python-format
+msgid "Error"
+msgstr "Errore"
+
+#. module: equivalent_products
+#: constraint:product.tag:0
+msgid "Error ! You cannot create recursive tags."
+msgstr "Errore! Non è possibile creare etichette ripetute."
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_id
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_id
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_tag_id
+msgid "ID"
+msgstr "ID"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_write_uid
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_write_uid
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_tag_write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento da"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_write_date
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_write_date
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_tag_write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_parent_left
+msgid "Left Parent"
+msgstr "Left Parent"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_line_id
+msgid "Line"
+msgstr "Linea"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_complete_name
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_name
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_tag_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_parent_id
+msgid "Parent"
+msgstr "Parent"
+
+#. module: equivalent_products
+#: model:ir.actions.act_window,name:equivalent_products.products_by_tag
+#: model:ir.model,name:equivalent_products.model_product_product
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: equivalent_products
+#: model:ir.actions.act_window,name:equivalent_products.product_tag_action_form
+#: model:ir.ui.menu,name:equivalent_products.menu_product_tag_action_form
+#: model:ir.ui.view,arch_db:equivalent_products.product_tag_list_view
+#: model:ir.ui.view,arch_db:equivalent_products.product_tag_tree_view
+msgid "Product Tags"
+msgstr "Etichette prodotto"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_product_id
+msgid "Product selected"
+msgstr "Prodotto selezionato"
+
+#. module: equivalent_products
+#: model:ir.ui.view,arch_db:equivalent_products.product_tag_form
+msgid "Product tag"
+msgstr "Etichette del prodotto"
+
+#. module: equivalent_products
+#: model:ir.ui.view,arch_db:equivalent_products.product_tag_form
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_product_ids
+#: model:ir.ui.view,arch_db:equivalent_products.equivalent_products_wizard
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_product_ids
+msgid "Products"
+msgstr "Prodotti"
+
+#. module: equivalent_products
+#: model:ir.actions.act_window,name:equivalent_products.product_tag_action
+msgid "Products by tags"
+msgstr "Prodotti secondo etichette"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_product_tag_parent_right
+msgid "Right Parent"
+msgstr "Right Parent"
+
+#. module: equivalent_products
+#: model:ir.model,name:equivalent_products.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Riga ordine di vendita"
+
+#. module: equivalent_products
+#: model:ir.model,name:equivalent_products.model_sale_report
+msgid "Sales Orders Statistics"
+msgstr "Statistiche ordine di vendita"
+
+#. module: equivalent_products
+#: model:ir.ui.view,arch_db:equivalent_products.equivalent_products_wizard
+msgid "Select product"
+msgstr "Selezionare prodotto"
+
+#. module: equivalent_products
+#: model:ir.ui.view,arch_db:equivalent_products.view_order_product_search_add_brand
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_report_tag_id
+msgid "Tag"
+msgstr "Etichetta"
+
+#. module: equivalent_products
+#: model:ir.ui.view,arch_db:equivalent_products.product_add_tags_search
+#: model:ir.model.fields,field_description:equivalent_products.field_product_product_tag_ids
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_products_tag_ids
+msgid "Tags"
+msgstr "Etichette"
+
+#. module: equivalent_products
+#: model:ir.model,name:equivalent_products.model_sale_equivalent_tag
+msgid "Tags for equivalent products wizard"
+msgstr "Etichetta per la procedura guidata per prodotti equivalenti"
+
+#. module: equivalent_products
+#: model:ir.model.fields,field_description:equivalent_products.field_sale_equivalent_tag_wiz_id
+msgid "Wizard"
+msgstr "Procedura guidata"
+
+#. module: equivalent_products
+#: model:ir.model,name:equivalent_products.model_sale_equivalent_products
+msgid "Wizard for change products in sale order line"
+msgstr "Procedura guidata per modifica prodotti nella riga ordine di vendita"
+

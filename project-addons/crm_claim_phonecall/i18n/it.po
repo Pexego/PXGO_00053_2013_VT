@@ -1,0 +1,228 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * crm_claim_phonecall
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-23 19:52+0000\n"
+"PO-Revision-Date: 2016-11-23 19:52+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_start_date
+msgid "Start Date"
+msgstr "Data di inizio"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_partner_id
+msgid "Contact"
+msgstr "Cliente"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_name
+msgid "Call Summary"
+msgstr "Motivo della chiamata"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_call_type
+msgid "Call type"
+msgstr "Tipo di chiamata"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Check Stock"
+msgstr "Controllo Stock"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Check Prices"
+msgstr "Consultare Prezzo"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Order/Budget"
+msgstr "Ordine/Preventivo"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Counsel"
+msgstr "Assistenza"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Shipments status"
+msgstr "Stato Spedizione"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Order Complain/Claim"
+msgstr "Reclamo/Reclamo Ordine"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "RMA Complain/Claim"
+msgstr "Reclamo/Reclamo RMA"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Tech Complain/Claim"
+msgstr "Reclamo/Reclamo Tecnico"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Web Complain/Claim"
+msgstr "Reclamo/Reclamo Web"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Shipment Complain/Claim"
+msgstr "Reclamo/Reclamo Invio"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type:0
+msgid "Accounting Complain/Claim"
+msgstr "Reclamo/Reclamo Contabilità"
+
+#. module: crm_claim_phonecall
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view
+msgid "Cancel Call"
+msgstr "Eliminare chiamata"
+
+#. module: crm_claim_phonecall
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view
+msgid "End Call"
+msgstr "Terminare chiamata"
+
+#. module: crm_claim_phonecall
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view_sat
+msgid "End Call and Notify"
+msgstr "Terminare chiamata e notificare"
+
+#. module: crm_claim_phonecall
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_call_type
+msgid "Duration (min)"
+msgstr "Durata (min)"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_partner_ref
+msgid "Ref. Contact"
+msgstr "Ref. Cliente"
+
+#. module: crm
+#: model:ir.model.fields,field_description:crm.field_crm_phonecall_date
+msgid "Date"
+msgstr "Data di inicio"
+
+#. module: crm
+#: model:ir.ui.view,arch_db:crm.view_crm_case_phonecalls_filter_group_by
+msgid "Week"
+msgstr "Settimana"
+
+#. module: crm_claim_phonecall
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.view_crm_case_phonecalls_filter_group_by
+msgid "Day"
+msgstr "Giorno"
+
+#. module: crm_claim_phonecall
+#: model:ir.actions.act_window,name:crm_claim_phonecall.crm_phonecall_menu_sat
+msgid "Phone calls"
+msgstr "Chiamata telefonica"
+
+#. module: crm_claim_phonecall
+#: model:ir.ui.menu,name:crm_claim_phonecall.crm_phonecall_new_call_direct
+msgid "New Call"
+msgstr "Nuova chiamata"
+
+#. module: crm_claim_phonecall
+#: model:ir.actions.act_window,name:crm_claim_phonecall.crm_phonecall_custom_wizard_action_sat
+msgid "New Call"
+msgstr "Nuova chiamata"
+
+#. module: crm_claim_phonecall
+#: model:ir.actions.act_window,name:crm_claim_phonecall.crm_case_categ_phone_incoming0_sat
+msgid "Logged Calls"
+msgstr "Chiamate registrate"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_partner_country
+msgid "Country"
+msgstr "Paese"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_brand_id
+msgid "Brand"
+msgstr "Marca"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_call_type_sat
+msgid "Call type"
+msgstr "Tipo di chiamata"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Check RMA status"
+msgstr "Controllo Stato RMA"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Incidence with product"
+msgstr "Incidenza con prodotto"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Post-sale question on operation"
+msgstr "Consulenza post-vendita su operazione"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Pre-sale query/advice"
+msgstr "Consulenza pre-vendita/assistenza"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "SAT Complaint/claim"
+msgstr "Reclamo/Reclamo SAT"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "DDNS request for registration"
+msgstr "Richiesta DDNS per registrazione"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Enquiry about courses/certificates"
+msgstr "Consulenza su corsi/certificati"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_type_sat:0
+msgid "Others"
+msgstr "Altri"
+
+#. module: crm_claim_phonecall
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view_sat
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+msgid "Subject"
+msgstr "Argomento"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_partner_salesperson
+msgid "Salesperson"
+msgstr "Commerciale"
+
+#. module: crm_claim_phonecall
+#: model:ir.actions.act_window,name:crm_claim_phonecall.crm_case_categ_phone_incoming0_sat_partner
+msgid "SAT Calls"
+msgstr "Chiamate SAT"
+
+#. module: crm_claim_phonecall
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.view_partners_form_crm_calls_sat
+#: selection:res.partner,sat_phonecall_count:0
+msgid "SAT Calls"
+msgstr "Chiamate SAT"

@@ -1,0 +1,461 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * crm_claim_rma_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-23 19:52+0000\n"
+"PO-Revision-Date: 2016-11-23 19:52+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.crm_case_categ_claim_sort
+msgid "Received Claims"
+msgstr "RMA Ricevuti"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.menu,name:crm_claim_rma_custom.menu_crm_case_claims
+msgid "Received Claims"
+msgstr "RMA Recevuti"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_bool_category_id
+msgid "Category"
+msgstr "Cetegoria"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_equivalent_products_wizard_qty_available_external
+msgid "External Stock"
+msgstr "Stock esterno"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_category_id
+msgid "Tags"
+msgstr "Etichette"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:88
+#, python-format
+msgid "Warning!"
+msgstr "¡Allarme!"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:89
+#, python-format
+msgid "One or more products aren't review yet!"
+msgstr "¡Uno o più prodotti non sono ancora stati controllati!"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.menu,name:0
+msgid "New Call"
+msgstr "Nuova chiamata"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:0
+msgid "New Call"
+msgstr "Nuova chiamata"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_aditional_notes
+msgid "Aditional Notes"
+msgstr "Note addizionali"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_allow_confirm_blocked
+msgid "Allow confirm"
+msgstr "Permettere conferma"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/crm_claim.py:156
+#, python-format
+msgid "Any line to invoice"
+msgstr "Nessuna riga da fatturare"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_equivalent_products_wizard_virtual_stock_conservative
+msgid "Available Stock"
+msgstr "Quantità disponibile"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_crm_claim_cost_report
+msgid "CRM Claim cost Report"
+msgstr "Rapporto costi reclamo CRM"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
+msgid "Calculate"
+msgstr "Calcolare"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:330
+#, python-format
+msgid "Cannot delete an invoiced line"
+msgstr "Impossibile eliminare una riga fatturata"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_claim_id
+#: model:ir.model,name:crm_claim_rma_custom.model_crm_claim
+msgid "Claim"
+msgstr "Reclamazione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_claim_number
+msgid "Claim Number"
+msgstr "Numero di reclamazione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_claim_inv_line_ids
+msgid "Claim inv line ids"
+msgstr "Riga di fatturazione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_claim_line_id
+msgid "Claim lne"
+msgstr "Riga di reclamazione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Claim type"
+msgstr "Tipo di reclamazione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_comercial
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_cost_report_comercial_id
+msgid "Comercial"
+msgstr "Commerciale"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_crm_case_claims_filter_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_country
+msgid "Country"
+msgstr "Paese"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
+msgid "Create repair"
+msgstr "Creare riparazione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_create_uid
+msgid "Created by"
+msgstr "Creado da"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_create_date
+msgid "Created on"
+msgstr "Creado il"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:130
+#, python-format
+msgid "Customer blocked by lack of payment. Check the maturity dates of their account move lines."
+msgstr "Cliente bloccato per mancanza di pagamento. Controlla le date di scadenza delle righe di movimento del loro account."
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_discount
+msgid "Discount"
+msgstr "Sconto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_display_name
+msgid "Display Name"
+msgstr "Nome display"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
+msgid "Follow Up"
+msgstr "Follow Up"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_id
+msgid "ID"
+msgstr "ID"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_stock_picking_internal_notes
+msgid "Internal Notes"
+msgstr "Note interne"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_stock_location
+msgid "Inventory Locations"
+msgstr "Posizioni Inventario"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_invoice_id
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_invoice_id
+#: model:ir.model,name:crm_claim_rma_custom.model_account_invoice
+msgid "Invoice"
+msgstr "Fattura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_invoiced
+msgid "Invoiced"
+msgstr "Fatturato"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
+msgid "Invoicing"
+msgstr "Fatturazione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_equivalent_products_wizard_kitchen_stock
+msgid "Kitchen Stock"
+msgstr "Stock cucina"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line___last_update
+msgid "Last Modified on"
+msgstr "Ultima modifica il"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_write_uid
+msgid "Last Updated by"
+msgstr "Ultima modifica da"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_write_date
+msgid "Last Updated on"
+msgstr "Ultima modifica il"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_claim_line
+msgid "List of product to return"
+msgstr "Lista di prodotti da restituire"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_make_picking_wizard_odoo_management
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_make_picking_from_picking_wizard_odoo_management
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_stock_location_odoo_management
+msgid "Management in Odoo"
+msgstr "Gestione su Odoo"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "My Case(s)"
+msgstr "I miei casi"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
+msgid "New Refund"
+msgstr "Nuovo rimborso"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_make_picking_wizard_not_sync
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_make_picking_from_picking_wizard_not_sync
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_stock_location_not_sync
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_stock_picking_not_sync
+msgid "Not sync"
+msgstr "Non sincronizzabile"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_stock_picking_odoo_management
+msgid "Odoo management"
+msgstr "Gestione Odoo"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_res_partner
+msgid "Partner"
+msgstr "Azienda"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:316
+#, python-format
+msgid "Partner not selected"
+msgstr "Cliente non selezionato"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_stock_picking
+msgid "Picking List"
+msgstr "Elenco ri raccolta"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_price_subtotal
+msgid "Price Subtotal"
+msgstr "Totale prezzo"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_price_unit
+msgid "Price Unit"
+msgstr "Prezzo unità"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Priority"
+msgstr "Priorità"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_product_id
+msgid "Product Code"
+msgstr "Codice prodotto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_product_description
+msgid "Product Description"
+msgstr "Descrizione prodotto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_qty
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_date_received
+msgid "Received Date"
+msgstr "Dati ricevuti "
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_mrp_repair
+msgid "Repair Order"
+msgstr "Ordine di riparazione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Responsible"
+msgstr "Responsabile"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:296
+#, python-format
+msgid "Selected product is not in the invoice"
+msgstr "Il prodotto selezionato non è in fattura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view_invisible_states
+msgid "Split"
+msgstr "Divisione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_report_crm_claim_cost_filter_imp_fields
+msgid "Stage"
+msgstr "Fase"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_tax_ids
+msgid "Taxes"
+msgstr "Imposte"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,help:crm_claim_rma_custom.field_stock_location_not_sync
+msgid "The incomimg pickings to this location not will be synced with vstock"
+msgstr "Le bolle di consegna entranti a questa posizione non sarqanno sincronizzate con vstock"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:106
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking_from_picking.py:56
+#, python-format
+msgid "The origin location is not managed by Odoo."
+msgstr "La posizione di origine non è gestita da Odoo."
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,help:crm_claim_rma_custom.field_stock_location_odoo_management
+msgid "The outputs of this location are managed in Odoo, Vstock only will print shipping labels"
+msgstr "Gli output di questa posizione sono gestiti in Odoo, Vstock stamperà solo le etichette di spedizione"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:149
+#, python-format
+msgid "There is at least one line of the claim with                            an incorrect invoice"
+msgstr "Almeno una riga del reclamo con una fattura errata"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,help:crm_claim_rma_custom.field_claim_make_picking_wizard_not_sync
+#: model:ir.model.fields,help:crm_claim_rma_custom.field_claim_make_picking_from_picking_wizard_not_sync
+#: model:ir.model.fields,help:crm_claim_rma_custom.field_stock_picking_not_sync
+msgid "This picking not will be synced with Vstock"
+msgstr "Questo prelievo non verrà sincronizzato con Vstock"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_picking_form_add_custom_fields
+msgid "Transfer"
+msgstr "Trasferimento"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/wizard/claim_make_picking.py:129
+#, python-format
+msgid "Warning for %s"
+msgstr "Aviso per %s"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_equivalent_products_wizard
+msgid "Wizard for change products in claim."
+msgstr "Procedura guidata per la modifica dei prodotti in reclamazione."
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_wizard
+msgid "Wizard to create pickings from claim lines"
+msgstr "Procedura guidata per creare prelievi dalle righe di reclamo"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model,name:crm_claim_rma_custom.model_claim_make_picking_from_picking_wizard
+msgid "Wizard to create pickings from picking lines"
+msgstr "Procedura guidata per creare prelievi dalle linee di prelievo"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:105
+#, python-format
+msgid "Warning!"
+msgstr "¡Adttenzione!"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:93
+#, python-format
+msgid "One or more products aren't pending shipping yet!"
+msgstr "Uno o più prodotti non sono ancora in attesa di spedizione!"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
+msgid "Claim Subject"
+msgstr "Oggetto in reclamazione"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:372
+#, python-format
+msgid "Quantity cannot be bigger than the quantity specified on invoice"
+msgstr "La quantità non può essere superiore alla quantità specificata nella fattura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_line_tree_view2_add_commercial
+msgid "Received date"
+msgstr "data di ricezione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.email_template_call_sat
+msgid "Call Alert Email"
+msgstr "Email avviso chiamata"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.email_template_call_sat
+msgid "Call to SAT from ${object.partner_id.commercial_partner_id.name}"
+msgstr "Chiamat a SAT da ${object.partner_id.commercial_partner_id.name}"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.email_template_call_sat
+msgid "<p>Call information:</p>
+<ul>
+<li>Partner: ${object.partner_id.commercial_partner_id.name}</li>
+<li>Date: ${object.date}</li><li>Type call:&nbsp;${object.call_type_sat}<br></li>
+<li>Subject: ${object.subject or 'N/A'}</li>
+<li>Brand: ${object.brand_id.name or 'N/A'}</li>
+<li>Description: ${object.description or 'N/A'}</li>
+</ul>"
+msgstr "<p>Información de la llamada:</p>
+<ul>
+<li>Empresa: ${object.partner_id.commercial_partner_id.name}</li>
+<li>Fecha: ${object.date}</li><li>Type call:&nbsp;${object.call_type_sat}<br></li>
+<li>Asunto: ${object.subject or 'N/A'}</li>
+<li>Marca: ${object.brand_id.name or 'N/A'}</li>
+<li>Descripción: ${object.description or 'N/A'}</li>
+</ul>"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_case_claims_form_view_inherit
+msgid "Claim/Action Description"
+msgstr "Descrizione di reclamo / azione"

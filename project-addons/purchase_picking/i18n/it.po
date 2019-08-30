@@ -1,0 +1,325 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * purchase_picking
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:24+0000\n"
+"PO-Revision-Date: 2014-12-17 16:24+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.assign_container_wzd_view
+msgid "Assign"
+msgstr "Assegnare"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.assign_container_wzd_view
+#: model:ir.actions.act_window,name:purchase_picking.action_assign_container
+msgid "Assign container"
+msgstr "Assegnare container"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
+msgid "Cancel"
+msgstr "Cancellare"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_company_id
+msgid "Company"
+msgstr "Azienda"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_consumed_for
+msgid "Consumed for"
+msgstr "Consumato per"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_container_id
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_container_id
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+#: model:ir.ui.view,arch_db:purchase_picking.stock_move_search_add_new_state
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_move_container_id
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_container_id
+msgid "Container"
+msgstr "Container"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_name
+msgid "Container Ref."
+msgstr "Ref. Container"
+
+#. module: purchase_picking
+#: sql_constraint:stock.container:0
+msgid "Container name must be unique"
+msgstr "Il riferimento al container deve essere unico"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container
+#: model:ir.ui.menu,name:purchase_picking.stock_container_menu
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_tree
+msgid "Containers"
+msgstr "Containers"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
+msgid "Create"
+msgstr "Creare"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
+msgid "Create Picking"
+msgstr "Creare bolla"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_create_picking
+msgid "Create picking"
+msgstr "Creare bolla"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_create_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_create_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_create_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_create_date
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_create_date
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_create_date
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_date_expected
+msgid "Date expected"
+msgstr "Data stimata"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_picking_ids
+msgid "Pickings"
+msgstr "Bolle"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_date_picking
+msgid "Date planned"
+msgstr "Data stabilita"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:40
+#, python-format
+msgid "Goods received."
+msgstr "Mercanzia ricevuta."
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_id
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_id
+msgid "ID"
+msgstr "ID"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_write_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_write_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_write_uid
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento di"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_assign_container_wzd_write_date
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_write_date
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_write_date
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento di"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_move_id
+msgid "Move"
+msgstr "Movimento"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_move_ids
+msgid "Moves"
+msgstr "Movimentos"
+
+#. module: purchase_picking
+#: model:ir.model,name:purchase_picking.model_stock_picking
+msgid "Picking List"
+msgstr "Bolle"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_move_picking_form_add_partner
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:78
+#, python-format
+msgid "Partner errore"
+msgstr "Errore azienda"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/wizard/create_picking_move.py:76
+#, python-format
+msgid "Picking error"
+msgstr "Errore nella bolla"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_production_id
+msgid "Production Order for Produced Products"
+msgstr "Ordine di produzione per i prodotti fabbricati 
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_raw_material_production_id
+msgid "Production Order for Raw Materials"
+msgstr "Ordine di produzione per materie prime"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_picking_created
+msgid "Picking created"
+msgstr "Bolla creata"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/wizard/create_picking_move.py:77
+#, python-format
+msgid "Picking error"
+msgstr "Errori nelle bolle"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: purchase_picking
+#: model:ir.model,name:purchase_picking.model_purchase_order
+msgid "Purchase Order"
+msgstr "Ordine d'acquisto"
+
+#. module: purchase_picking
+#: model:ir.model,name:purchase_picking.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr "Linea ordine d'acquisto"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_qty
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/wizard/create_picking_move.py:92
+#, python-format
+msgid "Quantity error"
+msgstr "Errore nelle quantità"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_order_form_change_view_picking
+msgid "Receive Products"
+msgstr "Ricevere prodotti"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Related Moves"
+msgstr "Movimenti relativi"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.stock_move_custom_tree
+msgid "Order"
+msgstr "Ordine"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_shipping_identifier
+msgid "Shipping identifier"
+msgstr "Identificatore di invio"
+
+#. module: purchase_picking
+#: model:ir.model,name:purchase_picking.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento di stock"
+
+#. module: purchase_picking
+#: model:ir.model,name:purchase_picking.model_stock_reservation
+msgid "Stock Reservation"
+msgstr "Riserva di stock"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_reservation_consumed_for
+msgid "Technical field used to make the traceability of produced products"
+msgstr "Campo tecnico utilizzato per effettuare la tracciabilità tra i prodotti realizzati"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_temp
+msgid "Temp."
+msgstr "Temp."
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:167
+#, python-format
+msgid "The date planned of the reservation was changed."
+msgstr "La data di prenotazione pianificata è cambiata."
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/wizard/create_picking_move.py:93
+#, python-format
+msgid "The quantity is greater than the original."
+msgstr "La cantidad es mayor a la original."
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:103
+#, python-format
+msgid "The sale order is already assigned."
+msgstr "L'ordine cliente è già assegnato."
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/wizard/create_picking_move.py:77
+#, python-format
+msgid "Type not found"
+msgstr "Tipo non trovato"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_move_detail_ids
+msgid "lines"
+msgstr "Linee"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_wizard_move_details_wizard_id
+msgid "wizard"
+msgstr "Assistente"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/stock.py:78
+#, python-format
+msgid "Set the partner in the created moves"
+msgstr "Iimposta il provider in movimento"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_order_form_change_view_picking
+msgid "View pickings"
+msgstr "Vedere bolla"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.purchase_order_form_change_view_picking
+msgid "Create picking"
+msgstr "Creare bolla"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/purchase.py:112
+#, python-format
+msgid "Warning"
+msgstr "Avviso"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/purchase.py:112
+#, python-format
+msgid "There is any move line without associated picking"
+msgstr 'Non vi è alcuna linea di movimento senza bolla di consegna associata"

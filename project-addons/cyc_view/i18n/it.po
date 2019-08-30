@@ -1,0 +1,167 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * cyc_view
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-25 11:40+0000\n"
+"PO-Revision-Date: 2015-06-25 11:40+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "April"
+msgstr "Aprile"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "August"
+msgstr "Agosto"
+
+#. module: cyc_view
+#: field:account.move.line,cyc_limit_date_insolvency:0
+msgid "C&C limit date insolvency"
+msgstr "Data limite C&C insolvenza"
+
+#. module: cyc_view
+#: field:account.move.line,cyc_notify_date:0
+msgid "C&C notify date"
+msgstr "Data notifica C&C"
+
+#. module: cyc_view
+#: field:account.invoice.cyc,cash:0
+msgid "Cash"
+msgstr "Contanti"
+
+#. module: cyc_view
+#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
+#: field:account.invoice.cyc,country_id:0
+msgid "Country"
+msgstr "Paese"
+
+#. module: cyc_view
+#: field:account.invoice.cyc,credit_covered:0
+msgid "Credit covered"
+msgstr "Credito coperto"
+
+#. module: cyc_view
+#: field:account.invoice.cyc,credit_not_covered:0
+msgid "Credit not covered"
+msgstr "Credito non coperto"
+
+#. module: cyc_view
+#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_tree
+#: model:ir.actions.act_window,name:cyc_view.action_account_invoice_cyc
+#: model:ir.ui.menu,name:cyc_view.account_invoice_menu_cyc
+msgid "Cyc report"
+msgstr "Rapporto Cyc"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "December"
+msgstr "Dicembre"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "February"
+msgstr "Febbraio"
+
+#. module: cyc_view
+#: field:account.invoice.cyc,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: cyc_view
+#: field:account.invoice.cyc,invoice_state:0
+msgid "Invoice state"
+msgstr "Stato fattura"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "January"
+msgstr "Gennaio"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "July"
+msgstr "Luglio"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "June"
+msgstr "Giugno"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "March"
+msgstr "Marzo"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "May"
+msgstr "Maggio"
+
+#. module: cyc_view
+#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
+#: field:account.invoice.cyc,invoice_month:0
+msgid "Month"
+msgstr "Mese"
+
+#. module: cyc_view
+#: field:account.invoice.cyc,not_credit:0
+msgid "No credit"
+msgstr "no credito"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "November"
+msgstr "Novembre"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "October"
+msgstr "Ottobre"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_state:0
+msgid "Open"
+msgstr "Aperto"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_state:0
+msgid "Paid"
+msgstr "Pagato"
+
+#. module: cyc_view
+#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
+msgid "Report"
+msgstr "Rapporto"
+
+#. module: cyc_view
+#: selection:account.invoice.cyc,invoice_month:0
+msgid "September"
+msgstr "Settembre"
+
+#. module: cyc_view
+#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
+msgid "State"
+msgstr "Stato"
+
+#. module: cyc_view
+#: field:account.invoice.cyc,amount_total:0
+msgid "Total"
+msgstr "Totale"
+
+#. module: cyc_view
+#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
+#: field:account.invoice.cyc,invoice_year:0
+msgid "Year"
+msgstr "Anno"
+

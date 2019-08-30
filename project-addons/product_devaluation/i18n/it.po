@@ -1,0 +1,214 @@
+# This file contains the translation of the following modules:
+#       * product_devaluation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-20 16:10+0000\n"
+"PO-Revision-Date: 2015-07-20 16:10+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.view_category_property_devaluation_form
+msgid "Account Devaluation Properties"
+msgstr "Proprietà della contabilità di svalutazione"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_account_move_id
+msgid "Account ID"
+msgstr "Account"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_name
+msgid "Account Ref"
+msgstr "Riferimento"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.view_devaluation_product_search
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_accounted_ok
+msgid "Accounted"
+msgstr "Contabilizzato"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.product_devaluation_account_wizard_form
+#: model:ir.ui.view,arch_db:product_devaluation.product_devaluation_wizard_form
+msgid "Cancel"
+msgstr "Cancellare"
+
+#. module: product_devaluation
+#: model:ir.model,name:product_devaluation.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: product_devaluation
+#: model:ir.actions.act_window,name:product_devaluation.act_product_devaluation_wizard2
+#: model:ir.actions.act_window,name:product_devaluation.action_product_devaluation_create_account
+msgid "Create Account"
+msgstr "Creare Account"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.product_devaluation_account_wizard_form
+msgid "Create Account from Devaluate Product Wizard"
+msgstr "Contabilizzare le svalutazioni del prodotto"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.product_devaluation_account_wizard_form
+msgid "Create Lines"
+msgstr "Creare linee"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_create_uid
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_create_uid
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_create_date
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_create_date
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_category_devaluation_account_credit_id
+#: model:ir.model.fields,field_description:product_devaluation.field_res_company_devaluation_account_credit_id
+msgid "Credit Account"
+msgstr "Conto di credito"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.view_devaluation_product_search
+msgid "Current Year"
+msgstr "Anno attuale"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_date
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_date_dev
+msgid "Date"
+msgstr "Data"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_category_devaluation_account_debit_id
+#: model:ir.model.fields,field_description:product_devaluation.field_res_company_devaluation_account_debit_id
+msgid "Debit Account"
+msgstr "Conto corrente "
+
+#. module: product_devaluation
+#: model:ir.actions.act_window,name:product_devaluation.act_product_devaluation_wizard
+#: model:ir.ui.view,arch_db:product_devaluation.product_devaluation_wizard_form
+msgid "Devaluate Product"
+msgstr "Prodotto svalutato"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.product_devaluation_wizard_form
+msgid "Devaluate Product Wizard"
+msgstr "Procedura guidata della svalutazione del prodotto"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_date_dev
+msgid "Devaluated on"
+msgstr "Svalutato il"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.view_company_form_outlet_prod_dev
+msgid "Devaluations"
+msgstr "Svalutazioni"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.view_devaluation_product_search
+msgid "Group By..."
+msgstr "Raggruppare per..."
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_id
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_id
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_category_devaluation_journal_id
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_journal_id
+#: model:ir.model.fields,field_description:product_devaluation.field_res_company_devaluation_journal_id
+msgid "Journal"
+msgstr "Giornaliero"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_write_uid
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_write_uid
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Últ. aggiornamento di"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_write_date
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_write_date
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_write_date
+msgid "Last Updated on"
+msgstr "Últ. aggiornamento il"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_period_id
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_account_wizard_period_id
+msgid "Period"
+msgstr "Periodo"
+
+#. module: product_devaluation
+#: code:addons/product_devaluation/wizard/product_devaluation_account_wizard.py:53
+#, python-format
+msgid "Please, select lines not accounted"
+msgstr "Per favore, seleziona le linee non contate"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_price_after
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_price_after
+msgid "Price After"
+msgstr "Prezzo dopo"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_price_before
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_price_before
+msgid "Price Before"
+msgstr "Precio prima"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.view_devaluation_product_search
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_product_id
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_wizard_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: product_devaluation
+#: model:ir.model,name:product_devaluation.model_product_category
+msgid "Product Category"
+msgstr "Categoria del prodotto"
+
+#. module: product_devaluation
+#: model:ir.actions.act_window,name:product_devaluation.action_open_search_devaluation_product
+#: model:ir.ui.menu,name:product_devaluation.menu_action_devaluation_product_search
+#: model:ir.ui.view,arch_db:product_devaluation.view_devaluation_product_search
+#: model:ir.ui.view,arch_db:product_devaluation.view_tree_devaluation_searched
+msgid "Product Devaluation"
+msgstr "Svalutazione prodotto"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_category_devaluation_account_provision_id
+#: model:ir.model.fields,field_description:product_devaluation.field_res_company_devaluation_account_provision_id
+msgid "Provision Account"
+msgstr "Numero provvigioni"
+
+#. module: product_devaluation
+#: model:ir.model.fields,field_description:product_devaluation.field_product_devaluation_quantity
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: product_devaluation
+#: model:ir.ui.view,arch_db:product_devaluation.view_tree_devaluation_searched
+msgid "Total"
+msgstr "Totale"

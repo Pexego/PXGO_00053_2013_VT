@@ -1,0 +1,354 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * transportation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-06-30 10:11+0000\n"
+"PO-Revision-Date: 2016-06-30 10:11+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_area_id
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_area_id
+msgid "Area"
+msgstr "Area"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_assignations
+msgid "Assignations"
+msgstr "Assegnazioni"
+
+#. module: transportation
+#: model:ir.ui.view,arch_db:transportation.view_picking_withtransport_out_form
+msgid "Carrier Information"
+msgstr "Informazioni sul corriere"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_picking_carrier_tracking_ref
+msgid "Carrier Tracking Ref"
+msgstr "Rif. Tracking del corriere"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_picking_carrier_name
+msgid "Carrier name"
+msgstr "Nome corriere"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_picking_carrier_service
+msgid "Carrier service"
+msgstr "Servizio di trasporto"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_res_country
+msgid "Country"
+msgstr "Paese"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_create_uid
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_create_uid
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_create_uid
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_create_uid
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_create_date
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_create_date
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_create_date
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_create_date
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_date
+msgid "Date"
+msgstr "Data"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_res_country_default_transporter
+msgid "Default transporter"
+msgstr "Corriere default"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_display_name
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_display_name
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_display_name
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_display_name
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_display_name
+msgid "Display Name"
+msgstr "Nome"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_id
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_id
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_id
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_id
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_id
+msgid "ID"
+msgstr "ID"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel___last_update
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter___last_update
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily___last_update
+#: model:ir.model.fields,field_description:transportation.field_transportation_service___last_update
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter___last_update
+msgid "Last Modified on"
+msgstr "Ultima modifica il"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_write_uid
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_write_uid
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_write_uid
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_write_uid
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento di"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_write_date
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_write_date
+#: model:ir.model.fields,field_description:transportation.field_transportation_daily_write_date
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_write_date
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_name
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_picking_weight_net
+msgid "Net Weight"
+msgstr "Peso netto"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_move_weight_net
+msgid "Net weight"
+msgstr "Peso netto"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_picking_number_of_packages
+msgid "Number of Packages"
+msgstr "Numero all'ingrosso dei pacchi
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_res_partner
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_partner_id
+msgid "Partner"
+msgstr "Azienda"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_stock_picking
+msgid "Picking List"
+msgstr "Bolla"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_quantity
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_ratio
+msgid "Ratio"
+msgstr "Ratio"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_res_partner_area_transporter_rotation_ids
+msgid "Rotation"
+msgstr "Rotazione"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_rot_counter
+msgid "Rotation counter"
+msgstr "Contatore di rotazione"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_sale_order
+msgid "Sales Order"
+msgstr "Ordine di vendita"
+
+#. module: transportation
+#: model:ir.ui.view,arch_db:transportation.transporter_form
+msgid "Service"
+msgstr "Servizio"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_transportation_transporter_service_ids
+msgid "Services"
+msgstr "Servizi"
+
+#. module: transportation
+#: model:ir.model,name:transportation.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento di scorta"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_res_partner_service_id
+#: model:ir.model.fields,field_description:transportation.field_sale_order_service_id
+msgid "Servizio di trasporto"
+msgstr "Servizio"
+
+#. module: transportation
+#: model:ir.ui.menu,name:transportation.menu_transportation_sale
+msgid "Transportation"
+msgstr "Trasporto"
+
+#. module: transportation
+#: model:ir.actions.act_window,name:transportation.action_transportation_service
+#: model:ir.ui.menu,name:transportation.menu_transportation_service_sale
+#: model:ir.ui.view,arch_db:transportation.transportation_service_filter
+#: model:ir.ui.view,arch_db:transportation.transportation_service_form
+#: model:ir.ui.view,arch_db:transportation.transportation_service_tree
+msgid "Transportation services"
+msgstr "Servizio di trasporto"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_transporter_id
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_transporter
+#: model:ir.actions.act_window,name:transportation.action_transporter
+#: model:ir.ui.menu,name:transportation.menu_transporter_sale
+#: model:ir.ui.view,arch_db:transportation.transportation_service_form
+#: model:ir.ui.view,arch_db:transportation.transporter_filter
+#: model:ir.ui.view,arch_db:transportation.transporter_form
+msgid "Transporter"
+msgstr "Corriere"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_transporter_ids
+#: model:ir.ui.view,arch_db:transportation.transporter_tree
+msgid "Transporters"
+msgstr "Corriere"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_move_weight_uom_id
+#: model:ir.model.fields,field_description:transportation.field_stock_picking_weight_uom_id
+msgid "Unit of Measure"
+msgstr "Unità di misura"
+
+#. module: transportation
+#: model:ir.model.fields,help:transportation.field_stock_move_weight_uom_id
+msgid "Unit of Measure (Unit of Measure) is the unit of measurement for Weight"
+msgstr "L'unità di misura è l'unità di misura del peso"
+
+#. module: transportation
+#: model:ir.model.fields,help:transportation.field_stock_picking_weight_uom_id
+msgid "Unit of measurement for Weight"
+msgstr "Unità di misura per peso"
+
+#. module: transportation
+#: code:addons/transportation/res_partner.py:65
+#: code:addons/transportation/res_partner.py:73
+#, python-format
+msgid "Value error"
+msgstr "Valors incorretto"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_picking_volume
+msgid "Volume"
+msgstr "Volume"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_stock_move_weight
+#: model:ir.ui.view,arch_db:transportation.view_picking_withtransport_out_form
+#: model:ir.model.fields,field_description:transportation.field_stock_picking_weight
+msgid "Weight"
+msgstr "Peso"
+
+#. module: transportation
+#: model:ir.ui.view,arch_db:transportation.view_picking_withtransport_out_form
+msgid "Weight Net"
+msgstr "Peso netto"
+
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_assignation_counter_daily_assigned
+msgid "daily"
+msgstr "diario"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_area_transportist_rel_ratio_shipping
+msgid "ratio"
+msgstr "ratio"
+
+#. module: transportation
+#: code:addons/transportation/res_partner.py:65
+#: code:addons/transportation/res_partner.py:73
+#, python-format
+msgid "the ratio can not be 0"
+msgstr "Il valore non può essere 0"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_res_partner_transporter_id
+#: model:ir.model.fields,field_description:transportation.field_sale_order_transporter_id
+msgid "transporter"
+msgstr "Corriere"
+
+#. module: transportation
+#: model:ir.ui.view,arch_db:transportation.view_picking_withtransport_out_form
+msgid "Check tracking status"
+msgstr "Controlla lo stato della spedizione"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_picking_tracking_status_status_picking
+msgid "STATUS"
+msgstr "Stato attuale"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_picking_tracking_status_status_request
+msgid "Status request"
+msgstr "Stato della richiesta"
+
+#. module: transportation
+#: selection:picking.tracking.status,status_request:0
+msgid "Error Request"
+msgstr "Errore nella richiesta"
+
+#. module: transportation
+#: selection:picking.tracking.status,status_request:0
+msgid "Information Available"
+msgstr "Informazione disponibile"
+
+#. module: transportation
+#: selection:picking.tracking.status,status_request:0
+msgid "No Information"
+msgstr "Senza informazione"
+
+#. module: transportation
+#: model:ir.ui.view,arch_db:transportation.view_picking_tracking_status
+msgid "Tracking status information"
+msgstr "Informazione tracking"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_picking_tracking_status_list_status
+msgid "Status"
+msgstr "Stato"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_picking_tracking_status_list_city
+msgid "City"
+msgstr "Città"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_picking_tracking_status_list_date
+msgid "Date"
+msgstr "Data"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_picking_tracking_status_num_packages
+msgid "Num Packages"
+msgstr "Num.Pacchi"
+

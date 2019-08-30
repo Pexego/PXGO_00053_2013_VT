@@ -1,0 +1,149 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * sale_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-05-17 13:26+0000\n"
+"PO-Revision-Date: 2017-05-17 13:26+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:29
+#, python-format
+msgid "Error"
+msgstr "Errore"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:29
+#, python-format
+msgid "Product quantity cannot be negative or zero"
+msgstr "La quantità di un prodotto non può essere negativa o zero"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_sales_partner
+msgid "Partner Orders"
+msgstr "Ordine Cliente"
+
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:133
+#, python-format
+msgid "Please, validate shipping address."
+msgstr "Si prega di convalidare l'indirizzo di spedizione ."
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:121
+#, python-format
+msgid "Please, introduce a shipping cost line."
+msgstr "Inserisci una riga dei costi di spedizione."
+
+#. module: sale_custom
+#: model:ir.actions.act_window,name:sale_custom.action_orders_reserve
+#: model:ir.ui.menu,name:sale_custom.menu_sale_order_reserve
+msgid "Sales Reserved"
+msgstr "Acquisti prenotati"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_imp_ship_addr_val
+msgid "  Validate address"
+msgstr "  Convalida indirizzo"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_imp_ship_addr
+msgid "Confirm Sale"
+msgstr "Confermare vendita"
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_sales_partner
+msgid "Risk Information"
+msgstr "Rischio Cliente"
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_sales_partner
+msgid "Warnings"
+msgstr "Avvisi"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:108
+#, python-format
+msgid "Partner Risk Information"
+msgstr "Informazioni sul rischio contabile di una società"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:91
+#, python-format
+msgid "Warnings"
+msgstr "Avvisi"
+
+#. module: sale_custom
+#: view:sale.order:sale_custom.view_order_form_inherit_sale_stock_change_string
+msgid "Pickings"
+msgstr "Bolle"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_partner_situation_tree_sale
+#: model:ir.actions.act_window,name:sale_custom.partner_situation_action_sale
+#: model:ir.ui.view,arch_db:sale_custom.sale_order_view_buttons_add_followup
+msgid "Customer situation"
+msgstr "Situazione del cliente"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:120
+#, python-format
+msgid "The address is incorrect, the following fields are empty:\n"
+msgstr "L'indirizzo è errato, mancano i seguenti campi:\n"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:113
+#, python-format
+msgid "Street"
+msgstr "Via"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:114
+#, python-format
+msgid "Zip"
+msgstr "Codice postale"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:115
+#, python-format
+msgid "City"
+msgstr "Città"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:116
+#, python-format
+msgid "State"
+msgstr "Provincia"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:117
+#, python-format
+msgid "Country"
+msgstr "Paese"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:151
+#, python-format
+msgid "Please consider that!"
+msgstr "Per favore, tienilo a mente!"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:150
+#, python-format
+msgid "Some of the products of this order {} aren't available now"
+msgstr "Alcuni dei prodotti nell'ordine {} non sono attualmente disponibili "
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_tree_add_date
+msgid "Invoice type"
+msgstr "Tipo de fatturazione"

@@ -1,0 +1,191 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * sale_customer_discount
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-11-15 12:42+0000\n"
+"PO-Revision-Date: 2016-11-15 12:42+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_commercial_cost
+msgid "Commercial Cost"
+msgstr "Costo Commerciale"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd1
+msgid "PVD 1 Margin"
+msgstr "Margine PVD_A"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd1_price
+msgid "PVD 1 price"
+msgstr "PVD_A"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd2
+msgid "PVD 2 Margin"
+msgstr "Margine PVD_B"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd2_price
+msgid "PVD 2 price"
+msgstr "PVD_B"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd3
+msgid "PVD 3 Margin"
+msgstr "Margine PVD_C"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd4
+msgid "PVD 4 Margin"
+msgstr "Margine PVD_D"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd_pvi_1
+msgid "PVD/PVI 1 margin"
+msgstr "Relazione PVD/PVI 1"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd_pvi_2
+msgid "PVD/PVI 2 margin"
+msgstr "Relazione PVD/PVI 2"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd_pvi_3
+msgid "PVD/PVI 3 margin"
+msgstr "Relazione PVD/PVI 3"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvd_pvi_4
+msgid "PVD/PVI 4 margin"
+msgstr "Relazione PVD/PVI 4"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd3_price
+msgid "PVD 3 price"
+msgstr "PVD_C"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd4_price
+msgid "PVD 4 price"
+msgstr "PVD_D"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvi1
+msgid "PVI 1 Margin"
+msgstr "Margine PVI_A"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvi1_price
+msgid "PVI 1 price"
+msgstr "PVI_A"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvi2
+msgid "PVI 2 Margin"
+msgstr "Margine PVI_B"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvi2_price
+msgid "PVI 2 price"
+msgstr "PVI_B"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvi3
+msgid "PVI 3 Margin"
+msgstr "Margine PVI_C"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvi3_price
+msgid "PVI 3 price"
+msgstr "PVI_C"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_margin_pvi4
+msgid "PVI 4 Margin"
+msgstr "Margine PVI_D"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvi4_price
+msgid "PVI 4 price"
+msgstr "PVI_D"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd2_relation
+msgid "PVP 2 / PVD 2 relation"
+msgstr "Relazione PVP_B / PVD_B"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd3_relation
+msgid "PVP 3 / PVD 3 relation"
+msgstr "Relazione PVP_C / PVD_C"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd4_relation
+msgid "PVP 4 / PVD 4 relation"
+msgstr "Relazione PVP_D / PVD_D"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP A"
+msgstr "PVP A"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP B"
+msgstr "PVP B"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP C"
+msgstr "PVP C"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP D"
+msgstr "PVP D"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd1_relation
+msgid "PVP/PVD 1 relation"
+msgstr "Relazione PVP_A / PVD_A"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_normal_form_view_add_discount
+msgid "Prices"
+msgstr "Prezzi"
+
+#. module: sale_customer_discount
+#: model:ir.model,name:sale_customer_discount.model_product_product
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price1
+msgid "Sale Price 1"
+msgstr "PVP_A"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price2
+msgid "Sale Price 2"
+msgstr "PVP_B"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price3
+msgid "Sale Price 3"
+msgstr "PVP_C"
+
+#. module: sale_customer_discount
+#: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_list_price4
+msgid "Sale Price 4"
+msgstr "PVP_D"
