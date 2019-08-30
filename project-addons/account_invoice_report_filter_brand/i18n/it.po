@@ -1,0 +1,197 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * account_invoice_report_filter_brand
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-03-28 10:22+0000\n"
+"PO-Revision-Date: 2016-03-28 10:22+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: account_invoice_report_filter_brand
+#: model:ir.actions.act_window,name:account_invoice_report_filter_brand.action_account_invoice_report_filter
+#: model:ir.ui.menu,name:account_invoice_report_filter_brand.menu_action_account_invoice_report_filter
+msgid "Invoices Analysis brand"
+msgstr "Analisi Fatture marca"
+
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,nbr:0
+msgid "# of Lines"
+msgstr "# di linee"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,product_qty:0
+msgid "Product Quantity"
+msgstr "Quantità di prodotti"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,price_average:0
+#: field:account.invoice.report.filter,user_currency_price_average:0
+msgid "Average Price"
+msgstr "Prezzo medio"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,residual:0
+#: field:account.invoice.report.filter,user_currency_residual:0
+msgid "Total Residual"
+msgstr "Totale residuo"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,currency_rate:0
+msgid "Currency Rate"
+msgstr "Tasso di cambio"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,price_total:0
+#: field:account.invoice.report.filter,user_currency_price_total:0
+msgid "Total Without Tax"
+msgstr "Totale Senza Tasse"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,benefit:0
+msgid "Benefit"
+msgstr "Beneficio"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,count:0
+msgid "Count"
+msgstr "Conto"
+
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,date_due:0
+msgid "Due Date"
+msgstr "Data di scadenza"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,partner_bank_id:0
+msgid "Bank Account"
+msgstr "Conto corrente"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,number:0
+msgid "Number"
+msgstr "Numero"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,journal_id:0
+msgid "Journal"
+msgstr "Giornaliero"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,currency_id:0
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,uom_name:0
+msgid "Reference Unit of Measure"
+msgstr "Unità di Misura di riferimento"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,fiscal_position:0
+msgid "Fiscal Position"
+msgstr "Posizione fiscale"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,user_id:0
+msgid "Salesperson"
+msgstr "Commerciale"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,partner_id:0
+msgid "Partner"
+msgstr "Azienda"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,country_id:0
+msgid "Country of the Partner Company"
+msgstr "Paese dell'azienda partner"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,company_id:0
+msgid "Company"
+msgstr "Compagnia"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,type:0
+msgid "Type"
+msgstr "Tipo"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,account_id:0
+msgid "Account"
+msgstr "Account"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,state:0
+msgid "Invoice Status"
+msgstr "Stato della fattura"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,account_line_id:0
+msgid "Account Line"
+msgstr "Linea contabile"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,date:0
+msgid "Date"
+msgstr "Data"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,categ_id:0
+msgid "Category of Product"
+msgstr "Categoria di Prodotto"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,product_id:0
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,commercial_partner_id:0
+msgid "Partner Company"
+msgstr "Azienda Partner"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,period_id:0
+msgid "Force period"
+msgstr "Periodo di Vigore"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,payment_term:0
+msgid "Payment Term"
+msgstr "Termine di pagamento"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,area_id:0
+msgid "Area"
+msgstr "Zona"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,section_id:0
+msgid "Sales Team"
+msgstr "Team Vendite"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,commercial_region_ids:0
+msgid "Commercial Regions"
+msgstr "Regioni Commerciali"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,brand_name:0
+msgid "Brand Name"
+msgstr "Nome della Marca"
+
+#. module: account_invoice_report_filter_brand
+#: field:account.invoice.report.filter,payment_mode_id:0
+msgid "Payment mode"
+msgstr "Metodo di pagamento"

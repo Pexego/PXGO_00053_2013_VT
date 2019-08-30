@@ -1,0 +1,81 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* picking_document
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:20+0000\n"
+"PO-Revision-Date: 2014-12-17 16:20+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: picking_document
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: picking_document
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: picking_document
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_description
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: picking_document
+#: model:ir.ui.menu,name:picking_document.menu_document
+#: model:ir.ui.view,arch_db:picking_document.document_filter
+#: model:ir.ui.view,arch_db:picking_document.document_form
+msgid "Document"
+msgstr "Documento"
+
+#. module: picking_document
+#: model:ir.ui.view,arch_db:picking_document.document_tree
+#: model:ir.ui.view,arch_db:picking_document.picking_add_documents
+#: model:ir.model.fields,field_description:picking_document.field_stock_picking_document_ids
+msgid "Documents"
+msgstr "Documenti"
+
+#. module: picking_document
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_id
+msgid "ID"
+msgstr "ID"
+
+#. module: picking_document
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento da"
+
+#. module: picking_document
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: picking_document
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: picking_document
+#: model:ir.model,name:picking_document.model_stock_picking
+msgid "Picking List"
+msgstr "Picking List"
+
+#. module: picking_document
+#: model:ir.model.fields,field_description:picking_document.field_stock_document_picking_ids
+msgid "Pickings"
+msgstr "Pickings"
+
+#. module: picking_document
+#: model:ir.actions.act_window,name:picking_document.action_document
+msgid "document"
+msgstr "Documento"
+

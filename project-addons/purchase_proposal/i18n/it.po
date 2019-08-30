@@ -1,0 +1,113 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * purchase_proposal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-05-23 15:32+0000\n"
+"PO-Revision-Date: 2016-05-23 15:32+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: purchase_proposal
+#: field:product.product,ref_manufacturer:0
+msgid "Manufacturer Product Code"
+msgstr "Codice del fabbricante"
+
+#. module: purchase_proposal
+#: field:product.product,average_margin:0
+msgid "Average Margin Last Sales"
+msgstr "Margine medio delle ultime vendite"
+
+#. module: purchase_proposal
+#: field:product.product,biggest_sale_id:0
+msgid "Biggest order"
+msgstr "Ordine più grande"
+
+#. module: purchase_proposal
+#: field:product.product,biggest_sale_qty:0
+msgid "Biggest sale qty"
+msgstr "Quant. ordine più grande"
+
+#. module: purchase_proposal
+#: view:product.product:purchase_proposal.product_add_proposal_data2
+msgid "Calculate Average Margin Last Sales"
+msgstr "Calcola il margine medio delle ultime vendite"
+
+#. module: purchase_proposal
+#: view:product.product:purchase_proposal.product_add_proposal_data
+msgid "Compute sale in last sixty days with stock"
+msgstr "Calcolare vendite negli últm. 60 giorni con stock"
+
+#. module: purchase_proposal
+#: field:sale.order.line,date_order:0
+#: field:stock.days.positive,datum:0
+msgid "Date"
+msgstr "Data"
+
+#. module: purchase_proposal
+#: field:stock.days.positive,display_name:0
+msgid "Display Name"
+msgstr "Descrizione"
+
+#. module: purchase_proposal
+#: field:stock.days.positive,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: purchase_proposal
+#: field:stock.days.positive,__last_update:0
+msgid "Last Modified on"
+msgstr "Últ. aggiornamento il"
+
+#. module: purchase_proposal
+#: field:product.product,order_cycle:0
+msgid "Order cycle"
+msgstr "Ciclo d'acquisto"
+
+#. module: purchase_proposal
+#: model:ir.model,name:purchase_proposal.model_product_product
+#: field:stock.days.positive,product_id:0
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: purchase_proposal
+#: field:stock.days.positive,qty:0
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: purchase_proposal
+#: model:ir.model,name:purchase_proposal.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Línea richiesta d'acquisto"
+
+#. module: purchase_proposal
+#: field:product.product,last_sixty_days_sales:0
+msgid "Sales in last 60 days with stock"
+msgstr "Vendite negli ultimi 60 giorni con stock"
+
+#. module: purchase_proposal
+#: field:product.product,security_margin:0
+msgid "Security margin"
+msgstr "Margine di sicurezza"
+
+#. module: purchase_proposal
+#: field:product.product,transport_time:0
+msgid "Transport time"
+msgstr "Tempo di trasporto"
+
+#. module: purchase_proposal
+#: view:product.product:purchase_proposal.product_add_proposal_data
+msgid "days"
+msgstr "Giorni"
+
+#. module: purchase_proposal
+#: model:ir.actions.act_window,name:purchase_proposal.action_purchase_line_product_tree_2
+msgid "Purchases"
+msgstr "Acquisti"

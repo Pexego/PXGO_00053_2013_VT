@@ -1,0 +1,190 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * sale_display_stock
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:31+0000\n"
+"PO-Revision-Date: 2014-12-17 16:31+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_company_id
+msgid "Company"
+msgstr "Azienda"
+
+#. module: sale_display_stock
+#: model:ir.model,name:sale_display_stock.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Linea ordine cliente"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_outgoing_picking_reserved_qty
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_outgoing_picking_reserved_qty
+msgid "Outgoing picking reserved qty"
+msgstr "Stock prenotato in magazzino"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_property_account_creditor_price_difference
+msgid "Price Difference Account"
+msgstr "Differenze di prezzo dell'account"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_qty_available_wo_wh
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_wo_wh
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_qty_available_wo_wh
+msgid "Qty. on kitchen"
+msgstr "Stock cucina"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_virtual_stock_conservative
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_virtual_stock_conservative
+#: model:ir.ui.view,arch_db:sale_display_stock.view_template_add_stocks
+msgid "Virtual Stock Conservative"
+msgstr "Stock disponibile"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_reservation_count
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_reservation_count
+#: model:ir.ui.view,arch_db:sale_display_stock.view_template_add_stocks
+msgid "# Sales"
+msgstr "Stock negli ordini"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_qty_available
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_qty_available
+#: model:ir.ui.view,arch_db:sale_display_stock.view_template_add_stocks
+msgid "Quantity On Hand"
+msgstr "Stock reale"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_qty_available
+msgid "Qty available"
+msgstr "Stock disp."
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_qty_available_external
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_external
+msgid "Qty. in external loc."
+msgstr "Stock magaz. esterno"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_in_production
+msgid "Qty. in production"
+msgstr "In produzione"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_input_loc
+msgid "Qty. on input"
+msgstr "Stock spiaggia"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_incoming_qty
+msgid "Incoming qty."
+msgstr "Stock in arrivo."
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_discount
+msgid "Discount"
+msgstr "Sconto"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+msgid "Group By"
+msgstr "Raggruppare per"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_id
+msgid "ID"
+msgstr "ID"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_order_id
+msgid "Order"
+msgstr "Ordine"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_partner_id
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_price_unit
+msgid "Price unit"
+msgstr "Prezzo unità"
+
+#. module: sale_display_stock
+#: model:ir.model,name:sale_display_stock.model_product_product
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_kitchen
+msgid "Qty in kitchen"
+msgstr "Stock cucina"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_qty
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_tree
+msgid "Sale line report"
+msgstr "Rapporto sulle linee di vendita"
+
+#. module: sale_display_stock
+#: model:ir.actions.act_window,name:sale_display_stock.action_sale_order_line_report
+#: model:ir.ui.menu,name:sale_display_stock.sale_order_line_report_menu
+msgid "Sale lines report"
+msgstr "Rapporto sulle linee di vendita"
+"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_salesman_id
+msgid "Salesperson"
+msgstr "Commerciale"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_state
+msgid "State"
+msgstr "Stato"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+msgid "Status"
+msgstr "Stato"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_stock
+msgid "Stock qty"
+msgstr "Stock"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_uom
+msgid "UoM"
+msgstr "UdM"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_product_virtual_available_wo_incoming
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_virtual_available_wo_incoming
+msgid "Virtual avail. conservative"
+msgstr "Stock disponibile"

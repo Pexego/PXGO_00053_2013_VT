@@ -1,0 +1,119 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * picking_incidences
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-03-09 14:09+0000\n"
+"PO-Revision-Date: 2016-03-09 14:09+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: picking_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_picking_form_add_incidences
+msgid "Accept ready qtys."
+msgstr "Accettare quantità pronta"
+
+#. module: picking_incidences
+#: model:ir.model.fields,field_description:picking_incidences.field_stock_picking_block_picking
+msgid "Albarán procesado Vstock"
+msgstr "Bolla di consegna processata Vstock"
+
+#. module: picking_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_picking_form_add_incidences
+msgid "Are you sure? Backorder will be created with remaining quantities"
+msgstr "¿Sei sicuro? Il backorder verrà creato con le quantità rimanenti."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:143
+#, python-format
+msgid "Cannot assign more qty that reserved availability."
+msgstr "Non è possibile assegnare più quantità di quella riservata disponibile."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:132
+#, python-format
+msgid "Cannot cancel an incoming picking with incidences. You can only process it."
+msgstr "Impossibile annullare un ritiro in arrivo con incidenze. Puoi solo elaborarlo."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:42
+#, python-format
+msgid "Cannot cancel this move because it is being processed in Vstock."
+msgstr "Non puoi cancellare questo movimento perchè è in fase di processo Vstock."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:154
+#, python-format
+msgid "Cannot cancel this picking because it is being processed in Vstock."
+msgstr "Impossibile annullare questo ritiro perché è in fase di elaborazione in Vstock."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:102
+#: code:addons/picking_incidences/stock.py:113
+#, python-format
+msgid "Cannot process picking with incidences. Please fix or ignore it."
+msgstr "Impossibile elaborare un ritiro con incidenze. Correggi o ignora."
+
+#. module: picking_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_picking_form_add_incidences
+msgid "Confirm assignation"
+msgstr "Confermare assegnazione"
+
+#. module: picking_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_picking_form_add_incidences
+msgid "Copy reserved qty. to confirmed qty."
+msgstr "Copia quantità riservata. a qtà confermata"
+
+#. module: picking_incidences
+#: model:ir.model,name:picking_incidences.model_stock_picking
+msgid "Picking List"
+msgstr "Bolla di consegna"
+
+#. module: picking_incidences
+#: model:ir.model.fields,field_description:picking_incidences.field_stock_move_qty_confirmed
+msgid "Qty confirmed"
+msgstr "Quantità confermata"
+
+#. module: picking_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_move_picking_tree_add_ready_qty
+msgid "Qty ready"
+msgstr "Quantità preparata"
+
+#. module: picking_incidences
+#: model:ir.ui.view,arch_db:picking_incidences.view_move_picking_tree_add_ready_qty
+msgid "Qty ordered"
+msgstr "Quantità richiesta"
+
+#. module: picking_incidences
+#: model:ir.model,name:picking_incidences.model_stock_move
+msgid "Stock Move"
+msgstr "Movimiento di stock"
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:169
+#, python-format
+msgid "User %s accepted confirmed qties."
+msgstr "L'utente % ha accettato le quantità confermate."
+
+#. module: picking_incidences
+#: code:addons/picking_incidences/stock.py:87
+#, python-format
+msgid "User %s accepted ready quantities."
+msgstr "L'utente % ha accettato le quantità pronte"
+
+#. module: picking_incidences
+#: model:ir.model.fields,field_description:picking_incidences.field_stock_picking_with_incidences
+msgid "With incidences"
+msgstr "Con incidenza"
+
+#. module: picking_incidences
+#: selection:stock.picking,state:0
+msgid "Partially Available"
+msgstr "Parzialmente disponibile"

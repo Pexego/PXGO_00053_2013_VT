@@ -1,0 +1,89 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * customer_mood
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:15+0000\n"
+"PO-Revision-Date: 2014-12-17 16:15+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: customer_mood
+#: model:ir.model.fields,field_description:customer_mood.field_mood_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: customer_mood
+#: model:ir.model.fields,field_description:customer_mood.field_mood_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: customer_mood
+#: model:ir.model.fields,field_description:customer_mood.field_sale_order_customer_mood
+msgid "Customer Mood"
+msgstr "Stato d'animo"
+
+#. module: customer_mood
+#: model:ir.model.fields,field_description:customer_mood.field_mood_id
+msgid "ID"
+msgstr "ID"
+
+#. module: customer_mood
+#: model:ir.model.fields,field_description:customer_mood.field_mood_write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento da"
+
+#. module: customer_mood
+#: model:ir.model.fields,field_description:customer_mood.field_mood_write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: customer_mood
+#: model:ir.actions.act_window,help:customer_mood.action_mood
+msgid "Manage the moods"
+msgstr "Gestione stati d'animo."
+
+#. module: customer_mood
+#: model:ir.model.fields,field_description:customer_mood.field_res_partner_mood_image
+#: model:ir.model.fields,field_description:customer_mood.field_res_partner_selected_image
+msgid "Mood"
+msgstr "Stato d'animo"
+
+#. module: customer_mood
+#: model:ir.ui.view,arch_db:customer_mood.view_partner_form_add_mood
+#: model:ir.ui.view,arch_db:customer_mood.view_partner_simple_form_add_mood
+msgid "Mood..."
+msgstr "Stato d'animo"
+
+#. module: customer_mood
+#: model:ir.actions.act_window,name:customer_mood.action_mood
+#: model:ir.ui.menu,name:customer_mood.menu_mood
+#: model:ir.ui.view,arch_db:customer_mood.view_mood_form
+#: model:ir.ui.view,arch_db:customer_mood.view_mood_tree
+msgid "Moods"
+msgstr "Stati d'animo"
+
+#. module: customer_mood
+#: model:ir.ui.view,arch_db:customer_mood.view_mood_form
+#: model:ir.model.fields,field_description:customer_mood.field_mood_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: customer_mood
+#: model:ir.model,name:customer_mood.model_res_partner
+msgid "Partner"
+msgstr "Azienda"
+
+#. module: customer_mood
+#: model:ir.model,name:customer_mood.model_sale_order
+msgid "Sales Order"
+msgstr "Ordini di vendita"
+
+

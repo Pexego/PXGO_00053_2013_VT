@@ -1,0 +1,210 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * product_outlet_loss
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-14 11:33+0000\n"
+"PO-Revision-Date: 2015-07-14 11:33+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_res_company_outlet_per_cent
+msgid "% Outlet Devalue"
+msgstr "% Svalutazione Outlet"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_commercial_cost
+msgid "Commercial Cost"
+msgstr "Costo commerciale"
+
+#. module: product_outlet_loss
+#: model:ir.model,name:product_outlet_loss.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: product_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
+msgid "Current Year"
+msgstr "Ano corrente"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_percent
+msgid "Default Outlet Price in %"
+msgstr "% Svalutazione Outlet per difetto"
+
+#. module: product_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss
+msgid "Group By..."
+msgstr "Raggruppato Per..."
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_id
+msgid "ID"
+msgstr "ID"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_write_uid
+msgid "Last Updated by"
+msgstr "Últ. aggiornamento di"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_write_date
+msgid "Last Updated on"
+msgstr "Últ. aggiornamento il"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_date_move
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_date_move
+msgid "Move to outlet on"
+msgstr "Spotato in Outlet il"
+
+#. module: product_outlet_loss
+#: model:ir.actions.act_window,name:product_outlet_loss.action_open_tree_outlet_loss
+msgid "Open Outlet Loss"
+msgstr "Perdite per Outlet"
+
+#. module: product_outlet_loss
+#: model:ir.actions.act_window,name:product_outlet_loss.action_open_tree_outlet_loss2
+msgid "Open Outlet Loss Filtro"
+msgstr "Filtrare Perdite per Outlet"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_order_line_id
+msgid "Order Line"
+msgstr "Linea vendita"
+
+#. module: product_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss
+msgid "Outlet Loss"
+msgstr "Perdite per Outlet"
+
+#. module: product_outlet_loss
+#: model:ir.actions.act_window,name:product_outlet_loss.action_open_search_outlet_loss
+#: model:ir.ui.menu,name:product_outlet_loss.menu_action_outlet_loss_search
+msgid "Outlet Lost"
+msgstr "Perdite per Outlet"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_price_outlet
+msgid "Outlet Price"
+msgstr "Prezzo dell' Outlet"
+
+#. module: product_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.product_outlet_wizard_form
+msgid "Outlet on"
+msgstr "Outlet attivo"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_price_unit
+msgid "Price"
+msgstr "Prezzo"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_price_outlet
+msgid "Price After"
+msgstr "Prezzo dopo"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_price_unit
+msgid "Price PVPA"
+msgstr "Prezzo PVPA"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price
+msgid "Price PVP"
+msgstr "Prezzo PVP"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price2
+msgid "Price PVP 2"
+msgstr "Prezzo PVP 2"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price3
+msgid "Price PVP 3"
+msgstr "Prezzo PVP 3"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_list_price4
+msgid "Price PVP 4"
+msgstr "Prezzo PVP 4"
+
+#. module: product_outlet_loss
+#: model:ir.model,name:product_outlet_loss.model_product_product
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: product_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_tree_outlet_loss
+msgid "Product Outlet Loss"
+msgstr "Perdite per Outlet"
+
+#. module: product_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_outlet_loss_search
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_tree_outlet_loss_searched
+msgid "Product Outlet Lost"
+msgstr "Perdidas per Outlet"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_product_outlet_wizard_qty_available
+msgid "Qty from stock"
+msgstr "Quantità proveniente da stock"
+
+#. module: product_outlet_loss
+#: code:addons/product_outlet_loss/wizard/product_outlet_wizard.py:58
+#, python-format
+msgid "Qty to outlet must be <= qty available on the location"
+msgstr "La quantità che si sposta all'Outlet deve essere inferiore o uguale alla quantità disponibile nel luogo
+
+#. module: product_outlet_loss
+#: code:addons/product_outlet_loss/wizard/product_outlet_wizard.py:99
+#, python-format
+msgid "Qty to outlet must be >=0"
+msgstr "La quantità che si sposta all' outlet dev'essere maggiore o uguale a 0"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_qty
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: product_outlet_loss
+#: model:ir.actions.act_window,name:product_outlet_loss.act_product_to_outlet_wizard
+msgid "Send to outlet"
+msgstr "Inviare a outlet"
+
+#. module: product_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_search_outlet_loss
+msgid "Status"
+msgstr "Estado"
+
+#. module: product_outlet_loss
+#: model:ir.ui.view,arch_db:product_outlet_loss.view_tree_outlet_loss_searched
+msgid "Total"
+msgstr "Totale"
+
+#. module: product_outlet_loss
+#: model:ir.model.fields,field_description:product_outlet_loss.field_outlet_loss_percent
+msgid "Outlet Percent"
+msgstr "Percentuale dell' Outlet"

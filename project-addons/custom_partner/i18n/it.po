@@ -16,7 +16,441 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_sale_product_count
+msgid "# Products sold"
+msgstr "# Prod. venduti"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,help:custom_partner.action_view_web_customers
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                Click to add a web customer in your address book.\n"
+"              </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                Fare clic per aggiungere un cliente Web nella rubrica.\n"
+"              </p>\n"
+"            "
+
+#. module: custom_partner
+#: model:ir.actions.act_window,help:custom_partner.act_res_partner_2_sale_quotations
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"                Click to create a quotation or sales order for this customer.\n"
+"              </p><p>\n"
+"                Odoo will help you efficiently handle the complete sale flow:\n"
+"                quotation, sales order, delivery, invoicing and\n"
+"                payment.\n"
+"              </p><p>\n"
+"                The social feature helps you organize discussions on each sales\n"
+"                order, and allow your customer to keep track of the evolution\n"
+"                of the sales order.\n"
+"              </p>\n"
+"            "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"                Fare clic per creare un preventivo o ordine per questo cliente.\n"
+"              </p><p>\n"
+"                Odoo ti aiuterà a gestire in modo efficiente l'intero processo di vendita:\n"
+"                preventivo, ordine cliente, consegna, fatturazione e\n"
+"                pagamento.\n"
+"              </p><p>\n"
+"                La funzione sociale ti aiuta a organizzare discussioni su ogni vendita\n"
+"                ordina e consenti ai tuoi clienti di tenere traccia dell'evoluzione dell'\n"
+"                ordine di vendita.\n"
+"              </p>\n"
+"            "
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_annual_invoiced
+msgid "Annual invoiced"
+msgstr "Fatturazione annuale"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_monthly_invoiced
+msgid "Monthly invoiced"
+msgstr "Fatturazione mesile"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_past_year_invoiced
+msgid "Past year invoiced"
+msgstr "Fatturazione anno anteriore"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_past_month_invoiced
+msgid "Past Month invoiced"
+msgstr "Fatturazione mese anteriore"
+
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_att
+msgid "The client is innactive"
+msgstr "Il cliente è inattivo"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_att
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_att
+msgid "A/A"
+msgstr "A/A"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:174
+#, python-format
+msgid "Amount"
+msgstr "Importo"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:192
+#, python-format
+msgid "Amount not due"
+msgstr "Importo non dovuto"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:277
+#, python-format
+msgid "The client is prospective. The client cannot be created on the web."
+msgstr "Il cliente è potenziale. Il cliente non può essere creato sulla Web."
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:153
+#, python-format
+msgid "At least, a contact must be added"
+msgstr "È necessario aggiungere almeno un contatto"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_web_field
+msgid "Created date"
+msgstr "Data di creazione"
+
+#. module: custom_partner
+#: model:ir.model.fields,help:custom_partner.field_res_partner_web
+msgid "Created from web"
+msgstr "Creato dalla web"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:171
+#, python-format
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_display_name
+msgid "Display Name"
+msgstr "Nome Display"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_dropship
+msgid "Dropship"
+msgstr "Dropship"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_ref_supplier
+msgid "Ref. Supplier"
+msgstr "Ref. Fornitore"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_product_supplierinfo_ref_supplier
+msgid "Ref. Supplier"
+msgstr "Ref. Fornitore"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:173
+#, python-format
+msgid "Due Date"
+msgstr "data di scadenza"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_email_web
+msgid "Email Web"
+msgstr "Email Web"
+
+#. module: custom_partner
+#: sql_constraint:res.partner:0
+msgid "Email web field, must be unique"
+msgstr "Il campo web e-mail deve essere unico"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_eur_currency
+msgid "Eur currency"
+msgstr "Importo (€)"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_growth_rate
+msgid "Growth rate"
+msgstr "Crescita"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_average_margin
+msgid "Average Margin"
+msgstr "Margine medio"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_id
+msgid "ID"
+msgstr "ID"
+
+#. module: custom_partner
 #: code:addons/custom_partner/partner.py:170
 #, python-format
 msgid "We would also like to inform you of the following invoices which will become due in the next 6 days"
-msgstr "Approfittiamo per informarla delle scadenze dei prossimi 6 giorni"
+msgstr "Desideriamo inoltre informarvi delle seguenti fatture che saranno dovute entro i prossimi 6 giorni"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:170
+#, python-format
+msgid "Invoice Date"
+msgstr "Data fattura"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:192
+#, python-format
+msgid "Invoice No."
+msgstr "Fattura Nº"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_id
+#: model:ir.ui.view,arch_db:custom_partner.stock_picking_search_add_invoice_type
+#: model:ir.model.fields,field_description:custom_partner.field_stock_picking_invoice_type_id
+msgid "Invoice type"
+msgstr "Tipo di fatturazione"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_write_uid
+msgid "Last Updated by"
+msgstr "Ultimo aggiornamento da"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:175
+#, python-format
+msgid "Lit."
+msgstr "Lit. "
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_invoice_type_name
+msgid "Name"
+msgstr "Nome"
+
+#. module: custom_partner
+#: model:ir.model,name:custom_partner.model_res_partner
+msgid "Partner"
+msgstr "Azienda"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:69
+#, python-format
+msgid "Partner ref must be unique"
+msgstr "Il riferimento del cliente deve essere unico"
+
+#. module: custom_partner
+#: model:ir.model,name:custom_partner.model_stock_picking
+msgid "Picking List"
+msgstr "Lista Picking"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_stock_picking
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_quotations
+msgid "Pickings"
+msgstr "Pickings"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.stock_picking_search_add_invoice_type
+msgid "Procurement Group"
+msgstr "Gruppo di approvvigionamento"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_products_no
+msgid "Products sold"
+msgstr "Prod. ventudi"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_sale_quotations
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_quotations
+msgid "Quotations"
+msgstr "Preventivi"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.act_res_partner_2_sale_order_line
+msgid "Quotations and Sales Lines"
+msgstr "Preventivi e linee di vendita"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:172
+#, python-format
+msgid "Reference"
+msgstr "Referimento"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_send_followup_to_user
+msgid "Send followup to sales agent"
+msgstr "Invia follow-up all'agente di vendita"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_notified_creditoycaucion
+msgid "Notified to Crédito y Caución"
+msgstr "Notificato a Credito y Cauzione"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_total_invoiced_real
+msgid "Total Invoiced"
+msgstr "Totale fatturato"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_order_tree_add_amount_untaxed
+msgid "Untaxed"
+msgstr "Base imponible"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:101
+#, python-format
+msgid "VAT must be unique"
+msgstr "il VATF deve essere unico"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_web
+msgid "Web"
+msgstr "Web"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.action_view_web_customers
+#: model:ir.ui.menu,name:custom_partner.res_partner_web
+msgid "Web customers"
+msgstr "Clienti dalla web"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_purchase_quantity
+msgid "Purchase quantity"
+msgstr "Quantità acquistata"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_require
+msgid "Phone/Mobile 1"
+msgstr "Telefono/Cellulare 1"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_form_add_require
+msgid "Phone/Mobile 2"
+msgstr "Telefono/Cellulare2"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_tree_custom
+msgid "Open partner in new tab"
+msgstr "Aprire cliente in una nuova pagina"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:360
+#, python-format
+msgid "Amount Due"
+msgstr "Importo dovuto"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:288,338
+#, python-format
+msgid "Client Order Ref."
+msgstr "Riferimento ordine cliente"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:76
+#, python-format
+msgid "Product, brand and category are empty"
+msgstr "Prodotto, marchio e categoria sono vuoti"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:643
+#, python-format
+msgid "Warning!"
+msgstr "¡Attenzione!"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:644
+#, python-format
+msgid "Remember to set our partner email, not dropship email!"
+msgstr "¡Ricorda di impostare l'e-mail del nostro cliente, non l'e-mail dropship !"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_current_global_invoiced
+msgid "Current year invoiced (global)"
+msgstr "Fatturazione (globale) anno in corso"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_past_year_global_invoiced
+msgid "Past year invoiced (global)"
+msgstr "Fatturazione (globale) anno anteriore"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_current_employees
+msgid "Current year employees"
+msgstr "Impiegati anno in corso"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_past_year_employees
+msgid "Past year employees"
+msgstr "Impiegati anno precedente"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_warning_form_add_global_data
+msgid "Global data"
+msgstr "Dati globali"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.partner_view_add_sale_analysis
+msgid "Sale analysis"
+msgstr "Analisis de vendita"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_res_partner_filter_add_comercial
+msgid "No current month sales"
+msgstr "Senza vendite questo mese"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_res_partner_filter_add_comercial
+msgid "Customers with previous month sales (but no sales action in current month)"
+msgstr "Clienti con vendite del mese precedente (ma nessuna azione di vendita nel mese corrente)"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_account_move_line_ref_line
+msgid "Payment Reference"
+msgstr "Reiferimento pagamento"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:428
+#, python-format
+msgid "Email web must be unique"
+msgstr "L'email Web deve essere unica"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_change_string
+msgid "Orders"
+msgstr "Ordini"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_inherit_followup_form
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_situation_tree
+#: model:ir.actions.act_window,name:custom_partner.partner_situation_action
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_followup
+msgid "Customer situation"
+msgstr "Situazione del cliente"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_inherit_followup_form
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_situation_tree
+#: model:ir.actions.act_window,name:custom_partner.partner_situation_action
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_followup
+msgid "Supplier Situation"
+msgstr "Situazione del fornitore"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_partner_situation_tree
+msgid "Partial reconciliation"
+msgstr "Riconciliazione parziale"

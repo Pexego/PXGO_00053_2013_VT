@@ -1,0 +1,88 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * pmp_landed_costs
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-05-06 16:17+0000\n"
+"PO-Revision-Date: 2019-05-06 16:17+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_container_ids
+msgid "Containers"
+msgstr "Contenitori"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_new_unit_cost
+msgid "New standard price"
+msgstr "Nuevo prezzo del prodotto"
+
+#. module: pmp_landed_costs
+#: model:ir.model,name:pmp_landed_costs.model_product_product
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: pmp_landed_costs
+#: model:ir.model,name:pmp_landed_costs.model_product_template
+msgid "Product Template"
+msgstr "Modello di prodotto"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
+msgid "Qty."
+msgstr "Quant."
+
+#. module: pmp_landed_costs
+#: model:ir.model,name:pmp_landed_costs.model_stock_landed_cost
+msgid "Stock Landed Cost"
+msgstr "Coste di destinazione"
+
+#. module: pmp_landed_costs
+#: model:ir.model,name:pmp_landed_costs.model_stock_landed_cost_lines
+msgid "Stock Landed Cost Lines"
+msgstr "Linee di costo di destinazione"
+
+#. module: pmp_landed_costs
+#: model:ir.model,name:pmp_landed_costs.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento scorte"
+
+#. module: pmp_landed_costs
+#: model:ir.model,name:pmp_landed_costs.model_stock_valuation_adjustment_lines
+msgid "Stock Valuation Adjustment Lines"
+msgstr "Linee di adeguamento della valutazione delle scorte"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_product_product_tariff
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_tariff
+msgid "Tariff"
+msgstr "Tariff"
+
+#. module: pmp_landed_costs
+#: code:addons/pmp_landed_costs/models/stock_landed_costs.py:129
+#, python-format
+msgid "The selected picking does not contain any move that would be impacted by landed costs. Landed costs are only possible for products configured in real time valuation with real price costing method. Please make sure it is the case, or you selected the correct picking"
+msgstr "La bolla di consegna selezionata non contiene alcun movimento che può essere influenzato dai costi di destinazione. I costi di destinazione sono possibili solo per prodotti configurati con valutazione in tempo reale e prezzo reale come metodo di costo. Assicurati che sia così o seleziona la bolla di consegna corretta"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
+msgid "Total."
+msgstr "Total."
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
+msgid "Volume"
+msgstr "Volume"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
+msgid "Weight"
+msgstr "Peso"

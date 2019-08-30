@@ -1,0 +1,167 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * product_outlet
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:22+0000\n"
+"PO-Revision-Date: 2014-12-17 16:22+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_outlet
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_wizard_form
+msgid "Cancel"
+msgstr "Cancellare"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_create_uid
+msgid "Created by"
+msgstr "Creato da"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_create_date
+msgid "Created on"
+msgstr "Creato il"
+
+#. module: product_outlet
+#: selection:product.outlet.wizard,state:0
+msgid "First"
+msgstr "Primo"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_product_is_outlet
+msgid "Is outlet"
+msgstr "è outlet"
+
+#. module: product_outlet
+#: selection:product.outlet.wizard,state:0
+msgid "Last"
+msgstr "Ultimo"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_write_date
+msgid "Last Updated on"
+msgstr "Ultimo aggiornamento il"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_all_product
+msgid "Move all to outlet."
+msgstr "Spostare tutto lo stock in outlet."
+
+#. module: product_outlet
+#: model:product.category,name:product_outlet.product_category_o1
+msgid "O1"
+msgstr "O1"
+
+#. module: product_outlet
+#: model:product.category,name:product_outlet.product_category_o2
+msgid "O2"
+msgstr "O2"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_location_orig_id
+msgid "Orig. location"
+msgstr "Posizione di origine"
+
+#. module: product_outlet
+#: model:product.category,name:product_outlet.product_category_outlet
+#: model:stock.location,name:product_outlet.stock_location_outlet
+msgid "Outlet"
+msgstr "Outlet"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_product_outlet_product_ids
+msgid "Outlet products"
+msgstr "Prodotti outlet"
+
+#. module: product_outlet
+#: model:ir.model,name:product_outlet.model_product_product
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_qty
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:79
+#, python-format
+msgid "Quantity error"
+msgstr "Errore di quantità"
+
+#. module: product_outlet
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_wizard_form
+msgid "Send outlet"
+msgstr "Inviare a outlet"
+
+#. module: product_outlet
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_wizard_form
+msgid "Send product to wizard"
+msgstr "Invia il prodotto alla procedura guidata"
+
+#. module: product_outlet
+#: model:ir.actions.act_window,name:product_outlet.act_product_to_outlet_wizard
+msgid "Send to outlet"
+msgstr "Inviare a outlet"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_state
+msgid "State"
+msgstr "Stato"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:119
+#, python-format
+msgid "This product is already in outlet category."
+msgstr "Questo prodotto è già nella categoria outlet."
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_warehouse_id
+msgid "Warehouse"
+msgstr "Magazzino"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_categ_id
+msgid "category"
+msgstr "Categoria"
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_product_normal_product_id
+msgid "normal product"
+msgstr "Prodotto normale"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:118
+#, python-format
+msgid "product error"
+msgstr "Errore di prodotto"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:113
+#, python-format
+msgid "the amount entered is greater than the quantity available in stock."
+msgstr "La quantità inserita è maggiore della quantità disponibile."
+
+#. module: product_outlet
+#: model:ir.model.fields,field_description:product_outlet.field_product_category_percent
+msgid "Outlet Percent"
+msgstr "Percentuale dell' Outlet"

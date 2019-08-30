@@ -1,0 +1,205 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * crm_claim_summary_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-12-18 11:05+0000\n"
+"PO-Revision-Date: 2015-12-18 11:05+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.minimal_layout
+msgid "<!DOCTYPE html>"
+msgstr "<!DOCTYPE html>"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.template_page_copy_title
+msgid "COPY FOR INTERNAL SUPPORT"
+msgstr "COPIA PER SUPPORTO TECNICO"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.template_page_copy_title
+msgid "CUSTOMER COPY"
+msgstr "COPIA DEL CLIENTE"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Claim Date"
+msgstr "Data di reclamazione"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Claim No."
+msgstr "No. Reclamazione"
+
+#. module: crm_claim_summary_report
+#: model:ir.actions.report.xml,name:crm_claim_summary_report.claim_summary_report
+msgid "Claim Summary Report"
+msgstr "Rapporto Resoconto Reclamo"
+
+#. module: crm_claim_summary_report
+#: model:ir.model,name:crm_claim_summary_report.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Customer Name"
+msgstr "Nome del Cliente"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
+msgid "Customer description"
+msgstr "Descrizione del cliente"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Date Deadline"
+msgstr "data limite"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Delivery Address"
+msgstr "Indirizzo di consegna"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Description"
+msgstr "Descrizione"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Email"
+msgstr "Email"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
+msgid "Fax"
+msgstr "Fax"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_footer
+msgid "IMPORTANT NOTE"
+msgstr "NOTA IMPORTANTE"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
+msgid "Internal Code"
+msgstr "Codice interno"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Internal Description"
+msgstr "Descrizione interna"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
+msgid "Phone"
+msgstr "Telefono"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Phone Number"
+msgstr "Nº. Telf"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Print Date"
+msgstr "Data di stampa"
+
+#. module: crm_claim_summary_report
+#: model:ir.model.fields,field_description:crm_claim_summary_report.field_claim_line_printable
+msgid "Printable"
+msgstr "Stampabile"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
+msgid "Priority"
+msgstr "Priorità"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Quantity"
+msgstr "Quantità"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
+msgid "RMA No."
+msgstr "RMA No."
+
+#. module: crm_claim_summary_report
+#: model:ir.model.fields,field_description:crm_claim_summary_report.field_res_company_rma_footer_note
+msgid "RMA Note"
+msgstr "Nota di RMA"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
+msgid "RMA Receipt"
+msgstr "RMA ricevuto"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
+msgid "Responsible"
+msgstr "Responsabile"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Serial/Lot"
+msgstr "Lotto/No. di serie"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
+msgid "Serial/Lot Number"
+msgstr "No. di serie/No. lotto"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
+msgid "TIN"
+msgstr "C.F."
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
+msgid "Type"
+msgstr "Tipo"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
+msgid "Website"
+msgstr "Sitio web"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.layout
+msgid "crm_claim_summary_report.layout"
+msgstr "crm_claim_summary_report.layout"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.layout
+msgid "data_report_dpi if data_report_dpi else None"
+msgstr "data_report_dpi if data_report_dpi else None"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.layout
+msgid "data_report_header_spacing if data_report_header_spacing else None"
+msgstr "data_report_header_spacing if data_report_header_spacing else None"
+
+#. module: crm_claim_summary_report
+#: model:ir.ui.view,arch_db:crm_claim_summary_report.layout
+msgid "data_report_margin_top if data_report_margin_top else None"
+msgstr "data_report_margin_top if data_report_margin_top else None"
+

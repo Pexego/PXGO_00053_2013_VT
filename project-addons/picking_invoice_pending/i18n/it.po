@@ -1,0 +1,115 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * picking_invoice_pending
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-15 12:22+0000\n"
+"PO-Revision-Date: 2017-06-15 12:22+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: picking_invoice_pending
+#: field:stock.picking,pending_invoice_move_id:0
+msgid "Account pending move"
+msgstr "Spostamento dell'account in sospeso
+
+#. module: picking_invoice_pending
+#: field:stock.picking,pending_stock_move_id:0
+msgid "Account pending stock move"
+msgstr "Spostamento dello stock in sospeso"
+
+#. module: picking_invoice_pending
+#: field:stock.picking,pending_stock_reverse_move_id:0
+msgid "Account pending stock reverse move"
+msgstr "Spostamento inverso stock in sospeso account"
+
+#. module: picking_invoice_pending
+#: model:ir.model,name:picking_invoice_pending.model_res_company
+msgid "Companies"
+msgstr "Aziende"
+
+#. module: picking_invoice_pending
+#: model:ir.model,name:picking_invoice_pending.model_account_invoice
+msgid "Invoice"
+msgstr "Fattura"
+
+#. module: picking_invoice_pending
+#: field:res.company,property_pending_expenses_account:0
+msgid "Pending invoice expenses account"
+msgstr "Conto spese fattura in sospeso"
+
+#. module: picking_invoice_pending
+#: field:res.company,property_pending_stock_account:0
+msgid "Pending invoice stock account"
+msgstr "Conto spese stock in sospeso"
+
+#. module: picking_invoice_pending
+#: field:res.company,property_pending_variation_account:0
+msgid "Pending invoice variation account"
+msgstr "Conto spese variazioni in sospeso"
+
+#. module: picking_invoice_pending
+#: field:res.company,property_pending_supplier_invoice_account:0
+msgid "Pending supplier invoice account"
+msgstr "Conto fattura fornitore in sospeso"
+
+#. module: picking_invoice_pending
+#: field:res.company,property_pending_stock_journal:0
+msgid "Pending supplier invoice journal"
+msgstr "Registro delle fatture fornitore in sospeso"
+
+#. module: picking_invoice_pending
+#: model:ir.model,name:picking_invoice_pending.model_stock_picking
+msgid "Picking List"
+msgstr "Picking List"
+
+#. module: picking_invoice_pending
+#: field:res.company,required_invoice_pending_move:0
+msgid "Require pending move"
+msgstr "Richiede movimento in sospeso"
+
+#. module: picking_invoice_pending
+#: help:res.company,required_invoice_pending_move:0
+msgid "Require pending move to done incoming picking"
+msgstr "Richiede lo spostamento in sospeso per eseguire il ritiro in arrivo"
+
+#. module: picking_invoice_pending
+#: help:res.company,property_pending_expenses_account:0
+#: help:res.company,property_pending_stock_account:0
+#: help:res.company,property_pending_supplier_invoice_account:0
+#: help:res.company,property_pending_variation_account:0
+msgid "This account is used for accounting in pending supplier invoices."
+msgstr "Questo account viene utilizzato per la contabilità nelle fatture fornitore in sospeso."
+
+#. module: picking_invoice_pending
+#: help:res.company,property_pending_stock_journal:0
+msgid "This journal is used for accounting in pending supplier invoices."
+msgstr "Questo registro viene utilizzato per la contabilità nelle fatture fornitore in sospeso."
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:164
+#, python-format
+msgid "You need to configure an account in the company for pending invoices"
+msgstr "È necessario configurare un account in azienda per le fatture in sospeso"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:136
+#: code:addons/picking_invoice_pending/stock_picking.py:160
+#: code:addons/picking_invoice_pending/stock_picking.py:167
+#, python-format
+msgid "You need to configure an account journal in the company for pending invoices"
+msgstr "È necessario configurare un registro account in azienda per le fatture in sospeso"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:133
+#: code:addons/picking_invoice_pending/stock_picking.py:157
+#, python-format
+msgid "You need to configure the accounts in the company for pending invoices"
+msgstr "È necessario configurare gli account in azienda per le fatture in sospeso"

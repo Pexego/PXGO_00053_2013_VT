@@ -1,0 +1,137 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* customer_lost
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:15+0000\n"
+"PO-Revision-Date: 2014-12-17 16:15+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Area"
+msgstr "Zona"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Companies"
+msgstr "Azienda"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Company"
+msgstr "Azienda"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_partner_tree
+msgid "Contacts"
+msgstr "Contatti"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Country"
+msgstr "Paese"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Customer Partners"
+msgstr "Clienti Partners"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.res_partner_view_lost_search
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+#: model:ir.model.fields,field_description:customer_lost.field_res_partner_customer_lost
+msgid "Customer lost"
+msgstr "Cliente perso"
+
+#. module: customer_lost
+#: model:ir.model.fields,field_description:customer_lost.field_res_partner_customer_win
+msgid "Customer win"
+msgstr "Cliente acquisito"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Customers"
+msgstr "Clienti"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Group By"
+msgstr "Agruppare per"
+
+#. module: customer_lost
+#: model:ir.model.fields,field_description:customer_lost.field_res_partner_last_sale_date
+msgid "Last sale"
+msgstr "Ultima vendita"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.res_partner_view_lost_search
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Lost"
+msgstr "Perso"
+
+#. module: customer_lost
+#: model:ir.actions.act_window,name:customer_lost.action_show_customer_lost
+#: model:ir.ui.menu,name:customer_lost.menu_customer_lost_report
+msgid "Lost and win customers"
+msgstr "Clienti persi o acquisiti"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "My Partners"
+msgstr "Miei clienti"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.res_partner_view_lost_search
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "No lost"
+msgstr "Non perso"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.res_partner_view_lost_search
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "No lost customers"
+msgstr "Clientes non perso"
+
+#. module: customer_lost
+#: model:ir.model,name:customer_lost.model_res_partner
+msgid "Partner"
+msgstr "Azienda"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Persons"
+msgstr "Persone"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Salesperson"
+msgstr "Commerciale"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Search Partner"
+msgstr "Cerca azienda"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Supplier Partners"
+msgstr "Fornitori partners"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Suppliers"
+msgstr "Fornitori"
+
+#. module: customer_lost
+#: model:ir.ui.view,arch_db:customer_lost.view_res_partner_filter_report
+msgid "Tag"
+msgstr "Etichetta"

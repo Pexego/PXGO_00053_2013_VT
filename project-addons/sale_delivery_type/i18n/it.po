@@ -1,0 +1,46 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * sale_delivery_type
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-12-17 16:31+0000\n"
+"PO-Revision-Date: 2014-12-17 16:31+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sale_delivery_type
+#: selection:sale.order,delivery_type:0
+#: selection:crm.claim,delivery_type:0
+msgid "Carrier - Customer"
+msgstr "Corriere -  Cliente"
+
+#. module: sale_delivery_type
+#: model:ir.model.fields,field_description:sale_delivery_type.field_sale_order_delivery_type
+#: model:ir.model.fields,field_description:sale_delivery_type.field_crm_claim_delivery_type
+msgid "Delivery type"
+msgstr "Tipo de invio"
+
+#. module: sale_delivery_type
+#: selection:sale.order,delivery_type:0
+#: selection:crm.claim,delivery_type:0
+msgid "Pickup in installations"
+msgstr "Raccolta nelle strutture"
+
+#. module: sale_delivery_type
+#: model:ir.model,name:sale_delivery_type.model_sale_order
+msgid "Sales Order"
+msgstr "Ordine di vendita"
+
+#. module: sale_delivery_type
+#: selection:sale.order,delivery_type:0
+#: selection:crm.claim,delivery_type:0
+msgid "Shipping"
+msgstr "Invio"
+

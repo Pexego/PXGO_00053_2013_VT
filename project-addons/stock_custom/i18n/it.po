@@ -1,0 +1,360 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * stock_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-01-20 11:54+0000\n"
+"PO-Revision-Date: 2016-01-20 11:54+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_standard_price_2
+#: model:ir.model.fields,field_description:stock_custom.field_product_template_standard_price_2
+msgid "Cost Price 2"
+msgstr "Prezzo di costo 2"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_sale_order_is_all_reserved
+msgid "Is all reserved"
+msgstr "Tutto riservato"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_history_brand_id
+msgid "Brand"
+msgstr "Marca"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_history_report_search_group_by_brand
+msgid "Brand"
+msgstr "Marca"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_template_kanban_stock_view_inherit
+msgid "Incoming:"
+msgstr "In arrivo:"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_internal_notes
+msgid "Internal Notes"
+msgstr "Note interne"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_move_lots_text
+msgid "Lots"
+msgstr "Lotti"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_res_partner_not_print_picking
+msgid "Not print picking"
+msgstr "Non allegare la bolla di consegna stampata"
+
+#. module: stock_custom
+#: code:addons/stock_custom/product.py:16
+#: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
+#, python-format
+msgid "Stock moves"
+msgstr "Movimenti di magazzino"
+
+#. module: stock_custom
+#: model:ir.model.fields,help:stock_custom.field_res_partner_not_print_picking
+msgid "Only print attachments on picking with attachs. report"
+msgstr "Basta stampare gli allegati nel rapporto bolle con gli allegati"
+
+#. module: stock_custom
+#: model:ir.model,name:stock_custom.model_stock_picking
+msgid "Picking List"
+msgstr "Bolle"
+
+#. module: stock_custom
+#: model:ir.actions.report.xml,name:stock_custom.action_report_picking_attachments
+msgid "Picking with attachments"
+msgstr "Bolle con allegato"
+
+#. module: stock_custom
+#: model:ir.model,name:stock_custom.model_report
+msgid "Report"
+msgstr "Report"
+
+#. module: stock_custom
+#: model:ir.model,name:stock_custom.model_stock_move
+msgid "Stock Move"
+msgstr "Movimento di scorta"
+
+#. module: stock_custom
+#: code:addons/stock_custom/stock.py:42
+#, python-format
+msgid "The number of lots defined are not equal to move product quantity"
+msgstr "Il numero di lotti definiti non è uguale alla quantità del prodotto nel movimento"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_ir_attachment_to_print
+msgid "To print"
+msgstr "Da stampare"
+
+#. module: stock_custom
+#: model:ir.model.fields,help:stock_custom.field_stock_move_lots_text
+msgid "Value must be separated by commas"
+msgstr "Il valore deve essere separato da virgole."
+
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_picking_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_commercial
+msgid "Commercial"
+msgstr "Commerciale"
+
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_sale_order_search
+msgid "all reservations assigned"
+msgstr "Tutte le prenotazioni assegnate "
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_sale_order_search
+msgid "some reservations assigned"
+msgstr "Ci sono prenotazioni in sospeso "
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_reservation_next_reception_date
+msgid "Next reception date"
+msgstr "Data della prossima ricezione"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_tree
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_virtual_stock_cooked
+msgid "Stock Available Cooking"
+msgstr "Stock Disponibile"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_name
+msgid "Picking Name"
+msgstr "Nome della bolla"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_date
+msgid "Date Order"
+msgstr "Data bolla"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_date_done
+msgid "Date Done"
+msgstr "Data spedizione"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product
+msgid "Product"
+msgstr "Nome del Prodotto"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_uom_qty
+msgid "# of Qty"
+msgstr "Numero di Unità"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_partner_id
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_commercial
+msgid "Commercial"
+msgstr "Commerciale"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_price_total
+msgid "Total Price"
+msgstr "Prezzo Totale"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_categ_id
+msgid "Category of Product"
+msgstr "Categoria del Prodotto"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_nbr
+msgid "# of Lines"
+msgstr "Numero delle Linee"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_state
+msgid "Picking Status"
+msgstr "Stato delle bolle"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+msgid "Order Month"
+msgstr "Ordinare per mese"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+msgid "Order Done Month"
+msgstr "Ordina per mese spedizione"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+msgid "Quotations"
+msgstr "Bozze"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+msgid "Sales"
+msgstr "Vendite"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_stock_product_search
+msgid "My Picking"
+msgstr "Le mie bolle"
+
+#. module: stock_custom
+#: model:ir.actions.server,name:stock_custom.action_product_stock_new
+#: model:ir.ui.menu,name:stock_custom.menu_products_stock_new
+#: code:addons/stock_custom/product.py:65
+msgid "Stock New"
+msgstr "Stock Nuovo"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_stock_graphic_form
+msgid "Refresh graph"
+msgstr "Aggiornare grafica"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_template_stock_graphic
+msgid "Graph"
+msgstr "Grafica"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_template_date_start
+msgid "Start date"
+msgstr "Data inizio"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_template_date_end
+msgid "End Date"
+msgstr "Data fine"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_template_period
+msgid "Time Period"
+msgstr "Data periodo"
+
+#. module: stock_custom
+#: selection:product.template,period:0
+msgid "Week"
+msgstr "Settimana"
+
+#. module: stock_custom
+#: selection:product.template,period:0
+msgid "Month"
+msgstr "Mese"
+
+#. module: stock_custom
+#: selection:product.template,period:0
+msgid "Year"
+msgstr "Anno"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_template_analysis_type
+msgid "Type of analysis"
+msgstr "Tipo di analisi"
+
+#. module: stock_custom
+#: selection:product.template,analysis_type:0
+msgid "Average"
+msgstr "Media stock al giorno"
+
+#. module: stock_custom
+#: selection:product.template,analysis_type:0
+msgid "End of period"
+msgstr "Finale del periodo"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_stock_graphic_form
+msgid "Stock graphic"
+msgstr "Evoluzione stock"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_stock_graphic_form
+msgid "Filters"
+msgstr "Filtri"
+
+#. module: stock_custom
+#: code:addons/stock_custom/stock_graphic.py:225
+#, python-format
+msgid "Date"
+msgstr "Data"
+
+#. module: stock_custom
+#: code:addons/stock_custom/stock_graphic.py:145
+#, python-format
+msgid "You must set all filter values"
+msgstr "Devi compilare tutti i filtri"
+
+#. module: stock_custom
+#: code:addons/stock_custom/stock_graphic.py:148
+#, python-format
+msgid "End date cannot be smaller than start date"
+msgstr "La data di fine non può essere inferiore alla data di inizio"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_stock_graphic_form
+msgid "(By default, the graph shows the analysis per month of the daily stock average of the last 6 months)"
+msgstr "(Per impostazione predefinita, il grafico mostra l'analisi al mese dello stock giornaliero medio degli ultimi 6 mesi) "
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_area_id
+msgid "Area"
+msgstr "Zona"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_state_name
+msgid "State Name"
+msgstr "Provincia"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_section_id
+msgid "Sales Team"
+msgstr "Sales Team"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_ref_visiotech
+msgid "Visiotech reference"
+msgstr "Riferimento Visiotech"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_production_lot_partner_id
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: stock_custom
+#: model:ir.model.fields,help:stock_custom.field_stock_production_lot_partner_id
+msgid "The last customer in possession of the product"
+msgstr "L'ultimo cliente in possesso del prodotto"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_move_line_date_expected
+msgid "Date Expected"
+msgstr "Data prevista"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_move_line_tree_add_date
+msgid "Ordered Qty"
+msgstr "Quantità richiesta"
