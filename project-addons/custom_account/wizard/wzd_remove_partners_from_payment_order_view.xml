@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="wzd_remove_partner_payment_order_form" model="ir.ui.view">
+           <field name="name">wzd.remove.partner.payment.order.form</field>
+           <field name="model">wzd.remove.partner.payment.order</field>
+           <field name="arch" type="xml">
+                <form string="Remove partners from payment order">
+                    <group>
+                        <field name="partner_ids" colspan="4"/>
+                    </group>
+                    <footer>
+                        <button string="Remove" name="action_remove_partners" icon="fa-check" type="object" colspan="2"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+           </field>
+      </record>
+
+    <record id="action_wzd_remove_partner_payment_order" model="ir.actions.act_window">
+         <field name="name">Remove partners from payment order</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">wzd.remove.partner.payment.order</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">form</field>
+    </record>
+
+</odoo>

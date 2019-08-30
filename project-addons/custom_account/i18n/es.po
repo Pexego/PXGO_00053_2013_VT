@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-19 14:09+0000\n"
-"PO-Revision-Date: 2019-07-19 14:09+0000\n"
+"POT-Creation-Date: 2019-08-29 14:28+0000\n"
+"PO-Revision-Date: 2019-08-29 14:28+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account_payment_order.py:17
+#: code:addons/custom_account/models/account_payment_order.py:53
 #, python-format
 msgid "\n"
 "Missing SEPA Direct Debit mandate on the bank payment line with partner '%s' (reference '%s')."
@@ -24,7 +24,7 @@ msgstr "\n"
 "No se ha encontrado un mandato sepa en la line bancaria de la empresa '%s' (referencia '%s')."
 
 #. module: custom_account
-#: code:addons/custom_account/models/account_payment_order.py:22
+#: code:addons/custom_account/models/account_payment_order.py:58
 #, python-format
 msgid "\n"
 "The SEPA Direct Debit mandate with reference '%s' for partner '%s' has expired."
@@ -32,7 +32,7 @@ msgstr "\n"
 "El mandato SEPA con referencia '%s' para la empresaa '%s' ha expirado."
 
 #. module: custom_account
-#: code:addons/custom_account/models/account_payment_order.py:29
+#: code:addons/custom_account/models/account_payment_order.py:65
 #, python-format
 msgid "\n"
 "The mandate with reference '%s' for partner '%s' has type set to 'One-Off' and it has a last debit date set to '%s', so we can't use it."
@@ -193,6 +193,7 @@ msgstr "CIF/NIF/VAT"
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.wizard_reclassify_move_line_balance_form
 #: model:ir.ui.view,arch_db:custom_account.wizard_reconcile_payment_statement_line_form
+#: model:ir.ui.view,arch_db:custom_account.wzd_remove_partner_payment_order_form
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -235,6 +236,7 @@ msgstr "País"
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_create_uid
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_create_uid
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_create_uid
+#: model:ir.model.fields,field_description:custom_account.field_wzd_remove_partner_payment_order_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
@@ -247,6 +249,7 @@ msgstr "Fecha de alta"
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_create_date
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_create_date
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_create_date
+#: model:ir.model.fields,field_description:custom_account.field_wzd_remove_partner_payment_order_create_date
 msgid "Created on"
 msgstr "Creado en"
 
@@ -302,6 +305,7 @@ msgstr "Recibo domiciliado"
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_display_name
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_display_name
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_display_name
+#: model:ir.model.fields,field_description:custom_account.field_wzd_remove_partner_payment_order_display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
 
@@ -349,6 +353,7 @@ msgstr "Información general"
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_id
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_id
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_id
+#: model:ir.model.fields,field_description:custom_account.field_wzd_remove_partner_payment_order_id
 msgid "ID"
 msgstr "ID (identificación)"
 
@@ -413,6 +418,7 @@ msgstr "Apuntes contables"
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity___last_update
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance___last_update
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line___last_update
+#: model:ir.model.fields,field_description:custom_account.field_wzd_remove_partner_payment_order___last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
@@ -425,6 +431,7 @@ msgstr "Último Pago"
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_write_uid
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_write_uid
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_write_uid
+#: model:ir.model.fields,field_description:custom_account.field_wzd_remove_partner_payment_order_write_uid
 msgid "Last Updated by"
 msgstr "Última actualización de"
 
@@ -432,6 +439,7 @@ msgstr "Última actualización de"
 #: model:ir.model.fields,field_description:custom_account.field_bank_maturity_write_date
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_write_date
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reconcile_payment_statement_line_write_date
+#: model:ir.model.fields,field_description:custom_account.field_wzd_remove_partner_payment_order_write_date
 msgid "Last Updated on"
 msgstr "Última actualización en"
 
@@ -468,7 +476,7 @@ msgid "Months"
 msgstr "Meses"
 
 #. module: custom_account
-#: code:addons/custom_account/models/payment_return.py:39
+#: code:addons/custom_account/models/payment_return.py:42
 #, python-format
 msgid "Move lines: %s"
 msgstr "Apuntes: %s"
@@ -492,34 +500,34 @@ msgstr "Sin seguimiento"
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_res_partner_not_send_following_email
 msgid "Not Send Following Email"
-msgstr "No enviar email de seguimiento"
+msgstr "Not Send Following Email"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:293
+#: code:addons/custom_account/models/account.py:302
 #, python-format
 msgid "Not all invoices are at the same sales team!"
 msgstr "¡No todas las facturas tienen el mismo equipo de ventas!"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:290
+#: code:addons/custom_account/models/account.py:299
 #, python-format
 msgid "Not all invoices are at the same salesperson!"
 msgstr "¡No todas las facturas tienen el mismo comercial!"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:296
+#: code:addons/custom_account/models/account.py:305
 #, python-format
 msgid "Not all invoices are of the same invoice type!"
 msgstr "¡No todas las facturas tienen la misma forma de facturación!"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:284
+#: code:addons/custom_account/models/account.py:293
 #, python-format
 msgid "Not all invoices have the same payment term!"
 msgstr "¡No todas las facturas tiene la misma forma de pago!"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:287
+#: code:addons/custom_account/models/account.py:296
 #, python-format
 msgid "Not all invoices use the same payment mode!"
 msgstr "¡No todas las facturas usan el mismo modo de pago!"
@@ -533,6 +541,11 @@ msgstr "No cambiar fecha"
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_not_send_email
 msgid "Not send email"
 msgstr "No enviar email"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_payment_mode_not_send_emails
+msgid "Not send emails"
+msgstr "No enviar emails"
 
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.view_order_form_inherit
@@ -603,6 +616,11 @@ msgstr "Ref. empresa"
 #: model:ir.model.fields,field_description:custom_account.field_report_account_treasury_forecast_analysis_partner_name
 msgid "Partner/Supplier"
 msgstr "Cliente/Proveedor"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_wzd_remove_partner_payment_order_partner_ids
+msgid "Partners to remove"
+msgstr "Empresas a eliminar de la orden"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_payment_line
@@ -767,10 +785,21 @@ msgid "Remark"
 msgstr "Remark"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:221
+#: code:addons/custom_account/models/account.py:229
 #, python-format
 msgid "Remember to change due date in associated payment(s)"
 msgstr "Recuerde cambiar la fecha de vencimientos en los pagos relacionados"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.wzd_remove_partner_payment_order_form
+msgid "Remove"
+msgstr "Quitar"
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.action_wzd_remove_partner_payment_order
+#: model:ir.ui.view,arch_db:custom_account.wzd_remove_partner_payment_order_form
+msgid "Remove partners from payment order"
+msgstr "Quitar empresas de la órden de cobro/pago"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_line_sale_order_id
@@ -980,7 +1009,7 @@ msgid "Voucher Lines"
 msgstr "Líneas de comprobante"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account.py:219
+#: code:addons/custom_account/models/account.py:227
 #, python-format
 msgid "Warning"
 msgstr "Aviso"
@@ -1026,3 +1055,8 @@ msgstr "wizard.reclassify.move.line.balance"
 #: model:ir.model,name:custom_account.model_wizard_reconcile_payment_statement_line
 msgid "wizard.reconcile.payment.statement.line"
 msgstr "wizard.reconcile.payment.statement.line"
+
+#. module: custom_account
+#: model:ir.model,name:custom_account.model_wzd_remove_partner_payment_order
+msgid "wzd.remove.partner.payment.order"
+msgstr "wzd.remove.partner.payment.order"

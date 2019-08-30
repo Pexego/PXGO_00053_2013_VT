@@ -35,6 +35,7 @@ class ClaimSendSupplier(models.TransientModel):
         claim_obj = self.env['crm.claim']
         wh_ids = wh_obj.search([('company_id', '=',
                                  self.env.user.company_id.id)])
+        supplier_type = self.env.ref('crm_claim_type.crm_claim_type_supplier').id
 
         lines = self.env['claim.line'].browse(self.env.context['active_ids'])
         supplier_lines = {}
@@ -55,7 +56,7 @@ class ClaimSendSupplier(models.TransientModel):
         for supplier in partner_obj.browse(supplier_lines.keys()):
             claims_created = claim_obj.search(
                 [('partner_id', '=', supplier.id),
-                 ('claim_type', '=', 'supplier'),
+                 ('claim_type', '=', supplier_type),
                  ('stage_id.closed', '=', False)])
             if claims_created:
                 claim = claims_created[0]
@@ -63,7 +64,7 @@ class ClaimSendSupplier(models.TransientModel):
                 claim_vals = {
                     'name': supplier.name,
                     'user_id': self.env.user.id,
-                    'claim_type': 'supplier',
+                    'claim_type': supplier_type,
                     'partner_id': supplier.id,
                     'partner_phone': supplier.phone,
                     'email_from': supplier.email,

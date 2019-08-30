@@ -61,15 +61,6 @@ class CrmClaimRma(models.Model):
 
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
-    @api.onchange('claim_type')
-    def onchange_claim_type(self):
-        if self.claim_type == 'customer':
-            return {'domain': {'partner_id': [('customer', '=', True),
-                                              ('is_company', '=', True)]}}
-        else:
-            return {'domain': {'partner_id': [('supplier', '=', True),
-                                              ('is_company', '=', True)]}}
-
     @api.multi
     def write(self, vals):
         if 'stage_id' in vals:
@@ -103,7 +94,8 @@ class CrmClaimRma(models.Model):
     @api.model
     def _get_sequence_number(self):
         seq_obj = self.env['ir.sequence']
-        if 'claim_type' in self.env.context and self.env.context['claim_type'] == 'supplier':
+        supplier_type = self.env.ref('crm_claim_type.crm_claim_type_supplier').id
+        if 'claim_type' in self.env.context and self.env.context['claim_type'] == supplier_type:
             res = seq_obj.get('crm.claim.rma.supplier') or '/'
         else:
             res = seq_obj.get('crm.claim.rma') or '/'
