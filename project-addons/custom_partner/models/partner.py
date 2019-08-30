@@ -672,11 +672,19 @@ class ResPartner(models.Model):
             }
 
 
-# TODO: Probar parte relacionada con account
 class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
     ref_line = fields.Char("Payment Reference", related='move_id.vref')
+    residual_balance = fields.Float("Residual Balance", compute='_get_residual_balance')
+
+    @api.multi
+    def _get_residual_balance(self):
+        for line in self:
+            if line.amount_residual:
+                line.residual_balance = line.amount_residual
+            else:
+                line.residual_balance = line.balance
 
 
 class AccountMove(models.Model):
