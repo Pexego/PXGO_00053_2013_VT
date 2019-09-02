@@ -20,6 +20,7 @@
         "wizard/base_synchro_view.xml",
         "views/base_synchro_view.xml",
         "views/res_request_view.xml",
+        "data/base_synchro_data.xml"
     ],
     "installable": True,
 }
