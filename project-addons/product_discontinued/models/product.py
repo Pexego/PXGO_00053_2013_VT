@@ -7,7 +7,7 @@ class ProductProduct(models.Model):
     discontinued = fields.Boolean(string="Discontinued", default=False, help="If marked, product not more available")
 
     @api.multi
-    @api.constrains('discontinued')
+    @api.constrains('discontinued', 'state')
     def allow_discontinued(self):
         for item in self:
             if (item.qty_available != 0) or item.state != 'end':
