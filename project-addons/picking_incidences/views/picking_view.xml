@@ -35,11 +35,9 @@
                 <xpath expr="//field[@name='move_lines']/tree/field[@name='quantity_done']" position="after">
                     <field name="state"/>
                 </xpath>
-                <xpath expr="//field[@name='move_lines']/tree/field[@name='quantity_done']" position="attributes">
-                    <attribute name="string">Qty ready</attribute>
-                </xpath>
                 <xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']" position="after">
-                    <field name="qty_confirmed"/>
+                    <field name="qty_confirmed" attrs="{'column_invisible': ['|','|',('parent.state', 'not in', ['confirmed','partially_available']),('parent.with_incidences','=',True),('parent.move_type', '!=' , 'direct')]}"/>
+                    <field name="qty_ready" attrs="{'column_invisible': ['|',('parent.state', 'not in', ['assigned','partially_available']),('parent.with_incidences','=',False)]}"/>
                 </xpath>
                 <xpath expr="//field[@name='move_lines']/tree/field[@name='product_uom_qty']" position="attributes">
                     <attribute name="string">Qty ordered</attribute>

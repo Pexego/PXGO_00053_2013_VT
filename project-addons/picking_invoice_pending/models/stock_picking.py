@@ -78,13 +78,17 @@ class StockPicking(models.Model):
                 'partner_id': move_line.partner_id.commercial_partner_id.id,
                 'product_id': move_line.product_id.id,
                 'account_id': debit_account.id,
-                'debit': amount_line,
+                'debit': 0,
                 'credit': 0,
                 'quantity': move_line.product_qty,
                 'move_id': move_id.id,
                 'journal_id': stock_journal_id,
                 'date': date
             }
+            if amount_line > 0:
+                vals['debit'] = amount_line
+            else:
+                vals['credit'] = abs(amount_line)
             lines_data.append(vals)
             if move_line.partner_id.commercial_partner_id.id in lines:
                 lines[move_line.partner_id.commercial_partner_id.id] += \

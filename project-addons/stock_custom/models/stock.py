@@ -29,6 +29,7 @@ class StockPicking(models.Model):
 
     def action_done(self):
         lot_obj = self.env["stock.production.lot"]
+        mov_line_obj = self.env['stock.move.line']
         for picking in self:
             for move in picking.move_lines:
                 if not move.lots_text and move.state == 'assigned' and \
@@ -37,9 +38,18 @@ class StockPicking(models.Model):
                 if move.lots_text:
                     txlots = move.lots_text.split(',')
                     if len(txlots) != len(move.move_line_ids):
-                        raise exceptions.Warning(_("The number of lots defined"
-                                                   " are not equal to move"
-                                                   " product quantity"))
+                        quantity = len(txlots) - len(move.move_line_ids)
+                        if quantity >= 0 and \
+                                len(txlots) == move.product_uom_qty:
+                            for i in range(0, int(quantity)):
+                                mov_line_obj.create(
+                                    move._prepare_move_line_vals(quantity=1))
+                            move.refresh()
+                        else:
+                            raise exceptions.\
+                                Warning(_("The number of lots defined"
+                                          " are not equal to move"
+                                          " product quantity"))
                     cont = 0
                     while (txlots):
                         lot_name = txlots.pop()
@@ -51,8 +61,11 @@ class StockPicking(models.Model):
                             lot = lot_obj.create({'name': lot_name,
                                                   'product_id':
                                                   move.product_id.id})
-                            move.move_line_ids[cont].lot_id = lot
-                            move.move_line_ids[cont].qty_done = 1.0
+                            move.move_line_ids[cont].\
+                                with_context(bypass_reservation_update=True).\
+                                write({'lot_id': lot.id,
+                                       'product_uom_qty': 0.0,
+                                       'qty_done': 1.0})
                             cont += 1
         res = super().action_done()
         for picking in self:
@@ -98,7 +111,8 @@ class StockMove(models.Model):
     available_stock = fields.Float(compute="_compute_available_stock")
     user_id = fields.Many2one('res.users', compute='_compute_responsible')
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
-    sale_id = fields.Many2one('sale.order', related='sale_line_id.order_id', readonly=True)
+    sale_id = fields.Many2one('sale.order', related='sale_line_id.order_id',
+                              readonly=True)
 
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()

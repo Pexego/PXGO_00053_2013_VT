@@ -8,6 +8,16 @@ class AccountPaymentOrder(models.Model):
     _inherit = 'account.payment.order'
 
     @api.multi
+    def action_done_cancel(self):
+        move_lines = []
+        for bline in self.bank_line_ids:
+            move_lines = bline.payment_line_ids.mapped('move_line_id')
+        res = super().action_done_cancel()
+        if move_lines:
+            move_lines.remove_move_reconcile()
+        return res
+
+    @api.multi
     def draft2open(self):
         for order in self:
             group_paylines = {}

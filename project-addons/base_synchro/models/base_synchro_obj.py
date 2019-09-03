@@ -19,6 +19,13 @@ class BaseSynchroServer(models.Model):
     obj_ids = fields.One2many('base.synchro.obj', 'server_id', 'Models',
                               ondelete='cascade')
 
+    @api.model
+    def sync_databases(self):
+        for server in self.search([]):
+            wzd = self.env['base.synchro'].\
+                create({'server_url': server.id})
+            wzd.upload_download()
+
 
 class BaseSynchroObj(models.Model):
     """Class to store the operations done by wizard."""
@@ -43,7 +50,8 @@ class BaseSynchroObj(models.Model):
                               'IDs Affected', ondelete='cascade')
     avoid_ids = fields.One2many('base.synchro.obj.avoid', 'obj_id',
                                 'Fields Not Sync.')
-    context = fields.Text('Context', help="Dictionary format. Used on create/write")
+    context = fields.Text('Context',
+                          help="Dictionary format. Used on create/write")
 
     @api.model
     def get_ids(self, obj, dt, domain=None, action=None):

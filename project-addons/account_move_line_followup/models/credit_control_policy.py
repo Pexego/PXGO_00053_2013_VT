@@ -125,13 +125,13 @@ class CreditCommunication(models.Model):
 
         # Get the maximum level of all credit lines group by partner
         sql = (
-            """ SELECT ccl.partner_id, ccl.policy_id, ccl.currency_id, 
+            """ SELECT ccl.partner_id, ccl.policy_id, ccl.currency_id,
                        max(ccl.level) as level
                 FROM credit_control_line ccl
                 JOIN credit_control_policy_level ccpl ON ccpl.id = ccl.policy_level_id
                 LEFT JOIN credit_control_policy_level ccpl_email ON ccpl_email.id = ccl.policy_level_id AND ccpl_email.channel = 'email'
                 JOIN account_move_line aml ON aml.id = ccl.move_line_id
-                WHERE ccl.id in %s AND COALESCE(aml.full_reconcile_id, 0) = 0 
+                WHERE ccl.id in %s AND COALESCE(aml.full_reconcile_id, 0) = 0
                 GROUP BY ccl.partner_id, ccl.policy_id, ccl.currency_id
 
         """)
