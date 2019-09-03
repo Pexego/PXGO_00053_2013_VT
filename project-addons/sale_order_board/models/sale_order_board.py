@@ -30,6 +30,8 @@ import base64
 import unidecode
 import collections
 
+import time
+
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -58,7 +60,7 @@ class SaleOrder(models.Model):
                 package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
                 package_pieces += int(order_line.product_uom_qty)
             num_pieces = int((package_weight / 20) + 1)
-            package_weight = str(package_weight)
+            package_weight = str(round(package_weight, 2))
             products_wo_weight = str(products_wo_weight)
             if products_wo_weight != '0':
                 products_wo_weight = products_wo_weight +\
@@ -474,13 +476,15 @@ class SaleOrder(models.Model):
                     byte_auth = bytearray(auth)
                     authentication = base64.b64encode(byte_auth).decode("utf-8")
 
+                    timestamp = time.strftime("%Y-%m-%d") + 'T18:00:00GMT+02:00'
+
                     headers = {'content-type': 'application/json', 'Authorization': 'Basic %s' % str(authentication)}
                     rate_request = '''{
                         "RateRequest": {
                             "ClientDetails": "",
                             "RequestedShipment": {
                                 "DropOffType": "REGULAR_PICKUP",
-                                "ShipTimestamp": "2019-09-03T14:00:00GMT+02:00",
+                                "ShipTimestamp": "%s",
                                 "UnitOfMeasurement": "SI",
                                 "Content": "DOCUMENTS",
                                 "PaymentInfo": "DAP",
@@ -517,7 +521,7 @@ class SaleOrder(models.Model):
                                 }
                             }
                         }
-                    }''' % (int(account_account), shipper_address_line, shipper_city, shipper_postal_code,
+                    }''' % (timestamp, int(account_account), shipper_address_line, shipper_city, shipper_postal_code,
                             shipper_country_code, (ship_to_address_line_1 + ship_to_address_line_2), ship_to_city,
                             ship_to_postal_code, ship_to_country_code, float(package_weight))
                     decoder = json.JSONDecoder(object_pairs_hook=collections.OrderedDict)
