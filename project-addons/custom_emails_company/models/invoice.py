@@ -17,5 +17,5 @@ class AccountInvoice(models.Model):
                 except ValueError:
                     template = False
 
-                template.send_mail(invoice.id, force_send=True)
+                template.send_mail(invoice.id)
         return res
