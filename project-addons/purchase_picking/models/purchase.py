@@ -78,6 +78,30 @@ class PurchaseOrder(models.Model):
             result['domain'] = "[('id','='," + str(move_lines[0].id) + ")]"
         return result
 
+    @api.multi
+    def _add_supplier_to_product(self):
+        """Update the partner info in the supplier list of the product if the
+        supplier is registered for this product."""
+        super()._add_supplier_to_product()
+        partner = self.partner_id if not self.partner_id.parent_id else \
+            self.partner_id.parent_id
+        for line in self.order_line:
+            if line.price_unit > 0:
+                seller = line.product_id._select_seller(
+                    partner_id=partner,
+                    quantity=line.product_qty,
+                    date=line.order_id.date_order and
+                    line.order_id.date_order[:10],
+                    uom_id=line.product_uom)
+                if seller:
+                    currency = (
+                        partner.property_purchase_currency_id or
+                        self.env.user.company_id.currency_id)
+                    seller.write({
+                        'price': line.price_unit,
+                        'currency_id': self.currency_id.id,
+                    })
+
 
 class PurchaseOrderLine(models.Model):
 
