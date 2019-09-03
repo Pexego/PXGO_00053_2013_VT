@@ -9,6 +9,7 @@
                     <field name="total_weight"/>
                     <t attrs="{'invisible': [('products_wo_weight', '=', '0')]}">
                         <b><field name="products_wo_weight" style="color:red"/></b>
+                        <field name="products_without_weight" style="color:red"/>
                     </t>
                 </group>
                 <group>

@@ -70,4 +70,20 @@
          <field name="key">account.password.tnt.api.request</field>
          <field name="value"></field>
       </record>
+      <record id="account_user_dhl_api_request" model="ir.config_parameter">
+         <field name="key">account.user.dhl.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="account_password_dhl_api_request" model="ir.config_parameter">
+         <field name="key">account.password.dhl.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="url_prod_dhl_api_request" model="ir.config_parameter">
+         <field name="key">url.prod.dhl.api.request</field>
+         <field name="value"></field>
+      </record>
+      <record id="account_dhl_api_request" model="ir.config_parameter">
+         <field name="key">account.dhl.api.request</field>
+         <field name="value"></field>
+      </record>
 </odoo>
