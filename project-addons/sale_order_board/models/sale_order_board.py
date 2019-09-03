@@ -28,6 +28,9 @@ import re
 import ast
 import base64
 import unidecode
+import collections
+
+import time
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -48,21 +51,24 @@ class SaleOrder(models.Model):
             package_weight = 0.0
             package_pieces = 0
             products_wo_weight = 0
+            products_without_weight = ''
             for order_line in order.order_line:
                 if order_line.product_id.weight == 0 and order_line.product_id.type == 'product':
                     products_wo_weight += 1
+                    products_without_weight = products_without_weight + ' %s' % (order_line.product_id.default_code)
                     continue
                 package_weight += float(order_line.product_id.weight * order_line.product_uom_qty)
                 package_pieces += int(order_line.product_uom_qty)
             num_pieces = int((package_weight / 20) + 1)
-            package_weight = str(package_weight)
+            package_weight = str(round(package_weight, 2))
             products_wo_weight = str(products_wo_weight)
             if products_wo_weight != '0':
                 products_wo_weight = products_wo_weight +\
                                      " of the product(s) of the order don't have set the weights," +\
                                      " please take the shipping cost as an aproximation"
             new.write({'total_weight': package_weight,
-                       'products_wo_weight': products_wo_weight})
+                       'products_wo_weight': products_wo_weight,
+                       'products_without_weight': products_without_weight})
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].sudo().get_param('service.codes.ups.api.request'))
@@ -444,6 +450,104 @@ class SaleOrder(models.Model):
                                         new.write({'data': [(0, 0, rated_status)]})
                     except AttributeError:
                         raise Exception("The response is not valid or it changed")
+
+                elif transporter.name == 'DHL':
+
+                    dhl_services = order.env['transportation.transporter'].search([('name', '=', 'DHL')]).service_ids.mapped('name')
+                    account_user = order.env['ir.config_parameter'].sudo().get_param('account.user.dhl.api.request')
+                    account_password = order.env['ir.config_parameter'].sudo().get_param('account.password.dhl.api.request')
+                    url = order.env['ir.config_parameter'].sudo().get_param('url.prod.dhl.api.request')
+                    account_account = order.env['ir.config_parameter'].sudo().get_param('account.dhl.api.request')
+
+                    shipper = order.env['res.company'].browse(1).partner_id
+                    shipper_address_line = shipper.street
+                    shipper_city = shipper.city
+                    shipper_postal_code = shipper.zip
+                    shipper_country_code = shipper.country_id.code
+
+                    ship_to_address_line_1 = order.partner_shipping_id.street
+                    ship_to_address_line_2 = order.partner_shipping_id.street2 if order.partner_shipping_id.street2 else ''
+                    ship_to_city = order.partner_shipping_id.city
+                    ship_to_postal_code = order.partner_shipping_id.zip
+                    ship_to_country_code = order.partner_shipping_id.country_id.code
+
+                    auth = str(account_user) + ":" + str(account_password)
+                    auth = auth.encode("utf-8")
+                    byte_auth = bytearray(auth)
+                    authentication = base64.b64encode(byte_auth).decode("utf-8")
+
+                    timestamp = time.strftime("%Y-%m-%d") + 'T18:00:00GMT+02:00'
+
+                    headers = {'content-type': 'application/json', 'Authorization': 'Basic %s' % str(authentication)}
+                    rate_request = '''{
+                        "RateRequest": {
+                            "ClientDetails": "",
+                            "RequestedShipment": {
+                                "DropOffType": "REGULAR_PICKUP",
+                                "ShipTimestamp": "%s",
+                                "UnitOfMeasurement": "SI",
+                                "Content": "DOCUMENTS",
+                                "PaymentInfo": "DAP",
+                                "Account": %s,
+                                "NextBusinessDay": "N",
+                                "Ship": {
+                                    "Shipper": {
+                                        "StreetLines": "%s",
+                                        "StreetLines2": "N/A",
+                                        "City": "%s",
+                                        "PostalCode": "%s",
+                                        "CountryCode": "%s"
+                                    },
+                                    "Recipient": {
+                                        "StreetLines": "%s",
+                                        "StreetLines2": "N/A",
+                                        "City": "%s",
+                                        "PostalCode": "%s",
+                                        "CountryCode": "%s"
+                                    }
+                                },
+                                "Packages": {
+                                    "RequestedPackages": {
+                                        "@number": "1",
+                                        "Weight": {
+                                            "Value": %s
+                                        },
+                                        "Dimensions": {
+                                            "Length": 1.0,
+                                            "Width": 1.0,
+                                            "Height": 1.0
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }''' % (timestamp, int(account_account), shipper_address_line, shipper_city, shipper_postal_code,
+                            shipper_country_code, (ship_to_address_line_1 + ship_to_address_line_2), ship_to_city,
+                            ship_to_postal_code, ship_to_country_code, float(package_weight))
+                    decoder = json.JSONDecoder(object_pairs_hook=collections.OrderedDict)
+                    response = requests.session().post(url, headers=headers,
+                                                       data=json.dumps(decoder.decode(rate_request.replace(" ", "").replace("\n", ""))))
+                    if response.status_code != 200:
+                        raise Exception(response.text)
+                    if 'error' in response.url:
+                        raise Exception("Could not find information on url '%s'" % response.url)
+                    info = json.loads(response.text)
+                    if "RateResponse" in info:
+                        data = info["RateResponse"]["Provider"][0]["Service"]
+                        if data:
+                            for service in data:
+                                dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
+                                if service["@type"] in list(dhl_services_dict.keys()):
+                                    currency = service['TotalNet']['Currency']
+                                    amount = service['TotalNet']['Amount']
+                                    rated_status = {
+                                        'currency': currency,
+                                        'amount': amount,
+                                        'service': 'DHL ' + dhl_services_dict[service["@type"]],
+                                        'order_id': order.id,
+                                        'wizard_id': new.id
+                                    }
+                                    new.write({'data': [(0, 0, rated_status)]})
 
         return {
             'name': 'Shipping Data Information',
