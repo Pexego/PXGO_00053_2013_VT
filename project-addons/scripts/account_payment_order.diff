@@ -1,3 +1,35 @@
+diff --git a/account_banking_sepa_direct_debit/models/account_payment_order.py b/account_banking_sepa_direct_debit/models/account_payment_order.py
+index 58b1423..77ab322 100644
+--- a/account_banking_sepa_direct_debit/models/account_payment_order.py
++++ b/account_banking_sepa_direct_debit/models/account_payment_order.py
+@@ -265,7 +265,7 @@ class AccountPaymentOrder(models.Model):
+                 'recurrent_sequence_type': 'recurring',
+                 })
+             for first_mandate in first_mandates:
+-                first_mandate.message_post(_(
++                first_mandate.message_post(body=_(
+                     "Automatically switched from <b>First</b> to "
+                     "<b>Recurring</b> when the debit order "
+                     "<a href=# data-oe-model=account.payment.order "
+diff --git a/account_payment_order/models/account_invoice.py b/account_payment_order/models/account_invoice.py
+index c738108..ec9fcb6 100644
+--- a/account_payment_order/models/account_invoice.py
++++ b/account_payment_order/models/account_invoice.py
+@@ -104,12 +104,12 @@ class AccountInvoice(models.Model):
+                     line.create_payment_line_from_move_line(payorder)
+                     count += 1
+                 if new_payorder:
+-                    inv.message_post(_(
++                    inv.message_post(body=_(
+                         '%d payment lines added to the new draft payment '
+                         'order %s which has been automatically created.')
+                         % (count, payorder.name))
+                 else:
+-                    inv.message_post(_(
++                    inv.message_post(body=_(
+                         '%d payment lines added to the existing draft '
+                         'payment order %s.')
+                         % (count, payorder.name))
 diff --git a/account_payment_order/models/account_payment_order.py b/account_payment_order/models/account_payment_order.py
 index 2a402c1..fd53aa5 100644
 --- a/account_payment_order/models/account_payment_order.py
