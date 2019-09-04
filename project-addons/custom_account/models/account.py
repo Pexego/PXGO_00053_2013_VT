@@ -77,6 +77,7 @@ class AccountInvoice(models.Model):
     date_due = fields.Date(states={'draft': [('readonly', False)],
                                    'open': [('readonly', False)]})
     state_web = fields.Char('State web', compute='_get_state_web', store=True)
+    payment_mode_id = fields.Many2one(states={'draft': [('readonly', False)], 'open': [('readonly', False)]})
 
     @api.multi
     @api.depends('state', 'payment_mode_id', 'payment_move_line_ids')
@@ -234,6 +235,11 @@ class AccountInvoice(models.Model):
         if self.currency_id != line.order_id.currency_id:
             self.currency_id = line.order_id.currency_id
         return data
+
+    @api.onchange('payment_mode_id')
+    def _onchange_payment_mode_id(self):
+        super()._onchange_payment_mode_id()
+        self.move_id.line_ids.filtered(lambda l: l.account_id.code == '43000000').write({'payment_mode_id': self.payment_mode_id.id})
 
 
 class PaymentMode(models.Model):
