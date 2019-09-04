@@ -197,25 +197,38 @@ class StockReservation(models.Model):
     def _compute_next_reception_date(self):
         for res in self:
             date_expected = False
+            supp_id = self.env.ref('stock.stock_location_suppliers').id
+            # First move search: Supplier to Playa
             moves = self.env['stock.move'].search(
                 [('state', 'in', ('waiting', 'confirmed', 'assigned',
                                   'partially_available')),
                  ('product_id', '=', res.product_id.id),
-                 ('location_id', '=',
-                  res.sale_id.warehouse_id.wh_input_stock_loc_id.id),
-                 ('location_dest_id', 'child_of',
-                  [res.sale_id.warehouse_id.view_location_id.id])],
+                 ('location_id', '=', supp_id),
+                 ('location_dest_id', '=',
+                  res.sale_id.warehouse_id.wh_input_stock_loc_id.id)],
                 order='date_expected asc')
             if not moves:
-                supp_id = self.env.ref('stock.stock_location_suppliers').id
+                customer_loc_id = self.env.ref('stock.stock_location_customers').id
+                # Second move search: Customer to Playa
                 moves = self.env['stock.move'].search(
                     [('state', 'in', ('waiting', 'confirmed', 'assigned',
                                       'partially_available')),
                      ('product_id', '=', res.product_id.id),
-                     ('location_id', '=', supp_id),
-                     ('location_dest_id', 'child_of',
-                      [res.sale_id.warehouse_id.view_location_id.id])],
+                     ('location_id', '=', customer_loc_id),
+                     ('location_dest_id', '=',
+                      res.sale_id.warehouse_id.wh_input_stock_loc_id.id)],
                     order='date_expected asc')
+                if not moves:
+                    # Third move search: Playa to VT child location
+                    moves = self.env['stock.move'].search(
+                        [('state', 'in', ('waiting', 'confirmed', 'assigned',
+                                          'partially_available')),
+                         ('product_id', '=', res.product_id.id),
+                         ('location_id', '=',
+                          res.sale_id.warehouse_id.wh_input_stock_loc_id.id),
+                         ('location_dest_id', 'child_of',
+                          [res.sale_id.warehouse_id.view_location_id.id])],
+                        order='date_expected asc')
             if moves:
                 date_expected = moves[0].date_expected
             res.next_reception_date = date_expected
