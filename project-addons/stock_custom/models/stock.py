@@ -43,7 +43,7 @@ class StockPicking(models.Model):
                                 len(txlots) == move.product_uom_qty:
                             for i in range(0, int(quantity)):
                                 mov_line_obj.create(
-                                    move._prepare_move_line_vals(quantity=1))
+                                    move._prepare_move_line_vals())
                             move.refresh()
                         else:
                             raise exceptions.\
@@ -61,12 +61,10 @@ class StockPicking(models.Model):
                             lot = lot_obj.create({'name': lot_name,
                                                   'product_id':
                                                   move.product_id.id})
-                            move.move_line_ids[cont].\
-                                with_context(bypass_reservation_update=True).\
-                                write({'lot_id': lot.id,
-                                       'product_uom_qty': 0.0,
-                                       'qty_done': 1.0})
-                            cont += 1
+                        move.move_line_ids[cont].\
+                            write({'lot_id': lot.id,
+                                   'qty_done': 1.0})
+                        cont += 1
         res = super().action_done()
         for picking in self:
             if picking.state == 'done' and picking.sale_id and \
