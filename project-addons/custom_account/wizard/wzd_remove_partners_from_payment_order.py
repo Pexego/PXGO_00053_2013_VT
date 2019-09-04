@@ -6,7 +6,9 @@ class WizardRemovePartnersFromPaymentOrder(models.TransientModel):
     _name = "wzd.remove.partner.payment.order"
 
     partner_ids = fields.Many2many("res.partner", string="Partners to remove",
-                                   required=True)
+                                   required=True,
+                                   domain=['|', ('active', '=', True),
+                                           ('active', '=', False)])
 
     @api.multi
     def action_remove_partners(self):
