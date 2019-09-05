@@ -534,7 +534,7 @@ class SaleOrder(models.Model):
                     info = json.loads(response.text)
                     if "RateResponse" in info:
                         data = info["RateResponse"]["Provider"][0]["Service"]
-                        if data:
+                        if data and type(data) is list:
                             for service in data:
                                 dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
                                 if service["@type"] in list(dhl_services_dict.keys()):
@@ -548,6 +548,19 @@ class SaleOrder(models.Model):
                                         'wizard_id': new.id
                                     }
                                     new.write({'data': [(0, 0, rated_status)]})
+                        elif data and type(data) is dict:
+                            dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
+                            if data["@type"] in list(dhl_services_dict.keys()):
+                                currency = data['TotalNet']['Currency']
+                                amount = data['TotalNet']['Amount']
+                                rated_status = {
+                                    'currency': currency,
+                                    'amount': amount,
+                                    'service': 'DHL ' + dhl_services_dict[data["@type"]],
+                                    'order_id': order.id,
+                                    'wizard_id': new.id
+                                }
+                                new.write({'data': [(0, 0, rated_status)]})
 
         return {
             'name': 'Shipping Data Information',

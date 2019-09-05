@@ -52,7 +52,7 @@ class StockPicking(models.Model):
             if picking.claim_id:
                 for move in picking.move_lines:
                     if move.claim_line_id:
-                        if picking.picking_type_code == 'incoming':
+                        if picking.picking_type_code == 'incoming' and picking.location_dest_id.name == 'RMA':
                             move.claim_line_id.substate_id = self.env.ref(
                                 'crm_claim_rma_custom.substate_received')
                         elif picking.picking_type_code == 'outgoing':
