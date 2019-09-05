@@ -18,14 +18,14 @@ class AccountInvoice(models.Model):
         for invoice in self:
             # Compruebo la empresa actual y su padre...
             for partner in invoice.partner_id.get_partners_to_check():
-                # Comprobar ventas bloqueadas si es una factura de cliente o si es una factura de un proveedor que es cliente también
-                if invoice.type == 'out_invoice' or (invoice.type == 'in_invoice' and partner.customer):
-                    if partner.blocked_sales and not invoice.allow_confirm_blocked:
-                        if not invoice.sale_order_ids or \
-                                (invoice.sale_order_ids
-                                 and any(not order.allow_confirm_blocked for order in invoice.sale_order_ids)):
-                            message = _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.')
-                            raise exceptions.Warning(message)
+                # Comprobar ventas bloqueadas si es una factura de un proveedor que es cliente también
+                if invoice.type == 'in_invoice' and partner.customer and \
+                        partner.blocked_sales and not invoice.allow_confirm_blocked:
+                    if not invoice.sale_order_ids or \
+                            (invoice.sale_order_ids
+                             and any(not order.allow_confirm_blocked for order in invoice.sale_order_ids)):
+                        message = _('Customer blocked by lack of payment. Check the maturity dates of their account move lines.')
+                        raise exceptions.Warning(message)
         return super().invoice_validate()
 
     @api.onchange('partner_id')
