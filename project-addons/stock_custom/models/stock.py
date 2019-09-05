@@ -26,6 +26,13 @@ class StockPicking(models.Model):
 
     internal_notes = fields.Text()
     commercial = fields.Many2one('res.users')
+    move_location_id = fields.\
+        Many2one('stock.location', related='move_lines.location_id',
+                 string='Moves origin location', readonly=True, store=True)
+    move_location_dest_id = fields.\
+        Many2one('stock.location', related='move_lines.location_dest_id',
+                 string='Moves destination location', readonly=True,
+                 store=True)
 
     def action_done(self):
         lot_obj = self.env["stock.production.lot"]
