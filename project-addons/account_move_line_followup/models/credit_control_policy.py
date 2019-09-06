@@ -232,3 +232,10 @@ class CreditCommunication(models.Model):
                                        <strong><center style="font-size: 18px">''' + _("Amount due") + \
                               ''' : %s </center></strong>''' % (round(total, 2))
         return followup_table
+
+    @api.multi
+    def get_email2(self):
+        """ Return a valid accounting email for customer """
+        self.ensure_one()
+        partner = self.partner_id
+        return partner.email2
