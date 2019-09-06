@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo noupdate="1">
+    <record id="email_template_purchase_product_to_order" model="mail.template">
+        <field name="name">Purchase Warning Product</field>
+        <field name="email_from">${(object.user_id.email or '')|safe}</field>
+        <field name="subject">New sale with products to order - ${object.name} -  🛒 </field>
+        <field name="email_to">purchasing.spain@visiotechsecurity.com</field >
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="lang">${object.lang}</field>
+        <field name="body_html"><![CDATA[
+<p>Hello,</p>
+<p>The sale ${object.name} has been created. There are some products to make the order: </p>
+<p>${ctx['products_to_order']}</p>
+<p>The order is assigned to ${object.user_id.name}</p>
+<p>Regards.</p>
+]]>
+         </field>
+    </record>
+</odoo>
