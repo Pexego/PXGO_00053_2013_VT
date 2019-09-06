@@ -26,14 +26,21 @@ class StockPicking(models.Model):
 
     internal_notes = fields.Text()
     commercial = fields.Many2one('res.users')
+    move_location_id = fields.\
+        Many2one('stock.location', related='move_lines.location_id',
+                 string='Moves origin location', readonly=True, store=True)
+    move_location_dest_id = fields.\
+        Many2one('stock.location', related='move_lines.location_dest_id',
+                 string='Moves destination location', readonly=True,
+                 store=True)
 
     def action_done(self):
         lot_obj = self.env["stock.production.lot"]
         mov_line_obj = self.env['stock.move.line']
         for picking in self:
             for move in picking.move_lines:
-                if not move.lots_text and move.state == 'assigned' and \
-                        not move.quantity_done:
+                if move.product_id.tracking == 'none' and \
+                        move.state == 'assigned' and not move.quantity_done:
                     move.quantity_done = move.product_uom_qty
                 if move.lots_text:
                     txlots = move.lots_text.split(',')
