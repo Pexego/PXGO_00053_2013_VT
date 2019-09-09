@@ -46,6 +46,9 @@
                 <button name="action_force_assign" type="object" strng="Force Reserve" icon="fa-forward" attrs="{'invisible': [('state', 'not in', ('confirmed', 'waiting', 'partially_available'))]}"  options='{"warn": true}' groups="stock_custom.group_stock_force_availability"/>
                 <button name="action_do_unreserve" type="object" string="Unreserve" icon="fa-undo" attrs="{'invisible': [('state', 'not in', ('assigned', 'partially_available'))]}"  options='{"warn": true}'/>
             </xpath>
+            <button name="action_toggle_is_locked" attrs="{'invisible': ['|', ('state', 'in', ('draft','cancel')), ('is_locked', '=', False)]}" position="attributes">
+                <attribute name="groups">base.group_system</attribute>
+            </button>
         </field>
     </record>
 
