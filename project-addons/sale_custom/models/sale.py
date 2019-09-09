@@ -200,8 +200,31 @@ class SaleOrder(models.Model):
                 message = "Some of the products of this order {} aren't available now".format(self.name)
                 self.env.user.notify_info(title="Please consider that!",
                                           message=message)
+            products_to_order = ''
+            for product in sale.order_line.mapped('product_id'):
+                if product.state == 'make_to_order':
+                    products_to_order = products_to_order + product.default_code + ', '
+            if products_to_order:
+                sale.send_email_to_purchases(products_to_order)
         return super().action_confirm()
 
+    @api.multi
+    def send_email_to_purchases(self, products_to_order):
+        self.ensure_one()
+        mail_pool = self.env['mail.mail']
+        context = self._context.copy()
+        context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        context['products_to_order'] = products_to_order
+
+        template_id = self.env.ref('sale_custom.email_template_purchase_product_to_order')
+
+        if template_id:
+            mail_id = template_id.with_context(context).send_mail(self.id)
+            if mail_id:
+                mail_id_check = mail_pool.browse(mail_id)
+                mail_id_check.send()
+
+        return True
 
 class MailMail(models.Model):
     _inherit = 'mail.mail'

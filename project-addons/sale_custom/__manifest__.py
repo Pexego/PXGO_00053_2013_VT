@@ -24,6 +24,6 @@
         "custom_financial_risk"
     ],
     "data": [
-        'views/sale_view.xml'
+        'views/sale_view.xml', 'views/email_purchase_template.xml'
     ],
 }
