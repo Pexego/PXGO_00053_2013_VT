@@ -1,0 +1,37 @@
+diff --git a/account_credit_control/wizard/credit_control_communication.py b/account_credit_control/wizard/credit_control_communication.py
+index 0893648..79d7137 100644
+--- a/account_credit_control/wizard/credit_control_communication.py
++++ b/account_credit_control/wizard/credit_control_communication.py
+@@ -8,7 +8,7 @@ from odoo import api, fields, models
+ logger = logging.getLogger(__name__)
+ 
+ 
+-class CreditCommunication(models.TransientModel):
++class CreditCommunication(models.Model):
+     """Shell class used to provide a base model to email template and reporting
+     Il use this approche in version 7 a browse record
+     will exist even if not saved
+@@ -180,14 +180,15 @@ class CreditCommunication(models.TransientModel):
+             # a problem with the email
+             if not all(email_values.get(field) for field in required_fields):
+                 state = 'email_error'
+-            email.attachment_ids = [(0, 0, {
+-                'name': att[0],
+-                'datas': att[1],
+-                'datas_fname': att[0],
+-                'res_model': 'mail.mail',
+-                'res_id': email.id,
+-                'type': 'binary',
+-            }) for att in attachment_list]
++            if attachment_list:
++                email.attachment_ids = [(0, 0, {
++                    'name': att[0],
++                    'datas': att[1],
++                    'datas_fname': att[0],
++                    'res_model': 'mail.mail',
++                    'res_id': email.id,
++                    'type': 'binary',
++                }) for att in attachment_list]
+             comm.credit_control_line_ids.write({'mail_message_id': email.id,
+                                                 'state': state})
+             emails += email
