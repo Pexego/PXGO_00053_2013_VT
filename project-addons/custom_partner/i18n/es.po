@@ -459,3 +459,14 @@ msgstr "Reconciliación parcial"
 #: model:ir.model.fields,field_description:custom_partner.field_account_move_line_residual_balance
 msgid "Residual Balance"
 msgstr "Saldo pendiente"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.view_sales_graph
+msgid "Sales Analysis"
+msgstr "Análisis de venta"
+
+#. module: custom_partner
+#: model:ir.actions.act_window,name:custom_partner.partner_graphic_sales_grouped
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_graphic
+msgid "Sales Graphic"
+msgstr "Gráfico de ventas"
