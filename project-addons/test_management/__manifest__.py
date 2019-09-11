@@ -7,7 +7,7 @@
     'category': 'Accounting',
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
-    "depends": ['sale', 'account', 'sale_stock', 'stock_account', 'auth_crypt'],
+    "depends": ['sale', 'account', 'sale_stock', 'stock_account', 'auth_crypt', 'order_invoice_policy'],
     "data": ['security/test_management_security.xml',
              'wizard/sale_make_invoice_advance.xml',
              'views/sale_view.xml',

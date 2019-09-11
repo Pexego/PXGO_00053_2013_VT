@@ -23,8 +23,8 @@
         <field name="inherit_id" ref="sale.view_sales_order_filter"/>
         <field name="arch" type="xml">
             <filter name="activities_upcoming_all" position="after">
-                <filter string="To Invoice" name="to_invoice_tests" domain="[('invoice_status', '=', 'to_invoice'),('tests', '=', False)]"/>
-                <filter string="To Invoice Tests" name="to_invoice_tests" domain="[('invoice_status', '=', 'to_invoice'),('tests', '=', True)]" groups="test_management.group_test_manager"/>
+                <filter string="To Invoice" name="to_invoice_tests" domain="[('invoice_status_2', '=', 'to_invoice'),('tests', '=', False)]"/>
+                <filter string="To Invoice Tests" name="to_invoice_tests" domain="[('invoice_status_2', '=', 'to_invoice'),('tests', '=', True)]" groups="test_management.group_test_manager"/>
             </filter>
 
         </field>

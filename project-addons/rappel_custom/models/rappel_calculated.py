@@ -57,7 +57,7 @@ class RappelCalculated(models.Model):
                                                             datetime.strptime(rp.date_end, "%Y-%m-%d").strftime('%d/%m/%Y')),
                                              'invoice_id': invoice.id,
                                              'account_id': account_id.id,
-                                             'invoice_line_tax_id': tax_ids,
+                                             'invoice_line_tax_ids': tax_ids,
                                              'price_unit': rp.quantity,
                                              'quantity': 1})
                     rp.invoice_id = invoice.id
