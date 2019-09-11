@@ -146,11 +146,18 @@ class StockMoveListener(Component):
 
     def on_stock_move_change(self, record):
         if record.product_id.show_stock_outside:
-            record.product_id.with_delay(priority=12, eta=30).update_product()
+            if self.env['queue.job'].search([('state', '=', 'pending')]):
+                pending_ids = self.env['queue.job'].search([('state', '=', 'pending')]).mapped(lambda r: int(r.record_ids[0]))
+                if pending_ids and record.product_id.id in pending_ids:
+                    record.product_id.with_delay(priority=12, eta=90).update_product()
+            else:
+                record.product_id.with_delay(priority=12, eta=90).update_product()
 
         packs = self.env['mrp.bom.line'].search([('product_id', '=', record.product_id.id)]).mapped('bom_id')
         for pack in packs:
-            pack.product_tmpl_id.product_variant_ids.with_delay(priority=12, eta=30).update_product()
+            pending_ids = self.env['queue.job'].search([('state', '=', 'pending')]).mapped(lambda r: int(r.record_ids[0]))
+            if pending_ids and pack.product_tmpl_id.product_variant_ids.id not in pending_ids:
+                pack.product_tmpl_id.product_variant_ids.with_delay(priority=12, eta=90).update_product()
 
 
 class StockMove(models.Model):
