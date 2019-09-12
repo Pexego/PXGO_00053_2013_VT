@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="mrp_produce_add_final_lot" model="ir.ui.view">
+            <field name="name">mrp.produce.form</field>
+            <field name="model">mrp.product.produce</field>
+            <field name="inherit_id" ref="mrp.view_mrp_product_produce_wizard"/>
+            <field name="arch" type="xml">
+                <field name="lot_id" position="before">
+                    <field name="final_lot" invisible="1"/>
+                </field>
+                <!--TODO:Migrar<field name="lot_id" position="attributes">
+                    <attribute name="attrs">{'required': [('final_lot', '=', False),
+                        ('mode', '=', 'consume_produce')], 'readonly': [('final_lot', '=', True)]}</attribute>
+                </field>-->
+
+                <xpath expr="//tree/field[@name='lot_id']" position="before">
+                    <field name="final_lot" invisible="1"/>
+                </xpath>
+                <xpath expr="//tree/field[@name='lot_id']" position="attributes">
+                    <attribute name="attrs">{'required': [('final_lot', '=', True)]}</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

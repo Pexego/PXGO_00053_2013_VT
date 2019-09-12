@@ -38,36 +38,18 @@ class MrpProduction(models.Model):
         return res
 
     @api.multi
-    def action_production_end(self):
-        t_quant = self.env['stock.quant']
-        for production in self:
-            for move in production.move_created_ids2:
-                quant_ids = t_quant.browse(move.quant_ids.ids)
-                quant_ids.write({'cost': move.price_unit})
-                # move.update_product_price()
-        return super().action_production_end()
-
-    @api.multi
-    def action_confirm(self):
-        res = super().action_confirm()
-        picking_obj = self.env['stock.picking']
+    def create_out_picking(self):
+        picking = self.env['stock.picking']
         # Create out picking
-        pick_out = picking_obj.create({'partner_id': self.company_id.partner_id.id,
-                                       'picking_type_id': self.env.ref('stock.picking_type_out').id,
-                                       'origin': self.name})
+        pick_out = picking.create({'partner_id': self.company_id.partner_id.id,
+                                   'picking_type_id': self.env.ref('stock.picking_type_out').id,
+                                   'location_id': self.move_raw_ids and self.move_raw_ids[0].location_id.id,
+                                   'location_dest_id': self.move_raw_ids and self.move_raw_ids[0].location_dest_id.id,
+                                   'origin': self.name})
         # Update reference out picking
         self.picking_out = pick_out.id
-        for move in self.move_lines:
-            move.picking_id = pick_out.id
-
-        return res
-
-    # def create(self, cr, uid, vals, context=None):
-    #     if context is None: TODO: Migrar
-    #         context = {}
-    #     context2 = dict(context)
-    #     context2.pop('default_state', False)
-    #     return super().create(cr, uid, vals, context=context2)
+        self.move_raw_ids.write({'picking_id': pick_out.id})
+        self.move_raw_ids.mapped('move_line_ids').write({'picking_id': pick_out.id})
 
 
 class MrpBomLine(models.Model):
@@ -98,52 +80,6 @@ class MrpProductProduceLine(models.TransientModel):
             self.final_lot = True
         else:
             self.final_lot = False
-
-
-class MrpProductProduce(models.TransientModel):
-
-    _inherit = 'mrp.product.produce'
-
-    final_lot = fields.Boolean('final lot', compute='_get_final_lot')
-    lot_id = fields.Many2one('stock.production.lot', 'Lot', compute='_get_lot')
-
-    @api.one
-    @api.depends('final_lot')
-    def _get_lot(self):
-        production = self.env['mrp.production'].browse(
-            self.env.context.get('active_id'))
-        if production.final_prod_lot:
-            self.lot_id = production.final_prod_lot
-
-    @api.multi
-    def do_produce(self):
-        production_id = self.env.context.get('active_id', False)
-        assert production_id, \
-            "Production Id should be specified in context as a Active ID."
-        production = self.env['mrp.production'].browse(production_id)
-        if not self.lot_id and self.final_lot:
-            for line in self.produce_line_ids:
-                if line.final_lot and line.lot_id:
-                    self.lot_id = self.env['stock.production.lot'].create(
-                        {'name': line.lot_id.name,
-                         'product_id': production.product_id.id}).id
-        super(MrpProductProduce, self).do_produce()
-        return True
-
-
-    @api.one
-    @api.depends('produce_line_ids')
-    def _get_final_lot(self):
-        final_lot = False
-        production = self.env['mrp.production'].browse(
-            self.env.context.get('active_id'))
-        for line in self.produce_line_ids:
-            if line.final_lot:
-                final_lot = True
-        if production.final_prod_lot:
-            final_lot = True
-        self.final_lot = final_lot
-
 
 # TODO: Migrar
 # ~ class StockMoveConsume(models.TransientModel):
