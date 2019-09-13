@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_from_attach_ubl" model="ir.ui.view">
+        <field name="name">res.partner.picking.email.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="opt_out" position="before">
+                <field name="attach_ubl_xml_file"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
