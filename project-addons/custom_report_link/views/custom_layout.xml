@@ -1503,16 +1503,18 @@ SWIFT/BIC: BESCPTPL
 
 
                         <t t-set="final_price" t-value="0"/>
+                        <t t-set="total_value" t-value="0"/>
                         <t t-foreach="taxes" t-as="t">
                             <tr>
                                 <td><span t-esc="t.amount"/>%</td>
                                 <td><span t-esc="t_value" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
                                 <td><span t-esc="(t.amount * t_value)/100" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
-
-                                <t t-set="partial_price" t-value="(((t.amount * t_value)/100) + t_value)" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
-                                <t t-set="final_price" t-value="final_price + partial_price"/>
+                                <t t-set="amount_tax" t-value="(t.amount * t_value)/100"/>
+                                <t t-set="final_price" t-value="final_price + amount_tax"/>
+                                <t t-set="total_value" t-value="t_value"/>
 
                                 <t t-if="len(taxes) == 1">
+                                    <t t-set="partial_price" t-value="amount_tax + t_value" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
                                     <td><strong t-esc="partial_price" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}" /></td>
                                 </t>
                                 <t t-if="len(taxes) != 1">
@@ -1524,7 +1526,7 @@ SWIFT/BIC: BESCPTPL
                             <t><td/></t>
                             <t><td/></t>
                             <t><td/></t>
-                            <td><strong t-esc="final_price"  t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
+                            <td><strong t-esc="final_price + total_value"  t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
                         </tr>
 
                     </tbody>
