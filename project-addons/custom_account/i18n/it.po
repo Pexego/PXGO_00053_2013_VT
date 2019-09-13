@@ -1029,10 +1029,12 @@ msgstr "wizard.reconcile.payment.statement.line"
 
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.invoice_supplier_form_add_pick
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_name
 msgid "Supplier Reference"
 msgstr "Riferimento fornitore "
 
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.invoice_supplier_form_add_pick
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_reference
 msgid "N. Supplier Invoice (SII)"
 msgstr "N. fattura fornitore (SII)"
