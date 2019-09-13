@@ -44,6 +44,16 @@
                 <field name="date_due" position="attributes">
                     <attribute name="attrs">{}</attribute>
                 </field>
+                <xpath expr="//page[@name='other_info']/group/group/field[@name='name']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <field name="purchase_id" position="before">
+                    <field name="name" string="Supplier Reference"/>
+                </field>
+                <field name="reference" position="attributes">
+                    <attribute name="string">N. Supplier Invoice (SII)</attribute>
+                    <attribute name="help">Invoice supplier number</attribute>
+                </field>
             </field>
         </record>
 

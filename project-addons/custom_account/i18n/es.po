@@ -1060,3 +1060,13 @@ msgstr "wizard.reconcile.payment.statement.line"
 #: model:ir.model,name:custom_account.model_wzd_remove_partner_payment_order
 msgid "wzd.remove.partner.payment.order"
 msgstr "wzd.remove.partner.payment.order"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.invoice_supplier_form_add_pick
+msgid "Supplier Reference"
+msgstr "Referencia de proveedor"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.invoice_supplier_form_add_pick
+msgid "N. Supplier Invoice (SII)"
+msgstr "Nº factura proveedor (SII)"
