@@ -79,18 +79,23 @@ class StockPicking(models.Model):
                         cont += 1
         res = super().action_done()
         for picking in self:
-            if picking.state == 'done' and picking.sale_id and \
-                    picking.picking_type_code == 'outgoing':
-                picking_template = self.env.\
-                    ref('stock_custom.picking_done_template')
-                picking_template.with_context(
-                    lang=picking.partner_id.lang).send_mail(picking.id)
-
             picking_states = picking.sale_id.picking_ids.mapped('state')
             if all(state in ('done', 'cancel') for state in picking_states) \
                     and not all(state == 'cancel' for state in picking_states):
                 picking.sale_id.action_done()
         return res
+
+    @api.multi
+    def write(self, vals):
+        for picking in self:
+            if vals.get('carrier_tracking_ref', False) and \
+                    picking.picking_type_code == 'outgoing' and \
+                    picking.sale_id:
+                picking_template = self.env. \
+                    ref('stock_custom.picking_done_template')
+                picking_template.with_context(
+                    lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
+        return super().write(vals)
 
 
 class StockMoveLine(models.Model):
