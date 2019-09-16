@@ -79,6 +79,9 @@ class AccountInvoice(models.Model):
     state_web = fields.Char('State web', compute='_get_state_web', store=True)
     payment_mode_id = fields.Many2one(states={'draft': [('readonly', False)], 'open': [('readonly', False)]})
 
+    name = fields.Char(string='Supplier Reference')
+    reference = fields.Char(string='N. Supplier Invoice (SII)')
+
     @api.multi
     @api.depends('state', 'payment_mode_id', 'payment_move_line_ids')
     def _get_state_web(self):
