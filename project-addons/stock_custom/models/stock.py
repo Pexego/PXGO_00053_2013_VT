@@ -91,7 +91,7 @@ class StockPicking(models.Model):
             if vals.get('carrier_tracking_ref', False) and \
                     picking.picking_type_code == 'outgoing' and \
                     picking.sale_id\
-                    and picking.carrier_tracking_ref is False:
+                    and not picking.carrier_tracking_ref:
                 picking_template = self.env. \
                     ref('stock_custom.picking_done_template')
                 picking_template.with_context(
