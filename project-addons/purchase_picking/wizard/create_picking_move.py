@@ -84,6 +84,8 @@ class CreatePickingMove(models.TransientModel):
                 move.move_id.container_id = False
             if not move.move_id.picking_type_id:
                 move.move_id.picking_type_id = type_id
+            else:
+                type_id = move.move_id.picking_type_id
             if move.qty != move.move_id.product_uom_qty:
                 if not move.qty:
                     continue

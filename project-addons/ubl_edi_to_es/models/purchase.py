@@ -3,11 +3,21 @@
 
 from odoo import models, api
 import base64
+from odoo.addons.http_routing.models.ir_http import slugify
 
 
 class PurchaseOrder(models.Model):
 
     _inherit = "purchase.order"
+
+    @api.multi
+    def get_ubl_filename(self, doc_type, version='2.1'):
+        """This method is designed to be inherited"""
+        if doc_type == 'rfq':
+            return 'UBL-RequestForQuotation-%s-%s.xml' % (version,
+                                                          slugify(self.name))
+        elif doc_type == 'order':
+            return 'UBL-Order-%s-%s.xml' % (version, slugify(self.name))
 
     @api.multi
     def attach_ubl_xml_file_button(self):
