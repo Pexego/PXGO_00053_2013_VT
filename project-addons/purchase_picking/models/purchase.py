@@ -52,6 +52,8 @@ class PurchaseOrder(models.Model):
         """
             Se sobreescribe la función para que no se cree el picking.
         """
+        if self.env.context.get('bypass_override'):
+            return super()._create_picking()
         for order in self:
             if any([ptype in ['product', 'consu'] for ptype in order.order_line.mapped('product_id.type')]):
                 void_pick = self.env['stock.picking']

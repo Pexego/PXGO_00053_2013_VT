@@ -1,0 +1,80 @@
+diff --git a/account_invoice_import/wizard/account_invoice_import.py b/account_invoice_import/wizard/account_invoice_import.py
+index 3824350..17bcba6 100644
+--- a/account_invoice_import/wizard/account_invoice_import.py
++++ b/account_invoice_import/wizard/account_invoice_import.py
+@@ -587,7 +587,7 @@ class AccountInvoiceImport(models.TransientModel):
+             assert self.import_config_id
+             import_config = self.import_config_id.convert_to_import_config()
+         invoice = self.create_invoice(parsed_inv, import_config)
+-        invoice.message_post(_(
++        invoice.message_post(body=_(
+             "This invoice has been created automatically via file import"))
+         action = iaao.for_xml_id('account', 'action_invoice_tree2')
+         action.update({
+@@ -724,7 +724,7 @@ class AccountInvoiceImport(models.TransientModel):
+                 parsed_inv['amount_untaxed']
+             invoice.tax_line_ids[0].amount = tax_amount
+             cur_symbol = invoice.currency_id.symbol
+-            invoice.message_post(_(
++            invoice.message_post(body=_(
+                 'The total tax amount has been forced to %s %s '
+                 '(amount computed by Odoo was: %s %s).')
+                 % (tax_amount, cur_symbol, initial_tax_amount, cur_symbol))
+@@ -886,7 +886,7 @@ class AccountInvoiceImport(models.TransientModel):
+         logger.info(
+             'Supplier invoice ID %d updated via import of file %s',
+             invoice.id, self.invoice_filename)
+-        invoice.message_post(_(
++        invoice.message_post(body=_(
+             "This invoice has been updated automatically via the import "
+             "of file %s") % self.invoice_filename)
+         action = iaao.for_xml_id('account', 'action_invoice_tree2')
+@@ -1035,7 +1035,7 @@ class AccountInvoiceImport(models.TransientModel):
+                         import_configs[0].convert_to_import_config()
+                 invoice = self.create_invoice(parsed_inv, import_config)
+                 logger.info('Invoice ID %d created from email', invoice.id)
+-                invoice.message_post(_(
++                invoice.message_post(body=_(
+                     "Invoice successfully imported from email sent by "
+                     "<b>%s</b> on %s with subject <i>%s</i>.") % (
+                         msg_dict.get('email_from'), msg_dict.get('date'),
+diff --git a/base_business_document_import/models/business_document_import.py b/base_business_document_import/models/business_document_import.py
+index 209b46a..a6a6087 100644
+--- a/base_business_document_import/models/business_document_import.py
++++ b/base_business_document_import/models/business_document_import.py
+@@ -894,11 +894,11 @@ class BusinessDocumentImport(models.AbstractModel):
+                     'datas_fname': filename,
+                 })
+         for msg in parsed_dict['chatter_msg']:
+-            record.message_post(msg)
++            record.message_post(body=msg)
+         if parsed_dict.get('note'):
+             if doc_filename:
+                 msg = _('<b>Notes in file %s:</b>') % doc_filename
+             else:
+                 msg = _('<b>Notes in imported document:</b>')
+             record.message_post(  # pylint: disable=translation-required
+-                '%s %s' % (msg, parsed_dict['note']))
++                body='%s %s' % (msg, parsed_dict['note']))
+diff --git a/sale_order_import/wizard/sale_order_import.py b/sale_order_import/wizard/sale_order_import.py
+index 9d0c074..a16d118 100644
+--- a/sale_order_import/wizard/sale_order_import.py
++++ b/sale_order_import/wizard/sale_order_import.py
+@@ -319,7 +319,7 @@ class SaleOrderImport(models.TransientModel):
+         self.ensure_one()
+         order = self.create_order(
+             parsed_order, self.price_source, order_filename)
+-        order.message_post(_(
++        order.message_post(body=_(
+             "Created automatically via file import (%s).")
+             % self.order_filename)
+         action = self.env['ir.actions.act_window'].for_xml_id(
+@@ -478,7 +478,7 @@ class SaleOrderImport(models.TransientModel):
+         logger.info(
+             'Quotation ID %d updated via import of file %s', order.id,
+             self.order_filename)
+-        order.message_post(_(
++        order.message_post(body=_(
+             "This quotation has been updated automatically via the import of "
+             "file %s") % self.order_filename)
+         action = self.env['ir.actions.act_window'].for_xml_id(

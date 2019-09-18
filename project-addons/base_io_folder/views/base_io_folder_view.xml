@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="base_io_folder_form">
+        <field name="name">base.io.folder.form</field>
+        <field name="model">base.io.folder</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Configuration">
+                            <group>
+                                <field name="company_id"/>
+                                <field name="directory_path"/>
+                                <field name="direction"/>
+                            </group>
+                            <group attrs="{'invisible': [('direction', '=', 'export')]}">
+                                <field name="after_import"/>
+                                <field name="backup_path"
+                                       attrs="{'invisible': [('after_import','=', 'delete')], 'required': [('direction', '=', 'import'),('after_import','=', 'backup')]}"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="base_io_folder_tree">
+        <field name="name">base.io.folder.tree</field>
+        <field name="model">base.io.folder</field>
+        <field name="arch" type="xml">
+            <tree default_order="name">
+                <field name="name"/>
+                <field name="direction"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="base_io_folder_action">
+        <field name="name">Directories Configuration</field>
+        <field name="res_model">base.io.folder</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="base_io_folder_action_menu"
+        parent="base.menu_automation"
+        action="base_io_folder_action" sequence="10"/>
+
+</odoo>

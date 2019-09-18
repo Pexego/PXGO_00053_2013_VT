@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_order_formform_generate_ubl" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <button name="action_done" position="after">
+                <button name="attach_ubl_xml_file_button" type="object" string="Generate UBL XML File"/>
+            </button>
+        </field>
+    </record>
+
+</odoo>
