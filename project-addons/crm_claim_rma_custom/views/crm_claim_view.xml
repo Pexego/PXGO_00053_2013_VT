@@ -61,9 +61,7 @@
         <field name="arch" type="xml">
             <field name="rma_cost" position="after">
                 <field name="date_received"/>
-                <field name="allow_confirm_blocked"
-                       attrs="{'invisible': [('claim_type', '!=', %(crm_claim_type.crm_claim_type_customer)d)]}"
-                       groups="account.group_account_manager"/>
+                <field name="allow_confirm_blocked" attrs="{'invisible': [('claim_type', '!=', %(crm_claim_type.crm_claim_type_customer)d)]}" groups="account.group_account_manager"/>
             </field>
             <field name="email_from" position="after">
                 <field name="comercial"/>
@@ -77,30 +75,28 @@
                 <page string="Invoicing">
                     <field name="claim_inv_line_ids" nolabel="1" colspan="4" editable="bottom">
                         <tree editable="bottom">
-                            <field name="sequence" widget="handle"/>
-                            <field name="invoice_id"
-                                   domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
-                            <field name="product_id"/>
-                            <field name="product_description"/>
-                            <field name="qty"/>
-                            <field name="price_unit"/>
-                            <field name="discount"/>
-                            <field name="tax_ids" widget="many2many_tags"
-                                   domain="[('parent_id','=',False),('type_tax_use','=','sale')]"/>
-                            <field name="price_subtotal"/>
-                            <field name="invoiced"/>
+                          <field name="sequence" widget="handle"/>
+                          <field name="invoice_id" domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
+                          <field name="product_id"/>
+                          <field name="product_description"/>
+                          <field name="qty"/>
+                          <field name="price_unit"/>
+                          <field name="discount"/>
+                          <field name="tax_ids" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','=','sale')]"/>
+                          <field name="price_subtotal"/>
+                          <field name="invoiced"/>
                         </tree>
                     </field>
                     <group>
-                        <group>
-                            <button name="calculate_invoices" type="object"
-                                    string="Calculate"
-                                    attrs="{'invisible': [('invoice_ids', '!=', [])]}" colspan="2"/>
-                            <separator/>
-                            <button name="make_refund_invoice"
-                                    attrs="{'invisible': [('claim_inv_line_ids', '=', [])]}"
-                                    type="object" string="New Refund" class="btn-primary" colspan="2"/>
-                        </group>
+                      <group>
+                          <button name="calculate_invoices" type="object"
+                            string="Calculate"
+                            attrs="{'invisible': [('invoice_ids', '!=', [])]}" colspan="2"/>
+                          <separator/>
+                          <button name="make_refund_invoice"
+                              attrs="{'invisible': [('claim_inv_line_ids', '=', [])]}"
+                              type="object" string="New Refund" class="btn-primary" colspan="2"/>
+                      </group>
                     </group>
                 </page>
             </xpath>
@@ -108,12 +104,12 @@
     </record>
 
     <record model="ir.ui.view" id="crm_claim_rma_form_view_invoice_method">
-        <field name="name">CRM - Claim product return Form</field>
-        <field name="model">crm.claim</field>
-        <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
-        <field name="arch" type="xml">
-            <field name="invoice_id" position="replace"/>
-        </field>
+      <field name="name">CRM - Claim product return Form</field>
+      <field name="model">crm.claim</field>
+      <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
+      <field name="arch" type="xml">
+          <field name="invoice_id" position="replace"/>
+      </field>
     </record>
 
     <record model="ir.ui.view" id="crm_claim_line_tree_view_invisible_states">
@@ -142,27 +138,26 @@
             <field name="claim_origine" position="after">
                 <!-- <field name="invoice_id"/> -->
                 <field name="partner_id" invisible="1"/>
-                <field name="invoice_id"
-                       domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
+                <field name="invoice_id" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
             </field>
         </field>
     </record>
 
     <record model="ir.ui.view" id="inherit2_crm_case_claims_tree_view">
-        <field name="name">CRM - Claims Tree</field>
-        <field name="model">crm.claim</field>
-        <field name="inherit_id" ref="crm_claim_rma.crm_case_claims_tree_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='team_id']" position="replace">
-                <field name="team_id" invisible="1"/>
-            </xpath>
-            <xpath expr="//field[@name='claim_type']" position="replace">
-                <field name="claim_type" invisible="1"/>
-            </xpath>
-            <xpath expr="//field[@name='date']" position="after">
-                <field name="date_received" readonly="True"/>
-            </xpath>
-        </field>
+      <field name="name">CRM - Claims Tree</field>
+      <field name="model">crm.claim</field>
+      <field name="inherit_id" ref="crm_claim_rma.crm_case_claims_tree_view"/>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='team_id']" position="replace">
+          <field name="team_id" invisible="1"/>
+        </xpath>
+        <xpath expr="//field[@name='claim_type']" position="replace">
+          <field name="claim_type" invisible="1"/>
+        </xpath>
+        <xpath expr="//field[@name='date']" position="after">
+          <field name="date_received" readonly="True"/>
+        </xpath>
+      </field>
     </record>
 
     <record model="ir.ui.view" id="inherit_crm_case_claims_tree_view">
@@ -196,13 +191,9 @@
                 <field name="name"/>
             </xpath>
             <xpath expr="//field[@name='delivery_address_id']" position="attributes">
-                <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=',
-                    'delivery')]
-                </attribute>
-                <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree',
-                    'default_type':'delivery', 'default_dropship': True,
-                    'default_not_print_picking': True, 'default_parent_id': partner_id, 'show_address':1}
-                </attribute>
+                <attribute name="domain">[('id', 'child_of', [partner_id]),'|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
+                <attribute name="context">{'tree_view_ref': 'crm_claim_rma.view_partner_contact_tree', 'default_type':'delivery', 'default_dropship': True,
+                                           'default_not_print_picking': True, 'default_parent_id': partner_id, 'show_address':1}</attribute>
                 <attribute name="options">{"always_reload": True}</attribute>
             </xpath>
         </field>
@@ -287,9 +278,7 @@
         <field name="search_view_id" ref="crm_claim.view_crm_case_claims_filter"/>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
-                Record and track your customers' claims. Claims may be linked to a sales order or a lot.You can send
-                emails with attachments and keep the full history for a claim (emails sent, intervention type and so
-                on).Claims may automatically be linked to an email address using the mail gateway module.
+                Record and track your customers' claims. Claims may be linked to a sales order or a lot.You can send emails with attachments and keep the full history for a claim (emails sent, intervention type and so on).Claims may automatically be linked to an email address using the mail gateway module.
             </p>
         </field>
     </record>
@@ -311,5 +300,5 @@
     </record>
 
     <menuitem name="Received Claims" id="menu_crm_case_claims"
-              parent="crm_claim.menu_aftersale" action="crm_case_categ_claim_sort" sequence="1"/>
+        parent="crm_claim.menu_aftersale" action="crm_case_categ_claim_sort" sequence="1"/>
 </odoo>
