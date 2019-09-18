@@ -46,7 +46,7 @@ class SaleOrder(models.Model):
             return {'warning': warning}
 
     @api.onchange('partner_id', 'team_id', 'payment_term_id')
-    def onchange_block_magrep(self):
+    def onchange_block_magreb(self):
         if (self.team_id.name == 'Magreb' or self.partner_id.team_id.name == 'Magreb') \
                 and self.allow_confirm_blocked_magreb is False:
             self.blocked_magreb = True
