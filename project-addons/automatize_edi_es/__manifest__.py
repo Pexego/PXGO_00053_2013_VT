@@ -1,16 +1,15 @@
 # Copyright 2019 Omar Castiñeira, Comunitea Servicios Tecnológicos S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 {
-    'name': "Import/Export folders",
+    'name': "Automatize edi's workflow in ES",
     'version': '11.0.0.0.1',
     'author': 'Comunitea',
     'webbsite': 'https://www.comunitea.com',
     'description': """""",
-    'depends': ['base'],
+    'depends': ['ubl_edi_from_it', 'ubl_edi_to_it', 'base_io_folder',
+                'sale_order_import_ubl', 'sale_order_ubl'],
     'category': 'EDI',
-    'data': ['data/base_io_folder_data.xml',
-             'security/ir.model.access.csv',
-             'views/base_io_folder_view.xml'],
+    'data': [],
     'auto_install': False,
     'installable': True,
 }

@@ -4,11 +4,7 @@
 import os
 from odoo import api, fields, models, _
 from odoo.exceptions import ValidationError
-from odoo.addons.queue_job.job import job
 from base64 import b64encode, b64decode
-
-
-BASE_CHANNEL = 'root.files_import_from_folder'
 
 
 def source_name(directory, file_name):
@@ -93,13 +89,10 @@ class BaseIOFolder(models.Model):
         for file_imported in files:
             file_full_name = source_name(self.directory_path,
                                          file_imported)
-            with open(file_full_name) \
-                    as fileobj:
+            with open(file_full_name, "rb") as fileobj:
                 data = fileobj.read()
             description = 'Import data from file %s' % file_imported
-            self.with_delay(
-                description=description).action_batch_import(
-                    file_imported, b64encode(data))
+            self.action_batch_import(file_imported, b64encode(data))
             self._after_import(file_imported, file_full_name)
 
     @api.multi
@@ -112,7 +105,6 @@ class BaseIOFolder(models.Model):
         with open(file_full_name, 'wb') as fileobj:
             fileobj.write(b64decode(b64data))
 
-    @job(default_channel=BASE_CHANNEL)
     def action_batch_import(self, file_name, file_content):
         """
             Method to manage the call to the import wizard for each
