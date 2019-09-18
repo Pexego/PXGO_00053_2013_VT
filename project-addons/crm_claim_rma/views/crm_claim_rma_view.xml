@@ -96,7 +96,6 @@
                 <field name="move_out_customer_state"/>
                 <field name="supplier_id"/>
                 <field name="internal_description"/>
-                <button name="%(action_claim_make_repair)d" type="action" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
             </tree>
         </field>
     </record>
@@ -123,7 +122,6 @@
                 <field name="move_out_customer_state"/>
                 <field name="supplier_id"/>
                 <field name="internal_description"/>
-                <button name="%(action_claim_make_repair)d" type="action" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
             </tree>
         </field>
     </record>
