@@ -29,6 +29,7 @@ class ProrementRule(models.Model):
                                               partner)
         if partner.automatice_purchases:
             res['force_confirm'] = True
+            res['date_planned'] = fields.Datetime.now()
         return res
 
 
