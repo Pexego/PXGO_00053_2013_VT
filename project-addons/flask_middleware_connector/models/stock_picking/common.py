@@ -145,12 +145,17 @@ class StockMoveListener(Component):
                 record.with_delay(priority=5, eta=240).unlink_pickingproduct()
 
     def on_stock_move_change(self, record):
-        if record.product_id.show_stock_outside:
+        record._cr.execute("select 1 where '%s' in (select trim(trailing ']' from trim(leading '[' from record_ids)) "
+                           "from queue_job where state = 'pending' and job_function_id = 486 and model_name = 'product.product')" % record.product_id.id)
+        res = record._cr.fetchall()
+        if record.product_id.show_stock_outside and not res:
             record.product_id.with_delay(priority=12, eta=30).update_product()
-
         packs = self.env['mrp.bom.line'].search([('product_id', '=', record.product_id.id)]).mapped('bom_id')
         for pack in packs:
-            pack.product_tmpl_id.product_variant_ids.with_delay(priority=12, eta=30).update_product()
+            record._cr.execute("select 1 where '%s' in (select trim(trailing ']' from trim(leading '[' from record_ids)) "
+                "from queue_job where state = 'pending' and job_function_id = 486 and model_name = 'product.product')" % pack.product_tmpl_id.product_variant_ids.id)
+            if not record._cr.fetchall():
+                pack.product_tmpl_id.product_variant_ids.with_delay(priority=12, eta=30).update_product()
 
 
 class StockMove(models.Model):
