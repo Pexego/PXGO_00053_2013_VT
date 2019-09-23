@@ -6,10 +6,6 @@
         <field name="inherit_id" ref="crm_claim_rma.crm_claim_rma_form_view"/>
         <field name="arch" type="xml">
             <button name="%(account.action_account_invoice_refund)d" position="replace"/>
-            <field name="date" position="before">
-                <field name="partner_id"/>
-                <field name="category_id"/>
-            </field>
         </field>
     </record>
 
