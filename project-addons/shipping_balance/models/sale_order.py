@@ -32,7 +32,7 @@ class SaleOrder(models.Model):
 
     @api.constrains('state', 'amount_untaxed')
     def _check_amount_on_state(self):
-        if self.amount_untaxed < 0:
+        if self.amount_untaxed < 0 and not self.order_line.filtered('deposit'):
             raise ValidationError("Total amount must be > 0")
 
     @api.multi

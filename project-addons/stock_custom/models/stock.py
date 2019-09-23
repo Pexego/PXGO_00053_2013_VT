@@ -79,18 +79,30 @@ class StockPicking(models.Model):
                         cont += 1
         res = super().action_done()
         for picking in self:
-            if picking.state == 'done' and picking.sale_id and \
-                    picking.picking_type_code == 'outgoing':
-                picking_template = self.env.\
-                    ref('stock_custom.picking_done_template')
-                picking_template.with_context(
-                    lang=picking.partner_id.lang).send_mail(picking.id)
-
             picking_states = picking.sale_id.picking_ids.mapped('state')
             if all(state in ('done', 'cancel') for state in picking_states) \
                     and not all(state == 'cancel' for state in picking_states):
                 picking.sale_id.action_done()
         return res
+
+    @api.multi
+    def write(self, vals):
+        pickings_to_send = []
+        for picking in self:
+            # We do this huge condition to ensure that both fields are not empty when the mail is sent
+            if ((vals.get('carrier_tracking_ref', False) and picking.carrier_name and not picking.carrier_tracking_ref) or
+                    (vals.get('carrier_name', False) and picking.carrier_tracking_ref and not picking.carrier_name) or
+                    (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and\
+                    picking.picking_type_code == 'outgoing' and picking.sale_id:
+                pickings_to_send.append(picking.id)
+        result = super().write(vals)
+        if pickings_to_send:
+            pickings = self.env["stock.picking"].browse(pickings_to_send)
+            for picking in pickings:
+                # We need to do this after the write, otherwise the email template won't get well some  picking values
+                picking_template = self.env.ref('stock_custom.picking_done_template')
+                picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
+        return result
 
 
 class StockMoveLine(models.Model):

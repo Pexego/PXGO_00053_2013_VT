@@ -91,6 +91,9 @@ class ProductTemplate(models.Model):
                                     if pack_stock_next < pack_stock:
                                         pack_stock = pack_stock_next
                         product.virtual_stock_conservative = pack_stock
+                    else:
+                        product.virtual_stock_conservative = \
+                            product.qty_available - product.outgoing_qty
             else:
                 product.virtual_stock_conservative = \
                     product.qty_available - product.outgoing_qty
@@ -121,6 +124,11 @@ class ProductTemplate(models.Model):
                                     if pack_stock_next < pack_stock:
                                         pack_stock = pack_stock_next
                         product.virtual_available_wo_incoming = pack_stock
+                    else:
+                        product.virtual_available_wo_incoming = \
+                            product.qty_available - product.outgoing_qty - \
+                            product.qty_available_wo_wh - \
+                            product.qty_available_input_loc
             else:
                 product.virtual_available_wo_incoming = \
                     product.qty_available - product.outgoing_qty - \
@@ -194,6 +202,9 @@ class ProductProduct(models.Model):
                                     if pack_stock_next < pack_stock:
                                         pack_stock = pack_stock_next
                         product.virtual_stock_conservative = pack_stock
+                    else:
+                        product.virtual_stock_conservative = \
+                            product.qty_available - product.outgoing_qty
             else:
                 product.virtual_stock_conservative = \
                     product.qty_available - product.outgoing_qty

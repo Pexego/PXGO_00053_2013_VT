@@ -1,0 +1,13 @@
+diff --git a/addons/product/models/product_template.py b/addons/product/models/product_template.py
+index a4972d2721d..a8c3a3efb33 100644
+--- a/addons/product/models/product_template.py
++++ b/addons/product/models/product_template.py
+@@ -323,7 +323,7 @@ class ProductTemplate(models.Model):
+     def write(self, vals):
+         tools.image_resize_images(vals)
+         res = super(ProductTemplate, self).write(vals)
+-        if 'attribute_line_ids' in vals or vals.get('active'):
++        if ('attribute_line_ids' in vals or vals.get('active')) and "create_product_product" not in self._context:
+             self.create_variant_ids()
+         if 'active' in vals and not vals.get('active'):
+             self.with_context(active_test=False).mapped('product_variant_ids').write({'active': vals.get('active')})
