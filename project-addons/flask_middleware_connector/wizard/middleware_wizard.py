@@ -171,12 +171,11 @@ class MiddlewareBackend(models.TransientModel):
                                                   ('customer', '=', True)])
             if self.mode_export == 'export':
                 for partner in partner_ids:
-                    for category in partner.category_id:
-                        category.with_delay().export_partner_tag_rel()
+                    partner.with_delay().unlink_partner_tag_rel()
+                    partner.with_delay().export_partner_tag_rel()
             else:
                 for partner in partner_ids:
-                    for category in partner.category_id:
-                        category.with_delay().update_partner_tag_rel()
+                    partner.with_delay().unlink_partner_tag_rel()
 
         elif self.type_export == 'order':
             if object_ids:
