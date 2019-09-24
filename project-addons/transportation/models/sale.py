@@ -39,6 +39,25 @@ class SaleOrder(models.Model):
         return res
 
     @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id_transporter(self):
+        transporter_ids=list()
+        all_transporters=self.env['transportation.transporter'].search([])
+        partnerCountry=self.partner_id.country_id
+        for x in all_transporters:
+            if partnerCountry in x.country_group_id.country_ids:
+                transporter_ids.append(x.id)
+
+        if transporter_ids:
+            if self.transporter_id.id not in transporter_ids:
+                self.transporter_id = False
+            return {'domain': {'transporter_id': [('id', 'in', transporter_ids)]}}
+        all_transporters_ids = [x.id for x in self.env['transportation.transporter'].search([])]
+        return {'domain': {'service_id': [('id', 'in', all_transporters_ids)]}}
+
+
+
+    @api.multi
     @api.onchange('transporter_id')
     def onchange_transporter_id(self):
         service_ids = [x.id for x in self.transporter_id.service_ids]
