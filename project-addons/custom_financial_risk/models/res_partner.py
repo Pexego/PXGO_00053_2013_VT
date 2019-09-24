@@ -19,6 +19,7 @@ class ResPartner(models.Model):
     risk_invoice_unpaid = fields.Monetary(store=False)
     risk_account_amount = fields.Monetary(store=False)
     risk_account_amount_unpaid = fields.Monetary(store=False)
+    risk_sale_order = fields.Monetary(store=False)
 
     @api.model
     def _risk_field_list(self):
