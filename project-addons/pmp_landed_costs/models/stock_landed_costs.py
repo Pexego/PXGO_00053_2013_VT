@@ -16,6 +16,7 @@ class StockLandedCost(models.Model):
 
     container_ids = fields.Many2many('stock.container', string='Containers',
                                      compute='_get_container', inverse='_set_pickings')
+    forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
 
     @api.multi
     def _get_container(self):
