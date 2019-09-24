@@ -62,6 +62,12 @@ msgid "Confirm Sale"
 msgstr "Confermare vendita"
 
 #. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:190
+#, python-format
+msgid "Sale has been blocked due to exceed the weight limit in DHL air shipments."
+msgstr "L'ordine è bloccato a causa del superamento del limite di peso nelle spedizioni aeree DHL."
+
+#. module: sale_custom
 #: view:sale.order:sale_custom.view_order_form_sales_partner
 msgid "Risk Information"
 msgstr "Rischio Cliente"

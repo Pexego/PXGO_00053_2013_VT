@@ -181,6 +181,14 @@ class SaleOrder(models.Model):
         user_buyer = self.env['ir.config_parameter'].sudo().get_param(
             'web.user.buyer')
         for sale in self:
+            dhl_flight= sale.transporter_id.name == "DHL" and sale.service_id.name == "UE Aéreo (U)"
+            if dhl_flight:
+                products_weight = 0
+                for product in sale.order_line:
+                    products_weight += product.product_id.weight * product.product_uom_qty
+                if products_weight > 70 :
+                    message = _('Sale has been blocked due to exceed the weight limit in DHL air shipments.')
+                    raise exceptions.Warning(message)
             if not sale.validated_dir and sale.create_uid.email == user_buyer:
                 message = _('Please, validate shipping address.')
                 raise exceptions.Warning(message)

@@ -32,6 +32,11 @@ msgstr "La cantidad de un producto no puede ser negativo o cero"
 msgid "Partner Orders"
 msgstr "Pedidos Cliente"
 
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:190
+#, python-format
+msgid "Sale has been blocked due to exceed the weight limit in DHL air shipments."
+msgstr "La transacción ha sido bloqueada debido al exceso de peso en envíos DHL aéreos."
 
 #. module: sale_custom
 #: code:addons/sale_custom/models/sale.py:133
