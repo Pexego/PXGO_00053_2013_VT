@@ -10,6 +10,7 @@ class SaleOrderLine(models.Model):
 
     _inherit = 'sale.order.line'
 
+    description_editable_related = fields.Boolean(related='product_id.description_editable', readonly=1)
     def write(self, vals):
         for line in self:
             if vals.get('product_id', False):
