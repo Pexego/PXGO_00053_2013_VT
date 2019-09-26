@@ -86,3 +86,8 @@ msgstr "Volumen"
 #: model:ir.ui.view,arch_db:pmp_landed_costs.stock_landed_cost_add_standard_price
 msgid "Weight"
 msgstr "Peso"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_forwarder_invoice
+msgid "Forwarder Invoice"
+msgstr "Factura del transitario"
