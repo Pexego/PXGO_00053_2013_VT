@@ -35,6 +35,7 @@
                     <filter string="Salesperson" domain="[]" context="{'group_by':'salesman_id'}"/>
                     <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
                     <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                    <filter string="Product state" domain="[]" context="{'group_by':'product_state'}"/>
                 </group>
            </search>
         </field>

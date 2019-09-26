@@ -39,6 +39,7 @@ class SaleOrderLineReport(models.Model):
                                readonly=True)
     qty_stock = fields.Float('Stock qty', group_operator="avg", readonly=True)
     company_id = fields.Many2one("res.company", "Company", readonly=True)
+    product_state = fields.Char('Product state', readonly=True)
 
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
@@ -56,7 +57,8 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.company_id as company_id,
        q_kt.product_id,
        q_kt.qty AS qty_kitchen,
-       stck.qty AS qty_stock
+       stck.qty AS qty_stock,
+       pt.state as product_state
 FROM   sale_order_line sol
        LEFT JOIN (SELECT product_id,
                           Sum(quantity) AS qty
@@ -84,8 +86,10 @@ FROM   sale_order_line sol
                                          stock.parent_right)
                    GROUP  BY product_id) stck
                ON sol.product_id = stck.product_id
+      LEFT JOIN product_product pp on sol.product_id = pp.id
+      LEFT JOIN product_template pt on pt.id = pp.product_tmpl_id
 WHERE  q_kt.qty > 0
 GROUP BY sol.id, sol.name, sol.order_partner_id, sol.product_uom_qty,
          sol.product_uom, sol.price_unit, sol.discount, sol.company_id,
-         sol.salesman_id, sol.state, sol.order_id, q_kt.product_id, q_kt.qty, stck.qty)
+         sol.salesman_id, sol.state, sol.order_id, q_kt.product_id, q_kt.qty, stck.qty, pt.state)
 """)
