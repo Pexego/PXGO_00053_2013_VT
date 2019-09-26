@@ -26,7 +26,8 @@ class ResPartner(models.Model):
             search([('partner_id', '=', self.id),
                     ('account_id.internal_type', '=', 'receivable'),
                     ('full_reconcile_id', '=', False),
-                    ('move_id.state', '!=', 'draft')])
+                    ('move_id.state', '!=', 'draft'),
+                    '|', ('invoice_id.state', '!=', 'paid'), ('invoice_id', '=', False)])
         return move_lines
 
     @api.multi
@@ -53,7 +54,8 @@ class ResPartner(models.Model):
             read_group([('account_id.internal_type', '=', 'receivable'),
                         ('full_reconcile_id', '=', False),
                         ('partner_id', '!=', False),
-                        ('move_id.state', '!=', 'draft')],
+                        ('move_id.state', '!=', 'draft'),
+                        '|', ('invoice_id.state', '!=', 'paid'), ('invoice_id', '=', False)],
                        ['partner_id', 'balance'], ['partner_id'])
         valid_partner_ids = []
         for partner_data in partners_data:
