@@ -47,7 +47,8 @@ class ProductProduct(models.Model):
         outlet_categ_ids.append(self.env.ref('product_outlet.product_category_o1').id)
         outlet_categ_ids.append(self.env.ref('product_outlet.product_category_o2').id)
         outlet_products = self.env['product.product'].search([('categ_id', 'in', outlet_categ_ids),
-                                                              ('normal_product_id.list_price1', '!=', 0),
+                                                              "|",('normal_product_id.list_price1', '!=', 0),
+                                                              ('normal_product_id.list_price2', '!=', 0),
                                                               ('sale_ok', '=', True)],
                                                              order="id desc")
         for product_o in outlet_products:
@@ -55,6 +56,7 @@ class ProductProduct(models.Model):
             standard_price = origin_product.standard_price * (1 - product_o.categ_id.percent / 100)
             standard_price_2 = origin_product.standard_price_2 * (1 - product_o.categ_id.percent / 100)
 
+            stock = (product_o.qty_available + product_o.qty_available_external)>0
             # update all prices
             for item in product_o.item_ids:
                 item.fixed_price = origin_product.with_context(pricelist=item.pricelist_id.id).price * \
@@ -66,5 +68,7 @@ class ProductProduct(models.Model):
                 'standard_price_2': standard_price_2,
                 'commercial_cost': origin_product.commercial_cost,
             })
+
+            product_o.write({'sale_ok':stock})
             product_o.write(values)
 
