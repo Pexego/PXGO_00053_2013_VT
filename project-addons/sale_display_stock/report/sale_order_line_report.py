@@ -38,6 +38,7 @@ class SaleOrderLineReport(models.Model):
     invoice_status = fields.Char('Line invoice status', readonly=True)
     order_state = fields.Char('Order state', readonly=True)
     invoice_status_2 = fields.Char('Order invoice status', readonly=True)
+    incoming_qty = fields.Float(related='product_id.incoming_qty')
 
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
