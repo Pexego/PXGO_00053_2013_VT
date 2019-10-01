@@ -28,6 +28,8 @@ class SyncLog(BaseModel):
 
     def sync_client(self):
         url = app.config['NOTIFY_URL']
+        header = app.config['NOTIFY_HEADER']
+        headers = {'x-api-key': header}
 
         signature = _get_signature()
         data = {'signature': signature,
@@ -36,7 +38,7 @@ class SyncLog(BaseModel):
                           'odoo_id': self.odoo_id}]}
         try:
             print(("DATA: ", data))
-            resp = requests.post(url, data=json.dumps(data), timeout=180)
+            resp = requests.post(url, headers=headers, data=json.dumps(data), timeout=180)
             print(("RESP: ", resp))
             if resp.status_code == 200:
                 self.sync = True
@@ -57,6 +59,8 @@ class SyncLog(BaseModel):
 
     def multisync_client(self, objs):
         url = app.config['NOTIFY_URL']
+        header = app.config['NOTIFY_HEADER']
+        headers = {'x-api-key': header}
         signature = _get_signature()
         to_sync = True
         sync = False
@@ -74,7 +78,7 @@ class SyncLog(BaseModel):
                 cookies = requests.utils.cookiejar_from_dict(pickle.load(cookies_file))
             except EOFError:
                 cookies = {}
-            resp = requests.post(url, data=json.dumps(data),
+            resp = requests.post(url, headers=headers, data=json.dumps(data),
                                  timeout=6*len(objs), cookies=cookies)
             pickle.dump(requests.utils.dict_from_cookiejar(resp.cookies), cookies_file)
             cookies_file.close()
