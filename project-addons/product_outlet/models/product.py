@@ -3,7 +3,6 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
 
-
 class ProductCategory(models.Model):
 
     _inherit = 'product.category'
@@ -49,7 +48,7 @@ class ProductProduct(models.Model):
         outlet_products = self.env['product.product'].search([('categ_id', 'in', outlet_categ_ids),
                                                               "|",('normal_product_id.list_price1', '!=', 0),
                                                               ('normal_product_id.list_price2', '!=', 0),
-                                                              ('sale_ok', '=', True)],
+                                                              "|",('qty_available', '>' ,0),('sale_ok', '=', True)],
                                                              order="id desc")
         for product_o in outlet_products:
             origin_product = product_o.normal_product_id
