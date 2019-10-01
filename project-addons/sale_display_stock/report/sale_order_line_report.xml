@@ -5,18 +5,20 @@
         <field name="model">sale.order.line.report</field>
         <field name="arch" type="xml">
             <tree string="Sale line report">
-                <field name="name"/>
                 <field name="product_id"/>
+                <field name="name"/>
+                <field name="product_state"/>
                 <field name="partner_id"/>
+                <field name="order_id"/>
                 <field name="product_qty"/>
-                <field name="uom"/>
                 <field name="price_unit"/>
                 <field name="discount"/>
-                <field name="qty_stock"/>
-                <field name="qty_kitchen"/>
-                <field name="order_id"/>
                 <field name="salesman_id"/>
                 <field name="state"/>
+                <field name="invoice_status"/>
+                <field name="order_state"/>
+                <field name="invoice_status_2"/>
+                <field name="incoming_qty"/>
             </tree>
         </field>
     </record>
@@ -34,7 +36,11 @@
                     <filter string="Order" domain="[]" context="{'group_by':'order_id'}"/>
                     <filter string="Salesperson" domain="[]" context="{'group_by':'salesman_id'}"/>
                     <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="Line invoice status" domain="[]" context="{'group_by':'invoice_status'}"/>
                     <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                    <filter string="Product state" domain="[]" context="{'group_by':'product_state'}"/>
+                    <filter string="Order state" domain="[]" context="{'group_by':'order_state'}"/>
+                    <filter string="Order invoice status" domain="[]" context="{'group_by':'invoice_status_2'}"/>
                 </group>
            </search>
         </field>

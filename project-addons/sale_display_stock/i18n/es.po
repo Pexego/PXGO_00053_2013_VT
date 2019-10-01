@@ -164,8 +164,8 @@ msgstr "Comercial"
 
 #. module: sale_display_stock
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_state
-msgid "State"
-msgstr "Estado"
+msgid "Line State"
+msgstr "Estado de la línea"
 
 #. module: sale_display_stock
 #: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
@@ -178,12 +178,30 @@ msgid "Stock qty"
 msgstr "Stock"
 
 #. module: sale_display_stock
-#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_uom
-msgid "UoM"
-msgstr "UdM"
-
-#. module: sale_display_stock
 #: model:ir.model.fields,field_description:sale_display_stock.field_product_product_virtual_available_wo_incoming
 #: model:ir.model.fields,field_description:sale_display_stock.field_product_template_virtual_available_wo_incoming
 msgid "Virtual avail. conservative"
 msgstr "Stock disponible"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_state
+msgid "Product state"
+msgstr "Estado de producto"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_invoice_status
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+msgid "Line invoice status"
+msgstr "Estado factura de la línea"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_order_state
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+msgid "Order state"
+msgstr "Estado del pedido"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_invoice_status_2
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+msgid "Order invoice status"
+msgstr "Estado factura del pedido"

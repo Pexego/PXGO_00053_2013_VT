@@ -219,6 +219,7 @@ class SaleOrder(models.Model):
         context = self._context.copy()
         context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         context['products_to_order'] = products_to_order
+        context.pop('default_state', False)
 
         template_id = self.env.ref('sale_custom.email_template_purchase_product_to_order')
 
@@ -229,6 +230,7 @@ class SaleOrder(models.Model):
                 mail_id_check.send()
 
         return True
+
 
 class MailMail(models.Model):
     _inherit = 'mail.mail'

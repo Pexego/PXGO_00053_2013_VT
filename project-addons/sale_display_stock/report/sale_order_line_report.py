@@ -26,66 +26,41 @@ class SaleOrderLineReport(models.Model):
     _auto = False
 
     name = fields.Char('Name', readonly=True)
+    product_id = fields.Many2one('product.product', 'Product', readonly=True)
+    product_state = fields.Char('Product state', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
     product_qty = fields.Float('Quantity', readonly=True)
-    uom = fields.Many2one('product.uom', 'UoM', readonly=True)
     price_unit = fields.Float('Price unit', readonly=True)
     discount = fields.Float('Discount', readonly=True)
     salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
-    state = fields.Char('State', readonly=True)
-    product_id = fields.Many2one('product.product', 'Product', readonly=True)
+    state = fields.Char('Line state', readonly=True)
     order_id = fields.Many2one('sale.order', 'Order', readonly=True)
-    qty_kitchen = fields.Float('Qty in kitchen', group_operator="avg",
-                               readonly=True)
-    qty_stock = fields.Float('Stock qty', group_operator="avg", readonly=True)
-    company_id = fields.Many2one("res.company", "Company", readonly=True)
+    invoice_status = fields.Char('Line invoice status', readonly=True)
+    order_state = fields.Char('Order state', readonly=True)
+    invoice_status_2 = fields.Char('Order invoice status', readonly=True)
 
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
         self._cr.execute("""
 CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.name as name,
+       sol.product_id as product_id,
+       pt.state as product_state,
        sol.order_partner_id as partner_id,
        sol.product_uom_qty as product_qty,
-       sol.product_uom as uom,
        sol.price_unit as price_unit,
        sol.discount as discount,
        sol.salesman_id as salesman_id,
        sol.state as state,
+       sol.invoice_status as invoice_status,
        sol.order_id as order_id,
-       sol.company_id as company_id,
-       q_kt.product_id,
-       q_kt.qty AS qty_kitchen,
-       stck.qty AS qty_stock
+       so.state as order_state,
+       so.invoice_status_2 as invoice_status_2
 FROM   sale_order_line sol
-       LEFT JOIN (SELECT product_id,
-                          Sum(quantity) AS qty
-                   FROM   stock_quant
-                   WHERE  location_id IN (SELECT res_id
-                                          FROM   ir_model_data
-                                          WHERE  module = 'location_moves' AND name IN ('stock_location_kitchen','stock_location_pantry')
-                                                 )
-                   GROUP  BY product_id) q_kt
-               ON sol.product_id = q_kt.product_id
-       LEFT JOIN (SELECT product_id,
-                          Sum(quantity) AS qty
-                   FROM   stock_quant
-                   WHERE  location_id IN (SELECT loc.id
-                                          FROM   stock_location loc
-                          INNER JOIN (SELECT parent_left,
-                                             parent_right
-                                      FROM   stock_location
-                                      WHERE
-                          id IN (select view_location_id from stock_warehouse))
-                                     stock
-                                  ON loc.parent_left >=
-                                     stock.parent_left
-                                     AND loc.parent_right <=
-                                         stock.parent_right)
-                   GROUP  BY product_id) stck
-               ON sol.product_id = stck.product_id
-WHERE  q_kt.qty > 0
+JOIN sale_order so on so.id = sol.order_id
+LEFT JOIN product_product pp on sol.product_id = pp.id
+LEFT JOIN product_template pt on pt.id = pp.product_tmpl_id
 GROUP BY sol.id, sol.name, sol.order_partner_id, sol.product_uom_qty,
-         sol.product_uom, sol.price_unit, sol.discount, sol.company_id,
-         sol.salesman_id, sol.state, sol.order_id, q_kt.product_id, q_kt.qty, stck.qty)
+         sol.product_uom, sol.price_unit, sol.discount,
+         sol.salesman_id, sol.state, sol.order_id, pt.state, so.state, so.invoice_status_2)
 """)
