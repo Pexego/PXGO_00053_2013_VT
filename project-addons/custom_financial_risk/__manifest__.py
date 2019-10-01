@@ -9,6 +9,8 @@
     'license': 'AGPL-3',
     'depends': [
         'account_financial_risk',
+        'sale_financial_risk',
+        'order_invoice_policy'
     ],
     'data': [
         'views/account.xml',
