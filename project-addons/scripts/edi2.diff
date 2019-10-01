@@ -1,0 +1,11 @@
+diff --git a/account_invoice_import/wizard/account_invoice_import.py b/account_invoice_import/wizard/account_invoice_import.py
+index 3824350..b8e4ef2 100644
+--- a/account_invoice_import/wizard/account_invoice_import.py
++++ b/account_invoice_import/wizard/account_invoice_import.py
+@@ -1040,5 +1040,6 @@ class AccountInvoiceImport(models.TransientModel):
+                     "<b>%s</b> on %s with subject <i>%s</i>.") % (
+                         msg_dict.get('email_from'), msg_dict.get('date'),
+                         msg_dict.get('subject')))
++                return invoice
+         else:
+             logger.info('The email has no attachments, skipped.')

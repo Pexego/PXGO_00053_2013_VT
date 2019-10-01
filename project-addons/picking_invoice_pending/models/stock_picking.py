@@ -37,15 +37,6 @@ class StockPicking(models.Model):
         fields.Many2one('account.move', 'Account pending stock move',
                         readonly=True, copy=False)
 
-    @api.model
-    def create(self, vals):
-        # force the location that we've introduced by hand
-        if vals.get('move_lines', False):
-            if vals.get('picking_type_id', False) != 1:  # TODO: temporal. Analizar este caso mejor/ en albaranes de entrada el formato del vals es diferente
-                vals['location_dest_id'] = vals['move_lines'][0][2]['location_dest_id']
-        res = super().create(vals)
-        return res
-
     @api.multi
     def account_pending_invoice(self, debit_account, credit_account, date):
         self.ensure_one()
@@ -204,23 +195,22 @@ class StockPicking(models.Model):
     def action_confirm(self):
         res = super().action_confirm()
         for pick in self:
-            if not pick.company_id. \
-                    property_pending_variation_account or not \
-                    pick.company_id.property_pending_stock_account or not \
-                    pick.company_id.property_pending_supplier_invoice_account:
-                raise Warning(_("You need to configure the accounts "
-                                "in the company for pending invoices"))
-            if not pick.company_id.property_pending_stock_journal:
-                raise Warning(_("You need to configure an account "
-                                "journal in the company for pending "
-                                "invoices"))
-
             if pick.picking_type_id.code == "incoming" and pick.move_lines \
                     and pick.move_lines[0].purchase_line_id and \
                     pick.company_id.required_invoice_pending_move and \
                     not pick.backorder_id and \
                     not pick.pending_invoice_move_id and \
                     not pick.pending_stock_move_id:
+                if not pick.company_id. \
+                    property_pending_variation_account or not \
+                    pick.company_id.property_pending_stock_account or not \
+                    pick.company_id.property_pending_supplier_invoice_account:
+                        raise Warning(_("You need to configure the accounts "
+                                        "in the company for pending invoices"))
+                if not pick.company_id.property_pending_stock_journal:
+                    raise Warning(_("You need to configure an account "
+                                    "journal in the company for pending "
+                                    "invoices"))
                 debit_account = pick.company_id.\
                     property_pending_expenses_account
                 credit_account = pick.company_id.\

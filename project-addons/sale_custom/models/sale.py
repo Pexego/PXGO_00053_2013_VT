@@ -10,6 +10,7 @@ class SaleOrderLine(models.Model):
 
     _inherit = 'sale.order.line'
 
+    description_editable_related = fields.Boolean(related='product_id.description_editable', readonly=1)
     def write(self, vals):
         for line in self:
             if vals.get('product_id', False):
@@ -178,42 +179,46 @@ class SaleOrder(models.Model):
             self.env.user.notify_warning(message=warning, sticky=True)
 
     def action_confirm(self):
-        user_buyer = self.env['ir.config_parameter'].sudo().get_param(
-            'web.user.buyer')
-        for sale in self:
-            dhl_flight= sale.transporter_id.name == "DHL" and sale.service_id.name == "UE Aéreo (U)"
-            if dhl_flight:
-                products_weight = 0
-                for product in sale.order_line:
-                    products_weight += product.product_id.weight * product.product_uom_qty
-                if products_weight > 70 :
-                    message = _('Sale has been blocked due to exceed the weight limit in DHL air shipments.')
-                    raise exceptions.Warning(message)
-            if not sale.validated_dir and sale.create_uid.email == user_buyer:
-                message = _('Please, validate shipping address.')
-                raise exceptions.Warning(message)
-
-            shipping_cost_line = False
-            if self.delivery_type not in ('installations', 'carrier'):
-                for line in self.order_line:
-                    if line.product_id.categ_id.name == 'Portes':
-                        shipping_cost_line = True
-                if not shipping_cost_line:
-                    message = _('Please, introduce a shipping cost line.')
+        if not self.env.context.get('bypass_override', False):
+            user_buyer = self.env['ir.config_parameter'].sudo().get_param(
+                'web.user.buyer')
+            for sale in self:
+                dhl_flight = sale.transporter_id.name == "DHL" and sale.service_id.name == "UE Aéreo (U)"
+                if dhl_flight:
+                    products_weight = 0
+                    for product in sale.order_line:
+                        products_weight += product.product_id.weight * product.product_uom_qty
+                    if products_weight > 70:
+                        message = _('Sale has been blocked due to exceed the weight limit in DHL air shipments.')
+                        raise exceptions.Warning(message)
+                if not sale.validated_dir and sale.create_uid.email == \
+                        user_buyer:
+                    message = _('Please, validate shipping address.')
                     raise exceptions.Warning(message)
 
-            self.apply_commercial_rules()
+                shipping_cost_line = False
+                if self.delivery_type not in ('installations', 'carrier'):
+                    for line in self.order_line:
+                        if line.product_id.categ_id.name == 'Portes':
+                            shipping_cost_line = True
+                    if not shipping_cost_line:
+                        message = _('Please, introduce a shipping cost line.')
+                        raise exceptions.Warning(message)
 
-            if not sale.is_all_reserved and 'confirmed' not in self.env.context:
-                message = "Some of the products of this order {} aren't available now".format(self.name)
-                self.env.user.notify_info(title="Please consider that!",
-                                          message=message)
-            products_to_order = ''
-            for product in sale.order_line.mapped('product_id'):
-                if product.state == 'make_to_order':
-                    products_to_order = products_to_order + product.default_code + ', '
-            if products_to_order:
-                sale.send_email_to_purchases(products_to_order)
+                self.apply_commercial_rules()
+
+                if not sale.is_all_reserved and 'confirmed' not in \
+                        self.env.context:
+                    message = "Some of the products of this order {} aren't available now".format(self.name)
+                    self.env.user.notify_info(title="Please consider that!",
+                                              message=message)
+                products_to_order = ''
+                for product in sale.order_line.mapped('product_id'):
+                    if product.state == 'make_to_order':
+                        products_to_order = products_to_order + \
+                            product.default_code + ', '
+                if products_to_order:
+                    sale.send_email_to_purchases(products_to_order)
         return super().action_confirm()
 
     @api.multi

@@ -87,16 +87,22 @@ class StockPicking(models.Model):
 
     @api.multi
     def write(self, vals):
+        pickings_to_send = []
         for picking in self:
-            if vals.get('carrier_tracking_ref', False) and \
-                    picking.picking_type_code == 'outgoing' and \
-                    picking.sale_id\
-                    and not picking.carrier_tracking_ref:
-                picking_template = self.env. \
-                    ref('stock_custom.picking_done_template')
-                picking_template.with_context(
-                    lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
-        return super().write(vals)
+            # We do this huge condition to ensure that both fields are not empty when the mail is sent
+            if ((vals.get('carrier_tracking_ref', False) and picking.carrier_name and not picking.carrier_tracking_ref) or
+                    (vals.get('carrier_name', False) and picking.carrier_tracking_ref and not picking.carrier_name) or
+                    (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and\
+                    picking.picking_type_code == 'outgoing' and picking.sale_id:
+                pickings_to_send.append(picking.id)
+        result = super().write(vals)
+        if pickings_to_send:
+            pickings = self.env["stock.picking"].browse(pickings_to_send)
+            for picking in pickings:
+                # We need to do this after the write, otherwise the email template won't get well some  picking values
+                picking_template = self.env.ref('stock_custom.picking_done_template')
+                picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
+        return result
 
 
 class StockMoveLine(models.Model):
@@ -258,7 +264,8 @@ class StockProductionLot(models.Model):
         compute='_compute_partner_id',
         help='The last customer in possession of the product')
     lot_notes = fields.Text('Notes')
-
+    order_id= fields.Many2one('sale.order',string='Order',compute='_compute_partner_id')
+    picking_id = fields.Many2one('stock.picking',string='Picking',compute='_compute_partner_id')
     def _compute_partner_id(self):
         pass
         for lot in self:
@@ -267,6 +274,8 @@ class StockProductionLot(models.Model):
             if move_line:
                 lot.partner_id = \
                     move_line.picking_id.partner_id.commercial_partner_id
+                lot.order_id=move_line.move_id.sale_line_id.order_id
+                lot.picking_id =move_line.picking_id
             else:
                 lot.partner_id = False
 

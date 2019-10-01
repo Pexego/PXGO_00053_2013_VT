@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <record id="stock_location_vendor_deposit" model="stock.location">
+        <field name="name">Vendor's deposit</field>
+        <field name="usage">supplier</field>
+        <field name="location_id" ref="stock.stock_location_company"/>
+    </record>
+
+    <record id="seq_deposit_supplier" model="ir.sequence">
+        <field name="name">Vendor's deposit in</field>
+        <field name="prefix">VD/IN/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+        <field name="code">vendor.seq.income</field>
+    </record>
+
+    <record id="picking_type_receive_top_deposit" model="stock.picking.type">
+        <field name="name">Receive to Vendor's deposit</field>
+        <field name="sequence_id" ref="seq_deposit_supplier"/>
+        <field name="default_location_src_id" ref="stock.stock_location_suppliers"/>
+        <field name="default_location_dest_id" ref="stock_location_vendor_deposit"/>
+        <field name="warehouse_id" eval="False"/>
+        <field name="code">incoming</field>
+        <field name="return_picking_type_id" ref="stock.picking_type_out"/>
+        <field name="force_location" eval="True"/>
+    </record>
+
+    <record id="ir_cron_confirm_purchases" model="ir.cron">
+        <field name="name">Process purchases with force confirm</field>
+        <field eval="True" name="active"/>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="state">code</field>
+        <field name="model_id" ref="purchase.model_purchase_order"/>
+        <field name="code">model._process_purchase_order_automated()</field>
+    </record>
+
+</odoo>

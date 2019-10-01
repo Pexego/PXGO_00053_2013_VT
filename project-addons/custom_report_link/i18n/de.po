@@ -452,6 +452,18 @@ msgid "<strong>Terms and Conditions:</strong>"
 msgstr "<strong>Terms and Conditions:</strong>"
 
 #. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_sale_order
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Proforma Invoice"
+msgstr "Proformarechnung"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<span>Proforma Invoice: </span>"
+msgstr "<span>Proformarechnung: </span>"
+
+#. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "<strong>Total Price</strong>"
