@@ -350,7 +350,7 @@ msgid "Order"
 msgstr "Pedido"
 
 #. module: stock_custom
-#: model:ir.model.fields,field_description:stock_custom.field_stock_production_lot_stock_operation_name
+#: model:ir.model.fields,field_description:stock_custom.field_stock_production_lot_picking_id
 msgid "Picking"
 msgstr "Albarán"
 
