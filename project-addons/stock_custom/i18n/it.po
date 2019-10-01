@@ -345,6 +345,11 @@ msgid "Customer"
 msgstr "Cliente"
 
 #. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_production_lot_order_id
+msgid "Order"
+msgstr "Ordine"
+
+#. module: stock_custom
 #: model:ir.model.fields,help:stock_custom.field_stock_production_lot_partner_id
 msgid "The last customer in possession of the product"
 msgstr "L'ultimo cliente in possesso del prodotto"
