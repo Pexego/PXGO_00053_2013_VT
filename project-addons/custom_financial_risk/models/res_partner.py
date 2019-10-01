@@ -19,6 +19,25 @@ class ResPartner(models.Model):
     risk_invoice_unpaid = fields.Monetary(store=False)
     risk_account_amount = fields.Monetary(store=False)
     risk_account_amount_unpaid = fields.Monetary(store=False)
+    risk_sale_order = fields.Monetary(store=False)
+
+    @api.multi
+    def _compute_risk_sale_order(self):
+        customers = self.filtered('customer')
+        partners = customers | customers.mapped('child_ids')
+        orders_group = self.env['sale.order.line'].read_group(
+            [('state', '=', 'sale'), ('order_partner_id', 'in', partners.ids),
+             ('order_id.invoice_status_2', '=', 'to_invoice')],
+            ['order_partner_id', 'price_total',
+             'amt_to_invoice', 'amt_invoiced'],
+            ['order_partner_id'])
+        for partner in customers:
+            partner_ids = (partner | partner.child_ids).ids
+            # Take in account max of ordered qty and delivered qty
+            partner.risk_sale_order = sum(
+                max(x['price_total'], x['amt_to_invoice']) - x['amt_invoiced']
+                for x in orders_group if x['order_partner_id'][0] in
+                partner_ids)
 
     @api.model
     def _risk_field_list(self):
@@ -35,15 +54,15 @@ class ResPartner(models.Model):
                  ('account_id.circulating', '=', True),
                  ('currency_id', '!=', False),
                  ('reconciled', '=', False)],
-                ['amount_residual_currency'],
-                groupby='amount_residual_currency')
+                ['partner_id', 'amount_residual_currency'],
+                groupby='partner_id')
             move_amount = self.env['account.move.line'].read_group(
                 [('partner_id', 'child_of', partner.id),
                  ('account_id.circulating', '=', True),
                  ('currency_id', '=', False),
                  ('reconciled', '=', False)],
-                ['amount_residual'],
-                groupby='amount_residual')
+                ['partner_id', 'amount_residual'],
+                groupby='partner_id')
             total_amount = 0
             if move_amount_curr:
                 total_amount += move_amount_curr[0]['amount_residual_currency']
