@@ -188,3 +188,8 @@ msgstr "UdM"
 #: model:ir.model.fields,field_description:sale_display_stock.field_product_template_virtual_available_wo_incoming
 msgid "Virtual avail. conservative"
 msgstr "Stock disponibile"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_state
+msgid "Product state"
+msgstr "Stato di prodotto"
