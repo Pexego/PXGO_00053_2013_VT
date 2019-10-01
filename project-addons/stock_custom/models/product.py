@@ -1,7 +1,7 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-#import seaborn as sns
-#import pandas as pd
+import seaborn as sns
+import pandas as pd
 from matplotlib import pyplot as plt
 from odoo import api, fields, models, _, exceptions
 from io import BytesIO
