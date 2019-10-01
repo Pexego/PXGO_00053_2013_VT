@@ -225,7 +225,7 @@
                 <group>
                     <field name="partner_id"/>
                     <field name="order_id"/>
-                    <field name="stock_operation_name"/>
+                    <field name="picking_id"/>
                 </group>
             </group>
         </field>
@@ -239,7 +239,7 @@
             <field name="create_date" position="after">
                 <field name="partner_id"/>
                 <field name="order_id"/>
-                <field name="stock_operation_name"/>
+                <field name="picking_id"/>
                 <field name="lot_notes"/>
             </field>
         </field>

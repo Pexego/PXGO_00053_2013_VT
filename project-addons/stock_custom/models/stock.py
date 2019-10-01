@@ -265,7 +265,7 @@ class StockProductionLot(models.Model):
         help='The last customer in possession of the product')
     lot_notes = fields.Text('Notes')
     order_id= fields.Many2one('sale.order',string='Order',compute='_compute_partner_id')
-    stock_operation_name = fields.Many2one('stock.picking',string='Picking',compute='_compute_partner_id')
+    picking_id = fields.Many2one('stock.picking',string='Picking',compute='_compute_partner_id')
     def _compute_partner_id(self):
         pass
         for lot in self:
@@ -274,10 +274,8 @@ class StockProductionLot(models.Model):
             if move_line:
                 lot.partner_id = \
                     move_line.picking_id.partner_id.commercial_partner_id
-                lot.order_id=self.env['sale.order'].search(
-                    [('name','=',move_line.picking_id.origin),('partner_id','=',lot.partner_id.id)], limit=1)
-                lot.stock_operation_name= self.env['stock.picking'].search(
-                    [('name', '=', move_line.picking_id.name)], limit=1)
+                lot.order_id=move_line.move_id.sale_line_id.order_id
+                lot.picking_id =move_line.picking_id
             else:
                 lot.partner_id = False
 
