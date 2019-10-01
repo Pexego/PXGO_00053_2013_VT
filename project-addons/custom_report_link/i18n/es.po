@@ -998,6 +998,18 @@ msgid "Quotation"
 msgstr "Presupuesto"
 
 #. module: custom_report_link
+#: model:ir.model,name:custom_report_link.model_sale_order
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "Proforma Invoice"
+msgstr "Factura Proforma"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<strong>Proforma Invoice: </strong>"
+msgstr "<strong>Factura proforma: </strong>"
+
+#. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.claim_external_layout_custom
 msgid "RMA Receipt"
 msgstr "Recepción de RMA"

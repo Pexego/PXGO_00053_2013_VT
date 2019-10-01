@@ -70,7 +70,7 @@
                             </span>
                         </span>
                         <span t-if="o.proforma == True">
-                            <div style="font-size:23px;">Factura Proforma</div>
+                            <div style="font-size:23px;">Proforma Invoice</div>
                             <div class="pull-right" style="width: 6.6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
                         </span>
                     </div>
@@ -112,7 +112,7 @@
                         <div>
                             <t t-if="o.state not in ['draft','sent']">
                                 <t t-if="o.proforma == True">
-                                    <span>Factura Proforma: </span>
+                                    <span>Proforma invoice: </span>
                                 </t>
                                 <t t-if="o.proforma == False">
                                     <th>
