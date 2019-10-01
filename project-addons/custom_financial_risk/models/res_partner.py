@@ -36,15 +36,15 @@ class ResPartner(models.Model):
                  ('account_id.circulating', '=', True),
                  ('currency_id', '!=', False),
                  ('reconciled', '=', False)],
-                ['amount_residual_currency'],
-                groupby='amount_residual_currency')
+                ['partner_id', 'amount_residual_currency'],
+                groupby='partner_id')
             move_amount = self.env['account.move.line'].read_group(
                 [('partner_id', 'child_of', partner.id),
                  ('account_id.circulating', '=', True),
                  ('currency_id', '=', False),
                  ('reconciled', '=', False)],
-                ['amount_residual'],
-                groupby='amount_residual')
+                ['partner_id','amount_residual'],
+                groupby='partner_id')
             total_amount = 0
             if move_amount_curr:
                 total_amount += move_amount_curr[0]['amount_residual_currency']
