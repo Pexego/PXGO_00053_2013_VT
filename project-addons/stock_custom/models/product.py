@@ -16,7 +16,6 @@ matplotlib.use('Agg')
 class ProductTemplate(models.Model):
 
     _inherit = 'product.template'
-
     date_start = fields.Date(
         "Start date",
         default=lambda *a: (datetime.now() - relativedelta(months=6)).strftime(
@@ -244,9 +243,6 @@ class ProductProduct(models.Model):
             'name': _('Stock New'),
             'view_mode': 'tree,form',
             'view_type': 'form',
-            'context': {'tree_view_ref': 'product.product_product_tree_view',
-                        'readonly_by_pass': ['lst_price', 'list_price2',
-                                             'list_price3', 'list_price4']},
             'res_model': 'product.product',
             'type': 'ir.actions.act_window',
         }

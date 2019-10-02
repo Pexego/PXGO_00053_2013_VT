@@ -12,6 +12,8 @@
                     <div>
                         <field name="sale_in_groups_of"/>
                     </div>
+                        <field name="description_editable" groups="base.group_system"/>
+
                     </group>
                 </group>
             </field>

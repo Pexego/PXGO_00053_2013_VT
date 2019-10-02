@@ -256,6 +256,7 @@ class SaleOrder(models.Model):
                         if 'error' in response.url:
                             raise Exception("Could not find information on url '%s'" % response.url)
                         info = json.loads(response.text)
+
                         if "RateResponse" in info:
                             data = info["RateResponse"]["RatedShipment"]["NegotiatedRateCharges"]
                             if data:
@@ -533,34 +534,38 @@ class SaleOrder(models.Model):
                         raise Exception("Could not find information on url '%s'" % response.url)
                     info = json.loads(response.text)
                     if "RateResponse" in info:
-                        data = info["RateResponse"]["Provider"][0]["Service"]
-                        if data and type(data) is list:
-                            for service in data:
+                        if int(info["RateResponse"]["Provider"][0]["Notification"][0]["@code"]) !=0:
+                            new.message_error = "DHL: "+ info["RateResponse"]["Provider"][0]["Notification"][0]["Message"]+"\n"
+                        else:
+                            data = info["RateResponse"]["Provider"][0]["Service"]
+                            if data and type(data) is list:
+                                for service in data:
+                                    dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
+                                    if service["@type"] in list(dhl_services_dict.keys()):
+                                        currency = service['TotalNet']['Currency']
+                                        amount = service['TotalNet']['Amount']
+                                        rated_status = {
+                                            'currency': currency,
+                                            'amount': amount,
+                                            'service': 'DHL ' + dhl_services_dict[service["@type"]],
+                                            'order_id': order.id,
+                                            'wizard_id': new.id
+                                        }
+                                        new.write({'data': [(0, 0, rated_status)]})
+                            elif data and type(data) is dict:
                                 dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
-                                if service["@type"] in list(dhl_services_dict.keys()):
-                                    currency = service['TotalNet']['Currency']
-                                    amount = service['TotalNet']['Amount']
+                                if data["@type"] in list(dhl_services_dict.keys()):
+                                    currency = data['TotalNet']['Currency']
+                                    amount = data['TotalNet']['Amount']
                                     rated_status = {
                                         'currency': currency,
                                         'amount': amount,
-                                        'service': 'DHL ' + dhl_services_dict[service["@type"]],
+                                        'service': 'DHL ' + dhl_services_dict[data["@type"]],
                                         'order_id': order.id,
                                         'wizard_id': new.id
                                     }
                                     new.write({'data': [(0, 0, rated_status)]})
-                        elif data and type(data) is dict:
-                            dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
-                            if data["@type"] in list(dhl_services_dict.keys()):
-                                currency = data['TotalNet']['Currency']
-                                amount = data['TotalNet']['Amount']
-                                rated_status = {
-                                    'currency': currency,
-                                    'amount': amount,
-                                    'service': 'DHL ' + dhl_services_dict[data["@type"]],
-                                    'order_id': order.id,
-                                    'wizard_id': new.id
-                                }
-                                new.write({'data': [(0, 0, rated_status)]})
+
 
         return {
             'name': 'Shipping Data Information',
