@@ -21,6 +21,9 @@
                         </tree>
                     </field>
                 </group>
+                <t>
+                    <field name="message_error" style="color:red" />
+                </t>
                 <footer>
                 </footer>
             </form>
