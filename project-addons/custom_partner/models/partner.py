@@ -26,7 +26,7 @@ import time
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
-import dateutil.relativedelta
+import dateutil.relativedelta,re
 from calendar import monthrange
 
 
@@ -430,6 +430,24 @@ class ResPartner(models.Model):
                     raise exceptions. \
                         ValidationError(_('VAT must be unique'))
 
+
+    def check_email(self,email):
+        any_char="^\s\t\r\n\(\)\<\>\,\:\;\[\]Çç\%\&@á-źÁ-Ź"
+        if not re.match('^(['+any_char+']+@['+any_char+'\.]+(\.['+any_char+'\.]+)+;?)+$', email) and email!="-" and email!=".":
+            message = _('The e-mail format is incorrect: ')
+            raise exceptions.ValidationError(message+email)
+
+    @api.constrains('email','email2','email_web')
+    def check_emails(self):
+        email=self.email
+        email2=self.email2
+        email_web=self.email_web
+        if email:
+            self.check_email(email)
+        if email2:
+            self.check_email(email2)
+        if email_web:
+            self.check_email(email_web)
     @api.multi
     def name_get(self):
         res = []
