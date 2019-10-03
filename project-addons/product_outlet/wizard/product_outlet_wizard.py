@@ -132,6 +132,7 @@ class ProductOutletWizard(models.TransientModel):
         else:
             outlet_product.normal_product_id = product.id
             new_product = outlet_product
+        new_product.sale_ok = True
 
         move_in = move_obj.create({'product_id': new_product.id,
                                    'product_uom_qty': self.qty,

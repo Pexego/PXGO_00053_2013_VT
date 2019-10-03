@@ -224,6 +224,8 @@
             <group name="main_group" position="inside">
                 <group>
                     <field name="partner_id"/>
+                    <field name="order_id"/>
+                    <field name="picking_id"/>
                 </group>
             </group>
         </field>
@@ -236,6 +238,8 @@
         <field name="arch" type="xml">
             <field name="create_date" position="after">
                 <field name="partner_id"/>
+                <field name="order_id"/>
+                <field name="picking_id"/>
                 <field name="lot_notes"/>
             </field>
         </field>
@@ -269,5 +273,4 @@
             </field>
         </field>
     </record>
-
 </odoo>

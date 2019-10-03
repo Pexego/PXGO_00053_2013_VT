@@ -9,7 +9,8 @@
         <field name="inherit_id" ref="sale_margin_percentage.sale_margin_percentage_sale_order"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='order_line']/tree/field[@name='name']" position="attributes">
-                <attribute name="readonly">1</attribute>
+                <attribute name="readonly">0</attribute>
+                <attribute name="attrs">{'readonly': [('description_editable_related', '=', False)]}</attribute>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='tax_id']" position="replace">
             </xpath>
@@ -17,6 +18,7 @@
                 <field name="tax_id" widget="many2many_tags" required="1" options="{'no_create': True}"
                     domain="[('type_tax_use','=','sale'),('company_id','=',parent.company_id)]"
                     attrs="{'readonly': [('qty_invoiced', '&gt;', 0)]}"/>
+                <field name="description_editable_related" invisible="1"/>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree/field[@name='no_rappel']" position="after">
                 <field name="invoice_status"/>
