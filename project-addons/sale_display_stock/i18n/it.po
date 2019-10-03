@@ -193,3 +193,109 @@ msgstr "Stock disponibile"
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_state
 msgid "Product state"
 msgstr "Stato di prodotto"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_incoming_qty
+msgid "Incoming"
+msgstr "Stock in entrata"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,product_state:0
+msgid "Make to order"
+msgstr "Su richiesta"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,product_state:0
+msgid "Normal"
+msgstr "Normale"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,product_state:0
+msgid "End of Lifecycle"
+msgstr "Ciclo di fine vita"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,product_state:0
+msgid "Obsolete"
+msgstr "Obsoleto"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,product_state:0
+msgid "In Development"
+msgstr "In sviluppo"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status_2:0
+msgid "Fully Invoiced"
+msgstr "Fatturati"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status_2:0
+msgid "To Invoice"
+msgstr "Da fatturare"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status_2:0
+msgid "Nothing to Invoice"
+msgstr "Niente da fatturare"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status_2:0
+msgid "Partially invoiced"
+msgstr "Parzialmente fatturato"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,order_state:0
+msgid "Quotation"
+msgstr "Preventivi"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,order_state:0
+msgid "Quotation Sent"
+msgstr "Preventivo inviato"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,order_state:0
+msgid "Reserved"
+msgstr "Ordine"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,order_state:0
+msgid "Sales Order"
+msgstr "Ordine di vendita"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,order_state:0
+msgid "Done"
+msgstr "Procezato"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,order_state:0
+msgid "Cancelled"
+msgstr "Annullato"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,order_state:0
+msgid "History"
+msgstr "History"
+
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status:0
+msgid "Upselling"
+msgstr "Upselling"
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status:0
+msgid "Invoiced"
+msgstr "Fatturato"
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status:0
+msgid "To invoice"
+msgstr "Per fatturare"
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status:0
+msgid "Nothing to invoice"
+msgstr "Niente di fatturare"
+#. module: sale_display_stock
+#: selection:sale.order.line.report,invoice_status:0
+msgid "Cancel"
+msgstr "Annullato"
