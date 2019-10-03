@@ -27,18 +27,45 @@ class SaleOrderLineReport(models.Model):
 
     name = fields.Char('Name', readonly=True)
     product_id = fields.Many2one('product.product', 'Product', readonly=True)
-    product_state = fields.Char('Product state', readonly=True)
+    product_state = fields.Selection([
+        ('draft', 'In Development'),
+        ('sellable', 'Normal'),
+        ('end', 'End of Lifecycle'),
+        ('obsolete', 'Obsolete'),
+        ('make_to_order', 'Make to order')],
+        'Product state', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
     product_qty = fields.Float('Quantity', readonly=True)
     price_unit = fields.Float('Price unit', readonly=True)
     discount = fields.Float('Discount', readonly=True)
     salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
-    state = fields.Char('Line state', readonly=True)
     order_id = fields.Many2one('sale.order', 'Order', readonly=True)
-    invoice_status = fields.Char('Line invoice status', readonly=True)
-    order_state = fields.Char('Order state', readonly=True)
-    invoice_status_2 = fields.Char('Order invoice status', readonly=True)
-    incoming_qty = fields.Float(related='product_id.incoming_qty')
+    invoice_status = fields.Selection([
+        ('upselling', 'Upselling'),
+        ('invoiced', 'Invoiced'),
+        ('to invoice', 'To invoice'),
+        ('no', 'Nothing to invoice'),
+        ('cancel', 'Cancel')
+        ],
+        'Line invoice status', readonly=True)
+    order_state = fields.Selection([
+        ('draft', 'Quotation'),
+        ('sent', 'Quotation Sent'),
+        ('reserve', 'Reserved'),
+        ('sale', 'Sales Order'),
+        ('done', 'Done'),
+        ('cancel', 'Cancelled'),
+        ('history', 'History')
+        ],
+        'Order state', readonly=True)
+    invoice_status_2 = fields.Selection([
+        ('invoiced', 'Fully Invoiced'),
+        ('to_invoice', 'To Invoice'),
+        ('no', 'Nothing to Invoice'),
+        ('partially_invoiced', 'Partially invoiced')
+        ],
+        'Order invoice status', readonly=True)
+    incoming_qty = fields.Float('Incoming', related='product_id.incoming_qty')
 
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
@@ -52,7 +79,6 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.price_unit as price_unit,
        sol.discount as discount,
        sol.salesman_id as salesman_id,
-       sol.state as state,
        sol.invoice_status as invoice_status,
        sol.order_id as order_id,
        so.state as order_state,
