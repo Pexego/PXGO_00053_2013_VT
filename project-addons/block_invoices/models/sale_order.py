@@ -13,7 +13,6 @@ class SaleOrder(models.Model):
         related='partner_id.commercial_partner_id.defaulter')
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
     allow_confirm_blocked_magreb = fields.Boolean('Allow confirm', copy=False)
-    blocked_magreb = fields.Boolean(default=False)
 
     @api.onchange('partner_id')
     def onchange_partner_id_check_blocked(self):
@@ -45,14 +44,6 @@ class SaleOrder(models.Model):
                 }
             return {'warning': warning}
 
-    @api.onchange('partner_id', 'team_id', 'payment_term_id')
-    def onchange_block_magreb(self):
-        if (self.team_id.name == 'Magreb' or self.partner_id.team_id.name == 'Magreb') \
-                and self.allow_confirm_blocked_magreb is False:
-            self.blocked_magreb = True
-        else:
-            self.blocked_magreb = False
-
     @api.multi
     def _action_confirm(self):
         message = ''
@@ -70,7 +61,8 @@ class SaleOrder(models.Model):
             if message:
                 raise exceptions.Warning(message)
 
-        if self.blocked_magreb and self.allow_confirm_blocked_magreb is False:
+        if (self.team_id.name == 'Magreb' or self.partner_id.team_id.name == 'Magreb') \
+                and not self.allow_confirm_blocked_magreb:
             message = _('Order blocked. Approve pending')
             raise exceptions.Warning(message)
 
