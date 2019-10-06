@@ -25,9 +25,8 @@ class ResPartner(models.Model):
         move_lines = move_line_obj. \
             search([('partner_id', '=', self.id),
                     ('account_id.internal_type', '=', 'receivable'),
-                    ('full_reconcile_id', '=', False),
-                    ('move_id.state', '!=', 'draft'),
-                    '|', ('invoice_id.state', '!=', 'paid'), ('invoice_id', '=', False)])
+                    ('reconciled', '=', False),
+                    ('move_id.state', '!=', 'draft')])
         return move_lines
 
     @api.multi
@@ -52,10 +51,9 @@ class ResPartner(models.Model):
     def _search_amount_due(self, operator, operand):
         partners_data = self.env['account.move.line'].\
             read_group([('account_id.internal_type', '=', 'receivable'),
-                        ('full_reconcile_id', '=', False),
+                        ('reconciled', '=', False),
                         ('partner_id', '!=', False),
-                        ('move_id.state', '!=', 'draft'),
-                        '|', ('invoice_id.state', '!=', 'paid'), ('invoice_id', '=', False)],
+                        ('move_id.state', '!=', 'draft')],
                        ['partner_id', 'balance'], ['partner_id'])
         valid_partner_ids = []
         for partner_data in partners_data:

@@ -32,11 +32,10 @@ class SaleOrder(models.Model):
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        res = super(SaleOrder, self).onchange_partner_id()
+        super().onchange_partner_id()
         if self.partner_id:
             self.transporter_id = self.partner_id.transporter_id.id
             self.service_id = self.partner_id.service_id.id
-        return res
 
     @api.multi
     @api.onchange('partner_id')

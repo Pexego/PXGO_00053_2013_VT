@@ -21,7 +21,8 @@
         "reserve_without_save_sale",
         "web_notify",
         "sale_financial_risk",
-        "custom_financial_risk"
+        "custom_financial_risk",
+        "custom_partner"
     ],
     "data": [
         'views/sale_view.xml', 'views/email_purchase_template.xml'
