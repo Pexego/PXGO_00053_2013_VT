@@ -28,6 +28,17 @@
         </field>
     </record>
 
+    <record id="view_partner_stock_form_add_deposit_loc" model="ir.ui.view">
+        <field name="name">res.partner.stock.property.form.inherit.add_deposit_loc</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="stock.view_partner_stock_form"/>
+        <field name="arch" type="xml">
+            <field name="property_stock_customer" position="after">
+                <field name="property_stock_deposit"/>
+            </field>
+        </field>
+    </record>
+
     <record id="res_partner_view_deposit_buttons" model="ir.ui.view">
         <field name="name">res.partner.view.deposit.buttons</field>
         <field name="model">res.partner</field>
