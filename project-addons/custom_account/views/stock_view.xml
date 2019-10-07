@@ -23,6 +23,20 @@
           </field>
       </record>
 
+      <record id="view_order_tree_custom" model="ir.ui.view">
+            <field name="name">sale.order.tree.custom</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="state" position="attributes">
+                    <attribute name="invisible">0</attribute>
+                </field>
+                <field name="state" position="after">
+                    <field string="Invoice type" name="invoice_type_id"/>
+                </field>
+            </field>
+        </record>
+
       <record id="view_order_form_change_button_2" model="ir.ui.view">
           <field name="name">sale.order.form.change_button_2</field>
           <field name="model">sale.order</field>

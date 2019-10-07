@@ -87,6 +87,8 @@ class SaleOrder(models.Model):
     picking_policy = fields.Selection(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
 
+    @api.multi
+    @api.onchange('partner_id')
     def onchange_partner_id(self):
         # Load the favorite shipping address
         super().onchange_partner_id()

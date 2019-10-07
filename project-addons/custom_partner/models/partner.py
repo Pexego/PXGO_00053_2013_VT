@@ -28,12 +28,31 @@ from dateutil.relativedelta import relativedelta
 from datetime import datetime, timedelta
 import dateutil.relativedelta
 from calendar import monthrange
+from odoo.addons.phone_validation.tools import phone_validation
 
 
 class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
 
     name = fields.Char("Name", required=True)
+
+
+class PhoneValidationMixin(models.AbstractModel):
+    _inherit = 'phone.validation.mixin'
+
+    def phone_format(self, number, country=None, company=None):
+        country = country or self._phone_get_country()
+        if not country:
+            return number
+        always_international = company.phone_international_format == 'prefix' if company else self._phone_get_always_international()
+        return phone_validation.phone_format(
+            number,
+            country.code if country else None,
+            country.phone_code if country else None,
+            always_international=always_international,
+            # We only change this parameter to raise the exception
+            raise_exception=True
+        )
 
 
 class ResPartner(models.Model):

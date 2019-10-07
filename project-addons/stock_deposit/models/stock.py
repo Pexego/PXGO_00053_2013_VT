@@ -62,9 +62,11 @@ class ProcurementRule(models.Model):
             product_id, product_qty, product_uom,
             location_id, name, origin, values, group_id)
         if self.env['sale.order.line'].browse(vals['sale_line_id']).deposit:
-            deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
-            picking_type_id = self.env['stock.picking.type'].search([('name', '=', u'Depósitos')])
-            vals['location_dest_id'] = deposit_id.id
+            picking_type_id = self.env['stock.picking.type'].\
+                search([('name', '=', u'Depósitos')])
+            vals['location_dest_id'] = self.env['sale.order.line'].\
+                browse(vals['sale_line_id']).order_id.partner_id.\
+                commercial_partner_id.property_stock_deposit.id
             vals['picking_type_id'] = picking_type_id.id
 
         return vals

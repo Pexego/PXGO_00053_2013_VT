@@ -29,13 +29,12 @@ class SaleOrder(models.Model):
     @api.multi
     @api.onchange('partner_id')
     def onchange_partner_id(self):
-        super(SaleOrder, self).onchange_partner_id()
-        for order in self:
-            if order.partner_id:
-                part = order.partner_id
-                self.invoice_type_id = part.invoice_type_id and part.invoice_type_id.id \
-                    or part.commercial_partner_id.invoice_type_id and part.commercial_partner_id.invoice_type_id.id \
-                    or False
+        super().onchange_partner_id()
+        if self.partner_id:
+            part = self.partner_id
+            self.invoice_type_id = part.invoice_type_id and part.invoice_type_id.id \
+                or part.commercial_partner_id.invoice_type_id and part.commercial_partner_id.invoice_type_id.id \
+                or False
 
     @api.model
     def cron_create_invoices(self):

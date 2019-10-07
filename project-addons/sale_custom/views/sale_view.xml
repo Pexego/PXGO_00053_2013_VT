@@ -51,12 +51,6 @@
                 <field name="confirmation_date" position="before">
                     <field name="date_order"/>
                 </field>
-                <field name="state" position="attributes">
-                    <attribute name="invisible">0</attribute>
-                </field>
-                <field name="state" position="after">
-                    <field string="Invoice type" name="invoice_type_id"/>
-                </field>
             </field>
         </record>
 <!--
