@@ -376,7 +376,7 @@ class SaleOrder(models.Model):
                     rate_request = """<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
                     <priceRequest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <appId>PC</appId>
-                        <appVersion>3.0</appVersion>
+                        <appVersion>3.2</appVersion>
                         <priceCheck>
                             <rateId>rate1</rateId>
                             <sender>
@@ -421,6 +421,7 @@ class SaleOrder(models.Model):
                         shipping_amount = 0.0
                         currency = ''
                         service_name = ''
+                        transit_time = ''
                         root = ET.fromstring(response_data)
                         for price_response in root.iterfind('priceResponse'):
                             for rated_services in price_response.iterfind('ratedServices'):
@@ -429,8 +430,11 @@ class SaleOrder(models.Model):
                                     currency = currency_code.text
                                 for children in rated_services.iter('ratedService'):
                                     amount_code = children.find('totalPriceExclVat')
+                                    transit_code = children.find('estimatedTimeOfArrival')
                                     if amount_code is not None:
                                         shipping_amount = float(amount_code.text)
+                                    if transit_code is not None:
+                                        transit_time = transit_code.text.replace("T", " ")[:-3]
                                     product = children.find('product')
                                     if product is not None:
                                         product_description_code = product.find('id')
@@ -443,6 +447,7 @@ class SaleOrder(models.Model):
                                             raise Exception("The service code \"%s\" is not defined in the system." % service_code)
                                         rated_status = {
                                             'currency': currency,
+                                            'transit_time': transit_time,
                                             'amount': shipping_amount,
                                             'service': service_name,
                                             'order_id': order.id,
@@ -542,7 +547,7 @@ class SaleOrder(models.Model):
                                 for service in data:
                                     dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
                                     if service["@type"] in list(dhl_services_dict.keys()):
-                                        transit_time = service["DeliveryTime"][:10]
+                                        transit_time = service["DeliveryTime"].replace("T", " ")[:-3]
                                         currency = service['TotalNet']['Currency']
                                         amount = service['TotalNet']['Amount']
                                         rated_status = {
@@ -559,7 +564,9 @@ class SaleOrder(models.Model):
                                 if data["@type"] in list(dhl_services_dict.keys()):
                                     currency = data['TotalNet']['Currency']
                                     amount = data['TotalNet']['Amount']
+                                    transit_time = data["DeliveryTime"].replace("T", " ")[:-3]
                                     rated_status = {
+                                        'transit_time': transit_time,
                                         'currency': currency,
                                         'amount': amount,
                                         'service': 'DHL ' + dhl_services_dict[data["@type"]],
