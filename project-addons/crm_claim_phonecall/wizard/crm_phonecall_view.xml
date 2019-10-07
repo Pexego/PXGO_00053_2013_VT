@@ -19,7 +19,7 @@
             </field>
             <field name="user_id" position="after">
                 <field name="date"/>
-                <field name="duration" string="Duration (min)" widget="float_time" class="oe_inline" />
+                <field name="duration" string="Duration (min)" widget="float_time"/>
                 <field name="call_type"/>
                 <field name="description"/>
             </field>
