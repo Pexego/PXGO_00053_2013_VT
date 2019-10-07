@@ -542,9 +542,11 @@ class SaleOrder(models.Model):
                                 for service in data:
                                     dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
                                     if service["@type"] in list(dhl_services_dict.keys()):
+                                        transit_time = service["DeliveryTime"][:10]
                                         currency = service['TotalNet']['Currency']
                                         amount = service['TotalNet']['Amount']
                                         rated_status = {
+                                            'transit_time': transit_time,
                                             'currency': currency,
                                             'amount': amount,
                                             'service': 'DHL ' + dhl_services_dict[service["@type"]],

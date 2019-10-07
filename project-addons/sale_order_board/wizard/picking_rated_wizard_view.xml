@@ -18,6 +18,7 @@
                             <field name="service"/>
                             <field name="amount"/>
                             <field name="currency"/>
+                            <field name="transit_time"/>
                         </tree>
                     </field>
                 </group>

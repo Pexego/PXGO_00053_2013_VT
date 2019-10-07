@@ -46,6 +46,11 @@ msgid "Currency"
 msgstr "Divisa"
 
 #. module: sale_order_board
+#: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_tree_transit_time
+msgid "Arrival"
+msgstr "Llegada"
+
+#. module: sale_order_board
 #: model:ir.model.fields,field_description:sale_order_board.field_picking_rated_wizard_products_wo_weight
 msgid "of the product(s) of the order don't have set the weights, please take the shipping cost as an aproximation"
 msgstr "de los productos del pedido no tienen marcados los pesos, tenga en cuenta que el coste de envio es una aproximacion"
