@@ -111,8 +111,7 @@ class CreditCommunication(models.Model):
                     ('move_id.state', '!=', 'draft'),
                     ('company_id', '=', self.company_id.id),
                     ('blocked', '!=', True),
-                    '|', ('invoice_id.state', '!=', 'paid'),
-                    ('invoice_id', '=', False),
+                    '|', ('debit', '>', 0), ('credit', '>', 0),
                     '|', ('date_maturity', '=', False),
                     ('date_maturity', '<=', search_date)])
         return move_lines
