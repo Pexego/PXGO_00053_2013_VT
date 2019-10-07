@@ -11,9 +11,7 @@
                 <field name="allow_confirm_blocked"
                     attrs="{'invisible': [('blocked', '=', False)]}"
                     groups="account.group_account_manager"/>
-                <field name="blocked_magreb" invisible="1"/>
                 <field name="allow_confirm_blocked_magreb" string="Approve Order"
-                    attrs="{'invisible': [('blocked_magreb', '=', False)]}"
                     groups="block_invoices.group_unblock_magreb"/>
             </field>
         </field>

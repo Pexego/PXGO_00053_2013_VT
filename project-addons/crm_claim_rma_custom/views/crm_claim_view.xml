@@ -77,7 +77,7 @@
                         <tree editable="bottom">
                           <field name="sequence" widget="handle"/>
                           <field name="invoice_id" domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
-                          <field name="product_id"/>
+                          <field name="product_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
                           <field name="product_description"/>
                           <field name="qty"/>
                           <field name="price_unit"/>

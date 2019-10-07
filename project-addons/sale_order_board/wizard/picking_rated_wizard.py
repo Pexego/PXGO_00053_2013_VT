@@ -31,6 +31,7 @@ class PickingRatedWizard(models.TransientModel):
     products_without_weight = fields.Char('', readonly=True)
     message_error = fields.Char('', readonly=True)
 
+
 class PickingRatedWizardTree(models.TransientModel):
     _name = 'picking.rated.wizard.tree'
     _order = 'amount asc'
@@ -40,3 +41,4 @@ class PickingRatedWizardTree(models.TransientModel):
     currency = fields.Char('Currency')
     amount = fields.Float('Amount')
     service = fields.Char('Service')
+    transit_time = fields.Char('Arrival')
