@@ -214,14 +214,16 @@ class SaleOrder(models.Model):
                     message = "Some of the products of this order {} aren't available now".format(self.name)
                     self.env.user.notify_info(title="Please consider that!",
                                               message=message)
-                products_to_order = ''
-                for product in sale.order_line.mapped('product_id'):
-                    if product.state == 'make_to_order':
-                        products_to_order = products_to_order + \
-                            product.default_code + ', '
-                if products_to_order:
-                    sale.send_email_to_purchases(products_to_order)
-        return super().action_confirm()
+        res = super().action_confirm()
+        for sale in self:
+            products_to_order = ''
+            for product in sale.order_line.mapped('product_id'):
+                if product.state == 'make_to_order':
+                    products_to_order = products_to_order + \
+                                        product.default_code + ', '
+            if products_to_order:
+                sale.send_email_to_purchases(products_to_order)
+        return res
 
     @api.multi
     def send_email_to_purchases(self, products_to_order):
