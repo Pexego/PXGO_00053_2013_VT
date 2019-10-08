@@ -18,6 +18,7 @@
                 <field name="order_state"/>
                 <field name="invoice_status_2"/>
                 <field name="incoming_qty"/>
+                <field name="company_id"/>
             </tree>
         </field>
     </record>

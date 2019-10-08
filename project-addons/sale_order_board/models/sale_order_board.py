@@ -549,7 +549,7 @@ class SaleOrder(models.Model):
                                     if service["@type"] in list(dhl_services_dict.keys()):
                                         transit_time = service["DeliveryTime"].replace("T", " ")[:-3]
                                         currency = service['TotalNet']['Currency']
-                                        amount = service['TotalNet']['Amount']
+                                        amount = service['Charges']['Charge'][0]['ChargeAmount'] + service['Charges']['Charge'][1]['ChargeAmount']
                                         rated_status = {
                                             'transit_time': transit_time,
                                             'currency': currency,
@@ -563,7 +563,7 @@ class SaleOrder(models.Model):
                                 dhl_services_dict = {i[-2:-1]: i for i in dhl_services}
                                 if data["@type"] in list(dhl_services_dict.keys()):
                                     currency = data['TotalNet']['Currency']
-                                    amount = data['TotalNet']['Amount']
+                                    amount = data['Charges']['Charge'][0]['ChargeAmount'] + data['Charges']['Charge'][1]['ChargeAmount']
                                     transit_time = data["DeliveryTime"].replace("T", " ")[:-3]
                                     rated_status = {
                                         'transit_time': transit_time,
