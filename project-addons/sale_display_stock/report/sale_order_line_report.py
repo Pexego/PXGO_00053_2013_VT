@@ -66,6 +66,7 @@ class SaleOrderLineReport(models.Model):
         ],
         'Order invoice status', readonly=True)
     incoming_qty = fields.Float('Incoming', related='product_id.incoming_qty')
+    company_id = fields.Many2one("res.company", "Company", readonly=True)
 
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
@@ -82,7 +83,8 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.invoice_status as invoice_status,
        sol.order_id as order_id,
        so.state as order_state,
-       so.invoice_status_2 as invoice_status_2
+       so.invoice_status_2 as invoice_status_2,
+       sol.company_id as company_id
 FROM   sale_order_line sol
 JOIN sale_order so on so.id = sol.order_id
 LEFT JOIN product_product pp on sol.product_id = pp.id
