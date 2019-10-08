@@ -20,3 +20,9 @@ msgstr ""
 #, python-format
 msgid "We would also like to inform you of the following invoices which will become due in the next 6 days"
 msgstr "Aussi, nous vous prions de prendre note des factures qui arrivent à échéance dans les 6  prochains jours"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:437
+#, python-format
+msgid "The e-mail format is incorrect: "
+msgstr "Le format de l'e-mail est incorrect: "

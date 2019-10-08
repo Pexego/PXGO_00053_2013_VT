@@ -454,3 +454,9 @@ msgstr "Situazione del fornitore"
 #: model:ir.ui.view,arch_db:custom_partner.view_partner_situation_tree
 msgid "Partial reconciliation"
 msgstr "Riconciliazione parziale"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:437
+#, python-format
+msgid "The e-mail format is incorrect: "
+msgstr "Il formato email non è corretto: "
