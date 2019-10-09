@@ -35,8 +35,8 @@ class SaleOrderLine(models.Model):
             line.margin_perc = 0.0
             line.purchase_price = 0.0
 
-            if line.product_id and line.product_id.standard_price_2:
-                line.purchase_price = line.product_id.standard_price_2
+            if line.product_id and line.product_id.standard_price_2_inc:
+                line.purchase_price = line.product_id.standard_price_2_inc
                 sale_price = line.price_unit * line.product_uom_qty * \
                     ((100.0 - line.discount) / 100.0)
                 purchase_price = line.purchase_price * line.product_uom_qty
@@ -57,9 +57,9 @@ class SaleOrderLine(models.Model):
             line.margin_perc_rappel = 0.0
             line.purchase_price = 0.0
 
-            if line.product_id and line.product_id.standard_price_2:
+            if line.product_id and line.product_id.standard_price_2_inc:
 
-                line.purchase_price = line.product_id.standard_price_2
+                line.purchase_price = line.product_id.standard_price_2_inc
 
                 sale_price = line.price_unit * line.product_uom_qty * ((100.0 - line.discount) / 100.0)
                 purchase_price = line.purchase_price * line.product_uom_qty
@@ -155,7 +155,7 @@ class SaleOrder(models.Model):
                         sale.total_purchase += line.purchase_price * \
                             line.product_uom_qty
                     elif line.product_id:
-                        cost_price = line.product_id.standard_price_2
+                        cost_price = line.product_id.standard_price_2_inc
                         sale.total_purchase += cost_price * \
                             line.product_uom_qty
 

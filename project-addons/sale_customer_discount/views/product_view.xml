@@ -44,5 +44,21 @@
             </field>
         </record>
 
+        <record id="product_add_increment_cost" model="ir.ui.view">
+            <field name="name">product.add_increment_cost</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref="product.product_normal_form_view"/>
+            <field name="arch" type="xml">
+                <field name="standard_price" position="after">
+                    <field name="standard_price_2_inc" colspan="2" widget='monetary'
+                           options="{'currency_field': 'cost_currency_id', 'field_digits': True}"
+                           readonly="1" force_save="1"/>
+                    <field name="cost_increment" groups="product_pricelist_custom.group_inc_mng"/>
+                </field>
+            </field>
+        </record>
+
+
+
     </data>
 </odoo>
