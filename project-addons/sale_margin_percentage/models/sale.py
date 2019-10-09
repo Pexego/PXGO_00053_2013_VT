@@ -133,6 +133,7 @@ class SaleOrder(models.Model):
             sale.margin_rappel = 0.0
             margin_rappel = 0.0
             sale_price = 0.0
+            purchase_price = 0.0
             for line in sale.order_line:
                 if not line.deposit:
                     if line.price_unit > 0:
@@ -140,8 +141,13 @@ class SaleOrder(models.Model):
                     else:
                         margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
                     sale_price += line.price_subtotal or 0.0
+                    purchase_price += line.product_id.standard_price_2_inc or 0.0
             if sale_price:
-                sale.margin_rappel = round((margin_rappel * 100) / sale_price, 2)
+
+                if sale_price < purchase_price:
+                    sale.margin_rappel = round((margin_rappel * 100) / purchase_price, 2)
+                else:
+                    sale.margin_rappel = round((margin_rappel * 100) / sale_price, 2)
 
     @api.multi
     def _get_total_price_purchase(self):
