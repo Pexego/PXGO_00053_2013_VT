@@ -45,10 +45,20 @@ class ProductTemplate(models.Model):
                     product.standard_price_2 = product.standard_price
             else:
                 product.standard_price_2 = product.standard_price
+            product.product_variant_ids._onchange_cost_increment()
 
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
+
+    standard_price_2_inc = fields.Float(
+        digits=dp.get_precision('Product Price'),
+        string="Cost Price 2")
+    cost_increment = fields.Float("Increment", default=0.0)
+
+    @api.onchange("cost_increment")
+    def _onchange_cost_increment(self):
+        self.standard_price_2_inc = self.standard_price_2 + self.cost_increment
 
     @api.depends('list_price', 'pvd1_relation', 'pvd2_relation', 'pvd3_relation', 'pvd4_relation',
                  'standard_price_2', 'pvi1_price', 'pvi2_price', 'pvi3_price', 'pvi4_price')

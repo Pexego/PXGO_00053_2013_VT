@@ -74,9 +74,9 @@
                 <group name="costs">
                     <separator string="Costs"/>
                     <group colspan="8" col="8">
-                        <label for="standard_price" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/>
+                        <!--label for="standard_price" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/-->
                         <field name="standard_price" colspan="2" widget='monetary' options="{'currency_field': 'cost_currency_id', 'field_digits': True}"/>
-                        <field name="standard_price_2" readonly="True" colspan="2" widget='monetary' options="{'currency_field': 'cost_currency_id', 'field_digits': True}"/>
+                        <field name="standard_price_2" readonly="True" colspan="2" widget='monetary' options="{'currency_field': 'cost_currency_id', 'field_digits': True}" invisible="1"/>
                     </group>
                 </group>
             </xpath>

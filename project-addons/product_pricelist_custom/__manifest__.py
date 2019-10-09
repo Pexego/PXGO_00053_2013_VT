@@ -11,7 +11,7 @@
 """,
     "depends": ["base", "product", "sale_customer_discount"],
     "data": [
-        "views/product_view.xml",
+        "views/product_view.xml", "security/product_pricelist_custom.xml"
     ],
     "demo": [],
     'auto_install': False,
