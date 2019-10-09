@@ -25,6 +25,6 @@
         "custom_partner"
     ],
     "data": [
-        'views/sale_view.xml', 'views/email_purchase_template.xml'
+        'views/sale_view.xml', 'views/email_purchase_template.xml','data/parameters.xml'
     ],
 }
