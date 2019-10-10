@@ -50,10 +50,10 @@ class ProductPricelistItem(models.Model):
                     if rule.base == 'pricelist' and rule.base_pricelist_id:
                         item.pricelist_calculated_price = item.fixed_price * (1 - rule.price_discount / 100)
                     elif rule.base == 'standard_price' or \
-                            (rule.base == 'standard_price_2' and not product_id.product_variant_ids.standard_price_2_inc):
+                            (rule.base == 'standard_price_2' and not product_id.product_variant_id.standard_price_2_inc):
                         item.pricelist_calculated_price = product_id.standard_price * (1 - rule.price_discount / 100)
                     elif rule.base == 'standard_price_2':
-                        item.pricelist_calculated_price = product_id.product_variant_ids.standard_price_2_inc * (1 - rule.price_discount / 100)
+                        item.pricelist_calculated_price = product_id.product_variant_id.standard_price_2_inc * (1 - rule.price_discount / 100)
 
     @api.multi
     @api.depends('fixed_price', 'product_id.standard_price_2', 'product_tmpl_id.standard_price_2', 'product_id.standard_price_2_inc')
@@ -62,7 +62,7 @@ class ProductPricelistItem(models.Model):
             product_id = item.product_tmpl_id or item.product_id.product_tmpl_id
             if product_id:
                 if item.fixed_price:
-                    item.margin = (1 - (product_id.product_variant_ids.standard_price_2_inc / item.fixed_price)) * 100.0
+                    item.margin = (1 - (product_id.product_variant_id.standard_price_2_inc / item.fixed_price)) * 100.0
                 else:
                     item.margin = 0
 
