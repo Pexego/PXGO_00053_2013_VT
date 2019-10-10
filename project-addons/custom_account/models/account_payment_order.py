@@ -108,6 +108,7 @@ class AccountPaymentOrder(models.Model):
                     # we add the email2, means the accounting email to use it later on the template
                     'partner_email2': line.partner_id.email2,
                     'partner_name': line.partner_id.name,
+                    'partner_team': line.partner_id.team_id,
                     'obj': line
                 })
                 mail_id = template.with_context(ctx).send_mail(order.id)

@@ -9,7 +9,36 @@ class PaymentReturn(models.Model):
 
     @api.multi
     def action_confirm(self):
-        res = super().action_confirm()
+        if self.not_send_emails:
+            res = super().action_confirm()
+        else:
+            self.not_send_emails = True
+            res = super().action_confirm()
+            self.not_send_emails = False
+            mail_pool = self.env['mail.mail']
+            mail_ids = self.env['mail.mail']
+            for partner in self.mapped('line_ids.partner_id'):
+                template = self.env.ref(
+                    'account_banking_sepa_mail.payment_return_advise_partner',
+                    False)
+                ctx = dict(self._context)
+                ctx.update({
+                    'partner_email': partner.email,
+                    # we add the email2, means the accounting email to use it later on the template
+                    'partner_email2': partner.email2,
+                    'partner_id': partner.id,
+                    'partner_name': partner.name,
+                    'partner': partner,
+                    'partner_team': partner.team_id,
+                    'lines': self.line_ids.filtered(
+                        lambda r: r.partner_id == partner),
+                    'obj': self,
+                })
+                mail_id = template.with_context(ctx).send_mail(self.id)
+                mail_ids += mail_pool.browse(mail_id)
+            if mail_ids:
+                mail_ids.send()
+
         for return_line in self.line_ids:
             for move_line in return_line.move_line_ids:
                 move_line.blocked = True
