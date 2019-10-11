@@ -36,6 +36,7 @@ class StockReservation(models.Model):
         context2 = dict(self._context)
         context2.pop('default_state', False)
         res = super(StockReservation, self.with_context(context2)).create(vals)
+        res.move_id.user_id = res.user_id
         if vals.get('sequence') and res.move_id:
             res.move_id.sequence = vals['sequence']
         if vals.get('unique_js_id', False) and \
@@ -68,6 +69,9 @@ class StockReservation(models.Model):
         elif vals.get('move_id'):
             for reserve in self:
                 reserve.move_id.sequence = reserve.sequence
+        if vals.get('sale_line_id'):
+            for reserve in self:
+                reserve.move_id.sale_line_id = vals['sale_line_id']
         return res
 
     def reassign(self, old_sequence=False):

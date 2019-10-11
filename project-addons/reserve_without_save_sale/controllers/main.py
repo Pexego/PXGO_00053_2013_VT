@@ -24,6 +24,8 @@ class WebsiteReservation(http.Controller):
                 'date_validity': False,
                 'name': post.get('name', product.default_code),
                 'location_id': warehouse.lot_stock_id.id,
+                'sale_id': post['sale_id'] != 'false' and int(post['sale_id']) or False,
+                'user_id': post['user_id'] != 'false' and int(post['user_id']) or False,
                 'price_unit': float(post['price_unit']),
                 'unique_js_id': post['unique_js_id']
             }
@@ -67,6 +69,8 @@ class WebsiteReservation(http.Controller):
                         'product_uom': int(post['uom']),
                         'product_uom_qty': float(post['qty']),
                         'date_validity': False,
+                        'sale_id': post['sale_id'] != 'false' and int(post['sale_id']) or False,
+                        'user_id': post['user_id'] != 'false' and int(post['user_id']) or False,
                         'name': post.get('name', product.default_code),
                         'location_id': warehouse.lot_stock_id.id,
                         'price_unit': float(post['price_unit']),
