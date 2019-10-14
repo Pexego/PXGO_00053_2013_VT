@@ -23,6 +23,8 @@ odoo.define('reserve_without_save_sale', function(require) {
                 'price_unit': element.data.price_unit,
                 'name': element.data.name,
                 'warehouse': recordData.warehouse_id.data.id,
+                'sale_id': recordData.id,
+                'user_id': recordData.user_id.data.id,
                 'csrf_token': require('web.core').csrf_token
             }
         },

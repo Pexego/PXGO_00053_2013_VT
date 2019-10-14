@@ -476,6 +476,10 @@ class SaleOrder(models.Model):
                     ship_to_city = order.partner_shipping_id.city
                     ship_to_postal_code = order.partner_shipping_id.zip
                     ship_to_country_code = order.partner_shipping_id.country_id.code
+                    if order.partner_shipping_id.country_id in self.env['res.country.group'].browse([1]).country_ids:
+                        content_doc = "DOCUMENTS"  # Just for Europe
+                    else:
+                        content_doc = "NON_DOCUMENTS"
 
                     auth = str(account_user) + ":" + str(account_password)
                     auth = auth.encode("utf-8")
@@ -492,7 +496,7 @@ class SaleOrder(models.Model):
                                 "DropOffType": "REGULAR_PICKUP",
                                 "ShipTimestamp": "%s",
                                 "UnitOfMeasurement": "SI",
-                                "Content": "DOCUMENTS",
+                                "Content": "%s",
                                 "PaymentInfo": "DAP",
                                 "Account": %s,
                                 "NextBusinessDay": "N",
@@ -527,7 +531,7 @@ class SaleOrder(models.Model):
                                 }
                             }
                         }
-                    }''' % (timestamp, int(account_account), shipper_address_line, shipper_city, shipper_postal_code,
+                    }''' % (timestamp, content_doc, int(account_account), shipper_address_line, shipper_city, shipper_postal_code,
                             shipper_country_code, (ship_to_address_line_1 + ship_to_address_line_2), ship_to_city,
                             ship_to_postal_code, ship_to_country_code, float(package_weight))
                     decoder = json.JSONDecoder(object_pairs_hook=collections.OrderedDict)
