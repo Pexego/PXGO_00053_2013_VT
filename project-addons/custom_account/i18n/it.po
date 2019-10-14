@@ -972,7 +972,7 @@ msgstr "Campo utile per esprimere l'importo della valuta."
 #. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_required_payment_term
 msgid "VAT"
-msgstr "Fattura"
+msgstr "P.IVA"
 
 #. module: custom_account
 #: model:ir.model,name:custom_account.model_account_voucher_line
