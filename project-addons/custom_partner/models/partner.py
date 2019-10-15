@@ -449,18 +449,17 @@ class ResPartner(models.Model):
                     raise exceptions. \
                         ValidationError(_('VAT must be unique'))
 
-
-    def check_email(self,email):
+    def check_email(self, email):
         any_char="^\s\t\r\n\(\)\<\>\,\:\;\[\]Çç\%\&@á-źÁ-Ź"
         if not re.match('^(['+any_char+']+@['+any_char+'\.]+(\.['+any_char+'\.]+)+;?)+$', email) and email!="-" and email!=".":
             message = _('The e-mail format is incorrect: ')
             raise exceptions.ValidationError(message+email)
 
-    @api.constrains('email','email2','email_web')
+    @api.constrains('email', 'email2', 'email_web')
     def check_emails(self):
-        email=self.email
-        email2=self.email2
-        email_web=self.email_web
+        email = self.email
+        email2 = self.email2
+        email_web = self.email_web
         if email:
             self.check_email(email)
         if email2:
@@ -680,6 +679,13 @@ class ResPartner(models.Model):
             }}
             if res:
                 return res
+
+    @api.multi
+    @api.onchange('vat')
+    def onchange_vat_country_completion(self):
+        country_code = self.commercial_partner_id.country_id.code
+        if self.vat[:len(country_code)] != country_code:
+            self.vat = country_code + self.vat
 
     @api.multi
     def open_partner(self):
