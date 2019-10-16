@@ -66,10 +66,11 @@ class SaleOrder(models.Model):
             message = _('Order blocked. Approve pending')
             raise exceptions.Warning(message)
 
-        for line in self.order_line:
-            if line.margin_perc_rappel < 10 and not line.deposit and not line.promotion_line and line.product_id.state != 'end' and line.product_id.categ_id.id not in (392, 393, 468) and not self.allow_confirm_blocked_magreb:
-                # we use the same check to aprove that magreb
-                message = _('Order blocked. Approve pending, margin is below the limits.')
-                raise exceptions.Warning(message)
+        if not self.pricelist_id.name.startswith('PVI'):
+            for line in self.order_line:
+                if line.margin_perc_rappel < 10 and not line.deposit and not line.promotion_line and line.product_id.state != 'end' and line.product_id.categ_id.id not in (392, 393, 468) and not self.allow_confirm_blocked_magreb:
+                    # we use the same check to aprove that magreb
+                    message = _('Order blocked. Approve pending, margin is below the limits.')
+                    raise exceptions.Warning(message)
 
         return super()._action_confirm()
