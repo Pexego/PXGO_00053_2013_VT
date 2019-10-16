@@ -32,15 +32,21 @@ class AccountInvoice(models.Model):
         ret = super().action_cancel()
         if ret:
             for inv in self:
-                for picking in inv.picking_ids:
-                    if picking.pending_invoice_move_id:
-                        if picking.pending_invoice_move_id.reversal_id:
-                            picking.pending_invoice_move_id.reversal_id.\
-                                line_ids.remove_move_reconcile()
-                            picking.pending_invoice_move_id.reversal_id.\
-                                button_cancel()
-                            picking.pending_invoice_move_id.reversal_id.\
-                                unlink()
+                purchase_lines = inv.invoice_line_ids.\
+                    mapped('purchase_line_id')
+                if purchase_lines:
+                    moves = self.env['stock.move'].search([
+                        ('purchase_line_id', '=', purchase_lines.ids),
+                        ('state', '=', 'done')])
+                    for picking in moves.mapped('picking_id'):
+                        if picking.pending_invoice_move_id:
+                            if picking.pending_invoice_move_id.reversal_id:
+                                picking.pending_invoice_move_id.reversal_id.\
+                                    line_ids.remove_move_reconcile()
+                                picking.pending_invoice_move_id.reversal_id.\
+                                    button_cancel()
+                                picking.pending_invoice_move_id.reversal_id.\
+                                    unlink()
 
         return ret
 
@@ -49,12 +55,21 @@ class AccountInvoice(models.Model):
         ret = super().action_move_create()
         if ret:
             for inv in self:
-                for picking in inv.picking_ids:
-                    if picking.pending_invoice_move_id:
-                        date = (inv.date or
-                                inv.date_invoice or fields.Date.today())
-                        picking.pending_invoice_move_id.\
-                            create_reversals(date, reconcile=True)
+                purchase_lines = inv.invoice_line_ids.\
+                    mapped('purchase_line_id')
+                if purchase_lines:
+                    moves = self.env['stock.move'].search([
+                        ('purchase_line_id', '=', purchase_lines.ids),
+                        ('state', '=', 'done')])
+                    for picking in moves.mapped('picking_id'):
+                        if picking.pending_invoice_move_id and \
+                                (picking.pending_invoice_move_id.
+                                 to_be_reversed or not picking.
+                                 pending_invoice_move_id.reversal_id):
+                            date = (inv.date or
+                                    inv.date_invoice or fields.Date.today())
+                            picking.pending_invoice_move_id.\
+                                create_reversals(date, reconcile=True)
 
         return ret
 
