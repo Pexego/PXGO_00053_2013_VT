@@ -352,3 +352,23 @@ msgstr "Fecha"
 msgid "Num Packages"
 msgstr "Bultos"
 
+#. module: transportation
+#: selection:res.partner,delivery_type:0
+msgid "Pickup in installations"
+msgstr "Recogida en instalaciones"
+
+#. module: transportation
+#: selection:res.partner,delivery_type:0
+msgid "Carrier - Customer"
+msgstr "Transportista - Cliente"
+
+#. module: transportation
+#: selection:res.partner,delivery_type:0
+msgid "Shipping"
+msgstr "Envío"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_res_partner_delivery_type
+#: model:ir.model.fields,field_description:transportation.field_sale_order_delivery_type
+msgid "Delivery type"
+msgstr "Tipo de envío"

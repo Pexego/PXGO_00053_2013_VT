@@ -8,6 +8,7 @@
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
                 <field name="company_id" position="after">
+                    <field name="delivery_type" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
                     <field name="transporter_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
                     <field name="service_id" attrs="{'required': [('is_company', '=', True),('customer','=', True),('active', '=', True)]}"/>
                 </field>
