@@ -4,80 +4,96 @@
     <template id="external_layout_custom_saleorder">
         <!-- Multicompany -->
         <t t-if="not o and doc">
-            <t t-set="o" t-value="doc" />
+            <t t-set="o" t-value="doc"/>
         </t>
         <t t-if="o and 'company_id' in o">
-            <t t-set="company" t-value="o.company_id" />
+            <t t-set="company" t-value="o.company_id"/>
         </t>
         <t t-if="not o or not 'company_id' in o">
-            <t t-set="company" t-value="res_company" />
+            <t t-set="company" t-value="res_company"/>
         </t>
+        <t t-set="odoo_spain" t-value="env['ir.config_parameter'].sudo().get_param('odoo_spain')"/>
+        <t t-set="odoo_italy" t-value="env['ir.config_parameter'].sudo().get_param('odoo_italy')"/>
         <div class="header">
-            <t t-set="lang" t-value="'undefined'" />
+            <t t-set="lang" t-value="'undefined'"/>
             <t t-if="o.partner_id.commercial_partner_id.id">
-                <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang" />
+                <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
             </t>
             <t t-if="not lang">
-                <t t-set="lang" t-value="'undefined'" />
+                <t t-set="lang" t-value="'undefined'"/>
             </t>
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%" />
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
-                    <br />
-                    <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}" />
-                    CIF: <span t-esc="company.vat"/>
-
+                    <br/>
+                    <address t-field="company.partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
+                    <b>VAT:</b>
+                    <span t-esc="company.vat"/>
+                    <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
+                        <b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/>
+                    </t>
                 </div>
             </div>
             <div class="row">
                 <div style="font-size:23px; font-weight: bold; color:#939597;">
                     <div class="pull-left">
-                        <div style="width: 0.1in; height: 0.07in; background-color: white;" />
-                        <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;" />
-                        <div style="width: 0.1in; height: 0.09in; background-color: white;" />
+                        <div style="width: 0.1in; height: 0.07in; background-color: white;"/>
+                        <div style="width: 0.1in; height: 0.19in; background-color: #da1f2e;"/>
+                        <div style="width: 0.1in; height: 0.09in; background-color: white;"/>
                     </div>
                     <div class="pull-left">
-                        <div style="width: 0.08in; height: 0.32in; background-color: white;" />
+                        <div style="width: 0.08in; height: 0.32in; background-color: white;"/>
                     </div>
                     <div>
                         <span t-if="o.state not in ['draft','sent'] and o.proforma == False">
                             <div style="font-size:23px;">Order</div>
                             <span t-if="lang != 'fr_FR' and lang !='de_DE'">
-                                <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
+                                <div class="pull-right"
+                                     style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'fr_FR'">
-                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
+                                <div class="pull-right"
+                                     style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'de_DE'">
-                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
+                                <div class="pull-right"
+                                     style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                         </span>
                         <span t-if="o.state in ['draft','sent'] and o.proforma == False">
                             <div style="font-size:23px;">Quotation</div>
                             <span t-if="lang == 'en_US' or lang == 'it_IT' or lang == 'undefined'">
-                                <div class="pull-right" style="width: 7.6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
+                                <div class="pull-right"
+                                     style="width: 7.6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'es_ES'">
-                                <div class="pull-right" style="width: 7.4in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
+                                <div class="pull-right"
+                                     style="width: 7.4in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'de_DE'">
-                                <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
+                                <div class="pull-right"
+                                     style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'fr_FR' or lang == 'pt_PT'">
-                                <div class="pull-right" style="width: 8.1in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
+                                <div class="pull-right"
+                                     style="width: 8.1in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                         </span>
                         <span t-if="o.proforma == True">
                             <div style="font-size:23px;">Proforma Invoice</div>
-                            <div class="pull-right" style="width: 6.6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;" />
+                            <div class="pull-right"
+                                 style="width: 6.6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </div>
                 </div>
             </div>
             <div style="font-size:13px; color:#6D6E70" class="row">
-                <br />
+                <br/>
                 <div class="col-xs-4 row" t-if="o.partner_id" name="partner_header">
                     <span t-if="o.partner_shipping_id == o.partner_invoice_id">
                         <strong>Invoice and shipping address</strong>
@@ -85,72 +101,79 @@
                     <span t-if="o.partner_shipping_id != o.partner_invoice_id">
                         <strong>Invoice address</strong>
                     </span>
-                    <div t-field="o.partner_invoice_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}" />
+                    <div t-field="o.partner_invoice_id"
+                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
                 </div>
                 <div class="col-xs-4" t-if="o.partner_shipping_id != o.partner_invoice_id">
                     <span>
                         <strong>Shipping address:</strong>
                     </span>
-                    <div t-field="o.partner_shipping_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': True}" />
+                    <div t-field="o.partner_shipping_id"
+                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': True}"/>
                 </div>
-                <div class="col-xs-4 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#da1f2e">
-                    <br />
-                    <br />
+                <div class="col-xs-4 pull-right text-right row"
+                     style="font-size:13px; font-weight: bold; color:#da1f2e">
+                    <br/>
+                    <br/>
                     <t t-if="o.date_order">
-                        <div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date_order" t-options="{'format': 'dd/MM/yyyy'}" />
+                        <div>Date:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.date_order"
+                                  t-options="{'format': 'dd/MM/yyyy'}"/>
                         </div>
                     </t>
                     <t t-if="o.partner_id.vat">
-                        <div>C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat" />
+                        <div>C.I.F.:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/>
                         </div>
                     </t>
                     <t t-if="o.client_order_ref">
-                        <div>Client order: <span style="font-weight: normal; color:#6D6E70" t-field="o.client_order_ref" />
+                        <div>Client order:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.client_order_ref"/>
                         </div>
                     </t>
                     <t t-if="o.name">
                         <div>
                             <t t-if="o.state not in ['draft','sent']">
                                 <t t-if="o.proforma == True">
-                                    <span>Proforma invoice: </span>
+                                    <span>Proforma invoice:</span>
                                 </t>
                                 <t t-if="o.proforma == False">
                                     <th>
-                                        <strong>Visiotech order: </strong>
+                                        <strong>Visiotech order:</strong>
                                     </th>
                                 </t>
                             </t>
                             <t t-if="o.state in ['draft','sent']">
                                 <th>
-                                    <strong>Quotation: </strong>
+                                    <strong>Quotation:</strong>
                                 </th>
                             </t>
-                            <span style="font-weight: normal; color:#6D6E70" t-field="o.name" />
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.name"/>
                         </div>
                     </t>
                 </div>
             </div>
         </div>
         <div class="article">
-            <t t-raw="0" />
+            <t t-raw="0"/>
         </div>
         <div class="footer">
-            <t t-set="lang" t-value="'undefined'" />
+            <t t-set="lang" t-value="'undefined'"/>
             <t t-if="o.partner_id.parent_id.id">
-                <t t-set="lang" t-value="o.partner_id.parent_id.lang" />
+                <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
             </t>
             <t t-if="not o.partner_id.parent_id.id">
-                <t t-set="lang" t-value="o.partner_id.lang" />
+                <t t-set="lang" t-value="o.partner_id.lang"/>
             </t>
             <!-- Get all different taxes from the order-->
-            <t t-set="taxes" t-value="{}" />
+            <t t-set="taxes" t-value="{}"/>
             <t t-foreach="o.order_line" t-as="l">
                 <t t-foreach="l.tax_id" t-as="t">
                     <t t-if="t in taxes">
-                        <t t-esc="taxes.update({t:(taxes[t] + l.price_subtotal)})" />
+                        <t t-esc="taxes.update({t:(taxes[t] + l.price_subtotal)})"/>
                     </t>
                     <t t-if="t not in taxes">
-                        <t t-esc="taxes.update({t:l.price_subtotal})" />
+                        <t t-esc="taxes.update({t:l.price_subtotal})"/>
                     </t>
                 </t>
             </t>
@@ -181,44 +204,47 @@
                     <tbody style="font-size:12px; color:#6D6E70;">
                         <tr>
                             <td>
-                                <span t-field="o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                <span t-field="o.amount_untaxed"
+                                      t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
                             </td>
-                            <t t-set="check_iva" t-value="0" />
-                            <t t-set="iva" t-value="0" />
-                            <t t-set="amount_tax" t-value="0" />
+                            <t t-set="check_iva" t-value="0"/>
+                            <t t-set="iva" t-value="0"/>
+                            <t t-set="amount_tax" t-value="0"/>
                             <t t-foreach="list(taxes.keys())" t-as="t">
                                 <t t-if="'REQ' not in t.description">
-                                    <t t-set="iva" t-value="iva + t.amount" />
-                                    <t t-set="amount_tax" t-value="amount_tax + taxes[t] * t.amount" />
-                                    <t t-set="check_iva" t-value="1" />
+                                    <t t-set="iva" t-value="iva + t.amount"/>
+                                    <t t-set="amount_tax" t-value="amount_tax + taxes[t] * t.amount"/>
+                                    <t t-set="check_iva" t-value="1"/>
                                 </t>
                             </t>
                             <t t-if="check_iva">
                                 <td>
-                                    <span t-esc="'%.1f'% iva" />
+                                    <span t-esc="'%.1f'% iva"/>
                                 </td>
                                 <td>
-                                    <span t-esc="amount_tax/100" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                    <span t-esc="amount_tax/100"
+                                          t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
                                 </td>
                             </t>
                             <t t-if="not check_iva">
                                 <td></td>
                                 <td></td>
                             </t>
-                            <t t-set="recharge" t-value="0" />
-                            <t t-set="amount_tax" t-value="0" />
+                            <t t-set="recharge" t-value="0"/>
+                            <t t-set="amount_tax" t-value="0"/>
                             <t t-foreach="list(taxes.keys())" t-as="t">
                                 <t t-if="'REQ' in t.description">
-                                    <t t-set="recharge" t-value="recharge + t.amount" />
-                                    <t t-set="amount_tax" t-value="amount_tax + taxes[t] * t.amount" />
+                                    <t t-set="recharge" t-value="recharge + t.amount"/>
+                                    <t t-set="amount_tax" t-value="amount_tax + taxes[t] * t.amount"/>
                                 </t>
                             </t>
                             <t t-if="recharge">
                                 <td>
-                                    <span t-esc="'%.1f'% recharge" />
+                                    <span t-esc="'%.1f'% recharge"/>
                                 </td>
                                 <td>
-                                    <span t-esc="amount_tax/100" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                    <span t-esc="amount_tax/100"
+                                          t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
                                 </td>
                             </t>
                             <t t-if="not recharge">
@@ -227,7 +253,8 @@
                             </t>
                             <td>
                                 <b>
-                                    <strong t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}" />
+                                    <strong t-field="o.amount_total"
+                                            t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
                                 </b>
                             </td>
                         </tr>
@@ -236,74 +263,84 @@
             </div>
             <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left col-xs-6 row">
-                    <p style="font-size:12px; color:#6D6E70;" t-field="o.note" />
+                    <p style="font-size:12px; color:#6D6E70;" t-field="o.note"/>
                     <div>
                         <strong>Payment Mode:</strong>
-                        <span style="font-size:12px; color:#6D6E70;" t-field="o.payment_mode_id.note" />
+                        <span style="font-size:12px; color:#6D6E70;" t-field="o.payment_mode_id.note"/>
                     </div>
                     <div>
                         <strong>Payment Term:</strong>
-                        <span style="font-size:12px; color:#6D6E70;" t-field="o.payment_term_id.name" />
+                        <span style="font-size:12px; color:#6D6E70;" t-field="o.payment_term_id.name"/>
                     </div>
                 </div>
                 <div class="pull-right col-xs-6 row">
                     <strong>Bank Account:</strong>
-                    <t t-if="lang == 'es_ES'">
+                    <t t-if="company.vat == odoo_italy"><!-- Esto es para Odoo Italia -->
                         <pre style="font-size:12px; color:#6D6E70;">
-    Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
-    Sabadell Atlantico
-    IBAN ES52 0081 0530 5900 0109 8214
-    BIC: BSABESBB
+                            INTESTATARIO: VISIOTECH srl.
+                            Unicredit
+                            IBAN IT82B0200805364000105728384
+                            BIC: UNCRITMMXXX
                         </pre>
                     </t>
-                    <t t-if="lang == 'en_US'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-    Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
-    CAIXABANK
-    IBAN ES46 2100 1726 5902 0032 1288
-    BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'fr_FR'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-    Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
-    Banco Popular Español
-    IBAN ES11 0075 0240 1006 0056 6137
-    BIC: POPUESMM
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'pt_PT'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-    Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
-    NOVOBANCO
-    Nº: 0001 1726 6211
-    NIB: 0007 0000 00117266211 23
-    IBAN PT50 0007 0000 0011 7266 2112 3
-    SWIFT/BIC: BESCPTPL
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'it_IT'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-    INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
-    CAIXABANK
-    IBAN ES46 2100 1726 5902 0032 1288
-    BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'de_DE'">
-                        <pre style="font-size:12px; color:#6D6E70">
-    Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
-    CAIXABANK
-    IBAN ES46 2100 1726 5902 0032 1288
-    BIC: CAIXESBBXXX
-                        </pre>
+                    <t t-if="company.vat == odoo_spain"><!-- Esto es para Odoo España -->
+                        <t t-if="lang == 'es_ES'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
+                                Sabadell Atlantico
+                                IBAN ES52 0081 0530 5900 0109 8214
+                                BIC: BSABESBB
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'en_US'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
+                                CAIXABANK
+                                IBAN ES46 2100 1726 5902 0032 1288
+                                BIC: CAIXESBBXXX
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'fr_FR'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
+                                Banco Popular Español
+                                IBAN ES11 0075 0240 1006 0056 6137
+                                BIC: POPUESMM
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'pt_PT'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
+                                NOVOBANCO
+                                Nº: 0001 1726 6211
+                                NIB: 0007 0000 00117266211 23
+                                IBAN PT50 0007 0000 0011 7266 2112 3
+                                SWIFT/BIC: BESCPTPL
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'it_IT'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
+                                CAIXABANK
+                                IBAN ES46 2100 1726 5902 0032 1288
+                                BIC: CAIXESBBXXX
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'de_DE'">
+                            <pre style="font-size:12px; color:#6D6E70">
+                                Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
+                                CAIXABANK
+                                IBAN ES46 2100 1726 5902 0032 1288
+                                BIC: CAIXESBBXXX
+                            </pre>
+                        </t>
                     </t>
                 </div>
             </div>
-            <br />
+            <br/>
             <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
                 <label>
-                    <br />
+                    <br/>
                     <t t-raw="company.name"></t>
                     <span t-field="company.report_footer"/>
                 </label>
@@ -312,12 +349,10 @@
     </template>
 
 
-
-
     <template id="external_layout_custom_orderdeposit">
         <!-- Multicompany -->
         <t t-if="not o and doc">
-            <t t-set="o" t-value="doc" />
+            <t t-set="o" t-value="doc"/>
         </t>
         <t t-if="o and 'company_id' in o">
             <t t-set="company" t-value="o.company_id"/>
@@ -325,7 +360,8 @@
         <t t-if="not o or not 'company_id' in o">
             <t t-set="company" t-value="res_company"/>
         </t>
-
+        <t t-set="odoo_spain" t-value="env['ir.config_parameter'].sudo().get_param('odoo_spain')"/>
+        <t t-set="odoo_italy" t-value="env['ir.config_parameter'].sudo().get_param('odoo_italy')"/>
         <div class="header">
             <t t-set="lang" t-value="'undefined'"/>
             <t t-if="o.partner_id.commercial_partner_id.id">
@@ -337,12 +373,19 @@
 
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                     <br/>
-                    <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
-                    CIF: <span t-field="company.vat"/>
+                    <address t-field="company.partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
+                    <b>VAT:</b>
+                    <span t-esc="company.vat"/>
+                    <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
+                        <b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/>
+                    </t>
                 </div>
             </div>
             <div class="row">
@@ -357,36 +400,65 @@
                     </div>
                     <div>
                         <div style="font-size:23px;">Deposit</div>
-                            <div class="pull-right" style="width: 7.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                        <div class="pull-right"
+                             style="width: 7.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                     </div>
                 </div>
             </div>
             <div style="font-size:13px; color:#6D6E70" class="row">
                 <br/>
                 <div class="col-xs-4 row" t-if="o.partner_id" name="partner_header">
-                    <span t-if="o.partner_shipping_id == o.partner_invoice_id"><strong>Invoice and shipping address</strong></span>
-                    <span t-if="o.partner_shipping_id != o.partner_invoice_id"><strong>Invoice address</strong></span>
-                    <div t-field="o.partner_invoice_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
+                    <span t-if="o.partner_shipping_id == o.partner_invoice_id">
+                        <strong>Invoice and shipping address</strong>
+                    </span>
+                    <span t-if="o.partner_shipping_id != o.partner_invoice_id">
+                        <strong>Invoice address</strong>
+                    </span>
+                    <div t-field="o.partner_invoice_id"
+                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
                 </div>
                 <div class="col-xs-4" t-if="o.partner_shipping_id != o.partner_invoice_id">
-                    <span><strong>Shipping address:</strong></span>
-                    <div t-field="o.partner_shipping_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
+                    <span>
+                        <strong>Shipping address:</strong>
+                    </span>
+                    <div t-field="o.partner_shipping_id"
+                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
                 </div>
-                <div class="col-xs-4 pull-right text-right row" style="font-size:13px; font-weight: bold; color:#da1f2e">
-                    <br/><br/>
-                    <t t-if="o.date_order"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date_order" t-options="{'format': 'dd/MM/yyyy'}"/></div></t>
-                    <t t-if="o.partner_id.vat"><div>C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
-                    <t t-if="o.client_order_ref"><div>Client order: <span style="font-weight: normal; color:#6D6E70" t-field="o.client_order_ref"/></div></t>
-                    <t t-if="o.name"><div>
-                        <th><strong>Visiotech order: </strong></th>
-                        <span style="font-weight: normal; color:#6D6E70" t-field="o.name"/></div></t>
+                <div class="col-xs-4 pull-right text-right row"
+                     style="font-size:13px; font-weight: bold; color:#da1f2e">
+                    <br/>
+                    <br/>
+                    <t t-if="o.date_order">
+                        <div>Date:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.date_order"
+                                  t-options="{'format': 'dd/MM/yyyy'}"/>
+                        </div>
+                    </t>
+                    <t t-if="o.partner_id.vat">
+                        <div>C.I.F.:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/>
+                        </div>
+                    </t>
+                    <t t-if="o.client_order_ref">
+                        <div>Client order:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.client_order_ref"/>
+                        </div>
+                    </t>
+                    <t t-if="o.name">
+                        <div>
+                            <th>
+                                <strong>Visiotech order:</strong>
+                            </th>
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.name"/>
+                        </div>
+                    </t>
                 </div>
             </div>
 
         </div>
 
         <div class="article">
-            <t t-raw="0" />
+            <t t-raw="0"/>
         </div>
         <div class="footer">
             <t t-set="lang" t-value="'undefined'"/>
@@ -410,7 +482,8 @@
                             <t t-esc="taxes.update({t:(l.product_uom_qty*l.price_unit*(1-(l.discount/100)))})"/>
                         </t>
                     </t>
-                    <t t-set="amount_total" t-value="amount_total + (l.product_uom_qty*l.price_unit*(1-(l.discount/100)))"/>
+                    <t t-set="amount_total"
+                       t-value="amount_total + (l.product_uom_qty*l.price_unit*(1-(l.discount/100)))"/>
                 </t>
             </t>
             <div class="row">
@@ -440,7 +513,8 @@
                     <tbody style="font-size:12px; color:#6D6E70;">
                         <tr t-if="valued_report">
                             <td>
-                                <span t-esc="amount_total" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                <span t-esc="amount_total"
+                                      t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
                             </td>
                             <t t-set="check_iva" t-value="0"/>
                             <t t-set="iva" t-value="0"/>
@@ -457,7 +531,8 @@
                                     <span t-esc="'%.1f'% iva"/>
                                 </td>
                                 <td>
-                                    <span t-esc="amount_tax_iva/100" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                    <span t-esc="amount_tax_iva/100"
+                                          t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
                                 </td>
                             </t>
                             <t t-if="not check_iva">
@@ -477,7 +552,8 @@
                                     <span t-esc="'%.1f'% recharge"/>
                                 </td>
                                 <td>
-                                    <span t-esc="amount_tax_rec/100" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                    <span t-esc="amount_tax_rec/100"
+                                          t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
                                 </td>
                             </t>
                             <t t-if="not recharge">
@@ -486,7 +562,8 @@
                             </t>
                             <td>
                                 <b>
-                                    <strong t-esc="amount_total + amount_tax_iva/100 + amount_tax_rec/100" t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
+                                    <strong t-esc="amount_total + amount_tax_iva/100 + amount_tax_rec/100"
+                                            t-options="{'widget': 'monetary', 'display_currency': o.pricelist_id.currency_id}"/>
                                 </b>
                             </td>
                         </tr>
@@ -521,42 +598,52 @@
                 </div>
                 <div class="pull-right col-xs-5 row" t-if="valued_report">
                     <strong>Bank Account:</strong>
-                    <t t-if="lang == 'es_ES'">
+                    <t t-if="company.vat == odoo_italy"><!-- Esto es para Odoo Italia -->
                         <pre style="font-size:12px; color:#6D6E70;">
-            Sabadell Atlantico
-            IBAN ES52 0081 0530 5900 0109 8214
-            BIC: BSABESBB
+                            INTESTATARIO: VISIOTECH srl.
+                            Unicredit
+                            IBAN IT82B0200805364000105728384
+                            BIC: UNCRITMMXXX
                         </pre>
                     </t>
-                    <t t-if="lang == 'en_US'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-            CAIXABANC
-            IBAN ES46 2100 1726 5902 0032 1288
-            BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'fr_FR'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-            Banco Popular Español
-            IBAN ES11 0075 0240 1006 0056 6137
-            BIC: POPUESMM
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'it_IT'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-            CAIXABANC
-            IBAN ES46 2100 1726 5902 0032 1288
-            BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'pt_PT'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-            NOVOBANCO
-            Nº: 0001 1726 6211
-            NIB: 0007 0000 00117266211 23
-            IBAN PT50 0007 0000 0011 7266 2112 3
-            SWIFT/BIC: BESCPTPL
-                        </pre>
+                    <t t-if="company.vat == odoo_spain"><!-- Esto es para Odoo España -->
+                        <t t-if="lang == 'es_ES'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                Sabadell Atlantico
+                                IBAN ES52 0081 0530 5900 0109 8214
+                                BIC: BSABESBB
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'en_US'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                CAIXABANC
+                                IBAN ES46 2100 1726 5902 0032 1288
+                                BIC: CAIXESBBXXX
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'fr_FR'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                Banco Popular Español
+                                IBAN ES11 0075 0240 1006 0056 6137
+                                BIC: POPUESMM
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'it_IT'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                CAIXABANC
+                                IBAN ES46 2100 1726 5902 0032 1288
+                                BIC: CAIXESBBXXX
+                            </pre>
+                        </t>
+                        <t t-if="lang == 'pt_PT'">
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                NOVOBANCO
+                                Nº: 0001 1726 6211
+                                NIB: 0007 0000 00117266211 23
+                                IBAN PT50 0007 0000 0011 7266 2112 3
+                                SWIFT/BIC: BESCPTPL
+                            </pre>
+                        </t>
                     </t>
                 </div>
             </div>
@@ -564,14 +651,16 @@
             <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
                 <label>
                     <br/>
-                    <t t-raw="company.name"></t> <span t-field="company.report_footer"/></label>
+                    <t t-raw="company.name"></t>
+                    <span t-field="company.report_footer"/>
+                </label>
             </div>
         </div>
     </template>
 
     <template id="external_layout_custom">
         <t t-if="not o and doc">
-            <t t-set="o" t-value="doc" />
+            <t t-set="o" t-value="doc"/>
         </t>
         <!-- Multicompany -->
         <t t-if="o and 'company_id' in o">
@@ -583,37 +672,48 @@
         <t t-if="not company.id">
             <t t-set="company" t-value="res_company"/>
         </t>
-
+        <t t-set="odoo_spain" t-value="env['ir.config_parameter'].sudo().get_param('odoo_spain')"/>
+        <t t-set="odoo_italy" t-value="env['ir.config_parameter'].sudo().get_param('odoo_italy')"/>
         <div class="header">
-            <div class="row">
+            <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                     <br/>
-                    <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
-                        CIF: <span t-esc="company.vat"/>
+                    <address t-field="company.partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
+                    <b>VAT:</b>
+                    <span t-esc="company.vat"/>
+                    <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
+                        <b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/>
+                    </t>
                 </div>
             </div>
         </div>
 
-            <div class="article">
-                <t t-raw="0" />
+        <div class="article">
+            <t t-raw="0"/>
+        </div>
+        <div class="footer">
+            <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
+                <label>
+                    <br/>
+                    <t t-raw="company.name"></t>
+                    <span t-field="company.report_footer"/>
+                </label>
             </div>
-            <div class="footer">
-                <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
-                    <label><br/><t t-raw="company.name"></t> <span t-field="company.report_footer"/></label>
-                </div>
-            </div>
+        </div>
 
 
     </template>
 
 
-
     <template id="external_layout_custom_invoice">
         <t t-if="not o and doc">
-            <t t-set="o" t-value="doc" />
+            <t t-set="o" t-value="doc"/>
         </t>
         <!-- Multicompany -->
         <t t-if="o and 'company_id' in o">
@@ -625,6 +725,8 @@
         <t t-if="not company.id">
             <t t-set="company" t-value="res_company"/>
         </t>
+        <t t-set="odoo_spain" t-value="env['ir.config_parameter'].sudo().get_param('odoo_spain')"/>
+        <t t-set="odoo_italy" t-value="env['ir.config_parameter'].sudo().get_param('odoo_italy')"/>
 
         <div class="header" style="margin-left: 2.2%; margin-right: 2.2%">
             <t t-set="lang" t-value="'undefined'"/>
@@ -636,14 +738,21 @@
             </t>
 
             <div class="row" style="margin-bottom: 2%">
-                    <div class="pull-left">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
-                    </div>
-                    <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
-                        <br/>
-                        <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
-                        CIF: <span t-esc="company.vat"/>
-                    </div>
+                <div class="pull-left">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+                </div>
+                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
+                    <br/>
+                    <address t-field="company.partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
+                    <b>VAT:</b>
+                    <span t-esc="company.vat"/>
+                    <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
+                        <b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/>
+                    </t>
+                </div>
             </div>
             <div class="row">
                 <div style="font-size:23px; font-weight: bold; color:#939597;">
@@ -659,81 +768,101 @@
                     <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">
                         <div>Invoice</div>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang != 'de_DE'">
-                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">
                         <div>PRO-FORMA</div>
-                        <div class="pull-right" style="width: 7.1in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                        <div class="pull-right"
+                             style="width: 7.1in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                     </span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'draft'">
                         <!-- Comprobacion del idioma (debido a la longitud de la traduccion) -->
                         <div>Draft Invoice</div>
                         <span t-if="lang == 'pt_PT'">
-                            <div class="pull-right" style="width: 5.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 5.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'es_ES' or lang == 'it_IT' or lang == 'fr_FR'">
-                            <div class="pull-right" style="width: 6.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 6.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'en_US' or lang == 'undefined'">
-                            <div class="pull-right" style="width: 6.75in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 6.75in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">
                         <div>Cancelled Invoice</div>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang != 'de_DE'">
-                            <div class="pull-right" style="width: 6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 6in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'out_refund'">
                         <div>Refund</div>
                         <span t-if="lang != 'en_US' and lang != 'pt_PT' and lang !='fr_FR'">
-                            <div class="pull-right" style="width: 5.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 5.7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'fr_FR'">
-                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
-                    <span t-if="lang == 'pt_PT'">
-                            <div class="pull-right" style="width: 7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                        <span t-if="lang == 'pt_PT'">
+                            <div class="pull-right"
+                                 style="width: 7in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'en_US' or lang == 'undefined'">
-                            <div class="pull-right" style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 7.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'in_refund'">
                         <div>Supplier Refund</div>
                         <span t-if="lang == 'pt_PT' or lang == 'es_ES' or lang == 'fr_FR'">
-                            <div class="pull-right" style="width: 3.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 3.5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'it_IT' or lang == 'en_US' or lang == 'undefined'">
-                            <div class="pull-right" style="width: 6.25in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 6.25in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                     </span>
                     <span t-if="o.type == 'in_invoice'">
                         <div>Supplier Invoice</div>
                         <span t-if="lang == 'de_DE'">
-                            <div class="pull-right" style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 5in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang != 'it_IT' and lang != 'en_US'">
-                            <div class="pull-right" style="width: 5.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 5.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
                         <span t-if="lang == 'it_IT' or lang == 'en_US' or lang == 'undefined'">
-                            <div class="pull-right" style="width: 6.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                            <div class="pull-right"
+                                 style="width: 6.2in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                         </span>
 
                     </span>
@@ -742,24 +871,43 @@
             <div class="row">
                 <br/>
                 <div class="pull-left">
-                    <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id.commercial_partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                    <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id.commercial_partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
                 </div>
                 <div class="pull-right text-right">
                     <br/>
-                    <t t-if="o.date_invoice"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice" t-options='{"format": "dd/MM/yyyy"}'/></div></t>
-                    <t t-if="o.number"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Invoice: <strong style="color:#6D6E70" t-field="o.number"/></div></t>
-                    <t t-if="o.partner_id.commercial_partner_id.vat"><div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.commercial_partner_id.vat"/></div></t>
-                    <t t-if="o.type == 'out_refund' and o.claim_id"><div style="font-size:14px; font-weight: bold; color:#da1f2e">Claim: <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/></div></t>
+                    <t t-if="o.date_invoice">
+                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">Date:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice"
+                                  t-options='{"format": "dd/MM/yyyy"}'/>
+                        </div>
+                    </t>
+                    <t t-if="o.number">
+                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">Invoice:
+                            <strong style="color:#6D6E70" t-field="o.number"/>
+                        </div>
+                    </t>
+                    <t t-if="o.partner_id.commercial_partner_id.vat">
+                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.:
+                            <span style="font-weight: normal; color:#6D6E70"
+                                  t-field="o.partner_id.commercial_partner_id.vat"/>
+                        </div>
+                    </t>
+                    <t t-if="o.type == 'out_refund' and o.claim_id">
+                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">Claim:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/>
+                        </div>
+                    </t>
                 </div>
             </div>
         </div>
 
 
         <div class="article">
-            <t t-raw="0" />
+            <t t-raw="0"/>
         </div>
         <div class="footer">
-            <div class="row">
+            <div class="row" t-if="o.tax_line_ids">
                 <t t-set="lang" t-value="'undefined'"/>
                 <t t-if="o.partner_id.commercial_partner_id.id">
                     <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
@@ -768,236 +916,247 @@
                     <t t-set="lang" t-value="'undefined'"/>
                 </t>
                 <br/>
+
                 <table class="table table-condensed">
                     <thead>
                         <tr style="font-size:12px; color:#da1f2e">
-                            <th><strong>BASE</strong></th>
-                            <th><strong>%</strong></th>
-                            <th><strong>IVA</strong></th>
-                            <th><strong>%</strong></th>
-                            <th><strong>REC.</strong></th>
-                            <th><strong>%</strong></th>
-                            <th><strong>RET.</strong></th>
-                            <th><strong>TOTAL</strong></th>
+                            <th>
+                                <strong>Taxes</strong>
+                            </th>
+                            <th>
+                                <strong>Price (ex tax)</strong>
+                            </th>
+                            <th>
+                                <strong>Taxes Amount</strong>
+                            </th>
+                            <th>
+                                <strong>TOTAL</strong>
+                            </th>
                         </tr>
                     </thead>
-                    <tbody style="font-size:12px;">
-                        <t t-if="o.tax_line_ids">
+                    <tbody>
+                        <tr style="color:#6D6E70" t-foreach="o.tax_line_ids" t-as="t">
                             <t t-if="o.amount_untaxed != 0.00">
-                                <t t-foreach="o.tax_line_ids" t-as="t">
-                                    <tr style="color:#6D6E70">
-                                        <t t-if="'IVA' in t.name and t.tax_id.tax_group_id != env.ref('l10n_es.tax_group_iva_0')">
-                                            <t t-if="o.type == 'out_refund'">
-                                                <td><span t-esc="-t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="o.type != 'out_refund'">
-                                                <td><span t-field="t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="t.base != 0">
-                                                <!-- <td><span t-esc="(t.amount*100)/t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td> -->
-                                                <td><span/></td>
-                                            </t>
-                                            <t t-if="t.base == 0">
-                                                <!-- <td><span t-esc="0" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td> -->
-                                                <td><span/></td>
-                                            </t>
-                                            <t t-if="o.type == 'out_refund'">
-                                                <td><span t-esc="-t.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="o.type != 'out_refund'">
-                                                <td><span t-field="t.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <td><span></span></td>
-                                            <td><span></span></td>
-                                            <td><span></span></td>
-                                            <td><span></span></td>
-                                            <t t-if="o.type == 'out_refund'">
-                                                <td><strong t-esc="-o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="o.type != 'out_refund'">
-                                                <td><strong t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
+                                <t t-set="bool" t-value="false"/>
 
-                                        </t>
-                                        <t t-if="t.tax_id.tax_group_id in (env.ref('l10n_es.tax_group_recargo_1-4'), env.ref('l10n_es.tax_group_recargo_0-5'), env.ref('l10n_es.tax_group_recargo_5-2'))">
-                                            <t t-if="o.type == 'out_refund'">
-                                                <td><span t-esc="-t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="o.type != 'out_refund'">
-                                                <td><span t-field="t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <td><span></span></td>
-                                            <td><span></span></td>
-                                            <t t-if="t.base != 0">
-                                                <td><span t-esc="(t.amount*100)/t.base" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="t.base == 0">
-                                                <td><span t-esc="0" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="o.type == 'out_refund'">
-                                                <td><span t-esc="-t.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="o.type != 'out_refund'">
-                                                <td><span t-field="t.amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <td><span></span></td>
-                                            <td><span></span></td>
-                                            <t t-if="o.type == 'out_refund'">
-                                                <td><strong t-esc="-o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                            <t t-if="o.type != 'out_refund'">
-                                                <td><strong t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                                            </t>
-                                        </t>
-                                    </tr>
+                                <t t-if="t.base != 0">
+                                    <td>
+                                        <span t-esc="t.name"
+                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </t>
+
+                                <t t-if="o.type == 'out_refund'">
+                                    <td>
+                                        <span t-esc="-t.base"
+                                              t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="-t.amount"
+                                              t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </t>
+                                <t t-if="o.type != 'out_refund'">
+                                    <td>
+                                        <span t-field="t.base"
+                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="t.amount"
+                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </t>
+
+                                <t t-if="len(o.tax_line_ids) == 1">
+                                    <t t-if="o.type == 'out_refund'">
+                                        <td>
+                                            <strong t-esc="(t.amount + t.base)"
+                                                    t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="o.type != 'out_refund'">
+                                        <td>
+                                            <strong t-esc="(t.amount + t.base)"
+                                                    t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        </td>
+                                    </t>
+                                </t>
+                                <t t-if="len(o.tax_line_ids) != 1">
+                                    <t t-if="o.type == 'out_refund'">
+                                        <td></td>
+                                    </t>
+                                    <t t-if="o.type != 'out_refund'">
+                                        <td></td>
+                                    </t>
                                 </t>
                             </t>
-                        </t>
+                        </tr>
+
                         <tr style="color:#6D6E70">
-                            <t t-if="o.type == 'out_refund'">
-                                <!-- <td><span t-esc="-o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td> -->
-                                <td><span/></td>
-                            </t>
-                            <t t-if="o.type != 'out_refund'">
-                                <!-- <td><span t-field="o.amount_untaxed" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td> -->
-                                <td><span/></td>
-                            </t>
-                            <td><span></span></td>
-                            <td>
-                                <t t-set="iva_value" t-value="sum(o.tax_line_ids.filtered(lambda r: 'IVA' in r.name).mapped('amount'))"/>
-                                <!-- <span t-if="iva_value" t-esc="iva_value" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/> -->
-                            </td>
-                            <td><span></span></td>
-                            <td>
-                                <t t-set="recargo_value" t-value="sum(o.tax_line_ids.filtered(lambda r: 'Recargo' in r.name).mapped('amount'))"/>
-                                <span t-if="recargo_value" t-esc="recargo_value" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
-                            </td>
-                            <td><span></span></td>
-                            <td><span></span></td>
-                            <t t-if="o.type == 'out_refund'">
-                                <td><strong t-esc="-o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
-                            </t>
-                            <t t-if="o.type != 'out_refund'">
-                                <td><strong t-field="o.amount_total" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                            <t t-if="o.amount_untaxed != 0.00">
+                                <t t-set="bool" t-value="false"/>
+                                <t>
+                                    <td>
+                                        <span/>
+                                    </td>
+                                </t>
+                                <t>
+                                    <td>
+                                        <span/>
+                                    </td>
+                                </t>
+                                <t>
+                                    <td>
+                                        <span/>
+                                    </td>
+                                </t>
+                                <t t-if="o.type == 'out_refund'">
+                                    <td>
+                                        <strong t-esc="-o.amount_total"
+                                                t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </t>
+                                <t t-if="o.type != 'out_refund'">
+                                    <td>
+                                        <strong t-field="o.amount_total"
+                                                t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                    </td>
+                                </t>
                             </t>
                         </tr>
                     </tbody>
                 </table>
             </div>
+
+
             <div style="font-size:13px; color:#da1f2e">
                 <div class="pull-left row col-xs-6">
                     <p t-if="o.comment">
                         <strong>Comment:</strong>
                         <span style="font-size:11px; color:#6D6E70;" t-field="o.comment"/>
                     </p>
-                    <t t-if="o.invoice_line_ids and o.invoice_line_ids[0].sale_line_ids and o.invoice_line_ids[0].sale_line_ids[0].order_id.note">
+                    <t t-if="o.invoice_line_ids[0].sale_order_id.note">
                         <strong>Terms and Conditions:</strong>
-                        <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2" t-field="o.invoice_line_ids[0].sale_line_ids[0].order_id.note"/>
+                        <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2"
+                             t-field="o.invoice_line_ids[0].sale_order_id.note"/>
                     </t>
                     <t t-if="o.fiscal_position_id.note">
                         <strong>Fiscal Position Remark:</strong>
-                        <pre style="font-size:11px; color:#6D6E70; background-color: #F1F1F2" t-field="o.fiscal_position_id.note"/>
+                        <pre style="font-size:11px; color:#6D6E70; background-color: #F1F1F2"
+                             t-field="o.fiscal_position.note"/>
                     </t>
                     <t t-if="o.expiration_dates_str">
                         <strong>Payment Term:</strong>
-                        <pre style="font-size:11px; color:#6D6E70; background-color: #F1F1F2" t-field="o.expiration_dates_str"/>
+                        <pre style="font-size:11px; color:#6D6E70; background-color: #F1F1F2"
+                             t-field="o.expiration_dates_str"/>
                     </t>
                 </div>
                 <div class="pull-right col-xs-6 row">
                     <script>
                         function shortText1 (){
-                            var item = document.getElementById("bankAcc");
-                            var str = item.innerHTML;
-                            str = str.substring(20,str.length);
-                            str = "XXXX XXXX XXXX XXXX " + str;
-                            item.innerHTML = str;
+                        var item = document.getElementById("bankAcc");
+                        var str = item.innerHTML;
+                        str = str.substring(20,str.length);
+                        str = "XXXX XXXX XXXX XXXX " + str;
+                        item.innerHTML = str;
                         }
                     </script>
 
-                    <t t-if="'Recibo domiciliado' in o.payment_mode_id.name">
+                    <t t-if="'Recibo domiciliado' in o.expiration_dates_str">
                         <t t-if="o.payment_mode_id.note">
                             <strong>Payment Mode:</strong>
-
-                            <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2" t-field="o.payment_mode_id.note"/>
+                            <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2"
+                                 t-field="o.payment_mode_id.note"/>
                         </t>
-                        <t t-if="o.mandate_id">
+                        <t t-if="o.partner_bank_id">
                             <strong>Bank Account:</strong>
-                            <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2" id ="bankAcc" t-field="o.mandate_id.partner_bank_id.acc_number"/>
+                            <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2" id="bankAcc"
+                                 t-field="o.partner_bank_id.acc_number"/>
                         </t>
                         <script>shortText1()</script>
                     </t>
 
-                <t t-if="'Recibo domiciliado' not in o.payment_mode_id.name and lang">
-                    <strong>Destination Account:</strong>
-                    <t t-if="lang == 'es_ES'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-    Beneficiario: LONG XIANG EXPORTACION IMPORTACION S.L.
-    Sabadell Atlantico
-    IBAN ES52 0081 0530 5900 0109 8214
-    BIC: BSABESBB
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'en_US'">
-                        <pre style="font-size:12px; color:#6D6E70">
-    Beneficiary: LONG XIANG EXPORTACION IMPORTACION S.L.
-    CAIXABANK
-    IBAN ES46 2100 1726 5902 0032 1288
-    BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'fr_FR'">
-                        <pre style="font-size:12px; color:#6D6E70">
-    Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
-    Banco Popular Español
-    IBAN ES11 0075 0240 1006 0056 6137
-    BIC: POPUESMM
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'pt_PT'">
-                        <pre style="font-size:12px; color:#6D6E70">
-    Beneficiário: LONG XIANG EXPORTACION IMPORTACION S.L.
-    NOVOBANCO
-    Nº: 0001 1726 6211
-    NIB: 0007 0000 00117266211 23
-    IBAN PT50 0007 0000 0011 7266 2112 3
-    SWIFT/BIC: BESCPTPL
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'it_IT'">
-                        <pre style="font-size:12px; color:#6D6E70;">
-    INTESTATARIO: LONG XIANG EXPORTACION IMPORTACION S.L.
-    BANCA: CAIXABANK
-    IBAN ES46 2100 1726 5902 0032 1288
-    BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'de_DE'">
-                        <pre style="font-size:12px; color:#6D6E70">
-    Begünstigter: LONG XIANG EXPORTACION IMPORTACION S.L.
-    CAIXABANK
-    IBAN ES46 2100 1726 5902 0032 1288
-    BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
+                    <t t-if="'Recibo domiciliado' not in o.expiration_dates_str and lang">
+                        <strong>Destination Account:</strong>
+                        <t t-if="company.vat == odoo_italy"><!-- Esto es para Odoo Italia -->
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                INTESTATARIO: VISIOTECH srl.
+                                Unicredit
+                                IBAN IT82B0200805364000105728384
+                                BIC: UNCRITMMXXX
+                            </pre>
+                        </t>
+                        <t t-if="company.vat == odoo_spain"><!-- Esto es para Odoo España -->
+                            <t t-if="lang == 'es_ES'">
+                                <pre style="font-size:12px; color:#6D6E70;">
+                                    Sabadell Atlantico
+                                    IBAN ES52 0081 0530 5900 0109 8214
+                                    BIC: BSABESBB
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'en_US'">
+                                <pre style="font-size:12px; color:#6D6E70">
+                                    CAIXABANC
+                                    IBAN ES46 2100 1726 5902 0032 1288
+                                    BIC: CAIXESBBXXX
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'fr_FR'">
+                                <pre style="font-size:12px; color:#6D6E70">
+                                    Banco Popular Español
+                                    IBAN ES11 0075 0240 1006 0056 6137
+                                    BIC: POPUESMM
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'pt_PT'">
+                                <pre style="font-size:12px; color:#6D6E70">
+                                    NOVOBANCO
+                                    Nº: 0001 1726 6211
+                                    NIB: 0007 0000 00117266211 23
+                                    IBAN PT50 0007 0000 0011 7266 2112 3
+                                    SWIFT/BIC: BESCPTPL
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'it_IT'">
+                                <pre style="font-size:12px; color:#6D6E70;">
+                                    INTESTATARIO: LONG XIANG IMPORTACION EXPORTACION SL
+                                    BANCA: CAIXABANC
+                                    IBAN ES46 2100 1726 5902 0032 1288
+                                    BIC: CAIXESBBXXX
+                                </pre>
+                            </t>
+                        </t>
                     </t>
                 </div>
             </div>
-        <div class="row">
-            <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
-                <label>
-                    <p style="font-size: 11px; font-weight: normal;">
-                        <span style="font-weight: bold;">PLEASE REMEMBER to include your sales order and/or invoice number on your bank transfers. This ensures your payment is processed correctly.</span>
+            <div class="row">
+                <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
+                    <label>
+                        <p style="font-size: 11px; font-weight: normal;">
+                            <span style="font-weight: bold;">PLEASE REMEMBER to include your sales order and/or invoice
+                                number on your bank transfers. This ensures your payment is processed correctly.
+                            </span>
+                            <br/>
+                            For more information regarding your invoice contact:
+                            <span style="color:#A61D34;">finance@visiotechsecurity.com</span>
+                        </p>
                         <br/>
-                        For more information regarding your invoice contact: <span style="color:#da1f2e;">finance@visiotechsecurity.com</span>
-                    </p><br/>
-                    <p style="font-size: 10px; font-weight: normal;">Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style="color:#da1f2e;">https://www.visiotechsecurity.com/en/login?view=registration</span></p>
-                    <t t-raw="company.name"></t> <span t-field="company.report_footer"/>
-                </label>
+                        <p style="font-size: 10px; font-weight: normal;">Remember that you can now download your
+                            invoices directly from our website. If you don't have web-access then please request a
+                            username/password from your Account Manager or click on the following link:
+                            <span style="color:#A61D34;">https://www.visiotechsecurity.com/en/login?view=registration
+                            </span>
+                        </p>
+                        <t t-if="company.vat == odoo_spain">
+                            <t t-raw="company.name"></t>
+                        R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, Ins 2º .- CIF:
+                        B80645518<!--<t t-raw="company.initiating_party_identifier"></t>-->
+                        </t>
+                    </label>
+                </div>
             </div>
-        </div>
 
         </div>
-
 
 
     </template>
@@ -1005,7 +1164,7 @@
 
     <template id="external_layout_custom_picking">
         <t t-if="not o and doc">
-            <t t-set="o" t-value="doc" />
+            <t t-set="o" t-value="doc"/>
         </t>
         <!-- Multicompany -->
         <t t-if="o and 'company_id' in o">
@@ -1017,7 +1176,8 @@
         <t t-if="not company.id">
             <t t-set="company" t-value="res_company"/>
         </t>
-
+        <t t-set="odoo_spain" t-value="env['ir.config_parameter'].sudo().get_param('odoo_spain')"/>
+        <t t-set="odoo_italy" t-value="env['ir.config_parameter'].sudo().get_param('odoo_italy')"/>
         <div class="header">
             <t t-set="lang" t-value="'undefined'"/>
             <t t-if="o.partner_id.commercial_partner_id.id">
@@ -1028,12 +1188,19 @@
             </t>
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"  style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
-                <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 2%">
+                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                     <br/>
-                    <address t-field="company.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
-                    CIF: <span t-field="company.vat"/>
+                    <address t-field="company.partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
+                    <b>VAT:</b>
+                    <span t-esc="company.vat"/>
+                    <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
+                        <b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/>
+                    </t>
                 </div>
             </div>
             <div class="row">
@@ -1050,13 +1217,16 @@
                         <span t-if="o.partner_id">
                             <div style="font-size:23px;">Picking</div>
                             <span t-if=" lang != 'fr_FR' and lang != 'de_DE'">
-                                <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                                <div class="pull-right"
+                                     style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'fr_FR'">
-                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                                <div class="pull-right"
+                                     style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'de_DE'">
-                                <div class="pull-right" style="width: 7.4in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                                <div class="pull-right"
+                                     style="width: 7.4in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                         </span>
                     </div>
@@ -1065,82 +1235,139 @@
             <div style="font-size:11px; color:#6D6E70" class="row">
                 <br/>
                 <div class="col-xs-4 row" t-if="o.partner_id" name="partner_header">
-                    <span t-if="o.picking_type_id.code=='incoming'"><strong>Supplier Address:</strong></span>
-                    <span t-if="o.picking_type_id.code=='internal'"><strong>Warehouse Address:</strong></span>
-                    <span t-if="o.picking_type_id.code=='outgoing'"><strong>Client:</strong></span>
-                    <div t-field="o.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
+                    <span t-if="o.picking_type_id.code=='incoming'">
+                        <strong>Supplier Address:</strong>
+                    </span>
+                    <span t-if="o.picking_type_id.code=='internal'">
+                        <strong>Warehouse Address:</strong>
+                    </span>
+                    <span t-if="o.picking_type_id.code=='outgoing'">
+                        <strong>Client:</strong>
+                    </span>
+                    <div t-field="o.partner_id"
+                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
                 </div>
-                <div class="col-xs-4" t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
-                    <span><strong>Delivery Address:</strong></span>
-                    <div t-field="o.move_lines[0].partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
+                <div class="col-xs-4"
+                     t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
+                    <span>
+                        <strong>Delivery Address:</strong>
+                    </span>
+                    <div t-field="o.move_lines[0].partner_id"
+                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
                 </div>
                 <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
-                    <span><strong>Warehouse Address:</strong></span>
-                    <div t-field="o.picking_type_id.warehouse_id.partner_id" t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
+                    <span>
+                        <strong>Warehouse Address:</strong>
+                    </span>
+                    <div t-field="o.picking_type_id.warehouse_id.partner_id"
+                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
                 </div>
-                <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#da1f2e">
+                <div class="col-xs-4 pull-right text-right row"
+                     style="font-size:11px; font-weight: bold; color:#da1f2e">
                     <br/>
-                    <t t-if="o.date"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date" t-options='{"widget": "date"}'/></div></t>
-                    <t t-if="o.name"><div>Picking: <strong style="color:#6D6E70" t-field="o.name"/></div></t>
-                    <t t-if="o.partner_id.vat"><div>C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
-                    <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.client_order_ref"><div>Client order: <span style="font-weight: normal; color:#6D6E70" t-field="o.move_lines[0].sale_line_id.order_id.client_order_ref"/></div></t>
-                    <t t-if="o.origin"><div>Visiotech order: <span style="font-weight: normal; color:#6D6E70" t-field="o.origin"/></div></t>
+                    <t t-if="o.date">
+                        <div>Date:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.date"
+                                  t-options='{"widget": "date"}'/>
+                        </div>
+                    </t>
+                    <t t-if="o.name">
+                        <div>Picking:
+                            <strong style="color:#6D6E70" t-field="o.name"/>
+                        </div>
+                    </t>
+                    <t t-if="o.partner_id.vat">
+                        <div>C.I.F.:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/>
+                        </div>
+                    </t>
+                    <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.client_order_ref">
+                        <div>Client order:
+                            <span style="font-weight: normal; color:#6D6E70"
+                                  t-field="o.move_lines[0].sale_line_id.order_id.client_order_ref"/>
+                        </div>
+                    </t>
+                    <t t-if="o.origin">
+                        <div>Visiotech order:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.origin"/>
+                        </div>
+                    </t>
                 </div>
             </div>
         </div>
 
         <div class="article">
-            <t t-raw="0" />
+            <t t-raw="0"/>
         </div>
 
         <div class="footer">
-        <t t-set="lang" t-value="'undefined'"/>
-        <t t-if="o.partner_id.parent_id.id">
-            <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
-        </t>
-        <t t-if="not o.partner_id.parent_id.id">
-            <t t-set="lang" t-value="o.partner_id.lang"/>
-        </t>
-        <!-- Calcular la divisa del widget para tener en cuenta casos en los que es null y que no dé error al general el informe -->
-        <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id.id"/>
-        <t t-if="monetary_widget">
-            <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id"/>
-        </t>
-        <t t-if="not monetary_widget">
-            <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
-        </t>
-
-        <t t-set="total_price" t-value="0"/>
-        <t t-set="total_tax" t-value="0"/>
-          <t t-foreach="o.move_lines" t-as="move">
-              <t t-if="move.phantom_bom_component is True and move.sale_line_id.product_id.product_tmpl_id.type == 'service'">
-                  <tr>
-                      <tr t-if="last_pack != move.sale_line_id.product_id">
-                          <t t-set="current_total_price" t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.sale_line_id.product_uom_qty"/>
-                          <t t-set="total_price" t-value="total_price + current_total_price"/>
-                          <t t-set="product_tax" t-value="sum(move.sale_line_id.tax_id.mapped('amount'))"/>
-                          <t t-set="total_tax" t-value="total_tax + (product_tax * current_total_price)"/>
-                      </tr>
-                </tr>
+            <t t-set="lang" t-value="'undefined'"/>
+            <t t-if="o.partner_id.parent_id.id">
+                <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
             </t>
-          </t>
-         <br/>
-          <div class="row" t-if="o.partner_id.parent_id.valued_picking == False or o.partner_id.valued_picking == False or o.picking_type_id.code != 'outgoing' or o.has_phantom_bom">
-              <table class="table table-condensed">
-                  <thead>
-                    <tr style="font-size:12px; color:#da1f2e">
-                        <th><strong>TOTAL PRICE.</strong></th>
-                        <th><strong>%</strong></th>
-                        <th><strong>AMOUNT</strong></th>
-                        <th><strong>BASE PRICE</strong></th>
-                        <th><strong>%</strong></th>
-                        <th><strong>IVA</strong></th>
-                        <th><strong>%</strong></th>
-                        <th><strong>REC.</strong></th>
-                        <th><strong>TOTAL</strong></th>
+            <t t-if="not o.partner_id.parent_id.id">
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+            </t>
+            <!-- Calcular la divisa del widget para tener en cuenta casos en los que es null y que no dé error al general el informe -->
+            <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id.id"/>
+            <t t-if="monetary_widget">
+                <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id"/>
+            </t>
+            <t t-if="not monetary_widget">
+                <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
+            </t>
+
+            <t t-set="total_price" t-value="0"/>
+            <t t-set="total_tax" t-value="0"/>
+            <t t-foreach="o.move_lines" t-as="move">
+                <t t-if="move.phantom_bom_component is True and move.sale_line_id.product_id.product_tmpl_id.type == 'service'">
+                    <tr>
+                        <tr t-if="last_pack != move.sale_line_id.product_id">
+                            <t t-set="current_total_price"
+                               t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.sale_line_id.product_uom_qty"/>
+                            <t t-set="total_price" t-value="total_price + current_total_price"/>
+                            <t t-set="product_tax" t-value="sum(move.sale_line_id.tax_id.mapped('amount'))"/>
+                            <t t-set="total_tax" t-value="total_tax + (product_tax * current_total_price)"/>
+                        </tr>
                     </tr>
-                  </thead>
-                  <tbody style="font-size:12px; color:#6D6E70;">
+                </t>
+            </t>
+            <br/>
+            <div class="row"
+                 t-if="o.partner_id.parent_id.valued_picking == False or o.partner_id.valued_picking == False or o.picking_type_id.code != 'outgoing' or o.has_phantom_bom">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr style="font-size:12px; color:#da1f2e">
+                            <th>
+                                <strong>TOTAL PRICE.</strong>
+                            </th>
+                            <th>
+                                <strong>%</strong>
+                            </th>
+                            <th>
+                                <strong>AMOUNT</strong>
+                            </th>
+                            <th>
+                                <strong>BASE PRICE</strong>
+                            </th>
+                            <th>
+                                <strong>%</strong>
+                            </th>
+                            <th>
+                                <strong>IVA</strong>
+                            </th>
+                            <th>
+                                <strong>%</strong>
+                            </th>
+                            <th>
+                                <strong>REC.</strong>
+                            </th>
+                            <th>
+                                <strong>TOTAL</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:12px; color:#6D6E70;">
                         <tr>
                             <td></td>
                             <td></td>
@@ -1152,98 +1379,152 @@
                             <td></td>
                             <td></td>
                         </tr>
-                  </tbody>
-              </table>
-              <br/><br/><br/><br/><br/><br/>
-          </div>
-          <div class="row" t-if="o.partner_id.parent_id.valued_picking == True and o.partner_id.valued_picking == True and o.partner_id.valued_picking == True and o.picking_type_id.code == 'outgoing' and o.has_phantom_bom == False">
-              <table class="table table-condensed">
-                  <thead>
-                    <tr style="font-size:12px; color:#da1f2e">
-                        <th><strong>TOTAL PRICE.</strong></th>
-                        <th><strong>%</strong></th>
-                        <th><strong>AMOUNT</strong></th>
-                        <th><strong>BASE PRICE</strong></th>
-                        <th><strong>%</strong></th>
-                        <th><strong>IVA</strong></th>
-                        <th><strong>%</strong></th>
-                        <th><strong>REC.</strong></th>
-                        <th><strong>TOTAL</strong></th>
-                    </tr>
-                  </thead>
-                  <tbody style="font-size:12px; color:#6D6E70;">
+                    </tbody>
+                </table>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+            </div>
+            <div class="row"
+                 t-if="o.partner_id.parent_id.valued_picking == True and o.partner_id.valued_picking == True and o.partner_id.valued_picking == True and o.picking_type_id.code == 'outgoing' and o.has_phantom_bom == False">
+                <table class="table table-condensed">
+                    <thead>
+                        <tr style="font-size:12px; color:#da1f2e">
+                            <th>
+                                <strong>TOTAL PRICE.</strong>
+                            </th>
+                            <th>
+                                <strong>%</strong>
+                            </th>
+                            <th>
+                                <strong>AMOUNT</strong>
+                            </th>
+                            <th>
+                                <strong>BASE PRICE</strong>
+                            </th>
+                            <th>
+                                <strong>%</strong>
+                            </th>
+                            <th>
+                                <strong>IVA</strong>
+                            </th>
+                            <th>
+                                <strong>%</strong>
+                            </th>
+                            <th>
+                                <strong>REC.</strong>
+                            </th>
+                            <th>
+                                <strong>TOTAL</strong>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody style="font-size:12px; color:#6D6E70;">
                         <tr>
-                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                            <td>
+                                <span t-esc="total_price + o.amount_untaxed"
+                                      t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            </td>
                             <td></td>
                             <td></td>
-                            <td><span t-esc="total_price + o.amount_untaxed" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                            <td>
+                                <span t-esc="total_price + o.amount_untaxed"
+                                      t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            </td>
                             <t t-if="o.amount_untaxed > 0">
-                                <td><span t-esc="'%.1f'%((o.amount_tax/o.amount_untaxed) * 100)"/></td>
+                                <td>
+                                    <span t-esc="'%.1f'%((o.amount_tax/o.amount_untaxed) * 100)"/>
+                                </td>
                             </t>
                             <t t-if="o.amount_untaxed &lt;= 0">
-                                <td><span>0</span></td>
+                                <td>
+                                    <span>0</span>
+                                </td>
                             </t>
-                            <td><span t-esc="(total_tax + o.amount_tax)" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                            <td>
+                                <span t-esc="(total_tax + o.amount_tax)"
+                                      t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            </td>
                             <!--<td><span t-field="o.amount_tax"/></td>-->
                             <td></td>
                             <td></td>
-                            <td><strong t-esc="((total_price + total_tax) + o.amount_total)" t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/></td>
+                            <td>
+                                <strong t-esc="((total_price + total_tax) + o.amount_total)"
+                                        t-esc-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                            </td>
                             <!--<td><span t-field="o.amount_total"/></td>-->
                         </tr>
-                  </tbody>
-              </table>
-              <div style="font-size:13px; color:#da1f2e">
-                <div class="pull-left col-xs-6 row">
-                    <t t-if="o.move_lines and o.move_lines and o.move_lines[0].sale_line_id.order_id.note">
-                        <strong>Terms and Conditions:</strong>
-                        <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2" t-field="o.move_lines[0].sale_line_id.order_id.note"/>
-                    </t>
-                </div>
+                    </tbody>
+                </table>
+                <div style="font-size:13px; color:#da1f2e">
+                    <div class="pull-left col-xs-6 row">
+                        <t t-if="o.move_lines and o.move_lines and o.move_lines[0].sale_line_id.order_id.note">
+                            <strong>Terms and Conditions:</strong>
+                            <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2"
+                                 t-field="o.move_lines[0].sale_line_id.order_id.note"/>
+                        </t>
+                    </div>
 
-                <div class="pull-right col-xs-5 row">
-                    <strong>Bank Account:</strong>
-                    <t t-if="lang == 'es_ES'">
-                        <pre style="font-size:12px; color:#6D6E70">
-Sabadell Atlantico
-IBAN ES52 0081 0530 5900 0109 8214
-BIC: BSABESBB
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'en_US'">
-                        <pre style="font-size:12px; color:#6D6E70">
-CAIXABANC
-IBAN ES46 2100 1726 5902 0032 1288
-BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'fr_FR'">
-                        <pre style="font-size:12px; color:#6D6E70">
-Banco Popular Español
-IBAN ES11 0075 0240 1006 0056 6137
-BIC: POPUESMM
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'it_IT'">
-                        <pre style="font-size:12px; color:#6D6E70">
-CAIXABANC
-IBAN ES46 2100 1726 5902 0032 1288
-BIC: CAIXESBBXXX
-                        </pre>
-                    </t>
-                    <t t-if="lang == 'pt_PT'">
-                        <pre style="font-size:12px; color:#6D6E70">
-NOVOBANCO
-Nº: 0001 1726 6211
-NIB: 0007 0000 00117266211 23
-IBAN PT50 0007 0000 0011 7266 2112 3
-SWIFT/BIC: BESCPTPL
-                        </pre>
-                    </t>
+                    <div class="pull-right col-xs-5 row">
+                        <strong>Bank Account:</strong>
+                        <t t-if="company.vat == odoo_italy"><!-- Esto es para Odoo Italia -->
+                            <pre style="font-size:12px; color:#6D6E70;">
+                                INTESTATARIO: VISIOTECH srl.
+                                Unicredit
+                                IBAN IT82B0200805364000105728384
+                                BIC: UNCRITMMXXX
+                            </pre>
+                        </t>
+                        <t t-if="company.vat == odoo_spain"><!-- Esto es para Odoo España -->
+                            <t t-if="lang == 'es_ES'">
+                                <pre style="font-size:12px; color:#6D6E70">
+                                    Sabadell Atlantico
+                                    IBAN ES52 0081 0530 5900 0109 8214
+                                    BIC: BSABESBB
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'en_US'">
+                                <pre style="font-size:12px; color:#6D6E70">
+                                    CAIXABANC
+                                    IBAN ES46 2100 1726 5902 0032 1288
+                                    BIC: CAIXESBBXXX
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'fr_FR'">
+                                <pre style="font-size:12px; color:#6D6E70">
+                                    Banco Popular Español
+                                    IBAN ES11 0075 0240 1006 0056 6137
+                                    BIC: POPUESMM
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'it_IT'">
+                                <pre style="font-size:12px; color:#6D6E70">
+                                    CAIXABANC
+                                    IBAN ES46 2100 1726 5902 0032 1288
+                                    BIC: CAIXESBBXXX
+                                </pre>
+                            </t>
+                            <t t-if="lang == 'pt_PT'">
+                                <pre style="font-size:12px; color:#6D6E70">
+                                    NOVOBANCO
+                                    Nº: 0001 1726 6211
+                                    NIB: 0007 0000 00117266211 23
+                                    IBAN PT50 0007 0000 0011 7266 2112 3
+                                    SWIFT/BIC: BESCPTPL
+                                </pre>
+                            </t>
+                        </t>
+                    </div>
                 </div>
-            </div>
             </div>
             <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
-                <label><t t-raw="company.name"></t> <span t-field="company.report_footer"/></label>
+                <label>
+                    <t t-raw="company.name"></t>
+                    <span t-field="company.report_footer"/>
+                </label>
             </div>
         </div>
 
@@ -1251,7 +1532,7 @@ SWIFT/BIC: BESCPTPL
 
     <template id="claim_external_layout_custom">
         <t t-if="not o and doc">
-            <t t-set="o" t-value="doc" />
+            <t t-set="o" t-value="doc"/>
         </t>
         <!-- Multicompany -->
         <t t-if="o and 'company_id' in o">
@@ -1264,86 +1545,92 @@ SWIFT/BIC: BESCPTPL
             <t t-set="company" t-value="res_company"/>
         </t>
 
-         <div class="header row">
+        <div class="header row">
+            <t t-set="lang" t-value="'undefined'"/>
+            <t t-if="o.partner_id.parent_id is Number">
+                <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
+            </t>
+            <t t-if="o.partner_id.parent_id is not Number">
+                <t t-set="lang" t-value="o.partner_id.lang"/>
+            </t>
+            <t t-if="not lang">
                 <t t-set="lang" t-value="'undefined'"/>
-                <t t-if="o.partner_id.parent_id is Number">
-                    <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
-                </t>
-                <t t-if="o.partner_id.parent_id is not Number">
-                    <t t-set="lang" t-value="o.partner_id.lang"/>
-                </t>
-                <t t-if="not lang">
-                    <t t-set="lang" t-value="'undefined'"/>
-                </t>
-                <div class="row" style="margin-bottom: 2%">
-                    <div class="pull-left">
-                        <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+            </t>
+            <div class="row" style="margin-bottom: 2%">
+                <div class="pull-left">
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+                </div>
+                <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 4%;">
+                    <div t-if="not claim.claim_type">RMA Receipt</div>
+                    <div t-if="company.vat">
+                        <strong>TIN</strong>
+                        <span t-field="company.vat"/>
                     </div>
-                    <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 4%;">
-                        <div t-if="not claim.claim_type">RMA Receipt</div>
-                        <div t-if="company.vat">
-                            <strong>TIN</strong> <span t-field="company.vat"/>
-                        </div>
-                        <div t-if="company.phone">
-                            <strong>Phone</strong>
-                            <t t-if="lang == 'es_ES'">0034 911883615</t>
-                            <t t-if="lang == 'en_US'">0034 911883615</t>
-                            <t t-if="lang == 'fr_FR'">+33434226281</t>
-                            <t t-if="lang == 'it_IT'">0694803224</t>
-                            <t t-if="lang == 'pt_PT'">0034 911883615</t>
-                        </div>
-                        <div t-if="company.id">
-                            <strong>Fax</strong>
-                            <span t-field="company.id"/>
-                        </div>
-                        <div t-if="company.email">
-                            <strong>Email</strong>
-                            <t t-if="lang == 'es_ES'">
-                                <span>sat@visiotechsecurity.com</span>
-                            </t>
-                            <t t-if="lang == 'en_US'">
-                                <span>sat@visiotechsecurity.com</span>
-                            </t>
-                            <t t-if="lang == 'fr_FR'">
-                                <span>sav@visiotechsecurity.com</span>
-                            </t>
-                            <t t-if="lang == 'it_IT'">
-                                <span>satitalia@visiotechsecurity.com</span>
-                            </t>
-                            <t t-if="lang == 'pt_PT'">
-                                <span>sat@visiotechsecurity.com</span>
-                            </t>
-                        </div>
-                        <div t-if="company.website">
-                            <strong>Website</strong>
-                            <span t-field="company.website"/>
-                        </div>
-                        <br/>
-                        <div style="font-size:11px; color:#da1f2e">
-                            <t t-call="crm_claim_summary_report.template_page_copy_title"/>
-                        </div>
+                    <div t-if="company.phone">
+                        <strong>Phone</strong>
+                        <t t-if="lang == 'es_ES'">0034 911883615</t>
+                        <t t-if="lang == 'en_US'">0034 911883615</t>
+                        <t t-if="lang == 'fr_FR'">+33434226281</t>
+                        <t t-if="lang == 'it_IT'">0694803224</t>
+                        <t t-if="lang == 'pt_PT'">0034 911883615</t>
+                    </div>
+                    <div t-if="company.id">
+                        <strong>Fax</strong>
+                        <span t-field="company.id"/>
+                    </div>
+                    <div t-if="company.email">
+                        <strong>Email</strong>
+                        <t t-if="lang == 'es_ES'">
+                            <span>sat@visiotechsecurity.com</span>
+                        </t>
+                        <t t-if="lang == 'en_US'">
+                            <span>sat@visiotechsecurity.com</span>
+                        </t>
+                        <t t-if="lang == 'fr_FR'">
+                            <span>sav@visiotechsecurity.com</span>
+                        </t>
+                        <t t-if="lang == 'it_IT'">
+                            <span>satitalia@visiotechsecurity.com</span>
+                        </t>
+                        <t t-if="lang == 'pt_PT'">
+                            <span>sat@visiotechsecurity.com</span>
+                        </t>
+                    </div>
+                    <div t-if="company.website">
+                        <strong>Website</strong>
+                        <span t-field="company.website"/>
+                    </div>
+                    <br/>
+                    <div style="font-size:11px; color:#da1f2e">
+                        <t t-call="crm_claim_summary_report.template_page_copy_title"/>
                     </div>
                 </div>
-         </div>
+            </div>
+        </div>
 
         <div class="article">
-            <t t-raw="0" />
+            <t t-raw="0"/>
         </div>
 
         <div class="footer rma-page-note" t-if="page_copy_title">
 
-                <div class="pull-left col-xs-6" style="color:#6D6E70">
-                    <p style="font-size: 10pt;">
-                        ATTENTION
-                        -Please check the material received with this RMA document. Claims concerning this will only be accepted
-                         during 48 hours after the reception.
-                    </p>
-                </div>
+            <div class="pull-left col-xs-6" style="color:#6D6E70">
+                <p style="font-size: 10pt;">
+                    ATTENTION
+                    -Please check the material received with this RMA document. Claims concerning this will only be
+                    accepted
+                    during 48 hours after the reception.
+                </p>
+            </div>
 
-                <div class="pull-right col-xs-6" style="color:#6D6E70;">
-                    <p style="font-size: 7pt;"><b>IMPORTANT NOTE</b><span>: </span><span t-field="company.rma_footer_note"/>
-                    </p>
-                </div>
+            <div class="pull-right col-xs-6" style="color:#6D6E70;">
+                <p style="font-size: 7pt;">
+                    <b>IMPORTANT NOTE</b>
+                    <span>:</span>
+                    <span t-field="company.rma_footer_note"/>
+                </p>
+            </div>
         </div>
 
     </template>
@@ -1362,7 +1649,8 @@ SWIFT/BIC: BESCPTPL
         <t t-if="not company.id">
             <t t-set="company" t-value="res_company"/>
         </t>
-
+        <t t-set="odoo_spain" t-value="env['ir.config_parameter'].sudo().get_param('odoo_spain')"/>
+        <t t-set="odoo_italy" t-value="env['ir.config_parameter'].sudo().get_param('odoo_italy')"/>
         <div class="header">
             <t t-set="lang" t-value="'undefined'"/>
             <t t-if="o.partner_id.commercial_partner_id.id">
@@ -1373,12 +1661,19 @@ SWIFT/BIC: BESCPTPL
             </t>
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
-                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)" style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+                    <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
                 </div>
-                <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 2%">
+                <div class="pull-right text-right col-xs-4" style="font-size:12px; color:#6D6E70; margin-top: 2%">
                     <br/>
-                    <address t-field="company.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;phone&quot;]}"/>
-                    <span>CIF: ESB80645518</span>
+                    <address t-field="company.partner_id"
+                             t-options="{'widget': 'contact', 'fields': ['address', 'phone']}"/>
+                    <b>VAT:</b>
+                    <span t-esc="company.vat"/>
+                    <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
+                        <b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/>
+                    </t>
                 </div>
             </div>
             <div class="row">
@@ -1395,10 +1690,12 @@ SWIFT/BIC: BESCPTPL
                         <span t-if="o.partner_id">
                             <div style="font-size:23px;">Picking</div>
                             <span t-if=" lang != 'fr_FR' and lang != 'de_DE'">
-                                <div class="pull-right" style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                                <div class="pull-right"
+                                     style="width: 8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                             <span t-if="lang == 'fr_FR' or lang == 'de_DE'">
-                                <div class="pull-right" style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
+                                <div class="pull-right"
+                                     style="width: 6.8in; height: 0.08in; margin-top: -2.2%; background-color: #da1f2e;"/>
                             </span>
                         </span>
                     </div>
@@ -1407,26 +1704,63 @@ SWIFT/BIC: BESCPTPL
             <div style="font-size:11px; color:#6D6E70" class="row">
                 <br/>
                 <div class="col-xs-4 row" t-if="o.partner_id" name="partner_header">
-                    <span t-if="o.picking_type_id.code=='incoming'"><strong>Supplier Address:</strong></span>
-                    <span t-if="o.picking_type_id.code=='internal'"><strong>Warehouse Address:</strong></span>
-                    <span t-if="o.picking_type_id.code=='outgoing'"><strong>Client:</strong></span>
-                    <div t-field="o.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;]}"/>
+                    <span t-if="o.picking_type_id.code=='incoming'">
+                        <strong>Supplier Address:</strong>
+                    </span>
+                    <span t-if="o.picking_type_id.code=='internal'">
+                        <strong>Warehouse Address:</strong>
+                    </span>
+                    <span t-if="o.picking_type_id.code=='outgoing'">
+                        <strong>Client:</strong>
+                    </span>
+                    <div t-field="o.partner_id"
+                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;]}"/>
                 </div>
-                <div class="col-xs-4" t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
-                    <span><strong>Delivery Address:</strong></span>
-                    <div t-field="o.move_lines[0].partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
+                <div class="col-xs-4"
+                     t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
+                    <span>
+                        <strong>Delivery Address:</strong>
+                    </span>
+                    <div t-field="o.move_lines[0].partner_id"
+                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
                 </div>
                 <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
-                    <span><strong>Warehouse Address:</strong></span>
-                    <div t-field="o.picking_type_id.warehouse_id.partner_id" t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
+                    <span>
+                        <strong>Warehouse Address:</strong>
+                    </span>
+                    <div t-field="o.picking_type_id.warehouse_id.partner_id"
+                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
                 </div>
-                <div class="col-xs-4 pull-right text-right row" style="font-size:11px; font-weight: bold; color:#da1f2e">
+                <div class="col-xs-4 pull-right text-right row"
+                     style="font-size:11px; font-weight: bold; color:#da1f2e">
                     <br/>
-                    <t t-if="o.date"><div>Date: <span style="font-weight: normal; color:#6D6E70" t-field="o.date" t-field-options="{&quot;widget&quot;: &quot;date&quot;}"/></div></t>
-                    <t t-if="o.name"><div>Picking: <strong style="color:#6D6E70" t-field="o.name"/></div></t>
-                    <t t-if="o.partner_id.vat"><div>C.I.F.: <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/></div></t>
-                    <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.client_order_ref"><div>Client order: <span style="font-weight: normal; color:#6D6E70" t-field="o.move_lines[0].sale_line_id.order_id.client_order_ref"/></div></t>
-                    <t t-if="o.origin"><div>Visiotech order: <span style="font-weight: normal; color:#6D6E70" t-field="o.origin"/></div></t>
+                    <t t-if="o.date">
+                        <div>Date:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.date"
+                                  t-field-options="{&quot;widget&quot;: &quot;date&quot;}"/>
+                        </div>
+                    </t>
+                    <t t-if="o.name">
+                        <div>Picking:
+                            <strong style="color:#6D6E70" t-field="o.name"/>
+                        </div>
+                    </t>
+                    <t t-if="o.partner_id.vat">
+                        <div>C.I.F.:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.partner_id.vat"/>
+                        </div>
+                    </t>
+                    <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.client_order_ref">
+                        <div>Client order:
+                            <span style="font-weight: normal; color:#6D6E70"
+                                  t-field="o.move_lines[0].sale_line_id.order_id.client_order_ref"/>
+                        </div>
+                    </t>
+                    <t t-if="o.origin">
+                        <div>Visiotech order:
+                            <span style="font-weight: normal; color:#6D6E70" t-field="o.origin"/>
+                        </div>
+                    </t>
                 </div>
             </div>
         </div>
@@ -1457,7 +1791,8 @@ SWIFT/BIC: BESCPTPL
                 <t t-if="move.phantom_bom_component is True">
                     <tr>
                         <tr t-if="last_pack != move.sale_line_id.product_id">
-                            <t t-set="current_total_price" t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.sale_line_id.product_uom_qty"/>
+                            <t t-set="current_total_price"
+                               t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.sale_line_id.product_uom_qty"/>
                             <t t-foreach="move.sale_line_id.tax_id" t-as="t">
                                 <t t-if="t in taxes">
                                     <t t-esc="taxes.update({t:(taxes[t] + current_total_price)})"/>
@@ -1493,10 +1828,18 @@ SWIFT/BIC: BESCPTPL
                 <table class="table table-condensed">
                     <thead>
                         <tr style="font-size:12px; color:#da1f2e">
-                            <th><strong>Taxes</strong></th>
-                            <th><strong>Price (ex tax)</strong></th>
-                            <th><strong>Taxes Amount</strong></th>
-                            <th><strong>TOTAL</strong></th>
+                            <th>
+                                <strong>Taxes</strong>
+                            </th>
+                            <th>
+                                <strong>Price (ex tax)</strong>
+                            </th>
+                            <th>
+                                <strong>Taxes Amount</strong>
+                            </th>
+                            <th>
+                                <strong>TOTAL</strong>
+                            </th>
                         </tr>
                     </thead>
                     <tbody style="font-size:12px; color:#6D6E70;">
@@ -1506,27 +1849,49 @@ SWIFT/BIC: BESCPTPL
                         <t t-set="total_value" t-value="0"/>
                         <t t-foreach="taxes" t-as="t">
                             <tr>
-                                <td><span t-esc="t.amount"/>%</td>
-                                <td><span t-esc="t_value" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
-                                <td><span t-esc="(t.amount * t_value)/100" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
+                                <td><span t-esc="t.amount"/>%
+                                </td>
+                                <td>
+                                    <span t-esc="t_value"
+                                          t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
+                                </td>
+                                <td>
+                                    <span t-esc="(t.amount * t_value)/100"
+                                          t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
+                                </td>
                                 <t t-set="amount_tax" t-value="(t.amount * t_value)/100"/>
                                 <t t-set="final_price" t-value="final_price + amount_tax"/>
                                 <t t-set="total_value" t-value="t_value"/>
 
                                 <t t-if="len(taxes) == 1">
-                                    <t t-set="partial_price" t-value="amount_tax + t_value" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
-                                    <td><strong t-esc="partial_price" t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}" /></td>
+                                    <t t-set="partial_price" t-value="amount_tax + t_value"
+                                       t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
+                                    <td>
+                                        <strong t-esc="partial_price"
+                                                t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
+                                    </td>
                                 </t>
                                 <t t-if="len(taxes) != 1">
-                                    <t><td/></t>
+                                    <t>
+                                        <td/>
+                                    </t>
                                 </t>
                             </tr>
                         </t>
                         <tr style="color:#6D6E70">
-                            <t><td/></t>
-                            <t><td/></t>
-                            <t><td/></t>
-                            <td><strong t-esc="final_price + total_value"  t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/></td>
+                            <t>
+                                <td/>
+                            </t>
+                            <t>
+                                <td/>
+                            </t>
+                            <t>
+                                <td/>
+                            </t>
+                            <td>
+                                <strong t-esc="final_price + total_value"
+                                        t-esc-options="{'widget': 'monetary', 'display_currency': monetary_widget}"/>
+                            </td>
                         </tr>
 
                     </tbody>
@@ -1536,7 +1901,8 @@ SWIFT/BIC: BESCPTPL
                 <div class="pull-left col-xs-6 row">
                     <t t-if="o.move_lines and o.move_lines[0].sale_line_id.order_id.note">
                         <strong>Terms and Conditions:</strong>
-                        <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2" t-field="o.move_lines[0].sale_line_id.order_id.note"/>
+                        <pre style="font-size:10px; color:#6D6E70; background-color: #F1F1F2"
+                             t-field="o.move_lines[0].sale_line_id.order_id.note"/>
                     </t>
                 </div>
 
@@ -1581,46 +1947,63 @@ SWIFT/BIC: BESCPTPL
                     </t>
                 </div!-->
             </div>
-        <div class="pull-right col-xs-6 row">
-            <!-- Obtener el idioma del cliente dependiendo de si es un contacto o una empresa -->
-            <t t-set="lang" t-value="'undefined'"/>
-            <t t-if="o.partner_id.parent_id.id">
-                <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
-            </t>
-            <t t-if="not o.partner_id.parent_id.id">
-                <t t-set="lang" t-value="o.partner_id.lang"/>
-            </t>
+            <div class="pull-right col-xs-6 row">
+                <!-- Obtener el idioma del cliente dependiendo de si es un contacto o una empresa -->
+                <t t-set="lang" t-value="'undefined'"/>
+                <t t-if="o.partner_id.parent_id.id">
+                    <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
+                </t>
+                <t t-if="not o.partner_id.parent_id.id">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                </t>
 
-            <t t-if="lang == 'es_ES'">
-                <p style="font-size:12px; color:#6D6E70;">
-                    Este albarán solo recoge el material enviado por nuestro almacén, conceptos asociados a servicios como los gastos de envío no aparecen aquí detallados pero pueden ser consultados en la correspondiente factura. Tenga en cuenta que los kits o packs aparecen desglosados en sus componentes
-                </p>
-            </t>
-            <t t-if="lang == 'en_US'">
-                <p style="font-size:12px; color:#6D6E70;">
-                    This delivery note only includes the material sent out by our warehouse. Concepts associated to services such as shipping costs are not listed here but can be consulted in the corresponding invoice. Please note that the kits and packs are separated into their components
-                </p>
-            </t>
-            <t t-if="lang == 'fr_FR'">
-                 <p style="font-size:12px; color:#6D6E70;">
-                    Sur ce bordereau de livraison est noté uniquement le matériel envoyé par notre entrepôt. Des concepts liés au service comme les frais d'envoie ne figurent pas ici, mais vous pouvez les consulter sur les prochaines factures. Il faut tenir en  compte que les kits et les packs sont détaillés dans ses composants
-                </p>
-            </t>
-            <t t-if="lang == 'it_IT'">
-                <p style="font-size:12px; color:#6D6E70;">
-                    Questo documento di trasporto indica unicamente il materiale inviato dai nostri magazzini,  mentre le voci associate ai servizi correlati, come le spese di spedizione, non sono indicate e  possono essere consultate nella fattura corrispondente. Consideri che i kit o pack sono dettagliati nei pezzi che li compongono
-                </p>
-            </t>
-            <t t-if="lang == 'pt_PT'">
-                <p style="font-size:12px; color:#6D6E70;">
-                    Esta guia de transporte somente reflete o material físico enviado pelo nosso armazém, referências relacionadas com serviços, como os gastos de envio, não aparecem na guia de transporte, mas podem ser consultadas na fatura correspondente ao pedido. Deve-se ter em conta que os kits ou pacotes aparecem desglosados
-                </p>
-            </t>
-            <t t-if="lang == 'de_DE'">
-                <p style="font-size:12px; color:#6D6E70;">
-                    Mit diesem Lieferschein wird nur das von unserem Lager gelieferte Material aufgeschlüsselt. Konzepte im Zusammenhang mit Dienstleistungen wie Versandkosten sind hier nicht aufgeführt, können jedoch in der entsprechenden Rechnung eingesehen werden. Denken Sie daran, dass die Kits oder Packs in ihre Bestandteile zerlegt sind
-                </p>
-            </t>
+                <t t-if="lang == 'es_ES'">
+                    <p style="font-size:12px; color:#6D6E70;">
+                        Este albarán solo recoge el material enviado por nuestro almacén, conceptos asociados a
+                        servicios como los gastos de envío no aparecen aquí detallados pero pueden ser consultados en la
+                        correspondiente factura. Tenga en cuenta que los kits o packs aparecen desglosados en sus
+                        componentes
+                    </p>
+                </t>
+                <t t-if="lang == 'en_US'">
+                    <p style="font-size:12px; color:#6D6E70;">
+                        This delivery note only includes the material sent out by our warehouse. Concepts associated to
+                        services such as shipping costs are not listed here but can be consulted in the corresponding
+                        invoice. Please note that the kits and packs are separated into their components
+                    </p>
+                </t>
+                <t t-if="lang == 'fr_FR'">
+                    <p style="font-size:12px; color:#6D6E70;">
+                        Sur ce bordereau de livraison est noté uniquement le matériel envoyé par notre entrepôt. Des
+                        concepts liés au service comme les frais d'envoie ne figurent pas ici, mais vous pouvez les
+                        consulter sur les prochaines factures. Il faut tenir en compte que les kits et les packs sont
+                        détaillés dans ses composants
+                    </p>
+                </t>
+                <t t-if="lang == 'it_IT'">
+                    <p style="font-size:12px; color:#6D6E70;">
+                        Questo documento di trasporto indica unicamente il materiale inviato dai nostri magazzini,
+                        mentre le voci associate ai servizi correlati, come le spese di spedizione, non sono indicate e
+                        possono essere consultate nella fattura corrispondente. Consideri che i kit o pack sono
+                        dettagliati nei pezzi che li compongono
+                    </p>
+                </t>
+                <t t-if="lang == 'pt_PT'">
+                    <p style="font-size:12px; color:#6D6E70;">
+                        Esta guia de transporte somente reflete o material físico enviado pelo nosso armazém,
+                        referências relacionadas com serviços, como os gastos de envio, não aparecem na guia de
+                        transporte, mas podem ser consultadas na fatura correspondente ao pedido. Deve-se ter em conta
+                        que os kits ou pacotes aparecem desglosados
+                    </p>
+                </t>
+                <t t-if="lang == 'de_DE'">
+                    <p style="font-size:12px; color:#6D6E70;">
+                        Mit diesem Lieferschein wird nur das von unserem Lager gelieferte Material aufgeschlüsselt.
+                        Konzepte im Zusammenhang mit Dienstleistungen wie Versandkosten sind hier nicht aufgeführt,
+                        können jedoch in der entsprechenden Rechnung eingesehen werden. Denken Sie daran, dass die Kits
+                        oder Packs in ihre Bestandteile zerlegt sind
+                    </p>
+                </t>
             </div>
 
             <!--p class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
