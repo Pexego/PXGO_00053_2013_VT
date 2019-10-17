@@ -1147,8 +1147,8 @@
                             <span style="color:#A61D34;">https://www.visiotechsecurity.com/en/login?view=registration
                             </span>
                         </p>
+                        <t t-raw="company.name"></t>
                         <t t-if="company.vat == odoo_spain">
-                            <t t-raw="company.name"></t>
                         R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, Ins 2º .- CIF:
                         B80645518<!--<t t-raw="company.initiating_party_identifier"></t>-->
                         </t>
