@@ -34,8 +34,8 @@
                     <b>VAT:</b>
                     <span t-esc="company.vat"/>
                     <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
-                        <b>Pec:</b>
-                        <span t-esc="company.partner_id.pec_destinatario"/>
+                        <p><b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/></p>
                     </t>
                 </div>
             </div>
@@ -383,8 +383,8 @@
                     <b>VAT:</b>
                     <span t-esc="company.vat"/>
                     <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
-                        <b>Pec:</b>
-                        <span t-esc="company.partner_id.pec_destinatario"/>
+                        <p><b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/></p>
                     </t>
                 </div>
             </div>
@@ -687,8 +687,8 @@
                     <b>VAT:</b>
                     <span t-esc="company.vat"/>
                     <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
-                        <b>Pec:</b>
-                        <span t-esc="company.partner_id.pec_destinatario"/>
+                        <p><b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/></p>
                     </t>
                 </div>
             </div>
@@ -749,8 +749,8 @@
                     <b>VAT:</b>
                     <span t-esc="company.vat"/>
                     <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
-                        <b>Pec:</b>
-                        <span t-esc="company.partner_id.pec_destinatario"/>
+                        <p><b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/></p>
                     </t>
                 </div>
             </div>
@@ -1198,8 +1198,8 @@
                     <b>VAT:</b>
                     <span t-esc="company.vat"/>
                     <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
-                        <b>Pec:</b>
-                        <span t-esc="company.partner_id.pec_destinatario"/>
+                        <p><b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/></p>
                     </t>
                 </div>
             </div>
@@ -1671,8 +1671,8 @@
                     <b>VAT:</b>
                     <span t-esc="company.vat"/>
                     <t t-if="company.vat == odoo_italy"> <!-- Esto es para Odoo Italia -->
-                        <b>Pec:</b>
-                        <span t-esc="company.partner_id.pec_destinatario"/>
+                        <p><b>Pec:</b>
+                        <span t-esc="company.partner_id.pec_destinatario"/></p>
                     </t>
                 </div>
             </div>
