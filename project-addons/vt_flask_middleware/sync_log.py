@@ -30,9 +30,11 @@ class SyncLog(BaseModel):
         url = app.config['NOTIFY_URL']
         header = app.config['NOTIFY_HEADER']
         headers = {'x-api-key': header}
+        country_code = app.config['NOTIFY_COUNTRY']
 
         signature = _get_signature()
         data = {'signature': signature,
+                'country_code': country_code,
                 'data': [{'model': self.model,
                           'operation': self.operation,
                           'odoo_id': self.odoo_id}]}
@@ -61,11 +63,14 @@ class SyncLog(BaseModel):
         url = app.config['NOTIFY_URL']
         header = app.config['NOTIFY_HEADER']
         headers = {'x-api-key': header}
+        country_code = app.config['NOTIFY_COUNTRY']
+
         signature = _get_signature()
         to_sync = True
         sync = False
         res = False
         data = {'signature': signature,
+                'country_code': country_code,
                 'data': []}
         for record in objs:
             data['data'].append({'model': record.model,
