@@ -165,8 +165,9 @@ class AccountInvoice(models.Model):
         if p:
             self.attach_picking = p.commercial_partner_id.attach_picking
             self.team_id = p.commercial_partner_id.team_id.id
-            self.currency_id = p.commercial_partner_id.\
-                property_purchase_currency_id.id or self.env.user.company_id.currency_id.id
+            if self.type != "in_invoice":
+                self.currency_id = p.commercial_partner_id.\
+                    property_purchase_currency_id.id or self.env.user.company_id.currency_id.id
             if self.type == "out_refund":
                 self.payment_term_id = False
                 self.date_due = fields.Date.today()
