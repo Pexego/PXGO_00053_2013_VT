@@ -27,6 +27,11 @@ msgid "Is all reserved"
 msgstr "Todo reservado"
 
 #. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
+msgid "Product Moves"
+msgstr "Movimientos de producto"
+
+#. module: stock_custom
 #: model:ir.model.fields,field_description:stock_custom.field_stock_history_brand_id
 msgid "Brand"
 msgstr "Marca"

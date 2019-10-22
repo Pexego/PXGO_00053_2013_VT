@@ -22,6 +22,11 @@ msgid "Cost Price 2"
 msgstr "Prezzo di costo 2"
 
 #. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
+msgid "Product Moves"
+msgstr "Movimenti di prodotto"
+
+#. module: stock_custom
 #: model:ir.model.fields,field_description:stock_custom.field_sale_order_is_all_reserved
 msgid "Is all reserved"
 msgstr "Tutto riservato"
