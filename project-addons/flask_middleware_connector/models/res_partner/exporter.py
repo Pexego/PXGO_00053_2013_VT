@@ -71,7 +71,7 @@ class ResPartnerCategoryExporter(Component):
         vals = {
             "odoo_id": binding.id,
             "name": binding.name or "",
-            "parent_id": binding.parent_id,
+            "parent_id": binding.parent_id.id,
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
