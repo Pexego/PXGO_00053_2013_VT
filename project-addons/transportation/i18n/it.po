@@ -352,3 +352,24 @@ msgstr "Data"
 msgid "Num Packages"
 msgstr "Num.Pacchi"
 
+
+#. module: transportation
+#: selection:res.partner,delivery_type:0
+msgid "Pickup in installations"
+msgstr "Raccolta nelle strutture"
+
+#. module: transportation
+#: selection:res.partner,delivery_type:0
+msgid "Carrier - Customer"
+msgstr "Corriere -  Cliente"
+
+#. module: transportation
+#: selection:res.partner,delivery_type:0
+msgid "Shipping"
+msgstr "Invio"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_res_partner_delivery_type
+#: model:ir.model.fields,field_description:transportation.field_sale_order_delivery_type
+msgid "Delivery type"
+msgstr "Tipo de invio"

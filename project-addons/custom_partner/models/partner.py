@@ -684,8 +684,9 @@ class ResPartner(models.Model):
     @api.onchange('vat')
     def onchange_vat_country_completion(self):
         country_code = self.commercial_partner_id.country_id.code
-        if self.vat[:len(country_code)] != country_code:
-            self.vat = country_code + self.vat
+        if country_code and self.vat and self.is_company:
+            if self.vat[:len(country_code)] != country_code:
+                self.vat = country_code + self.vat
 
     @api.multi
     def open_partner(self):

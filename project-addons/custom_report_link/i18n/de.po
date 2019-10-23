@@ -327,7 +327,12 @@ msgid "<strong>Phone</strong>"
 msgstr "<strong>Telefon</strong>"
 
 #. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "<strong>Price (ex tax)</strong>"
 msgstr "<strong>Price (ex tax)</strong>"
 
@@ -433,12 +438,22 @@ msgid "<strong>TOTAL</strong>"
 msgstr "<strong>Gesamt</strong>"
 
 #. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "<strong>Taxes Amount</strong>"
 msgstr "<strong>Taxes Amount</strong>"
 
 #. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "<strong>Taxes</strong>"
 msgstr "<strong>Steuern</strong>"
 
@@ -1046,7 +1061,16 @@ msgstr "Transfer"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "VAT:"
-msgstr "USt."
+msgstr "UST:"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "<b>VAT:</b>"
+msgstr "<b>UST: </b>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking

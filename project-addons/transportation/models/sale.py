@@ -28,6 +28,11 @@ class SaleOrder(models.Model):
                                      'transporter')
     service_id = fields.Many2one('transportation.service',
                                  'Transport service')
+    delivery_type = fields.Selection([
+        ('shipping', 'Shipping'),
+        ('carrier', 'Carrier - Customer'),
+        ('installations', 'Pickup in installations')],
+        'Delivery type', required=True, default='shipping')
 
     @api.multi
     @api.onchange('partner_id')
@@ -36,6 +41,7 @@ class SaleOrder(models.Model):
         if self.partner_id:
             self.transporter_id = self.partner_id.transporter_id.id
             self.service_id = self.partner_id.service_id.id
+            self.delivery_type = self.partner_id.delivery_type
 
     @api.multi
     @api.onchange('partner_id')
