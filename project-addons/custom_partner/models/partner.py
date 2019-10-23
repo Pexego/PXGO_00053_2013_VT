@@ -728,7 +728,10 @@ class AccountMoveLine(models.Model):
             if line.amount_residual:
                 line.residual_balance = line.amount_residual
             else:
-                line.residual_balance = line.balance
+                if line.balance < 0:
+                    line.residual_balance = line.amount_residual
+                else:
+                    line.residual_balance = line.balance
 
 
 class AccountMove(models.Model):

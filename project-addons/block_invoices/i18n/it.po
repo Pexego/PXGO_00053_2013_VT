@@ -104,20 +104,20 @@ msgid "Warning for %s"
 msgstr "Avviso per %s"
 
 #. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:53
-#: code:addons/block_invoices/sale_order.py:88
+#: code:addons/block_invoices/sale_order.py:31
+#: code:addons/block_invoices/sale_order.py:56
 #, python-format
 msgid "Defaulter customer! Please contact the accounting department."
 msgstr "¡Cliente moroso! Por favore, contattare il dipartimento di contabilità."
 
 #. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:73
+#: code:addons/block_invoices/sale_order.py:66
 #, python-format
 msgid "Order blocked. Approve pending"
 msgstr "Ordine bloccato. In attesa di approvazione"
 
 #. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:73
+#: code:addons/block_invoices/sale_order.py:59
 #, python-format
 msgid "Order blocked. The client has not bank account."
 msgstr "Ordine bloccato. Il cliente non ha conto corrente."
@@ -126,3 +126,9 @@ msgstr "Ordine bloccato. Il cliente non ha conto corrente."
 #: view:sale.order:block_invoices.view_order_add_allow_confirm_form
 msgid "Approve Order"
 msgstr "Approvare ordine"
+
+#. module: block_invoices
+#: code:addons/block_invoices/sale_order.py:72
+#, python-format
+msgid "Order blocked. Approve pending, margin is below the limits."
+msgstr "Ordine bloccato. In attesa di approvazione, il margine è inferiore al limite."
