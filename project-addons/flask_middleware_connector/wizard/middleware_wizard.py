@@ -171,8 +171,8 @@ class MiddlewareBackend(models.TransientModel):
                                                   ('customer', '=', True)])
             if self.mode_export == 'export':
                 for partner in partner_ids:
-                    partner.with_delay().unlink_partner_tag_rel()
-                    partner.with_delay().export_partner_tag_rel()
+                    partner.with_delay(priority=1).unlink_partner_tag_rel()
+                    partner.with_delay(priority=2, eta=10).export_partner_tag_rel()
             else:
                 for partner in partner_ids:
                     partner.with_delay().unlink_partner_tag_rel()
