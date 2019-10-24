@@ -43,6 +43,12 @@
             <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="attributes">
                 <attribute name="attrs">{'readonly': [('state', '=', 'purchase')]}</attribute>
             </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="before">
+                <field name="select_delete"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="before">
+                <button name="delete_purchase_lines" icon="fa-trash-o" type="object"/>
+            </xpath>
         </field>
     </record>
 
