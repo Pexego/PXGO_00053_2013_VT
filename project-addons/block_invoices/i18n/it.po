@@ -128,7 +128,7 @@ msgid "Approve Order"
 msgstr "Approvare ordine"
 
 #. module: block_invoices
-#: code:addons/block_invoices/sale_order.py:72
+#: code:addons/block_invoices/sale_order.py:92
 #, python-format
 msgid "Order blocked. Approve pending, margin is below the limits."
 msgstr "Ordine bloccato. In attesa di approvazione, il margine è inferiore al limite."
