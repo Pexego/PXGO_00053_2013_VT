@@ -67,10 +67,29 @@ class SaleOrder(models.Model):
             raise exceptions.Warning(message)
 
         if not self.pricelist_id.name.startswith('PVI'):
+            margin_adj = 0.0
+            margin = 0.0
+            sale_price = 0.0
+            purchase_price = 0.0
+            margin_limit = self.env['ir.config_parameter'].sudo().get_param('margin.lock.limit')
             for line in self.order_line:
-                if line.margin_perc_rappel < 10 and not line.deposit and not line.promotion_line and line.product_id.state != 'end' and line.product_id.categ_id.id not in (392, 393, 468) and not self.allow_confirm_blocked_magreb:
-                    # we use the same check to aprove that magreb
-                    message = _('Order blocked. Approve pending, margin is below the limits.')
-                    raise exceptions.Warning(message)
+                if not line.deposit and not line.promotion_line and \
+                        line.product_id.state != 'end' and \
+                        line.product_id.categ_id.id not in (392, 393, 468):
+                    if line.price_unit > 0:
+                        margin += line.margin_rappel or 0.0
+                    else:
+                        margin += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
+                    sale_price += line.price_subtotal or 0.0
+                    purchase_price += line.product_id.standard_price_2_inc or 0.0
+            if sale_price:
+                if sale_price < purchase_price:
+                    margin_adj = round((margin * 100) / purchase_price, 2)
+                else:
+                    margin_adj = round((margin * 100) / sale_price, 2)
+            if margin_adj < int(margin_limit) and not self.allow_confirm_blocked_magreb:
+                # we use the same check to aprove that magreb
+                message = _('Order blocked. Approve pending, margin is below the limits.')
+                raise exceptions.Warning(message)
 
         return super()._action_confirm()
