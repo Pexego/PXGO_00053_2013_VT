@@ -47,7 +47,7 @@
                 <field name="select_delete"/>
             </xpath>
             <xpath expr="//field[@name='order_line']" position="before">
-                <button name="delete_purchase_lines" icon="fa-trash-o" type="object"/>
+                <button name="delete_purchase_lines" icon="fa-trash-o" type="object" class="oe_right"/>
             </xpath>
         </field>
     </record>
