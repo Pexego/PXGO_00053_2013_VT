@@ -69,30 +69,10 @@ class ResPartnerCategoryExporter(Component):
 
     def update(self, binding, mode):
         vals = {
-            "is_company": binding.is_company,
-            "fiscal_name": binding.name,
-            "commercial_name": binding.comercial or "",
             "odoo_id": binding.id,
-            "vat": binding.vat or "",
-            "street": binding.street or "",
-            "city": binding.city or "",
-            "zipcode": binding.zip,
-            "commercial_id": binding.user_id.id,
-            "country": binding.country_id and binding.country_id.code or
-            "",
-            "ref": binding.ref,
-            "discount": binding.discount,
-            "pricelist_name": binding.property_product_pricelist and
-            binding.property_product_pricelist.name or "",
-            "state": binding.state_id and binding.state_id.name or "",
-            "email": binding.email_web or "",
-            "prospective": binding.prospective,
-            "lang": binding.lang and binding.lang.split("_")[0] or 'es',
-            "phone1": binding.phone,
-            "phone2": binding.mobile,
+            "name": binding.name or "",
+            "parent_id": binding.parent_id.id,
         }
-        if not vals['is_company']:
-            vals.update({"type": binding.type, "parent_id": binding.parent_id.id, "email": binding.email})
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:

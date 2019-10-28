@@ -11,6 +11,6 @@
     "depends": ['sale', 'stock_account', 'custom_account'],
     "data": ['views/res_company_view.xml', 'views/res_partner_view.xml',
              'views/sale_view.xml', 'views/account_invoice_view.xml',
-             'data/ir_cron.xml', 'security/block_invoices.xml'],
+             'data/ir_cron.xml', 'data/parameters.xml', 'security/block_invoices.xml'],
     "installable": True
 }
