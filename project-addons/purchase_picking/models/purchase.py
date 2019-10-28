@@ -104,10 +104,19 @@ class PurchaseOrder(models.Model):
                         'currency_id': self.currency_id.id,
                     })
 
+    @api.multi
+    def delete_purchase_lines(self):
+        for order in self:
+            for line in order.order_line:
+                if line.select_delete:
+                    line.unlink()
+
 
 class PurchaseOrderLine(models.Model):
 
     _inherit = 'purchase.order.line'
+
+    select_delete = fields.Boolean(' ')
 
     @api.multi
     def _prepare_stock_moves(self, picking):

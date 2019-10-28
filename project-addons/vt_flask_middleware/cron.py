@@ -5,7 +5,7 @@ def check_sync_data():
     print("DENTRO")
     to_sync_objs = []
     for x in SyncLog.select().where(SyncLog.to_sync == True).\
-            order_by(SyncLog.sync_date).limit(100):
+            order_by(SyncLog.sync_date).limit(300):
         to_sync_objs.append(x)
     print(("LEN: ", len(to_sync_objs)))
     if to_sync_objs:

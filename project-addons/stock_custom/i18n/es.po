@@ -373,3 +373,68 @@ msgstr "Fecha prevista"
 #: model:ir.ui.view,arch_db:stock_custom.view_move_line_tree_add_date
 msgid "Ordered Qty"
 msgstr "Cantidad pedida"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_state
+msgid "Product State"
+msgstr "Estado del producto"
+
+#. module: stock_custom
+#: selection:stock.picking.report,product_state:0
+msgid "Make to order"
+msgstr "Bajo Pedido"
+
+#. module: stock_custom
+#: selection:stock.picking.report,product_state:0
+msgid "Normal"
+msgstr "Normal"
+
+#. module: stock_custom
+#: selection:stock.picking.report,product_state:0
+msgid "End of Lifecycle"
+msgstr "Fin ciclo de vida"
+
+#. module: stock_custom
+#: selection:stock.picking.report,product_state:0
+msgid "Obsolete"
+msgstr "Obsoleto"
+
+#. module: stock_custom
+#: selection:stock.picking.report,product_state:0
+msgid "In Development"
+msgstr "En desarrollo"
+
+#. module: stock_custom
+#: selection:stock.picking.report,state:0
+msgid "New"
+msgstr "Nuevo"
+
+#. module: stock_custom
+#: selection:stock.picking.report,state:0
+msgid "Cancelled"
+msgstr "Cancelado"
+
+#. module: stock_custom
+#: selection:stock.picking.report,state:0
+msgid "Waiting Another Move"
+msgstr "Esperando otro movimiento"
+
+#. module: stock_custom
+#: selection:stock.picking.report,state:0
+msgid "Waiting Availability"
+msgstr "Esperando disponibilidad"
+
+#. module: stock_custom
+#: selection:stock.picking.report,state:0
+msgid "Partially Available"
+msgstr "Parcialmente disponible"
+
+#. module: stock_custom
+#: selection:stock.picking.report,state:0
+msgid "Available"
+msgstr "Reservado"
+
+#. module: stock_custom
+#: selection:stock.picking.report,state:0
+msgid "Done"
+msgstr "Hecho"
