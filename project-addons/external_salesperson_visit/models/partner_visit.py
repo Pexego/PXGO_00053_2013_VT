@@ -54,6 +54,7 @@ class PartnerVisit(models.Model):
     region_ids = fields.Many2many(related='area_id.commercial_region_ids')
     partner_visit_count = fields.Integer(string='Visits', related='partner_id.visit_count', readonly=True)
     partner_visit_current_year = fields.Integer(string='Current year visits', readonly=True, compute='get_visit_current_year')
+    sales_team=fields.Many2one('crm.team', 'Sales Team')
 
     @api.one
     @api.constrains('confirm_done')
@@ -63,7 +64,6 @@ class PartnerVisit(models.Model):
         difference = datetime.strptime(date_now, '%Y-%m-%d %H:%M:%S.%f') - \
                      datetime.strptime(self.visit_date, '%Y-%m-%d %H:%M:%S')
         difference = difference.total_seconds()
-
         if self.confirm_done:
             if difference < 0:
                 raise ValidationError("You cannot confirm the visit because schedule date is after current date")
@@ -127,6 +127,7 @@ class PartnerVisit(models.Model):
             self.area_id = self.partner_id.area_id.id
         else:
             self.area_id = self.partner_id.sudo().commercial_partner_id.area_id.id
+        self.sales_team = self.partner_id.commercial_partner_id.team_id.id
 
     @api.one
     def send_email(self):

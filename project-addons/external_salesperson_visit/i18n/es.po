@@ -194,6 +194,11 @@ msgstr "Cliente"
 
 #. module: external_salesperson_visit
 #: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
+msgid "Sales Team"
+msgstr "Equipo de Ventas"
+
+#. module: external_salesperson_visit
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
 msgid "Salesperson to notify"
 msgstr "Comercial a notificar"
 
