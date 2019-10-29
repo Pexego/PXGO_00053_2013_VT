@@ -264,13 +264,26 @@
             <field name="res_model">res.partner</field>
             <field name="view_type">form</field>
             <field name="view_mode">kanban,tree,form</field>
-            <field name="context">{"'default_web':1, 'default_active':0}</field>
-            <field name="domain">[('web', '=', 1),('active','=',0),('customer','=',1)]</field>
+            <field name="context">{"'search_default_non_active':1}</field>
+            <field name="domain">[('created_by_web','=',1),('dropship','=',0)]</field>
             <field name="search_view_id" ref="base.view_res_partner_filter"/>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 Click to add a web customer in your address book.
               </p>
+            </field>
+        </record>
+
+
+        <record id="res_partner_view_web_search" model="ir.ui.view">
+            <field name="name">View.web.customers</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                 <field name="name" position="after">
+                    <filter name="non_active" string="Non Active"
+                           domain="[('active','=',0)]"/>
+                </field>
             </field>
         </record>
 

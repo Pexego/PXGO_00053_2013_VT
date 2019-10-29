@@ -476,3 +476,14 @@ msgstr "Análisis de venta"
 #: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_graphic
 msgid "Sales Graphic"
 msgstr "Gráfico de ventas"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:517
+#, python-format
+msgid "Prospective customer becomes an active customer"
+msgstr "Cliente potencial pasa a ser activo"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_web_search
+msgid "Non Active"
+msgstr "No activo"
