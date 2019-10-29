@@ -20,6 +20,7 @@
              'views/partner_view.xml',
              'views/product_view.xml',
              'views/sale_view.xml',
-             'security/ir.model.access.csv'],
+             'security/ir.model.access.csv',
+             'data/groups.xml'],
     'installable': True
 }

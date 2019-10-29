@@ -89,6 +89,7 @@ class ResPartner(models.Model):
     property_product_pricelist = fields.\
         Many2one(search="_search_pricelist_name")
 
+
     @api.model
     def _calculate_annual_invoiced(self):
         partner_obj = self.env['res.partner']
@@ -370,6 +371,8 @@ class ResPartner(models.Model):
                                                     domain=[('full_reconcile_id', '=', False),
                                                             ('account_id.internal_type', '=', 'payable'),
                                                             ('move_id.state', '!=', 'draft')])
+    created_by_web=fields.Boolean("Created by web", default=lambda self: self.env['ir.config_parameter'].sudo().get_param('web.user.buyer')==self.env.user.login)
+
 
     @api.model
     def _commercial_fields(self):
@@ -510,6 +513,9 @@ class ResPartner(models.Model):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
             vals['email_web'] = None
+        if not self.active and 'active' in vals:
+            if vals['active']:
+                self.message_post(body=_("Prospective customer becomes an active customer"))
         res = super(ResPartner, self).write(vals)
         if 'lang' in vals and not vals.get('lang', False):
             for partner in self:
@@ -684,8 +690,9 @@ class ResPartner(models.Model):
     @api.onchange('vat')
     def onchange_vat_country_completion(self):
         country_code = self.commercial_partner_id.country_id.code
-        if self.vat[:len(country_code)] != country_code:
-            self.vat = country_code + self.vat
+        if country_code and self.vat and self.is_company:
+            if self.vat[:len(country_code)] != country_code:
+                self.vat = country_code + self.vat
 
     @api.multi
     def open_partner(self):
@@ -727,7 +734,10 @@ class AccountMoveLine(models.Model):
             if line.amount_residual:
                 line.residual_balance = line.amount_residual
             else:
-                line.residual_balance = line.balance
+                if line.balance < 0:
+                    line.residual_balance = line.amount_residual
+                else:
+                    line.residual_balance = line.balance
 
 
 class AccountMove(models.Model):

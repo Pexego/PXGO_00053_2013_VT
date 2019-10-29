@@ -30,6 +30,7 @@
                 'stock_picking_report_valued', 'crm_claim', 'product'],
     "data": [
         "data/report_paperformat.xml",
+        "data/parameters.xml",
         "views/custom_layout.xml",
         "views/stock_custom_report.xml",
         "views/report_sale_order.xml",

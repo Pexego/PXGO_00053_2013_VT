@@ -277,3 +277,8 @@ msgstr "Visite Realizzate"
 #: model:ir.model.fields,field_description:external_salesperson_visit.field_partner_visit_partner_visit_current_year
 msgid "Current year visits"
 msgstr "Visite anno corrente"
+
+#. module: external_salesperson_visit
+#: model:ir.ui.view,arch_db:external_salesperson_visit.partner_visit_search
+msgid "Sales Team"
+msgstr "Team di vendita"
