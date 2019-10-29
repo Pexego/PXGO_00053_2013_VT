@@ -56,6 +56,7 @@ class SaleOrderLine(models.Model):
                     'original_line_id': line.id,
                     'customer_lead': associated.associated_id.sale_delay or 0.0,
                     'tax_id': [(6, 0, tax_ids.ids)],
+                    'discount':associated.discount
                     # TODO: migrar junto con módulo commision_report
                     # 'agent': line.agent.id,
                     # 'commission': line.commission.id
