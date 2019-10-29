@@ -64,7 +64,6 @@ class AccountBankStatementImport(models.TransientModel):
             for record in mergeColumnRecord(disposal.records,
                                             record_index='record_group'):
                 vals_line = {}
-                import ipdb; ipdb.set_trace()
                 unique_val = (
                     record.get('data', '') + record['credito_debito'] +
                     record['amount'] + record['causale'].strip() +
