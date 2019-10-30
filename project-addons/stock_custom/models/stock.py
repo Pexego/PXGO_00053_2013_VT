@@ -39,10 +39,7 @@ class StockPicking(models.Model):
         mov_line_obj = self.env['stock.move.line']
         for picking in self:
             for move in picking.move_lines:
-                if move.product_id.tracking == 'none' and \
-                        move.state == 'assigned' and not move.quantity_done:
-                    move.quantity_done = move.product_uom_qty
-                elif move.product_id.tracking != 'none' and \
+                if move.product_id.tracking != 'none' and \
                         move.state == 'assigned' and not move.quantity_done \
                         and not move.lots_text:
                     for line in move.move_line_ids:

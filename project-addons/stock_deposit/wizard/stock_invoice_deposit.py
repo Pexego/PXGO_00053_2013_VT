@@ -59,7 +59,7 @@ class StockInvoiceDeposit(models.TransientModel):
                 inv_vals['payment_mode_id'] = \
                     sale.partner_id.customer_payment_mode_id.id
             if not inv_vals.get("partner_bank_id", False):
-                inv_vals['payment_mode_id'] = sale.partner_id.bank_ids \
+                inv_vals['partner_bank_id'] = sale.partner_id.bank_ids \
                     and sale.partner_id.bank_ids[0].id or False
             invoice = self.env['account.invoice'].create(inv_vals)
             for line in sale_lines:

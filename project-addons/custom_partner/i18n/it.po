@@ -463,7 +463,7 @@ msgstr "Il formato email non è corretto: "
 
 
 #. module: custom_partner
-#: code:addons/custom_partner/partner.py:517
+#: code:addons/custom_partner/partner.py:519
 #, python-format
 msgid "Prospective customer becomes an active customer"
 msgstr "Cliente potenziale diventa cliente attivo"
