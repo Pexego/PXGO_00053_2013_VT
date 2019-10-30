@@ -42,12 +42,25 @@ msgstr "<span style=\"font-weight: bold; color:#da1f2e\">To: </span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
+msgid "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice\n"
+"                                number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
+"                            <br/>For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
+msgstr "<span style=\"font-weight: bold;\">BITTE VERGESSEN  SIE NICHT, Ihre Bestell- und / oder Rechnungsnummer in Ihrer Überweisungen aufzuschreiben. Damit  Ihre Zahlung korrekt verarbeitet wird.</span>\n"
 "                        <br/>\n"
-"                        For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
-msgstr "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
-"                        <br/>\n"
-"                        For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
+"                        Weitere Informationen zu Ihrer Rechnungsadresse: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<p style=\"font-size: 10px; font-weight: normal;\">Remember that you can now download your"
+"           invoices directly from our website. If you don't have web-access then please request a"
+"           username/password from your Account Manager or click on the following link:<span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>\n"
+"     </p>"
+msgstr "<p style=\"font-size: 10px; font-weight: normal;\">Denken Sie daran, dass Sie jetzt Ihre Rechnungen direkt von unserer Website herunter laden Können."
+"           Wenn Sie keinen Web-Zugang haben, fordern Sie bitte einen an"
+"           Benutzername / Passwort von Ihrem Account Manager oder klicken Sie auf den folgenden link:\n"
+"           <span style="color:#da1f2e;">https://www.visiotechsecurity.com/de/login?view=registration\n"
+"           </span>\n"
+"      </p>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
@@ -982,7 +995,7 @@ msgstr "Gutschrift"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
-msgstr "Remember that you can now download your invoices directly from our website. If you don't have web-access then please request a username/password from your Account Manager or click on the following link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/de/login?view=registration</span>"
+msgstr "Denken Sie daran, dass Sie jetzt Ihre Rechnungen direkt von unserer Website herunter laden Können Wenn Sie keinen Web-Zugang haben, fordern Sie bitte einen an Benutzername / Passwort von Ihrem Account Manager oder klicken Sie auf den folgenden link: <span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document

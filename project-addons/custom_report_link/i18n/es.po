@@ -42,12 +42,25 @@ msgstr "<span style=\"font-weight: bold; color:#da1f2e\">Para: </span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
-"                        <br/>\n"
-"                        For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
-msgstr "<span style=\"font-weight: bold;\">RECUERDE indicar el número de pedido o factura como concepto al realizar el pago por transferencia.</span>\n"
+msgid "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice\n"
+"                                number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
+"                            <br/>For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
+msgstr "<span style=\"font-weight: bold;\">RECUERDE indicar el numero de pedido o factura como concepto al realizar el pago por transferencia.</span>\n"
 "                        <br/>\n"
 "                        Para cualquier consulta sobre esta factura contacte con: <span style=\"color:#da1f2e;\">contabilidad@visiotechsecurity.com</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<p style=\"font-size: 10px; font-weight: normal;\">Remember that you can now download your"
+"           invoices directly from our website. If you don't have web-access then please request a"
+"           username/password from your Account Manager or click on the following link:<span style=\"color:#da1f2e;\">https://www.visiotechsecurity.com/en/login?view=registration</span>\n"
+"     </p>"
+msgstr "<p style=\"font-size: 10px; font-weight: normal;\">Recuerda que puedes descargar tus"
+"                            facturas directamente desde la web. Si no tienes acceso a la web, por favor, pide un"
+"                            usuario/contraseña desde la configuración de tu cuenta o haz click en el siguiente link:\n"
+"                            <span style="color:#da1f2e;">https://www.visiotechsecurity.com/es/login?view=registration\n"
+"                            </span>\n"
+"                        </p>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
