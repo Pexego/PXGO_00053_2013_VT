@@ -44,7 +44,7 @@ class SaleOrderLine(models.Model):
             if sol.product_id:
                 product = sol.product_id
                 incoming_qty = product.incoming_qty + \
-                    product.qty_available_input_loc + product.qty_in_production
+                    product.qty_available_input_loc
             sol.incoming_qty = incoming_qty
 
 

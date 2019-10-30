@@ -89,6 +89,7 @@ class ResPartner(models.Model):
     property_product_pricelist = fields.\
         Many2one(search="_search_pricelist_name")
 
+
     @api.model
     def _calculate_annual_invoiced(self):
         partner_obj = self.env['res.partner']
@@ -370,6 +371,8 @@ class ResPartner(models.Model):
                                                     domain=[('full_reconcile_id', '=', False),
                                                             ('account_id.internal_type', '=', 'payable'),
                                                             ('move_id.state', '!=', 'draft')])
+    created_by_web=fields.Boolean("Created by web", default=lambda self: self.env['ir.config_parameter'].sudo().get_param('web.user.buyer')==self.env.user.login)
+
 
     @api.model
     def _commercial_fields(self):
@@ -510,6 +513,9 @@ class ResPartner(models.Model):
             vals['active'] = False
         if 'web' in vals and not vals['web']:
             vals['email_web'] = None
+        if not self.active and 'active' in vals:
+            if vals['active']:
+                self.message_post(body=_("Prospective customer becomes an active customer"))
         res = super(ResPartner, self).write(vals)
         if 'lang' in vals and not vals.get('lang', False):
             for partner in self:

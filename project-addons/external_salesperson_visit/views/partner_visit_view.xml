@@ -71,6 +71,9 @@
                         <filter string="Day"
                                 name="group_day"
                                 context="{'group_by':'visit_date:day'}"/>
+                        <filter string="Sales Team"
+                                name="group_sales_team"
+                                context="{'group_by':'sales_team'}"/>
                     </group>
                 </search>
             </field>
@@ -105,6 +108,7 @@
                                 <field name="add_user_email"/>
                                 <field name="confirm_done" attrs="{'invisible': [('visit_state', '=', 'log')]}"/>
                                 <field name="email_sent"/>
+                                <field name="sales_team" force_save="1" invisible="1"/>
                             </group>
                             <group name="button_email">
                                 <button string=" Notify by email" name="send_email"
