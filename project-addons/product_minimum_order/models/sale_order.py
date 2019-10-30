@@ -8,15 +8,11 @@ class SaleOrderLine(models.Model):
     @api.multi
     @api.onchange('product_id')
     def product_id_change(self):
-        price=self.price_unit
-        discount=self.discount
+
         res = super(SaleOrderLine, self).product_id_change()
 
         if self.product_id and self.product_uom_qty % self.product_id.sale_in_groups_of != 0:
             self.product_uom_qty = self.product_id.sale_in_groups_of
-        if self.product_id:
-            self.price_unit=price
-            self.discount =discount
 
         return res
 
