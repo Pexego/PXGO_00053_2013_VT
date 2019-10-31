@@ -35,3 +35,9 @@ class PurchaseOrder(models.Model):
     end_manufacture = fields.Date("Ending Date Of Manufacture")
     sale_notes = fields.Text("Purchase Sale Notes")
     remark = fields.Char("Remark")
+    send_date_planned_to_lines = fields.Boolean("Set date to all order lines",default=True)
+
+    def button_confirm(self):
+        if self.send_date_planned_to_lines:
+            self.action_set_date_planned()
+        super().button_confirm()
