@@ -131,6 +131,8 @@ class ProductOutletWizard(models.TransientModel):
             new_product.normal_product_id = self.product_id
         else:
             outlet_product.normal_product_id = product.id
+            if not outlet_product.barcode:
+                outlet_product.barcode=self.ean13
             new_product = outlet_product
         new_product.sale_ok = True
 
