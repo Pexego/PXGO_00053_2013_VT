@@ -12,15 +12,15 @@ class CrmClaim(models.Model):
 
         if claim:
             if claim.stage_id.name != "Pendiente de recibir":
-                message = "The {} is already received".format(claim.number)
-                self.env.user.notify_warning(title="RMA scanned", message=message, sticky=True)
+                message = _("The {} is already received").format(claim.number)
+                self.env.user.notify_warning(message=message, sticky=True)
             else:
                 claim.stage_id = self.env["crm.claim.stage"].search([('name', '=', 'Recibido')])
                 claim.date_received = fields.Date.today()
-                message = "{} received".format(claim.number)
+                message = _("{} received").format(claim.number)
                 self.env.user.notify_info(title="RMA scanned", message=message)
         else:
-            message = "The RMA {} doesn't exists".format(barcode)
+            message = _("The RMA {} doesn't exist").format(barcode)
             self.env.user.notify_warning(message=message, sticky=True)
 
         action = self.env.ref('rma_scanner.crm_claim_rma_scanner')

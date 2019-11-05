@@ -2,7 +2,7 @@
 <odoo>
 
     <record id="crm_claim_rma_scanner" model="ir.actions.act_window">
-        <field name="name">New Scan</field>
+        <field name="name">Scanning RMAs</field>
         <field name="res_model">barcode.action</field>
         <field name="context">{'default_model': 'crm.claim', 'default_method': 'find_claim_by_number_using_barcode'}</field>
         <field name="view_mode">form</field>
@@ -10,7 +10,7 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="menu_find_rmas" name="Find RMAs"
+    <menuitem id="menu_find_rmas" name="Scan RMAs"
         action="crm_claim_rma_scanner"
         parent="crm_claim_rma.menu_sat"/>
 </odoo>
