@@ -44,7 +44,11 @@ class StockPicking(models.Model):
                         and not move.lots_text:
                     for line in move.move_line_ids:
                         line.qty_done = line.product_uom_qty
-                if move.lots_text:
+                if move.product_id.tracking == 'none' and \
+                        move.state == 'assigned' and \
+                        not move.quantity_done and not picking.block_picking:
+                    move.quantity_done = move.product_uom_qty
+                elif move.lots_text:
                     txlots = move.lots_text.split(',')
                     if len(txlots) != len(move.move_line_ids):
                         quantity = len(txlots) - len(move.move_line_ids)
