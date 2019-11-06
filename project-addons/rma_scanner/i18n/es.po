@@ -1,0 +1,50 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * rma_scanner
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-10-05 13:26+0000\n"
+"PO-Revision-Date: 2019-10-05 13:26+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: rma_scanner
+#: code:addons/rma_scanner/models/crm_claim.py:15
+#, python-format
+msgid "The {} is already received"
+msgstr "El {} ya está recibido"
+
+#. module: rma_scanner
+#: code:addons/rma_scanner/models/crm_claim.py:20
+#, python-format
+msgid "{} received"
+msgstr "{} recibido"
+
+#. module: rma_scanner
+#: code:addons/rma_scanner/models/crm_claim.py:23
+#, python-format
+msgid "The RMA {} doesn't exist"
+msgstr "El RMA {} no existe"
+
+#. module: rma_scanner
+#: code:addons/rma_scanner/models/crm_claim.py:21
+#, python-format
+msgid "RMA scanned"
+msgstr "RMA escaneado"
+
+#. module: rma_scanner
+#: model:ir.ui.menu,name:rma_scanner.menu_find_rmas
+msgid "Scan RMAs"
+msgstr "Escanear RMAs"
+
+#. module: rma_scanner
+#: model:ir.actions.act_window,name:rma_scanner.crm_claim_rma_scanner
+msgid "Scanning RMAs"
+msgstr "Escaneando RMAs"
