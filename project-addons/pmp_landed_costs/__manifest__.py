@@ -12,6 +12,7 @@
                 'stock_account',
                 'transportation'],
     "data": ['views/stock_landed_costs_view.xml',
-             'views/product_view.xml'],
+             'views/product_view.xml',
+             'views/hs_code_view.xml'],
     "installable": True
 }
