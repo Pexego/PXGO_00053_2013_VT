@@ -63,7 +63,6 @@ class SaleOrderLine(models.Model):
                 }
                 new_line = self.create(args_line)
                 new_line.product_id_change()
-                new_line.discount=associated.discount
         return line
 
     @api.multi
