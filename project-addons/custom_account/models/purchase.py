@@ -44,6 +44,6 @@ class PurchaseOrder(models.Model):
             for line in order.order_line:
                 if line.product_id.default_code =="----- PTE NOMBRE -----":
                     raise UserError(_("An order cannot be confirmed with a product called \"")+line.product_id.default_code+"\"")
-                if order.send_date_planned_to_lines:
-                    order.action_set_date_planned()
+            if order.send_date_planned_to_lines:
+                order.action_set_date_planned()
         return super().button_confirm()
