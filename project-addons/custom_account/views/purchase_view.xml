@@ -16,6 +16,7 @@
                             help="This changes the scheduled date of all order lines to the given date"
                             class="fa fa-calendar o_icon_button oe_edit_only"/>
                     </div>
+                    <field name="send_date_planned_to_lines" string="Set date to all order lines"/>
                     <field name="remark" string="Remark"/>
                 </field>
                 <field name="picking_type_id" position="before">
