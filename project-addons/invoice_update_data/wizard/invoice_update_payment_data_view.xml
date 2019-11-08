@@ -1,0 +1,61 @@
+<odoo>
+
+     <record id="update_invoice_payment_data_wizard_info" model="ir.ui.view">
+        <field name="name">Update invoice payment data info</field>
+        <field name="model">invoice.update.payment.data</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form name="update_info" string="Update info">
+                <group>
+                    <field name="info" nolabel="1" colspan="4"/>
+                </group>
+            </form>
+            <footer>
+                <button string="Close" class="oe_link" special="cancel"/>
+            </footer>
+        </field>
+    </record>
+
+     <record id="update_invoice_payment_data_wizard_form" model="ir.ui.view">
+        <field name="name">Update invoice payment data form</field>
+        <field name="model">invoice.update.payment.data</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form name="update_invoice_data" string="Update invoice payment data">
+                <group>
+                    <field name="action"/>
+                    <field name="partner_id"/>
+                    <field name="option"/>
+                    <field name="partner_invoices_filtered" mode="tree" attrs="{'invisible': [('option', '!=', 'select_invoices')]}">
+                        <tree string="Invoices" editable="top">
+                            <field name="invoice_id"
+                                   domain="[('partner_id', 'child_of', parent.partner_id),('state', '=', 'open')]"
+                                   options="{'no_quick_create':True,'no_create_edit':True}"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button name="update_invoice_data" string="Update"
+                            type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_update_invoice_payment_data" model="ir.actions.act_window">
+        <field name="name">Update invoice payment data</field>
+        <field name="res_model">invoice.update.payment.data</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="update_invoice_payment_data_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_update_invoice_payment_data"
+                action="action_update_invoice_payment_data"
+                parent="payment.root_payment_menu"
+                groups="base.group_no_one"/>
+
+</odoo>
