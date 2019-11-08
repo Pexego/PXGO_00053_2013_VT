@@ -59,7 +59,7 @@ class AccountInvoice(models.Model):
                     mapped('purchase_line_id')
                 if purchase_lines:
                     moves = self.env['stock.move'].search([
-                        ('purchase_line_id', '=', purchase_lines.ids),
+                        ('purchase_line_id', 'in', purchase_lines.ids),
                         ('state', '=', 'done')])
                     for picking in moves.mapped('picking_id'):
                         if picking.pending_invoice_move_id and \
