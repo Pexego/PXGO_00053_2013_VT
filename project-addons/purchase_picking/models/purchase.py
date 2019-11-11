@@ -31,6 +31,24 @@ class PurchaseOrder(models.Model):
 
     date_planned = fields.Datetime(string='Scheduled Date', compute='', store=True, index=True)
 
+    total_no_disc = fields.Float(compute='_get_total', store=True, readonly=True, string='Amount without disc.')
+
+    total_disc = fields.Float(compute='_get_amount_discount', store=True, readonly=True, string='Disc. amount')
+
+    @api.multi
+    @api.depends('order_line.price_subtotal')
+    def _get_total(self):
+        for order in self:
+            for line in order.order_line:
+                order.total_no_disc += line.product_qty * line.price_unit
+
+    @api.multi
+    @api.depends('order_line.price_subtotal')
+    def _get_amount_discount(self):
+        for order in self:
+            for line in order.order_line:
+                order.total_disc += (line.product_qty * line.price_unit) - line.price_subtotal
+
     @api.multi
     def test_moves_done(self):
         '''PO is done at the delivery side if all the incoming shipments

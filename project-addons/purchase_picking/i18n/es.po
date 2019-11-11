@@ -323,3 +323,13 @@ msgstr "Aviso"
 #, python-format
 msgid "There is any move line without associated picking"
 msgstr "No hay ninguna línea de movimiento sin albarán asociado"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_total_no_disc
+msgid "Amount without disc."
+msgstr "Importe sin desc."
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_total_disc
+msgid "Disc. amount"
+msgstr "Importe desc."
