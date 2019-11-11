@@ -1,7 +1,8 @@
 # Copyright 2019 Omar Castiñeira, Comunitea Servicios Tecnológicos S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import fields, models
+from odoo import fields, models, exceptions, _, api
+import re
 
 
 class ProductProduct(models.Model):
@@ -23,3 +24,10 @@ class HSCode(models.Model):
     _inherit = "hs.code"
 
     tariff = fields.Float('Tariff', digits=(16, 2))
+
+    @api.constrains('local_code')
+    def check_hs_code(self):
+        for code in self:
+            if not re.match('^[0-9]{6}([0-9])?([0-9])?(\.[0-9])?([0-9])?$', code.local_code):
+                message = _('The HS Code format is incorrect')
+                raise exceptions.ValidationError(message)

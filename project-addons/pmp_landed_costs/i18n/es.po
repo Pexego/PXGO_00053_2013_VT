@@ -91,3 +91,9 @@ msgstr "Peso"
 #: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_forwarder_invoice
 msgid "Forwarder Invoice"
 msgstr "Factura del transitario"
+
+#. module: pmp_landed_costs
+#: code:addons/pmp_landed_costs/models/product.py:32
+#, python-format
+msgid "The hs code format is incorrect"
+msgstr "El formato del HS Code es incorrecto"
