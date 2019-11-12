@@ -144,6 +144,12 @@ class StockMove(models.Model):
 
     @api.multi
     def write(self, vals):
+        for move in self:
+            if 'product_uom_qty' in vals and vals['product_uom_qty'] < move.product_uom_qty:
+                move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
+            elif 'product_uom_qty' in vals and vals['product_uom_qty'] > move.product_uom_qty:
+                raise exceptions.Warning(_('Impossible to increase the quantity'))
+
         res = super(StockMove, self).write(vals)
         for move in self:
             move.refresh()
