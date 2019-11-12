@@ -333,3 +333,9 @@ msgstr "Importe sin desc."
 #: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_total_disc
 msgid "Disc. amount"
 msgstr "Importe desc."
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_container_ids
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_container_ids
+msgid "Containers"
+msgstr "Contenedores"

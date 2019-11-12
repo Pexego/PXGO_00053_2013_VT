@@ -53,6 +53,9 @@
                 <field name="total_no_disc" widget="monetary"/>
                 <field name="total_disc" widget="monetary"/>
             </field>
+            <field name="partner_ref" position="after">
+                <field name="container_ids" widget="many2many_tags" readonly="1"/>
+            </field>
         </field>
     </record>
 

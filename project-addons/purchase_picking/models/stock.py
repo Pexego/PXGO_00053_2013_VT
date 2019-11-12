@@ -98,6 +98,7 @@ class StockPicking(models.Model):
     usage = fields.Char(compute='_get_usage')
     shipping_identifier = fields.Char('Shipping identifier', size=64)
     temp = fields.Boolean("Temp.")
+    container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers')
 
     @api.multi
     def _get_usage(self):
@@ -117,6 +118,14 @@ class StockPicking(models.Model):
                     move.state = "draft"
                     move.picking_id = False
         return super(StockPicking, self).action_cancel()
+
+    @api.multi
+    def _get_containers(self):
+        for picking in self:
+            res = []
+            for move in picking.move_lines:
+                res.append(move.container_id.id)
+            picking.container_ids = res
 
 
 class StockMove(models.Model):

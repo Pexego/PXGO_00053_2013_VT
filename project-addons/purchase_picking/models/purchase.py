@@ -35,6 +35,17 @@ class PurchaseOrder(models.Model):
 
     total_disc = fields.Float(compute='_get_amount_discount', store=True, readonly=True, string='Disc. amount')
 
+    container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers')
+
+    @api.multi
+    def _get_containers(self):
+        for order in self:
+            res = []
+            for line in order.order_line:
+                for move in line.move_ids:
+                    res.append(move.container_id.id)
+            order.container_ids = res
+
     @api.multi
     @api.depends('order_line.price_subtotal')
     def _get_total(self):
