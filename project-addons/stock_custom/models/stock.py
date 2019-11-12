@@ -140,7 +140,7 @@ class StockMove(models.Model):
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()
         for move in self:
-            if move.picking_id.state == 'draft':
+            if move.picking_id.state == 'draft' or (move.picking_id.state in ('confirmed', 'assigned') and move.picking_id.picking_type_id.code == 'incoming'):
                 move.is_initial_demand_editable = True
 
     def _compute_responsible(self):
