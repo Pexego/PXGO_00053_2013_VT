@@ -145,7 +145,7 @@ class StockMove(models.Model):
     @api.multi
     def write(self, vals):
         for move in self:
-            if vals.get('product_uom_qty', False):
+            if 'product_uom_qty' in vals:
                 if move.product_uom_qty > vals['product_uom_qty'] > 0:
                     move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
                 elif vals['product_uom_qty'] > move.product_uom_qty:
