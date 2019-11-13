@@ -335,3 +335,10 @@ msgstr "Contenitori"
 #, python-format
 msgid "Impossible to increase the quantity"
 msgstr "Impossibile aumentare la quantità"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/models/stock.py:151
+#, python-format
+msgid "Impossible to decrease the quantity to 0"
+msgstr "Impossibile modificare la quantità su 0"
+
