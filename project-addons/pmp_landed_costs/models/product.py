@@ -28,6 +28,6 @@ class HSCode(models.Model):
     @api.constrains('local_code')
     def check_hs_code(self):
         for code in self:
-            if not re.match('^[0-9]{6}([0-9])?([0-9])?(\.[0-9])?([0-9])?$', code.local_code):
+            if not re.match('^[0-9]{8}\.[0-9]{2}$', code.local_code):
                 message = _('The HS Code format is incorrect')
                 raise exceptions.ValidationError(message)
