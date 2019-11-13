@@ -10,4 +10,16 @@
             </field>
         </field>
     </record>
+
+    <!-- Action for H.S. code -->
+    <record id="hs_code_action" model="ir.actions.act_window">
+        <field name="name">H.S. Codes</field>
+        <field name="res_model">hs.code</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu entry for H.S. code -->
+    <menuitem id="hs_code_menu" action="hs_code_action"
+        parent="sale.product_menu_catalog" sequence="60"/>
+
 </odoo>
