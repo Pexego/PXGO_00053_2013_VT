@@ -240,6 +240,11 @@ msgid "Nothing to Invoice"
 msgstr "Niente da fatturare"
 
 #. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_available
+msgid "Real Stock"
+msgstr "Stock Reale"
+
+#. module: sale_display_stock
 #: selection:sale.order.line.report,invoice_status_2:0
 msgid "Partially invoiced"
 msgstr "Parzialmente fatturato"
