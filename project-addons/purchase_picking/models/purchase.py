@@ -19,7 +19,7 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
-from odoo.exceptions import except_orm
+from odoo.exceptions import except_orm,UserError
 from odoo.tools.float_utils import float_is_zero, float_compare
 
 
@@ -72,6 +72,11 @@ class PurchaseOrder(models.Model):
                                    ('picking_id', '=', False)])
         if len(move_lines) < 1:
             raise except_orm(_('Warning'), _('There is any move line without associated picking'))
+
+        for line in self.order_line:
+            if line.product_id.default_code == "----- PTE NOMBRE -----":
+                raise UserError(
+                    _("A picking cannot be created with a product called \"") + line.product_id.default_code + "\"")
 
         result['context'] = []
         if len(move_lines) > 1:
