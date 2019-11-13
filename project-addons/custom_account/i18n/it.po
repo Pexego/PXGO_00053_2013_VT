@@ -26,8 +26,8 @@ msgstr "\n"
 #. module: custom_account
 #: code:addons/custom_account/models/purchase.py:44
 #, python-format
-msgid "An order cannot be confirmed with a product called \""
-msgstr "Un ordine non può essere confermato con un prodotto chiamato \""
+msgid "A picking cannot be created with a product called \""
+msgstr "Una bolla di consegna non può essere creato con un prodotto chiamato \""
 
 #. module: custom_account
 #: code:addons/custom_account/models/account_payment_order.py:22
