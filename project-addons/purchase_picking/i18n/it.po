@@ -329,3 +329,9 @@ msgstr 'Non vi è alcuna linea di movimento senza bolla di consegna associata"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_container_ids
 msgid "Containers"
 msgstr "Contenitori"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/models/stock.py:151
+#, python-format
+msgid "Impossible to increase the quantity"
+msgstr "Impossibile aumentare la quantità"

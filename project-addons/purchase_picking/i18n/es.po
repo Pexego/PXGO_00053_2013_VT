@@ -339,3 +339,9 @@ msgstr "Importe desc."
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_container_ids
 msgid "Containers"
 msgstr "Contenedores"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/models/stock.py:151
+#, python-format
+msgid "Impossible to increase the quantity"
+msgstr "Imposible incrementar la cantidad"
