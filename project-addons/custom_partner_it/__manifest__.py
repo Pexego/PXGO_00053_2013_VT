@@ -19,13 +19,12 @@
 ##############################################################################
 
 {
-    'name': "Partner custom",
+    'name': "Partner custom it",
     'version': '1.0',
     'category': 'Custom',
     'description': """Several little customizations in partners""",
-    'author': 'Comunitea Servicios Tecnológicos',
-    'website': 'www.comunitea.com',
-    "depends": ['custom_partner'],
+    'author': 'Alberto Cañal',
+    "depends": ['custom_partner','l10n_it_fatturapa'],
     "data": ["views/partner_view.xml"],
     "installable": True
 }
