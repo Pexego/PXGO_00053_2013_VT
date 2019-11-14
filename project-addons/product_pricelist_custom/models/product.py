@@ -164,18 +164,17 @@ class ProductProduct(models.Model):
     @api.model
     def create(self, vals):
         product_id = super().create(vals)
-        base_pricelists = self.env['product.pricelist'].search([('base_pricelist', '=', True)],
-                                                               order='sequence asc, id asc')
-
-        items = []
-        for pricelist in base_pricelists:
-            items.append((0, 0, {'pricelist_id': pricelist.id,
-                                 'pricelist_calculated': pricelist.pricelist_related_default and
-                                                         pricelist.pricelist_related_default.id or False,
-                                 'product_id': product_id.id,
-                                 'applied_on': '1_product'}))
-
-        product_id.write({'item_ids': items})
+        if not self.env.context.get('sync_db', False):
+            base_pricelists = self.env['product.pricelist'].search([('base_pricelist', '=', True)],
+                                                                   order='sequence asc, id asc')
+            items = []
+            for pricelist in base_pricelists:
+                items.append((0, 0, {'pricelist_id': pricelist.id,
+                                     'pricelist_calculated': pricelist.pricelist_related_default and
+                                                             pricelist.pricelist_related_default.id or False,
+                                     'product_id': product_id.id,
+                                     'applied_on': '1_product'}))
+            product_id.write({'item_ids': items})
         return product_id
 
     @api.multi

@@ -1,7 +1,6 @@
 # Copyright 2019 Omar Castiñeira, Comunitea Servicios Tecnológicos S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import fields,api, models, _
-from odoo.exceptions import UserError
+from odoo import fields,api, models, _, exceptions
 
 
 class PurchaseOrder(models.Model):
@@ -41,9 +40,6 @@ class PurchaseOrder(models.Model):
     @api.multi
     def button_confirm(self):
         for order in self:
-            for line in order.order_line:
-                if line.product_id.default_code =="----- PTE NOMBRE -----":
-                    raise UserError(_("An order cannot be confirmed with a product called \"")+line.product_id.default_code+"\"")
             if order.send_date_planned_to_lines:
                 order.action_set_date_planned()
         return super().button_confirm()
