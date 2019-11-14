@@ -87,6 +87,8 @@ class SaleOrder(models.Model):
                     margin_adj = round((margin * 100) / purchase_price, 2)
                 else:
                     margin_adj = round((margin * 100) / sale_price, 2)
+            if margin_adj == 0.0:
+                margin_adj = self.margin_rappel
             if margin_adj < int(margin_limit) and not self.allow_confirm_blocked_magreb:
                 # we use the same check to aprove that magreb
                 message = _('Order blocked. Approve pending, margin is below the limits.')

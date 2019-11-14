@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_invoice_update_payment_data,access_invoice_update_payment_data,model_invoice_update_payment_data,account.group_account_manager,1,1,1,0
+access_invoice_update_payment_data_invoices,access_invoice_update_payment_data_invoices,model_invoice_update_payment_data_invoices,account.group_account_manager,1,1,1,0

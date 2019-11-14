@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hs_code_form" model="ir.ui.view">
+        <field name="name">hs.code.form</field>
+        <field name="model">hs.code</field>
+        <field name="inherit_id" ref="product_harmonized_system.hs_code_view_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <field name="tariff"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- Action for H.S. code -->
+    <record id="hs_code_action" model="ir.actions.act_window">
+        <field name="name">H.S. Codes</field>
+        <field name="res_model">hs.code</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menu entry for H.S. code -->
+    <menuitem id="hs_code_menu" action="hs_code_action"
+        parent="sale.product_menu_catalog" sequence="60"/>
+
+</odoo>

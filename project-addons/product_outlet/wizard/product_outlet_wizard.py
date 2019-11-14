@@ -119,7 +119,7 @@ class ProductOutletWizard(models.TransientModel):
                  'default_code': product.default_code +
                                  categ_obj.browse(int(self.categ_id)).name,
                  'image_medium': product.image_medium,
-                 'ean13': self.ean13 or False})
+                 'barcode': self.ean13 or False})
             categ = self.env['product.category'].browse(int(self.categ_id))
             tag = self.env['product.tag'].search([('name', '=',
                                                    categ.name)])
@@ -131,6 +131,8 @@ class ProductOutletWizard(models.TransientModel):
             new_product.normal_product_id = self.product_id
         else:
             outlet_product.normal_product_id = product.id
+            if not outlet_product.barcode:
+                outlet_product.barcode=self.ean13
             new_product = outlet_product
         new_product.sale_ok = True
 

@@ -33,7 +33,7 @@ log.addHandler(h)
 
 def run_middleware():
     scheduler = BackgroundScheduler()
-    scheduler.add_job(cron.check_sync_data, 'interval', minutes=1)
+    scheduler.add_job(cron.check_sync_data, 'interval', seconds=30)
     # Explicitly kick off the background thread
     scheduler.start()
 
