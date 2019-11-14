@@ -100,6 +100,13 @@ class StockPicking(models.Model):
     temp = fields.Boolean("Temp.")
     container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers')
 
+    @api.model
+    def create(self, vals):
+        res = super().create(vals)
+        if not res.shipping_identifier:
+            res.shipping_identifier = ''.join(res.container_ids.mapped('name'))
+        return res
+
     @api.multi
     def _get_usage(self):
         for pick in self:
