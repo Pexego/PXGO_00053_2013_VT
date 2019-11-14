@@ -11,19 +11,7 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     description_editable_related = fields.Boolean(related='product_id.description_editable', readonly=1)
-    residual_balance = fields.Float("Residual Balance", compute='_get_residual_balance')
 
-    @api.multi
-    def _get_residual_balance(self):
-        for line in self:
-            if line.amount_residual:
-                line.residual_balance = line.amount_residual
-            else:
-                if line.balance < 0:
-                    line.residual_balance = line.amount_residual
-                else:
-                    line.residual_balance = line.balance
-                    
     def write(self, vals):
         for line in self:
             if vals.get('product_id', False):
