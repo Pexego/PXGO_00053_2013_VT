@@ -323,3 +323,31 @@ msgstr "Aviso"
 #, python-format
 msgid "There is any move line without associated picking"
 msgstr "No hay ninguna línea de movimiento sin albarán asociado"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_total_no_disc
+msgid "Amount without disc."
+msgstr "Importe sin desc."
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_total_disc
+msgid "Disc. amount"
+msgstr "Importe desc."
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_container_ids
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_container_ids
+msgid "Containers"
+msgstr "Contenedores"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/models/stock.py:151
+#, python-format
+msgid "Impossible to increase the quantity"
+msgstr "Imposible incrementar la cantidad"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/models/stock.py:151
+#, python-format
+msgid "Impossible to decrease the quantity to 0"
+msgstr "Imposible cambiar la cantidad a 0"
