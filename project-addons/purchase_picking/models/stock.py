@@ -103,7 +103,7 @@ class StockPicking(models.Model):
     @api.model
     def create(self, vals):
         res = super().create(vals)
-        if not res.shipping_identifier:
+        if not res.shipping_identifier and res.container_ids:
             res.shipping_identifier = ''.join(res.container_ids.mapped('name'))
         return res
 
@@ -131,7 +131,8 @@ class StockPicking(models.Model):
         for picking in self:
             res = []
             for move in picking.move_lines:
-                res.append(move.container_id.id)
+                if move.container_id:
+                    res.append(move.container_id.id)
             picking.container_ids = res
 
 
@@ -152,7 +153,7 @@ class StockMove(models.Model):
     @api.multi
     def write(self, vals):
         for move in self:
-            if 'product_uom_qty' in vals:
+            if 'product_uom_qty' in vals and self.purchase_line_id and self.picking_id and 'origin' not in vals:
                 if move.product_uom_qty > vals['product_uom_qty'] > 0:
                     move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
                 elif vals['product_uom_qty'] > move.product_uom_qty:
