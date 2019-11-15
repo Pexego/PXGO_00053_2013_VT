@@ -41,9 +41,9 @@ class ResPartner(models.Model):
                 date_maturity = aml.date_maturity or aml.date
                 if not worst_due_date or date_maturity < worst_due_date:
                     worst_due_date = date_maturity
-                amount_due += aml.balance
+                amount_due += aml.amount_residual
                 if date_maturity <= current_date:
-                    amount_overdue += aml.balance
+                    amount_overdue += aml.amount_residual
 
             partner.payment_amount_overdue = amount_overdue
             partner.payment_earliest_due_date = worst_due_date
