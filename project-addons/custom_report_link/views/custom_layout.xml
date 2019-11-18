@@ -1058,7 +1058,7 @@ SWIFT/BIC: BESCPTPL
                         }
                     </script>
 
-                    <t t-if="'Recibo domiciliado' in o.expiration_dates_str">
+                    <t t-if="'Recibo domiciliado' in o.payment_mode_id.note">
                         <t t-if="o.payment_mode_id.note">
                             <strong>Payment Mode:</strong>
                             <pre style="font-size:12px; color:#6D6E70; background-color: #F1F1F2"
@@ -1072,7 +1072,7 @@ SWIFT/BIC: BESCPTPL
                         <script>shortText1()</script>
                     </t>
 
-                    <t t-if="'Recibo domiciliado' not in o.expiration_dates_str and lang">
+                    <t t-if="'Recibo domiciliado' not in o.payment_mode_id.note and lang">
                         <strong>Destination Account:</strong>
                         <t t-if="country_code == 'IT'"><!-- Esto es para Odoo Italia -->
                             <pre style="font-size:12px; color:#6D6E70;">
