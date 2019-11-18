@@ -10,8 +10,11 @@
     'website': 'www.comunitea.com',
     "depends": ['stock_landed_costs',
                 'stock_account',
-                'transportation'],
+                'transportation',
+                'product_harmonized_system',
+                'purchase'],
     "data": ['views/stock_landed_costs_view.xml',
-             'views/product_view.xml'],
+             'views/product_view.xml',
+             'views/hs_code_view.xml'],
     "installable": True
 }

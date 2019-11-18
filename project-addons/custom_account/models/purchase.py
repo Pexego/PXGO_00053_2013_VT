@@ -1,6 +1,6 @@
 # Copyright 2019 Omar Castiñeira, Comunitea Servicios Tecnológicos S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import fields, models, _, exceptions
+from odoo import fields,api, models, _, exceptions
 
 
 class PurchaseOrder(models.Model):
@@ -35,3 +35,11 @@ class PurchaseOrder(models.Model):
     end_manufacture = fields.Date("Ending Date Of Manufacture")
     sale_notes = fields.Text("Purchase Sale Notes")
     remark = fields.Char("Remark")
+    send_date_planned_to_lines = fields.Boolean("Set date to all order lines",default=True)
+
+    @api.multi
+    def button_confirm(self):
+        for order in self:
+            if order.send_date_planned_to_lines:
+                order.action_set_date_planned()
+        return super().button_confirm()

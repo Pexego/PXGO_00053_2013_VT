@@ -1,0 +1,97 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* invoice_update_data
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-11-08 08:30+0000\n"
+"PO-Revision-Date: 2019-11-08 08:30+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: invoice_update_data
+#: model:ir.model.fields,field_description:invoice_update_data.field_invoice_update_payment_data_action
+msgid "Action"
+msgstr "Azione"
+
+#. module: invoice_update_data
+#: selection:invoice.update.payment.data,action:0
+msgid "Update to debit receipt"
+msgstr "Aggiornare a ricevuta di debito"
+
+#. module: invoice_update_data
+#: selection:invoice.update.payment.data,action:0
+msgid "Update valid mandate"
+msgstr "Aggiornare mandato valido"
+
+#. module: invoice_update_data
+#: model:ir.model.fields,field_description:invoice_update_data.field_invoice_update_payment_data_partner_id
+msgid "Partner"
+msgstr "Partner"
+
+#. module: invoice_update_data
+#: model:ir.model.fields,field_description:invoice_update_data.field_invoice_update_payment_data_option
+msgid "Option"
+msgstr "Opzioni"
+
+#. module: invoice_update_data
+#: selection:invoice.update.payment.data,option:0
+msgid "All open invoices"
+msgstr "Tutte le fatture aperte"
+
+#. module: invoice_update_data
+#: selection:invoice.update.payment.data,option:0
+msgid "Select invoices"
+msgstr "Seleziona fatture"
+
+#. module: invoice_update_data
+#: model:ir.model.fields,field_description:invoice_update_data.field_invoice_update_payment_data_partner_invoices_filtered
+#: view:invoice.update.payment.data:invoice_update_data.update_invoice_payment_data_wizard_form
+msgid "Invoices"
+msgstr "Fatture"
+
+#. module: invoice_update_data
+#: model:ir.model.fields,field_description:invoice_update_data.field_invoice_update_payment_data_invoices_invoice_id
+msgid "Invoice"
+msgstr "Fattura"
+
+#. module: invoice_update_data
+#: model:ir.model.fields,field_description:invoice_update_data.field_invoice_update_payment_data_info
+msgid "Information"
+msgstr "Informazioni"
+
+#. module: invoice_update_data
+#: code:addons/invoice_update_data/models/invoice_update_payment_data.py:46
+#, python-format
+msgid "There is not a valid mandate for this partner"
+msgstr "Non esiste un mandato valido per questo partner"
+
+#. module: invoice_update_data
+#: code:addons/invoice_update_data/models/invoice_update_payment_data.py:46
+#, python-format
+msgid "Updated invoices: %s"
+msgstr "Fatture aggiornate: %s"
+
+#. module: invoice_update_data
+#: code:addons/invoice_update_data/models/invoice_update_payment_data.py:46
+#, python-format
+msgid "Info changes"
+msgstr "Informazioni modifiche"
+
+#. module: invoice_update_data
+#: view:invoice.update.payment.data:invoice_update_data.update_invoice_payment_data_wizard_info
+msgid "Close"
+msgstr "Chiudere"
+
+#. module: invoice_update_data
+#: model:ir.actions.act_window,name:invoice_update_data.action_update_invoice_payment_data
+#: model:ir.ui.menu,name:invoice_update_data.menu_update_invoice_payment_data
+msgid "Update invoice payment data"
+msgstr "Aggiorna la modalità di pagamento della fattura"
+

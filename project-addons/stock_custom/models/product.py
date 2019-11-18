@@ -32,7 +32,14 @@ class ProductTemplate(models.Model):
     name = fields.Char(translate=False)
     description_sale = fields.Text(translate=False)
 
+    # this doesn't seem to work
     property_valuation = fields.Selection(default='real_time')
+
+    @api.model
+    def create(self, vals):
+        prod = super().create(vals)
+        prod.property_valuation = 'real_time'
+        return prod
 
 
 class ProductProduct(models.Model):
