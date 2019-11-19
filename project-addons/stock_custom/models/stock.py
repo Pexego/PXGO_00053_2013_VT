@@ -167,16 +167,13 @@ class StockMove(models.Model):
             move.real_stock = move.product_id.qty_available
 
     def _compute_dates(self):
-        product_id = self.env.context.get('active_id')
-        if product_id:
-            for move in self:
-                if move.product_id.id==product_id:
-                    if move.picking_id:
-                        move.date_reliability="high"
-                    elif move.container_id:
-                        move.date_reliability="medium"
-                    else:
-                        move.date_reliability="low"
+        for move in self:
+            if move.picking_id:
+                move.date_reliability="high"
+            elif move.container_id:
+                move.date_reliability="medium"
+            else:
+                move.date_reliability="low"
 
     @api.multi
     def _action_done(self):
