@@ -66,11 +66,8 @@ class SaleOrderLineReport(models.Model):
         ],
         'Order invoice status', readonly=True)
     incoming_qty = fields.Float('Incoming', related='product_id.incoming_qty')
-    qty_available = fields.Float('Real Stock', related='product_id.qty_available', search='_search_qty_conservative')
+    qty_available = fields.Float('Real Stock', related='product_id.qty_available', search='_search_qty_available')
     company_id = fields.Many2one("res.company", "Company", readonly=True)
-
-    def _search_qty_conservative(self,operator,value):
-        return [('product_id.qty_conservative', operator, value)]
 
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
