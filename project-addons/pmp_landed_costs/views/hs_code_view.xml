@@ -20,6 +20,6 @@
 
     <!-- Menu entry for H.S. code -->
     <menuitem id="hs_code_menu" action="hs_code_action"
-        parent="sale.product_menu_catalog" sequence="60"/>
+        parent="purchase.menu_product_in_config_purchase" sequence="3"/>
 
 </odoo>

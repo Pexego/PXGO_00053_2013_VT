@@ -245,7 +245,8 @@
                 <field name="date_maturity" readonly="True"/>
                 <field name="matched_debit_ids" readonly="True"/>
                 <field name="matched_credit_ids" readonly="True"/>
-                <field name="balance" readonly="True"/>
+                <field name="residual_balance" readonly="True" sum="Total balance"/>
+                <field name="balance" invisible="1" readonly="True"/>
             </tree>
         </field>
     </record>
