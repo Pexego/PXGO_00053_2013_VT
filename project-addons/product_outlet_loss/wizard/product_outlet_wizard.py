@@ -86,10 +86,26 @@ class ProductOutletWizard(models.TransientModel):
                                                             (1 - (category_selected.percent / 100))
                     standard_price_outlet = self.product_id.standard_price * (1 - (category_selected.percent / 100))
                     standard_price_outlet_2 = self.product_id.standard_price_2 * (1 - (category_selected.percent / 100))
+                    list_updated_price = outlet_product.get_list_updated_prices()
                     values = {
                         'standard_price': standard_price_outlet,
                         'standard_price_2': standard_price_outlet_2,
                         'commercial_cost': self.commercial_cost,
+                        'list_price1':list_updated_price['list_price1'],
+                        'list_price2': list_updated_price['list_price2'],
+                        'list_price3': list_updated_price['list_price3'],
+                        'list_price4': list_updated_price['list_price4'],
+                        'pvd1_price': list_updated_price['pvd1_price'],
+                        'pvd2_price': list_updated_price['pvd2_price'],
+                        'pvd3_price': list_updated_price['pvd3_price'],
+                        'pvd4_price': list_updated_price['pvd4_price'],
+                        'pvi1_price': list_updated_price['pvi1_price'],
+                        'pvi2_price': list_updated_price['pvi2_price'],
+                        'pvi3_price': list_updated_price['pvi3_price'],
+                        'pvi4_price': list_updated_price['pvi4_price'],
+                        'pvm1_price': list_updated_price['pvm1_price'],
+                        'pvm2_price': list_updated_price['pvm2_price'],
+                        'pvm3_price': list_updated_price['pvm3_price']
                     }
                     outlet_product.write(values)
 
