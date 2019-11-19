@@ -61,7 +61,7 @@ msgid "Stock Valuation Adjustment Lines"
 msgstr "Linee di adeguamento della valutazione delle scorte"
 
 #. module: pmp_landed_costs
-#: model:ir.model.fields,field_description:pmp_landed_costs.field_product_product_tariff
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_hs_code_tariff
 #: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_tariff
 msgid "Tariff"
 msgstr "Tariff"
@@ -91,3 +91,8 @@ msgstr "Peso"
 #: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_forwarder_invoice
 msgid "Forwarder Invoice"
 msgstr "Fattura dello spedizioniere"
+
+#. module: pmp_landed_costs
+#: code:addons/pmp_landed_costs/models/product.py:32
+msgid "The HS Code format is incorrect"
+msgstr "Il formato HS Code non è corretto"

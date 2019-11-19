@@ -15,6 +15,7 @@ class CrmClaim(models.Model):
                 message = _("The {} is already received").format(claim.number)
                 self.env.user.notify_warning(message=message, sticky=True)
             else:
+                claim.message_post(body="RMA scanned")
                 claim.stage_id = self.env["crm.claim.stage"].search([('name', '=', 'Recibido')])
                 claim.date_received = fields.Date.today()
                 message = _("{} received").format(claim.number)

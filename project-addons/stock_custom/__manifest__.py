@@ -11,7 +11,7 @@
                 'custom_account', 'picking_incidences',
                 'reserve_without_save_sale', 'sale_display_stock',
                 'stock_reserve_sale', 'product_brand', 'sale_customer_discount',
-                'product_stock_unsafety', 'stock', 'stock_landed_costs'],
+                'product_stock_unsafety', 'stock', 'stock_landed_costs', 'stock_account'],
     'data': ['views/ir_attachment_view.xml',
              'security/stock_custom_security.xml',
              'stock_custom_report.xml',
