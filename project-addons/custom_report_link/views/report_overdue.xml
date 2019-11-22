@@ -94,7 +94,9 @@
                                         <span t-esc="line['credit']" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                     </td>
                                     <td class="text-center" style="vertical-align:middle;">
-                                        <span t-esc="line['debit'] - line['credit']" t-options="{'widget': 'monetary', 'display_currency': currency}"/>
+                                        <t t-if="time.strftime('%Y-%m-%d') &gt; line['date_maturity']">
+                                            <span t-esc="line['debit'] - line['credit']" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                                        </t>
                                     </td>
                                 </tr>
                                 <tr class="border-black">
