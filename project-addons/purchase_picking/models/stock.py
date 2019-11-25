@@ -26,6 +26,15 @@ class StockContainer(models.Model):
     _name = 'stock.container'
 
     @api.multi
+    def write(self,vals):
+        res=super(StockContainer,self).write(vals)
+        if vals.get('date_expected'):
+            for container in self:
+                for move in container.move_ids:
+                    move.write({'date_expected': container.date_expected})
+        return res
+
+    @api.multi
     def _set_date_expected(self):
         picking_ids = []
         for container in self:
