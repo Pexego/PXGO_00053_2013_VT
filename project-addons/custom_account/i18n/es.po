@@ -877,8 +877,8 @@ msgstr "Fecha inicial"
 #. module: custom_account
 #: code:addons/custom_account/models/purchase.py:44
 #, python-format
-msgid "An order cannot be confirmed with a product called \""
-msgstr "No se puede confirmar un pedido con un producto llamado \""
+msgid "A picking cannot be created with a product called \""
+msgstr "No se puede crear un albarán con un producto llamado \""
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_sale_report_state_name

@@ -136,6 +136,11 @@ class StockMove(models.Model):
     lots_text = fields.Text('Lots', help="Value must be separated by commas")
     sale_id = fields.Many2one('sale.order', related='sale_line_id.order_id',
                               readonly=True)
+    date_reliability = fields.Selection([
+        ('high', 'High'),
+        ('medium', 'Medium'),
+        ('low', 'Low'),
+        ], readonly=False,compute='_compute_dates')
 
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()
@@ -160,6 +165,15 @@ class StockMove(models.Model):
     def _compute_real_stock(self):
         for move in self:
             move.real_stock = move.product_id.qty_available
+
+    def _compute_dates(self):
+        for move in self:
+            if move.picking_id:
+                move.date_reliability="high"
+            elif move.container_id:
+                move.date_reliability="medium"
+            else:
+                move.date_reliability="low"
 
     @api.multi
     def _action_done(self):
