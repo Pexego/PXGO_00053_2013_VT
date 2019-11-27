@@ -26,6 +26,15 @@ class StockContainer(models.Model):
     _name = 'stock.container'
 
     @api.multi
+    def write(self,vals):
+        res=super(StockContainer,self).write(vals)
+        if vals.get('date_expected'):
+            for container in self:
+                for move in container.move_ids:
+                    move.write({'date_expected': container.date_expected})
+        return res
+
+    @api.multi
     def _set_date_expected(self):
         picking_ids = []
         for container in self:
@@ -42,7 +51,7 @@ class StockContainer(models.Model):
         return True
 
     @api.multi
-    @api.depends('move_ids')
+    @api.depends('move_ids.picking_id.scheduled_date')
     def _get_date_expected(self):
         for container in self:
             min_date = False
@@ -77,7 +86,7 @@ class StockContainer(models.Model):
             container.user_id = responsible
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', readonly=False, required=False)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
     picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
