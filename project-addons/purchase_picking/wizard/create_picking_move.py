@@ -22,6 +22,9 @@
 from odoo import models, fields, api, exceptions, _
 
 
+from odoo.exceptions import except_orm,UserError
+
+
 class MoveDetails(models.TransientModel):
 
     _name = 'picking.wizard.move.details'
@@ -80,6 +83,9 @@ class CreatePickingMove(models.TransientModel):
         all_moves = self.env['stock.move']
         # se recorren los movimientos para agruparlos por tipo
         for move in self.move_detail_ids:
+            if move.move_id.product_id.default_code == "----- PTE NOMBRE -----":
+                raise UserError(
+                    _("A picking cannot be created with a product called \"") + move.move_id.product_id.default_code + "\"")
             if self.container_id:
                 move.move_id.container_id = False
             if not move.move_id.picking_type_id:

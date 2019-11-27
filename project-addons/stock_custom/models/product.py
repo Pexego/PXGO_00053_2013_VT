@@ -236,6 +236,18 @@ class ProductProduct(models.Model):
             'res_model': 'stock.move',
             'type': 'ir.actions.act_window',
         }
+    def action_view_moves_dates(self):
+        return {
+            'domain': "[('product_id','=', " + str(self.id) + ")]",
+            'name': _('Stock moves dates'),
+            'view_mode': 'tree,form',
+            'view_type': 'form',
+            'context': {'tree_view_ref': 'stock_custom.view_move_dates_tree',
+                        'search_default_future_dates': 1},
+            'res_model': 'stock.move',
+            'type': 'ir.actions.act_window',
+        }
+
 
     def get_stock_new(self):
         category_id = self.env['product.category'].search(
