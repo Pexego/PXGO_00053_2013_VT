@@ -26,7 +26,7 @@ class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
 
     qty_available = fields.\
-        Float('Qty available', readonly=True,compute="_compute_qty_available",
+        Float('Qty available', readonly=True, compute="_compute_qty_available",
               digits=dp.get_precision('Product Unit of Measure'))
     qty_available_wo_wh = fields.\
         Float('Qty. on kitchen', readonly=True,
@@ -37,9 +37,10 @@ class SaleOrderLine(models.Model):
               digits=dp.get_precision('Product Unit of Measure'))
 
     @api.multi
+    @api.depends('product_id')
     def _compute_qty_available(self):
         for line in self:
-            line.qty_available=line.product_id.virtual_stock_conservative-line.product_id.qty_available_wo_wh
+            line.qty_available = line.product_id.virtual_stock_conservative - line.product_id.qty_available_input_loc
 
     @api.multi
     def _get_incoming_qty(self):
