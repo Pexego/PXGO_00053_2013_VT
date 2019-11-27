@@ -17,7 +17,7 @@ msgstr ""
 
 
 #. module: payment_mode_supplier
-#: model:ir.model.fields,field_description:payment_mode_supplier.field_res_partner_payment_mode_supplier
+#: model:ir.model.fields,field_description:payment_mode_supplier.field_res_partner_payment_mode_suppliers
 #: model:ir.actions.act_window,name:payment_mode_supplier.payment_mode_suppliers_action
 #: model:ir.ui.menu,name:payment_mode_supplier.payment_mode_suppliers_menu
 #: model:ir.ui.view,arch_db:payment_mode_supplier.payment_mode_supplier_form
