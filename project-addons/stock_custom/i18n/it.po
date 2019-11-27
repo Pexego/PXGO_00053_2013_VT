@@ -433,3 +433,30 @@ msgstr "Disponibile"
 #: selection:stock.picking.report,state:0
 msgid "Done"
 msgstr "Completato"
+
+#. module: stock_custom
+#: selection:stock.move,date_reliability:0
+msgid "High"
+msgstr "Alta"
+
+#. module: stock_custom
+#: selection:stock.move,date_reliability:0
+msgid "Medium"
+msgstr "Media"
+
+#. module: stock_custom
+#: selection:stock.move,date_reliability:0
+msgid "Low"
+msgstr "Bassa"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_move_date_reliability
+msgid "Date Reliability"
+msgstr "Affidabilità della data"
+
+#. module: stock_custom
+#: code:addons/stock_custom/product.py:235
+#, python-format
+#: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
+msgid "Stock moves dates"
+msgstr "Date di arrivo"

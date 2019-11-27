@@ -19,7 +19,7 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
-from odoo.exceptions import except_orm
+from odoo.exceptions import except_orm,UserError
 from odoo.tools.float_utils import float_is_zero, float_compare
 
 
