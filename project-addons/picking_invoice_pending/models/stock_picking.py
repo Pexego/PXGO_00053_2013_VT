@@ -244,6 +244,10 @@ class StockPicking(models.Model):
             if pick.pending_stock_reverse_move_id:
                 pick.pending_stock_reverse_move_id.button_cancel()
                 pick.pending_stock_reverse_move_id.unlink()
+            if pick.sale_id:
+                states=[state in ['done', 'cancel'] for state in pick.sale_id.picking_ids.mapped('state')]
+                if states and all(states):
+                    pick.sale_id.state="done"
         return res
 
     @api.multi
