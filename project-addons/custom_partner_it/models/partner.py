@@ -18,18 +18,21 @@
 #
 ##############################################################################
 
-from odoo import models, fields
+from odoo import models, fields, api
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    codice_destinatario = fields.Char(required=True, readonly=True)
+    codice_destinatario = fields.Char(required=True)
 
-    pec_destinatario = fields.Char(required=False)
+    electronic_invoice_subjected = fields.Boolean(default=True)
 
-    electronic_invoice_subjected = fields.Boolean(readonly=True,default=True)
-
-
-
-
+    @api.onchange('prospective')
+    def onchange_prospective(self):
+        if self.prospective:
+            self.electronic_invoice_subjected=False
+            self.codice_destinatario = 'XXXXXXX'
+        elif self.country_id.code == 'IT':
+            self.electronic_invoice_subjected = True
+            self.codice_destinatario = '0000000'
 
