@@ -176,6 +176,13 @@ class SaleOrderLine(models.Model):
                 reserve.unlink()
         return super().unlink()
 
+    # @api.multi
+    # def _prepare_stock_reservation(self, date_validity=False, note=False):
+    #     res = super()._prepare_stock_reservation(date_validity=date_validity, note=note)
+    #     res['sale_id'] = self.order_id.id
+    #     res['user_id'] = self.order_id.user_id.id
+    #     return res
+
     def stock_reserve(self):
         if self.env.context.get('later', False):
             return True
@@ -193,4 +200,11 @@ class SaleOrderLine(models.Model):
                 vals = line._prepare_stock_reservation()
                 reservation = self.env['stock.reservation'].create(vals)
                 reservation.reserve()
+                if line.product_id.is_pack:
+                    pack_reservation = self.env['stock.reservation'].search([('sale_line_id', '=', line.id)])
+                    pack_reservation.write({'sale_line_id': line.id})
+                    pack_reservation.write({'origin': line.order_id.name})
+                else:
+                    reservation.write({'sale_line_id': line.id})
+                    reservation.write({'origin': line.order_id.name})
         return True
