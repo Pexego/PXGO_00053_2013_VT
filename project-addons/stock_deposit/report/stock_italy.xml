@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_quantity_history_italy_wizard" model="ir.ui.view">
+        <field name="name">Valuation Report Italy</field>
+        <field name="model">stock.quantity.history.italy.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Choose your date">
+                <group>
+                    <group>
+                        <field name="compute_at_date" widget="radio"/>
+                        <!--field name="date" attrs="{'invisible': [('compute_at_date', '=', 0)]}"/-->
+                    </group>
+                </group>
+                <footer>
+                    <button name="open_table" string="Retrieve the inventory valuation" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_product_italy_stock" model="ir.ui.view">
+        <field name="name">product.italy.stock</field>
+        <field name="model">stock.quantity.history.italy</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="product_id"/>
+                <field name="qty"/>
+                <field name="value"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_stock_inventory_valuation_italy" model="ir.actions.act_window">
+        <field name="name">Valuation Report Italy</field>
+        <field name="res_model">stock.quantity.history.italy.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="stock_deposit.view_stock_quantity_history_italy_wizard"/>
+        <field name="target">new</field>
+        <field name="context">{'default_compute_at_date': 0}</field>
+    </record>
+
+    <menuitem id="menu_valuation_italy" name="Inventory Valuation Italy" parent="stock.menu_warehouse_report" sequence="120" action="action_stock_inventory_valuation_italy"/>
+</odoo>
