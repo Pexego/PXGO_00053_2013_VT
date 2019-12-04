@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="outlook_calendar_tree" model="ir.ui.view">
+        <field name="name">outlook.calendar.tree</field>
+        <field name="model">outlook.calendar</field>
+        <field name="arch" type="xml">
+            <tree string="My calendars" create="false" delete="false" decoration-muted="can_edit == False" decoration-bf="sync == True">
+                <field name="name"/>
+                <field name="sync"/>
+                <field name="can_edit" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+</odoo>

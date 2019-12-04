@@ -1,18 +1,70 @@
 from odoo import api, fields, models
 import requests
+import json
 
 
 class CalendarEvent(models.Model):
 
     _inherit = "calendar.event"
 
+    outlook_id = fields.Char()
+    outlook_calendar_id = fields.Many2one('outlook.calendar', domain=[('can_edit', '=', True)], auto_join=True)
+
     @api.model
     def create(self, vals):
-        import ipdb
-        ipdb.set_trace()
         res = super().create(vals)
+        if self.env.user.outlook_is_logged and 'outlook_id' not in vals:
+            auth = self.env.user.outlook_auth_token
+            if self.env.user.partner_id.id in vals['partner_ids'][0][2]:
+                partner_ids = vals['partner_ids'][0][2].remove(self.env.user.partner_id.id)
+            else:
+                partner_ids = vals['partner_ids'][0][2]
+            partners = self.env['res.partner'].browse(partner_ids)
+            attendees = []
+            for partner in partners:
+                if partner.email.endswith("@visiotechsecurity.com"):
+                    attendees.append({
+                                        "emailAddress": {
+                                            "address": partner.email,
+                                            "name": partner.name
+                                        },
+                                        "type": "required"
+                                    })
+
+            event_data = {
+                            "subject": vals['name'],
+                            "body": {
+                                        "contentType": "HTML",
+                                        "content": vals['description'] or ""
+                                    },
+                            "start": {
+                                "dateTime": vals['start_datetime'][:10] + 'T' + vals['start_datetime'][11:],
+                                "timeZone": "Romance Standard Time"
+                            },
+                            "end": {
+                                "dateTime": vals['stop_datetime'][:10] + 'T' + vals['stop_datetime'][11:],
+                                "timeZone": "Romance Standard Time"
+                            },
+                            "attendees": attendees
+                        }
+            response = requests.post('https://graph.microsoft.com/v1.0/me/events',
+                                     headers={'Authorization': 'Bearer ' + auth}, json=event_data)
+            if response.status_code == 201:
+                o_event = json.loads(response.text)
+                res.outlook_id = o_event['id']
+                print(response.text)
+
+        return res
+
+    @api.multi
+    def unlink(self):
         auth = self.env.user.outlook_auth_token
-        graph_data = requests.get('https://graph.microsoft.com/v1.0/me/calendarview?startdatetime=2019-11-20T15:10:17.045Z&enddatetime=2019-11-27T15:10:17.045Z',
-                                  headers={'Authorization': 'Bearer ' + auth}).json()
-        print(graph_data)
+        response = requests.delete('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
+                                   headers={'Authorization': 'Bearer ' + auth})
+        return super().unlink()
+
+    @api.model
+    def write(self, vals):
+        print(vals)
+        res = super().write(vals)
         return res

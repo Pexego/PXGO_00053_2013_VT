@@ -7,10 +7,13 @@
         <field name="arch" type="xml">
             <group name="preferences" position="after">
                 <group name="outlook_preferences" string="Outlook Preferences">
-                    <field name="outlook_auth_token"/>
+                    <field name="outlook_is_logged"/>
                     <group>
-                        <button name="get_outlook_auth" type="object" string="Login"/>
+                        <group>
+                            <button name="get_outlook_auth" type="object" string="Login Outlook"/>
+                        </group>
                     </group>
+                    <field name="outlook_calendar_ids"/>
                 </group>
             </group>
         </field>
