@@ -351,3 +351,13 @@ msgstr "Imposible incrementar la cantidad"
 #, python-format
 msgid "Impossible to decrease the quantity to 0"
 msgstr "Imposible cambiar la cantidad a 0"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_picking_from_moves_wizard_supplier_mode
+msgid "If this field is checked, the pickings will be created grouped by supplier. Otherwise the pickings will be created grouped by order"
+msgstr "Si este campo está marcado, los albaranes se crearán agrupados por proveedor. Si no, se crearán agrupados por pedido."
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_supplier_mode
+msgid "Create pickings grouped by supplier"
+msgstr "Crear albaranes agrupados por proveedor"

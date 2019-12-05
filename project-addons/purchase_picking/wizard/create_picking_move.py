@@ -56,6 +56,8 @@ class CreatePickingMove(models.TransientModel):
                                       'wizard_id', 'lines', default=_get_lines)
     container_id = fields.Many2one("stock.container", "Container")
 
+    supplier_mode = fields.Boolean("Create pickings grouped by supplier", help="If this field is checked, the pickings will be created grouped by supplier. Otherwise the pickings will be created grouped by order")
+
     def _view_picking(self):
         action = self.env.ref('stock.action_picking_tree').read()[0]
         pick_ids = self.env.context.get('picking_ids', [])
@@ -79,8 +81,8 @@ class CreatePickingMove(models.TransientModel):
         if not type_ids:
             raise exceptions.except_orm(_('Picking error'), _('Type not found'))
         type_id = type_ids[0]
-        picking_types = {}
-        all_moves = self.env['stock.move']
+        moves = self.env['stock.move']
+        all_moves=dict(self.env['stock.move'])
         # se recorren los movimientos para agruparlos por tipo
         for move in self.move_detail_ids:
             if move.move_id.product_id.default_code == "----- PTE NOMBRE -----":
@@ -101,7 +103,17 @@ class CreatePickingMove(models.TransientModel):
                 new_move.purchase_line_id = move.move_id.purchase_line_id
 
                 move.move_id.product_uom_qty = move.move_id.product_uom_qty - move.qty
-                all_moves += new_move
+                moves += new_move
+                if self.supplier_mode:
+                    if new_move.partner_id.id in all_moves:
+                        all_moves[new_move.partner_id.id] += new_move
+                    else:
+                        all_moves[new_move.partner_id.id] = new_move
+                else:
+                    if new_move.purchase_line_id.order_id.id in all_moves:
+                        all_moves[new_move.purchase_line_id.order_id.id] += new_move
+                    else:
+                        all_moves[new_move.purchase_line_id.order_id.id] = new_move
                 if self.container_id:
                     new_move.container_id = self.container_id.id
                 else:
@@ -111,28 +123,40 @@ class CreatePickingMove(models.TransientModel):
                     move.move_id.container_id = self.container_id.id
                 else:
                     move.move_id.date_expected = self.date_picking
-                all_moves += move.move_id
-        partners = all_moves.mapped('partner_id')
-        if len(partners) > 1:
-            partner = self.env.ref('purchase_picking.partner_multisupplier').id
-        else:
-            partner = partners[0].id
+                moves += move.move_id
+                if self.supplier_mode:
+                    if move.move_id.partner_id.id in all_moves:
+                        all_moves[move.move_id.partner_id.id] += move.move_id
+                    else:
+                        all_moves[move.move_id.partner_id.id] = move.move_id
+                else:
+                    if move.move_id.purchase_line_id.order_id.id in all_moves:
+                        all_moves[move.move_id.purchase_line_id.order_id.id] += move.move_id
+                    else:
+                        all_moves[move.move_id.purchase_line_id.order_id.id] = move.move_id
 
-        picking_vals = {
-            'partner_id': partner,
-            'picking_type_id': type_id.id,
-            'move_lines': [(6, 0, [x.id for x in all_moves])],
-            'origin': ', '.join(all_moves.mapped('purchase_line_id.order_id.name')),
-            'scheduled_date': self.date_picking,
-            'location_id': type_id.default_location_src_id.id,
-            'location_dest_id': type_id.default_location_dest_id.id,
-            'temp': True
-        }
-        picking_id = self.env['stock.picking'].create(picking_vals)
-        picking_id.action_confirm()
-        # We don't use all_moves because when it is a kit, one of the moves is deleted and several ones are created instead
-        picking_id.move_lines._force_assign()
+        partners = moves.mapped('partner_id.id')
+        pickings = []
+        for (key, value) in all_moves.items():
+            picking_vals = {
+                'picking_type_id': type_id.id,
+                'move_lines': [(6, 0, [x.id for x in value])],
+                'origin': ', '.join(value.mapped('purchase_line_id.order_id.name')),
+                'scheduled_date': self.date_picking,
+                'location_id': type_id.default_location_src_id.id,
+                'location_dest_id': type_id.default_location_dest_id.id,
+                'temp': True
+            }
+            if key in partners:
+                picking_vals['partner_id'] = key
+            else:
+                picking_vals['partner_id'] = all_moves[key][0].partner_id.id
+            picking_id = self.env['stock.picking'].create(picking_vals)
+            picking_id.action_confirm()
+            # We don't use all_moves because when it is a kit, one of the moves is deleted and several ones are created instead
+            picking_id.move_lines._force_assign()
+            pickings.append(picking_id.id)
         context2 = dict(context)
-        context2['picking_ids'] = [picking_id.id]
+        context2['picking_ids'] = pickings
         return self.with_context(context2)._view_picking()
 
