@@ -5,7 +5,7 @@ class OutlookCalendar(models.Model):
 
     _name = 'outlook.calendar'
 
-    name = fields.Char('Name', readonly=True)
+    name = fields.Char('Calendar', readonly=True)
     outlook_id = fields.Char(readonly=True)
     sync = fields.Boolean('Sync')
     can_edit = fields.Boolean(readonly=True)

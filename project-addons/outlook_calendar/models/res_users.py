@@ -16,7 +16,7 @@ class ResUsers(models.Model):
     outlook_auth_state = fields.Char()
     outlook_is_logged = fields.Boolean('Logged in Outlook', compute='_get_is_outlook_logged')
     outlook_calendar_ids = fields.One2many('outlook.calendar', 'user_id')
-    outlook_sync = fields.Boolean('Outlook Sync Activated')
+    outlook_sync = fields.Boolean('Activate Outlook Sync')
 
     def _get_is_outlook_logged(self):
         if self.outlook_auth_token and self.outlook_auth_refresh_token and \

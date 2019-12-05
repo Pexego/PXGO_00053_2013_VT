@@ -7,8 +7,43 @@ msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-21 10:00+0000\n"
-"PO-Revision-Date: 2019-11-21 10:00+0000\n"
+"PO-Revision-Date: 2019-12-05 10:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Language: es\n"
+
+#. module: outlook_calendar
+#: model:ir.model.fields,field_description:outlook_calendar.field_res_users_outlook_sync
+msgid "Activate Outlook Sync"
+msgstr "Activar Sincr. con Outlook"
+
+#. module: outlook_calendar
+#: model:ir.model.fields,field_description:outlook_calendar.field_res_users_outlook_is_logged
+msgid "Logged in Outlook"
+msgstr "Registrado en Outlook"
+
+#. module: outlook_calendar
+#: model:ir.ui.view,arch_db:outlook_calendar.view_users_form
+msgid " Log in Outlook"
+msgstr " Log in Outlook"
+
+#. module: outlook_calendar
+#: model:ir.ui.view,arch_db:outlook_calendar.view_users_form
+msgid "Outlook Preferences"
+msgstr "Preferencias de Outlook"
+
+#. module: outlook_calendar
+#: model:ir.model.fields,field_description:outlook_calendar.field_outlook_calendar_name
+msgid "Calendar"
+msgstr "Calendario"
+
+#. module: outlook_calendar
+#: model:ir.model.fields,field_description:outlook_calendar.field_outlook_calendar_sync
+msgid "Sync"
+msgstr "Sincronizar"
+
+#. module: outlook_calendar
+#: model:ir.model.fields,field_description:outlook_calendar.field_calendar_event_outlook_calendar_id
+msgid "Outlook calendar"
+msgstr "Calendario de Outlook"

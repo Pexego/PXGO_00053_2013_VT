@@ -8,7 +8,7 @@ class CalendarEvent(models.Model):
     _inherit = "calendar.event"
 
     outlook_id = fields.Char()
-    outlook_calendar_id = fields.Many2one('outlook.calendar', domain=[('can_edit', '=', True)], auto_join=True)
+    outlook_calendar_id = fields.Many2one('outlook.calendar', 'Outlook calendar', domain=[('can_edit', '=', True)], auto_join=True)
 
     @api.model
     def create(self, vals):

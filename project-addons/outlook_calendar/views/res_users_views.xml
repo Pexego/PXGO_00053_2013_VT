@@ -12,7 +12,7 @@
                         <field name="outlook_sync"/>
                     </group>
                     <group>
-                        <button name="get_outlook_auth" type="object" string=" Login Outlook" icon="fa-calendar-o"/>
+                        <button name="get_outlook_auth" type="object" string=" Log in Outlook" icon="fa-calendar-o"/>
                     </group>
                     <field name="outlook_calendar_ids"/>
                 </group>
