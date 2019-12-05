@@ -1,4 +1,4 @@
-from odoo import api, fields, models
+from odoo import api, fields, models, _
 import requests
 import json
 
@@ -13,7 +13,7 @@ class CalendarEvent(models.Model):
     @api.model
     def create(self, vals):
         res = super().create(vals)
-        if self.env.user.outlook_is_logged and 'outlook_id' not in vals:
+        if self.env.user.outlook_sync and 'outlook_id' not in vals:
             auth = self.env.user.outlook_auth_token
             if self.env.user.partner_id.id in vals['partner_ids'][0][2]:
                 partner_ids = vals['partner_ids'][0][2].remove(self.env.user.partner_id.id)
@@ -52,15 +52,20 @@ class CalendarEvent(models.Model):
             if response.status_code == 201:
                 o_event = json.loads(response.text)
                 res.outlook_id = o_event['id']
-                print(response.text)
-
+            elif response.status_code == 401:
+                message = _("The event hasn't been created in Outlook. \nPlease log in in your profile")
+                self.env.user.notify_warning(message=message)
         return res
 
     @api.multi
     def unlink(self):
-        auth = self.env.user.outlook_auth_token
-        response = requests.delete('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
-                                   headers={'Authorization': 'Bearer ' + auth})
+        if self.env.user.outlook_sync:
+            auth = self.env.user.outlook_auth_token
+            response = requests.delete('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
+                                       headers={'Authorization': 'Bearer ' + auth})
+            if response.status_code == 401:
+                message = _("The event hasn't been deleted in Outlook. Please log in in your profile")
+                self.env.user.notify_warning(message=message)
         return super().unlink()
 
     @api.model

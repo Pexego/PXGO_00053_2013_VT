@@ -1,5 +1,4 @@
-
-from odoo import models, api, fields
+from odoo import models, api, fields, _
 from requests_oauthlib import OAuth2Session
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -17,6 +16,7 @@ class ResUsers(models.Model):
     outlook_auth_state = fields.Char()
     outlook_is_logged = fields.Boolean('Logged in Outlook', compute='_get_is_outlook_logged')
     outlook_calendar_ids = fields.One2many('outlook.calendar', 'user_id')
+    outlook_sync = fields.Boolean('Outlook Sync Activated')
 
     def _get_is_outlook_logged(self):
         if self.outlook_auth_token and self.outlook_auth_refresh_token and \
@@ -35,6 +35,7 @@ class ResUsers(models.Model):
         authorization_url, state = oauth.authorization_url(
             'https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize')
         self.env.user.outlook_auth_state = state
+        self.outlook_sync = True
 
         return {
             'type': 'ir.actions.act_url',
@@ -66,7 +67,10 @@ class ResUsers(models.Model):
     @api.multi
     def get_outlook_calendars(self):
         auth = self.env.user.outlook_auth_token
-        response = requests.get('https://graph.microsoft.com/v1.0/me/calendars', headers={'Authorization': 'Bearer ' + auth})
+
+        response = requests.get('https://graph.microsoft.com/v1.0/me/calendars',
+                                headers={'Authorization': 'Bearer ' + auth})
+
         if response.status_code == 200:
             calendars = json.loads(response.text)
             for calendar in calendars['value']:
@@ -78,18 +82,23 @@ class ResUsers(models.Model):
                                                  'sync': False,
                                                  'user_id': self.id}))
                     self.write({'outlook_calendar_ids': new_calendars})
+        elif response.status_code == 401:
+            message = _("Imposible to sync your calendars from Outlook. Please log in in your profile")
+            self.env.user.notify_warning(message=message)
 
     @api.multi
     def sync_outlook_calendar(self):
         # Get all events from now to 30 days ahead. TODO: maybe change 30 days to the whole future?
-        if self.outlook_is_logged:
+        if self.outlook_sync:
             auth = self.env.user.outlook_auth_token
             startdatetime = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
             enddatetime = (datetime.now() + relativedelta(days=30)).strftime('%Y-%m-%dT%H:%M:%S')
 
             response = requests.get('https://graph.microsoft.com/v1.0/me/calendarview?startdatetime=%s&enddatetime=%s'
                                     % (startdatetime, enddatetime),
-                                    headers={'Authorization': 'Bearer ' + auth, 'Prefer': 'outlook.timezone="Romance Standard Time"'})
+                                    headers={'Authorization': 'Bearer ' + auth,
+                                             'Prefer': 'outlook.timezone="Romance Standard Time"'})
+
             if response.status_code == 200:
                 events = json.loads(response.text)
                 for event in events['value']:
@@ -104,6 +113,9 @@ class ResUsers(models.Model):
                             'stop': stop
                         }
                         self.env['calendar.event'].create(new_event_vals)
+            elif response.status_code == 401:
+                message = _("Imposible to sync your events from Outlook. Please log in in your profile")
+                self.env.user.notify_warning(message=message)
 
         action = self.env.ref('calendar.action_calendar_event').read()[0]
         return action
