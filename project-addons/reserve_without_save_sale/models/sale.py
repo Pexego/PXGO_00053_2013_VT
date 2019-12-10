@@ -176,13 +176,6 @@ class SaleOrderLine(models.Model):
                 reserve.unlink()
         return super().unlink()
 
-    # @api.multi
-    # def _prepare_stock_reservation(self, date_validity=False, note=False):
-    #     res = super()._prepare_stock_reservation(date_validity=date_validity, note=note)
-    #     res['sale_id'] = self.order_id.id
-    #     res['user_id'] = self.order_id.user_id.id
-    #     return res
-
     def stock_reserve(self):
         if self.env.context.get('later', False):
             return True
