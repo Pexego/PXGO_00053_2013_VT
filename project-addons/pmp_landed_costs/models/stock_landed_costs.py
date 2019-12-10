@@ -97,8 +97,7 @@ class StockLandedCost(models.Model):
                             per_unit = (line.price_unit / total_cost)
                             value = valuation.former_cost * per_unit
                         elif line.split_method == 'by_tariff' and total_tariff:
-                            per_unit = (line.price_unit / total_tariff)
-                            value = valuation.tariff * per_unit
+                            value = valuation.former_cost * valuation.tariff / line.price_unit
                         else:
                             value = (line.price_unit / total_line)
 
