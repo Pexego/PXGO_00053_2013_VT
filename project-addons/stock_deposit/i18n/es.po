@@ -373,20 +373,3 @@ msgstr "Pérdida"
 #: model:ir.ui.view,arch_db:stock_deposit.view_stock_deposit_form
 msgid "Deposit loss"
 msgstr "A pérdidas"
-
-#. module: stock_deposit
-#: model:ir.actions.act_window,name:stock_deposit.action_stock_inventory_valuation_italy
-#: model:ir.ui.view,arch_db:stock_deposit.view_stock_quantity_history_italy_wizard
-#: model:ir.ui.menu,name:stock_deposit.menu_valuation_italy
-msgid "Valuation Report Italy"
-msgstr "Valoración del inventario Italia"
-
-#. module: stock_deposit
-#: model:ir.ui.view,arch_db:stock_deposit.view_stock_quantity_history_italy_wizard
-msgid "Retrieve the inventory valuation"
-msgstr "Recuperar la valoración del inventario"
-
-#. module: stock_deposit
-#: model:ir.ui.view,arch_db:stock_deposit.view_stock_quantity_history_italy_wizard
-msgid "Cancel"
-msgstr "Cancelar"
