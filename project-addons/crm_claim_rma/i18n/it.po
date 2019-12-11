@@ -758,12 +758,12 @@ msgstr "Nuovo"
 #. module: crm_claim_rma
 #: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
 msgid "New Delivery"
-msgstr "Nuova indirizzo"
+msgstr "Nuova consegna"
 
 #. module: crm_claim_rma
 #: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
 msgid "New Products Return"
-msgstr "Restituzione di nuovi prodotti"
+msgstr "Nuova entrata prodotti"
 
 #. module: crm_claim_rma
 #: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_rma_form_view
