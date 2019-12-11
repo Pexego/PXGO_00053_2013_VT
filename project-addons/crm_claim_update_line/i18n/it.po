@@ -18,7 +18,7 @@ msgstr ""
 #. module: crm_claim_update_line
 #: model:ir.ui.view,arch_db:crm_claim_update_line.crm_rma_advance_location_form_view_inherit
 msgid "Update RMA lines"
-msgstr "aGGIORNARE RIGHE RMA"
+msgstr "Aggiorna linee RMA"
 
 #. module: crm_claim_update_line
 #: model:ir.ui.view,arch_db:crm_claim_update_line.view_crm_claim_update_lines_wizard
