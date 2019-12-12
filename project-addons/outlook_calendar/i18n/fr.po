@@ -16,12 +16,12 @@ msgstr ""
 #. module: outlook_calendar
 #: model:ir.model.fields,field_description:outlook_calendar.field_res_users_outlook_sync
 msgid "Activate Outlook Sync"
-msgstr "Activer Syncr. avec Outlook"
+msgstr "Activer Sync. Outlook"
 
 #. module: outlook_calendar
 #: model:ir.model.fields,field_description:outlook_calendar.field_res_users_outlook_is_logged
 msgid "Logged in Outlook"
-msgstr "Connecté dans Outlook"
+msgstr "Enregistré dans Outlook"
 
 #. module: outlook_calendar
 #: model:ir.ui.view,arch_db:outlook_calendar.view_users_form
@@ -51,14 +51,14 @@ msgstr "Calendrier Outlook"
 #. module: outlook_calendar
 #: code:addons/outlook_calendar/models/calendar.py:59
 #, python-format
-msgid "L'événement n'a pas été créé dans Outlook. Please log in in your profile"
-msgstr "El evento no ha sido creado en Outlook. Veuillez vous connecter dans votre profil"
+msgid "The event hasn't been created in Outlook. Please log in in your profile"
+msgstr "L'événement n'a pas été créé dans Outlook. Veuillez vous connecter avec votre profil"
 
 #. module: outlook_calendar
 #: code:addons/outlook_calendar/models/calendar.py:70
 #, python-format
 msgid "The event hasn't been deleted in Outlook. Please log in in your profile"
-msgstr "L'événement n'a pas été supprimé dans Outlook. Veuillez vous connecter dans votre profil"
+msgstr "L'événement n'a pas été supprimé dans Outlook. Veuillez vous connecter avec votre profil"
 
 #. module: outlook_calendar
 #: code:addons/outlook_calendar/models/calendar.py:121
@@ -69,8 +69,8 @@ msgstr "L'événement n'a pas été mis à jour dans Outlook. Veuillez vous conn
 #. module: outlook_calendar
 #: code:addons/outlook_calendar/models/res_users.py:86
 #, python-format
-msgid "Impossible de synchroniser vos calendriers à partir d'Outlook. Please log in in your profile"
-msgstr "Imposible sincronizar calendarios con Outlook. Veuillez vous connecter dans votre profil"
+msgid "Impossible to sync your calendars from Outlook. Please log in in your profile"
+msgstr "Impossible de synchroniser vos calendriers avec Outlook. Veuillez vous connecter dans votre profil"
 
 #. module: outlook_calendar
 #: code:addons/outlook_calendar/models/res_users.py:138
