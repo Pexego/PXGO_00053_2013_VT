@@ -323,3 +323,22 @@ msgstr "Avviso"
 #, python-format
 msgid "There is any move line without associated picking"
 msgstr 'Non vi è alcuna linea di movimento senza bolla di consegna associata"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_container_ids
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_container_ids
+msgid "Containers"
+msgstr "Contenitori"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/models/stock.py:151
+#, python-format
+msgid "Impossible to increase the quantity"
+msgstr "Impossibile aumentare la quantità"
+
+#. module: purchase_picking
+#: code:addons/purchase_picking/models/stock.py:151
+#, python-format
+msgid "Impossible to decrease the quantity to 0"
+msgstr "Impossibile modificare la quantità su 0"
+

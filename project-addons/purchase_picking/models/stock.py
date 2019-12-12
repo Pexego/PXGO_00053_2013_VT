@@ -26,6 +26,15 @@ class StockContainer(models.Model):
     _name = 'stock.container'
 
     @api.multi
+    def write(self,vals):
+        res=super(StockContainer,self).write(vals)
+        if vals.get('date_expected'):
+            for container in self:
+                for move in container.move_ids:
+                    move.write({'date_expected': container.date_expected})
+        return res
+
+    @api.multi
     def _set_date_expected(self):
         picking_ids = []
         for container in self:
@@ -42,7 +51,7 @@ class StockContainer(models.Model):
         return True
 
     @api.multi
-    @api.depends('move_ids')
+    @api.depends('move_ids.picking_id.scheduled_date')
     def _get_date_expected(self):
         for container in self:
             min_date = False
@@ -77,7 +86,7 @@ class StockContainer(models.Model):
             container.user_id = responsible
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', readonly=False, required=False)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
     picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
@@ -98,6 +107,14 @@ class StockPicking(models.Model):
     usage = fields.Char(compute='_get_usage')
     shipping_identifier = fields.Char('Shipping identifier', size=64)
     temp = fields.Boolean("Temp.")
+    container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers')
+
+    @api.model
+    def create(self, vals):
+        res = super().create(vals)
+        if not res.shipping_identifier and res.container_ids:
+            res.shipping_identifier = ''.join(res.container_ids.mapped('name'))
+        return res
 
     @api.multi
     def _get_usage(self):
@@ -118,6 +135,15 @@ class StockPicking(models.Model):
                     move.picking_id = False
         return super(StockPicking, self).action_cancel()
 
+    @api.multi
+    def _get_containers(self):
+        for picking in self:
+            res = []
+            for move in picking.move_lines:
+                if move.container_id:
+                    res.append(move.container_id.id)
+            picking.container_ids = res
+
 
 class StockMove(models.Model):
 
@@ -135,6 +161,14 @@ class StockMove(models.Model):
 
     @api.multi
     def write(self, vals):
+        for move in self:
+            if 'product_uom_qty' in vals and self.purchase_line_id and self.picking_id and 'origin' not in vals:
+                if move.product_uom_qty > vals['product_uom_qty'] > 0:
+                    move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
+                elif vals['product_uom_qty'] > move.product_uom_qty:
+                    raise exceptions.Warning(_('Impossible to increase the quantity'))
+                elif vals['product_uom_qty'] == 0:
+                    raise exceptions.Warning(_('Impossible to decrease the quantity to 0'))
         res = super(StockMove, self).write(vals)
         for move in self:
             move.refresh()

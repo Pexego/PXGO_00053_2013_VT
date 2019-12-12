@@ -19,7 +19,7 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
-from odoo.exceptions import except_orm
+from odoo.exceptions import except_orm,UserError
 from odoo.tools.float_utils import float_is_zero, float_compare
 
 
@@ -30,6 +30,35 @@ class PurchaseOrder(models.Model):
     picking_created = fields.Boolean('Picking created', compute='is_picking_created')
 
     date_planned = fields.Datetime(string='Scheduled Date', compute='', store=True, index=True)
+
+    total_no_disc = fields.Float(compute='_get_total', store=True, readonly=True, string='Amount without disc.')
+
+    total_disc = fields.Float(compute='_get_amount_discount', store=True, readonly=True, string='Disc. amount')
+
+    container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers')
+
+    @api.multi
+    def _get_containers(self):
+        for order in self:
+            res = []
+            for line in order.order_line:
+                for move in line.move_ids:
+                    res.append(move.container_id.id)
+            order.container_ids = res
+
+    @api.multi
+    @api.depends('order_line.price_subtotal')
+    def _get_total(self):
+        for order in self:
+            for line in order.order_line:
+                order.total_no_disc += line.product_qty * line.price_unit
+
+    @api.multi
+    @api.depends('order_line.price_subtotal')
+    def _get_amount_discount(self):
+        for order in self:
+            for line in order.order_line:
+                order.total_disc += (line.product_qty * line.price_unit) - line.price_subtotal
 
     @api.multi
     def test_moves_done(self):
