@@ -3,6 +3,7 @@
     'version': '1.0',
     'category': 'Extra Tools',
     'description': "",
+    'author': 'Visiotech',
     'depends': ['calendar'],
     'data': [
         # 'security/ir.model.access.csv',
@@ -11,7 +12,6 @@
         'views/o_calendar_views.xml',
         'views/calendar_views.xml'
     ],
-    'demo': [],
     'installable': True,
     'auto_install': False,
 }

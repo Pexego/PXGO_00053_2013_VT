@@ -83,7 +83,7 @@ class ResUsers(models.Model):
                                                  'user_id': self.id}))
                     self.write({'outlook_calendar_ids': new_calendars})
         elif response.status_code == 401:
-            message = _("Imposible to sync your calendars from Outlook. Please log in in your profile")
+            message = _("Impossible to sync your calendars from Outlook. Please log in in your profile")
             self.env.user.notify_warning(message=message)
 
     @api.multi
@@ -102,19 +102,40 @@ class ResUsers(models.Model):
             if response.status_code == 200:
                 events = json.loads(response.text)
                 for event in events['value']:
-                    if event['id'] not in self.env['calendar.event'].search([('user_id', '=', self.id)]).mapped('outlook_id'):
+                    last_modified_date = event['lastModifiedDateTime'][:-9].replace('T', ' ')
+                    local_event = self.env['calendar.event'].search([('user_id', '=', self.id),
+                                                                     ('outlook_id', '=', event['id'])])
+                    if not local_event or local_event.outlook_last_modified_datetime < last_modified_date:
                         stop = event['end']['dateTime'][:-1].replace('T', ' ')
                         start = event['start']['dateTime'][:-1].replace('T', ' ')
+                        partners = [[6, False, []]]
+
+                        for attendee in event['attendees']:
+                            attendee_email = attendee['emailAddress']['address']
+                            partner = self.env['res.partner'].search([('email', '=', attendee_email)])
+                            if partner:
+                                partners[0][2].append(partner.id)
+
+                        organizer = self.env['res.partner'].search([('email', '=', event['organizer']['emailAddress']['address'])])
+                        if organizer:
+                            partners[0][2].append(organizer.id)
+
                         new_event_vals = {
-                            'name': event['subject'] or "",
+                            'name': event.get('subject', ''),
                             'outlook_id': event['id'],
-                            'location': event['location']['displayName'] or "",
+                            'outlook_last_modified_datetime': last_modified_date,
+                            'location': event.get('location', '').get('displayName', ''),
                             'start': start,
-                            'stop': stop
+                            'stop': stop,
+                            'description': event.get('bodyPreview', ''),
+                            'partner_ids': partners
                         }
-                        self.env['calendar.event'].create(new_event_vals)
+                        if not local_event:
+                            self.env['calendar.event'].create(new_event_vals)
+                        else:
+                            local_event.write(new_event_vals)
             elif response.status_code == 401:
-                message = _("Imposible to sync your events from Outlook. Please log in in your profile")
+                message = _("Impossible to sync your events from Outlook. Please log in in your profile")
                 self.env.user.notify_warning(message=message)
 
         action = self.env.ref('calendar.action_calendar_event').read()[0]
