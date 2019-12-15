@@ -134,12 +134,9 @@ class StockPicking(models.Model):
                         property_pending_variation_account
                     credit_account = pick.company_id.\
                         property_pending_stock_account
-                    change_date = vals['date_done']
-                    if pick.backorder_id:
-                        change_date = pick.backorder_id.date_done
-                    move_id = pick.account_pending_invoice(debit_account,
-                                                           credit_account,
-                                                           change_date)
+                    move_id = pick.pending_stock_move_id.\
+                        create_reversals(fields.Date.today(),
+                                         reconcile=True)
                     pick.pending_stock_reverse_move_id = move_id.id
 
                 if pick.state == 'done' and \
