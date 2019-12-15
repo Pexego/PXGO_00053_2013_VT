@@ -119,7 +119,8 @@ class StockPicking(models.Model):
                 if (pick.picking_type_id.code == "incoming" and pick.move_lines
                         and pick.move_lines[0].purchase_line_id and
                         pick.company_id.required_invoice_pending_move and
-                        not pick.pending_stock_reverse_move_id):
+                        not pick.pending_stock_reverse_move_id and
+                        pick.pending_stock_move_id):
                     pick.refresh()
                     if not pick.company_id.\
                             property_pending_variation_account or not \
