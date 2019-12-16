@@ -55,6 +55,7 @@ class StockLandedCost(models.Model):
             total_weight = 0.0
             total_volume = 0.0
             total_line = 0.0
+            total_tariff = 0.0
             all_val_line_values = cost.get_valuation_lines()
             for val_line_values in all_val_line_values:
                 for cost_line in cost.cost_lines:
@@ -65,6 +66,7 @@ class StockLandedCost(models.Model):
                 total_qty += val_line_values.get('quantity', 0.0)
                 total_weight += val_line_values.get('weight', 0.0)
                 total_volume += val_line_values.get('volume', 0.0)
+                total_tariff += val_line_values.get('tariff', 0.0)
 
                 former_cost = val_line_values.get('former_cost', 0.0)
                 total_cost += tools.float_round(former_cost,
@@ -94,8 +96,9 @@ class StockLandedCost(models.Model):
                                 total_cost:
                             per_unit = (line.price_unit / total_cost)
                             value = valuation.former_cost * per_unit
-                        elif line.split_method == 'by_tariff':
-                            value = valuation.former_cost * (valuation.tariff/100) / line.price_unit
+                        elif line.split_method == 'by_tariff' and total_tariff:
+                            per_unit = (line.price_unit / total_tariff)
+                            value = valuation.tariff * per_unit
                         else:
                             value = (line.price_unit / total_line)
 
@@ -130,7 +133,7 @@ class StockLandedCost(models.Model):
                 'former_cost': move.value,
                 'weight': move.product_id.weight * move.product_qty,
                 'volume': move.product_id.volume * move.product_qty,
-                'tariff': move.product_id.tariff
+                'tariff': move.value*(move.product_id.tariff/100)
             }
             lines.append(vals)
 
@@ -158,7 +161,7 @@ class StockValuationAdjustmentLines(models.Model):
 
     new_unit_cost = fields.Float('New standard price', store=True,
                                  compute="_get_new_move_cost")
-    tariff = fields.Float("Tariff(%)", digits=(16, 2))
+    tariff = fields.Float("Tariff", digits=(16, 2))
 
 
 class StockLandedCostLines(models.Model):

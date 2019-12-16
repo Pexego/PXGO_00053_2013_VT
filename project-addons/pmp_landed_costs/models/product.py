@@ -9,7 +9,7 @@ class ProductProduct(models.Model):
 
     _inherit = "product.product"
 
-    tariff = fields.Float('Tariff(%)', related="product_tmpl_id.hs_code_id.tariff", readonly=True)
+    tariff = fields.Float('Tariff', related="product_tmpl_id.hs_code_id.tariff", readonly=True)
 
 
 class ProductTemplate(models.Model):
@@ -23,7 +23,7 @@ class ProductTemplate(models.Model):
 class HSCode(models.Model):
     _inherit = "hs.code"
 
-    tariff = fields.Float('Tariff(%)', digits=(16, 2))
+    tariff = fields.Float('Tariff', digits=(16, 2))
 
     @api.constrains('local_code')
     def check_hs_code(self):
