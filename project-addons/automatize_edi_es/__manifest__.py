@@ -9,7 +9,7 @@
     'depends': ['ubl_edi_from_it', 'ubl_edi_to_it', 'base_io_folder',
                 'sale_order_import_ubl', 'sale_order_ubl'],
     'category': 'EDI',
-    'data': [],
+    'data': ['report/stock_italy.xml'],
     'auto_install': False,
     'installable': True,
 }
