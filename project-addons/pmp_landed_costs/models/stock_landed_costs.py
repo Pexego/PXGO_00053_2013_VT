@@ -133,7 +133,7 @@ class StockLandedCost(models.Model):
                 'former_cost': move.value,
                 'weight': move.product_id.weight * move.product_qty,
                 'volume': move.product_id.volume * move.product_qty,
-                'tariff': move.product_id.tariff * move.product_qty
+                'tariff': move.value*(move.product_id.tariff/100)
             }
             lines.append(vals)
 
