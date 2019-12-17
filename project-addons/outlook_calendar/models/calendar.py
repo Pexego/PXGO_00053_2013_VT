@@ -55,6 +55,7 @@ class CalendarEvent(models.Model):
             if response.status_code == 201:
                 o_event = json.loads(response.text)
                 res.outlook_id = o_event['id']
+                res.outlook_last_modified_datetime = o_event['lastModifiedDateTime'][:-9].replace('T', ' ')
             elif response.status_code == 401:
                 message = _("The event hasn't been created in Outlook. Please log in in your profile")
                 self.env.user.notify_warning(message=message)
