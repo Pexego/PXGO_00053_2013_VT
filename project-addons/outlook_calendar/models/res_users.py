@@ -97,7 +97,7 @@ class ResUsers(models.Model):
             response = requests.get('https://graph.microsoft.com/v1.0/me/calendarview?startdatetime=%s&enddatetime=%s'
                                     % (startdatetime, enddatetime),
                                     headers={'Authorization': 'Bearer ' + auth,
-                                             'Prefer': 'outlook.timezone="Romance Standard Time"'})
+                                             'Prefer': 'outlook.timezone="GMT Standard Time"'})
 
             if response.status_code == 200:
                 events = json.loads(response.text)
@@ -114,7 +114,7 @@ class ResUsers(models.Model):
                             attendee_email = attendee['emailAddress']['address']
                             partner = self.env['res.partner'].search([('email', '=', attendee_email)])
                             if partner:
-                                partners[0][2].append(partner.id)
+                                partners[0][2].append(partner[0].id)
 
                         organizer = self.env['res.partner'].search([('email', '=', event['organizer']['emailAddress']['address'])])
                         if organizer:

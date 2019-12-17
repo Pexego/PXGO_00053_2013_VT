@@ -42,11 +42,11 @@ class CalendarEvent(models.Model):
                                     },
                             "start": {
                                 "dateTime": vals['start'][:10] + 'T' + vals['start'][11:],
-                                "timeZone": "Romance Standard Time"
+                                "timeZone": "GMT Standard Time"
                             },
                             "end": {
                                 "dateTime": vals['stop'][:10] + 'T' + vals['stop'][11:],
-                                "timeZone": "Romance Standard Time"
+                                "timeZone": "GMT Standard Time"
                             },
                             "attendees": attendees
                         }
@@ -91,12 +91,12 @@ class CalendarEvent(models.Model):
                     elif field == 'start':
                         event_data['start'] = {
                             "dateTime": vals['start'].replace(' ', 'T'),
-                            "timeZone": "Romance Standard Time"
+                            "timeZone": "GMT Standard Time"
                         }
                     elif field == 'stop':
                         event_data['end'] = {
                             "dateTime": vals['stop'].replace(' ', 'T'),
-                            "timeZone": "Romance Standard Time"
+                            "timeZone": "GMT Standard Timee"
                         }
                     elif field == 'partner_ids':
                         partners_vals = vals['partner_ids'][0][2]
