@@ -41,7 +41,7 @@ class ProductProduct(models.Model):
                 product.is_outlet = False
 
     @api.model
-    def cron_update_outlet_price(self):
+    def cron_update_outlet_price_and_discontinued_products(self):
         outlet_categ_ids = []
         outlet_categ_ids.append(self.env.ref('product_outlet.product_category_o1').id)
         outlet_categ_ids.append(self.env.ref('product_outlet.product_category_o2').id)
@@ -70,4 +70,9 @@ class ProductProduct(models.Model):
 
             product_o.write({'sale_ok':stock})
             product_o.write(values)
+
+        discontinued_products = self.env['product.product'].search(
+            [('sale_ok', '=', False), ('product_tmpl_id.state', 'ilike', 'end'), ('qty_available', '>', 0)])
+        discontinued_products.write({'sale_ok': True})
+
 

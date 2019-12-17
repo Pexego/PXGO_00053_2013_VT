@@ -10,8 +10,8 @@
         <field eval="False" name="doall" />
         <field name="model_id" ref="model_product_product"/>
         <field eval="'product.product'" name="model" />
-        <field eval="'cron_update_outlet_price'" name="function" />
+        <field eval="'cron_update_outlet_price_and_discontinued_products'" name="function" />
         <field name="state">code</field>
-        <field name="code">model.cron_update_outlet_price()</field>
+        <field name="code">model.cron_update_outlet_price_and_discontinued_products()</field>
     </record>
 </odoo>
