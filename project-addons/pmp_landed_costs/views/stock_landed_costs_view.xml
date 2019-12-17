@@ -54,6 +54,7 @@
         <field name="arch" type="xml">
             <field name="name" position="after">
                 <field name="picking_ids"/>
+                <field name="container_ids"/>
             </field>
         </field>
     </record>
