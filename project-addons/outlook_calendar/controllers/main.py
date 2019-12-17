@@ -12,7 +12,8 @@ class OutlookCalendarController(http.Controller):
     def return_url_outlook(self, **kw):
         client_id = request.env['ir.config_parameter'].sudo().get_param('outlook.client.id')
         client_secret = request.env['ir.config_parameter'].sudo().get_param('outlook.client.secret')
-        authorization_response = 'http://localhost:9169/outlook_calendar/get_token?code=' \
+        base_url = request.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        authorization_response = '%s/outlook_calendar/get_token?code=' % base_url \
                                  + kw['code'] + '&state=' + kw['state'] + '&session_state=' + kw['session_state']
 
         outlook = OAuth2Session(client_id, state=request.env.user.outlook_auth_state)
