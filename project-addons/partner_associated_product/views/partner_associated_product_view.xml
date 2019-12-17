@@ -4,26 +4,12 @@
             <field name="name">partner.product.associated.tree</field>
             <field name="model">res.partner.associated.product</field>
             <field name="arch" type="xml">
-                <tree>
+                <tree editable="top" >
                     <field name="product_id"/>
                     <field name="price_unit"/>
                     <field name="qty"/>
                     <field name="discount"/>
                 </tree>
-            </field>
-    </record>
-    <record id="product_associated_form_view" model="ir.ui.view">
-            <field name="name">partner.product.associated.form</field>
-            <field name="model">res.partner.associated.product</field>
-            <field name="arch" type="xml">
-                <form>
-                    <group string="Product/Service">
-                        <field name="product_id"/>
-                        <field name="price_unit"/>
-                        <field name="qty"/>
-                        <field name="discount"/>
-                    </group>
-                </form>
             </field>
     </record>
 </odoo>

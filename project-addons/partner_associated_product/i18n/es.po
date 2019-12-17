@@ -53,8 +53,5 @@ msgstr "Precio por unidad"
 msgid "Discount"
 msgstr "Descuento"
 
-#. module: partner_associated_product
-#: model:ir.ui.view,arch_db:partner_associated_product.product_associated_form_view
-msgid "Product/Service"
-msgstr "Producto/Servicio"
+
 

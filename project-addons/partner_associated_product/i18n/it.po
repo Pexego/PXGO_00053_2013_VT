@@ -52,8 +52,3 @@ msgstr "Prezzo unitario"
 #: model:ir.model.fields,field_description:partner_associated_product.field_res_partner_associated_product_discount
 msgid "Discount"
 msgstr "Sconto"
-
-#. module: partner_associated_product
-#: model:ir.ui.view,arch_db:partner_associated_product.product_associated_form_view
-msgid "Product/Service"
-msgstr "Prodotto/Servizio"

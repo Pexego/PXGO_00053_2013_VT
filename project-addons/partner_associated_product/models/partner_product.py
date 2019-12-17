@@ -13,10 +13,5 @@ class PartnerAssociatedProducts(models.Model):
     qty = fields.Integer("Quantity",default=0,required=True)
     discount = fields.Float("Discount",default=0.0,required=True)
 
-    @api.model
-    def create(self,vals):
-        vals['partner_id']=self.env.context['active_id']
-        return super(PartnerAssociatedProducts, self).create(vals)
-
 
 

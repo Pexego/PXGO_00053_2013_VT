@@ -14,7 +14,7 @@ class Partner(models.Model):
             'name': _('Supplier Associated products'),
             'view_mode': 'tree,form',
             'view_type': 'form',
-            'context': {'tree_view_ref': 'product_associated_tree_view', 'form_view_ref': 'product_associated_form_view'},
+            'context': {'tree_view_ref': 'product_associated_tree_view', 'default_partner_id': self.id},
             'res_model': 'res.partner.associated.product',
             'type': 'ir.actions.act_window',
         }

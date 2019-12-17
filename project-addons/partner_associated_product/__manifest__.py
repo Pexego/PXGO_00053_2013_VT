@@ -26,7 +26,9 @@
     'author': 'Alberto Cañal',
     "depends": ['purchase','base'],
     "data": ["views/partner_view.xml",
-             "views/partner_associated_product_view.xml"
+             "security/ir.model.access.csv",
+             "views/partner_associated_product_view.xml",
+             "views/purchase_view.xml"
              ],
     "installable": True
 }
