@@ -38,7 +38,7 @@ class CalendarEvent(models.Model):
                             "subject": vals.get('name', ''),
                             "body": {
                                         "contentType": "HTML",
-                                        "content": vals.get('description', '')
+                                        "content": vals.get('description', '') and vals.get('description') or ''
                                     },
                             "start": {
                                 "dateTime": vals['start'][:10] + 'T' + vals['start'][11:],
@@ -63,7 +63,7 @@ class CalendarEvent(models.Model):
 
     @api.multi
     def unlink(self):
-        if self.env.user.outlook_sync:
+        if self.env.user.outlook_sync and self.outlook_id:
             auth = self.env.user.outlook_auth_token
             response = requests.delete('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
                                        headers={'Authorization': 'Bearer ' + auth})
@@ -75,7 +75,7 @@ class CalendarEvent(models.Model):
     @api.multi
     def write(self, vals):
         res = super().write(vals)
-        if self.env.user.outlook_sync and 'outlook_id' not in vals:
+        if self.env.user.outlook_sync and 'outlook_id' not in vals and self.outlook_id:
             auth = self.env.user.outlook_auth_token
             up_fields = ['location', 'name', 'start', 'stop', 'partner_ids']
             event_data = {}
@@ -96,7 +96,7 @@ class CalendarEvent(models.Model):
                     elif field == 'stop':
                         event_data['end'] = {
                             "dateTime": vals['stop'].replace(' ', 'T'),
-                            "timeZone": "GMT Standard Timee"
+                            "timeZone": "GMT Standard Time"
                         }
                     elif field == 'partner_ids':
                         partners_vals = vals['partner_ids'][0][2]
