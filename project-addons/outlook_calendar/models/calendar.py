@@ -63,7 +63,8 @@ class CalendarEvent(models.Model):
 
     @api.multi
     def unlink(self):
-        if self.env.user.outlook_sync and self.outlook_id:
+        if self.env.user.outlook_sync and self.outlook_id and not self.env.context.get('outlook_to_delete', False):
+            # if the outlook_to_delete in the context is true, there's no need of delete the event again in outlook
             auth = self.env.user.outlook_auth_token
             response = requests.delete('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
                                        headers={'Authorization': 'Bearer ' + auth})

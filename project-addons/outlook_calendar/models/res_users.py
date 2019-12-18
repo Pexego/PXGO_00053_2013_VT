@@ -101,7 +101,9 @@ class ResUsers(models.Model):
 
             if response.status_code == 200:
                 events = json.loads(response.text)
+                o_ids = []
                 for event in events['value']:
+                    o_ids.append(event['id'])
                     last_modified_date = event['lastModifiedDateTime'][:-9].replace('T', ' ')
                     local_event = self.env['calendar.event'].search([('user_id', '=', self.id),
                                                                      ('outlook_id', '=', event['id'])])
@@ -134,6 +136,18 @@ class ResUsers(models.Model):
                             self.env['calendar.event'].create(new_event_vals)
                         else:
                             local_event.write(new_event_vals)
+
+                # Now we delete the events deleted in outlook if any
+                local_o_ids = self.env['calendar.event'].search([('user_id', '=', self.id),
+                                                                 ('start', '>=', startdatetime),
+                                                                 ('stop', '<=', enddatetime),
+                                                                 ('outlook_id', '!=', False)]).mapped('outlook_id')
+                events_to_delete = set(local_o_ids).difference(set(o_ids))
+                if events_to_delete:
+                    for event in events_to_delete:
+                        self.env['calendar.event'].search([('outlook_id', '=', event)]).\
+                            with_context(outlook_to_delete=True).unlink()
+
             elif response.status_code == 401:
                 message = _("Impossible to sync your events from Outlook. Please log in in your profile")
                 self.env.user.notify_warning(message=message)
