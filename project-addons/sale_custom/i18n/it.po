@@ -153,3 +153,18 @@ msgstr "Alcuni dei prodotti nell'ordine {} non sono attualmente disponibili "
 #: model:ir.ui.view,arch_db:sale_custom.view_order_tree_add_date
 msgid "Invoice type"
 msgstr "Tipo de fatturazione"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:52
+#, python-format
+msgid ""
+"The quantity of the selected product (%i units) is not available at this moment but there is another product that can replace it: %s."
+msgstr "La quantità del prodotto selezionato (%i unità) non è al momento disponibile, ma esiste un altro prodotto che può sostituirlo: %s."
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:54
+#, python-format
+msgid "Not enough inventory but we have a replacement product!"
+msgstr "Inventario non sufficiente, ma esiste un altro prodotto che può sostituirlo!"
+
+La quantité du produit sélectionné (6 unités) n'est pas disponible pour le moment, mais vous pouvez le remplacer par un autre produit
