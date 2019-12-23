@@ -166,5 +166,3 @@ msgstr "La quantità del prodotto selezionato (%i unità) non è al momento disp
 #, python-format
 msgid "Not enough inventory but we have a replacement product!"
 msgstr "Inventario non sufficiente, ma esiste un altro prodotto che può sostituirlo!"
-
-La quantité du produit sélectionné (6 unités) n'est pas disponible pour le moment, mais vous pouvez le remplacer par un autre produit
