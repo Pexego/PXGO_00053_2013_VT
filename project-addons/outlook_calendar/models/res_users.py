@@ -105,11 +105,19 @@ class ResUsers(models.Model):
                 for event in events['value']:
                     o_ids.append(event['id'])
                     last_modified_date = event['lastModifiedDateTime'][:-9].replace('T', ' ')
-                    local_event = self.env['calendar.event'].search([('user_id', '=', self.id),
-                                                                     ('outlook_id', '=', event['id'])])
+                    local_event = self.env['calendar.event'].search([('outlook_id', '=', event['id'])])
+
                     if not local_event or local_event.outlook_last_modified_datetime < last_modified_date:
-                        stop = event['end']['dateTime'][:-1].replace('T', ' ')
                         start = event['start']['dateTime'][:-1].replace('T', ' ')
+                        stop = event['end']['dateTime'][:-1].replace('T', ' ')
+
+                        if event.get('isAllDay'):
+                            # In outlook, the all day events, are ended in the day after at 00:00
+                            stop_date_minus = fields.Datetime.from_string(stop) - relativedelta(days=1)
+                            stop_date = fields.Datetime.to_string(stop_date_minus)
+                        else:
+                            stop_date = stop
+
                         partners = [[6, False, []]]
 
                         for attendee in event['attendees']:
@@ -118,7 +126,9 @@ class ResUsers(models.Model):
                             if partner:
                                 partners[0][2].append(partner[0].id)
 
-                        organizer = self.env['res.partner'].search([('email', '=', event['organizer']['emailAddress']['address'])])
+                        organizer = self.env['res.partner'].search(
+                            [('email', '=', event['organizer']['emailAddress']['address'])])
+                        organizer_user = self.env['res.users'].search([('login', '=', event['organizer']['emailAddress']['address'])])
                         if organizer:
                             partners[0][2].append(organizer.id)
 
@@ -128,9 +138,12 @@ class ResUsers(models.Model):
                             'outlook_last_modified_datetime': last_modified_date,
                             'location': event.get('location', '').get('displayName', ''),
                             'start': start,
-                            'stop': stop,
+                            'stop': stop_date,
+                            'allday': event.get('isAllDay'),
                             'description': event.get('bodyPreview', ''),
-                            'partner_ids': partners
+                            'partner_ids': partners,
+                            'outlook_link': event.get('webLink'),
+                            'user_id': organizer_user.id
                         }
                         if not local_event:
                             self.env['calendar.event'].create(new_event_vals)

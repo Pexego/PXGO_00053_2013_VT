@@ -49,19 +49,19 @@ msgid "Outlook calendar"
 msgstr "Calendario di Outlook"
 
 #. module: outlook_calendar
-#: code:addons/outlook_calendar/models/calendar.py:59
+#: code:addons/outlook_calendar/models/calendar.py:70
 #, python-format
 msgid "The event hasn't been created in Outlook. Please log in in your profile"
 msgstr "L'evento non è creato in Outlook. Per favore, accedi al tuo profilo"
 
 #. module: outlook_calendar
-#: code:addons/outlook_calendar/models/calendar.py:70
+#: code:addons/outlook_calendar/models/calendar.py:82
 #, python-format
 msgid "The event hasn't been deleted in Outlook. Please log in in your profile"
 msgstr "L'evento non è cancellato in Outlook. Per favore, accedi al tuo profilo"
 
 #. module: outlook_calendar
-#: code:addons/outlook_calendar/models/calendar.py:121
+#: code:addons/outlook_calendar/models/calendar.py:132
 #, python-format
 msgid "The event hasn't been updated in Outlook. Please log in in your profile"
 msgstr "L'evento non è aggiornato in Outlook. Per favore, accedi al tuo profilo"
@@ -73,7 +73,19 @@ msgid "Impossible to sync your calendars from Outlook. Please log in in your pro
 msgstr "Impossibile sincronizzare i tuoi calendari da Outlook. Per favore, accedi al tuo profilo"
 
 #. module: outlook_calendar
-#: code:addons/outlook_calendar/models/res_users.py:138
+#: code:addons/outlook_calendar/models/res_users.py:165
 #, python-format
 msgid "Impossible to sync your events from Outlook. Please log in in your profile"
 msgstr "Impossibile sincronizzare i tuoi eventi da Outlook. Per favore, accedi al tuo profilo"
+
+#. module: outlook_calendar
+#: code:addons/outlook_calendar/models/calendar.py:139
+#, python-format
+msgid "The event hasn't been modified in outlook. You can not modify an event that is not yours"
+msgstr "L'evento non è stato modificato in Outlook. Non puoi modificare un evento che non è tuo"
+
+#. module: outlook_calendar
+#: model:ir.ui.view,arch_db:outlook_calendar.view_calendar_event_form_add_o_id
+#: model:ir.ui.view,arch_db:outlook_calendar.view_calendar_event_form_popup_add_button
+msgid "Remember, you cannot modify an event in Outlook that is not yours"
+msgstr "Ricorda, non puoi modificare un evento in Outlook che non è tuo"

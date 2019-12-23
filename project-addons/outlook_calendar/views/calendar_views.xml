@@ -8,9 +8,33 @@
             <div class="oe_title" position="after">
                 <label for="outlook_calendar_id"/>
                 <field name="outlook_calendar_id"/>
+                <field name="outlook_link" invisible="1"/>
+                <div attrs="{'invisible': [('outlook_link','=', False)]}">
+                    <span style="font-size:10px; color:grey">Remember, you cannot modify an event in Outlook that is not yours</span>
+                </div>
             </div>
         </field>
     </record>
+
+    <record id="view_calendar_event_form_popup_add_button" model="ir.ui.view">
+        <field name="name">calendar.event.form.popup.add.button</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form_popup"/>
+        <field name="arch" type="xml">
+            <field name="attendee_status" position="after">
+                <field name="outlook_link" invisible="1"/>
+                <button name="outlook_open_link" string="Open in outlook" type="object"
+                        attrs="{'invisible': [('outlook_link','=', False)]}"/>
+            </field>
+            <xpath expr="//form" position="inside">
+                <div attrs="{'invisible': [('outlook_link','=', False)]}">
+                    <span style="font-size:10px; color:grey">Remember, you cannot modify an event in Outlook that is not yours</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+
 
     <record id="action_server_sync_outlook" model="ir.actions.server">
         <field name="name">Sync Outlook</field>
