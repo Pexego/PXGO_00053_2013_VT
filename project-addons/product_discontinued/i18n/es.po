@@ -32,3 +32,32 @@ msgstr "El producto no cumple los requisitos para ser descatalogado. Stock exist
 #, python-format
 msgid "The product does not have stock."
 msgstr "El producto no tiene stock."
+
+#. module: product_discontinued
+#: #: model:mail.template,body_html:product_discontinued.alert_cron_send_mail_to_commercials_products_discontinued
+msgid "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+            <p>The following orders contain products discontinued:</p>
+            <ul>
+            % for move in ctx['moves']:
+                % if move.product_id.replacement_id:
+                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, created on the following date: <strong>${move.sale_line_id.order_id.date_order}</strong>, the product is :<strong> ${move.product_id.product_tmpl_id.name}</strong> (replacement product: <strong>${move.product_id.replacement_id.product_tmpl_id.name}</strong>)</li>
+                % endif
+                % if not move.product_id.replacement_id:
+                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, created on the following date: <strong>${move.sale_line_id.order_id.date_order}</strong>, the product is :<strong> ${move.product_id.product_tmpl_id.name}</strong> (ask purchasing team if the product is going to be available or not)</li>
+                % endif
+            % endfor
+            </ul>
+            </div>"
+msgstr "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+            <p>los siguientes pedidos tienen productos en fin de ciclo de vida:</p>
+            <ul>
+            % for move in ctx['moves']:
+                % if move.product_id.replacement_id:
+                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, creado en la siguiente fecha: <strong>${move.sale_line_id.order_id.date_order}</strong>, el producto es :<strong> ${move.product_id.product_tmpl_id.name}</strong> (producto de reemplazo: <strong>${move.product_id.replacement_id.product_tmpl_id.name}</strong>)</li>
+                % endif
+                % if not move.product_id.replacement_id:
+                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, creado en la siguiente fecha:: <strong>${move.sale_line_id.order_id.date_order}</strong>, el producto es :<strong> ${move.product_id.product_tmpl_id.name}</strong> (preguntad al equipo de compras si volverá a estar disponible)</li>
+                % endif
+            % endfor
+            </ul>
+            </div>"
