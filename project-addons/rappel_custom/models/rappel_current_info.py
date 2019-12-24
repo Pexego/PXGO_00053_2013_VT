@@ -60,7 +60,7 @@ class RappelCurrentInfo(models.Model):
                         send = False
 
                 if values.get(partner.id):
-                    template = self.env.ref('rappel.rappel_mail_advice')
+                    template = self.env.ref('rappel_custom.rappel_mail_advice')
                     ctx = dict(self._context)
                     ctx.update({
                         'partner_email': partner.email,
