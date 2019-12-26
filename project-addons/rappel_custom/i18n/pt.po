@@ -16,46 +16,6 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: rappel_custom
-#: model:ir.model.fields,field_description:rappel_custom.field_rappel_calculated_goal_percentage
-msgid "Goal Percentage"
-msgstr "Tasso di conformità"
-
-#. module: rappel_custom
-#: model:ir.model.fields,field_description:rappel_custom.field_rappel_brand_ids
-msgid "Brand"
-msgstr "Marca"
-
-#. module: rappel_custom
-#: model:ir.ui.view,arch_db:rappel_custom.rappel_form_add_brand
-msgid "You must fill in only one of the following fields to define the validity area of rappel:"
-msgstr "È necessario inserire solo uno dei seguenti dati per definire l'ambito di validità del rappel: "
-
-#. module: rappel_custom
-#: model:ir.model.fields,help:rappel_custom.field_rappel_current_info_curr_qty_pickings
-msgid "Qty estimation in pickings pending to be invoiced (shipping cost and product with no-rappel check in the order are not verified)"
-msgstr "Importo stimato nelle note di consegna in attesa di fatturazione (i costi di spedizione e i prodotti con l'assegno non di sconto nell'ordine non sono verificati) "
-
-#. module: rappel_custom
-#: model:ir.model.fields,field_description:rappel_custom.field_rappel_current_info_curr_qty_pickings
-msgid "Qty pending invoice"
-msgstr "Quant. in attesa di fatturazione"
-
-#. module: rappel_custom
-#: model:ir.ui.view,arch_db:rappel_custom.view_rappel_current_info_tree_add_qty_picking
-msgid "Curr. qty invoiced"
-msgstr "Quant. att. fatturata"
-
-#. module: rappel_custom
-#: model:ir.model.fields,field_description:rappel_custom.field_rappel_current_info_amount_est
-msgid "Estimated amount"
-msgstr "Importo stimato"
-
-#. module: custom_partner
-#: model:ir.model.fields,field_description:custom_partner.field_rappel_description
-msgid "Description"
-msgstr "Descrizione"
-
-#. module: rappel_custom
 #: model:mail.template,body_html:rappel_custom.rappel_mail_advice
 msgid "<html>\n"
 "<head>  \n"
@@ -125,9 +85,9 @@ msgid "<html>\n"
 "                        </div>\n"
 "</body>\n"
 "</html>"
-msgstr " \n"
-"  \n"
-"            <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\">\n"
+msgstr " <html>\n"
+"  <head>\n"
+"    <meta http-equiv=\"Content-type\" content=\"text/html; charset=utf-8\">\n"
 "    <title>Rappels ${ctx['partner_name']}</title>\n"
 "    <style>\n"
 "    span.oe_mail_footer_access {\n"
@@ -136,30 +96,31 @@ msgstr " \n"
 "        color:grey;\n"
 "    }\n"
 "    </style>\n"
-"  \n"
+"    </head>\n"
 "\n"
-"   \n"
+"   <body>\n"
 "    <div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
-"        <p>Gentile cliente:</p>\n"
+"        <p>Estimado Cliente:</p>\n"
 "        <div>\n"
 "          % for line in ctx['values']:\n"
 "\n"
-"            <p>In relazione al suo rappel <em>${line.concepto}</em>,\n"
-"              % if line.advice_timing == 'fixed': \n"
-"                     e mancando ${line.timing} giorni alla fine dello stesso, \n"
-"              % endif\n"
-"              % if line.advice_timing == 'variable': \n"
-"                      trascorsi ${line.timing}% del periodo computabile, \n"
-"              % endif\n"
-"              la informiamo che lo stato attuale del suo importo di acquisto fino ad oggi è di:\n"
+"            <p>Em relação ao seu rapel <em>${line.concepto}</em>,\n"
+"             % if line.advice_timing == 'fixed': \n"
+"                  e a faltar ${line.timing} dias para a finalização do mesmo,\n"
+"             % endif\n"
+"             % if line.advice_timing == 'variable': \n"
+"                  transcorrido o ${line.timing}% do período calculável, \n"
+"             % endif\n"
+"             informamos que sua situação actual do seu montante de compras no dia de hoje é:\n"
 "            </p> \n"
-"            %if line.curr_qty: \n"
-"                 <p> Importo: ${line.curr_qty} €</p>\n"
-"          % endif\n"
+"            % if line.curr_qty: \n"
+"               <p> Quantidade: ${line.curr_qty} €</p>\n"
+"            % endif\n"
+"\n"
 "          % endfor\n"
 "        </div>\n"
-"        <p>Per favore, se questa informazione non è di sua competenza, la invii al responsabile acquisti della sua azienda in modo che venga informato e, se ha qualche domanda in merito, non esiti a contattare il suo commerciale di riferimento ${object.user_id.name}.</p>\n"
-"        <p>Cordiali saluti.</p>\n"
+"        <p>Por favor, se esta informação não é da sua competência, reenviar ao responsável de compras da sua empresa e se existe qualquer pergunta ao respeito, não hesite em contactar com seu comercial habitual ${object.user_id.name}.</p>\n"
+"        <p>Melhores cumprimentos.</p>\n"
 "\n"
 "\n"
 "        <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
@@ -194,7 +155,5 @@ msgstr " \n"
 "            <p></p>\n"
 "        </div>\n"
 "    </div>\n"
-"\n"
-"\n"
-"                \n"
-"                "
+"                     </body>\n"
+"                </html>"
