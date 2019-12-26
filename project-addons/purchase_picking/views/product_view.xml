@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_product_date_first_incoming_form_iew" model="ir.ui.view">
+        <field name="name">product.product.date.first.incoming.purchase.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="last_purchase_date" position="after">
+                <field name="date_first_incoming"/>
+            </field>
+        </field>
+    </record>
+</odoo>
