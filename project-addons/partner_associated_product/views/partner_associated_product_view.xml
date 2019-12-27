@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_associated_tree_view" model="ir.ui.view">
+            <field name="name">partner.product.associated.tree</field>
+            <field name="model">res.partner.associated.product</field>
+            <field name="arch" type="xml">
+                <tree editable="top" >
+                    <field name="product_id"/>
+                    <field name="price_unit"/>
+                    <field name="qty"/>
+                    <field name="discount"/>
+                </tree>
+            </field>
+    </record>
+</odoo>
