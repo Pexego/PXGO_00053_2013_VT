@@ -1078,3 +1078,121 @@ msgstr "Referencia de proveedor"
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_reference
 msgid "N. Supplier Invoice (SII)"
 msgstr "N. factura proveedor (SII)"
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.action_account_invoice_contact_report
+#: model:ir.ui.menu,name:custom_account.menu_action_account_invoice_contact_report
+msgid "Invoices Contact Analysis"
+msgstr "Análisis de facturas (contactos)"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_number
+msgid "Number"
+msgstr "Número"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_period_id
+msgid "Period"
+msgstr "Período"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_partner_id
+msgid "Partner Company"
+msgstr "Empresa matriz"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_contact_id
+msgid "Partner contact"
+msgstr "Contacto"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_currency_id
+msgid "Currency"
+msgstr "Divisa"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_state
+msgid "State"
+msgstr "Estado"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_price_account_invoice_contact_report_total
+msgid "Total Without Tax"
+msgstr "Total base"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_benefit
+msgid "Benefit"
+msgstr "Beneficio"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,brand_id:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_brand_id
+msgid "Brand"
+msgstr "Marca"
+
+#. module: custom_account
+#: field:account.invoice.contact.report,product_id:0
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_contact_report_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "This Year"
+msgstr "Este año"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Customer"
+msgstr "Cliente"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Supplier"
+msgstr "Proveedor"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Refund"
+msgstr "Factura rectificativa"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Sales Team"
+msgstr "Equipo de ventas"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Without ef"
+msgstr "Sin ef"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Status"
+msgstr "Estado"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Company"
+msgstr "Compañía"
+
+#. module: custom_account
+#: view:account.invoice.contact.report:custom_account.view_account_invoice_contact_report_search
+msgid "Due Month"
+msgstr "Mes de vencimiento"
