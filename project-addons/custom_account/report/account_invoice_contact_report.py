@@ -57,7 +57,7 @@ class AccountInvoiceContactReport(models.Model):
     def _select(self):
         select_str = """
             SELECT  sub.id, sub.id_invoice, sub.number, sub.partner_id, sub.contact_id, 
-                    sub.date, sub.date_due, sub.team_id, sub.period_id, sub.type, sub.state, sub.currency_id,
+                    sub.date, sub.date_due, sub.team_id, sub.type, sub.state, sub.currency_id,
                     sub.product_id, sub.brand_id, sub.company_id,
                     sub.price_total / cr.rate as price_total, 
                     CASE WHEN sub.type IN ('out_refund') THEN -sub.benefit
@@ -69,7 +69,7 @@ class AccountInvoiceContactReport(models.Model):
     def _sub_select(self):
         select_str = """
                 SELECT  ail.id, ai.id AS id_invoice, ai.number AS number, ai.partner_id, coalesce(rp_contact.id, ai.partner_id) AS contact_id,
-                        ai.date_invoice AS date, ai.date_due, ai.team_id, ai.period_id, ai.type, ai.state, ai.currency_id,  
+                        ai.date_invoice AS date, ai.date_due, ai.team_id, ai.type, ai.state, ai.currency_id,  
                         ail.product_id, pt.product_brand_id AS brand_id, ai.company_id, 
                         SUM(CASE
                                 WHEN ai.type::text = ANY (ARRAY['out_refund'::character varying::text, 'in_invoice'::character varying::text])
@@ -96,7 +96,7 @@ class AccountInvoiceContactReport(models.Model):
     def _group_by(self):
         group_by_str = """
                 GROUP BY ail.id, ail.product_id, pt.product_brand_id, ai.id, ai.partner_id, coalesce(rp_contact.id, ai.partner_id), ai.number, ai.date_invoice, 
-                ai.team_id, ai.period_id, ai.currency_id, ai.type, ai.state, ai.company_id
+                ai.team_id, ai.currency_id, ai.type, ai.state, ai.company_id
         """
         return group_by_str
 

@@ -32,7 +32,6 @@
          <field name="arch" type="xml">
              <pivot string="Invoices Contact Analysis">
                  <field name="date" type="row"/>
-                 <field name="period_id" type="col"/>
                  <field name="price_total" type="measure"/>
              </pivot>
          </field>
