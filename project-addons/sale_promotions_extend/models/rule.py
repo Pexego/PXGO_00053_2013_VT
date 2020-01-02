@@ -251,7 +251,7 @@ class PromotionsRulesActions(models.Model):
             'product_id': self.env.ref('commercial_rules.product_discount').id,
             'name': '%s (%s)' % (
                      product_id.default_code,
-                     self.promotion.name),
+                     self.promotion.line_description),
             'price_unit': -price_unit,
             'discount': discount,
             'promotion_line': True,
@@ -267,6 +267,8 @@ class PromotionsRules(models.Model):
     _inherit = "promos.rules"
 
     special_promo = fields.Boolean("Special Promo")
+
+    line_description = fields.Char(translate=True,string="Desciption in lines",help="This field is shown in the description field of the invoice,picking and sale lines")
 
     @api.model
     def apply_special_promotions(self, order):
