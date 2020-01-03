@@ -5,7 +5,7 @@
           name="App Drawer - Secondary Menu"
           >
         <xpath expr="//li[hasclass('app-name')]/span/t" position="before">
-            🇮🇹
+            <t t-esc="request.env['ir.config_parameter'].sudo().get_param('country.flag')" />
         </xpath>
     </template>
 </odoo>
