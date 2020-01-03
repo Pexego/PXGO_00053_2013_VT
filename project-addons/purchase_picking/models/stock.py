@@ -24,6 +24,7 @@ from odoo import models, fields, api, _, exceptions
 class StockContainer(models.Model):
 
     _name = 'stock.container'
+    _order = 'write_date desc'
 
     @api.multi
     def write(self,vals):
