@@ -7,6 +7,7 @@
         "views/assets.xml",
         "views/menu_icons.xml",
         "views/web.xml",
+        "data/parameters.xml"
     ],
     "depends": [
         "web",
