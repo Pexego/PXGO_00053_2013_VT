@@ -342,3 +342,7 @@ msgstr "Impossibile aumentare la quantità"
 msgid "Impossible to decrease the quantity to 0"
 msgstr "Impossibile modificare la quantità su 0"
 
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_product_product_date_first_incoming
+msgid "Date First Incoming"
+msgstr "Data del primo arrivo"
