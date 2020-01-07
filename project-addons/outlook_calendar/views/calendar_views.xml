@@ -13,6 +13,9 @@
                     <span style="font-size:10px; color:grey">Remember, you cannot modify an event in Outlook that is not yours</span>
                 </div>
             </div>
+            <page name="page_invitations" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </page>
         </field>
     </record>
 

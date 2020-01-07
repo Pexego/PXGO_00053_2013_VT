@@ -137,7 +137,7 @@ class CalendarEvent(models.Model):
                     self.env.user.notify_warning(message=message)
         else:
             message = _("The event hasn't been modified in outlook. You can not modify an event that is not yours")
-            self.env.user.notify_warning(message=message, sticky=True)
+            self.env.user.notify_warning(message=message)
 
         return res
 
