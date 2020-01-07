@@ -1,0 +1,33 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * automatize_edi_es
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-10 12:20+0000\n"
+"PO-Revision-Date: 2019-12-10 12:20+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: automatize_edi_es
+#: model:ir.actions.act_window,name:automatize_edi_es.action_stock_inventory_valuation_italy
+#: model:ir.ui.view,arch_db:automatize_edi_es.view_stock_quantity_history_italy_wizard
+#: model:ir.ui.menu,name:automatize_edi_es.menu_valuation_italy
+msgid "Valuation Report Italy"
+msgstr "Valutazione dell'inventario Italia"
+
+#. module: automatize_edi_es
+#: model:ir.ui.view,arch_db:automatize_edi_es.view_stock_quantity_history_italy_wizard
+msgid "Retrieve the inventory valuation"
+msgstr "Recupera la valutazione del magazzino"
+
+#. module: automatize_edi_es
+#: model:ir.ui.view,arch_db:automatize_edi_es.view_stock_quantity_history_italy_wizard
+msgid "Cancel"
+msgstr "Anulla"

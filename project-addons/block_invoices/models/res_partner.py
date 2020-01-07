@@ -11,6 +11,7 @@ class ResPartner(models.Model):
 
     blocked_sales = fields.Boolean('Sales blocked?', copy=False)
     defaulter = fields.Boolean()
+    never_block = fields.Boolean("Never block sales in this partner")
 
     def get_partners_to_check(self):
         partners_to_check = self
@@ -56,6 +57,10 @@ class ResPartner(models.Model):
             date.today() + timedelta(days=-int(
                 self.env.user.company_id.block_customer_days)))
         for partner in self:
+            if partner.never_block:
+                if partner.blocked_sales:
+                    partner.blocked_sales = False
+                continue
             cust_accounts = self.env['account.account'].search(
                 [('company_id', '=', self.env.user.company_id.id),
                  ('internal_type', '=', 'receivable'),

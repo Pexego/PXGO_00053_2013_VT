@@ -38,7 +38,6 @@ class AccountInvoiceLine(models.Model):
     purchase_supplier_reference = fields.Char(
         'Supplier reference', related='purchase_id.partner_ref',
         readonly=True)
-    active = fields.Boolean(default=True)
     sale_order_id = fields.Many2one("sale.order", "Sale", readonly=True,
                                     related="sale_line_ids.order_id")
     cost_unit = fields.Float("Product cost price")
@@ -66,7 +65,6 @@ class AccountInvoice(models.Model):
     invoice_type_id = fields. \
         Many2one('res.partner.invoice.type', 'Invoice type', readonly=True,
                  related="commercial_partner_id.invoice_type_id")
-    active = fields.Boolean(default=True)
     not_send_email = fields.Boolean("Not send email")
     total = fields.Float("Total Paid", compute="total_paid")
     last_payment = fields.Date("Last Payment", compute="last_payment_date")
