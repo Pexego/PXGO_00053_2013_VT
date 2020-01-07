@@ -250,7 +250,7 @@ class SaleOrder(models.Model):
             mail_id = template_id.with_context(context).send_mail(self.id)
             if mail_id:
                 mail_id_check = mail_pool.browse(mail_id)
-                mail_id_check.send()
+                mail_id_check.with_context(context).send()
 
         return True
 
