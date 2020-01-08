@@ -147,7 +147,7 @@ class CreatePickingMove(models.TransientModel):
                 'location_dest_id': type_id.default_location_dest_id.id,
                 'temp': True
             }
-            if key in partners:
+            if self.supplier_mode and key in partners:
                 picking_vals['partner_id'] = key
             else:
                 picking_vals['partner_id'] = all_moves[key][0].partner_id.id
