@@ -137,9 +137,9 @@ class StockMove(models.Model):
     sale_id = fields.Many2one('sale.order', related='sale_line_id.order_id',
                               readonly=True)
     date_reliability = fields.Selection([
-        ('high', 'High'),
-        ('medium', 'Medium'),
-        ('low', 'Low'),
+        ('1.high', 'High'),
+        ('2.medium', 'Medium'),
+        ('3.low', 'Low'),
         ], readonly=False,compute='_compute_dates')
 
     def _compute_is_initial_demand_editable(self):
@@ -169,11 +169,11 @@ class StockMove(models.Model):
     def _compute_dates(self):
         for move in self:
             if move.picking_id:
-                move.date_reliability="high"
+                move.date_reliability="1.high"
             elif move.container_id:
-                move.date_reliability="medium"
+                move.date_reliability="2.medium"
             else:
-                move.date_reliability="low"
+                move.date_reliability="3.low"
 
     @api.multi
     def _action_done(self):
