@@ -36,6 +36,7 @@ class ProductPricelistItem(models.Model):
     margin = fields.Float("Margin (%)", compute='_get_margin', readonly=True, store=True)
     name_pricelist = fields.Char(related='pricelist_id.name', readonly=True)
     base = fields.Selection(selection_add=[('standard_price_2', 'Cost 2')])
+    pricelist_sequence = fields.Integer(related='pricelist_id.sequence', readonly=True)
 
     @api.multi
     @api.depends('fixed_price')
