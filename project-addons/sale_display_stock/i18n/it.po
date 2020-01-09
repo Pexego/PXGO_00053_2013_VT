@@ -201,6 +201,11 @@ msgid "Incoming"
 msgstr "Stock in entrata"
 
 #. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_pending
+msgid "Qty Pending"
+msgstr "Quant. in sopesso"
+
+#. module: sale_display_stock
 #: selection:sale.order.line.report,product_state:0
 msgid "Make to order"
 msgstr "Su richiesta"
