@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form" model="ir.ui.view">
+        <field name="name">res.users.form</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+        <field name="arch" type="xml">
+            <group name="preferences" position="after">
+                <group name="outlook_preferences" string="Outlook Preferences">
+                    <group>
+                        <field name="outlook_is_logged"/>
+                        <field name="outlook_sync"/>
+                    </group>
+                    <group>
+                        <button name="get_outlook_auth" type="object" string=" Log in Outlook" icon="fa-calendar-o"/>
+                    </group>
+                    <field name="outlook_calendar_ids"/>
+                </group>
+            </group>
+        </field>
+    </record>
+</odoo>
+
