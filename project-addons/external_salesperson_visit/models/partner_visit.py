@@ -127,7 +127,7 @@ class PartnerVisit(models.Model):
             self.area_id = self.partner_id.area_id.id
         else:
             self.area_id = self.partner_id.sudo().commercial_partner_id.area_id.id
-        self.sales_team = self.partner_id.commercial_partner_id.team_id.id
+        self.sales_team = self.partner_id.sudo().commercial_partner_id.team_id.id
 
     @api.one
     def send_email(self):

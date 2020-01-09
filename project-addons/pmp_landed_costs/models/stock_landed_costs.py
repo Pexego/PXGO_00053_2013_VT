@@ -15,7 +15,8 @@ class StockLandedCost(models.Model):
                  search([('code', '=', 'APUR')]))
 
     container_ids = fields.Many2many('stock.container', string='Containers',
-                                     compute='_get_container', inverse='_set_pickings')
+                                     compute='_get_container', inverse='_set_pickings',
+                                     search='_search_container')
     forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
 
     @api.multi
@@ -40,6 +41,13 @@ class StockLandedCost(models.Model):
                     for picking in container.picking_ids:
                         res.append(picking.id)
                 cost.picking_ids = res
+
+    @api.model
+    def _search_container(self, operator, value):
+        moves = self.env['stock.move'].search([('container_id.name', operator, value)])
+        pickings = moves.mapped('picking_id.id')
+        return[('picking_ids', 'in', pickings)]
+
 
 
     @api.multi
@@ -133,7 +141,7 @@ class StockLandedCost(models.Model):
                 'former_cost': move.value,
                 'weight': move.product_id.weight * move.product_qty,
                 'volume': move.product_id.volume * move.product_qty,
-                'tariff': move.product_id.tariff * move.product_qty
+                'tariff': move.value*(move.product_id.tariff/100)
             }
             lines.append(vals)
 

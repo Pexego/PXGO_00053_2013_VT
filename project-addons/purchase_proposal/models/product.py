@@ -44,34 +44,29 @@ class ProductProduct(models.Model):
         move_obj = self.env['stock.move']
         picking_type_obj = self.env['stock.picking.type']
         picking_type_ids = picking_type_obj.search([('code', '=', 'outgoing')])
-        if country_code == 'IT':
-            now = datetime.now()
-            last_sixty_days = (now - relativedelta(days=60)).strftime("%Y-%m-%d")
-            products = self.env['product.product'].search([('type', '!=', 'service')])
-            for product in products:
-                moves = move_obj.search([('date', '>=', last_sixty_days),
-                                         ('state', '=', 'done'),
-                                         ('product_id', '=', product.id),
-                                         ('picking_type_id', 'in', picking_type_ids.ids),
-                                         ('group_id.sale_id', '!=', False)],
-                                        order='product_uom_qty desc')
-                biggest_order = moves[0].group_id.sale_id.id if moves else False
-                biggest_move_qty = moves[0].product_uom_qty if moves else 0
-                sales_last_sixty_days = sum(moves.mapped('product_uom_qty'))
-                product.write({'biggest_sale_id': biggest_order,
-                               'biggest_sale_qty': biggest_move_qty,
-                               'last_sixty_days_sales': sales_last_sixty_days})
-        else:
-            query = """select pp.id,(select sum(product_uom_qty) from stock_move
-         sm inner join stock_picking_type spt on spt.id = sm.picking_type_id inner
-         join procurement_group po on po.id = sm.group_id where date >=
-         (select min(t.datum) from (select product_id,datum from stock_days_positive
-         where product_id = pp.id order by datum desc limit 60) as t) and
-         sm.state = 'done' and sm.product_id = pp.id and spt.code = 'outgoing' and
-         po.sale_id is not null), (select min(t2.datum) from (select product_id,
-         datum from stock_days_positive where product_id = pp.id order by datum desc
-         limit 60) as t2) from product_product pp inner join product_template pt on
-         pt.id = pp.product_tmpl_id where pt.type != 'service'"""
+        location_customer = self.env.ref('stock.stock_location_customers')
+        if country_code == 'ES':
+            query = """
+                        select pp.id,
+                               (select sum(sm.product_uom_qty) 
+                                from stock_move sm 
+                                inner join stock_picking_type spt on spt.id = sm.picking_type_id 
+                                inner join procurement_group po on po.id = sm.group_id 
+                                where date >= (select min(t.datum) 
+                                               from (select product_id, datum 
+                                                     from stock_days_positive 
+                                                     where product_id = pp.id 
+                                                     order by datum desc limit 60) as t) 
+                                      and sm.state = 'done' and sm.product_id = pp.id and spt.code = 'outgoing' 
+                                      and po.sale_id is not null and sm.location_dest_id = {}), 
+                                (select min(t2.datum) from (select product_id, datum 
+                                                            from stock_days_positive 
+                                                            where product_id = pp.id 
+                                                            order by datum desc
+                                                            limit 60) as t2) 
+                        from product_product pp inner join product_template pt on pt.id = pp.product_tmpl_id 
+                        where pt.type != 'service'
+                    """.format(location_customer.id)
             if not records:
                 self.average_margin_last_sales()
             else:
@@ -102,6 +97,28 @@ class ProductProduct(models.Model):
                                      " null, biggest_sale_qty = %s, "
                                      "last_sixty_days_sales = %s where id = %s" %
                                      (0.0, 0.0, product_data[0]))
+        else:
+            now = datetime.now()
+            last_sixty_days = (now - relativedelta(days=60)).strftime("%Y-%m-%d")
+            products = self.env['product.product'].search([('type', '!=', 'service')])
+            if not records:
+                self.average_margin_last_sales()
+            else:
+                products = products.filtered(lambda x: x.id in records)
+            for product in products:
+                moves = move_obj.search([('date', '>=', last_sixty_days),
+                                         ('state', '=', 'done'),
+                                         ('product_id', '=', product.id),
+                                         ('picking_type_id', 'in', picking_type_ids.ids),
+                                         ('group_id.sale_id', '!=', False),
+                                         ('location_dest_id', '=', location_customer.id)],
+                                        order='product_uom_qty desc')
+                biggest_order = moves[0].group_id.sale_id.id if moves else False
+                biggest_move_qty = moves[0].product_uom_qty if moves else 0
+                sales_last_sixty_days = sum(moves.mapped('product_uom_qty'))
+                product.write({'biggest_sale_id': biggest_order,
+                               'biggest_sale_qty': biggest_move_qty,
+                               'last_sixty_days_sales': sales_last_sixty_days})
 
     @api.model
     def average_margin_last_sales(self, ids=False):

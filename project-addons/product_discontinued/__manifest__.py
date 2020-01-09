@@ -14,7 +14,9 @@ the button commission_free will disappear of the view
         "sale_customer_discount"
     ],
     "data": [
-        "views/product_discontinued_view.xml"
+        "views/product_discontinued_view.xml",
+        "data/cron.xml",
+        "views/email_template.xml"
     ],
     "installable": True
 }
