@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_invoice_contact_report_search" model="ir.ui.view">
+        <field name="name">account.invoice.contact.report.search</field>
+        <field name="model">account.invoice.contact.report</field>
+        <field name="arch" type="xml">
+            <search string="Invoices Analysis">
+                <field name="date"/>
+                <filter string="This Year" name="thisyear" domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]" help="Journal invoices with period in current year"/>
+                <separator/>
+                <filter string="Customer" name="customer" domain="['|', ('type','=','out_invoice'),('type','=','out_refund')]"/>
+                <filter string="Supplier" domain="['|', ('type','=','in_invoice'),('type','=','in_refund')]"/>
+                <separator/>
+                <filter string="Invoice" domain="['|', ('type','=','out_invoice'),('type','=','in_invoice'), ('state', '!=', 'cancel')]"/>
+                <filter string="Refund" domain="['|', ('type','=','out_refund'),('type','=','in_refund')]"/>
+                <field name="partner_id" operator="child_of"/>
+                <filter string="Sales Team" domain="[]" context="{'group_by':'team_id'}" groups="base.group_multi_salesteams"/>
+                <group expand="1" string="Group By">
+                    <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
+                    <filter string="Status" context="{'group_by':'state'}"/>
+                    <filter string="Company" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    <separator orientation="vertical" />
+                    <filter string="Due Month" context="{'group_by':'date_due:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_account_invoice_contact_report_graph" model="ir.ui.view">
+         <field name="name">account.invoice.contact.report.graph</field>
+         <field name="model">account.invoice.contact.report</field>
+         <field name="arch" type="xml">
+             <pivot string="Invoices Contact Analysis">
+                 <field name="date" type="row"/>
+                 <field name="price_total" type="measure"/>
+             </pivot>
+         </field>
+    </record>
+
+    <record id="action_account_invoice_contact_report" model="ir.actions.act_window">
+        <field name="name">Invoices Contact Analysis</field>
+        <field name="res_model">account.invoice.contact.report</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">pivot</field>
+        <field name="search_view_id" ref="view_account_invoice_contact_report_search"/>
+        <field name="view_id" ref="view_account_invoice_contact_report_graph"/>
+        <field name="domain">[('state', 'not in', ['draft', 'cancel','proforma','proforma2'])]</field>
+        <field name="context">{'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
+    </record>
+
+    <menuitem action="action_account_invoice_contact_report" id="menu_action_account_invoice_contact_report" parent="account.account_reports_management_menu" sequence="1"/>
+
+</odoo>
