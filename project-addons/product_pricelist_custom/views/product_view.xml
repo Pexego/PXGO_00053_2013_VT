@@ -49,8 +49,9 @@
                     <group colspan="8" col="8">
                         <field name="item_ids" nolabel="1">
                             <tree string="Pricelist Items"
-                                  editable="bottom" create="false" delete="false">
+                                  editable="bottom" create="false" delete="false" default_order="pricelist_sequence">
                                 <field name="name_pricelist"/>
+                                <field name="pricelist_sequence" invisible="1"/>
                                 <field name="fixed_price" string="Price" required='1'/>
                                 <field name="margin"/>
                                 <field name="pricelist_calculated" readonly="True"/>
