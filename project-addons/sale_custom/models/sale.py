@@ -47,6 +47,14 @@ class SaleOrderLine(models.Model):
                              precision_digits=precision) == -1:
                 is_available = self._check_routing()
                 if not is_available:
+                    if self.product_id.replacement_id:
+                        if self.product_id.replacement_id.virtual_stock_conservative-self.product_uom_qty >= 0 and self.product_id.replacement_id.sale_ok:
+                            message = _('The quantity of the selected product (%i units) is not available at this moment but there is another product that can replace it: %s.') %(self.product_id.virtual_stock_conservative,self.product_id.replacement_id.default_code)
+                            warning_mess = {
+                                'title': _('Not enough inventory but we have a replacement product!'),
+                                'message': message
+                            }
+                            return {'warning': warning_mess}
                     message =  \
                         _('You plan to sell %s %s but you only have %s %s '
                           'available in %s warehouse.') % \
