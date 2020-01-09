@@ -106,7 +106,11 @@ class PromotionsRulesActions(models.Model):
              _('Discount % on Brand accumulated')),
             ('web_disc_accumulated',
              _('Web Discount % on Product accumulated')),
-            ('a_get_b_product_tag', _('AxB on product tag'))])
+            ('a_get_b_product_tag',
+             _('AxB on product tag')),
+            ('prod_fixed_price',
+             _('Fixed price on Product Tag'))
+            ])
 
     def on_change(self):
         if self.action_type == 'prod_disc_perc_accumulated':
@@ -131,6 +135,9 @@ class PromotionsRulesActions(models.Model):
         elif self.action_type == 'a_get_b_product_tag':
             self.product_code = 'product_tag'
             self.arguments = 'A,B'
+        elif self.action_type == 'prod_fixed_price':
+            self.product_code = 'product_tag'
+            self.arguments = '0.00'
         return super().on_change()
 
     def apply_perc_discount_accumulated(self, order_line):
@@ -242,6 +249,18 @@ class PromotionsRulesActions(models.Model):
                             num_lines, order_line.product_id)
                         promo_products.append(order_line.product_id.id)
         return {}
+
+    def action_prod_fixed_price(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) in order_line.product_tags:
+                self.apply_fixed_price(order_line)
+        return {}
+
+    def apply_fixed_price(self, order_line):
+        vals = {
+            'price_unit': eval(self.arguments)
+        }
+        return order_line.write(vals)
 
     def create_y_line_axb(self, order, price_unit, discount,
                           sequence, quantity, product_id):
