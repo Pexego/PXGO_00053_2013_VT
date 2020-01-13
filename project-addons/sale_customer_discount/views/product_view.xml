@@ -16,10 +16,12 @@
                     <field name="list_price2" string="PVP B"/>
                     <field name="list_price3" string="PVP C"/>
                     <field name="list_price4" string="PVP D"/>
+                    <field name="list_price5" string="PVP E"/>
                     <field name="pvi1_price" string="PVI A"/>
                     <field name="pvi2_price" string="PVI B"/>
                     <field name="pvi3_price" string="PVI C"/>
                     <field name="pvi4_price" string="PVI D"/>
+                    <field name="pvi5_price" string="PVI E"/>
                 </field>
                 <field name="uom_id" position="attributes">
                     <attribute name="invisible">1</attribute>

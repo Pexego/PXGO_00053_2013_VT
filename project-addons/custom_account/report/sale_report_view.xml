@@ -10,11 +10,13 @@
                     <field name="brand_id"/>
                     <field name="parent_category_id"/>
                     <field name="partner_ref"/>
+                    <field name="partner_vat"/>
                 </field>
                 <filter name="Category" position="after">
                     <filter string="Brand of Product" name="Brand" context="{'group_by':'brand_id'}"/>
                     <filter string="Parent Category" name="parent_categ" context="{'group_by':'parent_category_id'}"/>
                     <filter string="Partner ref." name="partner_ref" context="{'group_by':'partner_ref'}"/>
+                    <filter string="Partner VAT" name="partner_vat" context="{'group_by':'partner_vat'}"/>
                 </filter>
             </field>
         </record>
