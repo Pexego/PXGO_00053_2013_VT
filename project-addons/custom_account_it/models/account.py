@@ -8,11 +8,5 @@ class AccountInvoice(models.Model):
     def create(self, vals):
         if vals.get('type', False) == "out_refund":
             vals["fiscal_document_type_id"] = self.env['fiscal.document.type'].search(
-                    [('name', 'like', 'nota di credito')], limit=1).id
+                    [('id', '=', self.env.ref('l10n_it_fiscal_document_type.2').id)], limit=1).id
         return super().create(vals)
-
-    @api.onchange('partner_id', 'journal_id', 'type', 'fiscal_position_id')
-    def _set_document_fiscal_type_out_refund(self):
-        if self.type == 'out_refund':
-            self.fiscal_document_type_id = self.env['fiscal.document.type'].search(
-                [('name', 'like', 'nota di credito')], limit=1).id

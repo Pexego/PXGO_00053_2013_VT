@@ -11,7 +11,7 @@
     """,
     'author': 'Visiotech',
     'website': '',
-    "depends": ['custom_account','account'],
-    "data": [],
+    "depends": ['custom_account','account','l10n_it_fiscal_document_type'],
+    "data": ["security/ir.model.access.csv"],
     "installable": True
 }
