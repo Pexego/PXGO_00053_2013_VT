@@ -208,6 +208,18 @@ msgstr "Sconto % sul tag"
 msgid "Discount % on Tag accumulated"
 msgstr "Sconto % sul en tag"
 
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price on Product Tag"
+msgstr "Prezzo fisso sul tag prodotto"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price on Product"
+msgstr "Prezzo fisso sull prodotto"
+
 #. module: openerp_sale_promotions
 #: field:promos.rules,display_name:0
 #: field:promos.rules.actions,display_name:0
