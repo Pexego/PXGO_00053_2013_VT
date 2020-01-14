@@ -70,6 +70,7 @@
                        <field name="relation_pvd_pvi_b" readonly="True" colspan="2"/>
                        <field name="relation_pvd_pvi_c" readonly="True" colspan="2"/>
                        <field name="relation_pvd_pvi_d" readonly="True" colspan="2"/>
+                       <field name="relation_pvd_pvi_e" readonly="True" colspan="2"/>
                    </group>
                </group>
                 <group name="costs">

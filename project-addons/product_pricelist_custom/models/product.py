@@ -111,6 +111,15 @@ class ProductProduct(models.Model):
             else:
                 prod.relation_pvd_pvi_d = 0
 
+            # Update E pricelist relation
+            pricelist_rel = prod.item_ids.filtered(lambda i: 'E' == i.pricelist_id.name[-1:]). \
+                sorted(key=lambda i: i.pricelist_id.sequence)
+            if len(pricelist_rel) == 2 and pricelist_rel[0].fixed_price and pricelist_rel[1].fixed_price:
+                prod.relation_pvd_pvi_e = ((pricelist_rel[0].fixed_price - pricelist_rel[1].fixed_price)
+                                           / pricelist_rel[0].fixed_price) * 100
+            else:
+                prod.relation_pvd_pvi_e = 0
+
     @api.multi
     def get_product_price_with_pricelist(self, pricelist_name):
         pricelist = self.env['product.pricelist'].search([('name', '=', pricelist_name)])
@@ -135,14 +144,17 @@ class ProductProduct(models.Model):
             'list_price2': self.get_product_price_with_pricelist('PVPB'),
             'list_price3': self.get_product_price_with_pricelist('PVPC'),
             'list_price4': self.get_product_price_with_pricelist('PVPD'),
+            'list_price5': self.get_product_price_with_pricelist('PVPE'),
             'pvd1_price': self.get_product_price_with_pricelist('PVDA'),
             'pvd2_price': self.get_product_price_with_pricelist('PVDB'),
             'pvd3_price': self.get_product_price_with_pricelist('PVDC'),
             'pvd4_price': self.get_product_price_with_pricelist('PVDD'),
+            'pvd5_price': self.get_product_price_with_pricelist('PVDE'),
             'pvi1_price': self.get_product_price_with_pricelist('PVIA'),
             'pvi2_price': self.get_product_price_with_pricelist('PVIB'),
             'pvi3_price': self.get_product_price_with_pricelist('PVIC'),
             'pvi4_price': self.get_product_price_with_pricelist('PVID'),
+            'pvi5_price': self.get_product_price_with_pricelist('PVIE'),
             'pvm1_price': self.get_product_price_with_pricelist('PVMA'),
             'pvm2_price': self.get_product_price_with_pricelist('PVMB'),
             'pvm3_price': self.get_product_price_with_pricelist('PVMC')
@@ -160,6 +172,9 @@ class ProductProduct(models.Model):
                                       digits=(5, 2), readonly=True)
     relation_pvd_pvi_d = fields.Float(compute='_get_margins_relation',
                                       string='PVD/PVI D relation',
+                                      digits=(5, 2), readonly=True)
+    relation_pvd_pvi_e = fields.Float(compute='_get_margins_relation',
+                                      string='PVD/PVI E relation',
                                       digits=(5, 2), readonly=True)
 
     @api.model
@@ -207,4 +222,6 @@ class ProductTemplate(models.Model):
         Float(related="product_variant_ids.relation_pvd_pvi_c", readonly=True)
     relation_pvd_pvi_d = fields. \
         Float(related="product_variant_ids.relation_pvd_pvi_d", readonly=True)
+    relation_pvd_pvi_e = fields. \
+        Float(related="product_variant_ids.relation_pvd_pvi_e", readonly=True)
 
