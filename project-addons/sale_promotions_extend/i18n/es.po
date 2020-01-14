@@ -610,3 +610,8 @@ msgstr "Recalcular precio final después de marcar el check"
 #: view:sale.order:sale_promotions_extend.view_sale_promo_form2_remove_button_good
 msgid "Apply Promotions"
 msgstr "Aplicar promociones"
+
+#. module: sale_promotions_extend
+#: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_line_description
+msgid "Description in lines"
+msgstr "Descripción en líneas"

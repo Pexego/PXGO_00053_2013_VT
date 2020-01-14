@@ -82,10 +82,10 @@
                                 <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
                                     <t t-if="l1.sale_order_id.name == p.name">
                                             <td><span t-field="l1.product_id"/></td>
-                                            <t t-if="not l1.product_id.id or l1.product_id.id in (6985,9172,9758,2715,6590,16195)">
+                                            <t t-if="l1.product_id.description_editable">
                                                 <td style="font-size:10px"><span t-field="l1.name"/></td>
                                             </t>
-                                            <t t-if="l1.product_id.id and l1.product_id.id not in (6985,9172,9758,2715,6590,16195)">
+                                            <t t-if="not l1.product_id.description_editable">
                                                 <td style="font-size:10px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
                                             </t>
                                             <t t-set="decimal" t-value="l1.quantity % 1"/>
@@ -138,10 +138,10 @@
                                     <!--t t-if="l1.product_id.type == 'service'"-->
                                         <t t-if="not l1.origin">
                                             <td><span t-field="l1.product_id"/></td>
-                                            <t t-if="not l1.product_id.id or l1.product_id.id in (6985,9172,9758,2715,6590,16195)">
+                                            <t t-if="l1.product_id.description_editable">
                                                 <td style="font-size:10px"><span t-field="l1.name"/></td>
                                             </t>
-                                            <t t-if="l1.product_id.id and l1.product_id.id not in (6985,9172,9758,2715,6590,16195)">
+                                            <t t-if="not l1.product_id.description_editable">
                                                 <td style="font-size:10px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
                                             </t>
                                             <t t-set="decimal" t-value="l1.quantity % 1"/>
@@ -172,11 +172,11 @@
                         <t t-if="not o.sale_order_ids">
                            <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
                                     <td><span t-field="l1.product_id"/></td>
-                                    <t t-if="not l1.product_id.id or l1.product_id.id in (6985,9172,9758,2715,6590,16195)">
-                                        <td style="font-size:10px"><span t-field="l1.name"/></td>
+                                    <t t-if="l1.product_id.description_editable">
+                                          <td style="font-size:10px"><span t-field="l1.name"/></td>
                                     </t>
-                                    <t t-if="l1.product_id.id and l1.product_id.id not in (6985,9172,9758,2715,6590,16195)">
-                                        <td style="font-size:10px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
+                                    <t t-if="not l1.product_id.description_editable">
+                                          <td style="font-size:10px"><span t-field="l1.product_id.product_tmpl_id.description_sale"/></td>
                                     </t>
                                     <t t-set="decimal" t-value="l1.quantity % 1"/>
                                     <t t-if="not decimal == 0">
