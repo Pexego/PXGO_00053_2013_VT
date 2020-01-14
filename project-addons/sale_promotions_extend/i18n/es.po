@@ -214,6 +214,12 @@ msgstr "Descuento acumulado % en etiqueta"
 msgid "Fixed price on Product Tag"
 msgstr "Precio fijo en etiqueta de producto"
 
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price on Product"
+msgstr "Precio fijo en producto"
+
 #. module: openerp_sale_promotions
 #: field:promos.rules,display_name:0
 #: field:promos.rules.actions,display_name:0
