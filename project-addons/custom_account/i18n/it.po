@@ -133,6 +133,12 @@ msgid "Area"
 msgstr "Zona"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_partner_vat
+#: model:ir.ui.view,arch_db:custom_account.view_order_product_search_add_brand
+msgid "Partner VAT"
+msgstr "VAT azienda"
+
+#. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_attach_picking
 #: model:ir.model.fields,field_description:custom_account.field_res_partner_attach_picking
 msgid "Attach picking"
@@ -1052,3 +1058,9 @@ msgstr "N. fattura fornitore (SII)"
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_reference
 msgid "N. Supplier Invoice (SII)"
 msgstr "N. fattura fornitore (SII)"
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.action_account_invoice_contact_report
+#: model:ir.ui.menu,name:custom_account.menu_action_account_invoice_contact_report
+msgid "Invoices Contact Analysis"
+msgstr "Analisi delle fatture (contatti)"

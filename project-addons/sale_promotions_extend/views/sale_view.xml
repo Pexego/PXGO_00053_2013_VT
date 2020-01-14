@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="commercial_rules.view_sale_promo_form" />
         <field name="arch" type="xml">
             <button name="apply_commercial_rules" position="replace">
-                <button name="apply_commercial_rules" type="object" states="draft,reserve" string="Apply Promotions" class="btn-primary" groups="sales_team.group_sale_salesman_all_leads"/>
+                <button name="apply_commercial_rules" type="object" states="draft,sent,reserve" string="Apply Promotions" class="btn-primary"/>
             </button>
         </field>
     </record>

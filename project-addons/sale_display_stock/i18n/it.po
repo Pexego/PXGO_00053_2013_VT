@@ -73,7 +73,6 @@ msgstr "Stock disp."
 #. module: sale_display_stock
 #: model:ir.model.fields,field_description:sale_display_stock.field_product_product_qty_available_external
 #: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_external
-
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_qty_available_external
 msgid "Qty. in external loc."
 msgstr "Stock magaz. esterno"
@@ -200,6 +199,11 @@ msgstr "Stato di prodotto"
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_incoming_qty
 msgid "Incoming"
 msgstr "Stock in entrata"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_pending
+msgid "Qty Pending"
+msgstr "Quant. in sopesso"
 
 #. module: sale_display_stock
 #: selection:sale.order.line.report,product_state:0

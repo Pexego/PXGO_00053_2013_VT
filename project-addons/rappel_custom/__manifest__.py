@@ -8,6 +8,6 @@
     'description': """Several little customizations in rappels""",
     'author': 'Nadia Ferreyra',
     "depends": ['base', 'rappel', 'product_brand'],
-    "data": ["views/rappel_view.xml"],
+    "data": ["views/rappel_view.xml", "data/rappel_mail_advice_data.xml"],
     "installable": True
 }

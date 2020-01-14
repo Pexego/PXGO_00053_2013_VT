@@ -68,6 +68,7 @@ class SaleOrderLineReport(models.Model):
     incoming_qty = fields.Float('Incoming', related='product_id.incoming_qty')
     qty_available = fields.Float('Real Stock', related='product_id.qty_available')
     company_id = fields.Many2one("res.company", "Company", readonly=True)
+    qty_pending = fields.Float('Qty Pending', readonly=True)
 
     def init(self):
         tools.drop_view_if_exists(self._cr, self._table)
@@ -85,11 +86,13 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.order_id as order_id,
        so.state as order_state,
        so.invoice_status_2 as invoice_status_2,
-       sol.company_id as company_id
+       sol.company_id as company_id,
+       sol.product_uom_qty - sol.qty_delivered as qty_pending
 FROM   sale_order_line sol
 JOIN sale_order so on so.id = sol.order_id
 LEFT JOIN product_product pp on sol.product_id = pp.id
 LEFT JOIN product_template pt on pt.id = pp.product_tmpl_id
+LEFT JOIN stock_move sm on sm.sale_line_id = sol.id
 GROUP BY sol.id, sol.name, sol.order_partner_id, sol.product_uom_qty,
          sol.product_uom, sol.price_unit, sol.discount,
          sol.salesman_id, sol.state, sol.order_id, pt.state, so.state, so.invoice_status_2)
