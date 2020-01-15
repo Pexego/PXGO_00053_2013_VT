@@ -69,4 +69,10 @@ class SaleAdvancePaymentInv(models.TransientModel):
 
                 invoice._onchange_invoice_line_ids()
             orders.write({'force_invoiced':  True})
+        services_products = self.env['product.product'].search([('product_tmpl_id.type', '=', 'service')])
+        orders_to_done = self.env['sale.order']
+        for order in sale_orders:
+            if all(line.product_id.id in services_products.mapped('id') for line in order.order_line):
+                orders_to_done += order
+        orders_to_done.write({'state': 'done'})
         return res
