@@ -460,3 +460,14 @@ msgstr "Affidabilità della data"
 #: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
 msgid "Stock moves dates"
 msgstr "Date di arrivo"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_date_first_incoming
+msgid "Date First Incoming"
+msgstr "Data del primo arrivo"
+
+#. module: stock_custom
+#: model:ir.actions.act_window,name:stock_custom.product_date_first_incoming_action
+#: model:ir.ui.menu,name:stock_custom.first_incoming_date_menu
+msgid "First incoming date"
+msgstr "Data del primo arrivo"

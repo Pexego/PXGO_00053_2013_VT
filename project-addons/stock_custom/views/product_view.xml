@@ -102,4 +102,38 @@
 
     <menuitem id="menu_products_stock_new" action="action_product_stock_new"
         parent="sale.product_menu_catalog" groups="base.group_no_one" sequence="2"/>
+
+    <record id="product_product_date_first_incoming_form_iew" model="ir.ui.view">
+        <field name="name">product.product.date.first.incoming.purchase.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="last_purchase_date" position="after">
+                <field name="date_first_incoming"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_date_first_incoming_tree" model="ir.ui.view">
+        <field name="name">product.date.first.incoming</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <tree string="First incoming date" default_order='date_first_incoming desc'>
+                <field name="default_code"/>
+                <field name="date_first_incoming"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_date_first_incoming_action" model="ir.actions.act_window">
+        <field name="name">First incoming date</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('date_first_incoming','!=',False)]</field>
+        <field name="view_id" ref="product_date_first_incoming_tree"/>
+    </record>
+
+    <menuitem id="first_incoming_date_menu" name="First incoming date" string="First incoming date"
+              action="product_date_first_incoming_action"
+              parent="sale.menu_sale_report"/>
 </odoo>
