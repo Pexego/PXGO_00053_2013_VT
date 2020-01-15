@@ -99,3 +99,14 @@ class SaleOrder(models.Model):
 
         return True
 
+    @api.multi
+    def action_invoice_create(self):
+        res = super(SaleOrder, self).action_invoice_create()
+        services_products = self.env['product.product'].search([('product_tmpl_id.type', '=', 'service')])
+        orders_to_done = self.env['sale.order']
+        for order in self:
+            if all(line.product_id.id in services_products.mapped('id') for line in order.order_line):
+                orders_to_done += order
+            orders_to_done.write({'state': 'done'})
+        return res
+
