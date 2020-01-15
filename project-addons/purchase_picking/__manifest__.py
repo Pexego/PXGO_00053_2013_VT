@@ -32,7 +32,6 @@
                 'stock_reserve'],
     "data": ['wizard/create_picking_move_view.xml',
              'views/purchase_view.xml',
-             'views/product_view.xml',
              'data/res_partner_data.xml',
              'views/stock_view.xml',
              'security/ir.model.access.csv',

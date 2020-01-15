@@ -134,6 +134,15 @@ class PurchaseOrder(models.Model):
                     })
 
     @api.multi
+    def action_confirm(self):
+        res = super(PurchaseOrder, self).action_confirm()
+        import ipdb
+        ipdb.set_trace()
+        for order in self:
+            order.order_line.mapped('product_id')._compute_date_first_incoming()
+        return res
+
+    @api.multi
     def delete_purchase_lines(self):
         for order in self:
             for line in order.order_line:

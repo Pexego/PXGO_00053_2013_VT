@@ -34,4 +34,5 @@ class AssignContainerWzd(models.TransientModel):
         move_obj = self.env["stock.move"]
         for move in move_obj.browse(self.env.context["active_ids"]):
             move.container_id = self[0].container_id.id
+            move.product_id._compute_date_first_incoming()
         return {}
