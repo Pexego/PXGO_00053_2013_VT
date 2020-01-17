@@ -1,5 +1,6 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
+import datetime
 
 
 class ProductProduct(models.Model):
@@ -38,24 +39,25 @@ class ProductProduct(models.Model):
 
     @api.model
     def cron_send_mail_to_commercials_products_discontinued(self):
-        discontinued_products = self.env['product.product'].search([('product_tmpl_id.state', 'ilike', 'end'), ('qty_available', '<=', 0)])
-        moves = self.env['stock.move'].search([('state','in',('partially_available','confirmed','waiting')),('product_id','in',discontinued_products.mapped('id')),('sale_line_id','!=',False)])
+        date = (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
+        discontinued_products = self.env['product.product'].search([('product_tmpl_id.state', 'ilike', 'end'), ('virtual_stock_conservative', '<=', 0)])
+        moves = self.env['stock.move'].search([('state', 'in', ('partially_available', 'confirmed', 'waiting')), ('date', '>=', date),('product_id', 'in', discontinued_products.mapped('id')), ('sale_line_id', '!=', False)])
         moves_group_by_commercial=dict()
-        for move in moves:
-            if move.sale_line_id.salesman_id in moves_group_by_commercial:
-                moves_group_by_commercial[move.sale_line_id.salesman_id]+=move
-            else:
-                moves_group_by_commercial[move.sale_line_id.salesman_id] = move
-        for commercial,values in moves_group_by_commercial.items():
-            template = self.env.ref('product_discontinued.alert_cron_send_mail_to_commercials_products_discontinued')
-
-            ctx = dict(self._context)
-            ctx.update({
-                'email_to': commercial.login,
-                'moves':values,
-                'lang':commercial.lang
-            })
-            template.with_context(ctx).send_mail(self.id)
+        if moves:
+            for move in moves:
+                if move.sale_line_id.salesman_id in moves_group_by_commercial:
+                    moves_group_by_commercial[move.sale_line_id.salesman_id]+=move
+                else:
+                    moves_group_by_commercial[move.sale_line_id.salesman_id] = move
+            for commercial,values in moves_group_by_commercial.items():
+                template = self.env.ref('product_discontinued.alert_cron_send_mail_to_commercials_products_discontinued')
+                ctx = dict()
+                ctx.update({
+                    'email_to': commercial.login,
+                    'moves':values,
+                    'lang':commercial.lang
+                })
+                template.with_context(ctx).send_mail(self.id)
 
 
 
