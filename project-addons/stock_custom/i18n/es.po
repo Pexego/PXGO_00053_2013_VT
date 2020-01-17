@@ -467,7 +467,7 @@ msgid "Stock moves dates"
 msgstr "Fechas de llegada"
 
 #. module: stock_custom
-#: #: model:mail.template,body_html:stock_custom.send_mail_stock_inventory
+#: model:mail.template,body_html:stock_custom.send_mail_stock_inventory
 msgid "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">\n"
 "            <p>The following stock moves have exceeded the max difference allowed (${ctx['max_diff']} unit(s)) :</p>\n"
 "            <ul>\n"
