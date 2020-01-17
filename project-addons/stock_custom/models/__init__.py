@@ -7,3 +7,4 @@ from . import stock
 from . import partner
 from . import product
 from . import sale
+from . import stock_inventory
