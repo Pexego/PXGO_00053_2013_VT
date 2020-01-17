@@ -20,7 +20,9 @@
              'views/partner_view.xml',
              'views/product_view.xml',
              'views/sale_view.xml',
+             'views/email_template.xml',
              'security/ir.model.access.csv',
-             'data/groups.xml'],
+             'data/groups.xml',
+             'data/parameters.xml'],
     'installable': True
 }
