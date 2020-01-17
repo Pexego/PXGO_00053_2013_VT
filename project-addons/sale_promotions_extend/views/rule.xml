@@ -5,6 +5,9 @@
         <field name="model">promos.rules</field>
         <field name="inherit_id" ref="commercial_rules.view_promotion_rules_form"/>
         <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="line_description"/>
+            </field>
             <field name="stop_further" position="after">
                 <field name="special_promo"/>
             </field>

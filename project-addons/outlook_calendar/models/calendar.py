@@ -86,58 +86,59 @@ class CalendarEvent(models.Model):
     @api.multi
     def write(self, vals):
         res = super().write(vals)
-        if self.user_id == self.env.user:
-            if self.env.user.outlook_sync and 'outlook_id' not in vals and self.outlook_id:
-                auth = self.env.user.outlook_auth_token
-                up_fields = ['location', 'name', 'start', 'stop', 'partner_ids']
-                event_data = {}
+        for event in self:
+            if event.user_id == self.env.user:
+                if self.env.user.outlook_sync and 'outlook_id' not in vals and self.outlook_id:
+                    auth = self.env.user.outlook_auth_token
+                    up_fields = ['location', 'name', 'start', 'stop', 'partner_ids']
+                    event_data = {}
 
-                for field in up_fields:
-                    if field in vals:
-                        if field == 'location':
-                            event_data['location'] = {
-                                "displayName": vals['location']
-                            }
-                        elif field == 'name':
-                            event_data['subject'] = vals['name']
-                        elif field == 'start':
-                            event_data['start'] = {
-                                "dateTime": vals['start'].replace(' ', 'T'),
-                                "timeZone": "GMT Standard Time"
-                            }
-                        elif field == 'allday':
-                            event_data['isAllDay'] = vals['allday']
-                        elif field == 'stop':
-                            event_data['end'] = {
-                                "dateTime": vals['stop'].replace(' ', 'T'),
-                                "timeZone": "GMT Standard Time"
-                            }
-                        elif field == 'partner_ids':
-                            partners_vals = vals['partner_ids'][0][2]
-                            if self.env.user.partner_id.id in vals['partner_ids'][0][2]:
-                                partners_vals.remove(self.env.user.partner_id.id)
-                            attendees = []
-                            partners = self.env['res.partner'].browse(partners_vals)
-                            for partner in partners:
-                                if partner.email.endswith("@visiotechsecurity.com"):
-                                    attendees.append({
-                                        "emailAddress": {
-                                            "address": partner.email,
-                                            "name": partner.name
-                                        },
-                                        "type": "required"
-                                    })
-                            event_data['attendees'] = attendees
+                    for field in up_fields:
+                        if field in vals:
+                            if field == 'location':
+                                event_data['location'] = {
+                                    "displayName": vals['location']
+                                }
+                            elif field == 'name':
+                                event_data['subject'] = vals['name']
+                            elif field == 'start':
+                                event_data['start'] = {
+                                    "dateTime": vals['start'].replace(' ', 'T'),
+                                    "timeZone": "GMT Standard Time"
+                                }
+                            elif field == 'allday':
+                                event_data['isAllDay'] = vals['allday']
+                            elif field == 'stop':
+                                event_data['end'] = {
+                                    "dateTime": vals['stop'].replace(' ', 'T'),
+                                    "timeZone": "GMT Standard Time"
+                                }
+                            elif field == 'partner_ids':
+                                partners_vals = vals['partner_ids'][0][2]
+                                if self.env.user.partner_id.id in vals['partner_ids'][0][2]:
+                                    partners_vals.remove(self.env.user.partner_id.id)
+                                attendees = []
+                                partners = self.env['res.partner'].browse(partners_vals)
+                                for partner in partners:
+                                    if partner.email.endswith("@visiotechsecurity.com"):
+                                        attendees.append({
+                                            "emailAddress": {
+                                                "address": partner.email,
+                                                "name": partner.name
+                                            },
+                                            "type": "required"
+                                        })
+                                event_data['attendees'] = attendees
 
-                response = requests.patch('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
-                                          headers={'Authorization': 'Bearer ' + auth}, json=event_data)
+                    response = requests.patch('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
+                                              headers={'Authorization': 'Bearer ' + auth}, json=event_data)
 
-                if response.status_code == 401:
-                    message = _("The event hasn't been updated in Outlook. Please log in in your profile")
-                    self.env.user.notify_warning(message=message)
-        else:
-            message = _("The event hasn't been modified in outlook. You can not modify an event that is not yours")
-            self.env.user.notify_warning(message=message)
+                    if response.status_code == 401:
+                        message = _("The event hasn't been updated in Outlook. Please log in in your profile")
+                        self.env.user.notify_warning(message=message)
+            else:
+                message = _("The event hasn't been modified in outlook. You can not modify an event that is not yours")
+                self.env.user.notify_warning(message=message)
 
         return res
 

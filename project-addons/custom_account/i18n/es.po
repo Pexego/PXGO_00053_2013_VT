@@ -603,6 +603,12 @@ msgid "Partner Contact"
 msgstr "Contacto"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_partner_vat
+#: model:ir.ui.view,arch_db:custom_account.view_order_product_search_add_brand
+msgid "Partner VAT"
+msgstr "VAT empresa"
+
+#. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_sale_report_partner_ref
 msgid "Partner ref"
 msgstr "Ref. empresa"

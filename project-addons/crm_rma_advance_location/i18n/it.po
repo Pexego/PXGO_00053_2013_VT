@@ -23,12 +23,12 @@ msgstr "Perdita per rottura"
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
 msgid "Cancel"
-msgstr "Cancellare"
+msgstr "Cancella"
 
 #. module: crm_rma_advance_location
 #: model:stock.location,name:crm_rma_advance_location.stock_location_carrier_loss
 msgid "Carrier Loss"
-msgstr "Perdita per corriere"
+msgstr "Perdita del corriere"
 
 #. module: crm_rma_advance_location
 #: model:ir.actions.act_window,name:crm_rma_advance_location.action_loss_picking_from_claim_picking
@@ -83,7 +83,7 @@ msgstr "Ultimo aggiornamento da"
 #. module: crm_rma_advance_location
 #: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_from_picking_wizard_write_date
 msgid "Last Updated on"
-msgstr "Ultimo aggiornamento il"
+msgstr "Ultimo aggiornamento"
 
 #. module: crm_rma_advance_location
 #: model:ir.model.fields,field_description:crm_rma_advance_location.field_stock_warehouse_lot_breakage_loss_id

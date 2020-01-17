@@ -53,7 +53,7 @@ msgstr "Aziende"
 #. module: crm_claim_summary_report
 #: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Customer Name"
-msgstr "Nome del Cliente"
+msgstr "Nome del cliente"
 
 #. module: crm_claim_summary_report
 #: model:ir.ui.view,arch_db:crm_claim_summary_report.product_on_claim
@@ -63,7 +63,7 @@ msgstr "Descrizione del cliente"
 #. module: crm_claim_summary_report
 #: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
 msgid "Date Deadline"
-msgstr "data limite"
+msgstr "Data limite"
 
 #. module: crm_claim_summary_report
 #: model:ir.ui.view,arch_db:crm_claim_summary_report.page_summary_report
@@ -181,7 +181,7 @@ msgstr "Tipo"
 #. module: crm_claim_summary_report
 #: model:ir.ui.view,arch_db:crm_claim_summary_report.external_layout_header
 msgid "Website"
-msgstr "Sitio web"
+msgstr "Sito web"
 
 #. module: crm_claim_summary_report
 #: model:ir.ui.view,arch_db:crm_claim_summary_report.layout

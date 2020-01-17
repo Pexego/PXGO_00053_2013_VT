@@ -208,6 +208,18 @@ msgstr "Sconto % sul tag"
 msgid "Discount % on Tag accumulated"
 msgstr "Sconto % sul en tag"
 
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price on Product Tag"
+msgstr "Prezzo fisso sul tag prodotto"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price on Product"
+msgstr "Prezzo fisso sull prodotto"
+
 #. module: openerp_sale_promotions
 #: field:promos.rules,display_name:0
 #: field:promos.rules.actions,display_name:0
@@ -598,3 +610,8 @@ msgstr "Ricalcola il prezzo finale dopo aver controllato"
 #: view:sale.order:sale_promotions_extend.view_sale_promo_form2_remove_button_good
 msgid "Apply Promotions"
 msgstr "Applicare promozioni"
+
+#. module: sale_promotions_extend
+#: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_line_description
+msgid "Description in lines"
+msgstr "Descrizione in linee"

@@ -58,52 +58,52 @@ msgstr "Assistenza"
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type:0
 msgid "Shipments status"
-msgstr "Stato Spedizione"
+msgstr "Stato della pedizione"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type:0
 msgid "Order Complain/Claim"
-msgstr "Reclamo/Reclamo Ordine"
+msgstr "Lamentela / Lamentela ordine"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type:0
 msgid "RMA Complain/Claim"
-msgstr "Reclamo/Reclamo RMA"
+msgstr "Lamentela / Lamentela RMA"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type:0
 msgid "Tech Complain/Claim"
-msgstr "Reclamo/Reclamo Tecnico"
+msgstr "Lamentela / Lamentela tecnico"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type:0
 msgid "Web Complain/Claim"
-msgstr "Reclamo/Reclamo Web"
+msgstr "Lamentela / Lamentela Web"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type:0
 msgid "Shipment Complain/Claim"
-msgstr "Reclamo/Reclamo Invio"
+msgstr "Lamentela / Lamentela spedizione"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type:0
 msgid "Accounting Complain/Claim"
-msgstr "Reclamo/Reclamo Contabilità"
+msgstr "Lamentela / Lamentela contabilità"
 
 #. module: crm_claim_phonecall
 #: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view
 msgid "Cancel Call"
-msgstr "Eliminare chiamata"
+msgstr "Elimina chiamata"
 
 #. module: crm_claim_phonecall
 #: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view
 msgid "End Call"
-msgstr "Terminare chiamata"
+msgstr "Termina chiamata"
 
 #. module: crm_claim_phonecall
 #: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_wizard_form_view_sat
 msgid "End Call and Notify"
-msgstr "Terminare chiamata e notificare"
+msgstr "Termina chiamata e notifica"
 
 #. module: crm_claim_phonecall
 #: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_phonecall_custom_call_type
@@ -113,12 +113,12 @@ msgstr "Durata (min)"
 #. module: crm_claim_phonecall
 #: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_partner_ref
 msgid "Ref. Contact"
-msgstr "Ref. Cliente"
+msgstr "Rif. Cliente"
 
 #. module: crm
 #: model:ir.model.fields,field_description:crm.field_crm_phonecall_date
 msgid "Date"
-msgstr "Data di inicio"
+msgstr "Data"
 
 #. module: crm
 #: model:ir.ui.view,arch_db:crm.view_crm_case_phonecalls_filter_group_by
@@ -173,27 +173,27 @@ msgstr "Controllo Stato RMA"
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
 msgid "Incidence with product"
-msgstr "Incidenza con prodotto"
+msgstr "Problema con prodotto"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
 msgid "Post-sale question on operation"
-msgstr "Consulenza post-vendita su operazione"
+msgstr "Consulenza post-vendita"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
 msgid "Pre-sale query/advice"
-msgstr "Consulenza pre-vendita/assistenza"
+msgstr "Consulenza pre-vendita"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
 msgid "SAT Complaint/claim"
-msgstr "Reclamo/Reclamo SAT"
+msgstr "Lamentela / Lamentela SAT"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0
 msgid "DDNS request for registration"
-msgstr "Richiesta DDNS per registrazione"
+msgstr "Richiesta registrazione DDNS"
 
 #. module: crm_claim_phonecall
 #: selection:crm.phonecall,call_type_sat:0

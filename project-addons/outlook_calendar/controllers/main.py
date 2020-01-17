@@ -4,6 +4,9 @@ from requests_oauthlib import OAuth2Session
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import werkzeug
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class OutlookCalendarController(http.Controller):
@@ -23,12 +26,13 @@ class OutlookCalendarController(http.Controller):
             authorization_response=authorization_response,
             client_secret=client_secret,
             response_type='id_token')
+        _logger.info("%s", token)
+        if token['access_token']:
+            request.env.user.outlook_auth_token = token['access_token']
+            request.env.user.outlook_auth_refresh_token = token['refresh_token']
+            request.env.user.outlook_auth_token_exp = datetime.now() + relativedelta(seconds=token['expires_in'])
+            # request.env.user.get_outlook_calendars()
 
-        request.env.user.outlook_auth_token = token['access_token']
-        request.env.user.outlook_auth_refresh_token = token['refresh_token']
-        request.env.user.outlook_auth_token_exp = datetime.now() + relativedelta(seconds=token['expires_in'])
-        request.env.user.get_outlook_calendars()
-
-        request.env.user.with_delay(priority=20, eta=token['expires_in']-120).refresh_outlook_token()
+            request.env.user.with_delay(priority=20, eta=token['expires_in']-120).refresh_outlook_token()
 
         return werkzeug.utils.redirect("/web")
