@@ -77,6 +77,12 @@
                 <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='price_subtotal']" position="after">
                     <field name="sale_order_id"/>
                 </xpath>
+                <xpath expr="//button[@name='%(account.action_account_invoice_refund)d']" position="attributes">
+                    <attribute name="groups">purchase.group_analytic_accounting</attribute>
+                </xpath>
+<!--                <xpath expr="//button[@name='%(account.action_account_invoice_refund)d']" position="replace">-->
+<!--                    <button name="%(account.action_account_invoice_refund)d" type='action' string='Add Credit Note' groups="purchase.group_analytic_accounting" attrs="{'invisible': ['|',('type', '=', 'out_refund'), ('state', 'not in', ('open','paid'))]}"/>-->
+<!--                </xpath>-->
             </field>
         </record>
 
