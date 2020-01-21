@@ -173,6 +173,16 @@ class ProductTemplate(models.Model):
             product.outgoing_picking_reserved_qty = sum(moves.mapped(
                 'product_uom_qty'))
 
+    @api.multi
+    def _get_stock_italy(self):
+        location_id = self.env['stock.location'].search([('name', '=', 'Depósito Visiotech Italia')]).id
+        for product in self:
+            qty = product.with_context(location=location_id).qty_available
+            product.qty_available_italy = qty
+
+    qty_available_italy = fields.Float(string="Qty. available Italy", compute="_get_stock_italy",
+                             readonly=True,
+                             digits=dp.get_precision('Product Unit of Measure'))
 
 class ProductProduct(models.Model):
 
