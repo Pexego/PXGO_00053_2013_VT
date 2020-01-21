@@ -5,7 +5,6 @@
         <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
         <field name="subject">Pedidos con productos en fin de ciclo de vida</field>
         <field name="email_to">${ctx['email_to']}</field>
-        <field name="auto_delete" eval="True"/>
         <field name="model_id" ref="product.model_product_product"/>
         <field name="lang">${ctx['lang']}</field>
         <field name="body_html"><![CDATA[

@@ -96,17 +96,27 @@ class PromotionsRulesActions(models.Model):
         selection_add=[
             ('prod_disc_perc_accumulated',
              _('Discount % on Product accumulated')),
-            ('tag_disc_perc', _('Discount % on Tag')),
-            ('tag_disc_perc_accumulated', _('Discount % on Tag accumulated')),
-            ('categ_disc_perc', _('Discount % on Category')),
+            ('tag_disc_perc',
+             _('Discount % on Tag')),
+            ('tag_disc_perc_accumulated',
+             _('Discount % on Tag accumulated')),
+            ('categ_disc_perc',
+             _('Discount % on Category')),
             ('categ_disc_perc_accumulated',
              _('Discount % on Categ accumulated')),
-            ('brand_disc_perc', _('Discount % on Brand')),
+            ('brand_disc_perc',
+             _('Discount % on Brand')),
             ('brand_disc_perc_accumulated',
              _('Discount % on Brand accumulated')),
             ('web_disc_accumulated',
              _('Web Discount % on Product accumulated')),
-            ('a_get_b_product_tag', _('AxB on product tag'))])
+            ('a_get_b_product_tag',
+             _('AxB on product tag')),
+            ('prod_fixed_price_tag',
+             _('Fixed price on Product Tag')),
+            ('prod_fixed_price',
+             _('Fixed price on Product'))
+            ])
 
     def on_change(self):
         if self.action_type == 'prod_disc_perc_accumulated':
@@ -122,15 +132,27 @@ class PromotionsRulesActions(models.Model):
                 'categ_disc_perc', 'categ_disc_perc_accumulated']:
             self.product_code = 'categ_code'
             self.arguments = '0.00'
+
         elif self.action_type in [
                 'brand_disc_perc', 'brand_disc_perc_accumulated']:
             self.product_code = 'brand_code'
             self.arguments = '0.00'
+
         elif self.action_type == 'web_disc_accumulated':
             self.arguments = '10.00'
+
         elif self.action_type == 'a_get_b_product_tag':
             self.product_code = 'product_tag'
             self.arguments = 'A,B'
+
+        elif self.action_type == 'prod_fixed_price_tag':
+            self.product_code = 'product_tag'
+            self.arguments = '0.00'
+
+        elif self.action_type == 'prod_fixed_price':
+            self.product_code = 'product_reference'
+            self.arguments = '0.00'
+
         return super().on_change()
 
     def apply_perc_discount_accumulated(self, order_line):
@@ -243,6 +265,24 @@ class PromotionsRulesActions(models.Model):
                         promo_products.append(order_line.product_id.id)
         return {}
 
+    def action_prod_fixed_price_tag(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) in order_line.product_tags:
+                self.apply_fixed_price(order_line)
+        return {}
+
+    def action_prod_fixed_price(self, order):
+        for order_line in order.order_line:
+            if order_line.product_id.default_code in eval(self.product_code):
+                self.apply_fixed_price(order_line)
+        return {}
+
+    def apply_fixed_price(self, order_line):
+        vals = {
+            'price_unit': eval(self.arguments)
+        }
+        return order_line.write(vals)
+
     def create_y_line_axb(self, order, price_unit, discount,
                           sequence, quantity, product_id):
         vals = {
@@ -251,7 +291,7 @@ class PromotionsRulesActions(models.Model):
             'product_id': self.env.ref('commercial_rules.product_discount').id,
             'name': '%s (%s)' % (
                      product_id.default_code,
-                     self.promotion.name),
+                     self.promotion.line_description),
             'price_unit': -price_unit,
             'discount': discount,
             'promotion_line': True,
@@ -267,6 +307,8 @@ class PromotionsRules(models.Model):
     _inherit = "promos.rules"
 
     special_promo = fields.Boolean("Special Promo")
+
+    line_description = fields.Char(translate=True,string="Desciption in lines",help="This field is shown in the description field of the invoice,picking and sale lines")
 
     @api.model
     def apply_special_promotions(self, order):

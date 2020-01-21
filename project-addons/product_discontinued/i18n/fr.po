@@ -4,34 +4,16 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-01-19 16:22+0000\n"
-"PO-Revision-Date: 2019-01-19 16:22+0000\n"
+"POT-Creation-Date: 2020-01-14 16:22+0000\n"
+"PO-Revision-Date: 2020-01-14 16:22+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
-
-#. module: product_discontinued
-#: field:product.product,discontinued:0
-#: model:ir.model.fields,field_description:product_discontinued.field_product_template_discontinued
-msgid "Discontinued"
-msgstr "Fuori catalogo"
-
-#. module: product_discontinued
-#: code:addons/product_discontinued/models/product.py:21
-#, python-format
-msgid "The product can not be discontinued. Currently exist stock or the status is not - End of lifecycle"
-msgstr "Il prodotto non soddisfa i requisiti per essere sospeso. Lo stock esistente o il suo stato attuale non è 'Ciclo di fine vita'."
-
-#. module: product_discontinued
-#: code:addons/product_discontinued/models/product.py:33
-#, python-format
-msgid "The product does not have stock."
-msgstr "Il prodotto non è in stock."
 
 #. module: product_discontinued
 #: #: model:mail.template,body_html:product_discontinued.alert_cron_send_mail_to_commercials_products_discontinued
@@ -49,14 +31,14 @@ msgid "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-se
 "            </ul>\n"
 "            </div>"
 msgstr "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">\n"
-"            <p>I seguenti ordini contengono prodotti a fine vita:</p>\n"
+"            <p>Les commandes suivantes contiennent des produits en fin du cycle de vie:</p>\n"
 "            <ul>\n"
 "            % for move in ctx['moves']:\n"
 "                % if move.product_id.replacement_id:\n"
-"                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, creato il seguente giorno: <strong>${move.sale_line_id.order_id.date_order}</strong>, il prodotto è:<strong> ${move.product_id.product_tmpl_id.name}</strong> (prodotto sostitutivo: <strong>${move.product_id.replacement_id.product_tmpl_id.name}</strong>)</li>\n"
+"                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, créé à la date suivante: <strong>${move.sale_line_id.order_id.date_order}</strong>, le produit est: <strong> ${move.product_id.product_tmpl_id.name}</strong> (produit de remplacement: <strong>${move.product_id.replacement_id.product_tmpl_id.name}</strong>)</li>\n"
 "                % endif\n"
 "                % if not move.product_id.replacement_id:\n"
-"                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, creato il seguente giorno: <strong>${move.sale_line_id.order_id.date_order}</strong>, il prodotto è :<strong> ${move.product_id.product_tmpl_id.name}</strong> (chiedere al team acquisti se sarà nuovamente disponibile)</li>\n"
+"                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, créé à la date suivante: <strong>${move.sale_line_id.order_id.date_order}</strong>, le produit est: <strong> ${move.product_id.product_tmpl_id.name}</strong> (demandez à l'équipe Achat s'il sera à nouveau disponible)</li>\n"
 "                % endif\n"
 "            % endfor\n"
 "            </ul>\n"

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="send_mail_stock_inventory" model="mail.template">
+        <field name="name">Notify stock inventory</field>
+        <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
+        <field name="subject">Cambios que exceden el límite en la regularización de stock</field>
+        <field name="email_to">${'ssanchez@visiotechsecurity.com'}</field>
+        <field name="model_id" ref="stock.model_stock_inventory"/>
+        <field name="lang">${ctx['lang']}</field>
+        <field name="body_html"><![CDATA[
+            <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+            <p>The following stock moves have exceeded the max difference allowed (${ctx['max_diff']} unit(s)) :</p>
+            <ul>
+            % for line in ctx['lines']:
+                <li> <strong>Product: </strong>${line.product_id.default_code}
+                    <ul>
+                        <li><strong>Inventory name: </strong> ${line.inventory_id.name}</li>
+                        <li><strong>Location: </strong>${line.location_id.complete_name}</li>
+                        <li><strong>Quantity before the stock inventory: </strong>${line.theoretical_qty}</li>
+                        <li><strong>Quantity before the stock inventory: </strong> ${line.product_qty}</li>
+                    </ul>
+                </li>
+            % endfor
+            </ul>
+            </div>
+         ]]>
+        </field>
+    </record>
+</odoo>

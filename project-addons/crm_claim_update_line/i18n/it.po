@@ -18,22 +18,22 @@ msgstr ""
 #. module: crm_claim_update_line
 #: model:ir.ui.view,arch_db:crm_claim_update_line.crm_rma_advance_location_form_view_inherit
 msgid "Update RMA lines"
-msgstr "aGGIORNARE RIGHE RMA"
+msgstr "Aggiorna linee RMA"
 
 #. module: crm_claim_update_line
 #: model:ir.ui.view,arch_db:crm_claim_update_line.view_crm_claim_update_lines_wizard
 msgid "Update data"
-msgstr "Aggiornare dati"
+msgstr "Aggiorna dati"
 
 #. module: crm_claim_update_line
 #: model:ir.ui.view,arch_db:crm_claim_update_line.view_crm_claim_update_lines_wizard
 msgid "Update"
-msgstr "Aggiornare"
+msgstr "Aggiorna"
 
 #. module: crm_claim_update_line
 #: model:ir.ui.view,arch_db:crm_claim_update_line.view_crm_claim_update_lines_wizard
 msgid "Cancel"
-msgstr "Cancellare"
+msgstr "Cancella"
 
 #. module: crm_claim_update_line
 #: code:addons/ccrm_claim_update_line/models/crm_claim.py:40
@@ -64,7 +64,7 @@ msgstr "Prodotto danneggiato"
 #. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Not appropiate product"
-msgstr "Prodotto no appropriato"
+msgstr "Prodotto non appropriato"
 
 #. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
@@ -84,7 +84,7 @@ msgstr "Errore di invio"
 #. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Exchange request"
-msgstr "Sollecitare scambio"
+msgstr "Sollecitare cambio"
 
 #. module: crm_claim_update_line
 #: selection:crm_claim_update_lines.wizard,claim_origine:0

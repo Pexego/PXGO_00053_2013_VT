@@ -38,12 +38,13 @@
                                     <span t-field="l.product_id.product_tmpl_id.name" />
                                 </td>
                                 <td style="font-size:10px">
-                                    <t t-if="l.product_id">
-                                        <span t-field="l.product_id.product_tmpl_id.description_sale" />
-                                    </t>
-                                    <t t-if="not l.product_id">
+                                    <t t-if="(l.product_id and l.product_id.description_editable) or not l.product_id">
                                         <span t-field="l.name" />
                                     </t>
+                                    <t t-if="l.product_id and not l.product_id.description_editable">
+                                        <span t-field="l.product_id.product_tmpl_id.description_sale" />
+                                    </t>
+
                                 </td>
                                 <td class="text-center">
                                     <span t-esc="'%.0f'% l.product_uom_qty" />

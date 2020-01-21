@@ -34,7 +34,7 @@ class ResUsers(models.Model):
         oauth = OAuth2Session(client_id, scope=scope)
         authorization_url, state = oauth.authorization_url(
             'https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize')
-        self.env.user.outlook_auth_state = state
+        self.outlook_auth_state = state
         self.outlook_sync = True
 
         return {
@@ -50,23 +50,23 @@ class ResUsers(models.Model):
         client_id = self.env['ir.config_parameter'].sudo().get_param('outlook.client.id')
         client_secret = self.env['ir.config_parameter'].sudo().get_param('outlook.client.secret')
 
-        outlook = OAuth2Session(client_id, state=self.env.user.outlook_auth_state)
+        outlook = OAuth2Session(client_id, state=self.outlook_auth_state)
 
         token = outlook.refresh_token(
             'https://login.microsoftonline.com/organizations/oauth2/v2.0/token',
-            refresh_token=self.env.user.outlook_auth_refresh_token,
+            refresh_token=self.outlook_auth_refresh_token,
             client_id=client_id,
             client_secret=client_secret,
             response_type='id_token')
 
-        self.env.user.outlook_auth_token = token['access_token']
-        self.env.user.outlook_auth_refresh_token = token['refresh_token']
-        self.env.user.outlook_auth_token_exp = datetime.now() + relativedelta(seconds=token['expires_in'])
-        self.env.user.with_delay(priority=20, eta=token['expires_in'] - 120).refresh_outlook_token()
+        self.outlook_auth_token = token['access_token']
+        self.outlook_auth_refresh_token = token['refresh_token']
+        self.outlook_auth_token_exp = datetime.now() + relativedelta(seconds=token['expires_in'])
+        self.with_delay(priority=20, eta=token['expires_in'] - 120).refresh_outlook_token()
 
     @api.multi
     def get_outlook_calendars(self):
-        auth = self.env.user.outlook_auth_token
+        auth = self.outlook_auth_token
 
         response = requests.get('https://graph.microsoft.com/v1.0/me/calendars',
                                 headers={'Authorization': 'Bearer ' + auth})
@@ -84,13 +84,13 @@ class ResUsers(models.Model):
                     self.write({'outlook_calendar_ids': new_calendars})
         elif response.status_code == 401:
             message = _("Impossible to sync your calendars from Outlook. Please log in in your profile")
-            self.env.user.notify_warning(message=message)
+            self.notify_warning(message=message)
 
     @api.multi
     def sync_outlook_calendar(self):
         # Get all events from now to 30 days ahead. TODO: maybe change 30 days to the whole future?
         if self.outlook_sync:
-            auth = self.env.user.outlook_auth_token
+            auth = self.outlook_auth_token
             startdatetime = datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
             enddatetime = (datetime.now() + relativedelta(days=30)).strftime('%Y-%m-%dT%H:%M:%S')
 
@@ -163,7 +163,7 @@ class ResUsers(models.Model):
 
             elif response.status_code == 401:
                 message = _("Impossible to sync your events from Outlook. Please log in in your profile")
-                self.env.user.notify_warning(message=message)
+                self.notify_warning(message=message)
 
         action = self.env.ref('calendar.action_calendar_event').read()[0]
         return action
