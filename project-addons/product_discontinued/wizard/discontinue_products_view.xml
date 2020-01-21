@@ -23,13 +23,14 @@
     </record>
 
     <act_window name="Discontinue products"
-        res_model="discontinue.products.wizard"
-        src_model="product.product"
-        view_id="discontinue_products_view"
-        view_mode="form"
-        target="new"
-        key2="client_action_multi"
-        id="action_discontinue_products"/>
+                groups="group_discontinue"
+                res_model="discontinue.products.wizard"
+                src_model="product.product"
+                view_id="discontinue_products_view"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"
+                id="action_discontinue_products"/>
 
 
 </odoo>
