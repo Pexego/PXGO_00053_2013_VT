@@ -294,19 +294,28 @@ msgstr "History"
 #: selection:sale.order.line.report,invoice_status:0
 msgid "Upselling"
 msgstr "Upselling"
+
 #. module: sale_display_stock
 #: selection:sale.order.line.report,invoice_status:0
 msgid "Invoiced"
 msgstr "Fatturato"
+
 #. module: sale_display_stock
 #: selection:sale.order.line.report,invoice_status:0
 msgid "To invoice"
 msgstr "Per fatturare"
+
 #. module: sale_display_stock
 #: selection:sale.order.line.report,invoice_status:0
 msgid "Nothing to invoice"
 msgstr "Niente di fatturare"
+
 #. module: sale_display_stock
 #: selection:sale.order.line.report,invoice_status:0
 msgid "Cancel"
 msgstr "Annullato"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_product_template_qty_available_italy
+msgid "Qty. available Italy"
+msgstr "Stock Italia"
