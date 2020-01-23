@@ -1,13 +1,5 @@
 from odoo import models, fields, api, exceptions, _
 
-class ProductProductWizard(models.TransientModel):
-
-    _name = 'discontinue.product.info.wizard'
-
-    wizard_id = fields.Many2one('discontinue.products.wizard', 'wizard')
-
-    product_id = fields.Many2one('product.product', 'Product')
-
 class CreatePickingMove(models.TransientModel):
 
     _name = 'discontinue.products.wizard'
@@ -38,4 +30,11 @@ class CreatePickingMove(models.TransientModel):
                 self.env.user.notify_warning(message = message, sticky=True)
                 pass
 
+class ProductProductWizard(models.TransientModel):
+
+    _name = 'discontinue.product.info.wizard'
+
+    wizard_id = fields.Many2one('discontinue.products.wizard', 'wizard')
+
+    product_id = fields.Many2one('product.product', 'Product')
 
