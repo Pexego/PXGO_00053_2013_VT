@@ -471,3 +471,28 @@ msgstr "Data del primo arrivo"
 #: model:ir.ui.menu,name:stock_custom.first_incoming_date_menu
 msgid "First incoming date"
 msgstr "Data del primo arrivo"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Received"
+msgstr "Ricevuto"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "High"
+msgstr "Alta"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Medium"
+msgstr "Media"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Low"
+msgstr "Bassa"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_date_first_incoming_reliability
+msgid "Date First Incoming Reliability"
+msgstr "Affidabilità della data"

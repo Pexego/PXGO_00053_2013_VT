@@ -276,14 +276,23 @@ class ProductProduct(models.Model):
                 pickings = self.env['stock.picking'].search([('id', 'in', moves.mapped('picking_id.id'))],
                                                             order='date_done asc', limit=1)
                 product.date_first_incoming = pickings.date_done
+                product.date_first_incoming = "1.received"
             else:
                 moves = self.env['stock.move'].search(
                     [('product_id', '=', product.id), ('purchase_line_id', '!=', False)]).sorted(
                     key=lambda m: m.date_expected and m.date_reliability)
                 if moves:
+                    product.date_first_incoming = moves[0].date_reliability
                     product.date_first_incoming = moves[0].date_expected
 
     date_first_incoming = fields.Date(formats=['%Y-%m-%d %H:%M:%S'], compute=_compute_date_first_incoming, store=True)
+
+    date_first_incoming_reliability = fields.Selection([
+        ('1.received', 'Received'),
+        ('2.high', 'High'),
+        ('3.medium', 'Medium'),
+        ('4.low', 'Low'),
+        ])
 
 
 class StockQuantityHistory(models.TransientModel):

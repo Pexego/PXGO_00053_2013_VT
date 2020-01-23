@@ -86,6 +86,9 @@
             <field name="categ_id" position="attributes">
                 <attribute name="filter_domain"></attribute>
             </field>
+            <filter name="services" position="after">
+                <filter string="All / Saleable / NUEVOS" name="categ_new" domain="[('categ_id.name','like','NUEVOS')]"/>
+            </filter>
         </field>
     </record>
 
@@ -118,22 +121,26 @@
         <field name="name">product.date.first.incoming</field>
         <field name="model">product.product</field>
         <field name="arch" type="xml">
-            <tree string="First incoming date" default_order='date_first_incoming desc'>
+            <tree string="First incoming date" default_order='date_first_incoming asc' decoration-success="date_first_incoming_reliability =='1.received'" decoration-warning="date_first_incoming_reliability != '1.received'">
                 <field name="default_code"/>
                 <field name="date_first_incoming"/>
+                <field name="date_first_incoming_reliability"/>
             </tree>
         </field>
     </record>
 
     <record id="product_date_first_incoming_action" model="ir.actions.act_window">
         <field name="name">First incoming date</field>
+        <field name="type">ir.actions.act_window</field>
         <field name="res_model">product.product</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('date_first_incoming','!=',False)]</field>
+        <field name="search_view_id" ref="product.product_search_form_view"/>
         <field name="view_id" ref="product_date_first_incoming_tree"/>
+        <field name="domain">[('date_first_incoming','!=',False),('discontinued','=',False)]</field>
+        <field name="context">{'search_default_categ_new':1}</field>
     </record>
 
     <menuitem id="first_incoming_date_menu" name="First incoming date" string="First incoming date"
               action="product_date_first_incoming_action"
-              parent="sale.menu_sale_report"/>
+              parent="purchase.menu_product_in_config_purchase" sequence="7"/>
 </odoo>
