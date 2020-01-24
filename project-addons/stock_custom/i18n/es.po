@@ -501,3 +501,13 @@ msgstr "Baja"
 #: model:ir.model.fields,field_description:stock_custom.field_product_product_date_first_incoming_reliability
 msgid "Date First Incoming Reliability"
 msgstr "Fiabilidad de la fecha"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
+msgid "New Category"
+msgstr "Nuevos"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
+msgid "One month ago"
+msgstr "Desde hace un mes"

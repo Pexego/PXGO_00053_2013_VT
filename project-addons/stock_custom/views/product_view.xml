@@ -87,7 +87,8 @@
                 <attribute name="filter_domain"></attribute>
             </field>
             <filter name="services" position="after">
-                <filter string="All / Saleable / NUEVOS" name="categ_new" domain="[('categ_id.name','like','NUEVOS')]"/>
+                <filter string="New Category" name="categ_new" domain="[('categ_id.name','like','NUEVOS')]"/>
+                <filter string="One month ago" name="one_month_ago" domain="[('date_first_incoming','>=',(datetime.datetime.now() - datetime.timedelta(days=31)).strftime('%Y-%m-%d'))]"/>
             </filter>
         </field>
     </record>
@@ -137,7 +138,7 @@
         <field name="search_view_id" ref="product.product_search_form_view"/>
         <field name="view_id" ref="product_date_first_incoming_tree"/>
         <field name="domain">[('date_first_incoming','!=',False),('discontinued','=',False)]</field>
-        <field name="context">{'search_default_categ_new':1}</field>
+        <field name="context">{'search_default_one_month_ago':1}</field>
     </record>
 
     <menuitem id="first_incoming_date_menu" name="First incoming date" string="First incoming date"
