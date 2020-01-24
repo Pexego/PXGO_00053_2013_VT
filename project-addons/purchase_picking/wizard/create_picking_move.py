@@ -155,7 +155,6 @@ class CreatePickingMove(models.TransientModel):
             picking_id.action_confirm()
             # We don't use all_moves because when it is a kit, one of the moves is deleted and several ones are created instead
             picking_id.move_lines._force_assign()
-            picking_id.move_lines.mapped('product_id')._compute_date_first_incoming()
             pickings.append(picking_id.id)
         context2 = dict(context)
         context2['picking_ids'] = pickings
