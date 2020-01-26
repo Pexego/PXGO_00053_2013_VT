@@ -43,6 +43,7 @@ class BaseSynchroObj(models.Model):
                                ('b', 'Both')], 'Synchronization direction',
                               required=True,
                               default='d')
+    only_create_date = fields.Boolean("Only create date")
     sequence = fields.Integer('Sequence')
     active = fields.Boolean('Active', default=True)
     synchronize_date = fields.Datetime('Latest Synchronization', readonly=True)
@@ -54,18 +55,19 @@ class BaseSynchroObj(models.Model):
                           help="Dictionary format. Used on create/write")
 
     @api.model
-    def get_ids(self, obj, dt, domain=None, action=None):
+    def get_ids(self, model, dt, domain=None, action=None, obj=None):
         if action is None:
             action = {}
-        pool = self.env[obj]
+        pool = self.env[model]
         result = []
         if dt:
             w_date = domain + [('write_date', '>=', dt)]
             c_date = domain + [('create_date', '>=', dt)]
         else:
             w_date = c_date = domain
-        obj_rec = pool.search(w_date)
-        obj_rec += pool.search(c_date)
+        obj_rec = pool.search(c_date)
+        if not obj or not obj.only_create_date:
+            obj_rec += pool.search(w_date)
         for r in obj_rec.read(['create_date', 'write_date']):
             result.append((r['write_date'] or r['create_date'], r['id'],
                            action.get('action', 'd')))
