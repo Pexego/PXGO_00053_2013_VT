@@ -205,3 +205,8 @@ msgstr "Asistente para crear albaranes desde lineas de albarán"
 msgid "{'default_product_uom_qty': product_qty, 'cur_location_id': location_id}"
 msgstr "{'default_product_uom_qty': product_qty, 'cur_location_id': location_id}"
 
+#. module: crm_rma_advance_location
+#: code:crm_rma_advance_location/wizard/claim_make_picking_from_picking.py:83
+#, python-format
+msgid "You cannot send the following products to stock due to they are "make to order": "
+msgstr "No puedes enviar a existencias los siguientes productos ya que son "bajo pedido": "
