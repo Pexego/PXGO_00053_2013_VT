@@ -53,8 +53,8 @@ class Customer(SyncModel):
     commercial_id = ForeignKeyField(Commercial, on_delete='CASCADE', null=True)
     is_company = BooleanField(default=True)
     prospective = BooleanField(default=False)
-    phone1 = CharField(max_length=20, null=True)
-    phone2 = CharField(max_length=20, null=True)
+    phone1 = CharField(max_length=40, null=True)
+    phone2 = CharField(max_length=40, null=True)
 
     MOD_NAME = 'customer'
 

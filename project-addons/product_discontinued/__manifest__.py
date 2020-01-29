@@ -16,7 +16,9 @@ the button commission_free will disappear of the view
     "data": [
         "views/product_discontinued_view.xml",
         "data/cron.xml",
-        "views/email_template.xml"
+        "views/email_template.xml",
+        "security/product_discontinued.xml",
+        'wizard/discontinue_products_view.xml'
     ],
     "installable": True
 }

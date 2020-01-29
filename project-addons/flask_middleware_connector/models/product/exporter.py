@@ -39,7 +39,9 @@ class ProductProductExporter(Component):
             'type': binding.type,
             'is_pack': binding.is_pack,
             'discontinued': binding.discontinued,
-            'state': binding.state
+            'state': binding.state,
+            'sale_in_groups_of': binding.sale_in_groups_of,
+            'replacement_id': binding.replacement_id.id
         }
         if binding.show_stock_outside:
             vals['external_stock'] = binding.qty_available_external
