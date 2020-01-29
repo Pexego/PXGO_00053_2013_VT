@@ -266,6 +266,36 @@ class ProductProduct(models.Model):
             'type': 'ir.actions.act_window',
         }
 
+    @api.multi
+    def _compute_date_first_incoming(self):
+        for product in self:
+            moves = self.env['stock.move'].search(
+                [('product_id', '=', product.id), ('picking_id', '!=', False), ('picking_id.date_done', '!=', False),
+                 ('purchase_line_id', '!=', False),('state','!=','cancel'),('picking_id.state','=','done')])
+            if moves:
+                pickings = self.env['stock.picking'].search([('id', 'in', moves.mapped('picking_id.id'))],
+                                                            order='date_done asc', limit=1)
+                product.date_first_incoming = pickings.date_done
+                product.date_first_incoming_reliability = "1.received"
+            else:
+                moves = self.env['stock.move'].search(
+                    [('product_id', '=', product.id), ('purchase_line_id', '!=', False), ('state','!=','cancel')]).sorted(
+                    key=lambda m: m.date_expected and m.date_reliability)
+                if moves:
+                    reliability = moves[0].date_reliability[1::]
+                    number_reliability = str(int(moves[0].date_reliability[0]) + 1)
+                    product.date_first_incoming_reliability = number_reliability+reliability
+                    product.date_first_incoming = moves[0].date_expected
+
+    date_first_incoming = fields.Date(formats=['%Y-%m-%d %H:%M:%S'], compute=_compute_date_first_incoming, store=True)
+
+    date_first_incoming_reliability = fields.Selection([
+        ('1.received', 'Received'),
+        ('2.high', 'High'),
+        ('3.medium', 'Medium'),
+        ('4.low', 'Low'),
+        ])
+
 
 class StockQuantityHistory(models.TransientModel):
     _inherit = 'stock.quantity.history'
