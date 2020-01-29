@@ -122,7 +122,7 @@
         <field name="name">product.date.first.incoming</field>
         <field name="model">product.product</field>
         <field name="arch" type="xml">
-            <tree string="First incoming date" default_order='date_first_incoming asc' decoration-success="date_first_incoming_reliability =='1.received'" decoration-warning="date_first_incoming_reliability != '1.received'">
+            <tree string="First incoming date" default_order='date_first_incoming asc' decoration-bf="date_first_incoming_reliability =='1.received'">
                 <field name="default_code"/>
                 <field name="date_first_incoming"/>
                 <field name="date_first_incoming_reliability"/>
@@ -143,5 +143,5 @@
 
     <menuitem id="first_incoming_date_menu" name="First incoming date" string="First incoming date"
               action="product_date_first_incoming_action"
-              parent="purchase.menu_product_in_config_purchase" sequence="7"/>
+              parent="purchase.menu_purchase_control" sequence="7"/>
 </odoo>
