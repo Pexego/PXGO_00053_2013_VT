@@ -45,6 +45,9 @@
                 <field name="partner_id" position="attributes">
                     <attribute name="domain">['|', ('active', '=', True), '&amp;', ('active', '=', False), ('prospective', '=', True)]</attribute>
                 </field>
+                <field name="mobile" position="after">
+                    <field name="contact_email"/>
+                </field>
             </field>
         </record>
 
