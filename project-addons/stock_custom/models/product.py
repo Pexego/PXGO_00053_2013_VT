@@ -270,12 +270,10 @@ class ProductProduct(models.Model):
     def _compute_date_first_incoming(self):
         for product in self:
             moves = self.env['stock.move'].search(
-                [('product_id', '=', product.id), ('picking_id', '!=', False), ('picking_id.date_done', '!=', False),
-                 ('purchase_line_id', '!=', False),('state','!=','cancel'),('picking_id.state','=','done')])
+                [('product_id', '=', product.id), ('picking_id', '!=', False),
+                 ('purchase_line_id', '!=', False),('state','=','done'),('date_done','!=',False)],order='date_done asc', limit=1)
             if moves:
-                pickings = self.env['stock.picking'].search([('id', 'in', moves.mapped('picking_id.id'))],
-                                                            order='date_done asc', limit=1)
-                product.date_first_incoming = pickings.date_done
+                product.date_first_incoming = moves.date_done
                 product.date_first_incoming_reliability = "1.received"
             else:
                 moves = self.env['stock.move'].search(
@@ -287,7 +285,7 @@ class ProductProduct(models.Model):
                     product.date_first_incoming_reliability = number_reliability+reliability
                     product.date_first_incoming = moves[0].date_expected
 
-    date_first_incoming = fields.Date(formats=['%Y-%m-%d %H:%M:%S'], compute=_compute_date_first_incoming, store=True)
+    date_first_incoming = fields.Datetime(compute=_compute_date_first_incoming, store=True)
 
     date_first_incoming_reliability = fields.Selection([
         ('1.received', 'Received'),
