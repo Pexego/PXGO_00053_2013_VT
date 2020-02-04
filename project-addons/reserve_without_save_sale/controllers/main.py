@@ -24,6 +24,7 @@ class WebsiteReservation(http.Controller):
                 'date_validity': False,
                 'name': post.get('name', product.default_code),
                 'location_id': warehouse.lot_stock_id.id,
+                'sale_line_id': post['sale_line_id'] != 'false' and int(post['sale_line_id']) or False,
                 'sale_id': post['sale_id'] != 'false' and int(post['sale_id']) or False,
                 'user_id': post['user_id'] != 'false' and int(post['user_id']) or False,
                 'price_unit': float(post['price_unit']),
@@ -57,31 +58,39 @@ class WebsiteReservation(http.Controller):
         if post.get('product_id', False):
             product = request.env['product.product'].browse(
                 int(post['product_id']))
+            warehouse = request.env['stock.warehouse'].browse(
+                int(post['warehouse']))
             if product.type == "product":
                 reservation = request.env['stock.reservation'].search(
-                    [('unique_js_id', '=', post['unique_js_id'])])
-                if reservation.product_id.id != product.id:
-                    # Creamos una nueva reserva.
-                    warehouse = request.env['stock.warehouse'].browse(
-                        int(post['warehouse']))
-                    vals = {
-                        'product_id': int(post['product_id']),
-                        'product_uom': int(post['uom']),
-                        'product_uom_qty': float(post['qty']),
-                        'date_validity': False,
-                        'sale_id': post['sale_id'] != 'false' and int(post['sale_id']) or False,
-                        'user_id': post['user_id'] != 'false' and int(post['user_id']) or False,
-                        'name': post.get('name', product.default_code),
-                        'location_id': warehouse.lot_stock_id.id,
-                        'price_unit': float(post['price_unit']),
-                        'unique_js_id': post['new_js_unique_id'],
-                    }
-                    reserve = reservation.copy(vals)
-                    reserve.reserve()
-                    reservation.unlink()
-                    return json.dumps(
-                        {'unique_js_id': post['new_js_unique_id']})
-                else:
-                    # Solo nos importan los cambios en cantidad
-                    reservation.write({'product_uom_qty': float(post['qty'])})
+                    [('unique_js_id', '=', post['unique_js_id'])]) or \
+                              post['sale_line_id'] != 'false' and \
+                              request.env['stock.reservation'].search(
+                                  [('sale_line_id', '=', int(post['sale_line_id']))])
+                if reservation:
+                    if len(reservation) > 1 or reservation.product_id.id != product.id:
+                        # Si es un kit (puede tener 1 o varias líneas de reserva, pero el id de producto no coincide)
+                        # O si se cambia el producto de la línea del pedido por otro
+                        # Creamos una nueva reserva.
+                        vals = {
+                            'product_id': int(post['product_id']),
+                            'product_uom': int(post['uom']),
+                            'product_uom_qty': float(post['qty']),
+                            'date_validity': False,
+                            'sale_line_id': post['sale_line_id'] != 'false' and int(post['sale_line_id']) or False,
+                            'sale_id': post['sale_id'] != 'false' and int(post['sale_id']) or False,
+                            'user_id': post['user_id'] != 'false' and int(post['user_id']) or False,
+                            'name': post.get('name', product.default_code),
+                            'location_id': warehouse.lot_stock_id.id,
+                            'price_unit': float(post['price_unit']),
+                            'unique_js_id': post['new_js_unique_id'],
+                        }
+                        new_reservation = request.env['stock.reservation'].create(vals)
+                        new_reservation.reserve()
+                        reservation.unlink()
+                        return json.dumps({'unique_js_id': post['new_js_unique_id']})
+                    else:
+                        # Solo nos importan los cambios en cantidad
+                        reservation.write({'product_uom_qty': float(post['qty'])})
+                        reservation.reserve()
+                        reservation.move_id._recompute_state()
         return json.dumps(True)

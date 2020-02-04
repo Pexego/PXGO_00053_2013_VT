@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="discontinue_products_view" model="ir.ui.view">
+        <field name="name">discontinue.products.form</field>
+        <field name="model">discontinue.products.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Discontinue products">
+                <p><strong>Are you sure do you want to discontinue the following products?</strong></p>
+                <group>
+                    <field name="product_ids" colspan="4" nolabel="1">
+                        <tree create="false" delete="false" editable="top">
+                            <field name="product_id" readonly="1"/>
+                        </tree>
+                    </field>
+                    <footer>
+                        <button string="Discontinue" name="action_discontinue_products" type="object" class="btn-primary"/>
+                        <button string="Cancel" special="cancel"/>
+                    </footer>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="Discontinue products"
+                groups="group_discontinue"
+                res_model="discontinue.products.wizard"
+                src_model="product.product"
+                view_id="discontinue_products_view"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"
+                id="action_discontinue_products"/>
+
+
+</odoo>

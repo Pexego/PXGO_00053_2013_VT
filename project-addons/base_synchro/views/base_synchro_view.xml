@@ -84,8 +84,9 @@
                         <field name="model_id"/>
                         <field name="action"/>
                         <field name="sequence"/>
+                        <field name="only_create_date"/>
                         <field name="domain" colspan="4"/>
-			<field name="context" colspan="4"/>
+                        <field name="context" colspan="4"/>
                         <field name="synchronize_date"/>
                     </group>
                     <separator string="Fields Not Sync."/>

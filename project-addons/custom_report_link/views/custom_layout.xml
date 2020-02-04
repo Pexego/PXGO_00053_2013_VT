@@ -302,9 +302,9 @@ BIC: CAIXESBBXXX
                         <t t-if="lang == 'fr_FR'">
                             <pre style="font-size:12px; color:#6D6E70;">
 Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.
-Banco Popular Español
+Banco Santander
 IBAN ES11 0075 0240 1006 0056 6137
-BIC: POPUESMM
+BIC: BSCHESMM
                             </pre>
                         </t>
                         <t t-if="lang == 'pt_PT'">
@@ -621,9 +621,9 @@ BIC: CAIXESBBXXX
                         </t>
                         <t t-if="lang == 'fr_FR'">
                             <pre style="font-size:12px; color:#6D6E70;">
-Banco Popular Español
+Banco Santander
 IBAN ES11 0075 0240 1006 0056 6137
-BIC: POPUESMM
+BIC: BSCHESMM
                             </pre>
                         </t>
                         <t t-if="lang == 'it_IT'">
@@ -1099,9 +1099,9 @@ BIC: CAIXESBBXXX
                             </t>
                             <t t-if="lang == 'fr_FR'">
                                 <pre style="font-size:12px; color:#6D6E70">
-Banco Popular Español
+Banco Santander
 IBAN ES11 0075 0240 1006 0056 6137
-BIC: POPUESMM
+BIC: BSCHESMM
                                 </pre>
                             </t>
                             <t t-if="lang == 'pt_PT'">
@@ -1485,9 +1485,9 @@ BIC: CAIXESBBXXX
                             </t>
                             <t t-if="lang == 'fr_FR'">
                                 <pre style="font-size:12px; color:#6D6E70">
-Banco Popular Español
+Banco Santander
 IBAN ES11 0075 0240 1006 0056 6137
-BIC: POPUESMM
+BIC: BSCHESMM
                                 </pre>
                             </t>
                             <t t-if="lang == 'it_IT'">

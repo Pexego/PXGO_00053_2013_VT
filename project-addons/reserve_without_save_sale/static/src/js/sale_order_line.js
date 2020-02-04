@@ -22,6 +22,7 @@ odoo.define('reserve_without_save_sale', function(require) {
                 'uom': element.data.product_uom.data.id,
                 'price_unit': element.data.price_unit,
                 'name': element.data.name,
+                'sale_line_id': element.data.id || false,
                 'warehouse': recordData.warehouse_id.data.id,
                 'sale_id': recordData.id,
                 'user_id': recordData.user_id.data.id,
@@ -58,7 +59,7 @@ odoo.define('reserve_without_save_sale', function(require) {
                             return;
                         }
                         // Si no tiene reserva temporal la creamos siempre
-                        if(element.data.temp_unique_js_id == ""){
+                        if(element.data.temp_unique_js_id == "" && element.data.unique_js_id == ""){
                             var dat = self.__get_line_vals(element, self.recordData);
                             //Se crea un id unico para la reserva a crear.
                             var id = self.__get_reserve_unique_id();
@@ -78,7 +79,7 @@ odoo.define('reserve_without_save_sale', function(require) {
                         }
                         else{
                             var data = self.__get_line_vals(element, self.recordData)
-                            data['unique_js_id'] = element.data.temp_unique_js_id
+                            data['unique_js_id'] = element.data.temp_unique_js_id || element.data.unique_js_id
                             // Generamos el id en javascript por si es necesario crear reserva nueva.
                             data['new_js_unique_id'] = self.__get_reserve_unique_id()
                             $.ajax({

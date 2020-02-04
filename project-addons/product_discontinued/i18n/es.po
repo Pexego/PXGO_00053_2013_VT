@@ -61,3 +61,24 @@ msgstr "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-s
 "            % endfor\n"
 "            </ul>\n"
 "            </div>"
+
+#. module: product_discontinued
+#: model:ir.ui.view,arch_db:product_discontinued.discontinue_products_view
+#: model:ir.actions.act_window,name:product_discontinued.action_discontinue_products
+msgid "Discontinue products"
+msgstr "Descatalogar productos"
+
+#. module: product_discontinued
+#: model:ir.ui.view,arch_db:product_discontinued.discontinue_products_view
+msgid "<p><strong>Are you sure do you want to discontinue the following products?</strong></p>"
+msgstr "<p><strong>¿Está seguro de que desea descatalogar los siguientes productos?</strong></p>"
+
+#. module: product_discontinued
+#: model:ir.ui.view,arch_db:product_discontinued.discontinue_products_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: product_discontinued
+#: model:ir.ui.view,arch_db:product_discontinued.discontinue_products_view
+msgid "Discontinue"
+msgstr "Descatalogar"

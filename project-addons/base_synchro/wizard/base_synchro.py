@@ -77,13 +77,13 @@ class BaseSynchro(models.TransientModel):
                         server!'''))
         if object.action in ('d', 'b'):
             sync_ids = pool1.get('base.synchro.obj').\
-                get_ids(model_obj, dt, eval(object.domain), {'action': 'd'})
+                get_ids(model_obj, dt, eval(object.domain), {'action': 'd'}, obj=object)
 
         if object.action in ('u', 'b'):
             _logger.debug("Getting ids to synchronize [%s] (%s)",
                           object.synchronize_date, object.domain)
             sync_ids += pool2.env['base.synchro.obj'].\
-                get_ids(model_obj, dt, eval(object.domain), {'action': 'u'})
+                get_ids(model_obj, dt, eval(object.domain), {'action': 'u'}, obj=object)
         sorted(sync_ids, key=lambda x: str(x[0]))
         for dt, id, action in sync_ids:
             destination_inverted = False
