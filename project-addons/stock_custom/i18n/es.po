@@ -498,3 +498,75 @@ msgstr "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-s
 "            % endfor\n"
 "            </ul>\n"
 "            </div>"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_date_first_incoming
+msgid "Date First Incoming"
+msgstr "Fecha de primera llegada"
+
+#. module: stock_custom
+#: model:ir.actions.act_window,name:stock_custom.product_date_first_incoming_action
+#: model:ir.ui.menu,name:stock_custom.first_incoming_date_menu
+msgid "First incoming date"
+msgstr "Fechas de primera llegada"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Received"
+msgstr "Recibido"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "High"
+msgstr "Alta"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Medium"
+msgstr "Media"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Low"
+msgstr "Baja"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_date_first_incoming_reliability
+msgid "Date First Incoming Reliability"
+msgstr "Fiabilidad de la fecha"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
+msgid "New Category"
+msgstr "Nuevos"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
+msgid "One month ago"
+msgstr "Desde hace un mes"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_brand_id
+msgid "Product Brand"
+msgstr "Marca del producto"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_partner_vat
+msgid "Partner VAT"
+msgstr "NIF"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_origin
+msgid "Origin"
+msgstr "Origen"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_location_dest_name
+msgid "Location Destination Name"
+msgstr "Nombre de la ubicación de destino"
+
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_pricelist
+msgid "Pricelist"
+msgstr "Tarifa"
