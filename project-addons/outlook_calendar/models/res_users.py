@@ -10,13 +10,13 @@ import json
 class ResUsers(models.Model):
     _inherit = 'res.users'
 
-    outlook_auth_token = fields.Char('Outlook token')
-    outlook_auth_token_exp = fields.Datetime('Expiration date')
-    outlook_auth_refresh_token = fields.Char('Outlook refresh token')
-    outlook_auth_state = fields.Char()
-    outlook_is_logged = fields.Boolean('Logged in Outlook', compute='_get_is_outlook_logged')
+    outlook_auth_token = fields.Char('Outlook token', copy=False)
+    outlook_auth_token_exp = fields.Datetime('Expiration date', copy=False)
+    outlook_auth_refresh_token = fields.Char('Outlook refresh token', copy=False)
+    outlook_auth_state = fields.Char(copy=False)
+    outlook_is_logged = fields.Boolean('Logged in Outlook', compute='_get_is_outlook_logged', copy=False)
     outlook_calendar_ids = fields.One2many('outlook.calendar', 'user_id')
-    outlook_sync = fields.Boolean('Activate Outlook Sync')
+    outlook_sync = fields.Boolean('Activate Outlook Sync', copy=False)
 
     def _get_is_outlook_logged(self):
         if self.outlook_auth_token and self.outlook_auth_refresh_token and \
@@ -103,9 +103,9 @@ class ResUsers(models.Model):
                 events = json.loads(response.text)
                 o_ids = []
                 for event in events['value']:
-                    o_ids.append(event['id'])
+                    o_ids.append(event['iCalUId'])
                     last_modified_date = event['lastModifiedDateTime'][:-9].replace('T', ' ')
-                    local_event = self.env['calendar.event'].search([('outlook_id', '=', event['id'])])
+                    local_event = self.env['calendar.event'].search([('outlook_id', '=', event['iCalUId'])])
 
                     if not local_event or local_event.outlook_last_modified_datetime < last_modified_date:
                         start = event['start']['dateTime'][:-1].replace('T', ' ')
@@ -125,16 +125,21 @@ class ResUsers(models.Model):
                             partner = self.env['res.partner'].search([('email', '=', attendee_email)])
                             if partner:
                                 partners[0][2].append(partner[0].id)
-
-                        organizer = self.env['res.partner'].search(
-                            [('email', '=', event['organizer']['emailAddress']['address'])])
                         organizer_user = self.env['res.users'].search([('login', '=', event['organizer']['emailAddress']['address'])])
-                        if organizer:
-                            partners[0][2].append(organizer.id)
+                        if organizer_user:
+                            partners[0][2].append(organizer_user.partner_id.id)
+
+                        # Just save the event id from the organizer,
+                        # because is the only one who can modify or delete from outlook
+                        if organizer_user.id == self.id:
+                            outlook_id_resp = event['id']
+                        else:
+                            outlook_id_resp = False
 
                         new_event_vals = {
                             'name': event.get('subject', ''),
-                            'outlook_id': event['id'],
+                            'outlook_id': event['iCalUId'],
+                            'outlook_id_resp': outlook_id_resp,
                             'outlook_last_modified_datetime': last_modified_date,
                             'location': event.get('location', '').get('displayName', ''),
                             'start': start,
