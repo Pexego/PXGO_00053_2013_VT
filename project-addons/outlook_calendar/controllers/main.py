@@ -26,7 +26,7 @@ class OutlookCalendarController(http.Controller):
             authorization_response=authorization_response,
             client_secret=client_secret,
             response_type='id_token')
-        _logger.info("%s", token)
+        _logger.info("Outlook token adquired")
         if token['access_token']:
             request.env.user.outlook_auth_token = token['access_token']
             request.env.user.outlook_auth_refresh_token = token['refresh_token']
