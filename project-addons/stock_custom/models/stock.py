@@ -142,6 +142,8 @@ class StockMove(models.Model):
         ('3.low', 'Low'),
         ], readonly=False,compute='_compute_dates')
 
+    date_done = fields.Datetime(related='picking_id.date_done',store=True)
+
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()
         for move in self:
@@ -209,6 +211,14 @@ class StockMove(models.Model):
 
     def action_force_assign(self):
         return self._force_assign()
+
+    @api.multi
+    def write(self,vals):
+        res = super(StockMove, self).write(vals)
+        for move in self:
+            if move.purchase_line_id and move.product_id.date_reliability!='1.received' and (vals.get('date_expected') or vals.get('state') =='cancel' or vals.get('picking_id')==False):
+                move.product_id._compute_date_first_incoming()
+        return res
 
 
 class StockReturnPicking(models.TransientModel):
