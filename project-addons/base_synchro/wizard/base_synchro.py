@@ -75,34 +75,48 @@ class BaseSynchro(models.TransientModel):
                           download or both, please install
                           "Multi-DB Synchronization" module in targeted/
                         server!'''))
+        destination_inverted = False
         if object.action in ('d', 'b'):
+            fields_data = pool1.get(object.model_id.model).\
+                fields_get()
+            for field in object.avoid_ids:
+                if field.name in fields_data:
+                    del fields_data[field.name]
+            flds = list(fields_data.keys())
             sync_ids = pool1.get('base.synchro.obj').\
-                get_ids(model_obj, dt, eval(object.domain), {'action': 'd'}, obj=object)
+                get_ids(model_obj, dt, eval(object.domain), {'action': 'd'},
+                        obj=object, flds=flds)
+            pool_src = pool1
+            pool_dest = pool2
 
         if object.action in ('u', 'b'):
             _logger.debug("Getting ids to synchronize [%s] (%s)",
                           object.synchronize_date, object.domain)
+            fields_data = pool2.get(object.model_id.model).\
+                fields_get()
+            for field in object.avoid_ids:
+                if field.name in fields_data:
+                    del fields_data[field.name]
+            flds = list(fields_data.keys())
             sync_ids += pool2.env['base.synchro.obj'].\
-                get_ids(model_obj, dt, eval(object.domain), {'action': 'u'}, obj=object)
+                get_ids(model_obj, dt, eval(object.domain), {'action': 'u'},
+                        obj=object, flds=flds)
+            pool_src = pool2
+            pool_dest = pool1
+            destination_inverted = True
         sorted(sync_ids, key=lambda x: str(x[0]))
-        for dt, id, action in sync_ids:
-            destination_inverted = False
+
+        _logger.debug("{} REGS no: {}".format(model_obj, len(sync_ids)))
+        for dt, id, action, value in sync_ids:
+            value = value[0]
             if action == 'd':
                 pool_src = pool1
                 pool_dest = pool2
+                destination_inverted = False
             else:
                 pool_src = pool2
                 pool_dest = pool1
                 destination_inverted = True
-            fields = False
-            if object.model_id.model == 'crm.case.history':
-                fields = ['email', 'description', 'log_id']
-            if not destination_inverted:
-                value = pool_src.get(object.model_id.model).read([id],
-                                                                 fields)[0]
-            else:
-                pool = pool_src.env[object.model_id.model]
-                value = pool.browse([id]).read(fields)[0]
             if 'create_date' in value:
                 del value['create_date']
             if 'write_date' in value:
@@ -112,31 +126,32 @@ class BaseSynchro(models.TransientModel):
                 if field.name in value:
                     del value[field.name]
 
-            for key, val in value.items():
-                if isinstance(val, tuple):
-                    value.update({key: val[0]})
-
             value = self.data_transform(pool_src, pool_dest,
-                                        object.model_id.model, value, action,
+                                        object.model_id.model, value,
+                                        fields_data, action,
                                         destination_inverted)
             id2 = self.get_id(object.id, id, action)
             if id2:
                 _logger.debug("Updating model %s [%d]", object.model_id.name,
                               id2)
                 if not destination_inverted:
-                    pool = pool_dest.env[object.model_id.model].with_context(ctx)
+                    pool = pool_dest.env[object.model_id.model].\
+                        with_context(ctx)
                     pool.browse([id2]).write(value)
                 else:
-                    pool_dest.get(object.model_id.model).with_context(ctx).write([id2], value)
+                    pool_dest.get(object.model_id.model).with_context(ctx).\
+                        write([id2], value)
                 self.report_total += 1
                 self.report_write += 1
             else:
                 _logger.debug("Creating model %s", object.model_id.name)
                 if not destination_inverted:
-                    idnew = pool_dest.env[object.model_id.model].with_context(ctx).create(value)
+                    idnew = pool_dest.env[object.model_id.model].\
+                        with_context(ctx).create(value)
                     new_id = idnew.id
                 else:
-                    idnew = pool_dest.get(object.model_id.model).with_context(ctx).create(value)
+                    idnew = pool_dest.get(object.model_id.model).\
+                        with_context(ctx).create(value)
                     new_id = idnew
                 self.env['base.synchro.obj.line'].create({
                     'obj_id': object.id,
@@ -200,23 +215,18 @@ class BaseSynchro(models.TransientModel):
         return result
 
     @api.model
-    def data_transform(self, pool_src, pool_dest, obj, data, action=None,
-                       destination_inverted=False):
+    def data_transform(self, pool_src, pool_dest, obj, data, fields,
+                       action=None, destination_inverted=False):
         if action is None:
             action = {}
-        if not destination_inverted:
-            fields = pool_src.get(obj).fields_get()
-        else:
-            fields = pool_src.env[obj].fields_get()
         _logger.debug("Transforming data")
         for f in fields:
-            if f not in data:
-                continue
             ftype = fields[f]['type']
             if ftype in ('function', 'one2many', 'one2one'):
                 _logger.debug("Field %s of type %s, discarded.", f, ftype)
                 del data[f]
-            elif fields[f].get('compute'):
+            elif fields[f].get('compute') or fields[f].get('related') or \
+                    fields[f].get('depends'):
                 _logger.debug("Field %s with compute function, discarded.", f)
                 del data[f]
             elif ftype == 'many2one':
@@ -235,13 +245,13 @@ class BaseSynchro(models.TransientModel):
                 res = \
                     map(lambda x: self.relation_transform(pool_src,
                         pool_dest,
-                        fields[f]
-                        ['relation'],
+                        fields[f]['relation'],
                         x, action,
                         destination_inverted),
                         data[f])
                 data[f] = [(6, 0, [x for x in res if x])]
         del data['id']
+        _logger.debug("Data dest: {}".format(data))
         return data
 
     @api.multi
