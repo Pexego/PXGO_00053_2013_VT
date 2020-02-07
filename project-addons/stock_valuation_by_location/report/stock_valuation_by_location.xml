@@ -25,9 +25,9 @@
         <field name="arch" type="xml">
             <tree>
                 <field name="product_id"/>
-                <field name="qty"/>
-                <field name="value" widget="monetary" options="{'currency_field': 'cost_currency_id'}"/>
                 <field name="location_id"/>
+                <field name="qty" sum="Total Qty"/>
+                <field name="value" sum="Stock Valuation"/>
             </tree>
         </field>
     </record>

@@ -8,7 +8,7 @@ class StockValuationByLoc(models.TransientModel):
     location_id = fields.Many2one('stock.location','Location')
     value = fields.Float("Value")
 
-class StockQuantityHistory(models.TransientModel):
+class StockValuationByLocWizard(models.TransientModel):
     _name = 'stock.valuation.by.location.wizard'
     compute_at_date = fields.Selection([
         (0, 'Current Inventory'),
