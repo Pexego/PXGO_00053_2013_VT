@@ -108,7 +108,6 @@ class BaseSynchro(models.TransientModel):
 
         _logger.debug("{} REGS no: {}".format(model_obj, len(sync_ids)))
         for dt, id, action, value in sync_ids:
-            value = value[0]
             if action == 'd':
                 pool_src = pool1
                 pool_dest = pool2

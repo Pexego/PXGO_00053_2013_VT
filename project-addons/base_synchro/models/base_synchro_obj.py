@@ -58,6 +58,7 @@ class BaseSynchroObj(models.Model):
     def get_ids(self, model, dt, domain=None, action=None, obj=None, flds=[]):
         if action is None:
             action = {}
+        action = action.get('action', 'd')
         pool = self.env[model]
         result = []
         if dt:
@@ -68,9 +69,10 @@ class BaseSynchroObj(models.Model):
         obj_rec = pool.search(c_date)
         if not obj or not obj.only_create_date:
             obj_rec += pool.search(w_date)
-        for r in obj_rec:
-            result.append((r.write_date or r.create_date, r.id,
-                           action.get('action', 'd'), r.read(flds)))
+        data = obj_rec.read(flds)
+        for r in data:
+            result.append((r['write_date'] or r['create_date'], r['id'],
+                           action, r))
         return result
 
 
