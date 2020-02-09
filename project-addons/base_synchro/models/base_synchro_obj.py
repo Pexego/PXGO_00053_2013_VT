@@ -55,7 +55,8 @@ class BaseSynchroObj(models.Model):
                           help="Dictionary format. Used on create/write")
 
     @api.model
-    def get_ids(self, model, dt, domain=None, action=None, obj=None, flds=[]):
+    def get_ids(self, model, dt, domain=None, action=None,
+                only_create_date=False, flds=[]):
         if action is None:
             action = {}
         action = action.get('action', 'd')
@@ -75,7 +76,7 @@ class BaseSynchroObj(models.Model):
             data.extend(obj_rec.read(flds))
             offset += 250
             obj_rec = pool.search(c_date, limit=limit, offset=offset)
-        if not obj.only_create_date:
+        if not only_create_date:
             if get_ids:
                 w_date.extend(('id', 'not in', get_ids))
             offset = limit = 250
