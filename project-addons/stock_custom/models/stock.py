@@ -216,7 +216,7 @@ class StockMove(models.Model):
     def write(self,vals):
         res = super(StockMove, self).write(vals)
         for move in self:
-            if move.purchase_line_id and move.product_id.date_reliability!='1.received' and (vals.get('date_expected') or vals.get('state') =='cancel' or vals.get('picking_id')==False):
+            if move.purchase_line_id and move.product_id.date_first_incoming_reliability!='1.received' and (vals.get('date_expected') or vals.get('state') =='cancel' or vals.get('picking_id')==False):
                 move.product_id._compute_date_first_incoming()
         return res
 
