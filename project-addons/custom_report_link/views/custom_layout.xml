@@ -1781,7 +1781,7 @@ SWIFT/BIC: BESCPTPL
                     <tr>
                         <tr t-if="last_pack != move.sale_line_id.product_id">
                             <t t-set="current_total_price"
-                               t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.product_uom_qty"/>
+                               t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.sale_line_id.product_uom_qty"/>
                             <t t-foreach="move.sale_line_id.tax_id" t-as="t">
                                 <t t-if="t in taxes">
                                     <t t-esc="taxes.update({t:(taxes[t] + current_total_price)})"/>
