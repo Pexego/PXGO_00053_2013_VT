@@ -221,7 +221,7 @@ class ProductBrandListener(Component):
         up_fields = ["name"]
         for field in up_fields:
             if field in fields:
-                record.with_delay().update_product_brand()
+                record.with_delay().update_product_brand(fields)
                 break
 
     def on_record_unlink(self, record):

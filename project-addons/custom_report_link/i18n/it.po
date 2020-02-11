@@ -42,12 +42,16 @@ msgstr "<span style=\"font-weight: bold; color:#da1f2e\">To: </span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice\n"
-"                                number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
-"                            <br/>For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
-msgstr "<span style=\"font-weight: bold;\">Per assicurare la corretta realizzazione del pagamento, SI PREGA DI RICORDARE di includere il numero d’ordine e/o il numero della fattura nei bonifici bancari.</span>\n"
-"                        <br/>\n"
-"                        Per ulteriori informazioni sul suo contatto di fatturazione: <span style=\"color:#da1f2e;\">ccontabilita@visiotechsecurity.com</span>"
+msgid "<br/>\n"
+"                            For more information regarding your invoice contact: <span style="color:#da1f2e;">finance@visiotechsecurity.com</span>"
+msgstr "<br/>\n"
+"                            Per ulteriori informazioni sul suo contatto di fatturazione: <span style=\"color:#da1f2e;\">ccontabilita@visiotechsecurity.com</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<span style="font-weight: bold;">PLEASE REMEMBER to include your sales order and/or invoice\n"
+"                                number on your bank transfers. This ensures your payment is processed correctly.</span>"
+msgstr "<span style=\"font-weight: bold;\">Per assicurare la corretta realizzazione del pagamento, SI PREGA DI RICORDARE di includere il numero d’ordine e/o il numero della fattura nei bonifici bancari.</span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice

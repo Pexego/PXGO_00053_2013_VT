@@ -361,8 +361,3 @@ msgstr "Si este campo está marcado, los albaranes se crearán agrupados por pro
 #: model:ir.model.fields,field_description:purchase_picking.field_picking_from_moves_wizard_supplier_mode
 msgid "Create pickings grouped by supplier"
 msgstr "Crear albaranes agrupados por proveedor"
-
-#. module: purchase_picking
-#: model:ir.model.fields,field_description:purchase_picking.field_product_product_date_first_incoming
-msgid "Date First Incoming"
-msgstr "Fecha de primera llegada"
