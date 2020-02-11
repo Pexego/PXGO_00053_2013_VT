@@ -14,6 +14,6 @@
         </field>
     </record>
 
-    <menuitem id="promos" action="commercial_rules.act_commercial_rules"
+    <menuitem id="commercial_rules.promos" action="commercial_rules.act_commercial_rules"
         parent="sale.menu_sale_config" sequence="4"/>
 </odoo>
