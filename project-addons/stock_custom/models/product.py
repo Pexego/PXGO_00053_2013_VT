@@ -35,11 +35,19 @@ class ProductTemplate(models.Model):
     # this doesn't seem to work
     property_valuation = fields.Selection(default='real_time')
 
+    currency_purchase_id = fields.Many2one('res.currency', 'Currency', required=True,
+                                           default=lambda self: self.env.user.company_id.currency_id.id)
+
     @api.model
     def create(self, vals):
         prod = super().create(vals)
         prod.property_valuation = 'real_time'
         return prod
+
+    def set_product_template_last_purchase(self, date_order, price_unit,
+                                           partner_id, currency):
+        super(ProductTemplate, self).set_product_template_last_purchase(date_order, price_unit, partner_id)
+        self.currency_purchase_id = currency
 
 
 class ProductProduct(models.Model):
@@ -293,6 +301,52 @@ class ProductProduct(models.Model):
         ('3.medium', 'Medium'),
         ('4.low', 'Low'),
         ])
+
+    currency_purchase_id = fields.Many2one('res.currency', 'Currency', required=True,
+                                           default=lambda self: self.env.user.company_id.currency_id.id)
+
+    @api.multi
+    def set_product_last_purchase(self, order_id=False):
+        PurchaseOrderLine = self.env['purchase.order.line']
+        if not self.check_access_rights('write', raise_exception=False):
+            return
+        for product in self:
+            date_order = False
+            price_unit_uom = 0.0
+            last_supplier = False
+            currency_purchase_id = False
+
+            # Check if Order ID was passed, to speed up the search
+            if order_id:
+                lines = PurchaseOrderLine.search([
+                    ('order_id', '=', order_id),
+                    ('product_id', '=', product.id)], limit=1)
+            else:
+                lines = PurchaseOrderLine.search(
+                    [('product_id', '=', product.id),
+                     ('state', 'in', ['purchase', 'done'])]).sorted(
+                    key=lambda l: l.order_id.date_order, reverse=True)
+
+            if lines:
+                # Get most recent Purchase Order Line
+                last_line = lines[:1]
+
+                date_order = last_line.order_id.date_order
+                # Compute Price Unit in the Product base UoM
+                price_unit_uom = product.product_tmpl_id.uom_id. \
+                    _compute_quantity(last_line.price_unit,
+                                      last_line.product_uom)
+                last_supplier = last_line.order_id.partner_id
+                currency_purchase_id = last_line.order_id.currency_id.id
+
+            # Assign values to record
+            product.last_purchase_date = date_order
+            product.last_purchase_price = price_unit_uom
+            product.last_supplier_id = last_supplier
+            product.currency_purchase_id = currency_purchase_id
+            # Set related product template values
+            product.product_tmpl_id.set_product_template_last_purchase(
+                date_order, price_unit_uom, last_supplier, currency_purchase_id)
 
 
 class StockQuantityHistory(models.TransientModel):
