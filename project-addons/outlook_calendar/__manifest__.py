@@ -6,7 +6,7 @@
     'author': 'Visiotech',
     'depends': ['calendar'],
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'data/parameters.xml',
         'views/res_users_views.xml',
         'views/o_calendar_views.xml',

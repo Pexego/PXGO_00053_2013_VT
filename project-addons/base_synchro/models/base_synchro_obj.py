@@ -55,22 +55,41 @@ class BaseSynchroObj(models.Model):
                           help="Dictionary format. Used on create/write")
 
     @api.model
-    def get_ids(self, model, dt, domain=None, action=None, obj=None):
+    def get_ids(self, model, dt, domain=None, action=None,
+                only_create_date=False, flds=[]):
         if action is None:
             action = {}
+        action = action.get('action', 'd')
         pool = self.env[model]
         result = []
+        data = []
+        get_ids = []
         if dt:
             w_date = domain + [('write_date', '>=', dt)]
             c_date = domain + [('create_date', '>=', dt)]
         else:
             w_date = c_date = domain
-        obj_rec = pool.search(c_date)
-        if not obj or not obj.only_create_date:
-            obj_rec += pool.search(w_date)
-        for r in obj_rec.read(['create_date', 'write_date']):
+        offset = limit = 250
+        obj_rec = pool.search(c_date, limit=limit, offset=offset)
+        while obj_rec:
+            get_ids.extend(obj_rec.ids)
+            data.extend(obj_rec.read(flds))
+            offset += 250
+            obj_rec = pool.search(c_date, limit=limit, offset=offset)
+        if not only_create_date:
+            if get_ids:
+                w_date.append(('id', 'not in', get_ids))
+            offset = limit = 250
+            obj_rec = pool.search(w_date, limit=limit, offset=offset)
+            while obj_rec:
+                get_ids.extend(obj_rec.ids)
+                data.extend(obj_rec.read(flds))
+                offset += 250
+                obj_rec = pool.search(w_date, limit=limit, offset=offset)
+
+        for r in data:
             result.append((r['write_date'] or r['create_date'], r['id'],
-                           action.get('action', 'd')))
+                           action, r))
         return result
 
 
