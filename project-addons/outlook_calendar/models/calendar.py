@@ -8,11 +8,12 @@ class CalendarEvent(models.Model):
 
     _inherit = "calendar.event"
 
-    outlook_id = fields.Char()
+    outlook_id = fields.Char(copy=False)
+    outlook_id_resp = fields.Char(copy=False)
     outlook_calendar_id = fields.Many2one('outlook.calendar', 'Outlook calendar',
                                           domain=[('can_edit', '=', True)], auto_join=True)
-    outlook_last_modified_datetime = fields.Datetime()
-    outlook_link = fields.Char()
+    outlook_last_modified_datetime = fields.Datetime(copy=False)
+    outlook_link = fields.Char(copy=False)
 
     @api.model
     def create(self, vals):
@@ -64,8 +65,9 @@ class CalendarEvent(models.Model):
                                      headers={'Authorization': 'Bearer ' + auth}, json=event_data)
             if response.status_code == 201:
                 o_event = json.loads(response.text)
-                res.outlook_id = o_event['id']
+                res.outlook_id = o_event['iCalUId']
                 res.outlook_last_modified_datetime = o_event['lastModifiedDateTime'][:-9].replace('T', ' ')
+                res.outlook_id_resp = o_event['id']
             elif response.status_code == 401:
                 message = _("The event hasn't been created in Outlook. Please log in in your profile")
                 self.env.user.notify_warning(message=message)
@@ -75,12 +77,13 @@ class CalendarEvent(models.Model):
     def unlink(self):
         if self.env.user.outlook_sync and self.outlook_id and not self.env.context.get('outlook_to_delete', False):
             # if the outlook_to_delete in the context is true, there's no need of delete the event again in outlook
-            auth = self.env.user.outlook_auth_token
-            response = requests.delete('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
-                                       headers={'Authorization': 'Bearer ' + auth})
-            if response.status_code == 401:
-                message = _("The event hasn't been deleted in Outlook. Please log in in your profile")
-                self.env.user.notify_warning(message=message)
+            if self.outlook_id_resp:
+                auth = self.env.user.outlook_auth_token
+                response = requests.delete('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id_resp,
+                                           headers={'Authorization': 'Bearer ' + auth})
+                if response.status_code == 401:
+                    message = _("The event hasn't been deleted in Outlook. Please log in in your profile")
+                    self.env.user.notify_warning(message=message)
         return super().unlink()
 
     @api.multi
@@ -130,7 +133,7 @@ class CalendarEvent(models.Model):
                                         })
                                 event_data['attendees'] = attendees
 
-                    response = requests.patch('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id,
+                    response = requests.patch('https://graph.microsoft.com/v1.0/me/events/%s' % self.outlook_id_resp,
                                               headers={'Authorization': 'Bearer ' + auth}, json=event_data)
 
                     if response.status_code == 401:

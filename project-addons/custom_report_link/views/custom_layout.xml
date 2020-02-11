@@ -1801,13 +1801,14 @@ SWIFT/BIC: BESCPTPL
                 <!-- Obtener las diferentes tasas del pedido asociado si no es un pack -->
 
                 <t t-if="move.phantom_bom_component is False ">
-
+                    <t t-set="current_total_price"
+                               t-value="(move.sale_line_id.price_unit*(1-(move.sale_line_id.discount/100)))*move.product_uom_qty"/>
                     <t t-foreach="move.sale_line_id.tax_id" t-as="t">
                         <t t-if="t in taxes">
-                            <t t-esc="taxes.update({t:(taxes[t] + move.sale_line_id.price_subtotal)})"/>
+                            <t t-esc="taxes.update({t:(taxes[t] + current_total_price)})"/>
                         </t>
                         <t t-if="t not in taxes">
-                            <t t-esc="taxes.update({t:move.sale_line_id.price_subtotal})"/>
+                            <t t-esc="taxes.update({t:current_total_price})"/>
                         </t>
                     </t>
                 </t>
