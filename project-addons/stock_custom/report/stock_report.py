@@ -39,6 +39,11 @@ class StockPickingReport(models.Model):
         ('end', 'End of Lifecycle'),
         ('obsolete', 'Obsolete'),
         ('make_to_order', 'Make to order')], 'Product State', readonly=True)
+    product_brand_id = fields.Many2one('product.brand', 'Product Brand',readonly=True)
+    partner_vat = fields.Char('Partner VAT',readonly=True)
+    origin = fields.Char('Origin', readonly=True)
+    location_dest_name = fields.Char('Location Destination Name', readonly=True)
+    product_pricelist = fields.Many2one('product.pricelist','Pricelist',readonly=True)
 
     def _select(self):
         select_str = """
@@ -65,7 +70,13 @@ class StockPickingReport(models.Model):
                     rp.area_id as area_id,
                     rp.state_id as state_name,
                     rp.team_id as team_id, 
-                    t.state as product_state
+                    t.state as product_state,
+                    t.product_brand_id as product_brand_id,
+                    rp.vat as partner_vat,
+                    s.origin as origin,
+                    sl.name as location_dest_name,
+                    so.pricelist_id as product_pricelist     
+                             
         """
         return select_str
 
@@ -84,6 +95,7 @@ class StockPickingReport(models.Model):
                 left join stock_location sl on (sl.id = sm.location_dest_id)
                 left join product_uom u on (u.id = sm.product_uom)
                 LEFT JOIN sale_order_line sol ON sol.id = sm.sale_line_id
+                LEFT JOIN sale_order so ON sol.order_id = so.id
                 LEFT JOIN product_product p_pack ON p_pack.id = sol.product_id and COALESCE(p_pack.is_pack, False) = True  /*Ref pack si proviene de pack*/
                 LEFT JOIN mrp_bom pack ON pack.product_id = p_pack.id AND pack.type = 'phantom'
                 LEFT JOIN mrp_bom_line pack_line ON pack_line.bom_id = pack.id 
@@ -120,7 +132,12 @@ class StockPickingReport(models.Model):
                     rp.team_id,
                     sm.id,
                     p_pack.id, 
-                    t.state
+                    t.state,
+                    t.product_brand_id,
+                    rp.vat,
+                    s.origin,
+                    sl.name,
+                    so.pricelist_id
         """
         return group_by_str
 
