@@ -85,7 +85,7 @@ class BaseSynchro(models.TransientModel):
             flds = list(fields_data.keys())
             sync_ids = pool1.get('base.synchro.obj').\
                 get_ids(model_obj, dt, eval(object.domain), {'action': 'd'},
-                        object.only_create_date, flds=flds)
+                        object.only_create_date, flds)
             pool_src = pool1
             pool_dest = pool2
 
@@ -100,12 +100,12 @@ class BaseSynchro(models.TransientModel):
             flds = list(fields_data.keys())
             sync_ids += pool2.env['base.synchro.obj'].\
                 get_ids(model_obj, dt, eval(object.domain), {'action': 'u'},
-                        object.only_create_date, flds=flds)
+                        object.only_create_date, flds)
             pool_src = pool2
             pool_dest = pool1
             destination_inverted = True
         sorted(sync_ids, key=lambda x: str(x[0]))
-
+        _logger.debug("SORTED SYNC_IDS {}".format(sync_ids))
         _logger.debug("{} REGS no: {}".format(model_obj, len(sync_ids)))
         for dt, id, action, value in sync_ids:
             if action == 'd':
@@ -170,7 +170,7 @@ class BaseSynchro(models.TransientModel):
                                 (field_src, '=', id)])
         result = False
         if rid:
-            result = line_pool.browse([rid[0].id]).read([field_dest])
+            result = rid.read([field_dest])
             if result:
                 result = result[0][field_dest]
         return result
