@@ -497,7 +497,6 @@ msgstr "Bassa"
 msgid "Date First Incoming Reliability"
 msgstr "Affidabilità della data"
 
-
 #. module: stock_custom
 #: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
 msgid "New Category"
@@ -507,3 +506,28 @@ msgstr "Nuovo"
 #: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
 msgid "One month ago"
 msgstr "Per un mese"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_brand_id
+msgid "Product Brand"
+msgstr "Marca di prodotto"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_partner_vat
+msgid "Partner VAT"
+msgstr "VAT"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_origin
+msgid "Origin"
+msgstr "Origine"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_location_dest_name
+msgid "Location Destination Name"
+msgstr "Nome posizione destinazione"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_pricelist
+msgid "Pricelist"
+msgstr "Listino di Vendita"

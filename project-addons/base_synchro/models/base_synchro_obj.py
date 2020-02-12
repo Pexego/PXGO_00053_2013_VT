@@ -1,8 +1,10 @@
 # See LICENSE file for full copyright and licensing details.
 
 import time
-
+import logging
 from odoo import api, fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class BaseSynchroServer(models.Model):
@@ -63,32 +65,23 @@ class BaseSynchroObj(models.Model):
         pool = self.env[model]
         result = []
         data = []
-        get_ids = []
-        if dt:
-            w_date = domain + [('write_date', '>=', dt)]
-            c_date = domain + [('create_date', '>=', dt)]
-        else:
-            w_date = c_date = domain
-        offset = limit = 250
-        obj_rec = pool.search(c_date, limit=limit, offset=offset)
+        if dt and only_create_date:
+            domain += [('create_date', '>=', dt)]
+        elif dt:
+            domain += ['|', ('create_date', '>=', dt),
+                       ('write_date', '>=', dt)]
+        offset = 0
+        limit = 100
+        obj_rec = pool.search(domain, limit=limit, offset=offset)
         while obj_rec:
-            get_ids.extend(obj_rec.ids)
-            data.extend(obj_rec.read(flds))
-            offset += 250
-            obj_rec = pool.search(c_date, limit=limit, offset=offset)
-        if not only_create_date:
-            if get_ids:
-                w_date.append(('id', 'not in', get_ids))
-            offset = limit = 250
-            obj_rec = pool.search(w_date, limit=limit, offset=offset)
-            while obj_rec:
-                get_ids.extend(obj_rec.ids)
-                data.extend(obj_rec.read(flds))
-                offset += 250
-                obj_rec = pool.search(w_date, limit=limit, offset=offset)
+            res = obj_rec.read(flds)
+            data.extend(res)
+            _logger.debug("RES: {}".format(res))
+            offset += 100
+            obj_rec = pool.search(domain, limit=limit, offset=offset)
 
         for r in data:
-            result.append((r['write_date'] or r['create_date'], r['id'],
+            result.append((r['create_date'], r['id'],
                            action, r))
         return result
 

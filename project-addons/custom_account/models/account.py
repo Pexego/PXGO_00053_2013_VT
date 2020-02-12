@@ -42,6 +42,8 @@ class AccountInvoiceLine(models.Model):
                                     related="sale_line_ids.order_id")
     cost_unit = fields.Float("Product cost price")
 
+    invoice_line_tax_ids = fields.Many2many(required=True)
+
 
 class AccountInvoice(models.Model):
 
