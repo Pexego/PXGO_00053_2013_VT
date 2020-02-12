@@ -19,7 +19,7 @@
 #You should have received a copy of the GNU General Public License      #
 #along with this program.  If not, see <http://www.gnu.org/licenses/>.  #
 #########################################################################
-from odoo import fields, models, api
+from odoo import fields, models, api, exceptions, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
@@ -78,6 +78,10 @@ class ClaimMakePickingFromPicking(models.TransientModel):
     # If "Create" button pressed
     @api.multi
     def action_create_picking_from_picking(self):
+        products = self.picking_line_ids.mapped('product_id').filtered(lambda x: x.state == 'make_to_order')
+        if products:
+            message = _('You cannot send the following products to stock due to they are "make to order": ')
+            raise exceptions.Warning(message + str(products.mapped('default_code')))
         picking_obj = self.env['stock.picking']
         view_obj = self.env['ir.ui.view']
         context = self.env.context

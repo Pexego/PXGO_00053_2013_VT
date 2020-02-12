@@ -69,3 +69,7 @@ msgstr "[ ('customer', '=', True), '|', ('active', '=', True), '&', ('active', '
 msgid "['|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
 msgstr "['|', ('active', '=', True), '&', ('active', '=', False), ('prospective', '=', True)]"
 
+#. module: prospective_customer
+#: model:ir.model.fields,field_description:prospective_customer.field_crm_lead_contact_email
+msgid "Contact Email"
+msgstr "Email del contacto"
