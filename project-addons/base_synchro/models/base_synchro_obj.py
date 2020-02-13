@@ -58,7 +58,7 @@ class BaseSynchroObj(models.Model):
 
     @api.model
     def get_ids(self, model, dt, domain=None, action=None,
-                only_create_date=False, flds=[]):
+                only_create_date=False, flds=[], records_limit=1000):
         if action is None:
             action = {}
         action = action.get('action', 'd')
@@ -73,7 +73,7 @@ class BaseSynchroObj(models.Model):
         offset = 0
         limit = 100
         obj_rec = pool.search(domain, limit=limit, offset=offset)
-        while obj_rec:
+        while obj_rec and offset < records_limit:
             res = obj_rec.read(flds)
             data.extend(res)
             _logger.debug("RES: {}".format(res))
