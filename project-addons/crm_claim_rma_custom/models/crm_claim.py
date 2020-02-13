@@ -179,6 +179,8 @@ class CrmClaimRma(models.Model):
             if not invoice:
                 raise exceptions.Warning(_("Any line to invoice"))
 
+            description = ' '.join(claim_obj.claim_inv_line_ids.filtered(lambda i: i.invoiced is False).mapped('invoice_id.name'))
+
             # TODO-> Revisar: antes sale_refund
             domain_journal = [('type', '=', 'sale')]
             acc_journal_obj = self.env['account.journal']
@@ -201,7 +203,8 @@ class CrmClaimRma(models.Model):
                 'payment_term_id': False,  # Pago inmediato en rectificativas claim_obj.partner_id.property_payment_term_id.id,
                 'payment_mode_id':
                     claim_obj.partner_id.customer_payment_mode_id.id,
-                'mandate_id': claim_obj.partner_id.valid_mandate_id.id
+                'mandate_id': claim_obj.partner_id.valid_mandate_id.id,
+                'name': description
             }
             inv_obj = self.env['account.invoice']
             invoice_id = inv_obj.create(header_vals)
