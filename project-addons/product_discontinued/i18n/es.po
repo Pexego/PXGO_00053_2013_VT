@@ -32,3 +32,53 @@ msgstr "El producto no cumple los requisitos para ser descatalogado. Stock exist
 #, python-format
 msgid "The product does not have stock."
 msgstr "El producto no tiene stock."
+
+#. module: product_discontinued
+#: #: model:mail.template,body_html:product_discontinued.alert_cron_send_mail_to_commercials_products_discontinued
+msgid "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">\n"
+"            <p>The following orders contain products discontinued:</p>\n"
+"            <ul>\n"
+"            % for move in ctx['moves']:\n"
+"                % if move.product_id.replacement_id:\n"
+"                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, created on the following date: <strong>${move.sale_line_id.order_id.date_order}</strong>, the product is :<strong> ${move.product_id.product_tmpl_id.name}</strong> (replacement product: <strong>${move.product_id.replacement_id.product_tmpl_id.name}</strong>)</li>\n"
+"                % endif\n"
+"                % if not move.product_id.replacement_id:\n"
+"                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, created on the following date: <strong>${move.sale_line_id.order_id.date_order}</strong>, the product is :<strong> ${move.product_id.product_tmpl_id.name}</strong> (ask purchasing team if the product is going to be available or not)</li>\n"
+"                % endif\n"
+"            % endfor\n"
+"            </ul>\n"
+"            </div>"
+msgstr "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">\n"
+"            <p>Los siguientes pedidos tienen productos en fin de ciclo de vida:</p>\n"
+"            <ul>\n"
+"            % for move in ctx['moves']:\n"
+"                % if move.product_id.replacement_id:\n"
+"                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, creado en la siguiente fecha: <strong>${move.sale_line_id.order_id.date_order}</strong>, el producto es :<strong> ${move.product_id.product_tmpl_id.name}</strong> (producto de reemplazo: <strong>${move.product_id.replacement_id.product_tmpl_id.name}</strong>)</li>\n"
+"                % endif\n"
+"                % if not move.product_id.replacement_id:\n"
+"                    <li> <strong>${move.sale_line_id.order_id.name}</strong>, creado en la siguiente fecha:: <strong>${move.sale_line_id.order_id.date_order}</strong>, el producto es :<strong> ${move.product_id.product_tmpl_id.name}</strong> (preguntad al equipo de compras si volverá a estar disponible)</li>\n"
+"                % endif\n"
+"            % endfor\n"
+"            </ul>\n"
+"            </div>"
+
+#. module: product_discontinued
+#: model:ir.ui.view,arch_db:product_discontinued.discontinue_products_view
+#: model:ir.actions.act_window,name:product_discontinued.action_discontinue_products
+msgid "Discontinue products"
+msgstr "Descatalogar productos"
+
+#. module: product_discontinued
+#: model:ir.ui.view,arch_db:product_discontinued.discontinue_products_view
+msgid "<p><strong>Are you sure do you want to discontinue the following products?</strong></p>"
+msgstr "<p><strong>¿Está seguro de que desea descatalogar los siguientes productos?</strong></p>"
+
+#. module: product_discontinued
+#: model:ir.ui.view,arch_db:product_discontinued.discontinue_products_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: product_discontinued
+#: model:ir.ui.view,arch_db:product_discontinued.discontinue_products_view
+msgid "Discontinue"
+msgstr "Descatalogar"

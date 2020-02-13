@@ -465,3 +465,108 @@ msgstr "Fiabilidad de la fecha prevista"
 #: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
 msgid "Stock moves dates"
 msgstr "Fechas de llegada"
+
+#. module: stock_custom
+#: model:mail.template,body_html:stock_custom.send_mail_stock_inventory
+msgid "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">\n"
+"            <p>The following stock moves have exceeded the max difference allowed (${ctx['max_diff']} unit(s)) :</p>\n"
+"            <ul>\n"
+"            % for line in ctx['lines']:\n"
+"                <li> <strong>Product: </strong>${line.product_id.default_code}\n"
+"                    <ul>\n"
+"                        <li><strong>Inventory name: </strong> ${line.inventory_id.name}</li>\n"
+"                        <li><strong>Location: </strong>${line.location_id.complete_name}</li>\n"
+"                        <li><strong>Quantity before the stock inventory: </strong>${line.theoretical_qty}</li>\n"
+"                        <li><strong>Quantity before the stock inventory: </strong> ${line.product_qty}</li>\n"
+"                    </ul>\n"
+"                </li>\n"
+"            % endfor\n"
+"            </ul>\n"
+"            </div>"
+msgstr "<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">\n"
+"            <p>Los siguientes movimientos de stock superan la máxima diferencia de stock permitida: (${ctx['max_diff']} unidad(es)) :</p>\n"
+"            <ul>\n"
+"            % for line in ctx['lines']:\n"
+"                <li> <strong>Producto: </strong>${line.product_id.default_code}\n"
+"                    <ul>\n"
+"                        <li><strong>Nombre del ajuste de inventario: </strong> ${line.inventory_id.name}</li>\n"
+"                        <li><strong>Ubicación: </strong>${line.location_id.complete_name}</li>\n"
+"                        <li><strong>Cantidad antes del ajuste de inventario: </strong>${line.theoretical_qty}</li>\n"
+"                        <li><strong>Cantidad después del ajuste de inventario: </strong> ${line.product_qty}</li>\n"
+"                    </ul>\n"
+"                </li>\n"
+"            % endfor\n"
+"            </ul>\n"
+"            </div>"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_date_first_incoming
+msgid "Date First Incoming"
+msgstr "Fecha de primera llegada"
+
+#. module: stock_custom
+#: model:ir.actions.act_window,name:stock_custom.product_date_first_incoming_action
+#: model:ir.ui.menu,name:stock_custom.first_incoming_date_menu
+msgid "First incoming date"
+msgstr "Fechas de primera llegada"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Received"
+msgstr "Recibido"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "High"
+msgstr "Alta"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Medium"
+msgstr "Media"
+
+#. module: stock_custom
+#: selection:product.product,date_first_incoming_reliability:0
+msgid "Low"
+msgstr "Baja"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_date_first_incoming_reliability
+msgid "Date First Incoming Reliability"
+msgstr "Fiabilidad de la fecha"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
+msgid "New Category"
+msgstr "Nuevos"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
+msgid "One month ago"
+msgstr "Desde hace un mes"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_brand_id
+msgid "Product Brand"
+msgstr "Marca del producto"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_partner_vat
+msgid "Partner VAT"
+msgstr "NIF"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_origin
+msgid "Origin"
+msgstr "Origen"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_location_dest_name
+msgid "Location Destination Name"
+msgstr "Nombre de la ubicación de destino"
+
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_pricelist
+msgid "Pricelist"
+msgstr "Tarifa"

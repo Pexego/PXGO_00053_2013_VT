@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_inventory_by_location_wizard" model="ir.ui.view">
+        <field name="name">stock.valuation.by.location</field>
+        <field name="model">stock.valuation.by.location.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Choose your date">
+                <group>
+                    <group>
+                        <field name="compute_at_date" widget="radio"/>
+                        <field name="date" attrs="{'invisible': [('compute_at_date', '=', 0)]}"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="open_table" string="Retrieve the inventory valuation" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_stock_inventory_by_location" model="ir.ui.view">
+        <field name="name">stock.valuation.by.location</field>
+        <field name="model">stock.valuation.by.location</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="product_id"/>
+                <field name="location_id"/>
+                <field name="qty" sum="Total Qty"/>
+                <field name="value" sum="Stock Valuation"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_stock_inventory_valuation_by_location" model="ir.actions.act_window">
+        <field name="name">Inventory Valuation by Location</field>
+        <field name="res_model">stock.valuation.by.location.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="stock_valuation_by_location.view_stock_inventory_by_location_wizard"/>
+        <field name="target">new</field>
+        <field name="context">{'default_compute_at_date': 0}</field>
+    </record>
+
+    <menuitem id="menu_valuation_by_location" name="Inventory Valuation by Location" parent="stock.menu_warehouse_report" sequence="120" action="action_stock_inventory_valuation_by_location"/>
+</odoo>

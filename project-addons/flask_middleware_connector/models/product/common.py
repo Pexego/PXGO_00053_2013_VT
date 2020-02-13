@@ -81,7 +81,7 @@ class ProductListener(Component):
             "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
-            "discontinued", "state", "item_ids",
+            "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id"
         ]
         for field in up_fields:
             if field in fields:
@@ -221,7 +221,7 @@ class ProductBrandListener(Component):
         up_fields = ["name"]
         for field in up_fields:
             if field in fields:
-                record.with_delay().update_product_brand()
+                record.with_delay().update_product_brand(fields)
                 break
 
     def on_record_unlink(self, record):

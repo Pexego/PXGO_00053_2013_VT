@@ -86,6 +86,10 @@
             <field name="categ_id" position="attributes">
                 <attribute name="filter_domain"></attribute>
             </field>
+            <filter name="services" position="after">
+                <filter string="New Category" name="categ_new" domain="[('categ_id.name','like','NUEVOS')]"/>
+                <filter string="One month ago" name="one_month_ago" domain="[('date_first_incoming','>=',(datetime.datetime.now() - datetime.timedelta(days=31)).strftime('%Y-%m-%d'))]"/>
+            </filter>
         </field>
     </record>
 
@@ -102,4 +106,42 @@
 
     <menuitem id="menu_products_stock_new" action="action_product_stock_new"
         parent="sale.product_menu_catalog" groups="base.group_no_one" sequence="2"/>
+
+    <record id="product_product_date_first_incoming_form_iew" model="ir.ui.view">
+        <field name="name">product.product.date.first.incoming.purchase.form</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="last_purchase_date" position="after">
+                <field name="date_first_incoming"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="product_date_first_incoming_tree" model="ir.ui.view">
+        <field name="name">product.date.first.incoming</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <tree string="First incoming date" default_order='date_first_incoming asc' decoration-bf="date_first_incoming_reliability =='1.received'">
+                <field name="default_code"/>
+                <field name="date_first_incoming"/>
+                <field name="date_first_incoming_reliability"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="product_date_first_incoming_action" model="ir.actions.act_window">
+        <field name="name">First incoming date</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="product.product_search_form_view"/>
+        <field name="view_id" ref="product_date_first_incoming_tree"/>
+        <field name="domain">[('date_first_incoming','!=',False),('discontinued','=',False)]</field>
+        <field name="context">{'search_default_one_month_ago':1}</field>
+    </record>
+
+    <menuitem id="first_incoming_date_menu" name="First incoming date" string="First incoming date"
+              action="product_date_first_incoming_action"
+              parent="purchase.menu_purchase_control" sequence="7"/>
 </odoo>

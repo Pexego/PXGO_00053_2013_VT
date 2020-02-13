@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="max_diff_stock" model="ir.config_parameter">
+           <field name="key">max_diff_stock</field>
+           <field name="value"></field>
+        </record>
+    </data>
+</odoo>
+

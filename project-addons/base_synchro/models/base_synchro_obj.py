@@ -1,8 +1,10 @@
 # See LICENSE file for full copyright and licensing details.
 
 import time
-
+import logging
 from odoo import api, fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class BaseSynchroServer(models.Model):
@@ -43,6 +45,7 @@ class BaseSynchroObj(models.Model):
                                ('b', 'Both')], 'Synchronization direction',
                               required=True,
                               default='d')
+    only_create_date = fields.Boolean("Only create date")
     sequence = fields.Integer('Sequence')
     active = fields.Boolean('Active', default=True)
     synchronize_date = fields.Datetime('Latest Synchronization', readonly=True)
@@ -54,21 +57,32 @@ class BaseSynchroObj(models.Model):
                           help="Dictionary format. Used on create/write")
 
     @api.model
-    def get_ids(self, obj, dt, domain=None, action=None):
+    def get_ids(self, model, dt, domain=None, action=None,
+                only_create_date=False, flds=[], records_limit=1000):
         if action is None:
             action = {}
-        pool = self.env[obj]
+        action = action.get('action', 'd')
+        pool = self.env[model]
         result = []
-        if dt:
-            w_date = domain + [('write_date', '>=', dt)]
-            c_date = domain + [('create_date', '>=', dt)]
-        else:
-            w_date = c_date = domain
-        obj_rec = pool.search(w_date)
-        obj_rec += pool.search(c_date)
-        for r in obj_rec.read(['create_date', 'write_date']):
-            result.append((r['write_date'] or r['create_date'], r['id'],
-                           action.get('action', 'd')))
+        data = []
+        if dt and only_create_date:
+            domain += [('create_date', '>=', dt)]
+        elif dt:
+            domain += ['|', ('create_date', '>=', dt),
+                       ('write_date', '>=', dt)]
+        offset = 0
+        limit = 100
+        obj_rec = pool.search(domain, limit=limit, offset=offset)
+        while obj_rec and offset < records_limit:
+            res = obj_rec.read(flds)
+            data.extend(res)
+            _logger.debug("RES: {}".format(res))
+            offset += 100
+            obj_rec = pool.search(domain, limit=limit, offset=offset)
+
+        for r in data:
+            result.append((r['create_date'], r['id'],
+                           action, r))
         return result
 
 
