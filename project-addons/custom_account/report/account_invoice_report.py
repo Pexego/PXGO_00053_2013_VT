@@ -16,6 +16,7 @@ class AccountInvoiceReport(models.Model):
         Many2many(related='area_id.commercial_region_ids')
     contact_id = fields.Many2one('res.partner', 'Partner Contact',
                                  readonly=True)
+    manufacturer = fields.Char('Product Manufacturer')
 
     def _select(self):
         select_str = super()._select()
@@ -26,7 +27,8 @@ class AccountInvoiceReport(models.Model):
                       " WHEN sub.type IN ('out_invoice') THEN sub.benefit " \
                       " ELSE 0 END as benefit" \
                       ', sub.name as brand_name, sub.area_id' \
-                      ', sub.contact_id as contact_id'
+                      ', sub.contact_id as contact_id' \
+                      ', sub.manufacturer as manufacturer'
         return select_str
 
     def _sub_select(self):
@@ -36,7 +38,8 @@ class AccountInvoiceReport(models.Model):
                       '(100.0-ail.discount) / 100.0) - ' \
                       'sum(coalesce(ail.cost_unit, 0)*ail.quantity) ' \
                       'as benefit, pb.name, rpa.id as area_id, ' \
-                      'ai.partner_shipping_id as contact_id'
+                      'ai.partner_shipping_id as contact_id, ' \
+                      'rpm.name as manufacturer'
         return select_str
 
     def _from(self):
@@ -44,7 +47,8 @@ class AccountInvoiceReport(models.Model):
         from_str += ' LEFT JOIN product_brand pb ON pt.product_brand_id = ' \
                     'pb.id LEFT JOIN res_partner_area rpa ON rpa.id = ' \
                     'partner.area_id LEFT JOIN res_partner rpc on rpc.id = ' \
-                    'ai.partner_shipping_id'
+                    'ai.partner_shipping_id LEFT JOIN res_partner rpm ON rpm.id = ' \
+                    'pt.manufacturer'
         return from_str
 
     def _group_by(self):
@@ -52,6 +56,7 @@ class AccountInvoiceReport(models.Model):
         group_by_str += ', ai.payment_mode_id,' \
                         ' ai.number,' \
                         ' pb.name, ' \
-                        ' rpa.id, ai.partner_shipping_id'
+                        ' rpa.id, ai.partner_shipping_id, ' \
+                        'rpm.name'
 
         return group_by_str
