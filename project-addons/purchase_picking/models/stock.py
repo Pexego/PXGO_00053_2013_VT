@@ -19,7 +19,6 @@
 ##############################################################################
 
 from odoo import models, fields, api, _, exceptions
-from datetime import timedelta
 
 
 class StockContainer(models.Model):
