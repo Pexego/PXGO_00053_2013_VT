@@ -42,12 +42,17 @@ msgstr "<span style=\"font-weight: bold; color:#da1f2e\">Pour: </span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
-msgid "<span style=\"font-weight: bold;\">PLEASE REMEMBER to include your sales order and/or invoice\n"
-"                                number on your bank transfers. This ensures your payment is processed correctly.</span>\n"
-"                            <br/>For more information regarding your invoice contact: <span style=\"color:#da1f2e;\">finance@visiotechsecurity.com</span>"
-msgstr "<span style=\"font-weight: bold;\">N'OUBLIEZ PAS de préciser votre numéro de commande et / ou de facture sur vos virements bancaires. Cela garantit un traitement plus rapide de votre paiement.</span>\n"
-"                        <br/>\n"
-"                        Pour plus d'informations concernant votre facture, contactez: <span style=\"color:#da1f2e;\">comptabilite@visiotechsecurity.com</span>"
+msgid "<br/>\n"
+"                            For more information regarding your invoice contact: <span style="color:#da1f2e;">finance@visiotechsecurity.com</span>"
+msgstr "<br/>\n"
+"                            Pour plus d'informations concernant votre facture, contactez: <span style=\"color:#da1f2e;\">comptabilite@visiotechsecurity.com</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "<span style="font-weight: bold;">PLEASE REMEMBER to include your sales order and/or invoice\n"
+"                                number on your bank transfers. This ensures your payment is processed correctly.</span>"
+msgstr "<span style="font-weight: bold;">N'OUBLIEZ PAS de préciser votre numéro de commande et / ou de facture sur vos virements bancaires. Cela garantit un traitement plus rapide de votre paiement.</span>"
+
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice

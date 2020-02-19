@@ -262,5 +262,5 @@ class MiddlewareBackend(models.TransientModel):
 
             if self.mode_export == 'export':
                 for product in product_ids:
-                    for tag in product.tag_ids:
-                        tag.with_delay().export_product_tag_rel()
+                    product.with_delay(priority=1).unlink_product_tag_rel()
+                    product.with_delay(priority=2, eta=5).export_product_tag_rel()

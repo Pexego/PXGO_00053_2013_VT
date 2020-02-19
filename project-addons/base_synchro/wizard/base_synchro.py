@@ -60,6 +60,7 @@ class BaseSynchro(models.TransientModel):
     def synchronize(self, server, object):
         pool = self
         sync_ids = []
+        records_limit = 1000
         ctx = self.env.context.copy()
         pool1 = RPCProxy(server)
         pool2 = pool
@@ -76,6 +77,7 @@ class BaseSynchro(models.TransientModel):
                           "Multi-DB Synchronization" module in targeted/
                         server!'''))
         destination_inverted = False
+        domain = eval(object.domain)
         if object.action in ('d', 'b'):
             fields_data = pool1.get(object.model_id.model).\
                 fields_get()
@@ -83,12 +85,21 @@ class BaseSynchro(models.TransientModel):
                 if field.name in fields_data:
                     del fields_data[field.name]
             flds = list(fields_data.keys())
-            sync_ids = pool1.get('base.synchro.obj').\
-                get_ids(model_obj, dt, eval(object.domain), {'action': 'd'},
-                        object.only_create_date, flds=flds)
+            res_ids = pool1.get('base.synchro.obj').\
+                get_ids(model_obj, dt, domain, {'action': 'd'},
+                        object.only_create_date, flds, records_limit)
+            sync_ids += res_ids
+            while len(res_ids) >= records_limit:
+                domain += [('id', 'not in', [x[1] for x in res_ids])]
+                res_ids = pool1.get('base.synchro.obj').\
+                    get_ids(model_obj, dt, domain,
+                            {'action': 'd'}, object.only_create_date, flds,
+                            records_limit)
+                sync_ids += res_ids
+
             pool_src = pool1
             pool_dest = pool2
-
+        domain = eval(object.domain)
         if object.action in ('u', 'b'):
             _logger.debug("Getting ids to synchronize [%s] (%s)",
                           object.synchronize_date, object.domain)
@@ -98,14 +109,22 @@ class BaseSynchro(models.TransientModel):
                 if field.name in fields_data:
                     del fields_data[field.name]
             flds = list(fields_data.keys())
-            sync_ids += pool2.env['base.synchro.obj'].\
-                get_ids(model_obj, dt, eval(object.domain), {'action': 'u'},
-                        object.only_create_date, flds=flds)
+            res_ids = pool2.env['base.synchro.obj'].\
+                get_ids(model_obj, dt, domain, {'action': 'u'},
+                        object.only_create_date, flds, records_limit)
+            sync_ids += res_ids
+            while len(res_ids) >= records_limit:
+                domain += [('id', 'not in', [x[1] for x in res_ids])]
+                res_ids = pool2.env['base.synchro.obj'].\
+                    get_ids(model_obj, dt, domain, {'action': 'u'},
+                            object.only_create_date, flds, records_limit)
+                sync_ids += res_ids
+
             pool_src = pool2
             pool_dest = pool1
             destination_inverted = True
         sorted(sync_ids, key=lambda x: str(x[0]))
-
+        _logger.debug("SORTED SYNC_IDS {}".format(sync_ids))
         _logger.debug("{} REGS no: {}".format(model_obj, len(sync_ids)))
         for dt, id, action, value in sync_ids:
             if action == 'd':
@@ -170,7 +189,7 @@ class BaseSynchro(models.TransientModel):
                                 (field_src, '=', id)])
         result = False
         if rid:
-            result = line_pool.browse([rid[0].id]).read([field_dest])
+            result = rid.read([field_dest])
             if result:
                 result = result[0][field_dest]
         return result

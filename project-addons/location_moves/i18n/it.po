@@ -38,7 +38,7 @@ msgstr "Spiaggia -> Cucina"
 #. module: location_moves
 #: selection:location.moves,move_type:0
 msgid "Beach -> Pantry"
-msgstr "Spiaggia-> Dispensa"
+msgstr "Spiaggia -> Dispensa"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
@@ -54,13 +54,13 @@ msgstr "Qualità"
 #: model:ir.ui.view,arch_db:location_moves.location_moves_form
 #: model:ir.ui.view,arch_db:location_moves.quality_move_wzd_form
 msgid "Cancel"
-msgstr "Cancellare"
+msgstr "Anulla"
 
 #. module: location_moves
 #: code:addons/location_moves/wizard/quality_move.py:37
 #, python-format
 msgid "Cannot move more than origin move qty."
-msgstr "Impossibile spostare più quantità di quelal originaria."
+msgstr "Impossibile spostare più quantità di quella originaria."
 
 #. module: location_moves
 #: model:ir.model.fields,field_description:location_moves.field_location_moves_check_qty
@@ -252,7 +252,7 @@ msgstr "Qualità mossa"
 #. module: location_moves
 #: model:stock.location,name:location_moves.stock_location_sat
 msgid "SAT"
-msgstr "SAT"
+msgstr "RMA"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
@@ -277,7 +277,7 @@ msgstr "Stock -> Marketing"
 #. module: location_moves
 #: selection:location.moves,move_type:0
 msgid "Stock -> Pantry"
-msgstr "Existencias -> Despensa"
+msgstr "Stock -> Dispensa"
 
 #. module: location_moves
 #: selection:location.moves,move_type:0
