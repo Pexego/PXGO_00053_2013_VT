@@ -44,9 +44,7 @@ class ProductTemplate(models.Model):
         prod.property_valuation = 'real_time'
         return prod
 
-    def set_product_template_last_purchase(self, date_order, price_unit,
-                                           partner_id, currency):
-        super(ProductTemplate, self).set_product_template_last_purchase(date_order, price_unit, partner_id)
+    def set_product_template_currency_purchase(self, currency):
         self.currency_purchase_id = currency
 
 
@@ -305,18 +303,16 @@ class ProductProduct(models.Model):
     currency_purchase_id = fields.Many2one('res.currency', 'Currency', required=True,
                                            default=lambda self: self.env.user.company_id.currency_id.id)
 
+    last_purchase_price = fields.Monetary(currency_field="currency_purchase_id")
+
     @api.multi
     def set_product_last_purchase(self, order_id=False):
+        res= super().set_product_last_purchase(order_id)
         PurchaseOrderLine = self.env['purchase.order.line']
         if not self.check_access_rights('write', raise_exception=False):
             return
         for product in self:
-            date_order = False
-            price_unit_uom = 0.0
-            last_supplier = False
             currency_purchase_id = False
-
-            # Check if Order ID was passed, to speed up the search
             if order_id:
                 lines = PurchaseOrderLine.search([
                     ('order_id', '=', order_id),
@@ -330,23 +326,11 @@ class ProductProduct(models.Model):
             if lines:
                 # Get most recent Purchase Order Line
                 last_line = lines[:1]
-
-                date_order = last_line.order_id.date_order
-                # Compute Price Unit in the Product base UoM
-                price_unit_uom = product.product_tmpl_id.uom_id. \
-                    _compute_quantity(last_line.price_unit,
-                                      last_line.product_uom)
-                last_supplier = last_line.order_id.partner_id
                 currency_purchase_id = last_line.order_id.currency_id.id
-
-            # Assign values to record
-            product.last_purchase_date = date_order
-            product.last_purchase_price = price_unit_uom
-            product.last_supplier_id = last_supplier
             product.currency_purchase_id = currency_purchase_id
             # Set related product template values
-            product.product_tmpl_id.set_product_template_last_purchase(
-                date_order, price_unit_uom, last_supplier, currency_purchase_id)
+            product.product_tmpl_id.set_product_template_currency_purchase(currency_purchase_id)
+        return res
 
 
 class StockQuantityHistory(models.TransientModel):
