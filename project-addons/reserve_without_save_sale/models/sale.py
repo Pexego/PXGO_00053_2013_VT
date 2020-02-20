@@ -207,8 +207,6 @@ class SaleOrderLine(models.Model):
     @api.multi
     @api.depends('order_id.partner_id')
     def _compute_hide_reserve_buttons(self):
-        import ipdb
-        ipdb.set_trace()
         for line in self:
             if line.order_id.partner_id.user_id.id == line.env.user.id \
                     or line.env.user.has_group('base.group_system'):
