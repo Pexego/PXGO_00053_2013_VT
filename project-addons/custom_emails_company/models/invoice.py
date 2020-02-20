@@ -17,5 +17,41 @@ class AccountInvoice(models.Model):
                 except ValueError:
                     template = False
 
-                template.send_mail(invoice.id)
+                body_html = invoice.env['mail.template']. \
+                    with_context(template._context). \
+                    render_template(template.body_html, 'account.invoice',
+                                    invoice.id)
+                compose = invoice.env['mail.compose.message'].with_context({
+                    'mark_invoice_as_sent': True,
+                    'default_use_template': 'template',
+                    'custom_layout': layout,
+                    'default_res_id': invoice.id,
+                    'default_model': 'account.invoice',
+                    'email_from': template.email_from,
+                    'force_email': True,
+                    'default_template_id': template.id,
+                }).create({'auto_delete': False,
+                           'body': body_html,
+                           'email_from': template.email_from,
+                           'subject':
+                               'VISIOTECH - Factura (Ref ' +
+                               invoice.number + ')'})
+                values = compose. \
+                    generate_email_for_composer(template.id,
+                                                [invoice.id])[invoice.id]
+                Attachment = self.env['ir.attachment']
+                attachment_ids = []
+                for attach_fname, attach_datas in values.pop('attachments',
+                                                             []):
+                    data_attach = {
+                        'name': attach_fname,
+                        'datas': attach_datas,
+                        'datas_fname': attach_fname,
+                        'res_model': 'mail.compose.message',
+                        'res_id': 0,
+                        'type': 'binary'
+                    }
+                    attachment_ids.append(Attachment.create(data_attach).id)
+                compose.attachment_ids = [(6, 0, attachment_ids)]
+                compose.send_mail_action()
         return res
