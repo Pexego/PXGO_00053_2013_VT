@@ -88,11 +88,14 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="stock_reserve_sale.view_order_form_reserve"/>
         <field name="arch" type="xml">
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_subtotal']" position="after">
+                    <field name="hide_reserve_buttons" invisible="1"/>
+            </xpath>
             <xpath expr="//field[@name='order_line']/tree//button[@name='%(stock_reserve_sale.action_sale_stock_reserve)d']" position="attributes">
-                <attribute name="groups">base.group_system</attribute>
+                <attribute name="attrs">{'invisible': ['|', ('reservation_ids', '!=', []),  ('hide_reserve_buttons', '=', True)]}</attribute>
             </xpath>
             <xpath expr="//field[@name='order_line']/tree//button[@name='release_stock_reservation']" position="attributes">
-                <attribute name="groups">base.group_system</attribute>
+                <attribute name="attrs">{'invisible': ['|', ('reservation_ids', '=', []), ('hide_reserve_buttons', '=', True)]}</attribute>
             </xpath>
         </field>
     </record>
