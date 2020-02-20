@@ -35,11 +35,17 @@ class ProductTemplate(models.Model):
     # this doesn't seem to work
     property_valuation = fields.Selection(default='real_time')
 
+    currency_purchase_id = fields.Many2one('res.currency', 'Currency', required=True,
+                                           default=lambda self: self.env.user.company_id.currency_id.id)
+
     @api.model
     def create(self, vals):
         prod = super().create(vals)
         prod.property_valuation = 'real_time'
         return prod
+
+    def set_product_template_currency_purchase(self, currency):
+        self.currency_purchase_id = currency
 
 
 class ProductProduct(models.Model):
@@ -293,6 +299,38 @@ class ProductProduct(models.Model):
         ('3.medium', 'Medium'),
         ('4.low', 'Low'),
         ])
+
+    currency_purchase_id = fields.Many2one('res.currency', 'Currency', required=True,
+                                           default=lambda self: self.env.user.company_id.currency_id.id)
+
+    last_purchase_price = fields.Monetary(currency_field="currency_purchase_id")
+
+    @api.multi
+    def set_product_last_purchase(self, order_id=False):
+        res= super().set_product_last_purchase(order_id)
+        PurchaseOrderLine = self.env['purchase.order.line']
+        if not self.check_access_rights('write', raise_exception=False):
+            return
+        for product in self:
+            currency_purchase_id = False
+            if order_id:
+                lines = PurchaseOrderLine.search([
+                    ('order_id', '=', order_id),
+                    ('product_id', '=', product.id)], limit=1)
+            else:
+                lines = PurchaseOrderLine.search(
+                    [('product_id', '=', product.id),
+                     ('state', 'in', ['purchase', 'done'])]).sorted(
+                    key=lambda l: l.order_id.date_order, reverse=True)
+
+            if lines:
+                # Get most recent Purchase Order Line
+                last_line = lines[:1]
+                currency_purchase_id = last_line.order_id.currency_id.id
+            product.currency_purchase_id = currency_purchase_id
+            # Set related product template values
+            product.product_tmpl_id.set_product_template_currency_purchase(currency_purchase_id)
+        return res
 
 
 class StockQuantityHistory(models.TransientModel):
