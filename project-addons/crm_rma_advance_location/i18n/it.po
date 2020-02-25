@@ -143,17 +143,17 @@ msgstr "Linee di bolle di consegna"
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to Loss"
-msgstr "Prodotto a perdite"
+msgstr "Invia a perdite"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to refurbish stock"
-msgstr "Prodotto di cui riavviare stock"
+msgstr "Invia a guasti"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to stock"
-msgstr "Prodotto in stock"
+msgstr "Invia a stock"
 
 #. module: crm_rma_advance_location
 #: model:stock.location,name:crm_rma_advance_location.stock_location_rma
