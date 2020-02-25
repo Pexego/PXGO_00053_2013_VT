@@ -43,6 +43,11 @@
                             <br>
                             <p>If you have any question, do not hesitate to contact us.</p>
                             <p>Thank you for choosing VISIOTECH</p>
+                            % if object.transporter_id.name=="Medios Propios" and object.team_id.name=="España":
+                                       <b style="font-weight:bold;"><span>Horario de atención presencial | Recogidas de pedidos y reparaciones </span></b>
+                                       <br><b style="font-weight:bold;"><span style="color: #DA1F2E; font-size: 10.0pt; ">L.- J.: </span></b><span style="color: #8B9083">09:00 - 14:00 | 15:30 - 18:00</span>
+                                       <br><b style="font-weight:bold;"><span style="color: #DA1F2E; font-size: 10.0pt; ">     V: </span></b><span style="color: #8B9083">09:30 - 14:30</span>
+                            % endif
 
                         </div>
 

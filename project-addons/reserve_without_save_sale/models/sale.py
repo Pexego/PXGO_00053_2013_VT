@@ -71,7 +71,9 @@ class SaleOrderLine(models.Model):
                                 related='product_id.reservation_count',
                                 digits=dp.get_precision('Product Unit \
                                                   of Measure'))
-
+    hide_reserve_buttons = fields.Boolean("Hide reserve buttons",
+                                          compute='_compute_hide_reserve_buttons',
+                                          readonly=True)
 
     @api.multi
     @api.depends('state', 'product_id', 'reservation_ids')
@@ -201,3 +203,14 @@ class SaleOrderLine(models.Model):
                     reservation.write({'sale_line_id': line.id})
                     reservation.write({'origin': line.order_id.name})
         return True
+
+    @api.multi
+    @api.depends('order_id.partner_id')
+    def _compute_hide_reserve_buttons(self):
+        for line in self:
+            if line.order_id.partner_id.user_id.id == line.env.user.id \
+                    or line.env.user.has_group('base.group_system'):
+                line.hide_reserve_buttons = False
+            else:
+                line.hide_reserve_buttons = True
+
