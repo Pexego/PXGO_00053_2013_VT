@@ -172,14 +172,17 @@ class CrmClaimRma(models.Model):
             accinv_refund_ids = accinv_refund_obj.search(domain_acc_inv)
 
             invoice = False
+            invoice_name = []
             for line in claim_obj.claim_inv_line_ids:
                 if not line.invoiced:
+                    if line.invoice_id.name:
+                        invoice_name.append(line.invoice_id.name)
                     invoice = True
 
             if not invoice:
                 raise exceptions.Warning(_("Any line to invoice"))
 
-            description = ' '.join(claim_obj.claim_inv_line_ids.filtered(lambda i: i.invoiced is False).mapped('invoice_id.name'))
+            description = ' '.join(invoice_name)
 
             # TODO-> Revisar: antes sale_refund
             domain_journal = [('type', '=', 'sale')]
