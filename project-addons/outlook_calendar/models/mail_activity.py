@@ -17,7 +17,7 @@ class MailActivity(models.Model):
                 partners[0][2].append(self.user_id.partner_id.id)
             partners[0][2].append(self.env.user.partner_id.id)
             vals = {
-                "name": self.activity_type_id.name + " - " + self.summary,
+                "name": self.activity_type_id.name + " - " + (self.summary or ''),
                 "description": lead.name + " - " + lead.partner_id.name + " - " + re.sub(r'<[^>]*?>', '', self.note),
                 "start": self.calendar_start,
                 "stop": self.calendar_stop,
