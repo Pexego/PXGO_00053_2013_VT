@@ -35,7 +35,7 @@ class ProductTemplate(models.Model):
     # this doesn't seem to work
     property_valuation = fields.Selection(default='real_time')
 
-    currency_purchase_id = fields.Many2one('res.currency', 'Currency', required=True,
+    currency_purchase_id = fields.Many2one('res.currency', 'Currency',
                                            default=lambda self: self.env.user.company_id.currency_id.id)
 
     @api.model
@@ -300,7 +300,7 @@ class ProductProduct(models.Model):
         ('4.low', 'Low'),
         ])
 
-    currency_purchase_id = fields.Many2one('res.currency', 'Currency', required=True,
+    currency_purchase_id = fields.Many2one('res.currency', 'Currency',
                                            default=lambda self: self.env.user.company_id.currency_id.id)
 
     last_purchase_price = fields.Monetary(currency_field="currency_purchase_id")
@@ -312,7 +312,7 @@ class ProductProduct(models.Model):
         if not self.check_access_rights('write', raise_exception=False):
             return
         for product in self:
-            currency_purchase_id = False
+            currency_purchase_id = product.env.user.company_id.currency_id.id
             if order_id:
                 lines = PurchaseOrderLine.search([
                     ('order_id', '=', order_id),
