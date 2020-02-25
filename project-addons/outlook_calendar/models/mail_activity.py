@@ -4,9 +4,9 @@ import re
 
 class MailActivity(models.Model):
     _inherit = 'mail.activity'
-    sync_with_calendar = fields.Boolean()
-    calendar_start = fields.Datetime()
-    calendar_stop = fields.Datetime()
+    sync_with_calendar = fields.Boolean('Create calendar event')
+    calendar_start = fields.Datetime('Start')
+    calendar_stop = fields.Datetime('End')
 
     @api.multi
     def action_close_dialog(self):
