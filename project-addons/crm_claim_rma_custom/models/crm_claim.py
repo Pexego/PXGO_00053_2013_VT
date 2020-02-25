@@ -226,7 +226,7 @@ class CrmClaimRma(models.Model):
                             property_account_income_categ_id.id
                     else:
                         account_id = line.product_id. \
-                            property_account_expense.id
+                            property_account_expense_id.id
                         if not account_id:
                             account_id = \
                                 line.product_id.categ_id. \
