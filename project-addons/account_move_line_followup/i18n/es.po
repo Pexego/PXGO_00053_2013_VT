@@ -31,6 +31,18 @@ msgid "Email Type"
 msgstr "Tipo Email"
 
 #. module: account_move_line_followup
+#: code:addons/account_move_line_followup/models/credit_control_policy.py:220
+#, python-format
+msgid "Amount not due"
+msgstr "Importe no vencido"
+
+#. module: account_move_line_followup
+#: code:addons/account_move_line_followup/models/credit_control_policy.py:233
+#, python-format
+msgid "Amount due"
+msgstr "Importe vencido"
+
+#. module: account_move_line_followup
 #: selection:credit.control.communication,email_type:0
 msgid "Automatic email"
 msgstr "Email automático"
