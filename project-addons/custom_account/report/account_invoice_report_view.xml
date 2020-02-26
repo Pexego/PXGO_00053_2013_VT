@@ -23,6 +23,7 @@
                     <filter string="Brand name" name="brand_name" context="{'group_by':'brand_name'}"/>
                     <filter string="Area" name="area" context="{'group_by': 'area_id'}"/>
                     <filter string="Product Manufacturer" name="manufacturer" context="{'group_by': 'manufacturer'}"/>
+                    <filter string="Parent product category" name="parent_product_categ_id" context="{'group_by' : 'parent_product_categ_id'}"/>
                 </filter>
             </field>
         </record>

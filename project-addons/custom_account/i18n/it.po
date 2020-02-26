@@ -1070,3 +1070,9 @@ msgstr "Analisi delle fatture (contatti)"
 #: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
 msgid "Product Manufacturer"
 msgstr "Fornitore principale"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_parent_product_categ_id
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+msgid "Parent product category"
+msgstr "Categoria principale del prodotto"
