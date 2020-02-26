@@ -172,11 +172,11 @@ class CrmClaimRma(models.Model):
             accinv_refund_ids = accinv_refund_obj.search(domain_acc_inv)
 
             invoice = False
-            invoice_name = []
+            invoice_name = set()
             for line in claim_obj.claim_inv_line_ids:
                 if not line.invoiced:
                     if line.invoice_id.name:
-                        invoice_name.append(line.invoice_id.name)
+                        invoice_name.add(line.invoice_id.name)
                     invoice = True
 
             if not invoice:
