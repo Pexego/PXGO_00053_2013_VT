@@ -15,5 +15,5 @@
     </record>
 
     <menuitem id="commercial_rules.promos" action="commercial_rules.act_commercial_rules"
-        parent="sale.menu_sale_config" sequence="4"/>
+        parent="sale.menu_sale_config" groups="base.group_system" sequence="4"/>
 </odoo>
