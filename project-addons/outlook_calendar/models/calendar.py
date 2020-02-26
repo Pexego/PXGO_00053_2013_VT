@@ -36,7 +36,7 @@ class CalendarEvent(models.Model):
                                             },
                                             "type": "required"
                                         })
-            if 'allday' in vals:
+            if vals.get('allday'):
                 # We add one day, otherwise outlook will return an error in the allday events
                 # In outlook, the all day events, are ended in the day after at 00:00
                 stop_date_plus = fields.Datetime.from_string(vals['stop']) + relativedelta(days=1)
