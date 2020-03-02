@@ -1,0 +1,8 @@
+<odoo>
+    <template id="disable_action_buttons_template" name="Disable action buttons" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="disable_action_buttons/static/src/js/basic_view.js"/>
+            <script type="text/javascript" src="disable_action_buttons/static/src/js/sidebar.js"/>
+        </xpath>
+    </template>
+</odoo>

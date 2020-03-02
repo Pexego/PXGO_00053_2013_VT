@@ -578,4 +578,15 @@
             parent="crm.crm_menu_config"
             sequence="6"/>
 
+        <record id="button_view_promotions_add_groups_view" model="ir.ui.view">
+            <field name="name">res.partner.form.commercial.rules.group</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="commercial_rules.view_partner_form_commercial_rules" />
+            <field name="arch" type="xml">
+                <button name="buttom_view_promotions" position="attributes">
+                    <attribute name="groups">base.group_system</attribute>
+                </button>
+            </field>
+        </record>
+
 </odoo>

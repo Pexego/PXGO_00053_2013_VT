@@ -63,7 +63,7 @@ class StockContainer(models.Model):
                             min_date = move.picking_id.scheduled_date
                 if min_date:
                     container.date_expected = min_date
-
+                    container.move_ids.write({'date_expected': min_date})
             if not container.date_expected:
                 container.date_expected = fields.Date.today()
 
@@ -87,7 +87,7 @@ class StockContainer(models.Model):
             container.user_id = responsible
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
+    date_expected = fields.Datetime("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
     picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)

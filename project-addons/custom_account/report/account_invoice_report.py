@@ -17,6 +17,7 @@ class AccountInvoiceReport(models.Model):
     contact_id = fields.Many2one('res.partner', 'Partner Contact',
                                  readonly=True)
     manufacturer = fields.Char('Product Manufacturer')
+    parent_product_categ_id = fields.Many2one('product.category','Parent product category')
 
     def _select(self):
         select_str = super()._select()
@@ -28,7 +29,8 @@ class AccountInvoiceReport(models.Model):
                       " ELSE 0 END as benefit" \
                       ', sub.name as brand_name, sub.area_id' \
                       ', sub.contact_id as contact_id' \
-                      ', sub.manufacturer as manufacturer'
+                      ', sub.manufacturer as manufacturer'\
+                      ', sub.parent_product_categ_id as parent_product_categ_id'
         return select_str
 
     def _sub_select(self):
@@ -39,7 +41,8 @@ class AccountInvoiceReport(models.Model):
                       'sum(coalesce(ail.cost_unit, 0)*ail.quantity) ' \
                       'as benefit, pb.name, rpa.id as area_id, ' \
                       'ai.partner_shipping_id as contact_id, ' \
-                      'rpm.name as manufacturer'
+                      'rpm.name as manufacturer, '\
+                      'pc.parent_id as parent_product_categ_id'
         return select_str
 
     def _from(self):
@@ -48,7 +51,8 @@ class AccountInvoiceReport(models.Model):
                     'pb.id LEFT JOIN res_partner_area rpa ON rpa.id = ' \
                     'partner.area_id LEFT JOIN res_partner rpc on rpc.id = ' \
                     'ai.partner_shipping_id LEFT JOIN res_partner rpm ON rpm.id = ' \
-                    'pt.manufacturer'
+                    'pt.manufacturer '\
+                    'LEFT JOIN product_category pc ON pt.categ_id = pc.id  '
         return from_str
 
     def _group_by(self):
@@ -57,6 +61,7 @@ class AccountInvoiceReport(models.Model):
                         ' ai.number,' \
                         ' pb.name, ' \
                         ' rpa.id, ai.partner_shipping_id, ' \
-                        'rpm.name'
+                        'rpm.name, '\
+                        'pc.parent_id'
 
         return group_by_str

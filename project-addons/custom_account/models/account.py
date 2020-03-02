@@ -150,6 +150,7 @@ class AccountInvoice(models.Model):
             if partner.commercial_partner_id.attach_picking:
                 vals["attach_picking"] = \
                     partner.commercial_partner_id.attach_picking
+            vals['team_id'] = partner.commercial_partner_id.team_id.id
             if vals.get('type', False) == "out_refund":
                 # vencimiento inmediato en rectificativas
                 vals["payment_term_id"] = False
@@ -165,6 +166,7 @@ class AccountInvoice(models.Model):
         if p:
             self.attach_picking = p.commercial_partner_id.attach_picking
             self.team_id = p.commercial_partner_id.team_id.id
+            self.user_id = p.commercial_partner_id.user_id.id
             if self.type != "in_invoice":
                 self.currency_id = p.commercial_partner_id.\
                     property_purchase_currency_id.id or self.env.user.company_id.currency_id.id
@@ -198,6 +200,9 @@ class AccountInvoice(models.Model):
     @api.multi
     def write(self, vals):
         res = super().write(vals)
+        if vals.get('partner_id', False):
+            partner = self.env["res.partner"].browse(vals["partner_id"])
+            self.write({'team_id':partner.commercial_partner_id.team_id.id})
         if vals.get('payment_mode_id', False):
             for inv in self:
                 if inv.move_id and inv.payment_mode_id.blocked:
