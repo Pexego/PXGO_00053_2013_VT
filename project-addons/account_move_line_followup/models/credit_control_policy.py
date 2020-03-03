@@ -197,14 +197,15 @@ class CreditCommunication(models.Model):
                   </tr>
                   '''
             for aml in moves:
-                total += aml['balance']
+                # total += aml['balance']
+                total += aml['amount_residual']
                 strbegin = "<TD>"
                 strend = "</TD>"
                 date = aml['date_maturity'] or aml['date']
                 followup_table += "<TR>" + strbegin + datetime.datetime.strptime(aml['date'], '%Y-%m-%d').strftime('%d/%m/%Y') + strend + \
                                   strbegin + (aml['ref'] or '') + strend + \
                                   strbegin + str(datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%d/%m/%Y')) + strend + strbegin + \
-                                  str(aml['balance']) + strend + "</TR>"
+                                  str(aml['amount_residual']) + strend + "</TR>"
 
         return followup_table, total
 
