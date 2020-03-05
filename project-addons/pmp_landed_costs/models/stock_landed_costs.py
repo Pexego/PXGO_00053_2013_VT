@@ -19,6 +19,14 @@ class StockLandedCost(models.Model):
                                      search='_search_container')
     forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
 
+    currency_change = fields.Float(compute='_get_currency_change')
+
+    @api.multi
+    def _get_currency_change(self):
+        for cost in self:
+            line = cost.cost_lines.filtered(lambda l: l.split_method == 'by_tariff')[0]
+            self.currency_change = line.price_unit / line.price_unit_usd if line.price_unit_usd else 1.0
+
     @api.multi
     def _get_container(self):
         move_obj = self.env['stock.move']
@@ -100,8 +108,7 @@ class StockLandedCost(models.Model):
                             value = valuation.volume * per_unit
                         elif line.split_method == 'equal':
                             value = (line.price_unit / total_line)
-                        elif line.split_method == 'by_current_cost_price' and \
-                                total_cost:
+                        elif line.split_method == 'by_current_cost_price' and total_cost:
                             per_unit = (line.price_unit / total_cost)
                             value = valuation.former_cost * per_unit
                         elif line.split_method == 'by_tariff' and total_tariff:
@@ -124,7 +131,8 @@ class StockLandedCost(models.Model):
                             towrite_dict[valuation.id] += value
         for key, value in towrite_dict.items():
             AdjustementLines.browse(key).\
-                write({'additional_landed_cost': value})
+                write({'additional_landed_cost': value,
+                       'additional_landed_cost_usd': value / self.currency_change})
         return True
 
     def get_valuation_lines(self):
@@ -139,9 +147,11 @@ class StockLandedCost(models.Model):
                 'move_id': move.id,
                 'quantity': move.product_qty,
                 'former_cost': move.value,
+                'cost_purchase': move.purchase_line_id.price_subtotal,
                 'weight': move.product_id.weight * move.product_qty,
                 'volume': move.product_id.volume * move.product_qty,
-                'tariff': move.value*(move.product_id.tariff/100)
+                'tariff': round((move.purchase_line_id.price_subtotal * self.currency_change) *
+                                (move.product_id.tariff/100), 2)
             }
             lines.append(vals)
 
@@ -160,16 +170,36 @@ class StockValuationAdjustmentLines(models.Model):
     _inherit = 'stock.valuation.adjustment.lines'
 
     @api.multi
-    @api.depends('former_cost', 'quantity', 'additional_landed_cost')
+    @api.depends('former_cost', 'quantity', 'additional_landed_cost', 'cost_purchase')
     def _get_new_move_cost(self):
         for line in self:
             line.new_unit_cost = (line.former_cost +
                                   line.additional_landed_cost) / \
                 (line.quantity or 1.0)
+            line.new_unit_cost_usd = (line.cost_purchase +
+                                      line.additional_landed_cost) / \
+                                     (line.quantity or 1.0)
+
+    @api.multi
+    @api.depends('cost_purchase', 'quantity')
+    def _compute_cost_purchase_per_unit(self):
+        for line in self:
+            line.cost_purchase_per_unit = \
+                line.cost_purchase / (line.quantity or 1.0)
 
     new_unit_cost = fields.Float('New standard price', store=True,
                                  compute="_get_new_move_cost")
+    new_unit_cost_usd = fields.Float('New standard price USD', store=True,
+                                 compute="_get_new_move_cost")
     tariff = fields.Float("Tariff", digits=(16, 2))
+    cost_purchase = fields.Float(
+        'Purchase Price', digits=dp.get_precision('Product Price'))
+    cost_purchase_per_unit = fields.Float(
+        'Purchase Price (Per Unit)', compute='_compute_cost_purchase_per_unit',
+        digits=0, store=True)
+    additional_landed_cost_usd = fields.Float(
+        'Additional Landed Cost USD',
+        digits=dp.get_precision('Product Price'))
 
 
 class StockLandedCostLines(models.Model):
@@ -177,6 +207,7 @@ class StockLandedCostLines(models.Model):
 
     split_method = fields.Selection(selection_add=[('by_tariff',
                                                     'By tariff')])
+    price_unit_usd = fields.Float('Cost USD', digits=dp.get_precision('Product Price'))
 
     @api.onchange('product_id')
     def onchange_product_id(self):
