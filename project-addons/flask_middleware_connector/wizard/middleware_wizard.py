@@ -62,7 +62,46 @@ class MiddlewareBackend(models.TransientModel):
                                               ('is_company', '=', False)])
             if self.mode_export == 'export':
                 for partner in partner_ids:
+                    # Export all the partner things
                     partner.with_delay().export_partner()
+                    partner.with_delay(eta=10).export_partner_tag_rel()
+                    sales = self.env['sale.order'].search(
+                        [('partner_id', 'child_of', [partner.id]),
+                         ('company_id', '=', 1),
+                         ('state', 'in', ['done', 'sale'])])
+                    for sale in sales:
+                        sale.with_delay(priority=5, eta=120).export_order()
+                        for line in sale.order_line:
+                            line.with_delay(
+                                priority=10, eta=180).export_orderproduct()
+                    invoices = self.env['account.invoice'].search(
+                        [('commercial_partner_id', '=', partner.id),
+                         ('company_id', '=', 1),
+                         ('number', 'not like', '%ef%')])
+                    for invoice in invoices:
+                        invoice.with_delay(priority=5, eta=120).export_invoice()
+                    rmas = self.env['crm.claim'].search(
+                        [('partner_id', '=', partner.id)])
+                    for rma in rmas:
+                        rma.with_delay(priority=5, eta=120).export_rma()
+                        for line in rma.claim_line_ids:
+                            if line.product_id.web == 'published' and \
+                                    (not line.equivalent_product_id or
+                                     line.equivalent_product_id.web ==
+                                     'published'):
+                                line.with_delay(
+                                    priority=10, eta=240).export_rmaproduct()
+                    pickings = self.env['stock.picking'].search([
+                        ('partner_id', 'child_of', [partner.id]),
+                        ('state', '!=', 'cancel'),
+                        ('picking_type_id.code', '=', 'outgoing'),
+                        ('company_id', '=', 1),
+                        ('not_sync', '=', False)])
+                    for picking in pickings:
+                        picking.with_delay(priority=5, eta=120).export_picking()
+                        for line in picking.move_lines:
+                            line.with_delay(
+                                priority=10, eta=240).export_pickingproduct()
                 for contact in contact_ids:
                     contact.with_delay().export_partner()
             else:
