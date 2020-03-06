@@ -40,7 +40,8 @@ class ResPartner(models.Model):
         move_lines = self.env['account.move.line'].search(
             [('account_id', 'in', cust_account._ids),
              ('date_maturity', '<', limit_customer_date),
-             ('full_reconcile_id', '=', False)])
+             ('full_reconcile_id', '=', False),
+             ('invoice_id.state', '!=', 'paid')])  # <- to avoid partial reconciles
         if len(move_lines) > 0:
             for move_line in move_lines:
                 if move_line.partner_id.id not in visited_partner_ids:
@@ -70,7 +71,8 @@ class ResPartner(models.Model):
                  '|', ('date_maturity', '<', limit_customer_date),
                  ('date_maturity', '=', False),
                  ('full_reconcile_id', '=', False),
-                 ('partner_id', '=', partner.id)])
+                 ('partner_id', '=', partner.id),
+                 ('invoice_id.state', '!=', 'paid')])  # <- to avoid partial reconciles
             balance = 0
             for line in move_lines:
                 balance += line.credit
