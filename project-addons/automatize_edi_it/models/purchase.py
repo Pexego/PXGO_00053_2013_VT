@@ -56,4 +56,8 @@ class PurchaseOrder(models.Model):
             for pick in order.picking_ids:
                 pick.not_sync = True
                 pick.action_assign()
+                for move in pick.move_lines.filtered(lambda m: m.state not in
+                                                     ['done', 'cancel']):
+                    for move_line in move.move_line_ids:
+                        move_line.qty_done = move_line.product_uom_qty
                 pick.action_done()
