@@ -19,7 +19,6 @@
 ##############################################################################
 from odoo import api, exceptions, fields, models, _
 
-
 class StockPicking(models.Model):
     _inherit = "stock.picking"
     _order = "priority desc, date desc, id desc"
@@ -218,6 +217,16 @@ class StockMove(models.Model):
         for move in self:
             if move.purchase_line_id and move.product_id.date_first_incoming_reliability!='1.received' and (vals.get('date_expected') or vals.get('state') =='cancel' or vals.get('picking_id')==False):
                 move.product_id._compute_date_first_incoming()
+            if vals.get('date_expected') and move.purchase_line_id != False and move.state not in ['cancel','done'] and move.location_dest_id.usage=='internal':
+                move.product_id.with_delay().update_product()
+        return res
+
+    @api.multi
+    def create(self, vals):
+        res = super(StockMove, self).create(vals)
+        if vals.get('date_expected') and vals['purchase_line_id'] and vals['state'] not in ['cancel',
+                                                                                                   'done'] and self.env['stock.location'].browse(vals['location_dest_id']).usage == 'internal':
+                self.env['product.product'].browse(vals['product_id']).with_delay(eta=60).update_product()
         return res
 
 
