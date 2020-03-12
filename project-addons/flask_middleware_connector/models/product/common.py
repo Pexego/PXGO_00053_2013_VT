@@ -161,6 +161,14 @@ class ProductProduct(models.Model):
             return exporter.delete_product_tag_rel(self)
         return True
 
+    def compute_date_next_incoming(self):
+        moves = self.env['stock.move'].search(
+            [('product_id', '=', self.id), ('purchase_line_id', '!=', False), ('state', 'not in', ['cancel','done']),('location_dest_id.usage', 'like', 'internal')]).sorted(
+            key=lambda m: m.date_expected and m.date_reliability)
+        if moves:
+            return moves[0].date_expected
+        return False
+
 
 class ProductCategoryListener(Component):
     _name = 'product.category.event.listener'

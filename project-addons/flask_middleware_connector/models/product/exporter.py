@@ -41,7 +41,8 @@ class ProductProductExporter(Component):
             'discontinued': binding.discontinued,
             'state': binding.state,
             'sale_in_groups_of': binding.sale_in_groups_of,
-            'replacement_id': binding.replacement_id.id
+            'replacement_id': binding.replacement_id.id,
+            'date_next_incoming':binding.compute_date_next_incoming()
         }
         if binding.show_stock_outside:
             vals['external_stock'] = binding.qty_available_external
@@ -69,6 +70,9 @@ class ProductProductExporter(Component):
     def delete_product_tag_rel(self, partner_record_id):
         return self.backend_adapter.remove_rel(
             'producttagproductrel', partner_record_id)
+
+
+
 
 
 class ProductProductAdapter(Component):
