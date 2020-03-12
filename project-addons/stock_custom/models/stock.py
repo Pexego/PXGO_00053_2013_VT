@@ -226,7 +226,7 @@ class StockMove(models.Model):
         res = super(StockMove, self).create(vals)
         if vals.get('date_expected') and vals.get('purchase_line_id') and vals.get('state') not in ['cancel',
                                                                                                    'done'] and self.env['stock.location'].browse(vals.get('location_dest_id')).usage == 'internal':
-                self.env['product.product'].browse(vals['product_id']).with_delay(eta=60).update_product()
+                self.env['product.product'].browse(vals.get('product_id')).with_delay(eta=60).update_product()
         return res
 
 
