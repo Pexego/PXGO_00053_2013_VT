@@ -71,13 +71,7 @@ class ProductProductExporter(Component):
         return self.backend_adapter.remove_rel(
             'producttagproductrel', partner_record_id)
 
-    def compute_date_next_incoming(self):
-        moves = self.env['stock.move'].search(
-            [('product_id', '=', self.id), ('purchase_line_id', '!=', False), ('state', 'not in', ['cancel','done']),('location_dest_id.usage', 'like', 'internal')]).sorted(
-            key=lambda m: m.date_expected and m.date_reliability)
-        if moves:
-            return moves[0].date_expected
-        return False
+
 
 
 
