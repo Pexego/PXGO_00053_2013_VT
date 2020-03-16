@@ -11,6 +11,7 @@
     'depends': ['base', 'web', 'sale',
                 'stock_reserve', 'stock_reserve_sale',
                 ], # TODO: sale_display_stock y sale_product_customize
-    'data': ['views/sale.xml', 'views/stock_reserve.xml', 'data/cron.xml'],
+    'data': ['views/sale.xml', 'views/stock_reserve.xml',
+             'data/cron.xml', 'data/parameters.xml'],
     'installable': True,
 }
