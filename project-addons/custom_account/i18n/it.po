@@ -585,6 +585,11 @@ msgid "Parent Category"
 msgstr "Categoria principale"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_partner_category
+msgid "Partner categ."
+msgstr "Categoria azienda"
+
+#. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_sale_report_parent_category_id
 msgid "Parent categ."
 msgstr "Categoria principale"

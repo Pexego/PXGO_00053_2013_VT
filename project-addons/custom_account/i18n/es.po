@@ -591,6 +591,11 @@ msgid "Parent categ."
 msgstr "Categ. padre"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_sale_report_partner_category
+msgid "Partner categ."
+msgstr "Categoría del cliente"
+
+#. module: custom_account
 #: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
 #: model:ir.ui.view,arch_db:custom_account.view_account_invoice_filter_partner
 msgid "Partner"
