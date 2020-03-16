@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="view_fatturapa_out_attachment_form_jobs">
+            <field name="name">view_fatturapa_out_attachment_form_jobs</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="l10n_it_fatturapa_out.view_invoice_form_fatturapa"/>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook/page[4]/group" position="inside">
+                    <group string="PEC Jobs" colspan="12">
+                        <group>
+                            <field name="auto_fatturapa_error" readonly="1"/>
+                        </group>
+                        <field name="invoice_pec_jobs_ids" options="{'reload_on_button': true}"
+                               nolabel="1"
+                               readonly="1"
+                               context="{'tree_view_ref': 'auto_pec_it.view_queue_job_pec'}"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_queue_job_pec" model="ir.ui.view">
+            <field name="model">queue.job</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="date_created"/>
+                    <field name="eta"/>
+                    <field name="date_done"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</odoo>
