@@ -89,7 +89,7 @@ class StockContainer(models.Model):
     name = fields.Char("Container Ref.", required=True)
     date_expected = fields.Datetime("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
-                               readonly=True, copy=False)
+                               readonly=True, copy=False, domain=[('state', '!=', 'cancel')])
     picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
 
     user_id = fields.Many2one(string='Responsible', compute='_get_responsible')

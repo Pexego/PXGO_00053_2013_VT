@@ -11,7 +11,8 @@
     ],
     "depends": [
         "web",
-        "stock_custom"
+        "stock_custom",
+        "web_export_view"
     ],
     "auto_install": False,
     "installable": True,

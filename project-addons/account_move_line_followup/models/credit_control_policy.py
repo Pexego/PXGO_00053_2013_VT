@@ -197,21 +197,22 @@ class CreditCommunication(models.Model):
                   </tr>
                   '''
             for aml in moves:
-                total += aml['balance']
+                # total += aml['balance']
+                total += aml['amount_residual']
                 strbegin = "<TD>"
                 strend = "</TD>"
                 date = aml['date_maturity'] or aml['date']
                 followup_table += "<TR>" + strbegin + datetime.datetime.strptime(aml['date'], '%Y-%m-%d').strftime('%d/%m/%Y') + strend + \
                                   strbegin + (aml['ref'] or '') + strend + \
                                   strbegin + str(datetime.datetime.strptime(date, '%Y-%m-%d').strftime('%d/%m/%Y')) + strend + strbegin + \
-                                  str(aml['balance']) + strend + "</TR>"
+                                  str(aml['amount_residual']) + strend + "</TR>"
 
         return followup_table, total
 
     @api.multi
     def get_followup_table_html_not_due(self):
         today = fields.Date.from_string(fields.Date.today()).strftime("%Y-%m-%d")
-        aml_ids = self.move_line_ids
+        aml_ids = self.move_line_ids.filtered(lambda l: l.invoice_id.state != 'paid')
         aml_not_due = aml_ids.filtered(lambda l: today < l.date_maturity)
         followup_table, total = self.get_followup_table_html_base(aml_not_due)
         if followup_table:
@@ -224,7 +225,7 @@ class CreditCommunication(models.Model):
     @api.multi
     def get_followup_table_html_due(self):
         today = fields.Date.from_string(fields.Date.today()).strftime("%Y-%m-%d")
-        aml_ids = self.move_line_ids
+        aml_ids = self.move_line_ids.filtered(lambda l: l.invoice_id.state != 'paid')
         aml_due = aml_ids.filtered(lambda l: today >= l.date_maturity)
         followup_table, total = self.get_followup_table_html_base(aml_due)
         if followup_table:
