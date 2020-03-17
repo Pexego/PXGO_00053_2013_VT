@@ -98,31 +98,31 @@ class StockLandedCost(models.Model):
                     if valuation.cost_line_id and valuation.\
                             cost_line_id.id == line.id:
                         if line.split_method == 'by_quantity' and total_qty:
-                            per_unit = (line.price_unit / total_qty)
+                            per_unit = (line.price_unit_usd / total_qty)
                             value = valuation.quantity * per_unit
                         elif line.split_method == 'by_weight' and total_weight:
-                            per_unit = (line.price_unit / total_weight)
+                            per_unit = (line.price_unit_usd / total_weight)
                             value = valuation.weight * per_unit
                         elif line.split_method == 'by_volume' and total_volume:
-                            per_unit = (line.price_unit / total_volume)
+                            per_unit = (line.price_unit_usd / total_volume)
                             value = valuation.volume * per_unit
                         elif line.split_method == 'equal':
-                            value = (line.price_unit / total_line)
+                            value = (line.price_unit_usd / total_line)
                         elif line.split_method == 'by_current_cost_price' and total_cost:
-                            per_unit = (line.price_unit / total_cost)
+                            per_unit = (line.price_unit_usd / total_cost)
                             value = valuation.former_cost * per_unit
                         elif line.split_method == 'by_tariff' and total_tariff:
-                            per_unit = (line.price_unit / total_tariff)
+                            per_unit = (line.price_unit_usd / total_tariff)
                             value = valuation.tariff * per_unit
                         else:
-                            value = (line.price_unit / total_line)
+                            value = (line.price_unit_usd / total_line)
 
                         if digits:
                             value = tools.\
                                 float_round(value, precision_digits=digits[1],
                                             rounding_method='UP')
-                            fnc = min if line.price_unit > 0 else max
-                            value = fnc(value, line.price_unit - value_split)
+                            fnc = min if line.price_unit_usd > 0 else max
+                            value = fnc(value, line.price_unit_usd - value_split)
                             value_split += value
 
                         if valuation.id not in towrite_dict:
@@ -131,8 +131,8 @@ class StockLandedCost(models.Model):
                             towrite_dict[valuation.id] += value
         for key, value in towrite_dict.items():
             AdjustementLines.browse(key).\
-                write({'additional_landed_cost': value,
-                       'additional_landed_cost_usd': value / self.currency_change})
+                write({'additional_landed_cost': value * self.currency_change,
+                       'additional_landed_cost_usd': value})
         return True
 
     def get_valuation_lines(self):
@@ -150,7 +150,7 @@ class StockLandedCost(models.Model):
                 'cost_purchase': move.purchase_line_id.price_subtotal,
                 'weight': move.product_id.weight * move.product_qty,
                 'volume': move.product_id.volume * move.product_qty,
-                'tariff': round((move.purchase_line_id.price_subtotal * self.currency_change) *
+                'tariff': round(move.purchase_line_id.price_subtotal *
                                 (move.product_id.tariff/100), 2)
             }
             lines.append(vals)
@@ -177,7 +177,7 @@ class StockValuationAdjustmentLines(models.Model):
                                   line.additional_landed_cost) / \
                 (line.quantity or 1.0)
             line.new_unit_cost_usd = (line.cost_purchase +
-                                      line.additional_landed_cost) / \
+                                      line.additional_landed_cost_usd) / \
                                      (line.quantity or 1.0)
 
     @api.multi
