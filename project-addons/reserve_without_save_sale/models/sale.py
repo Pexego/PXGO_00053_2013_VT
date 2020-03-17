@@ -1,6 +1,8 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import fields, models, api
 import odoo.addons.decimal_precision as dp
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 
 class SaleOrder(models.Model):
@@ -179,6 +181,10 @@ class SaleOrderLine(models.Model):
         return super().unlink()
 
     def stock_reserve(self):
+        days_release_reserve = self.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
+        now = datetime.now()
+        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+
         if self.env.context.get('later', False):
             return True
 
@@ -192,7 +198,7 @@ class SaleOrderLine(models.Model):
                 for reserve in line.reservation_ids:
                     reserve.reassign()
             else:
-                vals = line._prepare_stock_reservation()
+                vals = line._prepare_stock_reservation(date_validity=date_validity)
                 reservation = self.env['stock.reservation'].create(vals)
                 reservation.reserve()
                 if line.product_id.is_pack:
