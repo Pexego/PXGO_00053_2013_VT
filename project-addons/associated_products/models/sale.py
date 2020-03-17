@@ -46,7 +46,7 @@ class SaleOrderLine(models.Model):
                 price = pricelist_obj.price_get(associated.associated_id.id,
                                                 associated.quantity * qty,
                                                 line.order_id.partner_id.id)[pricelist]
-                price *= (1 - associated.discount / 100)
+                discount = associated.discount if associated.discount>line.discount else line.discount
                 args_line = {
                     'order_id': line.order_id.id,
                     'price_unit': price,
@@ -56,7 +56,7 @@ class SaleOrderLine(models.Model):
                     'original_line_id': line.id,
                     'customer_lead': associated.associated_id.sale_delay or 0.0,
                     'tax_id': [(6, 0, tax_ids.ids)],
-                    'discount':associated.discount
+                    'discount':discount,
                     # TODO: migrar junto con módulo commision_report
                     # 'agent': line.agent.id,
                     # 'commission': line.commission.id
@@ -85,7 +85,7 @@ class SaleOrderLine(models.Model):
                                                     {'uom': associated.uom_id.id,
                                                      'date': line.order_id.date_order}
                                                     )[pricelist]
-                    price *= (1-associated.discount/100)
+                    discount = associated.discount if associated.discount > line.discount else line.discount
                     args_line = {
                      'order_id': line.order_id.id,
                      'price_unit': price,
@@ -95,6 +95,7 @@ class SaleOrderLine(models.Model):
                      'original_line_id': line.id,
                      'customer_lead': associated.associated_id.sale_delay or 0.0,
                      'tax_id': [(6, 0, tax_ids.ids)],
+                     'discount':discount,
                      # TODO: migrar junto con módulo commision_report
                      # 'agent': line.agent.id,
                      # 'commission': line.commission.id
