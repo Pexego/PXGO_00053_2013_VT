@@ -13,23 +13,20 @@ class SaleReport(models.Model):
     state_name = fields.Char("State Name")
     main_supplier = fields.Many2one('res.partner', 'Main supplier')
     partner_vat = fields.Char("Partner VAT")
-    partner_category = fields.Many2one("res.partner.category", 'Partner categ.')
 
     def _select(self):
         select_str = (", t.product_brand_id as brand_id, pc.parent_id as "
                       "parent_category_id, rp.ref as partner_ref, rp.vat as partner_vat , cs.name as "
-                      "state_name, t.manufacturer as main_supplier, rpc.id as partner_category")
+                      "state_name, t.manufacturer as main_supplier")
         return super()._select() + select_str
 
     def _from(self):
         from_str = (" left join res_partner rp on s.partner_id=rp.id left join"
                     " product_category pc on pc.id = t.categ_id"
-                    " LEFT JOIN res_country_state cs on cs.id = rp.state_id"
-                    " LEFT JOIN res_partner_res_partner_category_rel rprpc on rprpc.partner_id=rp.id"
-                    " LEFT JOIN res_partner_category rpc on rprpc.category_id=rpc.id")
+                    " LEFT JOIN res_country_state cs on cs.id = rp.state_id")
         return super()._from() + from_str
 
     def _group_by(self):
         group_by_str = """, t.product_brand_id, rp.ref, pc.parent_id, cs.name,
-                          t.manufacturer, rp.vat, rpc.id"""
+                          t.manufacturer, rp.vat"""
         return super()._group_by() + group_by_str
