@@ -79,9 +79,6 @@ class ClaimMakePickingFromPicking(models.TransientModel):
     @api.multi
     def action_create_picking_from_picking(self):
         products = self.picking_line_ids.mapped('product_id').filtered(lambda x: x.state == 'make_to_order')
-        if products:
-            message = _('You cannot send the following products to stock due to they are "make to order": ')
-            raise exceptions.Warning(message + str(products.mapped('default_code')))
         picking_obj = self.env['stock.picking']
         view_obj = self.env['ir.ui.view']
         context = self.env.context
@@ -171,6 +168,11 @@ class ClaimMakePickingFromPicking(models.TransientModel):
             picking_id.action_assign()
             #if we validate the picking, it fails because there is no quantity available
             #picking_id.button_validate()
+
+        if products:
+            message=_("You shouldn't send the following products to stock due to they are 'make to order' %s. "
+                      "Please check the picking (%s) carefully before validate it") %(str(products.mapped('default_code')),picking_id.name)
+            self.env.user.notify_warning(message=message, sticky=True)
 
         domain = "[('picking_type_code','=','%s'),('partner_id','=',%s)]" % (p_type, partner_id)
         return {
