@@ -3,6 +3,8 @@ import json
 import logging
 from odoo import http
 from odoo.http import request
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
 
 _logger = logging.getLogger(__name__)
 
@@ -12,6 +14,9 @@ class WebsiteReservation(http.Controller):
     @http.route(['/reservations/create'],
                 type='http', methods=['POST'], auth='user')
     def create_reservation(self, **post):
+        days_release_reserve = request.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
+        now = datetime.now()
+        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
         warehouse = request.env['stock.warehouse'].browse(
             int(post['warehouse']))
         product = request.env['product.product'].browse(
@@ -21,7 +26,7 @@ class WebsiteReservation(http.Controller):
                 'product_id': int(post['product_id']),
                 'product_uom': int(post['uom']),
                 'product_uom_qty': float(post['qty']),
-                'date_validity': False,
+                'date_validity': date_validity,
                 'name': post.get('name', product.default_code),
                 'location_id': warehouse.lot_stock_id.id,
                 'sale_line_id': post['sale_line_id'] != 'false' and int(post['sale_line_id']) or False,
@@ -55,6 +60,9 @@ class WebsiteReservation(http.Controller):
             una nueva.
             Si solo se modifica la cantidad se escribe.
         """
+        days_release_reserve = request.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
+        now = datetime.now()
+        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
         if post.get('product_id', False):
             product = request.env['product.product'].browse(
                 int(post['product_id']))
@@ -75,7 +83,7 @@ class WebsiteReservation(http.Controller):
                             'product_id': int(post['product_id']),
                             'product_uom': int(post['uom']),
                             'product_uom_qty': float(post['qty']),
-                            'date_validity': False,
+                            'date_validity': date_validity,
                             'sale_line_id': post['sale_line_id'] != 'false' and int(post['sale_line_id']) or False,
                             'sale_id': post['sale_id'] != 'false' and int(post['sale_id']) or False,
                             'user_id': post['user_id'] != 'false' and int(post['user_id']) or False,

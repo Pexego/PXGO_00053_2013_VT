@@ -5,7 +5,7 @@ It will try to automatically create the user table and admin user
 if they don't exist.
 """
 
-from peewee import CharField, FloatField, IntegerField, ForeignKeyField, BooleanField, TextField
+from peewee import CharField, FloatField, IntegerField, ForeignKeyField, BooleanField, TextField, DateTimeField
 from app import app
 from database import SyncModel
 from country import Country
@@ -76,6 +76,7 @@ class Product(SyncModel):
     state = CharField(max_length=50)
     sale_in_groups_of = FloatField(default=1.0)
     replacement_id = IntegerField()
+    date_next_incoming = DateTimeField(formats=['%Y-%m-%d %H:%M:%S'])
 
     def __unicode__(self):
         return self.name
