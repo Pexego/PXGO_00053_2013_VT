@@ -34,6 +34,7 @@ class ComputeRappelInvoice(models.TransientModel):
                     invoice_rappel.write(
                         {'payment_mode_id':
                          partner.customer_payment_mode_id.id,
+                         'payment_term_id': partner.property_payment_term_id.id,
                          'mandate_id': partner.valid_mandate_id.id,
                          'team_id': partner.team_id.id})
         return res
