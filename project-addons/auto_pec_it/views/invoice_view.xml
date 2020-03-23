@@ -33,5 +33,17 @@
             </field>
         </record>
 
+        <record id="view_account_invoice_fatturapa_out_auto_pec_filter" model="ir.ui.view">
+            <field name="name">view.account.invoice.fatturapa.out.auto.pec.filter</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="l10n_it_fatturapa_pec.view_account_invoice_fatturapa_out_pec_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='fatturapa_errors']" position="after">
+                    <separator/>
+                    <filter name="fatturapa_send_error" string="PEC send error" domain="[('auto_fatturapa_error','!=', False)]"/>
+                </xpath>
+            </field>
+        </record>
+
     </data>
 </odoo>
