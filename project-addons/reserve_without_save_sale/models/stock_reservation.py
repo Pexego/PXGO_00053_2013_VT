@@ -2,6 +2,7 @@
 from odoo import fields, models, api, registry, _
 from odoo.exceptions import UserError
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 
 class StockReservation(models.Model):
@@ -105,6 +106,10 @@ class StockReservation(models.Model):
         The reservation is done using the default UOM of the product.
         A date until which the product is reserved can be specified.
         """
+        days_release_reserve = self.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
+        now = datetime.now()
+        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+
         moves = self.env['stock.move']
         for reserve in self:
             current_sale_line_id = reserve.sale_line_id.id
@@ -116,8 +121,10 @@ class StockReservation(models.Model):
                     [('move_id', '=', move.id)])
                 if not reservation:
                     reservation = self.env['stock.reservation'].create(
-                        {'move_id': move.id, 'sale_line_id':
-                         current_sale_line_id})
+                        {'move_id': move.id,
+                         'sale_line_id': current_sale_line_id,
+                         'date_validity': date_validity
+                         })
                 reservation.message_post(
                     body=_("Reserva modificada. Estado '%s'") %
                     reservation.state)
