@@ -30,7 +30,7 @@
                 <attribute name="sum">Total.</attribute>
             </xpath>
             <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='volume']" position="after">
-                <field name="tariff" readonly="1"/>
+                <field name="tariff" readonly="1" sum="Tariff"/>
             </xpath>
             <field name="picking_ids" position="attributes">
                 <attribute name="domain">[('state', '=', 'done'),('picking_type_code', '=', 'incoming')]</attribute>
