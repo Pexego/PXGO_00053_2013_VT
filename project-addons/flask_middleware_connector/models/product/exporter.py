@@ -90,7 +90,7 @@ class ProductCategoryExporter(Component):
     _usage = 'record.exporter'
 
     def update(self, binding, mode):
-        vals = {"name": binding.name,
+        vals = {"name": binding.with_context({'lang': 'es_ES'}).name,
                 "parent_id": binding.parent_id.id,
                 "odoo_id": binding.id}
         if mode == "insert":
