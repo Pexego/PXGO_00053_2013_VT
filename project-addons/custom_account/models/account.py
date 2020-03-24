@@ -153,8 +153,7 @@ class AccountInvoice(models.Model):
             vals['team_id'] = partner.commercial_partner_id.team_id.id
             if vals.get('type', False) == "out_refund":
                 # vencimiento inmediato en rectificativas
-                vals["payment_term_id"] = False
-                vals["date_due"] = fields.Date.today()
+                vals["payment_term_id"] = self.env.ref('account.account_payment_term_immediate').id
         return super().create(vals)
 
     @api.onchange('partner_id', 'company_id')
