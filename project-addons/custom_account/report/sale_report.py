@@ -13,6 +13,7 @@ class SaleReport(models.Model):
     state_name = fields.Char("State Name")
     main_supplier = fields.Many2one('res.partner', 'Main supplier')
     partner_vat = fields.Char("Partner VAT")
+    partner_category = fields.Many2many(related='partner_id.category_id')
 
     def _select(self):
         select_str = (", t.product_brand_id as brand_id, pc.parent_id as "
