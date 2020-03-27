@@ -12,6 +12,6 @@
                 'stock_reserve', 'stock_reserve_sale',
                 ], # TODO: sale_display_stock y sale_product_customize
     'data': ['views/sale.xml', 'views/stock_reserve.xml',
-             'data/cron.xml', 'data/parameters.xml'],
+             'data/cron.xml', 'data/parameters.xml', 'data/mail_template.xml'],
     'installable': True,
 }
