@@ -177,6 +177,11 @@
                 </t>
             </t>
             <div class="row">
+                <span t-if="lang == 'fr_FR' and o.state == 'reserve'">
+                     <p class="text-center" style="font-size:12px; color:#6D6E70;">
+The products reservation is not guaranteed after 7 days from the date of this document.
+                     </p><br/>
+                </span>
                 <table class="table table-condensed">
                     <thead>
                         <tr style="font-size:12px; color:#da1f2e">
