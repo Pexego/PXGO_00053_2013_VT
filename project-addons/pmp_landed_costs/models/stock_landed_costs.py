@@ -9,6 +9,7 @@ from odoo.exceptions import UserError
 class StockLandedCost(models.Model):
 
     _inherit = 'stock.landed.cost'
+    _order = 'id desc'
 
     account_journal_id = fields.\
         Many2one(default=lambda self: self.env['account.journal'].
@@ -20,6 +21,8 @@ class StockLandedCost(models.Model):
     forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
 
     currency_change = fields.Float(compute='_get_currency_change')
+    no_tariff_adjustment = fields.Boolean('Without adjustment',
+                                          help='When this is marked, the cost by tariff is calculated without adjustment')
 
     @api.multi
     def _get_currency_change(self):
@@ -72,6 +75,10 @@ class StockLandedCost(models.Model):
             total_volume = 0.0
             total_line = 0.0
             total_tariff = 0.0
+            launch_warning = False
+            difference = 0.0
+            total_inserted = 0.0
+
             all_val_line_values = cost.get_valuation_lines()
             for val_line_values in all_val_line_values:
                 for cost_line in cost.cost_lines:
@@ -90,6 +97,11 @@ class StockLandedCost(models.Model):
                     if digits else former_cost
 
                 total_line += 1
+
+            difference = total_tariff - round(cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff').price_unit_usd, 2)
+            if difference != 0.0 and not cost.no_tariff_adjustment:
+                launch_warning = True
+                total_inserted = cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff').price_unit_usd
 
             for line in cost.cost_lines:
                 value_split = 0.0
@@ -113,7 +125,10 @@ class StockLandedCost(models.Model):
                             value = valuation.former_cost * per_unit
                         elif line.split_method == 'by_tariff' and total_tariff:
                             per_unit = (line.price_unit_usd / total_tariff)
-                            value = valuation.tariff * per_unit
+                            if cost.no_tariff_adjustment:
+                                value = valuation.tariff
+                            else:
+                                value = valuation.tariff * per_unit
                         else:
                             value = (line.price_unit_usd / total_line)
 
@@ -133,7 +148,25 @@ class StockLandedCost(models.Model):
             AdjustementLines.browse(key).\
                 write({'additional_landed_cost': value * self.currency_change,
                        'additional_landed_cost_usd': value})
-        return True
+        if launch_warning:
+            wiz_id = self.env['cost.adjustment.wizard']
+            new = wiz_id.create({'inserted': total_inserted,
+                                 'calculated': total_tariff,
+                                 'difference': difference})
+            return {
+                'name': 'Adjustment warning',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'target': 'new',
+                'res_model': 'cost.adjustment.wizard',
+                'src_model': 'stock.landed.cost',
+                'res_id': new.id,
+                'type': 'ir.actions.act_window',
+                'id': 'action_cost_adjustment_wizard',
+                'context': {'parent_obj': self.id},
+            }
+        else:
+            return True
 
     def get_valuation_lines(self):
         lines = []

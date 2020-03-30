@@ -15,6 +15,7 @@
                 'purchase'],
     "data": ['views/stock_landed_costs_view.xml',
              'views/product_view.xml',
-             'views/hs_code_view.xml'],
+             'views/hs_code_view.xml',
+             'wizard/cost_adjustment_wizard.xml'],
     "installable": True
 }

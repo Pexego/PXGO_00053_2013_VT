@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="cost_adjustment_wizard">
+            <field name="name">Adjustment warning</field>
+            <field name="model">cost.adjustment.wizard</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <h3>There are some difference between the tariff calculated in Odoo and the one inserted.</h3>
+                    <p>The tariff has been distributed among all products.</p>
+                    <p>If you want to calculated without the distribution, mark the check and calculate again.</p>
+                    <group>
+                        <field name="inserted"/>
+                        <field name="calculated"/>
+                        <field name="difference"/>
+                    </group>
+                    <footer>
+                        <button string="Ok" special="cancel" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_cost_adjustment_wizard" model="ir.actions.act_window">
+            <field name="name">Adjustment warning</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cost.adjustment.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="cost_adjustment_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

@@ -120,5 +120,50 @@ msgstr "Nuevo precio de coste de producto USD"
 
 #. module: pmp_landed_costs
 #: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_lines_price_unit_usd
-msgid "Cost USD
+msgid "Cost USD"
 msgstr "Coste USD"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_cost_adjustment_wizard_difference
+msgid "Difference"
+msgstr "Diferencia"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_cost_adjustment_wizard_inserted
+msgid "Inserted"
+msgstr "Insertado"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_cost_adjustment_wizard_calculated
+msgid "Calculated"
+msgstr "Calculado"
+
+#. module: pmp_landed_costs
+#: model:ir.actions.act_window,name:pmp_landed_costs.action_cost_adjustment_wizard
+msgid "Adjustment warning"
+msgstr "Aviso de reajuste"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_no_tariff_adjustment
+msgid "Without adjustment"
+msgstr "Sin reajuste"
+
+#. module: pmp_landed_costs
+#: model:ir.model.fields,help:pmp_landed_costs.field_stock_landed_cost_no_tariff_adjustment
+msgid "When this is marked, the cost by tariff is calculated without adjustment"
+msgstr "Marcado, el coste por arancel es calculado sin reajuste"
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.cost_adjustment_wizard
+msgid "There are some difference between the tariff calculated in Odoo and the one inserted."
+msgstr "Hay algunas diferencias entre el arancel calculado en Odoo y el insertado."
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.cost_adjustment_wizard
+msgid "The tariff has been distributed among all products."
+msgstr "El arancel ha sido distribuído entre todos los productos."
+
+#. module: pmp_landed_costs
+#: model:ir.ui.view,arch_db:pmp_landed_costs.cost_adjustment_wizard
+msgid "If you want to calculated without the distribution, mark the check and calculate again."
+msgstr "Si quieres calcularlo sin el reajuste, marca el check y calcula de nuevo."

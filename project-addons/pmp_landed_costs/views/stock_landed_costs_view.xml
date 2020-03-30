@@ -30,7 +30,7 @@
                 <attribute name="sum">Total.</attribute>
             </xpath>
             <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='volume']" position="after">
-                <field name="tariff" readonly="1" sum="Tariff"/>
+                <field name="tariff" readonly="1"/>
             </xpath>
             <field name="picking_ids" position="attributes">
                 <attribute name="domain">[('state', '=', 'done'),('picking_type_code', '=', 'incoming')]</attribute>
@@ -40,6 +40,7 @@
             </field>
             <field name="account_move_id" position="after">
                 <field name="forwarder_invoice"/>
+                <field name="no_tariff_adjustment"/>
             </field>
             <xpath expr="//field[@name='cost_lines']/tree/field[@name='split_method']" position="after">
                 <field name="price_unit_usd"/>
