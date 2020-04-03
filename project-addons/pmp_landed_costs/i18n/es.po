@@ -167,3 +167,9 @@ msgstr "El arancel ha sido distribuído entre todos los productos."
 #: model:ir.ui.view,arch_db:pmp_landed_costs.cost_adjustment_wizard
 msgid "If you want to calculated without the distribution, mark the check and calculate again."
 msgstr "Si quieres calcularlo sin el reajuste, marca el check y calcula de nuevo."
+
+#. module: pmp_landed_costs
+#: code:addons/pmp_landed_costs/models/stock_landed_costs.py:66
+#, python-format
+msgid "Not all the products have HS Code: %s"
+msgstr "No todos los productos tienen HS Code: %s"

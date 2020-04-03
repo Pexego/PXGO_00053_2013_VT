@@ -59,7 +59,11 @@ class StockLandedCost(models.Model):
         pickings = moves.mapped('picking_id.id')
         return[('picking_ids', 'in', pickings)]
 
-
+    @api.multi
+    def check_lines_hscode(self, vals):
+        product = self.env['product.product'].browse(vals.get('product_id'))
+        if product and not product.hs_code_id:
+            raise UserError(_('Not all the products have HS Code: %s') % product.default_code)
 
     @api.multi
     def compute_landed_cost(self):
@@ -81,6 +85,7 @@ class StockLandedCost(models.Model):
 
             all_val_line_values = cost.get_valuation_lines()
             for val_line_values in all_val_line_values:
+                self.check_lines_hscode(val_line_values)
                 for cost_line in cost.cost_lines:
                     val_line_values.update({'cost_id': cost.id,
                                             'cost_line_id': cost_line.id})
