@@ -3,6 +3,7 @@
 
 from odoo import models, api, _, fields, tools
 import odoo.addons.decimal_precision as dp
+from odoo.tools import float_compare
 from odoo.exceptions import UserError
 
 
@@ -80,7 +81,6 @@ class StockLandedCost(models.Model):
             total_line = 0.0
             total_tariff = 0.0
             launch_warning = False
-            difference = 0.0
             total_inserted = 0.0
 
             all_val_line_values = cost.get_valuation_lines()
@@ -103,8 +103,9 @@ class StockLandedCost(models.Model):
 
                 total_line += 1
 
-            difference = total_tariff - round(cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff').price_unit_usd, 2)
-            if difference != 0.0 and not cost.no_tariff_adjustment:
+            difference = float_compare(round(cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff').price_unit_usd, 4),
+                                       total_tariff, precision_rounding=0.00005)
+            if difference and not cost.no_tariff_adjustment:
                 launch_warning = True
                 total_inserted = cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff').price_unit_usd
 
@@ -151,13 +152,11 @@ class StockLandedCost(models.Model):
                             towrite_dict[valuation.id] += value
         for key, value in towrite_dict.items():
             AdjustementLines.browse(key).\
-                write({'additional_landed_cost': value * self.currency_change,
-                       'additional_landed_cost_usd': value})
+                write({'additional_landed_cost': value * self.currency_change})
         if launch_warning:
             wiz_id = self.env['cost.adjustment.wizard']
             new = wiz_id.create({'inserted': total_inserted,
-                                 'calculated': total_tariff,
-                                 'difference': difference})
+                                 'calculated': total_tariff})
             return {
                 'name': 'Adjustment warning',
                 'view_type': 'form',
@@ -189,7 +188,7 @@ class StockLandedCost(models.Model):
                 'weight': move.product_id.weight * move.product_qty,
                 'volume': move.product_id.volume * move.product_qty,
                 'tariff': round(move.purchase_line_id.price_subtotal *
-                                (move.product_id.tariff/100), 2)
+                                (move.product_id.tariff/100), 4)
             }
             lines.append(vals)
 
@@ -214,9 +213,6 @@ class StockValuationAdjustmentLines(models.Model):
             line.new_unit_cost = (line.former_cost +
                                   line.additional_landed_cost) / \
                 (line.quantity or 1.0)
-            line.new_unit_cost_usd = (line.cost_purchase +
-                                      line.additional_landed_cost_usd) / \
-                                     (line.quantity or 1.0)
 
     @api.multi
     @api.depends('cost_purchase', 'quantity')
@@ -227,17 +223,12 @@ class StockValuationAdjustmentLines(models.Model):
 
     new_unit_cost = fields.Float('New standard price', store=True,
                                  compute="_get_new_move_cost")
-    new_unit_cost_usd = fields.Float('New standard price USD', store=True,
-                                 compute="_get_new_move_cost")
     tariff = fields.Float("Tariff", digits=(16, 2))
     cost_purchase = fields.Float(
         'Purchase Price', digits=dp.get_precision('Product Price'))
     cost_purchase_per_unit = fields.Float(
         'Purchase Price (Per Unit)', compute='_compute_cost_purchase_per_unit',
         digits=0, store=True)
-    additional_landed_cost_usd = fields.Float(
-        'Additional Landed Cost USD',
-        digits=dp.get_precision('Product Price'))
 
 
 class StockLandedCostLines(models.Model):
