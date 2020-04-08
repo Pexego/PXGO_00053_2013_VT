@@ -191,7 +191,7 @@ class StockMove(models.Model):
                           ('product_id', '=', move.product_id.id)]
                 confirmed_ids = self.\
                     search(domain, limit=None,
-                           order="has_reservations,sequence,picking_id,id")
+                           order="has_reservations,sequence,date_expected,id")
                 if confirmed_ids:
                     confirmed_ids._action_assign()
         return res
