@@ -32,4 +32,4 @@ class SaleOrder(models.Model):
     @api.multi
     def _get_area_id(self):
         for sale in self:
-            sale.area_id = self.partner_shipping_id.area_id.id or self.partner_id.area_id.id
+            sale.area_id = sale.partner_shipping_id.area_id.id or sale.partner_id.area_id.id
