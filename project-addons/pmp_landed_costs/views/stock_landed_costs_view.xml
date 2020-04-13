@@ -41,11 +41,7 @@
             </field>
             <field name="account_move_id" position="after">
                 <field name="forwarder_invoice"/>
-                <field name="no_tariff_adjustment"/>
             </field>
-            <xpath expr="//field[@name='cost_lines']/tree/field[@name='split_method']" position="after">
-                <field name="price_unit_usd"/>
-            </xpath>
         </field>
     </record>
 

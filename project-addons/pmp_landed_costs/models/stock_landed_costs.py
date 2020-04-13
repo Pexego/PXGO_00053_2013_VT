@@ -21,16 +21,6 @@ class StockLandedCost(models.Model):
                                      search='_search_container')
     forwarder_invoice = fields.Char(string='Forwarder Invoice', required=True)
 
-    currency_change = fields.Float(compute='_get_currency_change')
-    no_tariff_adjustment = fields.Boolean('Without adjustment',
-                                          help='When this is marked, the cost by tariff is calculated without adjustment')
-
-    @api.multi
-    def _get_currency_change(self):
-        for cost in self:
-            line = cost.cost_lines.filtered(lambda l: l.split_method == 'by_tariff')[0]
-            self.currency_change = line.price_unit / line.price_unit_usd if line.price_unit_usd else 1.0
-
     @api.multi
     def _get_container(self):
         move_obj = self.env['stock.move']
@@ -80,8 +70,7 @@ class StockLandedCost(models.Model):
             total_volume = 0.0
             total_line = 0.0
             total_tariff = 0.0
-            launch_warning = False
-            total_inserted = 0.0
+            currency_change = 0.0
 
             all_val_line_values = cost.get_valuation_lines()
             for val_line_values in all_val_line_values:
@@ -95,19 +84,16 @@ class StockLandedCost(models.Model):
                 total_weight += val_line_values.get('weight', 0.0)
                 total_volume += val_line_values.get('volume', 0.0)
                 total_tariff += val_line_values.get('tariff', 0.0)
-
                 former_cost = val_line_values.get('former_cost', 0.0)
                 total_cost += tools.float_round(former_cost,
                                                 precision_digits=digits[1]) \
                     if digits else former_cost
 
                 total_line += 1
-
-            difference = float_compare(round(cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff').price_unit_usd, 4),
-                                       total_tariff, precision_rounding=0.00005)
-            if difference and not cost.no_tariff_adjustment:
-                launch_warning = True
-                total_inserted = cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff').price_unit_usd
+            import ipdb
+            ipdb.set_trace()
+            currency_change = cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff')[0].price_unit \
+                              / total_tariff
 
             for line in cost.cost_lines:
                 value_split = 0.0
@@ -116,34 +102,31 @@ class StockLandedCost(models.Model):
                     if valuation.cost_line_id and valuation.\
                             cost_line_id.id == line.id:
                         if line.split_method == 'by_quantity' and total_qty:
-                            per_unit = (line.price_unit_usd / total_qty)
+                            per_unit = (line.price_unit / total_qty)
                             value = valuation.quantity * per_unit
                         elif line.split_method == 'by_weight' and total_weight:
-                            per_unit = (line.price_unit_usd / total_weight)
+                            per_unit = (line.price_unit / total_weight)
                             value = valuation.weight * per_unit
                         elif line.split_method == 'by_volume' and total_volume:
-                            per_unit = (line.price_unit_usd / total_volume)
+                            per_unit = (line.price_unit / total_volume)
                             value = valuation.volume * per_unit
                         elif line.split_method == 'equal':
-                            value = (line.price_unit_usd / total_line)
+                            value = (line.price_unit / total_line)
                         elif line.split_method == 'by_current_cost_price' and total_cost:
-                            per_unit = (line.price_unit_usd / total_cost)
+                            per_unit = (line.price_unit / total_cost)
                             value = valuation.former_cost * per_unit
                         elif line.split_method == 'by_tariff' and total_tariff:
-                            per_unit = (line.price_unit_usd / total_tariff)
-                            if cost.no_tariff_adjustment:
-                                value = valuation.tariff
-                            else:
-                                value = valuation.tariff * per_unit
+                            per_unit = (line.price_unit / total_tariff)
+                            value = (valuation.tariff * per_unit) * currency_change
                         else:
-                            value = (line.price_unit_usd / total_line)
+                            value = (line.price_unit / total_line)
 
                         if digits:
                             value = tools.\
                                 float_round(value, precision_digits=digits[1],
                                             rounding_method='UP')
-                            fnc = min if line.price_unit_usd > 0 else max
-                            value = fnc(value, line.price_unit_usd - value_split)
+                            fnc = min if line.price_unit > 0 else max
+                            value = fnc(value, line.price_unit - value_split)
                             value_split += value
 
                         if valuation.id not in towrite_dict:
@@ -152,25 +135,7 @@ class StockLandedCost(models.Model):
                             towrite_dict[valuation.id] += value
         for key, value in towrite_dict.items():
             AdjustementLines.browse(key).\
-                write({'additional_landed_cost': value * self.currency_change})
-        if launch_warning:
-            wiz_id = self.env['cost.adjustment.wizard']
-            new = wiz_id.create({'inserted': total_inserted,
-                                 'calculated': total_tariff})
-            return {
-                'name': 'Adjustment warning',
-                'view_type': 'form',
-                'view_mode': 'form',
-                'target': 'new',
-                'res_model': 'cost.adjustment.wizard',
-                'src_model': 'stock.landed.cost',
-                'res_id': new.id,
-                'type': 'ir.actions.act_window',
-                'id': 'action_cost_adjustment_wizard',
-                'context': {'parent_obj': self.id},
-            }
-        else:
-            return True
+                write({'additional_landed_cost': value})
 
     def get_valuation_lines(self):
         lines = []
@@ -236,7 +201,6 @@ class StockLandedCostLines(models.Model):
 
     split_method = fields.Selection(selection_add=[('by_tariff',
                                                     'By tariff')])
-    price_unit_usd = fields.Float('Cost USD', digits=dp.get_precision('Product Price'))
 
     @api.onchange('product_id')
     def onchange_product_id(self):
