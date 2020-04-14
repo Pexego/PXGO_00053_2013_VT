@@ -71,8 +71,8 @@
                                     <field name="move_dest_ids" invisible="1"/>
                                     <field name="product_qty"/>
                                     <field name="production_qty"/>
-                                    <field name="shipment_qty"/>
                                     <field name="split_qty"/>
+                                    <field name="shipment_qty"/>
                                     <field name="qty_received_custom"/>
                                     <field name="qty_invoiced_custom"/>
                                     <field name="product_uom" groups="product.group_uom"
@@ -152,7 +152,7 @@
 
     <menuitem
             action="action_open_purchase_orders_in_purchase_order_state" id="menu_purchase_order_state" name="Purchase orders to split"
-            parent="purchase.menu_procurement_management" sequence="1" groups="stock.group_stock_user"/>
+            parent="purchase.menu_procurement_management" sequence="-1" groups="stock.group_stock_user"/>
 
 
     <record id="purchase_order_form_date_planned_edit" model="ir.ui.view">
