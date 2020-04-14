@@ -1,4 +1,3 @@
-
 {
     'name': "Separate purchase orders",
     'version': '11.0',
@@ -9,7 +8,8 @@
     "depends": ['purchase',
                 'stock',
                 'account'],
-    "data": ['views/purchase_view.xml',
-             'wizard/separate_orders_wizard.xml'],
+    "data": ['wizard/separate_orders_wizard.xml',
+             'views/purchase_view.xml'
+             ],
     "installable": True
 }
