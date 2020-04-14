@@ -90,8 +90,6 @@ class StockLandedCost(models.Model):
                     if digits else former_cost
 
                 total_line += 1
-            import ipdb
-            ipdb.set_trace()
             currency_change = cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff')[0].price_unit \
                               / total_tariff
 
