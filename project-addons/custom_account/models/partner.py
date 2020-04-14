@@ -73,3 +73,10 @@ class ResPartnerBank(models.Model):
         acc_number = vals.get('acc_number', False)
         if acc_number:
             validate_iban(acc_number)
+
+    @api.model
+    def create(self, vals):
+        super(ResPartnerBank, self).create(vals)
+        acc_number = vals.get('acc_number', False)
+        if acc_number:
+            validate_iban(acc_number)
