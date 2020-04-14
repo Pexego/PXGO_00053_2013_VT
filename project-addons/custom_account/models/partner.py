@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models, api
+from odoo.addons.base_iban.models.res_partner_bank import validate_iban
 
 
 class Partner(models.Model):
@@ -61,3 +62,14 @@ class Partner(models.Model):
         self.payment_responsible_id = self.user_id.id
         if self.user_id and self.user_id.sale_team_id:
             self.team_id = self.user_id.sale_team_id.id
+
+
+class ResPartnerBank(models.Model):
+    _inherit = "res.partner.bank"
+
+    @api.multi
+    def write(self, vals):
+        super(ResPartnerBank, self).write(vals)
+        acc_number = vals.get('acc_number', False)
+        if acc_number:
+            validate_iban(acc_number)
