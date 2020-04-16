@@ -90,11 +90,11 @@ class StockLandedCost(models.Model):
                     if digits else former_cost
 
                 total_line += 1
-            currency_change = cost.cost_lines.filtered(lambda c: c.split_method == 'by_tariff')[0].price_unit \
-                              / total_tariff
 
             for line in cost.cost_lines:
                 value_split = 0.0
+                if line.split_method == 'by_tariff':
+                    currency_change = line.price_unit / total_tariff
                 for valuation in cost.valuation_adjustment_lines:
                     value = 0.0
                     if valuation.cost_line_id and valuation.\

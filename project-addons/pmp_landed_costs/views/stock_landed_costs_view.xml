@@ -13,10 +13,10 @@
                 <field name="cost_purchase_per_unit"/>
             </xpath>
             <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='former_cost_per_unit']" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="invisible">0</attribute>
             </xpath>
             <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='former_cost']" position="attributes">
-                <attribute name="invisible">1</attribute>
+                <attribute name="invisible">0</attribute>
             </xpath>
             <xpath expr="//field[@name='valuation_adjustment_lines']/tree/field[@name='weight']" position="attributes">
                 <attribute name="sum">Weight</attribute>
