@@ -66,13 +66,13 @@ class ProductProduct(models.Model):
                 'standard_price': standard_price,
                 'standard_price_2': standard_price_2,
                 'commercial_cost': origin_product.commercial_cost,
+                'sale_ok': stock
             })
 
-            product_o.write({'sale_ok':stock})
             product_o.write(values)
 
         discontinued_products = self.env['product.product'].search(
-            [('sale_ok', '=', False), ('product_tmpl_id.state', 'ilike', 'end'), ('qty_available', '>', 0)])
-        discontinued_products.write({'sale_ok': True})
+            [('discontinued', '=', True), ('qty_available', '>', 0)])
+        discontinued_products.write({'sale_ok': True,'discontinued':False})
 
 
