@@ -15,11 +15,6 @@ class ProductCategory(SyncModel):
     odoo_id = IntegerField(unique=True)
     parent_id = IntegerField()
     name = CharField(max_length=150)
-    name_en = CharField(max_length=150)
-    name_it = CharField(max_length=150)
-    name_fr = CharField(max_length=150)
-    name_pt = CharField(max_length=150)
-    name_de = CharField(max_length=150)
 
     MOD_NAME = 'productcategory'
 
