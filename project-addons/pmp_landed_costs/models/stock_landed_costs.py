@@ -133,6 +133,7 @@ class StockLandedCost(models.Model):
         for key, value in towrite_dict.items():
             AdjustementLines.browse(key).\
                 write({'additional_landed_cost': value})
+        return True
 
     def get_valuation_lines(self):
         lines = []
