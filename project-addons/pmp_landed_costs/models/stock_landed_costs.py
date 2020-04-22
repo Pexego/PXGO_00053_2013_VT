@@ -3,14 +3,13 @@
 
 from odoo import models, api, _, fields, tools
 import odoo.addons.decimal_precision as dp
-from odoo.tools import float_compare
 from odoo.exceptions import UserError
 
 
 class StockLandedCost(models.Model):
 
     _inherit = 'stock.landed.cost'
-    _order = 'id desc'
+    _order = 'write_date desc'
 
     account_journal_id = fields.\
         Many2one(default=lambda self: self.env['account.journal'].
@@ -147,7 +146,7 @@ class StockLandedCost(models.Model):
                 'move_id': move.id,
                 'quantity': move.product_qty,
                 'former_cost': move.value,
-                'cost_purchase': move.purchase_line_id.price_subtotal,
+                'cost_purchase': (move.purchase_line_id.price_subtotal/move.purchase_line_id.product_qty) * move.product_qty,
                 'weight': move.product_id.weight * move.product_qty,
                 'volume': move.product_id.volume * move.product_qty,
                 'tariff': round(move.purchase_line_id.price_subtotal *
