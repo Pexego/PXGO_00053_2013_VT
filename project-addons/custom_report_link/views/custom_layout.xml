@@ -1561,7 +1561,7 @@ SWIFT/BIC: BESCPTPL
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
                     <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
-                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%; margin-left: 8%"/>
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 4%;">
                     <div t-if="not claim.claim_type">RMA Receipt</div>
