@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="days_to_release_reserve_stock" model="ir.config_parameter">
+       <field name="key">days_to_release_reserve_stock</field>
+       <field name="value">7</field>
+    </record>
+</odoo>

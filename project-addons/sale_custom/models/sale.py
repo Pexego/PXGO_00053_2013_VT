@@ -131,7 +131,8 @@ class SaleOrder(models.Model):
     def recalculate_line_prices(self):
         for order in self:
             for line in order.order_line:
-                line._onchange_discount()
+                if line.original_line_id.discount >line.discount or not line.original_line_id:
+                    line._onchange_discount()
 
     @api.multi
     def button_notification(self):

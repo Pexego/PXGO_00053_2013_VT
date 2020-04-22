@@ -41,7 +41,8 @@ class ProductProductExporter(Component):
             'discontinued': binding.discontinued,
             'state': binding.state,
             'sale_in_groups_of': binding.sale_in_groups_of,
-            'replacement_id': binding.replacement_id.id
+            'replacement_id': binding.replacement_id.id,
+            'date_next_incoming':binding.compute_date_next_incoming()
         }
         if binding.show_stock_outside:
             vals['external_stock'] = binding.qty_available_external
@@ -71,6 +72,9 @@ class ProductProductExporter(Component):
             'producttagproductrel', partner_record_id)
 
 
+
+
+
 class ProductProductAdapter(Component):
 
     _name = 'product.general.adapter'
@@ -86,7 +90,7 @@ class ProductCategoryExporter(Component):
     _usage = 'record.exporter'
 
     def update(self, binding, mode):
-        vals = {"name": binding.name,
+        vals = {"name": binding.with_context({'lang': 'es_ES'}).name,
                 "parent_id": binding.parent_id.id,
                 "odoo_id": binding.id}
         if mode == "insert":

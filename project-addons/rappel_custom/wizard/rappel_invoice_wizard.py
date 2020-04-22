@@ -36,4 +36,6 @@ class ComputeRappelInvoice(models.TransientModel):
                          partner.customer_payment_mode_id.id,
                          'mandate_id': partner.valid_mandate_id.id,
                          'team_id': partner.team_id.id})
+                if not rappel.rappel_id.discount_voucher:
+                    invoice_rappel.write({'payment_term_id': partner.property_payment_term_id.id})
         return res

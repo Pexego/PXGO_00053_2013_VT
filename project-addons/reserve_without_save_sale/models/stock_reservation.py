@@ -2,6 +2,7 @@
 from odoo import fields, models, api, registry, _
 from odoo.exceptions import UserError
 from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 
 class StockReservation(models.Model):
@@ -105,6 +106,10 @@ class StockReservation(models.Model):
         The reservation is done using the default UOM of the product.
         A date until which the product is reserved can be specified.
         """
+        days_release_reserve = self.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
+        now = datetime.now()
+        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+
         moves = self.env['stock.move']
         for reserve in self:
             current_sale_line_id = reserve.sale_line_id.id
@@ -116,8 +121,10 @@ class StockReservation(models.Model):
                     [('move_id', '=', move.id)])
                 if not reservation:
                     reservation = self.env['stock.reservation'].create(
-                        {'move_id': move.id, 'sale_line_id':
-                         current_sale_line_id})
+                        {'move_id': move.id,
+                         'sale_line_id': current_sale_line_id,
+                         'date_validity': date_validity
+                         })
                 reservation.message_post(
                     body=_("Reserva modificada. Estado '%s'") %
                     reservation.state)
@@ -170,4 +177,33 @@ class StockReservation(models.Model):
         if reserves_to_delete:
             reserves_to_delete.unlink()
 
+        return True
+
+    @api.model
+    def release_validity_exceeded(self, ids=None):
+        domain = [('date_validity', '<', fields.date.today()),
+                  ('state', 'in', ('confirmed', 'partially_available', 'assigned'))]
+        reservation_to_release = self.search(domain)
+
+        user_ids = reservation_to_release.mapped('move_id.user_id')
+        reserve_orders = reservation_to_release.mapped('sale_line_id.order_id')
+        # Send email grouping by user
+        for user in user_ids:
+            orders_user = reserve_orders.filtered(lambda x: x.user_id == user)
+            # Prepare email data
+            order_data = [order.name + ' (' + order.partner_id.name + ')' for order in orders_user]
+            mail_pool = self.env['mail.mail']
+            template_obj = self.env.ref('reserve_without_save_sale.mail_template_release_reservations_user')
+            ctx = dict(self._context)
+            ctx.update({
+                'values': order_data
+            })
+            # Send email
+            mail_id = template_obj.with_context(ctx).send_mail(user.id)
+            if mail_id:
+                mail_id_check = mail_pool.browse(mail_id)
+                mail_id_check.send()
+
+        reservation_to_release.release()
+        super().release_validity_exceeded(ids)
         return True

@@ -1,0 +1,48 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#   * auto_pec_it
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-03-18 12:20+0000\n"
+"PO-Revision-Date: 2020-03-18 12:20+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: auto_pec_it
+#: model:ir.model.fields,field_description:auto_pec_it.field_res_company_auto_pec_template
+msgid "PEC template"
+msgstr "Modello PEC"
+
+#. module: auto_pec_it
+#: model:ir.model.fields,field_description:auto_pec_it.field_res_company_pec_delay_time
+msgid "PEC Delay time"
+msgstr "Giorni ritardo PEC"
+
+#. module: auto_pec_it
+#: model:ir.model.fields,field_description:auto_pec_it.field_account_invoice_auto_fatturapa_error
+msgid "Automatic E-invoice Error"
+msgstr "Errore E-Invoice automatica"
+
+#. module: auto_pec_it
+#: model:ir.ui.view,arch_db:auto_pec_it.view_fatturapa_out_attachment_form_jobs
+msgid "PEC Jobs"
+msgstr "Spedizioni PEC"
+
+#. module: auto_pec_it
+#: code:addons/auto_pec_it/models/account_invoice.py:37
+#, python-format
+msgid "You cannot delete an invoice already registered at the PEC"
+msgstr "Non è possibile eliminare una fattura già registrata nel PEC"
+
+#. module: auto_pec_it
+#: code:addons/auto_pec_it/models/account_invoice.py:54
+#, python-format
+msgid "You can not cancel this invoice because there is a job running!"
+msgstr "Non è possibile annullare questa fattura perché è in esecuzione un lavoro!"
