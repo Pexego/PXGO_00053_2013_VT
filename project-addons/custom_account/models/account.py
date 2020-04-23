@@ -219,7 +219,7 @@ class AccountInvoice(models.Model):
         res = super().invoice_validate()
         for inv in self:
             for line in inv.invoice_line_ids:
-                line.write({'cost_unit': line.product_id.standard_price_2})
+                line.write({'cost_unit': (line.move_line_ids.price_unit * -1) or line.product_id.standard_price_2})
         return res
 
     @api.model
