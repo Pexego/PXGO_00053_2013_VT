@@ -89,12 +89,7 @@ class ProductCategoryExporter(Component):
     def update(self, binding, mode):
         vals = {"name": binding.with_context({'lang': 'es_ES'}).name,
                 "parent_id": binding.parent_id.id,
-                "odoo_id": binding.id,
-                "name_en": binding.with_context({'lang': 'en_EN'}).name,
-                "name_it": binding.with_context({'lang': 'it_IT'}).name,
-                "name_fr": binding.with_context({'lang': 'fr_FR'}).name,
-                "name_pt": binding.with_context({'lang': 'pt_PT'}).name,
-                "name_de": binding.with_context({'lang': 'de_DE'}).name
+                "odoo_id": binding.id
                 }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
