@@ -220,7 +220,7 @@ class AccountInvoice(models.Model):
         res = super().invoice_validate()
         for inv in self:
             for line in inv.invoice_line_ids:
-                line.write({'cost_unit': (numpy.average(line.move_line_ids.mapped('price_unit')) * -1) or line.product_id.standard_price_2})
+                line.write({'cost_unit': (line.move_line_ids and (numpy.average(line.move_line_ids.mapped('price_unit')) * -1)) or line.product_id.standard_price_2})
         return res
 
     @api.model
