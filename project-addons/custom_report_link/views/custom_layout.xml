@@ -942,8 +942,8 @@ SWIFT/BIC: BESCPTPL
 
                                 <t t-if="t.base != 0">
                                     <td>
-                                        <span t-esc="t.name"
-                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        <span t-esc="t.tax_id.amount"
+                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>%
                                     </td>
                                 </t>
 
