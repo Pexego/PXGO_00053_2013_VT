@@ -52,8 +52,6 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
-    virtual_stock_cooked = fields.Float(
-        'Stock Available Cooking', compute="_compute_virtual_stock_cooked")
     ref_visiotech = fields.Char('Visiotech reference')
 
     @api.model
@@ -223,11 +221,6 @@ class ProductProduct(models.Model):
             self.write({'stock_graphic': img_data})
 
         return
-
-    def _compute_virtual_stock_cooked(self):
-        for product in self:
-            product.virtual_stock_cooked = product.qty_available_wo_wh +\
-                                            product.virtual_stock_conservative
 
     def action_view_moves(self):
         return {
