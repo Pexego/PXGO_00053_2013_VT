@@ -32,19 +32,21 @@ class ResPartnerRappelRel(models.Model):
 
     def _get_invoices(self, period, products):
         super()._get_invoices(period, products)
-
+        company_id = self.rappel_id.company_id.id
         invoices = self.env['account.invoice'].search(
             [('type', '=', 'out_invoice'),
              ('date_invoice', '>=', period[0]),
              ('date_invoice', '<=', period[1]),
              ('state', 'in', ['open', 'paid']),
-             ('commercial_partner_id', '=', self.partner_id.id)])
+             ('commercial_partner_id', '=', self.partner_id.id),
+             ('company_id', '=', company_id)])
         refunds = self.env['account.invoice'].search(
             [('type', '=', 'out_refund'),
              ('date_invoice', '>=', period[0]),
              ('date_invoice', '<=', period[1]),
              ('state', 'in', ['open', 'paid']),
-             ('commercial_partner_id', '=', self.partner_id.id)])
+             ('commercial_partner_id', '=', self.partner_id.id),
+             ('company_id', '=', company_id)])
 
         # Si el rappel afecta al catalago entero,
         # no hacer la comprobacion por producto
