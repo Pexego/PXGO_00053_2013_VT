@@ -9,23 +9,22 @@ class PurchaseOrder(models.Model):
 
     parent_id = fields.Many2one('purchase.order',"Parent")
 
+    order_split_ids = fields.One2many("purchase.order", "parent_id", "Split orders")
 
-    def complete_purchase(self):
-        completed_purchase = True
-        for line in self.order_line:
-            if line.product_qty != line.qty_invoiced_custom:
-                completed_purchase = False
-        if completed_purchase!=self.completed_purchase:
-            self.write({'completed_purchase':completed_purchase})
+    @api.depends('order_line.product_qty', 'order_split_ids.order_line.qty_invoiced')
+    def _compute_completed_purchase(self):
+        for order in self:
+            order.completed_purchase = False
+            if all(line.product_qty == line.qty_invoiced_custom for line in order.order_line):
+                order.completed_purchase = True
 
-    completed_purchase = fields.Boolean("Purchase completed")
+    completed_purchase = fields.Boolean("Purchase completed", compute='_compute_completed_purchase', store=True)
 
     def _compute_picking_invoice_custom(self):
-        purchase_orders = self.env['purchase.order'].search([("parent_id", '=', self.id)])
-        if purchase_orders:
-            self.picking_count_custom = len(purchase_orders.mapped('picking_ids'))
-            self.invoice_count_custom = len(purchase_orders.mapped('invoice_ids'))
-            self.purchase_count_custom = len(purchase_orders)
+        if self.order_split_ids:
+            self.picking_count_custom = len(self.order_split_ids.mapped('picking_ids'))
+            self.invoice_count_custom = len(self.order_split_ids.mapped('invoice_ids'))
+            self.purchase_count_custom = len(self.order_split_ids)
 
     picking_count_custom = fields.Integer(compute='_compute_picking_invoice_custom', default=0)
     invoice_count_custom = fields.Integer(compute='_compute_picking_invoice_custom', default=0)
@@ -36,9 +35,9 @@ class PurchaseOrder(models.Model):
         action = self.env.ref('stock.action_picking_tree_all')
         result = action.read()[0]
         result['context'] = {}
-        pick_ids = self.env['purchase.order'].search([("parent_id", '=', self.id)]).mapped('picking_ids')
+        pick_ids = self.order_split_ids.mapped('picking_ids')
         if not pick_ids or len(pick_ids) > 1:
-            result['domain'] = "[('id','in',%s)]" % (pick_ids.ids)
+            result['domain'] = "[('id','in',%s)]" % pick_ids.ids
         elif len(pick_ids) == 1:
             res = self.env.ref('stock.view_picking_form', False)
             result['views'] = [(res and res.id or False, 'form')]
@@ -48,7 +47,7 @@ class PurchaseOrder(models.Model):
 
     def action_view_invoice_custom(self):
         res = self.action_view_invoice()
-        purchase_invoices = self.env['purchase.order'].search([("parent_id", '=', self.id)]).mapped('invoice_ids')
+        purchase_invoices = self.order_split_ids.mapped('invoice_ids')
         if self.state == 'purchase_order' and purchase_invoices:
             if not purchase_invoices or len(purchase_invoices) > 1:
                 res['domain'] = "[('id','in',%s)]" % purchase_invoices.ids
@@ -60,11 +59,10 @@ class PurchaseOrder(models.Model):
 
 
     def action_view_purchase_orders_custom(self):
-        purchase_orders = self.env['purchase.order'].search([("parent_id", '=', self.id)])
         action = self.env.ref('purchase.purchase_rfq').read()[0]
-        if len(purchase_orders) > 0:
-            action['domain'] = [('id', 'in', purchase_orders.ids)]
-            action['context'] = [('id', 'in', purchase_orders.ids)]
+        if self.order_split_ids:
+            action['domain'] = [('id', 'in', self.order_split_ids.ids)]
+            action['context'] = [('id', 'in', self.order_split_ids.ids)]
         else:
             action = {'type': 'ir.actions.act_window_close'}
         return action
