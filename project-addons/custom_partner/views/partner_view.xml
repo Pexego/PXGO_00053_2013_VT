@@ -401,7 +401,7 @@
                     <button class="oe_inline oe_stat_button" type="action" name="%(partner_graphic_sales_grouped)d"
                         string="Sales Graphic"
                         icon="fa-bar-chart"
-                        context="{'search_default_partner_id': active_id, 'group_by':'date_order'}"
+                        context="{'search_default_partner_id': active_id, 'search_default_sales_not_canceled':1, 'group_by':'date_order'}"
                         attrs="{'invisible': [('customer','=', False)]}"/>
                 </xpath>
             </field>
@@ -586,6 +586,18 @@
                 <button name="buttom_view_promotions" position="attributes">
                     <attribute name="groups">base.group_system</attribute>
                 </button>
+            </field>
+        </record>
+
+        <record id="form_view_readonly_group" model="ir.ui.view">
+            <field name="name">form.view.readonly.group</field>
+            <field name="model">res.partner</field>
+            <field name="groups_id" eval="[(6,0,[ref('stock_custom.group_comercial_ext')])]"/>
+            <field name="inherit_id" ref="product.view_partner_property_form"/>
+            <field name="arch" type="xml">
+                <field name="property_product_pricelist" position="attributes">
+                    <attribute name="readonly">True</attribute>
+                </field>
             </field>
         </record>
 

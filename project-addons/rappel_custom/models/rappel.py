@@ -21,6 +21,8 @@ class Rappel(models.Model):
     description = fields.Char(translate=True)
     sequence = fields.Integer(default=100)
     partner_add_conditions = fields.Char('Add partner conditions')
+    company_id = fields.Many2one('res.company', string='Company',
+                                 default=lambda self: self.env['res.company']._company_default_get())
 
     def get_products(self):
         product_obj = self.env['product.product']

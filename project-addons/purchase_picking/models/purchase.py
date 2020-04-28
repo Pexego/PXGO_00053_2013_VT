@@ -43,7 +43,8 @@ class PurchaseOrder(models.Model):
             res = []
             for line in order.order_line:
                 for move in line.move_ids:
-                    res.append(move.container_id.id)
+                    if move.state != 'cancel':
+                        res.append(move.container_id.id)
             order.container_ids = res
 
     @api.multi

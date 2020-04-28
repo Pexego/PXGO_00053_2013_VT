@@ -52,8 +52,6 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
-    virtual_stock_cooked = fields.Float(
-        'Stock Available Cooking', compute="_compute_virtual_stock_cooked")
     ref_visiotech = fields.Char('Visiotech reference')
 
     @api.model
@@ -224,16 +222,11 @@ class ProductProduct(models.Model):
 
         return
 
-    def _compute_virtual_stock_cooked(self):
-        for product in self:
-            product.virtual_stock_cooked = product.qty_available_wo_wh +\
-                                            product.virtual_stock_conservative
-
     def action_view_moves(self):
         return {
             'domain': "[('product_id','=', " + str(self.id) + ")]",
             'name': _('Stock moves'),
-            'view_mode': 'tree,form',
+            'view_mode': 'tree',
             'view_type': 'form',
             'context': {'tree_view_ref': 'stock.view_move_tree',
                         'search_default_groupby_dest_location_id': 1,
@@ -246,7 +239,7 @@ class ProductProduct(models.Model):
         return {
             'domain': "[('product_id','=', " + str(self.id) + ")]",
             'name': _('Stock moves dates'),
-            'view_mode': 'tree,form',
+            'view_mode': 'tree',
             'view_type' : 'form',
             'context': {'tree_view_ref': 'stock_custom.view_move_dates_tree',
                         'search_default_future_dates': 1},

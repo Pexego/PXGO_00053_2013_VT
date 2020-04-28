@@ -45,7 +45,7 @@
         <field name="inherit_id" ref="product.product_product_tree_view"/>
         <field name="arch" type="xml">
             <field name="price" position="after">
-                <field name="virtual_stock_cooked"/>
+                <field name="virtual_stock_conservative"/>
                 <field name="incoming_qty"/>
                 <field name="qty_in_production"/>
                 <field name="joking_index"/>
