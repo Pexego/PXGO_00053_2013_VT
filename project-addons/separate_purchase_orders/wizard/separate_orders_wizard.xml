@@ -7,6 +7,7 @@
             <form string="Separate orders">
                 <group>
                     <field name="date_planned"/>
+                    <field name="add_all"/>
                     <field name="order_line_details" colspan="4" nolabel="1">
                         <tree create="false" delete="false" editable="top">
                             <field name="product_id" readonly="1"/>
@@ -14,8 +15,9 @@
                             <field name="qty"/>
                         </tree>
                     </field>
+
                     <footer>
-                        <button string="Create" name="action_separate_orders" type="object"/>
+                        <button string="Create" class="btn-primary" name="action_separate_orders" type="object"/>
                         <button string="Cancel" special="cancel"/>
                     </footer>
                 </group>

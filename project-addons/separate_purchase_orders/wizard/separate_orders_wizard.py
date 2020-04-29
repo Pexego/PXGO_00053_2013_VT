@@ -25,7 +25,7 @@ class SeparateOrdersWizard(models.TransientModel):
                 wiz_lines.append({'product_id': line.product_id.id,
                                   'production_qty': line.production_qty,
                                   'purchase_line_id': line.id,
-                                  'qty': line.production_qty})
+                                  'qty': 0})
         return wiz_lines
 
     order_line_details = fields.One2many('order.line.details',
@@ -34,6 +34,13 @@ class SeparateOrdersWizard(models.TransientModel):
 
 
     date_planned = fields.Datetime(string='Date Planned',required=1)
+    add_all = fields.Boolean(string="Add All")
+
+    @api.onchange('add_all')
+    def action_add_all(self):
+        for line in self.order_line_details:
+            line.qty= line.production_qty if self.add_all else 0
+
 
     def action_separate_orders(self):
         lines = []
@@ -68,7 +75,6 @@ class SeparateOrdersWizard(models.TransientModel):
                 }
                 lines += self.env['purchase.order.line'].create(new_line)
         if lines:
-            order.button_confirm()
 
             return {
                 'view_type': 'form',

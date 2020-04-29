@@ -87,8 +87,9 @@ class PurchaseOrderLine(models.Model):
                 purchase_line.qty_invoiced_custom = sum(purchase_order_lines.mapped('qty_invoiced'))
                 move_without_picking_ids = purchase_order_lines.mapped('move_ids').filtered(lambda m,
                                                                                                    line=purchase_line: not m.picking_id and m.purchase_line_id.parent_id.id == line.id and m.state!='cancel')
+                purchase_line.split_qty =sum (purchase_order_lines.filtered(lambda l: l.state=='draft').mapped('product_qty'))
                 if move_without_picking_ids:
-                    purchase_line.split_qty = sum(move_without_picking_ids.mapped("product_uom_qty"))
+                    purchase_line.split_qty += sum(move_without_picking_ids.mapped("product_uom_qty"))
             purchase_line.production_qty = purchase_line.product_qty - purchase_line.split_qty - purchase_line.shipment_qty - purchase_line.qty_received_custom
 
 
@@ -108,7 +109,7 @@ class PurchaseOrderLine(models.Model):
             elif line.order_id.state == 'purchase_order' and vals.get('product_id', False) and line.production_qty != line.product_qty :
                 raise UserError(_("You cannot modify the product because there are confirmed quantities"))
             if line.parent_id and vals.get('product_qty', False) and vals.get('product_qty',
-                                                                              False) > line.product_qty + line.production_qty:
+                                                                              False) > line.product_qty + line.parent_id.production_qty:
                 raise UserError(_("You cannot modify the product quantity over the production_qty"))
 
         return super(PurchaseOrderLine, self).write(vals)

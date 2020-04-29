@@ -122,5 +122,10 @@ msgstr "No puedes eliminar una linea que tiene cantidades confirmadas"
 msgid "Separate orders"
 msgstr "Separar pedidos"
 
+#. module: separate_purchase_orders
+#: model:ir.model.fields,field_description:separate_purchase_orders.field_separate_orders_wizard_add_all
+msgid "Add All"
+msgstr "Añadir todo"
+
 
 
