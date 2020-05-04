@@ -36,10 +36,8 @@ class ProductProduct(models.Model):
 
     @api.model
     def calc_joking_index_temporal(self):
-        # Soluciones verticales, Decodificadores, Body Temp, Catálogos, Almacenamiento, Outlet01/02, Licencias
-        category_filter = [660, 661, 651, 588, 496, 392, 393, 607]
-        # Hikvision, HiWatch, X-security, Dahua
-        brand_filter = [190, 234, 216, 184]
+        category_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.category.filter'))
+        brand_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.brand.filter'))
 
         for product in self.search([('sale_ok', '=', True)]):
             if product.categ_id.id in category_filter:
