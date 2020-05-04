@@ -36,8 +36,8 @@ class ProductProduct(models.Model):
 
     @api.model
     def calc_joking_index_temporal(self):
-        # Soluciones verticales, Decodificadores, Body Temp, Catálogos, Almacenamiento, Outlet01/02
-        category_filter = [660, 661, 651, 588, 496, 392, 393]
+        # Soluciones verticales, Decodificadores, Body Temp, Catálogos, Almacenamiento, Outlet01/02, Licencias
+        category_filter = [660, 661, 651, 588, 496, 392, 393, 607]
         # Hikvision, HiWatch, X-security, Dahua
         brand_filter = [190, 234, 216, 184]
 
