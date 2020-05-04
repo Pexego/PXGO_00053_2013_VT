@@ -49,7 +49,7 @@ class ProductProduct(models.Model):
                 if stock > 0:
                     if product.last_sixty_days_sales > 0:
                         if product.product_brand_id.id in brand_filter:
-                            stock_days = stock / ((product.last_sixty_days_sales * 356) / 60)
+                            stock_days = stock / ((product.last_sixty_days_sales * 365) / 60)
                             # periodos de 365 dias
                         else:
                             stock_days = stock / product.last_sixty_days_sales
