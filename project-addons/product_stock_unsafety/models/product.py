@@ -35,6 +35,41 @@ class ProductProduct(models.Model):
             product.joking = stock_days * product.standard_price
 
     @api.model
+    def calc_joking_index_temporal(self):
+        # Soluciones verticales, Decodificadores, Body Temp, Catálogos, Almacenamiento, Outlet01/02
+        category_filter = [660, 661, 651, 588, 496, 392, 393]
+        # Hikvision, HiWatch, X-security, Dahua
+        brand_filter = [190, 234, 216, 184]
+
+        for product in self.search([('sale_ok', '=', True)]):
+            if product.categ_id.id in category_filter:
+                product.joking_index = -1
+            else:
+                # Calculamos días de stock
+                stock = product.qty_available + product.qty_available_external
+                stock_days = 0
+                if stock > 0:
+                    if product.last_sixty_days_sales > 0:
+                        if product.product_brand_id.id in brand_filter:
+                            stock_days = stock / ((product.last_sixty_days_sales * 356) / 60)
+                            # periodos de 365 dias
+                        else:
+                            stock_days = stock / product.last_sixty_days_sales
+                            # periodos de 60 dias
+                    else:
+                        stock_days = 1000
+
+                # Calculamos el índice de puteamiento
+                if stock_days >= 1000:
+                    product.joking_index = 100
+                else:
+                    if stock_days > 1:
+                        # Si tenemos más de un periodo de 60/365 días
+                        product.joking_index = 100
+                    else:
+                        product.joking_index = -1
+
+    @api.model
     def calc_joking_index(self):
         search_date = fields.Date.to_string(
             date.today() - relativedelta(days=60))
