@@ -7,7 +7,8 @@
     'website': 'www.visiotechsecurity.es',
     "depends": ['purchase',
                 'stock',
-                'account'],
+                'account',
+                'sale_display_stock'],
     "data": ['wizard/separate_orders_wizard.xml',
              'views/purchase_view.xml'
              ],
