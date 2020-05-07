@@ -3,7 +3,7 @@
 from odoo.addons.component.core import Component
 from odoo.addons.queue_job.job import job
 from odoo import api, fields, models
-from datetime import datetime, timedelta
+import datetime
 
 
 class ProductTemplate(models.Model):
@@ -169,7 +169,7 @@ class ProductProduct(models.Model):
             limit=1, order="date_expected asc")
         if moves:
             return moves.date_expected
-        return datetime.datetime.now() - datetime.timedelta(days=365)
+        return (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
 
 
 class ProductCategoryListener(Component):
