@@ -371,13 +371,12 @@ class ResPartner(models.Model):
                                                     domain=[('full_reconcile_id', '=', False),
                                                             ('account_id.internal_type', '=', 'payable'),
                                                             ('move_id.state', '!=', 'draft')])
-    created_by_web=fields.Boolean("Created by web", default=lambda self: self.env['ir.config_parameter'].sudo().get_param('web.user.buyer')==self.env.user.login)
+    created_by_web = fields.Boolean("Created by web", default=lambda self: self.env['ir.config_parameter'].sudo().get_param('web.user.buyer') == self.env.user.login)
 
-
-    @api.model
-    def _commercial_fields(self):
-        res = super()._commercial_fields()
-        return res + ['web']
+    # This function get the fields of the parent and saves them on the contact
+    # @api.mo(self):
+    #     res = super()._commercial_fields()
+    #     return res + ['web']
 
     @api.multi
     def _is_accounting(self):
