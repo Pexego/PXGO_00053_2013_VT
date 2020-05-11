@@ -570,3 +570,9 @@ msgstr "Nombre de la ubicación de destino"
 #: model:ir.model.fields,field_description:stock_custom.field_stock_picking_report_product_pricelist
 msgid "Pricelist"
 msgstr "Tarifa"
+
+#. module: stock_custom
+#: model:ir.actions.act_window,name:stock_custom.product_graphic_stock_grouped
+#: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
+msgid "Stock Graphic"
+msgstr "Evolución de stock"
