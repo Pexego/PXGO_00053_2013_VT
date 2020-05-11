@@ -220,7 +220,16 @@ class AccountInvoice(models.Model):
         res = super().invoice_validate()
         for inv in self:
             for line in inv.invoice_line_ids:
-                line.write({'cost_unit': (line.move_line_ids and (numpy.average(line.move_line_ids.mapped('price_unit')) * -1)) or line.product_id.standard_price_2})
+                cost = line.product_id.standard_price_2
+                if line.move_line_ids:
+                    if line.product_id.bom_ids:
+                        # We need to multiply by qty when te product is pack, because the product in the
+                        # stock_move is just the component
+                        cost = numpy.average(line.move_line_ids.mapped('price_unit')) * (sum(line.move_line_ids.mapped('product_qty')) / line.quantity) * -1
+                    else:
+                        cost = numpy.average(line.move_line_ids.mapped('price_unit')) * -1
+
+                line.write({'cost_unit': cost or line.product_id.standard_price_2})
         return res
 
     @api.model
