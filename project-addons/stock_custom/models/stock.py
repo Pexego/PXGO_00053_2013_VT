@@ -233,7 +233,7 @@ class StockMove(models.Model):
     def _compute_parent_partner(self):
         for move in self:
             move.parent_partner=move.sale_line_id.order_id.partner_id if move.sale_line_id else move.partner_id
-    parent_partner = fields.Many2one('res.partner',compute="_compute_parent_partner")
+    parent_partner = fields.Many2one('res.partner',compute="_compute_parent_partner",string="Partner")
 
 
 class StockReturnPicking(models.TransientModel):
