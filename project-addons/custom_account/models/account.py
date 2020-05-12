@@ -222,13 +222,14 @@ class AccountInvoice(models.Model):
             for line in inv.invoice_line_ids:
                 cost = line.product_id.standard_price_2
                 if line.move_line_ids:
-                    if line.product_id.bom_ids:
+                    if line.product_id.bom_ids and line.product_id.bom_ids[0].type == 'phantom':
                         # We need to multiply by qty when te product is pack, because the product in the
                         # stock_move is just the component
-                        cost = numpy.average(line.move_line_ids.mapped('price_unit')) * (sum(line.move_line_ids.mapped('product_qty')) / line.quantity) * -1
+                        cost = 0.0
+                        for move in line.move_line_ids:
+                            cost += move.price_unit * (move.product_qty/line.quantity) * -1
                     else:
                         cost = numpy.average(line.move_line_ids.mapped('price_unit')) * -1
-
                 line.write({'cost_unit': cost or line.product_id.standard_price_2})
         return res
 
