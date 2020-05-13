@@ -40,11 +40,11 @@ class ProductProduct(models.Model):
         brand_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.brand.filter'))
 
         for product in self.search([('sale_ok', '=', True)]):
-            if product.categ_id.id in category_filter:
+            if product.categ_id.id in category_filter or product.bom_ids:
                 product.joking_index = -1
             else:
                 # Calculamos días de stock
-                stock = product.qty_available + product.qty_available_external
+                stock = product.virtual_stock_conservative + product.qty_available_external
                 stock_days = 0
                 if stock > 0:
                     if product.last_sixty_days_sales > 0:
