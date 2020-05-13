@@ -30,6 +30,7 @@
              'views/stock_view.xml',
              'views/account_payment.xml',
              'views/purchase_view.xml',
+             'views/account_analytic.xml',
              'report/sale_report_view.xml',
              'wizard/reconline_payment_with_statement_lines_wzd_view.xml',
              'wizard/reclassify_move_line_balance_wizard_view.xml',
