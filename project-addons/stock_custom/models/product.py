@@ -1,26 +1,12 @@
 # © 2016 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models, _, exceptions
-from datetime import datetime, date
-from dateutil.relativedelta import relativedelta
 
 
 class ProductTemplate(models.Model):
 
     _inherit = 'product.template'
-    date_start = fields.Date(
-        "Start date",
-        default=lambda *a: (datetime.now() - relativedelta(months=6)).strftime(
-            '%Y-%m-%d'))
-    date_end = fields.Date("End Date", default=fields.Date.today)
-    period = fields.Selection([('week', 'Week'),
-                               ('month', 'Month'),
-                               ('year', 'Year')],
-                              'Time Period', default='month')
-    analysis_type = fields.Selection([('average', 'Average'),
-                                      ('end_of_period', 'End of period')],
-                                     'Type of analysis', default='average')
-    stock_graphic = fields.Binary("Graph")
+
     name = fields.Char(translate=False)
     description_sale = fields.Text(translate=False)
 
@@ -126,17 +112,17 @@ class ProductProduct(models.Model):
     @api.multi
     def set_product_last_purchase(self, order_id=False):
         res = super().set_product_last_purchase(order_id)
-        PurchaseOrderLine = self.env['purchase.order.line']
+        purchaseOrderLine = self.env['purchase.order.line']
         if not self.check_access_rights('write', raise_exception=False):
             return
         for product in self:
             currency_purchase_id = product.env.user.company_id.currency_id.id
             if order_id:
-                lines = PurchaseOrderLine.search([
+                lines = purchaseOrderLine.search([
                     ('order_id', '=', order_id),
                     ('product_id', '=', product.id)], limit=1)
             else:
-                lines = PurchaseOrderLine.search(
+                lines = purchaseOrderLine.search(
                     [('product_id', '=', product.id),
                      ('state', 'in', ['purchase', 'done'])]).sorted(
                     key=lambda l: l.order_id.date_order, reverse=True)
