@@ -22,6 +22,7 @@
                 <filter string="Day" domain="[]" context="{'group_by': 'create_date:day'}" />
                 <filter string="Month" domain="[]" context="{'group_by': 'create_date:month'}" />
                 <filter string="Year" domain="[]" context="{'group_by': 'create_date:year'}" />
+                <filter name="last_60_days" string="Last 60 days" domain="[('create_date', '&gt;=', ((context_today()-datetime.timedelta(days=60)).strftime('%Y-%m-%d')))]"/>
             </field>
         </field>
     </record>
@@ -32,6 +33,7 @@
         <field name="view_mode">graph</field>
         <field name="view_id" ref="view_stock_graph"/>
         <field name="search_view" ref="stock_inventory_line_search"/>
+        <field name="context">{'search_default_last_60_days': 1}</field>
     </record>
 
     <record id="product_form_view_move_button" model="ir.ui.view">

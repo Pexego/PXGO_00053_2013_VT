@@ -537,3 +537,23 @@ msgstr "Listino di Vendita"
 #: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
 msgid "Stock Graphic"
 msgstr "Grafica d'archivio"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
+msgid "Year"
+msgstr "Anno"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
+msgid "Month"
+msgstr "Mese"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
+msgid "Day"
+msgstr "Giorno"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
+msgid "Last 60 days"
+msgstr "Ultimi 60 giorni"

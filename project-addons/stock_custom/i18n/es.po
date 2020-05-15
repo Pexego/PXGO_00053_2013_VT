@@ -576,3 +576,23 @@ msgstr "Tarifa"
 #: model:ir.ui.view,arch_db:stock_custom.product_form_view_move_button
 msgid "Stock Graphic"
 msgstr "Evolución de stock"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
+msgid "Year"
+msgstr "Año"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
+msgid "Month"
+msgstr "Mes"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
+msgid "Day"
+msgstr "Dia"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
+msgid "Last 60 days"
+msgstr "Últimos 60 días"
