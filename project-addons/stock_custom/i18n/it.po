@@ -557,3 +557,8 @@ msgstr "Giorno"
 #: model:ir.ui.view,arch_db:stock_custom.stock_inventory_line_search
 msgid "Last 60 days"
 msgstr "Ultimi 60 giorni"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_move_parent_partner
+msgid "Partner"
+msgstr "Cliente"
