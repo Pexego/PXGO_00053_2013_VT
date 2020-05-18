@@ -21,7 +21,7 @@ class SaleOrder(models.Model):
                     message = _("It's an order with prepaid option. "
                                 "Please, calculate the discount if partner has prepaid or cancel the prepaid option.")
                 else:
-                    last_product_order = sale.order_line.sorted(key=lambda l: l.id)[-1]
+                    last_product_order = sale.order_line.sorted(key=lambda l: l.sequence)[-1]
                     if exist_prepaid_discount_line.id != last_product_order.id:
                         message = _("Please, recalculate prepaid discount")
             if message:
@@ -55,7 +55,7 @@ class SaleOrder(models.Model):
                                       'name': _("%s prepaid discount") % (discount_1 + '%'),
                                       'product_uom_qyt': 1.0,
                                       'price_unit': -(sale.amount_untaxed*int(discount_1)/100),
-                                      'sequence': 999}
+                                      'sequence': 9999}
                 self.env['sale.order.line'].create(discount_line_vals)
             elif margin_sale > margin_2:
                 discount_line_vals = {'order_id': sale.id,
@@ -63,7 +63,7 @@ class SaleOrder(models.Model):
                                       'name': _("%s prepaid discount") % (discount_2 + '%'),
                                       'product_uom_qyt': 1.0,
                                       'price_unit': -(sale.amount_untaxed*int(discount_2)/100),
-                                      'sequence': 999}
+                                      'sequence': 9999}
                 self.env['sale.order.line'].create(discount_line_vals)
         return True
 

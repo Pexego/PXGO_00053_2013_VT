@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: prepaid_order_discount
-#: model:ir.model.fields,field_description:prepaid_order_discount.prepaid_option
+#: model:ir.model.fields,field_description:prepaid_order_discount.field_sale_order_prepaid_option
 msgid "Prepaid option"
 msgstr "Opción Prepago"
 
@@ -41,11 +41,11 @@ msgstr "%s descuento por prepago"
 
 #. module: prepaid_order_discount
 #: view:sale.order:prepaid_order_discount.view_sale_prepaid_discount
-msgid "Calculate prepaid discount"
-msgstr "Calcular descuento prepago"
+msgid "Calculate prepaid"
+msgstr "Calcular prepago"
 
 #. module: prepaid_order_discount
 #: view:sale.order:prepaid_order_discount.view_sale_prepaid_discount
-msgid "Cancel prepaid option"
-msgstr "Cancelar opción prepago"
+msgid "Cancel prepaid"
+msgstr "Cancelar prepago"
 
