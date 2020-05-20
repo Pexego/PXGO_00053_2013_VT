@@ -219,7 +219,7 @@ class AccountInvoice(models.Model):
     def invoice_validate(self):
         res = super().invoice_validate()
         for inv in self:
-            if inv.claim_id:
+            if not inv.claim_id:
                 for line in inv.invoice_line_ids:
                     cost = line.product_id.standard_price_2
                     if line.move_line_ids:
