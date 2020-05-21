@@ -40,7 +40,8 @@ class ProductProduct(models.Model):
         brand_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.brand.filter'))
 
         for product in self.search([('sale_ok', '=', True)]):
-            if product.categ_id.id in category_filter or product.bom_ids:
+            if product.categ_id.id in category_filter or product.bom_ids or\
+                    product.product_brand_id.name in ('DAHUA', 'X-SECURITY'):
                 product.joking_index = -1
             else:
                 # Calculamos días de stock
