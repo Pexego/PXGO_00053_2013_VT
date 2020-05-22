@@ -109,7 +109,7 @@
                 <attribute name="filter_domain"></attribute>
             </field>
             <filter name="services" position="after">
-                <filter string="Main supplier not contains outlet" name="main_supplier_outlet" domain="[('seller_id','not ilike','outlet')]"/>
+                <filter string="Main supplier not contains outlet" name="main_supplier_outlet" domain="[('seller_id.name','not ilike','outlet')]"/>
                 <filter string="New Category" name="categ_new" domain="[('categ_id.name','like','NUEVOS')]"/>
                 <filter string="One month ago" name="one_month_ago" domain="[('date_first_incoming','>=',(datetime.datetime.now() - datetime.timedelta(days=31)).strftime('%Y-%m-%d'))]"/>
             </filter>
