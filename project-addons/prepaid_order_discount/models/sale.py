@@ -37,7 +37,13 @@ class SaleOrder(models.Model):
         margin_discount_1 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_1')
         margin_discount_2 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_2')
         prepaid_discount_product_id = self.env.ref('prepaid_order_discount.prepaid_discount_product').id
+        prepaid_id = self.env['account.payment.term'].with_context(lang='en_US').search([('name', 'ilike', 'Prepaid')])
         for sale in self:
+            # Comprobar que el plazo de pago del cliente no sea prepago por defecto,
+            # en cuyo caso no le corresponde este descuento
+            if sale.partner_id.property_payment_term_id.id in prepaid_id.ids:
+                sale.cancel_prepaid_option()
+                continue
             # Borrar línea descuento prepago existente
             sale.order_line.filtered(lambda l: l.product_id.id == prepaid_discount_product_id).unlink()
             # Aplicar promociones

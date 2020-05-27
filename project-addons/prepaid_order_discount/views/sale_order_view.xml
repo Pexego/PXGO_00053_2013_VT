@@ -7,7 +7,7 @@
             <field name="model">sale.order</field>
             <field name="arch" type="xml">
                 <field name="no_promos" position="after">
-                    <field name="prepaid_option" readonly="True"/>
+                    <field name="prepaid_option"/>
                 </field>
             </field>
         </record>
