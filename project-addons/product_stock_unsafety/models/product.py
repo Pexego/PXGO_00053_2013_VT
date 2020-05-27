@@ -40,7 +40,8 @@ class ProductProduct(models.Model):
         brand_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.brand.filter'))
 
         for product in self.search([('sale_ok', '=', True)]):
-            if product.categ_id.id in category_filter or product.bom_ids:
+            if product.categ_id.id in category_filter or product.bom_ids or\
+                    product.product_brand_id.name in ('DAHUA', 'X-SECURITY'):
                 product.joking_index = -1
             else:
                 # Calculamos días de stock
@@ -164,4 +165,4 @@ class ProductProduct(models.Model):
         'Next incoming date', compute='_get_next_incoming_date')
     min_suggested_qty = fields.Integer(
         'Min qty suggested', compute='_get_min_suggested_qty')
-    seller_id = fields.Many2one('res.partner', related='seller_ids.name', string='Main Supplier')
+    seller_id = fields.Many2one('res.partner', related='seller_ids.name', store=True, string='Main Supplier')
