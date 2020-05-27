@@ -838,8 +838,8 @@ msgstr "Schema"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_res_partner_email2
-msgid "Second Email"
-msgstr "Email secondaria"
+msgid "Accounting email"
+msgstr "Email di contabilità"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_wizard_reclassify_move_line_balance_selected_amount
