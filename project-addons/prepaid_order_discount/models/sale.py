@@ -56,20 +56,22 @@ class SaleOrder(models.Model):
             discount_2 = margin_discount_2.split(',')[1]
 
             if margin_1 < margin_sale < margin_2:
+                last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
                 discount_line_vals = {'order_id': sale.id,
                                       'product_id': prepaid_discount_product_id,
                                       'name': _("%s prepaid discount") % (discount_1 + '%'),
                                       'product_uom_qyt': 1.0,
                                       'price_unit': -(sale.amount_untaxed*int(discount_1)/100),
-                                      'sequence': 9999}
+                                      'sequence': last_sequence + 1}
                 self.env['sale.order.line'].create(discount_line_vals)
             elif margin_sale > margin_2:
+                last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
                 discount_line_vals = {'order_id': sale.id,
                                       'product_id': prepaid_discount_product_id,
                                       'name': _("%s prepaid discount") % (discount_2 + '%'),
                                       'product_uom_qyt': 1.0,
                                       'price_unit': -(sale.amount_untaxed*int(discount_2)/100),
-                                      'sequence': 9999}
+                                      'sequence': last_sequence + 1}
                 self.env['sale.order.line'].create(discount_line_vals)
         return True
 
