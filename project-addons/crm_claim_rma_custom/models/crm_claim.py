@@ -133,7 +133,7 @@ class CrmClaimRma(models.Model):
                                 'discount': inv_line.discount,
                                 'qty': claim_line.product_returned_quantity,
                                 'price_unit': inv_line.price_unit,
-                                'cost_unit': inv_line.cost_unit,
+                                'cost_unit': inv_line.product_id.standard_price,
                                 'tax_ids': [(6, 0, taxes_ids)]
                             }
                             break
