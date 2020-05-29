@@ -601,3 +601,14 @@ msgstr "Últimos 60 días"
 #: model:ir.model.fields,field_description:stock_custom.field_stock_move_parent_partner
 msgid "Partner"
 msgstr "Cliente"
+
+#. module: stock_custom
+#: model:ir.ui.menu,name:stock_custom.product_stock_catalog_update_menu
+#: model:ir.actions.act_window,name:stock_custom.product_stock_catalog_update_action
+msgid "Stock Catalog"
+msgstr "Catálogo de existencias"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_add_tags_search
+msgid "Main supplier not contains outlet"
+msgstr "Proveedor principal no contiene outlet"
