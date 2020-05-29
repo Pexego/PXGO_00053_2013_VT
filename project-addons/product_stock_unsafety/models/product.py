@@ -53,8 +53,8 @@ class ProductProduct(models.Model):
                             stock_days = stock / ((product.last_sixty_days_sales * 365) / 60)
                             # periodos de 365 dias
                         else:
-                            stock_days = stock / product.last_sixty_days_sales
-                            # periodos de 60 dias
+                            stock_days = stock / ((product.last_sixty_days_sales * 120) / 60)
+                            # periodos de 120 dias
                     else:
                         stock_days = 1000
 
