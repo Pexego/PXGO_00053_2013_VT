@@ -311,8 +311,6 @@ class ResPartner(models.Model):
     @api.multi
     def _get_average_margin(self):
         for partner in self:
-            # import ipdb
-            # ipdb.set_trace()
             if partner.customer:
                 margin_avg = 0.0
                 total_price = 0.0
@@ -330,16 +328,10 @@ class ResPartner(models.Model):
                      ('date_invoice', '>=', start_date),
                      ('date_invoice', '<=', final_date)])
 
-                invoices_line = self.env['account.invoice.line'].search(
-                    [('invoice_id', 'in', invoices.ids)])
-
-                for i_line in invoices_line:
-                    lines = self.env['sale.order.line'].search([('invoice_lines', 'in', [i_line.id])], limit=1)
-                    order_line = lines and lines[0] or False
-                    if order_line:
-                        o_line_data = order_line.read(['purchase_price'])[0]
+                for i_line in invoices.mapped('invoice_line_ids'):
+                    if i_line.sale_line_ids:
                         total_price += i_line.quantity * i_line.price_unit * ((100.0 - i_line.discount) / 100)
-                        total_cost += i_line.quantity * o_line_data['purchase_price']
+                        total_cost += i_line.quantity * i_line.cost_unit
 
                 if total_price:
                     margin_avg = (1 - total_cost / total_price) * 100.0
