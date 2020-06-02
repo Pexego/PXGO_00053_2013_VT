@@ -38,10 +38,11 @@ class ProductProduct(models.Model):
     def calc_joking_index_temporal(self):
         category_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.category.filter'))
         brand_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.brand.filter'))
+        brand_excluded = eval(self.env['ir.config_parameter'].sudo().get_param('joking.brand.excluded'))
 
         for product in self.search([('sale_ok', '=', True)]):
             if product.categ_id.id in category_filter or product.bom_ids or\
-                    product.product_brand_id.name in ('DAHUA', 'X-SECURITY'):
+                    product.product_brand_id.id in brand_excluded:
                 product.joking_index = -1
             else:
                 # Calculamos días de stock
@@ -53,8 +54,8 @@ class ProductProduct(models.Model):
                             stock_days = stock / ((product.last_sixty_days_sales * 365) / 60)
                             # periodos de 365 dias
                         else:
-                            stock_days = stock / product.last_sixty_days_sales
-                            # periodos de 60 dias
+                            stock_days = stock / ((product.last_sixty_days_sales * 120) / 60)
+                            # periodos de 120 dias
                     else:
                         stock_days = 1000
 

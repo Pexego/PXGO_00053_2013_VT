@@ -861,7 +861,7 @@ msgstr "Esquema"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_account.field_res_partner_email2
-msgid "Second Email"
+msgid "Accounting email"
 msgstr "Correo Contabilidad"
 
 #. module: custom_account
