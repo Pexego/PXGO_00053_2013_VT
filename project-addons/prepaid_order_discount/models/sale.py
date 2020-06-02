@@ -37,8 +37,6 @@ class SaleOrder(models.Model):
         margin_discount_1 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_1')
         margin_discount_2 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_2')
         prepaid_discount_product_id = self.env.ref('prepaid_order_discount.prepaid_discount_product').id
-        import ipdb
-        ipdb.set_trace()
         for sale in self:
             # Comprobar que el plazo de pago del cliente no sea prepago por defecto,
             # en cuyo caso no le corresponde este descuento
