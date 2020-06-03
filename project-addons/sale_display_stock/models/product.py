@@ -93,10 +93,10 @@ class ProductTemplate(models.Model):
                         product.virtual_stock_conservative = pack_stock
                     else:
                         product.virtual_stock_conservative = \
-                            product.qty_available - product.outgoing_qty
+                            product.qty_available - product.outgoing_picking_reserved_qty - product.reservation_count
             else:
                 product.virtual_stock_conservative = \
-                    product.qty_available - product.outgoing_qty
+                    product.qty_available - product.outgoing_picking_reserved_qty - product.reservation_count
 
     @api.multi
     def _get_avail_conservative(self):
@@ -126,12 +126,12 @@ class ProductTemplate(models.Model):
                         product.virtual_available_wo_incoming = pack_stock
                     else:
                         product.virtual_available_wo_incoming = \
-                            product.qty_available - product.outgoing_qty - \
+                            product.virtual_stock_conservative - \
                             product.qty_available_wo_wh - \
                             product.qty_available_input_loc
             else:
                 product.virtual_available_wo_incoming = \
-                    product.qty_available - product.outgoing_qty - \
+                    product.virtual_stock_conservative - \
                     product.qty_available_wo_wh - \
                     product.qty_available_input_loc
 
@@ -214,7 +214,7 @@ class ProductProduct(models.Model):
                         product.virtual_stock_conservative = pack_stock
                     else:
                         product.virtual_stock_conservative = \
-                            product.qty_available - product.outgoing_qty
+                            product.qty_available - product.outgoing_picking_reserved_qty - product.reservation_count
             else:
                 product.virtual_stock_conservative = \
-                    product.qty_available - product.outgoing_qty
+                    product.qty_available - product.outgoing_picking_reserved_qty - product.reservation_count
