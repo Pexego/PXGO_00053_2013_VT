@@ -12,7 +12,8 @@
                 'sale',
                 'product',
                 'sale_promotions_extend',
-                'commercial_rules'
+                'commercial_rules',
+                'flask_middleware_connector'
                 ],
     'data': ['data/product_data.xml',
              'data/parameters.xml',
