@@ -212,7 +212,7 @@ class CreditCommunication(models.Model):
     @api.multi
     def get_followup_table_html_not_due(self):
         today = fields.Date.from_string(fields.Date.today()).strftime("%Y-%m-%d")
-        aml_ids = self.move_line_ids
+        aml_ids = self.move_line_ids.filtered(lambda l: l.invoice_id.state != 'paid')
         aml_not_due = aml_ids.filtered(lambda l: today < l.date_maturity)
         followup_table, total = self.get_followup_table_html_base(aml_not_due)
         if followup_table:
@@ -225,7 +225,7 @@ class CreditCommunication(models.Model):
     @api.multi
     def get_followup_table_html_due(self):
         today = fields.Date.from_string(fields.Date.today()).strftime("%Y-%m-%d")
-        aml_ids = self.move_line_ids
+        aml_ids = self.move_line_ids.filtered(lambda l: l.invoice_id.state != 'paid')
         aml_due = aml_ids.filtered(lambda l: today >= l.date_maturity)
         followup_table, total = self.get_followup_table_html_base(aml_due)
         if followup_table:
