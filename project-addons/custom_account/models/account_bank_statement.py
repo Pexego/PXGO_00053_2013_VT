@@ -26,8 +26,6 @@ class AccountBankStatementLine(models.Model):
     @api.multi
     def action_ignore(self, reason):
         for line in self:
-            import ipdb
-            ipdb.set_trace()
             bank_statement = line.statement_id
             line.old_statement_id = line.statement_id.id
             line.statement_id = False
@@ -37,8 +35,6 @@ class AccountBankStatementLine(models.Model):
     @api.multi
     def action_unignore(self):
         for line in self:
-            import ipdb
-            ipdb.set_trace()
             if line.old_statement_id:
                 line.statement_id = line.old_statement_id
                 line.old_statement_id = False
