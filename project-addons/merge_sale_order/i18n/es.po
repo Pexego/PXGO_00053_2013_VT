@@ -91,4 +91,4 @@ msgstr "Cancelar"
 #: code:addons/merge_sale_order/wizard/merge_sale_order_wizard.py:117
 #, python-format
 msgid "This order has been created by merging these orders: %s"
-msgstr "Este pedido ha sido creado mezclando los pedidos: %s"
+msgstr "Este pedido ha sido creado mezclando los pedidos: %S"
