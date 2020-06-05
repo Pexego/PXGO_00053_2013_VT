@@ -19,7 +19,7 @@ msgstr ""
 #. module: merge_sale_order
 #: code:addons/merge_sale_order/wizard/merge_sale_order_wizard.py:41
 #, python-format
-msgid "Please select at least two sale order"
+msgid "Please select at least two sale orders"
 msgstr "Por favor, seleccione al menos dos pedidos"
 
 #. module: merge_sale_order
@@ -86,3 +86,9 @@ msgstr "Unir pedidos"
 #: model:ir.ui.view,arch_db:merge_sale_order.view_merge_sale_line
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: merge_sale_order
+#: code:addons/merge_sale_order/wizard/merge_sale_order_wizard.py:117
+#, python-format
+msgid "This order has been created by merging these orders: %s"
+msgstr "Este pedido ha sido creado mezclando los pedidos: %S"

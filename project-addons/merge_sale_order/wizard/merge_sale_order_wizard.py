@@ -67,7 +67,13 @@ class MergePurchaseOrder(models.TransientModel):
         }
 
     def merge_orders(self, sale_orders, so, merge_mode=False):
+        notes=""
+        internal_notes=""
+        sale_notes=""
         for order in sale_orders:
+            notes += order.note + "\n" if order.note else ""
+            internal_notes += order.internal_notes + "\n" if order.internal_notes else ""
+            sale_notes += order.sale_notes + "\n" if order.sale_notes else ""
             if merge_mode and order == so:
                 continue
             for line in order.order_line:
@@ -105,3 +111,7 @@ class MergePurchaseOrder(models.TransientModel):
                 order.sudo().action_cancel()
                 if self.merge_type in ('new_delete', 'merge_delete'):
                     order.sudo().unlink()
+        so.note = notes
+        so.internal_notes = internal_notes
+        so.sale_notes = sale_notes
+        so.message_post(body=_('This order has been created by merging these orders: %s')%sale_orders.mapped('name'))
