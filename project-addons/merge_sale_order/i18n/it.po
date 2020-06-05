@@ -88,7 +88,7 @@ msgid "Cancel"
 msgstr "Annulla"
 
 #. module: merge_sale_order
-#: code:addons/merge_sale_order/wizard/merge_sale_order_wizard.py:117
+#: code:addons/merge_sale_order/wizard/merge_sale_order_wizard.py:118
 #, python-format
 msgid "This order has been created by merging these orders: %s"
 msgstr "Questo ordine è stato creato unendo questi ordini: %s"

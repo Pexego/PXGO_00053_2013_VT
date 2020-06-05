@@ -106,6 +106,7 @@ class MergePurchaseOrder(models.TransientModel):
                         move.name = move.name.replace(old_so.name, so.name)
                     if self.merge_type in ('new_cancel', 'merge_cancel'):
                         line.copy(default={'order_id': old_so.id})
+        sale_orders_name = sale_orders.mapped('name')
         for order in sale_orders:
             if order != so:
                 order.sudo().action_cancel()
@@ -114,4 +115,4 @@ class MergePurchaseOrder(models.TransientModel):
         so.note = notes
         so.internal_notes = internal_notes
         so.sale_notes = sale_notes
-        so.message_post(body=_('This order has been created by merging these orders: %s')%sale_orders.mapped('name'))
+        so.message_post(body=_('This order has been created by merging these orders: %s')%sale_orders_name)
