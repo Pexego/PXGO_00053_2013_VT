@@ -235,7 +235,8 @@ class AccountInvoice(models.Model):
             else:
                 for line in inv.invoice_line_ids:
                     if not line.cost_unit:
-                        line.write({'cost_unit': line.product_id.standard_price_2})
+                        # We choose the standard_price and not the 2 because is the one used in the picking
+                        line.write({'cost_unit': line.product_id.standard_price})
         return res
 
     @api.model

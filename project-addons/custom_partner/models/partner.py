@@ -453,21 +453,29 @@ class ResPartner(models.Model):
 
     def check_email(self, email):
         any_char="^\s\t\r\n\(\)\<\>\,\:\;\[\]Çç\%\&@á-źÁ-Ź"
-        if not re.match('^(['+any_char+']+@['+any_char+'\.]+(\.['+any_char+'\.]+)+;?)+$', email) and email!="-" and email!=".":
-            message = _('The e-mail format is incorrect: ')
-            raise exceptions.ValidationError(message+email)
+        return not re.match('^(['+any_char+']+@['+any_char+'\.]+(\.['+any_char+'\.]+)+;?)+$', email) and email!="-" and email!="."
 
     @api.constrains('email', 'email2', 'email_web')
     def check_emails(self):
         email = self.email
         email2 = self.email2
         email_web = self.email_web
+        message = _('[Partner "%s"] The e-mail format is incorrect: ') %self.name
         if email:
-            self.check_email(email)
+            not_correct = self.check_email(email)
+            if not_correct:
+                message += ' "%s" (Email)' % email
+                raise exceptions.ValidationError(message)
         if email2:
-            self.check_email(email2)
+            not_correct = self.check_email(email2)
+            if not_correct:
+                message += _(' "%s" (Accounting email)') % email2
+                raise exceptions.ValidationError(message)
         if email_web:
-            self.check_email(email_web)
+            not_correct = self.check_email(email_web)
+            if not_correct:
+                message += ' "%s" (Email Web)' % email_web
+                raise exceptions.ValidationError(message)
     @api.multi
     def name_get(self):
         res = []
