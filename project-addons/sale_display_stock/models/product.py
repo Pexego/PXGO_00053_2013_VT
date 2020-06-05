@@ -60,10 +60,7 @@ class ProductTemplate(models.Model):
                                                        ('purchase_line_id', '!=', False),
                                                        ('picking_id', '=', False),
                                                        ('state', '!=', 'cancel')])
-                qty = 0.0
-                for move in moves:
-                    qty += move.product_uom_qty
-                product.qty_in_production = qty
+                product.qty_in_production = sum(moves.mapped('product_uom_qty')) or 0.0
             else:
                 product.qty_in_production = 0.0
 
