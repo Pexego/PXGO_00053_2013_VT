@@ -79,8 +79,8 @@ class ProductTemplate(models.Model):
                             subproduct_quantity_next = subproduct.product_qty
                             if subproduct_quantity_next:
                                 subproduct_stock_next = \
-                                    subproduct.qty_available - subproduct.outgoing_picking_reserved_qty - \
-                                    subproduct.reservation_count
+                                    subproduct.product_id.qty_available - subproduct.product_id.outgoing_picking_reserved_qty - \
+                                    subproduct.product_id.reservation_count
                                 pack_stock_next = math.\
                                     floor(subproduct_stock_next /
                                           subproduct_quantity_next)
@@ -110,8 +110,8 @@ class ProductTemplate(models.Model):
                             subproduct_quantity_next = subproduct.product_qty
                             if subproduct_quantity_next:
                                 subproduct_stock_next = \
-                                    subproduct.qty_available - subproduct.outgoing_picking_reserved_qty - \
-                                    subproduct.reservation_count - \
+                                    subproduct.product_id.qty_available - subproduct.product_id.outgoing_picking_reserved_qty - \
+                                    subproduct.product_id.reservation_count - \
                                     subproduct.product_id.qty_available_wo_wh - \
                                     subproduct.product_id.qty_available_input_loc
                                 pack_stock_next = math.\
@@ -197,8 +197,8 @@ class ProductProduct(models.Model):
                             subproduct_quantity_next = subproduct.product_qty
                             if subproduct_quantity_next:
                                 subproduct_stock_next = \
-                                    subproduct.qty_available - subproduct.outgoing_picking_reserved_qty - \
-                                    subproduct.reservation_count
+                                    subproduct.product_id.qty_available - subproduct.product_id.outgoing_picking_reserved_qty - \
+                                    subproduct.product_id.reservation_count
                                 pack_stock_next = math.\
                                     floor(subproduct_stock_next /
                                           subproduct_quantity_next)
