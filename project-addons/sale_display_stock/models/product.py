@@ -163,11 +163,12 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def _get_outgoing_picking_qty(self):
+        picking_types_ids = [item['id'] for item in self.env['stock.picking.type'].search_read([('code','=','outgoing')],['id'])]
         for product in self:
             domain=[('product_id', 'in', product.product_variant_ids.ids),
                     ('state', 'in', ('confirmed', 'assigned',
                                   'partially_available', 'waiting')),
-                    ('picking_id', '!=', False), ('sale_line_id', '!=', False),('picking_type_id', '=', 2)]
+                    ('picking_id', '!=', False), ('sale_line_id', '!=', False),('picking_type_id', 'in', picking_types_ids)]
             product.outgoing_picking_reserved_qty= sum(item['product_uom_qty'] for item in self.env['stock.move'].search_read(domain,['product_uom_qty']))
 
     @api.multi
