@@ -110,7 +110,7 @@ class ProductListener(Component):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    @api.depends('bom_ids')
+    @api.depends('bom_ids','bom_ids.type','bom_ids.bom_line_ids')
     def _compute_is_pack(self):
         for product in self:
             if product.bom_ids.filtered(lambda r: r.type == 'phantom'):
