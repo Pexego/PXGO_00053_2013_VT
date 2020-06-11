@@ -290,7 +290,7 @@ class MiddlewareBackend(models.TransientModel):
                     tag.with_delay().export_product_tag()
             else:
                 for tag in product_tag_ids:
-                    tag.with_delay().update_product_tag(fields=None)
+                    tag.with_delay().update_product_tag()
 
         elif self.type_export == 'producttagproductrel':
             product_obj = self.env['product.product']
