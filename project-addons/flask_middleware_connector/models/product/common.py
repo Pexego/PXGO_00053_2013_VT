@@ -46,7 +46,7 @@ class ProductTemplateListener(Component):
     def on_record_write(self, record, fields=None):
         up_fields = [
             "name", "list_price", "categ_id", "product_brand_id",
-            "show_stock_outside", "sale_ok"]
+            "show_stock_outside", "sale_ok", "weight", "volume"]
         if record.image or len(fields) != 1:
             for field in up_fields:
                 if field in fields:
@@ -82,7 +82,8 @@ class ProductListener(Component):
             "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
-            "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id"
+            "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
+            "weight", "volume"
         ]
         for field in up_fields:
             if field in fields:
