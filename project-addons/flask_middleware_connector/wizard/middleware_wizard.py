@@ -257,16 +257,16 @@ class MiddlewareBackend(models.TransientModel):
             tag_ids = tag_obj.search([('active', '=', True)])
         if self.mode_export == 'export':
             for tag in tag_ids:
-                tag.with_delay().export_partner_tag()
-                for product in tag.product_ids:
-                    product.with_delay(priority=5, eta=60).unlink_product_tag_rel()
-                    product.with_delay(priority=2, eta=120).export_product_tag_rel()
+                tag.with_delay(priority=5).export_partner_tag()
+                for partner in tag.partner_ids:
+                    partner.with_delay(priority=1).unlink_partner_tag_rel()
+                    partner.with_delay(priority=2, eta=10).export_partner_tag_rel()
         elif self.mode_export == 'update':
             for tag in tag_ids:
-                tag.with_delay().update_partner_tag()
-                for product in tag.product_ids:
-                    product.with_delay(priority=5, eta=60).unlink_product_tag_rel()
-                    product.with_delay(priority=2, eta=120).export_product_tag_rel()
+                tag.with_delay(priority=5).update_partner_tag()
+                for partner in tag.partner_ids:
+                    partner.with_delay(priority=1).unlink_partner_tag_rel()
+                    partner.with_delay(priority=2, eta=10).export_partner_tag_rel()
         else:
             for tag in tag_ids:
                 tag.with_delay().unlink_partner_tag()
@@ -302,12 +302,12 @@ class MiddlewareBackend(models.TransientModel):
                                                    ('company_id', '=', 1)])
         if self.mode_export == 'export':
             for sale in sales:
-                sale.with_delay().export_order()
+                sale.with_delay(priority=5).export_order()
                 for line in sale.order_line:
                     line.with_delay().export_orderproduct()
         elif self.mode_export == 'update':
             for sale in sales:
-                sale.with_delay().update_order(fields=None)
+                sale.with_delay(priority=5).update_order(fields=None)
                 for line in sale.order_line:
                     line.with_delay().update_orderproduct(fields=None)
         else:
@@ -373,9 +373,15 @@ class MiddlewareBackend(models.TransientModel):
         if self.mode_export == 'export':
             for tag in product_tag_ids:
                 tag.with_delay().export_product_tag()
+                for product in tag.product_ids:
+                    product.with_delay(priority=5, eta=60).unlink_product_tag_rel()
+                    product.with_delay(priority=2, eta=120).export_product_tag_rel()
         elif self.mode_export == 'update':
             for tag in product_tag_ids:
                 tag.with_delay().update_product_tag(fields=None)
+                for product in tag.product_ids:
+                    product.with_delay(priority=5, eta=60).unlink_product_tag_rel()
+                    product.with_delay(priority=2, eta=120).export_product_tag_rel()
         else:
             for tag in product_tag_ids:
                 tag.with_delay().unlink_product_tag()
