@@ -16,7 +16,6 @@
                 <footer>
                     <button name="do_export" type="object"
                         string="Start" class="oe_highlight"/>
-                    or
                     <button string="Cancel" class="oe_link" special="cancel"/>
                 </footer>
             </form>
