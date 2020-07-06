@@ -38,7 +38,7 @@ class AccountBankStatementLine(models.Model):
         for line in self:
             if line.old_statement_id:
                 line.statement_id = line.old_statement_id
-                line.old_statement_id = False
+                line.old_statement_id = None
                 line.statement_id.balance_end_real += line.amount
             else:
                 raise UserError(_('There is no old statement to link'))
