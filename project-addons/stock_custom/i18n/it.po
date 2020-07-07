@@ -580,3 +580,9 @@ msgstr "Fornitore principale non contiene outlet"
 #: model:ir.actions.act_window,name:stock_custom.action_sale_report_uniview_projects
 msgid "Sales Analysis 2 - Uniview and Projects"
 msgstr "Analisi delle vendite 2 - Uniview e progetti"
+
+#. module: stock_custom
+#: model:ir.ui.menu,name:stock_custom.menu_products_toxic_stock
+#: model:ir.actions.act_window,name:stock_custom.action_product_toxic_stock
+msgid "Toxic Stock"
+msgstr "Stock Tossico"
