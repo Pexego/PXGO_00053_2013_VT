@@ -35,7 +35,9 @@
              'wizard/reconline_payment_with_statement_lines_wzd_view.xml',
              'wizard/reclassify_move_line_balance_wizard_view.xml',
              'wizard/wzd_remove_partners_from_payment_order_view.xml',
-             'report/account_invoice_contact_report_view.xml'
+             'report/account_invoice_contact_report_view.xml',
+             'views/account_bank_statement.xml',
+             'wizard/statement_ignore.xml'
              ],
     "installable": True
 }
