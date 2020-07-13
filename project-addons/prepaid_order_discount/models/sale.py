@@ -37,6 +37,8 @@ class SaleOrder(models.Model):
         margin_discount_1 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_1')
         margin_discount_2 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_2')
         prepaid_discount_product_id = self.env.ref('prepaid_order_discount.prepaid_discount_product').id
+        shipping_cost_categ = self.env['product.category'].\
+            with_context(lang='es_ES').search([('name', '=', 'Portes')])
         for sale in self:
             # Comprobar que el plazo de pago del cliente no sea prepago por defecto,
             # en cuyo caso no le corresponde este descuento
@@ -54,13 +56,15 @@ class SaleOrder(models.Model):
             margin_2 = int(margin_discount_2.split(',')[0])
             discount_2 = margin_discount_2.split(',')[1]
 
+            amount_untaxed = sum(sale.order_line.filtered(
+                lambda l: l.product_id.categ_id.id not in shipping_cost_categ.ids).mapped('price_subtotal'))
             if margin_1 < margin_sale < margin_2:
                 last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
                 discount_line_vals = {'order_id': sale.id,
                                       'product_id': prepaid_discount_product_id,
                                       'name': _("%s prepaid discount") % (discount_1 + '%'),
                                       'product_uom_qyt': 1.0,
-                                      'price_unit': -(sale.amount_untaxed*int(discount_1)/100),
+                                      'price_unit': -(amount_untaxed*int(discount_1)/100),
                                       'sequence': last_sequence + 1}
                 self.env['sale.order.line'].create(discount_line_vals)
             elif margin_sale > margin_2:
@@ -69,7 +73,7 @@ class SaleOrder(models.Model):
                                       'product_id': prepaid_discount_product_id,
                                       'name': _("%s prepaid discount") % (discount_2 + '%'),
                                       'product_uom_qyt': 1.0,
-                                      'price_unit': -(sale.amount_untaxed*int(discount_2)/100),
+                                      'price_unit': -(amount_untaxed*int(discount_2)/100),
                                       'sequence': last_sequence + 1}
                 self.env['sale.order.line'].create(discount_line_vals)
         return True
