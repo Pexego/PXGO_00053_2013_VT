@@ -749,8 +749,8 @@ class ResPartner(models.Model):
                     ['&', '&', '&',
                      ('date_invoice', '>=', date_start), ('date_invoice', '<=', date_end), '&',
                      ('partner_id', 'child_of', [partner.id]),
-                     ('type', 'in', ['out_invoice', 'out_refund']), '|', '&',
-                     ('state', '=', 'paid'), ('state', '=', 'open'), ('date_due', '>=', date_end)]).mapped(
+                     ('type', 'in', ['out_invoice', 'out_refund']), '|',
+                     ('state', '=', 'paid'), '&',('state', '=', 'open'), ('date_due', '>=', date_end)]).mapped(
                     'invoice_line_ids')
                 for line in invoice_lines:
                     if line.invoice_id.type == 'out_invoice':
