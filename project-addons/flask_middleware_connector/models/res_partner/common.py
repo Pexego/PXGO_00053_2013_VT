@@ -70,8 +70,7 @@ class PartnerListener(Component):
             elif partner.web:
                 for field in up_fields:
                     if field in fields:
-                        partner.with_delay(
-                            priority=5, eta=120).update_partner()
+                        partner.with_delay(priority=5, eta=120).update_partner()
                         if 'street' in fields or \
                                 'zip' in fields or \
                                 'city' in fields or \
@@ -85,13 +84,11 @@ class PartnerListener(Component):
                                 ('company_id', '=', 1)
                             ])
                             for sale in sales:
-                                sale.with_delay(
-                                    priority=5, eta=180).update_order()
+                                sale.with_delay(priority=5, eta=180).update_order()
                         break
         else:
-            if partner.web and 'active' in fields and \
-                    partner.active or 'prospective' in fields and \
-                    partner.prospective:
+            if partner.web and (('active' in fields and partner.active) or
+                                ('prospective' in fields and partner.prospective)):
                 partner.with_delay(priority=1, eta=120).export_partner()
 
     def on_record_write(self, record, fields=None):
