@@ -46,9 +46,6 @@ class SaleOrder(models.Model):
             if sale.partner_id.prepaid_payment_term():
                 sale.cancel_prepaid_option()
                 continue
-            # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
-            sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
-            sale.invoice_type_id = daily_invoicing.id
             # Borrar línea descuento prepago existente
             sale.order_line.filtered(lambda l: l.product_id.id == prepaid_discount_product_id).unlink()
             # Aplicar promociones
@@ -71,6 +68,9 @@ class SaleOrder(models.Model):
                                       'price_unit': -(amount_untaxed*int(discount_1)/100),
                                       'sequence': last_sequence + 1}
                 self.env['sale.order.line'].create(discount_line_vals)
+                # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
+                sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
+                sale.invoice_type_id = daily_invoicing.id
             elif margin_sale > margin_2:
                 last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
                 discount_line_vals = {'order_id': sale.id,
@@ -80,6 +80,9 @@ class SaleOrder(models.Model):
                                       'price_unit': -(amount_untaxed*int(discount_2)/100),
                                       'sequence': last_sequence + 1}
                 self.env['sale.order.line'].create(discount_line_vals)
+                # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
+                sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
+                sale.invoice_type_id = daily_invoicing.id
         return True
 
     @api.multi
