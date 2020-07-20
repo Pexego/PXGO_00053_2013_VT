@@ -33,6 +33,8 @@
     "data": ["views/partner_view.xml",
              "views/sale_view.xml",
              "security/ir.model.access.csv",
-             "data/custom_partner_data.xml"],
+             "data/custom_partner_data.xml",
+             "security/groups.xml",
+             "data/parameters.xml"],
     "installable": True
 }
