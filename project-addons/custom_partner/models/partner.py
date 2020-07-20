@@ -737,6 +737,13 @@ class ResPartner(models.Model):
     @api.multi
     @api.depends('fidelity_credit_limit_include')
     def compute_fidelity_credit_limit(self):
+        """This function calculates the field fidelity_credit_limit.
+        Only open and unexpired, or paid invoices will be used for its calculation.
+        Fidelity_credit_limit will be the sum of the benefit of the invoice lines
+        whose invoice type is "out_invoice" - the sum of the benefit of the invoice lines
+        whose invoice type is "out_refund"
+        If total benefit of last x months(the variable x is determined by the system
+        parameter "benefit.months") is lower than 0, the value of this field will be 0 """
         months = int(self.env['ir.config_parameter'].sudo().get_param('benefit.months'))
         d1 = datetime.strptime(datetime.now().strftime("%Y-%m-%d"), "%Y-%m-%d")
         date_end = d1.strftime("%Y-%m-%d")
@@ -760,7 +767,7 @@ class ResPartner(models.Model):
                         benefit -= line.quantity * line.price_unit * (100.0 - line.discount) / 100.0 - (
                             line.cost_unit if line.cost_unit else 0) * line.quantity
 
-            partner.fidelity_credit_limit = benefit
+            partner.fidelity_credit_limit = benefit if benefit >= 0 else 0
 
     fidelity_credit_limit = fields.Float("Fidelity Credit Limit",
                                         help='Profit of the last x months' ,compute="compute_fidelity_credit_limit", store=True)
