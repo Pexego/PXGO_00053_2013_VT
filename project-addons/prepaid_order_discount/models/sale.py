@@ -21,9 +21,13 @@ class SaleOrder(models.Model):
                     message = _("It's an order with prepaid option. "
                                 "Please, calculate the discount if partner has prepaid or cancel the prepaid option.")
                 else:
-                    last_product_order = sale.order_line.sorted(key=lambda l: l.sequence)[-1]
-                    if exist_prepaid_discount_line.id != last_product_order.id:
-                        message = _("Please, recalculate prepaid discount")
+                    order_lines_sorted_by_id = sale.order_line.sorted(key=lambda l: l.id)
+                    last_product_order = order_lines_sorted_by_id[-1]
+                    if exist_prepaid_discount_line.id < last_product_order.id:
+                        num_elements = len(order_lines_sorted_by_id) -1 - order_lines_sorted_by_id.mapped('id').index(
+                            exist_prepaid_discount_line.id)
+                        if last_product_order.product_id.categ_id.name != 'Portes' or num_elements > 1:
+                            message = _("Please, recalculate prepaid discount")
             if message:
                 raise exceptions.Warning(message)
         return super().action_confirm()
