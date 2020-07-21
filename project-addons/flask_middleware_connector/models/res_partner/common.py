@@ -70,8 +70,7 @@ class PartnerListener(Component):
             elif partner.web:
                 for field in up_fields:
                     if field in fields:
-                        partner.with_delay(
-                            priority=5, eta=120).update_partner()
+                        partner.with_delay(priority=5, eta=120).update_partner()
                         if 'street' in fields or \
                                 'zip' in fields or \
                                 'city' in fields or \
@@ -85,13 +84,11 @@ class PartnerListener(Component):
                                 ('company_id', '=', 1)
                             ])
                             for sale in sales:
-                                sale.with_delay(
-                                    priority=5, eta=180).update_order()
+                                sale.with_delay(priority=5, eta=180).update_order()
                         break
         else:
-            if partner.web and 'active' in fields and \
-                    partner.active or 'prospective' in fields and \
-                    partner.prospective:
+            if partner.web and (('active' in fields and partner.active) or
+                                ('prospective' in fields and partner.prospective)):
                 partner.with_delay(priority=1, eta=120).export_partner()
 
     def on_record_write(self, record, fields=None):
@@ -100,7 +97,7 @@ class PartnerListener(Component):
             "name", "comercial", "vat", "city", "street", "zip", "country_id",
             "state_id", "email_web", "ref", "user_id",
             "property_product_pricelist", "lang", "sync", "type", "parent_id",
-            "is_company", "email", "active", "prospective", "phone", "mobile"
+            "is_company", "email", "active", "prospective", "phone", "mobile","property_payment_term_id"
         ]
         if 'web' in fields and record.web and \
                 (partner.active or partner.prospective):
@@ -246,6 +243,17 @@ class ResPartner(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.delete_category_rel(self.id)
         return True
+
+    @api.multi
+    def prepaid_payment_term(self):
+        # Obtener ids de plazo de pago que requieran prepagar (Prepago y Pago inmediato)
+        prepaid_ids = []
+        prepaid_ids.extend([self.env['account.payment.term'].
+                           with_context(lang='en_US').search([('name', 'ilike', 'Prepaid')]).id])
+        prepaid_ids.extend([self.env.ref('account.account_payment_term_immediate').id])
+        for partner in self:
+            # Si el plazo de pago del cliente coincide con alguno de esos ids, devolver True
+            return partner.property_payment_term_id.id in prepaid_ids
 
 
 class PartnerCategoryListener(Component):
