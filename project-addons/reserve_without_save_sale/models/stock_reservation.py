@@ -143,12 +143,14 @@ class StockReservation(models.Model):
             timedelta(minutes=-10)
         last_date = datetime.strftime(d, '%Y-%m-%d %H:%M:%S')
         reserves = self.search([('create_date', '<=', last_date),
+                                ('sale_line_id', '=', False),
+                                ('mrp_id', '=', False),
+                                ('claim_id', '=', False),
                                 ('move_id.state', 'not in', ['done',
                                                              'cancel'])])
 
         if reserves:
-            reserves.filtered(lambda r: not r.sale_line_id and not r.mrp_id and not r.claim_id)\
-                .unlink()
+            reserves.unlink()
 
         reserves_loc = self.env.ref("stock_reserve.stock_location_reservation")
         moves = self.env["stock.move"].search([('location_dest_id', '=',
@@ -159,8 +161,13 @@ class StockReservation(models.Model):
         if moves:
             moves._action_cancel()
 
+        reserves = self.search([('create_date', '<=', last_date),
+                                ('sale_line_id', '!=', False),
+                                ('partner_id', '=', False),
+                                ('move_id.state', 'not in', ['done',
+                                                             'cancel'])])
         reserves_to_delete = self.env['stock.reservation']
-        for reserve in reserves.filtered(lambda r: r.sale_line_id and not r.partner_id):
+        for reserve in reserves:
             check_other_reserves = self.\
                 search([('sale_line_id', '=', reserve.sale_line_id.id),
                         ('partner_id', '!=', False),
