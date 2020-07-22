@@ -19,12 +19,14 @@
 ##############################################################################
 
 from odoo import models, api
+from odoo.tools.profiler import profile
 
 
 class ProcurementGroup(models.Model):
     _inherit = 'procurement.group'
 
     @api.model
+    @profile
     def _run_scheduler_tasks(self, use_new_cursor=False, company_id=False):
         super()._run_scheduler_tasks(use_new_cursor=use_new_cursor,
                                      company_id=company_id)
@@ -32,15 +34,17 @@ class ProcurementGroup(models.Model):
             search([("picking_type_id", "=",
                      self.env.ref('stock.picking_type_internal').id),
                     ("state", "in", ("assigned", "confirmed", "partially_available"))])
-        for pick_assign in pick_ids.filtered(
-                lambda l: l.state == "assigned"):
-            pick_assign.action_done()
-        for pick_partially in pick_ids.filtered(
-                lambda l: l.state in ("confirmed", "partially_available")):
-            pick_partially.move_type = 'direct'
-            if pick_partially.state == "partially_available":
-                pick_partially.action_copy_reserv_qty()
-                pick_partially.action_accept_confirmed_qty()
+        for picking in pick_ids:
+            if picking.state == "assigned":
+                picking.action_done()
+            elif picking.state in ("confirmed", "partially_available"):
+                picking.move_type = 'direct'
+                if picking.state == "partially_available":
+                    picking.action_copy_reserv_qty()
+                    picking.action_accept_confirmed_qty()
+
+        # Merge both crons to avoid overlap
+        self.env['stock.reservation'].delete_orphan_reserves()
 
         if use_new_cursor:
             self.env.cr.commit()
