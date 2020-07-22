@@ -51,7 +51,8 @@ class SaleOrder(models.Model):
             # Aplicar promociones
             sale.apply_commercial_rules()
             # Obtener umbrales márgenes y porcentaje descuento a aplicar
-            margin_sale = sale.margin_rappel
+            margin_sale = sale.product_margin_without_shipping_costs(shipping_cost_categ)
+
             margin_1 = int(margin_discount_1.split(',')[0])
             discount_1 = margin_discount_1.split(',')[1]
             margin_2 = int(margin_discount_2.split(',')[0])
@@ -97,4 +98,26 @@ class SaleOrder(models.Model):
             sale.payment_term_id = sale.partner_id.property_payment_term_id
             sale.invoice_type_id = sale.partner_id.invoice_type_id
         return True
+
+    @api.multi
+    def product_margin_without_shipping_costs(self,shipping_cost_categ):
+        for sale in self:
+            sale.margin_rappel = 0.0
+            margin_rappel = 0.0
+            sale_price = 0.0
+            purchase_price = 0.0
+            for line in sale.order_line:
+                if not line.deposit and line.product_id.categ_id.id not in shipping_cost_categ.ids:
+                    if line.price_unit > 0:
+                        margin_rappel += line.margin_rappel or 0.0
+                    else:
+                        margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
+                    sale_price += line.price_subtotal or 0.0
+                    purchase_price += line.product_id.standard_price_2_inc or 0.0 * line.product_uom_qty
+            if sale_price:
+                if sale_price < purchase_price:
+                    return round((margin_rappel * 100) / purchase_price, 2)
+                else:
+                    return round((margin_rappel * 100) / sale_price, 2)
+
 
