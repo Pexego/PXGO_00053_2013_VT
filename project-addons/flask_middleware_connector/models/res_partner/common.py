@@ -250,8 +250,7 @@ class ResPartner(models.Model):
         # 7 días y Pago inmediato)
         prepaid_ids = []
         prepaid_terms = self.env['account.payment.term'].with_context(lang='en_US').search(
-            ["|", "|", "|", "|", ("name", "=", "1 day"), ("name", "=", "3 days"),
-             ("name", "=", "5 days"), ("name", "=", "7 days"), ('name', 'ilike', 'Prepaid')])
+            [("name", "in", ("1 day","3 days","5 days","7 days","Prepaid"))])
         prepaid_ids.extend(prepaid_terms.ids)
         prepaid_ids.extend([self.env.ref('account.account_payment_term_immediate').id])
         for partner in self:
