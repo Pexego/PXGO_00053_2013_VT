@@ -172,16 +172,6 @@
             </field>
         </record>
 
-        <record id="res_partner_view_delete_email" model="ir.ui.view">
-            <field name="name">res.partner.view.delete.email</field>
-            <field name="model">res.partner</field>
-            <field name="inherit_id" ref="mail_tracking.view_partner_form" />
-            <field name="arch" type="xml">
-                <field name="email_score" position="replace"/>
-                    <field name="email_bounced" position="replace"/>
-            </field>
-        </record>
-
         <record id="view_partner_warning_form_add_global_data" model="ir.ui.view">
             <field name="name">res.partner.warning.form.inherit.global.data</field>
             <field name="model">res.partner</field>
