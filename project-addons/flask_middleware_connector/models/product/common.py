@@ -83,7 +83,7 @@ class ProductListener(Component):
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
             "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
-            "weight", "volume"
+            "weight", "volume", "standard_price_2_inc"
         ]
         for field in up_fields:
             if field in fields:
@@ -101,8 +101,8 @@ class ProductListener(Component):
                 pack.product_tmpl_id.product_variant_ids.with_delay(priority=2, eta=30).update_product()
 
         if 'tag_ids' in fields:
-            record.with_delay(priority=5, eta=60).unlink_product_tag_rel()
-            record.with_delay(priority=2, eta=120).export_product_tag_rel()
+            record.with_delay(priority=1, eta=30).unlink_product_tag_rel()
+            record.with_delay(priority=2, eta=60).export_product_tag_rel()
 
     def on_record_unlink(self, record):
         record.with_delay().unlink_product()
@@ -331,9 +331,17 @@ class ProductTagsListener(Component):
 
     def on_record_create(self, record, fields=None):
         record.with_delay(priority=1, eta=60).export_product_tag()
+        if 'product_ids' in fields:
+            for product in record.product_ids:
+                product.with_delay(priority=1, eta=30).unlink_product_tag_rel()
+                product.with_delay(priority=2, eta=60).export_product_tag_rel()
 
     def on_record_write(self, record, fields=None):
         record.with_delay(priority=2, eta=120).update_product_tag()
+        if 'product_ids' in fields:
+            for product in record.product_ids:
+                product.with_delay(priority=1, eta=30).unlink_product_tag_rel()
+                product.with_delay(priority=2, eta=60).export_product_tag_rel()
 
     def on_record_unlink(self, record):
         record.with_delay(priority=3, eta=120).unlink_product_tag()
@@ -351,7 +359,7 @@ class ProductTag(models.Model):
         return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def update_product_tag(self, fields):
+    def update_product_tag(self):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
