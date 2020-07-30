@@ -5,6 +5,6 @@
     'author': 'Visiotech',
     'license': 'AGPL-3',
     'depends': ['base', 'barcode_action', 'crm_claim', 'crm_claim_rma', 'crm_claim_rma_custom'],
-    'data': ['views/claim_views.xml',],
+    'data': ['views/claim_views.xml', 'views/vstock_location_views.xml', ],
     'installable': True,
 }
