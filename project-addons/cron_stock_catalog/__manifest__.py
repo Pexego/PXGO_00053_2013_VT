@@ -6,7 +6,7 @@
         "data/ir_cron.xml",
         "views/email_template.xml",
     ],
-    "depends": [
+    "depends": ['stock',
     ],
 
     "auto_install": False,
