@@ -3,7 +3,7 @@
     <data noupdate="1">
         <record forcecreate="True" id="ir_cron_stock_catalog" model="ir.cron">
             <field name="name">Purchase Stock Catalog</field>
-            <field name="active" eval="True" />
+            <field name="active" eval="False" />
             <field name="user_id" ref="base.user_root"/>
             <field name="interval_number">1</field>
             <field name="interval_type">days</field>
