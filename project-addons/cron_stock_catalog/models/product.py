@@ -9,10 +9,10 @@ class ProductProduct(models.Model):
 
     def cron_stock_catalog(self):
         headers = ["ID", "Proveedor principal", "Referencia interna", "Fabricando", "Entrante", "Stock cocina",
-                   "Stock real", "Stock disponible", "Ventas en los últimos 60 días con stock",
-                   "Cant. pedido más grande", "Días de stock restantes", "Stock en playa", "Stock alm. externo",
-                   "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
-                   "Última fecha de compra", "Reemplazado por", "Estado"]
+                   "Stock real", "Stock disponible", "Ventas en los últimos 60 dias con stock",
+                   "Cant. pedido mas grande", "Dias de stock restantes", "Stock en playa", "Stock alm. externo",
+                   "Media de margen de ultimas ventas", "Cost Price", "Ultimo precio de compra",
+                   "Ultima fecha de compra", "Reemplazado por", "Estado"]
 
         domain = [('custom', '=', False), ('type', '!=', 'service'), ('seller_id.name', 'not ilike', 'outlet')]
         fields = ["id", "seller_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
