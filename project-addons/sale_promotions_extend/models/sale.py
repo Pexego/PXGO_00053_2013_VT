@@ -52,7 +52,7 @@ class SaleOrder(models.Model):
             self.env['promos.rules'].apply_special_promotions(self)
             res = False
 
-        if order.state == 'reserve' and not order.is_all_reserved:
+        if order.state == 'reserve':
             order.order_reserve()
 
         taxes = order.order_line.filtered(
