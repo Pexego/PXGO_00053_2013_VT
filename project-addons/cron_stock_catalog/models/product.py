@@ -1,7 +1,7 @@
 from odoo import api, fields, models, _, exceptions
-import csv
-import io
 import base64
+from datetime import datetime
+import xlsxwriter
 
 
 class ProductProduct(models.Model):
@@ -9,61 +9,80 @@ class ProductProduct(models.Model):
 
     def cron_stock_catalog(self):
         headers = ["ID", "Proveedor principal", "Referencia interna", "Fabricando", "Entrante", "Stock cocina",
-                   "Stock real", "Stock disponible", "Ventas en los últimos 60 dias con stock",
-                   "Cant. pedido mas grande", "Dias de stock restantes", "Stock en playa", "Stock alm. externo",
-                   "Media de margen de ultimas ventas", "Cost Price", "Ultimo precio de compra",
-                   "Ultima fecha de compra", "Reemplazado por", "Estado"]
+                   "Stock real", "Stock disponible", "Ventas en los últimos 60 días con stock",
+                   "Cant. pedido más grande", "Días de stock restantes", "Stock en playa", "Stock alm. externo",
+                   "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
+                   "Última fecha de compra", "Reemplazado por", "Estado"]
 
         domain = [('custom', '=', False), ('type', '!=', 'service'), ('seller_id.name', 'not ilike', 'outlet')]
+
         fields = ["id", "seller_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
                   "remaining_days_sale", "qty_available_input_loc", "qty_available_external", "average_margin",
                   "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state"]
         rows = []
+        translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
+                           "obsolete": "Obsoleto", "make_to_order": "Bajo pedido"}
 
-        products = self.env['product.product'].search_read(domain, fields, limit=2)
+        products = self.env['product.product'].search_read(domain, fields)
         for product in products:
             product_fields = []
             for field in fields:
-                if field == 'seller_id':
+                if product[field] is False:
+                    product_fields.append("")
+                elif field in ('seller_id', 'replacement_id'):
                     product_fields.append(product[field][1])
+                elif field == 'state':
+                    product_fields.append(translate_state[product[field]])
+                elif field == 'average_margin':
+                    product_fields.append(round(product[field], 2))
                 else:
-                    if product[field] is False:
-                        product_fields.append("")
-                    else:
-                        product_fields.append(product[field])
+                    product_fields.append(product[field])
             rows.append(product_fields)
 
-        # Create the csv
-        s = io.StringIO()
-        csv.writer(s).writerow(headers)
-        csv.writer(s).writerows(rows)
-        s.seek(0)
-        buf = io.BytesIO()
-        buf.write(s.getvalue().encode())
-        buf.seek(0)
-        buf.name = 'stock_catalog.csv'
+        # Generate the xls
+        file_name = 'temp'
+        workbook = xlsxwriter.Workbook(file_name, {'in_memory': True})
+        worksheet = workbook.add_worksheet()
+        row = 0
+        col = 0
+        for e in headers:
+            worksheet.write(row, col, e)
+            col += 1
+        row += 1
+        for data_row in rows:
+            col = 0
+            for cell in data_row:
+                worksheet.write(row, col, cell)
+                col += 1
+            row += 1
+        workbook.close()
 
-        self.send_stock_email(buf)
+        with open(file_name, "rb") as file:
+            file_b64 = base64.b64encode(file.read())
 
+        self.send_stock_email(file_b64)
 
     @api.multi
     def send_stock_email(self, file):
         attach = None
         if file:
+            self.env['ir.attachment'].search(
+                [('res_id', '=', self.env.user.id), ('res_model', '=', 'res.users'),
+                 ('name', '=', 'stock_diary')]).unlink()
             attach = self.env['ir.attachment'].create({
                 'name': "stock_diary",
                 'res_model': 'res.users',
                 'res_field': False,
-                'res_id': 1,
+                'res_id': self.env.user.id,
                 'type': 'binary',
-                'datas': base64.b64encode(file.read()),
-                'datas_fname': "stock_catalog.csv",
+                'datas': file,
+                'datas_fname': "stock_catalog_{}.xlsx"
+                .format(datetime.now().strftime('%m%d')),
 
             })
         mail_pool = self.env['mail.mail']
         context = self._context.copy()
-        context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
         context['attachment'] = attach.id
         context.pop('default_state', False)
 
