@@ -125,16 +125,7 @@ class StockReservation(models.Model):
                          'sale_line_id': current_sale_line_id,
                          'date_validity': date_validity
                          })
-                reservation.message_post(
-                    body=_("Reserva modificada. Estado '%s'") %
-                    reservation.state)
         return moves
-
-    def release(self):
-        res = super().release()
-        for reserve in self:
-            reserve.message_post(body=_("Reserva liberada."))
-        return res
 
     @api.model
     def delete_orphan_reserves(self):
