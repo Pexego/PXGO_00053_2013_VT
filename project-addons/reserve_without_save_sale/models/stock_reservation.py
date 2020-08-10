@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 class StockReservation(models.Model):
 
     _name = 'stock.reservation'
-    _inherit = ['stock.reservation', 'mail.thread']
+    _inherit = 'stock.reservation'
     _order = "sequence asc"
 
     def _new_sequence(self):
