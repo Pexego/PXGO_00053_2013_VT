@@ -1,21 +1,26 @@
 from odoo import models, fields, api
 
-# TODO: comentado hasta encontrar una forma mejor de calcularlo
-# class ProductTemplate(models.Model):
-#     _inherit = 'product.template'
-#
-#     @api.multi
-#     def _get_in_production_stock(self):
-#         res= super(ProductTemplate, self)._get_in_production_stock()
-#         for product in self:
-#             if product.product_variant_ids:
-#                 order_lines = self.env["purchase.order.line"].search([('product_id', 'in', product.product_variant_ids.ids),
-#                                                        ('order_id.state', '=', 'purchase_order'),('order_id.completed_purchase','=',False)])
-#                 qty = 0.0
-#                 for order_line in order_lines:
-#                     qty += order_line.production_qty
-#                 product.qty_in_production += qty
-#         return res
+
+class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+
+    @api.multi
+    def _get_in_production_stock(self):
+        res= super(ProductTemplate, self)._get_in_production_stock()
+        for product in self:
+            if product.product_variant_ids:
+                self.env.cr.execute(
+                    """
+                    SELECT SUM(product_qty) FROM purchase_order_line pol
+                    JOIN purchase_order po ON po.id = pol.order_id
+                    WHERE pol.state = 'purchase_order' AND po.completed_purchase is False AND pol.product_id = %s
+                    """, product.product_variant_ids.ids
+                )
+                qty = self.env.cr.fetchall()
+                if qty[0][0]:
+                    product.qty_in_production += qty[0][0]
+        return res
+
 
 class ProductProduct(models.Model):
     _inherit = 'product.product'
