@@ -6,15 +6,16 @@ class ProductTemplate(models.Model):
 
     @api.multi
     def _get_in_production_stock(self):
-        res= super(ProductTemplate, self)._get_in_production_stock()
+        res = super(ProductTemplate, self)._get_in_production_stock()
         for product in self:
             if product.product_variant_ids:
                 self.env.cr.execute(
                     """
                     SELECT SUM(product_qty) FROM purchase_order_line pol
                     JOIN purchase_order po ON po.id = pol.order_id
-                    WHERE pol.state = 'purchase_order' AND po.completed_purchase is False AND pol.product_id = %s
-                    """, product.product_variant_ids.ids
+                    WHERE pol.state = 'purchase_order' AND po.completed_purchase is False 
+                    AND pol.company_id = %s AND pol.product_id in %s
+                    """, (self.env.user.company_id.id, tuple(product.product_variant_ids.ids))
                 )
                 qty = self.env.cr.fetchall()
                 if qty[0][0]:
