@@ -48,13 +48,13 @@ class ProductProduct(models.Model):
 
 
     def cron_product_valuation(self):
-        headers = ["Nombre del Producto", "Cantidad", "Valor"]
+        headers = ["ID","Nombre del Producto","Marca","Categoria","Proveedores", "Cantidad", "Valor"]
 
         products_real_time_ids = self.env['product.template'].search([('property_valuation', '=', 'real_time')]).ids
         domain = [('type', '=', 'product'), ('qty_available', '>', 0),
                   ('product_tmpl_id', 'in', products_real_time_ids)]
 
-        fields = ["display_name", "qty_available", "standard_price", "cost_method", "categ_id"]
+        fields = ["display_name", "qty_available", "standard_price", "cost_method", "categ_id","product_brand_id","seller_ids"]
         rows = []
 
         products = self.env['product.product'].with_context(company_owned=True, owner_id=False).search_read(domain,
@@ -77,6 +77,8 @@ class ProductProduct(models.Model):
                 fifo_automated_values[(row[0], row[1])] = row[2]
         for product in products:
             value = 0
+            category_name = product["categ_id"][1]
+            brand_name = product["product_brand_id"][1] if product["product_brand_id"] and product["product_brand_id"][1] else 0
             if product["cost_method"] in ['standard', 'average']:
                 value = round(product["standard_price"] * product["qty_available"], 2)
             elif product["cost_method"] == 'fifo':
@@ -84,8 +86,24 @@ class ProductProduct(models.Model):
                     property_stock_valuation_account_id.id
                 value = round(fifo_automated_values.get((product["id"],
                                                          valuation_account_id)) or 0, 2)
-            product_fields = [product['display_name'], product["qty_available"], value]
-            rows.append(product_fields)
+            seller_ids = product["seller_ids"]
+            if seller_ids:
+                sellers = self.env['product.supplierinfo'].browse(seller_ids)
+                display_name = sellers[0].display_name or 0
+                product_fields = [product["id"],product['display_name'], brand_name, category_name,
+                                  display_name, product["qty_available"], value]
+                rows.append(product_fields)
+                if len(sellers)>1:
+                    sellers=sellers[1::]
+                    for seller in sellers:
+                        display_name = seller.display_name or 0
+                        product_fields = ["","", "","",display_name,"",""]
+                        rows.append(product_fields)
+            else:
+                product_fields = [product["id"],product['display_name'], brand_name, category_name,
+                                  0, product["qty_available"], value]
+                rows.append(product_fields)
+
         file_b64 = self.generate_xls(headers, rows)
         self.send_email(file_b64, "product_valuation",
                         "product_valuation_{}.xlsx".format(datetime.now().strftime('%m%d')),
