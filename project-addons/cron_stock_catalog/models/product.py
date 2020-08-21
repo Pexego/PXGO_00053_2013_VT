@@ -115,7 +115,7 @@ class ProductProduct(models.Model):
         if file:
             self.env['ir.attachment'].search(
                 [('res_id', '=', self.env.user.id), ('res_model', '=', 'res.users'),
-                 ('name', '=', 'product_valuation')]).unlink()
+                 ('name', '=', name)]).unlink()
             attach = self.env['ir.attachment'].create({
                 'name': name,
                 'res_model': 'res.users',
