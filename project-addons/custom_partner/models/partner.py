@@ -773,6 +773,30 @@ class ResPartner(models.Model):
                                         help='Profit of the last x months' ,compute="compute_fidelity_credit_limit", store=True)
     fidelity_credit_limit_include = fields.Boolean("Include fidelity credit limit",
                                                    help="If this field is checked, the fidelity credit limit will be added to credit limit ")
+    mail_count = fields.Integer(compute="_compute_mail_count")
+
+    @api.multi
+    @api.depends('email')
+    def _compute_mail_count(self):
+        for partner in self:
+            count = 0
+            if partner.email:
+                count = self.env['mail.mail'].search_count(['|',
+                    ('email_to', 'in', [partner.email,partner.email2]),
+                    ('recipient_ids','in',[partner.id])
+                ])
+            partner.mail_count = count
+
+    def action_view_email(self):
+        mails = self.env['mail.mail'].search_read(['|',
+                    ('email_to', 'in', [self.email,self.email2]),('recipient_ids','in',[self.id])
+                ],['id'])
+        mail_ids = [x['id'] for x in mails]
+        action = self.env.ref('custom_partner.action_view_emails').read()[0]
+        if len(mail_ids) > 0:
+            action['domain'] = [('id', 'in', mail_ids)]
+            action['context'] = [('id', 'in', mail_ids)]
+        return action
 
 
 class AccountMoveLine(models.Model):
