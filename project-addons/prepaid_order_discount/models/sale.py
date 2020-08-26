@@ -117,7 +117,7 @@ class SaleOrder(models.Model):
             sale_price = 0.0
             purchase_price = 0.0
             for line in sale.order_line:
-                if not line.deposit and line.product_id.categ_id.id not in shipping_cost_categ.ids:
+                if not line.deposit and line.product_id.categ_id.id not in shipping_cost_categ.ids and not line.original_line_id:
                     if line.price_unit > 0:
                         margin_rappel += line.margin_rappel or 0.0
                     else:
