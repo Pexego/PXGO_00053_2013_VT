@@ -779,17 +779,28 @@ class ResPartner(models.Model):
     @api.depends('email')
     def _compute_mail_count(self):
         for partner in self:
-            count = 0
-            if partner.email:
-                count = self.env['mail.mail'].search_count(['|',
-                    ('email_to', 'in', [partner.email,partner.email2]),
-                    ('recipient_ids','in',[partner.id])
-                ])
+            domain_to=[]
+            if partner.email and partner.email2:
+                domain_to =['|',('email_to', 'in', [partner.email,partner.email2])]
+            elif partner.email:
+                domain_to = ['|',('email_to', '=', partner.email)]
+            elif partner.email2:
+                domain_to = ['|',('email_to', '=', partner.email2)]
+            if domain_to:
+                count = self.env['mail.mail'].search_count(domain_to+[('recipient_ids','in',[partner.id])])
+            else:
+                count = self.env['mail.mail'].search_count([('recipient_ids', 'in', [partner.id])])
             partner.mail_count = count
 
     def action_view_email(self):
-        mails = self.env['mail.mail'].search_read(['|',
-                    ('email_to', 'in', [self.email,self.email2]),('recipient_ids','in',[self.id])
+        domain_to = []
+        if self.email and self.email2:
+            domain_to = ['|',('email_to', 'in', [self.email, self.email2])]
+        elif self.email:
+            domain_to = ['|',('email_to', '=', self.email)]
+        elif self.email2:
+            domain_to = ['|',('email_to', '=', self.email2)]
+        mails = self.env['mail.mail'].search_read(domain_to+[('recipient_ids','in',[self.id])
                 ],['id'])
         mail_ids = [x['id'] for x in mails]
         action = self.env.ref('custom_partner.action_view_emails').read()[0]
