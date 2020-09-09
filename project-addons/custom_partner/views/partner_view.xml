@@ -585,4 +585,28 @@
         </field>
     </record>
 
+    <record id="action_view_emails" model="ir.actions.act_window">
+        <field name="name">E-mails</field>
+        <field name="res_model">mail.mail</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record id="view_partner_form_add_button_email" model="ir.ui.view">
+        <field name="name">Partner Form with emails button</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <div name="button_box" position="inside">
+                <button name="action_view_email"
+                        type="object"
+                        class="oe_stat_button"
+                        icon="fa-envelope-o">
+                    <field name="mail_count"
+                        widget="statinfo"
+                        string="E-mails"/>
+                </button>
+            </div>
+        </field>
+    </record>
 </odoo>
