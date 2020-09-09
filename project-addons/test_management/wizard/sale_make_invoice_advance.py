@@ -69,6 +69,7 @@ class SaleAdvancePaymentInv(models.TransientModel):
 
                 invoice._onchange_invoice_line_ids()
             orders.write({'force_invoiced':  True})
+            orders.mapped('order_line').filtered(lambda l:l.invoice_status=='to invoice').write({'invoice_status': 'no'})
         orders_to_done = self.env['sale.order']
         for order in sale_orders:
             if not order.order_line.mapped('product_id').filtered(lambda x: x.type != 'service'):
