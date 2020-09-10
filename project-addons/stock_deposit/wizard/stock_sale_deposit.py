@@ -17,7 +17,8 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, fields, api, exceptions, _
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
 
 
 class StockSaleDeposit(models.TransientModel):
@@ -50,8 +51,7 @@ class StockSaleDeposit(models.TransientModel):
         for line in self.deposit_change_qty:
             qty_deposit = line.deposit_id.product_uom_qty
             if line.qty_to_sale > qty_deposit or line.qty_to_sale == 0:
-                raise exceptions.except_orm(_('Quantity error'),
-                                            _('The quantity to sale cannot be zero or greater than the original.'))
+                raise ValidationError(_('The quantity to sale cannot be zero or greater than the original.'))
             elif line.qty_to_sale < qty_deposit:
                 new_deposit = line.deposit_id.copy()
                 new_deposit.write({'product_uom_qty': qty_deposit - line.qty_to_sale})
