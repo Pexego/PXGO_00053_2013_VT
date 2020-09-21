@@ -145,7 +145,11 @@ class StockMove(models.Model):
     @api.multi
     def write(self, vals):
         for move in self:
-            if 'product_uom_qty' in vals and self.purchase_line_id and self.picking_id and 'origin' not in vals:
+            if 'product_uom_qty' in vals \
+                    and self.purchase_line_id \
+                    and self.picking_id \
+                    and 'origin' not in vals\
+                    and not move._context.get('accept_ready_qty'):
                 if move.product_uom_qty > vals['product_uom_qty'] > 0:
                     move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
                 elif vals['product_uom_qty'] > move.product_uom_qty:
