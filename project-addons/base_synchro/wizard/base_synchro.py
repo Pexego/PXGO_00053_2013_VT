@@ -73,6 +73,8 @@ class BaseSynchro(models.TransientModel):
                                    ('state', '=', 'installed')])
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        import ipdb
+        ipdb.set_trace()
         if object.context:
             ctx.update(dict(eval(object.context)))
         if not module_id:
@@ -84,12 +86,14 @@ class BaseSynchro(models.TransientModel):
         if object.action in ('d', 'b'):
             fields_data = pool1.get(object.model_id.model). \
                 fields_get()
-            if object.model_id.model == 'product.product' and country_code == 'IT' and not fields_data.get(
-                    'virtual_stock_conservative', False):
-                fields_data['virtual_stock_conservative'] = {'type': 'float'}
             for field in object.avoid_ids:
                 if field.name in fields_data:
                     del fields_data[field.name]
+
+            if object.model_id.model == 'product.product' and country_code == 'IT' and not fields_data.get(
+                    'virtual_stock_conservative', False):
+                fields_data['virtual_stock_conservative'] = {'type': 'float'}
+
             flds = list(fields_data.keys())
             sync_ids, domain = self.download_get_items(pool1, model_obj, dt, domain, object, flds, sync_ids,
                                                        records_limit, False)
@@ -100,13 +104,14 @@ class BaseSynchro(models.TransientModel):
             fields_data = pool2.get(object.model_id.model). \
                 fields_get()
 
+            for field in object.avoid_ids:
+                if field.name in fields_data:
+                    del fields_data[field.name]
+
             if object.model_id.model == 'product.product' and country_code == 'ES' and not fields_data.get(
                     'virtual_stock_conservative', False):
                 fields_data['virtual_stock_conservative'] = {'type': 'float'}
 
-            for field in object.avoid_ids:
-                if field.name in fields_data:
-                    del fields_data[field.name]
             flds = list(fields_data.keys())
             sync_ids, domain = pool2.upload_get_items(model_obj, dt, domain, object, flds, sync_ids, records_limit,
                                                       False)
