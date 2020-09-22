@@ -73,8 +73,6 @@ class BaseSynchro(models.TransientModel):
                                    ('state', '=', 'installed')])
 
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
-        import ipdb
-        ipdb.set_trace()
         if object.context:
             ctx.update(dict(eval(object.context)))
         if not module_id:
