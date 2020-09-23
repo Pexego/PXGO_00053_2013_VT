@@ -149,7 +149,7 @@ class BaseSynchro(models.TransientModel):
             sorted(sync_ids_forced, key=lambda x: str(x[0]))
             _logger.debug("SORTED SYNC_IDS_FORCED {}".format(sync_ids_forced))
             _logger.debug("{} REGS no: {}".format(model_obj, len(sync_ids_forced)))
-            self.update_elements(pool1, pool2, sync_ids_forced, object, new_data_fields_forced, ctx)
+            self.update_elements(pool1, pool2, sync_ids_forced, object, new_data_fields_forced, ctx, False)
 
         return True
 
@@ -179,7 +179,7 @@ class BaseSynchro(models.TransientModel):
             sync_ids += res_ids
         return sync_ids, domain
 
-    def update_elements(self, pool1, pool2, sync_ids, object, fields_data, ctx):
+    def update_elements(self, pool1, pool2, sync_ids, object, fields_data, ctx, create=True):
         for dt, id, action, value in sync_ids:
             if action == 'd':
                 pool_src = pool1
@@ -218,7 +218,7 @@ class BaseSynchro(models.TransientModel):
                         write([id2], value)
                 self.report_total += 1
                 self.report_write += 1
-            else:
+            elif create:
                 _logger.debug("Creating model %s", object.model_id.name)
                 if not destination_inverted:
                     idnew = pool_dest.env[object.model_id.model]. \
