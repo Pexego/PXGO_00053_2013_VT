@@ -105,7 +105,7 @@ class SaleOrder(models.Model):
                     'order_id': self.id,
                     'customization_types': [(6, 0, [x.id for x in
                                              line.customization_types])],
-                    'purchase_price': product.standard_price_2_inc,
+                    'purchase_price': product.standard_price,
                     'delay': max([product.sale_delay, line.delay]),
                     'product_uom_qty': line.product_uom_qty,
                     'product_uom': product.uom_id.id,
