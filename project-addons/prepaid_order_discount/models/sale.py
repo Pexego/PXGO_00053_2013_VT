@@ -134,3 +134,11 @@ class SaleOrder(models.Model):
                     return round((margin_rappel * 100) / purchase_price, 2)
                 else:
                     return round((margin_rappel * 100) / sale_price, 2)
+
+    @api.model
+    def create(self, vals):
+        res = super(SaleOrder, self).create(vals)
+        if vals.get('prepaid_option', False) and self.env.user.login == self.env['ir.config_parameter'].sudo().get_param(
+                'web.user.buyer'):
+            res.message_post(body=_("Prepaid option checked by Web Team"))
+        return res
