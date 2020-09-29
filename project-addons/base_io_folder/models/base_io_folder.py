@@ -40,7 +40,9 @@ class BaseIOFolder(models.Model):
         :return:
         """
         for config in self.search([('direction', '=', 'import')]):
-            config._iter_directory()
+            imported_files = config._iter_directory()
+            for file_imported, file_full_name in imported_files:
+                config._after_import(file_imported, file_full_name)
 
     @api.multi
     def _get_files_in_directory(self):
@@ -81,6 +83,7 @@ class BaseIOFolder(models.Model):
         :return: None
         """
         self.ensure_one()
+        imported_files = []
         if not os.path.exists(self.directory_path):
             raise ValidationError(_('Unknown path provided: %s'
                                     % self.directory_path))
@@ -91,9 +94,9 @@ class BaseIOFolder(models.Model):
                                          file_imported)
             with open(file_full_name, "rb") as fileobj:
                 data = fileobj.read()
-            description = 'Import data from file %s' % file_imported
             self.action_batch_import(file_imported, b64encode(data))
-            self._after_import(file_imported, file_full_name)
+            imported_files.append((file_imported, file_full_name))
+        return imported_files
 
     @api.multi
     def export_file(self, b64data, filename):

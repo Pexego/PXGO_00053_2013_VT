@@ -189,9 +189,13 @@ class AccountInvoice(models.Model):
     def action_move_create(self):
         res = super().action_move_create()
         for inv in self:
-            inv.move_id.line_ids.\
-                write({'blocked': inv.payment_mode_id.blocked or
-                       inv.payment_term_id.blocked})
+            if inv.type == 'out_refund':
+                inv.move_id.line_ids.\
+                    write({'blocked': inv.payment_mode_id.blocked})
+            else:
+                inv.move_id.line_ids.\
+                    write({'blocked': inv.payment_mode_id.blocked or
+                                      inv.payment_term_id.blocked})
             payment_move_lines = inv._get_payment()
             for payment_line in payment_move_lines:
                 inv.assign_outstanding_credit(payment_line.id)
