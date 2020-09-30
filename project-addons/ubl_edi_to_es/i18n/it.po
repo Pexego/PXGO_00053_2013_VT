@@ -21,3 +21,8 @@ msgstr ""
 msgid "Qty Available ES"
 msgstr "Stock disponibile ES"
 
+#. module: ubl_edi_to_es
+#: model:ir.model.fields,field_description:ubl_edi_to_es.field_sale_order_line_qty_available_es
+msgid "Qty Avail. ES"
+msgstr "Stock disp. ES"
+
