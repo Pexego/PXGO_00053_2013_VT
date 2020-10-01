@@ -35,7 +35,7 @@ class ResPartnerInvoiceType(models.Model):
     _name = 'res.partner.invoice.type'
 
     name = fields.Char("Name", required=True)
-
+    journal_id = fields.Many2one('account.journal', string="Journal")
 
 class PhoneValidationMixin(models.AbstractModel):
     _inherit = 'phone.validation.mixin'
