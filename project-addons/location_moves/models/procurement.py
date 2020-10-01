@@ -28,27 +28,40 @@ class ProcurementGroup(models.Model):
     def _run_scheduler_tasks(self, use_new_cursor=False, company_id=False):
         super()._run_scheduler_tasks(use_new_cursor=use_new_cursor,
                                      company_id=company_id)
-        location_it = self.env['stock.location'].search([('name', '=', 'Depósito Visiotech Italia')])
-        operation_it = self.env['stock.picking.type'].search([('name', '=', 'Albarán de salida desde depósito IT')])
-        pick_ids = self.env["stock.picking"].\
-            search([("picking_type_id", "=",
-                     self.env.ref('stock.picking_type_internal').id),
-                    ("state", "in", ("assigned", "confirmed", "partially_available"))])
-        # Italy pickings
-        pick_ids += self.env["stock.picking"].\
-            search([("location_id", "=", location_it.id),
-                    ("picking_type_id", "=", operation_it.id),
-                    ("state", "in", ("assigned", "confirmed", "partially_available"))])
 
-        for pick_assign in pick_ids.filtered(
-                lambda l: l.state == "assigned"):
+        location_it = self.env['stock.location'].search(
+            [('name', '=', 'Depósito Visiotech Italia')])
+
+        operation_it = self.env['stock.picking.type'].search([('name', '=', 'Albarán de salida desde depósito IT')])
+        operation_internal = self.env.ref('stock.picking_type_internal').id
+        pick_ids_assign = self.env["stock.picking"]. \
+            search(['&', ("state", "=", "assigned"), '|',
+                    ("picking_type_id", "=", operation_internal), '&',
+                    ("location_id", "=", location_it.id),
+                    ("picking_type_id", "=", operation_it.id)
+                    ])
+
+        pick_ids_confirmed_par = self.env["stock.picking"]. \
+            search(['&', ("state", "in", ("confirmed", "partially_available")), '|',
+                    ("picking_type_id", "=", operation_internal),
+                    '&', ("location_id", "=", location_it.id),
+                    ("picking_type_id", "=", operation_it.id)
+                    ])
+        max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
+        len_pick_assign = len(pick_ids_assign)
+        for count, pick_assign in enumerate(pick_ids_assign):
             pick_assign.action_done()
-        for pick_partially in pick_ids.filtered(
-                lambda l: l.state in ("confirmed", "partially_available")):
+            if ((count + 1 >= max_commit_len and count + 1 % max_commit_len == 0) or count == len_pick_assign - 1) \
+                    and use_new_cursor:
+                self.env.cr.commit()
+
+        for count, pick_partially in enumerate(pick_ids_confirmed_par):
             pick_partially.move_type = 'direct'
             if pick_partially.state == "partially_available":
                 pick_partially.action_copy_reserv_qty()
                 pick_partially.action_accept_confirmed_qty()
+            if count + 1 >= max_commit_len and count + 1 % max_commit_len == 0 and use_new_cursor:
+                self.env.cr.commit()
 
         if use_new_cursor:
             self.env.cr.commit()
