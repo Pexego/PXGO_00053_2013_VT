@@ -22,14 +22,14 @@ from odoo import models, fields, api, _, exceptions
 
 
 class SalePointProgrammeRule(models.Model):
-
     _name = 'sale.point.programme.rule'
 
     name = fields.Char('Description', required=True, size=128)
     date_start = fields.Date('Start date')
     date_end = fields.Date('End date')
-    points = fields.Integer('Points / Participations', required=True)
-    modality = fields.Selection([('point', 'points'), ('participation', 'participations')], 'Modality', default='point',required=True)
+    points = fields.Float('Points / Participations', required=True)
+    modality = fields.Selection([('point', 'points'), ('participation', 'participations')], 'Modality', default='point',
+                                required=True)
     category_id = fields.Many2one('product.category', 'Category')
     product_id = fields.Many2one('product.product', 'Product')
     product_brand_id = fields.Many2one('product.brand', 'Brand')
@@ -44,6 +44,9 @@ class SalePointProgrammeRule(models.Model):
                                 'Operator', required=True, default='for_each')
     value = fields.Float('Value', digits=(16, 2), required=True, default=1.0)
     active = fields.Boolean('Active', default=True)
+    integer_points = fields.Boolean(default=True)
+    partner_category_id = fields.Many2many('res.partner.category', 'partner_id',
+                                           'category_id', string='Tags')
 
     @api.multi
     @api.constrains('date_start', 'date_end')
@@ -57,11 +60,12 @@ class SalePointProgrammeRule(models.Model):
         for rule in self:
             if rule.operator == "for_each":
                 mult = amount / (rule.value or 1.0)
-                return int(mult * rule.points)
+                if rule.integer_points:
+                    return int(mult * rule.points)
+                else:
+                    return mult * rule.points
             else:
                 if eval(str(amount) + rule.operator + str(rule.value)):
                     return rule.points
                 else:
                     return 0
-
-

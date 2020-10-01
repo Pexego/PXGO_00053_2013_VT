@@ -382,3 +382,15 @@ msgstr "res.partner.point.programme.bag"
 #: model:ir.model,name:sale_point_programme.model_sale_point_programme_rule
 msgid "sale.point.programme.rule"
 msgstr "sale.point.programme.rule"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_integer_points
+msgid "Integer Points"
+msgstr "Puntos enteros"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_sale_point_programme_rule_partner_category_id
+msgid "Tags"
+msgstr "Etiquetas de cliente"
+
+

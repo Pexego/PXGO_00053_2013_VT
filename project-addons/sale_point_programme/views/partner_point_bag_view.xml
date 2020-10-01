@@ -9,9 +9,12 @@
                 <tree string="Points traceability">
                     <field name="partner_id"/>
                     <field name="order_id"/>
+                    <field name="order_applied_id"/>
                     <field name="name"/>
                     <field name="points"/>
                     <field name="email_sent"/>
+                    <field name="applied_state"/>
+                    <field name="line_id" invisible="1"/>
                 </tree>
             </field>
         </record>
