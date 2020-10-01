@@ -31,7 +31,7 @@ class PartnerPointProgrammeBag(models.Model):
     points = fields.Float('Points', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
     email_sent = fields.Boolean('Email sent', default=False)
-    order_applied_id = fields.Many2one('sale.order', 'Sale order', readonly=True)
+    order_applied_id = fields.Many2one('sale.order', 'Sale order applied', readonly=True)
     applied_state = fields.Selection([
         ('no', 'No'),
         ('applied', 'Applied'),

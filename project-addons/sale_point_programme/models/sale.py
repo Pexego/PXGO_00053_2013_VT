@@ -38,32 +38,40 @@ class SaleOrder(models.Model):
                     pkey = line.product_id.id
                     ckey = line.product_id.categ_id.id
                     bkey = line.product_id.product_brand_id.id
+                    if mode == "claim":
+                        qty = line.qty
+                    else:
+                        qty = line.product_uom_qty
+                    if mode == "move":
+                        amount = line.sale_line_id.price_subtotal / line.sale_line_id.product_uom_qty * line.product_uom_qty
+                    else:
+                        amount = line.price_subtotal
                     if products.get(pkey):
-                        products[pkey]['qty'] += line.product_uom_qty if not mode=="claim" else line.qty
-                        products[pkey]['amount'] += line.price_subtotal if not mode=="move" else line.sale_line_id.price_subtotal/line.sale_line_id.product_uom_qty*line.product_uom_qty
+                        products[pkey]['qty'] += qty
+                        products[pkey]['amount'] += amount
                     else:
-                        products[pkey] = {'qty': line.product_uom_qty if not mode=="claim" else line.qty,
-                                          'amount': line.price_subtotal if not mode=="move" else line.sale_line_id.price_subtotal/line.sale_line_id.product_uom_qty*line.product_uom_qty}
+                        products[pkey] = {'qty': qty,
+                                          'amount': amount}
                     if categories.get(ckey):
-                        categories[ckey]['qty'] += line.product_uom_qty if not mode=="claim" else line.qty
-                        categories[ckey]['amount'] += line.price_subtotal if not mode=="move" else line.sale_line_id.price_subtotal/line.sale_line_id.product_uom_qty*line.product_uom_qty
+                        categories[ckey]['qty'] += qty
+                        categories[ckey]['amount'] += amount
                     else:
-                        categories[ckey] = {'qty': line.product_uom_qty if not mode=="claim" else line.qty,
-                                            'amount': line.price_subtotal if not mode=="move" else line.sale_line_id.price_subtotal/line.sale_line_id.product_uom_qty*line.product_uom_qty}
+                        categories[ckey] = {'qty': qty,
+                                            'amount': amount}
                     if brands.get(bkey):
-                        brands[bkey]['qty'] += line.product_uom_qty if not mode=="claim" else line.qty
-                        brands[bkey]['amount'] += line.price_subtotal if not mode=="move" else line.sale_line_id.price_subtotal/line.sale_line_id.product_uom_qty*line.product_uom_qty
+                        brands[bkey]['qty'] += qty
+                        brands[bkey]['amount'] += amount
                     else:
-                        brands[bkey] = {'qty': line.product_uom_qty if not mode=="claim" else line.qty,
-                                        'amount': line.price_subtotal if not mode=="move" else line.sale_line_id.price_subtotal/line.sale_line_id.product_uom_qty*line.product_uom_qty}
-                total_product_qty += line.product_uom_qty if not mode=="claim" else line.qty
+                        brands[bkey] = {'qty': qty,
+                                        'amount': amount}
+                    total_product_qty += qty
 
             for rule in rules:
-                apply_rule=True
+                apply_rule = True
                 if rule.partner_category_id:
                     partner_categories = set(self.partner_id.category_id)
                     rule_categories = set(rule.partner_category_id)
-                    apply_rule = len(partner_categories & rule_categories)>0
+                    apply_rule = len(partner_categories & rule_categories) > 0
                 if apply_rule:
                     points = False
                     if rule.product_id:
@@ -110,7 +118,7 @@ class SaleOrder(models.Model):
                 modality_type = rule.modality
                 if modality_type == 'participation':
                     reg = bag_obj.search_read([('point_rule_id', '=', rule.id)], ['points'],
-                                                   order='id desc', limit=1)
+                                              order='id desc', limit=1)
                     if not reg:
                         last_number = 0
                     else:

@@ -393,4 +393,20 @@ msgstr "Puntos enteros"
 msgid "Tags"
 msgstr "Etiquetas de cliente"
 
+#. module: sale_point_programme
+#: selection:res.partner.point.programme.bag,applied_state:0
+msgid "Applied"
+msgstr "Aplicado"
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_applied_state
+msgid "State"
+msgstr "Estado"
+
+
+#. module: sale_point_programme
+#: model:ir.model.fields,field_description:sale_point_programme.field_res_partner_point_programme_bag_order_applied_id
+msgid "Sale order applied"
+msgstr "Pedido de venta aplicado"
+
 
