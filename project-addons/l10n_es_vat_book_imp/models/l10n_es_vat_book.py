@@ -15,11 +15,11 @@ class L10nEsVatBook(models.Model):
                 WHERE
                     ((aml.date >= '%s') and (aml.date <= '%s'))
                     and ((amlatr.account_tax_id in %s) or (aml.tax_line_id in %s))
-                    and aml.company_id = 1
+                    and aml.company_id = %s
                 ORDER BY
                     aml.date desc,
                     aml.id desc
-        """) % (self.date_start, self.date_end, tuple(taxes.ids), tuple(taxes.ids))
+        """) % (self.date_start, self.date_end, tuple(taxes.ids), tuple(taxes.ids), self.env.user.company_id.id)
         self.env.cr.execute(sql)
         lines = self.env.cr.fetchall()
         lines = self.env['account.move.line'].browse([x[0] for x in lines])
