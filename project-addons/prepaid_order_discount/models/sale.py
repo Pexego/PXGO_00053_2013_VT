@@ -10,9 +10,11 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
+        risk = False
         for sale in self:
             message = ''
             if sale.prepaid_option:
+                risk = True
                 prepaid_discount_product_id = self.env.ref('prepaid_order_discount.prepaid_discount_product').id
                 exist_prepaid_discount_line = sale.order_line. \
                     filtered(lambda l: l.product_id.id == prepaid_discount_product_id)
@@ -35,7 +37,7 @@ class SaleOrder(models.Model):
                             message = _("Please, recalculate prepaid discount")
             if message:
                 raise exceptions.Warning(message)
-        return super().action_confirm()
+        return super(SaleOrder, self.with_context(bypass_risk=risk)).action_confirm()
 
     @api.multi
     def calculate_prepaid_discount(self):
