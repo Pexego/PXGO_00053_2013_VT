@@ -19,6 +19,9 @@
 ##############################################################################
 
 from odoo import models, api
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class ProcurementGroup(models.Model):
@@ -26,23 +29,24 @@ class ProcurementGroup(models.Model):
 
     @api.model
     def _run_scheduler_tasks(self, use_new_cursor=False, company_id=False):
+        _logger.info("STARTING CALL SUPER SCHEDULER")
         super()._run_scheduler_tasks(use_new_cursor=use_new_cursor,
                                      company_id=company_id)
-        location_it = self.env['stock.location'].search([('name', '=', 'Depósito Visiotech Italia')])
-        operation_it = self.env['stock.picking.type'].search([('name', '=', 'Albarán de salida desde depósito IT')])
-        pick_ids = self.env["stock.picking"].\
+        _logger.info("SEARCHING FOR INTERNAL PICKINGS")
+
+        pick_ids = self.env["stock.picking"]. \
             search([("picking_type_id", "=",
                      self.env.ref('stock.picking_type_internal').id),
                     ("state", "in", ("assigned", "confirmed", "partially_available"))])
-        # Italy pickings
-        pick_ids += self.env["stock.picking"].\
-            search([("location_id", "=", location_it.id),
-                    ("picking_type_id", "=", operation_it.id),
-                    ("state", "in", ("assigned", "confirmed", "partially_available"))])
+
+        _logger.info("TRANSFERRING READY INTERNAL PICKINGS")
 
         for pick_assign in pick_ids.filtered(
                 lambda l: l.state == "assigned"):
             pick_assign.action_done()
+
+        _logger.info("PROCESSING CONFIRMED AND PARTIALLY AVAILABLE PICKINGS")
+
         for pick_partially in pick_ids.filtered(
                 lambda l: l.state in ("confirmed", "partially_available")):
             pick_partially.move_type = 'direct'
@@ -52,3 +56,5 @@ class ProcurementGroup(models.Model):
 
         if use_new_cursor:
             self.env.cr.commit()
+        _logger.info("DONE")
+
