@@ -62,12 +62,12 @@ class ResPartner(models.Model):
                 if partner.blocked_sales:
                     partner.blocked_sales = False
                 continue
-            cust_accounts = self.env['account.account'].search(
-                [('company_id', '=', self.env.user.company_id.id),
-                 ('internal_type', '=', 'receivable'),
-                 ('code', 'like', '430%')])
+
+            debit_receipt_param = self.env['ir.config_parameter'].sudo().get_param('debit.receipt.account.ids')
+            account_id = int(debit_receipt_param.split(',')[1])
+
             move_lines = self.env['account.move.line'].search(
-                [('account_id', 'in', cust_accounts._ids),
+                [('account_id', '=', account_id),
                  '|', ('date_maturity', '<', limit_customer_date),
                  ('date_maturity', '=', False),
                  ('full_reconcile_id', '=', False),
