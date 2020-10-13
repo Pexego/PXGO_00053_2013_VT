@@ -158,13 +158,13 @@ class StockReservation(models.Model):
                                 ('move_id.state', 'not in', ['done',
                                                              'cancel'])])
         reserves_to_delete = self.env['stock.reservation']
-        for reserve in reserves:
-            check_other_reserves = self.\
-                search([('sale_line_id', '=', reserve.sale_line_id.id),
-                        ('partner_id', '!=', False),
-                        ('move_id.state', 'not in', ['done', 'cancel'])])
-            if check_other_reserves:
-                reserves_to_delete |= reserve
+        check_other_reserves = self.\
+            search([('sale_line_id', 'in', reserves.mapped('sale_line_id').mapped('id')),
+                    ('partner_id', '!=', False),
+                    ('move_id.state', 'not in', ['done', 'cancel'])])
+        if check_other_reserves:
+            reserves_to_delete |= reserves.\
+                filtered(lambda r: r.sale_line_id.id in check_other_reserves.mapped('sale_line_id').mapped('id'))
         if reserves_to_delete:
             reserves_to_delete.unlink()
 
