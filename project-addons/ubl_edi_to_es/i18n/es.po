@@ -19,5 +19,10 @@ msgstr ""
 #: model:ir.model.fields,field_description:ubl_edi_to_es.field_product_product_virtual_stock_conservative_es
 #: model:ir.model.fields,field_description:ubl_edi_to_es.field_product_template_virtual_stock_conservative_es
 msgid "Qty Available ES"
-msgstr "Cantidad disponible ES"
+msgstr "Stock disponible ES"
+
+#. module: ubl_edi_to_es
+#: model:ir.model.fields,field_description:ubl_edi_to_es.field_sale_order_line_qty_available_es
+msgid "Qty Avail. ES"
+msgstr "Stock disp. ES"
 
