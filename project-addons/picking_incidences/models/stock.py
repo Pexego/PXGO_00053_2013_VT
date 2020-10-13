@@ -220,7 +220,7 @@ class StockPicking(models.Model):
                 bck.write({'move_type': 'one'})
                 self.action_assign()
                 pick.move_lines.write({'state': 'assigned'})
-            self.message_post(body=_("User %s accepted confirmed qties.") %
+            pick.message_post(body=_("User %s accepted confirmed qties.") %
                               self.env.user.name)
 
     @api.model
