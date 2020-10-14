@@ -89,3 +89,18 @@ msgstr "L'evento non è stato modificato in Outlook. Non puoi modificare un even
 #: model:ir.ui.view,arch_db:outlook_calendar.view_calendar_event_form_popup_add_button
 msgid "Remember, you cannot modify an event in Outlook that is not yours"
 msgstr "Ricorda, non puoi modificare un evento in Outlook che non è tuo"
+
+#. module: outlook_calendar
+#: model:ir.model.fields,field_description:outlook_calendar.field_mail_activity_sync_with_calendar
+msgid "Create calendar event"
+msgstr "Creare evento del calendario"
+
+#. module: outlook_calendar
+#: model:ir.model.fields,field_description:outlook_calendar.field_mail_activity_calendar_start
+msgid "Start"
+msgstr "Inizio"
+
+#. module: outlook_calendar
+#: model:ir.model.fields,field_description:outlook_calendar.field_mail_activity_calendar_stop
+msgid "End"
+msgstr "Fine"

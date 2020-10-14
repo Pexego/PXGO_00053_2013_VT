@@ -19,7 +19,6 @@
 ##############################################################################
 from odoo import api, exceptions, fields, models, _
 
-
 class StockPicking(models.Model):
     _inherit = "stock.picking"
     _order = "priority desc, date desc, id desc"
@@ -80,10 +79,11 @@ class StockPicking(models.Model):
                         cont += 1
         res = super().action_done()
         for picking in self:
-            picking_states = picking.sale_id.picking_ids.mapped('state')
-            if all(state in ('done', 'cancel') for state in picking_states) \
-                    and not all(state == 'cancel' for state in picking_states):
-                picking.sale_id.action_done()
+            if picking.sale_id:
+                picking_states = self.env['stock.picking'].search_read([('sale_id', '=', picking.sale_id.id)],['state'])
+                if all(picking['state'] in ('done', 'cancel') for picking in picking_states) \
+                        and not all(picking['state'] == 'cancel' for picking in picking_states):
+                    picking.sale_id.action_done()
         return res
 
     @api.multi
@@ -95,11 +95,10 @@ class StockPicking(models.Model):
                     (vals.get('carrier_name', False) and picking.carrier_tracking_ref and not picking.carrier_name) or
                     (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and\
                     picking.picking_type_code == 'outgoing' and picking.sale_id:
-                pickings_to_send.append(picking.id)
+                pickings_to_send.append(picking)
         result = super().write(vals)
         if pickings_to_send:
-            pickings = self.env["stock.picking"].browse(pickings_to_send)
-            for picking in pickings:
+            for picking in pickings_to_send:
                 # We need to do this after the write, otherwise the email template won't get well some  picking values
                 picking_template = self.env.ref('stock_custom.picking_done_template')
                 picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
@@ -192,7 +191,7 @@ class StockMove(models.Model):
                           ('product_id', '=', move.product_id.id)]
                 confirmed_ids = self.\
                     search(domain, limit=None,
-                           order="has_reservations,sequence,picking_id,id")
+                           order="has_reservations,sequence,date_expected,id")
                 if confirmed_ids:
                     confirmed_ids._action_assign()
         return res
@@ -214,11 +213,34 @@ class StockMove(models.Model):
 
     @api.multi
     def write(self,vals):
+        if len(vals) > 1 and 'product_uom_qty' in vals and vals['product_uom_qty'] == self.product_uom_qty:
+            # This is the case when the user modifies the price of the
+            # sale order line, in this case product_uom_qty is also write
+            # and that put the state "partially_available" on the reserve
+            del vals['product_uom_qty']
         res = super(StockMove, self).write(vals)
         for move in self:
             if move.purchase_line_id and move.product_id.date_first_incoming_reliability!='1.received' and (vals.get('date_expected') or vals.get('state') =='cancel' or vals.get('picking_id')==False):
                 move.product_id._compute_date_first_incoming()
+            if vals.get('date_expected') and move.purchase_line_id != False and move.state not in ['cancel','done'] and move.location_dest_id.usage=='internal':
+                move.product_id.with_delay().update_product()
         return res
+
+    @api.multi
+    def create(self, vals):
+        res = super(StockMove, self).create(vals)
+        if vals.get('date_expected') and vals.get('purchase_line_id') and vals.get('state') not in ['cancel',
+                                                                                                   'done'] and self.env['stock.location'].browse(vals.get('location_dest_id')).usage == 'internal':
+                self.env['product.product'].browse(vals.get('product_id')).with_delay(eta=60).update_product()
+        return res
+
+    @api.multi
+    def _compute_parent_partner(self):
+        for move in self:
+            move.parent_partner=move.sale_line_id.order_id.partner_id if move.sale_line_id else move.partner_id
+    parent_partner = fields.Many2one('res.partner',compute="_compute_parent_partner",string="Partner")
+
+    purchase_order_id = fields.Many2one('purchase.order',related='purchase_line_id.order_id')
 
 
 class StockReturnPicking(models.TransientModel):

@@ -52,7 +52,7 @@ class AccountInvoice(models.Model):
             for order in invoice.sale_order_ids:
                 orders += order.name + ','
             if orders.endswith(','):
-                self.orders = orders[:-1]
+                invoice.orders = orders[:-1]
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
     def export_invoice(self):

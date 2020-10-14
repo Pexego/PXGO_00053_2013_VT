@@ -115,7 +115,9 @@ class PromotionsRulesActions(models.Model):
             ('prod_fixed_price_tag',
              _('Fixed price on Product Tag')),
             ('prod_fixed_price',
-             _('Fixed price on Product'))
+             _('Fixed price on Product')),
+            ('prod_free_per_unit',
+             _('Products free per unit'))
             ])
 
     def on_change(self):
@@ -152,6 +154,10 @@ class PromotionsRulesActions(models.Model):
         elif self.action_type == 'prod_fixed_price':
             self.product_code = 'product_reference'
             self.arguments = '0.00'
+
+        elif self.action_type == 'prod_free_per_unit':
+            self.product_code = '"product_reference",..."'
+            self.arguments = '{"product":qty, ...}'
 
         return super().on_change()
 
@@ -259,9 +265,7 @@ class PromotionsRulesActions(models.Model):
                     num_lines = int(qty / qty_a) * (qty_a - qty_b)
                     if qty - qty_a >= 0:
                         self.create_y_line_axb(
-                            order, order_line.price_unit,
-                            order_line.discount, order_line.sequence,
-                            num_lines, order_line.product_id)
+                            order, order_line,num_lines)
                         promo_products.append(order_line.product_id.id)
         return {}
 
@@ -283,22 +287,43 @@ class PromotionsRulesActions(models.Model):
         }
         return order_line.write(vals)
 
-    def create_y_line_axb(self, order, price_unit, discount,
-                          sequence, quantity, product_id):
+    def create_y_line_axb(self, order, order_line, quantity):
+        product_id=order_line.product_id
         vals = {
             'order_id': order.id,
-            'sequence': sequence,
+            'sequence': order_line.sequence,
             'product_id': self.env.ref('commercial_rules.product_discount').id,
             'name': '%s (%s)' % (
                      product_id.default_code,
                      self.promotion.line_description),
-            'price_unit': -price_unit,
-            'discount': discount,
+            'price_unit': -order_line.price_unit,
+            'discount': order_line.discount,
             'promotion_line': True,
             'product_uom_qty': quantity,
-            'product_uom': product_id.uom_id.id
+            'product_uom': product_id.uom_id.id,
+            'original_line_id_promo': order_line.id,
+            'promo_qty_split': eval(self.arguments.split(",")[0])
+
         }
         self.create_line(vals)
+        return True
+
+    def action_prod_free_per_unit(self, order):
+        """
+        Action for: Get Product for free per unit
+        """
+        product_obj = self.env['product.product']
+        # Get Product
+        products_code = eval(self.product_code)
+        products = product_obj.search([('default_code', 'in', products_code)])
+        if not products:
+            raise UserError(_("No product with the code % s") % products_code)
+        for line in order.order_line.filtered(lambda l: l.product_id in products):
+            promo_products = eval(self.arguments)
+            for product, qty in promo_products.items():
+                prod = product_obj.search([('default_code', '=', product)])
+                self.create_y_line(order, qty * line.product_qty, prod.id)
+
         return True
 
 

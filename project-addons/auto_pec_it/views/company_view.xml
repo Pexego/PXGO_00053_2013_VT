@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_company_form_e_invoice_pec_template" model="ir.ui.view">
+            <field name="name">view_company_form_e_invoice_pec_template</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="l10n_it_fatturapa.view_company_form_e_invoice"/>
+            <field name="arch" type="xml">
+                <field name="fatturapa_fiscal_position_id" position="before">
+                    <field name="auto_pec_template"/>
+                    <field name="pec_delay_time"/>
+                </field>
+            </field>
+        </record>
+    </data>
+</odoo>

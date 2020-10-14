@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="group_archive_button" model="res.groups">
+        <field name="name">Archive Button</field>
+    </record>
+
+</odoo>

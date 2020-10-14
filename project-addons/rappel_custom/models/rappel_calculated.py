@@ -1,7 +1,7 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import api, fields, models
-from datetime import datetime
+from datetime import datetime,timedelta
 
 
 class RappelCalculated(models.Model):
@@ -22,10 +22,14 @@ class RappelCalculated(models.Model):
         ctx['active_id'] = rappels_to_invoice[0]
 
         rappel_invoice_wzd = self.env['rappel.invoice.wzd']
-        new_data_invoice = rappel_invoice_wzd.with_context(ctx).create(
-            {'journal_id': journal_id,
+        invoice_data = {'journal_id': journal_id,
              'group_by_partner': True,
-             'invoice_date': False})
+             'invoice_date': False}
+        today = datetime.today()
+        if today.day==1:
+            yesterday = today - timedelta(days=1)
+            invoice_data['invoice_date'] = yesterday
+        new_data_invoice = rappel_invoice_wzd.with_context(ctx).create(invoice_data)
 
         # Create invoice
         new_data_invoice.action_invoice()

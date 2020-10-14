@@ -58,6 +58,8 @@ class CrmClaimRma(models.Model):
     aditional_notes = fields.Text("Aditional Notes")
     claim_inv_line_ids = fields.One2many("claim.invoice.line", "claim_id")
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
+    transport_incidence = fields.Boolean('Transport incidence')
+    t_incidence_picking = fields.Char('Trp. inc. picking')
 
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
@@ -133,6 +135,7 @@ class CrmClaimRma(models.Model):
                                 'discount': inv_line.discount,
                                 'qty': claim_line.product_returned_quantity,
                                 'price_unit': inv_line.price_unit,
+                                'cost_unit': inv_line.product_id.standard_price,
                                 'tax_ids': [(6, 0, taxes_ids)]
                             }
                             break
@@ -172,11 +175,11 @@ class CrmClaimRma(models.Model):
             accinv_refund_ids = accinv_refund_obj.search(domain_acc_inv)
 
             invoice = False
-            invoice_name = []
+            invoice_name = set()
             for line in claim_obj.claim_inv_line_ids:
                 if not line.invoiced:
                     if line.invoice_id.name:
-                        invoice_name.append(line.invoice_id.name)
+                        invoice_name.add(line.invoice_id.name)
                     invoice = True
 
             if not invoice:
@@ -243,6 +246,7 @@ class CrmClaimRma(models.Model):
                     'quantity': line.qty,
                     'claim_line_id': line.claim_line_id.id,
                     'price_unit': line.price_unit,
+                    'cost_unit': line.cost_unit,
                     'uos_id': line.product_id.uom_id.id,
                     'discount': line.discount,
                     'account_analytic_id': False
@@ -280,6 +284,7 @@ class ClaimInvoiceLine(models.Model):
     product_description = fields.Char("Product Description", required=True)
     invoice_id = fields.Many2one("account.invoice", "Invoice")
     price_unit = fields.Float("Price Unit")
+    cost_unit = fields.Float("Cost Unit")
     price_subtotal = fields.Float("Price Subtotal", compute="_get_subtotal",
                                   readonly=True)
     tax_ids = fields.Many2many("account.tax", "claim_line_tax",

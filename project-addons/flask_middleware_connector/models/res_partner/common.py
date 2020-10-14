@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo.addons.component.core import Component
 from odoo.addons.queue_job.job import job
-from odoo import models, api, fields
+from odoo import models, api, fields, _
 
 
 class PartnerListener(Component):
@@ -62,7 +62,7 @@ class PartnerListener(Component):
                      "country_id", "state_id", "email_web", "ref", 'user_id',
                      "property_product_pricelist", "lang", "type",
                      "parent_id", "is_company", "email",
-                     "prospective", "phone", "mobile"]
+                     "prospective", "phone", "mobile","csv_connector_access"]
         if partner.is_company:
 
             if partner.web and (partner.active or partner.prospective):
@@ -70,8 +70,7 @@ class PartnerListener(Component):
             elif partner.web:
                 for field in up_fields:
                     if field in fields:
-                        partner.with_delay(
-                            priority=5, eta=120).update_partner()
+                        partner.with_delay(priority=5, eta=120).update_partner()
                         if 'street' in fields or \
                                 'zip' in fields or \
                                 'city' in fields or \
@@ -85,13 +84,11 @@ class PartnerListener(Component):
                                 ('company_id', '=', 1)
                             ])
                             for sale in sales:
-                                sale.with_delay(
-                                    priority=5, eta=180).update_order()
+                                sale.with_delay(priority=5, eta=180).update_order()
                         break
         else:
-            if partner.web and 'active' in fields and \
-                    partner.active or 'prospective' in fields and \
-                    partner.prospective:
+            if partner.web and (('active' in fields and partner.active) or
+                                ('prospective' in fields and partner.prospective)):
                 partner.with_delay(priority=1, eta=120).export_partner()
 
     def on_record_write(self, record, fields=None):
@@ -100,7 +97,8 @@ class PartnerListener(Component):
             "name", "comercial", "vat", "city", "street", "zip", "country_id",
             "state_id", "email_web", "ref", "user_id",
             "property_product_pricelist", "lang", "sync", "type", "parent_id",
-            "is_company", "email", "active", "prospective", "phone", "mobile"
+            "is_company", "email", "active", "prospective", "phone", "mobile",
+            "property_payment_term_id", "last_sale_date", "csv_connector_access"
         ]
         if 'web' in fields and record.web and \
                 (partner.active or partner.prospective):
@@ -113,9 +111,8 @@ class PartnerListener(Component):
                               'prospective' in fields) and not \
                 (partner.active or partner.prospective):
             record.with_delay(priority=1, eta=60).unlink_partner()
-        elif partner.web and 'active' in fields and \
-                partner.active or 'prospective' in fields and \
-                partner.prospective:
+        elif partner.web and ('active' in fields and partner.active
+                              or 'prospective' in fields and partner.prospective):
             self.export_partner_data(record)
 
         elif partner.web:
@@ -168,13 +165,18 @@ class ResPartner(models.Model):
                     discount = item.price_discount
                 partner.discount = discount
 
+    csv_connector_access = fields.Boolean("CSV Connector Access", help="System field to allow csv connector access")
+
     @api.model
     def create(self, vals):
         if vals.get('user_id', False) and 'web' in vals.keys() and vals['web']:
             user = self.env['res.users'].browse(vals['user_id'])
             if not user.web:
                 user.web = True
-        return super().create(vals)
+        res = super().create(vals)
+        if vals.get('csv_connector_access',False):
+            res.message_post(body=_('CSV connector access checked by %s')% self.env.user.name)
+        return res
 
     @api.multi
     def write(self, vals):
@@ -199,6 +201,12 @@ class ResPartner(models.Model):
                     deletea = False
                 if deletea:
                     del vals['active']
+            if 'csv_connector_access' in vals.keys():
+                partner.message_post(
+                    body=_('<p>CSV conector access has been changed by %s </p>'
+                           '<ul><li>  %s &#10137; %s </li></ul>')
+                         % (self.env.user.name, partner.csv_connector_access,vals['csv_connector_access']))
+
 
         return super().write(vals)
 
@@ -247,6 +255,19 @@ class ResPartner(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.delete_category_rel(self.id)
         return True
+
+    @api.multi
+    def prepaid_payment_term(self):
+        # Obtener ids de plazo de pago que requieran prepagar (Prepago, 1 días, 3 días, 5 días,
+        # 7 días y Pago inmediato)
+        prepaid_ids = []
+        prepaid_terms = self.env['account.payment.term'].with_context(lang='en_US').search(
+            [("name", "in", ("1 day","3 days","5 days","7 days","Prepaid"))])
+        prepaid_ids.extend(prepaid_terms.ids)
+        prepaid_ids.extend([self.env.ref('account.account_payment_term_immediate').id])
+        for partner in self:
+            # Si el plazo de pago del cliente coincide con alguno de esos ids, devolver True
+            return partner.property_payment_term_id.id in prepaid_ids
 
 
 class PartnerCategoryListener(Component):

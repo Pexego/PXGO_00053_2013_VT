@@ -38,10 +38,11 @@ msgid "Customer %s blocked by lack of payment. Check the maturity dates of their
 msgstr "Cliente %s bloqueado por impagos. Compruebe la fecha de vencimiento de sus efectos contables."
 
 #. module: block_invoices
-#: code:addons/block_invoices/account_invoice.py:48
-#: code:addons/block_invoices/account_invoice.py:73
+#: code:addons/block_invoices/account_invoice.py:27
+#: code:addons/block_invoices/account_invoice.py:40
 #: code:addons/block_invoices/sale_make_invoice.py:49
-#: code:addons/block_invoices/sale_order.py:50
+#: code:addons/block_invoices/sale_order.py:39
+#: code:addons/block_invoices/sale_order.py:52
 #: code:addons/block_invoices/stock_invoice_onshipping.py:47
 #, python-format
 msgid "Customer blocked by lack of payment. Check the maturity dates of their account move lines."

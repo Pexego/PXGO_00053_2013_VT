@@ -456,14 +456,39 @@ msgid "Partial reconciliation"
 msgstr "Riconciliazione parziale"
 
 #. module: custom_partner
-#: code:addons/custom_partner/partner.py:437
+#: code:addons/custom_partner/partner.py:463
 #, python-format
-msgid "The e-mail format is incorrect: "
-msgstr "Il formato email non è corretto: "
+msgid '[Partner "%s"] The e-mail format is incorrect: '
+msgstr '[Cliente "%s"] Il formato email non è corretto: '
 
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:472
+#, python-format
+msgid ' "%s" (Accounting email)'
+msgstr ' "%s" (Email di contabilità)'
 
 #. module: custom_partner
 #: code:addons/custom_partner/partner.py:519
 #, python-format
 msgid "Prospective customer becomes an active customer"
 msgstr "Cliente potenziale diventa cliente attivo"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_fidelity_credit_limit
+msgid "Fidelity Credit Limit"
+msgstr "Limite di credito fedeltà"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_fidelity_credit_limit_include
+msgid "Include fidelity credit limit"
+msgstr "Includi limite di credito fedeltà"
+
+#. module: custom_partner
+#: help:res.partner,fidelity_credit_limit_include:0
+msgid "If this field is checked, the fidelity credit limit will be added to credit limit "
+msgstr "Se questo campo è selezionato, il limite di credito fedeltà verrà aggiunto al limite di credito "
+
+#. module: custom_partner
+#: help:res.partner,fidelity_credit_limit:0
+msgid "Profit of the last x months"
+msgstr "Profitto degli ultimi x mesi"

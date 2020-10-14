@@ -177,6 +177,11 @@
                 </t>
             </t>
             <div class="row">
+                <span t-if="lang == 'fr_FR' and o.state == 'reserve'">
+                     <p class="text-center" style="font-size:12px; color:#6D6E70;">
+The products reservation is not guaranteed after 7 days from the date of this document.
+                     </p><br/>
+                </span>
                 <table class="table table-condensed">
                     <thead>
                         <tr style="font-size:12px; color:#da1f2e">
@@ -937,8 +942,8 @@ SWIFT/BIC: BESCPTPL
 
                                 <t t-if="t.base != 0">
                                     <td>
-                                        <span t-esc="t.name"
-                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        <span t-esc="t.tax_id.amount"
+                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>%
                                     </td>
                                 </t>
 
@@ -1090,7 +1095,7 @@ IBAN ES52 0081 0530 5900 0109 8214
 BIC: BSABESBB
                                 </pre>
                             </t>
-                            <t t-if="lang == 'en_US'">
+                            <t t-if="lang in ('en_US','de_DE')">
                                 <pre style="font-size:12px; color:#6D6E70">
 CAIXABANC
 IBAN ES46 2100 1726 5902 0032 1288
@@ -1129,6 +1134,14 @@ BIC: CAIXESBBXXX
                 <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
                     <label>
                         <p style="font-size: 11px; font-weight: normal;">
+                            <span t-if="lang == 'de_DE'">
+                                (1) Steuerfreie innergemeinschaftliche Lieferung. Leistungsempfänger Steuerschuidner germäß Artikel 194 EU Mehrwertsteuerrichtlinie 2006/112/EC.
+                                <br/>
+                                (2) Steuerfreie innergemeinschaftliche Lieferung. Leistungsempfänger Steuerschuidner germäß Artikel 194 der Mehrwertsteuerrichtlinie.
+                                <br/>
+                                <br/>
+                            </span>
+
                             <span style="font-weight: bold;">PLEASE REMEMBER to include your sales order and/or invoice
                                 number on your bank transfers. This ensures your payment is processed correctly.</span>
                             <span t-if="lang == 'fr_FR' and o.type == 'out_invoice' and o.state != 'proforma2'">
@@ -1243,14 +1256,6 @@ BIC: CAIXESBBXXX
                     </span>
                     <div t-field="o.partner_id"
                          t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email']}"/>
-                </div>
-                <div class="col-xs-4"
-                     t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
-                    <span>
-                        <strong>Delivery Address:</strong>
-                    </span>
-                    <div t-field="o.move_lines[0].partner_id"
-                         t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'fax', 'email'], 'no_marker': true}"/>
                 </div>
                 <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
                     <span>
@@ -1556,7 +1561,7 @@ SWIFT/BIC: BESCPTPL
             <div class="row" style="margin-bottom: 2%">
                 <div class="pull-left">
                     <img t-if="company.logo" t-att-src="'data:image/png;base64,%s' % to_text(company.logo)"
-                         style="width: 300px; margin-bottom: 2%; margin-top: 8%"/>
+                         style="width: 300px; margin-bottom: 2%; margin-top: 8%; margin-left: 8%"/>
                 </div>
                 <div class="pull-right text-right col-xs-4" style="font-size:11px; color:#6D6E70; margin-top: 4%;">
                     <div t-if="not claim.claim_type">RMA Receipt</div>
@@ -1711,14 +1716,6 @@ SWIFT/BIC: BESCPTPL
                     </span>
                     <div t-field="o.partner_id"
                          t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;]}"/>
-                </div>
-                <div class="col-xs-4"
-                     t-if="o.move_lines and o.move_lines[0].partner_id and o.move_lines[0].partner_id.id != o.partner_id.id">
-                    <span>
-                        <strong>Delivery Address:</strong>
-                    </span>
-                    <div t-field="o.move_lines[0].partner_id"
-                         t-field-options="{&quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;fax&quot;, &quot;email&quot;], &quot;no_marker&quot;: true}"/>
                 </div>
                 <div t-if="o.picking_type_id.code != 'internal' and (not o.move_lines or not o.move_lines[0].partner_id) and o.picking_type_id.warehouse_id.partner_id">
                     <span>

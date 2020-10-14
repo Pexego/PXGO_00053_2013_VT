@@ -36,6 +36,18 @@ msgid "Automatic email"
 msgstr "Email automatica"
 
 #. module: account_move_line_followup
+#: code:addons/account_move_line_followup/models/credit_control_policy.py:220
+#, python-format
+msgid "Amount not due"
+msgstr "Importo non dovuto"
+
+#. module: account_move_line_followup
+#: code:addons/account_move_line_followup/models/credit_control_policy.py:233
+#, python-format
+msgid "Amount due"
+msgstr "Importo dovuto"
+
+#. module: account_move_line_followup
 #: selection:credit.control.communication,email_type:0
 msgid "Manual email"
 msgstr "Email manuale"

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<odoo noupdate="1">
+        <record id="mail_template_release_reservations_user" model="mail.template">
+            <field name="name">Release Reservation - Send by Email</field>
+            <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
+            <field name="email_to">${(object.email or '')|safe}</field>
+            <field name="subject">Orders with released reservation</field>
+            <field name="model_id" ref="base.model_res_users"/>
+            <field name="lang">${object.lang}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html"><![CDATA[
+
+                    <p> The reservations of the following orders have been released:</p>
+                    <div style="margin: 20px;">
+                    % for line in ctx['values']:
+                        ${line} <br/>
+                    % endfor
+                    </div>
+
+                    ]]>
+            </field>
+        </record>
+</odoo>

@@ -43,6 +43,7 @@
                 </field>
                 <filter context="{'group_by':'date_order'}" position="after">
                     <filter string="Invoice type" domain="[]" context="{'group_by':'invoice_type_id'}"/>
+                    <filter string="Sales not canceled" name="sales_not_canceled" domain="[('state','!=','cancel')]"/>
                 </filter>
             </field>
         </record>

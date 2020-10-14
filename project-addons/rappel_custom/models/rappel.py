@@ -21,6 +21,8 @@ class Rappel(models.Model):
     description = fields.Char(translate=True)
     sequence = fields.Integer(default=100)
     partner_add_conditions = fields.Char('Add partner conditions')
+    company_id = fields.Many2one('res.company', string='Company',
+                                 default=lambda self: self.env['res.company']._company_default_get())
 
     def get_products(self):
         product_obj = self.env['product.product']
@@ -95,7 +97,7 @@ class Rappel(models.Model):
                 # Rappel que depende de la compra de un producto concreto
                 partner_product = self.env['account.invoice.line'].search([
                     ('product_id', '=', product_rappel.id),
-                    ('invoice_id.state', 'in', ['open', 'paid'])]).mapped('invoice_id.partner_id.id')
+                    ('invoice_id.state', 'in', ['open', 'paid'])]).mapped('invoice_id.commercial_partner_id.id')
                 partner_filter.extend(["('id', 'in', partner_product)"])
 
             if partner_filter:

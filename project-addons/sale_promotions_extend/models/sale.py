@@ -21,6 +21,9 @@ class SaleOrderLine(models.Model):
     product_tags = fields.Char(compute="_compute_product_tags", string='Tags')
     web_discount = fields.Boolean()
     accumulated_promo = fields.Boolean(default=False)
+    original_line_id_promo = fields.Many2one('sale.order.line', "Original line", ondelete='cascade')
+    promo_qty_split = fields.Integer(help="It is the minimum quantity of product for which this promo is applied")
+    old_discount = fields.Float(copy=False)
 
 
 class SaleOrder(models.Model):
@@ -36,6 +39,11 @@ class SaleOrder(models.Model):
         context2.pop('default_state', False)
         self.with_context(context2)._prepare_custom_line(moves=False)
         order = self.with_context(context2)
+
+        if order.state == 'reserve':
+            # We need to do this because it fails when we apply promotions over
+            # a kit with more than one component
+            order.release_multiple_reservation_lines()
 
         if not order.no_promos:
             res = super(SaleOrder, order).apply_commercial_rules()
@@ -55,6 +63,11 @@ class SaleOrder(models.Model):
                 if '3 por ciento' in line.name:
                     line.sequence = 999
         return res
+
+    def release_multiple_reservation_lines(self):
+        for line in self.order_line:
+            if len(line.reservation_ids) > 1:
+                line.reservation_ids.release()
 
     def clear_existing_promotion_lines(self):
         line_dict = {}

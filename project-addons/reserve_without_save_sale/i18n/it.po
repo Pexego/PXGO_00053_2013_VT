@@ -37,3 +37,33 @@ msgstr "Processato"
 #: model:ir.ui.view,arch_db:reserve_without_save_sale.view_stock_reservation_search_add_waiting
 msgid "Partially available"
 msgstr "Parzialmente disponibile"
+
+#. module: reserve_without_save_sale
+#: model:mail.template,subject:reserve_without_save_sale.mail_template_release_reservations_user
+msgid "Orders with released reservation"
+msgstr "Ordini con prenotazioni rilasciate"
+
+#. module: reserve_without_save_sale
+#: model:mail.template,body_html:reserve_without_save_sale.mail_template_release_reservations_user
+msgid "\n"
+"\n"
+"                    <p> The reservations of the following orders have been released:</p>\n"
+"                    <div style=\"margin: 20px;\">\n"
+"                    % for line in ctx['values']:\n"
+"                        ${line} <br/>\n"
+"                    % endfor\n"
+"                    </div>\n"
+"\n"
+"                    \n"
+"            "
+msgstr "\n"
+"\n"
+"                    <p> Le prenotazioni dei seguenti ordini sono state rilasciate:</p>\n"
+"                    <div style=\"margin: 20px;\">\n"
+"                    % for line in ctx['values']:\n"
+"                        ${line} <br/>\n"
+"                    % endfor\n"
+"                    </div>\n"
+"\n"
+"                    \n"
+"            "

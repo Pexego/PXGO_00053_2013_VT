@@ -27,43 +27,25 @@ class StockContainer(models.Model):
     _order = 'write_date desc'
 
     @api.multi
-    def write(self,vals):
-        res=super(StockContainer,self).write(vals)
-        if vals.get('date_expected'):
-            for container in self:
-                for move in container.move_ids:
-                    move.write({'date_expected': container.date_expected})
-        return res
-
-    @api.multi
     def _set_date_expected(self):
-        picking_ids = []
         for container in self:
             if container.move_ids:
-                for move in container.move_ids:
-                    if move.picking_id:
-                        if move.picking_id not in picking_ids:
-                            picking_ids.append(move.picking_id)
                 date_expected = container.date_expected
-                for picking in picking_ids:
-                    new_vals = {'scheduled_date': date_expected}
-                    picking.write(new_vals)
-
+                container.move_ids.write({'date_expected': date_expected})
+                picking_ids = container.move_ids.mapped('picking_id')
+                if picking_ids:
+                    picking_ids.write({'scheduled_date': date_expected})
         return True
 
     @api.multi
     @api.depends('move_ids.picking_id.scheduled_date')
     def _get_date_expected(self):
         for container in self:
-            min_date = False
             if container.move_ids:
-                for move in container.move_ids:
-                    if move.picking_id:
-                        if not min_date or min_date < move.picking_id.scheduled_date:
-                            min_date = move.picking_id.scheduled_date
-                if min_date:
-                    container.date_expected = min_date
-
+                max_date = max(container.move_ids.mapped('date_expected') or fields.Date.today())
+                if max_date:
+                    container.date_expected = max_date
+                    container.move_ids.write({'date_expected': max_date})
             if not container.date_expected:
                 container.date_expected = fields.Date.today()
 
@@ -87,9 +69,9 @@ class StockContainer(models.Model):
             container.user_id = responsible
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
+    date_expected = fields.Datetime("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
-                               readonly=True, copy=False)
+                               readonly=True, copy=False, domain=[('state', '!=', 'cancel')])
     picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
 
     user_id = fields.Many2one(string='Responsible', compute='_get_responsible')
@@ -163,7 +145,11 @@ class StockMove(models.Model):
     @api.multi
     def write(self, vals):
         for move in self:
-            if 'product_uom_qty' in vals and self.purchase_line_id and self.picking_id and 'origin' not in vals:
+            if 'product_uom_qty' in vals \
+                    and self.purchase_line_id \
+                    and self.picking_id \
+                    and 'origin' not in vals\
+                    and not move._context.get('accept_ready_qty'):
                 if move.product_uom_qty > vals['product_uom_qty'] > 0:
                     move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
                 elif vals['product_uom_qty'] > move.product_uom_qty:
@@ -225,12 +211,6 @@ class StockReservation(models.Model):
                 if reservation_qty - reservation_used <= product_uom_qty - qty_used:
                     reservation.date_planned = move.date_expected
                     reservation_index += 1
-                    if reservation.sale_id:
-                        sale = reservation.sale_id
-                        followers = sale.message_follower_ids
-                        sale.message_post(body=_("The date planned of the reservation was changed."),
-                                          subtype='mt_comment',
-                                          partner_ids=followers)
                 else:
                     reservation_used += product_uom_qty - qty_used
                     break

@@ -1,6 +1,7 @@
 # Copyright 2019 Omar Castiñeira, Comunitea Servicios Tecnológicos S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models, fields, api, _, exceptions
+import numpy
 
 
 class AccountMoveLine(models.Model):
@@ -150,10 +151,10 @@ class AccountInvoice(models.Model):
             if partner.commercial_partner_id.attach_picking:
                 vals["attach_picking"] = \
                     partner.commercial_partner_id.attach_picking
+            vals['team_id'] = partner.commercial_partner_id.team_id.id
             if vals.get('type', False) == "out_refund":
                 # vencimiento inmediato en rectificativas
-                vals["payment_term_id"] = False
-                vals["date_due"] = fields.Date.today()
+                vals["payment_term_id"] = self.env.ref('account.account_payment_term_immediate').id
         return super().create(vals)
 
     @api.onchange('partner_id', 'company_id')
@@ -165,6 +166,7 @@ class AccountInvoice(models.Model):
         if p:
             self.attach_picking = p.commercial_partner_id.attach_picking
             self.team_id = p.commercial_partner_id.team_id.id
+            self.user_id = p.commercial_partner_id.user_id.id
             if self.type != "in_invoice":
                 self.currency_id = p.commercial_partner_id.\
                     property_purchase_currency_id.id or self.env.user.company_id.currency_id.id
@@ -180,16 +182,20 @@ class AccountInvoice(models.Model):
         self.ensure_one()
         payments = self.env['account.move.line']
         if self.type == "out_invoice" and self.sale_order_ids:
-            payments = self.sale_order_ids.mapped('payment_line_ids')
+            payments = self.sale_order_ids.mapped('payment_line_ids').filtered(lambda l: not l.reconciled)
         return payments
 
     @api.multi
     def action_move_create(self):
         res = super().action_move_create()
         for inv in self:
-            inv.move_id.line_ids.\
-                write({'blocked': inv.payment_mode_id.blocked or
-                       inv.payment_term_id.blocked})
+            if inv.type == 'out_refund':
+                inv.move_id.line_ids.\
+                    write({'blocked': inv.payment_mode_id.blocked})
+            else:
+                inv.move_id.line_ids.\
+                    write({'blocked': inv.payment_mode_id.blocked or
+                                      inv.payment_term_id.blocked})
             payment_move_lines = inv._get_payment()
             for payment_line in payment_move_lines:
                 inv.assign_outstanding_credit(payment_line.id)
@@ -198,6 +204,9 @@ class AccountInvoice(models.Model):
     @api.multi
     def write(self, vals):
         res = super().write(vals)
+        if vals.get('partner_id', False):
+            partner = self.env["res.partner"].browse(vals["partner_id"])
+            self.write({'team_id':partner.commercial_partner_id.team_id.id})
         if vals.get('payment_mode_id', False):
             for inv in self:
                 if inv.move_id and inv.payment_mode_id.blocked:
@@ -214,8 +223,24 @@ class AccountInvoice(models.Model):
     def invoice_validate(self):
         res = super().invoice_validate()
         for inv in self:
-            for line in inv.invoice_line_ids:
-                line.write({'cost_unit': line.product_id.standard_price_2})
+            if not inv.claim_id:
+                for line in inv.invoice_line_ids:
+                    cost = line.product_id.standard_price_2
+                    if line.move_line_ids:
+                        if line.product_id.bom_ids and line.product_id.bom_ids[0].type == 'phantom':
+                            # We need to multiply by qty when te product is pack, because the product in the
+                            # stock_move is just the component
+                            cost = 0.0
+                            for move in line.move_line_ids:
+                                cost += move.price_unit * (move.product_qty/line.quantity) * -1
+                        else:
+                            cost = numpy.average(line.move_line_ids.mapped('price_unit')) * -1
+                    line.write({'cost_unit': cost or line.product_id.standard_price_2})
+            else:
+                for line in inv.invoice_line_ids:
+                    if not line.cost_unit:
+                        # We choose the standard_price and not the 2 because is the one used in the picking
+                        line.write({'cost_unit': line.product_id.standard_price})
         return res
 
     @api.model
@@ -245,6 +270,7 @@ class AccountInvoice(models.Model):
         super()._onchange_payment_mode_id()
         self.move_id.line_ids.filtered(lambda l: l.account_id.code == '43000000').write({'payment_mode_id': self.payment_mode_id.id})
 
+    scheme = fields.Selection(related="mandate_id.scheme")
 
 class PaymentMode(models.Model):
 

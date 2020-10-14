@@ -27,7 +27,7 @@ class ProductProduct(models.Model):
             stock_days = 0.00
             stock_per_day = product.get_daily_sales()
             virtual_available = product.virtual_available - \
-                product.incoming_qty + product.qty_available_external
+                product.incoming_qty
             if stock_per_day > 0 and virtual_available:
                 stock_days = round(virtual_available / stock_per_day)
 
@@ -35,13 +35,50 @@ class ProductProduct(models.Model):
             product.joking = stock_days * product.standard_price
 
     @api.model
+    def calc_joking_index_temporal(self):
+        category_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.category.filter'))
+        brand_filter = eval(self.env['ir.config_parameter'].sudo().get_param('joking.brand.filter'))
+        brand_excluded = eval(self.env['ir.config_parameter'].sudo().get_param('joking.brand.excluded'))
+
+        for product in self.search([('sale_ok', '=', True)]):
+            if product.date_first_incoming and \
+                    product.date_first_incoming > fields.Date.to_string(date.today() - relativedelta(days=60)):
+                product.joking_index = -1
+            else:
+                if product.categ_id.id in category_filter or product.bom_ids or\
+                        product.product_brand_id.id in brand_excluded:
+                    product.joking_index = -1
+                else:
+                    # Calculamos días de stock
+                    stock = product.virtual_stock_conservative
+                    stock_days = 0
+                    if stock > 0:
+                        if product.last_sixty_days_sales > 0:
+                            if product.product_brand_id.id in brand_filter:
+                                stock_days = stock / ((product.last_sixty_days_sales * 365) / 60)
+                                # periodos de 365 dias
+                            else:
+                                stock_days = stock / ((product.last_sixty_days_sales * 120) / 60)
+                                # periodos de 120 dias
+                        else:
+                            stock_days = 1000
+
+                    # Calculamos el índice de puteamiento
+                    if stock_days >= 1000:
+                        product.joking_index = 100
+                    else:
+                        if stock_days > 1:
+                            # Si tenemos más de un periodo de 60/365 días
+                            product.joking_index = 100
+                        else:
+                            product.joking_index = -1
+
+    @api.model
     def calc_joking_index(self):
         search_date = fields.Date.to_string(
             date.today() - relativedelta(days=60))
         warehouses = self.env["stock.warehouse"].search([])
         stock_location_ids = [x.lot_stock_id.id for x in warehouses]
-        stock_location_ids. \
-            append(self.env.ref('location_moves.stock_location_external').id)
         product_obj = self.env["product.product"]
         self.env.cr.\
             execute("select distinct product_id from stock_move where "
@@ -77,7 +114,7 @@ class ProductProduct(models.Model):
                     and product.last_sixty_days_sales == 0 \
                     and product.type == 'product' \
                     and product.categ_id.parent_id.name != 'Outlet' \
-                    and (product.virtual_available - product.incoming_qty + product.qty_available_external) == 0:
+                    and (product.virtual_available - product.incoming_qty) == 0:
                 product.joking_index = 0
             elif product.joking_index == -1 \
                     and product.last_sixty_days_sales == 0 \
@@ -131,4 +168,4 @@ class ProductProduct(models.Model):
         'Next incoming date', compute='_get_next_incoming_date')
     min_suggested_qty = fields.Integer(
         'Min qty suggested', compute='_get_min_suggested_qty')
-    seller_id = fields.Many2one('res.partner', related='seller_ids.name', string='Main Supplier')
+    seller_id = fields.Many2one('res.partner', related='seller_ids.name', store=True, string='Main Supplier')

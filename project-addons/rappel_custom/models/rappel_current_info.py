@@ -38,8 +38,8 @@ class RappelCurrentInfo(models.Model):
 
                         if rappel_timing.advice_timing == 'variable':
 
-                            timing = (date_end - date_start).days * \
-                                rappel_timing.timing / 100
+                            timing = round((date_end - date_start).days * \
+                                rappel_timing.timing / 100)
                             timing2 = (today - date_start).days
 
                             if timing == timing2:

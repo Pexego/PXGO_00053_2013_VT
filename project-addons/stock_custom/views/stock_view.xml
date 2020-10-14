@@ -59,6 +59,7 @@
         <field name="arch" type="xml">
             <field name="location_dest_id" position="after">
                 <field name="user_id"/>
+                <field name="parent_partner"/>
                 <field name="string_availability_info"/>
                 <field name="real_stock"/>
             </field>
@@ -124,7 +125,7 @@
                 <filter name="not_cancelled" string="Not cancelled" domain="[('state', '!=', 'cancel')]"/>
                 <filter string="Ready" name="ready" domain="[('state','=','assigned')]" help="Stock moves that are Available (Ready to process)"/>
                 <filter string="To Do" name="future" domain="[('state','not in',['done', 'draft', 'cancel'])]" help="Stock moves that are Confirmed, Available or Waiting"/>
-                <filter string="Pending" name="future_dates" domain="[('state','not in',['done', 'cancel']),('location_dest_id.usage', 'like', 'internal')]" help="Stock moves that are Confirmed, Available or Waiting (For stock move dates menu)"/>
+                <filter string="Pending" name="future_dates" domain="[('state','not in',['done', 'cancel']),('location_dest_id.usage', 'like', 'internal'),('purchase_line_id','!=',False)]" help="Stock moves that are Confirmed, Available or Waiting (For stock move dates menu)"/>
                 <filter string="Done" name="done" domain="[('state','=','done')]" help="Stock moves that have been processed"/>
                 <separator/>
                 <filter string="Today" domain="[('date','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59))), ('date','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))]" help="Orders processed Today or planned for Today"/>
@@ -177,12 +178,14 @@
         <field name="arch" type="xml">
             <tree decoration-success="date_reliability =='1.high'" decoration-warning="date_reliability =='2.medium'" decoration-muted="date_reliability =='3.low'" string="Stock moves dates" default_order='date desc'>
                 <field name="date"/>
+                <field name="purchase_order_id" groups="purchase.group_purchase_manager"/>
                 <field name="reference"/>
                 <field name="product_id"/>
+                <field name="product_uom_qty"/>
                 <field name="picking_id"/>
                 <field name="picking_type_id"/>
                 <field name="container_id" groups="purchase.group_purchase_manager"/>
-                <field name="date_expected"/>
+                <field name="date_expected" attrs="{'invisible': [('date_reliability', '=', '3.low')]}"/>
                 <field name="date_reliability"/>
                 <field name="state"/>
             </tree>
@@ -292,4 +295,14 @@
             </field>
         </field>
     </record>
+    <record id="view_carrier_racking_ref_no_readonly" model="ir.ui.view">
+            <field name="name">view.carrier.racking.ref.no.readonly</field>
+            <field name="model">stock.picking</field>
+            <field name="inherit_id" ref="delivery.view_picking_withcarrier_out_form"/>
+            <field name="arch" type="xml">
+               <xpath expr="//page[@name='extra']/group/group[@name='carrier_data']/div/field[@name='carrier_tracking_ref']" position="replace">
+                    <field name="carrier_tracking_ref" class="oe_inline"/>
+                </xpath>
+            </field>
+        </record>
 </odoo>

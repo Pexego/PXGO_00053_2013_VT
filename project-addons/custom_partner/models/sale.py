@@ -100,12 +100,21 @@ class SaleOrder(models.Model):
         return True
 
     @api.multi
-    def action_invoice_create(self):
-        res = super(SaleOrder, self).action_invoice_create()
+    def action_invoice_create(self, grouped=False, final=False):
+        res = super(SaleOrder, self).action_invoice_create(grouped=grouped, final=final)
         orders_to_done = self.env['sale.order']
         for order in self:
             if not order.order_line.mapped('product_id').filtered(lambda x: x.type != 'service'):
                 orders_to_done += order
         orders_to_done.write({'state': 'done'})
+        return res
+
+    @api.multi
+    def _prepare_invoice(self):
+        res = super(SaleOrder, self)._prepare_invoice()
+        invoice_type = (self.invoice_type_id
+                        or self.partner_id.commercial_partner_id.invoice_type_id)
+        if invoice_type and invoice_type.journal_id:
+            res['journal_id'] = invoice_type.journal_id.id
         return res
 

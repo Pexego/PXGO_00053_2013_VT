@@ -1,0 +1,18 @@
+<odoo>
+    <record id="mail_activity_view_form_popup" model="ir.ui.view">
+        <field name="name">mail.activity.view.form.popup.add.calendar</field>
+        <field name="model">mail.activity</field>
+        <field name="inherit_id" ref="mail.mail_activity_view_form_popup"/>
+        <field name="arch" type="xml">
+            <field name="note" position="before">
+                <group>
+                    <field name="sync_with_calendar"/>
+                </group>
+                <group attrs="{'invisible': [('sync_with_calendar', '=', False )]}">
+                    <field name="calendar_start"/>
+                    <field name="calendar_stop"/>
+                </group>
+            </field>
+        </field>
+    </record>
+</odoo>

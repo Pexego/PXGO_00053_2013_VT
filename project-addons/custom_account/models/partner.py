@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import fields, models, api
+from odoo.addons.base_iban.models.res_partner_bank import validate_iban
 
 
 class Partner(models.Model):
@@ -41,7 +42,7 @@ class Partner(models.Model):
         else:
             self.is_accounting = False
 
-    email2 = fields.Char('Second Email')
+    email2 = fields.Char('Accounting email')
     not_send_following_email = fields.Boolean()
     unreconciled_purchase_aml_ids = fields.\
         One2many('account.move.line', 'partner_id',
@@ -61,3 +62,23 @@ class Partner(models.Model):
         self.payment_responsible_id = self.user_id.id
         if self.user_id and self.user_id.sale_team_id:
             self.team_id = self.user_id.sale_team_id.id
+
+
+class ResPartnerBank(models.Model):
+    _inherit = "res.partner.bank"
+
+    @api.multi
+    def write(self, vals):
+        res = super(ResPartnerBank, self).write(vals)
+        acc_number = vals.get('acc_number', False)
+        if acc_number:
+            validate_iban(acc_number)
+        return res
+
+    @api.model
+    def create(self, vals):
+        res = super(ResPartnerBank, self).create(vals)
+        acc_number = vals.get('acc_number', False)
+        if acc_number:
+            validate_iban(acc_number)
+        return res

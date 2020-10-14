@@ -3,6 +3,7 @@
 from odoo.addons.component.core import Component
 from odoo.addons.queue_job.job import job
 from odoo import api, fields, models
+import datetime
 
 
 class ProductTemplate(models.Model):
@@ -45,7 +46,11 @@ class ProductTemplateListener(Component):
     def on_record_write(self, record, fields=None):
         up_fields = [
             "name", "list_price", "categ_id", "product_brand_id",
-            "show_stock_outside", "sale_ok"]
+            "show_stock_outside", "sale_ok", "weight", "volume"]
+
+        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        if country_code == "IT":
+            up_fields += ['virtual_stock_conservative_es']
         if record.image or len(fields) != 1:
             for field in up_fields:
                 if field in fields:
@@ -81,8 +86,14 @@ class ProductListener(Component):
             "pvd1_relation", "pvd2_relation", "pvd3_relation", "pvd4_relation",
             "last_sixty_days_sales", "joking_index", "sale_ok", "barcode",
             "description_sale", "manufacturer_pref", "standard_price", "type",
-            "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id"
+            "discontinued", "state", "item_ids", "sale_in_groups_of", "replacement_id",
+            "weight", "volume", "standard_price_2_inc"
         ]
+
+        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        if country_code == "IT":
+            up_fields += ['virtual_stock_conservative_es']
+
         for field in up_fields:
             if field in fields:
                 record.with_delay(priority=2, eta=30).update_product()
@@ -99,8 +110,8 @@ class ProductListener(Component):
                 pack.product_tmpl_id.product_variant_ids.with_delay(priority=2, eta=30).update_product()
 
         if 'tag_ids' in fields:
-            record.with_delay(priority=5, eta=60).unlink_product_tag_rel()
-            record.with_delay(priority=2, eta=120).export_product_tag_rel()
+            record.with_delay(priority=1, eta=30).unlink_product_tag_rel()
+            record.with_delay(priority=2, eta=60).export_product_tag_rel()
 
     def on_record_unlink(self, record):
         record.with_delay().unlink_product()
@@ -109,7 +120,7 @@ class ProductListener(Component):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
-    @api.depends('bom_ids')
+    @api.depends('bom_ids','bom_ids.type','bom_ids.bom_line_ids')
     def _compute_is_pack(self):
         for product in self:
             if product.bom_ids.filtered(lambda r: r.type == 'phantom'):
@@ -160,6 +171,15 @@ class ProductProduct(models.Model):
             exporter = work.component(usage='record.exporter')
             return exporter.delete_product_tag_rel(self)
         return True
+
+    def compute_date_next_incoming(self):
+        moves = self.env['stock.move'].search(
+            [('product_id', '=', self.id), ('purchase_line_id', '!=', False), ('state', 'not in', ['cancel','done']),
+             ('location_dest_id.usage', 'like', 'internal'),'|',('picking_id','!=',False),('container_id','!=',False)]).sorted(
+            key=lambda m: m.date_expected and m.date_reliability)
+        if moves:
+            return moves[0].date_expected
+        return (datetime.datetime.now() - datetime.timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
 
 
 class ProductCategoryListener(Component):
@@ -320,9 +340,17 @@ class ProductTagsListener(Component):
 
     def on_record_create(self, record, fields=None):
         record.with_delay(priority=1, eta=60).export_product_tag()
+        if 'product_ids' in fields:
+            for product in record.product_ids:
+                product.with_delay(priority=1, eta=30).unlink_product_tag_rel()
+                product.with_delay(priority=2, eta=60).export_product_tag_rel()
 
     def on_record_write(self, record, fields=None):
         record.with_delay(priority=2, eta=120).update_product_tag()
+        if 'product_ids' in fields:
+            for product in record.product_ids:
+                product.with_delay(priority=1, eta=30).unlink_product_tag_rel()
+                product.with_delay(priority=2, eta=60).export_product_tag_rel()
 
     def on_record_unlink(self, record):
         record.with_delay(priority=3, eta=120).unlink_product_tag()
@@ -340,7 +368,7 @@ class ProductTag(models.Model):
         return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def update_product_tag(self, fields):
+    def update_product_tag(self):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')

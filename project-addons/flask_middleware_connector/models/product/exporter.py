@@ -41,14 +41,21 @@ class ProductProductExporter(Component):
             'discontinued': binding.discontinued,
             'state': binding.state,
             'sale_in_groups_of': binding.sale_in_groups_of,
-            'replacement_id': binding.replacement_id.id
+            'replacement_id': binding.replacement_id.id,
+            'date_next_incoming': binding.compute_date_next_incoming(),
+            'weight': binding.weight,
+            'volume': binding.volume,
+            'cost_price': binding.standard_price_2_inc,
+            'real_stock': binding.qty_available
         }
         if binding.show_stock_outside:
-            vals['external_stock'] = binding.qty_available_external
             stock_qty = eval(
                 "product." + self.backend_record.product_stock_field_id.name,
                 {'product': binding})
             vals["stock"] = stock_qty
+        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        if country_code == "IT":
+            vals['stock_available_es'] = binding.virtual_stock_conservative_es
         if mode == "insert":
             self.backend_adapter.insert(vals)
         else:
@@ -86,9 +93,10 @@ class ProductCategoryExporter(Component):
     _usage = 'record.exporter'
 
     def update(self, binding, mode):
-        vals = {"name": binding.name,
+        vals = {"name": binding.with_context({'lang': 'es_ES'}).name,
                 "parent_id": binding.parent_id.id,
-                "odoo_id": binding.id}
+                "odoo_id": binding.id
+                }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
