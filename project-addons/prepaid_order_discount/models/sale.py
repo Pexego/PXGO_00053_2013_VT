@@ -37,7 +37,10 @@ class SaleOrder(models.Model):
                             message = _("Please, recalculate prepaid discount")
             if message:
                 raise exceptions.Warning(message)
-        return super(SaleOrder, self.with_context(bypass_risk=risk)).action_confirm()
+        if risk:
+            return super(SaleOrder, self.with_context(bypass_risk=True)).action_confirm()
+        else:
+            return super().action_confirm()
 
     @api.multi
     def calculate_prepaid_discount(self):
