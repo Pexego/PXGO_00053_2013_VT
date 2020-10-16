@@ -33,26 +33,40 @@ class ProcurementGroup(models.Model):
         super()._run_scheduler_tasks(use_new_cursor=use_new_cursor,
                                      company_id=company_id)
         _logger.info("SEARCHING FOR INTERNAL PICKINGS")
-
-        pick_ids = self.env["stock.picking"]. \
+        operation_internal = self.env.ref('stock.picking_type_internal').id
+        pick_ids_assign = self.env["stock.picking"]. \
             search([("picking_type_id", "=",
-                     self.env.ref('stock.picking_type_internal').id),
-                    ("state", "in", ("assigned", "confirmed", "partially_available"))])
+                     operation_internal),
+                    ("state", "=", "assigned")])
+
+        pick_ids_confirmed = self.env["stock.picking"]. \
+            search([("picking_type_id", "=",
+                     operation_internal),
+                    ("state", "=", "confirmed"), ('move_type', '!=', 'direct')])
+        max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
+        len_pick_assign = len(pick_ids_assign)
 
         _logger.info("TRANSFERRING READY INTERNAL PICKINGS")
-
-        for pick_assign in pick_ids.filtered(
-                lambda l: l.state == "assigned"):
+        for count, pick_assign in enumerate(pick_ids_assign):
             pick_assign.action_done()
+            if ((count + 1 >= max_commit_len and count + 1 % max_commit_len == 0) or count == len_pick_assign - 1) \
+                    and use_new_cursor:
+                self.env.cr.commit()
 
         _logger.info("PROCESSING CONFIRMED AND PARTIALLY AVAILABLE PICKINGS")
+        if pick_ids_confirmed:
+            pick_ids_confirmed.write({'move_type': 'direct'})
+        pick_ids_par = self.env["stock.picking"]. \
+            search([("picking_type_id", "=",
+                     operation_internal),
+                    ("state", "=", "partially_available")])
 
-        for pick_partially in pick_ids.filtered(
-                lambda l: l.state in ("confirmed", "partially_available")):
-            pick_partially.move_type = 'direct'
-            if pick_partially.state == "partially_available":
-                pick_partially.action_copy_reserv_qty()
-                pick_partially.action_accept_confirmed_qty()
+        pick_ids_par.write({'move_type': 'direct'})
+        for count, pick_partially in enumerate(pick_ids_par):
+            pick_partially.action_copy_reserv_qty()
+            pick_partially.action_accept_confirmed_qty()
+            if count + 1 >= max_commit_len and count + 1 % max_commit_len == 0 and use_new_cursor:
+                self.env.cr.commit()
 
         if use_new_cursor:
             self.env.cr.commit()
