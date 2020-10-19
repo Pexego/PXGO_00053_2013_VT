@@ -42,9 +42,9 @@ class BaseIOFolder(models.Model):
             continue_search = True
             while continue_search:
                 imported_files, continue_search = config._iter_directory(max_commit_length)
+                self.env.cr.commit()
                 for file_imported, file_full_name in imported_files:
                     config._after_import(file_imported, file_full_name)
-                self.env.cr.commit()
 
     @api.multi
     def _get_files_in_directory(self, max_commit_length=False):
