@@ -12,7 +12,7 @@ class StockReservation(models.Model):
     _order = "sequence asc"
 
     def _new_sequence(self):
-        query = "SELECT MAX(sequence)  FROM stock_reservation "
+        query = "SELECT id FROM stock_reservation ORDER BY id DESC LIMIT 1"
         self.env.cr.execute(query, ())
         regs = self.env.cr.fetchall()
         for reg in regs:
