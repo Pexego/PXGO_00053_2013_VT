@@ -13,7 +13,7 @@ class PaymentLineExporter(Component):
             "code": binding.order_id.name,
             "date": binding.order_id.date_uploaded,
             "invoice_id": invoice.id,
-            "partner_id": binding.partner_id,
+            "partner_id": binding.partner_id.id,
             "amount": binding.amount_currency,
         }
         if mode == "insert":
