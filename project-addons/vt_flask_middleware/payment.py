@@ -5,6 +5,7 @@ from database import SyncModel
 class PaymentLine(SyncModel):
     MOD_NAME = 'paymentline'
 
+    odoo_id = IntegerField(unique=True)
     code = CharField(max_length=60)
     date = CharField(max_length=60)
     invoice_id = IntegerField()

@@ -10,6 +10,7 @@ class PaymentLineExporter(Component):
     def update(self, binding, mode):
         invoice = self.env['account.invoice'].search([('number', '=', binding.communication)])
         vals = {
+            "odoo_id": binding.id,
             "code": binding.order_id.name,
             "date": binding.order_id.date_uploaded,
             "invoice_id": invoice.id,
