@@ -8,15 +8,20 @@ class PaymentLineListener(Component):
     _inherit = 'base.event.listener'
     _apply_on = ['account.payment.line']
 
-    def on_record_write(self, record, fields=None):
-        if record.payment_type == 'outbound' and record.partner_id.web:
-            if 'state' in fields and record.state == 'uploaded':
-                record.with_delay(priority=1).export_payment_line()
-            else:
-                record.with_delay(priority=2, eta=10).update_payment_line(fields=fields)
-
     def on_record_unlink(self, record):
         record.with_delay().unlink_payment_line()
+
+
+class AccountPaymentOrder(models.Model):
+    _inherit = 'account.payment.order'
+
+    @api.multi
+    def generated2uploaded(self):
+        res = super(AccountPaymentOrder, self).generated2uploaded()
+        for line in self.payment_line_ids:
+            if line.payment_type == 'inbound' and line.partner_id.web:
+                line.with_delay(priority=1).export_payment_line()
+        return res
 
 
 class AccountPaymentLine(models.Model):
