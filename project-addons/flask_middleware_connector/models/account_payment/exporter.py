@@ -31,4 +31,4 @@ class PaymentLineAdapter(Component):
     _name = 'account.payment.line.general.adapter'
     _inherit = 'middleware.adapter'
     _apply_on = 'account.payment.line'
-    _middleware_model = 'payment_line'
+    _middleware_model = 'paymentline'
