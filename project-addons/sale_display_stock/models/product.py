@@ -204,3 +204,15 @@ class ProductProduct(models.Model):
             else:
                 product.virtual_stock_conservative = \
                     product.qty_available - product.outgoing_picking_reserved_qty - product.reservation_count
+
+    @api.multi
+    def _compute_reservation_count(self):
+        super()._compute_reservation_count()
+        for product in self:
+
+            domain = [('product_id', 'in', product.product_variant_ids.ids),
+                      ('state', 'in', ('confirmed', 'assigned', 'partially_available', 'waiting')),
+                      ('raw_material_production_id', '!=', False),
+                      ('picking_id', '=', False)]
+            product.reservation_count += sum(
+                item['product_uom_qty'] for item in self.env['stock.move'].search_read(domain, ['product_uom_qty']))
