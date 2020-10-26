@@ -65,6 +65,7 @@
                 <field name="allow_confirm_blocked" attrs="{'invisible': [('claim_type', '!=', %(crm_claim_type.crm_claim_type_customer)d)]}" groups="account.group_account_manager"/>
                 <field name="t_incidence_picking" attrs="{'invisible':[('transport_incidence', '=', False)]}"/>
                 <field name="transport_incidence"/>
+                <field name="warehouse_location"/>
             </field>
             <field name="email_from" position="after">
                 <field name="comercial"/>

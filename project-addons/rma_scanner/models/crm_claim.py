@@ -24,6 +24,7 @@ class CrmClaim(models.Model):
                     next_is_location = True
                 else:
                     claim.message_post(body="RMA scanned")
+                    claim.warehouse_location = self.env.user.warehouse_location
                     claim.stage_id = self.env["crm.claim.stage"].search([('name', '=', 'Recibido')])
                     claim.date_received = fields.Date.today()
                     message = _("{} received").format(claim.number)
