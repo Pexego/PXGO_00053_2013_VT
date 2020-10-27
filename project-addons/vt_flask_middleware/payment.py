@@ -9,7 +9,7 @@ class PaymentLine(SyncModel):
     date = CharField(max_length=60)
     invoice_id = IntegerField()
     partner_id = IntegerField()
-    amount = DecimalField(max_digits=2, decimal_places=2, rounding='ROUND_HALF_EVEN')
+    amount = DecimalField(rounding='ROUND_HALF_EVEN')
 
     MOD_NAME = 'paymentline'
 
