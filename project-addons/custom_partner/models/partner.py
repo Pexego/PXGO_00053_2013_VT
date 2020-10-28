@@ -834,17 +834,6 @@ class AccountMove(models.Model):
     vref = fields.Char("Reference")
 
 
-class AccountVoucher(models.Model):
-    _inherit = 'account.voucher'
-
-    @api.multi
-    def account_move_get(self):
-        move = super(AccountVoucher, self).account_move_get()
-        move['vref'] = self.reference
-
-        return move
-
-
 class AccountPayment(models.Model):
     _inherit = 'account.payment'
 
