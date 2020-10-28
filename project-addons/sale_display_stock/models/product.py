@@ -173,6 +173,8 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
+    _order ='is_pack asc,default_code asc'
+
     @api.multi
     def _stock_conservative(self):
         for product in self:
@@ -184,9 +186,11 @@ class ProductProduct(models.Model):
                         for subproduct in bom.bom_line_ids:
                             subproduct_quantity_next = subproduct.product_qty
                             if subproduct_quantity_next:
+                                product_id = subproduct.product_id
                                 subproduct_stock_next = \
-                                    subproduct.product_id.qty_available - subproduct.product_id.outgoing_picking_reserved_qty - \
-                                    subproduct.product_id.reservation_count
+                                    product_id.qty_available - \
+                                    product_id.outgoing_picking_reserved_qty - \
+                                    product_id.reservation_count
                                 pack_stock_next = math.\
                                     floor(subproduct_stock_next /
                                           subproduct_quantity_next)
@@ -203,3 +207,12 @@ class ProductProduct(models.Model):
             else:
                 product.virtual_stock_conservative = \
                     product.qty_available - product.outgoing_picking_reserved_qty - product.reservation_count
+
+    @api.multi
+    def _compute_reservation_count(self):
+        for product in self:
+            domain = [('product_id', '=', product.id),
+                      ('state', 'in', ['draft', 'confirmed', 'assigned',
+                                       'partially_available'])]
+            reservations = self.env['stock.reservation'].search_read(domain,["product_qty"])
+            product.reservation_count = sum([x.get('product_qty') for x in reservations])
