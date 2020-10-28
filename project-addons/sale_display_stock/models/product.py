@@ -174,6 +174,8 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
+    _order ='is_pack asc,default_code asc'
+
     @api.multi
     def _stock_conservative(self):
         for product in self:
@@ -185,9 +187,11 @@ class ProductProduct(models.Model):
                         for subproduct in bom.bom_line_ids:
                             subproduct_quantity_next = subproduct.product_qty
                             if subproduct_quantity_next:
+                                product_id = subproduct.product_id
                                 subproduct_stock_next = \
-                                    subproduct.product_id.qty_available - subproduct.product_id.outgoing_picking_reserved_qty - \
-                                    subproduct.product_id.reservation_count
+                                    product_id.qty_available - \
+                                    product_id.outgoing_picking_reserved_qty - \
+                                    product_id.reservation_count
                                 pack_stock_next = math.\
                                     floor(subproduct_stock_next /
                                           subproduct_quantity_next)
@@ -209,7 +213,6 @@ class ProductProduct(models.Model):
     def _compute_reservation_count(self):
         super()._compute_reservation_count()
         for product in self:
-
             domain = [('product_id', 'in', product.product_variant_ids.ids),
                       ('state', 'in', ('confirmed', 'assigned', 'partially_available', 'waiting')),
                       ('raw_material_production_id', '!=', False),
