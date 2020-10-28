@@ -5,5 +5,6 @@ from . import purchase
 from . import sale
 from . import base
 from . import product
+from . import stock
 from . import crm_claim
 from . import crm_phonecall
