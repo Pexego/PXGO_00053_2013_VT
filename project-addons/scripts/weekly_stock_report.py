@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
-import xmlrpc.client
-import socket
+import json
+import random
+import urllib.request
 
 from datetime import datetime
 from dateutil.relativedelta import MO, SU, relativedelta
@@ -15,7 +16,7 @@ class weekly_stock_report(object):
         """método incial"""
 
         try:
-            self.url_template = "http://%s:%s/xmlrpc/2/%s"
+            self.url_template = "http://%s:%s/jsonrpc"
             self.server = "localhost"
             self.port = 8069
             self.dbname = dbname
@@ -29,16 +30,10 @@ class weekly_stock_report(object):
                                 'terminar en .xls')
 
             #
-            # Conectamos con OpenERP
+            # Conectamos con Odoo
             #
-            login_facade = xmlrpc.client.\
-                ServerProxy(self.url_template %
-                            (self.server, self.port, 'common'))
-            self.user_id = login_facade.login(self.dbname, self.user_name,
-                                              self.user_passwd)
-            self.object_facade = xmlrpc.client.\
-                ServerProxy(self.url_template % (self.server, self.port,
-                                                 'object'))
+            self.user_id = self.call("common", "login", self.dbname,
+                                     self.user_name, self.user_passwd)
 
             res = self.create_stock_report()
             # con exito
@@ -48,136 +43,50 @@ class weekly_stock_report(object):
             print("ERROR: {}".format(e))
             sys.exit(1)
 
-        # Métodos Xml-rpc
+    def json_rpc(self, url, method, params):
+        data = {
+            "jsonrpc": "2.0",
+            "method": method,
+            "params": params,
+            "id": random.randint(0, 1000000000),
+        }
+        req = urllib.request.\
+            Request(url=url, data=json.dumps(data).encode(),
+                    headers={"Content-Type": "application/json"})
+        reply = json.loads(urllib.request.urlopen(req).read().decode('UTF-8'))
+        if reply.get("error"):
+            raise Exception(reply["error"])
+        return reply["result"]
 
-    def exception_handler(self, exception):
-        """Manejador de Excepciones"""
-        print("HANDLER: {}".format(exception))
-        return True
-
-    def create(self, model, data):
-        """
-        Wrapper del metodo create.
-        """
-        try:
-            res = self.object_facade.execute(self.dbname, self.user_id,
-                                             self.user_passwd, model, 'create',
-                                             data)
-            return res
-        except socket.error as err:
-            raise Exception('Conexion rechazada: %s!' % err)
-        except xmlrpc.client.Fault as err:
-            raise Exception('Error %s en create: %s' % (err.faultCode,
-                                                        err.faultString))
+    def call(self, service, method, *args):
+        return self.json_rpc(self.url_template % (self.server, self.port),
+                             "call", {"service": service, "method": method,
+                                      "args": args})
 
     def search(self, model, query, offset=0, limit=False, order=False,
                count=False):
         """
         Wrapper del metodo search.
         """
-        try:
-            ids = self.object_facade.execute(self.dbname, self.user_id,
-                                             self.user_passwd, model, 'search',
-                                             query, offset, limit, order,
-                                             count)
-            return ids
-        except socket.error as err:
-            raise Exception('Conexion rechazada: %s!' % err)
-        except xmlrpc.client.Fault as err:
-            raise Exception('Error %s en search: %s' % (err.faultCode,
-                                                        err.faultString))
+        ids = self.call("object", "execute", self.dbname, self.user_id,
+                        self.user_passwd, model, 'search',
+                        query, offset, limit, order, count)
+        return ids
 
     def read_group(self, model, domain, fields, groupby, offset=0, limit=False,
                    orderby=False, lazy=False):
         """
         Wrapper del metodo read_group.
         """
-        try:
-            res = self.object_facade.\
-                execute(self.dbname, self.user_id, self.user_passwd,
-                        model, 'read_group', domain, fields, groupby, offset,
-                        limit, orderby, lazy)
-            return res
-        except socket.error as err:
-            raise Exception('Conexion rechazada: %s!' % err)
-        except xmlrpc.client.Fault as err:
-            raise Exception('Error %s en read_group: %s' %
-                            (err.faultCode, err.faultString))
+        res = self.call("object", "execute", self.dbname, self.user_id,
+                        self.user_passwd, model, 'read_group', domain, fields,
+                        groupby, offset, limit, orderby, lazy)
+        return res
 
     def read(self, model, ids, fields):
-        """
-        Wrapper del metodo read.
-        """
-        try:
-            data = self.object_facade.execute(self.dbname, self.user_id,
-                                              self.user_passwd, model, 'read',
-                                              ids, fields)
-            return data
-        except socket.error as err:
-            raise Exception('Conexion rechazada: %s!' % err)
-        except xmlrpc.client.Fault as err:
-            raise Exception('Error %s en read: %s' % (err.faultCode,
-                                                      err.faultString))
-
-    def write(self, model, ids, field_values):
-        """
-        Wrapper del metodo write.
-        """
-        try:
-            res = self.object_facade.execute(self.dbname, self.user_id,
-                                             self.user_passwd, model, 'write',
-                                             ids, field_values)
-            return res
-        except socket.error as err:
-            raise Exception('Conexion rechazada: %s!' % err)
-        except xmlrpc.client.Fault as err:
-            raise Exception('Error %s en write: %s' % (err.faultCode,
-                                                       err.faultString))
-
-    def unlink(self, model, ids):
-        """
-        Wrapper del metodo unlink.
-        """
-        try:
-            res = self.object_facade.execute(self.dbname, self.user_id,
-                                             self.user_passwd, model,
-                                             'unlink', ids)
-            return res
-        except socket.error as err:
-            raise Exception('Conexion rechazada: %s!' % err)
-        except xmlrpc.client.Fault as err:
-            raise Exception('Error %s en unlink: %s' %
-                            (err.faultCode, err.faultString))
-
-    def default_get(self, model, fields_list=[]):
-        """
-        Wrapper del metodo default_get.
-        """
-        try:
-            res = self.object_facade.execute(self.dbname, self.user_id,
-                                             self.user_passwd, model,
-                                             'default_get', fields_list)
-            return res
-        except socket.error as err:
-            raise Exception('Conexion rechazada: %s!' % err)
-        except xmlrpc.client.Fault as err:
-            raise Exception('Error %s en default_get: %s' %
-                            (err.faultCode, err.faultString))
-
-    def execute(self, model, method, *args, **kw):
-        """
-        Wrapper del método execute.
-        """
-        try:
-            res = self.object_facade.execute(self.dbname, self.user_id,
-                                             self.user_passwd, model, method,
-                                             *args, **kw)
-            return res
-        except socket.error as err:
-            raise Exception('Conexión rechazada: %s!' % err)
-        except xmlrpc.client.Fault as err:
-            raise Exception('Error %s en execute: %s' % (err.faultCode,
-                                                         err.faultString))
+        data = self.call("object", "execute", self.dbname, self.user_id,
+                         self.user_passwd, model, 'read', ids, fields)
+        return data
 
     def create_stock_report(self):
         start_date = datetime.strptime(self.start_date, "%Y-%m-%d").date()
