@@ -88,7 +88,7 @@ class weekly_stock_report(object):
                                                         err.faultString))
 
     def read_group(self, model, domain, fields, groupby, offset=0, limit=False,
-                   orderby=False, lazy=True):
+                   orderby=False, lazy=False):
         """
         Wrapper del metodo read_group.
         """
@@ -183,11 +183,14 @@ class weekly_stock_report(object):
         start_date = datetime.strptime(self.start_date, "%Y-%m-%d").date()
         end_date = datetime.strptime(self.end_date, "%Y-%m-%d").date()
         next_sunday = start_date+relativedelta(weekday=SU)
-        products = self.search("product.product", [('type', '=', 'product')])
-        products_len = len(products)
+        days = abs(start_date - end_date).days
+        weeks = (days//7)
+        if not weeks:
+            weeks = 1
         wb = xlwt.Workbook()
-
+        week = 0
         while (next_sunday <= end_date):
+            week += 1
             ws = wb.add_sheet(start_date.strftime("%d%m%Y") + " - " +
                               next_sunday.strftime("%d%m%Y"))
             print("NEW SHEET: {}".format(start_date.strftime("%d/%m/%Y") +
@@ -198,38 +201,35 @@ class weekly_stock_report(object):
             ws.write(line, 1, "Uds.")
             ws.write(line, 2, "Zona")
             ws.write(line, 3, "Fecha entrada")
-            prod = 0
-            for product_id in products:
-                prod += 1
-                product_data = self.read("product.product", [product_id],
-                                         ['default_code'])[0]
-                product_stock_data = self.\
-                    read_group("stock.history",
-                               [('product_id', '=', product_id),
-                                ('location_id.usage', '=', 'internal'),
+
+            product_stock_data = self.\
+                read_group("stock.history",
+                           [('product_id.type', '=', 'product'),
+                            ('location_id.usage', '=', 'internal'),
+                            ('date', '<=',
+                             next_sunday.strftime("%Y-%m-%d 23:23:59"))],
+                           ['product_id', 'location_id', 'quantity'],
+                           ['product_id', 'location_id'])
+            for data in product_stock_data:
+                if data['quantity']:
+                    line += 1
+                    move_ids = self.\
+                        search("stock.move",
+                               [('product_id', '=', data['product_id'][0]),
+                                ('location_dest_id', '=',
+                                 data['location_id'][0]),
                                 ('date', '<=',
-                                 next_sunday.strftime("%Y-%m-%d 23:23:59"))],
-                               ['location_id', 'quantity'], ['location_id'])
-                for data in product_stock_data:
-                    if data['quantity']:
-                        line += 1
-                        move_ids = self.\
-                            search("stock.move",
-                                   [('product_id', '=', product_id),
-                                    ('location_dest_id', '=',
-                                     data['location_id'][0]),
-                                    ('date', '<=',
-                                     next_sunday.strftime("%Y-%m-%d")),
-                                    ('state', '=', 'done')],
-                                   limit=1, order="date desc")
-                        in_date = move_ids and \
-                            self.read('stock.move', move_ids,
-                                      ['date'])[0]['date'][:11] or ""
-                        ws.write(line, 0, product_data['default_code'])
-                        ws.write(line, 1, data['quantity'])
-                        ws.write(line, 2, data['location_id'][1])
-                        ws.write(line, 3, in_date)
-                print("Prod {} de {}".format(prod, products_len))
+                                 next_sunday.strftime("%Y-%m-%d")),
+                                ('state', '=', 'done')],
+                               limit=1, order="date desc")
+                    in_date = move_ids and \
+                        self.read('stock.move', move_ids,
+                                  ['date'])[0]['date'][:11] or ""
+                    ws.write(line, 0, data['product_id'][1])
+                    ws.write(line, 1, data['quantity'])
+                    ws.write(line, 2, data['location_id'][1])
+                    ws.write(line, 3, in_date)
+            print("Week {} de {}".format(week, weeks))
 
             start_date = next_sunday+relativedelta(weekday=MO)
             next_sunday = start_date+relativedelta(weekday=SU)
