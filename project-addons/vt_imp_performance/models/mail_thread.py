@@ -8,15 +8,20 @@ class MailThread(models.AbstractModel):
     @api.model
     def create(self, values):
         """Eliminamos el log de documento creado y cambios en campos"""
-        return super(MailThread, self.
-                     with_context({'mail_create_nolog': True,
-                                   'mail_notrack': True})).create(values)
+        ctx = dict(self.env.context)
+        ctx.update({'mail_create_nolog': True,
+                    'mail_notrack': True})
+        res =  super(MailThread, self.
+                     with_context(ctx)).create(values)
+        return res
 
     @api.multi
     def write(self, values):
         """Eliminamos el log de cambios en campos"""
+        ctx = dict(self.env.context)
+        ctx.update({'mail_notrack': True})
         return super(MailThread, self.
-                     with_context({'mail_notrack': True})).write(values)
+                     with_context(ctx)).write(values)
 
 
 class Followers(models.Model):
