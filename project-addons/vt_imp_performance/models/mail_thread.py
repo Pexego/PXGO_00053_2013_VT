@@ -9,17 +9,18 @@ class MailThread(models.AbstractModel):
     def create(self, values):
         """Eliminamos el log de documento creado y cambios en campos"""
         ctx = dict(self.env.context)
-        ctx.update({'mail_create_nolog': True,
-                    'mail_notrack': True})
-        res =  super(MailThread, self.
-                     with_context(ctx)).create(values)
+        if self._name != 'sale.order':
+            ctx.update({'mail_create_nolog': True,
+                        'mail_notrack': True})
+        res = super(MailThread, self.with_context(ctx)).create(values)
         return res
 
     @api.multi
     def write(self, values):
         """Eliminamos el log de cambios en campos"""
         ctx = dict(self.env.context)
-        ctx.update({'mail_notrack': True})
+        if self._name != 'sale.order':
+            ctx.update({'mail_notrack': True})
         return super(MailThread, self.
                      with_context(ctx)).write(values)
 
