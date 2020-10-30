@@ -9,17 +9,13 @@ class ProductTemplate(models.Model):
 
     name = fields.Char(translate=False)
     description_sale = fields.Text(translate=False)
-
-    # this doesn't seem to work
-    property_valuation = fields.Selection(default='real_time')
-
     currency_purchase_id = fields.Many2one('res.currency', 'Currency',
                                            default=lambda self: self.env.user.company_id.currency_id.id)
 
     @api.model
     def create(self, vals):
         prod = super().create(vals)
-        prod.property_valuation = 'real_time'
+        prod.property_valuation = prod.categ_id.property_valuation
         return prod
 
     def set_product_template_currency_purchase(self, currency):

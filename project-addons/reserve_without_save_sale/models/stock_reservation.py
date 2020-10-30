@@ -12,7 +12,7 @@ class StockReservation(models.Model):
     _order = "sequence asc"
 
     def _new_sequence(self):
-        query = "SELECT MAX(sequence)  FROM stock_reservation "
+        query = "SELECT sequence FROM stock_reservation ORDER BY sequence DESC LIMIT 1"
         self.env.cr.execute(query, ())
         regs = self.env.cr.fetchall()
         for reg in regs:
@@ -25,7 +25,7 @@ class StockReservation(models.Model):
 
     unique_js_id = fields.Char(size=64)
     sequence = fields.Integer(help='Gives the priority in reservation.',
-                              default=_new_sequence)
+                              default=_new_sequence, index=True)
     user_id = fields.Many2one('res.users', relation='sale_id.user_id',
                               string='Responsible', readonly=True)
     date_order = fields.Datetime(relation='sale_id.date_order', readonly=True)
@@ -158,13 +158,13 @@ class StockReservation(models.Model):
                                 ('move_id.state', 'not in', ['done',
                                                              'cancel'])])
         reserves_to_delete = self.env['stock.reservation']
-        for reserve in reserves:
-            check_other_reserves = self.\
-                search([('sale_line_id', '=', reserve.sale_line_id.id),
-                        ('partner_id', '!=', False),
-                        ('move_id.state', 'not in', ['done', 'cancel'])])
-            if check_other_reserves:
-                reserves_to_delete |= reserve
+        check_other_reserves = self.\
+            search([('sale_line_id', 'in', reserves.mapped('sale_line_id').ids),
+                    ('partner_id', '!=', False),
+                    ('move_id.state', 'not in', ['done', 'cancel'])])
+        if check_other_reserves:
+            reserves_to_delete |= reserves.\
+                filtered(lambda r: r.sale_line_id.id in check_other_reserves.mapped('sale_line_id').ids)
         if reserves_to_delete:
             reserves_to_delete.unlink()
 

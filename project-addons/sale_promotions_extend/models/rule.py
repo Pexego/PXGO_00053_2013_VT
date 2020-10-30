@@ -108,6 +108,8 @@ class PromotionsRulesActions(models.Model):
              _('Discount % on Brand')),
             ('brand_disc_perc_accumulated',
              _('Discount % on Brand accumulated')),
+            ('brand_price_disc_accumulated',
+             _('Discount % on Brand accumulated (Price Unit)')),
             ('web_disc_accumulated',
              _('Web Discount % on Product accumulated')),
             ('a_get_b_product_tag',
@@ -138,7 +140,8 @@ class PromotionsRulesActions(models.Model):
             self.arguments = '0.00'
 
         elif self.action_type in [
-                'brand_disc_perc', 'brand_disc_perc_accumulated']:
+                'brand_disc_perc', 'brand_disc_perc_accumulated',
+                'brand_price_disc_accumulated']:
             self.product_code = 'brand_code'
             self.arguments = '0.00'
 
@@ -182,6 +185,18 @@ class PromotionsRulesActions(models.Model):
             order_line.write({'discount': final_discount,
                               'old_discount': order_line.discount,
                               'accumulated_promo': True})
+
+    def apply_perc_discount_price_accumulated(self, order_line):
+        discount = eval(self.arguments)
+
+        promo_price = order_line.price_unit * (1 - (discount / 100))
+
+        if not order_line.old_price:
+            order_line.write({'old_price': order_line.price_unit,
+                              'price_unit': promo_price})
+        else:
+            order_line.write({'price_unit': promo_price})
+
 
     def action_tag_disc_perc_accumulated(self, order):
         """
@@ -332,6 +347,7 @@ class PromotionsRulesActions(models.Model):
 
         return True
 
+
     def create_y_line_sale_points_programme(self, order, price_unit,bags_ids):
         product_id = self.env.ref('commercial_rules.product_discount')
         vals = {
@@ -397,6 +413,14 @@ class PromotionsRulesActions(models.Model):
             self.create_y_line_sale_points_programme(order, price_subtotal,bags_to_change_status)
 
         return True
+
+    def action_brand_price_disc_accumulated(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) == \
+                    order_line.product_id.product_brand_id.code:
+                self.apply_perc_discount_price_accumulated(order_line)
+        return {}
+
 
 
 class PromotionsRules(models.Model):
