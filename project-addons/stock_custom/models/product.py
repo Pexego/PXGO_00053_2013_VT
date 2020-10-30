@@ -16,6 +16,13 @@ class ProductTemplate(models.Model):
     def create(self, vals):
         prod = super().create(vals)
         prod.property_valuation = prod.categ_id.property_valuation
+        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT' \
+                and not prod.seller_ids:
+            supplierinfo = self.env['product.supplierinfo'].create({
+                'name': 27,
+                'min_qty': 1
+            })
+            prod.seller_ids = supplierinfo
         return prod
 
     def set_product_template_currency_purchase(self, currency):
