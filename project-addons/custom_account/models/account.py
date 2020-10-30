@@ -17,7 +17,7 @@ class AccountMoveLine(models.Model):
     last_rec_date = fields.Date(
         compute='_compute_last_rec_date',
         store=True,
-        index=True,
+        index=False,
         string='Last reconciliation date',
         help="The date of the last reconciliation (full) "
              "account move line."
