@@ -1,5 +1,5 @@
 <templates id="template" inherit="web.template">
-        <t t-name="Sidebar" t-extend="Sidebar">
+        <t t-extend="Sidebar">
             <t t-jquery="ul" t-operation="append">
                 <li t-if="section.name == 'files' and widget.options.editable and widget.items[section.name].length>1">
                     <a class="btn download_all" target="_self"
