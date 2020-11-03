@@ -9,6 +9,7 @@ from rma import RmaStatus, RmaStage, Rma, RmaProduct
 from picking import Picking, PickingProduct
 from rappel import Rappel, RappelCustomerInfo, RappelSection
 from translation import Translation
+from payment import PaymentLine
 #from post import Post
 MODELS_CLASS = {
     'invoice': Invoice, 'customer': Customer, 'customertag': CustomerTag, 'customertagcustomerrel': CustomerTagCustomerRel,
@@ -18,12 +19,12 @@ MODELS_CLASS = {
     'productbrand': ProductBrand, 'productbrandcountryrel': ProductBrandCountryRel, 
     'order': Order, 'orderproduct': OrderProduct, 'rappel': Rappel, 'rappelcustomerinfo': RappelCustomerInfo,
     'rappelsection': RappelSection, 'countrystate': CountryState, 'producttag': ProductTag, 'producttagproductrel': ProductTagProductRel,
-    'translation': Translation}#, 'post': Post}
+    'translation': Translation, 'paymentline': PaymentLine}#, 'post': Post}
 
 MASTER_CLASSES = {'commercial': Commercial,'productcategory': ProductCategory,
                   'rmastatus': RmaStatus, 'rmastage': RmaStage,
                   'country': Country, 'productbrand': ProductBrand, 'rappel': Rappel,
-                  'translation': Translation}
+                  'translation': Translation, 'paymentline': PaymentLine}
 
 DEPENDENT_CLASSES = {'invoice': Invoice, 'customer': Customer, 'customertag': CustomerTag, 'customertagcustomerrel': CustomerTagCustomerRel,
                      'product': Product, 'picking': Picking, 'pickingproduct': PickingProduct,
