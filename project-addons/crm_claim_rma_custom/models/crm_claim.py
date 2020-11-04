@@ -49,7 +49,7 @@ class CrmClaimRma(models.Model):
                                                                        ('3', 'Critical')])
     comercial = fields.Many2one("res.users", string="Comercial")
     country = fields.Many2one("res.country", string="Country")
-    date = fields.Date('Claim Date', index=True,
+    date = fields.Date('Claim Date', index=False,
                        default=fields.Date.context_today)
     write_date = fields.Datetime("Update date", readonly=True)
     date_received = fields.Date('Received Date')

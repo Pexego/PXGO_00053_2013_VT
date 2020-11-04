@@ -15,7 +15,7 @@ class CrmClaim(models.Model):
 
         next_is_location = False
 
-        if barcode.startswith('RMA'):
+        if 'RMA' in barcode:
             claim = self.search([('number', '=', barcode)], limit=1)
             if claim:
                 if claim.stage_id.with_context({'lang': 'es_ES'}).name != "Pendiente de recibir":
