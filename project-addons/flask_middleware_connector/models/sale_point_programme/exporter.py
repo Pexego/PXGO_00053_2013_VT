@@ -17,7 +17,7 @@ class SalePointProgrammeRuleExporter(Component):
             "product_id": binding.product_id.id,
             "operator": binding.operator,
             "date_end": binding.date_end,
-            "customertag_id": binding.partner_category_id
+            "customertag_id": binding.partner_category_id.id
         }
         if mode == "insert":
             return self.backend_adapter.insert(vals)
