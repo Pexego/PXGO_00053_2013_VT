@@ -36,6 +36,7 @@ for fidelization programmes""",
              'views/sale_participations_cron.xml',
              'views/template_participations.xml',
              'views/partner_view.xml',
-             'security/ir.model.access.csv'],
+             'security/ir.model.access.csv',
+             'data/cron.xml'],
     "installable": True
 }

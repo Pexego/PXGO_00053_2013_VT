@@ -69,9 +69,7 @@ class SaleOrder(models.Model):
             for rule in rules:
                 apply_rule = True
                 if rule.partner_category_id:
-                    partner_categories = set(self.partner_id.category_id)
-                    rule_categories = set(rule.partner_category_id)
-                    apply_rule = len(partner_categories & rule_categories) > 0
+                    apply_rule = rule.partner_category_id in self.partner_id.category_id
                 if apply_rule:
                     points = False
                     if rule.product_id:
@@ -105,53 +103,54 @@ class SaleOrder(models.Model):
     @api.multi
     def action_confirm(self):
         res = super().action_confirm()
-        bag_obj = self.env['res.partner.point.programme.bag']
-        for order in self:
-            rule_obj = self.env['sale.point.programme.rule']
-            rules = rule_obj.search(['|', ('date_start', '<=', self.date_order[:10]),
-                                     ('date_start', '=', False),
-                                     '|', ('date_end', '>=', self.date_order[:10]),
-                                     ('date_end', '=', False)])
-            rules_with_points, brands, products, categories = order.compute_points_programme_bag(self.order_line,
-                                                                                                 rules)
-            for rule, points in rules_with_points.items():
-                modality_type = rule.modality
-                if modality_type == 'participation':
-                    reg = bag_obj.search_read([('point_rule_id', '=', rule.id)], ['points'],
-                                              order='id desc', limit=1)
-                    if not reg:
-                        last_number = 0
-                    else:
-                        last_number = reg[0]['points']
-
-                    control = 0
-                    while points > control:
-                        participation = last_number + 1
-
-                        if order.partner_id.is_company or not order.partner_id.parent_id:
-                            partner_id = order.partner_id.id
+        if isinstance(res, bool):
+            bag_obj = self.env['res.partner.point.programme.bag']
+            for order in self:
+                rule_obj = self.env['sale.point.programme.rule']
+                rules = rule_obj.search(['|', ('date_start', '<=', self.date_order[:10]),
+                                         ('date_start', '=', False),
+                                         '|', ('date_end', '>=', self.date_order[:10]),
+                                         ('date_end', '=', False)])
+                rules_with_points, brands, products, categories = order.compute_points_programme_bag(self.order_line,
+                                                                                                     rules)
+                for rule, points in rules_with_points.items():
+                    modality_type = rule.modality
+                    if modality_type == 'participation':
+                        reg = bag_obj.search_read([('point_rule_id', '=', rule.id)], ['points'],
+                                                  order='id desc', limit=1)
+                        if not reg:
+                            last_number = 0
                         else:
-                            partner_id = order.partner_id.parent_id.id
+                            last_number = reg[0]['points']
 
-                        bag_obj.create({'name': rule.name,
-                                        'point_rule_id': rule.id,
-                                        'order_id': order.id,
-                                        'points': participation,
-                                        'partner_id': partner_id})
-                        last_number = participation
-                        control += 1
-                elif modality_type == 'point':
-                    if points:
-                        if order.partner_id.is_company or not order.partner_id.parent_id:
-                            partner_id = order.partner_id.id
-                        else:
-                            partner_id = order.partner_id.parent_id.id
+                        control = 0
+                        while points > control:
+                            participation = last_number + 1
 
-                        bag_obj.create({'name': rule.name,
-                                        'point_rule_id': rule.id,
-                                        'order_id': order.id,
-                                        'points': points,
-                                        'partner_id': partner_id})
+                            if order.partner_id.is_company or not order.partner_id.parent_id:
+                                partner_id = order.partner_id.id
+                            else:
+                                partner_id = order.partner_id.parent_id.id
+
+                            bag_obj.create({'name': rule.name,
+                                            'point_rule_id': rule.id,
+                                            'order_id': order.id,
+                                            'points': participation,
+                                            'partner_id': partner_id})
+                            last_number = participation
+                            control += 1
+                    elif modality_type == 'point':
+                        if points:
+                            if order.partner_id.is_company or not order.partner_id.parent_id:
+                                partner_id = order.partner_id.id
+                            else:
+                                partner_id = order.partner_id.parent_id.id
+
+                            bag_obj.create({'name': rule.name,
+                                            'point_rule_id': rule.id,
+                                            'order_id': order.id,
+                                            'points': points,
+                                            'partner_id': partner_id})
 
         return res
 
