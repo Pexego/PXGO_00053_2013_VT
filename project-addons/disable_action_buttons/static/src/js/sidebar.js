@@ -5,18 +5,8 @@ odoo.define('disable_action_buttons.sidebar', function (require) {
 var core = require('web.core');
 var Sidebar = require('web.Sidebar');
 var QWeb = core.qweb;
-var ajax = require('web.ajax');
-ajax.loadXML('/disable_action_buttons/static/src/views/assets.xml', QWeb);
 
 Sidebar.include({
-
-    _onDropdownClicked: function (event) {
-        if ($(event.currentTarget).is('.download_all')){
-            return true
-        }else{
-            return this._super.apply(this, arguments);
-        }
-    },
 
     _redraw: function () {
         var self=this;
