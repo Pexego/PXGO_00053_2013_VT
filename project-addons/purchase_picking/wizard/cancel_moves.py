@@ -34,7 +34,7 @@ class CancelMovesLinesWizard(models.TransientModel):
     wizard_id = fields.Many2one('cancel.moves.wzd', 'wizard')
 
 
-class CreatePickingMove(models.TransientModel):
+class CancelMovesWizard(models.TransientModel):
 
     _name = 'cancel.moves.wzd'
 
