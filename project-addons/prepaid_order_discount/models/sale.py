@@ -77,7 +77,7 @@ class SaleOrder(models.Model):
 
             amount_untaxed = sum(sale.order_line.filtered(
                 lambda l: l.product_id.categ_id.id not in shipping_cost_categ.ids).mapped('price_subtotal'))
-            if margin_1 < margin_sale < margin_2:
+            if margin_1 <= margin_sale < margin_2:
                 last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
                 discount_line_vals = {'order_id': sale.id,
                                       'product_id': prepaid_discount_product_id,
@@ -89,7 +89,7 @@ class SaleOrder(models.Model):
                 # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
                 sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
                 sale.invoice_type_id = daily_invoicing.id
-            elif margin_sale > margin_2:
+            elif margin_sale >= margin_2:
                 last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
                 discount_line_vals = {'order_id': sale.id,
                                       'product_id': prepaid_discount_product_id,

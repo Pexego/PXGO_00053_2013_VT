@@ -62,7 +62,8 @@ class CrmClaimRma(models.Model):
     t_incidence_picking = fields.Char('Trp. inc. picking')
     warehouse_location = fields.Selection([('madrid1', 'Madrid - Avd. del Sol'),
                                            ('madrid2', 'Madrid - Casablanca'),
-                                           ('italia', 'Italia - Arcore')], "Warehouse Location")
+                                           ('italia', 'Italia - Arcore'),
+                                           ('transit', 'In transit')], "Warehouse Location")
 
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
