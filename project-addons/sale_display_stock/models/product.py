@@ -174,8 +174,6 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
-    _order ='is_pack asc,default_code asc'
-
     @api.multi
     def _stock_conservative(self):
         for product in self:
