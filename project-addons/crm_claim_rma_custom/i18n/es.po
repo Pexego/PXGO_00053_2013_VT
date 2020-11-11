@@ -482,3 +482,8 @@ msgstr "Sede"
 #, python-format
 msgid "Please, select the warehouse location of the RMA"
 msgstr "Por favor, selecciona la sede del RMA"
+
+#. module: crm_claim_rma_custom
+#: selection:crm.claim,warehouse_location:0
+msgid "In transit"
+msgstr "En tránsito"

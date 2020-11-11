@@ -8,7 +8,11 @@ class RappelCalculated(models.Model):
 
     _inherit = 'rappel.calculated'
 
+    _order = 'date_end desc'
+
     goal_percentage = fields.Float()
+
+    invoice_line_ids = fields.Many2many('account.invoice.line',readonly=True)
 
     @api.model
     def create_rappel_invoice(self, rappels_to_invoice):
