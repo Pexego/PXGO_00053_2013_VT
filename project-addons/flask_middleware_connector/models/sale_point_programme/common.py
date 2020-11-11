@@ -3,7 +3,7 @@ from odoo.addons.queue_job.job import job
 from odoo import api, fields, models
 
 
-class RappelListener(Component):
+class SalePointProgrammeRuleListener(Component):
     _name = 'sale.point.programme.rule.event.listener'
     _inherit = 'base.event.listener'
     _apply_on = ['sale.point.programme.rule']
