@@ -367,3 +367,44 @@ msgstr "Crear albaranes agrupados por proveedor"
 #, python-format
 msgid "Picking already created"
 msgstr "Albarán ya creado"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.cancel_moves_wzd_view
+#: model:ir.actions.act_window,name:purchase_picking.action_cancel_moves_wzd
+msgid "Cancel Moves"
+msgstr "Cancelar movimientos"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.cancel_moves_wzd_view
+msgid "Confirm"
+msgstr "Aceptar"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.cancel_moves_wzd_view
+msgid "Are you sure you want to cancel these records?"
+msgstr "¿Estás seguro de que deseas cancelar estos movimientos?"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.cancel_moves_wzd_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_cancel_moves_lines_wzd_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_cancel_moves_lines_wzd_origin
+msgid "Origin"
+msgstr "Origen"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_cancel_moves_lines_wzd_qty
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_cancel_moves_lines_wzd_container_id
+msgid "Container"
+msgstr "Contenedor"
