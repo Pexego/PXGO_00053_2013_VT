@@ -121,8 +121,6 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
     _order = 'is_pack asc,default_code asc'
 
-    _order ='is_pack asc,default_code asc'
-
     @api.depends('bom_ids','bom_ids.type','bom_ids.bom_line_ids')
     def _compute_is_pack(self):
         for product in self:
