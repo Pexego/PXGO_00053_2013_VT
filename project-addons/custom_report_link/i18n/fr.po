@@ -1092,3 +1092,8 @@ msgstr "Au-delà de 7 jours à compter de la date du présent document, la rése
 #: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
 msgid "<strong>H.S. Code</strong>"
 msgstr "<strong>Code S.H.</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "Simplified Invoice"
+msgstr "Facture simplifiée"
