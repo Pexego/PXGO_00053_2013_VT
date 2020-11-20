@@ -222,6 +222,10 @@ class StockPicking(models.Model):
                 pick.move_lines.write({'state': 'assigned'})
             pick.message_post(body=_("User %s accepted confirmed qties.") %
                               self.env.user.name)
+            if pick.sale_id.scheduled_date:
+                bck.not_sync = True
+                bck.scheduled_picking = True
+                bck._process_picking_scheduled_time()
 
     @api.model
     def cron_accept_qty_incoming_shipments(self):
