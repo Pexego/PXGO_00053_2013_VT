@@ -84,7 +84,7 @@ class AccountInvoice(models.Model):
     reference = fields.Char(string='N. Supplier Invoice (SII)')
 
     @api.multi
-    @api.depends('state', 'payment_mode_id', 'payment_move_line_ids')
+    @api.depends('state', 'payment_mode_id', 'payment_move_line_ids','payment_move_line_ids.move_id.line_ids.full_reconcile_id')
     def _get_state_web(self):
         for invoice in self:
             res = ''
@@ -155,6 +155,10 @@ class AccountInvoice(models.Model):
             if vals.get('type', False) == "out_refund":
                 # vencimiento inmediato en rectificativas
                 vals["payment_term_id"] = self.env.ref('account.account_payment_term_immediate').id
+            invoice_type = (partner.invoice_type_id
+                            or partner.commercial_partner_id.invoice_type_id)
+            if invoice_type and invoice_type.journal_id:
+                vals['journal_id'] = invoice_type.journal_id.id
         return super().create(vals)
 
     @api.onchange('partner_id', 'company_id')
@@ -174,6 +178,11 @@ class AccountInvoice(models.Model):
                 self.payment_term_id = False
                 self.date_due = fields.Date.today()
                 self.payment_mode_id = self.partner_id.commercial_partner_id.customer_payment_mode_id
+            invoice_type = (p.invoice_type_id or p.commercial_partner_id.invoice_type_id)
+            if invoice_type and invoice_type.journal_id:
+                self.journal_id = invoice_type.journal_id.id
+            else:
+                self.journal_id = self.with_context(type=self.type)._default_journal()
         return result
 
     @api.multi
