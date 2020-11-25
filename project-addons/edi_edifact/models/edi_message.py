@@ -305,6 +305,7 @@ class EdifFile(models.Model):
         # Read the files
         files = []
         lines = []
+        latest_date = False
         ftp.dir("", lines.append)
         date_reading = fields.Datetime.now()
         latest_date_str = self.search([], limit=1, order='read_date desc').read_date
@@ -313,7 +314,8 @@ class EdifFile(models.Model):
             pieces = line.split(maxsplit=9)
             datetime_str = pieces[5] + " " + pieces[6] + " " + pieces[7]
             line_datetime = parser.parse(datetime_str)
-            latest_date = parser.parse(latest_date_str)
+            if latest_date_str:
+                latest_date = parser.parse(latest_date_str)
             if not latest_date or line_datetime > latest_date:
                 files.append(pieces[8])
 
