@@ -16,4 +16,8 @@
         <field name="key">ftp_edi_folder</field>
         <field name="value"></field>
     </record>
+    <record id="ftp_edi_folder_out" model="ir.config_parameter">
+        <field name="key">ftp_edi_folder_out</field>
+        <field name="value"></field>
+    </record>
 </odoo>

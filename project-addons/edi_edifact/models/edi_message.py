@@ -9,9 +9,8 @@ class EdifMenssage(models.Model):
 
     _name = "edif.message"
 
-    def UNH(self, ref):
-        #TODO modificar esto para que sea universal, no solo invoic
-        msg = "UNH+{}+INVOIC:D:93A:UN:EAN007'".format(ref)
+    def UNH(self, ref, typ):
+        msg = "UNH+{}+{}:D:93A:UN:EAN007'".format(ref, typ)
         return msg
 
     def BGM(self, typ, ref):
@@ -109,7 +108,7 @@ class EdifMenssage(models.Model):
         invoice.ensure_one()
         msg = ""
         msg_ref = "XXXXXXXX"  # TODO: y esto de donde sale, me lo invento?
-        msg += self.UNH(msg_ref)
+        msg += self.UNH(msg_ref, 'INVOIC')
         if invoice.type == 'out_invoice':
             msg += self.BGM('380', invoice.number)
         elif invoice.type == 'out_refund':
@@ -229,6 +228,11 @@ class EdifMenssage(models.Model):
                     else:
                         order_vals['partner_id'] = partner_ship.commercial_partner_id.id
                         order_vals['partner_shipping_id'] = partner_ship.id
+                        exist_order = self.env['sale.order'].search([('partner_id.id', '=', order_vals['partner_id']),
+                                                                     ('client_order_ref', '=', order_vals['client_order_ref'])])
+                        if exist_order:
+                            parse_errors += _('The order is already created')
+                            break
             elif segment[0] == 'RFF':
                 pass
             elif segment[0] == 'TOD':
@@ -306,7 +310,7 @@ class EdifFile(models.Model):
         files = []
         lines = []
         latest_date = False
-        ftp.dir("", lines.append)
+        ftp.dir("", lines.append)  # Read every line in the folder
         date_reading = fields.Datetime.now()
         latest_date_str = self.search([], limit=1, order='read_date desc').read_date
 
@@ -316,7 +320,7 @@ class EdifFile(models.Model):
             line_datetime = parser.parse(datetime_str)
             if latest_date_str:
                 latest_date = parser.parse(latest_date_str)
-            if not latest_date or line_datetime > latest_date:
+            if line_datetime > latest_date:
                 files.append(pieces[8])
 
         for file in files:
@@ -330,6 +334,7 @@ class EdifFile(models.Model):
 
         ftp.quit()
 
+    @api.multi
     def decode_file(self, data):
         order_file = data.decode('latin-1')
         message_obj = self.env['edif.message']

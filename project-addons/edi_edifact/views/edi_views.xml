@@ -9,7 +9,7 @@
                 <field name="read_date"/>
                 <field name="error"/>
                 <button type="object" name="retry_file" string="Retry" icon="fa-repeat"
-                        attrs="{'invisible': [('error','=',False)]}"/>
+                        attrs="{'invisible': ['|',('error','=',False),('error','=','')]}"/>
             </tree>
         </field>
     </record>

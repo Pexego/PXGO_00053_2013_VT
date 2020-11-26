@@ -6,7 +6,7 @@
     "sequence": 0,
     "certificate": "",
     "license": "",
-    "depends": [],
+    "depends": ["account"],
     "category": "Generic Modules/EDI",
     "description": """
     """,
@@ -14,8 +14,10 @@
         "views/res_partner_views.xml",
         "views/res_company_views.xml",
         "views/edi_views.xml",
+        "views/account_invoice_views.xml",
         "data/parameters.xml",
-        "data/edi_edifact_data.xml"
+        "data/edi_edifact_data.xml",
+        "security/ir.model.access.csv"
     ],
     "auto_install": False,
     "installable": True,
