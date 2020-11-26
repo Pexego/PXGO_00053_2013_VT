@@ -1,4 +1,5 @@
 from odoo import models, fields, api, exceptions, _
+from odoo.tools import float_compare
 import re
 from datetime import datetime
 from dateutil import parser
@@ -215,10 +216,11 @@ class EdifMenssage(models.Model):
                 if segment[1] == '137':
                     order_vals['date_order'] = datetime.strptime(segment[2], '%Y%m%d')
                 if segment[1] == '2':
-                    order_vals['scheduled_date'] = datetime.strptime(segment[2], '%Y%m%d')
+                    order_vals['sale_notes'] += 'FECHA DE ENTREGA: {} \n'.format(datetime.strptime(segment[2], '%Y%m%d').
+                                                                              strftime("%d/%m/%Y"))
             elif segment[0] == 'FTX':
                 if segment[1] == 'AAI':
-                    order_vals['sale_notes'] += segment[4]
+                    order_vals['sale_notes'] += ''.join(segment[4:len(segment)])
             elif segment[0] == 'NAD':
                 if segment[1] == 'DP':
                     partner_ship = self.env['res.partner'].search([('ean', '=', segment[2])])
@@ -259,7 +261,7 @@ class EdifMenssage(models.Model):
                     line['product_uom_qty'] = int(segment[2])
             elif segment[0] == 'MOA':
                 if segment[1] == '79':  # Total neto
-                    if total_net != float(segment[2]):
+                    if float_compare(total_net, float(segment[2]), precision_digits=2) != 0:
                         parse_errors += _('The total net price does not match with the sum of the lines')
                         break
                 elif segment[1] == '66':  # Subtotal
@@ -280,6 +282,8 @@ class EdifMenssage(models.Model):
         order_vals['no_promos'] = True
         if not parse_errors:
             sale = self.env['sale.order'].create(order_vals)
+            sale.onchange_partner_id()
+            sale.write({'partner_shipping_id': order_vals['partner_shipping_id']})
             sale.apply_commercial_rules()
 
         return parse_errors
@@ -288,6 +292,7 @@ class EdifMenssage(models.Model):
 class EdifFile(models.Model):
 
     _name = "edif.file"
+    _order = "read_date desc"
 
     file_name = fields.Char(string='File')
     read_date = fields.Datetime(string='Read date')
