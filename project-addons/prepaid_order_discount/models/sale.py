@@ -38,7 +38,7 @@ class SaleOrder(models.Model):
             if message:
                 raise exceptions.Warning(message)
         if risk:
-            return super(SaleOrder, self.with_context(bypass_risk=True)).action_confirm()
+            return super(SaleOrder, self.with_context(bypass_risk=True,force_check=True)).action_confirm()
         else:
             return super().action_confirm()
 
