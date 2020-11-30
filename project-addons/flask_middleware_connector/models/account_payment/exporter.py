@@ -12,7 +12,7 @@ class PaymentLineExporter(Component):
         vals = {
             "odoo_id": binding.id,
             "code": binding.order_id.name,
-            "date": binding.order_id.date_uploaded,
+            "date": binding.date,
             "invoice_id": invoice.id,
             "partner_id": binding.partner_id.id,
             "amount": binding.amount_currency,
