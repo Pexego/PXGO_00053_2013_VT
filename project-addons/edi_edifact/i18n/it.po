@@ -18,24 +18,24 @@ msgstr ""
 #. module: edi_edifact
 #: model:ir.model.fields,field_description:edi_edifact.field_edif_file_file_name
 msgid "File"
-msgstr "Fichero"
+msgstr "File"
 
 #. module: edi_edifact
 #: model:ir.model.fields,field_description:edi_edifact.field_edif_file_read_date
 msgid "Read date"
-msgstr "Fecha de lectura"
+msgstr "Data di lettura"
 
 #. module: edi_edifact
 #: model:ir.model.fields,field_description:edi_edifact.field_edif_file_error
 msgid "Error"
-msgstr "Error"
+msgstr "Errore"
 
 #. module: edi_edifact
 #: model:ir.ui.menu,name:edi_edifact.edi_sales_files
 #: model:ir.ui.view,arch_db:edi_edifact.action_edi_sale_files
 #: model:ir.actions.act_window,name:edi_edifact.action_edi_sale_files
 msgid "EDI Files"
-msgstr "Ficheros EDI"
+msgstr "File EDI"
 
 #. module: edi_edifact
 #: model:ir.ui.menu,name:edi_edifact.edi_sales_menu
@@ -45,9 +45,9 @@ msgstr "EDI"
 #. module: edi_edifact
 #: model:ir.model.fields,field_description:edi_edifact.field_res_partner_edi_enabled
 msgid "EDI Enable"
-msgstr "EDI Activado"
+msgstr "EDI Attivato"
 
 #. module: edi_edifact
 #: model:ir.ui.view,arch_db:edi_edifact.invoice_edi_form
 msgid "Send to EDI"
-msgstr "Enviar EDI"
+msgstr "Invia EDI"
