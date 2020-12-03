@@ -46,7 +46,7 @@ class AccountInvoice(models.Model):
     @api.multi
     def invoice_validate(self):
         res = super(AccountInvoice, self).invoice_validate()
-        for invoice in self.filtered(lambda i: i.partner_id.commercial_partner_id.edi_enable):
+        for invoice in self.filtered(lambda i: i.partner_id.commercial_partner_id.edi_enabled):
             invoice.send_via_edi()
 
         return res
