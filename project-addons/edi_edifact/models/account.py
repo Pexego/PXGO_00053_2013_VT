@@ -26,10 +26,9 @@ class AccountInvoice(models.Model):
             ftp = ftplib.FTP(ftp_dir)
             ftp.login(user=ftp_user, passwd=ftp_pass)
             ftp.cwd(ftp_folder_out)
-
-            response = ftp.storbinary("STOR %s" % filename, fileb)
-
-            if not response.startswith('226'):
+            try:
+                ftp.storbinary("STOR %s" % filename, fileb)
+            except ftplib.error_perm:
                 self.send_edi_error_mail()
 
             ftp.quit()
