@@ -3,7 +3,9 @@ from odoo import fields, models, api, registry, _
 from odoo.exceptions import UserError
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class StockReservation(models.Model):
 
@@ -198,3 +200,29 @@ class StockReservation(models.Model):
         reservation_to_release.release()
         super().release_validity_exceeded(ids)
         return True
+
+    @api.model
+    def delete_canceled_reserves(self, interval_dates=[]):
+        if not interval_dates:
+            now = fields.Datetime.now()
+            d1 = datetime.strptime(now, '%Y-%m-%d %H:%M:%S') + \
+                 timedelta(days=-7)
+            d2 = datetime.strptime(now, '%Y-%m-%d %H:%M:%S') + \
+                 timedelta(days=-14)
+            start_date = datetime.strftime(d1, '%Y-%m-%d')
+            end_date = datetime.strftime(d2, '%Y-%m-%d')
+        else:
+            start_date = interval_dates[0]
+            end_date = interval_dates[1]
+        _logger.info("SEARCH CANCELED RESERVATIONS -> STARTING")
+        reserves = self.search([('create_date', '>=', start_date),
+                                ('create_date', '<', end_date),
+                                ('sale_line_id', '=', False),
+                                ('mrp_id', '=', False),
+                                ('claim_id', '=', False),
+                                ('move_id.state', 'in', ['cancel'])])
+        _logger.info("SEARCH CANCELED RESERVATIONS -> FINISHED")
+        if reserves:
+            _logger.info("UNLINK CANCELED RESERVATIONS -> STARTING")
+            reserves.unlink()
+            _logger.info("UNLINK CANCELED RESERVATIONS -> FINISHED")
