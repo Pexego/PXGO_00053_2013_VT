@@ -138,6 +138,14 @@ class ProductProduct(models.Model):
             product.product_tmpl_id.set_product_template_currency_purchase(currency_purchase_id)
         return res
 
+    @api.onchange('type')
+    def onchange_product_type(self):
+        for product in self:
+            if product.type=='service':
+                product.invoice_policy = 'order'
+            elif product.type=='product':
+                product.invoice_policy = 'delivery'
+
 
 class StockQuantityHistory(models.TransientModel):
     _inherit = 'stock.quantity.history'
