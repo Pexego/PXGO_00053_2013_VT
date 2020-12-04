@@ -84,7 +84,7 @@ class AccountInvoice(models.Model):
     reference = fields.Char(string='N. Supplier Invoice (SII)')
 
     @api.multi
-    @api.depends('state', 'payment_mode_id', 'payment_move_line_ids')
+    @api.depends('state', 'payment_mode_id', 'payment_move_line_ids','payment_move_line_ids.move_id.line_ids.full_reconcile_id')
     def _get_state_web(self):
         for invoice in self:
             res = ''
@@ -278,6 +278,13 @@ class AccountInvoice(models.Model):
     def _onchange_payment_mode_id(self):
         super()._onchange_payment_mode_id()
         self.move_id.line_ids.filtered(lambda l: l.account_id.code == '43000000').write({'payment_mode_id': self.payment_mode_id.id})
+
+    def _get_currency_rate_date(self):
+        res = super()._get_currency_rate_date()
+        if self.picking_ids and self.type in ('in_invoice', 'in_refund'):
+            # Use first picking date of the purchase order to invoice
+            res = self.picking_ids.sorted(key=lambda p: p.date)[0].date
+        return res
 
     scheme = fields.Selection(related="mandate_id.scheme")
 
