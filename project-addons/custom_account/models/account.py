@@ -279,6 +279,13 @@ class AccountInvoice(models.Model):
         super()._onchange_payment_mode_id()
         self.move_id.line_ids.filtered(lambda l: l.account_id.code == '43000000').write({'payment_mode_id': self.payment_mode_id.id})
 
+    def _get_currency_rate_date(self):
+        res = super()._get_currency_rate_date()
+        if self.picking_ids and self.type in ('in_invoice', 'in_refund'):
+            # Use first picking date of the purchase order to invoice
+            res = self.picking_ids.sorted(key=lambda p: p.date)[0].date
+        return res
+
     scheme = fields.Selection(related="mandate_id.scheme")
 
 class PaymentMode(models.Model):
