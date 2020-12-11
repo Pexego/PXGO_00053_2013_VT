@@ -181,8 +181,7 @@ class StockMove(models.Model):
         res = super()._action_done()
         stock_loc = self.env.ref("stock.stock_location_stock")
         for move in self:
-            if (move.location_id.usage in ('supplier', 'production')) and \
-                    (move.product_id.cost_method == 'fifo'):
+            if move.product_id.cost_method == 'fifo':
                 move.product_id.product_tmpl_id.recalculate_standard_price_2()
             if move.location_dest_id == stock_loc:
                 domain = [('state', 'in', ['confirmed',
