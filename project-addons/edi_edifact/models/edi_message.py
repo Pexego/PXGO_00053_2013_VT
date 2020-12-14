@@ -163,10 +163,7 @@ class EdifMenssage(models.Model):
             # 1: identificacion adicional o 5: identificacion del producto
             msg += self.PIA('5', line.product_id.default_code)
             msg += self.IMD(line.name.replace("\n", " "))
-            if invoice.type == 'out_invoice':
-                msg += self.QTY('47', str(line.quantity))
-            elif invoice.type == 'out_refund':
-                msg += self.QTY('61', str(line.quantity))
+            msg += self.QTY('47', str(line.quantity))
             msg += self.MOA('66', '{:.2f}'.format(line.price_subtotal))
             msg += self.PRI('AAA', str(line.price_unit))
             for tax in line.invoice_line_tax_ids:
