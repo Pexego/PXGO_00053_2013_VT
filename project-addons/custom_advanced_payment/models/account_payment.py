@@ -1,4 +1,4 @@
-from odoo import models, api
+from odoo import models, api, fields
 
 
 class AccountPayment(models.Model):
@@ -17,3 +17,10 @@ class AccountPayment(models.Model):
                     if invoice.state == 'open' and move_line.amount_residual:
                         invoice.assign_outstanding_credit(move_line.id)
         return res
+
+
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    old_payment_id = fields.Many2one('account.payment')
+
