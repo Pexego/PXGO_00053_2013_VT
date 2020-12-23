@@ -11,19 +11,19 @@ class EdifMenssage(models.Model):
     _name = "edif.message"
 
     def UNH(self, ref, typ):
-        msg = "UNH+{}+{}:D:93A:UN:EAN007'".format(ref, typ)
+        msg = "UNH+{}+{}:D:93A:UN:EAN007'\n".format(ref, typ)
         return msg
 
     def BGM(self, typ, ref):
-        msg = "BGM+{}+{}'".format(typ, ref)
+        msg = "BGM+{}+{}'\n".format(typ, ref)
         return msg
 
     def DTM(self, typ, date):
-        msg = "DTM+{}:{}:102'".format(typ, date)
+        msg = "DTM+{}:{}:102'\n".format(typ, date)
         return msg
 
     def RFF(self, typ, ref):
-        msg = "RFF+{}:{}'".format(typ, ref)
+        msg = "RFF+{}:{}'\n".format(typ, ref)
         return msg
 
     def NAD(self, typ, code, **kwargs):
@@ -43,72 +43,75 @@ class EdifMenssage(models.Model):
             pc = kwargs.get('pc', None)
             msg += "++{}".format(pc)
             msg += "+ES"
-        return msg + "'"
+        return msg + "'\n"
 
     def CUX(self):
-        msg = "CUX+2:EUR:4'"
+        msg = "CUX+2:EUR:4'\n"
         return msg
 
-    def PAT(self):  # Forma de pago
-        # TODO: revisar esta función, de dónde sale el 68?
-        # TODO: el 35 es pago único, pero tenemos este cliente así?
-        msg = "PAT+35++68'"
+    def PAT(self, val):  # Forma de pago
+
+        msg = "PAT+{}'\n".format(val)
         return msg
 
     def ALC(self, dc, typ):
-        msg = "ALC+{}+++1+{}'".format(dc, typ)
+        msg = "ALC+{}+++1+{}'\n".format(dc, typ)
         return msg
 
     def PCD(self, dc, perc):
         msg = "PCD"
         if dc == 'A':
-            msg += "+1:{}'".format(perc)
+            msg += "+1:{}'\n".format(perc)
         elif dc == 'C':
-            msg += "+2:{}'".format(perc)
+            msg += "+2:{}'\n".format(perc)
         return msg
 
     def MOA(self, typ, imp):
-        msg = "MOA+{}:{}'".format(typ, imp)
+        msg = "MOA+{}:{}'\n".format(typ, imp)
         return msg
 
     def LIN(self, n, ean):
-        msg = "LIN+{}++{}:EN'".format(n, ean)
+        msg = "LIN+{}++{}:EN'\n".format(n, ean)
         return msg
 
     def PIA(self, typ, default_code):
-        msg = "PIA+{}+{}:SA'".format(typ, default_code)
+        msg = "PIA+{}+{}:SA'\n".format(typ, default_code)
         return msg
 
     def IMD(self, description):
         msg = "IMD+F+M:::{}".format(description[:35])
         if len(description) > 35:
             msg += ":{}".format(description[35:])
-        return msg + "'"
+        return msg + "'\n"
 
     def QTY(self, typ, qty):
-        msg = "QTY+{}:{}'".format(typ, qty)
+        msg = "QTY+{}:{}'\n".format(typ, qty)
         return msg
 
     def PRI(self, tpy, qty):
-        msg = "PRI+{}+{}'".format(tpy, qty)
+        msg = "PRI+{}:{}'\n".format(tpy, qty)
         return msg
 
     def TAX(self, tpy, qty):
-        msg = "TAX+7+{}+++:::{}'".format(tpy, qty)
+        msg = "TAX+7+{}+++:::{}'\n".format(tpy, qty)
         return msg
 
     def UNS(self):
-        msg = "UNS+S'"
+        msg = "UNS+S'\n"
         return msg
 
     def UNT(self, num, ref):
-        msg = "UNT+{}+{}'".format(num, ref)
+        msg = "UNT+{}+{}'\n".format(num, ref)
         return msg
 
     def generate_invoice(self, invoice):
         invoice.ensure_one()
         msg = ""
-        msg_ref = "XXXXXXXX"  # TODO: y esto de donde sale, me lo invento?
+        msg_ref = "VT{}".format(datetime.now().strftime("%Y%m%d%H%M"))
+        length = 35
+        street_partner = invoice.partner_id.commercial_partner_id.street
+        street_partner_cut = [street_partner[i:i+length] for i in range(0, len(street_partner), length)]
+
         msg += self.UNH(msg_ref, 'INVOIC')
         if invoice.type == 'out_invoice':
             msg += self.BGM('380', invoice.number)
@@ -116,10 +119,12 @@ class EdifMenssage(models.Model):
             msg += self.BGM('381', invoice.number)
         msg += self.DTM('137', invoice.date_invoice.replace("-", ""))
         msg += self.RFF('ON', invoice.name)
+        for pick in invoice.picking_ids:
+            msg += self.RFF('DQ', pick.name)
 
         # -- Interlocutors segment --
-        msg += self.NAD('SU', invoice.company_id.ean)
-        msg += self.NAD('SCO', invoice.company_id.ean,
+        msg += self.NAD('SU', invoice.company_id.vat[2:])
+        msg += self.NAD('SCO', invoice.company_id.vat[2:],
                         name=invoice.company_id.name,
                         reg=invoice.company_id.company_registry,
                         street=invoice.company_id.street,
@@ -129,15 +134,16 @@ class EdifMenssage(models.Model):
         # msg += self.NAD('II') # Mismo que SCO
         msg += self.NAD('IV', invoice.partner_id.commercial_partner_id.ean)
         msg += self.NAD('BY', invoice.partner_shipping_id.ean)
+        msg += self.NAD('DP', invoice.partner_shipping_id.ean)
         msg += self.NAD('BCO', invoice.partner_id.commercial_partner_id.ean,
                         name=invoice.partner_id.commercial_partner_id.name,
-                        street=invoice.partner_id.commercial_partner_id.street,
+                        street=':'.join(street_partner_cut),
                         city=invoice.partner_id.commercial_partner_id.city,
                         pc=invoice.partner_id.commercial_partner_id.zip)
         msg += self.RFF('VA', invoice.partner_id.commercial_partner_id.vat)
 
         msg += self.CUX()
-        msg += self.PAT()
+        msg += self.PAT('35')  # 35 - pago único
         msg += self.DTM('13', invoice.date_due.replace("-", ""))  # PAT
 
         # Estas líneas son para descuentos o cargos generales
@@ -153,14 +159,11 @@ class EdifMenssage(models.Model):
             amount_discount += amount_line_discount
             amount_net += amount_line_net
 
-            msg += self.LIN(i, line.product_id.barcode)
-            #TODO: 1: identificacion adicional o 5: identificacion del producto
+            msg += self.LIN(i, line.product_id.barcode or '0000000000000')
+            # 1: identificacion adicional o 5: identificacion del producto
             msg += self.PIA('5', line.product_id.default_code)
-            msg += self.IMD(line.name)
-            if invoice.type == 'out_invoice':
-                msg += self.QTY('47', str(line.quantity))
-            elif invoice.type == 'out_refund':
-                msg += self.QTY('61', str(line.quantity))
+            msg += self.IMD(line.name.replace("\n", " "))
+            msg += self.QTY('47', str(line.quantity))
             msg += self.MOA('66', '{:.2f}'.format(line.price_subtotal))
             msg += self.PRI('AAA', str(line.price_unit))
             for tax in line.invoice_line_tax_ids:
@@ -169,10 +172,10 @@ class EdifMenssage(models.Model):
                 else:
                     msg += self.TAX('VAT', str(tax.amount))
                 msg += self.MOA('124', str(round(line.price_subtotal * (tax.amount / 100), 2)))  # TAX
-            # TODO: investigar esta zona, donde se pone el descuento??
-            # msg += self.ALC()
-            # msg += self.PCD()  # ALC
-            # msg += self.MOA()  # ALC
+            if line.discount:
+                msg += self.ALC('A', 'TD')
+                msg += self.PCD('1', line.discount)  # ALC
+                msg += self.MOA('8', line.quantity * line.price_unit * (line.discount/100))  # ALC
 
         msg += self.UNS()
         msg += self.MOA('79', str(round(amount_net, 2)))  # Importe neto
@@ -281,10 +284,22 @@ class EdifMenssage(models.Model):
 
         order_vals['no_promos'] = True
         if not parse_errors:
+            shipping_prod = self.env['product.product'].search([('default_code', '=', 'GASTOS DE ENVIO')])
             sale = self.env['sale.order'].create(order_vals)
-            sale.onchange_partner_id()
-            sale.write({'partner_shipping_id': order_vals['partner_shipping_id']})
-            sale.apply_commercial_rules()
+            if sale:
+                shipping_vals = {
+                    'product_id': shipping_prod.id,
+                    'name': shipping_prod.default_code,
+                    'product_uom_qty': 1,
+                    'product_uom': 1,
+                    'price_unit': 7,
+                    'discount': 100,
+                    'order_id': sale.id
+                }
+                self.env['sale.order.line'].create(shipping_vals)
+                sale.onchange_partner_id()
+                sale.write({'partner_shipping_id': order_vals['partner_shipping_id']})
+                sale.apply_commercial_rules()
 
         return parse_errors
 
@@ -346,6 +361,8 @@ class EdifFile(models.Model):
         self.error = False
         errors = message_obj.parse_order(order_file)
         self.error = errors
+        if errors or errors != '':
+            self.send_error_mail()
 
     @api.multi
     def retry_file(self):
@@ -363,3 +380,19 @@ class EdifFile(models.Model):
             ftp.retrbinary("RETR %s" % file.file_name, callback=file.decode_file)
 
             ftp.quit()
+
+    @api.multi
+    def send_error_mail(self):
+        mail_pool = self.env['mail.mail']
+        context = self._context.copy()
+        context.pop('default_state', False)
+
+        template_id = self.env.ref('edi_edifact.email_template_edi_read_error')
+
+        if template_id:
+            mail_id = template_id.with_context(context).send_mail(self.id)
+            if mail_id:
+                mail_id_check = mail_pool.browse(mail_id)
+                mail_id_check.with_context(context).send()
+
+        return True
