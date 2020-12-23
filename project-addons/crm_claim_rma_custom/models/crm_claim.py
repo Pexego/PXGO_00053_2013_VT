@@ -65,6 +65,7 @@ class CrmClaimRma(models.Model):
                                            ('italia', 'Italia - Arcore'),
                                            ('transit', 'In transit')], "Warehouse Location")
     client_ref = fields.Char('Client Ref')
+    warehouse_date = fields.Date('Final Received Date')
 
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
