@@ -67,6 +67,9 @@
                 <field name="transport_incidence"/>
                 <field name="warehouse_location"/>
             </field>
+            <field name="model_ref_id" position="after">
+                <field name="client_ref" />
+            </field>
             <field name="email_from" position="after">
                 <field name="comercial"/>
                 <field name="country" invisible="True"/>
@@ -128,7 +131,7 @@
                 <attribute name="context">{'search_product_id': product_id}</attribute>
             </field>
             <field name="internal_description" position="after">
-                <field name="substate_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                <field name="substate_id" options="{'no_open': True,'no_quick_create':True,'no_create_edit':True}"/>
                 <field name="write_date"/>
             </field>
             <field name="product_returned_quantity" position="after">
