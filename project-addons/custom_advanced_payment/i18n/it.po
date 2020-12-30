@@ -18,7 +18,7 @@ msgstr ""
 #. module: custom_advanced_payment
 #: model:ir.ui.view,arch_db:custom_advanced_payment.view_account_voucher_wizard_custom
 msgid "Assign old payment"
-msgstr "Asignar anticipo"
+msgstr "Assegnare anticipo"
 
 #. module: custom_advanced_payment
 #: model:ir.ui.view,arch_db:custom_advanced_payment.view_account_voucher_wizard_custom
@@ -28,29 +28,29 @@ msgstr "Anticipos antiguos"
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_advanced_payment.field_old_payment_line_ref
 msgid "Ref."
-msgstr "Referencia"
+msgstr "Riferimento"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_advanced_payment.field_old_payment_line_residual
 msgid "Amount"
-msgstr "Cantidad"
+msgstr "Quantità"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_advanced_payment.field_old_payment_line_journal
 msgid "Journal"
-msgstr "Diario"
+msgstr "Giornale"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_advanced_payment.field_old_payment_line_sale_order
 msgid "Order"
-msgstr "Pedido"
+msgstr "Ordine"
 
 #. module: custom_account
 #: model:ir.model.fields,field_description:custom_advanced_payment.field_account_voucher_wizard_add_old_payments
 msgid "Assign old payments"
-msgstr "Asignar anticipos antiguos"
+msgstr "Assegnare anticipos antiguos"
 
 #. module: custom_advanced_payment
 #: model:ir.ui.view,arch_db:custom_advanced_payment.view_account_voucher_wizard_custom
 msgid "When an old payment is selected, the information at the top will be dismissed"
-msgstr "Cuando se selecciona un anticipo antiguo, la información introducida en la parte superior será desechada"
+msgstr "Quando viene selezionato un vecchio pagamento, le informazioni in alto verranno ignorate"

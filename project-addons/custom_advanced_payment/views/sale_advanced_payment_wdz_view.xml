@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-
     <record id="view_account_voucher_wizard_custom" model="ir.ui.view">
         <field name="name">Advance Payment</field>
         <field name="model">account.voucher.wizard</field>
@@ -13,18 +12,21 @@
                 </group>
                 <group attrs="{'invisible': [('add_old_payments', '=', False)]}" colspan="4" col="4">
                     <separator string="Old payments" colspan="4"/>
-                     <field name="old_payment_ids" nolabel="1" colspan="4">
-                          <tree create="false" delete="false" editable="top">
-                              <field name="selected" nolabel="1"/>
-                              <field name="ref"/>
-                              <field name="residual"/>
-                          </tree>
+                    <p><b>When an old payment is selected, the information at the top will be dismissed</b></p>
+                    <field name="old_payment_ids" nolabel="1" colspan="4">
+                        <tree create="false" delete="false" editable="top">
+                            <field name="selected" nolabel="1" string=" "/>
+                            <field name="ref" readonly="1"/>
+                            <field name="journal" readonly="1"/>
+                            <field name="sale_order" readonly="1"/>
+                            <field name="residual" readonly="1"/>
+                        </tree>
                     </field>
                 </group>
             </xpath>
             <footer position="inside">
-                <button name="make_advance_payment_from_old" string="Assign old payment" type="object"
-                        class="btn-primary" attrs="{'invisible': [('add_old_payments', '=', False)]}"/>
+                <button name="make_advance_payment_from_old" string="Assign old payment"
+                        type="object" class="btn-primary" attrs="{'invisible': [('add_old_payments', '=', False)]}"/>
             </footer>
             <button name="make_advance_payment" position="attributes">
                 <attribute name="attrs">{'invisible': [('add_old_payments', '!=', False)]}</attribute>

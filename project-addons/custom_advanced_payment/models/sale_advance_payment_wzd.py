@@ -15,7 +15,10 @@ class AccountVoucherWizard(models.TransientModel):
 
             wiz_lines.append({'ref': move.ref,
                               'residual': move.amount_residual,
-                              'move_id': move.id})
+                              'move_id': move.id,
+                              'journal': move.journal_id.name,
+                              'sale_order': move.payment_id.sale_id.name,
+                              })
         return wiz_lines
 
     add_old_payments = fields.Boolean(string='Assign old payments')
@@ -27,9 +30,14 @@ class AccountVoucherWizard(models.TransientModel):
             raise exceptions.ValidationError(_("Amount of advance must be "
                                                "positive."))
 
+    @api.onchange('add_old_payments')
+    def fill_dummy_data(self):
+        if self.add_old_payments:
+            self.journal_id = 7
+            self.amount_advance = 1.0
+
     @api.multi
     def make_advance_payment_from_old(self):
-        # FIXME: los valores de las líneas están vacíos cuando llegan aquí
         old_pay_line = self.old_payment_ids.filtered(lambda p: p.selected)
         sale_ids = self.env.context.get('active_ids', [])
         payment_obj = self.env['account.payment']
@@ -71,6 +79,9 @@ class OldPaymentLine(models.TransientModel):
 
     selected = fields.Boolean()
     wizard_id = fields.Many2one('account.voucher.wizard')
-    ref = fields.Char('Ref.', readonly=True)
-    residual = fields.Float('Amount', readonly=True)
-    move_id = fields.Many2one('account.move.line', readonly=True)
+    move_id = fields.Many2one('account.move.line')
+    ref = fields.Char('Ref.', related='move_id.ref')
+    residual = fields.Monetary('Amount', currency_field='company_currency_id', related='move_id.amount_residual')
+    journal = fields.Char('Journal', related='move_id.journal_id.name')
+    sale_order = fields.Char('Order', related='move_id.payment_id.sale_id.name')
+    company_currency_id = fields.Many2one('res.currency', related='move_id.company_currency_id')
