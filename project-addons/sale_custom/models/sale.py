@@ -80,6 +80,16 @@ class SaleOrderLine(models.Model):
                     return {'warning': warning_mess}
         return {}
 
+    @api.multi
+    def _update_reservation_price_qty(self):
+        lines_released = self.env['sale.order.line']
+        for line in self:
+            if len(line.reservation_ids) > 1:
+                line.reservation_ids.release()
+                lines_released += line
+        super()._update_reservation_price_qty()
+        lines_released.stock_reserve()
+
 
 class SaleOrder(models.Model):
 
