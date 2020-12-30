@@ -1,5 +1,5 @@
 from odoo import models, api
-import numpy
+from statistics import mean
 
 class StockPicking(models.Model):
 
@@ -12,7 +12,7 @@ class StockPicking(models.Model):
             if picking.picking_type_id.code == "outgoing":
                 for move in picking.move_lines:
                     if move.move_orig_ids:
-                        cost = numpy.average(move.move_orig_ids.mapped('price_unit'))
+                        cost = mean(move.move_orig_ids.mapped('price_unit'))
                         move.price_unit =  cost * -1
                         move.invoice_line_ids.write({'cost_unit':cost})
         return res
