@@ -117,6 +117,7 @@ class StockReservation(models.Model):
             current_sale_line_id = reserve.sale_line_id.id
             res = super(StockReservation, reserve).reserve()
             reserve.refresh()
+            reserve.write({"sale_line_id": current_sale_line_id})
             moves |= res
             for move in res:
                 reservation = self.env['stock.reservation'].search(
