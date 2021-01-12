@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="invoice_edi_form" model="ir.ui.view">
+        <field name="name">account.invoice.edi.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form" />
+        <field name="arch" type="xml">
+            <field name="move_id" position="before">
+                <field name="edi_partner" invisible="1"/>
+            </field>
+            <button name="action_invoice_draft" position="after">
+                <button type="object" string="Send to EDI" name="send_via_edi"
+                        attrs="{'invisible': [('edi_partner','=',False)]}"/>
+            </button>
+        </field>
+    </record>
+</odoo>

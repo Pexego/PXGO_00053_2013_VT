@@ -1,7 +1,7 @@
 # Copyright 2019 Omar Castiñeira, Comunitea Servicios Tecnológicos S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from odoo import models, fields, api, _, exceptions
-import numpy
+from statistics import mean
 
 
 class AccountMoveLine(models.Model):
@@ -84,7 +84,7 @@ class AccountInvoice(models.Model):
     reference = fields.Char(string='N. Supplier Invoice (SII)')
 
     @api.multi
-    @api.depends('state', 'payment_mode_id', 'payment_move_line_ids')
+    @api.depends('state', 'payment_mode_id', 'payment_move_line_ids','payment_move_line_ids.move_id.line_ids.full_reconcile_id')
     def _get_state_web(self):
         for invoice in self:
             res = ''
@@ -243,7 +243,7 @@ class AccountInvoice(models.Model):
                             for move in line.move_line_ids:
                                 cost += move.price_unit * (move.product_qty/line.quantity) * -1
                         else:
-                            cost = numpy.average(line.move_line_ids.mapped('price_unit')) * -1
+                            cost = mean(line.move_line_ids.mapped('price_unit')) * -1
                     line.write({'cost_unit': cost or line.product_id.standard_price_2})
             else:
                 for line in inv.invoice_line_ids:
@@ -278,6 +278,13 @@ class AccountInvoice(models.Model):
     def _onchange_payment_mode_id(self):
         super()._onchange_payment_mode_id()
         self.move_id.line_ids.filtered(lambda l: l.account_id.code == '43000000').write({'payment_mode_id': self.payment_mode_id.id})
+
+    def _get_currency_rate_date(self):
+        res = super()._get_currency_rate_date()
+        if self.picking_ids and self.type in ('in_invoice', 'in_refund'):
+            # Use first picking date of the purchase order to invoice
+            res = self.picking_ids.sorted(key=lambda p: p.date)[0].date
+        return res
 
     scheme = fields.Selection(related="mandate_id.scheme")
 
