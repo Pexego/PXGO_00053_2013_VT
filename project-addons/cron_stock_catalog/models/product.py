@@ -8,7 +8,7 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     def cron_stock_catalog(self):
-        headers = ["ID", "Proveedor principal", "Referencia interna", "Fabricando", "Entrante", "Stock cocina",
+        headers = ["ID", "Último Proveedor", "Referencia interna", "Fabricando", "Entrante", "Stock cocina",
                    "Stock real", "Stock disponible", "Ventas en los últimos 60 días con stock",
                    "Cant. pedido más grande", "Días de stock restantes", "Stock en playa",
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
@@ -16,7 +16,7 @@ class ProductProduct(models.Model):
 
         domain = [('custom', '=', False), ('type', '!=', 'service'), ('seller_id.name', 'not ilike', 'outlet')]
 
-        fields = ["id", "seller_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
+        fields = ["id", "last_supplier_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
                   "remaining_days_sale", "qty_available_input_loc", "average_margin",
                   "standard_price", "last_purchase_price", "last_purchase_date", "replacement_id", "state"]
@@ -24,13 +24,16 @@ class ProductProduct(models.Model):
         translate_state = {"draft": "En desarrollo", "sellable": "Normal", "end": "Fin del ciclo de vida",
                            "obsolete": "Obsoleto", "make_to_order": "Bajo pedido"}
 
-        products = self.env['product.product'].search_read(domain, fields)
+        products = self.env['product.product'].search_read(domain, fields + ["seller_id"])
         for product in products:
             product_fields = []
             for field in fields:
                 if product[field] is False:
-                    product_fields.append("")
-                elif field in ('seller_id', 'replacement_id'):
+                    if field != "last_supplier_id" or product["seller_id"] is False:
+                        product_fields.append("")
+                    else:
+                        product_fields.append(product["seller_id"][1])
+                elif field in ('last_supplier_id', 'replacement_id'):
                     product_fields.append(product[field][1])
                 elif field == 'state':
                     product_fields.append(translate_state[product[field]])
