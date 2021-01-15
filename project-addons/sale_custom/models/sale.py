@@ -85,7 +85,7 @@ class SaleOrderLine(models.Model):
         lines_released = self.env['sale.order.line']
         if not self.env.context.get('later', False):
             for line in self:
-                if len(line.reservation_ids) > 1:
+                if len(line.reservation_ids) > 1 or line.product_id.bom_ids:
                     line.reservation_ids.release()
                     lines_released += line
             super()._update_reservation_price_qty()
