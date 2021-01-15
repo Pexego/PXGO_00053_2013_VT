@@ -279,10 +279,11 @@ class CrmClaimRma(models.Model):
 
     @api.multi
     def resequence(self):
-        seq = 0
-        for line in self.claim_line_ids:
-            line.sequence = seq
-            seq += 1
+        for claim in self:
+            seq = 1
+            for line in claim.claim_line_ids:
+                line.sequence = seq
+                seq += 1
 
 
 class ClaimInvoiceLine(models.Model):
@@ -431,9 +432,10 @@ class CrmClaimLine(models.Model):
 
     @api.multi
     def unlink(self):
-        claim = self.claim_id
+        claims = self.mapped('claim_id')
         super().unlink()
-        claim.resequence()
+        if claims:
+            claims.resequence()
         return True
 
 
