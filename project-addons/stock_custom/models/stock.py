@@ -154,6 +154,8 @@ class StockMove(models.Model):
             responsible = None
             if move.picking_id:
                 responsible = move.picking_id.commercial.id
+            elif move.sale_id:
+                responsible = move.sale_id.user_id.id
             elif move.origin:
                 responsible = move.env['sale.order'].search(
                     [('name', '=', move.origin)]).user_id.id
@@ -237,10 +239,10 @@ class StockMove(models.Model):
     @api.multi
     def _compute_parent_partner(self):
         for move in self:
-            move.parent_partner=move.sale_line_id.order_id.partner_id if move.sale_line_id else move.partner_id
-    parent_partner = fields.Many2one('res.partner',compute="_compute_parent_partner",string="Partner")
+            move.parent_partner = move.sale_line_id.order_id.partner_id if move.sale_line_id else move.partner_id
+    parent_partner = fields.Many2one('res.partner', compute="_compute_parent_partner", string="Partner")
 
-    purchase_order_id = fields.Many2one('purchase.order',related='purchase_line_id.order_id')
+    purchase_order_id = fields.Many2one('purchase.order', related='purchase_line_id.order_id')
 
 
 class StockReturnPicking(models.TransientModel):
