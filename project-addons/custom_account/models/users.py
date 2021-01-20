@@ -11,6 +11,6 @@ class ResUsers(models.Model):
         res = super(ResUsers, self).create(vals)
         if res.partner_id:
             employee_category_id = self.env.ref('custom_account.employee_category').id
-            res.partner_id.category_id = [(4,employee_category_id,0)]
+            res.partner_id.category_id = [(4,employee_category_id)]
         return res
 
