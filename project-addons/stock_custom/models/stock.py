@@ -104,6 +104,15 @@ class StockPicking(models.Model):
                 picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
         return result
 
+    @api.multi
+    def action_confirm(self):
+        res = super(StockPicking, self).action_confirm()
+        self.filtered(lambda picking: picking.picking_type_code == 'outgoing' and picking.location_id.usage=='internal' and picking.state == 'confirmed') \
+                .mapped('move_lines')._action_assign()
+        return res
+
+
+
 
 class StockMoveLine(models.Model):
 
