@@ -34,7 +34,12 @@ class SaleOrderLine(models.Model):
             self.product_packaging = False
             return {}
         if self.order_id.state == 'sale':
-            self.order_id.check_weight_dhl_flight()
+            exception = self.order_id.check_weight(True)
+            if exception:
+                warning_mess =  {
+                        'title': _('Max weight advise'),
+                        'message': exception}
+                return {'warning': warning_mess}
         if self.product_id.type == 'product':
             precision = self.env['decimal.precision'].\
                 precision_get('Product Unit of Measure')
@@ -269,7 +274,7 @@ class SaleOrder(models.Model):
 
         return True
 
-    def check_weight(self):
+    def check_weight(self,onchange=False):
         dhl_flight = self.transporter_id.name == "DHL" and self.service_id.name == "UE Aéreo (U)"
         canary = self.partner_shipping_id and \
                  not self.env.context.get("bypass_canary_max_weight", False) and \
@@ -286,12 +291,16 @@ class SaleOrder(models.Model):
                 message = _('Sale has been blocked due to exceed the weight limit in DHL air shipments.')
                 raise exceptions.Warning(message)
             if canary and products_weight > float(canary_max_weight):
+                if onchange:
+                    return _(
+                        "This order to the Canary Islands exceeds %skg. Have you checked the shipping costs and conditions?" % canary_max_weight)
                 return self.env['max.weight.advise.wiz'].create({
                     'sale_id': self.id,
                     'origin_reference':
                         '%s,%s' % ('sale.order', self.id),
                     'continue_method': 'action_confirm',
-                    'message': _("This order to the Canary Islands exceeds %skg. Have you checked the shipping costs and conditions?") %canary_max_weight
+                    'message': _(
+                        "This order to the Canary Islands exceeds %skg. Have you checked the shipping costs and conditions?") % canary_max_weight
                 }).action_show()
 
 
