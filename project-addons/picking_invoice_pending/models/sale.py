@@ -13,11 +13,12 @@ class SaleOrder(models.Model):
                 original_line_id_promo = self.env['sale.order.line'].browse(line.original_line_id_promo)
                 # For example in 4x3 promo, line.promo_qty_split is equals to 4
                 # because this field show us the minimum qty of product for which the promo is applied
-                qty_to_invoice = (original_line_id_promo.qty_invoiced +
-                                  original_line_id_promo.qty_to_invoice)//line.promo_qty_split - line.qty_invoiced
-                line.qty_to_invoice = qty_to_invoice
-                if qty_to_invoice == 0:
-                    lines += line
+                if original_line_id_promo:
+                    qty_to_invoice = (original_line_id_promo.qty_invoiced +
+                                      original_line_id_promo.qty_to_invoice)//line.promo_qty_split - line.qty_invoiced
+                    line.qty_to_invoice = qty_to_invoice
+                    if qty_to_invoice == 0:
+                        lines += line
         res = super(SaleOrder, self).action_invoice_create()
         for line in lines:
             if line.product_uom_qty != line.qty_invoiced:
