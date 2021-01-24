@@ -309,7 +309,7 @@ class PromotionsRulesActions(models.Model):
         return order_line.write(vals)
 
     def create_y_line_axb(self, order, order_line, quantity):
-        product_id=order_line.product_id
+        product_id = order_line.product_id
         vals = {
             'order_id': order.id,
             'sequence': order_line.sequence,
