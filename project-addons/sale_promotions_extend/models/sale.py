@@ -1,6 +1,6 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class SaleOrderLine(models.Model):
@@ -92,3 +92,10 @@ class SaleOrder(models.Model):
                             'old_discount': 0.00,
                             'accumulated_promo': False})
         return res
+
+    @api.multi
+    def action_confirm(self):
+        ctx = dict(self._context)
+        ctx['is_confirm'] = True
+        order = self.with_context(ctx)
+        return super(SaleOrder, order).action_confirm()
