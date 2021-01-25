@@ -10,6 +10,7 @@
             </field>
             <field name="stop_further" position="after">
                 <field name="special_promo"/>
+                <field name="apply_at_confirm"/>
             </field>
         </field>
     </record>

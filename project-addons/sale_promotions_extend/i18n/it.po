@@ -627,3 +627,8 @@ msgstr "Prodotti gratuiti per unità"
 #, python-format
 msgid "Discount % on Brand accumulated (Price Unit)"
 msgstr "Sconto accumulato % sulla marca (Prezzo Unità)"
+
+#. module: sale_promotions_extend
+#: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_apply_at_confirm
+msgid "Apply at confirm"
+msgstr "Applicare al confermare"
