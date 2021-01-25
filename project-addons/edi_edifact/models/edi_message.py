@@ -59,11 +59,7 @@ class EdifMenssage(models.Model):
         return msg
 
     def PCD(self, dc, perc):
-        msg = "PCD"
-        if dc == 'A':
-            msg += "+1:{}'\n".format(perc)
-        elif dc == 'C':
-            msg += "+2:{}'\n".format(perc)
+        msg = "PCD+{}:{}'\n".format(dc, perc)
         return msg
 
     def MOA(self, typ, imp):
