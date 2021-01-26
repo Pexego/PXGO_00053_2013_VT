@@ -1275,3 +1275,20 @@ msgstr "Antiguo Diario"
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_scheme
 msgid "Scheme"
 msgstr "Esquema"
+
+#. module: custom_account
+#: model:res.groups,name:custom_account.group_big_accounts
+msgid "Projects and Big Accounts"
+msgstr "Proyectos y Grandes cuentas"
+
+#. module: custom_account
+#: model:ir.ui.menu,name:custom_account.account_reports_big_accounts_parent
+msgid "Reports"
+msgstr "Informes"
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.action_account_invoice_report_filter_big_accounts
+#: model:ir.ui.menu,name:custom_account.account_reports_big_accounts
+msgid "Invoices Analysis Projects and Big Accounts"
+msgstr "Análisis de facturas: Proyectos y Grandes Cuentas"
+
