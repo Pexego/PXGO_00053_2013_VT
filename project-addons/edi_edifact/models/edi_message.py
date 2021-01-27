@@ -75,7 +75,7 @@ class EdifMenssage(models.Model):
         return msg
 
     def IMD(self, description):
-        msg = "IMD+F+M:::{}".format(description[:35])
+        msg = "IMD+F+M+:::{}".format(description[:35])
         if len(description) > 35:
             msg += ":{}".format(description[35:])
         return msg + "'\n"
@@ -149,19 +149,21 @@ class EdifMenssage(models.Model):
 
         amount_discount = 0.0
         amount_net = 0.0
-        for i, line in enumerate(invoice.invoice_line_ids, start=1):
+        invoice_lines = invoice.invoice_line_ids.\
+            filtered(lambda l: l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes')
+        for i, line in enumerate(invoice_lines, start=1):
             amount_line_discount = (line.quantity * line.price_unit) * (line.discount / 100)
-            amount_line_net = line.quantity * line.price_unit
             amount_discount += amount_line_discount
-            amount_net += amount_line_net
+            amount_net += line.price_subtotal
 
             msg += self.LIN(i, line.product_id.barcode or '0000000000000')
-            # 1: identificacion adicional o 5: identificacion del producto
             msg += self.PIA('5', line.product_id.default_code)
-            msg += self.IMD(line.name.replace("\n", " "))
+            msg += self.IMD(line.name.replace("\n", " ").replace("+", "-"))
             msg += self.QTY('47', str(line.quantity))
             msg += self.MOA('66', '{:.2f}'.format(line.price_subtotal))
-            msg += self.PRI('AAA', str(line.price_unit))
+            msg += self.PRI('AAA', str(round(line.price_unit * (1 - (line.discount/100)), 2)))
+            if line.discount:
+                msg += self.PRI('AAB', str(line.price_unit))
             for tax in line.invoice_line_tax_ids:
                 if tax.amount == 0.0:
                     msg += self.TAX('EXT', str(tax.amount))
@@ -171,7 +173,7 @@ class EdifMenssage(models.Model):
             if line.discount:
                 msg += self.ALC('A', 'TD')
                 msg += self.PCD('1', line.discount)  # ALC
-                msg += self.MOA('8', line.quantity * line.price_unit * (line.discount/100))  # ALC
+                msg += self.MOA('8', line.quantity * line.price_unit * (line.discount / 100))  # ALC
 
         msg += self.UNS()
         msg += self.MOA('79', str(round(amount_net, 2)))  # Importe neto
@@ -181,11 +183,11 @@ class EdifMenssage(models.Model):
         msg += self.MOA('260', str(amount_discount))
         for tax in invoice.tax_line_ids:
             if tax.amount == 0.0:
-                msg += self.TAX('EXT', str(round(tax.amount, 2)))
+                msg += self.TAX('EXT', str(round(tax.tax_id.amount, 2)))
             else:
-                msg += self.TAX('VAT', str(round(tax.amount, 2)))
+                msg += self.TAX('VAT', str(round(tax.tax_id.amount, 2)))
             msg += self.MOA('125', str(invoice.amount_untaxed))  # TAX
-            msg += self.MOA('176', str(round(invoice.amount_untaxed * (tax.amount / 100), 2)))  # TAX
+            msg += self.MOA('176', str(round(tax.amount, 2)))  # TAX
         msg_count = msg.count("'") + 1
         msg += self.UNT(str(msg_count), msg_ref)
 
