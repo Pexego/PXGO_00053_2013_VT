@@ -333,7 +333,7 @@ class EdifFile(models.Model):
         date_reading = fields.Datetime.now()
         latest_date_str = self.search([], limit=1, order='read_date desc').read_date
 
-        _logger.debug("EDI - Start reading files")
+        _logger.info("EDI - Start reading files")
 
         for line in ftp.mlsd(ftp_folder):  # Get the latest files only
             datetime_str = line[1].get("modify")
@@ -350,7 +350,7 @@ class EdifFile(models.Model):
                 'error': False
             }
             created_file = self.create(vals)
-            _logger.debug("EDI - Parse file {}".format(file))
+            _logger.info("EDI - Parse file {}".format(file))
             ftp.retrbinary("RETR %s" % file, callback=created_file.decode_file)
 
         ftp.quit()
