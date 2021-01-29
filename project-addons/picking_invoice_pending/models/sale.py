@@ -5,7 +5,7 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     @api.multi
-    def action_invoice_create(self):
+    def action_invoice_create(self, grouped=False, final=False):
         lines = self.env['sale.order.line']
         for order in self:
             promo_lines = order.mapped('order_line').filtered(lambda x: x.original_line_id_promo)
@@ -19,10 +19,8 @@ class SaleOrder(models.Model):
                     line.qty_to_invoice = qty_to_invoice
                     if qty_to_invoice == 0:
                         lines += line
-        res = super(SaleOrder, self).action_invoice_create()
+        res = super(SaleOrder, self).action_invoice_create(grouped=grouped, final=final)
         for line in lines:
             if line.product_uom_qty != line.qty_invoiced:
                 line.qty_to_invoice = line.product_uom_qty-line.qty_invoiced
         return res
-
-
