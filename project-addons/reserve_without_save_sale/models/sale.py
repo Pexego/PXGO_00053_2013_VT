@@ -47,7 +47,7 @@ class SaleOrder(models.Model):
     def order_reserve(self):
         self.write({'state': 'reserve'})
         lines = self.mapped('order_line').filtered(
-            lambda r: r.product_id and r.product_id.type != 'service')
+            lambda r: r.product_id and r.product_id.type != 'service' and r.promotion_line is not True)
         lines.stock_reserve()
         return True
 
