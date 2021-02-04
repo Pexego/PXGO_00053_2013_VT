@@ -9,6 +9,7 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     edi_partner = fields.Boolean(related="partner_id.edi_enabled", readonly=True)
+    partner_final_invoicing_id = fields.Many2one('res.partner')
 
     @api.multi
     def send_via_edi(self):
