@@ -1,4 +1,5 @@
 from . import res_company
 from . import res_partner
-from . import edi_message
+from . import sale
 from . import account
+from . import edi_message

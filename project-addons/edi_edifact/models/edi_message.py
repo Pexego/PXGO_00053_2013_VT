@@ -132,8 +132,7 @@ class EdifMenssage(models.Model):
         msg += self.RFF('VA', self.env.user.company_id.vat)
         # msg += self.NAD('II') # Mismo que SCO
         msg += self.NAD('IV', invoice.partner_id.commercial_partner_id.ean)
-        msg += self.NAD('BY', invoice.partner_shipping_id.ean)
-        msg += self.NAD('DP', invoice.partner_shipping_id.ean)
+        msg += self.NAD('BY', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean)
         msg += self.NAD('BCO', invoice.partner_id.commercial_partner_id.ean,
                         name=invoice.partner_id.commercial_partner_id.name,
                         street=':'.join(street_partner_cut),
@@ -239,6 +238,13 @@ class EdifMenssage(models.Model):
                         if exist_order:
                             parse_errors += _('The order is already created')
                             break
+                if segment[1] == 'BY':
+                    partner_inv = self.env['res.partner'].search([('ean', '=', segment[2])])
+                    if not partner_inv:
+                        parse_errors += _('The partner {} does not exist').format(segment[2])
+                        break
+                    else:
+                        order_vals['partner_final_invoicing_id'] = partner_inv.id
             elif segment[0] == 'RFF':
                 pass
             elif segment[0] == 'TOD':
