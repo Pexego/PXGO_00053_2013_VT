@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="help_url_gen" model="ir.actions.server">
+        <field name="name">Gen Help url</field>
+        <field name="model_id" ref="base.model_ir_config_parameter"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = {
+                "type": "ir.actions.act_url",
+                "target": "new",
+                "url": env['ir.config_parameter'].sudo().get_param('url.help'),
+            }
+        </field>
+    </record>
+
+    <menuitem action="help_url_gen" name="Help" id="help_odoo_menu"
+              sequence="1000" web_icon="custom_theme,static/description/Help_Icon_2.png"/>
+</odoo>
+
+
+
