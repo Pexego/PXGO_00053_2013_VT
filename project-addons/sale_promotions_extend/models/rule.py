@@ -377,8 +377,8 @@ class PromotionsRulesActions(models.Model):
                 price_subtotal += order_line.price_subtotal
         if price_subtotal == 0:
             return True
-        rules = rule_obj.search([('name', 'in', eval(self.arguments))])
-        bags = bag_obj.search([('partner_id','=',order.partner_id.id),('point_rule_id','in',rules.ids),('applied_state','=','no')])
+        rule = rule_obj.search([('name', 'ilike', self.arguments)])
+        bags = bag_obj.search([('partner_id','=',order.partner_id.id),('point_rule_id','=',rule.id),('applied_state','=','no')])
         points = sum([x.points for x in bags])
         if points <= 0:
             return True
@@ -389,8 +389,9 @@ class PromotionsRulesActions(models.Model):
         else:
             bags_to_change_status = self.env['res.partner.point.programme.bag']
             cont_point_applied = 0
+            if rule.integer_points:
+                price_subtotal = int(price_subtotal)
             for bag in bags:
-                rule = bag.point_rule_id
                 if price_subtotal<=cont_point_applied:
                     break
                 bag_points=bag.points

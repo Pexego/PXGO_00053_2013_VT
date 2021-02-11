@@ -35,7 +35,7 @@ class ProductPricelistItem(models.Model):
     pricelist_calculated_price = fields.Float("Price calculated", compute='_get_pricelist_calculated_price')
     margin = fields.Float("Margin (%)", compute='_get_margin', readonly=True, store=True)
     name_pricelist = fields.Char(related='pricelist_id.name', readonly=True)
-    base = fields.Selection(selection_add=[('standard_price_2', 'Cost 2')])
+    base = fields.Selection(selection_add=[('standard_price_2_inc', 'Cost 2')])
     pricelist_sequence = fields.Integer(related='pricelist_id.sequence', readonly=True)
 
     @api.multi
@@ -51,9 +51,9 @@ class ProductPricelistItem(models.Model):
                     if rule.base == 'pricelist' and rule.base_pricelist_id:
                         item.pricelist_calculated_price = item.fixed_price * (1 - rule.price_discount / 100)
                     elif rule.base == 'standard_price' or \
-                            (rule.base == 'standard_price_2' and not product_id.product_variant_id.standard_price_2_inc):
+                            (rule.base == 'standard_price_2_inc' and not product_id.product_variant_id.standard_price_2_inc):
                         item.pricelist_calculated_price = product_id.standard_price * (1 - rule.price_discount / 100)
-                    elif rule.base == 'standard_price_2':
+                    elif rule.base == 'standard_price_2_inc':
                         item.pricelist_calculated_price = product_id.product_variant_id.standard_price_2_inc * (1 - rule.price_discount / 100)
 
     @api.multi
