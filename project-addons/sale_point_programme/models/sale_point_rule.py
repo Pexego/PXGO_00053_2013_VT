@@ -72,12 +72,13 @@ class SalePointProgrammeRule(models.Model):
 
     @api.model
     def compute_partner_point_bag_accumulated(self):
-        now=datetime.now()
+        now = datetime.now()
         bag_accumulated_obj = self.env['res.partner.point.programme.bag.accumulated']
         rules = self.env['sale.point.programme.rule'].search(['|', ('date_start', '<=', now),
                                  ('date_start', '=', False),
                                  '|', ('date_end', '>=', now),
                                  ('date_end', '=', False)])
+        bags_updated = self.env['res.partner.point.programme.bag.accumulated']
         for rule in rules:
             bags = self.env['res.partner.point.programme.bag'].read_group([('point_rule_id', '=', rule.id),('applied_state', '=', 'no')],
                                                                         ['points', 'partner_id'], ['partner_id'])
@@ -86,8 +87,17 @@ class SalePointProgrammeRule(models.Model):
                 bag_accumulated = bag_accumulated_obj.search([('partner_id','=',partner_id),('point_rule_id','=',rule.id)])
                 if bag_accumulated:
                     bag_accumulated.write({'points': bag['points']})
+                    bags_updated += bag_accumulated
                 else:
-                    bag_accumulated_obj.create({'name': rule.name,
+                    new_bag = bag_accumulated_obj.create({'name': rule.name,
                                 'point_rule_id': rule.id,
                                 'points': bag['points'],
                                 'partner_id': partner_id})
+                    bags_updated += new_bag
+        if rules:
+            domain = [('point_rule_id','in',rules.ids)]
+            if bags_updated:
+                domain += [('id','not in', bags_updated.ids)]
+            bags_to_unlink = self.env['res.partner.point.programme.bag.accumulated'].search(domain)
+            if bags_to_unlink:
+                bags_to_unlink.unlink()

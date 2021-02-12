@@ -4,6 +4,9 @@ import re
 from datetime import datetime
 from dateutil import parser
 import ftplib
+import logging
+
+_logger = logging.getLogger(__name__)
 
 
 class EdifMenssage(models.Model):
@@ -75,7 +78,7 @@ class EdifMenssage(models.Model):
         return msg
 
     def IMD(self, description):
-        msg = "IMD+F+M:::{}".format(description[:35])
+        msg = "IMD+F+M+:::{}".format(description[:35])
         if len(description) > 35:
             msg += ":{}".format(description[35:])
         return msg + "'\n"
@@ -129,8 +132,8 @@ class EdifMenssage(models.Model):
         msg += self.RFF('VA', self.env.user.company_id.vat)
         # msg += self.NAD('II') # Mismo que SCO
         msg += self.NAD('IV', invoice.partner_id.commercial_partner_id.ean)
-        msg += self.NAD('BY', invoice.partner_shipping_id.ean)
         msg += self.NAD('DP', invoice.partner_shipping_id.ean)
+        msg += self.NAD('BY', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean)
         msg += self.NAD('BCO', invoice.partner_id.commercial_partner_id.ean,
                         name=invoice.partner_id.commercial_partner_id.name,
                         street=':'.join(street_partner_cut),
@@ -149,19 +152,21 @@ class EdifMenssage(models.Model):
 
         amount_discount = 0.0
         amount_net = 0.0
-        for i, line in enumerate(invoice.invoice_line_ids, start=1):
+        invoice_lines = invoice.invoice_line_ids.\
+            filtered(lambda l: l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes')
+        for i, line in enumerate(invoice_lines, start=1):
             amount_line_discount = (line.quantity * line.price_unit) * (line.discount / 100)
-            amount_line_net = line.quantity * line.price_unit
             amount_discount += amount_line_discount
-            amount_net += amount_line_net
+            amount_net += line.price_subtotal
 
             msg += self.LIN(i, line.product_id.barcode or '0000000000000')
-            # 1: identificacion adicional o 5: identificacion del producto
             msg += self.PIA('5', line.product_id.default_code)
-            msg += self.IMD(line.name.replace("\n", " "))
+            msg += self.IMD(line.name.replace("\n", " ").replace("+", "-"))
             msg += self.QTY('47', str(line.quantity))
             msg += self.MOA('66', '{:.2f}'.format(line.price_subtotal))
-            msg += self.PRI('AAA', str(line.price_unit))
+            msg += self.PRI('AAA', str(round(line.price_unit * (1 - (line.discount/100)), 2)))
+            if line.discount:
+                msg += self.PRI('AAB', str(line.price_unit))
             for tax in line.invoice_line_tax_ids:
                 if tax.amount == 0.0:
                     msg += self.TAX('EXT', str(tax.amount))
@@ -171,7 +176,7 @@ class EdifMenssage(models.Model):
             if line.discount:
                 msg += self.ALC('A', 'TD')
                 msg += self.PCD('1', line.discount)  # ALC
-                msg += self.MOA('8', line.quantity * line.price_unit * (line.discount/100))  # ALC
+                msg += self.MOA('8', line.quantity * line.price_unit * (line.discount / 100))  # ALC
 
         msg += self.UNS()
         msg += self.MOA('79', str(round(amount_net, 2)))  # Importe neto
@@ -181,11 +186,11 @@ class EdifMenssage(models.Model):
         msg += self.MOA('260', str(amount_discount))
         for tax in invoice.tax_line_ids:
             if tax.amount == 0.0:
-                msg += self.TAX('EXT', str(round(tax.amount, 2)))
+                msg += self.TAX('EXT', str(round(tax.tax_id.amount, 2)))
             else:
-                msg += self.TAX('VAT', str(round(tax.amount, 2)))
+                msg += self.TAX('VAT', str(round(tax.tax_id.amount, 2)))
             msg += self.MOA('125', str(invoice.amount_untaxed))  # TAX
-            msg += self.MOA('176', str(round(invoice.amount_untaxed * (tax.amount / 100), 2)))  # TAX
+            msg += self.MOA('176', str(round(tax.amount, 2)))  # TAX
         msg_count = msg.count("'") + 1
         msg += self.UNT(str(msg_count), msg_ref)
 
@@ -234,6 +239,13 @@ class EdifMenssage(models.Model):
                         if exist_order:
                             parse_errors += _('The order is already created')
                             break
+                if segment[1] == 'BY':
+                    partner_inv = self.env['res.partner'].search([('ean', '=', segment[2])])
+                    if not partner_inv:
+                        parse_errors += _('The partner {} does not exist').format(segment[2])
+                        break
+                    else:
+                        order_vals['partner_final_invoicing_id'] = partner_inv.id
             elif segment[0] == 'RFF':
                 pass
             elif segment[0] == 'TOD':
@@ -328,6 +340,8 @@ class EdifFile(models.Model):
         date_reading = fields.Datetime.now()
         latest_date_str = self.search([], limit=1, order='read_date desc').read_date
 
+        _logger.info("EDI - Start reading files")
+
         for line in ftp.mlsd(ftp_folder):  # Get the latest files only
             datetime_str = line[1].get("modify")
             line_datetime = parser.parse(datetime_str)
@@ -343,6 +357,7 @@ class EdifFile(models.Model):
                 'error': False
             }
             created_file = self.create(vals)
+            _logger.info("EDI - Parse file {}".format(file))
             ftp.retrbinary("RETR %s" % file, callback=created_file.decode_file)
 
         ftp.quit()
