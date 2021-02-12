@@ -277,7 +277,7 @@ class StockMove(models.Model):
         if self.purchase_line_id and self.product_id.id == self.purchase_line_id.product_id.id:
             line = self.purchase_line_id
             order = line.order_id
-            price_unit = line.price_unit
+            price_unit = line.price_unit * (1 - (line.discount / 100))
             if line.taxes_id:
                 price_unit = line.taxes_id.\
                     with_context(round=False).\
