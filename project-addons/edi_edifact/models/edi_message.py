@@ -132,6 +132,7 @@ class EdifMenssage(models.Model):
         msg += self.RFF('VA', self.env.user.company_id.vat)
         # msg += self.NAD('II') # Mismo que SCO
         msg += self.NAD('IV', invoice.partner_id.commercial_partner_id.ean)
+        msg += self.NAD('DP', invoice.partner_shipping_id.ean)
         msg += self.NAD('BY', invoice.partner_final_invoicing_id.ean or invoice.partner_shipping_id.ean)
         msg += self.NAD('BCO', invoice.partner_id.commercial_partner_id.ean,
                         name=invoice.partner_id.commercial_partner_id.name,
