@@ -16,8 +16,9 @@ class SaleOrderLine(models.Model):
 
     @api.multi
     def _get_is_editable(self):
+        products_non_editable = self._get_products_non_editable()
         for line in self:
-            if line.product_id.id in self._get_products_non_editable():
+            if line.product_id.id in products_non_editable:
                 line.is_editable = False
             elif (self.env.user.has_group('sale_custom.sale_editor') and line.order_id.state == 'sale') \
                     or line.order_id.state in ('draft', 'sent', 'reserve'):
