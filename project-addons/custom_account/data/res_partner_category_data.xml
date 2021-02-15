@@ -4,4 +4,8 @@
         <field name="name">Empleado</field>
         <field name="active" eval="True"/>
     </record>
+    <record id="group_big_accounts" model="res.groups">
+        <field name="name">Projects and Big Accounts</field>
+    </record>
+
 </odoo>

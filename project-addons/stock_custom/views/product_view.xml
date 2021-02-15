@@ -61,6 +61,17 @@
         </field>
     </record>
 
+    <record id="view_template_property_form_add_new_tracking" model="ir.ui.view">
+        <field name="name">product.template.stock.property.form.add_new_tracking</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="stock.view_template_property_form"/>
+        <field name="arch" type="xml">
+            <field name="tracking" position="before">
+                <field name="track_serial" attrs="{'invisible':[('type', 'in', ['service', 'digital'])]}"/>
+            </field>
+        </field>
+    </record>
+
     <record id="view_stock_product_tree" model="ir.ui.view">
         <field name="name">product.stock.tree.inherit</field>
         <field name="model">product.product</field>
@@ -140,15 +151,15 @@
     </record>
 
     <record id="product_product_last_purchase_info_form_view" model="ir.ui.view">
-		<field name="name">product.product.last.purchase.info.form</field>
-		<field name="model">product.product</field>
-		<field name="inherit_id" ref="purchase_last_price_info.product_product_last_purchase_info_form_view" />
-		<field name="arch" type="xml">
+                <field name="name">product.product.last.purchase.info.form</field>
+                <field name="model">product.product</field>
+                <field name="inherit_id" ref="purchase_last_price_info.product_product_last_purchase_info_form_view" />
+                <field name="arch" type="xml">
             <field name="last_supplier_id" position="after">
                 <field name="currency_purchase_id" invisible="1"/>
             </field>
-		</field>
-	</record>
+                </field>
+        </record>
 
     <record id="product_date_first_incoming_tree" model="ir.ui.view">
         <field name="name">product.date.first.incoming</field>

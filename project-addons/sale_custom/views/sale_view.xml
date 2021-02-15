@@ -40,6 +40,18 @@
             <button name="action_done" position="attributes">
                 <attribute name="invisible">1</attribute>
             </button>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="after">
+                <field name="is_editable" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="attributes">
+                <attribute name="attrs">{'readonly': [('is_editable','=',False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="attributes">
+                <attribute name="attrs">{'readonly': [('is_editable','=',False)]}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="attributes">
+                <attribute name="attrs">{'readonly': [('is_editable','=',False)]}</attribute>
+            </xpath>
         </field>
     </record>
 

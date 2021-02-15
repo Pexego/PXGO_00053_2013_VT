@@ -17,6 +17,6 @@ class MrpBom(models.Model):
     @api.model
     def create(self, values):
         res = super().create(values)
-        self.product_tmpl_id.product_variant_ids.calculate_bom_weight()
-        self.product_tmpl_id.recalculate_standard_price_2()
+        res.product_tmpl_id.product_variant_ids.calculate_bom_weight()
+        res.product_tmpl_id.recalculate_standard_price_2()
         return res
