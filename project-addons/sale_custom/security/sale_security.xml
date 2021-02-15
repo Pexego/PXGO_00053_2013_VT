@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="res.groups" id="sale_editor">
+        <field name="name">Sale editor</field>
+    </record>
+</odoo>
