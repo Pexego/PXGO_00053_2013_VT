@@ -39,44 +39,13 @@ class StockPicking(models.Model):
         for picking in self:
             for move in picking.move_lines:
                 if move.product_id.tracking != 'none' and \
-                        move.state == 'assigned' and not move.quantity_done \
-                        and not move.lots_text:
+                        move.state == 'assigned' and not move.quantity_done:
                     for line in move.move_line_ids:
                         line.qty_done = line.product_uom_qty
                 if move.product_id.tracking == 'none' and \
                         move.state == 'assigned' and \
                         not move.quantity_done and not picking.block_picking:
                     move.quantity_done = move.product_uom_qty
-                elif move.lots_text:
-                    txlots = move.lots_text.split(',')
-                    if len(txlots) != len(move.move_line_ids):
-                        quantity = len(txlots) - len(move.move_line_ids)
-                        if quantity >= 0 and \
-                                len(txlots) == move.product_uom_qty:
-                            for i in range(0, int(quantity)):
-                                mov_line_obj.create(
-                                    move._prepare_move_line_vals())
-                            move.refresh()
-                        else:
-                            raise exceptions.\
-                                Warning(_("The number of lots defined"
-                                          " are not equal to move"
-                                          " product quantity"))
-                    cont = 0
-                    while (txlots):
-                        lot_name = txlots.pop()
-                        lot = lot_obj.search([("name", "=", lot_name),
-                                              ("product_id", "=",
-                                               move.product_id.id)],
-                                             limit=1)
-                        if not lot:
-                            lot = lot_obj.create({'name': lot_name,
-                                                  'product_id':
-                                                  move.product_id.id})
-                        move.move_line_ids[cont].\
-                            write({'lot_id': lot.id,
-                                   'qty_done': 1.0})
-                        cont += 1
         res = super().action_done()
         for picking in self:
             if picking.sale_id:
@@ -141,7 +110,7 @@ class StockMove(models.Model):
     real_stock = fields.Float(compute='_compute_real_stock')
     available_stock = fields.Float(compute="_compute_available_stock")
     user_id = fields.Many2one('res.users', compute='_compute_responsible')
-    lots_text = fields.Text('Lots', help="Value must be separated by commas")
+    lots_text = fields.Text('Serials', help="Value must be separated by commas")
     sale_id = fields.Many2one('sale.order', related='sale_line_id.order_id',
                               readonly=True)
     date_reliability = fields.Selection([
