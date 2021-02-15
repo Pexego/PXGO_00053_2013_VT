@@ -23,7 +23,8 @@
                 'account_credit_control', 'stock_picking_invoice_link',
                 'account_invoice_merge', 'customer_area',
                 'res_currency_rate_force'],
-    "data": ['views/account_view.xml',
+    "data": ['data/res_partner_category_data.xml',
+             'views/account_view.xml',
              'views/partner_view.xml',
              'report/account_invoice_report_view.xml',
              'security/ir.model.access.csv',
@@ -37,8 +38,7 @@
              'wizard/wzd_remove_partners_from_payment_order_view.xml',
              'report/account_invoice_contact_report_view.xml',
              'views/account_bank_statement.xml',
-             'wizard/statement_ignore.xml',
-             'data/res_partner_category_data.xml'
+             'wizard/statement_ignore.xml'
              ],
     "installable": True
 }
