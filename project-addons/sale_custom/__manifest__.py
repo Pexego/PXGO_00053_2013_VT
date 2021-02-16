@@ -26,6 +26,8 @@
         "custom_partner"
     ],
     "data": [
-        'views/sale_view.xml', 'views/email_purchase_template.xml','data/parameters.xml','wizard/max_weight_advise_wiz.xml'
+        'views/sale_view.xml', 'views/email_purchase_template.xml',
+        'data/parameters.xml', 'wizard/max_weight_advise_wiz.xml',
+        'security/sale_security.xml'
     ],
 }
