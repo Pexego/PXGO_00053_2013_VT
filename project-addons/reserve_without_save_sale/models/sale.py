@@ -52,7 +52,7 @@ class SaleOrder(models.Model):
                      if line[2] and line[2].get('product_uom_qty') and line[0] == 1]  # 1 = write, 0 = create
             if lines:
                 self.env['sale.order.line'].browse(lines).\
-                    filtered(lambda r: r.product_id and r.product_id.type != 'service'
+                    filtered(lambda r: r.product_id and r.product_id.type == 'product'
                                        and r.promotion_line is not True).\
                     stock_reserve()
         return res
@@ -95,7 +95,7 @@ class SaleOrderLine(models.Model):
     def _compute_is_stock_reservation(self):
         for line in self:
             reservable = False
-            if not (line.state not in ('draft', 'reserve') or line._get_procure_method() == 'make_to_order' or not line.product_id or line.product_id.type == 'service'):
+            if not (line.state not in ('draft', 'reserve') or line._get_procure_method() == 'make_to_order' or not line.product_id or line.product_id.type != 'product'):
                 reservable = True
             line.is_stock_reservable = reservable
 
@@ -106,7 +106,7 @@ class SaleOrderLine(models.Model):
     @api.model
     def create(self, vals):
         res = super().create(vals)
-        if res.product_id and res.product_id.type != 'service' \
+        if res.product_id and res.product_id.type == 'product' \
                 and res.promotion_line is not True and res.order_id.state == 'reserve':
             res.stock_reserve()
         return res
