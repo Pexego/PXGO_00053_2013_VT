@@ -46,7 +46,6 @@ class SaleOrder(models.Model):
     @api.multi
     def write(self, vals):
         res = super().write(vals)
-        print(vals)
         if vals.get('order_line', False):
             lines = [line[1] for line in vals['order_line']
                      if line[2] and line[2].get('product_uom_qty') and line[0] == 1]  # 1 = write, 0 = create
