@@ -7,7 +7,6 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-
 class StockReservation(models.Model):
 
     _name = 'stock.reservation'
@@ -43,6 +42,20 @@ class StockReservation(models.Model):
         res.move_id.user_id = res.user_id
         if vals.get('sequence') and res.move_id:
             res.move_id.sequence = vals['sequence']
+        if vals.get('unique_js_id', False) and \
+                not vals.get('sale_line_id', False):
+            with registry(self.env.cr.dbname).cursor() as new_cr:
+                new_env = api.Environment(new_cr, self.env.uid,
+                                          self.env.context)
+
+                new_env.cr.execute("select id from sale_order_line where "
+                                   "unique_js_id = '%s'" % vals['unique_js_id']
+                                   )
+
+                lines = new_env.cr.fetchone()
+                if lines:
+                    self.with_env(new_env).write({'sale_line_id': lines[0]})
+                new_env.cr.commit()
         return res
 
     def write(self, vals):
