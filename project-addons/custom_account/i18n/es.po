@@ -1292,3 +1292,12 @@ msgstr "Informes"
 msgid "Invoices Analysis Projects and Big Accounts"
 msgstr "Análisis de facturas: Proyectos y Grandes Cuentas"
 
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_warehouse_notes
+msgid "Notes for the warehouse on sales"
+msgstr "Notas para almacén en pedidos de venta"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_warehouse_notes
+msgid "This will be copied in the Notes for the warehouse field on the sales"
+msgstr "Este mensaje será copiado automáticamente en las notas para almacén del pedido"
