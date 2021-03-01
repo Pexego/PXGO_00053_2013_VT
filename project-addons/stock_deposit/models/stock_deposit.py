@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions, _
 from datetime import datetime
 
 
@@ -110,7 +110,7 @@ class StockDeposit(models.Model):
             move._action_confirm()
             picking.action_assign()
             picking.action_done()
-            deposit.move_id.sale_line_id.write({'qty_invoiced': 0, 'invoice_status': 'to invoice'})
+            deposit.move_id.sale_line_id.write({'qty_invoiced': deposit.move_id.sale_line_id.qty_invoiced-deposit.product_uom_qty, 'invoice_status': 'to invoice'})
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
 
     @api.one
@@ -231,4 +231,41 @@ class StockDeposit(models.Model):
             picking.action_assign()
             picking.action_done()
             deposit.write({'state': 'loss', 'loss_move_id': move.id})
+
+    @api.multi
+    def create_invoice(self,journal_id=None):
+        deposit_obj = self.env['stock.deposit']
+        deposits = self.filtered(lambda d:d.state=='sale')
+        invoice_ids = []
+        if not deposits:
+            raise exceptions.Warning(_('No deposit selected'))
+        sales = list(set([x.sale_id for x in deposits]))
+        for sale in sales:
+            sale_deposit = deposit_obj.search(
+                [('id', 'in', deposits.ids), ('sale_id', '=', sale.id)])
+
+            sale_lines = self.env['sale.order.line']
+            for deposit in sale_deposit:
+                sale_lines += deposit.move_id.sale_line_id
+            my_context = dict(self.env.context)
+            my_context['invoice_deposit'] = True
+            inv_vals = sale._prepare_invoice()
+            inv_vals['journal_id'] = journal_id or sale.partner_id.commercial_partner_id.invoice_type_id.journal_id
+            if not inv_vals.get("payment_term_id", False):
+                inv_vals['payment_term_id'] = \
+                    sale.partner_id.property_payment_term_id.id
+            if not inv_vals.get("payment_mode_id", False):
+                inv_vals['payment_mode_id'] = \
+                    sale.partner_id.customer_payment_mode_id.id
+            if not inv_vals.get("partner_bank_id", False):
+                inv_vals['partner_bank_id'] = sale.partner_id.bank_ids \
+                    and sale.partner_id.bank_ids[0].id or False
+            invoice = self.env['account.invoice'].create(inv_vals)
+            for line in sale_lines:
+                line.with_context(my_context).invoice_line_create(invoice.id, line.qty_to_invoice)
+                line.qty_invoiced=line.product_qty
+            invoice_ids.append(invoice.id)
+            sale_deposit.write({'invoice_id': invoice.id})
+        deposits.write({'state': 'invoiced'})
+        return invoice_ids
 
