@@ -1,0 +1,237 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* amazon_connector
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-03-01 11:30+0000\n"
+"PO-Revision-Date: 2021-03-01 17:00+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_fulfillment
+msgid "Fulfillment"
+msgstr "Realizado por"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_untaxed
+msgid "Amount Untaxed"
+msgstr "Base imponible"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_tax
+msgid "Amount Tax"
+msgstr "Impuestos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_total
+msgid "Amount Total"
+msgstr "Total"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_theoretical_total_amount
+msgid "Theoretical Total Amount"
+msgstr "Cantidad total enviada por Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_theoretical_total_taxes
+msgid "Theoretical Total Taxes"
+msgstr "Impuestos aplicados por Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_message_error
+msgid "Message Error"
+msgstr "Errores"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_state
+msgid "Status"
+msgstr "Estado"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,state:0
+msgid "Read"
+msgstr "Leído"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,state:0
+msgid "Sale created"
+msgstr "Venta creada"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,state:0
+msgid "Invoice created"
+msgstr "Factura creada"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_state
+msgid "Status"
+msgstr "Estado"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_warning_price
+msgid "Warning Price"
+msgstr "Aviso error Precio"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_asin
+msgid "Product Asin"
+msgstr "Código ASIN"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_qty
+msgid "Product Qty"
+msgstr "Cantidad"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_unit
+msgid "Price Unit"
+msgstr "Precio Unidad"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_subtotal
+msgid "Price Subtotal"
+msgstr "Subtotal"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_tax_id
+msgid "Tax"
+msgstr "Impuestos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_tax
+msgid "Price Tax"
+msgstr "Impuestos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_total
+msgid "Price Total"
+msgstr "Total"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_code
+msgid "Code"
+msgstr "Código"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:114
+msgid "Amazon API Error. No order was created due to errors. '%s' \n"
+msgstr "Error API Amazon. Ningún pedido se ha creado debido ha que se ha producido un error. '%s'"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:125
+msgid "Amazon API Error. Order %s. '%s' \n"
+msgstr "Error API Amazon. Pedido %s. '%s'"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:134
+#: code:addons/amazon_connector/models/amazon_sale_order.py:163
+msgid "Total amount != Theoretical total amount (%f-%f)\n"
+msgstr "Total != Total enviado por Amazon (%f-%f)\n"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:186
+msgid "Product with ASIN CODE %s not found\n"
+msgstr "El producto con código ASIn %s no ha sido encontrado \n"
+
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:189
+msgid "ItemPrice or ItemTax fields are empty %s\n"
+msgstr "Los campos ItemPrice o ItemTax vienen vacíos %s\n"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:311
+msgid "There are no deposit for this order"
+msgstr "No hay depósitos para este pedido"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Retry Order"
+msgstr "Reintentar lectura"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Process Order"
+msgstr "Procesar Pedido"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Deposits"
+msgstr "Depósitos"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Invoices"
+msgstr "Facturas"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Sale orders"
+msgstr "Pedidos de Venta"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Amazon Order"
+msgstr "Pedido de Amazon"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Order Lines"
+msgstr "Líneas del Pedido"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_tree
+#: model:ir.actions.act_window,name:amazon_connector.action_show_amazon_orders
+#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
+msgid "Amazon Orders"
+msgstr "Pedidos de Amazon"
+
+#. module: amazon_connector
+#: model:ir.ui.menu,name:amazon_connector.config_amazon_menu
+msgid "Configuration"
+msgstr "Configuración"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
+#: model:ir.actions.act_window,name:amazon_connector.retry_Amazon_orders_action
+msgid "Retry Orders"
+msgstr "Reintentar pedidos"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+
+
+
+
+
