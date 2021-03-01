@@ -286,3 +286,8 @@ msgstr "Tipo de operazaione"
 #: model:ir.ui.view,arch_db:location_moves.location_moves_form
 msgid "create moves"
 msgstr "Creare movimenti"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Nursing -> Kitchen"
+msgstr "Infermeria -> Cucina"

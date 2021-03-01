@@ -163,4 +163,19 @@
             </field>
         </record>
 
+        <record model="ir.ui.view" id="view_partner_form_add_warehouse_notes">
+            <field name="name">res.partner.form.add_warehouse_notes</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="sale.res_partner_view_buttons" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sale_warn']/.." position="after">
+                    <group colspan="2" col="2">
+                        <separator string="Notes for the warehouse on sales" colspan="4"/>
+                            <field name="warehouse_notes" colspan="3" nolabel="1"
+                            placeholder="This will be copied in the Notes for the warehouse field on the sales"/>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
 </odoo>
