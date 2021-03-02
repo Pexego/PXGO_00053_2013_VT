@@ -10,6 +10,6 @@
     'author': 'Visiotech',
     'website': '',
     "depends": ['account', 'sale_advance_payment'],
-    "data": [],
+    "data": ['views/sale_advanced_payment_wdz_view.xml'],
     "installable": True
 }
