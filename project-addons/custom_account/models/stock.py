@@ -111,6 +111,8 @@ class SaleOrder(models.Model):
             self.partner_tags = [(6, 0, self.partner_id.category_id.ids)]
             if self.partner_id.team_id:
                 self.team_id = self.partner_id.team_id.id
+            if self.partner_id.warehouse_notes:
+                self.internal_notes = self.partner_id.warehouse_notes
 
 
 class SaleOrderLine(models.Model):

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record model="res.partner.category" id="employee_category">
+        <field name="name">Empleado</field>
+        <field name="active" eval="True"/>
+    </record>
+    <record id="group_big_accounts" model="res.groups">
+        <field name="name">Projects and Big Accounts</field>
+    </record>
+
+</odoo>

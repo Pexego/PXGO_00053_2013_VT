@@ -49,7 +49,7 @@ extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
 left join account_payment_mode pm on pm.id = ai.payment_mode_id
 left join account_journal aj on aj.id = pm.fixed_journal_id
-where ai.company_id = 1 and p.credit_limit > 0 and p.risk_insurance_grant_date is not null and
+where ai.company_id = 1 and p.insurance_credit_limit > 0 and p.risk_insurance_grant_date is not null and
 (ai.payment_mode_id is null or aj.type != 'cash') and ai.type = 'out_invoice'
 and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
@@ -62,7 +62,7 @@ extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
 left join account_payment_mode pm on pm.id = ai.payment_mode_id
 left join account_journal aj on aj.id = pm.fixed_journal_id
-where ai.company_id = 1 and p.credit_limit > 0 and p.risk_insurance_grant_date is not null and
+where ai.company_id = 1 and p.insurance_credit_limit > 0 and p.risk_insurance_grant_date is not null and
 (ai.payment_mode_id is null or aj.type != 'cash') and ai.type = 'out_refund'
 and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
@@ -75,7 +75,7 @@ extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
 left join account_payment_mode pm on pm.id = ai.payment_mode_id
 left join account_journal aj on aj.id = pm.fixed_journal_id
-where ai.company_id = 1 and p.credit_limit > 0 and p.risk_insurance_grant_date is null and
+where ai.company_id = 1 and p.insurance_credit_limit > 0 and p.risk_insurance_grant_date is null and
 (ai.payment_mode_id is null or aj.type != 'cash') and ai.type = 'out_invoice'
 and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
@@ -88,7 +88,7 @@ extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
 left join account_payment_mode pm on pm.id = ai.payment_mode_id
 left join account_journal aj on aj.id = pm.fixed_journal_id
-where ai.company_id = 1 and p.credit_limit > 0 and p.risk_insurance_grant_date is null and
+where ai.company_id = 1 and p.insurance_credit_limit > 0 and p.risk_insurance_grant_date is null and
 (ai.payment_mode_id is null or aj.type != 'cash') and ai.type = 'out_refund'
 and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
@@ -101,7 +101,7 @@ extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
 left join account_payment_mode pm on pm.id = ai.payment_mode_id
 left join account_journal aj on aj.id = pm.fixed_journal_id
-where ai.company_id = 1 and p.credit_limit <= 0 and (ai.payment_mode_id is null or aj.type != 'cash')
+where ai.company_id = 1 and p.insurance_credit_limit <= 0 and (ai.payment_mode_id is null or aj.type != 'cash')
 and ai.type = 'out_invoice' and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
 extract(month from ai.date_invoice), ai.state, p.user_id, p.area_id
@@ -113,7 +113,7 @@ extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
 from account_invoice ai inner join res_partner p on p.id = ai.partner_id
 left join account_payment_mode pm on pm.id = ai.payment_mode_id
 left join account_journal aj on aj.id = pm.fixed_journal_id
-where ai.company_id = 1 and p.credit_limit <= 0 and (ai.payment_mode_id is null or aj.type != 'cash')
+where ai.company_id = 1 and p.insurance_credit_limit <= 0 and (ai.payment_mode_id is null or aj.type != 'cash')
 and ai.type = 'out_refund' and ai.state in ('open', 'paid')
 group by p.country_id, extract(year from ai.date_invoice)::int,
 extract(month from ai.date_invoice), ai.state, p.user_id, p.area_id

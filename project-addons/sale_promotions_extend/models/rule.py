@@ -309,7 +309,7 @@ class PromotionsRulesActions(models.Model):
         return order_line.write(vals)
 
     def create_y_line_axb(self, order, order_line, quantity):
-        product_id=order_line.product_id
+        product_id = order_line.product_id
         vals = {
             'order_id': order.id,
             'sequence': order_line.sequence,
@@ -429,7 +429,10 @@ class PromotionsRules(models.Model):
 
     special_promo = fields.Boolean("Special Promo")
 
-    line_description = fields.Char(translate=True,string="Desciption in lines",help="This field is shown in the description field of the invoice,picking and sale lines")
+    line_description = fields.Char(translate=True, string="Desciption in lines",
+                                   help="This field is shown in the description field of the invoice,picking and sale lines")
+
+    apply_at_confirm = fields.Boolean("Apply at confirm")
 
     @api.model
     def apply_special_promotions(self, order):
@@ -447,3 +450,12 @@ class PromotionsRules(models.Model):
                 if promotion_rule.stop_further:
                     return True
         return True
+
+    @api.model
+    def _get_promotions_domain(self, order):
+        if self.env.context.get('is_confirm', False):
+            return super()._get_promotions_domain(order)
+        else:
+            domain = super()._get_promotions_domain(order)
+            domain += [('apply_at_confirm', '=', False)]
+            return domain

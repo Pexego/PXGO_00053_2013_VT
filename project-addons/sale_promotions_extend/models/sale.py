@@ -1,6 +1,6 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class SaleOrderLine(models.Model):
@@ -21,7 +21,7 @@ class SaleOrderLine(models.Model):
     product_tags = fields.Char(compute="_compute_product_tags", string='Tags')
     web_discount = fields.Boolean()
     accumulated_promo = fields.Boolean(default=False)
-    original_line_id_promo = fields.Many2one('sale.order.line', "Original line", ondelete='cascade')
+    original_line_id_promo = fields.Integer("Original line")
     promo_qty_split = fields.Integer(help="It is the minimum quantity of product for which this promo is applied")
     old_discount = fields.Float(copy=False)
     old_price = fields.Float(copy=False)
@@ -92,3 +92,10 @@ class SaleOrder(models.Model):
                             'old_discount': 0.00,
                             'accumulated_promo': False})
         return res
+
+    @api.multi
+    def action_confirm(self):
+        ctx = dict(self._context)
+        ctx['is_confirm'] = True
+        order = self.with_context(ctx)
+        return super(SaleOrder, order).action_confirm()

@@ -12,6 +12,7 @@ class UpdatePartnerRisk(models.TransientModel):
         for partner in self.partner_ids:
             partner.insurance_credit_limit = self.new_risk
             if self.new_risk == 0:
+                partner.payment_days = False
                 partner.company_credit_limit = self.new_risk
                 if partner.team_id:
                     prepaid_id = partner.env['account.payment.term'].with_context(lang='en_US').search(

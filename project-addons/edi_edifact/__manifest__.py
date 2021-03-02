@@ -6,7 +6,7 @@
     "sequence": 0,
     "certificate": "",
     "license": "",
-    "depends": ["account"],
+    "depends": ["account", "sale"],
     "category": "Generic Modules/EDI",
     "description": """
     """,

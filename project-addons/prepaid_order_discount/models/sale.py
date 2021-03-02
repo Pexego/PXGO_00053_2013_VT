@@ -147,3 +147,15 @@ class SaleOrder(models.Model):
                 'web.user.buyer'):
             res.message_post(body=_("Prepaid option checked by Web Team"))
         return res
+
+
+class SaleOrderLine(models.Model):
+
+    _inherit = "sale.order.line"
+
+    @api.multi
+    def _get_products_non_editable(self):
+        res = super()._get_products_non_editable()
+        res.append(self.env.ref("prepaid_order_discount.prepaid_discount_product").id)
+        return res
+

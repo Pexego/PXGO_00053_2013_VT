@@ -39,44 +39,13 @@ class StockPicking(models.Model):
         for picking in self:
             for move in picking.move_lines:
                 if move.product_id.tracking != 'none' and \
-                        move.state == 'assigned' and not move.quantity_done \
-                        and not move.lots_text:
+                        move.state == 'assigned' and not move.quantity_done:
                     for line in move.move_line_ids:
                         line.qty_done = line.product_uom_qty
                 if move.product_id.tracking == 'none' and \
                         move.state == 'assigned' and \
                         not move.quantity_done and not picking.block_picking:
                     move.quantity_done = move.product_uom_qty
-                elif move.lots_text:
-                    txlots = move.lots_text.split(',')
-                    if len(txlots) != len(move.move_line_ids):
-                        quantity = len(txlots) - len(move.move_line_ids)
-                        if quantity >= 0 and \
-                                len(txlots) == move.product_uom_qty:
-                            for i in range(0, int(quantity)):
-                                mov_line_obj.create(
-                                    move._prepare_move_line_vals())
-                            move.refresh()
-                        else:
-                            raise exceptions.\
-                                Warning(_("The number of lots defined"
-                                          " are not equal to move"
-                                          " product quantity"))
-                    cont = 0
-                    while (txlots):
-                        lot_name = txlots.pop()
-                        lot = lot_obj.search([("name", "=", lot_name),
-                                              ("product_id", "=",
-                                               move.product_id.id)],
-                                             limit=1)
-                        if not lot:
-                            lot = lot_obj.create({'name': lot_name,
-                                                  'product_id':
-                                                  move.product_id.id})
-                        move.move_line_ids[cont].\
-                            write({'lot_id': lot.id,
-                                   'qty_done': 1.0})
-                        cont += 1
         res = super().action_done()
         for picking in self:
             if picking.sale_id:
@@ -103,6 +72,15 @@ class StockPicking(models.Model):
                 picking_template = self.env.ref('stock_custom.picking_done_template')
                 picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
         return result
+
+    @api.multi
+    def action_confirm(self):
+        res = super(StockPicking, self).action_confirm()
+        self.filtered(lambda picking: picking.picking_type_code == 'outgoing' and picking.location_id.usage=='internal' and picking.state == 'confirmed') \
+                .mapped('move_lines')._action_assign()
+        return res
+
+
 
 
 class StockMoveLine(models.Model):
@@ -132,7 +110,7 @@ class StockMove(models.Model):
     real_stock = fields.Float(compute='_compute_real_stock')
     available_stock = fields.Float(compute="_compute_available_stock")
     user_id = fields.Many2one('res.users', compute='_compute_responsible')
-    lots_text = fields.Text('Lots', help="Value must be separated by commas")
+    lots_text = fields.Text('Serials', help="Value must be separated by commas")
     sale_id = fields.Many2one('sale.order', related='sale_line_id.order_id',
                               readonly=True)
     date_reliability = fields.Selection([
@@ -154,6 +132,8 @@ class StockMove(models.Model):
             responsible = None
             if move.picking_id:
                 responsible = move.picking_id.commercial.id
+            elif move.sale_id:
+                responsible = move.sale_id.user_id.id
             elif move.origin:
                 responsible = move.env['sale.order'].search(
                     [('name', '=', move.origin)]).user_id.id
@@ -237,10 +217,10 @@ class StockMove(models.Model):
     @api.multi
     def _compute_parent_partner(self):
         for move in self:
-            move.parent_partner=move.sale_line_id.order_id.partner_id if move.sale_line_id else move.partner_id
-    parent_partner = fields.Many2one('res.partner',compute="_compute_parent_partner",string="Partner")
+            move.parent_partner = move.sale_line_id.order_id.partner_id if move.sale_line_id else move.partner_id
+    parent_partner = fields.Many2one('res.partner', compute="_compute_parent_partner", string="Partner")
 
-    purchase_order_id = fields.Many2one('purchase.order',related='purchase_line_id.order_id')
+    purchase_order_id = fields.Many2one('purchase.order', related='purchase_line_id.order_id')
 
 
 class StockReturnPicking(models.TransientModel):
