@@ -301,9 +301,7 @@ class AmazonSaleOrder(models.Model):
                     for invoice in self.env['account.invoice'].browse(invoices_ids):
                         for line in invoice.invoice_line_ids:
                             o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)
-                            line.invoice_line_tax_ids = [(6, 0, o_line.tax_id.ids)]
-                            line.price_unit = o_line.price_unit
-                            line.discount = 0
+                            line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0, 'quantity': o_line.product_qty})
                         invoice._onchange_invoice_line_ids()
                         if not order.warning_price:
                             invoice.action_invoice_open()
