@@ -152,7 +152,6 @@ class AmazonSaleOrder(models.Model):
                 res_order = orders_obj.get_order_items(amazon_order.name)
             except SellingApiException as e:
                 raise UserError("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e))
-            res_order = orders_obj.get_order_items()
             time.sleep(amazon_time_rate_limit)
             order = res_order.payload
             if order:
