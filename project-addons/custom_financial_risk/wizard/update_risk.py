@@ -11,7 +11,6 @@ class UpdatePartnerRisk(models.TransientModel):
     def action_update_risk(self):
         partners_without_team = []
         for partner in self.partner_ids:
-            partner.credit_available = max((self.new_risk - (partner.insurance_credit_limit - partner.credit_available)), 0)
             partner.insurance_credit_limit = self.new_risk
             if self.new_risk == 0:
                 partner.payment_days = False

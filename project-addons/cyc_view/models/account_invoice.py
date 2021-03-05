@@ -6,7 +6,6 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     amount_insurance = fields.Float("Amount insured")
-    residual_insurance = fields.Float(compute='_compute_residual_insurance')
 
     @api.multi
     def invoice_validate(self):
@@ -16,49 +15,15 @@ class AccountInvoice(models.Model):
                     invoice.type == 'out_invoice' and \
                     invoice.payment_term_id != self.env.ref('account.account_payment_term_immediate') and \
                     not invoice.payment_ids:
-                available = invoice.partner_id.commercial_partner_id.credit_available
-                # Calculate the quantity insured of the invoice and subtract it from the credit still available
-                invoice.partner_id.commercial_partner_id.credit_available = max((available - invoice.amount_total), 0.0)
-                invoice.amount_insurance = min(invoice.amount_total, available)
-            elif invoice.partner_id.commercial_partner_id.insurance_credit_limit > 0 and invoice.type == 'out_refund':
-                invoice.amount_insurance = invoice.amount_total
-        return res
-
-    @api.multi
-    def _compute_residual_insurance(self):
-        for invoice in self:
-            paid = invoice.amount_total - invoice.residual
-            invoice.residual_insurance = max(invoice.amount_insurance-paid, 0.0)
-
-    @api.multi
-    def action_invoice_re_open(self):
-        res = super().action_invoice_re_open()
-        for invoice in self:
-            # Subtract again the qty from the available when reopen
-            if invoice.amount_insurance and invoice.amount_insurance > 0 and \
-                    invoice.partner_id.commercial_partner_id.insurance_credit_limit > 0 and \
-                    invoice.type == 'out_invoice' and\
-                    invoice.payment_term_id != self.env.ref('account.account_payment_term_immediate'):
-                available = invoice.partner_id.commercial_partner_id.credit_available
-                invoice.partner_id.commercial_partner_id.credit_available = \
-                    max((available - invoice.amount_insurance), 0.0)
-
-        return res
-
-
-class AccountPayment(models.Model):
-
-    _inherit = "account.payment"
-
-    def action_validate_invoice_payment(self):
-        invoice = self.invoice_ids
-        if invoice.amount_insurance and invoice.amount_insurance > 0 and \
-                invoice.partner_id.commercial_partner_id.insurance_credit_limit > 0 and \
-                invoice.type == 'out_invoice' and \
-                invoice.payment_term_id != self.env.ref('account.account_payment_term_immediate'):
-            if self.amount <= invoice.residual_insurance:
-                invoice.partner_id.commercial_partner_id.credit_available += self.amount
-            else:
-                invoice.partner_id.commercial_partner_id.credit_available += invoice.residual_insurance
-        res = super().action_validate_invoice_payment()
+                # We watch the debt in this moment and then compare it with the credit
+                # with this we calculate the amount insured
+                credit = invoice.partner_id.commercial_partner_id.insurance_credit_limit
+                insured_open_invoices = self.env['account.move.line'].\
+                    search([('partner_id', '=', invoice.partner_id.commercial_partner_id.id),
+                            ('account_id.internal_type', '=', 'receivable'),
+                            ('reconciled', '=', False),
+                            '|', ('invoice_id.amount_insurance', '!=', False), ('balance', '<', 0)])
+                debt = sum(insured_open_invoices.mapped('residual_balance'))
+                # Take as maximum the total of the invoice and never less than 0
+                invoice.amount_insurance = max(min(invoice.amount_total, max(credit - debt, 0.0)), 0.0)
         return res

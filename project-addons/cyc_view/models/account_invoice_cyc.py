@@ -123,4 +123,3 @@ union
 group by a.country_id, a.invoice_month, a.invoice_year, a.state, a.user_id,
 a.area_id)
 """)
-# TODO: Añadir entregas a cuenta, restando del crédito asegurado
