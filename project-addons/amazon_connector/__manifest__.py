@@ -7,6 +7,7 @@
     "depends": ['base', 'sale', 'account', 'product', 'stock_deposit'],
     "data": ["data/data.xml", "views/company.xml", "views/product.xml", "views/amazon_sale_order.xml", "data/cron.xml",
              "data/email.xml",
-             "wizard/retry_orders.xml"],
+             "wizard/retry_orders.xml",
+             "security/ir.model.access.csv"],
     "installable": True
 }
