@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="kitchen_picking_message" model="ir.config_parameter">
+        <field name="key">kitchen.picking.message</field>
+        <field name="value">PERSONALIZADO</field>
+    </record>
+</odoo>
