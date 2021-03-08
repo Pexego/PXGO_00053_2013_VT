@@ -46,8 +46,6 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
-        import ipdb
-        ipdb.set_trace()
         if not self.env.context.get('bypass_risk', False) or self.env.context.get('force_check', False):
             message = ''
             for partner in self.partner_id.get_partners_to_check():
