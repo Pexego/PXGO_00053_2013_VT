@@ -230,6 +230,17 @@ msgstr "Reintentar pedidos"
 msgid "Cancel"
 msgstr "Cancelar"
 
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_sales_channel
+msgid "Sales Channel"
+msgstr "Canal de Venta"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_purchase_date
+msgid "Purchase Date"
+msgstr "Fecha de compra"
+
+
 
 
 

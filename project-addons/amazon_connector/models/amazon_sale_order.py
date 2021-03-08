@@ -30,6 +30,8 @@ class AmazonSaleOrder(models.Model):
         ('AFN', 'Amazon'),
         ('MFN', 'Own')
     ], readonly=1)
+    sales_channel = fields.Char("Sales Channel")
+    purchase_date = fields.Date("Purchase Date")
 
     def _compute_count(self):
         for order in self:
@@ -113,34 +115,45 @@ class AmazonSaleOrder(models.Model):
         except SellingApiException as e:
             raise UserError(_("Amazon API Error. No order was created due to errors. '%s' \n") % e)
         orders = res.payload.get('Orders', False)
-        if orders:
-            for order in orders:
-                exist_order = self.env['amazon.sale.order'].search([('name', '=', order.get('AmazonOrderId'))])
-                if exist_order:
-                    continue
-                time.sleep(amazon_time_rate_limit)
+        cont=0
+        while res.payload.get('NextToken', False) or cont==0:
+            if cont==1:
                 try:
-                    res_order = orders_obj.get_order_items(order.get('AmazonOrderId'))
+                    res = orders_obj.get_orders(NextToken=res.payload.get('NextToken'))
+                    orders = res.payload.get('Orders', False)
                 except SellingApiException as e:
-                    raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order.get('AmazonOrderId'), e))
-                new_order = res_order.payload
-                if new_order:
-                    amazon_order_values = {'name': new_order.get('AmazonOrderId'),
-                                           'fulfillment': order.get('FulfillmentChannel')}
-                    amazon_order_values_lines = self._get_lines_values(new_order)
-                    amazon_order_values.update(amazon_order_values_lines)
-                    amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
-                    if amazon_order.amount_total != amazon_order.theoretical_total_amount:
-                        amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
-                            amazon_order.amount_total, amazon_order.theoretical_total_amount)
-                        amazon_order.warning_price = True
-                    if amazon_order.state == 'error':
-                        amazon_order.send_error_mail()
-                    else:
-                        if amazon_order.warning_price:
+                    raise UserError(_("Amazon API Error. No order was created due to errors. '%s' \n") % e)
+            cont=1
+            if orders:
+                for order in orders:
+                    exist_order = self.env['amazon.sale.order'].search([('name', '=', order.get('AmazonOrderId'))])
+                    if exist_order or order.get('SalesChannel',"")=='Non-Amazon':
+                        continue
+                    time.sleep(amazon_time_rate_limit)
+                    try:
+                        res_order = orders_obj.get_order_items(order.get('AmazonOrderId'))
+                    except SellingApiException as e:
+                        raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order.get('AmazonOrderId'), e))
+                    new_order = res_order.payload
+                    if new_order:
+                        amazon_order_values = {'name': new_order.get('AmazonOrderId'),
+                                               'fulfillment': order.get('FulfillmentChannel'),
+                                               'sales_channel':order.get('SalesChannel',False),
+                                               'purchase_date':order.get('PurchaseDate',False)}
+                        amazon_order_values_lines = self._get_lines_values(new_order)
+                        amazon_order_values.update(amazon_order_values_lines)
+                        amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
+                        if amazon_order.amount_total != amazon_order.theoretical_total_amount:
+                            amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
+                                amazon_order.amount_total, amazon_order.theoretical_total_amount)
+                            amazon_order.warning_price = True
+                        if amazon_order.state == 'error':
                             amazon_order.send_error_mail()
-                        if not only_read:
-                            amazon_order.process_order()
+                        else:
+                            if amazon_order.warning_price:
+                                amazon_order.send_error_mail()
+                            if not only_read:
+                                amazon_order.process_order()
 
     @api.multi
     def retry_order(self):
@@ -298,6 +311,7 @@ class AmazonSaleOrder(models.Model):
                     invoices_ids = deposits.create_invoice()
                     order.state = "invoice_created"
                     for invoice in self.env['account.invoice'].browse(invoices_ids):
+                        invoice.write({'origin': order.name})
                         for line in invoice.invoice_line_ids:
                             o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)
                             line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0, 'quantity': o_line.product_qty})
