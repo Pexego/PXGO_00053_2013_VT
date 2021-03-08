@@ -46,6 +46,8 @@ class SaleOrder(models.Model):
 
     @api.multi
     def action_confirm(self):
+        import ipdb
+        ipdb.set_trace()
         if not self.env.context.get('bypass_risk', False) or self.env.context.get('force_check', False):
             message = ''
             for partner in self.partner_id.get_partners_to_check():
@@ -62,7 +64,8 @@ class SaleOrder(models.Model):
                 if message:
                     raise exceptions.Warning(message)
 
-            if (self.team_id.name == 'Magreb' or self.partner_id.team_id.name == 'Magreb') \
+            if self.amount_total>=int(self.env['ir.config_parameter'].sudo().get_param('magreb.limit.without.block')) \
+                    and (self.team_id.name == 'Magreb' or self.partner_id.team_id.name == 'Magreb') \
                     and not self.allow_confirm_blocked_magreb:
                 message = _('Order blocked. Approve pending')
                 raise exceptions.Warning(message)
