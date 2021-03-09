@@ -3,7 +3,7 @@
 
     <template id="report_purchasequotation_custom_document">
         <t t-call="custom_report_link.external_layout_custom">
-            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>
+            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.commercial_partner_id.lang})"/>
             <div class="page">
                 <div class="oe_structure"></div>
 
@@ -74,7 +74,7 @@
                 <div class="row">
                     <div class="col-xs-1"/>
                     <div class="col-xs-10">
-    <t t-if="o.partner_id.lang == 'en_US'">
+    <t t-if="o.partner_id.commercial_partner_id.lang == 'en_US'">
                         <pre>
     The final shipping method (by sea or air) and quantity will be defined after merchandise is ready to be shipped.
     Pls. ask shipping information before cargo is released.
@@ -95,7 +95,7 @@
     <template id="report_purchasequotation_custom">
        <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
-                <t t-call="custom_report_link.report_purchasequotation_custom_document" t-lang="doc.partner_id.lang" />
+                <t t-call="custom_report_link.report_purchasequotation_custom_document" t-lang="doc.partner_id.commercial_partner_id.lang" />
             </t>
         </t>
     </template>
@@ -113,20 +113,10 @@
 
     <template id="report_purchaseorder_custom_document">
         <t t-call="custom_report_link.external_layout_custom">
-            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>
+            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.commercial_partner_id.lang})"/>
             <div class="page">
                 <div class="oe_structure"></div>
-
-                <t t-set="lang" t-value="'undefined'"/>
-                <t t-if="o.partner_id.parent_id is Number">
-                    <t t-set="lang" t-value="o.partner_id.parent_id.lang"/>
-                </t>
-                <t t-if="o.partner_id.parent_id is not Number">
-                    <t t-set="lang" t-value="o.partner_id.lang"/>
-                </t>
-                <t t-if="not lang">
-                    <t t-set="lang" t-value="'undefined'"/>
-                </t>
+                <t t-set="lang" t-value="o.partner_id.commercial_partner_id.lang"/>
 
                 <div class="row">
                     <div style="font-size:23px; font-weight: bold; color:#939597;">
@@ -250,7 +240,7 @@
                 <div class="row">
                     <div class="col-xs-1"/>
                     <div class="col-xs-10">
-    <t t-if="o.partner_id.lang == 'en_US'">
+    <t t-if="o.partner_id.commercial_partner_id.lang == 'en_US'">
                         <pre  style="font-size:13px; color:#6D6E70;">
     The final shipping method (by sea or air) and quantity will be defined after merchandise is ready to be shipped.
     Pls. ask shipping information before cargo is released.
@@ -272,7 +262,7 @@
     <template id="report_purchaseorder_custom">
        <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
-                <t t-call="custom_report_link.report_purchaseorder_custom_document" t-lang="doc.partner_id.lang" />
+                <t t-call="custom_report_link.report_purchaseorder_custom_document" t-lang="doc.partner_id.commercial_partner_id.lang" />
             </t>
         </t>
     </template>
