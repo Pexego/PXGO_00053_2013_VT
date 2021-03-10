@@ -7,6 +7,7 @@ import json
 import hmac
 import time
 import hashlib
+import uuid
 
 
 def _get_signature():
@@ -31,9 +32,9 @@ class SyncLog(BaseModel):
         header = app.config['NOTIFY_HEADER']
         headers = {'x-api-key': header}
         country_code = app.config['NOTIFY_COUNTRY']
+        w_uuid = str(uuid.uuid4())
 
-        signature = _get_signature()
-        data = {'signature': signature,
+        data = {'uuid': w_uuid,
                 'country_code': country_code,
                 'data': [{'model': self.model,
                           'operation': self.operation,
@@ -64,12 +65,12 @@ class SyncLog(BaseModel):
         header = app.config['NOTIFY_HEADER']
         headers = {'x-api-key': header}
         country_code = app.config['NOTIFY_COUNTRY']
+        w_uuid = str(uuid.uuid4())
 
-        signature = _get_signature()
         to_sync = True
         sync = False
         res = False
-        data = {'signature': signature,
+        data = {'uuid': w_uuid,
                 'country_code': country_code,
                 'data': []}
         for record in objs:
