@@ -276,7 +276,7 @@ class PartnerCategoryListener(Component):
     _apply_on = ['res.partner.category']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=1, eta=60).export_partner_tag()
+        record.with_delay(priority=1, eta=30).export_partner_tag()
 
     # TODO: revisar esta función
     def on_record_write(self, record, fields=None):
@@ -284,13 +284,13 @@ class PartnerCategoryListener(Component):
             partner_ids = self.env['res.partner'].search(
                 [('is_company', '=', True), ('web', '=', True),
                  ('customer', '=', True), ('category_id', 'in', record.id)])
-            record.with_delay(priority=3, eta=120).unlink_partner_tag()
+            record.with_delay(priority=1).unlink_partner_tag()
 
             for partner in partner_ids:
                 partner.with_delay(
-                    priority=5, eta=60).unlink_partner_tag_rel()
+                    priority=1).unlink_partner_tag_rel()
                 partner.with_delay(
-                    priority=10, eta=120).export_partner_tag_rel()
+                    priority=2, eta=60).export_partner_tag_rel()
         elif 'active' in fields and record.active or \
              'prospective' in fields and record.prospective:
             partner_ids = self.env['res.partner'].search(
@@ -298,16 +298,15 @@ class PartnerCategoryListener(Component):
                  ('web', '=', True),
                  ('customer', '=', True),
                  ('category_id', 'in', record.id)])
-            record.with_delay(priority=1, eta=60).export_partner_tag()
+            record.with_delay(priority=2, eta=60).export_partner_tag()
             for partner in partner_ids:
-                partner.with_delay(priority=5, eta=60).unlink_partner_tag_rel()
-                partner.with_delay(
-                    priority=10, eta=120).export_partner_tag_rel()
+                partner.with_delay(priority=1).unlink_partner_tag_rel()
+                partner.with_delay(priority=2, eta=60).export_partner_tag_rel()
         elif record.active:
-            record.with_delay(priority=2, eta=120).update_partner_tag()
+            record.with_delay(priority=2, eta=60).update_partner_tag()
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=3, eta=120).unlink_partner_tag()
+        record.with_delay(priority=1).unlink_partner_tag()
 
 
 class ResPartnerCategory(models.Model):
