@@ -33,4 +33,5 @@ class RetrieveCustomizationsWiz(models.TransientModel):
                 self.customizations_ids.action_draft()
             else:
                 raise UserError(_("You can't retrieve several customizations for the same order"))
-        return getattr(self.origin_reference, self.continue_method)()
+        return getattr(self.origin_reference.with_context(
+            bypass_retrieve_customization=True), self.continue_method)()

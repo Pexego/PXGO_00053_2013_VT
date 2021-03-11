@@ -10,7 +10,8 @@ class SaleOrder(models.Model):
     def _compute_customization_count(self):
         for order in self:
             order.customization_count = len(order.customization_ids)
-            order.customization_count_not_cancelled = len(order.customization_ids.filtered(lambda c:c.state!='cancel'))
+            order.customization_count_not_cancelled = len(
+                order.customization_ids.filtered(lambda c: c.state != 'cancel'))
 
     customization_count = fields.Integer(compute='_compute_customization_count', default=0)
     customization_count_not_cancelled = fields.Integer(compute='_compute_customization_count', default=0)
@@ -25,11 +26,13 @@ class SaleOrder(models.Model):
                 pickings.message_post(
                     body=_('This picking has been created from an order with customized products'))
                 for move in pickings.move_lines:
-                    move.customization_line = move.sale_line_id.customization_line.filtered(lambda l:l.state!='cancel')
-                if pickings.state=='assigned':
-                    customizations.action_confirm()
-                else:
-                    customizations.state = 'waiting'
+                    move.customization_line = move.sale_line_id.customization_line.filtered(
+                        lambda l: l.state != 'cancel')
+                if customizations.state != 'sent':
+                    if pickings.state == 'assigned':
+                        customizations.action_confirm()
+                    else:
+                        customizations.state = 'waiting'
 
         return res
 
@@ -64,7 +67,9 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         for sale in self:
-            if sale.customization_ids and all([x.state == 'cancel' for x in sale.customization_ids]):
+            if not self.env.context.get('bypass_retrieve_customization', False) \
+                    and not self.env.context.get('bypass_risk', False) \
+                    and sale.customization_ids and all([x.state == 'cancel' for x in sale.customization_ids]):
                 return sale.env['retrieve.customizations.wiz'].create({
                     'sale_id': sale.id,
                     'origin_reference':
