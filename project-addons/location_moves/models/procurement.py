@@ -28,10 +28,7 @@ class ProcurementGroup(models.Model):
     _inherit = 'procurement.group'
 
     @api.model
-    def _run_scheduler_tasks(self, use_new_cursor=False, company_id=False):
-        _logger.info("STARTING CALL SUPER SCHEDULER")
-        super()._run_scheduler_tasks(use_new_cursor=use_new_cursor,
-                                     company_id=company_id)
+    def run_scheduler_internal_pickings(self):
         _logger.info("SEARCHING FOR INTERNAL PICKINGS")
         operation_internal = self.env.ref('stock.picking_type_internal').id
         pick_ids_assign = self.env["stock.picking"]. \
@@ -49,8 +46,7 @@ class ProcurementGroup(models.Model):
         _logger.info("TRANSFERRING READY INTERNAL PICKINGS")
         for count, pick_assign in enumerate(pick_ids_assign):
             pick_assign.action_done()
-            if ((count + 1 >= max_commit_len and count + 1 % max_commit_len == 0) or count == len_pick_assign - 1) \
-                    and use_new_cursor:
+            if (count + 1 >= max_commit_len and count + 1 % max_commit_len == 0) or count == len_pick_assign - 1:
                 self.env.cr.commit()
 
         _logger.info("PROCESSING CONFIRMED AND PARTIALLY AVAILABLE PICKINGS")
@@ -65,10 +61,7 @@ class ProcurementGroup(models.Model):
         for count, pick_partially in enumerate(pick_ids_par):
             pick_partially.action_copy_reserv_qty()
             pick_partially.action_accept_confirmed_qty()
-            if count + 1 >= max_commit_len and count + 1 % max_commit_len == 0 and use_new_cursor:
+            if (count + 1 >= max_commit_len and count + 1 % max_commit_len == 0) or count == len(pick_ids_par) - 1:
                 self.env.cr.commit()
 
-        if use_new_cursor:
-            self.env.cr.commit()
         _logger.info("DONE")
-
