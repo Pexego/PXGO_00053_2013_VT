@@ -88,6 +88,8 @@ class SaleOrder(models.Model):
                 self.env['sale.order.line'].create(discount_line_vals)
                 # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
                 sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
+                if sale.payment_mode_id.name == 'Ricevuta bancaria':
+                    sale.payment_mode_id = self.env['account.payment.mode'].search([('payment_method_code', '=', 'MP05')])
                 sale.invoice_type_id = daily_invoicing.id
             elif margin_sale >= margin_2:
                 last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
@@ -100,6 +102,8 @@ class SaleOrder(models.Model):
                 self.env['sale.order.line'].create(discount_line_vals)
                 # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
                 sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
+                if sale.payment_mode_id.name == 'Ricevuta bancaria':
+                    sale.payment_mode_id = self.env['account.payment.mode'].search([('payment_method_code', '=', 'MP05')])
                 sale.invoice_type_id = daily_invoicing.id
             else:
                 message = _("The order margin are below the limits to apply the prepayment discount")
