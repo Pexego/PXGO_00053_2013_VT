@@ -13,6 +13,7 @@
     "data": ['views/account_invoice_cyc_view.xml',
              'security/ir.model.access.csv',
              'views/account_view.xml',
-             'data/ir_config_parameter.xml'],
+             'data/ir_config_parameter.xml',
+             'views/account_invoice_cyc_view_old.xml'],
     "installable": True
 }
