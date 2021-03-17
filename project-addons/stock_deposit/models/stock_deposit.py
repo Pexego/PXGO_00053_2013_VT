@@ -250,7 +250,7 @@ class StockDeposit(models.Model):
             my_context = dict(self.env.context)
             my_context['invoice_deposit'] = True
             inv_vals = sale._prepare_invoice()
-            inv_vals['journal_id'] = journal_id or sale.partner_id.commercial_partner_id.invoice_type_id.journal_id
+            inv_vals['journal_id'] = journal_id.id if journal_id else sale.partner_id.commercial_partner_id.invoice_type_id.journal_id.id
             if not inv_vals.get("payment_term_id", False):
                 inv_vals['payment_term_id'] = \
                     sale.partner_id.property_payment_term_id.id
