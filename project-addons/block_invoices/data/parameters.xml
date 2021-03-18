@@ -4,4 +4,8 @@
         <field name="key">margin.lock.limit</field>
         <field name="value"></field>
     </record>
+    <record id="magreb_limit_without_block" model="ir.config_parameter">
+        <field name="key">magreb.limit.without.block</field>
+        <field name="value">2000</field>
+    </record>
 </odoo>

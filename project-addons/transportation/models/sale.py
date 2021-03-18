@@ -44,10 +44,10 @@ class SaleOrder(models.Model):
             self.delivery_type = self.partner_id.delivery_type
 
     @api.multi
-    @api.onchange('partner_id')
+    @api.onchange('partner_shipping_id')
     def onchange_partner_id_transporter(self):
-        transporter_ids=self.env['transportation.transporter'].search(
-            [('country_group_id.country_ids', 'in', [self.partner_id.country_id.id])])
+        transporter_ids = self.env['transportation.transporter'].search(
+            [('country_group_id.country_ids', 'in', [self.partner_shipping_id.country_id.id])])
         if transporter_ids:
             if self.transporter_id not in transporter_ids:
                 self.transporter_id = False

@@ -4,7 +4,7 @@
        
 <t t-name="custom_report_link.report_invoice_custom_document">
         <t t-call="custom_report_link.external_layout_custom_invoice">
-            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.lang})"/>
+            <t t-set="o" t-value="doc.with_context({'lang':doc.partner_id.commercial_partner_id.lang})"/>
             <t t-set="print_hs_code" t-value="doc.env.context.get('print_hs_code',False)"/>
 
             <div class="page">
@@ -239,7 +239,7 @@
     <template id="report_invoice_custom">
        <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
-                <t t-call="custom_report_link.report_invoice_custom_document" t-lang="doc.partner_id.lang" />
+                <t t-call="custom_report_link.report_invoice_custom_document" t-lang="doc.partner_id.commercial_partner_id.lang" />
             </t>
         </t>
     </template>
@@ -263,7 +263,7 @@
        <t t-call="web.html_container">
             <t t-foreach="docs" t-as="doc">
                 <t t-set="doc" t-value="doc.with_context({'print_hs_code':True})"/>
-                <t t-call="custom_report_link.report_invoice_custom_document" t-lang="doc.partner_id.lang"/>
+                <t t-call="custom_report_link.report_invoice_custom_document" t-lang="doc.partner_id.commercial_partner_id.lang"/>
             </t>
         </t>
     </template>
