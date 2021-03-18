@@ -288,3 +288,15 @@ msgstr "Tipo de operación"
 #: model:ir.ui.view,arch_db:location_moves.location_moves_form
 msgid "create moves"
 msgstr "Crear movimientos"
+
+#. module: location_moves
+#: selection:location.moves,move_type:0
+msgid "Nursing -> Kitchen"
+msgstr "Enfermería -> Cocina"
+
+#. module: location_moves
+#: model:ir.cron,cron_name:location_moves.ir_cron_scheduler_internal_pickings
+#: model:ir.cron,name:location_moves.ir_cron_scheduler_internal_pickings
+msgid "Procurement: Scheduler Internal Pickings"
+msgstr "Abastecimiento: Planificador albaranes internos"
+

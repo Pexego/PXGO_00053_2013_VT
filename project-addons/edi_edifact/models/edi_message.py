@@ -5,6 +5,8 @@ from datetime import datetime
 from dateutil import parser
 import ftplib
 import logging
+import io
+import base64
 
 _logger = logging.getLogger(__name__)
 
@@ -206,6 +208,7 @@ class EdifMenssage(models.Model):
         line = {}
         ref_message = ""
         total_net = 0.0
+        client_ref = ""
         for long_segment in order_file.split("'"):
             segment = re.split("\+|:", long_segment.replace("\n", ""))
             if segment[0] == 'UNH':
@@ -216,6 +219,7 @@ class EdifMenssage(models.Model):
             elif segment[0] == 'BGM':
                 if segment[1] == '220':
                     order_vals['client_order_ref'] = segment[2]
+                    client_ref = segment[2]
             elif segment[0] == 'DTM':
                 if segment[1] == '137':
                     order_vals['date_order'] = datetime.strptime(segment[2], '%Y%m%d')
@@ -308,6 +312,22 @@ class EdifMenssage(models.Model):
                 sale.onchange_partner_id()
                 sale.write({'partner_shipping_id': order_vals['partner_shipping_id']})
                 sale.apply_commercial_rules()
+
+                # Add the read data to the attachment
+
+                fileb = io.BytesIO()
+                fileb.write(order_file.encode('latin-1'))
+                fileb.seek(0)
+                filename = "{}-{}.EDI".format(sale.name, client_ref)
+                ctx = {}
+                self.env['ir.attachment'].with_context(ctx).create({
+                    'name': filename,
+                    'res_id': sale.id,
+                    'res_model': str(sale._name),
+                    'datas': base64.b64encode(fileb.getvalue()),
+                    'datas_fname': filename,
+                    'type': 'binary',
+                })
 
         return parse_errors
 

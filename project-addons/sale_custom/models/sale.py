@@ -12,6 +12,24 @@ class SaleOrderLine(models.Model):
 
     description_editable_related = fields.Boolean(related='product_id.description_editable', readonly=1)
 
+    is_editable = fields.Boolean(compute='_get_is_editable', default=True)
+
+    @api.multi
+    def _get_is_editable(self):
+        products_non_editable = self._get_products_non_editable()
+        for line in self:
+            if line.product_id.id in products_non_editable:
+                line.is_editable = False
+            elif (self.env.user.has_group('sale_custom.sale_editor') and line.order_id.state == 'sale') \
+                    or line.order_id.state in ('draft', 'sent', 'reserve'):
+                line.is_editable = True
+            else:
+                line.is_editable = False
+
+    @api.multi
+    def _get_products_non_editable(self):
+        return []
+
     def write(self, vals):
         for line in self:
             if vals.get('product_id', False):

@@ -11,6 +11,7 @@ class ProductTemplate(models.Model):
     description_sale = fields.Text(translate=False)
     currency_purchase_id = fields.Many2one('res.currency', 'Currency',
                                            default=lambda self: self.env.user.company_id.currency_id.id)
+    track_serial = fields.Boolean("Track Serials")
 
     @api.model
     def create(self, vals):

@@ -62,6 +62,7 @@
                 <field name="parent_partner"/>
                 <field name="string_availability_info"/>
                 <field name="real_stock"/>
+                <field name="lots_text"/>
             </field>
         </field>
     </record>
@@ -133,6 +134,7 @@
                 <field name="name" string="Location" filter_domain="['|',('location_id','ilike',self),('location_dest_id','ilike',self)]"/>
                 <field name="partner_id" string="Partner" filter_domain="[('picking_id.partner_id','child_of',self)]"/>
                 <field name="container_id" string="Container" filter_domain="[('container_id.name','ilike',self)]"/>
+                <field name="lots_text"/>
                 <group expand="0" string="Group By">
                     <filter string="Product" name="by_product" domain="[]"  context="{'group_by':'product_id'}"/>
                     <filter string="Picking" name="groupby_picking_id" domain="[]"  context="{'group_by':'picking_id'}"/>
@@ -305,4 +307,15 @@
                 </xpath>
             </field>
         </record>
+
+    <record id="view_stock_return_picking_form_location_id_invisible" model="ir.ui.view">
+        <field name="name">Return lines</field>
+        <field name="model">stock.return.picking</field>
+        <field name="inherit_id" ref="stock.view_stock_return_picking_form"/>
+        <field name="arch" type="xml">
+            <field name="location_id" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+        </field>
+    </record>
 </odoo>

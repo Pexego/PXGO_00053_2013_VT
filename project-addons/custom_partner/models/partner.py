@@ -89,6 +89,14 @@ class ResPartner(models.Model):
     property_product_pricelist = fields.\
         Many2one(search="_search_pricelist_name")
 
+    @api.multi
+    @api.depends('country_id')
+    def _compute_product_pricelist(self):
+        ids = self.ids or self._origin.ids
+        res = self.env['product.pricelist']._get_partner_pricelist_multi_2(ids)
+        for partner in self:
+            partner.property_product_pricelist = res.get(partner.id if self.ids else self._origin.id)
+
 
     @api.model
     def _calculate_annual_invoiced(self):
