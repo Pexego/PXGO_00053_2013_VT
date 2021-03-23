@@ -16,3 +16,4 @@
 ##############################################################################
 from . import sale
 from . import rules
+from . import invoice
