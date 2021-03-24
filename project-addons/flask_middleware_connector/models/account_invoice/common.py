@@ -22,19 +22,19 @@ class InvoiceListener(Component):
                     invoice.in_web = True
                     record.with_delay(priority=5, eta=120).export_invoice()
                 elif invoice.state_web in ('paid', 'returned', 'remitted'):
-                    record.with_delay(priority=10, eta=120).update_invoice(fields=fields)
+                    record.with_delay(priority=5, eta=120).update_invoice(fields=fields)
                 elif invoice.state_web == 'cancel' and invoice.in_web:
                     invoice.in_web = False
-                    record.with_delay(priority=15, eta=120).unlink_invoice()
+                    record.with_delay(priority=5, eta=120).unlink_invoice()
                 elif invoice.state_web == 'open':
                     for field in up_fields:
                         if field in fields:
-                            record.with_delay(priority=10, eta=120).update_invoice(fields=fields)
+                            record.with_delay(priority=5, eta=120).update_invoice(fields=fields)
                             break
             elif invoice.state in ('open', 'paid'):
                 for field in up_fields:
                     if field in fields:
-                        record.with_delay(priority=10, eta=60).update_invoice(fields=fields)
+                        record.with_delay(priority=5, eta=60).update_invoice(fields=fields)
                         break
 
 

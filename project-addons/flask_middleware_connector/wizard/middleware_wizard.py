@@ -101,34 +101,34 @@ class MiddlewareBackend(models.TransientModel):
         if self.mode_export == 'export':
             for partner in partner_ids:
                 # Export all the partner things
-                partner.with_delay().export_partner()
-                partner.with_delay(eta=10).export_partner_tag_rel()
+                partner.with_delay(priority=2).export_partner()
+                partner.with_delay(priority=2, eta=10).export_partner_tag_rel()
                 sales = self.env['sale.order'].search(
                     [('partner_id', 'child_of', [partner.id]),
                      ('company_id', '=', 1),
                      ('state', 'in', ['done', 'sale'])])
                 for sale in sales:
-                    sale.with_delay(priority=5, eta=120).export_order()
+                    sale.with_delay(priority=2, eta=120).export_order()
                     for line in sale.order_line:
                         line.with_delay(
-                            priority=10, eta=180).export_orderproduct()
+                            priority=2, eta=180).export_orderproduct()
                 invoices = self.env['account.invoice'].search(
                     [('commercial_partner_id', '=', partner.id),
                      ('company_id', '=', 1),
                      ('number', 'not like', '%ef%')])
                 for invoice in invoices:
-                    invoice.with_delay(priority=5, eta=120).export_invoice()
+                    invoice.with_delay(priority=2, eta=120).export_invoice()
                 rmas = self.env['crm.claim'].search(
                     [('partner_id', '=', partner.id)])
                 for rma in rmas:
-                    rma.with_delay(priority=5, eta=120).export_rma()
+                    rma.with_delay(priority=2, eta=120).export_rma()
                     for line in rma.claim_line_ids:
                         if line.product_id.web == 'published' and \
                                 (not line.equivalent_product_id or
                                  line.equivalent_product_id.web ==
                                  'published'):
                             line.with_delay(
-                                priority=10, eta=240).export_rmaproduct()
+                                priority=2, eta=180).export_rmaproduct()
                 pickings = self.env['stock.picking'].search([
                     ('partner_id', 'child_of', [partner.id]),
                     ('state', '!=', 'cancel'),
@@ -136,10 +136,10 @@ class MiddlewareBackend(models.TransientModel):
                     ('company_id', '=', 1),
                     ('not_sync', '=', False)])
                 for picking in pickings:
-                    picking.with_delay(priority=5, eta=120).export_picking()
+                    picking.with_delay(priority=2, eta=120).export_picking()
                     for line in picking.move_lines:
                         line.with_delay(
-                            priority=10, eta=240).export_pickingproduct()
+                            priority=2, eta=180).export_pickingproduct()
             for contact in contact_ids:
                 contact.with_delay().export_partner()
         elif self.mode_export == 'update':
@@ -241,17 +241,17 @@ class MiddlewareBackend(models.TransientModel):
         if self.mode_export == 'export':
             for product in product_ids:
                 product.with_delay().export_product()
-                product.with_delay(priority=1).unlink_product_tag_rel()
+                product.with_delay(priority=2).unlink_product_tag_rel()
                 product.with_delay(priority=2, eta=60).export_product_tag_rel()
         elif self.mode_export == 'update':
             for product in product_ids:
                 product.with_delay().update_product()
-                product.with_delay(priority=1).unlink_product_tag_rel()
+                product.with_delay(priority=2).unlink_product_tag_rel()
                 product.with_delay(priority=2, eta=60).export_product_tag_rel()
         else:
             for product in product_ids:
                 product.with_delay().unlink_product()
-                product.with_delay(priority=1, eta=30).unlink_product_tag_rel()
+                product.with_delay(priority=2, eta=30).unlink_product_tag_rel()
 
     def export_tags(self, object_ids):
         tag_obj = self.env['res.partner.category']
@@ -261,15 +261,15 @@ class MiddlewareBackend(models.TransientModel):
             tag_ids = tag_obj.search([('active', '=', True)])
         if self.mode_export == 'export':
             for tag in tag_ids:
-                tag.with_delay(priority=5).export_partner_tag()
+                tag.with_delay(priority=2).export_partner_tag()
                 for partner in tag.partner_ids:
-                    partner.with_delay(priority=1).unlink_partner_tag_rel()
+                    partner.with_delay(priority=2).unlink_partner_tag_rel()
                     partner.with_delay(priority=2, eta=60).export_partner_tag_rel()
         elif self.mode_export == 'update':
             for tag in tag_ids:
-                tag.with_delay(priority=5).update_partner_tag()
+                tag.with_delay(priority=2).update_partner_tag()
                 for partner in tag.partner_ids:
-                    partner.with_delay(priority=1).unlink_partner_tag_rel()
+                    partner.with_delay(priority=2).unlink_partner_tag_rel()
                     partner.with_delay(priority=2, eta=60).export_partner_tag_rel()
         else:
             for tag in tag_ids:
@@ -285,8 +285,8 @@ class MiddlewareBackend(models.TransientModel):
                                               ('customer', '=', True)])
         if self.mode_export in ('export','update'):
             for partner in partner_ids:
-                partner.with_delay(priority=1).unlink_partner_tag_rel()
-                partner.with_delay(priority=2, eta=10).export_partner_tag_rel()
+                partner.with_delay(priority=2).unlink_partner_tag_rel()
+                partner.with_delay(priority=2, eta=60).export_partner_tag_rel()
         else:
             for partner in partner_ids:
                 partner.with_delay().unlink_partner_tag_rel()
@@ -306,19 +306,19 @@ class MiddlewareBackend(models.TransientModel):
                                                    ('company_id', '=', 1)])
         if self.mode_export == 'export':
             for sale in sales:
-                sale.with_delay(priority=5).export_order()
+                sale.with_delay(priority=2).export_order()
                 for line in sale.order_line:
-                    line.with_delay().export_orderproduct()
+                    line.with_delay(priority=2, eta=30).export_orderproduct()
         elif self.mode_export == 'update':
             for sale in sales:
-                sale.with_delay(priority=5).update_order(fields=None)
+                sale.with_delay(priority=2).update_order(fields=None)
                 for line in sale.order_line:
-                    line.with_delay().update_orderproduct(fields=None)
+                    line.with_delay(priority=2, eta=30).update_orderproduct(fields=None)
         else:
             for sale in sales:
-                sale.with_delay().unlink_order()
+                sale.with_delay(priority=2).unlink_order()
                 for line in sale.order_line:
-                    line.with_delay().unlink_orderproduct()
+                    line.with_delay(priority=2, eta=30).unlink_orderproduct()
 
     def export_rappel(self, object_ids):
         rappel_obj = self.env['rappel']
@@ -378,13 +378,13 @@ class MiddlewareBackend(models.TransientModel):
             for tag in product_tag_ids:
                 tag.with_delay().export_product_tag()
                 for product in tag.product_ids:
-                    product.with_delay(priority=1).unlink_product_tag_rel()
+                    product.with_delay(priority=2).unlink_product_tag_rel()
                     product.with_delay(priority=2, eta=60).export_product_tag_rel()
         elif self.mode_export == 'update':
             for tag in product_tag_ids:
                 tag.with_delay().update_product_tag(fields=None)
                 for product in tag.product_ids:
-                    product.with_delay(priority=1).unlink_product_tag_rel()
+                    product.with_delay(priority=2).unlink_product_tag_rel()
                     product.with_delay(priority=2, eta=60).export_product_tag_rel()
         else:
             for tag in product_tag_ids:
@@ -399,11 +399,11 @@ class MiddlewareBackend(models.TransientModel):
 
         if self.mode_export == 'export':
             for product in product_ids:
-                product.with_delay(priority=1).unlink_product_tag_rel()
+                product.with_delay(priority=2).unlink_product_tag_rel()
                 product.with_delay(priority=2, eta=60).export_product_tag_rel()
         else:
             for product in product_ids:
-                product.with_delay(priority=1).unlink_product_tag_rel()
+                product.with_delay(priority=2).unlink_product_tag_rel()
 
     def export_users(self, object_ids):
         user_obj = self.env['res.users']
@@ -415,14 +415,14 @@ class MiddlewareBackend(models.TransientModel):
         if self.mode_export == 'export':
             for user in user_ids:
                 if user.web:
-                    user.with_delay(priority=1).export_commercial()
+                    user.with_delay(priority=2).export_commercial()
         elif self.mode_export == 'update':
             for user in user_ids:
                 if user.web:
-                    user.with_delay(priority=3).update_commercial(fields=None)
+                    user.with_delay(priority=2).update_commercial(fields=None)
         else:
             for user in user_ids:
-                user.with_delay(priority=100).unlink_commercial()
+                user.with_delay(priority=2).unlink_commercial()
 
     def export_rappel_info(self, object_ids):
         rappel_info_obj = self.env['rappel.current.info']
@@ -434,7 +434,7 @@ class MiddlewareBackend(models.TransientModel):
         if self.mode_export == 'export':
             for rappel_info in rappel_info_ids:
                 if rappel_info.partner_id.commercial_partner_id.web:
-                    rappel_info.with_delay(priority=1, eta=60).export_rappel_info()
+                    rappel_info.with_delay(priority=2, eta=60).export_rappel_info()
         elif self.mode_export == 'update':
             for rappel_info in rappel_info_ids:
                 if rappel_info.partner_id.commercial_partner_id.web:
@@ -442,7 +442,7 @@ class MiddlewareBackend(models.TransientModel):
         else:
             for rappel_info in rappel_info_ids:
                 if rappel_info.partner_id.commercial_partner_id.web:
-                    rappel_info.with_delay(priority=3, eta=120).unlink_rappel_info()
+                    rappel_info.with_delay(priority=2, eta=120).unlink_rappel_info()
 
     def export_translations(self,_):
         translations_obj = self.env['ir.translation']
@@ -471,7 +471,7 @@ class MiddlewareBackend(models.TransientModel):
                             if translation.web:
                                 translation.with_delay(priority=2, eta=10).update_translation()
                             else:
-                                translation.with_delay(priority=1).export_translation()
+                                translation.with_delay(priority=2).export_translation()
                                 translation.with_context({'no_update':True}).web = True
                     elif translation.web:
                         translation.with_delay().unlink_translation()
@@ -486,13 +486,13 @@ class MiddlewareBackend(models.TransientModel):
             res_country_ids = res_country_obj.search([])
         if self.mode_export == 'export':
             for res_country in res_country_ids:
-                res_country.with_delay(priority=1).export_country()
+                res_country.with_delay(priority=2).export_country()
         elif self.mode_export == 'update':
             for res_country in res_country_ids:
-                res_country.with_delay(priority=3).update_country(fields=None)
+                res_country.with_delay(priority=2).update_country(fields=None)
         else:
             for res_country in res_country_ids:
-                res_country.with_delay(priority=100).unlink_country()
+                res_country.with_delay(priority=2).unlink_country()
 
     def export_product_brand(self,object_ids):
         product_brand_obj = self.env['product.brand']
@@ -518,13 +518,13 @@ class MiddlewareBackend(models.TransientModel):
             brand_country_rel_ids = brand_country_rel_obj.search([])
         if self.mode_export == 'export':
             for brand_country in brand_country_rel_ids:
-                brand_country.with_delay(priority=50).export_product_brand_rel()
+                brand_country.with_delay(priority=2).export_product_brand_rel()
         elif self.mode_export == 'update':
             for brand_country in brand_country_rel_ids:
                 brand_country.with_delay(delay=50).update_product_brand_rel()
         else:
             for brand_country in brand_country_rel_ids:
-                brand_country.with_delay(priority=1).unlink_product_brand_rel()
+                brand_country.with_delay(priority=2).unlink_product_brand_rel()
 
     def export_product_category(self,object_ids):
         product_category_obj = self.env['product.category']
@@ -534,13 +534,13 @@ class MiddlewareBackend(models.TransientModel):
             product_category_ids = product_category_obj.search([])
         if self.mode_export == 'export':
             for product_category in product_category_ids:
-                product_category.with_delay(priority=1).export_product_category()
+                product_category.with_delay(priority=2).export_product_category()
         elif self.mode_export == 'update':
             for product_category in product_category_ids:
-                product_category.with_delay().update_product_category()
+                product_category.with_delay(priority=2).update_product_category()
         else:
             for product_category in product_category_ids:
-                product_category.with_delay().unlink_product_category()
+                product_category.with_delay(priority=2).unlink_product_category()
 
     def export_sale_point_programme_rule(self, object_ids):
         rule_obj = self.env['sale.point.programme.rule']
@@ -550,13 +550,13 @@ class MiddlewareBackend(models.TransientModel):
             rule_ids = rule_obj.search([])
         if self.mode_export == 'export':
             for rule in rule_ids:
-                rule.with_delay(priority=1).export_rule()
+                rule.with_delay(priority=2).export_rule()
         elif self.mode_export == 'update':
             for rule in rule_ids:
-                rule.with_delay().update_rule()
+                rule.with_delay(priority=2).update_rule()
         else:
             for rule in rule_ids:
-                rule.with_delay().unlink_rule()
+                rule.with_delay(priority=2).unlink_rule()
 
     def export_sale_point_programme_bag(self, object_ids):
         bag_obj = self.env['res.partner.point.programme.bag.accumulated']
@@ -566,10 +566,10 @@ class MiddlewareBackend(models.TransientModel):
             bag_ids = bag_obj.search([])
         if self.mode_export == 'export':
             for bag in bag_ids:
-                bag.with_delay(priority=1).export_point_programme_bag_acc()
+                bag.with_delay(priority=2).export_point_programme_bag_acc()
         elif self.mode_export == 'update':
             for bag in bag_ids:
-                bag.with_delay().update_point_programme_bag_acc()
+                bag.with_delay(priority=2).update_point_programme_bag_acc()
         else:
             for bag in bag_ids:
-                bag.with_delay().unlink_point_programme_bag_acc()
+                bag.with_delay(priority=2).unlink_point_programme_bag_acc()
