@@ -1,4 +1,4 @@
-from odoo import fields, models, api
+from odoo import fields, models, api, _, exceptions
 
 
 class EquivalentProductsWizard(models.TransientModel):
@@ -25,4 +25,12 @@ class EquivalentProductsWizard(models.TransientModel):
     @api.multi
     def select_product(self):
         self.line_id.equivalent_product_id = self.product_id
+
+    @api.multi
+    def delete_product(self):
+        if self.line_id.move_out_customer_state and self.line_id.move_out_customer_state != 'cancel':
+            raise exceptions.UserError(_("There are open pickings that contain this product"))
+        else:
+            self.line_id.equivalent_product_id = None
+            self.env.user.notify_info(title=_("Product deleted"), message=_("Check the status of the line"))
 
