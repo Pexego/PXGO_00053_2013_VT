@@ -4,13 +4,7 @@
         <t t-call="custom_report_link.external_layout_custom">
             <div class="page">
                 <div class="oe_structure"></div>
-                <t t-set="lang" t-value="'undefined'"/>
-                <t t-if="o.commercial_partner_id.id">
-                    <t t-set="lang" t-value="o.commercial_partner_id.lang"/>
-                </t>
-                <t t-if="not lang">
-                    <t t-set="lang" t-value="'undefined'"/>
-                </t>
+                <t t-set="lang" t-value="o.commercial_partner_id.lang"/>
 
                 <div class="row">
                     <div style="font-size:23px; font-weight: bold; color:#939597;">

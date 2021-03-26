@@ -17,8 +17,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from datetime import datetime
+from odoo.exceptions import UserError
 
 
 class StockDeposit(models.Model):
@@ -232,3 +233,52 @@ class StockDeposit(models.Model):
             picking.action_done()
             deposit.write({'state': 'loss', 'loss_move_id': move.id})
 
+
+    @api.multi
+    def revert_sale(self):
+        move_obj = self.env['stock.move']
+        picking_type_id = self.env.ref('stock.picking_type_in')
+        location_deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
+        for deposit in self:
+            picking = self.env['stock.picking'].create(
+                {'picking_type_id': picking_type_id.id,
+                 'partner_id': deposit.partner_id.id,
+                 'origin': deposit.sale_picking_id.name,
+                 'date_done': datetime.now(),
+                 'commercial': deposit.user_id.id,
+                 'group_id': deposit.sale_move_id.group_id.id,
+                 'location_id': deposit.sale_move_id.location_dest_id.id,
+                 'location_dest_id': location_deposit_id.id})
+            values = {
+                'product_id': deposit.product_id.id,
+                'product_uom_qty': deposit.product_uom_qty,
+                'product_uom': deposit.product_uom.id,
+                'partner_id': deposit.partner_id.id,
+                'name': 'Return Sale Deposit: ' + deposit.sale_move_id.name,
+                'location_id': deposit.sale_move_id.location_dest_id.id,
+                'location_dest_id': location_deposit_id.id,
+                'picking_id': picking.id,
+                'commercial': deposit.user_id.id,
+                'group_id': deposit.sale_move_id.group_id.id
+            }
+            move = move_obj.create(values)
+            move._action_confirm()
+            picking.action_assign()
+            picking.action_done()
+            new_qty_invoiced = deposit.move_id.sale_line_id.qty_invoiced + deposit.product_uom_qty
+            if new_qty_invoiced == deposit.move_id.sale_line_id.product_qty:
+                invoice_status = 'invoiced'
+            else:
+                invoice_status = 'to invoice'
+            deposit.move_id.sale_line_id.write({'qty_invoiced': new_qty_invoiced , 'invoice_status': invoice_status})
+            deposit.write({'state': 'draft', 'sale_move_id': False})
+
+    @api.multi
+    def revert_invoice(self):
+        for deposit in self:
+            if deposit.invoice_id:
+                if deposit.invoice_id.state not in ['draft','cancel']:
+                    raise UserError(_("This deposit has invoices in non-draft status, please check it before reverting it"))
+                deposit.invoice_id.action_invoice_cancel()
+                deposit.invoice_id = False
+                deposit.revert_sale()
