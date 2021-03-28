@@ -11,9 +11,8 @@ class PartnerListener(Component):
     _apply_on = ['res.partner']
 
     def export_partner_data(self, record):
-        record.with_delay(priority=1, eta=60).export_partner()
-        record.with_delay(
-            priority=10, eta=120).export_partner_tag_rel()
+        record.with_delay(priority=5).export_partner()
+        record.with_delay(priority=5, eta=60).export_partner_tag_rel()
 
         sales = self.env['sale.order'].search(
             [('partner_id', 'child_of', [record.id]),
@@ -22,8 +21,7 @@ class PartnerListener(Component):
         for sale in sales:
             sale.with_delay(priority=5, eta=120).export_order()
             for line in sale.order_line:
-                line.with_delay(
-                    priority=10, eta=180).export_orderproduct()
+                line.with_delay(priority=5, eta=180).export_orderproduct()
 
         invoices = self.env['account.invoice'].search(
             [('commercial_partner_id', '=', record.id),
@@ -41,8 +39,7 @@ class PartnerListener(Component):
                         (not line.equivalent_product_id or
                             line.equivalent_product_id.web ==
                             'published'):
-                    line.with_delay(
-                        priority=10, eta=240).export_rmaproduct()
+                    line.with_delay(priority=5, eta=240).export_rmaproduct()
         pickings = self.env['stock.picking'].search([
             ('partner_id', 'child_of', [record.id]),
             ('state', '!=', 'cancel'),
@@ -53,8 +50,7 @@ class PartnerListener(Component):
         for picking in pickings:
             picking.with_delay(priority=5, eta=120).export_picking()
             for line in picking.move_lines:
-                line.with_delay(
-                    priority=10, eta=240).export_pickingproduct()
+                line.with_delay(priority=5, eta=240).export_pickingproduct()
 
     def on_record_create(self, record, fields=None):
         partner = record
@@ -89,7 +85,7 @@ class PartnerListener(Component):
         else:
             if partner.web and (('active' in fields and partner.active) or
                                 ('prospective' in fields and partner.prospective)):
-                partner.with_delay(priority=1, eta=120).export_partner()
+                partner.with_delay(priority=5, eta=120).export_partner()
 
     def on_record_write(self, record, fields=None):
         partner = record
@@ -105,27 +101,23 @@ class PartnerListener(Component):
             self.export_partner_data(record)
 
         elif "web" in fields and not record.web:
-            record.with_delay(priority=1, eta=60).unlink_partner()
+            record.with_delay(priority=5, eta=60).unlink_partner()
 
         elif partner.web and ('active' in fields or
                               'prospective' in fields) and not \
                 (partner.active or partner.prospective):
-            record.with_delay(priority=1, eta=60).unlink_partner()
+            record.with_delay(priority=5, eta=60).unlink_partner()
         elif partner.web and ('active' in fields and partner.active
                               or 'prospective' in fields and partner.prospective):
             self.export_partner_data(record)
 
         elif partner.web:
             if 'category_id' in fields:
-                partner.with_delay(
-                    priority=5, eta=60).unlink_partner_tag_rel()
-
-                partner.with_delay(
-                    priority=10, eta=120).export_partner_tag_rel()
+                partner.with_delay(priority=5, eta=60).unlink_partner_tag_rel()
+                partner.with_delay(priority=5, eta=120).export_partner_tag_rel()
             for field in up_fields:
                 if field in fields:
-                    partner.with_delay(
-                        priority=2, eta=120).update_partner()
+                    partner.with_delay(priority=5, eta=120).update_partner()
                     if 'street' in fields or \
                             'zip' in fields or \
                             'city' in fields or \
@@ -139,13 +131,12 @@ class PartnerListener(Component):
                             ('company_id', '=', 1)
                         ])
                         for sale in sales:
-                            sale.with_delay(
-                                priority=5, eta=180).update_order()
+                            sale.with_delay(priority=5, eta=180).update_order()
                     break
 
     def on_record_unlink(self, record):
         if record.web:
-            record.with_delay(eta=60).unlink_partner()
+            record.with_delay(priority=5, eta=60).unlink_partner()
 
 
 class ResPartner(models.Model):
@@ -175,7 +166,7 @@ class ResPartner(models.Model):
                 user.web = True
         res = super().create(vals)
         if vals.get('csv_connector_access',False):
-            res.message_post(body=_('CSV connector access checked by %s')% self.env.user.name)
+            res.message_post(body=_('CSV connector access checked by %s') % self.env.user.name)
         return res
 
     @api.multi
@@ -276,7 +267,7 @@ class PartnerCategoryListener(Component):
     _apply_on = ['res.partner.category']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=1, eta=30).export_partner_tag()
+        record.with_delay(priority=5, eta=30).export_partner_tag()
 
     # TODO: revisar esta función
     def on_record_write(self, record, fields=None):
@@ -288,9 +279,9 @@ class PartnerCategoryListener(Component):
 
             for partner in partner_ids:
                 partner.with_delay(
-                    priority=1).unlink_partner_tag_rel()
+                    priority=5).unlink_partner_tag_rel()
                 partner.with_delay(
-                    priority=2, eta=60).export_partner_tag_rel()
+                    priority=5, eta=60).export_partner_tag_rel()
         elif 'active' in fields and record.active or \
              'prospective' in fields and record.prospective:
             partner_ids = self.env['res.partner'].search(
@@ -298,12 +289,12 @@ class PartnerCategoryListener(Component):
                  ('web', '=', True),
                  ('customer', '=', True),
                  ('category_id', 'in', record.id)])
-            record.with_delay(priority=2, eta=60).export_partner_tag()
+            record.with_delay(priority=5, eta=60).export_partner_tag()
             for partner in partner_ids:
-                partner.with_delay(priority=1).unlink_partner_tag_rel()
-                partner.with_delay(priority=2, eta=60).export_partner_tag_rel()
+                partner.with_delay(priority=5).unlink_partner_tag_rel()
+                partner.with_delay(priority=5, eta=60).export_partner_tag_rel()
         elif record.active:
-            record.with_delay(priority=2, eta=60).update_partner_tag()
+            record.with_delay(priority=5, eta=60).update_partner_tag()
 
     def on_record_unlink(self, record):
         record.with_delay(priority=1).unlink_partner_tag()

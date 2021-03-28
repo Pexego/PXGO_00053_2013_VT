@@ -12,7 +12,7 @@ class SaleOrderListener(Component):
 
     def on_record_create(self, record, fields=None):
         if record.partner_id.web or record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=2, eta=80).export_order()
+            record.with_delay(priority=5, eta=80).export_order()
 
     def on_record_write(self, record, fields=None):
         # He cogido order_line porque no entra amount_total ni amount_untaxed en el write
@@ -21,11 +21,11 @@ class SaleOrderListener(Component):
         model_name = 'sale.order'
         if record.partner_id.web or record.partner_id.commercial_partner_id.web:
             if 'state' in fields and record.state == 'cancel':
-                record.with_delay(priority=7, eta=80).unlink_order()
+                record.with_delay(priority=5, eta=80).unlink_order()
             elif 'state' in fields and record.state == 'draft':
-                record.with_delay(priority=2, eta=80).export_order()
+                record.with_delay(priority=5, eta=80).export_order()
                 for line in record.order_line:
-                    line.with_delay(priority=2, eta=100).export_orderproduct()
+                    line.with_delay(priority=5, eta=100).export_orderproduct()
             elif record.state != 'cancel':
                 for field in up_fields:
                     if field in fields:
@@ -34,7 +34,7 @@ class SaleOrderListener(Component):
 
     def on_record_unlink(self, record):
         if record.partner_id.web or record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=7, eta=120).unlink_order()
+            record.with_delay(priority=5, eta=120).unlink_order()
 
 
 class SaleOrder(models.Model):
@@ -72,7 +72,7 @@ class SaleOrderLineListener(Component):
 
     def on_record_create(self, record, fields=None):
         if record.order_id.partner_id.web or record.order_id.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=2, eta=120).export_orderproduct()
+            record.with_delay(priority=5, eta=120).export_orderproduct()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["product_id", "product_uom_qty", "price_unit", "discount", "order_id",
@@ -86,7 +86,7 @@ class SaleOrderLineListener(Component):
 
     def on_record_unlink(self, record):
         if record.order_id.partner_id.web or record.order_id.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=7, eta=180).unlink_orderproduct()
+            record.with_delay(priority=5, eta=180).unlink_orderproduct()
 
 
 class SaleOrderLine(models.Model):
