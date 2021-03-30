@@ -14,6 +14,7 @@
                 </group>
                 <footer>
                     <button string="Select product" name="select_product" type="object" class="oe_highlight"/>
+                    <button string="Delete product" name="delete_product" type="object" class="btn-danger"/>
                     <button string="Cancel" special="cancel"/>
                 </footer>
             </form>

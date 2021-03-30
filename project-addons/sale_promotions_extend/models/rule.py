@@ -316,7 +316,7 @@ class PromotionsRulesActions(models.Model):
             'product_id': self.env.ref('commercial_rules.product_discount').id,
             'name': '%s (%s)' % (
                      product_id.default_code,
-                     self.promotion.line_description),
+                     self.promotion.with_context({'lang': order.partner_id.lang}).line_description),
             'price_unit': -order_line.price_unit,
             'discount': order_line.discount,
             'promotion_line': True,
@@ -352,8 +352,8 @@ class PromotionsRulesActions(models.Model):
         product_id = self.env.ref('commercial_rules.product_discount')
         vals = {
             'order_id': order.id,
-            'product_id': product_id.id ,
-            'name': '%s' % self.promotion.line_description,
+            'product_id': product_id.id,
+            'name': '%s' % self.promotion.with_context({'lang': order.partner_id.lang}).line_description,
             'price_unit': -price_unit,
             'promotion_line': True,
             'product_uom_qty': 1,
