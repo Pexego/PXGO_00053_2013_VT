@@ -5,5 +5,9 @@
             <field name="key">notification.period.days.cyc</field>
             <field name="value">120</field>
         </record>
+        <record id="anon_credit_limit" model="ir.config_parameter">
+            <field name="key">anon.credit.limit</field>
+            <field name="value">3000</field>
+        </record>
     </data>
 </odoo>
