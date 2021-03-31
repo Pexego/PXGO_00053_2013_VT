@@ -20,7 +20,7 @@ class AccountInvoice(models.Model):
                 credit = partner.insurance_credit_limit
                 insured_open_invoices = self.env['account.move.line'].\
                     search([('partner_id', '=', partner.id),
-                            ('invoice_id.id', '!=', invoice.id),
+                            '|', ('invoice_id.id', '!=', invoice.id), ('invoice_id', '=', False),
                             ('account_id.internal_type', '=', 'receivable'),
                             ('reconciled', '=', False),
                             ('date', '>=', partner.risk_insurance_grant_date)])
