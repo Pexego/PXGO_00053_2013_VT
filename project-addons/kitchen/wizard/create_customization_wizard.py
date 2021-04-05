@@ -50,11 +50,15 @@ class CustomizationWizard(models.TransientModel):
 
     def action_create(self):
         lines = []
+        if self.order_id.state != 'reserve':
+            raise UserError(_("you can't create a customization of a done order"))
+
         customization = self.env['kitchen.customization'].sudo().create({'partner_id': self.order_id.partner_id.id,
                                                                   'order_id': self.order_id.id,
                                                                   'commercial_id': self.order_id.user_id.id,
                                                                   'comments': self.comments,
-                                                                  'notify_users': [(6, 0, self.notify_users.ids)]
+                                                                  'notify_users': [(6, 0, self.notify_users.ids)],
+                                                                  'notify_sales_team': self.notify_sales_team
                                                                   })
         for line in self.customization_line:
             qty = line.qty
@@ -88,3 +92,6 @@ class CustomizationWizard(models.TransientModel):
             }
         else:
             raise UserError(_("You cannot create an empty customization"))
+
+
+    notify_sales_team = fields.Boolean()
