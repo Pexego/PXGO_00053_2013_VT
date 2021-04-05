@@ -242,12 +242,12 @@ class MiddlewareBackend(models.TransientModel):
             for product in product_ids:
                 product.with_delay().export_product()
                 product.with_delay(priority=2).unlink_product_tag_rel()
-                product.with_delay(priority=2, eta=60).export_product_tag_rel()
+                product.with_delay(priority=2, eta=120).export_product_tag_rel()
         elif self.mode_export == 'update':
             for product in product_ids:
                 product.with_delay().update_product()
                 product.with_delay(priority=2).unlink_product_tag_rel()
-                product.with_delay(priority=2, eta=60).export_product_tag_rel()
+                product.with_delay(priority=2, eta=120).export_product_tag_rel()
         else:
             for product in product_ids:
                 product.with_delay().unlink_product()
@@ -264,13 +264,13 @@ class MiddlewareBackend(models.TransientModel):
                 tag.with_delay(priority=2).export_partner_tag()
                 for partner in tag.partner_ids:
                     partner.with_delay(priority=2).unlink_partner_tag_rel()
-                    partner.with_delay(priority=2, eta=60).export_partner_tag_rel()
+                    partner.with_delay(priority=2, eta=120).export_partner_tag_rel()
         elif self.mode_export == 'update':
             for tag in tag_ids:
                 tag.with_delay(priority=2).update_partner_tag()
                 for partner in tag.partner_ids:
                     partner.with_delay(priority=2).unlink_partner_tag_rel()
-                    partner.with_delay(priority=2, eta=60).export_partner_tag_rel()
+                    partner.with_delay(priority=2, eta=120).export_partner_tag_rel()
         else:
             for tag in tag_ids:
                 tag.with_delay().unlink_partner_tag()
@@ -283,10 +283,10 @@ class MiddlewareBackend(models.TransientModel):
             partner_ids = partner_obj.search([('is_company', '=', True),
                                               ('web', '=', True),
                                               ('customer', '=', True)])
-        if self.mode_export in ('export','update'):
+        if self.mode_export in ('export', 'update'):
             for partner in partner_ids:
                 partner.with_delay(priority=2).unlink_partner_tag_rel()
-                partner.with_delay(priority=2, eta=60).export_partner_tag_rel()
+                partner.with_delay(priority=2, eta=120).export_partner_tag_rel()
         else:
             for partner in partner_ids:
                 partner.with_delay().unlink_partner_tag_rel()
@@ -379,13 +379,13 @@ class MiddlewareBackend(models.TransientModel):
                 tag.with_delay().export_product_tag()
                 for product in tag.product_ids:
                     product.with_delay(priority=2).unlink_product_tag_rel()
-                    product.with_delay(priority=2, eta=60).export_product_tag_rel()
+                    product.with_delay(priority=2, eta=120).export_product_tag_rel()
         elif self.mode_export == 'update':
             for tag in product_tag_ids:
                 tag.with_delay().update_product_tag(fields=None)
                 for product in tag.product_ids:
                     product.with_delay(priority=2).unlink_product_tag_rel()
-                    product.with_delay(priority=2, eta=60).export_product_tag_rel()
+                    product.with_delay(priority=2, eta=120).export_product_tag_rel()
         else:
             for tag in product_tag_ids:
                 tag.with_delay().unlink_product_tag()
@@ -400,7 +400,7 @@ class MiddlewareBackend(models.TransientModel):
         if self.mode_export == 'export':
             for product in product_ids:
                 product.with_delay(priority=2).unlink_product_tag_rel()
-                product.with_delay(priority=2, eta=60).export_product_tag_rel()
+                product.with_delay(priority=2, eta=120).export_product_tag_rel()
         else:
             for product in product_ids:
                 product.with_delay(priority=2).unlink_product_tag_rel()
