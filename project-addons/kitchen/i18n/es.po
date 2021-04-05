@@ -472,3 +472,8 @@ msgstr "<p>¿Quieres recuperar alguna personalización?</p>"
 #: code:addons/kitchen/models/kitchen_customization.py:125
 msgid "You cannot activate a new customization because the selected order already has one, please cancel it before"
 msgstr "Non è possibile attivare una nuova personalizzazione perché l'ordine selezionato ne ha già una, annullarla prima"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_create_customization_wizard_notify_sales_team
+msgid "Notify Sales Team"
+msgstr "Notificar al equipo de ventas"

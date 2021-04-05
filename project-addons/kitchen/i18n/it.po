@@ -426,3 +426,8 @@ msgstr "No puedes activar una nueva personalización ya que el pedido asociado y
 #: code:addons/kitchen/models/kitchen_customization.py:185
 msgid "You cannot create a new customization because the selected order already has one, please cancel it before creating a new one"
 msgstr "Non è possibile creare una nuova personalizzazione perché l'ordine selezionato ne ha già uno, annullarlo prima di crearne uno nuovo"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_create_customization_wizard_notify_sales_team
+msgid "Notify Sales Team"
+msgstr "Avvisa il team di vendita"
