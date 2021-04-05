@@ -14,6 +14,7 @@
              'security/ir.model.access.csv',
              'views/account_view.xml',
              'data/ir_config_parameter.xml',
-             'views/account_invoice_cyc_view_old.xml'],
+             'views/account_invoice_cyc_view_old.xml',
+             'views/res_partner_view.xml'],
     "installable": True
 }
