@@ -344,14 +344,14 @@ class ProductTagsListener(Component):
         if 'product_ids' in fields:
             for product in record.product_ids:
                 product.with_delay(priority=5, eta=30).unlink_product_tag_rel()
-                product.with_delay(priority=5, eta=90).export_product_tag_rel()
+                product.with_delay(priority=5, eta=150).export_product_tag_rel()
 
     def on_record_write(self, record, fields=None):
         record.with_delay(priority=5, eta=120).update_product_tag()
         if 'product_ids' in fields:
             for product in record.product_ids:
                 product.with_delay(priority=5).unlink_product_tag_rel()
-                product.with_delay(priority=5, eta=60).export_product_tag_rel()
+                product.with_delay(priority=5, eta=120).export_product_tag_rel()
 
     def on_record_unlink(self, record):
         record.with_delay(priority=5).unlink_product_tag()
