@@ -1,10 +1,11 @@
 from odoo import models, fields, _
 
+
 class UpdatePartnerRisk(models.TransientModel):
     _name = 'update.partner.risk'
 
     partner_ids = fields.Many2many('res.partner', string="Partners to update risk",
-                                   required=True,domain="[('customer','=',1), ('parent_id', '=', False),('supplier','=',0),('is_company','=',1)]" )
+                                   required=True, domain="[('customer','=',1), ('parent_id', '=', False),('supplier','=',0),('is_company','=',1)]" )
     new_risk = fields.Float(help="If this field is 0, the payment mode will be bank transfer and payment term will be prepaid")
 
     def action_update_risk(self):
