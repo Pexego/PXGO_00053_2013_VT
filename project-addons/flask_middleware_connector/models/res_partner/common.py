@@ -278,10 +278,8 @@ class PartnerCategoryListener(Component):
             record.with_delay(priority=1).unlink_partner_tag()
 
             for partner in partner_ids:
-                partner.with_delay(
-                    priority=5).unlink_partner_tag_rel()
-                partner.with_delay(
-                    priority=5, eta=60).export_partner_tag_rel()
+                partner.with_delay(priority=5).unlink_partner_tag_rel()
+                partner.with_delay(priority=5, eta=120).export_partner_tag_rel()
         elif 'active' in fields and record.active or \
              'prospective' in fields and record.prospective:
             partner_ids = self.env['res.partner'].search(
@@ -292,7 +290,7 @@ class PartnerCategoryListener(Component):
             record.with_delay(priority=5, eta=60).export_partner_tag()
             for partner in partner_ids:
                 partner.with_delay(priority=5).unlink_partner_tag_rel()
-                partner.with_delay(priority=5, eta=60).export_partner_tag_rel()
+                partner.with_delay(priority=5, eta=120).export_partner_tag_rel()
         elif record.active:
             record.with_delay(priority=5, eta=60).update_partner_tag()
 
