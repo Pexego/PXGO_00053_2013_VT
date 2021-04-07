@@ -412,6 +412,7 @@ msgstr "Configuración"
 #: model:ir.ui.menu,name:kitchen.menu_customization_type_action_form
 #: model:ir.actions.act_window,name:kitchen.customization_type_action_form
 #: model:ir.ui.view,arch_db:kitchen.customization_type_list_view
+#: model:ir.ui.view,arch_db:kitchen.customization_type_view_form
 msgid "Customization Type"
 msgstr "Tipo de personalización"
 
@@ -428,10 +429,10 @@ msgstr "<p class="oe_view_nocontent_create">\n"
 #. module: kitchen
 #: model:mail.template,body_html:kitchen.send_mail_to_commercials_date_planned_changed
 msgid "<p>The expected date of customization <strong>${object.name}</strong> has changed.</p>\n"
-"            <p>The new expected date is <strong>${object.date_planned}</strong></p>\n"
+"            <p>The new expected date is <strong>${ctx.get('date_planned') or ''}</strong></p>\n"
 "            <p>Best regards.</p>"
 msgstr "<p>La fecha esperada de la personalización <strong>${object.name}</strong> ha cambiado.</p>\n"
-"            <p>La nueva fecha es <strong>${object.date_planned}</strong></p>\n"
+"            <p>La nueva fecha es <strong>${ctx.get('date_planned') or ''}</strong></p>\n"
 "            <p>Saludos.</p>"
 
 #. module: kitchen
@@ -472,3 +473,55 @@ msgstr "<p>¿Quieres recuperar alguna personalización?</p>"
 #: code:addons/kitchen/models/kitchen_customization.py:125
 msgid "You cannot activate a new customization because the selected order already has one, please cancel it before"
 msgstr "Non è possibile attivare una nuova personalizzazione perché l'ordine selezionato ne ha già una, annullarla prima"
+
+#. module: kitchen
+#: model:mail.template,body_html:kitchen.send_mail_cancel_customization
+msgid "<p> The customization ${object.name} - ${object.partner_id.name or ''} has been cancelled.</p>\n"
+"            % if ctx.get('picking_message'):\n"
+"                <p> If you want the order (${object.order_id.name or ''}) to be shipped without customizing it, please, remove the 'Not sync' check from the picking.\n"
+"                If, on the other hand, you want to cancel it or change the customization, cancel the order and confirm it again if necessary .</p>\n"
+"                <p>\n"
+"            % endif\n"
+"            <p>Best regards.</p>"
+msgstr "<p> La personalización ${object.name} - ${object.partner_id.name or ''} ha sido cancelada.</p>\n"
+"            % if ctx.get('picking_message'):\n"
+"                <p> Si quieres que el pedido(${object.order_id.name or ''}) sea enviado sin personalizar,por favor, elimina el check de 'No sincronizable' del albarán.\n"
+"                Si por el contrario quieres cancelarlo o cambiar la personalización, cancela el pedido y tramítalo de nuevo si fuera necesario.</p>\n"
+"                <p>\n"
+"            % endif\n"
+"            <p>Saludos.</p>"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.product_customization_config
+msgid "Customization conditions"
+msgstr "Condiciones de personalización"
+
+#. module: kitchen
+#: code:addons/kitchen/wizard/create_customization_wizard.py:68
+msgid "You can't create a customization with different customization types (%s) than the product %s has %s"
+msgstr "No puedes crear una personalización con tipos de personalización distintos (%s) a los que tiene el producto (%s) %s"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_automatic_customization_type_rule_product_brand_id
+msgid "Product Brand"
+msgstr "Marca del producto"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_automatic_customization_type_rule_product_categ_id
+msgid "Product Category"
+msgstr "Categoría del producto"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_customization_type_rule_ids
+msgid "Automatic Rules"
+msgstr "Reglas de aplicación automática"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_product_template_customizable
+msgid "Customizable"
+msgstr "Personalizable"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_product_template_customization_type_ids
+msgid "Type"
+msgstr "Tipos"
