@@ -30,8 +30,11 @@ class PromotionsRulesConditionsExprs(models.Model):
         selection_add=[
             ('prod_tag', 'Tag in order'),
             ('order_pricelist', _('Order Pricelist')),
-            ('web_discount', 'Web Discount')])
+            ('web_discount', 'Web Discount'),
+            ('comp_sub_total_brand', 'Compute sub total of brand'),
+            ('category_in_order','Product Category in Order')])
 
+    @api.onchange('attribute')
     def on_change_attribute(self):
         if not self.attribute:
             return
@@ -43,19 +46,52 @@ class PromotionsRulesConditionsExprs(models.Model):
 
         if self.attribute == 'web_discount':
             self.value = 'True'
+
+        if self.attribute == 'comp_sub_total_brand':
+            self.value = "['product_brand','product_brand2']|0.00"
+
+        if self.attribute == 'category_in_order':
+            self.value = "['prod_categ_1','prod_categ_2']"
         return super().on_change_attribute()
 
     def validate(self, vals):
         numerical_comparators = ['==', '!=', '<=', '<', '>', '>=']
+        iterator_comparators = ['in', 'not in']
         attribute = vals['attribute']
         comparator = vals['comparator']
-        if attribute == 'web_discount' and \
-                comparator not in numerical_comparators:
-            raise UserError("Only %s can be used with %s"
+        value = vals['value']
+        if attribute == 'web_discount':
+            if comparator not in numerical_comparators:
+                raise UserError("Only %s can be used with %s"
                             % (",".join(numerical_comparators), attribute))
+            if type(eval(value)) != bool:
+                raise UserError(
+                    "Value for Web discount is invalid\n"
+                    "Eg for right values: True or False")
         if attribute == 'prod_tag' and comparator not in numerical_comparators:
-            raise UserError("Only %s can be used with %s"
+                raise UserError("Only %s can be used with %s"
                             % (",".join(numerical_comparators), attribute))
+        if attribute == 'comp_sub_total_brand':
+            if comparator not in numerical_comparators:
+                raise UserError("Only %s can be used with %s" % (",".join(numerical_comparators), attribute))
+            if len(value.split("|")) != 2:
+                raise UserError(
+                    "Value for computed subtotal combination is invalid\n"
+                    "Eg for right format is `['brand1,brand2',..]|120.50`")
+            product_brands_iter, quantity = value.split("|")
+            if not (type(eval(product_brands_iter)) in [tuple, list] and
+                    type(eval(quantity)) in [int, float]):
+                raise UserError(
+                    "Value for Compute sub total of brand is invalid\n"
+                    "Eg for right format is `['brand1,brand2',..]|120.50`")
+        if attribute == 'category_in_order':
+            if not type(eval(value)) in [tuple, list]:
+                raise UserError(
+                    "Value for Product Category in Order is invalid\n"
+                    "Eg for right format is ['prod_categ_1','prod_categ_2',...]")
+            if comparator not in iterator_comparators:
+                raise UserError("Only %s can be used with %s" % (",".join(iterator_comparators), attribute))
+
         return super().validate(vals)
 
     def serialise(self, attribute, comparator, value):
@@ -72,21 +108,34 @@ class PromotionsRulesConditionsExprs(models.Model):
         elif attribute == 'order_pricelist':
             return """order.pricelist_id.name %s %s""" % (comparator, value)
         elif attribute == 'web_discount':
-            return "kwargs['%s']" % attribute
+            return "web_discount"
+        elif attribute == 'comp_sub_total_brand':
+            product_brands_iter, quantity = value.split("|")
+            return "sum([brand_sub_total.get(prod_brand,0) for prod_brand in %s]) %s %s" % (eval(product_brands_iter), comparator, quantity)
+        elif attribute == 'category_in_order':
+            return "all([c %s categories for c in %s])" % (comparator, eval(value))
         else:
             return super().serialise(attribute, comparator, value)
 
     def evaluate(self, order, **kwargs):
-        prod_tag = {}
-        web_discount = False
-
-        for line in order.order_line:
-            if line.product_id:
-                prod_tag = line.product_tags
-                if line.web_discount:
-                    web_discount = True
-        return super().evaluate(
-            order, prod_tag=prod_tag, web_discount=web_discount, **kwargs)
+        if self.attribute in ['prod_tag','web_discount','category_in_order','comp_sub_total_brand']:
+            prod_tag = {}
+            web_discount = False
+            brand_sub_total = {}
+            categories = set()
+            for line in order.order_line:
+                if line.product_id:
+                    prod_tag = line.product_tags
+                    if line.web_discount:
+                        web_discount = True
+                    brand = line.product_id.product_brand_id.name
+                    category = line.product_id.categ_id.name
+                    categories.add(category)
+                    brand_sub_total[brand] = \
+                        brand_sub_total.get(brand, 0.00) + \
+                        line.price_subtotal
+            return eval(self.serialised_expr,locals())
+        return super().evaluate(order,**kwargs)
 
 
 class PromotionsRulesActions(models.Model):
