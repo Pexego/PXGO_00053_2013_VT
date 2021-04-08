@@ -438,9 +438,10 @@ class PromotionsRulesActions(models.Model):
             if re.match(eval(self.product_code)[1], line.product_id.default_code):
                 for qty in range(int(line.product_uom_qty)):
                     products_exp.append(line.price_subtotal/line.product_uom_qty)
+        products_exp.sort()
 
         new_lines = []
-        for count, price in enumerate(sorted(products_exp)):
+        for count, price in enumerate(products_exp):
             if count >= products_tag:
                 break
             else:
