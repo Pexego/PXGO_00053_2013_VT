@@ -141,34 +141,36 @@ msgid "Code"
 msgstr "Código"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:114
+#: code:addons/amazon_connector/models/amazon_sale_order.py:117
+#: code:addons/amazon_connector/models/amazon_sale_order.py:126
 msgid "Amazon API Error. No order was created due to errors. '%s' \n"
 msgstr "Error API Amazon. Ningún pedido se ha creado debido ha que se ha producido un error. '%s'"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:125
+#: code:addons/amazon_connector/models/amazon_sale_order.py:143
+#: code:addons/amazon_connector/models/amazon_sale_order.py:178
 msgid "Amazon API Error. Order %s. '%s' \n"
 msgstr "Error API Amazon. Pedido %s. '%s'"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:134
-#: code:addons/amazon_connector/models/amazon_sale_order.py:163
+#: code:addons/amazon_connector/models/amazon_sale_order.py:154
+#: code:addons/amazon_connector/models/amazon_sale_order.py:186
 msgid "Total amount != Theoretical total amount (%f-%f)\n"
 msgstr "Total != Total enviado por Amazon (%f-%f)\n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:186
+#: code:addons/amazon_connector/models/amazon_sale_order.py:214
 msgid "Product with ASIN CODE %s not found\n"
-msgstr "El producto con código ASIn %s no ha sido encontrado \n"
+msgstr "El producto con código ASIN %s no ha sido encontrado \n"
 
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:189
+#: code:addons/amazon_connector/models/amazon_sale_order.py:217
 msgid "ItemPrice or ItemTax fields are empty %s\n"
 msgstr "Los campos ItemPrice o ItemTax vienen vacíos %s\n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:311
+#: code:addons/amazon_connector/models/amazon_sale_order.py:342
 msgid "There are no deposit for this order"
 msgstr "No hay depósitos para este pedido"
 
@@ -239,6 +241,22 @@ msgstr "Canal de Venta"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_purchase_date
 msgid "Purchase Date"
 msgstr "Fecha de compra"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Mark to Done"
+msgstr "Marcar como hecho"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:191
+#: code:addons/amazon_connector/models/amazon_sale_order.py:158
+msgid "Amount untaxed is greater than 400 %s."
+msgstr "La Base imponible es mayor que 400 %s"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:348
+msgid "There aren't any invoices linked to this Amazon order"
+msgstr "No hay ninguna factura asociada a este pedido"
 
 
 

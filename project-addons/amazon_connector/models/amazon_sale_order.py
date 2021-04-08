@@ -2,7 +2,7 @@ from odoo import models, fields, api, _
 from sp_api.api import Orders, Catalog
 from sp_api.base import Marketplaces
 from datetime import datetime, timedelta
-from sp_api.base.exceptions import SellingApiException
+from sp_api.base.exceptions import SellingApiException,SellingApiRequestThrottledException
 from odoo.exceptions import UserError
 import time
 
@@ -21,6 +21,7 @@ class AmazonSaleOrder(models.Model):
     invoice_deposits_count = fields.Integer(compute='_compute_count', default=0)
     state = fields.Selection([
         ('error', 'Error'),
+        ('warning', 'Warning'),
         ('read', 'Read'),
         ('sale_created', 'Sale created'),
         ('invoice_created', 'Invoice created')
@@ -94,7 +95,7 @@ class AmazonSaleOrder(models.Model):
         'res.currency',
         required=True,
         readonly=True,
-        default=lambda self: self.env.user.company_id.currency_id
+        default=lambda self: self.env.user.company_id.currency_id.id
     )
     message_error = fields.Text()
     warning_price = fields.Boolean(default=False)
@@ -130,10 +131,16 @@ class AmazonSaleOrder(models.Model):
                     if exist_order or order.get('SalesChannel',"")=='Non-Amazon':
                         continue
                     time.sleep(amazon_time_rate_limit)
-                    try:
-                        res_order = orders_obj.get_order_items(order.get('AmazonOrderId'))
-                    except SellingApiException as e:
-                        raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order.get('AmazonOrderId'), e))
+                    read = False
+                    while not read:
+                        try:
+                            time.sleep(amazon_time_rate_limit)
+                            res_order = orders_obj.get_order_items(order.get('AmazonOrderId'))
+                            read = True
+                        except SellingApiRequestThrottledException as ex:
+                            read = False
+                        except SellingApiException as e:
+                            raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order.get('AmazonOrderId'), e))
                     new_order = res_order.payload
                     if new_order:
                         amazon_order_values = {'name': new_order.get('AmazonOrderId'),
@@ -147,6 +154,10 @@ class AmazonSaleOrder(models.Model):
                             amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
                                 amazon_order.amount_total, amazon_order.theoretical_total_amount)
                             amazon_order.warning_price = True
+                        if amazon_order.amount_untaxed >400:
+                            amazon_order.message_error += _('Amount untaxed is greater than 400 %s.') %amazon_order.currency_id.symbol
+                            if amazon_order.state != 'error':
+                                amazon_order.state = 'warning'
                         if amazon_order.state == 'error':
                             amazon_order.send_error_mail()
                         else:
@@ -164,7 +175,7 @@ class AmazonSaleOrder(models.Model):
             try:
                 res_order = orders_obj.get_order_items(amazon_order.name)
             except SellingApiException as e:
-                raise UserError("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e))
+                raise UserError(_("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e)))
             time.sleep(amazon_time_rate_limit)
             order = res_order.payload
             if order:
@@ -175,6 +186,11 @@ class AmazonSaleOrder(models.Model):
                     amazon_order.message_error += _('Total amount(%f) != Theoretical total amount (%f)\n') % (
                         amazon_order.amount_total, amazon_order.theoretical_total_amount)
                     amazon_order.warning_price = True
+                if amazon_order.amount_untaxed > 400:
+                    amazon_order.message_error += _(
+                        'Amount untaxed is greater than 400 %s.') % amazon_order.currency_id.symbol
+                    if amazon_order.state != 'error':
+                        amazon_order.state = 'warning'
                 if amazon_order.state == 'error' or amazon_order.warning_price:
                     amazon_order.send_error_mail()
 
@@ -205,7 +221,7 @@ class AmazonSaleOrder(models.Model):
                 if default_currency:
                     default_currency = False
                     amazon_order_values['currency_id'] = self.env['res.currency'].search(
-                        [('name', '=', order_item.get('ItemPrice').get('CurrencyCode'))]).id
+                        [('name', '=', order_item.get('ItemPrice').get('CurrencyCode'))]).id or self.env.user.company_id.currency_id.id
                 taxes = float(order_item.get('ItemTax').get('Amount'))
                 order_total_taxes += taxes
                 price_subtotal = price_total - taxes
@@ -308,19 +324,28 @@ class AmazonSaleOrder(models.Model):
                     order.deposits = [(6, 0, deposits.ids)]
                     deposits.sale()
                     order.state = "sale_created"
-                    invoices_ids = deposits.create_invoice()
-                    order.state = "invoice_created"
-                    for invoice in self.env['account.invoice'].browse(invoices_ids):
-                        invoice.write({'origin': order.name})
-                        for line in invoice.invoice_line_ids:
-                            o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)
-                            line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0, 'quantity': o_line.product_qty})
-                        invoice._onchange_invoice_line_ids()
-                        if not order.warning_price:
-                            invoice.action_invoice_open()
+                    if order.amount_untaxed<=400:
+                        invoices_ids = deposits.create_invoice()
+                        order.state = "invoice_created"
+                        for invoice in self.env['account.invoice'].browse(invoices_ids):
+                            invoice.write({'name': order.name})
+                            for line in invoice.invoice_line_ids:
+                                o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)
+                                line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0, 'quantity': o_line.product_qty})
+                            invoice._onchange_invoice_line_ids()
+                            if not order.warning_price:
+                                invoice.action_invoice_open()
+                    else:
+                        order.state = 'warning'
+
                 else:
                     self.env.user.notify_warning(message=_("There are no deposit for this order"), sticky=True)
 
+    def mark_to_done(self):
+        if self.invoice_deposits:
+            self.state='invoice_created'
+        else:
+            raise UserError(_("There aren't any invoices linked to this Amazon order"))
 
 class AmazonSaleOrderLine(models.Model):
     _name = 'amazon.sale.order.line'

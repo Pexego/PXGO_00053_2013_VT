@@ -638,3 +638,13 @@ msgstr "Descuento acumulado % en marca (Precio Unidad)"
 #: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_apply_at_confirm
 msgid "Apply at confirm"
 msgstr "Aplicar al confirmar"
+
+#. module: sale_promotions_extend
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Product Category in Order"
+msgstr "Categoría de producto en pedido"
+
+#. module: sale_promotions_extend
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Compute sub total of brand"
+msgstr "Calcula Subtotal por marca/s"

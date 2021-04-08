@@ -65,7 +65,10 @@
                             attrs="{'invisible': [('state','!=','error')]}"
                             class="oe_highlight"/>
                     <button name="process_order" string="Process Order" type="object"
-                            attrs="{'invisible': [('state','!=','read')]}"
+                            attrs="{'invisible': ['|',('state','not in',['read','warning']),('invoice_deposits_count','>',0)]}"
+                            class="oe_highlight"/>
+                    <button name="mark_to_done" string="Mark to Done" type="object"
+                            attrs="{'invisible': [('state','!=','warning')]}"
                             class="oe_highlight"/>
                 </header>
                 <sheet>
@@ -100,7 +103,7 @@
                             <field name="theoretical_total_amount" readonly="1"/>
                             <field name="theoretical_total_taxes" readonly="1"/>
                             <field name="warning_price" readonly="1"/>
-                            <field name="message_error" attrs="{'invisible':[('state','!=','error')]}" readonly="1"/>
+                            <field name="message_error" attrs="{'invisible':[('state','not in',['error','warning'])]}" readonly="1"/>
                         </group>
                         <group>
                             <field name="fulfillment" readonly="1"/>

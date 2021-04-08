@@ -19,7 +19,7 @@ class RetryAmazonOrders(models.TransientModel):
     def retry_orders(self):
         amazon_orders=self.amazon_orders.mapped('amazon_order')
         amazon_orders.filtered(lambda o: o.state=='error').retry_order()
-        amazon_orders.filtered(lambda o: o.state=='read').process_order()
+        amazon_orders.filtered(lambda o: o.state in ['warning','read']).process_order()
 
 
 
