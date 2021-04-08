@@ -21,6 +21,7 @@
 from odoo import api, models, fields, _
 from odoo.tools.misc import ustr
 from odoo.exceptions import except_orm, UserError
+import re
 
 
 class PromotionsRulesConditionsExprs(models.Model):
@@ -53,9 +54,6 @@ class PromotionsRulesConditionsExprs(models.Model):
                 comparator not in numerical_comparators:
             raise UserError("Only %s can be used with %s"
                             % (",".join(numerical_comparators), attribute))
-        if attribute == 'prod_tag' and comparator not in numerical_comparators:
-            raise UserError("Only %s can be used with %s"
-                            % (",".join(numerical_comparators), attribute))
         return super().validate(vals)
 
     def serialise(self, attribute, comparator, value):
@@ -68,7 +66,7 @@ class PromotionsRulesConditionsExprs(models.Model):
         """
 
         if attribute == 'prod_tag':
-            return '%s %s prod_tag' % (value, comparator)
+            return "%s %s kwargs['prod_tag']" % (value, comparator)
         elif attribute == 'order_pricelist':
             return """order.pricelist_id.name %s %s""" % (comparator, value)
         elif attribute == 'web_discount':
@@ -77,12 +75,13 @@ class PromotionsRulesConditionsExprs(models.Model):
             return super().serialise(attribute, comparator, value)
 
     def evaluate(self, order, **kwargs):
-        prod_tag = {}
+        prod_tag = []
         web_discount = False
 
         for line in order.order_line:
             if line.product_id:
-                prod_tag = line.product_tags
+                if line.product_tags:
+                    prod_tag.extend(eval(line.product_tags))
                 if line.web_discount:
                     web_discount = True
         return super().evaluate(
@@ -121,7 +120,9 @@ class PromotionsRulesActions(models.Model):
             ('prod_free_per_unit',
              _('Products free per unit')),
             ('sale_points_programme_discount_on_brand',
-             _('Sale points programme discount on Brand'))
+             _('Sale points programme discount on Brand')),
+            ('disc_per_product',
+             _('Discount line per each product'))
             ])
 
     def on_change(self):
@@ -168,6 +169,10 @@ class PromotionsRulesActions(models.Model):
             self.product_code = 'brand_code'
             self.arguments = 'sale_point_rule_name'
 
+        elif self.action_type == 'disc_per_product':
+            self.product_code = '["tag_product","reg_exp_product_code"]'
+            self.arguments = '0.00'
+
         return super().on_change()
 
     def apply_perc_discount_accumulated(self, order_line):
@@ -196,7 +201,6 @@ class PromotionsRulesActions(models.Model):
                               'price_unit': promo_price})
         else:
             order_line.write({'price_unit': promo_price})
-
 
     def action_tag_disc_perc_accumulated(self, order):
         """
@@ -347,7 +351,6 @@ class PromotionsRulesActions(models.Model):
 
         return True
 
-
     def create_y_line_sale_points_programme(self, order, price_unit,bags_ids):
         product_id = self.env.ref('commercial_rules.product_discount')
         vals = {
@@ -420,6 +423,48 @@ class PromotionsRulesActions(models.Model):
                 self.apply_perc_discount_price_accumulated(order_line)
         return {}
 
+    def action_disc_per_product(self, order):
+        # first get all the product with the tag
+        products_tag = \
+            sum(order.order_line
+                .filtered(lambda l, promo=self:
+                          eval(promo.product_code)[0]
+                          in l.product_id.tag_ids._get_tag_recursivity())
+                .mapped('product_uom_qty'))
+
+        # then, get a dict with all the products that match the condition
+        products_exp = []
+        for line in order.order_line:
+            if re.match(eval(self.product_code)[1], line.product_id.default_code):
+                for qty in range(int(line.product_uom_qty)):
+                    products_exp.append(line.price_subtotal/line.product_uom_qty)
+
+        new_lines = []
+        for count, price in enumerate(sorted(products_exp)):
+            if count >= products_tag:
+                break
+            else:
+                # Group by products with same price
+                if count > 0 and price == products_exp[count-1]:
+                    new_lines[len(new_lines)-1][0] += 1
+                else:
+                    new_lines.append([1, price])
+
+        # new_lines -> [[qty, price], [qty, price], ...]
+        for line in new_lines:
+            vals = {
+                'sequence': 999,
+                'order_id': order.id,
+                'product_id': self.env.ref('commercial_rules.product_discount').id,
+                'name': '%s' % (
+                    self.promotion.with_context({'lang': order.partner_id.lang}).line_description),
+                'price_unit': -line[1],
+                'discount': int(self.arguments),
+                'promotion_line': True,
+                'product_uom_qty': line[0],
+                'product_uom': 1
+            }
+            self.create_line(vals)
 
 
 class PromotionsRules(models.Model):
