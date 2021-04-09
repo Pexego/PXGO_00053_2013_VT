@@ -25,7 +25,7 @@ class CustomizationWizard(models.TransientModel):
     def _get_lines(self):
         wiz_lines = []
         for line in self.env['sale.order'].browse(self.env.context.get('active_ids')).order_line.filtered(
-                lambda l: not l.deposit and l.product_id.categ_id.with_context(
+                lambda l: l.product_id.customizable and not l.deposit and l.product_id.categ_id.with_context(
                     lang='es_ES').name != 'Portes' and l.price_unit >= 0):
             new_line = {'product_id': line.product_id.id,
                         'sale_line_id': line.id,
@@ -65,6 +65,11 @@ class CustomizationWizard(models.TransientModel):
             if not line.type_ids:
                 raise UserError(_(
                     "You can't create a customization without a customization type: %s") % line.sale_line_id.product_id.default_code)
+            line_type_ids = line.type_ids
+            product_type_ids = line.sale_line_id.product_id.customization_type_ids
+            if line_type_ids - product_type_ids:
+                raise UserError(_(
+                    "You can't create a customization with different customization types (%s) than the product %s has %s") % (line.sale_line_id.product_id.default_code,line_type_ids.mapped('name'),product_type_ids.mapped('name')))
             if qty < 0:
                 raise UserError(_(
                     "You can't create a customization with a quantity of less than zero of this product: %s") % line.sale_line_id.product_id.default_code)
