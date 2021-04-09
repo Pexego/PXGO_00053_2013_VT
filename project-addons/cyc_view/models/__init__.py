@@ -4,3 +4,4 @@ from . import account
 from . import account_invoice
 from . import account_invoice_cyc
 from . import account_invoice_cyc_old
+from . import partner

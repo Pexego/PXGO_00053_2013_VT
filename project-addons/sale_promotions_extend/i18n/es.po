@@ -634,6 +634,12 @@ msgstr "Descuento por el programa de puntos en una Marca"
 msgid "Discount % on Brand accumulated (Price Unit)"
 msgstr "Descuento acumulado % en marca (Precio Unidad)"
 
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Discount line per each product"
+msgstr "Línea de descuento por cada par de productos"
+
 #. module: sale_promotions_extend
 #: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_apply_at_confirm
 msgid "Apply at confirm"
