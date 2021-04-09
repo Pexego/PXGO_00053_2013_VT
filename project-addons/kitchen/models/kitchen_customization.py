@@ -61,7 +61,7 @@ class KitchenCustomization(models.Model):
             'email_to': self.commercial_id.login,
             'email_cc': ','.join(self.notify_users.mapped('email')),
             'lang': self.commercial_id.lang,
-            'picking_name': picking.name
+            'picking_name': picking.name if picking else ""
         })
         if self.notify_sales_team and self.commercial_id.sale_team_id.email:
             ctx['email_cc'] += ',%s' % self.commercial_id.sale_team_id.email
