@@ -1,5 +1,6 @@
 from odoo import models, fields, _, exceptions, api
-
+from datetime import datetime
+import pytz
 
 class KitchenCustomization(models.Model):
     _name = 'kitchen.customization'
@@ -112,15 +113,19 @@ class KitchenCustomization(models.Model):
     @api.multi
     def action_cancel(self):
         for customization in self:
-            if customization.state in ['done', 'in_progress']:
-                if not self.env.user.has_group('kitchen.group_kitchen'):
+            if customization.state in ['done', 'in_progress'] \
+                    and not self.env.user.has_group('kitchen.group_kitchen'):
                     raise exceptions.UserError(
                         _("You can't cancel an active customization. Please, contact the kitchen staff."))
-            elif customization.order_id and customization.state == 'sent':
-                picking = customization.customization_line[0].move_ids[0].picking_id \
-                    if customization.customization_line and customization.customization_line[0].move_ids else False
-                if picking:
-                    picking.write({'not_sync': False})
+            if customization.state in ['sent','in_progress','waiting']:
+                context = {'lang': customization.commercial_id.lang,
+                           'email_to': self.commercial_id.login,
+                           'email_cc': ','.join(self.notify_users.mapped('email')),
+                           }
+                if not self.env.context.get("cancel_from_sale_or_picking",False):
+                    context.update({'picking_message':True})
+                template = self.env.ref('kitchen.send_mail_cancel_customization')
+                template.with_context(context).send_mail(customization.id)
             customization.state = 'cancel'
 
     def action_draft(self):
@@ -137,7 +142,7 @@ class KitchenCustomization(models.Model):
             self.notify_users = [(6, 0, [self.order_id.user_id.id])]
             self.customization_line = False
             for line in self.order_id.order_line.filtered(
-                    lambda l: not l.deposit and l.product_id.categ_id.with_context(
+                    lambda l: l.product_id.customizable and not l.deposit and l.product_id.categ_id.with_context(
                         lang='es_ES').name != 'Portes' and l.price_unit >= 0):
                 customization_qty = sum([x.get("product_qty", 0) for x in
                                          self.env['kitchen.customization.line'].search_read(
@@ -198,10 +203,14 @@ class KitchenCustomization(models.Model):
         if vals.get('date_planned', False):
             template = self.env.ref('kitchen.send_mail_to_commercials_date_planned_changed')
             ctx = dict()
+            date_planned = datetime.strptime(self.date_planned, '%Y-%m-%d %H:%M:%S')
+            date_planned = date_planned.replace(tzinfo=pytz.utc).astimezone(pytz.timezone(self.env.user.tz)).strftime(
+                '%Y-%m-%d %H:%M:%S')
             ctx.update({
                 'email_to': self.commercial_id.login,
                 'email_cc': ','.join(self.notify_users.mapped('email')),
-                'lang': self.commercial_id.lang
+                'lang': self.commercial_id.lang,
+                'date_planned': date_planned
             })
             template.with_context(ctx).send_mail(self.id)
         return res
@@ -215,13 +224,15 @@ class KitchenCustomization(models.Model):
     def _compute_reservation_status(self):
         for customization in self:
             customization.reservation_status = "waiting"
-            if customization.customization_line and all(
+            if customization.customization_line:
+                if all(
                     [x.reservation_status and x.reservation_status != "waiting" for x in customization.customization_line]):
-                if not customization.order_id or customization.order_id.state=='sale':
-                    customization.action_confirm()
-                customization.reservation_status = "to customize"
-
-
+                    if not customization.order_id or (customization.order_id.state=='sale' and customization.state!='sent'):
+                        customization.action_confirm()
+                    customization.reservation_status = "to customize"
+                elif customization.state == 'sent':
+                    customization.write({'state':'waiting'})
+                    customization.reservation_status = "waiting"
 
     backorder_id = fields.Many2one('kitchen.customization', ondelete='cascade')
 
@@ -276,11 +287,11 @@ class KitchenCustomizationLine(models.Model):
     reserved_qty = fields.Float(compute="_compute_reserved_qty", store=True)
 
     @api.depends('move_ids.move_line_ids.product_id', 'move_ids.move_line_ids.product_uom_id',
-                 'move_ids.move_line_ids.product_uom_qty', 'move_ids')
+                 'move_ids.move_line_ids.product_uom_qty', 'move_ids','move_ids.picking_id.state')
     def _compute_reserved_qty(self):
         for line in self:
             line.reserved_qty = sum(line.move_ids.mapped(
-                'reserved_availability')) if line.move_ids else 0
+                'reserved_availability')) if line.move_ids and line.move_ids[0].picking_id.state=='assigned' else 0
 
     reservation_status = fields.Selection([
         ('waiting', 'Waiting Availability'),
@@ -292,7 +303,7 @@ class KitchenCustomizationLine(models.Model):
     def _compute_reservation_status(self):
         for line in self:
             line.reservation_status = "waiting"
-            if line.reserved_qty >= line.product_qty and line.state in ('waiting','draft'):
+            if line.reserved_qty >= line.product_qty:
                 line.reservation_status = "to customize"
 
     move_ids = fields.One2many('stock.move','customization_line')

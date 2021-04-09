@@ -66,6 +66,8 @@
                             class="oe_highlight" groups="kitchen.group_kitchen"/>
                     <button name="action_cancel" string="Cancel" type="object"
                             attrs="{'invisible': [('state','not in',('draft','sent','waiting'))]}"/>
+                    <button name="action_cancel" string="Cancel" type="object" groups="kitchen.group_kitchen"
+                            attrs="{'invisible': [('state','!=','in_progress')]}"/>
                     <button name="action_draft" string="Draft" type="object"
                             attrs="{'invisible': ['|',('state','!=','cancel'),'&amp;',('order_state','!=','reserve'),('order_id','!=',False)]}"/>
                 </header>
@@ -148,7 +150,9 @@
                 <filter string="My pending orders"
                         domain="[('commercial_id','=',uid),('state','in',('sent','in_progress','waiting'))]"
                         name="my_kitchen_customization_pending_filter"/>
-
+                <field name="name"/>
+                <field name="order_id"/>
+                <field name="partner_id"/>
             </search>
         </field>
     </record>
@@ -164,6 +168,8 @@
             </field>
         </field>
     </record>
+
+
 
 
 </odoo>
