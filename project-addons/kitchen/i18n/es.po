@@ -530,3 +530,8 @@ msgstr "Personalizable"
 #: model:ir.model.fields,field_description:kitchen.field_product_template_customization_type_ids
 msgid "Type"
 msgstr "Tipos"
+
+#. module: kitchen
+#: model:ir.actions.act_window,name:kitchen.action_product_customizable_form
+msgid "Customizable"
+msgstr "Personalizables"
