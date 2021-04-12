@@ -87,6 +87,7 @@
                                    attrs="{'readonly': [('state', '!=', 'draft')],'required': [('is_manager','=',False)]}"/>
                             <field name="commercial_id" attrs="{'readonly': [('state', 'not in', ('draft','sent','waiting'))]}"/>
                             <field name="notify_users" widget="many2many_tags"/>
+                            <field name="notify_sales_team"/>
                             <field name="user"/>
                         </group>
                         <group>
