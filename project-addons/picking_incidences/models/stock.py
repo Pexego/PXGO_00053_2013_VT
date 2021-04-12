@@ -73,7 +73,7 @@ class StockPicking(models.Model):
             if relevant_move_state == 'partially_available':
                 self.state = 'partially_available'
             elif relevant_move_state == 'confirmed':
-                if any(move.state == 'assigned' for move in self.move_lines):
+                if any(move.state in ['assigned','partially_available'] for move in self.move_lines):
                     self.state = 'partially_available'
 
     @api.multi
