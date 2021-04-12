@@ -1301,3 +1301,8 @@ msgstr "Notas para almacén en pedidos de venta"
 #: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_warehouse_notes
 msgid "This will be copied in the Notes for the warehouse field on the sales"
 msgstr "Este mensaje será copiado automáticamente en las notas para almacén del pedido"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_product_product_not_include_report
+msgid "Not include in reports"
+msgstr "No incluir en informes"
