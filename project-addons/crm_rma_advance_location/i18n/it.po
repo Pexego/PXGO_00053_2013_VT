@@ -22,6 +22,7 @@ msgstr "Perdita per rottura"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
+ #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_to_refurbish
 msgid "Cancel"
 msgstr "Cancella"
 
@@ -52,6 +53,7 @@ msgstr "Creare Perdita Prodotti"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
+ #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_to_refurbish
 msgid "Create picking"
 msgstr "Creare bolla di consegna"
 
@@ -122,6 +124,7 @@ msgstr "Luogo in cui il sistema immagazzinerà i prodotti restituiti"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
+ #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_to_refurbish
 msgid "Locations"
 msgstr "Posizioni"
 
@@ -172,11 +175,13 @@ msgstr "Linea riparazione"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
+ #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_to_refurbish
 msgid "Select lines for picking"
 msgstr "Selezionare linea per bolla consegna"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_from_picking
+ #: model:ir.ui.view,arch_db:crm_rma_advance_location.view_claim_picking_to_refurbish
 msgid "Select lines to add in picking"
 msgstr "Selezionare linea da aggiungere a bolla di spedizione"
 
@@ -210,3 +215,139 @@ msgstr "{'default_product_uom_qty': product_qty, 'cur_location_id': location_id}
 #, python-format
 msgid "You shouldn't send the following products to stock due to they are 'make to order' %s. Please check the picking (%s) carefully before validate it"
 msgstr "Non dovresti inviare a magazzino i seguenti prodotti in quanto sono disponibili "su prenotazione": %s .Si prega di controllare attentamente la bolla di consegna prima di convalidarlo"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_damaged_product_product_id
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_to_refurbish_line_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_damaged_product_prodlot_id
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_to_refurbish_line_prodlot_id
+msgid "Product Lot / Serial"
+msgstr "Lotto / numero di serie del prodotto"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_damaged_product_problem_description
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_to_refurbish_line_problem_description
+msgid "Problem Description"
+msgstr "Descrizione del problema"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_damaged_product_user_id
+msgid "User"
+msgstr "Utente"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_damaged_product_supplier_id
+msgid "Supplier"
+msgstr "Fornitore"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_damaged_product_claim_id
+msgid "Claim"
+msgstr "Richiesta"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_line_printed
+msgid "Printed"
+msgstr "Stampato"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.print_damaged_products_form
+#: model:ir.actions.act_window,name:crm_rma_advance_location.print_damaged_products_action
+msgid "Print"
+msgstr "Stampa"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.damaged_product_tree
+#: model:ir.actions.act_window,name:crm_rma_advance_location.action_damaged_products_tree
+#: model:ir.ui.menu,name:crm_rma_advance_location.menu_damaged_products
+msgid "Damaged Products"
+msgstr "Prodotti danneggiati"
+
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.view_damaged_products_filter
+msgid "Printed"
+msgstr "Stampato"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.view_damaged_products_filter
+msgid "Unprinted"
+msgstr "Non Stampato"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_to_refurbish_line_product_qty
+msgid "Product Qty"
+msgstr "Qtà prodotto"
+
+#. module: crm_rma_advance_location
+#: model:ir.actions.report,name:crm_rma_advance_location.report_damaged_products
+msgid "Print Damaged Products"
+msgstr "Stampa prodotti danneggiati"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/wizard/claim_make_picking_to_refurbish.py:120
+#, python-format
+msgid "There is no RMP in progress for this supplier (%s)"
+msgstr "Nessun RMP in corso per questo fornitore (%s)"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/wizard/claim_make_picking_to_refurbish.py:124
+#, python-format
+msgid "There are %i RMP in progress for this supplier (%s). (%s)"
+msgstr "Sono in corso% i RMP per questo fornitore (% s). (%s)"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/wizard/claim_make_picking_to_refurbish.py:157
+#, python-format
+msgid "Products successfully entered in the following RMPs %s"
+msgstr "Prodotti inseriti correttamente nei seguenti RMP %s"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.report_damaged_products_data
+msgid "<strong>Product</strong>"
+msgstr "<strong>Prodotto</strong>"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.report_damaged_products_data
+msgid "<strong>Problem Description</strong>"
+msgstr "<strong>Descrizione del problema</strong>"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.report_damaged_products_data
+msgid "<strong>Product Lot / Serial</strong>"
+msgstr "<strong>Lotto / numero di serie del prodotto</strong>"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.report_damaged_products_data
+msgid "<strong>User</strong>"
+msgstr "<strong>Utente</strong>"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.report_damaged_products_data
+msgid "<strong>Supplier</strong>"
+msgstr "<strong>Fornitore</strong>"
+
+#. module: crm_rma_advance_location
+#: model:res.groups,name:crm_rma_advance_location.group_damaged_products
+msgid "Responsible Damaged Products"
+msgstr "Prodotti Danneggiati Responsabili"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_claim_make_picking_to_refurbish_line_claim_id
+msgid "Claim"
+msgstr "RMP"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/wizard/claim_make_picking_to_refurbish.py:64
+#, python-format
+msgid "All products must have a description of the problem, please fill it out and try again"
+msgstr "Tutti i prodotti devono avere una descrizione del problema, si prega di compilarlo e riprova"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_rma_advance_location.field_res_partner_rmp_partner
+msgid "RMP partner"
+msgstr "Azienda RMP"
