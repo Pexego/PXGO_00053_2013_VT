@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="view_partner_rmp_partner" model="ir.ui.view">
+        <field name="name">partner.rmp.partner</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="payment_mode_supplier.view_partner_property_form_purchase"/>
+        <field name="arch" type="xml">
+            <field name="payment_mode_suppliers" position="after">
+                <field name="rmp_partner" attrs="{'invisible': [('supplier','=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
