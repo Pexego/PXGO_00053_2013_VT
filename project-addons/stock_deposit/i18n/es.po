@@ -404,3 +404,19 @@ msgstr "Cantidad a vender"
 #, python-format
 msgid "There are two or more different account journals. Please, make sure to select sale orders with the same journal."
 msgstr "Hay dos o más diarios diferentes. Por favor, asegúrese de seleccionar pedidos con el mismo diario."
+
+#. module: stock_deposit
+#: model:ir.ui.view,arch_db:stock_deposit.view_stock_deposit_form
+msgid "Revert Sale"
+msgstr "Revertir Venta"
+
+#. module: stock_deposit
+#: model:ir.ui.view,arch_db:stock_deposit.view_stock_deposit_form
+msgid "Revert Invoice"
+msgstr "Revertir Facturado"
+
+#. module: stock_deposit
+#: code:addons/stock_deposit/models/stock_deposit.py:281
+#, python-format
+msgid "This deposit has invoices in non-draft status, please check it before reverting it"
+msgstr "Este depósito tiene facturas en estado distinto a borrador, por favor, compruebalo antes de revertirlo"

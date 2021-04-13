@@ -56,7 +56,7 @@ class ProductTemplateListener(Component):
                 if field in fields:
                     product = self.env["product.product"].search(
                         [('product_tmpl_id', '=', record.id)])
-                    product.with_delay(priority=3, eta=60).update_product()
+                    product.with_delay(priority=5, eta=60).update_product()
                     break
 
 
@@ -72,12 +72,12 @@ class ProductListener(Component):
              ('claim_id.partner_id.web', '=', True)])
         for line in claim_lines:
             if not line.equivalent_product_id:
-                line.with_delay(priority=10, eta=120).export_rmaproduct()
+                line.with_delay(priority=5, eta=120).export_rmaproduct()
         claim_lines = self.env['claim.line'].search(
             [('equivalent_product_id', '=', record.id),
              ('claim_id.partner_id.web', '=', True)])
         for line in claim_lines:
-            line.with_delay(priority=10, eta=120).export_rmaproduct()
+            line.with_delay(priority=5, eta=120).export_rmaproduct()
 
     def on_record_write(self, record, fields=None):
         up_fields = [
@@ -96,7 +96,7 @@ class ProductListener(Component):
 
         for field in up_fields:
             if field in fields:
-                record.with_delay(priority=2, eta=30).update_product()
+                record.with_delay(priority=5, eta=30).update_product()
                 break
 
         packs = self.env['mrp.bom.line'].search([('product_id', '=', record.id)]).mapped('bom_id')
@@ -107,11 +107,11 @@ class ProductListener(Component):
                 if not min_stock or min_stock > product_stock_qty:
                     min_stock = product_stock_qty
             if min_stock:
-                pack.product_tmpl_id.product_variant_ids.with_delay(priority=2, eta=30).update_product()
+                pack.product_tmpl_id.product_variant_ids.with_delay(priority=5, eta=30).update_product()
 
         if 'tag_ids' in fields:
-            record.with_delay(priority=1, eta=30).unlink_product_tag_rel()
-            record.with_delay(priority=2, eta=60).export_product_tag_rel()
+            record.with_delay(priority=5, eta=30).unlink_product_tag_rel()
+            record.with_delay(priority=5, eta=60).export_product_tag_rel()
 
     def on_record_unlink(self, record):
         record.with_delay().unlink_product()
@@ -236,7 +236,7 @@ class ProductBrandListener(Component):
     _apply_on = ['product.brand']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=0).export_product_brand()
+        record.with_delay(priority=5).export_product_brand()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["name"]
@@ -293,7 +293,7 @@ class BrandCountryListener(Component):
     _apply_on = ['brand.country.rel']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=50).export_product_brand_rel()
+        record.with_delay(priority=5).export_product_brand_rel()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["brand_id", "country_id"]
@@ -303,7 +303,7 @@ class BrandCountryListener(Component):
                 break
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=1).unlink_product_brand_rel()
+        record.with_delay(priority=5).unlink_product_brand_rel()
 
 
 class BrandCountryRel(models.Model):
@@ -340,21 +340,21 @@ class ProductTagsListener(Component):
     _apply_on = ['product.tag']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=1, eta=60).export_product_tag()
+        record.with_delay(priority=5, eta=60).export_product_tag()
         if 'product_ids' in fields:
             for product in record.product_ids:
-                product.with_delay(priority=1, eta=30).unlink_product_tag_rel()
-                product.with_delay(priority=2, eta=60).export_product_tag_rel()
+                product.with_delay(priority=5, eta=30).unlink_product_tag_rel()
+                product.with_delay(priority=5, eta=150).export_product_tag_rel()
 
     def on_record_write(self, record, fields=None):
-        record.with_delay(priority=2, eta=120).update_product_tag()
+        record.with_delay(priority=5, eta=120).update_product_tag()
         if 'product_ids' in fields:
             for product in record.product_ids:
-                product.with_delay(priority=1, eta=30).unlink_product_tag_rel()
-                product.with_delay(priority=2, eta=60).export_product_tag_rel()
+                product.with_delay(priority=5).unlink_product_tag_rel()
+                product.with_delay(priority=5, eta=120).export_product_tag_rel()
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=3, eta=120).unlink_product_tag()
+        record.with_delay(priority=5).unlink_product_tag()
 
 
 class ProductTag(models.Model):

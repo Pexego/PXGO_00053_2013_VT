@@ -96,6 +96,7 @@
                 </field>
                 <field name="amount_total_signed" position="before">
                     <field name="payment_term_id"/>
+                    <field name="amount_untaxed_signed" sum="subtotal"/>
                 </field>
                 <field name="state" position="after">
                     <field name="total"/>

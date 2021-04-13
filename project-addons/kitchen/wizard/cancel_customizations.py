@@ -28,5 +28,5 @@ class CancelCustomizationsWiz(models.TransientModel):
     @api.multi
     def button_continue(self):
         self.ensure_one()
-        self.customizations_ids.action_cancel()
+        self.customizations_ids.with_context({"cancel_from_sale_or_picking":True}).action_cancel()
         return getattr(self.origin_reference, self.continue_method)()

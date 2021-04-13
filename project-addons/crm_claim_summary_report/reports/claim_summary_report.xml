@@ -159,7 +159,7 @@
                             <span t-field="line_id.product_id.name"/></td>
                             <td class="col-xs-1"><span t-field="line_id.product_returned_quantity"/></td>
                             <td class="col-xs-2"><span t-field="line_id.claim_origine"/></td>
-                            <td class="col-xs-1"><span t-field="line_id.prodlot_id.ref"/></td>
+                            <td class="col-xs-1"><span t-field="line_id.prodlot_id"/></td>
                             <td class="col-xs-2"><span t-field="line_id.name"/></td>
                             <td class="col-xs-2"><span t-field="line_id.internal_description"/></td>
                         </tr>
@@ -191,7 +191,7 @@
                             </t>
                         </div>
                         <div class="col-xs-3">
-                            <p class="list-group-item-text"><strong>Serial/Lot Number<span>: </span></strong><span t-field="line.prodlot_id.ref"/></p>
+                            <p class="list-group-item-text"><strong>Serial/Lot Number<span>: </span></strong><span t-field="line.prodlot_id"/></p>
                             <p class="list-group-item-text"><strong>Priority<span>: </span></strong><span t-field="line.claim_id.priority"/></p>
                         </div>
                     </div>

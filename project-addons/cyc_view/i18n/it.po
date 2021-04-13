@@ -165,3 +165,8 @@ msgstr "Totale"
 msgid "Year"
 msgstr "Anno"
 
+#. module: merge_sale_order
+#: model:ir.model.fields,field_description:cyc_view.field_res_partner_risk_insurance_anon
+msgid "Anonymous"
+msgstr "Anónimo"
+

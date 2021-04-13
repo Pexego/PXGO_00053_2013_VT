@@ -10,7 +10,8 @@ class SaleOrder(models.Model):
     def _compute_customization_count(self):
         for order in self:
             order.customization_count = len(order.customization_ids)
-            order.customization_count_not_cancelled = len(order.customization_ids.filtered(lambda c:c.state!='cancel'))
+            order.customization_count_not_cancelled = len(
+                order.customization_ids.filtered(lambda c: c.state != 'cancel'))
 
     customization_count = fields.Integer(compute='_compute_customization_count', default=0)
     customization_count_not_cancelled = fields.Integer(compute='_compute_customization_count', default=0)
@@ -21,16 +22,19 @@ class SaleOrder(models.Model):
             customizations = sale.customization_ids.filtered(lambda p: p.state == 'draft')
             if customizations:
                 pickings = sale.picking_ids.filtered(lambda p: p.state != 'cancel')
-                pickings.write({'not_sync': True})
-                pickings.message_post(
-                    body=_('This picking has been created from an order with customized products'))
-                for move in pickings.move_lines:
-                    move.customization_line = move.sale_line_id.customization_line.filtered(lambda l:l.state!='cancel')
-                if pickings.state=='assigned':
-                    customizations.action_confirm()
-                else:
-                    customizations.state = 'waiting'
-
+                for picking in pickings:
+                    for move in picking.move_lines:
+                        move.customization_line = move.sale_line_id.customization_line.filtered(
+                            lambda l: l.state != 'cancel')
+                    if picking.customization_ids.filtered(lambda p:p.state!='cancel'):
+                        picking.write({'not_sync': True})
+                        picking.message_post(
+                            body=_('This picking has been created from an order with customized products'))
+                    if customizations.state != 'sent':
+                        if picking.state == 'assigned':
+                            customizations.action_confirm()
+                        else:
+                            customizations.state = 'waiting'
         return res
 
     def action_view_customizations(self):
@@ -58,13 +62,15 @@ class SaleOrder(models.Model):
                         raise exceptions.UserError(
                             _("You cannot cancel this order because there are customizations in progress"))
                     else:
-                        customizations.action_cancel()
+                        customizations.with_context({"cancel_from_sale_or_picking":True}).action_cancel()
 
         return super(SaleOrder, self).action_cancel()
 
     def action_confirm(self):
         for sale in self:
-            if sale.customization_ids and all([x.state == 'cancel' for x in sale.customization_ids]):
+            if not self.env.context.get('bypass_retrieve_customization', False) \
+                    and not self.env.context.get('bypass_risk', False) \
+                    and sale.customization_ids and all([x.state == 'cancel' for x in sale.customization_ids]):
                 return sale.env['retrieve.customizations.wiz'].create({
                     'sale_id': sale.id,
                     'origin_reference':

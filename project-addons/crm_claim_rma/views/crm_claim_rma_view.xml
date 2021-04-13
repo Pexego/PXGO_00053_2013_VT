@@ -86,7 +86,7 @@
                 <field name="equivalent_product_id" readonly="1"/>
                 <field name="name" string="Customer description"/>
                 <field name="product_returned_quantity"/>
-                <field name="prodlot_id" domain="[('product_id', '=', product_id)]" context="{'product_id': product_id}"/>
+                <field name="prodlot_id"/>
                 <field name="claim_origine"/>
                 <field name="repair_id" readonly="1"/>
                 <field name="repair_state"/>
@@ -113,7 +113,7 @@
                 <field name="equivalent_product_id" readonly="1"/>
                 <field name="name"/>
                 <field name="product_returned_quantity"/>
-                <field name="prodlot_id" domain="[('product_id', '=', product_id)]"/>
+                <field name="prodlot_id"/>
                 <field name="claim_origine"/>
                 <field name="repair_id" readonly="1"/>
                 <field name="repair_state"/>

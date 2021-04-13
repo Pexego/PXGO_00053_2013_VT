@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="print_damaged_products_form" model="ir.ui.view">
+        <field name="name">print.claim.line.form</field>
+        <field name="model">print.claim.line.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Damaged Products">
+                <field name="claim_line_ids">
+                    <tree string="Damaged Products">
+                        <field name="product_id"/>
+                        <field name="name"/>
+                        <field name="prodlot_id"/>
+                        <field name="supplier_id"/>
+                        <field name="create_uid"/>
+                        <field name="printed"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button string="Print" name="print" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="Print"
+                res_model="print.claim.line.wizard"
+                src_model="claim.line"
+                view_id="print_damaged_products_form"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"
+                id="print_damaged_products_action"/>
+
+    <template id="external_layout_custom_damaged_products">
+        <div class="header"/>
+        <div class="article">
+            <t t-raw="0"/>
+        </div>
+        <div class="footer"/>
+    </template>
+
+    <template id="report_damaged_products_data">
+        <t t-call="web.html_container">
+            <t t-lang="docs[0].user_id.partner_id.lang"/>
+            <t t-call="crm_rma_advance_location.external_layout_custom_damaged_products">
+                <div class="page">
+                    <table style="border-collapse:separate; border-spacing: 0 1em">
+                        <thead>
+                            <tr style="background-color:#da1F2e; color:white;">
+                                <th width="16%" style="vertical-align:middle;">
+                                    <strong>Product</strong>
+                                </th>
+                                <th width="25%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Problem Description</strong>
+                                </th>
+                                <th width="10%" style="vertical-align:middle;">
+                                    <strong>Product Lot / Serial</strong>
+                                </th>
+                                <th width="13%" class="text-center" style="vertical-align:middle;">
+                                    <strong>User</strong>
+                                </th>
+                                <th width="36%" class="text-center" style="vertical-align:middle;">
+                                    <strong>Supplier</strong>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody style="color:6D6E70;">
+                            <tr t-foreach="docs" t-as="o">
+                                <td>
+                                    <span t-field="o.product_id.default_code"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.prodlot_id"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.create_uid.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.supplier_id"/>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+
+    <report
+            id="report_print_claim_line"
+            string="Print Damaged Products"
+            model="claim.line"
+            report_type="qweb-pdf"
+            file="crm_rma_advance_location.report_damaged_products_data"
+            name="crm_rma_advance_location.report_damaged_products_data"
+            print_report_name="time.strftime('%Y-%m-%d') + '_damaged_products'"
+    />
+    <record id="paperformat_damaged_products" model="report.paperformat">
+        <field name="name">European A4 damaged products</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">7</field>
+        <field name="margin_bottom">7</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">7</field>
+        <field name="dpi">90</field>
+    </record>
+    <record id="report_print_claim_line" model="ir.actions.report">
+        <field name="paperformat_id" ref="crm_rma_advance_location.paperformat_damaged_products"/>
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+</odoo>

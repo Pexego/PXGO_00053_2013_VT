@@ -64,6 +64,13 @@ msgid "Cyc report"
 msgstr "Informe Cyc"
 
 #. module: cyc_view
+#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_tree_old
+#: model:ir.actions.act_window,name:cyc_view.action_account_invoice_cyc_old
+#: model:ir.ui.menu,name:cyc_view.account_invoice_menu_cyc_old
+msgid "Cyc report (Old)"
+msgstr "Informe Cyc (Antiguo)"
+
+#. module: cyc_view
 #: selection:account.invoice.cyc,invoice_month:0
 msgid "December"
 msgstr "Diciembre"
@@ -165,3 +172,7 @@ msgstr "Total"
 msgid "Year"
 msgstr "Año"
 
+#. module: merge_sale_order
+#: model:ir.model.fields,field_description:cyc_view.field_res_partner_risk_insurance_anon
+msgid "Anonymous"
+msgstr "Anónimo"
