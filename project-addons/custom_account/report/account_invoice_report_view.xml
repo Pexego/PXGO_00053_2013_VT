@@ -30,7 +30,7 @@
 
         <record id="account.action_account_invoice_report_all" model="ir.actions.act_window">
             <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
-            <field name="domain">['|',('company_id.name','not like','Pruebas'),'&amp;',('partner_category','not like','Empleado'),('company_id.name','like','Pruebas')]</field>
+            <field name="domain">['&amp;', '|', ('product_id', '=', False), ('product_id.not_include_report', '=', False), '|', ('company_id.name','not like','Pruebas'),'&amp;',('partner_category','not like','Empleado'),('company_id.name','like','Pruebas')]</field>
         </record>
 
      <menuitem id="account_reports_big_accounts_parent"
@@ -47,7 +47,7 @@
         <field name="groups" eval="[(4, ref('custom_account.group_big_accounts'))]"/>
         <field name="search_view_id" ref="account_invoice_report_add_filters"/>
         <field name="context">{'search_default_current':1, 'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_thisyear': 1}</field>
-        <field name="domain">['&amp;','|',('company_id.name','not like','Pruebas'),'&amp;',('partner_category','not like','Empleado'),('company_id.name','like','Pruebas'),'|',('partner_category', 'ilike', 'proy'),('partner_category', 'ilike', 'grandes')]</field>
+        <field name="domain">['&amp;', '|', ('product_id', '=', False), ('product_id.not_include_report', '=', False),'&amp;','|',('company_id.name','not like','Pruebas'),'&amp;',('partner_category','not like','Empleado'),('company_id.name','like','Pruebas'),'|',('partner_category', 'ilike', 'proy'),('partner_category', 'ilike', 'grandes')]</field>
     </record>
 
 

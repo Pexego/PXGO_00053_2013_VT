@@ -1142,3 +1142,8 @@ msgstr "Note per magazzino in ordini"
 #: model:ir.ui.view,arch_db:custom_account.view_partner_form_add_warehouse_notes
 msgid "This will be copied in the Notes for the warehouse field on the sales"
 msgstr "Questo messaggio sarà messo in Note per magazzino nell'ordine di vendita"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_product_product_not_include_report
+msgid "Not include in reports"
+msgstr "Non includere nei rapporti"
