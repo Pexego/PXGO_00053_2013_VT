@@ -12,7 +12,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
         for move in self.env['stock.picking'].browse(self.env.context['active_id']).move_lines:
             new_line = {'product_id': move.product_id.id,
                         'move_id': move.id,
-                        'product_qty': move.product_uom_qty}
+                        'product_qty': 1}
             product = move.product_id
             domain = [('claim_type', '=',
                        self.env.ref('crm_claim_type.crm_claim_type_supplier').id),
@@ -24,7 +24,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
             claim_id = self.env['crm.claim'].search(domain)
             if claim_id and len(claim_id) == 1:
                 new_line.update({'claim_id': claim_id.id})
-            wiz_lines.append(new_line)
+            for __ in range(int(move.product_uom_qty)):
+                wiz_lines.append(new_line)
         return wiz_lines
 
     @api.model
@@ -96,7 +97,6 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
         rmps = self.env['crm.claim']
         for l in self.picking_line_ids:
             product = l.move_id.product_id
-            qty = l.move_id.product_uom_qty
             suppliers = self.env['res.partner']
             if l.claim_id:
                 rmp_id = self.env['crm.claim'].browse(l.claim_id.id)
@@ -129,7 +129,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'product_id': product.id,
                 'name': l.problem_description,
                 'claim_origine': 'broken_down',
-                'product_returned_qty': qty,
+                'product_returned_qty': 1,
                 'claim_id': rmp_id.id,
                 'prodlot_id': l.prodlot_id,
                 'printed': False,
@@ -142,11 +142,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                     seq = max(sec_list) + 1
                 else:
                     seq = 0
-            for i in range(int(qty)):
-                if not l.prodlot_id:
-                    line_domain['prodlot_id'] = seq
-                    seq += 1
-                self.env['claim.line'].create(line_domain)
+                line_domain['prodlot_id'] = seq
+            self.env['claim.line'].create(line_domain)
             rmps += rmp_id
 
         action = self.env.ref('stock.action_picking_tree_all')
