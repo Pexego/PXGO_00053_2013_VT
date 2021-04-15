@@ -59,5 +59,38 @@
         sequence="1"
     />
 
+    <record id="account_invoice_report_product_wizard" model="ir.ui.view">
+        <field name="name">account_invoice_report_product_wizard</field>
+        <field name="model">account.invoice.report.product</field>
+        <field name="arch" type="xml">
+            <form string="Select the report">
+                <group>
+                    <field name="report_filter"/>
+                </group>
+                <footer>
+                    <button name="show_product_report" type="object" string="Show" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="account_reports_for_product_action" model="ir.actions.act_window">
+        <field name="name">Invoices Analysis for Product</field>
+        <field name="res_model">account.invoice.report.product</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="account_invoice_report_product_wizard"/>
+    </record>
+
+
+    <menuitem
+        id="account_reports_for_product"
+        parent="account.menu_finance_reports"
+        name="Invoices Analysis for Product"
+        action="account_reports_for_product_action"
+        groups="custom_account.group_product_manager"
+        sequence="1"
+    />
 
 </odoo>
