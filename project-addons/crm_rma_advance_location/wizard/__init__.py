@@ -20,3 +20,5 @@
 ##############################################################################
 from . import claim_make_picking_from_picking
 from . import claim_make_picking
+from . import claim_make_picking_to_refurbish
+from . import print_damaged_products

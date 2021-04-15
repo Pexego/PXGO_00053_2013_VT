@@ -49,7 +49,7 @@ class KitchenCustomization(models.Model):
         self.state = 'done'
         picking=""
         if self.customization_line and self.customization_line[0].move_ids:
-            picking = self.customization_line[0].move_ids[0].picking_id
+            picking = self.customization_line[0].move_ids.filtered(lambda m: m.state != 'cancel')[0].picking_id
             if picking:
                 notes = picking.internal_notes or ""
                 picking_mssg = self.env['ir.config_parameter'].sudo().get_param('kitchen.picking.message')
@@ -61,8 +61,10 @@ class KitchenCustomization(models.Model):
             'email_to': self.commercial_id.login,
             'email_cc': ','.join(self.notify_users.mapped('email')),
             'lang': self.commercial_id.lang,
-            'picking_name': picking.name
+            'picking_name': picking.name if picking else ""
         })
+        if self.notify_sales_team and self.commercial_id.sale_team_id.email:
+            ctx['email_cc'] += ',%s' % self.commercial_id.sale_team_id.email
         template.with_context(ctx).send_mail(self.id)
 
     def action_confirm(self):
@@ -122,6 +124,8 @@ class KitchenCustomization(models.Model):
                            'email_to': self.commercial_id.login,
                            'email_cc': ','.join(self.notify_users.mapped('email')),
                            }
+                if self.notify_sales_team and self.commercial_id.sale_team_id.email:
+                    context['email_cc'] += ',%s' % self.commercial_id.sale_team_id.email
                 if not self.env.context.get("cancel_from_sale_or_picking",False):
                     context.update({'picking_message':True})
                 template = self.env.ref('kitchen.send_mail_cancel_customization')
@@ -212,6 +216,8 @@ class KitchenCustomization(models.Model):
                 'lang': self.commercial_id.lang,
                 'date_planned': date_planned
             })
+            if self.notify_sales_team and self.commercial_id.sale_team_id.email:
+                ctx['email_cc'] += ',%s' % self.commercial_id.sale_team_id.email
             template.with_context(ctx).send_mail(self.id)
         return res
 
@@ -235,6 +241,7 @@ class KitchenCustomization(models.Model):
                     customization.reservation_status = "waiting"
 
     backorder_id = fields.Many2one('kitchen.customization', ondelete='cascade')
+    notify_sales_team = fields.Boolean()
 
 
 class KitchenCustomizationLine(models.Model):

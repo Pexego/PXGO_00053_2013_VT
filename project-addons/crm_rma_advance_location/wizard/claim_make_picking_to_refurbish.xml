@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="action_used_picking_from_claim_picking" model="ir.actions.act_window">
+        <field name="name">Create Incoming Shipment to Refurbish Location</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">claim.make.picking.to.refurbish.wizard</field>
+        <field name="src_model">stock.picking</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_claim_picking_to_refurbish" model="ir.ui.view">
+        <field name="name">claim_picking</field>
+        <field name="model">claim.make.picking.to.refurbish.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Select lines to add in picking">
+                <separator string="Locations" colspan="4"/>
+                <group>
+                    <field name="picking_line_source_location" nolabel="1" colspan="4"/>
+                    <field name="picking_line_dest_location" nolabel="1" colspan="4"/>
+                </group>
+                <separator string="Select lines for picking" colspan="4"/>
+                <field name="picking_line_ids" nolabel="1" colspan="4">
+                    <tree create="false" delete="true" editable="top">
+                        <field name="product_id" readonly="1"/>
+                        <field name="product_qty" readonly="1"/>
+                        <field name="prodlot_id"/>
+                        <field name="problem_description" required="1"/>
+                        <field name="wizard_id" invisible="1"/>
+                        <field name="claim_id" groups="crm_rma_advance_location.group_damaged_products"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button special="cancel" string="Cancel" name="action_cancel" type="object"/>
+                    <button name="action_create_picking" string="Create picking" type="object"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

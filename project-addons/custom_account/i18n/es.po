@@ -1303,6 +1303,11 @@ msgid "This will be copied in the Notes for the warehouse field on the sales"
 msgstr "Este mensaje será copiado automáticamente en las notas para almacén del pedido"
 
 #. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_product_product_not_include_report
+msgid "Not include in reports"
+msgstr "No incluir en informes"
+
+#. module: custom_account
 #: model:ir.actions.act_window,name:custom_account.account_reports_for_product_action
 #: model:ir.ui.menu,name:custom_account.account_reports_for_product
 msgid "Invoices Analysis for Product"

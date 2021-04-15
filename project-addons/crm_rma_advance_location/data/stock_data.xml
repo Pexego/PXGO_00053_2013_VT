@@ -37,4 +37,13 @@
         <field name="lot_carrier_loss_id" ref="stock_location_carrier_loss"/>
         <field name="lot_refurbish_id" ref="stock_location_refurbish"/>
     </record>
+
+    <record id="group_damaged_products" model="res.groups">
+            <field name="name">Responsible Damaged Products</field>
+    </record>
+
+     <record id="brands_seller_ids_rmp" model="ir.config_parameter">
+           <field name="key">brands_seller_ids_rmp</field>
+           <field name="value">['Ajax', 'HIKVISION']</field>
+     </record>
 </odoo>

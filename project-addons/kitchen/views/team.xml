@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sales_team_form_view_in_crm_add_email" model="ir.ui.view">
+        <field name="name">crm.team.form.add.email</field>
+        <field name="model">crm.team</field>
+        <field name="inherit_id" ref="crm.sales_team_form_view_in_crm"/>
+        <field name="arch" type="xml">
+            <field name="alias_contact" position="after">
+                <field name="email"/>
+            </field>
+        </field>
+    </record>
+</odoo>

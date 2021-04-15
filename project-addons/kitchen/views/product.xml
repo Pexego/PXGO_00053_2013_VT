@@ -32,4 +32,21 @@
     </record>
 
 
+    <record id="action_product_customizable_form" model="ir.actions.act_window">
+        <field name="name">Customizable</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.product</field>
+        <field name="domain">[("customizable", "=", True)]</field>
+    </record>
+
+    <menuitem
+            id="menu_products_customizable"
+            action="action_product_customizable_form"
+            parent="sale.product_menu_catalog"
+            groups="base.group_user"
+            sequence="2"
+            string="Customizable"
+    />
+
+
 </odoo>

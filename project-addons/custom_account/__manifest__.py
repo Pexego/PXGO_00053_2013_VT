@@ -12,7 +12,7 @@
     """,
     'author': 'Comunitea',
     'website': '',
-    "depends": ['mail', 'account', 'stock', 'product_brand',
+    "depends": ['mail', 'account', 'stock', 'product', 'product_brand',
                 'stock_account', 'sale_stock', 'account_payment_partner',
                 'account_payment_mode', 'sale', 'purchase',
                 'account_financial_risk', 'account_payment_order',

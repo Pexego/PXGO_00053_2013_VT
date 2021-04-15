@@ -52,13 +52,18 @@ WARNING: Use with caution, this module is currently not yet completely debugged 
 """,
  'images': [],
  'demo': [],
+ 'depends':['purchase','crm_claim_rma','stock'],
  'data': [
     'wizard/claim_make_picking_from_picking_view.xml',
     'wizard/claim_make_picking_view.xml',
+    'wizard/claim_make_picking_to_refurbish.xml',
     'views/stock_view.xml',
     'data/stock_data.xml',
     'views/claim_rma_view.xml',
-    'views/mrp_repair_view.xml'
+    'views/mrp_repair_view.xml',
+    'views/claim_rma_view.xml',
+    'wizard/print_products.xml',
+     'views/partner.xml'
  ],
  'installable': True,
  'application': True,
