@@ -73,7 +73,7 @@ class StockPicking(models.Model):
             if relevant_move_state == 'partially_available':
                 self.state = 'partially_available'
             elif relevant_move_state == 'confirmed':
-                if any(move.state == 'assigned' for move in self.move_lines):
+                if any(move.state in ['assigned','partially_available'] for move in self.move_lines):
                     self.state = 'partially_available'
 
     @api.multi
@@ -220,11 +220,15 @@ class StockPicking(models.Model):
                 bck.write({'move_type': 'one'})
                 self.action_assign()
                 pick.move_lines.write({'state': 'assigned'})
-                if bck.customization_ids:
+                if bck.customization_ids and pick.customization_ids:
                     bck.customization_ids.create_backorder_customization(new_moves)
                     bck.not_sync = True
                     bck.message_post(
                         body=_('This picking has been created from an order with customized products'))
+                elif pick.customization_ids:
+                    bck.not_sync = False
+                elif bck.customization_ids:
+                    pick.not_sync = False
             pick.message_post(body=_("User %s accepted confirmed qties.") %
                               self.env.user.name)
             if pick.sale_id.scheduled_date and not bck.customization_ids:

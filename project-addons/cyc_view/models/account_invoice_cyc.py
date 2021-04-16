@@ -58,21 +58,6 @@ from (
     extract(month from ai.date_invoice), ai.state, p.user_id, p.area_id
 union
     select min(ai.id) as id, p.country_id,
-    -SUM(ai.amount_insurance) as credit_covered,
-    0.0 as credit_not_covered,
-    0.0 as not_credit,
-    0.0 as cash,
-    CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
-    extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
-    from account_invoice ai inner join res_partner p on p.id = ai.partner_id
-    where ai.company_id = 1
-        and ai.amount_insurance is not null
-        and ai.type = 'out_refund'
-        and ai.state in ('open', 'paid')
-    group by p.country_id, extract(year from ai.date_invoice)::int,
-    extract(month from ai.date_invoice), ai.state, p.user_id, p.area_id
-union
-    select min(ai.id) as id, p.country_id,
     0.0 as credit_covered,
     0.0 as credit_not_covered,
     SUM(ai.amount_total) as not_credit,
@@ -101,6 +86,7 @@ union
         and ai.amount_insurance is null
         and ai.type = 'out_refund'
         and ai.state in ('open', 'paid')
+        and p.insurance_credit_limit = 0
     group by p.country_id, extract(year from ai.date_invoice)::int,
     extract(month from ai.date_invoice), ai.state, p.user_id, p.area_id
 union

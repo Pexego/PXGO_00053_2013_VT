@@ -131,8 +131,7 @@ class ClaimLine(models.Model):
     return_value = fields.Float(
             compute="_line_total_amount", string='Total return',
             help="Quantity returned * Unit sold price")
-    prodlot_id = fields.Many2one(
-            'stock.production.lot',
+    prodlot_id = fields.Char(
             string='Serial/Lot n°',
             help="The serial/lot of the returned product")
     applicable_guarantee = fields.Selection(

@@ -7,11 +7,59 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='%(crm_claim_rma.action_claim_picking_out)d']" position="after">
                 <button name="%(action_claim_picking_loss)d"
-                                string="New Product Loss" attrs="{'invisible':[('state_show_buttons', '=', False)]}"
-                                type="action" target="new"
-                                context="{'warehouse_id': warehouse_id,
+                        string="New Product Loss" attrs="{'invisible':[('state_show_buttons', '=', False)]}"
+                        type="action" target="new"
+                        context="{'warehouse_id': warehouse_id,
                                     'partner_id': partner_id}"/>
             </xpath>
         </field>
     </record>
+
+    <record id="view_damaged_products_filter" model="ir.ui.view">
+        <field name="name">damaged.product.filters</field>
+        <field name="model">claim.line</field>
+        <field name="inherit_id" ref="crm_claim_rma.view_crm_claim_lines_filter"/>
+        <field name="arch" type="xml">
+            <filter name="without supplier" position="before">
+                <filter string="Unprinted" domain="[('printed','=',False)]" name="unprinted"/>
+                <filter string="Printed" domain="[('printed','=',True)]" name="printed"/>
+            </filter>
+            <field name="state" position="before">
+                <field name="product_id"/>
+            </field>
+
+        </field>
+    </record>
+    <record id="claim_line_damaged_products_tree" model="ir.ui.view">
+        <field name="name">damaged.product.tree</field>
+        <field name="model">claim.line</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="claim_id"/>
+                <field name="product_id"/>
+                <field name="name"/>
+                <field name="prodlot_id"/>
+                <field name="supplier_id"/>
+                <field name="create_uid"/>
+                <field name="printed"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_damaged_products_tree">
+        <field name="name">Products Damaged</field>
+        <field name="res_model">claim.line</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain" eval="[('claim_type','=',ref('crm_claim_type.crm_claim_type_supplier'))]"/>
+        <field name="context">{'search_default_unprinted': 1}</field>
+        <field name="view_id" ref="claim_line_damaged_products_tree"/>
+        <field name="search_view_id" ref="view_damaged_products_filter"/>
+    </record>
+
+
+    <menuitem name="damaged_products" id="menu_damaged_products"
+              parent="crm_claim.menu_aftersale" action="action_damaged_products_tree" sequence="5"/>
+
+
 </odoo>
