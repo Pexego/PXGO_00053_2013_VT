@@ -1,8 +1,8 @@
 from odoo import models, fields, api, _
-from sp_api.api import Orders, Catalog
+from sp_api.api import Orders, Reports
 from sp_api.base import Marketplaces
 from datetime import datetime, timedelta
-from sp_api.base.exceptions import SellingApiException,SellingApiRequestThrottledException
+from sp_api.base.exceptions import SellingApiException, SellingApiRequestThrottledException
 from odoo.exceptions import UserError
 import time
 
@@ -33,6 +33,10 @@ class AmazonSaleOrder(models.Model):
     ], readonly=1)
     sales_channel = fields.Char("Sales Channel")
     purchase_date = fields.Date("Purchase Date")
+    partner_vat = fields.Char()
+    vat_imputation_country = fields.Char()
+    buyer_email = fields.Char()
+    buyer_name = fields.Char()
 
     def _compute_count(self):
         for order in self:
@@ -100,77 +104,124 @@ class AmazonSaleOrder(models.Model):
     message_error = fields.Text()
     warning_price = fields.Boolean(default=False)
 
-    def cron_create_amazon_sale_orders(self, last_updated_after=False,only_read=False):
+    def cron_create_amazon_sale_orders(self, data_start_time=False, data_end_time=False, marketplaces=False, only_read=False):
         amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
 
         credentials = self._get_credentials()
-        if not last_updated_after:
-            last_updated_after = (datetime.utcnow() - timedelta(days=1)).isoformat()
+        if not data_start_time:
+            data_start_time = (datetime.utcnow() - timedelta(days=15)).isoformat()
+        if not data_end_time:
+            data_end_time = datetime.utcnow().isoformat()
         orders_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
-        marketplaces = self._get_marketplaces()
+        reports_obj = Reports(marketplace=Marketplaces.ES, credentials=credentials)
+        if not marketplaces:
+            marketplaces = self._get_marketplaces()
         try:
-            res = orders_obj.get_orders(
-                LastUpdatedAfter=last_updated_after,
-                OrderStatuses=','.join(["Unshipped", "PartiallyShipped", "Shipped", "InvoiceUnconfirmed"]),
-                MarketplaceIds=','.join(marketplaces))
+            report_created = reports_obj.create_report(reportType="SC_VAT_TAX_REPORT",
+                                                       marketplaceIds=marketplaces,
+                                                       dataStartTime=data_start_time,
+                                                       dataEndTime=data_end_time).payload
         except SellingApiException as e:
             raise UserError(_("Amazon API Error. No order was created due to errors. '%s' \n") % e)
-        orders = res.payload.get('Orders', False)
-        cont=0
-        while res.payload.get('NextToken', False) or cont==0:
-            if cont==1:
-                try:
-                    res = orders_obj.get_orders(NextToken=res.payload.get('NextToken'))
-                    orders = res.payload.get('Orders', False)
-                except SellingApiException as e:
-                    raise UserError(_("Amazon API Error. No order was created due to errors. '%s' \n") % e)
-            cont=1
-            if orders:
-                for order in orders:
-                    exist_order = self.env['amazon.sale.order'].search([('name', '=', order.get('AmazonOrderId'))])
-                    if exist_order or order.get('SalesChannel',"")=='Non-Amazon':
-                        continue
-                    time.sleep(amazon_time_rate_limit)
+        report_state = ""
+        while report_state != 'DONE':
+            try:
+                report = reports_obj.get_report(report_created.get('reportId')).payload
+                report_state = report.get("processingStatus")
+            except SellingApiRequestThrottledException:
+                time.sleep(amazon_time_rate_limit)
+                continue
+            except SellingApiException as e:
+                raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_created.get('reportId'), e))
+
+        report_document = reports_obj.get_report_document(report.get('reportDocumentId'), decrypt=True).payload
+        document_lines = report_document.get('document').split("\n")
+        headers = document_lines[0].split(',')
+        orders = document_lines[1:-1]
+        order_name_index = headers.index('"Order ID"')
+        vat_number_index = headers.index('"Buyer Tax Registration"')
+        vat_imputation_country_index = headers.index('"Buyer Tax Registration Jurisdiction"')
+        order_date_index = headers.index('"Order Date"')
+
+        transaction_type_index = headers.index('"Transaction Type"')
+        for order in orders:
+            order = order.split(',')
+            if order[transaction_type_index]=="SHIPMENT":
+                order_name = order[order_name_index]
+                exist_order = self.env['amazon.sale.order'].search([('name', '=', order_name)])
+                if exist_order:
+                    continue
+                read = False
+                while not read:
+                    try:
+                        res_order = orders_obj.get_order_items(order_name)
+                        read = True
+                    except SellingApiRequestThrottledException:
+                        time.sleep(amazon_time_rate_limit)
+                        read = False
+                    except SellingApiException as e:
+                        raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order_name, e))
+                new_order = res_order.payload
+
+                if new_order:
+                    amazon_order_values = {'name': order_name,
+                                           'partner_vat':order[vat_number_index] or False,
+                                           'vat_imputation_country':order[vat_imputation_country_index] or False,
+                                           'purchase_date': order[order_date_index] or False
+                                           }
                     read = False
                     while not read:
                         try:
-                            time.sleep(amazon_time_rate_limit)
-                            res_order = orders_obj.get_order_items(order.get('AmazonOrderId'))
+                            order_complete = orders_obj.get_order_items(order_name).payload
                             read = True
-                        except SellingApiRequestThrottledException as ex:
+                        except SellingApiRequestThrottledException:
+                            time.sleep(amazon_time_rate_limit)
                             read = False
                         except SellingApiException as e:
-                            raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order.get('AmazonOrderId'), e))
-                    new_order = res_order.payload
-                    if new_order:
-                        amazon_order_values = {'name': new_order.get('AmazonOrderId'),
-                                               'fulfillment': order.get('FulfillmentChannel'),
-                                               'sales_channel':order.get('SalesChannel',False),
-                                               'purchase_date':order.get('PurchaseDate',False)}
-                        amazon_order_values_lines = self._get_lines_values(new_order)
-                        amazon_order_values.update(amazon_order_values_lines)
-                        amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
-                        if amazon_order.amount_total != amazon_order.theoretical_total_amount:
-                            amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
-                                amazon_order.amount_total, amazon_order.theoretical_total_amount)
-                            amazon_order.warning_price = True
-                        if amazon_order.amount_untaxed >400:
-                            amazon_order.message_error += _('Amount untaxed is greater than 400 %s.') %amazon_order.currency_id.symbol
-                            if amazon_order.state != 'error':
-                                amazon_order.state = 'warning'
-                        if amazon_order.state == 'error':
+                            raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order_name, e))
+                    amazon_order_values.update({
+                                               'fulfillment': order_complete.get('FulfillmentChannel',False),
+                                               'sales_channel':order_complete.get('SalesChannel',False)})
+                    amazon_order_values_lines = self._get_lines_values(new_order)
+                    amazon_order_values.update(amazon_order_values_lines)
+                    amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
+                    if amazon_order.amount_total != amazon_order.theoretical_total_amount:
+                        amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
+                            amazon_order.amount_total, amazon_order.theoretical_total_amount)
+                        amazon_order.warning_price = True
+                    if (amazon_order.partner_vat and amazon_order.vat_imputation_country and amazon_order.amount_total > 400)\
+                            or amazon_order.amount_tax==0:
+                        read = False
+                        while not read:
+                            try:
+                                buyer_info = orders_obj.get_order_buyer_info(order_name).payload
+                                read = True
+                            except SellingApiRequestThrottledException:
+                                time.sleep(amazon_time_rate_limit)
+                                read = False
+                            except SellingApiException as e:
+                                raise UserError(_("Amazon API Error. Buyer Info Request. Order %s. '%s' \n") % (order_name, e))
+
+                        amazon_order.buyer_email = buyer_info.get('BuyerEmail',False)
+                        amazon_order.buyer_name = buyer_info.get('BuyerName',False)
+                        amazon_order.message_error += _(
+                            'This Order requires a non simplified Invoice')
+                        if amazon_order.state != 'error':
+                            amazon_order.state = 'warning'
+                    if amazon_order.state == 'error':
+                        amazon_order.send_error_mail()
+                    else:
+                        if amazon_order.warning_price or amazon_order.state == 'warning':
                             amazon_order.send_error_mail()
-                        else:
-                            if amazon_order.warning_price:
-                                amazon_order.send_error_mail()
-                            if not only_read:
-                                amazon_order.process_order()
+                        if not only_read:
+                            amazon_order.process_order()
 
     @api.multi
     def retry_order(self):
         amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
         credentials = self._get_credentials()
         for amazon_order in self:
+            amazon_order.message_error = ""
             orders_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
             try:
                 res_order = orders_obj.get_order_items(amazon_order.name)
@@ -183,15 +234,16 @@ class AmazonSaleOrder(models.Model):
                 amazon_order_values = amazon_order._get_lines_values(order)
                 amazon_order.write(amazon_order_values)
                 if amazon_order.amount_total != amazon_order.theoretical_total_amount:
-                    amazon_order.message_error += _('Total amount(%f) != Theoretical total amount (%f)\n') % (
+                    amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
                         amazon_order.amount_total, amazon_order.theoretical_total_amount)
                     amazon_order.warning_price = True
-                if amazon_order.amount_untaxed > 400:
+                if (amazon_order.partner_vat and amazon_order.vat_imputation_country and amazon_order.amount_total > 400) \
+                        or amazon_order.amount_tax == 0:
                     amazon_order.message_error += _(
-                        'Amount untaxed is greater than 400 %s.') % amazon_order.currency_id.symbol
+                        'This Order requires a non simplified Invoice')
                     if amazon_order.state != 'error':
                         amazon_order.state = 'warning'
-                if amazon_order.state == 'error' or amazon_order.warning_price:
+                if amazon_order.state in ['error','warning'] or amazon_order.warning_price:
                     amazon_order.send_error_mail()
 
     def _get_marketplaces(self):
@@ -253,6 +305,9 @@ class AmazonSaleOrder(models.Model):
         template = self.env.ref('amazon_connector.send_mail_errors_amazon')
         if self.warning_price:
             context = {'message_warning': 'The order has been processed but the invoice is in draft status.'}
+            template.with_context(context).send_mail(self.id)
+        elif self.state=='warning':
+            context = {'message_warning': 'The order has been processed but the invoice has not been created.'}
             template.with_context(context).send_mail(self.id)
         else:
             template.send_mail(self.id)
@@ -324,7 +379,10 @@ class AmazonSaleOrder(models.Model):
                     order.deposits = [(6, 0, deposits.ids)]
                     deposits.sale()
                     order.state = "sale_created"
-                    if order.amount_untaxed<=400:
+                    if (order.partner_vat and order.vat_imputation_country and order.amount_total > 400) \
+                            or order.amount_tax == 0:
+                        order.state = 'warning'
+                    else:
                         invoices_ids = deposits.create_invoice()
                         order.state = "invoice_created"
                         for invoice in self.env['account.invoice'].browse(invoices_ids):
@@ -335,8 +393,6 @@ class AmazonSaleOrder(models.Model):
                             invoice._onchange_invoice_line_ids()
                             if not order.warning_price:
                                 invoice.action_invoice_open()
-                    else:
-                        order.state = 'warning'
 
                 else:
                     self.env.user.notify_warning(message=_("There are no deposit for this order"), sticky=True)

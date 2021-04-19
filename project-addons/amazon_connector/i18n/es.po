@@ -141,36 +141,36 @@ msgid "Code"
 msgstr "Código"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:117
-#: code:addons/amazon_connector/models/amazon_sale_order.py:126
+#: code:addons/amazon_connector/models/amazon_sale_order.py:125
 msgid "Amazon API Error. No order was created due to errors. '%s' \n"
 msgstr "Error API Amazon. Ningún pedido se ha creado debido ha que se ha producido un error. '%s'"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:143
-#: code:addons/amazon_connector/models/amazon_sale_order.py:178
+#: code:addons/amazon_connector/models/amazon_sale_order.py:163
+#: code:addons/amazon_connector/models/amazon_sale_order.py:181
+#: code:addons/amazon_connector/models/amazon_sale_order.py:229
 msgid "Amazon API Error. Order %s. '%s' \n"
 msgstr "Error API Amazon. Pedido %s. '%s'"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:154
-#: code:addons/amazon_connector/models/amazon_sale_order.py:186
+#: code:addons/amazon_connector/models/amazon_sale_order.py:189
+#: code:addons/amazon_connector/models/amazon_sale_order.py:237
 msgid "Total amount != Theoretical total amount (%f-%f)\n"
 msgstr "Total != Total enviado por Amazon (%f-%f)\n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:214
+#: code:addons/amazon_connector/models/amazon_sale_order.py:266
 msgid "Product with ASIN CODE %s not found\n"
 msgstr "El producto con código ASIN %s no ha sido encontrado \n"
 
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:217
+#: code:addons/amazon_connector/models/amazon_sale_order.py:269
 msgid "ItemPrice or ItemTax fields are empty %s\n"
 msgstr "Los campos ItemPrice o ItemTax vienen vacíos %s\n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:342
+#: code:addons/amazon_connector/models/amazon_sale_order.py:398
 msgid "There are no deposit for this order"
 msgstr "No hay depósitos para este pedido"
 
@@ -258,6 +258,41 @@ msgstr "La Base imponible es mayor que 400 %s"
 msgid "There aren't any invoices linked to this Amazon order"
 msgstr "No hay ninguna factura asociada a este pedido"
 
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_partner_vat
+msgid "Partner VAT"
+msgstr "CIF del cliente"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_vat_imputation_country
+msgid "VAT imputation country"
+msgstr "País de tributación del IVA"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_buyer_email
+msgid "Buyer Email"
+msgstr "Email del comprador"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_buyer_name
+msgid "Buyer Name"
+msgstr "Nombre del comprador"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Buyer Info"
+msgstr "Información del comprador"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:203
+msgid "Amazon API Error. Buyer Info Request. Order %s. '%s' \n"
+msgstr "Amazon API Error. Petición de info del comprador. Pedido %s. '%s' \n"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:208
+#: code:addons/amazon_connector/models/amazon_sale_order.py:243
+msgid "This Order requires a non simplified Invoice"
+msgstr "Este pedido necesita una factura que no sea simplificada"
 
 
 
