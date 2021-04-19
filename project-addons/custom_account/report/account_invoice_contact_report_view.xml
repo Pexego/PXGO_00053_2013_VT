@@ -44,7 +44,7 @@
         <field name="view_mode">pivot</field>
         <field name="search_view_id" ref="view_account_invoice_contact_report_search"/>
         <field name="view_id" ref="view_account_invoice_contact_report_graph"/>
-        <field name="domain">[('state', 'not in', ['draft', 'cancel','proforma','proforma2'])]</field>
+        <field name="domain">['&amp;', '|', ('product_id', '=', False), ('product_id.not_include_report', '=', False), ('state', 'not in', ['draft', 'cancel','proforma','proforma2'])]</field>
         <field name="context">{'search_default_customer':1, 'search_default_without_ef':1, 'group_by':['date'], 'group_by_no_leaf':1, 'search_default_year': 1}</field>
     </record>
 
