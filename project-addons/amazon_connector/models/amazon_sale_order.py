@@ -172,7 +172,7 @@ class AmazonSaleOrder(models.Model):
                     read = False
                     while not read:
                         try:
-                            order_complete = orders_obj.get_order_items(order_name).payload
+                            order_complete = orders_obj.get_order(order_name).payload
                             read = True
                         except SellingApiRequestThrottledException:
                             time.sleep(amazon_time_rate_limit)
