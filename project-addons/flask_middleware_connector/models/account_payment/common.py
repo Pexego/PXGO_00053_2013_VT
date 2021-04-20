@@ -20,7 +20,7 @@ class AccountPaymentOrder(models.Model):
         res = super(AccountPaymentOrder, self).generated2uploaded()
         for line in self.payment_line_ids:
             if line.payment_type == 'inbound' and line.partner_id.web:
-                line.with_delay(priority=5).export_payment_line()
+                line.with_delay(priority=10).export_payment_line()
         return res
 
 
