@@ -5,7 +5,7 @@
     'author': 'Visiotech',
     'category': '',
     'depends': ['stock', 'base_synchro', 'picking_incidences'],
-    'data': [],
+    'data': ["views/stock_picking_view.xml"],
     'active': False,
     'installable': True,
 }

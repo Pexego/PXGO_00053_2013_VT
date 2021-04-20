@@ -18,6 +18,11 @@ class StockPicking(models.Model):
                     message = _("The picking has not been notified properly, please check the picking in the other odoo")
                     self.env.user.notify_warning(message=message, sticky=True)
 
+    @api.multi
+    def retry_notify_picking_done(self):
+        for pick in self:
+            pick.notify_picking_done(pick.purchase_id.remark)
+
     def notify_picking_done(self, order):
         # get the server
         server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
