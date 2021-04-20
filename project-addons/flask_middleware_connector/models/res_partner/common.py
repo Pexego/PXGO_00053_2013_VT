@@ -117,6 +117,8 @@ class PartnerListener(Component):
                 partner.with_delay(priority=5, eta=120).export_partner_tag_rel()
             for field in up_fields:
                 if field in fields:
+                    if field == 'last_sale_date' and not partner.csv_connector_access:
+                        break
                     partner.with_delay(priority=5, eta=120).update_partner()
                     if 'street' in fields or \
                             'zip' in fields or \
