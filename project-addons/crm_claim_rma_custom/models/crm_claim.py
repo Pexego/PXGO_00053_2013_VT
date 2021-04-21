@@ -150,6 +150,8 @@ class CrmClaimRma(models.Model):
                                 'cost_unit': inv_line.product_id.standard_price,
                                 'tax_ids': [(6, 0, taxes_ids)]
                             }
+                            if inv_line.quantity < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
+                                raise exceptions.Warning(_("The quantity of this product in all RMAs cannot be greater than the invoice quantity"))
                             break
                     if not vals:
                         raise exceptions.Warning(
@@ -360,8 +362,11 @@ class ClaimInvoiceLine(models.Model):
     def onchange_values(self):
         if self.product_id and self.invoice_id:
             for line in self.invoice_id.invoice_line_ids:
-                if line.product_id == self.product_id and line.quantity < self.qty:
-                    raise exceptions.Warning(_('Quantity cannot be bigger than the quantity specified on invoice'))
+                if line.product_id == self.product_id :
+                    if line.quantity < self.qty:
+                        raise exceptions.Warning(_('Quantity cannot be bigger than the quantity specified on invoice'))
+                    if line.quantity < line.with_context({'not_id':self._origin.id}).claim_invoice_line_qty + self.qty:
+                        raise exceptions.Warning(_("The quantity of this product in all RMAs cannot be greater than the invoice quantity"))
         price_subtotal = self.qty * self.price_unit * ((100.0 - self.discount) / 100.0)
         self.price_subtotal = price_subtotal
 

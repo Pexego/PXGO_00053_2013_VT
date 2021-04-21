@@ -497,3 +497,10 @@ msgstr "Referencia cliente"
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_warehouse_date
 msgid "Final Received Date"
 msgstr "Fecha recepción final"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:154
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:369
+#, python-format
+msgid "The quantity of this product in all RMAs cannot be greater than the invoice quantity"
+msgstr "La cantidad de este producto en todos los RMAs no puede ser mayor que la cantidad de la factura"
