@@ -1,4 +1,5 @@
 from odoo import models, fields, api, _
+from odoo.addons.queue_job.job import job
 import odoorpc
 
 
@@ -12,17 +13,14 @@ class StockPicking(models.Model):
         for picking in self:
             if picking.picking_type_id.id == self.env.ref('automatize_edi_it.picking_type_receive_top_deposit').id:
                 # Notify odoo ES that the picking is done
-                try:
-                    self.notify_picking_done(picking.purchase_id.remark)
-                except:
-                    message = _("The picking has not been notified properly, please check the picking in the other odoo")
-                    self.env.user.notify_warning(message=message, sticky=True)
+                self.with_delay(eta=10).notify_picking_done(picking.purchase_id.remark)
 
     @api.multi
     def retry_notify_picking_done(self):
         for pick in self:
             pick.notify_picking_done(pick.purchase_id.remark)
 
+    @job(retry_pattern={1: 10 * 60})
     def notify_picking_done(self, order):
         # get the server
         server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
@@ -46,6 +44,7 @@ class StockPicking(models.Model):
                             if move.product_id.default_code == move_es.product_id.default_code:
                                 move_es.qty_ready = move.qty_ready
                                 move_es.quantity_done = move.quantity_done
+                                break
                     picking.with_incidences = True
                     picking.move_type = 'direct'
                     picking.action_accept_confirmed_qty()
