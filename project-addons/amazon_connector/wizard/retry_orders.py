@@ -17,7 +17,7 @@ class RetryAmazonOrders(models.TransientModel):
 
     @api.multi
     def retry_orders(self):
-        amazon_orders=self.amazon_orders.mapped('amazon_order')
+        amazon_orders = self.env['amazon.sale.order'].search([('id', 'in', self.env.context.get('active_ids', False))])
         amazon_orders.filtered(lambda o: o.state=='error').retry_order()
         amazon_orders.filtered(lambda o: o.state in ['warning','read']).process_order()
 

@@ -352,50 +352,50 @@ class AmazonSaleOrder(models.Model):
                 # sale_order = self.env['sale.order'].create({order_vals})
                 # sale_order.onchange_partner_id()
                 # sale_order.action_confirm()
-
             else:
                 # Buscar el depósito, crear la venta, crear factura, ajustar precio de la factura generada con el de venta en amazon y validarla
                 deposits = self.env['stock.deposit']
-                for line in order.order_line:
-                    cont = 0
-                    max = line.product_qty
-                    deposits_part = self.env['stock.deposit'].search(
-                        [('partner_id.name', '=', 'Ventas Amazon'),
-                         ('state', '=', 'draft'),
-                         ('product_id', '=', line.product_id.id)],
-                        order='delivery_date asc')
-                    for deposit in deposits_part:
-                        if cont + deposit.product_uom_qty < max:
-                            cont += deposit.product_uom_qty
-                            deposits += deposit
+                if not order.deposits:
+                    for line in order.order_line:
+                        cont = 0
+                        max = line.product_qty
+                        deposits_part = self.env['stock.deposit'].search(
+                            [('partner_id.name', '=', 'Ventas Amazon'),
+                             ('state', '=', 'draft'),
+                             ('product_id', '=', line.product_id.id)],
+                            order='delivery_date asc')
+                        for deposit in deposits_part:
+                            if cont + deposit.product_uom_qty < max:
+                                cont += deposit.product_uom_qty
+                                deposits += deposit
+                            else:
+                                qty_to_sale = max - cont
+                                new_deposit = deposit.copy()
+                                new_deposit.write({'product_uom_qty': deposit.product_uom_qty - qty_to_sale})
+                                deposit.write({'product_uom_qty': qty_to_sale})
+                                deposits += deposit
+                                break
+                    if deposits:
+                        order.deposits = [(6, 0, deposits.ids)]
+                        deposits.sale()
+                        order.state = "sale_created"
+                        if (order.partner_vat and order.vat_imputation_country and order.amount_total > 400) \
+                                or order.amount_tax == 0:
+                            order.state = 'warning'
                         else:
-                            qty_to_sale = max - cont
-                            new_deposit = deposit.copy()
-                            new_deposit.write({'product_uom_qty': deposit.product_uom_qty - qty_to_sale})
-                            deposit.write({'product_uom_qty': qty_to_sale})
-                            deposits += deposit
-                            break
-                if deposits:
-                    order.deposits = [(6, 0, deposits.ids)]
-                    deposits.sale()
-                    order.state = "sale_created"
-                    if (order.partner_vat and order.vat_imputation_country and order.amount_total > 400) \
-                            or order.amount_tax == 0:
-                        order.state = 'warning'
-                    else:
-                        invoices_ids = deposits.create_invoice()
-                        order.state = "invoice_created"
-                        for invoice in self.env['account.invoice'].browse(invoices_ids):
-                            invoice.write({'name': order.name})
-                            for line in invoice.invoice_line_ids:
-                                o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)
-                                line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0, 'quantity': o_line.product_qty})
-                            invoice._onchange_invoice_line_ids()
-                            if not order.warning_price:
-                                invoice.action_invoice_open()
+                            invoices_ids = deposits.create_invoice()
+                            order.state = "invoice_created"
+                            for invoice in self.env['account.invoice'].browse(invoices_ids):
+                                invoice.write({'name': order.name})
+                                for line in invoice.invoice_line_ids:
+                                    o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)[0]
+                                    line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0, 'quantity': o_line.product_qty})
+                                invoice._onchange_invoice_line_ids()
+                                if not order.warning_price:
+                                    invoice.action_invoice_open()
 
-                else:
-                    self.env.user.notify_warning(message=_("There are no deposit for this order"), sticky=True)
+                    else:
+                        self.env.user.notify_warning(message=_("There are no deposit for this order"), sticky=True)
 
     def mark_to_done(self):
         if self.invoice_deposits:
