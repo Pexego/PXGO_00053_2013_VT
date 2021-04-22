@@ -24,9 +24,9 @@ class AmazonSaleOrder(models.Model):
         ('warning', 'Warning'),
         ('read', 'Read'),
         ('sale_created', 'Sale created'),
-        ('invoice_created', 'Invoice created')
+        ('invoice_created', 'Invoice created'),
+        ('invoice_open', 'Invoice open')
     ], string='Status', readonly=True, copy=False, index=True, track_visibility='onchange', default='error')
-
     fulfillment = fields.Selection([
         ('AFN', 'Amazon'),
         ('MFN', 'Own')
@@ -383,23 +383,30 @@ class AmazonSaleOrder(models.Model):
                                 or order.amount_tax == 0:
                             order.state = 'warning'
                         else:
+                            import ipdb
+                            ipdb.set_trace()
                             invoices_ids = deposits.create_invoice()
                             order.state = "invoice_created"
                             for invoice in self.env['account.invoice'].browse(invoices_ids):
-                                invoice.write({'name': order.name})
+                                invoice.write({'name': order.name,'amazon_order':order.id})
                                 for line in invoice.invoice_line_ids:
                                     o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)[0]
-                                    line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0, 'quantity': o_line.product_qty})
+                                    line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0})
                                 invoice._onchange_invoice_line_ids()
                                 if not order.warning_price:
                                     invoice.action_invoice_open()
+                                    order.state = 'invoice_open'
 
                     else:
-                        self.env.user.notify_warning(message=_("There are no deposit for this order"), sticky=True)
+                        self.env.user.notify_warning(message=_("There are no deposit for this order"))
 
     def mark_to_done(self):
         if self.invoice_deposits:
-            self.state='invoice_created'
+            states = self.invoice_deposits.mapped('state')
+            if all([x=='draft' for x in states]):
+                self.state='invoice_created'
+            else:
+                self.state='invoice_open'
         else:
             raise UserError(_("There aren't any invoices linked to this Amazon order"))
 

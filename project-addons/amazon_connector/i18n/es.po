@@ -294,7 +294,10 @@ msgstr "Amazon API Error. Petición de info del comprador. Pedido %s. '%s' \n"
 msgid "This Order requires a non simplified Invoice"
 msgstr "Este pedido necesita una factura que no sea simplificada"
 
-
+#. module: amazon_connector
+#: selection:amazon.sale.order,state:0
+msgid "Invoice open"
+msgstr "Factura validada"
 
 
 
