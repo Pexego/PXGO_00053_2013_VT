@@ -383,8 +383,6 @@ class AmazonSaleOrder(models.Model):
                                 or order.amount_tax == 0:
                             order.state = 'warning'
                         else:
-                            import ipdb
-                            ipdb.set_trace()
                             invoices_ids = deposits.create_invoice()
                             order.state = "invoice_created"
                             for invoice in self.env['account.invoice'].browse(invoices_ids):
