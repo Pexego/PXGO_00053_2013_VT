@@ -15,7 +15,7 @@ class IrTranslationListener(Component):
         # this should look like "model.name,field"
         if len(name) == 2:
             if name[0] in models.keys() and name[1] in models.get(name[0], []):
-                record.with_delay(priority=5).export_translation()
+                record.with_delay(priority=11).export_translation()
                 record.with_context({'no_update': True}).web = True
 
     def on_record_write(self, record, fields=None):
@@ -25,9 +25,9 @@ class IrTranslationListener(Component):
         if not no_update and len(name) == 2:
             if name[0] in models.keys() and name[1] in models.get(name[0], []):
                 if record.web:
-                    record.with_delay(priority=5, eta=10).update_translation(fields=fields)
+                    record.with_delay(priority=11, eta=10).update_translation(fields=fields)
                 else:
-                    record.with_delay(priority=5).export_translation()
+                    record.with_delay(priority=11).export_translation()
                     record.with_context({'no_update': True}).web = True
 
     def on_record_unlink(self, record):

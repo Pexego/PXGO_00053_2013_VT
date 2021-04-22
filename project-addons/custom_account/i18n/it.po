@@ -1147,3 +1147,24 @@ msgstr "Questo messaggio sarà messo in Note per magazzino nell'ordine di vendit
 #: model:ir.model.fields,field_description:custom_account.field_product_product_not_include_report
 msgid "Not include in reports"
 msgstr "Non includere nei rapporti"
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.account_reports_for_product_action
+#: model:ir.ui.menu,name:custom_account.account_reports_for_product
+msgid "Invoices Analysis for Product"
+msgstr "Analisi delle fature per Prodotto"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_product_wizard
+msgid "Select the report"
+msgstr "Seleziona un rapporto"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_product_wizard
+msgid "Show"
+msgstr "Mostrare"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_product_report_filter
+msgid "Filter"
+msgstr "Filtro"

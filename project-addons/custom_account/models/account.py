@@ -84,15 +84,6 @@ class AccountInvoice(models.Model):
     reference = fields.Char(string='N. Supplier Invoice (SII)')
 
     @api.multi
-    def _write(self, vals):
-        state_web = vals.get('state_web',False)
-        if state_web and state_web not in ('draft','open') and not self.env.context.get('no_job',False):
-            for invoice in self:
-                invoice.with_delay(priority=5, eta=120).update_invoice(fields=['state_web'])
-        return super(AccountInvoice,self)._write(vals)
-
-
-    @api.multi
     @api.depends('state', 'payment_mode_id', 'payment_move_line_ids','payment_move_line_ids.move_id.line_ids.full_reconcile_id')
     def _get_state_web(self):
         for invoice in self:
