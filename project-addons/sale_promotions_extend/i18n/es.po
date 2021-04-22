@@ -644,3 +644,8 @@ msgstr "Línea de descuento por cada par de productos"
 #: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_apply_at_confirm
 msgid "Apply at confirm"
 msgstr "Aplicar al confirmar"
+
+#. module: sale_promotions_extend
+#: view:promos.rules:sale_promotions_extend.view_promotion_rules_form_special
+msgid "Partner Categories Excluded"
+msgstr "Categorías cliente excluidas"

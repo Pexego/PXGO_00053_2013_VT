@@ -12,6 +12,12 @@
                 <field name="special_promo"/>
                 <field name="apply_at_confirm"/>
             </field>
+            <notebook position="inside">
+                <page string="Partner Categories Excluded">
+                    <field name="partner_categories_excluded"
+                        nolabel="1" />
+                </page>
+            </notebook>
         </field>
     </record>
 
