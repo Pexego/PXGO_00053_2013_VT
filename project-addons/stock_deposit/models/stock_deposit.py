@@ -245,9 +245,7 @@ class StockDeposit(models.Model):
             sale_deposit = deposit_obj.search(
                 [('id', 'in', deposits.ids), ('sale_id', '=', sale.id)])
 
-            sale_lines = self.env['sale.order.line']
-            for deposit in sale_deposit:
-                sale_lines += deposit.move_id.sale_line_id
+            sale_lines = sale_deposit.mapped('move_id.sale_line_id')
             my_context = dict(self.env.context)
             my_context['invoice_deposit'] = True
             inv_vals = sale._prepare_invoice()
@@ -263,7 +261,8 @@ class StockDeposit(models.Model):
                     and sale.partner_id.bank_ids[0].id or False
             invoice = self.env['account.invoice'].create(inv_vals)
             for line in sale_lines:
-                line.with_context(my_context).invoice_line_create(invoice.id, line.qty_to_invoice)
+                deposit = self.filtered(lambda d: d.move_id.sale_line_id.id==line.id)
+                line.with_context(my_context).invoice_line_create(invoice.id, sum(deposit.mapped('product_uom_qty')))
                 line.qty_invoiced=line.product_qty
             invoice_ids.append(invoice.id)
             sale_deposit.write({'invoice_id': invoice.id})
