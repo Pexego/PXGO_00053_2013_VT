@@ -299,6 +299,12 @@ msgstr "Este pedido necesita una factura que no sea simplificada"
 msgid "Invoice open"
 msgstr "Factura validada"
 
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/invoice.py:24
+msgid "You cannot merge invoices with differents amazon orders: %s"
+msgstr "No puedes fusionar facturas con diferentes pedidos de Amazon: %s"
+
+
 
 
 

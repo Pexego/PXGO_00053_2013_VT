@@ -43,9 +43,9 @@ class AmazonSaleOrder(models.Model):
             if order.deposits:
                 order.deposits_count = len(order.deposits)
                 order.sale_deposits = order.deposits.mapped('sale_id')
-                order.invoice_deposits = order.deposits.mapped('invoice_id') + self.env['account.invoice'].search([('amazon_order','=',order.id)])
+                order.invoice_deposits = self.env['account.invoice'].search([('amazon_order','=',order.id)])
                 order.sale_deposits_count = len(order.sale_deposits)
-                order.invoice_deposits_count = len(set(order.invoice_deposits))
+                order.invoice_deposits_count = len(order.invoice_deposits)
 
     def action_view_sales(self):
         action = self.env.ref('sale.action_quotations').read()[0]
@@ -389,7 +389,7 @@ class AmazonSaleOrder(models.Model):
                             if len(invoices)>1:
                                 allinvoices = invoices.do_merge(keep_references=False)
                                 invoices = self.env['account.invoice'].browse(list(allinvoices))
-                            invoices.write({'name': order.name,'amazon_order':order.id})
+
                             for line in invoices.invoice_line_ids:
                                 o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)[0]
                                 line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0})
