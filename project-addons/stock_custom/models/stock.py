@@ -19,6 +19,7 @@
 ##############################################################################
 from odoo import api, exceptions, fields, models, _
 
+
 class StockPicking(models.Model):
     _inherit = "stock.picking"
     _order = "priority desc, date desc, id desc"
@@ -79,8 +80,6 @@ class StockPicking(models.Model):
         self.filtered(lambda picking: picking.picking_type_code == 'outgoing' and picking.location_id.usage=='internal' and picking.state == 'confirmed') \
                 .mapped('move_lines')._action_assign()
         return res
-
-
 
 
 class StockMoveLine(models.Model):
@@ -174,6 +173,7 @@ class StockMove(models.Model):
                            order="has_reservations,sequence,date_expected,id")
                 if confirmed_ids:
                     confirmed_ids._action_assign()
+            self._push_apply()
         return res
 
     def _get_price_unit(self):
@@ -254,7 +254,6 @@ class StockReservation(models.Model):
             reservation.next_reception_date = moves[0].date_expected if moves else False
 
 
-
 class StockProductionLot(models.Model):
     _inherit = 'stock.production.lot'
 
@@ -290,3 +289,14 @@ class StockLandedCost(models.Model):
         valuation_lines.mapped('move_id.product_id.product_tmpl_id').\
             recalculate_standard_price_2()
         return res
+
+
+class PushedFlow(models.Model):
+    _inherit = "stock.location.path"
+
+    apply_at_finish = fields.Boolean(string='Apply at finish',
+                                     help='Apply the rule when move is done')
+
+    def _apply(self, move):
+        if not self.apply_at_finish or (self.apply_at_finish and move.state == 'done'):
+            super()._apply(move)
