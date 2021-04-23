@@ -43,7 +43,7 @@ class AmazonSaleOrder(models.Model):
             if order.deposits:
                 order.deposits_count = len(order.deposits)
                 order.sale_deposits = order.deposits.mapped('sale_id')
-                order.invoice_deposits = self.env['account.invoice'].search([('amazon_order','=',order.id)])
+                order.invoice_deposits = order.deposits.mapped('invoice_id') + self.env['account.invoice'].search([('amazon_order','=',order.id)])
                 order.sale_deposits_count = len(order.sale_deposits)
                 order.invoice_deposits_count = len(set(order.invoice_deposits))
 
