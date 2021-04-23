@@ -26,6 +26,21 @@ class SaleOrderLine(models.Model):
     old_discount = fields.Float(copy=False)
     old_price = fields.Float(copy=False)
 
+    @api.multi
+    def invoice_line_create(self, invoice_id, qty):
+        lines = self.env['sale.order.line']
+        for line in self:
+            if line.promotion_line:
+                #TODO: la idea es sacar el total_to_invoice del context, pero se pierde
+                #TODO: aquí no se puede calcular, porque las lineas anteriores ya se han marcado como facturadas
+                order = line.order_id
+                total_to_invoice = sum([l.qty_to_invoice * l.price_subtotal for l in order.order_line.filtered(lambda l: l.invoice_status == 'to invoice')])
+                if total_to_invoice > 0 or (total_to_invoice < 0 and not order.order_line.filtered(lambda l: l.invoice_status == 'no')):
+                    lines += line
+            else:
+                lines += line
+        return super(SaleOrderLine, lines).invoice_line_create(invoice_id, qty)
+
 
 class SaleOrder(models.Model):
 
@@ -99,3 +114,14 @@ class SaleOrder(models.Model):
         ctx['is_confirm'] = True
         order = self.with_context(ctx)
         return super(SaleOrder, order).action_confirm()
+
+    @api.multi
+    def _prepare_invoice(self):
+        #TODO: este context se pierde cuando llega a la función invoice_line_create
+        self.ensure_one()
+        ctx = dict(self.env.context)
+        total_to_invoice = sum([l.qty_to_invoice * l.price_subtotal for l in
+                                self.order_line.filtered(lambda l: l.invoice_status == 'to invoice')])
+        ctx.update({'total_to_invoice': total_to_invoice})
+        return super(SaleOrder, self.with_context(ctx))._prepare_invoice()
+
