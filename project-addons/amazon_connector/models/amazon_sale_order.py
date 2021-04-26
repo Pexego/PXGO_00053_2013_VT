@@ -37,6 +37,7 @@ class AmazonSaleOrder(models.Model):
     vat_imputation_country = fields.Char()
     buyer_email = fields.Char()
     buyer_name = fields.Char()
+    amazon_invoice_name = fields.Char("Amazon Invoice")
 
     def _compute_count(self):
         for order in self:
@@ -94,7 +95,6 @@ class AmazonSaleOrder(models.Model):
                                    track_visibility='always')
     theoretical_total_amount = fields.Monetary()
     theoretical_total_taxes = fields.Monetary()
-
     currency_id = fields.Many2one(
         'res.currency',
         required=True,
@@ -106,7 +106,7 @@ class AmazonSaleOrder(models.Model):
 
     def cron_create_amazon_sale_orders(self, data_start_time=False, data_end_time=False, marketplaces=False, only_read=False):
         amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-
+        amazon_max_difference_allowed = float(self.env['ir.config_parameter'].sudo().get_param('amazon.max.difference.allowed'))
         credentials = self._get_credentials()
         if not data_start_time:
             data_start_time = (datetime.utcnow() - timedelta(days=15)).isoformat()
@@ -142,7 +142,7 @@ class AmazonSaleOrder(models.Model):
         vat_number_index = headers.index('"Buyer Tax Registration"')
         vat_imputation_country_index = headers.index('"Buyer Tax Registration Jurisdiction"')
         order_date_index = headers.index('"Order Date"')
-
+        amazon_invoice_index = headers.index('"VAT Invoice Number"')
         transaction_type_index = headers.index('"Transaction Type"')
         for order in orders:
             order = order.split(',')
@@ -162,12 +162,12 @@ class AmazonSaleOrder(models.Model):
                     except SellingApiException as e:
                         raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order_name, e))
                 new_order = res_order.payload
-
                 if new_order:
                     amazon_order_values = {'name': order_name,
                                            'partner_vat':order[vat_number_index] or False,
                                            'vat_imputation_country':order[vat_imputation_country_index] or False,
-                                           'purchase_date': order[order_date_index] or False
+                                           'purchase_date': order[order_date_index] or False,
+                                           'amazon_invoice_name': order[amazon_invoice_index] or False
                                            }
                     read = False
                     while not read:
@@ -185,7 +185,7 @@ class AmazonSaleOrder(models.Model):
                     amazon_order_values_lines = self._get_lines_values(new_order)
                     amazon_order_values.update(amazon_order_values_lines)
                     amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
-                    if amazon_order.amount_total != amazon_order.theoretical_total_amount:
+                    if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
                         amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
                             amazon_order.amount_total, amazon_order.theoretical_total_amount)
                         amazon_order.warning_price = True
@@ -215,14 +215,25 @@ class AmazonSaleOrder(models.Model):
                             amazon_order.send_error_mail()
                         if not only_read:
                             amazon_order.process_order()
-
     @api.multi
     def retry_order(self):
         amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+        amazon_max_difference_allowed = float(self.env['ir.config_parameter'].sudo().get_param('amazon.max.difference.allowed'))
         credentials = self._get_credentials()
         for amazon_order in self:
-            amazon_order.message_error = ""
             orders_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
+            if not amazon_order.message_error:
+                try:
+                    res_order_header = orders_obj.get_order(amazon_order.name)
+                except SellingApiException as e:
+                    raise UserError(_("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e)))
+                time.sleep(amazon_time_rate_limit)
+                order_header = res_order_header.payload
+                amazon_order.write({'fulfillment': order_header.get('FulfillmentChannel',False),
+                                    'sales_channel':order_header.get('SalesChannel',False),
+                                    'purchase_date': order_header.get('PurchaseDate',False)})
+
+            amazon_order.message_error = ""
             try:
                 res_order = orders_obj.get_order_items(amazon_order.name)
             except SellingApiException as e:
@@ -233,7 +244,7 @@ class AmazonSaleOrder(models.Model):
                 amazon_order.order_line.unlink()
                 amazon_order_values = amazon_order._get_lines_values(order)
                 amazon_order.write(amazon_order_values)
-                if amazon_order.amount_total != amazon_order.theoretical_total_amount:
+                if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
                     amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
                         amazon_order.amount_total, amazon_order.theoretical_total_amount)
                     amazon_order.warning_price = True
@@ -272,8 +283,10 @@ class AmazonSaleOrder(models.Model):
                 order_total_price += price_total
                 if default_currency:
                     default_currency = False
-                    amazon_order_values['currency_id'] = self.env['res.currency'].search(
-                        [('name', '=', order_item.get('ItemPrice').get('CurrencyCode'))]).id or self.env.user.company_id.currency_id.id
+                    currency = self.env['res.currency'].search([('name', '=', order_item.get('ItemPrice').get('CurrencyCode'))])
+                    if not currency:
+                        amazon_order_values['message_error'] += _('There is no currency with this name or it is no activated %s\n') % order_item.get('ItemPrice').get('CurrencyCode')
+                    amazon_order_values['currency_id'] = currency.id or self.env.user.company_id.currency_id.id
                 taxes = float(order_item.get('ItemTax').get('Amount'))
                 order_total_taxes += taxes
                 price_subtotal = price_total - taxes
@@ -390,10 +403,6 @@ class AmazonSaleOrder(models.Model):
                                 allinvoices = invoices.do_merge(keep_references=False)
                                 invoices = self.env['account.invoice'].browse(list(allinvoices))
 
-                            for line in invoices.invoice_line_ids:
-                                o_line = order.order_line.filtered(lambda l: l.product_id == line.product_id)[0]
-                                line.write({'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit, 'discount': 0})
-                            invoices._onchange_invoice_line_ids()
                             if not order.warning_price:
                                 invoices.action_invoice_open()
                                 order.state = 'invoice_open'

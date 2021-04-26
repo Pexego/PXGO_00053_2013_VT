@@ -5,7 +5,7 @@ class AccountInvoice(models.Model):
     _inherit = 'account.invoice'
 
     amazon_order = fields.Many2one(comodel_name='amazon.sale.order')
-
+    amazon_invoice = fields.Char()
     @api.multi
     def action_invoice_open(self):
         res = super(AccountInvoice, self).action_invoice_open()
@@ -23,7 +23,7 @@ class AccountInvoice(models.Model):
             if len(amazon_order)>1:
                 raise exceptions.Warning(_('You cannot merge invoices with differents amazon orders: %s') %amazon_order.mapped('name'))
             invoice = self.env['account.invoice'].browse(list(res))
-            invoice.write({'name':amazon_order.name,'amazon_order':amazon_order.id})
+            invoice.write({'name':amazon_order.name,'amazon_order':amazon_order.id,'amazon_invoice':amazon_order.amazon_invoice_name})
         return res
 
 

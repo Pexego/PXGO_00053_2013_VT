@@ -107,6 +107,7 @@
                                    readonly="1"/>
                         </group>
                         <group>
+                            <field name="amazon_invoice_name" readonly="1"/>
                             <field name="fulfillment" readonly="1"/>
                             <field name="sales_channel" readonly="1"/>
                             <field name="purchase_date" readonly="1"/>
