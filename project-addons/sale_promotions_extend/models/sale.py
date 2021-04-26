@@ -31,11 +31,16 @@ class SaleOrderLine(models.Model):
         lines = self.env['sale.order.line']
         for line in self:
             if line.promotion_line:
-                #TODO: la idea es sacar el total_to_invoice del context, pero se pierde
-                #TODO: aquí no se puede calcular, porque las lineas anteriores ya se han marcado como facturadas
                 order = line.order_id
-                total_to_invoice = sum([l.qty_to_invoice * l.price_subtotal for l in order.order_line.filtered(lambda l: l.invoice_status == 'to invoice')])
-                if total_to_invoice > 0 or (total_to_invoice < 0 and not order.order_line.filtered(lambda l: l.invoice_status == 'no')):
+                total_to_invoice_dict = self._context.get('total_to_invoice', False)
+                total_to_invoice = 0
+                # Do not include the discount lines if the qty to invoice is < 0
+                # because it will create a refund
+                if total_to_invoice_dict:
+                    total_to_invoice = total_to_invoice_dict.get(self.order_id.id, 0)
+                if total_to_invoice > 0 or \
+                        (total_to_invoice < 0 and not order.order_line.filtered(lambda l: l.invoice_status == 'no')) or \
+                        total_to_invoice == 0:
                     lines += line
             else:
                 lines += line
@@ -116,12 +121,12 @@ class SaleOrder(models.Model):
         return super(SaleOrder, order).action_confirm()
 
     @api.multi
-    def _prepare_invoice(self):
-        #TODO: este context se pierde cuando llega a la función invoice_line_create
-        self.ensure_one()
+    def action_invoice_create(self, grouped=False, final=False):
         ctx = dict(self.env.context)
-        total_to_invoice = sum([l.qty_to_invoice * l.price_subtotal for l in
-                                self.order_line.filtered(lambda l: l.invoice_status == 'to invoice')])
-        ctx.update({'total_to_invoice': total_to_invoice})
-        return super(SaleOrder, self.with_context(ctx))._prepare_invoice()
-
+        total_to_invoice_dict = {}
+        for order in self:
+            total_to_invoice = sum([l.qty_to_invoice * l.price_subtotal for l in
+                                    self.order_line.filtered(lambda l: l.invoice_status == 'to invoice')])
+            total_to_invoice_dict[order.id] = total_to_invoice
+        ctx.update({'total_to_invoice': total_to_invoice_dict})
+        return super(SaleOrder, self.with_context(ctx)).action_invoice_create(grouped=grouped,final=final)
