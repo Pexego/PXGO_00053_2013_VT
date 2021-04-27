@@ -15,7 +15,9 @@ class AccountInvoiceExporter(Component):
             'custom_report_link.action_report_invoice_custom')
         result = invoice_report_action.render_qweb_pdf(res_ids=binding.id)
         result_encode = base64.b64encode(result[0])
-        binding.with_context({"no_job": True})._get_state_web()
+        if not binding.state_web:
+            binding._get_state_web()
+
         vals = {'odoo_id': binding.id,
                 'number': binding.number,
                 'partner_id': binding.partner_id.commercial_partner_id.id,
@@ -25,7 +27,7 @@ class AccountInvoiceExporter(Component):
                 'subtotal_wt_rect': binding.amount_untaxed_signed,
                 'total_wt_rect': binding.amount_total_signed,
                 'pdf_file_data': result_encode,
-                'state': binding.state_web,
+                'state': binding.state_web,  # Llamada a _get_state_web para evitar problemas en facturas que no tienen inicializado ese valor
                 'payment_mode_id': binding.payment_mode_id.name,
                 'orders': binding.orders}
         if mode == 'insert':

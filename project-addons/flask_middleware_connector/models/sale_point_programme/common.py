@@ -9,16 +9,16 @@ class SalePointProgrammeRuleListener(Component):
     _apply_on = ['sale.point.programme.rule']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=5, eta=60).export_rule()
+        record.with_delay(priority=11, eta=60).export_rule()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["name","points","value","product_category_id","product_brand_id","product_id","operator","date_end"]
         for field in up_fields:
             if field in fields:
-                record.with_delay(priority=5, eta=120).update_rule(fields=fields)
+                record.with_delay(priority=11, eta=120).update_rule(fields=fields)
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=5, eta=120).unlink_rule()
+        record.with_delay(priority=11, eta=120).unlink_rule()
 
 
 class SalePointProgrammeRule(models.Model):
@@ -33,7 +33,7 @@ class SalePointProgrammeRule(models.Model):
         return True
 
     @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
-    def update_rule(self, fields):
+    def update_rule(self, fields=None):
         backend = self.env["middleware.backend"].search([])[0]
         with backend.work_on(self._name) as work:
             exporter = work.component(usage='record.exporter')
@@ -56,15 +56,15 @@ class ResPartnerPointProgrammeBagAccumulatedListener(Component):
 
     def on_record_create(self, record, fields=None):
         if record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=5, eta=60).export_point_programme_bag_acc()
+            record.with_delay(priority=11, eta=60).export_point_programme_bag_acc()
 
     def on_record_write(self, record, fields=None):
         if record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=5, eta=120).update_point_programme_bag_acc(fields=fields)
+            record.with_delay(priority=11, eta=120).update_point_programme_bag_acc(fields=fields)
 
     def on_record_unlink(self, record):
         if record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=5, eta=120).unlink_point_programme_bag_acc()
+            record.with_delay(priority=11, eta=120).unlink_point_programme_bag_acc()
 
 
 class ResPartnerPointProgrammeBagAccumulated(models.Model):

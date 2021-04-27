@@ -97,8 +97,9 @@ class WebsiteReservation(http.Controller):
                         reservation.unlink()
                         return json.dumps({'unique_js_id': post['new_js_unique_id']})
                     else:
-                        # Solo nos importan los cambios en cantidad
-                        reservation.write({'product_uom_qty': float(post['qty'])})
-                        reservation.reserve()
-                        reservation.move_id._recompute_state()
+                        if reservation.product_uom_qty != float(post['qty']):
+                            # Solo nos importan los cambios en cantidad
+                            reservation.write({'product_uom_qty': float(post['qty'])})
+                            reservation.reserve()
+                            reservation.move_id._recompute_state()
         return json.dumps(True)

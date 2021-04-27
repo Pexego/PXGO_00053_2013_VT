@@ -24,6 +24,7 @@
                 'account_invoice_merge', 'customer_area',
                 'res_currency_rate_force'],
     "data": ['data/res_partner_category_data.xml',
+             'data/groups.xml',
              'views/account_view.xml',
              'views/partner_view.xml',
              'report/account_invoice_report_view.xml',

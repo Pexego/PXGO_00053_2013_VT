@@ -28,7 +28,8 @@ class EquivalentProductsWizard(models.TransientModel):
 
     @api.multi
     def delete_product(self):
-        if self.line_id.move_out_customer_state and self.line_id.move_out_customer_state != 'cancel':
+        if self.line_id.move_out_customer_state and self.line_id.move_out_customer_state != 'cancel'\
+                and self.line_id.move_out_customer_id.location_id.id != self.env.ref('crm_rma_advance_location.stock_location_rma').id:
             raise exceptions.UserError(_("There are open pickings that contain this product"))
         else:
             self.line_id.equivalent_product_id = None

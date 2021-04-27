@@ -1306,3 +1306,24 @@ msgstr "Este mensaje será copiado automáticamente en las notas para almacén d
 #: model:ir.model.fields,field_description:custom_account.field_product_product_not_include_report
 msgid "Not include in reports"
 msgstr "No incluir en informes"
+
+#. module: custom_account
+#: model:ir.actions.act_window,name:custom_account.account_reports_for_product_action
+#: model:ir.ui.menu,name:custom_account.account_reports_for_product
+msgid "Invoices Analysis for Product"
+msgstr "Análisis de facturas para Producto"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_product_wizard
+msgid "Select the report"
+msgstr "Selecciona el informe"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_product_wizard
+msgid "Show"
+msgstr "Mostrar"
+
+#. module: custom_account
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_product_report_filter
+msgid "Filter"
+msgstr "Filtro"

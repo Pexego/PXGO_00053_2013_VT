@@ -639,3 +639,8 @@ msgstr "Linea di sconto per ogni due prodotti"
 #: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_apply_at_confirm
 msgid "Apply at confirm"
 msgstr "Applicare al confermare"
+
+#. module: sale_promotions_extend
+#: view:promos.rules:sale_promotions_extend.view_promotion_rules_form_special
+msgid "Partner Categories Excluded"
+msgstr "Categorie clienti esclusi"
