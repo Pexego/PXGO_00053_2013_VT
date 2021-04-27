@@ -109,7 +109,7 @@ class AmazonSaleOrder(models.Model):
         amazon_max_difference_allowed = float(self.env['ir.config_parameter'].sudo().get_param('amazon.max.difference.allowed'))
         credentials = self._get_credentials()
         if not data_start_time:
-            data_start_time = (datetime.utcnow() - timedelta(days=15)).isoformat()
+            data_start_time = (datetime.utcnow() - timedelta(days=1)).isoformat()
         if not data_end_time:
             data_end_time = datetime.utcnow().isoformat()
         orders_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
