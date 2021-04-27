@@ -89,6 +89,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'location_dest_id': self.picking_line_dest_location.id,
                 'note': note,
                 'picking_type_id': type_ids and type_ids[0].id,
+                'product_uom_qty': 1
             }
             wizard_picking_line.move_id.copy(default_move_data)
         if picking_id:
@@ -153,7 +154,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
         result['views'] = [(res and res.id or False, 'form')]
         result['res_id'] = picking_id.id
         message = _("Products successfully entered in the following RMPs %s") % rmps.mapped('number')
-        picking_id.env.user.notify_info(message=message, sticky=True)
+        picking_id.env.user.notify_info(message=message)
         return result
 
     select_claim = fields.Boolean()

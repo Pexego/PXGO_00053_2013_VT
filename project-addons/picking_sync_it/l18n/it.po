@@ -20,3 +20,8 @@ msgstr ""
 #, python-format
 msgid "The picking has not been notified properly, please check the picking in the other odoo"
 msgstr "La bolla non è stata notificata correttamente, per favore controlla nell'altro odoo"
+
+#. module: picking_sync_it
+#: model:ir.ui.view,arch_db:picking_sync_it.view_picking_form_button_sync
+msgid "Notify ES"
+msgstr "Notifica ES"
