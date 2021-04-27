@@ -19,7 +19,7 @@ class StockDeposit(models.Model):
                         invoice.journal_id.company_id.currency_id,
                         amazon_order.currency_id)
                     invoice.write(
-                        {'name': amazon_order.name, 'amazon_order': amazon_order.id})
+                        {'name': amazon_order.name, 'amazon_order': amazon_order.id, 'amazon_invoice': amazon_order.amazon_invoice_name})
                     for line in invoice.invoice_line_ids:
                         o_line = amazon_order.order_line.filtered(lambda l: l.product_id == line.product_id)[0]
                         line.write(
