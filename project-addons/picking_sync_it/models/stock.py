@@ -47,4 +47,4 @@ class StockPicking(models.Model):
                                 break
                     picking.with_incidences = True
                     picking.move_type = 'direct'
-                    picking.action_accept_confirmed_qty()
+                    picking.action_accept_ready_qty()
