@@ -173,7 +173,9 @@ class StockMove(models.Model):
                            order="has_reservations,sequence,date_expected,id")
                 if confirmed_ids:
                     confirmed_ids._action_assign()
-            self._push_apply()
+            if move.location_dest_id.name == 'Tránsito Italia':
+                # TODO: revisar y permitir aplicar en otras circustancias para el futuro
+                self._push_apply()
         return res
 
     def _get_price_unit(self):
