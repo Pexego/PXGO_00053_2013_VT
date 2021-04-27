@@ -273,7 +273,7 @@ class ClaimLine(models.Model):
     @api.multi
     def equivalent_products(self):
         view = self.env.ref('crm_claim_rma.equivalent_products_wizard')
-        wiz = self.env['equivalent.products.wizard'].with_context(claim_line=self.id).create({'line_id': self.id})
+        wiz = self.env['equivalent.products.wizard'].with_context(claim_line=self).create({'line_id': self.id})
 
         return {
             'name': _("Equivalent products"),
