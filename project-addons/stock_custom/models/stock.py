@@ -19,6 +19,7 @@
 ##############################################################################
 from odoo import api, exceptions, fields, models, _
 
+
 class StockPicking(models.Model):
     _inherit = "stock.picking"
     _order = "priority desc, date desc, id desc"
@@ -79,8 +80,6 @@ class StockPicking(models.Model):
         self.filtered(lambda picking: picking.picking_type_code == 'outgoing' and picking.location_id.usage=='internal' and picking.state == 'confirmed') \
                 .mapped('move_lines')._action_assign()
         return res
-
-
 
 
 class StockMoveLine(models.Model):
@@ -174,6 +173,7 @@ class StockMove(models.Model):
                            order="has_reservations,sequence,date_expected,id")
                 if confirmed_ids:
                     confirmed_ids._action_assign()
+            self._push_apply()
         return res
 
     def _get_price_unit(self):
@@ -243,46 +243,15 @@ class StockReturnPicking(models.TransientModel):
 class StockReservation(models.Model):
     _inherit = 'stock.reservation'
 
-    next_reception_date = fields.Date(compute='_compute_next_reception_date')
+    next_reception_date = fields.Datetime(compute='_compute_next_reception_date')
 
     def _compute_next_reception_date(self):
-        for res in self:
-            date_expected = False
-            supp_id = self.env.ref('stock.stock_location_suppliers').id
-            # First move search: Supplier to Playa
+        for reservation in self:
             moves = self.env['stock.move'].search(
-                [('state', 'in', ('waiting', 'confirmed', 'assigned',
-                                  'partially_available')),
-                 ('product_id', '=', res.product_id.id),
-                 ('location_id', '=', supp_id),
-                 ('location_dest_id', '=',
-                  res.sale_id.warehouse_id.wh_input_stock_loc_id.id)],
-                order='date_expected asc')
-            if not moves:
-                customer_loc_id = self.env.ref('stock.stock_location_customers').id
-                # Second move search: Customer to Playa
-                moves = self.env['stock.move'].search(
-                    [('state', 'in', ('waiting', 'confirmed', 'assigned',
-                                      'partially_available')),
-                     ('product_id', '=', res.product_id.id),
-                     ('location_id', '=', customer_loc_id),
-                     ('location_dest_id', '=',
-                      res.sale_id.warehouse_id.wh_input_stock_loc_id.id)],
-                    order='date_expected asc')
-                if not moves:
-                    # Third move search: Playa to VT child location
-                    moves = self.env['stock.move'].search(
-                        [('state', 'in', ('waiting', 'confirmed', 'assigned',
-                                          'partially_available')),
-                         ('product_id', '=', res.product_id.id),
-                         ('location_id', '=',
-                          res.sale_id.warehouse_id.wh_input_stock_loc_id.id),
-                         ('location_dest_id', 'child_of',
-                          [res.sale_id.warehouse_id.view_location_id.id])],
-                        order='date_expected asc')
-            if moves:
-                date_expected = moves[0].date_expected
-            res.next_reception_date = date_expected
+                [('product_id', '=', reservation.product_id.id), ('purchase_line_id', '!=', False),
+                 ('state', 'not in', ['cancel', 'done']), ('location_dest_id.usage', 'like', 'internal')]).sorted(
+                key=lambda m: m.date_expected and m.date_reliability)
+            reservation.next_reception_date = moves[0].date_expected if moves else False
 
 
 class StockProductionLot(models.Model):
@@ -320,3 +289,14 @@ class StockLandedCost(models.Model):
         valuation_lines.mapped('move_id.product_id.product_tmpl_id').\
             recalculate_standard_price_2()
         return res
+
+
+class PushedFlow(models.Model):
+    _inherit = "stock.location.path"
+
+    apply_at_finish = fields.Boolean(string='Apply at finish',
+                                     help='Apply the rule when move is done')
+
+    def _apply(self, move):
+        if not self.apply_at_finish or (self.apply_at_finish and move.state == 'done'):
+            super()._apply(move)

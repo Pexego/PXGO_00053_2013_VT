@@ -11,6 +11,28 @@
             </tree>
         </field>
     </record>
+    <record id="customization_type_view_form" model="ir.ui.view">
+        <field name="name">customization.type.form</field>
+        <field name="model">customization.type</field>
+        <field name="arch" type="xml">
+            <form string="Customization Type">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <group>
+                        <field name="rule_ids">
+                            <tree string="Automatic customization type rules" editable="bottom">
+                                <field name="product_brand_id"/>
+                                <field name="product_categ_id"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
 
     <record id="customization_type_action_form" model="ir.actions.act_window">
         <field name="name">Customization Type</field>

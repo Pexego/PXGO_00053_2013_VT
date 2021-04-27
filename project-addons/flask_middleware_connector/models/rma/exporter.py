@@ -62,7 +62,7 @@ class ClaimLineExporter(Component):
             "entrance_date": binding.date_in,
             "end_date": binding.date_out,
             "status_id": binding.substate_id.id,
-            "prodlot_id": binding.prodlot_id.name,
+            "prodlot_id": binding.prodlot_id,
             "invoice_id": binding.invoice_id.number,
         }
 

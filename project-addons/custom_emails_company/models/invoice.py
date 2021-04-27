@@ -10,6 +10,9 @@ class AccountInvoice(models.Model):
         layout = \
             'account.mail_template_data_notification_email_account_invoice'
         for invoice in self:
+            if invoice.type == 'out_invoice' and invoice.journal_id.type == 'purchase':
+                # To prevent possible errors
+                invoice.type = 'in_invoice'
             if not invoice.not_send_email and invoice.type in ('out_invoice', 'out_refund'):
                 try:
                     template = invoice.env.\

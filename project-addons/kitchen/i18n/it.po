@@ -375,10 +375,10 @@ msgstr "Qtà prodotto"
 #. module: kitchen
 #: model:mail.template,body_html:kitchen.send_mail_to_commercials_date_planned_changed
 msgid "<p>The expected date of customization <strong>${object.name}</strong> has changed.</p>\n"
-"            <p>The new expected date is <strong>${object.date_planned}</strong></p>\n"
+"            <p>The new expected date is <strong>${ctx.get('date_planned') or ''}</strong></p>\n"
 "            <p>Best regards.</p>"
 msgstr "<p>La data prevista per la personalizzazione <strong>${object.name}</strong> è cambiata.</p>\n"
-"            <p>La nuova data prevista è <strong>${object.date_planned}</strong></p>\n"
+"            <p>La nuova data prevista è <strong>${ctx.get('date_planned') or ''}</strong></p>\n"
 "            <p>I migliori saluti.</p>"
 
 
@@ -419,10 +419,72 @@ msgstr "<p>Vuoi recuperare l'eventuale cancellazione della personalizzazione?</p
 #. module: kitchen
 #: code:addons/kitchen/models/kitchen_customization.py:125
 msgid "You cannot activate a new customization because the selected order already has one, please cancel it before"
-msgstr "No puedes activar una nueva personalización ya que el pedido asociado ya tine una, cancelala antes de activar esta."
+msgstr "Non puoi attivare una nuova personalizzazione perché l'ordine selezionato ne ha già una, cancellala prima"
 
 #. module: kitchen
 #: code:addons/kitchen/models/kitchen_customization.py:96
 #: code:addons/kitchen/models/kitchen_customization.py:185
 msgid "You cannot create a new customization because the selected order already has one, please cancel it before creating a new one"
 msgstr "Non è possibile creare una nuova personalizzazione perché l'ordine selezionato ne ha già uno, annullarlo prima di crearne uno nuovo"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_create_customization_wizard_notify_sales_team
+msgid "Notify Sales Team"
+msgstr "Avvisa il team di vendita"
+
+#. module: kitchen
+#: model:mail.template,body_html:kitchen.send_mail_cancel_customization
+msgid "<p> The customization ${object.name} - ${object.partner_id.name or ''} has been cancelled.</p>\n"
+"            % if ctx.get('picking_message'):\n"
+"                <p> If you want the order (${object.order_id.name or ''}) to be shipped without customizing it, please, remove the 'Not sync' check from the picking.\n"
+"                If, on the other hand, you want to cancel it or change the customization, cancel the order and confirm it again if necessary .</p>\n"
+"                <p>\n"
+"            % endif\n"
+"            <p>Best regards.</p>"
+msgstr "<p> La personalizzazione ${object.name} - ${object.partner_id.name or ''} è stata annullata.</p>\n"
+"            % if ctx.get('picking_message'):\n"
+"                <p> Se desideri che l'ordine (${object.order_id.name or ''}) venga spedito senza personalizzarlo, rimuovi il segno di "non sincronizzabile" dalla bolla di consegna.\n"
+"                Se invece desideri annullarlo o modificare la personalizzazione, annulla l'ordine e, se necessario, confermalo nuovamente.</p>\n"
+"                <p>\n"
+"            % endif\n"
+"            <p>I migliori saluti.</p>"
+
+#. module: kitchen
+#: model:ir.ui.view,arch_db:kitchen.product_customization_config
+msgid "Customization conditions"
+msgstr "Condizioni di personalizzazione"
+
+#. module: kitchen
+#: code:addons/kitchen/wizard/create_customization_wizard.py:68
+msgid "You can't create a customization with different customization types (%s) than the product %s has %s"
+msgstr "Non puoi creare una personalizzazione con diversi tipi di personalizzazione (%s) rispetto al prodotto (%s) %s"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_automatic_customization_type_rule_product_brand_id
+msgid "Product Brand"
+msgstr "Marca del prodotto"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_automatic_customization_type_rule_product_categ_id
+msgid "Product Category"
+msgstr "Categoria di prodotto"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_customization_type_rule_ids
+msgid "Automatic Rules"
+msgstr "Regole di applicazione automatiche"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_product_template_customizable
+msgid "Customizable"
+msgstr "Personalizzabile"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_product_template_customization_type_ids
+msgid "Type"
+msgstr "Tipi"
+
+#. module: kitchen
+#: model:ir.actions.act_window,name:kitchen.action_product_customizable_form
+msgid "Customizable"
+msgstr "Personalizzabile"
