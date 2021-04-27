@@ -13,7 +13,7 @@ class StockPicking(models.Model):
         for picking in self:
             if picking.picking_type_id.id == self.env.ref('automatize_edi_it.picking_type_receive_top_deposit').id:
                 # Notify odoo ES that the picking is done
-                self.with_delay(eta=10).notify_picking_done(picking.purchase_id.remark)
+                self.with_delay(eta=10, priority=8).notify_picking_done(picking.purchase_id.remark)
 
     @api.multi
     def retry_notify_picking_done(self):
@@ -42,7 +42,7 @@ class StockPicking(models.Model):
                     for move in self.move_lines:
                         for move_es in picking.move_lines:
                             if move.product_id.default_code == move_es.product_id.default_code:
-                                move_es.qty_ready = move.qty_ready
+                                move_es.qty_ready = move.quantity_done
                                 move_es.quantity_done = move.quantity_done
                                 break
                     picking.with_incidences = True
