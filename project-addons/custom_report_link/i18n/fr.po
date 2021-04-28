@@ -1097,3 +1097,14 @@ msgstr "<strong>Code S.H.</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 msgid "Simplified Invoice"
 msgstr "Facture simplifiée"
+
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<span>PICKUP</span>"
+msgstr "<span>ENLÈVEMENT</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "<span>SHIPPING</span>"
+msgstr "<span>ENVOI</span>"
