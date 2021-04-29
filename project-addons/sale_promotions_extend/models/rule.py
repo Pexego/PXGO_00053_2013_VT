@@ -528,6 +528,13 @@ class PromotionsRules(models.Model):
 
     apply_at_confirm = fields.Boolean("Apply at confirm")
 
+    partner_categories_excluded = fields.Many2many('res.partner.category',
+                                                   'rule_partner_cat_rel_ex',
+                                                   'category_id',
+                                                   'rule_id',
+                                                   copy=True,
+                                                   string="Partner Categories Excluded")
+
     @api.model
     def apply_special_promotions(self, order):
         active_promos = self.search([('special_promo', '=', True)])
@@ -547,9 +554,13 @@ class PromotionsRules(models.Model):
 
     @api.model
     def _get_promotions_domain(self, order):
+        domain = super()._get_promotions_domain(order)
+        if order.partner_id.category_id:
+            categ_ids = [x.id for x in order.partner_id.category_id]
+            domain += ['|', ('partner_categories_excluded', 'not in', categ_ids),
+                       ('partner_categories_excluded', '=', False)]
         if self.env.context.get('is_confirm', False):
-            return super()._get_promotions_domain(order)
+            return domain
         else:
-            domain = super()._get_promotions_domain(order)
             domain += [('apply_at_confirm', '=', False)]
             return domain
