@@ -116,14 +116,13 @@ class StockDeposit(models.Model):
 
     @api.one
     def _prepare_deposit_move(self, picking, group):
-        deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
         move_template = {
             'name': 'RET' or '',
             'product_id': self.product_id.id,
             'product_uom': self.product_uom.id,
             'product_uom_qty': self.product_uom_qty,
             'product_uos': self.product_uom.id,
-            'location_id': deposit_id.id,
+            'location_id': self.move_id.location_dest_id.id,
             'location_dest_id':
                 picking.picking_type_id.default_location_dest_id.id,
             'picking_id': picking.id,
@@ -160,12 +159,11 @@ class StockDeposit(models.Model):
     @api.multi
     def return_deposit(self):
         picking_type_id = self.env.ref('stock.picking_type_in')
-        deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
         for deposit in self:
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
-                 'location_id': deposit_id.id,
+                 'location_id': deposit.move_id.location_dest_id.id,
                  'location_dest_id': picking_type_id.default_location_dest_id.id})
             deposit._create_stock_moves(picking)
             deposit.write({'state': 'returned',
@@ -238,7 +236,6 @@ class StockDeposit(models.Model):
     def revert_sale(self):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_in')
-        location_deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
         for deposit in self:
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
@@ -248,7 +245,7 @@ class StockDeposit(models.Model):
                  'commercial': deposit.user_id.id,
                  'group_id': deposit.sale_move_id.group_id.id,
                  'location_id': deposit.sale_move_id.location_dest_id.id,
-                 'location_dest_id': location_deposit_id.id})
+                 'location_dest_id': deposit.sale_move_id.location_id.id})
             values = {
                 'product_id': deposit.product_id.id,
                 'product_uom_qty': deposit.product_uom_qty,
@@ -256,7 +253,7 @@ class StockDeposit(models.Model):
                 'partner_id': deposit.partner_id.id,
                 'name': 'Return Sale Deposit: ' + deposit.sale_move_id.name,
                 'location_id': deposit.sale_move_id.location_dest_id.id,
-                'location_dest_id': location_deposit_id.id,
+                'location_dest_id': deposit.sale_move_id.location_id.id,
                 'picking_id': picking.id,
                 'commercial': deposit.user_id.id,
                 'group_id': deposit.sale_move_id.group_id.id
