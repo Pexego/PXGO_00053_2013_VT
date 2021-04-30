@@ -26,6 +26,26 @@ class SaleOrderLine(models.Model):
     old_discount = fields.Float(copy=False)
     old_price = fields.Float(copy=False)
 
+    @api.multi
+    def invoice_line_create(self, invoice_id, qty):
+        lines = self.env['sale.order.line']
+        for line in self:
+            if line.promotion_line:
+                order = line.order_id
+                total_to_invoice_dict = self._context.get('total_to_invoice', False)
+                total_to_invoice = 0
+                # Do not include the discount lines if the qty to invoice is < 0
+                # because it will create a refund
+                if total_to_invoice_dict:
+                    total_to_invoice = total_to_invoice_dict.get(self.order_id.id, 0)
+                if total_to_invoice > 0 or \
+                        (total_to_invoice < 0 and not order.order_line.filtered(lambda l: l.invoice_status == 'no')) or \
+                        total_to_invoice == 0:
+                    lines += line
+            else:
+                lines += line
+        return super(SaleOrderLine, lines).invoice_line_create(invoice_id, qty)
+
 
 class SaleOrder(models.Model):
 
@@ -99,3 +119,14 @@ class SaleOrder(models.Model):
         ctx['is_confirm'] = True
         order = self.with_context(ctx)
         return super(SaleOrder, order).action_confirm()
+
+    @api.multi
+    def action_invoice_create(self, grouped=False, final=False):
+        ctx = dict(self.env.context)
+        total_to_invoice_dict = {}
+        for order in self:
+            total_to_invoice = sum([l.qty_to_invoice * l.price_subtotal for l in
+                                    self.order_line.filtered(lambda l: l.invoice_status == 'to invoice')])
+            total_to_invoice_dict[order.id] = total_to_invoice
+        ctx.update({'total_to_invoice': total_to_invoice_dict})
+        return super(SaleOrder, self.with_context(ctx)).action_invoice_create(grouped=grouped,final=final)

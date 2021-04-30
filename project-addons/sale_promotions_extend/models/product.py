@@ -8,7 +8,7 @@ class ProductBrand(models.Model):
 
     _inherit = 'product.brand'
 
-    code = fields.Char('Internal code')
+    code = fields.Char('Internal code', required=True)
     not_compute_joking = fields.Boolean('Not compute joking index')
 
 
