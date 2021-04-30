@@ -18,10 +18,10 @@
 #
 ##############################################################################
 
-from odoo import models, fields, api, exceptions, _
+from odoo import models, fields, api, exceptions
 from datetime import datetime
 from odoo.exceptions import except_orm
-
+from odoo.tools.translate import translate, _
 
 class CrmClaimRma(models.Model):
     _inherit = 'crm.claim'
@@ -97,7 +97,22 @@ class CrmClaimRma(models.Model):
                             raise except_orm(_('Warning!'),
                                              _("One or more products aren't pending shipping yet!"))
 
+            if vals['stage_id'] == stage_received_id and self.partner_id.email3:
+                import ipdb
+                ipdb.set_trace()
+                email_body = self.with_context(lang=self.partner_id.commercial_partner_id.lang)._("<p>Dear client,</p> " \
+                             "<p>We inform you that we have received the products from the %s.</p>" \
+                             "<p>We will check it as soon as possible.</p> " \
+                             "<p>Kindly,</p>" \
+                             "<p>VISIOTECH</p>") % self.number
+                picking_template = self.env.ref('crm_claim_rma_custom.rma_received_template')
+                picking_template.with_context(lang=self.partner_id.commercial_partner_id.lang,
+                                              email_rma_body=email_body).send_mail(self.id)
+
         return super(CrmClaimRma, self).write(vals)
+
+    def _(self, src):
+        return _(src)
 
     @api.model
     def create(self, vals):

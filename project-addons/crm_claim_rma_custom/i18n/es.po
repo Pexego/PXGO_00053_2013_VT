@@ -504,3 +504,19 @@ msgstr "Fecha recepción final"
 #, python-format
 msgid "The quantity of this product in all RMAs cannot be greater than the invoice quantity"
 msgstr "La cantidad de este producto en todos los RMAs no puede ser mayor que la cantidad de la factura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_res_partner_email3
+msgid "SAT email"
+msgstr "Correo SAT"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:101
+#, python-format
+msgid "<p>Dear client,</p> <p>We inform you that we have received the products from the %s.</p><p>We will check it as soon as possible.</p> <p>Kindly,</p><p>VISIOTECH</p>"
+msgstr "<p>Estimado cliente,</p> <p>Le informamos que hemos recibido los productos del %s.</p><p>A la menor brevedad posible iniciaremos su revisión.</p> <p>Atentamente,</p><p>VISIOTECH</p>"
+
+#. module: crm_claim_rma_custom
+#: model:mail.template,subject:crm_claim_rma_custom.rma_received_template
+msgid "Visiotech - RMA received"
+msgstr "Visiotech - RMA recibido"
