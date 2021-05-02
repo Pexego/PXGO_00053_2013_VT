@@ -31,10 +31,12 @@ class ProcurementGroup(models.Model):
     def run_scheduler_internal_pickings(self):
         _logger.info("SEARCHING FOR INTERNAL PICKINGS")
         operation_internal = self.env.ref('stock.picking_type_internal').id
+        transit_it_location = self.env['stock.location'].search([('name', '=', 'Tránsito Italia')]).id
         pick_ids_assign = self.env["stock.picking"]. \
             search([("picking_type_id", "=",
                      operation_internal),
-                    ("state", "=", "assigned")])
+                    ("state", "=", "assigned"),
+                    ("location_id", "!=", transit_it_location)])
 
         pick_ids_confirmed = self.env["stock.picking"]. \
             search([("picking_type_id", "=",
