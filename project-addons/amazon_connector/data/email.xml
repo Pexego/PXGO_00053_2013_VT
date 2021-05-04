@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo noupdate="1">
+    <record id="send_mail_errors_amazon" model="mail.template">
+        <field name="name">Error reading an Amazon Order</field>
+        <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
+        <field name="subject">Error reading Amazon Order - ${object.name}</field>
+        <field name="email_to">${'odoo_team@visiotechsecurity.com'}</field>
+        <field name="model_id" ref="model_amazon_sale_order"/>
+        <field name="body_html"><![CDATA[
+            <p>The amazon order <strong>${object.name}</strong> has the following errors:</p>
+            <p>ERRORS: ${object.message_error}</strong></p>
+            <p>${ctx.get('message_warning','')}</p>
+         ]]>
+        </field>
+    </record>
+
+</odoo>

@@ -102,7 +102,7 @@ class StockSaleDeposit(models.TransientModel):
             }
             move = move_obj.create(values)
             move._action_confirm()
-            deposit.move_id.sale_line_id.write({'qty_invoiced': 0, 'invoice_status': 'to invoice'})
+            deposit.move_id.sale_line_id.write({'qty_invoiced': deposit.move_id.sale_line_id.qty_invoiced-deposit.product_uom_qty, 'invoice_status': 'to invoice'})
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
         picking.action_assign()
         picking.action_done()

@@ -52,6 +52,14 @@ class StockMove(models.Model):
                 deposit_obj.create(values)
         return res
 
+    @api.multi
+    def _get_new_picking_values(self):
+        values = super(StockMove, self)._get_new_picking_values()
+        for move in self:
+            if move.push_rule_id and move.push_rule_id.name == 'Llegada Italia':
+                values['not_sync'] = True
+        return values
+
 
 class ProcurementRule(models.Model):
     _inherit = 'procurement.rule'
