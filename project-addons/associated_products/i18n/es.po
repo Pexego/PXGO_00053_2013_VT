@@ -116,3 +116,13 @@ msgstr "UdM"
 #: model:ir.model.fields,field_description:associated_products.field_product_associated_discount
 msgid "Discount (%)"
 msgstr "Descuento (%)"
+
+#. module: associated_products
+#: model:ir.model.fields,field_description:associated_products.field_product_product_equivalent_products
+msgid "Equivalent Products"
+msgstr "Productos Equivalentes"
+
+#. module: associated_products
+#: model:ir.ui.view,arch_db:associated_products.product_add_equivalent_products_search
+msgid "Product Equivalent"
+msgstr "Producto Equivalente"

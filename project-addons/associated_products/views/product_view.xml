@@ -69,4 +69,15 @@
             </field>
         </record>
 
+    <record id="product_add_equivalent_products_search" model="ir.ui.view">
+        <field name="name">product.add.equivalent.products.search</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_search_form_view"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="equivalent_products" string="Product Equivalent"/>
+            </field>
+        </field>
+    </record>
+
 </odoo>
