@@ -52,7 +52,7 @@ class StockPicking(models.Model):
 
     with_incidences = fields.Boolean('With incidences', readonly=True,
                                      copy=False)
-    block_picking = fields.Boolean('Albarán procesado Vstock')
+    block_picking = fields.Boolean('Albarán procesado Vstock',copy=False)
     partial_picking = fields.Boolean('Partial picking', default=False)
 
     state = fields.Selection(selection_add=[('partially_available', 'Partially Available')])
