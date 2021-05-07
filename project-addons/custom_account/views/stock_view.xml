@@ -32,6 +32,7 @@
                     <attribute name="invisible">0</attribute>
                 </field>
                 <field name="state" position="after">
+                    <field name="payment_mode_id" position="after"/>
                     <field string="Invoice type" name="invoice_type_id"/>
                 </field>
             </field>
