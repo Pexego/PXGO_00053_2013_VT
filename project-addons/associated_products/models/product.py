@@ -20,7 +20,6 @@
 
 from odoo import fields, models, api
 
-
 class Product(models.Model):
 
     _inherit = 'product.product'
@@ -31,7 +30,8 @@ class Product(models.Model):
 
     def _compute_equivalent_products(self):
         for product in self:
-            product.equivalent_products = self.env['product.equivalent'].search(['|',('product_id', '=', product.id),('equivalent_id', '=', product.id)])
+            prod_equiv = self.env['product.equivalent'].search(['|',('product_id', '=', product.id),('equivalent_id', '=', product.id)])
+            product.equivalent_products = prod_equiv.mapped('product_id') + prod_equiv.mapped('equivalent_id')
 
     def _search_equivalent_products(self, operator, value):
         prod_equiv = self.env['product.equivalent'].search(['|',('product_id.default_code', operator, value),('equivalent_id.default_code', operator, value)])
