@@ -62,13 +62,3 @@ class EquivalentProduct(models.Model):
     product_id = fields.Many2one('product.product', "Product", required=True)
     equivalent_id = fields.Many2one('product.product', "Equivalent product", required=True)
 
-    @api.model
-    def name_search(self, name='', args=None, operator='ilike', limit=100):
-        import ipdb
-        ipdb.set_trace()
-        args = args or []
-        recs = self.browse()
-        if name:
-            recs = self.search(['|',('product_id.default_code', operator, name),('equivalent_id.default_code', operator, name)] + args, limit=limit)
-
-        return recs.name_get()
