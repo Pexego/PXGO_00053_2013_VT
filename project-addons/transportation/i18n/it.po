@@ -373,3 +373,8 @@ msgstr "Invio"
 #: model:ir.model.fields,field_description:transportation.field_sale_order_delivery_type
 msgid "Delivery type"
 msgstr "Tipo de invio"
+
+#. module: transportation
+#: model:ir.model.fields,field_description:transportation.field_transportation_service_by_air
+msgid "By Air"
+msgstr "Aerea"
