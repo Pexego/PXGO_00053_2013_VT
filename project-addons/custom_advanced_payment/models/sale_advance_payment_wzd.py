@@ -72,6 +72,27 @@ class AccountVoucherWizard(models.TransientModel):
         else:
             raise exceptions.ValidationError(_("Select just one payment"))
 
+    @api.model
+    def default_get(self, fields):
+        res = super().default_get(fields)
+
+        sale_ids = self.env.context.get('active_ids', [])
+        if not sale_ids:
+            return res
+        sale_id = sale_ids[0]
+
+        sale = self.env['sale.order'].browse(sale_id)
+
+        total_advance = 0.0
+        for payment in sale.account_payment_ids:
+            if payment.state != 'cancelled':
+                total_advance += payment.amount
+
+        if 'amount_total' in fields:
+            res.update({'amount_total': total_advance})
+
+        return res
+
 
 class OldPaymentLine(models.TransientModel):
 
