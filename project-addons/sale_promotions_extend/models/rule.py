@@ -171,7 +171,9 @@ class PromotionsRulesActions(models.Model):
             ('sale_points_programme_discount_on_brand',
              _('Sale points programme discount on Brand')),
             ('disc_per_product',
-             _('Discount line per each product'))
+             _('Discount line per each product')),
+            ('fix_price_per_product',
+             _('Fixed price per each product'))
             ])
 
     def on_change(self):
@@ -515,6 +517,21 @@ class PromotionsRulesActions(models.Model):
                 'product_uom': 1
             }
             self.create_line(vals)
+
+    def action_fix_price_per_product(self, order):
+        # first get all the product with the tag
+        products_tag = \
+            sum(order.order_line
+                .filtered(lambda l, promo=self:
+                          eval(promo.product_code)
+                          in l.product_id.tag_ids._get_tag_recursivity())
+                .mapped('product_uom_qty'))
+
+        for line in order.order_line.sorted(key=lambda r: r.price_unit):
+            if line.product_id.default_code in eval(self.arguments).keys() and products_tag > 0:
+                line.price_unit = eval(self.arguments)[line.product_id.default_code]
+                line.discount = 0.0
+                products_tag -= 1
 
 
 class PromotionsRules(models.Model):
