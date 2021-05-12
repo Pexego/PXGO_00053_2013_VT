@@ -527,11 +527,38 @@ class PromotionsRulesActions(models.Model):
                           in l.product_id.tag_ids._get_tag_recursivity())
                 .mapped('product_uom_qty'))
 
+        products_exp = []
         for line in order.order_line.sorted(key=lambda r: r.price_unit):
             if line.product_id.default_code in eval(self.arguments).keys() and products_tag > 0:
-                line.price_unit = eval(self.arguments)[line.product_id.default_code]
-                line.discount = 0.0
-                products_tag -= 1
+                for qty in range(int(line.product_uom_qty)):
+                    products_exp.append([line.price_subtotal / line.product_uom_qty, line.product_id.default_code])
+        products_exp.sort()
+
+        new_lines = []
+        for count, product in enumerate(products_exp):
+            if count >= products_tag:
+                break
+            else:
+                # Group by products with same price
+                if count > 0 and product[1] == products_exp[count - 1][1]:
+                    new_lines[len(new_lines) - 1][0] += 1
+                else:
+                    new_lines.append([1, product[0], product[1]])
+
+        # new_lines -> [[qty, price, product], [qty, price, product], ...]
+        for line in new_lines:
+            vals = {
+                'sequence': 999,
+                'order_id': order.id,
+                'product_id': self.env.ref('commercial_rules.product_discount').id,
+                'name': 'Promo %s' % line[2],
+                'price_unit': -(line[1] - eval(self.arguments)[line[2]]),
+                'discount': 0.0,
+                'promotion_line': True,
+                'product_uom_qty': line[0],
+                'product_uom': 1
+            }
+            self.create_line(vals)
 
 
 class PromotionsRules(models.Model):
