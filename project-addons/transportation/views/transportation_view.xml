@@ -71,6 +71,7 @@
             <field name="arch" type="xml">
                 <tree string="Transportation services">
                     <field name="name"/>
+                    <field name="by_air"/>
                 </tree>
             </field>
         </record>
@@ -83,6 +84,7 @@
                     <sheet>
                         <group>
                             <field name="name"/>
+                            <field name="by_air"/>
                             <field name="transporter_ids">
                                 <tree string="Transporter">
                                     <field name="name"/>

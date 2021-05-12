@@ -44,3 +44,4 @@ class TransportService(models.Model):
                                        'service_id',
                                        'transporter_id',
                                        'Transporters')
+    by_air = fields.Boolean()
