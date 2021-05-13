@@ -251,7 +251,7 @@ class KitchenCustomizationLine(models.Model):
     product_qty = fields.Float(required=1)
     customization_id = fields.Many2one('kitchen.customization', ondelete='cascade', index=True,
                                        copy=False)
-    sale_line_id = fields.Many2one('sale.order.line')
+    sale_line_id = fields.Many2one('sale.order.line', ondelete='cascade')
     state = fields.Selection([
         ('draft', 'New'),
         ('waiting','Waiting Availability'),

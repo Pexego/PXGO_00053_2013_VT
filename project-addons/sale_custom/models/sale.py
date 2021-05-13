@@ -293,7 +293,7 @@ class SaleOrder(models.Model):
         return True
 
     def check_weight(self,onchange=False):
-        dhl_flight = self.transporter_id.name == "DHL" and self.service_id.name == "UE Aéreo (U)"
+        dhl_flight = self.transporter_id.name == "DHL" and self.service_id.by_air
         canary = self.partner_shipping_id and \
                  not self.env.context.get("bypass_canary_max_weight", False) and \
                  self.partner_shipping_id.state_id.id in (
