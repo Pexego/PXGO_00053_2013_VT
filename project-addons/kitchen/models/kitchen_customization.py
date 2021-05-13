@@ -53,7 +53,7 @@ class KitchenCustomization(models.Model):
             if picking:
                 notes = picking.internal_notes or ""
                 picking_mssg = self.env['ir.config_parameter'].sudo().get_param('kitchen.picking.message')
-                notes += picking_mssg + "\n %s" % self.products_qty_format
+                notes += "%s \n" %picking_mssg
                 picking.write({'not_sync': False,'internal_notes': notes})
         template = self.env.ref('kitchen.send_mail_to_commercials_customization_done')
         ctx = dict()
@@ -251,7 +251,7 @@ class KitchenCustomizationLine(models.Model):
     product_qty = fields.Float(required=1)
     customization_id = fields.Many2one('kitchen.customization', ondelete='cascade', index=True,
                                        copy=False)
-    sale_line_id = fields.Many2one('sale.order.line')
+    sale_line_id = fields.Many2one('sale.order.line', ondelete='cascade')
     state = fields.Selection([
         ('draft', 'New'),
         ('waiting','Waiting Availability'),
@@ -297,8 +297,9 @@ class KitchenCustomizationLine(models.Model):
                  'move_ids.move_line_ids.product_uom_qty', 'move_ids','move_ids.picking_id.state')
     def _compute_reserved_qty(self):
         for line in self:
-            line.reserved_qty = sum(line.move_ids.mapped(
-                'reserved_availability')) if line.move_ids and line.move_ids[0].picking_id.state=='assigned' else 0
+            move_ids = line.move_ids.filtered(lambda m:m.state != 'cancel')
+            line.reserved_qty = sum(move_ids.mapped(
+                'reserved_availability')) if move_ids and move_ids[0].picking_id.state=='assigned' else 0
 
     reservation_status = fields.Selection([
         ('waiting', 'Waiting Availability'),

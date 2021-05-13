@@ -234,7 +234,8 @@ msgid "No deposit"
 msgstr "Nessun deposito"
 
 #. module: stock_deposit
-#: code:addons/stock_deposit/wizard/stock_invoice_deposit.py:41
+#: code:addons/stock_deposit/wizard/stock_invoice_deposit.py:51
+#: code:addons/stock_deposit/models/stock_deposit.py:241
 #, python-format
 msgid "No deposit selected"
 msgstr "Nessun deposito selezionato"

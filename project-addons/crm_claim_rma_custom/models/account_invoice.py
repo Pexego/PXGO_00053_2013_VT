@@ -49,3 +49,16 @@ class AccountInvoice(models.Model):
             recs = self.search([('name', operator, name)] + args, limit=limit)
 
         return recs.name_get()
+
+class AccountInvoiceLine(models.Model):
+
+    _inherit = 'account.invoice.line'
+
+    def _compute_claim_invoice_line(self):
+        for invoice in self:
+            domain = [('invoice_id','=',invoice.invoice_id.id),('product_id','=',invoice.product_id.id)]
+            if self.env.context.get('not_id',False):
+                domain += [('id','!=',self.env.context.get('not_id',False))]
+            invoice.claim_invoice_line_qty = sum(self.env['claim.invoice.line'].search(domain).mapped('qty'))
+
+    claim_invoice_line_qty = fields.Float(compute="_compute_claim_invoice_line")

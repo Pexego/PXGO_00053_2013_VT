@@ -19,6 +19,7 @@
 ##############################################################################
 from odoo import api, exceptions, fields, models, _
 
+
 class StockPicking(models.Model):
     _inherit = "stock.picking"
     _order = "priority desc, date desc, id desc"
@@ -81,8 +82,6 @@ class StockPicking(models.Model):
         return res
 
 
-
-
 class StockMoveLine(models.Model):
 
     _inherit = 'stock.move.line'
@@ -120,6 +119,7 @@ class StockMove(models.Model):
         ], readonly=False,compute='_compute_dates')
 
     date_done = fields.Datetime(related='picking_id.date_done',store=True)
+
 
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()
@@ -174,6 +174,9 @@ class StockMove(models.Model):
                            order="has_reservations,sequence,date_expected,id")
                 if confirmed_ids:
                     confirmed_ids._action_assign()
+            if move.location_dest_id.name == 'Tránsito Italia':
+                # TODO: revisar y permitir aplicar en otras circustancias para el futuro
+                self._push_apply()
         return res
 
     def _get_price_unit(self):
@@ -254,7 +257,6 @@ class StockReservation(models.Model):
             reservation.next_reception_date = moves[0].date_expected if moves else False
 
 
-
 class StockProductionLot(models.Model):
     _inherit = 'stock.production.lot'
 
@@ -290,3 +292,14 @@ class StockLandedCost(models.Model):
         valuation_lines.mapped('move_id.product_id.product_tmpl_id').\
             recalculate_standard_price_2()
         return res
+
+
+class PushedFlow(models.Model):
+    _inherit = "stock.location.path"
+
+    apply_at_finish = fields.Boolean(string='Apply at finish',
+                                     help='Apply the rule when move is done')
+
+    def _apply(self, move):
+        if not self.apply_at_finish or (self.apply_at_finish and move.state == 'done'):
+            super()._apply(move)
