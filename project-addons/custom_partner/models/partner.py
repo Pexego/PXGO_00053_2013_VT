@@ -430,7 +430,7 @@ class ResPartner(models.Model):
         for partner in self:
             if partner._context.get('install_mode'):
                 return
-            if partner.is_company and partner.active:
+            if partner.is_company and partner.active and partner.customer:
                 if not partner.child_ids:
                     raise exceptions. \
                         ValidationError(_('At least, a contact must be added'))

@@ -140,6 +140,7 @@ class CrmClaimRma(models.Model):
             for invoice_line in claim_obj.claim_inv_line_ids:
                 if not invoice_line.invoiced:
                     invoice_line.unlink()
+            message = ""
             for claim_line in claim_obj.claim_line_ids:
                 vals = {}
                 taxes_ids = []
@@ -166,7 +167,8 @@ class CrmClaimRma(models.Model):
                                 'tax_ids': [(6, 0, taxes_ids)]
                             }
                             if inv_line.quantity < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
-                                raise exceptions.Warning(_("The quantity of this product in all RMAs cannot be greater than the invoice quantity"))
+                                message += _("All units of this product (%s) included in the indicated invoice (%s) have already been paid \n") % (
+                                    inv_line.product_id.default_code, inv_line.invoice_id.number)
                             break
                     if not vals:
                         raise exceptions.Warning(
@@ -174,14 +176,16 @@ class CrmClaimRma(models.Model):
                                an incorrect invoice"))
                 if vals:
                     claim_inv_line_obj.create(vals)
+            if message:
+                raise exceptions.Warning(message)
 
     @api.onchange('partner_id')
     def onchange_partner_id(self):
         result = super().onchange_partner_id()
         if self.partner_id:
             self.delivery_address_id = self.partner_id
-            self.team_id = self.partner_id.team_id   # Get team_id from res.partner
-            self.country = self.partner_id.country_id    # Get country_id from res.partner
+            self.team_id = self.partner_id.team_id  # Get team_id from res.partner
+            self.country = self.partner_id.country_id  # Get country_id from res.partner
             if self.partner_id.user_id:
                 self.comercial = self.partner_id.user_id.id
             if self.partner_id.rma_warn_msg:
@@ -231,7 +235,8 @@ class CrmClaimRma(models.Model):
                 'team_id': claim_obj.partner_id.team_id.id,
                 'claim_id': claim_obj.id,
                 'type': 'out_refund',
-                'payment_term_id': False,  # Pago inmediato en rectificativas claim_obj.partner_id.property_payment_term_id.id,
+                'payment_term_id': False,
+                # Pago inmediato en rectificativas claim_obj.partner_id.property_payment_term_id.id,
                 'payment_mode_id':
                     claim_obj.partner_id.customer_payment_mode_id.id,
                 'mandate_id': claim_obj.partner_id.valid_mandate_id.id,
@@ -251,14 +256,14 @@ class CrmClaimRma(models.Model):
                     if not account_id:
                         account_id = \
                             line.product_id.categ_id. \
-                            property_account_income_categ_id.id
+                                property_account_income_categ_id.id
                     else:
                         account_id = line.product_id. \
                             property_account_expense_id.id
                         if not account_id:
                             account_id = \
                                 line.product_id.categ_id. \
-                                property_account_expense_categ_id.id
+                                    property_account_expense_categ_id.id
                 else:
                     prop = self.env['ir.property'].get('property_account_income_categ_id', 'product.category')
                     account_id = prop and prop.id or False
@@ -377,11 +382,13 @@ class ClaimInvoiceLine(models.Model):
     def onchange_values(self):
         if self.product_id and self.invoice_id:
             for line in self.invoice_id.invoice_line_ids:
-                if line.product_id == self.product_id :
+                if line.product_id == self.product_id:
                     if line.quantity < self.qty:
                         raise exceptions.Warning(_('Quantity cannot be bigger than the quantity specified on invoice'))
-                    if line.quantity < line.with_context({'not_id':self._origin.id}).claim_invoice_line_qty + self.qty:
-                        raise exceptions.Warning(_("The quantity of this product in all RMAs cannot be greater than the invoice quantity"))
+                    if line.quantity < line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty + self.qty:
+                        raise exceptions.Warning(
+                            _("All units of this product (%s) included in the indicated invoice (%s) have already been paid \n") % (
+                            line.product_id.default_code, line.invoice_id.number))
         price_subtotal = self.qty * self.price_unit * ((100.0 - self.discount) / 100.0)
         self.price_subtotal = price_subtotal
 
@@ -457,7 +464,3 @@ class CrmClaimLine(models.Model):
         if claims:
             claims.resequence()
         return True
-
-
-
-
