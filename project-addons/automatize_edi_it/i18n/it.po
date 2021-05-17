@@ -18,26 +18,26 @@ msgstr ""
 #. module: automatize_edi_it
 #: model:ir.model.fields,field_description:automatize_edi_it.field_purchase_order_amount_to_invoice_es
 msgid "Amount To Invoice Es"
-msgstr "A facturar ES"
+msgstr "Di fattura ES"
 
 #. module: automatize_edi_it
 #: model:ir.actions.server,name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx_ir_actions_server
 #: model:ir.cron,cron_name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx
 #: model:ir.cron,name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx
 msgid "Check Quantity to Invoice LX"
-msgstr "Comprobar cantidad a facturar LX"
+msgstr "Controllare quantità in attesa di fattura LX"
 
 #. module: automatize_edi_it
 #: model:ir.model.fields,field_description:automatize_edi_it.field_purchase_order_diff_to_invoice
 msgid "Diff To Invoice"
-msgstr "Dif a facturar ES"
+msgstr "Dif fattura ES"
 
 #. module: automatize_edi_it
 #: model:ir.ui.view,arch_db:automatize_edi_it.view_purchase_order_filter_inherit_search
 msgid "To Invoice Complete"
-msgstr "A facturar Completo"
+msgstr "Attesa fattura Completo"
 
 #. module: automatize_edi_it
 #: model:ir.ui.view,arch_db:automatize_edi_it.view_purchase_order_filter_inherit_search
 msgid "To Invoice Incomplete"
-msgstr "A facturar Incompleto"
+msgstr "Attesa fattura Incompleto"
