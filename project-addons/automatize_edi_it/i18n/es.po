@@ -1,0 +1,135 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* automatize_edi_it
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-17 09:11+0000\n"
+"PO-Revision-Date: 2021-05-17 09:11+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: automatize_edi_it
+#: sql_constraint:product.product:0
+msgid "A barcode can only be assigned to one product !"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,field_description:automatize_edi_it.field_purchase_order_amount_to_invoice_es
+msgid "Amount To Invoice Es"
+msgstr "A facturar ES"
+
+#. module: automatize_edi_it
+#: code:addons/automatize_edi_it/models/base_io_folder.py:19
+#, python-format
+msgid "Any partner set as automatice purchases"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,field_description:automatize_edi_it.field_res_partner_automatice_purchases
+#: model:ir.model.fields,field_description:automatize_edi_it.field_res_users_automatice_purchases
+msgid "Automatize purchases"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,help:automatize_edi_it.field_res_partner_automatice_purchases
+#: model:ir.model.fields,help:automatize_edi_it.field_res_users_automatice_purchases
+msgid "Automatize the confirmation of purchases created from stock addons."
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.actions.server,name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx_ir_actions_server
+#: model:ir.cron,cron_name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx
+#: model:ir.cron,name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx
+msgid "Check Quantity to Invoice LX"
+msgstr "Comprobar cantidad a facturar LX"
+
+#. module: automatize_edi_it
+#: model:ir.model,name:automatize_edi_it.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,field_description:automatize_edi_it.field_purchase_order_force_confirm
+msgid "Force Confirm"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,field_description:automatize_edi_it.field_stock_picking_type_force_location
+msgid "Force location"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,help:automatize_edi_it.field_stock_picking_type_force_location
+msgid "Force orig. location on picking creation"
+msgstr ""
+
+#. module: automatize_edi_it
+#: code:addons/automatize_edi_it/models/purchase.py:64
+#, python-format
+msgid "Please create an export folder"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.actions.server,name:automatize_edi_it.ir_cron_confirm_purchases_ir_actions_server
+#: model:ir.cron,cron_name:automatize_edi_it.ir_cron_confirm_purchases
+#: model:ir.cron,name:automatize_edi_it.ir_cron_confirm_purchases
+msgid "Process purchases with force confirm"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model,name:automatize_edi_it.model_procurement_rule
+msgid "Procurement Rule"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model,name:automatize_edi_it.model_product_product
+msgid "Product"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model,name:automatize_edi_it.model_purchase_order
+msgid "Purchase Order"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model,name:automatize_edi_it.model_purchase_order_line
+msgid "Purchase Order Line"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:stock.picking.type,name:automatize_edi_it.picking_type_receive_top_deposit
+msgid "Receive to Vendor's deposit"
+msgstr ""
+
+#. module: automatize_edi_it
+#: sql_constraint:product.product:0
+msgid "The code of product must be unique."
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model,name:automatize_edi_it.model_stock_picking_type
+msgid "The operation type determines the picking view"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model,name:automatize_edi_it.model_stock_picking
+msgid "Transfer"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:stock.location,name:automatize_edi_it.stock_location_vendor_deposit
+msgid "Vendor's deposit"
+msgstr ""
+
+#. module: automatize_edi_it
+#: model:ir.model,name:automatize_edi_it.model_base_io_folder
+msgid "base.io.folder"
+msgstr ""
+
