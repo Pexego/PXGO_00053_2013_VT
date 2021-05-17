@@ -27,6 +27,8 @@ class SaleOrderLineReport(models.Model):
 
     name = fields.Char('Name', readonly=True)
     product_id = fields.Many2one('product.product', 'Product', readonly=True)
+    product_brand_id = fields.Many2one('product.brand', 'Brand')
+    product_category_id = fields.Many2one('product.category', 'Category', readonly=True)
     product_state = fields.Selection([
         ('draft', 'In Development'),
         ('sellable', 'Normal'),
@@ -40,6 +42,16 @@ class SaleOrderLineReport(models.Model):
     discount = fields.Float('Discount', readonly=True)
     salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
     order_id = fields.Many2one('sale.order', 'Order', readonly=True)
+    date_order = fields.Datetime(
+        related='order_id.date_order',
+        string='Date',
+        readonly=True,
+    )
+    confirmation_date = fields.Datetime(
+        related='order_id.confirmation_date',
+        string='Confirmation date',
+        readonly=True,
+    )
     invoice_status = fields.Selection([
         ('upselling', 'Upselling'),
         ('invoiced', 'Invoiced'),
@@ -76,6 +88,8 @@ class SaleOrderLineReport(models.Model):
 CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.name as name,
        sol.product_id as product_id,
+       pt.product_brand_id as product_brand_id,
+       pt.categ_id as product_category_id,
        pt.state as product_state,
        sol.order_partner_id as partner_id,
        sol.product_uom_qty as product_qty,
@@ -93,7 +107,7 @@ JOIN sale_order so on so.id = sol.order_id
 LEFT JOIN product_product pp on sol.product_id = pp.id
 LEFT JOIN product_template pt on pt.id = pp.product_tmpl_id
 LEFT JOIN stock_move sm on sm.sale_line_id = sol.id
-GROUP BY sol.id, sol.name, sol.order_partner_id, sol.product_uom_qty,
+GROUP BY sol.id, sol.name, pt.product_brand_id, pt.categ_id, sol.order_partner_id, sol.product_uom_qty,
          sol.product_uom, sol.price_unit, sol.discount,
          sol.salesman_id, sol.state, sol.order_id, pt.state, so.state, so.invoice_status_2)
 """)
