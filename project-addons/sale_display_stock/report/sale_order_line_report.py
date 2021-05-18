@@ -98,6 +98,8 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        sol.salesman_id as salesman_id,
        sol.invoice_status as invoice_status,
        sol.order_id as order_id,
+       so.date_order as date_order,
+       so.confirmation_date as confirmation_date,
        so.state as order_state,
        so.invoice_status_2 as invoice_status_2,
        sol.company_id as company_id,
@@ -108,6 +110,6 @@ LEFT JOIN product_product pp on sol.product_id = pp.id
 LEFT JOIN product_template pt on pt.id = pp.product_tmpl_id
 LEFT JOIN stock_move sm on sm.sale_line_id = sol.id
 GROUP BY sol.id, sol.name, pt.product_brand_id, pt.categ_id, sol.order_partner_id, sol.product_uom_qty,
-         sol.product_uom, sol.price_unit, sol.discount,
-         sol.salesman_id, sol.state, sol.order_id, pt.state, so.state, so.invoice_status_2)
+         sol.product_uom, sol.price_unit, sol.discount, sol.salesman_id, sol.state, sol.order_id, 
+         so.date_order, so.confirmation_date, pt.state, so.state, so.invoice_status_2)
 """)
