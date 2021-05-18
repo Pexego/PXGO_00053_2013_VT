@@ -18,8 +18,8 @@ msgstr ""
 #. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/models/crm_claim.py:101
 #, python-format
-msgid "<p>Dear client,</p> <p>We inform you that we have received the products from the %s.</p><p>We will check it as soon as possible.</p> <p>Kindly,</p><p>VISIOTECH</p>"
-msgstr "<p>Estimado cliente,</p> <p>Le informamos que hemos recibido los productos del %s.</p><p>A la menor brevedad posible iniciaremos su revisión.</p> <p>Atentamente,</p><p>VISIOTECH</p>"
+msgid "<p>Dear Customer,</p> <p>We inform you that we have received the products corresponding to %s.</p><p>We will start the procedure as soon as possible.</p> <p>Sincerely,</p><p>VISIOTECH</p>"
+msgstr "<p>Cher client,</p> <p>Nous vous informons que nous avons reçu les produits correspondant à votre %s.</p><p>Nous procèderons à la vérification de celui-ci dans les plus brefs délais.</p> <p>Sincères salutations,</p><p>VISIOTECH</p>"
 
 #. module: crm_claim_rma_custom
 #: model:mail.template,subject:crm_claim_rma_custom.rma_received_template

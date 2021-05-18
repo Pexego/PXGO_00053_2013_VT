@@ -505,8 +505,8 @@ msgstr "email SAT"
 #. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/models/crm_claim.py:101
 #, python-format
-msgid "<p>Dear client,</p> <p>We inform you that we have received the products from the %s.</p><p>We will check it as soon as possible.</p> <p>Kindly,</p><p>VISIOTECH</p>"
-msgstr "<p>Caro cliente,</p> <p>Li informiamo che abbiamo ricevuto i prodotti del %s.</p><p>Lo faremo.</p> <p>Saluti,</p><p>VISIOTECH</p>"
+msgid "<p>Dear Customer,</p> <p>We inform you that we have received the products corresponding to %s.</p><p>We will start the procedure as soon as possible.</p> <p>Sincerely,</p><p>VISIOTECH</p>"
+msgstr "<p>Gentile cliente,</p> <p>La informiamo che abbiamo ricevuto i prodotti corrispondenti all'%s.</p><p>Effettuaremo la revisione il prima possibile.</p> <p>Cordiali saluti,</p><p>VISIOTECH</p>"
 
 #. module: crm_claim_rma_custom
 #: model:mail.template,subject:crm_claim_rma_custom.rma_received_template
