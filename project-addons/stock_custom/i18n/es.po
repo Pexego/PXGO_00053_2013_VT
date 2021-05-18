@@ -634,3 +634,8 @@ msgstr "Enviar factura con H.S Code"
 #: model:ir.model.fields,help:stock_custom.field_res_partner_send_hs_code_invoice
 msgid "If this field is checked, the pdf attached to the invoice email will be the invoice template H.S Code."
 msgstr "Si este campo está marcado, el pdf adjunto al correo electrónico de la factura será la plantilla de factura H.S Code."
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_stock_location_path_apply_at_finish
+msgid "Apply at finish"
+msgstr "Aplicar al finalizar"
