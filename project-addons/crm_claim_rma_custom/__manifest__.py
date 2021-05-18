@@ -49,8 +49,6 @@
              'report/crm_claim_report_view.xml',
              'data/stage_data.xml',
              'views/res_users_view.xml',
-             'views/res_users_view.xml',
-             'views/res_partner_view.xml',
              'data/email_layout.xml'],
     "installable": True
 }
