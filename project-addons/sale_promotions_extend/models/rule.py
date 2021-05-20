@@ -173,8 +173,11 @@ class PromotionsRulesActions(models.Model):
             ('disc_per_product',
              _('Discount line per each product')),
             ('fix_price_per_product',
-             _('Fixed price per each product'))
+             _('Fixed price per each product')),
+            ('tag_disc_perc_line',
+             _('New discount line per product with tag'))
             ])
+
 
     def on_change(self):
         if self.action_type == 'prod_disc_perc_accumulated':
@@ -559,6 +562,23 @@ class PromotionsRulesActions(models.Model):
                 'product_uom': 1
             }
             self.create_line(vals)
+
+    def action_tag_disc_perc_line(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) in order_line.product_tags:
+                vals = {
+                    'sequence': 999,
+                    'order_id': order.id,
+                    'product_id': self.env.ref('commercial_rules.product_discount').id,
+                    'name': 'Promo %s' % order_line.product_id.default_code,
+                    'price_unit': -(order_line.price_subtotal * (int(self.arguments)/100)),
+                    'discount': 0.0,
+                    'promotion_line': True,
+                    'product_uom_qty': 1,
+                    'product_uom': 1
+                }
+                self.create_line(vals)
+        return {}
 
 
 class PromotionsRules(models.Model):
