@@ -66,6 +66,7 @@ class CrmClaimRma(models.Model):
                                            ('transit', 'In transit')], "Warehouse Location")
     client_ref = fields.Char('Client Ref')
     warehouse_date = fields.Date('Final Received Date')
+    deposit_id = fields.Many2many('stock.picking', string='Deposit')
 
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
