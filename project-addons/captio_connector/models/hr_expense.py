@@ -14,11 +14,11 @@ class HrExpense(models.Model):
 
         client_id = self.env['ir.config_parameter'].sudo().get_param('captio.client_id')
         client_secret = self.env['ir.config_parameter'].sudo().get_param('captio.client_secret')
+        url_token = self.env['ir.config_parameter'].sudo().get_param('captio.api_token')
 
         data = 'grant_type=client_credentials&scope=integrations_api&client_id=%s&client_secret=%s' % \
                (client_id, client_secret)
-        # TODO: cambiar url por parámetro para poder cambiar entre PRE y PRO
-        response = requests.post('https://identity-pre.captio.net/identity/connect/token', data=data)
+        response = requests.post(url_token, data=data)
 
         if response.status_code == 200:
             resp = json.loads(response.text)
@@ -31,9 +31,10 @@ class HrExpense(models.Model):
 
         token = self.env.user.company_id.captio_token
         ckey = self.env['ir.config_parameter'].sudo().get_param('captio.customer_key')
+        url_api = self.env['ir.config_parameter'].sudo().get_param('captio.api_endpoint')
         filters = '?filters={"Id":"%s"}' % captio_id
-        # TODO: cambiar url por parámetro para poder cambiar entre PRE y PRO
-        response = requests.get('https://api-integrations-pre.captio.net/api/v3.1/Users%s' % filters,
+
+        response = requests.get('%s/v3.1/Users%s' % (url_api, filters),
                                 headers={'Authorization': 'Bearer ' + token,
                                          'CustomerKey': ckey})
         if response.status_code == 200:
@@ -47,6 +48,7 @@ class HrExpense(models.Model):
     def cron_import_captio_expenses(self):
 
         company = self.env.user.company_id
+        url_api = self.env['ir.config_parameter'].sudo().get_param('captio.api_endpoint')
 
         if not company.captio_token_expire or \
                 company.captio_token_expire < datetime.now().strftime('%Y-%m-%d %H:%M:%S'):
@@ -58,8 +60,7 @@ class HrExpense(models.Model):
 
         # Search for the reports with status 4 (Approved), and aproved after the last time we check
         filters = '?filters={"Status":"4",“StatusDate”:”>%s”}' % (company.captio_last_date.replace(" ", "T") + "Z")
-        # TODO: cambiar url por parámetro para poder cambiar entre PRE y PRO
-        response = requests.get('https://api-integrations-pre.captio.net/api/v3.1/Reports%s' % filters,
+        response = requests.get('%s/v3.1/Reports%s' % (url_api, filters),
                                 headers={'Authorization': 'Bearer ' + token,
                                          'CustomerKey': ckey})
         if response.status_code == 200:
@@ -73,8 +74,7 @@ class HrExpense(models.Model):
                 # Make two calls, one for the credit card and another for cash
                 # Each of one will make a separate account_move
                 filters = '?filters={"Report_Id":"%s","PaymentMethod_Name":"Tarjeta"}' % report["Id"]
-                # TODO: cambiar url por parámetro para poder cambiar entre PRE y PRO
-                response = requests.get('https://api-integrations-pre.captio.net/api/v3.1/Expenses%s' % filters,
+                response = requests.get('%s/v3.1/Expenses%s' % (url_api, filters),
                                         headers={'Authorization': 'Bearer ' + token,
                                                  'CustomerKey': ckey})
                 if response.status_code == 200:
@@ -113,8 +113,7 @@ class HrExpense(models.Model):
                         move.post()
 
                 filters = '?filters={"Report_Id":"%s","PaymentMethod_Name":"Efectivo"}' % report["Id"]
-                # TODO: cambiar url por parámetro para poder cambiar entre PRE y PRO
-                response = requests.get('https://api-integrations-pre.captio.net/api/v3.1/Expenses%s' % filters,
+                response = requests.get('%s/v3.1/Expenses%s' % (url_api, filters),
                                         headers={'Authorization': 'Bearer ' + token,
                                                  'CustomerKey': ckey})
                 if response.status_code == 200:

@@ -2,10 +2,10 @@
 <odoo noupdate="1">
     <record id="captio_endpoint" model="ir.config_parameter">
         <field name="key">captio.api_endpoint</field>
-        <field name="value"></field>
+        <field name="value">https://api-integrations-pre.captio.net/api</field>
     </record>
     <record id="captio_token" model="ir.config_parameter">
         <field name="key">captio.api_token</field>
-        <field name="value"></field>
+        <field name="value">https://identity-pre.captio.net/identity/connect/token</field>
     </record>
 </odoo>
