@@ -79,10 +79,11 @@ class HrExpense(models.Model):
                                                  'CustomerKey': ckey})
                 if response.status_code == 200:
                     resp_exp = json.loads(response.text)
-                    exp_vals = {}
+                    exp_vals = []
                     if resp_exp:
-                        name = user.partner_id.name.upper() + " TJ " + report["Code"]
+                        name = user.partner_id.name.upper() + " TJ TEST " + report["Code"]
                         journal = self.env['account.journal'].search([('code', '=', 'PERS')])
+                        # TODO: la cuenta analítica depende del país del comercial
                         analytic_account_id = self.env['account.analytic.account'].search([('code', '=', 'AA025')])
                         move = self.env['account.move'].create({
                             'ref': name,
@@ -92,24 +93,22 @@ class HrExpense(models.Model):
                         for expense in resp_exp:
                             account = expense["Category"]["Account"]
                             account_id = self.env['account.account'].search([('code', '=', account)])
-                            if account in exp_vals:
-                                exp_vals[account]["debit"] += expense["FinalAmount"]["Value"]
-                            else:
-                                exp_vals[account] = {'name': name,
-                                                     'move_id': move.id,
-                                                     'account_id': account_id.id,
-                                                     'analytic_account_id': analytic_account_id.id,
-                                                     'debit': expense["FinalAmount"]["Value"],
-                                                     'credit': 0}
+                            exp_vals.append({'name': name,
+                                             'move_id': move.id,
+                                             'account_id': account_id.id,
+                                             'analytic_account_id': analytic_account_id.id,
+                                             'date': expense["Date"],
+                                             'debit': expense["FinalAmount"]["Value"],
+                                             'credit': 0})
                             total_report += expense["FinalAmount"]["Value"]
 
-                        exp_vals[int(user.card_account_id.code)] = {'name': name,
-                                                                    'move_id': move.id,
-                                                                    'account_id': user.card_account_id.id,
-                                                                    'debit': 0,
-                                                                    'credit': total_report}
+                        exp_vals.append({'name': name,
+                                         'move_id': move.id,
+                                         'account_id': user.card_account_id.id,
+                                         'debit': 0,
+                                         'credit': total_report})
 
-                        move.line_ids = [(0, 0, x) for x in exp_vals.values()]
+                        move.line_ids = [(0, 0, x) for x in exp_vals]
                         move.post()
 
                 filters = '?filters={"Report_Id":"%s","PaymentMethod_Name":"Efectivo"}' % report["Id"]
@@ -118,10 +117,11 @@ class HrExpense(models.Model):
                                                  'CustomerKey': ckey})
                 if response.status_code == 200:
                     resp_exp = json.loads(response.text)
-                    exp_vals = {}
+                    exp_vals = []
                     if resp_exp:
                         name = user.partner_id.name.upper() + " EF " + report["Code"]
                         journal = self.env['account.journal'].search([('code', '=', 'MISC')])
+                        # TODO: la cuenta analítica depende del país del comercial
                         analytic_account_id = self.env['account.analytic.account'].search([('code', '=', 'AA025')])
                         move = self.env['account.move'].create({
                             'ref': name,
@@ -131,24 +131,22 @@ class HrExpense(models.Model):
                         for expense in resp_exp:
                             account = expense["Category"]["Account"]
                             account_id = self.env['account.account'].search([('code', '=', account)])
-                            if account in exp_vals:
-                                exp_vals[account]["debit"] += expense["FinalAmount"]["Value"]
-                            else:
-                                exp_vals[account] = {'name': name,
-                                                     'move_id': move.id,
-                                                     'account_id': account_id.id,
-                                                     'analytic_account_id': analytic_account_id.id,
-                                                     'debit': expense["FinalAmount"]["Value"],
-                                                     'credit': 0}
+                            exp_vals.append({'name': name,
+                                             'move_id': move.id,
+                                             'account_id': account_id.id,
+                                             'analytic_account_id': analytic_account_id.id,
+                                             'date': expense["Date"],
+                                             'debit': expense["FinalAmount"]["Value"],
+                                             'credit': 0})
                             total_report += expense["FinalAmount"]["Value"]
 
-                        exp_vals[int(user.card_account_id.code)] = {'name': name,
-                                                                    'move_id': move.id,
-                                                                    'account_id': user.cash_account_id.id,
-                                                                    'debit': 0,
-                                                                    'credit': total_report}
+                        exp_vals.append({'name': name,
+                                         'move_id': move.id,
+                                         'account_id': user.cash_account_id.id,
+                                         'debit': 0,
+                                         'credit': total_report})
 
-                        move.line_ids = [(0, 0, x) for x in exp_vals.values()]
+                        move.line_ids = [(0, 0, x) for x in exp_vals]
                         move.post()
 
         company.captio_last_date = datetime.now()
