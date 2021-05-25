@@ -88,8 +88,8 @@ class AccountVoucherWizard(models.TransientModel):
             if payment.state != 'cancelled':
                 total_advance += payment.amount
 
-        if 'amount_total' in fields:
-            res.update({'amount_total': total_advance})
+                if 'amount_total' in fields:
+                    res.update({'amount_total': total_advance})
 
         return res
 
