@@ -68,7 +68,7 @@
                 <field name="t_incidence_picking" attrs="{'invisible':[('transport_incidence', '=', False)]}"/>
                 <field name="warehouse_date"/>
                 <field name="transport_incidence"/>
-                <field name="deposit_id" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id)]" widget="many2many_tags"/>
+                <field name="deposit_id" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id), ('location_dest_id.name','=','Deposito')]" widget="many2many_tags"/>
             </field>
             <field name="model_ref_id" position="after">
                 <field name="client_ref" />
