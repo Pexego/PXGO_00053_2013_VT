@@ -86,7 +86,7 @@ class StockMoveLine(models.Model):
 
     _inherit = 'stock.move.line'
 
-    sale_line = fields.Many2one('sale.order.line', store=True, copy=False)
+    sale_line = fields.Many2one('sale.order.line', store=True)
     sale_price_unit = fields.Float(store=True)
     sale_discount = fields.Float(store=True)
     sale_tax_description = fields.Char(store=True)
@@ -120,7 +120,6 @@ class StockMove(models.Model):
 
     date_done = fields.Datetime(related='picking_id.date_done',store=True)
 
-    sale_line_id = fields.Many2one('sale.order.line', 'Sale Line', index=True, copy=False)
 
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()
