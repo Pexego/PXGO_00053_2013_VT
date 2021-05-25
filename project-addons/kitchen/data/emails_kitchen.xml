@@ -56,9 +56,29 @@
         <field name="lang">${ctx['lang']}</field>
         <field name="body_html"><![CDATA[
             <p>The expected date of customization <strong>${object.name}</strong> has changed.</p>
-            <p>The new expected date is <strong>${object.date_planned}</strong></p>
+            <p>The new expected date is <strong>${ctx.get('date_planned') or ''}</strong></p>
             <p>Best regards.</p>
          ]]>
         </field>
     </record>
+    <record id="send_mail_cancel_customization" model="mail.template">
+        <field name="name">Notify cancel customization</field>
+        <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
+        <field name="email_cc">${ctx.get('email_cc')}</field>
+        <field name="subject">The customization ${object.name} has been cancelled</field>
+        <field name="email_to">${ctx.get('email_to')}</field>
+        <field name="model_id" ref="model_kitchen_customization"/>
+        <field name="lang">${ctx['lang']}</field>
+        <field name="body_html"><![CDATA[
+            <p> The customization ${object.name} - ${object.partner_id.name or ''} has been cancelled.</p>
+            % if ctx.get('picking_message'):
+                <p> If you want the order (${object.order_id.name or ''}) to be shipped without customizing it, please, remove the 'Not sync' check from the picking.
+                If, on the other hand, you want to cancel it or change the customization, cancel the order and confirm it again if necessary .</p>
+                <p>
+            % endif
+            <p>Best regards.</p>
+         ]]>
+        </field>
+    </record>
+
 </odoo>

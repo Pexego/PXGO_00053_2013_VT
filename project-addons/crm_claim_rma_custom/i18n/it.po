@@ -496,3 +496,19 @@ msgstr "Riferimento cliente"
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_warehouse_date
 msgid "Final Received Date"
 msgstr "Data di ricezione finale"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_res_partner_email3
+msgid "SAT email"
+msgstr "email SAT"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:101
+#, python-format
+msgid "<p>Dear Customer,</p> <p>We inform you that we have received the products corresponding to %s.</p><p>We will start the procedure as soon as possible.</p> <p>Sincerely,</p><p>VISIOTECH</p>"
+msgstr "<p>Gentile cliente,</p> <p>La informiamo che abbiamo ricevuto i prodotti corrispondenti all'%s.</p><p>Effettuaremo la revisione il prima possibile.</p> <p>Cordiali saluti,</p><p>VISIOTECH</p>"
+
+#. module: crm_claim_rma_custom
+#: model:mail.template,subject:crm_claim_rma_custom.rma_received_template
+msgid "Visiotech - RMA received"
+msgstr "Visiotech - RMA ricevuto"

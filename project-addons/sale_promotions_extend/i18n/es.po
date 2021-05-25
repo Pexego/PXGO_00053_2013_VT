@@ -634,7 +634,40 @@ msgstr "Descuento por el programa de puntos en una Marca"
 msgid "Discount % on Brand accumulated (Price Unit)"
 msgstr "Descuento acumulado % en marca (Precio Unidad)"
 
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Discount line per each product"
+msgstr "Línea de descuento por cada par de productos"
+
 #. module: sale_promotions_extend
 #: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_apply_at_confirm
 msgid "Apply at confirm"
 msgstr "Aplicar al confirmar"
+
+#. module: sale_promotions_extend
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Product Category in Order"
+msgstr "Categoría de producto en pedido"
+
+#. module: sale_promotions_extend
+#: selection:promos.rules.conditions.exps,attribute:0
+msgid "Compute sub total of brand"
+msgstr "Calcula Subtotal por marca/s"
+
+#. module: sale_promotions_extend
+#: view:promos.rules:sale_promotions_extend.view_promotion_rules_form_special
+msgid "Partner Categories Excluded"
+msgstr "Categorías cliente excluidas"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price per each product"
+msgstr "Precio fijo por cada producto"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "New discount line per product with tag"
+msgstr "Nueva línea descuento por producto con tag"

@@ -1,0 +1,27 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* crm_claim_rma_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-04-29 13:28+0000\n"
+"PO-Revision-Date: 2021-04-29 13:28+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:101
+#, python-format
+msgid "<p>Dear Customer,</p> <p>We inform you that we have received the products corresponding to %s.</p><p>We will start the procedure as soon as possible.</p> <p>Sincerely,</p><p>VISIOTECH</p>"
+msgstr "<p>Sehr geehrter Kunde,</p> <p>Wir informieren Sie, dass wir die Produkte gemäß %s erhalten haben.</p><p>Wir werden die Überprüfung so schnell wie möglich starten.</p> <p>Mit freundlichen Grüßen,</p><p>VISIOTECH</p>"
+
+#. module: crm_claim_rma_custom
+#: model:mail.template,subject:crm_claim_rma_custom.rma_received_template
+msgid "Visiotech - RMA received"
+msgstr "Visiotech - RMA empfangen"

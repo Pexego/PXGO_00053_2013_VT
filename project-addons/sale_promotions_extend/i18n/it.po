@@ -628,7 +628,31 @@ msgstr "Prodotti gratuiti per unità"
 msgid "Discount % on Brand accumulated (Price Unit)"
 msgstr "Sconto accumulato % sulla marca (Prezzo Unità)"
 
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Discount line per each product"
+msgstr "Linea di sconto per ogni due prodotti"
+
 #. module: sale_promotions_extend
 #: model:ir.model.fields,field_description:sale_promotions_extend.field_promos_rules_apply_at_confirm
 msgid "Apply at confirm"
 msgstr "Applicare al confermare"
+
+#. module: sale_promotions_extend
+#: view:promos.rules:sale_promotions_extend.view_promotion_rules_form_special
+msgid "Partner Categories Excluded"
+msgstr "Categorie clienti esclusi"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price per each product"
+msgstr "Prezzo fisso per ogni prodotto"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "New discount line per product with tag"
+msgstr "Nuovo sconto per prodotto con tag"

@@ -56,6 +56,7 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     default_code = fields.Char(required=True)
+    not_include_report = fields.Boolean(string='Not include in reports')
 
     _sql_constraints = [
         ('default_code_uniq', 'unique(default_code, active)',

@@ -17,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from odoo import models, fields, api, _
+from odoo import models, fields, api, exceptions, _
 from datetime import datetime
 from odoo.exceptions import UserError
 
@@ -111,19 +111,18 @@ class StockDeposit(models.Model):
             move._action_confirm()
             picking.action_assign()
             picking.action_done()
-            deposit.move_id.sale_line_id.write({'qty_invoiced': 0, 'invoice_status': 'to invoice'})
+            deposit.move_id.sale_line_id.write({'qty_invoiced': deposit.move_id.sale_line_id.qty_invoiced-deposit.product_uom_qty, 'invoice_status': 'to invoice'})
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
 
     @api.one
     def _prepare_deposit_move(self, picking, group):
-        deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
         move_template = {
             'name': 'RET' or '',
             'product_id': self.product_id.id,
             'product_uom': self.product_uom.id,
             'product_uom_qty': self.product_uom_qty,
             'product_uos': self.product_uom.id,
-            'location_id': deposit_id.id,
+            'location_id': self.move_id.location_dest_id.id,
             'location_dest_id':
                 picking.picking_type_id.default_location_dest_id.id,
             'picking_id': picking.id,
@@ -160,12 +159,11 @@ class StockDeposit(models.Model):
     @api.multi
     def return_deposit(self):
         picking_type_id = self.env.ref('stock.picking_type_in')
-        deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
         for deposit in self:
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
-                 'location_id': deposit_id.id,
+                 'location_id': deposit.move_id.location_dest_id.id,
                  'location_dest_id': picking_type_id.default_location_dest_id.id})
             deposit._create_stock_moves(picking)
             deposit.write({'state': 'returned',
@@ -233,12 +231,47 @@ class StockDeposit(models.Model):
             picking.action_done()
             deposit.write({'state': 'loss', 'loss_move_id': move.id})
 
+    @api.multi
+    def create_invoice(self,journal_id=None):
+        deposit_obj = self.env['stock.deposit']
+        deposits = self.filtered(lambda d:d.state=='sale')
+        invoice_ids = []
+        if not deposits:
+            raise exceptions.Warning(_('No deposit selected'))
+        sales = list(set([x.sale_id for x in deposits]))
+        for sale in sales:
+            sale_deposit = deposit_obj.search(
+                [('id', 'in', deposits.ids), ('sale_id', '=', sale.id)])
+
+            sale_lines = sale_deposit.mapped('move_id.sale_line_id')
+            my_context = dict(self.env.context)
+            my_context['invoice_deposit'] = True
+            inv_vals = sale._prepare_invoice()
+            inv_vals['journal_id'] = journal_id.id if journal_id else sale.partner_id.commercial_partner_id.invoice_type_id.journal_id.id
+            if not inv_vals.get("payment_term_id", False):
+                inv_vals['payment_term_id'] = \
+                    sale.partner_id.property_payment_term_id.id
+            if not inv_vals.get("payment_mode_id", False):
+                inv_vals['payment_mode_id'] = \
+                    sale.partner_id.customer_payment_mode_id.id
+            if not inv_vals.get("partner_bank_id", False):
+                inv_vals['partner_bank_id'] = sale.partner_id.bank_ids \
+                    and sale.partner_id.bank_ids[0].id or False
+            invoice = self.env['account.invoice'].create(inv_vals)
+            for line in sale_lines:
+                deposit = self.filtered(lambda d: d.move_id.sale_line_id.id==line.id)
+                line.with_context(my_context).invoice_line_create(invoice.id, sum(deposit.mapped('product_uom_qty')))
+                line.qty_invoiced=line.product_qty
+            invoice_ids.append(invoice.id)
+            sale_deposit.write({'invoice_id': invoice.id})
+        deposits.write({'state': 'invoiced'})
+        return invoice_ids
+
 
     @api.multi
     def revert_sale(self):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_in')
-        location_deposit_id = self.env.ref('stock_deposit.stock_location_deposit')
         for deposit in self:
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
@@ -248,7 +281,7 @@ class StockDeposit(models.Model):
                  'commercial': deposit.user_id.id,
                  'group_id': deposit.sale_move_id.group_id.id,
                  'location_id': deposit.sale_move_id.location_dest_id.id,
-                 'location_dest_id': location_deposit_id.id})
+                 'location_dest_id': deposit.sale_move_id.location_id.id})
             values = {
                 'product_id': deposit.product_id.id,
                 'product_uom_qty': deposit.product_uom_qty,
@@ -256,7 +289,7 @@ class StockDeposit(models.Model):
                 'partner_id': deposit.partner_id.id,
                 'name': 'Return Sale Deposit: ' + deposit.sale_move_id.name,
                 'location_id': deposit.sale_move_id.location_dest_id.id,
-                'location_dest_id': location_deposit_id.id,
+                'location_dest_id': deposit.sale_move_id.location_id.id,
                 'picking_id': picking.id,
                 'commercial': deposit.user_id.id,
                 'group_id': deposit.sale_move_id.group_id.id
@@ -282,3 +315,4 @@ class StockDeposit(models.Model):
                 deposit.invoice_id.action_invoice_cancel()
                 deposit.invoice_id = False
                 deposit.revert_sale()
+

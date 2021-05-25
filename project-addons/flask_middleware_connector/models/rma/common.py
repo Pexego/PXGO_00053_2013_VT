@@ -23,22 +23,22 @@ class CrmClaimListener(Component):
 
         if rma.partner_id and rma.partner_id.web and not rma.in_web:
             rma.in_web = True
-            rma.with_delay(priority=1).export_rma()
+            rma.with_delay(priority=11).export_rma()
             for line in rma.claim_line_ids:
-                line.with_delay(priority=10, eta=120).export_rmaproduct()
+                line.with_delay(priority=11, eta=120).export_rmaproduct()
         elif 'partner_id' in fields and (not rma.partner_id or (rma.partner_id and not rma.partner_id.web)):
             rma.in_web = False
-            rma.with_delay(priority=6, eta=120).unlink_rma()
+            rma.with_delay(priority=11, eta=120).unlink_rma()
         elif rma.partner_id.web:
             for field in up_fields:
                 if field in fields:
-                    rma.with_delay(priority=5, eta=120).update_rma(fields=fields)
+                    rma.with_delay(priority=11, eta=120).update_rma(fields=fields)
                     break
 
     def on_record_unlink(self, record):
         if record.partner_id and record.partner_id.web:
             record.in_web = False
-            record.with_delay(priority=25, eta=120).unlink_rma()
+            record.with_delay(priority=11, eta=120).unlink_rma()
 
 
 class CrmClaim(models.Model):
@@ -81,7 +81,7 @@ class ClaimLineListener(Component):
         if record.claim_id.partner_id.web and \
                 (not record.equivalent_product_id) and \
                 record.web:
-            record.with_delay(priority=10, eta=120).export_rmaproduct()
+            record.with_delay(priority=11, eta=120).export_rmaproduct()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["product_id", "date_in", "date_out", "substate_id",
@@ -89,18 +89,18 @@ class ClaimLineListener(Component):
                      "internal_description", "product_returned_quantity",
                      "equivalent_product_id", "prodlot_id", "invoice_id"]
         if 'web' in fields and record.web:
-            record.with_delay(priority=10, eta=120).export_rmaproduct()
+            record.with_delay(priority=11, eta=120).export_rmaproduct()
         elif not record.web:
-            record.with_delay(priority=20, eta=180).unlink_rmaproduct()
+            record.with_delay(priority=11, eta=180).unlink_rmaproduct()
         elif record.claim_id.partner_id.web and record.web:
             for field in up_fields:
                 if field in fields:
-                    record.with_delay(priority=15, eta=180).update_rmaproduct()
+                    record.with_delay(priority=11, eta=180).update_rmaproduct()
                     break
 
     def on_record_unlink(self, record):
         if record.claim_id.partner_id.web and record.web:
-            record.with_delay(priority=20, eta=180).unlink_rmaproduct()
+            record.with_delay(priority=11, eta=180).unlink_rmaproduct()
 
 
 class ClaimLine(models.Model):
@@ -152,17 +152,17 @@ class SubstateListener(Component):
     _apply_on = ['substate.substate']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=1).export_rma_status()
+        record.with_delay(priority=11).export_rma_status()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["name"]
         for field in up_fields:
             if field in fields:
-                record.with_delay(priority=2).update_rma_status()
+                record.with_delay(priority=11).update_rma_status()
                 break
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=100).unlink_rma_status()
+        record.with_delay(priority=11).unlink_rma_status()
 
 
 class SubstateSubstate(models.Model):
@@ -199,17 +199,17 @@ class ClaimStageListener(Component):
     _apply_on = ['crm.claim.stage']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=1).export_rma_stage()
+        record.with_delay(priority=11).export_rma_stage()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["name"]
         for field in up_fields:
             if field in fields:
-                record.with_delay(priority=2).update_rma_stage()
+                record.with_delay(priority=11).update_rma_stage()
                 break
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=100).unlink_rma_stage()
+        record.with_delay(priority=11).unlink_rma_stage()
 
 
 class CrmClaimStage(models.Model):

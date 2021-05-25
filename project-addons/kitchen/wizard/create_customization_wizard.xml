@@ -7,6 +7,7 @@
             <form string="Create customization">
                 <group>
                     <field name="notify_users" widget="many2many_tags"/>
+                    <field name="notify_sales_team"/>
                     <field name="order_id" invisible="1"/>
                 </group>
 

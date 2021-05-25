@@ -11,17 +11,17 @@ class ResCountryListener(Component):
     _apply_on = ['res.country']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=1).export_country()
+        record.with_delay(priority=11).export_country()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["name", "code"]
         for field in up_fields:
             if field in fields:
-                record.with_delay(priority=3).update_country(fields=fields)
+                record.with_delay(priority=11).update_country(fields=fields)
                 break
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=100).unlink_country()
+        record.with_delay(priority=11).unlink_country()
 
 
 class ResCountry(models.Model):
@@ -66,11 +66,11 @@ class CountryStateListener(Component):
         up_fields = ["name", "code", "country_id"]
         for field in up_fields:
             if field in fields:
-                record.with_delay(priority=3).update_country_state(fields=fields)
+                record.with_delay(priority=11).update_country_state(fields=fields)
                 break
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=5).unlink_country_state()
+        record.with_delay(priority=11).unlink_country_state()
 
 
 class ResCountryState(models.Model):

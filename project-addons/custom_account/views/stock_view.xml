@@ -32,6 +32,7 @@
                     <attribute name="invisible">0</attribute>
                 </field>
                 <field name="state" position="after">
+                    <field name="payment_mode_id"/>
                     <field string="Invoice type" name="invoice_type_id"/>
                 </field>
             </field>
@@ -69,5 +70,16 @@
     <menuitem
             action="action_order_line_wo_reserve" id="menu_order_line_wo_reserve"
             parent="purchase.menu_procurement_management" sequence="101" groups="stock.group_stock_user"/>
+
+    <record id="product_not_include_report_check" model="ir.ui.view">
+        <field name="name">product.product.not_include_report</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <field name="lst_price" position="after">
+                <field name="not_include_report" groups="base.group_system"/>
+            </field>
+        </field>
+    </record>
 
 </odoo>

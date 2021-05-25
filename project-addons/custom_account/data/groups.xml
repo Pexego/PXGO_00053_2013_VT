@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="group_big_accounts" model="res.groups">
+            <field name="name">Projects and Big Accounts</field>
+        </record>
+        <record id="group_product_manager" model="res.groups">
+            <field name="name">Producto</field>
+        </record>
+    </data>
+</odoo>

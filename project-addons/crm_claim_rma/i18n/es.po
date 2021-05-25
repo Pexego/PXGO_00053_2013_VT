@@ -1129,6 +1129,11 @@ msgid "Select product"
 msgstr "Seleccionar producto"
 
 #. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.equivalent_products_wizard
+msgid "Delete product"
+msgstr "Borrar producto"
+
+#. module: crm_claim_rma
 #: model:ir.ui.view,arch_db:crm_claim_rma.claim_send_supplier_view
 msgid "Send"
 msgstr "Enviar"
@@ -1542,3 +1547,21 @@ msgstr "válido"
 #: model:ir.ui.view,arch_db:crm_claim_rma.view_crm_claim_lines_filter
 msgid "without supplier RMA"
 msgstr "Sin RMA de proveedor"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/equivalent_products_wizard.py:32
+#, python-format
+msgid "There are open pickings that contain this product"
+msgstr "Hay albaranes sin cancelar que contienen este producto"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/equivalent_products_wizard.py:35
+#, python-format
+msgid "Product deleted"
+msgstr "Producto borrado"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/equivalent_products_wizard.py:35
+#, python-format
+msgid "Check the status of the line"
+msgstr "Comprueba el estado de la línea"

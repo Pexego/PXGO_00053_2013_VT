@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_show_amazon_orders" model="ir.actions.act_window">
+        <field name="name">Amazon Orders</field>
+        <field name="res_model">amazon.sale.order</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field eval="False" name="view_id"/>
+        <field name="view_amazon_sale_order_filter"/>
+        <field name="context">{
+            'search_default_errors_filter': 1
+            }
+        </field>
+    </record>
+
+    <record id="amazon_marketplace_tree" model="ir.ui.view">
+        <field name="name">amazon.marketplace.form</field>
+        <field name="model">amazon.marketplace</field>
+        <field name="arch" type="xml">
+            <tree string="Marketplaces" editable="top">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="amazon_marketplace_form" model="ir.ui.view">
+        <field name="name">amazon.marketplace.form</field>
+        <field name="model">amazon.marketplace</field>
+        <field name="arch" type="xml">
+            <form string="Marketplaces">
+                <sheet>
+                    <field name="name"/>
+                    <field name="code"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_show_marketplaces">
+        <field name="name">Marketplaces</field>
+        <field name="res_model">amazon.marketplace</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="amazon_marketplace_tree"/>
+    </record>
+
+    <menuitem id="amazon_menu" name="Amazon" web_icon="amazon_connector,static/amazon_logo.png"
+              sequence="4" action="action_show_amazon_orders" groups="amazon_connector.group_amazon"/>
+
+    <menuitem id="config_amazon_menu" name="Configuration" sequence="1"
+              parent="amazon_menu"/>
+
+    <menuitem id="marketplaces_menu" name="Marketplaces" sequence="1" action="action_show_marketplaces"
+              string="Marketplaces" parent="config_amazon_menu"/>
+
+    <record id="amazon_sale_order_form" model="ir.ui.view">
+        <field name="name">amazon.sale.order.form</field>
+        <field name="model">amazon.sale.order</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" readonly="1"/>
+                    <button name="retry_order" string="Retry Order" type="object"
+                            attrs="{'invisible': [('state','!=','error')]}"
+                            class="oe_highlight"/>
+                    <button name="process_order" string="Process Order" type="object"
+                            attrs="{'invisible': ['|',('state','not in',['read','warning']),('invoice_deposits_count','>',0)]}"
+                            class="oe_highlight"/>
+                    <button name="mark_to_done" string="Mark to Done" type="object"
+                            attrs="{'invisible': [('state','!=','warning')]}"
+                            class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box"
+                         attrs="{'invisible':[('state','in',['error','read'])]}">
+                        <button type="object" name="action_view_deposits"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                            <field name="deposits_count" widget="statinfo" string="Deposits"/>
+                        </button>
+                        <button type="object" name="action_view_sales"
+                                class="oe_stat_button"
+                                icon="fa-shopping-cart">
+                            <field name="sale_deposits_count" widget="statinfo" string="Sale orders"/>
+                        </button>
+                        <button type="object" name="action_view_invoices"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                            <field name="invoice_deposits_count" widget="statinfo" string="Invoices"/>
+                        </button>
+
+                    </div>
+                    <div class="oe_title">
+                        <label string="Amazon Order"/>
+                        <h1>
+                            <field name="name" attrs="{'readonly':[('state','!=','error')]}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="theoretical_total_amount" readonly="1"/>
+                            <field name="theoretical_total_taxes" readonly="1"/>
+                            <field name="warning_price" readonly="1"/>
+                            <field name="message_error" attrs="{'invisible':[('state','not in',['error','warning'])]}"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="amazon_invoice_name" readonly="1"/>
+                            <field name="fulfillment" readonly="1"/>
+                            <field name="sales_channel" readonly="1"/>
+                            <field name="purchase_date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Order Lines">
+                            <field name="order_line" readonly="1">
+                                <tree string="Order Lines">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="product_asin"/>
+                                    <field name="product_id"/>
+                                    <field name="product_qty"/>
+                                    <field name="price_unit"/>
+                                    <field name="price_subtotal"/>
+                                    <field name="tax_id" widget="many2many_tags"/>
+                                    <field name="price_tax"/>
+                                    <field name="price_total"/>
+                                </tree>
+
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="amount_untaxed" widget="monetary"
+                                       options="{'currency_field': 'currency_id'}"/>
+                                <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                <div class="oe_subtotal_footer_separator oe_inline">
+                                    <label for="amount_total"/>
+                                </div>
+                                <field name="amount_total" nolabel="1" class="oe_subtotal_footer_separator"
+                                       widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            </group>
+                        </page>
+                        <page string="Buyer Info" name="buyer_info">
+                            <group>
+                                <field name="partner_vat"/>
+                                <field name="vat_imputation_country"/>
+                                <field name="buyer_email"/>
+                                <field name="buyer_name"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="amazon_sale_order_tree" model="ir.ui.view">
+        <field name="name">amazon.sale.order.tree</field>
+        <field name="model">amazon.sale.order</field>
+        <field name="arch" type="xml">
+            <tree string="Amazon Orders" decoration-danger="state=='error'">
+                <field name="name"/>
+                <field name="fulfillment"/>
+                <field name="sales_channel"/>
+                <field name="purchase_date"/>
+                <field name="state"/>
+                <field name="warning_price"/>
+                <field name="message_error"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_amazon_sale_order_filter" model="ir.ui.view">
+        <field name="name">amazon.sale.order.filters</field>
+        <field name="model">amazon.sale.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter string="Errors" domain="[('state','=','error')]" name="errors_filter"/>
+            </search>
+        </field>
+    </record>
+
+
+</odoo>

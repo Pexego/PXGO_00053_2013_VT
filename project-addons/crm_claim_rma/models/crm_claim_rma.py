@@ -131,8 +131,7 @@ class ClaimLine(models.Model):
     return_value = fields.Float(
             compute="_line_total_amount", string='Total return',
             help="Quantity returned * Unit sold price")
-    prodlot_id = fields.Many2one(
-            'stock.production.lot',
+    prodlot_id = fields.Char(
             string='Serial/Lot n°',
             help="The serial/lot of the returned product")
     applicable_guarantee = fields.Selection(
@@ -274,7 +273,7 @@ class ClaimLine(models.Model):
     @api.multi
     def equivalent_products(self):
         view = self.env.ref('crm_claim_rma.equivalent_products_wizard')
-        wiz = self.env['equivalent.products.wizard'].with_context(claim_line=self.id).create({'line_id': self.id})
+        wiz = self.env['equivalent.products.wizard'].with_context(claim_line=self).create({'line_id': self.id})
 
         return {
             'name': _("Equivalent products"),

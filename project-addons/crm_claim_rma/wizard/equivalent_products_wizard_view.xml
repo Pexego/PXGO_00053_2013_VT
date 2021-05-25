@@ -7,13 +7,21 @@
         <field name="arch" type="xml">
             <form string="Equivalent products">
                 <group>
-                    <field name="product_tag_ids" widget="many2many_tags"/>
                     <field name="product_id" required="1"/>
-                    <field name="real_stock"/>
-                    <field name="virtual_stock"/>
+                    <field name="product_ids">
+                        <tree string="Products">
+                            <field name="default_code"/>
+                            <field name="qty_available"/>
+                            <field name="virtual_stock_conservative"/>
+                            <field name="qty_available_wo_wh"/>
+                            <field name="virtual_available"/>
+                            <field name="tag_ids" widget="many2many_tags"/>
+                        </tree>
+                    </field>
                 </group>
                 <footer>
                     <button string="Select product" name="select_product" type="object" class="oe_highlight"/>
+                    <button string="Delete product" name="delete_product" type="object" class="btn-danger"/>
                     <button string="Cancel" special="cancel"/>
                 </footer>
             </form>

@@ -6,3 +6,4 @@
 "access_ir_exports_group_system_manager","ir_exports group_system","base.model_ir_exports","base.group_system",1,1,1,1
 "access_ir_exports_line_group_system_manager","ir_exports_line group_system","base.model_ir_exports_line","base.group_system",1,1,1,1
 "access_account_invoice_contact_report","account.invoice.contact.report","model_account_invoice_contact_report","base.group_user",1,1,1,0
+"access_account_invoice_report_product","account.invoice.report.product","model_account_invoice_report_product","custom_account.group_product_manager",1,1,1,0

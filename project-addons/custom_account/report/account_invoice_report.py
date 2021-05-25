@@ -1,6 +1,6 @@
 # Copyright 2019 Omar Castiñeira, Comunitea Servicios Tecnológicos S.L.
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
-from odoo import models, fields
+from odoo import models, fields, api
 
 
 class AccountInvoiceReport(models.Model):
@@ -68,3 +68,26 @@ class AccountInvoiceReport(models.Model):
                         'pc.parent_id'
 
         return group_by_str
+
+
+class AccountInvoiceReportProduct(models.TransientModel):
+    _name = 'account.invoice.report.product'
+
+    report_filter = fields.Many2one('ir.filters', string="Filter",
+                                    domain=[('name', 'like', 'Producto%'),
+                                            ('model_id', '=', 'account.invoice.report')])
+
+    @api.multi
+    def show_product_report(self):
+        return {
+            'type': 'ir.actions.act_window',
+            'name': self.report_filter.name,
+            'res_model': 'account.invoice.report',
+            'domain': self.report_filter.domain,
+            'context': self.report_filter.context,
+            'view_type': 'form',
+            'view_mode': 'pivot',
+        }
+
+        
+

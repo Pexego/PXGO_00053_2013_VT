@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_company_amazon_connector_form" model="ir.ui.view">
+        <field name="name">res.company.amazon.connector.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <notebook position="inside">
+                <page name="amazon_connector" string="Amazon Connector">
+                    <group name="amazon_credentials" string="Credentials">
+                        <field name="marketplace_ids" widget="many2many_tags"/>
+                        <field name="refresh_token"/>
+                        <field name="lwa_app_id"/>
+                        <field name="lwa_client_secret"/>
+                        <field name="aws_secret_key"/>
+                        <field name="aws_access_key"/>
+                        <field name="role_arn"/>
+                    </group>
+
+                </page>
+            </notebook>
+        </field>
+    </record>
+</odoo>

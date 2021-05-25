@@ -12,16 +12,16 @@ class RappelListener(Component):
     _apply_on = ['rappel']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=1, eta=60).export_rappel()
+        record.with_delay(priority=11, eta=60).export_rappel()
 
     def on_record_write(self, record, fields=None):
         up_fields = ["name"]
         for field in up_fields:
             if field in fields:
-                record.with_delay(priority=2, eta=120).update_rappel(fields=fields)
+                record.with_delay(priority=11, eta=120).update_rappel(fields=fields)
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=3, eta=120).unlink_rappel()
+        record.with_delay(priority=11, eta=120).unlink_rappel()
 
 
 class Rappel(models.Model):
@@ -59,15 +59,15 @@ class RappelInfoListener(Component):
 
     def on_record_create(self, record, fields=None):
         if record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=1, eta=60).export_rappel_info()
+            record.with_delay(priority=11).export_rappel_info()
 
     def on_record_write(self, record, fields=None):
         if record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=2, eta=120).update_rappel_info(fields=fields)
+            record.with_delay(priority=11, eta=60).update_rappel_info(fields=fields)
 
     def on_record_unlink(self, record):
         if record.partner_id.commercial_partner_id.web:
-            record.with_delay(priority=3, eta=120).unlink_rappel_info()
+            record.with_delay(priority=11, eta=60).unlink_rappel_info()
 
 
 class RappelInfo(models.Model):
@@ -104,13 +104,13 @@ class RappelSectionListener(Component):
     _apply_on = ['rappel.section']
 
     def on_record_create(self, record, fields=None):
-        record.with_delay(priority=1, eta=60).export_rappel_section()
+        record.with_delay(priority=11).export_rappel_section()
 
     def on_record_write(self, record, fields=None):
-        record.with_delay(priority=2, eta=120).update_rappel_section(fields=fields)
+        record.with_delay(priority=11, eta=60).update_rappel_section(fields=fields)
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=3, eta=120).unlink_rappel_section()
+        record.with_delay(priority=11, eta=60).unlink_rappel_section()
 
 
 class RappelSection(models.Model):

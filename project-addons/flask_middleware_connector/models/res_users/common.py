@@ -17,17 +17,17 @@ class ResUsersListener(Component):
     def on_record_write(self, record, fields=None):
         up_fields = ["name", 'email', 'web']
         if "web" in fields and record.web:
-            record.with_delay(priority=1).export_commercial()
+            record.with_delay(priority=11).export_commercial()
         elif "web" in fields and not record.web:
-            record.with_delay(priority=100).unlink_commercial()
+            record.with_delay(priority=11).unlink_commercial()
         else:
             for field in up_fields:
                 if field in fields:
-                    record.with_delay(priority=3).update_commercial(fields)
+                    record.with_delay(priority=11).update_commercial(fields)
                     break
 
     def on_record_unlink(self, record):
-        record.with_delay(priority=100).unlink_commercial()
+        record.with_delay(priority=11).unlink_commercial()
 
 
 class ResUsers(models.Model):
