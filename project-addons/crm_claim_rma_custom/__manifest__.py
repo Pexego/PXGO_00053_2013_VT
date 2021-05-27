@@ -38,7 +38,8 @@
                 # 'block_invoices',
                 'product_brand',
                 'mail',
-                'picking_incidences'],
+                'picking_incidences',
+                'custom_account'],
     "data": ['views/crm_claim_view.xml',
              'data/substate_data.xml',
              'security/ir.model.access.csv',
@@ -47,6 +48,8 @@
              'wizard/claim_make_picking_from_picking_view.xml',
              'report/crm_claim_report_view.xml',
              'data/stage_data.xml',
-             'views/res_users_view.xml'],
+             'views/res_users_view.xml',
+             'data/email_layout.xml',
+             'views/res_partner_view.xml'],
     "installable": True
 }
