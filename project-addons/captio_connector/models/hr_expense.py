@@ -9,6 +9,16 @@ class HrExpense(models.Model):
 
     _inherit = "hr.expense"
 
+    COUNTRY_ACCOUNTS = {
+        'España': 'AA025',
+        'Italia': 'AA026',
+        'Francia': 'AA031',
+        'Portugal': 'AA027',
+        'Norte Europa': 'AA028',
+        'Magreb': 'AA029',
+        'DACH': 'AA025'
+    }
+
     @api.model
     def get_new_token_captio(self):
 
@@ -71,83 +81,60 @@ class HrExpense(models.Model):
                 if not user:
                     user = self.assign_user_from_captio(report["User"]["Id"])
 
-                # Make two calls, one for the credit card and another for cash
-                # Each of one will make a separate account_move
-                filters = '?filters={"Report_Id":"%s","PaymentMethod_Name":"Tarjeta"}' % report["Id"]
+                # Search for the expenses in the report
+                # each expense will be an account.move so each movement can have its own date
+                filters = '?filters={"Report_Id":"%s"}' % report["Id"]
                 response = requests.get('%s/v3.1/Expenses%s' % (url_api, filters),
                                         headers={'Authorization': 'Bearer ' + token,
                                                  'CustomerKey': ckey})
                 if response.status_code == 200:
                     resp_exp = json.loads(response.text)
-                    exp_vals = []
                     if resp_exp:
-                        name = user.partner_id.name.upper() + " TJ TEST " + report["Code"]
-                        journal = self.env['account.journal'].search([('code', '=', 'PERS')])
-                        # TODO: la cuenta analítica depende del país del comercial
-                        analytic_account_id = self.env['account.analytic.account'].search([('code', '=', 'AA025')])
-                        move = self.env['account.move'].create({
-                            'ref': name,
-                            'journal_id': journal.id
-                        })
-                        total_report = 0
-                        for expense in resp_exp:
+                        for count, expense in enumerate(resp_exp):
+                            exp_vals = []
+
+                            # Create all the necessary data
+                            if expense["PaymentMethod"]["Name"] == 'Tarjeta empresa':
+                                payment_method = ' TJ '
+                                journal = self.env['account.journal'].search([('code', '=', 'PERS')])
+                                close_account = user.card_account_id.id,
+                            elif expense["PaymentMethod"]["Name"] == 'Efectivo':
+                                payment_method = ' EF '
+                                journal = self.env['account.journal'].search([('code', '=', 'MISC')])
+                                close_account = user.cash_account_id.id,
+                            move_name = user.partner_id.name.upper() + payment_method + report["Code"] + \
+                                        ' %s/%s ' % (count + 1, len(resp_exp))
+                            line_name = user.partner_id.name.upper()
+                            aa_code = self.COUNTRY_ACCOUNTS.get(user.team_id.name, 'AA025')
+                            analytic_account_id = self.env['account.analytic.account'].search([('code', '=', aa_code)])
+                            # if the expense is from another month, put the creation date
+                            if int(expense["Date"][5:7]) != datetime.now().month:
+                                exp_date = expense["CreationDate"]
+                            else:
+                                exp_date = expense["Date"]
+
+                            # Create the move
+                            move = self.env['account.move'].create({
+                                'ref': move_name,
+                                'journal_id': journal.id
+                            })
                             account = expense["Category"]["Account"]
                             account_id = self.env['account.account'].search([('code', '=', account)])
-                            exp_vals.append({'name': name,
+                            exp_vals.append({'name': line_name,
                                              'move_id': move.id,
                                              'account_id': account_id.id,
                                              'analytic_account_id': analytic_account_id.id,
-                                             'date': expense["Date"],
+                                             'date': exp_date,
                                              'debit': expense["FinalAmount"]["Value"],
                                              'credit': 0})
-                            total_report += expense["FinalAmount"]["Value"]
 
-                        exp_vals.append({'name': name,
-                                         'move_id': move.id,
-                                         'account_id': user.card_account_id.id,
-                                         'debit': 0,
-                                         'credit': total_report})
-
-                        move.line_ids = [(0, 0, x) for x in exp_vals]
-                        move.post()
-
-                filters = '?filters={"Report_Id":"%s","PaymentMethod_Name":"Efectivo"}' % report["Id"]
-                response = requests.get('%s/v3.1/Expenses%s' % (url_api, filters),
-                                        headers={'Authorization': 'Bearer ' + token,
-                                                 'CustomerKey': ckey})
-                if response.status_code == 200:
-                    resp_exp = json.loads(response.text)
-                    exp_vals = []
-                    if resp_exp:
-                        name = user.partner_id.name.upper() + " EF " + report["Code"]
-                        journal = self.env['account.journal'].search([('code', '=', 'MISC')])
-                        # TODO: la cuenta analítica depende del país del comercial
-                        analytic_account_id = self.env['account.analytic.account'].search([('code', '=', 'AA025')])
-                        move = self.env['account.move'].create({
-                            'ref': name,
-                            'journal_id': journal.id
-                        })
-                        total_report = 0
-                        for expense in resp_exp:
-                            account = expense["Category"]["Account"]
-                            account_id = self.env['account.account'].search([('code', '=', account)])
-                            exp_vals.append({'name': name,
+                            exp_vals.append({'name': line_name,
                                              'move_id': move.id,
-                                             'account_id': account_id.id,
-                                             'analytic_account_id': analytic_account_id.id,
-                                             'date': expense["Date"],
-                                             'debit': expense["FinalAmount"]["Value"],
-                                             'credit': 0})
-                            total_report += expense["FinalAmount"]["Value"]
+                                             'account_id': close_account,
+                                             'debit': 0,
+                                             'credit': expense["FinalAmount"]["Value"]})
 
-                        exp_vals.append({'name': name,
-                                         'move_id': move.id,
-                                         'account_id': user.cash_account_id.id,
-                                         'debit': 0,
-                                         'credit': total_report})
-
-                        move.line_ids = [(0, 0, x) for x in exp_vals]
-                        move.post()
+                            move.line_ids = [(0, 0, x) for x in exp_vals]
+                            move.post()
 
         company.captio_last_date = datetime.now()
-
