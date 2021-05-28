@@ -105,7 +105,7 @@ class HrExpense(models.Model):
                             move_name = user.partner_id.name.upper() + payment_method + report["Code"] + \
                                         ' %s/%s ' % (count + 1, len(resp_exp))
                             line_name = user.partner_id.name.upper()
-                            aa_code = self.COUNTRY_ACCOUNTS.get(user.team_id.name, 'AA025')
+                            aa_code = self.COUNTRY_ACCOUNTS.get(user.sale_team_id.name, 'AA025')
                             analytic_account_id = self.env['account.analytic.account'].search([('code', '=', aa_code)])
                             # if the expense is from another month, put the creation date
                             if int(expense["Date"][5:7]) != datetime.now().month:
