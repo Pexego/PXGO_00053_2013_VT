@@ -18,12 +18,14 @@
 #
 ##############################################################################
 
-from odoo import models, api
+from odoo import models, api, fields
 
 
 class ResPartner(models.Model):
 
     _inherit = 'res.partner'
+
+    email3 = fields.Char('SAT email', help='The RMAs will arrive to this email')
 
     @api.model
     def search(self, args, offset=0, limit=None, order=None, count=False):

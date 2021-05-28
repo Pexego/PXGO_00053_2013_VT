@@ -120,6 +120,7 @@ class StockMove(models.Model):
 
     date_done = fields.Datetime(related='picking_id.date_done',store=True)
 
+
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()
         for move in self:

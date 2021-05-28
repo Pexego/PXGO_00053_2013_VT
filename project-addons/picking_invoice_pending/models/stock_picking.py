@@ -265,6 +265,13 @@ class StockPicking(models.Model):
                 pick.pending_stock_reverse_move_id.unlink()
         return super().unlink()
 
+    @api.multi
+    def action_back_to_draft(self):
+        for pick in self:
+            if pick.state == 'cancel':
+                pick.sale_id.state = 'sale'
+        return super().action_back_to_draft()
+
 
 class StockMove(models.Model):
 

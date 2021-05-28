@@ -644,3 +644,15 @@ msgstr "Applicare al confermare"
 #: view:promos.rules:sale_promotions_extend.view_promotion_rules_form_special
 msgid "Partner Categories Excluded"
 msgstr "Categorie clienti esclusi"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price per each product"
+msgstr "Prezzo fisso per ogni prodotto"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "New discount line per product with tag"
+msgstr "Nuovo sconto per prodotto con tag"

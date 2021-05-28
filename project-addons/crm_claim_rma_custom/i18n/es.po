@@ -499,8 +499,24 @@ msgid "Final Received Date"
 msgstr "Fecha recepción final"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/models/crm_claim.py:154
-#: code:addons/crm_claim_rma_custom/models/crm_claim.py:369
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:155
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:375
 #, python-format
-msgid "The quantity of this product in all RMAs cannot be greater than the invoice quantity"
-msgstr "La cantidad de este producto en todos los RMAs no puede ser mayor que la cantidad de la factura"
+msgid "All units of this product (%s) included in the indicated invoice (%s) have already been paid \n"
+msgstr "Ya se han abonado todas las unidades del producto %s incluidas en la factura %s \n"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_res_partner_email3
+msgid "SAT email"
+msgstr "Correo SAT"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:101
+#, python-format
+msgid "<p>Dear Customer,</p> <p>We inform you that we have received the products corresponding to %s.</p><p>We will start the procedure as soon as possible.</p> <p>Sincerely,</p><p>VISIOTECH</p>"
+msgstr "<p>Estimado cliente,</p> <p>Le informamos que hemos recibido los productos del %s.</p><p>A la menor brevedad posible iniciaremos su revisión.</p> <p>Atentamente,</p><p>VISIOTECH</p>"
+
+#. module: crm_claim_rma_custom
+#: model:mail.template,subject:crm_claim_rma_custom.rma_received_template
+msgid "Visiotech - RMA received"
+msgstr "Visiotech - RMA recibido"
