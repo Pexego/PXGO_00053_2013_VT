@@ -82,8 +82,10 @@ union
     CAST(extract(year from ai.date_invoice)::int as text) as invoice_year, p.area_id,
     extract(month from ai.date_invoice) as invoice_month, ai.state, p.user_id
     from account_invoice ai inner join res_partner p on p.id = ai.partner_id
+    left join account_payment_term apt on apt.id = ai.payment_term_id
     where ai.company_id = 1
         and ai.amount_insurance is null
+        and apt.name not in ('Prepaid','Immediate payment')
         and ai.type = 'out_refund'
         and ai.state in ('open', 'paid')
         and p.insurance_credit_limit = 0
@@ -101,7 +103,7 @@ union
     left join account_payment_term apt on apt.id = ai.payment_term_id
     where ai.company_id = 1
         and ai.amount_insurance is null
-        and (ai.payment_mode_id is null or apt.name in ('Prepaid','Immediate payment'))
+        and (ai.payment_term_id is null or apt.name in ('Prepaid','Immediate payment'))
         and ai.type = 'out_invoice'
         and ai.state in ('open', 'paid')
     group by p.country_id, extract(year from ai.date_invoice)::int,
@@ -118,7 +120,7 @@ union
     left join account_payment_term apt on apt.id = ai.payment_term_id
     where ai.company_id = 1
         and ai.amount_insurance is null
-        and (ai.payment_mode_id is null or apt.name in ('Prepaid','Immediate payment'))
+        and (ai.payment_term_id is null or apt.name in ('Prepaid','Immediate payment'))
         and ai.type = 'out_refund'
         and ai.state in ('open', 'paid')
     group by p.country_id, extract(year from ai.date_invoice)::int,
