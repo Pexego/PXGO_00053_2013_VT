@@ -1118,9 +1118,9 @@ msgstr "Fattura semplificata"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "<span>PICKUP</span>"
-msgstr "<span>RACCOLTA</span>"
+msgstr "<span>PICKUP</span>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "<span>SHIPPING</span>"
-msgstr "<span>SPEDIZIONE</span>"
+msgstr "<span>SHIPPING</span>"
