@@ -498,6 +498,11 @@ msgid "Final Received Date"
 msgstr "Data di ricezione finale"
 
 #. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_deposit_id
+msgid "Deposit"
+msgstr "Depositare"
+
+#. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_res_partner_email3
 msgid "SAT email"
 msgstr "email SAT"
