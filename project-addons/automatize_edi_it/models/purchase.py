@@ -2,6 +2,7 @@
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
 from odoo import models, fields, api, exceptions, _
+import odoorpc
 
 
 class PurchaseOrderLine(models.Model):
@@ -37,7 +38,15 @@ class PurchaseOrder(models.Model):
 
     _inherit = "purchase.order"
 
+    @api.depends('amount_to_invoice_es')
+    @api.multi
+    def _get_to_invoice_diff(self):
+        for order in self:
+            order.diff_to_invoice = order.amount_to_invoice_es - order.amount_total
+
     force_confirm = fields.Boolean()
+    amount_to_invoice_es = fields.Monetary()
+    diff_to_invoice = fields.Monetary(compute='_get_to_invoice_diff', store=True)
 
     @api.model
     def _check_picking_to_process(self):
@@ -67,4 +76,30 @@ class PurchaseOrder(models.Model):
     picking_type_id = fields.Many2one('stock.picking.type',
                                       default=lambda self:
                                       self.env.ref('automatize_edi_it.picking_type_receive_top_deposit'))
+
+    def _get_qty_to_invoice_es(self, purchase_ref):
+        # get the server
+        server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
+        # Prepare the connection to the server
+        odoo_es = odoorpc.ODOO(server.server_url, port=server.server_port)
+        # Login
+        odoo_es.login(server.server_db, server.login, server.password)
+
+        amt_to_invoice = 0.0
+        order_es_id = odoo_es.env['sale.order'].search([('client_order_ref', '=', purchase_ref), ('partner_id', '=', 245247)])
+        if order_es_id:
+            order_es = odoo_es.env['sale.order'].browse(order_es_id)
+            if order_es.invoice_status == 'to invoice':
+                for line in order_es.order_line:
+                    amt_to_invoice += line.qty_to_invoice * line.price_unit
+        return amt_to_invoice
+
+    def cron_check_qty_to_invoice_lx(self):
+        purchases = self.search([('invoice_status', '=', 'to invoice')])
+
+        for purchase in purchases:
+            if purchase.amount_total != purchase.amount_to_invoice_es:
+                purchase.amount_to_invoice_es = self._get_qty_to_invoice_es(purchase.name)
+
+
 

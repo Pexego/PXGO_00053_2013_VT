@@ -11,7 +11,8 @@
                 'custom_account'],
     'category': 'EDI',
     'data': ['data/automatize_edi_it_data.xml',
-             'views/stock_picking_type_view.xml'],
+             'views/stock_picking_type_view.xml',
+             'views/purchase_view.xml'],
     'auto_install': False,
     'installable': True,
 }

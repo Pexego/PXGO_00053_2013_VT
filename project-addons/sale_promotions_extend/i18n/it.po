@@ -650,3 +650,9 @@ msgstr "Categorie clienti esclusi"
 #, python-format
 msgid "Fixed price per each product"
 msgstr "Prezzo fisso per ogni prodotto"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "New discount line per product with tag"
+msgstr "Nuovo sconto per prodotto con tag"
