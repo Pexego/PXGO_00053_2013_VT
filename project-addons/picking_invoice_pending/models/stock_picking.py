@@ -143,8 +143,8 @@ class StockPicking(models.Model):
             message_error = ""
             if sale_id.invoice_status != 'to invoice':
                 message_error += _("\tThe order invoice status is not 'to invoice' \n")
-            if sale_id.invoice_type_id.name == 'Diaria':
-                message_error += _("\tThe order invoice type is not 'Diaría' \n")
+            if sale_id.invoice_type_id.name != 'Diaria':
+                message_error += _("\tThe order invoice type is not 'Diaria' \n")
             if sale_id.tests:
                 message_error += _("\tThe order invoice is a test order \n")
             if pick.invoice_ids:

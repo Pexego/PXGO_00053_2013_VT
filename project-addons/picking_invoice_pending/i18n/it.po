@@ -128,7 +128,7 @@ msgstr "\tLo stato della fattura dell'ordine non è 'Da fatturare' \n"
 #. module: picking_invoice_pending
 #: code:addons/picking_invoice_pending/stock_picking.py:147
 #, python-format
-msgid "\tThe order invoice type is not 'Diaría' \n"
+msgid "\tThe order invoice type is not 'Diaria' \n"
 msgstr "\tIl tipo di fatturazione non è 'Giornaliero' \n"
 
 #. module: picking_invoice_pending

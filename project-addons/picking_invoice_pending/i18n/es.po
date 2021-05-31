@@ -128,8 +128,8 @@ msgstr "\tEl estado de la factura del pedido no es 'A facturar' \n"
 #. module: picking_invoice_pending
 #: code:addons/picking_invoice_pending/stock_picking.py:147
 #, python-format
-msgid "\tThe order invoice type is not 'Diaría' \n"
-msgstr "\tEl tipo de facturación no es 'Diaría' \n"
+msgid "\tThe order invoice type is not 'Diaria' \n"
+msgstr "\tEl tipo de facturación no es 'Diaria' \n"
 
 #. module: picking_invoice_pending
 #: code:addons/picking_invoice_pending/stock_picking.py:149
