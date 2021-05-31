@@ -19,7 +19,7 @@
 ##############################################################################
 
 from odoo import models, fields, api, _
-from odoo.exceptions import Warning
+from odoo.exceptions import Warning, UserError
 
 
 class StockPicking(models.Model):
@@ -112,8 +112,6 @@ class StockPicking(models.Model):
             ctx = dict(self._context or {})
             ctx['bypass_risk'] = True
             for pick in self:
-                templates = []
-                validate = True
                 if (pick.picking_type_id.code == "incoming" and pick.move_lines
                         and pick.move_lines[0].purchase_line_id and
                         pick.company_id.required_invoice_pending_move and
@@ -129,63 +127,73 @@ class StockPicking(models.Model):
                         raise Warning(_("You need to configure an account "
                                         "journal in the company for pending "
                                         "invoices"))
-                    debit_account = pick.company_id.\
-                        property_pending_variation_account
-                    credit_account = pick.company_id.\
-                        property_pending_stock_account
                     move_id = pick.pending_stock_move_id.\
                         create_reversals(fields.Date.today(),
                                          reconcile=True)
                     pick.pending_stock_reverse_move_id = move_id.id
 
-                if pick.state == 'done' and \
-                        pick.picking_type_code == 'outgoing':
-                    sale_id = pick.sale_id
-                    if (sale_id.invoice_status == 'to invoice'
-                        and sale_id.invoice_type_id.name == 'Diaria'
-                            and not sale_id.tests):
-                        # Create invoice
-                        try:
-                            id_invoice = sale_id.action_invoice_create()
-                            invoice_created = self.env['account.invoice'].\
-                                with_context(ctx).browse(id_invoice)
-                        except:
-                            invoice_created = False
-                        if not invoice_created:
-                            templates.append(
-                                self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices', False))
-                            validate = False
-                        elif invoice_created and \
-                                not invoice_created.invoice_line_ids:
-                            # Invoice created without lines
-                            templates.append(
-                                self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices_empty_lines',
-                                             False))
-                            # Do not validate it because it will generate an error
-                            validate = False
-                        if validate:
-                            try:
-                                invoice_created.compute_taxes()
-                                invoice_created.action_invoice_open()
-                            except:
-                                invoice_created.invoice_created_from_picking = True
-                                templates.append(
-                                    self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
-
-                        for tmpl in templates:
-                            ctx.update({
-                                'default_model': 'stock.picking',
-                                'default_res_id': pick.id,
-                                'default_use_template': bool(tmpl.id),
-                                'default_template_id': tmpl.id,
-                                'default_composition_mode': 'comment',
-                                'mark_so_as_sent': True
-                            })
-                            composer_id = self.env['mail.compose.message'].\
-                                with_context(ctx).create({})
-                            composer_id.with_context(ctx).send_mail()
-
         return res
+
+    @api.multi
+    def create_invoice(self):
+        ctx = dict(self._context or {})
+        ctx['bypass_risk'] = True
+        for pick in self:
+            sale_id = pick.sale_id
+            message_error = ""
+            if sale_id.invoice_status != 'to invoice':
+                message_error += _("\tThe order invoice status is not 'to invoice' \n")
+            if sale_id.invoice_type_id.name == 'Diaria':
+                message_error += _("\tThe order invoice type is not 'Diaría' \n")
+            if sale_id.tests:
+                message_error += _("\tThe order invoice is a test order \n")
+            if pick.invoice_ids:
+                message_error += _("\tThe picking has already invoices \n")
+            if message_error:
+                raise UserError(_("The picking cannot be invoiced due to:\n%s") %message_error)
+            templates = []
+            validate = True
+            # Create invoice
+            try:
+                id_invoice = sale_id.action_invoice_create()
+                invoice_created = self.env['account.invoice']. \
+                    with_context(ctx).browse(id_invoice)
+            except:
+                invoice_created = False
+            if not invoice_created:
+                templates.append(
+                    self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices', False))
+                validate = False
+            elif invoice_created and \
+                    not invoice_created.invoice_line_ids:
+                # Invoice created without lines
+                templates.append(
+                    self.env.ref('picking_invoice_pending.alert_picking_autocreate_invoices_empty_lines',
+                                 False))
+                # Do not validate it because it will generate an error
+                validate = False
+            if validate:
+                try:
+                    invoice_created.compute_taxes()
+                    invoice_created.action_invoice_open()
+                except:
+                    invoice_created.invoice_created_from_picking = True
+                    templates.append(
+                        self.env.ref('picking_invoice_pending.alert_picking_autovalidate_invoices', False))
+
+            for tmpl in templates:
+                ctx.update({
+                    'default_model': 'stock.picking',
+                    'default_res_id': pick.id,
+                    'default_use_template': bool(tmpl.id),
+                    'default_template_id': tmpl.id,
+                    'default_composition_mode': 'comment',
+                    'mark_so_as_sent': True
+                })
+                composer_id = self.env['mail.compose.message']. \
+                    with_context(ctx).create({})
+                composer_id.with_context(ctx).send_mail()
+
 
     @api.multi
     def action_confirm(self):

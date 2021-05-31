@@ -113,3 +113,38 @@ msgstr "È necessario configurare un registro account in azienda per le fatture 
 #, python-format
 msgid "You need to configure the accounts in the company for pending invoices"
 msgstr "È necessario configurare gli account in azienda per le fatture in sospeso"
+
+#. module: picking_invoice_pending
+#: model:ir.ui.view,arch_db:picking_invoice_pending.view_picking_form_add_pending_move
+msgid "Create Invoice"
+msgstr "Fatturare"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:145
+#, python-format
+msgid "\tThe order invoice status is not 'to invoice' \n"
+msgstr "\tLo stato della fattura dell'ordine non è 'Da fatturare' \n"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:147
+#, python-format
+msgid "\tThe order invoice type is not 'Diaría' \n"
+msgstr "\tIl tipo di fatturazione non è 'Giornaliero' \n"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:149
+#, python-format
+msgid "\tThe order invoice is a test order \n"
+msgstr "\tL'ordine è un ordine di prova \n"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:151
+#, python-format
+msgid "\tThe picking has already invoices \n"
+msgstr "\tLa bolla di consegna ha già fatture associate \n"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:153
+#, python-format
+msgid "The picking cannot be invoiced due to:\n%s"
+msgstr "La bolla di consegna non può essere fatturata a causa di:\n%s"
