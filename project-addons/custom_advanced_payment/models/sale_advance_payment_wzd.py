@@ -84,12 +84,14 @@ class AccountVoucherWizard(models.TransientModel):
         sale = self.env['sale.order'].browse(sale_id)
 
         total_advance = res['amount_total']
+        import ipdb
+        ipdb.set_trace()
         for payment in sale.account_payment_ids:
             if payment.state == 'cancelled':
                 total_advance += payment.amount
 
-            if 'amount_total' in fields:
-                res.update({'amount_total': total_advance})
+        if 'amount_total' in fields:
+            res.update({'amount_total': total_advance})
 
         return res
 
