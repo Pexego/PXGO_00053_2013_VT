@@ -43,13 +43,11 @@ class SaleOrderLineReport(models.Model):
     salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
     order_id = fields.Many2one('sale.order', 'Order', readonly=True)
     date_order = fields.Datetime(
-        related='order_id.date_order',
-        string='Date',
+        'order_id.date_order',
         readonly=True,
     )
     confirmation_date = fields.Datetime(
-        related='order_id.confirmation_date',
-        string='Confirmation date',
+        'order_id.confirmation_date',
         readonly=True,
     )
     invoice_status = fields.Selection([
