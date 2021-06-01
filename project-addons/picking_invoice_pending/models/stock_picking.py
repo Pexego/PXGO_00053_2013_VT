@@ -193,7 +193,7 @@ class StockPicking(models.Model):
                 composer_id = self.env['mail.compose.message']. \
                     with_context(ctx).create({})
                 composer_id.with_context(ctx).send_mail()
-            return invoice_created
+            return  invoice_created != False
 
 
     @api.multi
