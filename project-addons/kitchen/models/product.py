@@ -7,6 +7,7 @@ class ProductTemplate(models.Model):
     customization_type_ids = fields.Many2many('customization.type', string="Type")
 
     customizable = fields.Boolean()
+    erase_logo = fields.Boolean()
 
     def create(self, vals):
         if vals.get('type','') == 'product':
@@ -55,3 +56,13 @@ class ProductTemplate(models.Model):
                 vals["customizable"] = len(types_ids)>0
                 vals["customization_type_ids"] = [(6, 0, types_ids)]
         return super(ProductTemplate, self).write(vals)
+
+
+class ProductProduct(models.Model):
+
+    _inherit = 'product.product'
+
+    @api.onchange("customizable","erase_logo")
+    def onchange_customizable(self):
+        if self.customizable and self.erase_logo:
+            raise exceptions.UserError(_("You can't check the fields customizable and erase logo at the same time"))
