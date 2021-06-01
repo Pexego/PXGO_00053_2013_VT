@@ -1019,6 +1019,12 @@ msgid "Without ef"
 msgstr "Senza ef"
 
 #. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+#: model:ir.ui.view,arch_db:custom_account.view_account_invoice_filter_partner
+msgid "Today"
+msgstr "Oggi"
+
+#. module: custom_account
 #: code:addons/custom_account/wizard/reclassify_move_line_balance_wizard.py:55
 #, python-format
 msgid "You are trying to reclassify one entry that are already reconciled!"
