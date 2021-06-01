@@ -73,9 +73,6 @@ class SaleOrder(models.Model):
             self.env['promos.rules'].apply_special_promotions(self)
             res = False
 
-        if order.state == 'reserve':
-            order.order_reserve()
-
         taxes = order.order_line.filtered(
             lambda l: len(l.tax_id) > 0)[0].tax_id
         for line in order.order_line:
