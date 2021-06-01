@@ -73,11 +73,15 @@ class KitchenCustomization(models.Model):
         if any(self.customization_line.filtered(lambda l: l.product_qty <= 0)):
             raise exceptions.UserError(
                 _("You can't create a customization with a quantity of less than one of a product"))
-        lines_without_type = self.customization_line.filtered(lambda l: not l.type_ids)
+        lines_without_type = self.customization_line.filtered(lambda l: not l.type_ids and not l.product_id.erase_logo)
         if lines_without_type:
             raise exceptions.UserError(
                 _("You can't confirm a customization without a customization type: %s") % lines_without_type.mapped(
                     'product_id.default_code'))
+        lines_without_erase_logo = self.customization_line.filtered(lambda l: l.product_id.erase_logo and not l.erase_logo)
+        if lines_without_erase_logo:
+            raise exceptions.UserError(
+                _("You can't create a customization without check erase logo option of this product : %s") % lines_without_erase_logo.mapped('sale_line_id.product_id.default_code'))
         if self.order_id:
             customization_product_lines = set(self.customization_line.mapped('product_id.default_code'))
             order_product_lines = set(self.order_id.order_line.mapped('product_id.default_code'))
@@ -146,8 +150,8 @@ class KitchenCustomization(models.Model):
             self.notify_users = [(6, 0, [self.order_id.user_id.id])]
             self.customization_line = False
             for line in self.order_id.order_line.filtered(
-                    lambda l: l.product_id.customizable and not l.deposit and l.product_id.categ_id.with_context(
-                        lang='es_ES').name != 'Portes' and l.price_unit >= 0):
+                    lambda l: (l.product_id.customizable or l.product_id.erase_logo) and not l.deposit and
+                              l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes' and l.price_unit >= 0):
                 customization_qty = sum([x.get("product_qty", 0) for x in
                                          self.env['kitchen.customization.line'].search_read(
                                              [('sale_line_id', '=', line.id), ('state', '!=', 'cancel')],
@@ -185,7 +189,7 @@ class KitchenCustomization(models.Model):
 
 
     def write(self, vals):
-        lines_without_type = self.customization_line.filtered(lambda l: not l.type_ids)
+        lines_without_type = self.customization_line.filtered(lambda l: not l.type_ids and not l.product_id.erase_logo)
         if lines_without_type and not vals.get("customization_line", False):
             raise exceptions.UserError(
                 _("You can't save a customization without a customization type: %s") % lines_without_type.mapped(
@@ -196,12 +200,6 @@ class KitchenCustomization(models.Model):
                 raise exceptions.UserError(_("You cannot create a new customization because the selected order already "
                                              "has one, please cancel it before creating a new one"))
 
-        if vals.get("customization_line", False):
-            for line in vals.get("customization_line", False):
-                line = line[2]
-                if line and (not line.get("type_ids", False) or not line.get("type_ids", False)[0][2]):
-                    raise exceptions.UserError(_("You can't save a customization without a customization type: %s")
-                        % self.env['product.product'].browse(line.get("product_id")).default_code)
 
         res = super(KitchenCustomization, self).write(vals)
         if vals.get('date_planned', False):
@@ -263,7 +261,7 @@ class KitchenCustomizationLine(models.Model):
         default='draft')
     erase_logo = fields.Boolean()
 
-    type_ids = fields.Many2many('customization.type', required=1, string="Type")
+    type_ids = fields.Many2many('customization.type', string="Type")
 
     @api.onchange('product_qty')
     def onchange_product_qty(self):
@@ -315,3 +313,31 @@ class KitchenCustomizationLine(models.Model):
                 line.reservation_status = "to customize"
 
     move_ids = fields.One2many('stock.move','customization_line')
+    product_erase_logo = fields.Boolean(related="product_id.erase_logo")
+
+    @api.multi
+    def write(self, vals):
+        for line in self:
+            keys = vals.keys()
+            type_ids = line.type_ids
+            if "type_ids" in keys:
+                type_ids = vals.get("type_ids", False)[0][2]
+                if not type_ids and not line.product_erase_logo:
+                   raise exceptions.UserError(_("You can't save a customization without a customization type: %s")
+                                                   % self.env['product.product'].browse(
+                            line.product_id.id).default_code)
+                elif type_ids:
+                    type_ids = self.env['customization.type'].browse(type_ids)
+            if 'product_id' in keys:
+                product_id = self.env['product.product'].browse(vals.get('product_id'))
+            else:
+                product_id = line.product_id
+            product_type_ids = product_id.customization_type_ids
+            if type_ids - product_type_ids:
+                raise exceptions.UserError(_(
+                    "You can't create a customization with different customization types (%s) than the product %s has %s") % (
+                                    line.sale_line_id.product_id.default_code, type_ids.mapped('name'),
+                                    product_type_ids.mapped('name')))
+            if line.product_erase_logo and "erase_logo" in keys and not vals.get("erase_logo",True):
+                raise exceptions.UserError(_("You can't create a customization without check erase logo option of this product : %s") % line.product_id.default_code)
+        return super(KitchenCustomizationLine, self).write(vals)
