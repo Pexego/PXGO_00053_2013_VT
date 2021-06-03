@@ -100,7 +100,7 @@ class HrExpense(models.Model):
                                 close_account = user.card_account_id.id,
                             elif expense["PaymentMethod"]["Name"] == 'Efectivo':
                                 payment_method = ' EF '
-                                journal = self.env['account.journal'].search([('code', '=', 'MISC')])
+                                journal = self.env['account.journal'].search([('code', '=', 'PERS')])
                                 close_account = user.cash_account_id.id,
                             move_name = user.partner_id.name.upper() + payment_method + report["Code"] + \
                                         ' %s/%s ' % (count + 1, len(resp_exp))
