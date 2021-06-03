@@ -113,6 +113,18 @@ msgstr "Ordine"
 
 #. module: sale_display_stock
 #: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_date_order
+msgid "Order Date"
+msgstr "Data ordine"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_confirmation_date
+msgid "Confirmation Date"
+msgstr "Data di conferma"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_partner_id
 msgid "Partner"
 msgstr "Cliente"
@@ -128,6 +140,20 @@ msgstr "Prezzo unità"
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_id
 msgid "Product"
 msgstr "Prodotto"
+
+#. module: sale_display_stock
+#: model:ir.model,name:sale_display_stock.model_product_product
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_brand_id
+msgid "Brand"
+msgstr "Marca"
+
+#. module: sale_display_stock
+#: model:ir.model,name:sale_display_stock.model_product_product
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_product_category_id
+msgid "Product Category"
+msgstr "Categoría de producto"
 
 #. module: sale_display_stock
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_kitchen
