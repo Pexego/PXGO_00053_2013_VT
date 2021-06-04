@@ -18,6 +18,7 @@
                 </field>
                 <footer>
                     <button string="Create sales" name="create_sale" type="object"/>
+                    <button string="Return" type="object"/>
                     <button string="Cancel" special="cancel"/>
                 </footer>
             </form>

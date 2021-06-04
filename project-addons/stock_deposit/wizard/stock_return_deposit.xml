@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="stock_return_deposit_form" model="ir.ui.view">
+        <field name="name">stock.return.deposit.form</field>
+        <field name="model">stock.return.deposit</field>
+        <field name="arch" type="xml">
+            <form string="Return deposits">
+                <footer>
+                    <button string="Create return" name="create_return" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="Create return"
+        res_model="stock.return.deposit"
+        src_model="stock.deposit"
+        view_id="stock_return_deposit_form"
+        view_mode="form"
+        target="new"
+        key2="client_action_multi"
+        id="stock_return_deposit_action"/>
+</odoo>

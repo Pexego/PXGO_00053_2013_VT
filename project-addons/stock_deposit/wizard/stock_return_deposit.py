@@ -17,7 +17,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import stock_invoice_deposit
-from . import stock_sale_deposit
-from . import stock_return_deposit
-from . import stock_loss_deposit
+from odoo import models, fields, api, exceptions, _
+
+
+class StockReturnDeposit(models.TransientModel):
+    _name = 'stock.return.deposit'
+
+    @api.multi
+    def create_return(self):
+        import ipdb
+        ipdb.set_trace()
+        return None
