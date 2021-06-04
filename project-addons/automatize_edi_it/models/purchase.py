@@ -84,14 +84,7 @@ class PurchaseOrder(models.Model):
                                       default=lambda self:
                                       self.env.ref('automatize_edi_it.picking_type_receive_top_deposit'))
 
-    def _get_qty_to_invoice_es(self, purchase_ref):
-        # get the server
-        server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
-        # Prepare the connection to the server
-        odoo_es = odoorpc.ODOO(server.server_url, port=server.server_port)
-        # Login
-        odoo_es.login(server.server_db, server.login, server.password)
-
+    def _get_qty_to_invoice_es(self, purchase_ref, odoo_es):
         amt_to_invoice = 0.0
         es_sale = None
         order_es_id = odoo_es.env['sale.order'].search([('client_order_ref', '=', purchase_ref), ('partner_id', '=', 245247)])
@@ -106,9 +99,19 @@ class PurchaseOrder(models.Model):
     def cron_check_qty_to_invoice_lx(self):
         purchases = self.search([('invoice_status', '=', 'to invoice')])
 
-        for purchase in purchases:
-            if purchase.amount_total != purchase.amount_to_invoice_es:
-                purchase.amount_to_invoice_es, purchase.es_sale_order = self._get_qty_to_invoice_es(purchase.name)
+        if purchases:
+            # get the server
+            server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech')])
+            # Prepare the connection to the server
+            odoo_es = odoorpc.ODOO(server.server_url, port=server.server_port)
+            # Login
+            odoo_es.login(server.server_db, server.login, server.password)
+
+            for purchase in purchases:
+                if purchase.amount_total != purchase.amount_to_invoice_es:
+                    purchase.amount_to_invoice_es, purchase.es_sale_order = self._get_qty_to_invoice_es(purchase.name, odoo_es)
+
+            odoo_es.logout()
 
 
 
