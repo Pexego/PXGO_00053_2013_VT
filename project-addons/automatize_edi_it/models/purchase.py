@@ -42,11 +42,18 @@ class PurchaseOrder(models.Model):
     @api.multi
     def _get_to_invoice_diff(self):
         for order in self:
-            order.diff_to_invoice = order.amount_to_invoice_es - order.amount_total
+            order.diff_to_invoice = order.amount_to_invoice_es - order.amount_to_invoice_it
+
+    @api.multi
+    def _get_amt_to_invoice(self):
+        for order in self:
+            order.amount_to_invoice_it = sum([l.qty_received * l.price_unit for l in order.order_line])
 
     force_confirm = fields.Boolean()
     amount_to_invoice_es = fields.Monetary()
     diff_to_invoice = fields.Monetary(compute='_get_to_invoice_diff', store=True)
+    es_sale_order = fields.Char('ES Sale')
+    amount_to_invoice_it = fields.Monetary('To Invoice', compute='_get_amt_to_invoice', store=False)
 
     @api.model
     def _check_picking_to_process(self):
@@ -86,20 +93,22 @@ class PurchaseOrder(models.Model):
         odoo_es.login(server.server_db, server.login, server.password)
 
         amt_to_invoice = 0.0
+        es_sale = None
         order_es_id = odoo_es.env['sale.order'].search([('client_order_ref', '=', purchase_ref), ('partner_id', '=', 245247)])
         if order_es_id:
             order_es = odoo_es.env['sale.order'].browse(order_es_id)
+            es_sale = order_es.name
             if order_es.invoice_status == 'to invoice':
                 for line in order_es.order_line:
                     amt_to_invoice += line.qty_to_invoice * line.price_unit
-        return amt_to_invoice
+        return amt_to_invoice, es_sale
 
     def cron_check_qty_to_invoice_lx(self):
         purchases = self.search([('invoice_status', '=', 'to invoice')])
 
         for purchase in purchases:
             if purchase.amount_total != purchase.amount_to_invoice_es:
-                purchase.amount_to_invoice_es = self._get_qty_to_invoice_es(purchase.name)
+                purchase.amount_to_invoice_es, purchase.es_sale_order = self._get_qty_to_invoice_es(purchase.name)
 
 
 
