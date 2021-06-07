@@ -14,7 +14,12 @@ class ProductProduct(models.Model):
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
                    "Última fecha de compra", "Reemplazado por", "Estado"]
 
-        domain = [('custom', '=', False), ('type', '!=', 'service'), ('seller_id.name', 'not ilike', 'outlet')]
+        country_code = self.env['ir.config_parameter'].sudo().get_param('custom_report_link.country_code')
+        domain = [('custom', '=', False), ('type', '!=', 'service')]
+        if country_code == "IT":
+            domain += [("categ_id","not in",["O1", "O2" , "Descatalogados"])]
+        else:
+            domain += [('seller_id.name', 'not ilike', 'outlet')]
 
         fields = ["id", "last_supplier_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
