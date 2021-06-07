@@ -69,7 +69,7 @@ class HrExpense(models.Model):
         ckey = self.env['ir.config_parameter'].sudo().get_param('captio.customer_key')
 
         # Search for the reports with status 4 (Approved), and aproved after the last time we check
-        filters = '?filters={"Status":"4",“StatusDate”:”>%s”}' % (company.captio_last_date.replace(" ", "T") + "Z")
+        filters = '?filters={"Status":"4","StatusDate":">%s"}' % (company.captio_last_date.replace(" ", "T") + "Z")
         response = requests.get('%s/v3.1/Reports%s' % (url_api, filters),
                                 headers={'Authorization': 'Bearer ' + token,
                                          'CustomerKey': ckey})
