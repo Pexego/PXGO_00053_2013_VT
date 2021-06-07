@@ -1054,8 +1054,7 @@ msgid "Today"
 msgstr "Hoy"
 
 #. module: custom_account
-#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
-#: model:ir.ui.view,arch_db:custom_account.view_account_invoice_filter_partner
+#: model:ir.model.fields,field_description:custom_account.field_account_invoice_product_id
 msgid "Product"
 msgstr "Producto"
 
