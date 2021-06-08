@@ -11,6 +11,7 @@
                     <field name="customizable" readonly="1"/>
                     <field name="customization_type_ids" widget="many2many_tags"
                            attrs="{'invisible':[('customizable','=',False)],'readonly':1}"/>
+                    <field name="erase_logo" readonly="1"/>
                 </group>
             </group>
         </field>
@@ -26,6 +27,9 @@
                 <attribute name="readonly">False</attribute>
             </field>
             <field name="customization_type_ids" position="attributes">
+                <attribute name="readonly">False</attribute>
+            </field>
+            <field name="erase_logo" position="attributes">
                 <attribute name="readonly">False</attribute>
             </field>
         </field>

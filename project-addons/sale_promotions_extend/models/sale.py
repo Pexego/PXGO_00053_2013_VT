@@ -125,8 +125,7 @@ class SaleOrder(models.Model):
         ctx = dict(self.env.context)
         total_to_invoice_dict = {}
         for order in self:
-            total_to_invoice = sum([l.qty_to_invoice * l.price_subtotal for l in
-                                    order.order_line.filtered(lambda l: l.invoice_status == 'to invoice')])
+            total_to_invoice = sum(order.order_line.filtered(lambda l: l.invoice_status == 'to invoice').mapped('amt_to_invoice'))
             total_to_invoice_dict[order.id] = total_to_invoice
         ctx.update({'total_to_invoice': total_to_invoice_dict})
         return super(SaleOrder, self.with_context(ctx)).action_invoice_create(grouped=grouped, final=final)
