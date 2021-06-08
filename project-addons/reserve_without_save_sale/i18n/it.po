@@ -43,6 +43,11 @@ msgstr "Parzialmente disponibile"
 msgid "Orders with released reservation"
 msgstr "Ordini con prenotazioni rilasciate"
 
+#. module: sale_line_add_auxiliar_field
+#: model:ir.ui.view,arch_db:reserve_without_save_sale.sale_line_add_auxiliar_field
+msgid "Reserve Stock"
+msgstr "Riservare stock"
+
 #. module: reserve_without_save_sale
 #: model:mail.template,body_html:reserve_without_save_sale.mail_template_release_reservations_user
 msgid "\n"
