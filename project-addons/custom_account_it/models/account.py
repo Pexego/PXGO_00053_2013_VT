@@ -16,3 +16,11 @@ class AccountInvoice(models.Model):
         if doc_id and doc_id not in dt:
             dt.insert(0, doc_id)
         return dt
+
+
+class AccountBankingMandate(models.Model):
+
+    _inherit = 'account.banking.mandate'
+
+    format = fields.Selection(
+        selection_add=[('riba', 'RiBa Mandate')])

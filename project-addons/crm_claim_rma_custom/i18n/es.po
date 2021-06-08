@@ -499,6 +499,11 @@ msgid "Final Received Date"
 msgstr "Fecha recepción final"
 
 #. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_deposit_id
+msgid "Deposit"
+msgstr "Depósito"
+
+#. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/models/crm_claim.py:155
 #: code:addons/crm_claim_rma_custom/models/crm_claim.py:375
 #, python-format
