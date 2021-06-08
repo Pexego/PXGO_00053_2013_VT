@@ -67,14 +67,6 @@ class AccountInvoice(models.Model):
                 price_diff = price_subtotal - line['price_purchase']
                 if tools.float_is_zero(price_diff, 2):
                     continue
-                else:
-                    for move in line.move_line_ids:
-                        move.write({
-                            'value': move.value + move.product_qty * price_diff,
-                            'remaining_value': move.remaining_value + move.remaining_qty * price_diff,
-                            'price_unit': move.price_unit + price_diff
-                        })
-                        move.product_id.product_tmpl_id.recalculate_standard_price_2()
 
                 diff_res.append({
                     'type': 'src',
