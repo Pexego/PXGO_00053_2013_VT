@@ -71,7 +71,6 @@ class Partner(models.Model):
             self.group_riba = True
 
 
-
 class ResPartnerBank(models.Model):
     _inherit = "res.partner.bank"
 
