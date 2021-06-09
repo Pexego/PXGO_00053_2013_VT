@@ -65,12 +65,6 @@ class Partner(models.Model):
             self.team_id = self.user_id.sale_team_id.id
 
 
-    @api.onchange("customer_payment_mode_id")
-    def on_change_customer_payment_mode_id(self):
-        if self.customer_payment_mode_id.name == "Ricevuta bancaria":
-            self.group_riba = True
-
-
 class ResPartnerBank(models.Model):
     _inherit = "res.partner.bank"
 
