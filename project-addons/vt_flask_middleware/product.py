@@ -26,7 +26,7 @@ class ProductBrand(SyncModel):
     MOD_NAME = 'productbrand'
     odoo_id = IntegerField(unique=True)
     name = CharField(max_length=150)
-    brand_check = BooleanField()
+    no_csv = BooleanField()
 
     def __unicode__(self):
         return self.name
