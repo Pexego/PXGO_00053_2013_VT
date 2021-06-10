@@ -65,9 +65,8 @@ class SaleOrder(models.Model):
                 if invoices:
                     invoices.unlink()
                 pass
-
-        if len(sales) != len(res):
-            templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
+        # if len(sales) != len(res):
+            # templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
         invoices_created = self.env['account.invoice'].with_context(ctx).\
             browse(res)
         if len(res) != len(invoices_created.mapped('invoice_line_ids.invoice_id.id')):
