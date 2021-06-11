@@ -2,6 +2,18 @@ from odoo import models, fields, api, _
 from odoo.exceptions import UserError
 
 
+class AccountBankStatement(models.Model):
+    _inherit = "account.bank.statement"
+
+    @api.multi
+    def name_get(self):
+        res_list = []
+        for line in self:
+            res_tuple = (line['id'], line['create_date'])
+            res_list.append(res_tuple)
+        return res_list
+
+
 class AccountBankStatementLine(models.Model):
 
     _inherit = "account.bank.statement.line"
