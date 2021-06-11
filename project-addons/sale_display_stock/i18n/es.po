@@ -113,6 +113,12 @@ msgstr "Pedido"
 
 #. module: sale_display_stock
 #: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_order_id
+msgid "Sale team"
+msgstr "Equipo de venta"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_date_order
 msgid "Order Date"
 msgstr "Fecha de pedido"
@@ -128,6 +134,12 @@ msgstr "Fecha de confirmación"
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_partner_id
 msgid "Partner"
 msgstr "Cliente"
+
+#. module: sale_display_stock
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_order_id
+msgid "Partner country"
+msgstr "País del cliente"
 
 #. module: sale_display_stock
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_price_unit
@@ -226,6 +238,12 @@ msgstr "Estado del pedido"
 #: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
 msgid "Order invoice status"
 msgstr "Estado factura del pedido"
+
+#. module: sale_display_stock
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_invoice_status_2
+#: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
+msgid "Quantity delivered"
+msgstr "Cantidad entregada"
 
 #. module: sale_display_stock
 #: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_incoming_qty
