@@ -113,7 +113,7 @@ msgstr "Ordine"
 
 #. module: sale_display_stock
 #: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
-#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_order_id
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_team_id
 msgid "Sale team"
 msgstr "Gruppo vendite"
 
@@ -137,7 +137,7 @@ msgstr "Cliente"
 
 #. module: sale_display_stock
 #: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
-#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_order_id
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_country_id
 msgid "Partner country"
 msgstr "Paese cliente   "
 
@@ -227,7 +227,7 @@ msgid "Product state"
 msgstr "Stato di prodotto"
 
 #. module: sale_display_stock
-#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_invoice_status_2
+#: model:ir.model.fields,field_description:sale_display_stock.field_sale_order_line_report_qty_delivered
 #: model:ir.ui.view,arch_db:sale_display_stock.sale_order_line_report_filter
 msgid "Quantity delivered"
 msgstr "Quantità consegnata"

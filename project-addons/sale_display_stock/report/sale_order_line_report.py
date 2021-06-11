@@ -45,16 +45,10 @@ class SaleOrderLineReport(models.Model):
     salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
     order_id = fields.Many2one('sale.order', 'Order', readonly=True)
     team_id = fields.Many2one('crm.team', 'Order team', readonly=True)
-    date_order = fields.Datetime(
-        related='order_id.date_order',
-        string='Date',
-        readonly=True,
-    )
+    date_order = fields.Datetime('Date', readonly=True)
     confirmation_date = fields.Datetime(
-        related='order_id.confirmation_date',
-        string='Confirmation date',
-        readonly=True,
-    )
+        'Confirmation date',
+        readonly=True)
     invoice_status = fields.Selection([
         ('upselling', 'Upselling'),
         ('invoiced', 'Invoiced'),
