@@ -22,7 +22,7 @@
             <field name="partner_id" position="before">
                 <field name="code"/>
                 <field name="not_compute_joking"/>
-                <field name="brand_check"/>
+                <field name="no_csv"/>
             </field>
         </field>
     </record>
