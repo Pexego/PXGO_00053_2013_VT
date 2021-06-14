@@ -31,11 +31,18 @@ class Product(models.Model):
     def _compute_equivalent_products(self):
         for product in self:
             prod_equiv = self.env['product.equivalent'].search(['|',('product_id', '=', product.id),('equivalent_id', '=', product.id)])
-            product.equivalent_products = prod_equiv.mapped('product_id') + prod_equiv.mapped('equivalent_id')
+            if not prod_equiv:
+                products = product
+            else:
+                products = prod_equiv.mapped('product_id') + prod_equiv.mapped('equivalent_id')
+            product.equivalent_products = products
 
     def _search_equivalent_products(self, operator, value):
         prod_equiv = self.env['product.equivalent'].search(['|',('product_id.default_code', operator, value),('equivalent_id.default_code', operator, value)])
-        products = prod_equiv.mapped('product_id') + prod_equiv.mapped('equivalent_id')
+        if not prod_equiv:
+            products = self.env['product.product'].search(('default_code', operator, value))
+        else:
+            products = prod_equiv.mapped('product_id') + prod_equiv.mapped('equivalent_id')
         return [('id', 'in', products.ids)]
 
 
