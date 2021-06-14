@@ -1,0 +1,28 @@
+diff --git a/l10n_it_ricevute_bancarie/models/account/account.py b/l10n_it_ricevute_bancarie/models/account/account.py
+index ff76dfd..4a6b46b 100644
+--- a/l10n_it_ricevute_bancarie/models/account/account.py
++++ b/l10n_it_ricevute_bancarie/models/account/account.py
+@@ -58,7 +58,7 @@ class AccountMoveLine(models.Model):
+         'account.invoice', 'invoice_unsolved_line_rel', 'line_id',
+         'invoice_id', 'Unsolved Invoices')
+     iban = fields.Char(
+-        related='partner_id.bank_ids.acc_number', string='IBAN', store=False)
++        compute='_get_partner_iban', string='IBAN', store=False)
+ 
+     @api.model
+     def fields_view_get(self, view_id=None, view_type='form', toolbar=False,
+@@ -99,6 +99,14 @@ class AccountMoveLine(models.Model):
+                         riba_line.state = 'paid'
+                         riba_line.distinta_id.state = 'paid'
+ 
++    @api.multi
++    def _get_partner_iban(self):
++        for line in self:
++            if line.partner_id.bank_ids:
++                mandates = line.partner_id.bank_ids.filtered(lambda i: 'cancel' not in i.mandate_ids.mapped('state'))
++                if mandates:
++                    line.iban = mandates[0].acc_number
++
+     @api.multi
+     def reconcile(
+         self, writeoff_acc_id=False, writeoff_journal_id=False

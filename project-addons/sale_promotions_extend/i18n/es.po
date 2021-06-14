@@ -659,3 +659,15 @@ msgstr "Calcula Subtotal por marca/s"
 #: view:promos.rules:sale_promotions_extend.view_promotion_rules_form_special
 msgid "Partner Categories Excluded"
 msgstr "Categorías cliente excluidas"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Fixed price per each product"
+msgstr "Precio fijo por cada producto"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "New discount line per product with tag"
+msgstr "Nueva línea descuento por producto con tag"

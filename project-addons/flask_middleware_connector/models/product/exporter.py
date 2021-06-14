@@ -122,7 +122,8 @@ class ProductBrandExporter(Component):
 
     def update(self, binding, mode):
         vals = {"name": binding.name,
-                "odoo_id": binding.id}
+                "odoo_id": binding.id,
+                "no_csv":binding.no_csv,}
         if mode == "insert":
             return self.backend_adapter.insert(vals)
         else:
