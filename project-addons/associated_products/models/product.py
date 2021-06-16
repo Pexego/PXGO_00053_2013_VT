@@ -40,7 +40,7 @@ class Product(models.Model):
     def _search_equivalent_products(self, operator, value):
         prod_equiv = self.env['product.equivalent'].search(['|',('product_id.default_code', operator, value),('equivalent_id.default_code', operator, value)])
         if not prod_equiv:
-            products = self.env['product.product'].search(('default_code', operator, value))
+            products = self.env['product.product'].search([('default_code', operator, value)])
         else:
             products = prod_equiv.mapped('product_id') + prod_equiv.mapped('equivalent_id')
         return [('id', 'in', products.ids)]
