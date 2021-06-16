@@ -49,3 +49,18 @@ class StockPicking(models.Model):
                     picking.with_incidences = True
                     picking.move_type = 'direct'
                     picking.action_accept_ready_qty()
+            elif picking.location_id.name == 'Tránsito Italia' and picking.state != 'assigned':
+                mail_pool = self.env['mail.mail']
+                context = self._context.copy()
+                context.pop('default_state', False)
+                context['message_warn'] = 'Entrada %s recibida. Imposible notificar finalización. Revisar el pedido %s' \
+                                          % (self.name, order)
+
+                template_id = self.env.ref('picking_sync_it.email_template_sync_pick_error')
+
+                if template_id:
+                    mail_id = template_id.with_context(context).send_mail(self.id)
+                    if mail_id:
+                        mail_id_check = mail_pool.browse(mail_id)
+                        mail_id_check.with_context(context).send()
+
