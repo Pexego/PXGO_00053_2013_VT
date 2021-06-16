@@ -38,8 +38,6 @@ class Product(models.Model):
             product.equivalent_products = products
 
     def _search_equivalent_products(self, operator, value):
-        import ipdb
-        ipdb.set_trace()
         prod_equiv = self.env['product.equivalent'].search(['|',('product_id.default_code', operator, value),('equivalent_id.default_code', operator, value)])
         if not prod_equiv:
             products = self.env['product.product'].search([('default_code', operator, value)])
