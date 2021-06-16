@@ -50,8 +50,6 @@ class StockPicking(models.Model):
                     picking.move_type = 'direct'
                     picking.action_accept_ready_qty()
             elif picking.location_id.name == 'Tránsito Italia' and picking.state != 'assigned':
-                import ipdb
-                ipdb.set_trace()
                 mail_pool = self.env['mail.mail']
                 context = self._context.copy()
                 context.pop('default_state', False)
