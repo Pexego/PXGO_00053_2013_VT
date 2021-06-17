@@ -14,10 +14,10 @@ class ProductProduct(models.Model):
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
                    "Última fecha de compra", "Reemplazado por", "Estado"]
 
-        country_code = self.env['ir.config_parameter'].sudo().get_param('custom_report_link.country_code')
+        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
         domain = [('custom', '=', False), ('type', '!=', 'service')]
         if country_code == "IT":
-            domain += [("categ_id","not in",["O1", "O2" , "Descatalogados"])]
+            domain += [("categ_id.name", "not in", ["O1", "O2" , "Descatalogados"])]
         else:
             domain += [('seller_id.name', 'not ilike', 'outlet')]
 
