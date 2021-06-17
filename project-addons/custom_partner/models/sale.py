@@ -37,20 +37,20 @@ class SaleOrder(models.Model):
                 or False
 
     @api.model
-    def cron_create_invoices(self):
+    def cron_create_invoices(self, limit):
         sale_obj = self.env['sale.order']
         ctx = dict(self._context or {})
         ctx['bypass_risk'] = True
         templates = []
         validate = True
+        ok_validation = True
 
         # Sales to Invoice
         sales = sale_obj.\
             search([('invoice_status_2', '=', 'to_invoice'),
                     ('invoice_type_id.name', '=', 'Diaria'),
                     ('tests', '=', False)],
-                   order='confirmation_date')
-
+                   order='confirmation_date desc', limit=limit)
         # Create invoice
         res = []
         for sale in sales:
@@ -65,9 +65,8 @@ class SaleOrder(models.Model):
                 if invoices:
                     invoices.unlink()
                 pass
-
-        if len(sales) != len(res):
-            templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
+        # if len(sales) != len(res):
+            # templates.append(self.env.ref('picking_invoice_pending.alert_cron_create_invoices', False))
         invoices_created = self.env['account.invoice'].with_context(ctx).\
             browse(res)
         if len(res) != len(invoices_created.mapped('invoice_line_ids.invoice_id.id')):
@@ -77,11 +76,11 @@ class SaleOrder(models.Model):
             validate = False
         if validate:
             # Validate invoice
-            invoices_created.action_invoice_open()
-            invoice_states = invoices_created.mapped('state')
-            if 'draft' in invoice_states or 'cancel' in invoice_states or \
-                    'proforma' in invoice_states or \
-                    'proforma2' in invoice_states:
+            for inv in invoices_created:
+                inv.action_invoice_open()
+                if inv.state in ('draft', 'cancel', 'proforma', 'proforma2'):
+                    ok_validation = False
+            if not ok_validation:
                 templates.append(self.env.ref('picking_invoice_pending.alert_cron_validate_invoices', False))
         if invoices_created:
             for tmpl in templates:

@@ -9,11 +9,12 @@ class StockPicking(models.Model):
 
     @api.multi
     def action_done(self):
-        super().action_done()
+        res = super().action_done()
         for picking in self:
             if picking.picking_type_id.id == self.env.ref('automatize_edi_it.picking_type_receive_top_deposit').id:
                 # Notify odoo ES that the picking is done
                 self.with_delay(eta=10, priority=8).notify_picking_done(picking.purchase_id.remark)
+        return res
 
     @api.multi
     def retry_notify_picking_done(self):
@@ -48,3 +49,18 @@ class StockPicking(models.Model):
                     picking.with_incidences = True
                     picking.move_type = 'direct'
                     picking.action_accept_ready_qty()
+            elif picking.location_id.name == 'Tránsito Italia' and picking.state != 'assigned':
+                mail_pool = self.env['mail.mail']
+                context = self._context.copy()
+                context.pop('default_state', False)
+                context['message_warn'] = 'Entrada %s recibida. Imposible notificar finalización. Revisar el pedido %s' \
+                                          % (self.name, order)
+
+                template_id = self.env.ref('picking_sync_it.email_template_sync_pick_error')
+
+                if template_id:
+                    mail_id = template_id.with_context(context).send_mail(self.id)
+                    if mail_id:
+                        mail_id_check = mail_pool.browse(mail_id)
+                        mail_id_check.with_context(context).send()
+
