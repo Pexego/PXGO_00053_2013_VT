@@ -6,10 +6,12 @@
         <field name="inherit_id" ref="purchase.purchase_order_tree"/>
         <field name="arch" type="xml">
             <field name="amount_total" position="after">
+                <field name="amount_to_invoice_it"/>
                 <field name="amount_to_invoice_es"/>
+                <field name="es_sale_order"/>
             </field>
             <xpath expr="//tree" position="attributes">
-                <attribute name="decoration-danger">amount_total != amount_to_invoice_es</attribute>
+                <attribute name="decoration-danger">amount_to_invoice_it != amount_to_invoice_es</attribute>
             </xpath>
         </field>
     </record>
