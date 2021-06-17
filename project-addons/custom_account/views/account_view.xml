@@ -136,6 +136,7 @@
                 </field>
                 <field name="user_id" position="before">
                     <field name="commercial_partner_id" string="Partner"/>
+                    <field name="product_id" />
                 </field>
                 <filter name="unpaid" position="after">
                     <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
