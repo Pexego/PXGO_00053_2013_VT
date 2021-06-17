@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Sales deposits">
                 <label string="Deposits"/>
-                 <field name="deposit_change_qty" mode="tree">
+                <field name="deposit_change_qty" mode="tree">
                     <tree string="Deposits" create="false" delete="false" editable="top">
                         <field name="partner_id"/>
                         <field name="sale_id"/>

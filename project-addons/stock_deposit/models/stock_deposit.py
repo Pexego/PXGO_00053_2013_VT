@@ -158,6 +158,8 @@ class StockDeposit(models.Model):
 
     @api.multi
     def return_deposit(self):
+        import ipdb
+        ipdb.set_trace()
         picking_type_id = self.env.ref('stock.picking_type_in')
         for deposit in self:
             picking = self.env['stock.picking'].create(

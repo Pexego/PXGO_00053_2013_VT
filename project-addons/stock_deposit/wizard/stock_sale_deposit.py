@@ -47,6 +47,8 @@ class StockSaleDeposit(models.TransientModel):
     @api.multi
     def create_sale(self):
         deposit_ids = []
+        import ipdb
+        ipdb.set_trace()
         # Change deposit quantity -> create a new deposit with the remaining qty
         for line in self.deposit_change_qty:
             qty_deposit = line.deposit_id.product_uom_qty
