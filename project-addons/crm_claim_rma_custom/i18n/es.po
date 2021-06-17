@@ -504,11 +504,18 @@ msgid "Deposit"
 msgstr "Depósito"
 
 #. module: crm_claim_rma_custom
-#: code:addons/crm_claim_rma_custom/models/crm_claim.py:155
-#: code:addons/crm_claim_rma_custom/models/crm_claim.py:375
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:174
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:400
 #, python-format
 msgid "All units of this product (%s) included in the indicated invoice (%s) have already been paid \n"
 msgstr "Ya se han abonado todas las unidades del producto %s incluidas en la factura %s \n"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:171
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:396
+#, python-format
+msgid "There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n"
+msgstr "No hay suficientes unidades de este producto (%s) en esta factura (%s). Solo %i unidad(es) restante(s) disponible \n"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_res_partner_email3
