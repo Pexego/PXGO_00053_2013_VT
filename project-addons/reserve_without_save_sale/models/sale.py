@@ -19,6 +19,23 @@ class SaleOrder(models.Model):
         ('cancel', 'Cancelled'),
     ])
 
+    infinite_reservation = fields.Boolean(
+        string='Has Infinite Reservations')
+
+    @api.multi
+    def update_stock_reservation_date_validity(self):
+        now = datetime.now()
+        for sale in self:
+            for line in sale.order_line:
+                if sale.infinite_reservation:
+                    date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
+                    line.reservation_ids.write({'date_validity': date_validity})
+                else:
+                    date_validity = (now + relativedelta(days=7)).strftime("%Y-%m-%d")
+                    line.reservation_ids.write({'date_validity': date_validity})
+
+
+
     @api.multi
     @api.depends('state',
                  'order_line.reservation_ids',
@@ -194,6 +211,8 @@ class SaleOrderLine(models.Model):
                 continue
             if not line.is_stock_reservable:
                 continue
+            if line.order_id.infinite_reservation:
+                date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
             if line.reservation_ids:
                 for reserve in line.reservation_ids:
                     reserve.reassign()

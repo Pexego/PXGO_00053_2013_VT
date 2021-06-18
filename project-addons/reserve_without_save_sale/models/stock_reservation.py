@@ -38,6 +38,11 @@ class StockReservation(models.Model):
     def create(self, vals):
         context2 = dict(self._context)
         context2.pop('default_state', False)
+        order_id = vals.get('sale_id')
+        order_obj = self.env['sale.order'].browse(order_id)
+        now = datetime.now()
+        if order_obj.infinite_reservation:
+            vals['date_validity'] = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
         res = super(StockReservation, self.with_context(context2)).create(vals)
         res.move_id.user_id = res.user_id
         if vals.get('sequence') and res.move_id:
