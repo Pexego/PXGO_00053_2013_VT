@@ -9,8 +9,9 @@ class SaleStockReserve(models.TransientModel):
 
     @api.multi
     def button_reserve(self):
-        order_id = self.env.context.get('params').get('id')
-        order_obj = self.env['sale.order'].browse(order_id)
+        sale_line_id = self.env.context.get('active_id')
+        sale_line_obj = self.env['sale.order.line'].browse(sale_line_id)
+        order_obj = sale_line_obj.order_id
         days_release_reserve = self.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
         now = datetime.now()
 
