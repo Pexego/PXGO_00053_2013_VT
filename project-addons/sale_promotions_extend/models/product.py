@@ -10,6 +10,7 @@ class ProductBrand(models.Model):
 
     code = fields.Char('Internal code', required=True)
     not_compute_joking = fields.Boolean('Not compute joking index')
+    no_csv = fields.Boolean('Not include CSV conector')
 
 
 class ProductCategory(models.Model):

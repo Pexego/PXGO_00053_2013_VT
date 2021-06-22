@@ -9,11 +9,12 @@ class StockPicking(models.Model):
 
     @api.multi
     def action_done(self):
-        super().action_done()
+        res = super().action_done()
         for picking in self:
             if picking.picking_type_id.id == self.env.ref('automatize_edi_it.picking_type_receive_top_deposit').id:
                 # Notify odoo ES that the picking is done
                 self.with_delay(eta=10, priority=8).notify_picking_done(picking.purchase_id.remark)
+        return res
 
     @api.multi
     def retry_notify_picking_done(self):

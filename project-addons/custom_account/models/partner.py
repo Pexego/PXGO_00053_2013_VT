@@ -65,7 +65,6 @@ class Partner(models.Model):
             self.team_id = self.user_id.sale_team_id.id
 
 
-
 class ResPartnerBank(models.Model):
     _inherit = "res.partner.bank"
 
