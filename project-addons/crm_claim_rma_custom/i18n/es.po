@@ -512,7 +512,7 @@ msgstr "Ya se han abonado todas las unidades del producto %s incluidas en la fac
 
 #. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/models/crm_claim.py:171
-#: code:addons/crm_claim_rma_custom/models/crm_claim.py:396
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:395
 #, python-format
 msgid "There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n"
 msgstr "No hay suficientes unidades de este producto (%s) en esta factura (%s). Solo %i unidad(es) restante(s) disponible \n"

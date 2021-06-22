@@ -392,10 +392,8 @@ class ClaimInvoiceLine(models.Model):
                     if line.quantity < line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty + self.qty:
                         units_available = line.quantity - line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty
                         if units_available > 0:
-                            raise exceptions.Warning(
-                                "There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available") % \
-                                       (line.product_id.default_code, line.invoice_id.number,
-                                        int(units_available))
+                            raise exceptions.Warning(_("There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n") %
+                                                     (line.product_id.default_code, line.invoice_id.number, int(units_available)))
                         raise exceptions.Warning(
                             _("All units of this product (%s) included in the indicated invoice (%s) have already been paid \n") % (
                             line.product_id.default_code, line.invoice_id.number))
