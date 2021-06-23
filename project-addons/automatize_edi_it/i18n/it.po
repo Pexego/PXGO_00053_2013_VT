@@ -1,0 +1,48 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* automatize_edi_it
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-05-17 14:50+0000\n"
+"PO-Revision-Date: 2021-05-17 14:50+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,field_description:automatize_edi_it.field_purchase_order_amount_to_invoice_es
+msgid "Amount To Invoice Es"
+msgstr "Di fattura ES"
+
+#. module: automatize_edi_it
+#: model:ir.actions.server,name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx_ir_actions_server
+#: model:ir.cron,cron_name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx
+#: model:ir.cron,name:automatize_edi_it.ir_cron_check_qty_to_invoice_lx
+msgid "Check Quantity to Invoice LX"
+msgstr "Controllare quantità in attesa di fattura LX"
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,field_description:automatize_edi_it.field_purchase_order_diff_to_invoice
+msgid "Diff To Invoice"
+msgstr "Dif fattura ES"
+
+#. module: automatize_edi_it
+#: model:ir.ui.view,arch_db:automatize_edi_it.view_purchase_order_filter_inherit_search
+msgid "To Invoice Complete"
+msgstr "Attesa fattura Completo"
+
+#. module: automatize_edi_it
+#: model:ir.ui.view,arch_db:automatize_edi_it.view_purchase_order_filter_inherit_search
+msgid "To Invoice Incomplete"
+msgstr "Attesa fattura Incompleto"
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,field_description:automatize_edi_it.field_purchase_order_es_sale_order
+msgid "Amount To Invoice Es"
+msgstr "Ordine ES"

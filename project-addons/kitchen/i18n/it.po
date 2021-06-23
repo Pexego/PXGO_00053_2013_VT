@@ -456,6 +456,7 @@ msgstr "Condizioni di personalizzazione"
 
 #. module: kitchen
 #: code:addons/kitchen/wizard/create_customization_wizard.py:68
+#: code:addons/kitchen/models/kitchen_customization.py:338
 msgid "You can't create a customization with different customization types (%s) than the product %s has %s"
 msgstr "Non puoi creare una personalizzazione con diversi tipi di personalizzazione (%s) rispetto al prodotto (%s) %s"
 
@@ -488,3 +489,14 @@ msgstr "Tipi"
 #: model:ir.actions.act_window,name:kitchen.action_product_customizable_form
 msgid "Customizable"
 msgstr "Personalizzabile"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_product_template_erase_logo
+msgid "Erase Logo"
+msgstr "Elimina Logo"
+
+#. module: kitchen
+#: code:addons/kitchen/wizard/create_customization_wizard.py:70
+#: code:addons/kitchen/models/kitchen_customization.py:342
+msgid "You can't create a customization without check erase logo option of this product : %s"
+msgstr "Non è possibile creare una personalizzazione senza controllare il controllo di eliminazione del logo per questo prodotto : %s"

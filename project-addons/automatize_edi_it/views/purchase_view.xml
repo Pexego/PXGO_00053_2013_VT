@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_order_tree_inherit" model="ir.ui.view">
+        <field name="name">purchase.order.tree</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="amount_total" position="after">
+                <field name="amount_to_invoice_it"/>
+                <field name="amount_to_invoice_es"/>
+                <field name="es_sale_order"/>
+            </field>
+            <xpath expr="//tree" position="attributes">
+                <attribute name="decoration-danger">amount_to_invoice_it != amount_to_invoice_es</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_purchase_order_filter_inherit_search" model="ir.ui.view">
+        <field name="name">purchase.order.list.select</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+        <field name="arch" type="xml">
+            <filter name="activities_my" position="before">
+                <separator orientation="vertical"/>
+                <filter name="to_invoice_complete" string="To Invoice Complete" domain="[('diff_to_invoice','=',0)]"/>
+                <filter name="to_invoice_incomplete" string="To Invoice Incomplete" domain="[('diff_to_invoice','!=',0)]"/>
+                <separator orientation="vertical"/>
+            </filter>
+        </field>
+    </record>
+</odoo>

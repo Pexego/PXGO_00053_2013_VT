@@ -12,7 +12,8 @@ class CustomizationLine(models.TransientModel):
     wizard_id = fields.Many2one('customization.wizard', 'wizard')
     sale_line_id = fields.Many2one('sale.order.line')
     erase_logo = fields.Boolean()
-    type_ids = fields.Many2many('customization.type', required=1)
+    type_ids = fields.Many2many('customization.type')
+    product_erase_logo = fields.Boolean()
 
 
 class CustomizationWizard(models.TransientModel):
@@ -25,12 +26,12 @@ class CustomizationWizard(models.TransientModel):
     def _get_lines(self):
         wiz_lines = []
         for line in self.env['sale.order'].browse(self.env.context.get('active_ids')).order_line.filtered(
-                lambda l: l.product_id.customizable and not l.deposit and l.product_id.categ_id.with_context(
-                    lang='es_ES').name != 'Portes' and l.price_unit >= 0):
+                lambda l: (l.product_id.customizable or l.product_id.erase_logo) and not l.deposit
+                          and l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes' and l.price_unit >= 0):
             new_line = {'product_id': line.product_id.id,
                         'sale_line_id': line.id,
-                        'type_ids': None}
-
+                        'type_ids': None,
+                        'product_erase_logo':line.product_id.erase_logo}
             if line.product_qty:
                 new_line.update({'qty': line.product_qty,
                                  'product_qty': line.product_qty})
@@ -62,9 +63,11 @@ class CustomizationWizard(models.TransientModel):
                                                                   })
         for line in self.customization_line:
             qty = line.qty
-            if not line.type_ids:
+            if not line.type_ids and not line.product_erase_logo:
                 raise UserError(_(
                     "You can't create a customization without a customization type: %s") % line.sale_line_id.product_id.default_code)
+            if not line.erase_logo and line.product_erase_logo:
+                raise UserError(_("You can't create a customization without check erase logo option of this product : %s") % line.sale_line_id.product_id.default_code)
             line_type_ids = line.type_ids
             product_type_ids = line.sale_line_id.product_id.customization_type_ids
             if line_type_ids - product_type_ids:
