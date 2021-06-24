@@ -98,7 +98,7 @@
                 <attribute name="attrs">{'invisible': ['|', ('reservation_ids', '=', []), ('hide_reserve_buttons', '=', True)]}</attribute>
             </xpath>
             <field name="analytic_account_id" position="after" >
-                    <label for="infinite_reservation"/>
+                    <label for="infinite_reservation" groups="reserve_without_save_sale.date_validity_editor"/>
                     <div>
                         <field name="infinite_reservation" groups="reserve_without_save_sale.date_validity_editor"/>
                         <button name="update_stock_reservation_date_validity" groups="reserve_without_save_sale.date_validity_editor"

@@ -119,6 +119,17 @@ class StockReservation(models.Model):
 
         moves = self.env['stock.move']
         for reserve in self:
+            sale_line_id = self.env.context.get('active_id')
+            sale_line_obj = reserve.env['sale.order.line'].browse(sale_line_id)
+            order_obj = sale_line_obj.order_id
+            days_release_reserve = reserve.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
+            now = datetime.now()
+
+            if order_obj.infinite_reservation:
+                date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
+            else:
+                date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+
             current_sale_line_id = reserve.sale_line_id.id
             res = super(StockReservation, reserve).reserve()
             reserve.refresh()

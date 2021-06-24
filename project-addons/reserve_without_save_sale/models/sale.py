@@ -206,13 +206,13 @@ class SaleOrderLine(models.Model):
             return True
 
         for line in self:
+            if line.order_id.infinite_reservation:
+                date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
             if line.order_id.state in ('draft', 'sent', 'progress', 'done',
                                        'manual'):
                 continue
             if not line.is_stock_reservable:
                 continue
-            if line.order_id.infinite_reservation:
-                date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
             if line.reservation_ids:
                 for reserve in line.reservation_ids:
                     reserve.reassign()
@@ -224,6 +224,7 @@ class SaleOrderLine(models.Model):
                     pack_reservation = self.env['stock.reservation'].search([('sale_line_id', '=', line.id)])
                     pack_reservation.write({'sale_line_id': line.id})
                     pack_reservation.write({'origin': line.order_id.name})
+                    pack_reservation.write({'date_validity': date_validity})
                 else:
                     reservation.write({'sale_line_id': line.id})
                     reservation.write({'origin': line.order_id.name})
