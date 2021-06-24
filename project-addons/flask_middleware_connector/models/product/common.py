@@ -239,7 +239,7 @@ class ProductBrandListener(Component):
         record.with_delay(priority=11).export_product_brand()
 
     def on_record_write(self, record, fields=None):
-        up_fields = ["name"]
+        up_fields = ["name", "no_csv"]
         for field in up_fields:
             if field in fields:
                 record.with_delay().update_product_brand(fields)

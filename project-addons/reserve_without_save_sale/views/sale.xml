@@ -34,7 +34,7 @@
                 <button name="order_reserve"
                     type="object"
                     string="Reserve Stock"
-                    states="draft,sent"
+                    states="draft,sent,reserve"
                     />
             </button>
             <button name="release_all_stock_reservation" position="replace"></button>
