@@ -16,6 +16,7 @@
                     <attribute name="invisible">True</attribute>
                 </filter>
                 <filter name="partner_id" position="after">
+                    <filter string="Today" name="today" domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
                     <filter name="without_ef" string="Without ef" domain="[('number','not like','%_ef%')]"/>
                     <filter string="Partner" context="{'group_by':'commercial_partner_id'}"/>
                     <filter string="country" name="country_id" context="{'group_by':'country_id'}"/>

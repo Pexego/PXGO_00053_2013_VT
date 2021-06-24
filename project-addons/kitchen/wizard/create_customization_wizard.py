@@ -13,7 +13,7 @@ class CustomizationLine(models.TransientModel):
     sale_line_id = fields.Many2one('sale.order.line')
     erase_logo = fields.Boolean()
     type_ids = fields.Many2many('customization.type')
-    product_erase_logo = fields.Boolean(related="sale_line_id.product_id.erase_logo")
+    product_erase_logo = fields.Boolean()
 
 
 class CustomizationWizard(models.TransientModel):
