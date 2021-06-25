@@ -235,7 +235,7 @@ class StockReturnPicking(models.TransientModel):
         if pick_type_obj.code == "incoming":
             pick_obj = self.env["stock.picking"].browse(new_picking)
             location_stock = self.env.ref('stock.stock_location_stock')
-            if pick_obj.move_lines and pick_obj.location_id.id == location_stock.id:
+            if pick_obj.move_lines and pick_obj.location_dest_id.id == location_stock.id:
                 pick_obj.location_dest_id = pick_obj.move_lines[0].warehouse_id.wh_input_stock_loc_id.id
             for move in pick_obj.move_lines:
                 if move.warehouse_id.lot_stock_id == move.location_dest_id:
