@@ -41,3 +41,8 @@ msgstr "Attesa fattura Completo"
 #: model:ir.ui.view,arch_db:automatize_edi_it.view_purchase_order_filter_inherit_search
 msgid "To Invoice Incomplete"
 msgstr "Attesa fattura Incompleto"
+
+#. module: automatize_edi_it
+#: model:ir.model.fields,field_description:automatize_edi_it.field_purchase_order_es_sale_order
+msgid "Amount To Invoice Es"
+msgstr "Ordine ES"
