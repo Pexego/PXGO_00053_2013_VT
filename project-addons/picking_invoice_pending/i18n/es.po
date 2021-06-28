@@ -113,3 +113,38 @@ msgstr "Necesita configurar un diario en la compañía para las facturas pendien
 #, python-format
 msgid "You need to configure the accounts in the company for pending invoices"
 msgstr "Necesita configurar las cuentas en la compañía para las facturas pendientes de recibir"
+
+#. module: picking_invoice_pending
+#: model:ir.ui.view,arch_db:picking_invoice_pending.view_picking_form_add_pending_move
+msgid "Create Invoice"
+msgstr "Facturar"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:145
+#, python-format
+msgid "\tThe order invoice status is not 'to invoice' \n"
+msgstr "\tEl estado de la factura del pedido no es 'A facturar' \n"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:147
+#, python-format
+msgid "\tThe order invoice type is not 'Diaria' \n"
+msgstr "\tEl tipo de facturación no es 'Diaria' \n"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:149
+#, python-format
+msgid "\tThe order invoice is a test order \n"
+msgstr "\tEl pedido es un pedido de pruebas \n"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:151
+#, python-format
+msgid "\tThe picking has already invoices \n"
+msgstr "\tEl albarán ya tiene facturas asociadas \n"
+
+#. module: picking_invoice_pending
+#: code:addons/picking_invoice_pending/stock_picking.py:153
+#, python-format
+msgid "The picking cannot be invoiced due to:\n%s"
+msgstr "El albarán no puede ser facturado debido a:\n%s"

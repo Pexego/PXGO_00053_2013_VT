@@ -101,8 +101,9 @@
                                 <tree string="Customization Lines" editable="bottom">
                                     <field name="product_id"/>
                                     <field name="product_qty"/>
+                                    <field name="product_erase_logo" invisible="1"/>
                                     <field name="type_ids" widget="many2many_tags"
-                                           attrs="{'readonly': [('state', 'not in', ('draft','sent','waiting'))]}"/>
+                                           attrs="{'readonly': ['|',('product_erase_logo','=',True),('state', 'not in', ('draft','sent','waiting'))]}"/>
                                     <field name="erase_logo"/>
                                     <field name="state" invisible="1"/>
                                     <field name="sale_line_id" invisible="1"/>

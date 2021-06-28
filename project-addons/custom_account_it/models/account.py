@@ -16,3 +16,21 @@ class AccountInvoice(models.Model):
         if doc_id and doc_id not in dt:
             dt.insert(0, doc_id)
         return dt
+
+
+class AccountBankingMandate(models.Model):
+
+    _inherit = 'account.banking.mandate'
+
+    format = fields.Selection(
+        selection_add=[('riba', 'RiBa Mandate')])
+
+
+class GroupRiba(models.Model):
+
+    _inherit = "res.partner"
+
+    @api.onchange("customer_payment_mode_id")
+    def on_change_customer_payment_mode_id(self):
+        if self.customer_payment_mode_id.name == "Ricevuta bancaria":
+            self.group_riba = True
