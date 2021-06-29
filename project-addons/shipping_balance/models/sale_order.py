@@ -32,10 +32,11 @@ class SaleOrder(models.Model):
 
     @api.constrains('state', 'amount_untaxed')
     def _check_amount_on_state(self):
-        prepaid_discount_product_id=self.env.ref('prepaid_order_discount.prepaid_discount_product').id
-        if self.amount_untaxed < 0 and \
-                not self.order_line.filtered(lambda l: l.deposit or l.promotion_line or l.product_id.id==prepaid_discount_product_id):
-            raise ValidationError("Total amount must be > 0")
+        for order in self:
+            prepaid_discount_product_id = self.env.ref('prepaid_order_discount.prepaid_discount_product').id
+            if order.amount_untaxed < 0 and \
+                    not order.order_line.filtered(lambda l: l.deposit or l.promotion_line or l.product_id.id == prepaid_discount_product_id):
+                raise ValidationError("Total amount must be > 0")
 
     @api.multi
     def unlink(self):
