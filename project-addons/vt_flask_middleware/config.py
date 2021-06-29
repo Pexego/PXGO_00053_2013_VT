@@ -17,8 +17,6 @@ class Config(object):
                 'autorollback': True,
                 'stale_timeout': 600}
 
-    NOTIFY_URL = "https://d2aszo0r8k.execute-api.eu-west-1.amazonaws.com/prod/web/syncdata"
-    NOTIFY_USER = os.environ.get('NOTIFY_USER')
-    NOTIFY_PASSWORD = os.environ.get('NOTIFY_PASSWORD')
-    NOTIFY_HEADER = ""
+    NOTIFY_URL = os.environ.get('FLASK_URL')
+    NOTIFY_HEADER = os.environ.get('FLASK_HEADER') 
     NOTIFY_COUNTRY = os.environ.get('FLASK_COUNTRY')  # ES, IT, ... depending on the odoo instance
