@@ -38,15 +38,18 @@
                     <filter string="Brand" domain="[]" context="{'group_by':'product_brand_id'}"/>
                     <filter string="Product Category" domain="[]" context="{'group_by':'product_category_id'}"/>
                     <filter string="Order" domain="[]" context="{'group_by':'order_id'}"/>
+                    <filter string="Sale team" domain="[]" context="{'group_by':'team_id'}"/>
                     <filter string="Order Date" domain="[]" context="{'group_by':'date_order'}"/>
                     <filter string="Confirmation Date" domain="[]" context="{'group_by':'confirmation_date'}"/>
                     <filter string="Salesperson" domain="[]" context="{'group_by':'salesman_id'}"/>
                     <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
                     <filter string="Line invoice status" domain="[]" context="{'group_by':'invoice_status'}"/>
                     <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                    <filter string="Partner country" domain="[]" context="{'group_by':'country_id'}"/>
                     <filter string="Product state" domain="[]" context="{'group_by':'product_state'}"/>
                     <filter string="Order state" domain="[]" context="{'group_by':'order_state'}"/>
                     <filter string="Order invoice status" domain="[]" context="{'group_by':'invoice_status_2'}"/>
+                    <filter string="Quantity delivered" domain="[]" context="{'group_by':'qty_delivered'}"/>
                 </group>
            </search>
         </field>
