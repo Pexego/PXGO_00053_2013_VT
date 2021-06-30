@@ -209,6 +209,12 @@ class CrmClaimRma(models.Model):
             invoice = False
             invoice_name = set()
             for line in claim_obj.claim_inv_line_ids:
+                import ipdb
+                ipdb.set_trace()
+                for i_line_id in line.invoice_id.invoice_line_ids:
+                    print(i_line_id.product_id.name) # Name (Discount line)
+                    print(i_line_id.name) # Promo XS-IPD843H-4EW
+
                 if not line.invoiced:
                     if line.invoice_id.name:
                         invoice_name.add(line.invoice_id.name)

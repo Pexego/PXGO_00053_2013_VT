@@ -47,6 +47,7 @@
              'views/stock_view.xml',
              'wizard/claim_make_picking_from_picking_view.xml',
              'report/crm_claim_report_view.xml',
+             'wizard/invoice_payment_discount_view.xml',
              'data/stage_data.xml',
              'views/res_users_view.xml',
              'data/email_layout.xml',
