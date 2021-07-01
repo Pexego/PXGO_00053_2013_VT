@@ -536,7 +536,7 @@ msgstr "Visiotech - RMA recibido"
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
-msgid "Wizard"
+msgid "Check Discounts/New Refund"
 msgstr "Comprobar descuentos/Nuevo abono"
 
 #. module: crm_claim_rma_custom

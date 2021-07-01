@@ -102,7 +102,9 @@
                           <button name="calculate_invoices" type="object"
                             string="Calculate"
                             attrs="{'invisible': [('invoice_ids', '!=', [])]}"/>
-                            <button name="%(create_invoice_payment_discount_wizard)d" type="action" string="Wizard" class="oe_highlight"/>
+                            <button name="check_discounts"
+                              attrs="{'invisible': [('claim_inv_line_ids', '=', [])]}"
+                              type="object" string="Check Discounts/New Refund" class="btn-primary"/>
                           <button name="make_refund_invoice"
                               attrs="{'invisible': [('claim_inv_line_ids', '=', [])]}"
                               type="object" string="New Refund" class="btn-primary"/>

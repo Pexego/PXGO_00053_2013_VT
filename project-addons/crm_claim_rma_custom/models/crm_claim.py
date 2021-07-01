@@ -209,12 +209,6 @@ class CrmClaimRma(models.Model):
             invoice = False
             invoice_name = set()
             for line in claim_obj.claim_inv_line_ids:
-                import ipdb
-                ipdb.set_trace()
-                for i_line_id in line.invoice_id.invoice_line_ids:
-                    print(i_line_id.product_id.name) # Name (Discount line)
-                    print(i_line_id.name) # Promo XS-IPD843H-4EW
-
                 if not line.invoiced:
                     if line.invoice_id.name:
                         invoice_name.add(line.invoice_id.name)
@@ -316,6 +310,25 @@ class CrmClaimRma(models.Model):
             for line in claim.claim_line_ids:
                 line.sequence = seq
                 seq += 1
+
+    
+    @api.multi
+    def check_discounts(self):
+        for claim_obj in self:
+            for line in claim_obj.claim_inv_line_ids:
+                for i_line_id in line.invoice_id.invoice_line_ids:
+                    if i_line_id.product_id.name == 'Discount line':
+                        if line.product_id.name in i_line_id.name:
+                            return {
+                                'type': 'ir.actions.act_window',
+                                'view_type': 'form',
+                                'view_mode': 'form',
+                                'res_model': 'crm.claim.invoice.discount',
+                                'view_id': self.env.ref('crm_claim_rma_custom.invoice_payment_discount_form').id,
+                                'target': 'new'
+                            }
+            
+        self.make_refund_invoice()
 
 
 class ClaimInvoiceLine(models.Model):
