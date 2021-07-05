@@ -13,5 +13,18 @@
          ]]>
         </field>
     </record>
+    <record id="send_amazon_settlement" model="mail.template">
+        <field name="name">Amazon Settlement Read complete</field>
+        <field name="email_from">${'odoo_team@visiotechsecurity.com'}</field>
+        <field name="subject">Amazon Settlement Read complete - ${object.name}</field>
+        <field name="email_to">${'contabilidad@visiotechsecurity.com'}</field>
+        <field name="model_id" ref="model_amazon_settlement"/>
+        <field name="body_html"><![CDATA[
+            <p>The Amazon settlement <strong>${object.name} - ${object.marketplace_id.name} </strong> has ended.</p>
+            <p>ERRORS: ${ctx.get('error_count')}</strong></p>
+            <p>RECONCILED: ${ctx.get('reconciled_count')}</p>
+         ]]>
+        </field>
+    </record>
 
 </odoo>
