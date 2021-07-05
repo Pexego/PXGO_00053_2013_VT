@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_outlet_reverse_wizard_form" model="ir.ui.view">
+        <field name="name">product.outlet.reverse.wizard.form</field>
+        <field name="model">product.outlet.reverse.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send product to wizard">
+                <field name="categ_name" invisible="1"/>
+                <group attrs="{'invisible': [('categ_name', 'in', ('O1', 'O2'))]}">
+                    <p>This is not an Outlet product</p>
+                </group>
+                <group attrs="{'invisible': [('categ_name', 'not in', ('O1', 'O2'))]}">
+                    <group>
+                        <field name="warehouse_id"/>
+                    </group>
+                    <separator/>
+                    <group>
+                        <field name="qty"/>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Send to Stock" name="make_reverse_move" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+    id="act_product_to_outlet_reverse_wizard"
+    name="Send to Stock"
+    res_model="product.outlet.reverse.wizard"
+    src_model="product.product"
+    view_id="product_outlet_reverse_wizard_form"
+    view_mode="form"
+    target="new"/>
+
+</odoo>
