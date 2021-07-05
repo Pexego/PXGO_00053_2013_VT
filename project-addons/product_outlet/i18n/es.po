@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0\n"
+"Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-17 16:22+0000\n"
 "PO-Revision-Date: 2014-12-17 16:22+0000\n"
@@ -17,6 +17,7 @@ msgstr ""
 
 #. module: product_outlet
 #: model:ir.ui.view,arch_db:product_outlet.product_outlet_wizard_form
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_reverse_wizard_form
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -99,11 +100,13 @@ msgstr "Producto"
 
 #. module: product_outlet
 #: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_qty
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_reverse_wizard_qty
 msgid "Quantity"
 msgstr "Cantidad"
 
 #. module: product_outlet
-#: code:addons/product_outlet/wizard/product_outlet_wizard.py:79
+#: code:addons/product_outlet/wizard/product_outlet_wizard.py:96
+#: code:addons/product_outlet/wizard/product_outlet_wizard_reverse.py:53
 #, python-format
 msgid "Quantity error"
 msgstr "Error de cantidad"
@@ -136,6 +139,7 @@ msgstr "Este producto está en la categoría outlet."
 
 #. module: product_outlet
 #: model:ir.model.fields,field_description:product_outlet.field_product_outlet_wizard_warehouse_id
+#: model:ir.model.fields,field_description:product_outlet.field_product_outlet_reverse_wizard_warehouse_id
 msgid "Warehouse"
 msgstr "Almacén"
 
@@ -165,3 +169,24 @@ msgstr "La cantidad introducida es mayor que la cantidad disponible."
 #: model:ir.model.fields,field_description:product_outlet.field_product_category_percent
 msgid "Outlet Percent"
 msgstr "Porcentaje de Outlet"
+
+#. module: product_outlet
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_reverse_wizard_form
+msgid "Send to Stock"
+msgstr "Enviar a Existencias"
+
+#. module: product_outlet
+#: model:ir.actions.act_window,name:product_outlet.act_product_to_outlet_reverse_wizard
+msgid "Send to Stock"
+msgstr "Enviar a Existencias"
+
+#. module: product_outlet
+#: model:ir.ui.view,arch_db:product_outlet.product_outlet_reverse_wizard_form
+msgid "This is not an Outlet product"
+msgstr "Este no es un producto Outlet"
+
+#. module: product_outlet
+#: code:addons/product_outlet/wizard/product_outlet_wizard_reverse.py:54
+#, python-format
+msgid "The amount entered is greater than the quantity available in stock."
+msgstr "La cantidad introducida es mayor que la cantidad disponible."
