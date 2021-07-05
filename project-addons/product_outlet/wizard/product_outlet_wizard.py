@@ -154,7 +154,7 @@ class ProductOutletWizard(models.TransientModel):
                                     'product_uom': product.uom_id.id,
                                     'picking_type_id':
                                         self.warehouse_id.out_type_id.id,
-                                    'move_dest_id': move_in.id,
+                                    'move_dest_ids': [(6, 0, [move_in.id])],
                                     'partner_id':
                                         self.env.user.company_id.partner_id.id,
                                     'name': "OUTLET"})
