@@ -318,4 +318,15 @@
             </field>
         </field>
     </record>
+
+    <record id="view_picking_form_reopen_group" model="ir.ui.view">
+        <field name="name">view_picking_form_reopen_group</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock_picking_back2draft.view_picking_form_reopen"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_back_to_draft']" position="attributes">
+                <attribute name="groups">base.group_system</attribute>
+            </xpath>
+        </field>
+    </record>
 </odoo>

@@ -31,13 +31,17 @@ class AmazonSaleOrder(models.Model):
         ('AFN', 'Amazon'),
         ('MFN', 'Own')
     ], readonly=1)
-    sales_channel = fields.Char("Sales Channel")
+    sales_channel = fields.Many2one("amazon.marketplace","Sales Channel")
     purchase_date = fields.Date("Purchase Date")
     partner_vat = fields.Char()
     vat_imputation_country = fields.Char()
     buyer_email = fields.Char()
     buyer_name = fields.Char()
     amazon_invoice_name = fields.Char("Amazon Invoice")
+    city = fields.Char('City')
+    country_id = fields.Many2one('res.country', string='Country', readonly=True)
+    state_id = fields.Char()
+    zip = fields.Char(string='Postal Code')
 
     def _compute_count(self):
         for order in self:
@@ -144,9 +148,13 @@ class AmazonSaleOrder(models.Model):
         order_date_index = headers.index('"Order Date"')
         amazon_invoice_index = headers.index('"VAT Invoice Number"')
         transaction_type_index = headers.index('"Transaction Type"')
+        city_index = headers.index('"Ship To City"')
+        state_index = headers.index('"Ship To State"')
+        country_index = headers.index('"Ship To Country"')
+        zip_index = headers.index('"Ship To Postal Code"')
         for order in orders:
             order = order.split(',')
-            if order[transaction_type_index]=="SHIPMENT":
+            if order[transaction_type_index]=="SHIPMENT" and order[country_index] == 'ES':
                 order_name = order[order_name_index]
                 exist_order = self.env['amazon.sale.order'].search([('name', '=', order_name)])
                 if exist_order:
@@ -167,7 +175,11 @@ class AmazonSaleOrder(models.Model):
                                            'partner_vat':order[vat_number_index] or False,
                                            'vat_imputation_country':order[vat_imputation_country_index] or False,
                                            'purchase_date': order[order_date_index] or False,
-                                           'amazon_invoice_name': order[amazon_invoice_index] or False
+                                           'amazon_invoice_name': order[amazon_invoice_index] or False,
+                                           'city': order[city_index] or '',
+                                           'country_id' : self.env['res.country'].search([('code','=',order[country_index])]).id,
+                                           'state_id': order[state_index],
+                                           'zip': order[zip_index] or ''
                                            }
                     read = False
                     while not read:
@@ -181,7 +193,7 @@ class AmazonSaleOrder(models.Model):
                             raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order_name, e))
                     amazon_order_values.update({
                                                'fulfillment': order_complete.get('FulfillmentChannel',False),
-                                               'sales_channel':order_complete.get('SalesChannel',False)})
+                                               'sales_channel':self.env['amazon.marketplace'].search([('amazon_name','=',order_complete.get('SalesChannel',False))]).id})
                     amazon_order_values_lines = self._get_lines_values(new_order)
                     amazon_order_values.update(amazon_order_values_lines)
                     amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
@@ -222,23 +234,33 @@ class AmazonSaleOrder(models.Model):
         credentials = self._get_credentials()
         for amazon_order in self:
             orders_obj = Orders(marketplace=Marketplaces.ES, credentials=credentials)
-            if not amazon_order.message_error:
+            read = False
+            while not read:
                 try:
                     res_order_header = orders_obj.get_order(amazon_order.name)
+                    read = True
+                except SellingApiRequestThrottledException:
+                    time.sleep(amazon_time_rate_limit)
+                    read = False
                 except SellingApiException as e:
                     raise UserError(_("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e)))
-                time.sleep(amazon_time_rate_limit)
-                order_header = res_order_header.payload
-                amazon_order.write({'fulfillment': order_header.get('FulfillmentChannel',False),
-                                    'sales_channel':order_header.get('SalesChannel',False),
-                                    'purchase_date': order_header.get('PurchaseDate',False)})
 
+            order_header = res_order_header.payload
+            amazon_order.write({'fulfillment': order_header.get('FulfillmentChannel', False),
+                                'sales_channel': self.env['amazon.marketplace'].search(
+                                    [('amazon_name', '=', order_header.get('SalesChannel', False))]).id,
+                                'purchase_date': order_header.get('PurchaseDate', False)})
             amazon_order.message_error = ""
-            try:
-                res_order = orders_obj.get_order_items(amazon_order.name)
-            except SellingApiException as e:
-                raise UserError(_("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e)))
-            time.sleep(amazon_time_rate_limit)
+            read = False
+            while not read:
+                try:
+                    res_order = orders_obj.get_order_items(amazon_order.name)
+                    read = True
+                except SellingApiRequestThrottledException:
+                    time.sleep(amazon_time_rate_limit)
+                    read = False
+                except SellingApiException as e:
+                    raise UserError(_("Amazon API Error. Order %s. '%s' \n" % (amazon_order.name, e)))
             order = res_order.payload
             if order:
                 amazon_order.order_line.unlink()
@@ -269,9 +291,14 @@ class AmazonSaleOrder(models.Model):
         order_total_taxes = 0
         for order_item in order.get('OrderItems'):
             product_qty = int(order_item.get('QuantityOrdered'))
+            if product_qty <= 0:
+                continue
             asin_code = order_item.get('ASIN')
             line = {'product_asin': asin_code,
-                    'product_qty': product_qty}
+                    'product_qty': product_qty,
+                    'product_seller_sku':  order_item.get('SellerSKU'),
+                    'order_item':  order_item.get('OrderItemId'),
+            }
             product_obj = self.env['product.product'].search([('asin_code', '=', asin_code)])
             if not product_obj:
                 amazon_order_values['message_error'] += _('Product with ASIN CODE %s not found\n') % asin_code
@@ -290,6 +317,11 @@ class AmazonSaleOrder(models.Model):
                 taxes = float(order_item.get('ItemTax').get('Amount'))
                 order_total_taxes += taxes
                 price_subtotal = price_total - taxes
+                if order_item.get('PromotionDiscount',False):
+                    discount = float(order_item.get('PromotionDiscount').get('Amount'))
+                    price_subtotal -= discount
+                    order_total_price -= discount
+                    line.update({'discount':discount})
                 price_unit = price_subtotal / product_qty
                 taxes_obj = self.env['account.tax'].search(
                     [('description', '=', 'S_IVA21B' if taxes > 0 else 'S_IVA0_IC'),
@@ -381,6 +413,10 @@ class AmazonSaleOrder(models.Model):
                             if cont + deposit.product_uom_qty < max:
                                 cont += deposit.product_uom_qty
                                 deposits += deposit
+                            elif cont + deposit.product_uom_qty == max:
+                                cont += deposit.product_uom_qty
+                                deposits += deposit
+                                break
                             else:
                                 qty_to_sale = max - cont
                                 new_deposit = deposit.copy()
@@ -424,9 +460,12 @@ class AmazonSaleOrderLine(models.Model):
     _name = 'amazon.sale.order.line'
 
     product_asin = fields.Char(required=True)
+    product_seller_sku = fields.Char()
+    order_item = fields.Char()
     product_id = fields.Many2one('product.product')
     product_qty = fields.Float()
     price_unit = fields.Float()
+    discount = fields.Monetary()
     price_tax = fields.Monetary(compute='_compute_amount', store=True)
     price_total = fields.Monetary(compute='_compute_amount', store=True)
     price_subtotal = fields.Monetary(compute='_compute_amount', store=True)
@@ -459,3 +498,5 @@ class AmazonMarketplace(models.Model):
 
     name = fields.Char(translate=True)
     code = fields.Char()
+    amazon_name = fields.Char()
+    account_id = fields.Many2one("account.account")

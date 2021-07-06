@@ -13,10 +13,8 @@ class SaleOrderLine(models.Model):
                 tags = line.product_id.tag_ids._get_tag_recursivity()
                 for tag in tags:
                     stream.append(tag)
-            if stream:
-                line.product_tags = stream
-            else:
-                line.product_tags = ''
+            line.product_tags = stream
+
 
     product_tags = fields.Char(compute="_compute_product_tags", string='Tags')
     web_discount = fields.Boolean()
