@@ -17,6 +17,7 @@
     "data": ['data/product_data.xml',
              'data/cron.xml',
              'wizard/product_outlet_wizard_view.xml',
+             'wizard/product_outlet_wizard_reverse_view.xml',
              'views/product_category.xml'],
     "installable": True
 }
