@@ -9,6 +9,8 @@
              "data/email.xml",
              "wizard/retry_orders.xml",
              "security/ir.model.access.csv",
-             "views/invoice.xml"],
+             "views/invoice.xml",
+             "views/amazon_settlement.xml"
+             ],
     "installable": True
 }
