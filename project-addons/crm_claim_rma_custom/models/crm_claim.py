@@ -321,8 +321,6 @@ class CrmClaimRma(models.Model):
                 for i_line_id in line.invoice_id.invoice_line_ids:
                     # if i_line_id.product_id.name == 'Discount line' and line.product_id.name in i_line_id.name \
                     #     and not any(d['invoice_id'] == line.invoice_id.id for d in discount_product_list):
-                    import ipdb
-                    ipdb.set_trace()
                     if i_line_id.product_id.name == 'Discount line' and line.product_id.name in i_line_id.name \
                         and not line.invoice_id.number in discount_product_list:
                         has_discount = True
