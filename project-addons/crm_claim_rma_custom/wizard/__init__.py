@@ -20,4 +20,4 @@
 
 from . import claim_make_picking
 from . import claim_make_picking_from_picking
-from . import invoice_payment_discount
+from . import invoice_discount_wiz
