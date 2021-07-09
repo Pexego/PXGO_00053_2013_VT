@@ -28,6 +28,6 @@
     "data": [
         'views/sale_view.xml', 'views/email_purchase_template.xml',
         'data/parameters.xml', 'wizard/max_weight_advise_wiz.xml',
-        'security/sale_security.xml'
+        'security/sale_security.xml', 'views/sale_report_filters.xml'
     ],
 }

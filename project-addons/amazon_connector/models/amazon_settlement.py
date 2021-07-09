@@ -351,7 +351,7 @@ class AmazonSettlement(models.Model):
         states = ['cancel']
         lines_with_products = {}
         if not refund_mode:
-            states += ['done']
+            states += ['paid']
         for line in line_order_ids:
             amazon_invoice = line.amazon_order_id.invoice_deposits.filtered(
                 lambda i: i.state not in states and i.type != 'out_refund')
