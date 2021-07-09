@@ -9,7 +9,8 @@
                 <field name="date"/>
                 <field name="date_done"/>
                 <field name="commercial"/>
-                <filter string="This Year" name="year" invisible="1" domain="[('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <filter string="This Year" name="year" domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                <separator/>
                 <filter name="Quotations" string="Quotations" domain="[('state','=','draft')]"/>
                 <filter name="Sales" string="Sales" domain="[('state','not in',('draft', 'cancel'))]"/>
                 <separator/>
@@ -61,7 +62,7 @@
         <field name="view_mode">pivot,graph</field>
         <field name="search_view_id" ref="view_stock_product_search"/>
         <field name="view_id" ref="view_picking_graph"/>
-        <field name="context">{'search_default_Sales':1, 'group_by_no_leaf':1,'group_by':[]}</field>
+        <field name="context">{'search_default_Sales':1, 'group_by_no_leaf':1,'group_by':[], 'search_default_year':1}</field>
         <field name="help">This report performs analysis on your quotations and sales orders. Analysis check your sales revenues and sort it by different group criteria (salesman, partner, product, etc.) Use this report to perform analysis on sales not having invoiced yet. If you want to analyse your turnover, you should use the Invoice Analysis report in the Accounting application.</field>
     </record>
 
