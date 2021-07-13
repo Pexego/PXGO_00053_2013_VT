@@ -176,3 +176,9 @@ msgstr "Año"
 #: model:ir.model.fields,field_description:cyc_view.field_res_partner_risk_insurance_anon
 msgid "Anonymous"
 msgstr "Anónimo"
+
+#. module: cyc_view
+#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_invoice_quarter
+msgid "Quarter"
+msgstr "Trimestre"
