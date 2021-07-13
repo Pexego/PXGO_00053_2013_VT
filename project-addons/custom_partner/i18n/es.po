@@ -513,3 +513,8 @@ msgstr "Si este campo está marcado, el límite de crédito de fidelidad será a
 #: help:res.partner,fidelity_credit_limit:0
 msgid "Profit of the last x months"
 msgstr "Beneficio de los últimos x meses"
+
+#. module: custom_partner
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_products_no
+msgid "Invoice Pending Sales"
+msgstr "Pedidos Pendientes de Facturar"
