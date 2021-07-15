@@ -1049,3 +1049,8 @@ msgstr "retry.amazon.orders.lines"
 #: model:ir.model,name:amazon_connector.model_retry_amazon_orders_wizard
 msgid "retry.amazon.orders.wizard"
 msgstr "retry.amazon.orders.wizard"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_move_id
+msgid "Move"
+msgstr "Asiento"

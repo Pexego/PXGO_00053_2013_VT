@@ -75,16 +75,10 @@
                                     <field name="amount" sum="Amount Items total" readonly="1"/>
                                     <field name="amount_items" sum="Amount Items total" readonly="1"/>
                                     <field name="invoice_name" readonly="1"/>
+                                    <field name="move_id" readonly="1"/>
                                     <field name="items_ids" readonly="1"/>
                                     <field name="state" readonly="1"/>
                                     <field name="error" readonly="1"/>
-                                    <!--                                    <button name="reconcile_order_lines"-->
-                                    <!--                                            attrs="{'invisible': ['|',('state', '==', 'reconciled'),('type', '!=','Order')]}" string="Reconcile"-->
-                                    <!--                                            type="object" icon="fa fa-share text-error"/>-->
-                                    <!--                                    <button name="reconcile_refund_lines"-->
-                                    <!--                                            attrs="{'invisible': ['|',('state', '==', 'reconciled'),('type', '!=','Refund')]}" string="Reconcile"-->
-                                    <!--                                            type="object" icon="fa fa-share text-error"/>-->
-
                                 </tree>
 
                             </field>
