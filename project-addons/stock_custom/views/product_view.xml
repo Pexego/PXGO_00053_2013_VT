@@ -242,4 +242,11 @@
 
      <menuitem id="menu_products_toxic_stock" action="action_product_toxic_stock"
         parent="sale.product_menu_catalog"  sequence="2"/>
+
+    <record id="product_product_last_purchase_info_form_view" model="ir.ui.view">
+        <field name="name">product.product.procurement</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="stock.product_form_view_procurement_button" />
+        <field name="groups_id" eval="[(4, ref('base.group_system'))]"/>
+    </record>
 </odoo>
