@@ -411,13 +411,13 @@ class AmazonSettlement(models.Model):
             else:
                 line.error = _('There is no invoice for this order\n')
                 lines_not_reconciled += line
+        if moves:
+            for m,lines_to_r in moves.items():
+                if refund_mode:
+                    lines_to_r.reconcile_refund_lines(m, lines_with_products)
+                else:
+                    lines_to_r.reconcile_order_lines(m)
         if total_amount > 0:
-            if moves:
-                for m,lines_to_r in moves.items():
-                    if refund_mode:
-                        lines_to_r.reconcile_refund_lines(m, lines_with_products)
-                    else:
-                        lines_to_r.reconcile_order_lines(m)
             lines_to_reconcile_without_moves = lines_to_reconcile - lines_with_moves
             if lines_to_reconcile_without_moves:
                 move = self._create_move(total_amount, refund_mode)
