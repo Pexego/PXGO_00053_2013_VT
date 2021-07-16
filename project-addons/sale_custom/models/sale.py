@@ -158,7 +158,7 @@ class SaleOrder(models.Model):
             line.write({'old_discount': 0.0, 'accumulated_promo': False})
         if self.order_line and \
                 self.pricelist_id and self.pricelist_id.discount_policy == 'with_discount':
-            self.order_line.discount = 0.0
+            self.order_line.write({'discount': 0.0})
 
     def open_historical_orders(self):
         self.ensure_one()
