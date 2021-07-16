@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _, exceptions
+from odoo import api, fields, models, _, exceptions, tools
 import base64
 from datetime import datetime
 import xlsxwriter
@@ -224,7 +224,8 @@ class ProductProduct(models.Model):
     def generate_xls(headers, rows):
         # Generate the xls
         file_name = 'temp'
-        workbook = xlsxwriter.Workbook(file_name, {'in_memory': True})
+        tmpdir = tools.config["data_dir"] + '/filestore'
+        workbook = xlsxwriter.Workbook(file_name, {'tmpdir': tmpdir})
         worksheet = workbook.add_worksheet()
         row = 0
         col = 0
