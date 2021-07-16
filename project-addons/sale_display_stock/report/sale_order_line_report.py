@@ -37,11 +37,14 @@ class SaleOrderLineReport(models.Model):
         ('make_to_order', 'Make to order')],
         'Product state', readonly=True)
     partner_id = fields.Many2one('res.partner', 'Partner', readonly=True)
+    country_id = fields.Many2one('res.country', 'Partner country', readonly=True)
     product_qty = fields.Float('Quantity', readonly=True)
     price_unit = fields.Float('Price unit', readonly=True)
     discount = fields.Float('Discount', readonly=True)
+    qty_delivered = fields.Float('Qty delivered', readonly=True)
     salesman_id = fields.Many2one('res.users', 'Salesperson', readonly=True)
     order_id = fields.Many2one('sale.order', 'Order', readonly=True)
+    team_id = fields.Many2one('crm.team', 'Order team', readonly=True)
     date_order = fields.Datetime('Dateorder', readonly=True)
     confirmation_date = fields.Datetime('Confirmationdate', readonly=True)
     invoice_status = fields.Selection([
@@ -84,14 +87,17 @@ CREATE or REPLACE VIEW sale_order_line_report as (SELECT sol.id as id,
        pt.categ_id as product_category_id,
        pt.state as product_state,
        sol.order_partner_id as partner_id,
+       rp.country_id as country_id,
        sol.product_uom_qty as product_qty,
        sol.price_unit as price_unit,
        sol.discount as discount,
+       sol.qty_delivered as qty_delivered,
        sol.salesman_id as salesman_id,
        sol.invoice_status as invoice_status,
        sol.order_id as order_id,
        so.date_order as date_order,
        so.confirmation_date as confirmation_date,
+       so.team_id as team_id,
        so.state as order_state,
        so.invoice_status_2 as invoice_status_2,
        sol.company_id as company_id,
@@ -101,7 +107,8 @@ JOIN sale_order so on so.id = sol.order_id
 LEFT JOIN product_product pp on sol.product_id = pp.id
 LEFT JOIN product_template pt on pt.id = pp.product_tmpl_id
 LEFT JOIN stock_move sm on sm.sale_line_id = sol.id
-GROUP BY sol.id, sol.name, pt.product_brand_id, pt.categ_id, sol.order_partner_id, sol.product_uom_qty,
+LEFT JOIN res_partner rp on rp.id = sol.order_partner_id
+GROUP BY sol.id, sol.name, pt.product_brand_id, pt.categ_id, sol.order_partner_id, rp.country_id, sol.product_uom_qty,
          sol.product_uom, sol.price_unit, sol.discount, sol.salesman_id, sol.state, sol.order_id, 
-         so.date_order, so.confirmation_date, pt.state, so.state, so.invoice_status_2)
+         so.date_order, so.confirmation_date, so.team_id, pt.state, so.state, so.invoice_status_2)
 """)

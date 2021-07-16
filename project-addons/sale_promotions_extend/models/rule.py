@@ -266,7 +266,7 @@ class PromotionsRulesActions(models.Model):
         @param context: Context(no direct use).
         """
         for order_line in order.order_line:
-            if eval(self.product_code) in order_line.product_tags:
+            if eval(self.product_code) in eval(order_line.product_tags):
                 self.apply_perc_discount_accumulated(order_line)
         return {}
 
@@ -306,7 +306,7 @@ class PromotionsRulesActions(models.Model):
         @param context: Context(no direct use).
         """
         for order_line in order.order_line:
-            if eval(self.product_code) in order_line.product_tags:
+            if eval(self.product_code) in eval(order_line.product_tags):
                 self.apply_perc_discount(order_line)
         return {}
 
@@ -350,7 +350,7 @@ class PromotionsRulesActions(models.Model):
 
     def action_prod_fixed_price_tag(self, order):
         for order_line in order.order_line:
-            if eval(self.product_code) in order_line.product_tags:
+            if eval(self.product_code) in eval(order_line.product_tags):
                 self.apply_fixed_price(order_line)
         return {}
 
@@ -565,7 +565,7 @@ class PromotionsRulesActions(models.Model):
 
     def action_tag_disc_perc_line(self, order):
         for order_line in order.order_line:
-            if eval(self.product_code) in order_line.product_tags:
+            if eval(self.product_code) in eval(order_line.product_tags):
                 vals = {
                     'sequence': 999,
                     'order_id': order.id,

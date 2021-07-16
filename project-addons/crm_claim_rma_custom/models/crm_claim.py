@@ -314,39 +314,21 @@ class CrmClaimRma(models.Model):
     
     @api.multi
     def check_discounts(self):
-        discount_product_list = []
-        has_discount = False
         for claim_obj in self:
             for line in claim_obj.claim_inv_line_ids:
                 for i_line_id in line.invoice_id.invoice_line_ids:
-                    # if i_line_id.product_id.name == 'Discount line' and line.product_id.name in i_line_id.name \
-                    #     and not any(d['invoice_id'] == line.invoice_id.id for d in discount_product_list):
-                    if i_line_id.product_id.name == 'Discount line' and line.product_id.name in i_line_id.name \
-                        and not line.invoice_id.number in discount_product_list:
-                        has_discount = True
-
-                        discount_product_list.append(line.invoice_id.number)
-
-                        # discount_product_list.append({
-                        #     'invoice_id': line.invoice_id.id,
-                        #     'product_id': line.product_id.id,
-                        #     'product_description': line.product_description,
-                        #     'qty': line.qty,
-                        #     'price_unit': line.price_unit,
-                        #     'discount': line.discount,
-                        #     'tax_ids': line.tax_ids.id,
-                        #     'price_subtotal': line.price_subtotal,
-                        #     'invoiced': line.invoiced,
-                        # })
-        if has_discount:
-            return self.env['invoice.discount.wiz'].create({
-                                # 'crm_claim_lines_ids': ([6,0,discount_product_list]),
-                                'origin_reference': '%s,%s' % ('crm.claim', self.id),
-                                'continue_method': 'make_refund_invoice',
-                                'message': "This order has discounts. Do you want to proceed anyways?: " + ', '.join(discount_product_list)
-                            }).action_show()
-        else:
-            self.make_refund_invoice()
+                    if i_line_id.product_id.name == 'Discount line':
+                        if line.product_id.name in i_line_id.name:
+                            return {
+                                'type': 'ir.actions.act_window',
+                                'view_type': 'form',
+                                'view_mode': 'form',
+                                'res_model': 'crm.claim.invoice.discount',
+                                'view_id': self.env.ref('crm_claim_rma_custom.invoice_payment_discount_form').id,
+                                'target': 'new'
+                            }
+            
+        self.make_refund_invoice()
 
 
 class ClaimInvoiceLine(models.Model):

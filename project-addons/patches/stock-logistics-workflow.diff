@@ -1,0 +1,23 @@
+diff --git a/purchase_stock_picking_invoice_link/models/account_invoice.py b/purchase_stock_picking_invoice_link/models/account_invoice.py
+index 556c0fb..42c638e 100644
+--- a/purchase_stock_picking_invoice_link/models/account_invoice.py
++++ b/purchase_stock_picking_invoice_link/models/account_invoice.py
+@@ -17,7 +17,8 @@ class AccountInvoice(models.Model):
+             move_ids = moves._get_moves()
+             vals['move_line_ids'] = [(6, 0, move_ids.ids)]
+             pickings = move_ids.mapped('picking_id')
+-            pickings.invoice_ids = [(4, self.id)]
++            for pick in pickings:
++                pick.invoice_ids = [(4, self.id)]
+         return vals
+
+     @api.model
+@@ -27,7 +28,7 @@ class AccountInvoice(models.Model):
+         if 'invoice_line_ids' not in values:
+             return super().create(values)
+         for item in values.get('invoice_line_ids'):
+-            if not item[2].get('purchase_line_id'):
++            if not isinstance(item[2], dict) or not item[2].get('purchase_line_id'):
+                 continue
+             moves = self.env['stock.move'].search([
+                 ('purchase_line_id', '=', item[2]['purchase_line_id']),

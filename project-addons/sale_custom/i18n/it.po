@@ -184,3 +184,8 @@ msgstr "Avviso di peso massimo"
 #: model:ir.ui.view,arch_db:sale_custom.max_weight_advise_wizard
 msgid "Yes"
 msgstr "Sì"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.sale_report_year_filter
+msgid "This Year"
+msgstr "Quest'anno"

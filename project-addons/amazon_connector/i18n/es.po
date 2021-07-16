@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 11.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-01 11:30+0000\n"
-"PO-Revision-Date: 2021-03-01 17:00+0000\n"
+"POT-Creation-Date: 2021-06-14 06:37+0000\n"
+"PO-Revision-Date: 2021-06-14 06:37+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,59 +16,440 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: amazon_connector
+#: model:mail.template,body_html:amazon_connector.send_amazon_settlement
+msgid "\n"
+"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">The Amazon settlement <strong style=\"font-weight:bold;\">${object.name} - ${object.marketplace_id.name} </strong> has ended.</p>\n"
+"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">ERRORS: ${ctx.get('error_count')}</p>\n"
+"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">RECONCILED: ${ctx.get('reconciled_count')}</p>\n"
+"         \n"
+"        "
+msgstr "\n"
+"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">El informe de pago de amazon <strong style=\"font-weight:bold;\">${object.name} - ${object.marketplace_id.name} </strong> ha terminado.</p>\n"
+"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">ERRORES: ${ctx.get('error_count')}</p>\n"
+"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">CONCILIADAS: ${ctx.get('reconciled_count')}</p>\n"
+"         \n"
+"        "
+
+#. module: amazon_connector
+#: model:mail.template,body_html:amazon_connector.send_mail_errors_amazon
+msgid "\n"
+"            <p>The amazon order <strong>${object.name}</strong> has the following errors:</p>\n"
+"            <p>ERRORS: ${object.message_error}</strong></p>\n"
+"            <p>${ctx.get('message_warning','')}</p>\n"
+"         \n"
+"        "
+msgstr "\n"
+"            <p>El pedido de Amazon <strong>${object.name}</strong> tiene los siguientes errores:</p>\n"
+"            <p>ERRORES: ${object.message_error}</strong></p>\n"
+"            <p>${ctx.get('message_warning','')}</p>\n"
+"         \n"
+"        "
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_account_id
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_account_move
+msgid "Account Entry"
+msgstr "Asiento contable"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_adjustment_id
+msgid "Adjustment"
+msgstr "Ajuste"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_base_amount
+msgid "Advertising Transaction Base Amount"
+msgstr "Importe Base de la Transacción Publicitaria"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_tax_amount
+msgid "Advertising Transaction Tax Amount"
+msgstr "Importe del impuesto sobre la transacción publicitaria"
+
+#. module: amazon_connector
+#: selection:amazon.settlement.line,type:0
+msgid "AdvertisingTransactionDetails"
+msgstr "Transacción Publicidad"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,fulfillment:0
+#: model:ir.ui.menu,name:amazon_connector.amazon_menu
+#: model:res.groups,name:amazon_connector.group_amazon
+msgid "Amazon"
+msgstr "Amazon"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:215
+#, python-format
+msgid "Amazon API Error. Buyer Info Request. Order %s. '%s' \n"
+msgstr "Amazon API Error. Petición de info del comprador. Pedido %s. '%s' \n"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:129
+#, python-format
+msgid "Amazon API Error. No order was created due to errors. '%s' \n"
+msgstr "Error API Amazon. Ningún pedido se ha creado debido ha que se ha producido un error. '%s'"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:171
+#: code:addons/amazon_connector/models/amazon_sale_order.py:193
+#: code:addons/amazon_connector/models/amazon_sale_order.py:246
+#: code:addons/amazon_connector/models/amazon_sale_order.py:263
+#: code:addons/amazon_connector/models/amazon_settlement.py:249
+#, python-format
+msgid "Amazon API Error. Order %s. '%s' \n"
+msgstr "Error API Amazon. Pedido %s. '%s'"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:139
+#: code:addons/amazon_connector/models/amazon_settlement.py:96
+#, python-format
+msgid "Amazon API Error. Report %s. '%s' \n"
+msgstr "Error API Amazon. Informe %s. '%s'"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_product_product_asin_code
+msgid "Amazon ASIN"
+msgstr "Amazon ASIN"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.view_company_amazon_connector_form
+msgid "Amazon Connector"
+msgstr "Conector Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_amazon_invoice
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amazon_invoice_name
+msgid "Amazon Invoice"
+msgstr "Factura de Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_amazon_name
+msgid "Amazon Name"
+msgstr "Nombre Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_amazon_order
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_amazon_order_id
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_amazon_order
+#: model:ir.model.fields,field_description:amazon_connector.field_stock_deposit_amazon_order_id
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Amazon Order"
+msgstr "Pedido de Amazon"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_name
-msgid "Name"
-msgstr "Nombre"
+msgid "Amazon Order Id"
+msgstr "Id Pedido Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_amazon_order_item_code
+msgid "Amazon Order Item Code"
+msgstr "Código Elemento Pedido Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_amazon_order_name
+msgid "Amazon Order Name"
+msgstr "Nombre Pedido Amazon"
+
+#. module: amazon_connector
+#: model:ir.actions.act_window,name:amazon_connector.action_show_amazon_orders
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_amazon_orders
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_tree
+#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
+msgid "Amazon Orders"
+msgstr "Pedidos de Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_account_move_amazon_refund_settlement_id
+msgid "Amazon Refund Settlement"
+msgstr "Informe de Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_amazon_report_document
+msgid "Amazon Report Document"
+msgstr "Documento Origen Informe"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_account_move_amazon_settlement_id_21898
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
+msgid "Amazon Settlement"
+msgstr "Pagos Amazon"
+
+#. module: amazon_connector
+#: model:mail.template,subject:amazon_connector.send_amazon_settlement
+msgid "Amazon Settlement Read complete - ${object.name}"
+msgstr "Informe de Amazon leído con errores - ${object.name}"
+
+#. module: amazon_connector
+#: model:ir.actions.act_window,name:amazon_connector.action_show_settlements
+msgid "Amazon Settlements"
+msgstr "Pagos Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_amount
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_amount
+msgid "Amount"
+msgstr "Importe"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_amount_items
+msgid "Amount Items"
+msgstr "Cantidad Elementos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_amount_items_positive_events
+msgid "Amount Items Positive Events"
+msgstr "Cantidad sin cargos Amazon"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
+msgid "Amount Items total"
+msgstr "Cantidad total de los elementos"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_item_event_tree
+msgid "Amount total"
+msgstr "Cantidad total"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_company_aws_access_key
+msgid "Aws Access Key"
+msgstr "AWS clave acceso"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_company_aws_secret_key
+msgid "Aws Secret Key"
+msgstr "AWS clave secreta"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_buyer_email
+msgid "Buyer Email"
+msgstr "Email del comprador"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Buyer Info"
+msgstr "Información del comprador"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_buyer_name
+msgid "Buyer Name"
+msgstr "Nombre del comprador"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_city
+msgid "City"
+msgstr "Ciudad"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_code
+msgid "Code"
+msgstr "Código"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_company_currency_id
+msgid "Company Currency"
+msgstr "Moneda de la compañía"
+
+#. module: amazon_connector
+#: model:ir.ui.menu,name:amazon_connector.config_amazon_menu
+msgid "Configuration"
+msgstr "Configuración"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_country_id
+msgid "Country"
+msgstr "País"
+
+#. module: amazon_connector
+#: model:ir.actions.server,name:amazon_connector.ir_cron_create_amazon_sale_orders_ir_actions_server
+#: model:ir.cron,cron_name:amazon_connector.ir_cron_create_amazon_sale_orders
+#: model:ir.cron,name:amazon_connector.ir_cron_create_amazon_sale_orders
+msgid "Create Amazon Sale Orders"
+msgstr "Crear Pedidos Ventas Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.view_company_amazon_connector_form
+msgid "Credentials"
+msgstr "Credenciales"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_currency_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_currency_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_currency_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_currency_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_currency_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_currency_id
+msgid "Currency"
+msgstr "Moneda"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_deposit_date
+msgid "Deposit Date"
+msgstr "Fecha de depósito"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_stock_deposit
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_deposits
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
+msgid "Deposits"
+msgstr "Depósitos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_deposits_count
+msgid "Deposits Count"
+msgstr "Contador Depósitos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_destination_country_id
+msgid "Destination Country"
+msgstr "País de destino"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_discount
+msgid "Discount"
+msgstr "Descuento"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: amazon_connector
+#: selection:amazon.settlement,state:0
+msgid "Done"
+msgstr "Done"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_end_date
+msgid "End Date"
+msgstr "Fecha final"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,state:0
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_error
+msgid "Error"
+msgstr "Error"
+
+#. module: amazon_connector
+#: model:mail.template,subject:amazon_connector.send_mail_errors_amazon
+msgid "Error reading Amazon Order - ${object.name}"
+msgstr "Error leyendo un pedido de Amazon - ${object.name}"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.view_amazon_sale_order_filter
+msgid "Errors"
+msgstr "Errores"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_item_event_form
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_item_event_tree
+msgid "Event Item"
+msgstr "Evento del Elemento"
+
+#. module: amazon_connector
+#: selection:amazon.settlement.item.event,type:0
+msgid "Fee"
+msgstr "Cargo"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_fulfillment
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_fulfillment
 msgid "Fulfillment"
 msgstr "Realizado por"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_untaxed
-msgid "Amount Untaxed"
-msgstr "Base imponible"
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "General Info"
+msgstr "Info. General"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_tax
-msgid "Amount Tax"
-msgstr "Impuestos"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_id
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_id
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_id
+msgid "ID"
+msgstr "ID (identificación)"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_total
-msgid "Amount Total"
-msgstr "Total"
+#: model:ir.model,name:amazon_connector.model_account_invoice
+msgid "Invoice"
+msgstr "Factura"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_theoretical_total_amount
-msgid "Theoretical Total Amount"
-msgstr "Cantidad total enviada por Amazon"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_deposits
+msgid "Invoice Deposits"
+msgstr "Facturas de los depósitos"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_theoretical_total_taxes
-msgid "Theoretical Total Taxes"
-msgstr "Impuestos aplicados por Amazon"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_invoice_deposits_count
+msgid "Invoice Deposits Count"
+msgstr "Contador de facturas de los depósitos"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_message_error
-msgid "Message Error"
-msgstr "Errores"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_state
-msgid "Status"
-msgstr "Estado"
-
-#. module: amazon_connector
-#: selection:amazon.sale.order,state:0
-msgid "Read"
-msgstr "Leído"
-
-#. module: amazon_connector
-#: selection:amazon.sale.order,state:0
-msgid "Sale created"
-msgstr "Venta creada"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_invoice_name
+msgid "Invoice Name"
+msgstr "Nombre de la factura"
 
 #. module: amazon_connector
 #: selection:amazon.sale.order,state:0
@@ -76,49 +457,224 @@ msgid "Invoice created"
 msgstr "Factura creada"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_state
-msgid "Status"
-msgstr "Estado"
+#: selection:amazon.sale.order,state:0
+msgid "Invoice open"
+msgstr "Factura validada"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_warning_price
-msgid "Warning Price"
-msgstr "Aviso error Precio"
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Invoices"
+msgstr "Facturas"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_asin
-msgid "Product Asin"
-msgstr "Código ASIN"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_item_id
+msgid "Item"
+msgstr "Elemento"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_id
-msgid "Product"
-msgstr "Producto"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_item_event_ids
+msgid "Item Event"
+msgstr "Evento del elemento"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_id
-msgid "Product"
-msgstr "Producto"
+#: code:addons/amazon_connector/models/amazon_sale_order.py:305
+#, python-format
+msgid "ItemPrice or ItemTax fields are empty %s\n"
+msgstr "Los campos ItemPrice o ItemTax vienen vacíos %s\n"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_qty
-msgid "Product Qty"
-msgstr "Cantidad"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_items_ids
+msgid "Items"
+msgstr "Elementos"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_unit
-msgid "Price Unit"
-msgstr "Precio Unidad"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización de"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_line_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_ids
+msgid "Line"
+msgstr "Línea"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
+msgid "Lines"
+msgstr "Líneas"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_company_lwa_app_id
+msgid "Lwa App"
+msgstr "LWA App"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_company_lwa_client_secret
+msgid "Lwa Client Secret"
+msgstr "LWA Secreto del cliente"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Mark to Done"
+msgstr "Marcar como hecho"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_marketplace_id
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_marketplace_id
+#: model:ir.model.fields,field_description:amazon_connector.field_res_company_marketplace_ids
+msgid "Marketplace"
+msgstr "Marketplace"
+
+#. module: amazon_connector
+#: model:ir.actions.act_window,name:amazon_connector.action_show_marketplaces
+#: model:ir.ui.menu,name:amazon_connector.marketplaces_menu
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_marketplace_form
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_marketplace_tree
+msgid "Marketplaces"
+msgstr "Marketplaces"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_merchant_order_id
+msgid "Merchant Order"
+msgstr "Pedido Vendedor"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_merchant_promotion
+msgid "Merchant Promotion"
+msgstr "Promoción Vendedor"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_message_error
+msgid "Message Error"
+msgstr "Mensaje de Error"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_move_ids
+msgid "Move"
+msgstr "Asientos de ventas"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_move_refund_ids
+msgid "Move Refund"
+msgstr "Asiento de las devoluciones"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
+msgid "Moves"
+msgstr "Asientos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_moves_count
+msgid "Moves Count"
+msgstr "Contador de Asientos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_name
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_name
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_name
+msgid "Name"
+msgstr "Nombre"
+
+#. module: amazon_connector
+#: selection:amazon.settlement.line,type:0
+msgid "Order"
+msgstr "Pedido"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_order_item
+msgid "Order Item"
+msgstr "Elemento del Pedido"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_order_line
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
+msgid "Order Lines"
+msgstr "Líneas del pedido"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_order_id
+msgid "Order Reference"
+msgstr "Referencia del pedido"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_amount
+msgid "Other Transaction Amount"
+msgstr "Cantidad de otras transacciones"
+
+#. module: amazon_connector
+#: selection:amazon.settlement.line,type:0
+msgid "OtherTransaction"
+msgstr "Otra Transacción"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,fulfillment:0
+msgid "Own"
+msgstr "Propio"
+
+#. module: amazon_connector
+#: selection:amazon.settlement,state:0
+msgid "Partially Reconciled"
+msgstr "Conciliado Parcialmente"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_partner_vat
+msgid "Partner Vat"
+msgstr "CIF Cliente"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_zip
+msgid "Postal Code"
+msgstr "Código Postal"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_posted_date
+msgid "Posted Date"
+msgstr "Fecha de publicación"
+
+#. module: amazon_connector
+#: selection:amazon.settlement.item.event,type:0
+msgid "Price"
+msgstr "Precio"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_subtotal
 msgid "Price Subtotal"
-msgstr "Subtotal"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_tax_id
-msgid "Tax"
-msgstr "Impuestos"
+msgstr "Precio subtotal"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_tax
@@ -131,54 +687,9 @@ msgid "Price Total"
 msgstr "Total"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_name
-msgid "Name"
-msgstr "Nombre"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_code
-msgid "Code"
-msgstr "Código"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:125
-msgid "Amazon API Error. No order was created due to errors. '%s' \n"
-msgstr "Error API Amazon. Ningún pedido se ha creado debido ha que se ha producido un error. '%s'"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:163
-#: code:addons/amazon_connector/models/amazon_sale_order.py:181
-#: code:addons/amazon_connector/models/amazon_sale_order.py:229
-#: code:addons/amazon_connector/models/amazon_sale_order.py:240
-msgid "Amazon API Error. Order %s. '%s' \n"
-msgstr "Error API Amazon. Pedido %s. '%s'"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:189
-#: code:addons/amazon_connector/models/amazon_sale_order.py:248
-msgid "Total amount != Theoretical total amount (%f-%f)\n"
-msgstr "Total != Total enviado por Amazon (%f-%f)\n"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:277
-msgid "Product with ASIN CODE %s not found\n"
-msgstr "El producto con código ASIN %s no ha sido encontrado \n"
-
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:280
-msgid "ItemPrice or ItemTax fields are empty %s\n"
-msgstr "Los campos ItemPrice o ItemTax vienen vacíos %s\n"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:411
-msgid "There are no deposit for this order"
-msgstr "No hay depósitos para este pedido"
-
-#. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
-msgid "Retry Order"
-msgstr "Reintentar lectura"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_price_unit
+msgid "Price Unit"
+msgstr "Precio unidad"
 
 #. module: amazon_connector
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
@@ -186,57 +697,36 @@ msgid "Process Order"
 msgstr "Procesar Pedido"
 
 #. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
-msgid "Deposits"
-msgstr "Depósitos"
+#: model:ir.model,name:amazon_connector.model_product_product
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_id
+msgid "Product"
+msgstr "Producto"
 
 #. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
-msgid "Invoices"
-msgstr "Facturas"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_asin
+msgid "Product Asin"
+msgstr "Código ASIN"
 
 #. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
-msgid "Sale orders"
-msgstr "Pedidos de Venta"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_qty
+msgid "Product Qty"
+msgstr "Cantidad producto"
 
 #. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
-msgid "Amazon Order"
-msgstr "Pedido de Amazon"
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_product_seller_sku
+msgid "Product Seller Sku"
+msgstr "Sku del producto"
 
 #. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
-msgid "Order Lines"
-msgstr "Líneas del Pedido"
+#: code:addons/amazon_connector/models/amazon_sale_order.py:302
+#, python-format
+msgid "Product with ASIN CODE %s not found\n"
+msgstr "El producto con código ASIN %s no ha sido encontrado \n"
 
 #. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_tree
-#: model:ir.actions.act_window,name:amazon_connector.action_show_amazon_orders
-#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
-msgid "Amazon Orders"
-msgstr "Pedidos de Amazon"
-
-#. module: amazon_connector
-#: model:ir.ui.menu,name:amazon_connector.config_amazon_menu
-msgid "Configuration"
-msgstr "Configuración"
-
-#. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
-#: model:ir.actions.act_window,name:amazon_connector.retry_Amazon_orders_action
-msgid "Retry Orders"
-msgstr "Reintentar pedidos"
-
-#. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
-msgid "Cancel"
-msgstr "Cancelar"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_sales_channel
-msgid "Sales Channel"
-msgstr "Canal de Venta"
+#: selection:amazon.settlement.item.event,type:0
+msgid "Promotion"
+msgstr "Promoción"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_purchase_date
@@ -244,89 +734,318 @@ msgid "Purchase Date"
 msgstr "Fecha de compra"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_qty
+msgid "Qty"
+msgstr "Cantidad"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,state:0
+#: selection:amazon.settlement,state:0
+#: selection:amazon.settlement.line,state:0
+msgid "Read"
+msgstr "Leído"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
+msgid "Reconcile All"
+msgstr "Conciliar Todo"
+
+#. module: amazon_connector
+#: model:ir.actions.server,name:amazon_connector.ir_cron_reconcile_amazon_invoices_ir_actions_server
+#: model:ir.cron,cron_name:amazon_connector.ir_cron_reconcile_amazon_invoices
+#: model:ir.cron,name:amazon_connector.ir_cron_reconcile_amazon_invoices
+msgid "Reconcile Amazon Invoices"
+msgstr "Conciliar Facturas Amazon"
+
+#. module: amazon_connector
+#: selection:amazon.settlement.line,state:0
+msgid "Reconciled"
+msgstr "Conciliado"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_company_refresh_token
+msgid "Refresh Token"
+msgstr "Token de refresco"
+
+#. module: amazon_connector
+#: selection:amazon.settlement.line,type:0
+msgid "Refund"
+msgstr "Devolución"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_refund_invoice_id
+msgid "Refund Invoice"
+msgstr "Factura de abono"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_refund_moves_count
+msgid "Refund Moves Count"
+msgstr "Contador de asientos de devolución"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
+msgid "Refund moves"
+msgstr "Asientos de devolución"
+
+#. module: amazon_connector
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
-msgid "Mark to Done"
-msgstr "Marcar como hecho"
+msgid "Retry Order"
+msgstr "Reintentar lectura"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:191
-#: code:addons/amazon_connector/models/amazon_sale_order.py:158
-msgid "Amount untaxed is greater than 400 %s."
-msgstr "La Base imponible es mayor que 400 %s"
+#: model:ir.actions.act_window,name:amazon_connector.retry_Amazon_orders_action
+#: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
+msgid "Retry Orders"
+msgstr "Reintentar pedidos"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:421
+#: model:ir.model.fields,field_description:amazon_connector.field_res_company_role_arn
+msgid "Role Arn"
+msgstr "Rol ARN"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_sale_deposits
+msgid "Sale Deposits"
+msgstr "Ventas de Depósitos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_sale_deposits_count
+msgid "Sale Deposits Count"
+msgstr "Contador de ventas de depósito"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,state:0
+msgid "Sale created"
+msgstr "Venta creada"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Sale orders"
+msgstr "Pedidos de Venta"
+
+#. module: amazon_connector
+#: model:ir.ui.menu,name:amazon_connector.sales_amazon_menu
+#: model:ir.ui.menu,name:amazon_connector.sales_amazon_parent_menu
+msgid "Sales"
+msgstr "Ventas"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_sales_channel
+msgid "Sales Channel"
+msgstr "Canal de ventas"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_settlement_id
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_tree
+msgid "Settlement"
+msgstr "Pagos"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_item_form
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_item_tree
+msgid "Settlement Item"
+msgstr "Elemento de Pagos"
+
+#. module: amazon_connector
+#: model:ir.ui.menu,name:amazon_connector.settlement_amazon_menu
+#: model:ir.ui.menu,name:amazon_connector.settlement_amazon_report_menu
+msgid "Settlements"
+msgstr "Pagos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_shipment_id
+msgid "Shipment"
+msgstr "Envío"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Shipping Address"
+msgstr "Dirección de envío"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_sku
+msgid "Sku"
+msgstr "SKU"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_start_date
+msgid "Start Date"
+msgstr "Fecha inicial"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_state_id
+msgid "State"
+msgstr "Estado"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_state
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_state
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_state
+msgid "Status"
+msgstr "Estado"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_tax_id
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_tax
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_theoretical_total_amount
+msgid "Theoretical Total Amount"
+msgstr "Cantidad total enviada por Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_theoretical_total_taxes
+msgid "Theoretical Total Taxes"
+msgstr "Impuestos aplicados por Amazon"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:441
+#, python-format
+msgid "There are no deposit for this order"
+msgstr "No hay depósitos para este pedido"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:451
+#, python-format
 msgid "There aren't any invoices linked to this Amazon order"
 msgstr "No hay ninguna factura asociada a este pedido"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_partner_vat
-msgid "Partner VAT"
-msgstr "CIF del cliente"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_vat_imputation_country
-msgid "VAT imputation country"
-msgstr "País de tributación del IVA"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_buyer_email
-msgid "Buyer Email"
-msgstr "Email del comprador"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_buyer_name
-msgid "Buyer Name"
-msgstr "Nombre del comprador"
-
-#. module: amazon_connector
-#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
-msgid "Buyer Info"
-msgstr "Información del comprador"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:203
-msgid "Amazon API Error. Buyer Info Request. Order %s. '%s' \n"
-msgstr "Amazon API Error. Petición de info del comprador. Pedido %s. '%s' \n"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:208
-#: code:addons/amazon_connector/models/amazon_sale_order.py:254
-msgid "This Order requires a non simplified Invoice"
-msgstr "Este pedido necesita una factura que no sea simplificada"
-
-#. module: amazon_connector
-#: selection:amazon.sale.order,state:0
-msgid "Invoice open"
-msgstr "Factura validada"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/invoice.py:24
-msgid "You cannot merge invoices with differents amazon orders: %s"
-msgstr "No puedes fusionar facturas con diferentes pedidos de Amazon: %s"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amazon_invoice_name
-#: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_amazon_invoice
-msgid "Amazon Invoice"
-msgstr "Factura de Amazon"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_amazon_order
-msgid "Amazon Order"
-msgstr "Pedido de Amazon"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:288
+#: code:addons/amazon_connector/models/amazon_sale_order.py:313
+#, python-format
 msgid "There is no currency with this name or it is no activated %s\n"
 msgstr "No hay ninguna moneda con este nombre o no está activa. %s \n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:135
-msgid "Amazon API Error. Report %s. '%s' \n"
-msgstr "Error API Amazon. Informe %s. '%s'"
+#: code:addons/amazon_connector/models/amazon_settlement.py:337
+#, python-format
+msgid "There is no invoice for this order\n"
+msgstr "No hay factura para este pedido\n"
 
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:219
+#: code:addons/amazon_connector/models/amazon_sale_order.py:275
+#, python-format
+msgid "This Order requires a non simplified Invoice"
+msgstr "Este pedido necesita una factura que no sea simplificada"
 
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_total
+msgid "Total"
+msgstr "Total"
 
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_total_amount
+msgid "Total Amount"
+msgstr "Importe total"
 
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_total_amount_company_currency
+msgid "Total Amount Company Currency"
+msgstr "Importe total divisa compañia"
 
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:201
+#: code:addons/amazon_connector/models/amazon_sale_order.py:270
+#: code:addons/amazon_connector/models/amazon_settlement.py:330
+#, python-format
+msgid "Total amount != Theoretical total amount (%f-%f)\n"
+msgstr "Total != Total enviado por Amazon (%f-%f)\n"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_transaction_name
+msgid "Transaction Name"
+msgstr "Nombre de la transacción"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_transaction_type
+msgid "Transaction Type"
+msgstr "Tipo de la transacción"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_type
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_untaxed
+msgid "Untaxed Amount"
+msgstr "Base imponible"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_vat_imputation_country
+msgid "Vat Imputation Country"
+msgstr "País de imputación de IVA"
+
+#. module: amazon_connector
+#: selection:amazon.sale.order,state:0
+msgid "Warning"
+msgstr "Advertencia"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_warning_price
+msgid "Warning Price"
+msgstr "Aviso error Precio"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_wizard_id
+msgid "Wizard"
+msgstr "Asistente"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/invoice.py:26
+#, python-format
+msgid "You cannot merge invoices with differents amazon orders: %s"
+msgstr "No puedes fusionar facturas con diferentes pedidos de Amazon: %s"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_amazon_marketplace
+msgid "amazon.marketplace"
+msgstr "amazon.marketplace"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_amazon_sale_order
+msgid "amazon.sale.order"
+msgstr "amazon.sale.order"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_amazon_sale_order_line
+msgid "amazon.sale.order.line"
+msgstr "amazon.sale.order.line"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_amazon_settlement
+msgid "amazon.settlement"
+msgstr "amazon.settlement"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_amazon_settlement_item
+msgid "amazon.settlement.item"
+msgstr "amazon.settlement.item"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_amazon_settlement_item_event
+msgid "amazon.settlement.item.event"
+msgstr "amazon.settlement.item.event"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_amazon_settlement_line
+msgid "amazon.settlement.line"
+msgstr "amazon.settlement.line"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_retry_amazon_orders_lines
+msgid "retry.amazon.orders.lines"
+msgstr "retry.amazon.orders.lines"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_retry_amazon_orders_wizard
+msgid "retry.amazon.orders.wizard"
+msgstr "retry.amazon.orders.wizard"

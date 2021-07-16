@@ -29,6 +29,22 @@ class ProcurementGroup(models.Model):
 
     @api.model
     def run_scheduler_internal_pickings(self):
+        max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
+        _logger.info("CHECKING AVAILABILITY")
+        pickings_to_check = self.env['stock.picking'].search([('picking_type_id', '=', self.env.ref('stock.picking_type_internal').id),
+                                                ('state', 'in', ['confirmed', 'partially_available'])])
+        len_pickings_to_check = len(pickings_to_check)
+        pickings_commit = self.env['stock.picking']
+        for count, pick_to_check in enumerate(pickings_to_check):
+            pick_to_check.action_assign()
+            pickings_commit += pick_to_check
+            pick_number = count + 1
+            if (pick_number >= max_commit_len and pick_number % max_commit_len == 0) or pick_number == len_pickings_to_check:
+                self.env.cr.commit()
+                _logger.info("COMMIT DONE: %s" % pickings_commit)
+                pickings_commit = self.env['stock.picking']
+
+
         _logger.info("SEARCHING FOR INTERNAL PICKINGS")
         operation_internal = self.env.ref('stock.picking_type_internal').id
         transit_it_location = self.env['stock.location'].search([('name', '=', 'Tránsito Italia')]).id
@@ -42,14 +58,18 @@ class ProcurementGroup(models.Model):
             search([("picking_type_id", "=",
                      operation_internal),
                     ("state", "=", "confirmed"), ('move_type', '!=', 'direct')])
-        max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
         len_pick_assign = len(pick_ids_assign)
 
         _logger.info("TRANSFERRING READY INTERNAL PICKINGS")
+        pickings_commit = self.env['stock.picking']
         for count, pick_assign in enumerate(pick_ids_assign):
             pick_assign.action_done()
-            if (count + 1 >= max_commit_len and count + 1 % max_commit_len == 0) or count == len_pick_assign - 1:
+            pickings_commit += pick_assign
+            pick_number = count + 1
+            if (pick_number >= max_commit_len and pick_number % max_commit_len == 0) or pick_number == len_pick_assign:
                 self.env.cr.commit()
+                _logger.info("COMMIT DONE: %s" %pickings_commit)
+                pickings_commit = self.env['stock.picking']
 
         _logger.info("PROCESSING CONFIRMED AND PARTIALLY AVAILABLE PICKINGS")
         if pick_ids_confirmed:
@@ -60,10 +80,14 @@ class ProcurementGroup(models.Model):
                     ("state", "=", "partially_available")])
 
         pick_ids_par.write({'move_type': 'direct'})
+        pickings_commit = self.env['stock.picking']
         for count, pick_partially in enumerate(pick_ids_par):
             pick_partially.action_copy_reserv_qty()
             pick_partially.action_accept_confirmed_qty()
-            if (count + 1 >= max_commit_len and count + 1 % max_commit_len == 0) or count == len(pick_ids_par) - 1:
+            pickings_commit += pick_partially
+            pick_number = count + 1
+            if (pick_number >= max_commit_len and pick_number % max_commit_len == 0) or pick_number == len(pick_ids_par):
                 self.env.cr.commit()
-
+                _logger.info("COMMIT DONE: %s" % pickings_commit)
+                pickings_commit = self.env['stock.picking']
         _logger.info("DONE")

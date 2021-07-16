@@ -20,4 +20,7 @@
 
 from . import claim_make_picking
 from . import claim_make_picking_from_picking
+<<<<<<< HEAD
 from . import invoice_discount_wiz
+=======
+>>>>>>> upstream/11.0
