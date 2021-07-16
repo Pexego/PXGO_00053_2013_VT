@@ -12,6 +12,9 @@
                     <field name="partner_id" invisible="1"/>
                     <field name="invoice_id" domain="[('partner_id', 'child_of', [partner_id]),('state', '!=', 'draft')]"/>
                     <field name="substate_id"/>
+                    <field name="web"/>
+                    <field name="printable"/>
+
                 </group>
 
                 <footer>

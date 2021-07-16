@@ -1,4 +1,4 @@
-from odoo import api, fields, models, _, exceptions
+from odoo import api, fields, models, _, exceptions, tools
 import base64
 from datetime import datetime
 import xlsxwriter
@@ -14,7 +14,12 @@ class ProductProduct(models.Model):
                    "Media de margen de últimas ventas", "Cost Price", "Último precio de compra",
                    "Última fecha de compra", "Reemplazado por", "Estado"]
 
-        domain = [('custom', '=', False), ('type', '!=', 'service'), ('seller_id.name', 'not ilike', 'outlet')]
+        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+        domain = [('custom', '=', False), ('type', '!=', 'service')]
+        if country_code == "IT":
+            domain += [("categ_id.name", "not in", ["O1", "O2" , "Descatalogados"])]
+        else:
+            domain += [('seller_id.name', 'not ilike', 'outlet')]
 
         fields = ["id", "last_supplier_id", "code", "qty_in_production", "incoming_qty", "qty_available_wo_wh",
                   "qty_available", "virtual_stock_conservative", "last_sixty_days_sales", "biggest_sale_qty",
@@ -219,7 +224,8 @@ class ProductProduct(models.Model):
     def generate_xls(headers, rows):
         # Generate the xls
         file_name = 'temp'
-        workbook = xlsxwriter.Workbook(file_name, {'in_memory': True})
+        tmpdir = tools.config["data_dir"] + '/filestore'
+        workbook = xlsxwriter.Workbook(file_name, {'tmpdir': tmpdir})
         worksheet = workbook.add_worksheet()
         row = 0
         col = 0

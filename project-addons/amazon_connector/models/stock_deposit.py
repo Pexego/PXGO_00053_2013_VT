@@ -27,3 +27,9 @@ class StockDeposit(models.Model):
                              'discount': 0})
                     invoice._onchange_invoice_line_ids()
         return invoice_ids
+
+    @api.multi
+    def revert_sale(self):
+        res = super(StockDeposit, self).revert_sale()
+        self.write({'amazon_order_id':False})
+        return res

@@ -95,3 +95,28 @@ msgstr "Perdido durante el transporte"
 #: selection:crm_claim_update_lines.wizard,claim_origine:0
 msgid "Other"
 msgstr "Otro"
+
+#. module: crm_claim_update_line
+#: selection:crm_claim_update_lines.wizard,web:0
+msgid "Select none"
+msgstr "Desmarcar todos"
+
+#. module: crm_claim_update_line
+#: selection:crm_claim_update_lines.wizard,web:0
+msgid "Select all"
+msgstr "Marcar todos"
+
+#. module: crm_claim_update_line
+#: selection:crm_claim_update_lines.wizard,printable:0
+msgid "Select all"
+msgstr "Marcar todos"
+
+#. module: crm_claim_update_line
+#: selection:crm_claim_update_lines.wizard,printable:0
+msgid "Select none"
+msgstr "Desmarcar todos"
+
+#. module: crm_claim_update_line
+#: model:ir.model.fields,field_description:crm_claim_update_line.field_crm_claim_update_lines_wizard_printable
+msgid "printable"
+msgstr "Imprimible"

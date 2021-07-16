@@ -13,10 +13,8 @@ class SaleOrderLine(models.Model):
                 tags = line.product_id.tag_ids._get_tag_recursivity()
                 for tag in tags:
                     stream.append(tag)
-            if stream:
-                line.product_tags = stream
-            else:
-                line.product_tags = ''
+            line.product_tags = stream
+
 
     product_tags = fields.Char(compute="_compute_product_tags", string='Tags')
     web_discount = fields.Boolean()
@@ -72,9 +70,6 @@ class SaleOrder(models.Model):
             self.clear_existing_promotion_lines()
             self.env['promos.rules'].apply_special_promotions(self)
             res = False
-
-        if order.state == 'reserve':
-            order.order_reserve()
 
         taxes = order.order_line.filtered(
             lambda l: len(l.tax_id) > 0)[0].tax_id
