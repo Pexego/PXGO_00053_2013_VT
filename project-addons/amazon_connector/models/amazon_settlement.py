@@ -361,7 +361,7 @@ class AmazonSettlement(models.Model):
         for line in line_order_ids:
             if not line.amazon_order_id:
                 line.amazon_order_id = self.env['amazon.sale.order'].search(
-                    [('name', 'ilike', line.amazon_order_name)])
+                    [('name', '=', line.amazon_order_name)])
             amazon_invoice = line.amazon_order_id.invoice_deposits.filtered(
                 lambda i: i.state not in states and i.type != 'out_refund')
             theoretical_amount = 0
@@ -625,7 +625,7 @@ class AmazonSettlementLine(models.Model):
         for count,line in enumerate(self):
             if not line.amazon_order_id:
                 am_o = self.env['amazon.sale.order'].search(
-                    [('name', 'ilike', line.amazon_order_name)])
+                    [('name', '=', line.amazon_order_name)])
                 if am_o:
                     line.amazon_order_id = am_o
             if line.amazon_order_id:
