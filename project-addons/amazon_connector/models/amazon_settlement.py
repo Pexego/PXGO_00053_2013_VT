@@ -8,7 +8,9 @@ import time
 import xml.etree.ElementTree as ET
 import re
 from dateutil.parser import parse
+import logging
 
+_logger = logging.getLogger(__name__)
 
 class AmazonSettlement(models.Model):
     _name = 'amazon.settlement'
@@ -194,6 +196,8 @@ class AmazonSettlement(models.Model):
                         line_vals.update({'tax_amount': float(advertising_transaction[4].text),
                                           'amount': float(advertising_transaction[5].text)})
                     self.env['amazon.settlement.line'].create(line_vals)
+                self.env.cr.commit()
+                _logger.info("Reading Settlement %s Done" %name)
                 settlement.reconcile()
                 lines_error = settlement.line_ids.filtered(
                     lambda l: l.state == 'read' and l.type in ['Order', 'Refund'])
@@ -350,9 +354,14 @@ class AmazonSettlement(models.Model):
         total_amount = 0
         states = ['cancel']
         lines_with_products = {}
+        moves = {}
+        lines_with_moves = self.env['amazon.settlement.line']
         if not refund_mode:
             states += ['paid']
         for line in line_order_ids:
+            if not line.amazon_order_id:
+                line.amazon_order_id = self.env['amazon.sale.order'].search(
+                    [('name', '=', line.amazon_order_name)])
             amazon_invoice = line.amazon_order_id.invoice_deposits.filtered(
                 lambda i: i.state not in states and i.type != 'out_refund')
             theoretical_amount = 0
@@ -385,23 +394,38 @@ class AmazonSettlement(models.Model):
                 positive_events = abs(line.amount_items_positive_events) / rate
                 if abs(theoretical_amount) - positive_events <= amazon_max_difference_allowed:
                     lines_to_reconcile |= line
+                    if line.move_id:
+                        lines_with_moves |= line
+                        if moves.get(line.move_id,False):
+                            moves[line.move_id] |= line
+                        else:
+                            moves[line.move_id] = line
                 else:
                     if theoretical_amount > 0:
                         line.error = _('Total amount != Theoretical total amount (%f-%f)\n') % (
                             abs(theoretical_amount), positive_events)
                     lines_not_reconciled += line
                     theoretical_amount = 0
-                if theoretical_amount:
+                if theoretical_amount and not line.move_id:
                     total_amount += theoretical_amount
             else:
                 line.error = _('There is no invoice for this order\n')
                 lines_not_reconciled += line
+        if moves:
+            for m,lines_to_r in moves.items():
+                if refund_mode:
+                    lines_to_r.reconcile_refund_lines(m, lines_with_products)
+                else:
+                    lines_to_r.reconcile_order_lines(m)
         if total_amount > 0:
-            move = self._create_move(total_amount,refund_mode)
-            if refund_mode:
-                lines_to_reconcile.reconcile_refund_lines(move, lines_with_products)
-            else:
-                lines_to_reconcile.reconcile_order_lines(move)
+            lines_to_reconcile_without_moves = lines_to_reconcile - lines_with_moves
+            if lines_to_reconcile_without_moves:
+                move = self._create_move(total_amount, refund_mode)
+                lines_to_reconcile_without_moves.write({'move_id':move.id})
+                if refund_mode:
+                    lines_to_reconcile_without_moves.reconcile_refund_lines(move, lines_with_products)
+                else:
+                    lines_to_reconcile_without_moves.reconcile_order_lines(move)
 
     def action_view_moves(self):
         action = self.env.ref('account.action_move_journal_line').read()[0]
@@ -468,6 +492,7 @@ class AmazonSettlementLine(models.Model):
     refund_invoice_id = fields.Many2one('account.invoice')
     error = fields.Char()
     destination_country_id = fields.Many2one('res.country')
+    move_id = fields.Many2one('account.move')
 
     @api.multi
     def _compute_items_value(self):
@@ -512,7 +537,10 @@ class AmazonSettlementLine(models.Model):
 
     @api.multi
     def reconcile_refund_lines(self, move_id, line_with_products={}):
-        for line in self:
+        max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
+        len_lines =len(self)
+        lines_commit = self.env['amazon.settlement.line']
+        for count, line in enumerate(self):
             if not line.amazon_order_id:
                 am_o = self.env['amazon.sale.order'].search(
                     [('name', 'ilike', line.amazon_order_name)])
@@ -582,13 +610,22 @@ class AmazonSettlementLine(models.Model):
                     move_lines_filtered.with_context(skip_full_reconcile_check='amount_currency_excluded').reconcile()
                     moves.force_full_reconcile()
                     line.state = "reconciled"
+            lines_commit += line
+            line_number = count + 1
+            if (line_number >= max_commit_len and line_number % max_commit_len == 0) or line_number == len_lines:
+                self.env.cr.commit()
+                _logger.info("COMMIT DONE: %s" % lines_commit)
+                lines_commit = self.env['amazon.settlement.line']
 
     @api.multi
     def reconcile_order_lines(self, move_id):
-        for line in self:
+        max_commit_len = int(self.env['ir.config_parameter'].sudo().get_param('max_commit_len'))
+        len_lines = len(self)
+        lines_commit = self.env['amazon.settlement.line']
+        for count,line in enumerate(self):
             if not line.amazon_order_id:
                 am_o = self.env['amazon.sale.order'].search(
-                    [('name', 'ilike', line.amazon_order_name)])
+                    [('name', '=', line.amazon_order_name)])
                 if am_o:
                     line.amazon_order_id = am_o
             if line.amazon_order_id:
@@ -607,6 +644,13 @@ class AmazonSettlementLine(models.Model):
                 move_lines_filtered.with_context(skip_full_reconcile_check='amount_currency_excluded').reconcile()
                 moves.force_full_reconcile()
                 line.state = "reconciled"
+            lines_commit += line
+            line_number = count + 1
+            if (line_number >= max_commit_len and line_number % max_commit_len == 0) or line_number == len_lines:
+                self.env.cr.commit()
+                _logger.info("COMMIT DONE: %s" % lines_commit)
+                lines_commit = self.env['amazon.settlement.line']
+
 
     @api.multi
     def check_other_settlement(self, settlement_id):
