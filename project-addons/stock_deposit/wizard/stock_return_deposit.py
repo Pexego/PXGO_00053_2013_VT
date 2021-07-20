@@ -59,7 +59,7 @@ class StockReturnDeposit(models.TransientModel):
         deposits = self.env['stock.deposit'].browse(deposit_ids)
 
         move_obj = self.env['stock.move']
-        picking_type_id = self.env.ref('stock.picking_type_out')
+        picking_type_id = self.env.ref('stock.picking_type_in')
         deposit_location = self.env.ref('stock_deposit.stock_location_deposit')
         picking = self.env['stock.picking'].create({
             'picking_type_id': picking_type_id.id,
