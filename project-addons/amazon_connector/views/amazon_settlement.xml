@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_show_settlements" model="ir.actions.act_window">
+        <field name="name">Amazon Settlements</field>
+        <field name="res_model">amazon.settlement</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="settlement_amazon_menu" name="Settlements" sequence="2"
+              parent="amazon_menu"/>
+
+    <menuitem id="settlement_amazon_report_menu" name="Settlements" sequence="1" action="action_show_settlements"
+              parent="settlement_amazon_menu"/>
+
+    <record id="amazon_settlement_form" model="ir.ui.view">
+        <field name="name">amazon.settlement.form</field>
+        <field name="model">amazon.settlement</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar" readonly="1"/>
+                    <button name="reconcile" string="Reconcile All" type="object"
+                            attrs="{'invisible': [('state','==','reconciled')]}"
+                            class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_view_moves"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o">
+                            <field name="moves_count" widget="statinfo" string="Moves"/>
+                        </button>
+                        <button type="object" name="action_view_refund_moves"
+                                class="oe_stat_button"
+                                icon="fa-shopping-cart">
+                            <field name="refund_moves_count" widget="statinfo" string="Refund moves"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label string="Amazon Settlement"/>
+                        <h1>
+                            <field name="name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="start_date" readonly="1"/>
+                            <field name="end_date" readonly="1"/>
+                            <field name="deposit_date" readonly="1"/>
+                            <field name="marketplace_id" readonly="1"/>
+                            <field name="total_amount" readonly="1"/>
+                            <field name="total_amount_company_currency" readonly="1"/>
+                            <field name="company_currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Lines">
+                            <field name="line_ids">
+                                <tree string="Order Lines" editable="top"
+                                      decoration-danger="state=='read' and type in ['Order','Refund']">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="type" readonly="1"/>
+                                    <field name="amazon_order_id"/>
+                                    <field name="amazon_order_name" readonly="1"/>
+                                    <field name="destination_country_id" readonly="1"/>
+                                    <field name="shipment_id" readonly="1"/>
+                                    <field name="adjustment_id" readonly="1"/>
+                                    <field name="marketplace_id" readonly="1"/>
+                                    <field name="fulfillment" readonly="1"/>
+                                    <field name="posted_date" readonly="1"/>
+                                    <field name="transaction_name" readonly="1"/>
+                                    <field name="transaction_type" readonly="1"/>
+                                    <field name="amount" sum="Amount Items total" readonly="1"/>
+                                    <field name="amount_items" sum="Amount Items total" readonly="1"/>
+                                    <field name="invoice_name" readonly="1"/>
+                                    <field name="move_id" readonly="1"/>
+                                    <field name="items_ids" readonly="1"/>
+                                    <field name="state" readonly="1"/>
+                                    <field name="error" readonly="1"/>
+                                </tree>
+
+                            </field>
+                        </page>
+
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="amazon_settlement_tree" model="ir.ui.view">
+        <field name="name">amazon.settlement.tree</field>
+        <field name="model">amazon.settlement</field>
+        <field name="arch" type="xml">
+            <tree string="Settlement">
+                <field name="name"/>
+                <field name="marketplace_id"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="deposit_date"/>
+                <field name="total_amount"/>
+                <field name="currency_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="amazon_settlement_item_tree" model="ir.ui.view">
+        <field name="name">amazon.settlement.item.tree</field>
+        <field name="model">amazon.settlement.item</field>
+        <field name="arch" type="xml">
+            <tree string="Settlement Item">
+                <field name="currency_id" invisible="1"/>
+                <field name="amazon_order_item_code"/>
+                <field name="sku"/>
+                <field name="qty"/>
+                <field name="amount"/>
+                <field name="item_event_ids"/>
+            </tree>
+
+        </field>
+    </record>
+    <record id="amazon_settlement_item_form" model="ir.ui.view">
+        <field name="name">amazon.settlement.item.form</field>
+        <field name="model">amazon.settlement.item</field>
+        <field name="arch" type="xml">
+            <form string="Settlement Item">
+                <field name="amazon_order_item_code"/>
+                <field name="sku"/>
+                <field name="qty"/>
+                <field name="amount"/>
+                <field name="item_event_ids"/>
+            </form>
+
+        </field>
+    </record>
+    <record id="amazon_settlement_item_event_tree" model="ir.ui.view">
+        <field name="name">amazon.settlement.item.event.tree</field>
+        <field name="model">amazon.settlement.item.event</field>
+        <field name="arch" type="xml">
+            <tree string="Event Item">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="amount" sum="Amount total"/>
+                <field name="merchant_promotion"/>
+                <field name="currency_id" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="amazon_settlement_item_event_form" model="ir.ui.view">
+        <field name="name">amazon.settlement.item.event.form</field>
+        <field name="model">amazon.settlement.item.event</field>
+        <field name="arch" type="xml">
+            <form string="Event Item">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="amount"/>
+                <field name="merchant_promotion"/>
+                <field name="currency_id" invisible="1"/>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -6,12 +6,14 @@ class AccountInvoice(models.Model):
 
     amazon_order = fields.Many2one(comodel_name='amazon.sale.order')
     amazon_invoice = fields.Char()
+
     @api.multi
     def action_invoice_open(self):
         res = super(AccountInvoice, self).action_invoice_open()
         for invoice in self:
             if invoice.amazon_order:
-                invoice.amazon_order.state= "invoice_open"
+                amazon_order = invoice.amazon_order
+                amazon_order.state = "invoice_open"
         return res
 
     @api.multi
@@ -25,5 +27,12 @@ class AccountInvoice(models.Model):
             invoice = self.env['account.invoice'].browse(list(res))
             invoice.write({'name':amazon_order.name,'amazon_order':amazon_order.id,'amazon_invoice':amazon_order.amazon_invoice_name})
         return res
+
+
+class AccountMove(models.Model):
+    _inherit = 'account.move'
+
+    amazon_settlement_id = fields.Many2one("amazon.settlement")
+    amazon_refund_settlement_id = fields.Many2one("amazon.settlement")
 
 

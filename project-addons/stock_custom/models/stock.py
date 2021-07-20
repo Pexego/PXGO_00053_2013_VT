@@ -63,14 +63,19 @@ class StockPicking(models.Model):
             # We do this huge condition to ensure that both fields are not empty when the mail is sent
             if ((vals.get('carrier_tracking_ref', False) and picking.carrier_name and not picking.carrier_tracking_ref) or
                     (vals.get('carrier_name', False) and picking.carrier_tracking_ref and not picking.carrier_name) or
-                    (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and\
-                    picking.picking_type_code == 'outgoing' and picking.sale_id:
+                    (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and \
+                    picking.picking_type_code == 'outgoing' and \
+                    (picking.sale_id or (picking.claim_id and picking.location_dest_id == self.env.ref(
+                        'stock.stock_location_customers'))):
                 pickings_to_send.append(picking)
         result = super().write(vals)
         if pickings_to_send:
             for picking in pickings_to_send:
                 # We need to do this after the write, otherwise the email template won't get well some  picking values
-                picking_template = self.env.ref('stock_custom.picking_done_template')
+                if picking.claim_id:
+                    picking_template = self.env.ref('stock_custom.picking_done_template_claim')
+                else:
+                    picking_template = self.env.ref('stock_custom.picking_done_template')
                 picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
         return result
 
@@ -234,12 +239,13 @@ class StockReturnPicking(models.TransientModel):
         pick_type_obj = self.env["stock.picking.type"].browse(pick_type_id)
         if pick_type_obj.code == "incoming":
             pick_obj = self.env["stock.picking"].browse(new_picking)
-            if pick_obj.move_lines:
+            location_stock = self.env.ref('stock.stock_location_stock')
+            if pick_obj.move_lines and pick_obj.location_dest_id.id == location_stock.id:
                 pick_obj.location_dest_id = pick_obj.move_lines[0].warehouse_id.wh_input_stock_loc_id.id
-                for move in pick_obj.move_lines:
-                    if move.warehouse_id.lot_stock_id == move.location_dest_id:
-                        move.location_dest_id = \
-                            move.warehouse_id.wh_input_stock_loc_id.id
+            for move in pick_obj.move_lines:
+                if move.warehouse_id.lot_stock_id == move.location_dest_id:
+                    move.location_dest_id = \
+                        move.warehouse_id.wh_input_stock_loc_id.id
         return new_picking, pick_type_id
 
 
