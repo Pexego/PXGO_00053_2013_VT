@@ -239,11 +239,6 @@ msgid "My Case(s)"
 msgstr "Mis casos"
 
 #. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
-msgid "New Refund"
-msgstr "Nuevo abono"
-
-#. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_make_picking_wizard_not_sync
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_make_picking_from_picking_wizard_not_sync
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_stock_location_not_sync
@@ -536,8 +531,8 @@ msgstr "Visiotech - RMA recibido"
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
-msgid "Check Discounts/New Refund"
-msgstr "Comprobar descuentos/Nuevo abono"
+msgid "New Refund"
+msgstr "Nuevo abono"
 
 #. module: crm_claim_rma_custom
 #: model:ir.actions.act_window,name:crm_claim_rma_custom.create_invoice_payment_discount_wizard

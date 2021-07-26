@@ -104,7 +104,7 @@
                             attrs="{'invisible': [('invoice_ids', '!=', [])]}"/>
                             <button name="check_discounts"
                               attrs="{'invisible': [('claim_inv_line_ids', '=', [])]}"
-                              type="object" string="Check Discounts/New Refund" class="btn-primary"/>
+                              type="object" string="New Refund" class="btn-primary"/>
 
                       </group>
                     </group>
