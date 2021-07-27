@@ -591,15 +591,28 @@ msgstr "Facturado"
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
-msgid "Create refund"
-msgstr "Crear abono"
-
-#. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
 msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: crm_claim_rma_custom
-#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_invoice_discount_wiz_message
-msgid "Message"
-msgstr "Las siguientes facturas tienen descuentos. ¿Quieres continuar?: "
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_discount_wizard
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
+msgid "Create refund"
+msgstr "Crear abono"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_discount_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/wizard/invoice_discount_wiz.py:20
+#, python-format
+msgid "Crm Claim Invoice Discount"
+msgstr "Facturas con descuentos en CRM"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:331
+#, python-format
+msgid "This orders have discounts. Do you want to proceed anyways?: %s"
+msgstr "Las siguientes facturas tienen descuentos. ¿Quieres continuar?: %s"

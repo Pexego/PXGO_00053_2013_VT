@@ -328,7 +328,7 @@ class CrmClaimRma(models.Model):
             return self.env['invoice.discount.wiz'].create({
                                 'origin_reference': '%s,%s' % ('crm.claim', self.id),
                                 'continue_method': 'make_refund_invoice',
-                                'message': "This order has discounts. Do you want to proceed anyways?: " + ', '.join(discount_product_list)
+                                'message': _("This orders have discounts. Do you want to proceed anyways?: %s") % ', '.join(discount_product_list)
                             }).action_show()
         else:
             self.make_refund_invoice()

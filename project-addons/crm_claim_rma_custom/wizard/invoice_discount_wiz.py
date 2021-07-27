@@ -9,7 +9,7 @@ class CrmClaimInvoiceDiscount(models.TransientModel):
             (m.model, m.name) for m in self.env['ir.model'].search([])],
         string='Object')
     continue_method = fields.Char()
-    message = fields.Char(string='Message', readonly=True)
+    message = fields.Char(readonly=True)
 
 
     @api.multi
