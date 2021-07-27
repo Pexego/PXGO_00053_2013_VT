@@ -516,5 +516,5 @@ msgstr "Beneficio de los últimos x meses"
 
 #. module: custom_partner
 #: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_products_no
-msgid "Invoice Pending Sales"
-msgstr "Pedidos Pendientes de Facturar"
+msgid "Invoice Pending"
+msgstr "Pendientes de Facturar"
