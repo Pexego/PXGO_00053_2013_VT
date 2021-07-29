@@ -25,6 +25,27 @@ class StockContainer(models.Model):
 
     _name = 'stock.container'
     _order = 'write_date desc'
+    type = fields.Selection([
+        ('air', 'Air'),
+        ('sea', 'Sea'),
+        ('road', 'Road'),
+    ])
+    dimensions = fields.Char(string="CBM/KG", help="Dimensions")
+    ready = fields.Datetime(string="Ready", help="Ready merchandise date")
+    etd = fields.Datetime(string="ETD", help="Date of departure of transport")
+    eta = fields.Datetime(string="ETA", help="Arrival date at port / destination")
+    notes_purchases = fields.Char(string="Purchases notes")
+    notes_warehouse = fields.Char(string="Warehouse notes")
+    conf = fields.Boolean(string="Confirmed", help="Warehouse delivery has been confirmed")
+    telex = fields.Boolean(string="Telex")
+    arrived = fields.Boolean(string="Arrived", help="All delivery notes are finalized")
+    cost = fields.Float(sting="Cost")
+    n_ref = fields.Char(string="Nº ref", store=False, compute="_get_picking_ids")
+    forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
+                                string="FWDR")
+    incoterm = fields.Many2one('stock.container.incoterm', string='Incoterm')
+    destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
+    status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status')
 
     @api.multi
     def _set_date_expected(self):
@@ -53,10 +74,15 @@ class StockContainer(models.Model):
     def _get_picking_ids(self):
         for container in self:
             res = []
+            n_ref = ""
             for line in container.move_ids:
                 if line.picking_id.id not in res:
                     res.append(line.picking_id.id)
                     container.picking_ids = res
+                    if line.picking_id:
+                        n_ref = n_ref + line.picking_id.name + ", "
+                if n_ref:
+                    container.n_ref = n_ref[:-2]
 
     @api.multi
     def _get_responsible(self):
@@ -69,10 +95,11 @@ class StockContainer(models.Model):
             container.user_id = responsible
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Datetime("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
+    date_expected = fields.Datetime("Date expected", compute='_get_date_expected', inverse='_set_date_expected',
+                                    store=True, readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False, domain=[('state', '!=', 'cancel')])
-    picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
+    picking_ids = fields.One2many('stock.picking', "container_ids", compute='_get_picking_ids', string='Pickings', readonly=True)
 
     user_id = fields.Many2one(string='Responsible', compute='_get_responsible')
     company_id = fields.Many2one("res.company", "Company", required=True,
@@ -235,3 +262,31 @@ class StockReservation(models.Model):
         for reservation in self:
             reservation.reassign_reservation_dates(reservation.product_id)
         return res
+
+
+class StockContainerIncoterm(models.Model):
+    _name = 'stock.container.incoterm'
+    _rec_name = 'incoterm_code'
+    _description = "specifies who is responsible for paying"
+    incoterm_code = fields.Char('Code', required=True)
+    active = fields.Boolean('Active', default=True)
+    incoterm_desc = fields.Text('Description', help="To give more information about the incoterm")
+
+
+class StockContainerDestinationPort(models.Model):
+    _name = 'stock.container.port'
+    _rec_name = 'port_code'
+    _description = "destination port for containers (shipping company/port)"
+    active = fields.Boolean('Active', default=True)
+    port_code = fields.Char('Code', required=True)
+    port_desc = fields.Text('Description', help="To give more information about the destination port")
+
+
+class StockContainerStatus(models.Model):
+    _name = 'stock.container.status'
+    _description = "delivery Status"
+    _rec_name = 'status_code'
+    active = fields.Boolean('Active', default=True)
+    status_name = fields.Char('Status name', required=True)
+    status_code = fields.Char('Code', required=True)
+    status_desc = fields.Text('Description', help="To give more information about the shipping status")

@@ -641,6 +641,7 @@ msgid "Apply at finish"
 msgstr "Aplicar al finalizar"
 
 #. module: stock_custom
+<<<<<<< Updated upstream
 #: model:mail.template,body_html:stock_custom.picking_done_template_claim
 msgid "\n"
 "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dear customer,</p>\n"
@@ -685,3 +686,8 @@ msgstr "VISIOTECH - Productos enviados"
 #: model:mail.template,report_name:stock_custom.picking_done_template_claim
 msgid "Picking_${(object.name or '').replace('/','_')}"
 msgstr "Albarán_${(object.name or '').replace('/','_')}"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_move_review_search
+msgid "Container"
+msgstr "Envío"

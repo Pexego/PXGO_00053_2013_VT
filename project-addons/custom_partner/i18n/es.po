@@ -513,3 +513,9 @@ msgstr "Si este campo está marcado, el límite de crédito de fidelidad será a
 #: help:res.partner,fidelity_credit_limit:0
 msgid "Profit of the last x months"
 msgstr "Beneficio de los últimos x meses"
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_forwarder
+#: model:ir.model.fields,field_description:custom_partner.field_res_users_forwarder
+msgid "Forwarder"
+msgstr "Transitario"
