@@ -71,13 +71,13 @@ class PurchaseOrder(models.Model):
                                  ('state', '=', 'draft')])
         for order in purchases:
             order.with_context(bypass_override=True).button_confirm()
-            '''action = order.attach_ubl_xml_file_button()
+            action = order.attach_ubl_xml_file_button()
             attachment = self.env['ir.attachment'].browse(action['res_id'])
             output_folder = self.env['base.io.folder'].\
                 search([('direction', '=', 'export')], limit=1)
             if not output_folder:
                 raise exceptions.UserError(_("Please create an export folder"))
-            output_folder.export_file(attachment.datas, attachment.name)'''
+            output_folder.export_file(attachment.datas, attachment.name)
             order.picking_ids._process_picking()
         self._check_picking_to_process()
 
