@@ -42,6 +42,7 @@ class AmazonSaleOrder(models.Model):
     country_id = fields.Many2one('res.country', string='Country', readonly=True)
     state_id = fields.Char()
     zip = fields.Char(string='Postal Code')
+    fiscal_position_id = fields.Many2one("account.fiscal.position","Fiscal Position")
 
     def _compute_count(self):
         for order in self:
@@ -154,7 +155,7 @@ class AmazonSaleOrder(models.Model):
         zip_index = headers.index('"Ship To Postal Code"')
         for order in orders:
             order = order.split(',')
-            if order[transaction_type_index]=="SHIPMENT" and order[country_index] == 'ES':
+            if order[transaction_type_index]=="SHIPMENT":
                 order_name = order[order_name_index]
                 exist_order = self.env['amazon.sale.order'].search([('name', '=', order_name)])
                 if exist_order:
@@ -171,15 +172,21 @@ class AmazonSaleOrder(models.Model):
                         raise UserError(_("Amazon API Error. Order %s. '%s' \n") % (order_name, e))
                 new_order = res_order.payload
                 if new_order:
+                    country_id = self.env['res.country'].search([('code','=',order[country_index])]).id
+                    if not country_id:
+                        import ipdb
+                        ipdb.set_trace()
+                    fiscal_position = self.env['account.fiscal.position'].search([('country_id', '=', country_id)])
                     amazon_order_values = {'name': order_name,
                                            'partner_vat':order[vat_number_index] or False,
                                            'vat_imputation_country':order[vat_imputation_country_index] or False,
                                            'purchase_date': order[order_date_index] or False,
                                            'amazon_invoice_name': order[amazon_invoice_index] or False,
                                            'city': order[city_index] or '',
-                                           'country_id' : self.env['res.country'].search([('code','=',order[country_index])]).id,
+                                           'country_id' : country_id,
                                            'state_id': order[state_index],
-                                           'zip': order[zip_index] or ''
+                                           'zip': order[zip_index] or '',
+                                           'fiscal_position_id': fiscal_position.id
                                            }
                     read = False
                     while not read:
@@ -194,7 +201,7 @@ class AmazonSaleOrder(models.Model):
                     amazon_order_values.update({
                                                'fulfillment': order_complete.get('FulfillmentChannel',False),
                                                'sales_channel':self.env['amazon.marketplace'].search([('amazon_name','=',order_complete.get('SalesChannel',False))]).id})
-                    amazon_order_values_lines = self._get_lines_values(new_order)
+                    amazon_order_values_lines = self._get_lines_values(new_order, fiscal_position)
                     amazon_order_values.update(amazon_order_values_lines)
                     amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
                     if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
@@ -264,7 +271,9 @@ class AmazonSaleOrder(models.Model):
             order = res_order.payload
             if order:
                 amazon_order.order_line.unlink()
-                amazon_order_values = amazon_order._get_lines_values(order)
+                import ipdb
+                ipdb.set_trace()
+                amazon_order_values = amazon_order._get_lines_values(order, amazon_order.fiscal_position_id)
                 amazon_order.write(amazon_order_values)
                 if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
                     amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
@@ -283,7 +292,7 @@ class AmazonSaleOrder(models.Model):
         company = self.env.user.company_id
         return company.marketplace_ids.mapped('code')
 
-    def _get_lines_values(self, order):
+    def _get_lines_values(self, order, fiscal_position_id):
         amazon_order_values = {'order_line': [],
                                'message_error': ""}
         default_currency = True
@@ -326,8 +335,9 @@ class AmazonSaleOrder(models.Model):
                 taxes_obj = self.env['account.tax'].search(
                     [('description', '=', 'S_IVA21B' if taxes > 0 else 'S_IVA0_IC'),
                      ('company_id', '=', self.env.user.company_id.id)])
+                taxes = fiscal_position_id.map_tax(taxes_obj)
                 line.update({'price_unit': price_unit,
-                             'tax_id': [(6, 0, taxes_obj.ids)]})
+                             'tax_id': [(6, 0, taxes.ids)]})
             amazon_order_values['order_line'].append((0, 0, line))
         amazon_order_values['theoretical_total_amount'] = order_total_price
         amazon_order_values['theoretical_total_taxes'] = order_total_taxes
