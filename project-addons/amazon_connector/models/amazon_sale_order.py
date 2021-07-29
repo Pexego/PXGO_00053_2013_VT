@@ -173,9 +173,6 @@ class AmazonSaleOrder(models.Model):
                 new_order = res_order.payload
                 if new_order:
                     country_id = self.env['res.country'].search([('code','=',order[country_index])]).id
-                    if not country_id:
-                        import ipdb
-                        ipdb.set_trace()
                     fiscal_position = self.env['account.fiscal.position'].search([('country_id', '=', country_id)])
                     amazon_order_values = {'name': order_name,
                                            'partner_vat':order[vat_number_index] or False,
@@ -271,8 +268,6 @@ class AmazonSaleOrder(models.Model):
             order = res_order.payload
             if order:
                 amazon_order.order_line.unlink()
-                import ipdb
-                ipdb.set_trace()
                 amazon_order_values = amazon_order._get_lines_values(order, amazon_order.fiscal_position_id)
                 amazon_order.write(amazon_order_values)
                 if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
@@ -331,11 +326,14 @@ class AmazonSaleOrder(models.Model):
                     price_subtotal -= discount
                     order_total_price -= discount
                     line.update({'discount':discount})
-                price_unit = price_subtotal / product_qty
                 taxes_obj = self.env['account.tax'].search(
                     [('description', '=', 'S_IVA21B' if taxes > 0 else 'S_IVA0_IC'),
                      ('company_id', '=', self.env.user.company_id.id)])
                 taxes = fiscal_position_id.map_tax(taxes_obj)
+                if taxes.price_include:
+                    price_unit = price_total / product_qty
+                else:
+                    price_unit = price_subtotal / product_qty
                 line.update({'price_unit': price_unit,
                              'tax_id': [(6, 0, taxes.ids)]})
             amazon_order_values['order_line'].append((0, 0, line))
