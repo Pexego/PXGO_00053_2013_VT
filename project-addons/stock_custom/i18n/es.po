@@ -641,7 +641,6 @@ msgid "Apply at finish"
 msgstr "Aplicar al finalizar"
 
 #. module: stock_custom
-<<<<<<< Updated upstream
 #: model:mail.template,body_html:stock_custom.picking_done_template_claim
 msgid "\n"
 "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dear customer,</p>\n"

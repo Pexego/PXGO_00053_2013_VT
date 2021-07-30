@@ -38,7 +38,7 @@ class StockContainer(models.Model):
     notes_warehouse = fields.Char(string="Warehouse notes")
     conf = fields.Boolean(string="Confirmed", help="Warehouse delivery has been confirmed")
     telex = fields.Boolean(string="Telex")
-    arrived = fields.Boolean(string="Arrived", help="All delivery notes are finalized")
+    arrived = fields.Boolean(string="Arrived", help="All delivery notes are finalized", compute="_set_arrived")
     cost = fields.Float(sting="Cost")
     n_ref = fields.Char(string="Nº ref", store=False, compute="_get_picking_ids")
     forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
@@ -46,6 +46,14 @@ class StockContainer(models.Model):
     incoterm = fields.Many2one('stock.container.incoterm', string='Incoterm')
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status')
+
+    @api.multi
+    def _set_arrived(self):
+        for container in self:
+            container.arrived = True
+            for line in container.picking_ids:
+                if line.state != 'done':
+                    container.arrived = False
 
     @api.multi
     def _set_date_expected(self):
