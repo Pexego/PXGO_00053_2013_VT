@@ -59,9 +59,12 @@ class PurchaseOrder(models.Model):
     def _check_picking_to_process(self):
         pickings_to_stock = self.env['stock.picking'].search([('picking_type_id', '=',
                                                                self.env.ref('stock.picking_type_in').id),
+                                                              ('location_id', '=',
+                                                               self.env.ref('automatize_edi_it.stock_location_vendor_deposit').id),
+                                                              ('location_dest_id', '=',
+                                                               self.env.ref('stock.stock_location_stock').id),
                                                               ('state', 'in',
-                                                               ("assigned", "confirmed", "partially_available")),
-                                                              ('claim_id', '=', False)])
+                                                               ("assigned", "confirmed", "partially_available"))])
         pickings_to_stock._process_picking()
 
     @api.model
