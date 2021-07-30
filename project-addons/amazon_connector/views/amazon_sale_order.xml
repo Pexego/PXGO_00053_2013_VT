@@ -121,7 +121,7 @@
                             <field name="fulfillment" readonly="1"/>
                             <field name="sales_channel" readonly="1"/>
                             <field name="purchase_date" readonly="1"/>
-                            <field name="fiscal_position_id" invisible="1"/>
+                            <field name="fiscal_position_id" attrs="{'readonly':[('state','!=','error')]}"/>
                         </group>
                     </group>
                     <notebook>
