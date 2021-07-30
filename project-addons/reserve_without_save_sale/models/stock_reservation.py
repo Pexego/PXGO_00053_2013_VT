@@ -121,7 +121,7 @@ class StockReservation(models.Model):
             current_order_id = reserve.sale_line_id.order_id
             if current_order_id:
                 if current_order_id.infinite_reservation:
-                    date_validity = date_validity + relativedelta(days=358)
+                    date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
 
             current_sale_line_id = reserve.sale_line_id.id
             res = super(StockReservation, reserve).reserve()
