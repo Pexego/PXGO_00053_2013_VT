@@ -17,6 +17,7 @@ import atexit
 import cron
 from apscheduler.schedulers.background import BackgroundScheduler
 import logging
+from waitress import serve
 
 log = logging.getLogger('apscheduler.executors.default')
 log.setLevel(logging.INFO)  # DEBUG
@@ -38,7 +39,9 @@ def run_middleware():
     scheduler.start()
 
     atexit.register(lambda: scheduler.shutdown(wait=False))
-    app.run(host="0.0.0.0")
+    #app.run(host="0.0.0.0")
+    serve(app, host='0.0.0.0', port=5000)
+
 
 
 if __name__ == "__main__":
