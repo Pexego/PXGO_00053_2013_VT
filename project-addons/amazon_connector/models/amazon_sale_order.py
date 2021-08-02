@@ -4,6 +4,7 @@ from sp_api.base import Marketplaces
 from datetime import datetime, timedelta
 from sp_api.base.exceptions import SellingApiException, SellingApiRequestThrottledException
 from odoo.exceptions import UserError
+import re
 import time
 
 
@@ -154,7 +155,7 @@ class AmazonSaleOrder(models.Model):
         country_index = headers.index('"Ship To Country"')
         zip_index = headers.index('"Ship To Postal Code"')
         for order in orders:
-            order = order.split(',')
+            order = re.split(r',\s*(?![^"]*\"\,)', order)
             if order[transaction_type_index]=="SHIPMENT":
                 order_name = order[order_name_index]
                 exist_order = self.env['amazon.sale.order'].search([('name', '=', order_name)])
