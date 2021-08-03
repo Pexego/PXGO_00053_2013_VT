@@ -269,6 +269,8 @@ class AmazonSaleOrder(models.Model):
             order = res_order.payload
             if order:
                 amazon_order.order_line.unlink()
+                if not amazon_order.fiscal_position_id:
+                    raise UserError(_("Please add a valid fiscal position before retry this order"))
                 amazon_order_values = amazon_order._get_lines_values(order, amazon_order.fiscal_position_id)
                 amazon_order.write(amazon_order_values)
                 if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
@@ -447,7 +449,9 @@ class AmazonSaleOrder(models.Model):
                             if len(invoices)>1:
                                 allinvoices = invoices.do_merge(keep_references=False)
                                 invoices = self.env['account.invoice'].browse(list(allinvoices))
-
+                            if invoices.invoice_line_ids:
+                                tax_in_price_unit = invoices.invoice_line_ids[0].invoice_line_tax_ids.price_include
+                                invoices.write({'tax_in_price_unit':tax_in_price_unit})
                             if not order.warning_price:
                                 invoices.action_invoice_open()
                                 order.state = 'invoice_open'
