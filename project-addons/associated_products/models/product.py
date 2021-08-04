@@ -83,8 +83,6 @@ class EquivalentProduct(models.Model):
 
     @api.multi
     def unlink(self):
-        import ipdb
-        ipdb.set_trace()
         products=self
         for product in products:
             product_equiv = self.env['product.equivalent'].search(
