@@ -69,3 +69,14 @@ class EquivalentProduct(models.Model):
     product_id = fields.Many2one('product.product', "Product", required=True)
     equivalent_id = fields.Many2one('product.product', "Equivalent product", required=True)
 
+
+    @api.model
+    def create(self, vals):
+        res = super(EquivalentProduct, self).create(vals)
+        product_id = vals.get('product_id')
+        equivalent_id = vals.get('equivalent_id')
+        product_equiv = self.env['product.equivalent'].search([('product_id','=',equivalent_id),('equivalent_id','=',product_id)])
+        if not product_equiv:
+            vals_rev = {'equivalent_id': product_id, 'product_id': equivalent_id}
+            self.env['product.equivalent'].create(vals_rev)
+        return res
