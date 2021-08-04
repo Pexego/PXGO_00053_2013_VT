@@ -80,3 +80,15 @@ class EquivalentProduct(models.Model):
             vals_rev = {'equivalent_id': product_id, 'product_id': equivalent_id}
             self.env['product.equivalent'].create(vals_rev)
         return res
+
+    @api.multi
+    def unlink(self):
+        import ipdb
+        ipdb.set_trace()
+        products=self
+        for product in products:
+            product_equiv = self.env['product.equivalent'].search(
+                [('product_id', '=', product.equivalent_id.id), ('equivalent_id', '=', product.product_id.id)])
+            if product_equiv:
+                products |= product_equiv
+        return super(EquivalentProduct, products).unlink()
