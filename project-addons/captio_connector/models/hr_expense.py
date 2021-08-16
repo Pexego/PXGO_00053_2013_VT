@@ -109,15 +109,15 @@ class HrExpense(models.Model):
                             aa_code = self.COUNTRY_ACCOUNTS.get(user.sale_team_id.name, 'AA025')
                             analytic_account_id = self.env['account.analytic.account'].search([('code', '=', aa_code)])
                             # if the expense is not from the past month or the current one, put the last day of the past month
-                            if int(expense["Date"][5:7]) != datetime.now().month \
-                                    or int(expense["Date"][5:7]) != (datetime.now() - timedelta(days=30)).month:
+                            if int(expense["Date"][5:7]) == datetime.now().month \
+                                    or int(expense["Date"][5:7]) == (datetime.now() - timedelta(days=30)).month:
+                                exp_date = expense["Date"]
+                            else:
                                 # This gets the last day of the past month
                                 exp_date_year = (datetime.now() - timedelta(days=30)).year
                                 exp_date_month = (datetime.now() - timedelta(days=30)).month
                                 exp_date_day = calendar.monthrange(exp_date_year, exp_date_month)[1]
-                                exp_date = "%i-%i-%i" % (exp_date_year, exp_date_month, exp_date_day)
-                            else:
-                                exp_date = expense["Date"]
+                                exp_date = "%i-%i-%i" % (exp_date_year, exp_date_month, exp_date_day)         
 
                             # Create the move
                             move = self.env['account.move'].create({
