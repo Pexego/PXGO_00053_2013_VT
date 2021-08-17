@@ -127,26 +127,30 @@
             <form string="Container">
                 <group col="6" colspan="2">
                     <field name="name"/>
-                    <field name="cost"/>
-                    <field name="date_expected"/>
-                    <field name="dimensions"/>
+                    <field name="status"/>
+                    <field name="ready"/>
+                    <field name="type"/>
                     <field name="telex"/>
                     <field name="etd"/>
-                    <field name="type"/>
-                    <field name="destination_port"/>
-                    <field name="eta"/>
-                    <field name="status"/>
-                    <field name="forwarder"/>
-                    <field name="ready"/>
-                    <field name="conf"/>
                     <field name="incoterm"/>
-                    <field name="arrived"/>
+                    <field name="dimensions"/>
+                    <field name="eta"/>
+                    <field name="destination_port"/>
                     <field name="n_ref"/>
+                    <label for="date_expected"/>
+                    <div>
+                        <field name="date_expected"/>
+                        <field name="conf" nolabel="1" style="padding-left: 15px;"/>
+                    </div>
+                    <field name="forwarder"/>
+                    <field name="ctns"/>
+                    <field name="arrived"/>
+                    <field name="cost"/>
+                    <field name="notes_purchases" colspan="4" style="padding-right: 20%;"/>
+                    <field name="notes_purchases" invisible="1"/>
+                    <field name="notes_warehouse" colspan="4" style="padding-right: 20%;"/>
                 </group>
-                <group colspan="4">
-                    <field name="notes_purchases"/>
-                    <field name="notes_warehouse"/>
-                </group>
+
                 <group colspan="4">
                     <separator string="Moves" colspan="4"/>
                     <notebook>
@@ -208,7 +212,7 @@
         <field name="name">stock.container.tree</field>
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
-            <tree string="Containers">
+            <tree string="Containers" class="custom_tree">
                 <field name="name"/>
                 <field name="type"/>
                 <field name="incoterm"/>
@@ -219,15 +223,10 @@
                 <field name="etd"/>
                 <field name="eta"/>
                 <field name="status"/>
-                <field name="incoterm"/>
                 <field name="date_expected"/>
                 <field name="conf"/>
                 <field name="arrived"/>
                 <field name="notes_purchases"/>
-                <field name="telex"/>
-                <field name="n_ref"/>
-                <field name="notes_warehouse"/>
-                <field name="cost"/>
             </tree>
         </field>
     </record>

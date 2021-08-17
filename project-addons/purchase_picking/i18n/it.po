@@ -372,7 +372,7 @@ msgstr "Note di magazzino"
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_notes_purchases
 msgid "Purchases notes"
-msgstr "Note sugli acquisti"
+msgstr "Note"
 
 
 #. module: purchase_picking
@@ -471,8 +471,8 @@ msgstr "Data di arrivo al porto/destinazione"
 
 #. module: purchase_picking
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_conf
-msgid "Warehouse delivery has been confirmed"
-msgstr "Consegna in magazzino confermata con spedizioniere"
+msgid "Confirmed"
+msgstr "Confermato"
 
 #. module: purchase_picking
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_arrived
@@ -483,3 +483,13 @@ msgstr "Tutte le bolle di consegna sono finalizzate"
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_status
 msgid "For more information click on the status"
 msgstr "Per maggiori informazioni clicca sullo stato"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_notes_purchases
+msgid "Purchases notes"
+msgstr "Note per gli acquisti"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_notes_warehouse
+msgid "Purchases notes"
+msgstr "Note di magazzino"

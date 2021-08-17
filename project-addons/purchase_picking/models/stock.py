@@ -31,14 +31,14 @@ class StockContainer(models.Model):
         ('road', 'Road'),
     ])
     dimensions = fields.Char(string="CBM/KG", help="Dimensions")
-    ready = fields.Datetime(string="Ready", help="Ready merchandise date")
-    etd = fields.Datetime(string="ETD", help="Date of departure of transport")
-    eta = fields.Datetime(string="ETA", help="Arrival date at port / destination")
-    notes_purchases = fields.Char(string="Purchases notes")
-    notes_warehouse = fields.Char(string="Warehouse notes")
-    conf = fields.Boolean(string="Confirmed", help="Warehouse delivery has been confirmed")
-    telex = fields.Boolean(string="Telex")
-    arrived = fields.Boolean(string="Arrived", help="All delivery notes are finalized", compute="_set_arrived")
+    ready = fields.Date(string="Ready", help="Ready merchandise date")
+    etd = fields.Date(string="ETD", help="Date of departure of transport")
+    eta = fields.Date(string="ETA", help="Arrival date at port / destination")
+    notes_purchases = fields.Char(string="Notes", help="Purchases notes")
+    notes_warehouse = fields.Char(string="Warehouse notes", help="Warehouse notes")
+    conf = fields.Boolean(string="Conf", help="Confirmed")
+    telex = fields.Boolean(string="Telex", help="Telex")
+    arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived")
     cost = fields.Float(sting="Cost")
     n_ref = fields.Char(string="Nº ref", store=False, compute="_get_picking_ids")
     forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
@@ -46,6 +46,8 @@ class StockContainer(models.Model):
     incoterm = fields.Many2one('stock.container.incoterm', string='Incoterm')
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status')
+    ctns = fields.Char(string="Ctns")
+
 
     @api.multi
     def _set_arrived(self):
@@ -103,7 +105,7 @@ class StockContainer(models.Model):
             container.user_id = responsible
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Datetime("Date expected", compute='_get_date_expected', inverse='_set_date_expected',
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected',
                                     store=True, readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False, domain=[('state', '!=', 'cancel')])

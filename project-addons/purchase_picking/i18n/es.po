@@ -419,12 +419,12 @@ msgstr "Productos"
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_notes_warehouse
 msgid "Warehouse notes"
-msgstr "Notas almacén"
+msgstr "Notas alm."
 
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_notes_purchases
-msgid "Purchases notes"
-msgstr "Notas compras"
+msgid "Notes"
+msgstr "Notas"
 
 
 #. module: purchase_picking
@@ -523,15 +523,20 @@ msgstr "Fecha de llegada a puerto/destino"
 
 #. module: purchase_picking
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_conf
-msgid "Warehouse delivery has been confirmed"
-msgstr "Entrega en almacén confirmada con el transitario"
-
-#. module: purchase_picking
-#: model:ir.model.fields,help:purchase_picking.field_stock_container_arrived
-msgid "All delivery notes are finalized"
-msgstr "Todos los albaranes de entrada estén finalizados."
+msgid "Confirmed"
+msgstr "Confirmado"
 
 #. module: purchase_picking
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_status
 msgid "For more information click on the status"
 msgstr "Para más información haga click en el status"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_notes_purchases
+msgid "Purchases notes"
+msgstr "Notas para compras"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_notes_warehouse
+msgid "Purchases notes"
+msgstr "Notas almacén"
