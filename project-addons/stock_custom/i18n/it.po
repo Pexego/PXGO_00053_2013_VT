@@ -601,3 +601,49 @@ msgstr "Se questo campo è selezionato, il pdf allegato all'e-mail di fattura sa
 #: model:ir.model.fields,field_description:stock_custom.field_stock_location_path_apply_at_finish
 msgid "Apply at finish"
 msgstr "Applicare al termine"
+
+#. module: stock_custom
+#: model:mail.template,body_html:stock_custom.picking_done_template_claim
+msgid "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dear customer,</p>\n"
+"% if object.carrier_name:\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">We hereby inform you that we have sent your claim ${object.claim_id.number}, the delivery note number is ${object.name}.</p>\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">The transport company responsible for the shipping of your order is\n"
+"${object.carrier_name}\n"
+"    % if object.carrier_tracking_ref:\n"
+"        and the tracking number of your order is\n"
+"${object.carrier_tracking_ref}. </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"        </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"        <b style=\"font-weight:bold;\">Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>\n"
+"    % endif\n"
+"    </p>\n"
+"% endif\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Best regards,</p>\n"
+"            "
+msgstr "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Estimado cliente,</p>\n"
+"% if object.carrier_name:\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le informiamo che il nostro magazzino ha preparato i prodotti corrispondenti alla bolla di consegna ${object.name} della richiesta ${object.claim_id.number}</p>\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">La ditta di trasporto che cura la spedizione è \n"
+"${object.carrier_name}\n"
+"    % if object.carrier_tracking_ref:\n"
+"        il numero di riferimento del tuo ordine è \n"
+"${object.carrier_tracking_ref}. </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"        </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"        <b style=\"font-weight:bold;\">Le informazioni di verifica del tuo ordine potrebbero non essere disponibili al momento in cui si riceve questa e-mail</b>\n"
+"    % endif\n"
+"    </p>\n"
+"% endif\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cordiali saluti,</p>\n"
+"            "
+
+#. module: stock_custom
+#: model:mail.template,subject:stock_custom.picking_done_template
+#: model:mail.template,subject:stock_custom.picking_done_template_claim
+msgid "VISIOTECH - Shipped products"
+msgstr "VISIOTECH - Prodotti inviati"
+
+#. module: stock_custom
+#: model:mail.template,report_name:stock_custom.picking_done_template_claim
+msgid "Picking_${(object.name or '').replace('/','_')}"
+msgstr "Bolla_${(object.name or '').replace('/','_')}"

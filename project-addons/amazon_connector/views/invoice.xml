@@ -10,6 +10,9 @@
                     <field name="amazon_order" attrs="{'invisible':[('amazon_order','=',False)]}"/>
                     <field name="amazon_invoice" attrs="{'invisible':[('amazon_order','=',False)]}"/>
                 </xpath>
+                <xpath expr="/form/sheet/notebook/page[@name='other_info']/group/group/field[@name='fiscal_position_id']" position="after">
+                     <field name="tax_in_price_unit" attrs="{'invisible':[('tax_in_price_unit','=',False)]}"/>
+                </xpath>
             </data>
         </field>
     </record>
