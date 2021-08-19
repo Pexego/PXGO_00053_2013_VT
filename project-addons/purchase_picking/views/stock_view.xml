@@ -131,24 +131,29 @@
                     <field name="ready"/>
                     <field name="type"/>
                     <field name="telex"/>
-                    <field name="etd"/>
+                    <label for="etd"/>
+                    <div>
+                        <field name="etd"/>
+                        <field name="departure" nolabel="1" style="padding-left: 15px;"/>
+                    </div>
                     <field name="incoterm"/>
-                    <field name="dimensions"/>
+                    <field name="n_ref"/>
                     <field name="eta"/>
                     <field name="destination_port"/>
-                    <field name="n_ref"/>
+                    <field name="ctns"/>
                     <label for="date_expected"/>
                     <div>
                         <field name="date_expected"/>
                         <field name="conf" nolabel="1" style="padding-left: 15px;"/>
                     </div>
                     <field name="forwarder"/>
-                    <field name="ctns"/>
+                    <field name="dimensions" invisible="1"/>
                     <field name="arrived"/>
-                    <field name="cost"/>
+                    <field name="dimensions"/>
                     <field name="notes_purchases" colspan="4" style="padding-right: 20%;"/>
-                    <field name="notes_purchases" invisible="1"/>
+                    <field name="cost"/>
                     <field name="notes_warehouse" colspan="4" style="padding-right: 20%;"/>
+
                 </group>
 
                 <group colspan="4">

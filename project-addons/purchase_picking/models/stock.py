@@ -47,7 +47,7 @@ class StockContainer(models.Model):
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status')
     ctns = fields.Char(string="Ctns")
-
+    departure = fields.Boolean(String="Departure", help="Transport departure")
 
     @api.multi
     def _set_arrived(self):

@@ -426,7 +426,6 @@ msgstr "Notas alm."
 msgid "Notes"
 msgstr "Notas"
 
-
 #. module: purchase_picking
 #: model:ir.ui.menu,name:purchase_picking.shipping_menu
 msgid "Shipping"
@@ -540,3 +539,8 @@ msgstr "Notas para compras"
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_notes_warehouse
 msgid "Purchases notes"
 msgstr "Notas almacén"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_departure
+msgid "Transport departure"
+msgstr "Salida transporte"
