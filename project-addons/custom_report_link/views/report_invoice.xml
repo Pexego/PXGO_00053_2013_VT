@@ -15,9 +15,19 @@
                                 <th width="22%" style="vertical-align:middle;"><strong>Reference</strong></th>
                                 <th width="40%" style="vertical-align:middle;"><strong>Description</strong></th>
                                 <th width="4%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
-                                <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
+                                <t t-if="o.tax_in_price_unit">
+                                    <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price (VAT included)</strong></th>
+                                </t>
+                                <t t-if="not o.tax_in_price_unit">
+                                    <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
+                                </t>
                                 <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
-                                <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
+                                <t t-if="o.tax_in_price_unit">
+                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount (VAT excluded)</strong></th>
+                                </t>
+                                <t t-if="not o.tax_in_price_unit">
+                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
+                                </t>
                                 <th width="10%" class="text-center" style="vertical-align:middle;"><strong>Delivery Note</strong></th>
                             </t>
                             <t t-if="print_hs_code">
@@ -25,9 +35,19 @@
                                 <th width="10%" style="vertical-align:middle;"><strong>H.S. Code</strong></th>
                                 <th width="36%" style="vertical-align:middle;"><strong>Description</strong></th>
                                 <th width="3%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
-                                <th width="10%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
+                                <t t-if="o.tax_in_price_unit">
+                                    <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price (VAT included)</strong></th>
+                                </t>
+                                <t t-if="not o.tax_in_price_unit">
+                                    <th width="10%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
+                                </t>
                                 <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
-                                <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
+                                <t t-if="o.tax_in_price_unit">
+                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount (VAT excluded)</strong></th>
+                                </t>
+                                <t t-if="not o.tax_in_price_unit">
+                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
+                                </t>
                                 <th width="9%" class="text-center" style="vertical-align:middle;"><strong>Delivery Note</strong></th>
                             </t>
                         </tr>
