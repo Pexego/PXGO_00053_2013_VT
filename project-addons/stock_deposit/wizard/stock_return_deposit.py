@@ -94,7 +94,7 @@ class StockReturnDeposit(models.TransientModel):
                 'partner_id': deposit.partner_id.id,
                 'name': 'Sale Deposit: ' + deposit.move_id.name,
                 'location_id': deposit.move_id.location_dest_id.id,
-                'location_dest_id': deposit.partner_id.property_stock_customer.id,
+                'location_dest_id': picking_type_id.default_location_dest_id.id,
                 'picking_id': picking.id,
                 'commercial': deposit.user_id.id,
                 'group_id': group_id
