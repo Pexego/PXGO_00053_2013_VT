@@ -182,12 +182,20 @@
     <record id="purchase_order_line_tree_add_production_qty" model="ir.ui.view">
         <field name="name">purchase.order.line.tree</field>
         <field name="model">purchase.order.line</field>
-        <field name="inherit_id" ref="purchase.purchase_order_line_tree"/>
         <field name="arch" type="xml">
-            <field name="product_qty" position="before">
-                <field name="state" invisible="1"/>
+            <tree>
+                <field name="order_id" context="{'form_view_ref':'separate_purchase_orders.purchase_order_form_custom'}"/>
+                <field name="name"/>
+                <field name="partner_id" string="Vendor"/>
+                <field name="product_id"/>
+                <field name="price_unit"/>
                 <field name="production_qty" attrs="{'invisible':[('state','!=','purchase_order')]}"/>
-            </field>
+                <field name="product_qty"/>
+                <field name="product_uom" groups="product.group_uom"/>
+                <field name="price_subtotal" widget="monetary"/>
+                <field name="date_planned" widget="date"/>
+                <field name="state" invisible="1"/>
+            </tree>
         </field>
     </record>
 

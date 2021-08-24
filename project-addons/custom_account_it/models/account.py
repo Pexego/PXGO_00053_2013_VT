@@ -1,4 +1,5 @@
 from odoo import models, fields, api, _, exceptions
+from datetime import datetime
 
 
 class AccountInvoice(models.Model):
@@ -16,6 +17,22 @@ class AccountInvoice(models.Model):
         if doc_id and doc_id not in dt:
             dt.insert(0, doc_id)
         return dt
+
+    @api.multi
+    def _check_duplicate_supplier_reference(self):
+        for invoice in self:
+            # refuse to validate a vendor bill/credit note if there already exists one with the same reference for the same partner,
+            # because it's probably a double encoding of the same bill/credit note
+            # NEW: In italy, it is allowed if the invoices are from different years
+            if invoice.type in ('in_invoice', 'in_refund') and invoice.reference:
+                invs = self.search([('type', '=', invoice.type),
+                                ('reference', '=', invoice.reference),
+                                ('company_id', '=', invoice.company_id.id),
+                                ('commercial_partner_id', '=', invoice.commercial_partner_id.id),
+                                ('id', '!=', invoice.id)])
+                for inv in invs:
+                    if datetime.strptime(inv.date,"%Y-%m-%d").year == datetime.today().year:
+                        raise exceptions.UserError(_("Duplicated vendor reference detected. You probably encoded twice the same vendor bill/credit note."))
 
 
 class AccountBankingMandate(models.Model):

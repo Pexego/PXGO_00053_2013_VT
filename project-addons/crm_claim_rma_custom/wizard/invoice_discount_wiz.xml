@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="invoice_discount_wizard" model="ir.ui.view">
+        <field name="name">Crm Claim Invoice Discount</field>
+        <field name="model">invoice.discount.wiz</field>
+        <field name="arch" type="xml">
+            <form string="CRM claim invoice discount">
+                <h><field name="message"/></h>
+                <footer>
+                    <button name="button_continue"
+                        attrs="{'invisible': [('message', '=', '')]}"
+                        type="object" string="Create refund" class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>
