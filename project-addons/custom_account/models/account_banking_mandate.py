@@ -18,3 +18,12 @@ class AccountBankingMandate(models.Model):
             else:
                 name = mandate.unique_mandate_reference
             mandate.display_name = name
+
+    @api.multi
+    def cancel(self):
+        res = super().cancel()
+        for mandate in self:
+            if all(mandate.state == 'cancel' for mandate in mandate.partner_bank_id.mapped('mandate_ids')):
+                mandate.partner_bank_id.active = False
+        return res
+
