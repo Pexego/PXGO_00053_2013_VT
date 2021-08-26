@@ -1054,3 +1054,19 @@ msgstr "retry.amazon.orders.wizard"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_move_id
 msgid "Move"
 msgstr "Asiento"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_fiscal_position_id
+msgid "Fiscal Position"
+msgstr "Posición fiscal"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_tax_in_price_unit
+msgid "Tax In Price Unit"
+msgstr "Impuestos incluidos en precio unitario"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:273
+#, python-format
+msgid "Please add a valid fiscal position before retry this order"
+msgstr "Por favor, añade una posición fiscal válida antes de reintentar la lectura del pedido"
