@@ -580,7 +580,7 @@ class AmazonSettlementLine(models.Model):
                     amazon_invoice = line.amazon_order_id.invoice_deposits.filtered(
                         lambda i: i.state != 'cancel' and i.type != 'out_refund')
                     if amazon_invoice:
-                        refund = self.make_refund_invoice(amazon_invoice)
+                        refund = line.make_refund_invoice(amazon_invoice)
                         line.refund_invoice_id = refund
                         for item in line.items_ids:
                             product = self.env['amazon.sale.order.line'].search(

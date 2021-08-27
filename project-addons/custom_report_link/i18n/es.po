@@ -510,6 +510,16 @@ msgid "<strong>Unit Price</strong>"
 msgstr "<strong>Precio Ud.</strong>"
 
 #. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+msgid "<strong>Unit Price (VAT included)</strong>"
+msgstr "<strong>Precio Ud. (IVA incluido)</strong>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
+msgid "<strong>Amount (VAT excluded)</strong>"
+msgstr "<strong>Importe (IVA no incluido)</strong>"
+
+#. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "<strong>Visiotech Model</strong>"
