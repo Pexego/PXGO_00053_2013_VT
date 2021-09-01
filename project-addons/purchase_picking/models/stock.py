@@ -46,6 +46,10 @@ class StockContainer(models.Model):
     incoterm = fields.Many2one('stock.container.incoterm', string='Incoterm')
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status')
+    forwarder_comercial = fields.Char(related="forwarder.comercial", store=False, string="FWDR")
+    incoterm = fields.Many2one('stock.container.incoterm', string='Incoterm', ondelete="restrict")
+    destination_port = fields.Many2one('stock.container.port', string='NAV/PTO', ondelete="restrict")
+    status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
     ctns = fields.Char(string="Ctns")
     departure = fields.Boolean(String="Departure", help="Transport departure")
 

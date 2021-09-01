@@ -146,7 +146,11 @@
                         <field name="date_expected"/>
                         <field name="conf" nolabel="1" style="padding-left: 15px;"/>
                     </div>
-                    <field name="forwarder"/>
+                    <label for="forwarder"/>
+                    <div>
+                        <field name="forwarder"/>
+                        <field name="forwarder_comercial" nolabel="1" style="padding-left: 15px;" readonly="1"/>
+                    </div>
                     <field name="dimensions" invisible="1"/>
                     <field name="arrived"/>
                     <field name="dimensions"/>
@@ -222,7 +226,7 @@
                 <field name="type"/>
                 <field name="incoterm"/>
                 <field name="destination_port"/>
-                <field name="forwarder"/>
+                <field name="forwarder_comercial"/>
                 <field name="dimensions"/>
                 <field name="ready"/>
                 <field name="etd"/>
