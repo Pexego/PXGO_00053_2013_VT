@@ -63,4 +63,6 @@ class CrmClaimUpdateLines(models.TransientModel):
                     vals['printable'] = True
                 elif self.printable in ['none']:
                     vals['printable'] = False
+            if self.invoice_id:
+                vals['invoice_id'] = self.invoice_id.id
             rma_line.write(vals)
