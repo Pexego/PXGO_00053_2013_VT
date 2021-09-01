@@ -175,7 +175,9 @@ class PromotionsRulesActions(models.Model):
             ('fix_price_per_product',
              _('Fixed price per each product')),
             ('tag_disc_perc_line',
-             _('New discount line per product with tag'))
+             _('New discount line per product with tag')),
+            ('change_pricelist_category',
+             _('Change pricelist price category'))
             ])
 
 
@@ -581,6 +583,41 @@ class PromotionsRulesActions(models.Model):
                 }
                 self.create_line(vals)
         return {}
+
+    def action_change_pricelist_category(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) == \
+                    order_line.product_id.categ_id.name:
+                self.change_pricelist_line(order_line)
+        return {}
+
+    def change_pricelist_line(self, order_line):
+        new_pricelist_argument = eval(self.arguments)
+        product = order_line.product_id
+        new_pricelist = self.env['product.pricelist'].search([('name', '=', new_pricelist_argument)])
+        price_unit = self.env['account.tax']._fix_tax_included_price_company(
+            self._get_display_price_from_pricelist(product, new_pricelist, order_line),
+            product.taxes_id, order_line.tax_id, order_line.company_id)
+        order_line.write({'price_unit': price_unit, 'discount': 0.0, 'old_discount': 0.0, 'accumulated_promo': False})
+
+    @api.multi
+    def _get_display_price_from_pricelist(self, product, pricelist, order_line):
+        # This is a copy of _get_display_price, but here we specify the pricelist
+        if pricelist.discount_policy == 'with_discount':
+            return product.with_context(pricelist=pricelist.id).price
+        product_context = dict(self.env.context, partner_id=order_line.order_id.partner_id.id, date=order_line.order_id.date_order,
+                               uom=order_line.product_uom.id)
+        final_price, rule_id = pricelist.with_context(product_context).get_product_price_rule(
+            product, order_line.product_uom_qty or 1.0, order_line.order_id.partner_id)
+        base_price, currency_id = order_line.with_context(product_context)._get_real_price_currency(product, rule_id,
+                                                                                              order_line.product_uom_qty,
+                                                                                              order_line.product_uom,
+                                                                                              pricelist.id)
+        if currency_id != pricelist.currency_id.id:
+            base_price = self.env['res.currency'].browse(currency_id).with_context(product_context).compute(base_price,
+                                                                                                            pricelist.currency_id)
+        # negative discounts (= surcharge) are included in the display price
+        return max(base_price, final_price)
 
 
 class PromotionsRules(models.Model):

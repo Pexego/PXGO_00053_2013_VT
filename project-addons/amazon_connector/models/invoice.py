@@ -6,6 +6,7 @@ class AccountInvoice(models.Model):
 
     amazon_order = fields.Many2one(comodel_name='amazon.sale.order')
     amazon_invoice = fields.Char()
+    tax_in_price_unit = fields.Boolean()
 
     @api.multi
     def action_invoice_open(self):
