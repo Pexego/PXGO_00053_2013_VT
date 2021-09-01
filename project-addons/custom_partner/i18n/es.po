@@ -519,3 +519,7 @@ msgstr "Beneficio de los últimos x meses"
 #: model:ir.model.fields,field_description:custom_partner.field_res_users_forwarder
 msgid "Forwarder"
 msgstr "Transitario"
+
+#: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_products_no
+msgid "Invoice Pending"
+msgstr "Pendientes de Facturar"

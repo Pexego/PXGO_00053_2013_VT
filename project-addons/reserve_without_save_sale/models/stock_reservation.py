@@ -38,6 +38,11 @@ class StockReservation(models.Model):
     def create(self, vals):
         context2 = dict(self._context)
         context2.pop('default_state', False)
+        order_id = vals.get('sale_id')
+        order_obj = self.env['sale.order'].browse(order_id)
+        now = datetime.now()
+        if order_obj.infinite_reservation:
+            vals['date_validity'] = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
         res = super(StockReservation, self.with_context(context2)).create(vals)
         res.move_id.user_id = res.user_id
         if vals.get('sequence') and res.move_id:
@@ -110,10 +115,14 @@ class StockReservation(models.Model):
         """
         days_release_reserve = self.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
         now = datetime.now()
-        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
-
         moves = self.env['stock.move']
         for reserve in self:
+            date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+            current_order_id = reserve.sale_line_id.order_id
+            if current_order_id:
+                if current_order_id.infinite_reservation:
+                    date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
+
             current_sale_line_id = reserve.sale_line_id.id
             res = super(StockReservation, reserve).reserve()
             reserve.refresh()
