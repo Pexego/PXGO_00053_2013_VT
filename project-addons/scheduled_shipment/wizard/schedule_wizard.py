@@ -8,7 +8,6 @@ class StockScheduleWizard(models.TransientModel):
     _name = "stock.schedule.wizard"
 
     scheduled_date = fields.Datetime('Scheduled shipping date')
-    picking_id = fields.Many2one('stock.picking')
 
     @api.multi
     def action_button_schedule(self):
@@ -21,17 +20,14 @@ class StockScheduleWizard(models.TransientModel):
                 raise ValidationError(_("Scheduled date must be bigger than current date"))
 
             picking = self.env['stock.picking'].browse(self.env.context['parent_obj'])
-            old_scheduled_picking = self.env['stock.schedule.wizard'].search([('picking_id','=',picking.id)])
+            cron_id = self.env['queue.job'].search([('model_name','=','stock.picking'),('state','=','pending'),('record_ids','like',picking.id), ('method_name','=','make_picking_sync')])
 
-            if old_scheduled_picking:
-                old_scheduled_picking = old_scheduled_picking[0]
+            if cron_id:
+                if len(cron_id) > 1:
+                    cron_id = cron_id[0]
 
-                if self.scheduled_date > old_scheduled_picking.scheduled_date:
-                    cron_id = self.env['queue.job'].search([('model_name','=','stock.picking'),('state','=','pending'),('record_ids','like',picking.id), ('method_name','=','make_picking_sync')])
+                if self.scheduled_date > cron_id.eta:
                     cron_id.unlink()
-                    
-
-            self.picking_id = picking.id
 
             picking.sale_id.scheduled_date = self.scheduled_date
             picking.not_sync = True
