@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sim_package_tree" model="ir.ui.view">
+        <field name="name">sim.package.tree</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <tree string="SIM packages">
+                <field name="code"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sim_package_form" model="ir.ui.view">
+        <field name="name">sim.package.form</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <form string="SIM packages">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" default_focus="1" placeholder="Code"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="create_date" readonly="1"/>
+                            <field name="partner_id"/>
+                        </group>
+                    </group>
+                    <field name="serial_ids" nolabel="1">
+                        <tree editable="top">
+                            <field name="code"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sim_package" model="ir.actions.act_window">
+        <field name="name">SIM packages</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.package</field>
+        <field name="view_type">form</field>
+        <field name="help">Manage the SIM packages</field>
+    </record>
+
+    <record id="action_sim_package_creator" model="ir.actions.act_window">
+        <field name="name">Scanning SIMs</field>
+        <field name="res_model">barcode.action</field>
+        <field name="context">{'default_model': 'sim.package',
+            'default_method': 'create_package_using_barcode',
+            'default_state': 'waiting',
+            'default_status': 'Scan SIM pack'}</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_sim_package" action="action_sim_package" parent="mrp.menu_mrp_bom" sequence="40"/>
+    <menuitem id="menu_sim_package_creator" action="action_sim_package_creator" name="Scan SIMs"
+            parent="mrp.menu_mrp_manufacturing" sequence="50"/>
+</odoo>
