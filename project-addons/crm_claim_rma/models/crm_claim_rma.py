@@ -296,6 +296,12 @@ class CrmClaim(models.Model):
 
     _rec_name = "number"
 
+    def name_get(self):
+        res = []
+        for claim in self:
+            res.append((claim.id, claim.number))
+        return res
+
     @api.onchange('claim_type')
     def onchange_claim_type(self):
         customer_type = self.env.ref('crm_claim_type.crm_claim_type_customer')
