@@ -61,19 +61,19 @@ class StockLossDeposit(models.TransientModel):
         picking_type_id = self.env.ref('stock.picking_type_out')
         deposit_location = self.env.ref('stock_deposit.stock_location_deposit')
         deposit_loss_loc = self.env.ref('stock_deposit.stock_location_deposit_loss')
-        picking = self.env['stock.picking'].create({
-            'picking_type_id': picking_type_id.id,
-            'location_id': deposit_location.id,
-            'location_dest_id': deposit_loss_loc.id})
 
         sorted_deposits = sorted(deposits, key=lambda deposit: deposit.sale_id)
         for deposit in sorted_deposits:
+            picking = self.env['stock.picking'].create({
+                'picking_type_id': picking_type_id.id,
+                'location_id': deposit.move_id.location_dest_id.id,
+                'location_dest_id': deposit_loss_loc.id})
             if not picking['partner_id']:
                 partner_id = deposit.partner_id.id
                 commercial = deposit.user_id.id
                 group_id = deposit.sale_id.procurement_group_id.id
                 picking.write({'partner_id': partner_id, 'commercial': commercial,
-                               'group_id': group_id, 'origin': deposit.sale_id.name})
+                               'group_id': group_id, 'origin': deposit.sale_id.name,})
 
             elif picking['group_id'] != deposit.sale_id.procurement_group_id:
                 picking = self.env['stock.picking'].create({

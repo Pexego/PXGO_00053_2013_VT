@@ -61,13 +61,13 @@ class StockReturnDeposit(models.TransientModel):
         move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_in')
         deposit_location = self.env.ref('stock_deposit.stock_location_deposit')
-        picking = self.env['stock.picking'].create({
-            'picking_type_id': picking_type_id.id,
-            'location_id': deposit_location.id,
-            'location_dest_id': picking_type_id.default_location_dest_id.id})
 
         sorted_deposits = sorted(deposits, key=lambda deposit: deposit.sale_id)
         for deposit in sorted_deposits:
+            picking = self.env['stock.picking'].create({
+                'picking_type_id': picking_type_id.id,
+                'location_id': deposit.move_id.location_dest_id.id,
+                'location_dest_id': picking_type_id.default_location_dest_id.id})
             if not picking['partner_id']:
                 partner_id = deposit.partner_id.id
                 commercial = deposit.user_id.id
