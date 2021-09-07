@@ -180,7 +180,7 @@ class PromotionsRulesActions(models.Model):
              _('Change pricelist price category'))
             ])
 
-
+    @api.onchange('action_type')
     def on_change(self):
         if self.action_type == 'prod_disc_perc_accumulated':
             self.product_code = 'product_code'
