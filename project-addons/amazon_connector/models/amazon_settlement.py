@@ -56,7 +56,7 @@ class AmazonSettlement(models.Model):
     @api.depends("line_ids", "line_ids.state")
     def _compute_state(self):
         for settlement in self:
-            line_states = [x.state == 'reconciled' or x.type in ['Order', 'Refund'] for x in settlement.line_ids]
+            line_states = [x.state == 'reconciled' or x.type not in ['Order', 'Refund'] for x in settlement.line_ids]
             if all(line_states):
                 settlement.state = 'done'
             elif any(line_states):
@@ -525,7 +525,7 @@ class AmazonSettlementLine(models.Model):
             'partner_id': invoice.partner_id.id,
             'fiscal_position_id':
                 invoice.fiscal_position_id.id,
-            'date_invoice': self.posted_date,
+            'date_invoice': datetime.now(),
             'journal_id': invoice.journal_id.id,
             'account_id':
                 invoice.partner_id.property_account_receivable_id.id,
@@ -588,22 +588,27 @@ class AmazonSettlementLine(models.Model):
                                  ('order_item', '=', item.amazon_order_item_code),
                                  ('order_id', '=', line.amazon_order_id.id),
                                  ]).mapped('product_id')
-                            invoice_line = amazon_invoice.invoice_line_ids.filtered(
-                                lambda il: il.product_id == product[0])
-                            if invoice_line:
-                                vals = {
-                                    'invoice_id': refund.id,
-                                    'name': invoice_line[0].name,
-                                    'product_id': product.id,
-                                    'account_id': invoice_line.account_id.id,
-                                    'quantity': 1,
-                                    'price_unit': invoice_line[0].price_unit,
-                                    'cost_unit': invoice_line[0].cost_unit,
-                                    'discount': invoice_line[0].discount,
-                                    'account_analytic_id': False,
-                                    'invoice_line_tax_ids': [(6, 0, invoice_line[0].invoice_line_tax_ids.ids)]
-                                }
-                                self.env['account.invoice.line'].create(vals)
+                            if product:
+                                invoice_line = amazon_invoice.invoice_line_ids.filtered(
+                                    lambda il: il.product_id == product[0])
+                                if invoice_line:
+                                    i_price_unit = invoice_line.price_total / invoice_line.quantity
+                                    i_uds = int(abs(sum(
+                                        item.mapped('item_event_ids').filtered(lambda i: i.type != 'fee').mapped(
+                                            'amount'))) / i_price_unit)
+                                    vals = {
+                                        'invoice_id': refund.id,
+                                        'name': invoice_line[0].name,
+                                        'product_id': product.id,
+                                        'account_id': invoice_line.account_id.id,
+                                        'quantity': i_uds or 1,
+                                        'price_unit': invoice_line[0].price_unit,
+                                        'cost_unit': invoice_line[0].cost_unit,
+                                        'discount': invoice_line[0].discount,
+                                        'account_analytic_id': False,
+                                        'invoice_line_tax_ids': [(6, 0, invoice_line[0].invoice_line_tax_ids.ids)]
+                                    }
+                                    self.env['account.invoice.line'].create(vals)
                         refund.compute_taxes()
                         refund.action_invoice_open()
 
@@ -674,7 +679,7 @@ class AmazonSettlementLine(models.Model):
                     lambda i: i.state not in ['cancel', 'done'] and i.type != 'out_refund')
                 theoretical_amount = sum(amazon_invoice.mapped('amount_total'))
                 rate = line.settlement_id.currency_id.with_context(
-                    date=line.posted_date)._get_conversion_rate(
+                    date=line.amazon_order_id.purchase_date)._get_conversion_rate(
                     line.settlement_id.company_currency_id,
                     line.settlement_id.currency_id)
                 positive_events = (abs(line.amount_items_positive_events) + abs(

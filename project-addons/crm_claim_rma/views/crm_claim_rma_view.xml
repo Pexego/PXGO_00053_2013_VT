@@ -80,8 +80,9 @@
         <field name="name">CRM - Claims Tree</field>
         <field name="model">claim.line</field>
         <field name="arch" type="xml">
-            <tree string="Returned lines" editable="bottom">
+            <tree string="Returned lines" editable="bottom">                
                 <field name="product_id"/>
+                <field name="claim_id"/>
                 <button name="equivalent_products" string="Change product" type="object" icon="fa-retweet"/>
                 <field name="equivalent_product_id" readonly="1"/>
                 <field name="name" string="Customer description"/>
