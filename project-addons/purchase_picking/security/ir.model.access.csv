@@ -1,6 +1,5 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_stock_container,stock.container,model_stock_container,purchase.group_purchase_user,1,0,0,0
 access_stock_container_manager,stock.container,model_stock_container,purchase.group_purchase_manager,1,1,1,1
-access_stock_container_incoterm,stock.container.incoterm,model_stock_container_incoterm,purchase.group_purchase_user,1,1,1,1
 access_stock_container_status,stock.container.status,model_stock_container_status,purchase.group_purchase_user,1,1,1,1
 access_stock_container_port,stock.container.port,model_stock_container_port,purchase.group_purchase_user,1,1,1,1

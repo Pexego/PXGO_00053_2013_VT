@@ -43,11 +43,10 @@ class StockContainer(models.Model):
     n_ref = fields.Char(string="Nº ref", store=False, compute="_get_picking_ids")
     forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
                                 string="FWDR")
-    incoterm = fields.Many2one('stock.container.incoterm', string='Incoterm')
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status')
     forwarder_comercial = fields.Char(related="forwarder.comercial", store=False, string="FWDR")
-    incoterm = fields.Many2one('stock.container.incoterm', string='Incoterm', ondelete="restrict")
+    incoterm = fields.Many2one('stock.incoterms', string='Incoterm', ondelete="restrict")
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO', ondelete="restrict")
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
     ctns = fields.Char(string="Ctns")
@@ -278,15 +277,6 @@ class StockReservation(models.Model):
         return res
 
 
-class StockContainerIncoterm(models.Model):
-    _name = 'stock.container.incoterm'
-    _rec_name = 'incoterm_code'
-    _description = "specifies who is responsible for paying"
-    incoterm_code = fields.Char('Code', required=True)
-    active = fields.Boolean('Active', default=True)
-    incoterm_desc = fields.Text('Description', help="To give more information about the incoterm")
-
-
 class StockContainerDestinationPort(models.Model):
     _name = 'stock.container.port'
     _rec_name = 'port_code'
@@ -304,3 +294,20 @@ class StockContainerStatus(models.Model):
     status_name = fields.Char('Status name', required=True)
     status_code = fields.Char('Code', required=True)
     status_desc = fields.Text('Description', help="To give more information about the shipping status")
+
+
+class StockIncoterms(models.Model):
+
+    _inherit = "stock.incoterms"
+
+    @api.multi
+    def name_get(self):
+        result = []
+        orig_name = dict(super(StockIncoterms, self).name_get())
+        for line in self:
+            name = orig_name[line.id]
+            if self.env.context.get('incoterm_code', True):
+                name = line.code
+            result.append((line.id, name))
+        return result
+
