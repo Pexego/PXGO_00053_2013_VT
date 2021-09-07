@@ -67,7 +67,8 @@ class ProductProduct(models.Model):
 
     standard_price_2_inc = fields.Float(
         digits=dp.get_precision('Product Price'),
-        string="Cost Price 2")
+        string="Cost Price 2",
+        copy=False)
     cost_increment = fields.Float("Increment", default=0.0)
 
     @api.onchange("cost_increment")
