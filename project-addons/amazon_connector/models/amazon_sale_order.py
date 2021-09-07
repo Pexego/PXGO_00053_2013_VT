@@ -330,7 +330,7 @@ class AmazonSaleOrder(models.Model):
                         except SellingApiException as e:
                             raise UserError(
                                 _("Amazon API Error. Address Info Request. Order %s. '%s' \n") % (amazon_order.name, e))
-                    amazon_order.address = address.get('ShippingAddress',False).get('AddressLine1', False)
+                    amazon_order.address = address.get('ShippingAddress', False).get('AddressLine1', False)
                     amazon_order.message_error += _(
                         'This Order requires a non simplified Invoice')
                 if amazon_order.state in ['error', 'warning'] or amazon_order.warning_price:
@@ -364,10 +364,22 @@ class AmazonSaleOrder(models.Model):
                 amazon_order_values['message_error'] += _('ItemPrice or ItemTax fields are empty %s\n') % asin_code
             else:
                 price_total = float(order_item.get('ItemPrice').get('Amount'))
-                shipping_tax = float(order_item.get('ShippingTax').get('Amount'))
-                shipping_price = float(order_item.get('ShippingPrice').get('Amount'))
-                shipping_discount_tax = float(order_item.get('ShippingDiscountTax').get('Amount'))
-                shipping_discount_price = float(order_item.get('ShippingDiscount').get('Amount'))
+                shipping_price = 0
+                shipping_discount_price = 0
+                shipping_tax = 0
+                shipping_discount_tax = 0
+                shipping_tax_obj = order_item.get('ShippingTax', False)
+                if shipping_tax_obj:
+                    shipping_tax = float(shipping_tax_obj.get('Amount'))
+                shipping_price_obj = order_item.get('ShippingPrice', False)
+                if shipping_price_obj:
+                    shipping_price = float(shipping_price_obj.get('Amount'))
+                shipping_discount_tax_obj = order_item.get('ShippingDiscountTax', False)
+                if shipping_discount_tax_obj:
+                    shipping_discount_tax = float(shipping_discount_tax_obj.get('Amount'))
+                shipping_discount_price_obj = order_item.get('ShippingDiscount', False)
+                if shipping_discount_price_obj:
+                    shipping_discount_price = float(shipping_discount_price_obj.get('Amount'))
                 shipping_final_total = shipping_price - shipping_discount_price
                 shipping_taxes_total = (shipping_tax - shipping_discount_tax)
                 price_total += shipping_final_total
@@ -425,10 +437,12 @@ class AmazonSaleOrder(models.Model):
     def send_error_mail(self):
         template = self.env.ref('amazon_connector.send_mail_errors_amazon')
         if self.warning_price:
-            context = {'message_warning': 'The order has been processed but the invoice is in draft status.','lang': 'es_ES'}
+            context = {'message_warning': 'The order has been processed but the invoice is in draft status.',
+                       'lang': 'es_ES'}
             template.with_context(context).send_mail(self.id)
         elif self.state == 'warning':
-            context = {'message_warning': 'The order has been processed but the invoice has not been created.', 'lang': 'es_ES'}
+            context = {'message_warning': 'The order has been processed but the invoice has not been created.',
+                       'lang': 'es_ES'}
             template.with_context(context).send_mail(self.id)
         else:
             template.send_mail(self.id)
