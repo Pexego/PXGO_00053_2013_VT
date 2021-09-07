@@ -38,6 +38,9 @@ class CrmClaimUpdateLines(models.TransientModel):
                                       ('other', 'Other')
                                       ], 'Claim Subject')
 
+    web = fields.Selection([('none', 'Select none'), ('all', 'Select all')])
+    printable = fields.Selection([('none', 'Select none'), ('all', 'Select all')])
+
     @api.multi
     def button_update_lines(self):
         model = self.env.context['active_model']
@@ -50,7 +53,16 @@ class CrmClaimUpdateLines(models.TransientModel):
                 vals['substate_id'] = self.substate_id.id
             if self.claim_origine:
                 vals['claim_origine'] = self.claim_origine
+            if self.web:
+                if self.web in ['all']:
+                    vals['web'] = True
+                elif self.web in ['none']:
+                    vals['web'] = False
+            if self.printable:
+                if self.printable in ['all']:
+                    vals['printable'] = True
+                elif self.printable in ['none']:
+                    vals['printable'] = False
             if self.invoice_id:
                 vals['invoice_id'] = self.invoice_id.id
-
             rma_line.write(vals)

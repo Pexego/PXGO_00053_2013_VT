@@ -1,0 +1,62 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * stock_custom
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-06-16 07:12+0000\n"
+"PO-Revision-Date: 2021-06-16 07:12+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_custom
+#: model:mail.template,body_html:stock_custom.picking_done_template_claim
+msgid "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dear customer,</p>\n"
+"% if object.carrier_name:\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">We hereby inform you that we have sent your claim ${object.claim_id.number}, the delivery note number is ${object.name}.</p>\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">The transport company responsible for the shipping of your order is\n"
+"${object.carrier_name}\n"
+"    % if object.carrier_tracking_ref:\n"
+"        and the tracking number of your order is\n"
+"${object.carrier_tracking_ref}. </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"        </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"        <b style=\"font-weight:bold;\">Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>\n"
+"    % endif\n"
+"    </p>\n"
+"% endif\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Best regards,</p>\n"
+"            "
+msgstr "\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Sehr geehrter Kunde,</p>\n"
+"% if object.carrier_name:\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Wir informieren Sie, dass unser Lager die Produkte vorbereitet hat, die dem Lieferschein ${object.name} von der Bestellung ${object.claim_id.number} entsprechen.</p>\n"
+"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Das für die Absendung Ihrer Bestellung zuständige Transportunternehmen ist \n"
+"${object.carrier_name}\n"
+"    % if object.carrier_tracking_ref:\n"
+"        und die Tracking-Nummer Ihrer Bestellung ist \n"
+"${object.carrier_tracking_ref}. </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"        </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
+"        <b style=\"font-weight:bold;\">Bitte beachten Sie dass die Tracking-Informationen Ihrer Bestellung möglicherweise zum Zeitpunkt des Empfangs dieser E-Mail noch nicht verfügbar sind.</b>\n"
+"    % endif\n"
+"    </p>\n"
+"% endif\n"
+"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Mit freundlichen Grüßen,</p>\n"
+"            "
+
+#. module: stock_custom
+#: model:mail.template,subject:stock_custom.picking_done_template
+#: model:mail.template,subject:stock_custom.picking_done_template_claim
+msgid "VISIOTECH - Shipped products"
+msgstr "VISIOTECH - Bestellung versendet"
+
+#. module: stock_custom
+#: model:mail.template,report_name:stock_custom.picking_done_template_claim
+msgid "Picking_${(object.name or '').replace('/','_')}"
+msgstr "Picking_${(object.name or '').replace('/','_')}"

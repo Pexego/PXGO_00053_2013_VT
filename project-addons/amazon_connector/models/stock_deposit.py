@@ -19,11 +19,20 @@ class StockDeposit(models.Model):
                         invoice.journal_id.company_id.currency_id,
                         amazon_order.currency_id)
                     invoice.write(
-                        {'name': amazon_order.name, 'amazon_order': amazon_order.id, 'amazon_invoice': amazon_order.amazon_invoice_name})
+                        {'name': amazon_order.name, 'amazon_order': amazon_order.id,
+                         'amazon_invoice': amazon_order.amazon_invoice_name,
+                         'fiscal_position_id': amazon_order.fiscal_position_id.id})
                     for line in invoice.invoice_line_ids:
                         o_line = amazon_order.order_line.filtered(lambda l: l.product_id == line.product_id)[0]
                         line.write(
-                            {'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)], 'price_unit': o_line.price_unit / rate,
+                            {'invoice_line_tax_ids': [(6, 0, o_line.tax_id.ids)],
+                             'price_unit': o_line.price_unit / rate,
                              'discount': 0})
                     invoice._onchange_invoice_line_ids()
         return invoice_ids
+
+    @api.multi
+    def revert_sale(self):
+        res = super(StockDeposit, self).revert_sale()
+        self.write({'amazon_order_id': False})
+        return res
