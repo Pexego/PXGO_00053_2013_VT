@@ -302,6 +302,8 @@ class StockIncoterms(models.Model):
 
     _inherit = "stock.incoterms"
 
+    code = fields.Char('Code', size=8)
+
     @api.multi
     def name_get(self):
         result = []
