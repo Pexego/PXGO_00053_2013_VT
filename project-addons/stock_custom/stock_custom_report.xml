@@ -51,17 +51,16 @@
             <field name="report_name">Picking_${(object.name or '').replace('/','_')}</field>
             <field name="body_html"><![CDATA[
 <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Dear customer,</p>
-% if object.carrier_name:
-    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">We hereby inform you that we have sent your claim ${object.claim_id.number}, the delivery note number is ${object.name}.</p>
-    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">The transport company responsible for the shipping of your order is
-${object.carrier_name}
+
+<p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">We hereby inform you that we have prepared your claim ${object.claim_id.number}, the delivery note number is ${object.name}.</p>
+% if object.carrier_name and object.carrier_name != "GENERICA":
+    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">The transport company responsible for the shipping of your order is ${object.carrier_name}
     % if object.carrier_tracking_ref:
-        and the tracking number of your order is
-${object.carrier_tracking_ref}. </p><p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
-        </p><p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
-        <b style="font-weight:bold;">Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>
+        and the tracking number of your order is ${object.carrier_tracking_ref}. </p>
+        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+            <b style="font-weight:bold;">Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>
+        </p>
     % endif
-    </p>
 % endif
 <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Best regards,</p>
             ]]></field>
