@@ -200,7 +200,9 @@ class StockMove(models.Model):
                     and 'origin' not in vals\
                     and not move._context.get('accept_ready_qty'):
                 if move.product_uom_qty > vals['product_uom_qty'] > 0:
-                    move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
+                    if not (move.location_id.name == "Vendor's deposit"
+                            and move.location_dest_id.id == self.env.ref('stock.stock_location_stock').id):
+                        move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
                 elif vals['product_uom_qty'] > move.product_uom_qty:
                     raise exceptions.Warning(_('Impossible to increase the quantity'))
                 elif vals['product_uom_qty'] == 0:
