@@ -21,6 +21,13 @@ class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     scheduled_date = fields.Datetime('Scheduled shipping date')
+    not_sync_picking = fields.Boolean()
+
+    @api.onchange('not_sync_picking')
+    def _compute_not_sync(self):
+        if self.not_sync_picking:
+            for picking in self.picking_ids:
+                picking.write({'not_sync': True})
 
     @api.multi
     def write(self, vals):

@@ -21,6 +21,11 @@ msgid "Scheduled Date"
 msgstr "Fecha programada de envío"
 
 #. module: scheduled_shipment
+#: model:ir.ui.view,arch_db:scheduled_shipment.view_order_form_scheduled_date
+msgid "Non-Synchronizable Picking"
+msgstr "Albarán no sincronizable"
+
+#. module: scheduled_shipment
 #: code:addons/scheduled_shipment/models/sale.py:42
 #, python-format
 msgid "Scheduled date must be bigger than current date"
