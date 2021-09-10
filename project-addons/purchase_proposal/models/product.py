@@ -35,7 +35,7 @@ class ProductProduct(models.Model):
     order_cycle = fields.Integer()
     transport_time = fields.Integer()
     security_margin = fields.Integer()
-    average_margin = fields.Float("Average Margin Last Sales", readonly=True)
+    average_margin = fields.Float("Average Margin Last Sales", readonly=True, copy=False)
     ref_manufacturer = fields.Char(related='manufacturer_pref', readonly=True)
 
     @api.model

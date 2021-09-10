@@ -8,7 +8,16 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     name = fields.Char(translate=False)
-    description_sale = fields.Text(translate=False)
+
+    description = fields.Text(copy=False)
+    description_sale = fields.Text(copy=False)
+    description_purchase = fields.Text(copy=False)
+    description_pickingout = fields.Text(copy=False)
+    description_pickingin = fields.Text(copy=False)
+    description_picking = fields.Text(copy=False)
+    sale_line_warn = fields.Selection(copy=False)
+    purchase_line_warn = fields.Selection(copy=False)
+
     currency_purchase_id = fields.Many2one('res.currency', 'Currency',
                                            default=lambda self: self.env.user.company_id.currency_id.id)
     track_serial = fields.Boolean("Track Serials")
@@ -110,7 +119,9 @@ class ProductProduct(models.Model):
     currency_purchase_id = fields.Many2one('res.currency', 'Currency',
                                            default=lambda self: self.env.user.company_id.currency_id.id)
 
-    last_purchase_price = fields.Monetary(currency_field="currency_purchase_id")
+    last_purchase_price = fields.Monetary(currency_field="currency_purchase_id", copy=False)
+    last_supplier_id = fields.Many2one(
+        comodel_name='res.partner', string='Last Supplier', copy=False)
 
     @api.multi
     def set_product_last_purchase(self, order_id=False):

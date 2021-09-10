@@ -639,4 +639,17 @@
             </div>
         </field>
     </record>
+
+    <record id="view_partner_forwarder" model="ir.ui.view">
+        <field name="name">partner.forwarder</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="purchase.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <field name="property_purchase_currency_id" position="before">
+                <field name="forwarder"/>
+            </field>
+        </field>
+    </record>
+
+
 </odoo>
