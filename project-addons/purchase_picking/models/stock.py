@@ -40,7 +40,7 @@ class StockContainer(models.Model):
     telex = fields.Boolean(string="Telex", help="Telex")
     arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived")
     cost = fields.Float(sting="Cost")
-    n_ref = fields.Char(string="Nº ref", store=False, compute="_get_picking_ids")
+    n_ref = fields.Integer(string="Nº ref", store=False, compute="_get_ref")
     forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
                                 string="FWDR")
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
@@ -87,15 +87,21 @@ class StockContainer(models.Model):
     def _get_picking_ids(self):
         for container in self:
             res = []
-            n_ref = ""
             for line in container.move_ids:
                 if line.picking_id.id not in res:
                     res.append(line.picking_id.id)
                     container.picking_ids = res
-                    if line.picking_id:
-                        n_ref = n_ref + line.picking_id.name + ", "
-                if n_ref:
-                    container.n_ref = n_ref[:-2]
+
+    @api.multi
+    def _get_ref(self):
+        for container in self:
+            res = []
+            n_ref = 0
+            for line in container.move_ids:
+                if line.id not in res:
+                    res.append(line.id)
+                    n_ref += 1
+        container.n_ref = n_ref
 
     @api.multi
     def _get_responsible(self):
