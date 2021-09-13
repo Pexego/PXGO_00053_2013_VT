@@ -67,7 +67,7 @@
               <xpath expr="//field[@name='partner_id']" position="after">
                 <field name="partner_ref"/>
                 <field name="remark"/>
-                <field name="parent_id"/>
+                <field name="origin"/>
               </xpath>
           </field>
       </record>
