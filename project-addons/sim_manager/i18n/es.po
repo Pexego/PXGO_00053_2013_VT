@@ -72,8 +72,8 @@ msgid "Scan SIMs"
 msgstr "Escanear SIMs"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:49
-#: code:addons/sim_manager/models/sim.py:57
+#: code:addons/sim_manager/models/sim.py:38
+#: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
 #, python-format
 msgid "Scan the serials for %s"
 msgstr "Escanea los ID para %s"
@@ -104,16 +104,34 @@ msgid "State"
 msgstr "Estado"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:33
-#: code:addons/sim_manager/models/sim.py:45
+#: code:addons/sim_manager/models/sim.py:29
 #, python-format
 msgid "{} created"
 msgstr "{} creado"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:38
-#, python-format
-msgid "{} already exists"
-msgstr "{} ya existe"
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Create new SIM package"
+msgstr "Crear nuevo paquete SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_new_code
+msgid "New package"
+msgstr "Nuevo Paquete"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Scan"
+msgstr "Escanear"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Cancel"
+msgstr "Cancelar"
 
 

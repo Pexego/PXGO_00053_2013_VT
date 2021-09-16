@@ -50,15 +50,42 @@
         <field name="help">Manage the SIM packages</field>
     </record>
 
-    <record id="action_sim_package_creator" model="ir.actions.act_window">
+    <record id="action_sim_package_creator_scan" model="ir.actions.act_window">
         <field name="name">Scanning SIMs</field>
         <field name="res_model">barcode.action</field>
         <field name="context">{'default_model': 'sim.package',
-            'default_method': 'create_package_using_barcode',
+            'default_method': 'create_sims_using_barcode',
             'default_state': 'waiting',
             'default_status': 'Scan SIM pack'}</field>
         <field name="view_mode">form</field>
         <field name="view_type">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_sim_package_creator" model="ir.ui.view">
+        <field name="name">Create new SIM package</field>
+        <field name="model">sim.package.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create new SIM package">
+                <group>
+                    <field name="type_sim"/>
+                    <field name="new_code" readonly="1"/>
+                </group>
+                <footer>
+                    <button name="create_package" string="Scan" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sim_package_creator" model="ir.actions.act_window">
+        <field name="name">Create SIM package</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.package.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sim_package_creator"/>
         <field name="target">new</field>
     </record>
 

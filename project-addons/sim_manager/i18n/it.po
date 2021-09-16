@@ -50,7 +50,7 @@ msgstr "Movimento"
 #: model:ir.model.fields,field_description:sim_manager.field_sim_package_code
 #: model:ir.model.fields,field_description:sim_manager.field_sim_serial_package_id
 msgid "Package"
-msgstr "Pacchetto "
+msgstr "Pacchetto"
 
 #. module: sim_manager
 #: model:ir.actions.act_window,name:sim_manager.act_res_partner_sim_cards
@@ -72,8 +72,8 @@ msgid "Scan SIMs"
 msgstr "Scansionare SIMs"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:49
-#: code:addons/sim_manager/models/sim.py:57
+#: code:addons/sim_manager/models/sim.py:38
+#: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
 #, python-format
 msgid "Scan the serials for %s"
 msgstr "Sacasiona i IDs per %s"
@@ -104,14 +104,32 @@ msgid "State"
 msgstr "Stato"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:33
-#: code:addons/sim_manager/models/sim.py:45
+#: code:addons/sim_manager/models/sim.py:29
 #, python-format
 msgid "{} created"
 msgstr "{} creado"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:38
-#, python-format
-msgid "{} already exists"
-msgstr "{} esiste ancora"
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Create new SIM package"
+msgstr "Creare nuovo pack SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_new_code
+msgid "New package"
+msgstr "Nuovo Pacchetto"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Scan"
+msgstr "Scansiona"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Cancel"
+msgstr "Anulla"

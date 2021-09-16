@@ -20,51 +20,25 @@ class SimPackage(models.Model):
                              selection=[('available', 'Available'),
                                         ('sold', 'Sold')])
 
-    def create_package_using_barcode(self, barcode):
+    def create_sims_using_barcode(self, barcode):
         logger.info("Imported SIM %s" % barcode)
-        barcode = barcode.replace("?", "_")
-        next_serial = False
-        next_serial_2 = False
-        if 'M2M' in barcode:
-            package = self.search([('code', '=', barcode)])
-            if not package:
-                sim_pkg = self.create({'code': barcode})
-                if sim_pkg:
-                    message = _("{} created").format(sim_pkg.code)
-                    self.env.user.notify_info(message=message)
-                    next_serial = True
-            else:
-                sim_pkg = package
-                message = _("{} already exists").format(barcode)
-                self.env.user.notify_warning(message=message)
-                next_serial = True
-        elif self.id > 0:
-            # The barcode is a serial
-            sim_serial = self.env['sim.serial'].create({'code': barcode, 'package_id': self.id})
-            if sim_serial:
-                message = _("{} created").format(sim_serial.code)
-                self.env.user.notify_info(message=message)
-                next_serial_2 = True
 
-        action = self.env.ref('sim_manager.action_sim_package_creator')
+        created_code = self.env['sim.package'].search([], order="create_date desc", limit=1)
+        sim_serial = self.env['sim.serial'].create({'code': barcode, 'package_id': created_code.id})
+        if sim_serial:
+            message = _("{} created").format(sim_serial.code)
+            self.env.user.notify_info(message=message)
+
+        action = self.env.ref('sim_manager.action_sim_package_creator_scan')
         result = action.read()[0]
 
-        if next_serial:
-            context = safe_eval(result['context'])
-            context.update({
-                'default_state': 'warning',
-                'default_status': _('Scan the serials for %s') % sim_pkg.code,
-                'default_res_id': sim_pkg.id,
-            })
-            result['context'] = json.dumps(context)
-        elif next_serial_2:
-            context = safe_eval(result['context'])
-            context.update({
-                'default_state': 'warning',
-                'default_status': _('Scan the serials for %s') % self.code,
-                'default_res_id': self.id,
-            })
-            result['context'] = json.dumps(context)
+        context = safe_eval(result['context'])
+        context.update({
+            'default_state': 'waiting',
+            'default_status': _('Scan the serials for %s') % created_code.code,
+            'default_res_id': created_code.id,
+        })
+        result['context'] = json.dumps(context)
 
         return result
 
