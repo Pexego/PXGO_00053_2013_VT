@@ -412,13 +412,19 @@ class ClaimInvoiceLine(models.Model):
 
     @api.onchange("qty", "price_unit", "discount")
     def onchange_values(self):
+        products_ids = {}
         if self.product_id and self.invoice_id:
             for line in self.invoice_id.invoice_line_ids:
+                if line.product_id.id in products_ids:
+                    products_ids[line.product_id.id] += line.quantity
+                else:
+                    products_ids[line.product_id.id] = line.quantity
+            for line in self.invoice_id.invoice_line_ids:
                 if line.product_id == self.product_id:
-                    if line.quantity < self.qty:
+                    if products_ids[line.product_id.id] < self.qty:
                         raise exceptions.Warning(_('Quantity cannot be bigger than the quantity specified on invoice'))
-                    if line.quantity < line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty + self.qty:
-                        units_available = line.quantity - line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty
+                    if products_ids[line.product_id.id] < line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty + self.qty:
+                        units_available = products_ids[line.product_id.id] - line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty
                         if units_available > 0:
                             raise exceptions.Warning(_("There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n") %
                                                      (line.product_id.default_code, line.invoice_id.number, int(units_available)))
