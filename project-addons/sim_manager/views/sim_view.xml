@@ -42,6 +42,20 @@
         </field>
     </record>
 
+    <record id="view_sim_package_filter" model="ir.ui.view">
+        <field name="name">sim.package.search</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+               <filter string="ES" domain="[('code','like','ES')]"/>
+               <filter string="EU" domain="[('code','like','EU')]"/>
+               <filter string="VIP" domain="[('code','like','VIP')]"/>
+               <filter string="Sold" domain="[('state','=','sold')]"/>
+               <filter string="Available" domain="[('state','=','available')]"/>
+           </search>
+        </field>
+    </record>
+
     <record id="action_sim_package" model="ir.actions.act_window">
         <field name="name">SIM packages</field>
         <field name="type">ir.actions.act_window</field>
@@ -102,20 +116,6 @@
                 <field name="sim_10"/>
                 <field name="qty"/>
             </tree>
-        </field>
-    </record>
-
-    <record id="view_sim_package_filter" model="ir.ui.view">
-        <field name="name">sim.package.search</field>
-        <field name="model">sim.package</field>
-        <field name="arch" type="xml">
-            <search string="Search">
-               <filter string="ES" domain="[('code','like','ES')]"/>
-               <filter string="EU" domain="[('code','like','EU')]"/>
-               <filter string="VIP" domain="[('code','like','VIP')]"/>
-               <filter string="Sold" domain="[('state','=','sold')]"/>
-               <filter string="Available" domain="[('state','=','available')]"/>
-           </search>
         </field>
     </record>
 
