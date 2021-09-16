@@ -83,3 +83,26 @@ msgstr "La ubicación escaneada no existe"
 #: model:ir.actions.act_window,name:rma_scanner.action_wizard_print_rma
 msgid "Print Label"
 msgstr "Imprimir Etiqueta"
+
+#. module: rma_scanner
+#: model:ir.model.fields,field_description:rma_scanner.field_wizard_print_record_label_copies
+msgid "Copies"
+msgstr "Copias"
+
+#. module: rma_scanner
+#: model:ir.ui.view,arch_db:printer_zpl2.view_wizard_print_product_label_form
+msgid "Print label"
+msgstr "Imprimir etiqueta"
+
+#. module: rma_scanner
+#: model:ir.model.fields,field_description:printer_zpl2.field_printing_label_zpl2_printer_id
+#: model:ir.model.fields,field_description:printer_zpl2.field_wizard_print_record_label_printer_id
+msgid "Printer"
+msgstr "Impresora"
+
+#. module: rma_scanner
+#: model:ir.model.fields,field_description:printer_zpl2.field_printing_label_zpl2_component_label_id
+#: model:ir.model.fields,field_description:printer_zpl2.field_wizard_import_zpl2_label_id
+#: model:ir.model.fields,field_description:printer_zpl2.field_wizard_print_record_label_label_id
+msgid "Label"
+msgstr "Etiqueta"

@@ -32,3 +32,9 @@ msgstr '[Partenaire "%s"] Le format de l'e-mail est incorrect: '
 #, python-format
 msgid ' "%s" (Accounting email)'
 msgstr ' "%s" (Email de comptabilité)'
+
+#. module: custom_partner
+#: model:ir.model.fields,field_description:custom_partner.field_res_partner_forwarder
+#: model:ir.model.fields,field_description:custom_partner.field_res_users_forwarder
+msgid "Forwarder"
+msgstr "Transitaire"

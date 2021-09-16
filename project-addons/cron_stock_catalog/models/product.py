@@ -223,9 +223,8 @@ class ProductProduct(models.Model):
     @staticmethod
     def generate_xls(headers, rows):
         # Generate the xls
-        file_name = 'temp'
-        tmpdir = tools.config["data_dir"] + '/filestore'
-        workbook = xlsxwriter.Workbook(file_name, {'tmpdir': tmpdir})
+        file_name = tools.config["data_dir"] + '/filestore/temp'
+        workbook = xlsxwriter.Workbook(file_name)
         worksheet = workbook.add_worksheet()
         row = 0
         col = 0

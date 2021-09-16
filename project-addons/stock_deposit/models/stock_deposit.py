@@ -247,16 +247,24 @@ class StockDeposit(models.Model):
             my_context = dict(self.env.context)
             my_context['invoice_deposit'] = True
             inv_vals = sale._prepare_invoice()
-            inv_vals['journal_id'] = journal_id.id if journal_id else sale.partner_id.commercial_partner_id.invoice_type_id.journal_id.id
+            if self.env.context.get('force_partner_id',False):
+                partner_id = self.env.context.get('force_partner_id')
+                inv_vals['partner_id'] = partner_id.id
+                inv_vals['partner_shipping_id'] = partner_id.id
+                inv_vals['payment_term_id'] = \
+                    partner_id.property_payment_term_id.id
+            else:
+                partner_id = sale.partner_id
+            inv_vals['journal_id'] = journal_id.id if journal_id else partner_id.commercial_partner_id.invoice_type_id.journal_id.id
             if not inv_vals.get("payment_term_id", False):
                 inv_vals['payment_term_id'] = \
-                    sale.partner_id.property_payment_term_id.id
+                    partner_id.property_payment_term_id.id
             if not inv_vals.get("payment_mode_id", False):
                 inv_vals['payment_mode_id'] = \
-                    sale.partner_id.customer_payment_mode_id.id
+                    partner_id.customer_payment_mode_id.id
             if not inv_vals.get("partner_bank_id", False):
-                inv_vals['partner_bank_id'] = sale.partner_id.bank_ids \
-                    and sale.partner_id.bank_ids[0].id or False
+                inv_vals['partner_bank_id'] = partner_id.bank_ids \
+                    and partner_id.bank_ids[0].id or False
             invoice = self.env['account.invoice'].create(inv_vals)
             for line in sale_lines:
                 deposit = self.filtered(lambda d: d.move_id.sale_line_id.id==line.id)

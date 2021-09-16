@@ -240,7 +240,7 @@ class SaleOrder(models.Model):
                 if exception:
                     return exception
                 if not sale.validated_dir and sale.create_uid.email == \
-                        user_buyer:
+                        user_buyer and self.delivery_type not in 'installations':
                     message = _('Please, validate shipping address.')
                     raise exceptions.Warning(message)
 

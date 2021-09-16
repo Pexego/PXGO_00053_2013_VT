@@ -318,6 +318,27 @@ class CrmClaimRma(models.Model):
                 line.sequence = seq
                 seq += 1
 
+    
+    @api.multi
+    def check_discounts(self):
+        discount_product_list = []
+        has_discount = False
+        for claim_obj in self:
+            for line in claim_obj.claim_inv_line_ids:
+                for i_line_id in line.invoice_id.invoice_line_ids:
+                    if i_line_id.product_id.name == 'Discount line' and not line.invoice_id.number in discount_product_list:
+                        has_discount = True
+
+                        discount_product_list.append(line.invoice_id.number)
+        if has_discount:
+            return self.env['invoice.discount.wiz'].create({
+                                'origin_reference': '%s,%s' % ('crm.claim', self.id),
+                                'continue_method': 'make_refund_invoice',
+                                'message': _("This orders have discounts. Do you want to proceed anyways?: %s") % ', '.join(discount_product_list)
+                            }).action_show()
+        else:
+            self.make_refund_invoice()
+
 
 class ClaimInvoiceLine(models.Model):
     _name = 'claim.invoice.line'

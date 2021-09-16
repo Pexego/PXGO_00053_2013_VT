@@ -9,9 +9,16 @@ class SaleStockReserve(models.TransientModel):
 
     @api.multi
     def button_reserve(self):
+        sale_line_id = self.env.context.get('active_id')
+        sale_line_obj = self.env['sale.order.line'].browse(sale_line_id)
+        order_obj = sale_line_obj.order_id
         days_release_reserve = self.env['ir.config_parameter'].sudo().get_param('days_to_release_reserve_stock')
         now = datetime.now()
-        date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
+
+        if order_obj.infinite_reservation:
+            date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
+        else:
+            date_validity = (now + relativedelta(days=int(days_release_reserve))).strftime("%Y-%m-%d")
 
         self.ensure_one()
         lines = self._get_so_lines()
