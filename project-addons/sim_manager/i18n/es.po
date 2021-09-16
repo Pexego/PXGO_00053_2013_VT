@@ -17,6 +17,7 @@ msgstr ""
 
 #. module: sim_manager
 #: selection:sim.package,state:0
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
 msgid "Available"
 msgstr "Disponible"
 
@@ -90,6 +91,7 @@ msgstr "Nº serie"
 
 #. module: sim_manager
 #: selection:sim.package,state:0
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
 msgid "Sold"
 msgstr "Vendido"
 
@@ -134,4 +136,13 @@ msgstr "Escanear"
 msgid "Cancel"
 msgstr "Cancelar"
 
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.action_sim_package_report
+msgid "SIM Report"
+msgstr "SIM Informe"
+
+#. module: sim_manager
+#: model:ir.ui.menu,name:sim_manager.menu_sim_report
+msgid "SIM Tags"
+msgstr "Etiquetas SIM"
 

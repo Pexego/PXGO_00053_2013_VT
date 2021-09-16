@@ -47,6 +47,7 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sim.package</field>
         <field name="view_type">form</field>
+        <field name="search_view_id" ref="view_sim_package_filter"/>
         <field name="help">Manage the SIM packages</field>
     </record>
 
@@ -83,6 +84,41 @@
         </field>
     </record>
 
+    <record id="view_sim_report" model="ir.ui.view">
+        <field name="name">sim.report.view</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <tree string="SIM packages">
+                <field name="code"/>
+                <field name="sim_1"/>
+                <field name="sim_2"/>
+                <field name="sim_3"/>
+                <field name="sim_4"/>
+                <field name="sim_5"/>
+                <field name="sim_6"/>
+                <field name="sim_7"/>
+                <field name="sim_8"/>
+                <field name="sim_9"/>
+                <field name="sim_10"/>
+                <field name="qty"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sim_package_filter" model="ir.ui.view">
+        <field name="name">sim.package.search</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+               <filter string="ES" domain="[('code','like','ES')]"/>
+               <filter string="EU" domain="[('code','like','EU')]"/>
+               <filter string="VIP" domain="[('code','like','VIP')]"/>
+               <filter string="Sold" domain="[('state','=','sold')]"/>
+               <filter string="Available" domain="[('state','=','available')]"/>
+           </search>
+        </field>
+    </record>
+
     <record id="action_sim_package_creator" model="ir.actions.act_window">
         <field name="name">Create SIM package</field>
         <field name="type">ir.actions.act_window</field>
@@ -92,7 +128,18 @@
         <field name="target">new</field>
     </record>
 
+    <record id="action_sim_package_report" model="ir.actions.act_window">
+        <field name="name">Sim Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.package</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_sim_report"/>
+        <field name="search_view_id" ref="view_sim_package_filter"/>
+    </record>
+
     <menuitem id="menu_sim_package" action="action_sim_package" parent="mrp.menu_mrp_bom" sequence="40"/>
     <menuitem id="menu_sim_package_creator" action="action_sim_package_creator" name="Scan SIMs"
             parent="mrp.menu_mrp_manufacturing" sequence="50"/>
+    <menuitem id="menu_sim_report" action="action_sim_package_report" name="SIM Tags"
+              parent="mrp.menu_mrp_reporting" sequence="50"/>
 </odoo>

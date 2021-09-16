@@ -20,6 +20,33 @@ class SimPackage(models.Model):
                              selection=[('available', 'Available'),
                                         ('sold', 'Sold')])
 
+    # Report Fields
+    sim_1 = fields.Char(string="Serie Inicio", compute='_get_serials')
+    sim_2 = fields.Char(string="Serie 2", compute='_get_serials')
+    sim_3 = fields.Char(string="Serie 3", compute='_get_serials')
+    sim_4 = fields.Char(string="Serie 4", compute='_get_serials')
+    sim_5 = fields.Char(string="Serie 5", compute='_get_serials')
+    sim_6 = fields.Char(string="Serie 6", compute='_get_serials')
+    sim_7 = fields.Char(string="Serie 7", compute='_get_serials')
+    sim_8 = fields.Char(string="Serie 8", compute='_get_serials')
+    sim_9 = fields.Char(string="Serie 9", compute='_get_serials')
+    sim_10 = fields.Char(string="Serie Fin", compute='_get_serials')
+    qty = fields.Char(string="Cantidad", default='10')
+
+    def _get_serials(self):
+        for pkg in self:
+            pkg.sim_1 = pkg.serial_ids[0].code
+            pkg.sim_2 = pkg.serial_ids[1].code
+            pkg.sim_3 = pkg.serial_ids[2].code
+            pkg.sim_4 = pkg.serial_ids[3].code
+            pkg.sim_5 = pkg.serial_ids[4].code
+            pkg.sim_6 = pkg.serial_ids[5].code
+            pkg.sim_7 = pkg.serial_ids[6].code
+            pkg.sim_8 = pkg.serial_ids[7].code
+            pkg.sim_9 = pkg.serial_ids[8].code
+            pkg.sim_10 = pkg.serial_ids[9].code
+
+
     def create_sims_using_barcode(self, barcode):
         logger.info("Imported SIM %s" % barcode)
 
