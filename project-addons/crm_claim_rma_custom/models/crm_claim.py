@@ -147,6 +147,12 @@ class CrmClaimRma(models.Model):
                     claim_inv_lines = claim_inv_line_obj.search([('claim_line_id', '=', claim_line.id)])
                     if claim_inv_lines:
                         continue
+                    products_ids = {}
+                    for line in claim_line.invoice_id.invoice_line_ids:
+                        if line.product_id.id in products_ids:
+                            products_ids[line.product_id.id] += line.quantity
+                        else:
+                            products_ids[line.product_id.id] = line.quantity
                     for inv_line in claim_line.invoice_id.invoice_line_ids:
                         if inv_line.product_id == claim_line.product_id:
                             if inv_line.invoice_line_tax_ids:
@@ -165,7 +171,7 @@ class CrmClaimRma(models.Model):
                                 'cost_unit': inv_line.product_id.standard_price,
                                 'tax_ids': [(6, 0, taxes_ids)]
                             }
-                            if inv_line.quantity < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
+                            if products_ids[line.product_id.id] < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
                                 units_available = inv_line.quantity - inv_line.claim_invoice_line_qty
                                 if units_available > 0:
                                     message += _("There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n") % \
@@ -412,19 +418,13 @@ class ClaimInvoiceLine(models.Model):
 
     @api.onchange("qty", "price_unit", "discount")
     def onchange_values(self):
-        products_ids = {}
         if self.product_id and self.invoice_id:
             for line in self.invoice_id.invoice_line_ids:
-                if line.product_id.id in products_ids:
-                    products_ids[line.product_id.id] += line.quantity
-                else:
-                    products_ids[line.product_id.id] = line.quantity
-            for line in self.invoice_id.invoice_line_ids:
                 if line.product_id == self.product_id:
-                    if products_ids[line.product_id.id] < self.qty:
+                    if line.quantity < self.qty:
                         raise exceptions.Warning(_('Quantity cannot be bigger than the quantity specified on invoice'))
-                    if products_ids[line.product_id.id] < line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty + self.qty:
-                        units_available = products_ids[line.product_id.id] - line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty
+                    if line.quantity < line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty + self.qty:
+                        units_available = line.quantity - line.with_context({'not_id': self._origin.id}).claim_invoice_line_qty
                         if units_available > 0:
                             raise exceptions.Warning(_("There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n") %
                                                      (line.product_id.default_code, line.invoice_id.number, int(units_available)))
