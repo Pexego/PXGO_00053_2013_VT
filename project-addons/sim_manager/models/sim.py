@@ -35,17 +35,18 @@ class SimPackage(models.Model):
 
     def _get_serials(self):
         for pkg in self:
-            pkg.sim_1 = pkg.serial_ids[0].code
-            pkg.sim_2 = pkg.serial_ids[1].code
-            pkg.sim_3 = pkg.serial_ids[2].code
-            pkg.sim_4 = pkg.serial_ids[3].code
-            pkg.sim_5 = pkg.serial_ids[4].code
-            pkg.sim_6 = pkg.serial_ids[5].code
-            pkg.sim_7 = pkg.serial_ids[6].code
-            pkg.sim_8 = pkg.serial_ids[7].code
-            pkg.sim_9 = pkg.serial_ids[8].code
-            pkg.sim_10 = pkg.serial_ids[9].code
-
+            serials = [s.code for s in pkg.serial_ids]
+            serials += [False for x in range(10-len(serials))]
+            pkg.sim_1 = serials[0]
+            pkg.sim_2 = serials[1]
+            pkg.sim_3 = serials[2]
+            pkg.sim_4 = serials[3]
+            pkg.sim_5 = serials[4]
+            pkg.sim_6 = serials[5]
+            pkg.sim_7 = serials[6]
+            pkg.sim_8 = serials[7]
+            pkg.sim_9 = serials[8]
+            pkg.sim_10 = serials[9]
 
     def create_sims_using_barcode(self, barcode):
         logger.info("Imported SIM %s" % barcode)
