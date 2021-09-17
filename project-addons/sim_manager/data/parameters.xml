@@ -4,4 +4,12 @@
         <field name="key">package.sim.card.max</field>
         <field name="value">10</field>
     </record>
+    <record id="web_sim_endpoint" model="ir.config_parameter">
+        <field name="key">web.sim.endpoint</field>
+        <field name="value"></field>
+    </record>
+    <record id="web_sim_endpoint_key" model="ir.config_parameter">
+        <field name="key">web.sim.endpoint.key</field>
+        <field name="value"></field>
+    </record>
 </odoo>

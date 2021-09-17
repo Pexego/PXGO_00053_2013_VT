@@ -1,7 +1,9 @@
-from odoo import models, fields, _
+from odoo import models, fields, api, _
 from odoo.tools.safe_eval import safe_eval
 import json
 import logging
+from odoo.addons.queue_job.job import job
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -62,7 +64,7 @@ class SimPackage(models.Model):
             action = self.env.ref('sim_manager.action_sim_package_creator_scan')
             result = action.read()[0]
 
-            if len(created_code.serial_ids) == max_cards: #TODO: PARAMETRIZAR
+            if len(created_code.serial_ids) == max_cards:
                 # We reach the maximum serials per package
                 context = safe_eval(result['context'])
                 context.update({
@@ -102,6 +104,21 @@ class SimPackage(models.Model):
             result['context'] = json.dumps(context)
 
         return result
+
+    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
+    @api.multi
+    def notify_sale_web(self, mode):
+        web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint')
+        for package in self:
+            data = {
+                "odoo_id": package.partner_id.id,
+                "partner_name": package.partner_id.name,
+                "mode": mode,
+                "codes": [sim.code for sim in package.serial_ids],
+            }
+            api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint.key')
+            headers = {'x-api-key': api_key}
+            response = requests.post(web_endpoint, headers=headers, data=json.dumps({"data": data}))
 
 
 class SimSerial(models.Model):
