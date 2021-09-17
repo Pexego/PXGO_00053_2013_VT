@@ -9,7 +9,7 @@ class SimPackageCreateWizard(models.TransientModel):
 
     type_sim = fields.Selection(string='Type',
                                 selection=[('M2M_CARD_ES', 'ES'),
-                                           ('M2M_CARD_IT', 'IT'),
+                                           ('M2M_CARD_EU', 'EU'),
                                            ('M2M_CARD_VIP', 'VIP')],
                                 required=True)
 
@@ -37,7 +37,7 @@ class SimPackageCreateWizard(models.TransientModel):
         context = safe_eval(result['context'])
         context.update({
             'default_state': 'waiting',
-            'default_status': _('Scan the serials for %s') % pkg.code,
+            'default_status': _('Scan the #1 serial for %s') % pkg.code,
             'default_res_id': pkg.id,
         })
         result['context'] = json.dumps(context)

@@ -72,11 +72,10 @@ msgid "Scan SIMs"
 msgstr "Scansionare SIMs"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:38
 #: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
 #, python-format
-msgid "Scan the serials for %s"
-msgstr "Sacasiona i IDs per %s"
+msgid "Scan the #1 serial for %s"
+msgstr "Scansiona il #1 ID per il %s"
 
 #. module: sim_manager
 #: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator
@@ -133,3 +132,16 @@ msgstr "Scansiona"
 #: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
 msgid "Cancel"
 msgstr "Anulla"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:70
+#, python-format
+msgid "Package %s finished. Scan for continue with next package"
+msgstr "Pachetto %s finito. Scansiona il sucesivo per continuare"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:78
+#: code:addons/sim_manager/models/sim.py:99
+#, python-format
+msgid "Scan the #%s serial for %s"
+msgstr "Scasiona il #%s ID per il %s"

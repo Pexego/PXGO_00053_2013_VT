@@ -73,11 +73,10 @@ msgid "Scan SIMs"
 msgstr "Escanear SIMs"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/sim.py:38
 #: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
 #, python-format
-msgid "Scan the serials for %s"
-msgstr "Escanea los ID para %s"
+msgid "Scan the #1 serial for %s"
+msgstr "Escanea el #1 ID para el %s"
 
 #. module: sim_manager
 #: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator
@@ -146,3 +145,15 @@ msgstr "SIM Informe"
 msgid "SIM Tags"
 msgstr "Etiquetas SIM"
 
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:70
+#, python-format
+msgid "Package %s finished. Scan for continue with next package"
+msgstr "Paquete %s terminado. Escanea el siguiente para continuar"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:78
+#: code:addons/sim_manager/models/sim.py:99
+#, python-format
+msgid "Scan the #%s serial for %s"
+msgstr "Escanea el #%s ID para el %s"
