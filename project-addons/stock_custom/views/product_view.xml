@@ -247,7 +247,7 @@
         <field name="name">product.product.last.purchase.info.form</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="purchase_last_price_info.product_product_last_purchase_info_form_view" />
-        <field name="groups_id" eval="[(6, 0, [ref('__export__.res_groups_57') ])]"/>
+        <field name="groups_id" eval="[(6, 0, [ref('commercial_group') ])]"/>
         <field name="arch" type="xml">
             <xpath expr="//button[@name='%(stock.action_view_change_product_quantity)d']" position="attributes">
                 <attribute name="invisible">1</attribute>
