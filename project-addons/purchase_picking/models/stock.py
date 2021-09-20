@@ -25,6 +25,40 @@ class StockContainer(models.Model):
 
     _name = 'stock.container'
     _order = 'write_date desc'
+    type = fields.Selection([
+        ('air', 'Air'),
+        ('sea', 'Sea'),
+        ('road', 'Road'),
+    ])
+    dimensions = fields.Char(string="CBM/KG", help="Dimensions")
+    ready = fields.Date(string="Ready", help="Ready merchandise date")
+    etd = fields.Date(string="ETD", help="Date of departure of transport")
+    eta = fields.Date(string="ETA", help="Arrival date at port / destination")
+    notes_purchases = fields.Char(string="Notes", help="Purchases notes")
+    notes_warehouse = fields.Char(string="Warehouse notes", help="Warehouse notes")
+    conf = fields.Boolean(string="Conf", help="Confirmed")
+    telex = fields.Boolean(string="Telex", help="Telex")
+    arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived")
+    cost = fields.Float(sting="Cost")
+    n_ref = fields.Integer(string="Nº ref", store=False, compute="_get_ref")
+    forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
+                                string="FWDR")
+    destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
+    status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status')
+    forwarder_comercial = fields.Char(related="forwarder.comercial", store=False, string="FWDR")
+    incoterm = fields.Many2one('stock.incoterms', string='Incoterm', ondelete="restrict")
+    destination_port = fields.Many2one('stock.container.port', string='NAV/PTO', ondelete="restrict")
+    status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
+    ctns = fields.Char(string="Ctns")
+    departure = fields.Boolean(String="Departure", help="Transport departure")
+
+    @api.multi
+    def _set_arrived(self):
+        for container in self:
+            container.arrived = True
+            for line in container.picking_ids:
+                if line.state != 'done':
+                    container.arrived = False
 
     @api.multi
     def _set_date_expected(self):
@@ -59,6 +93,17 @@ class StockContainer(models.Model):
                     container.picking_ids = res
 
     @api.multi
+    def _get_ref(self):
+        for container in self:
+            res = []
+            n_ref = 0
+            for line in container.move_ids:
+                if line.product_id.id not in res:
+                    res.append(line.product_id.id)
+                    n_ref += 1
+        container.n_ref = n_ref
+
+    @api.multi
     def _get_responsible(self):
         for container in self:
             responsible = ''
@@ -69,10 +114,11 @@ class StockContainer(models.Model):
             container.user_id = responsible
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Datetime("Date expected", compute='_get_date_expected', inverse='_set_date_expected', store=True,readonly=False, required=False)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected',
+                                    store=True, readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False, domain=[('state', '!=', 'cancel')])
-    picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
+    picking_ids = fields.One2many('stock.picking', "container_ids", compute='_get_picking_ids', string='Pickings', readonly=True)
 
     user_id = fields.Many2one(string='Responsible', compute='_get_responsible')
     company_id = fields.Many2one("res.company", "Company", required=True,
@@ -160,7 +206,9 @@ class StockMove(models.Model):
                     and 'origin' not in vals\
                     and not move._context.get('accept_ready_qty'):
                 if move.product_uom_qty > vals['product_uom_qty'] > 0:
-                    move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
+                    if not (move.location_id.name == "Vendor's deposit"
+                            and move.location_dest_id.id == self.env.ref('stock.stock_location_stock').id):
+                        move.copy({'picking_id': False, 'product_uom_qty': move.product_uom_qty - vals['product_uom_qty']})
                 elif vals['product_uom_qty'] > move.product_uom_qty:
                     raise exceptions.Warning(_('Impossible to increase the quantity'))
                 elif vals['product_uom_qty'] == 0:
@@ -235,3 +283,41 @@ class StockReservation(models.Model):
         for reservation in self:
             reservation.reassign_reservation_dates(reservation.product_id)
         return res
+
+
+class StockContainerDestinationPort(models.Model):
+    _name = 'stock.container.port'
+    _rec_name = 'port_code'
+    _description = "destination port for containers (shipping company/port)"
+    active = fields.Boolean('Active', default=True)
+    port_code = fields.Char('Code', required=True)
+    port_desc = fields.Text('Description', help="To give more information about the destination port")
+
+
+class StockContainerStatus(models.Model):
+    _name = 'stock.container.status'
+    _description = "delivery Status"
+    _rec_name = 'status_code'
+    active = fields.Boolean('Active', default=True)
+    status_name = fields.Char('Status name', required=True)
+    status_code = fields.Char('Code', required=True)
+    status_desc = fields.Text('Description', help="To give more information about the shipping status")
+
+
+class StockIncoterms(models.Model):
+
+    _inherit = "stock.incoterms"
+
+    code = fields.Char('Code', size=8)
+
+    @api.multi
+    def name_get(self):
+        result = []
+        orig_name = dict(super(StockIncoterms, self).name_get())
+        for line in self:
+            name = orig_name[line.id]
+            if self.env.context.get('incoterm_code', True):
+                name = line.code
+            result.append((line.id, name))
+        return result
+

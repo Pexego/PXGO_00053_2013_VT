@@ -8,7 +8,16 @@ class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
     name = fields.Char(translate=False)
-    description_sale = fields.Text(translate=False)
+
+    description = fields.Text(copy=False)
+    description_sale = fields.Text(copy=False)
+    description_purchase = fields.Text(copy=False)
+    description_pickingout = fields.Text(copy=False)
+    description_pickingin = fields.Text(copy=False)
+    description_picking = fields.Text(copy=False)
+    sale_line_warn = fields.Selection(copy=False)
+    purchase_line_warn = fields.Selection(copy=False)
+
     currency_purchase_id = fields.Many2one('res.currency', 'Currency',
                                            default=lambda self: self.env.user.company_id.currency_id.id)
     track_serial = fields.Boolean("Track Serials")
@@ -17,13 +26,14 @@ class ProductTemplate(models.Model):
     def create(self, vals):
         prod = super().create(vals)
         prod.property_valuation = prod.categ_id.property_valuation
-        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT' \
-                and not prod.seller_ids:
-            supplierinfo = self.env['product.supplierinfo'].create({
-                'name': 27,
-                'min_qty': 1
-            })
-            prod.seller_ids = supplierinfo
+        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT':
+            if not prod.seller_ids:
+                supplierinfo = self.env['product.supplierinfo'].create({
+                    'name': 27,
+                    'min_qty': 1
+                })
+                prod.seller_ids = supplierinfo
+            prod.last_supplier_id = prod.seller_ids[0].name.id
         return prod
 
     def set_product_template_currency_purchase(self, currency):
@@ -110,7 +120,9 @@ class ProductProduct(models.Model):
     currency_purchase_id = fields.Many2one('res.currency', 'Currency',
                                            default=lambda self: self.env.user.company_id.currency_id.id)
 
-    last_purchase_price = fields.Monetary(currency_field="currency_purchase_id")
+    last_purchase_price = fields.Monetary(currency_field="currency_purchase_id", copy=False)
+    last_supplier_id = fields.Many2one(
+        comodel_name='res.partner', string='Last Supplier', copy=False)
 
     @api.multi
     def set_product_last_purchase(self, order_id=False):
@@ -146,6 +158,13 @@ class ProductProduct(models.Model):
                 product.invoice_policy = 'order'
             elif product.type=='product':
                 product.invoice_policy = 'delivery'
+
+    @api.model
+    def create(self, vals):
+        prod = super().create(vals)
+        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT'and prod.seller_ids:
+            prod.last_supplier_id = prod.seller_ids[0].name.id
+        return prod
 
 
 class StockQuantityHistory(models.TransientModel):

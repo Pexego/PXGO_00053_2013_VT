@@ -71,7 +71,13 @@ class PurchaseOrder(models.Model):
     def create(self,vals):
         if self._context.get("default_state",False)=="purchase_order":
             vals["name"] = self.env['ir.sequence'].next_by_code('split.purchase.orders.name') or 'New'
-        return super(PurchaseOrder, self).create(vals)
+        res = super(PurchaseOrder, self).create(vals)
+        for rec in res:
+            if rec.state == 'purchase_order':
+                rec.order_line.mapped('product_id').set_product_last_purchase(
+                    rec.id)
+                rec._add_supplier_to_product()
+        return res
 
     @api.multi
     def button_cancel(self):
@@ -93,6 +99,21 @@ class PurchaseOrder(models.Model):
             })
         return super(PurchaseOrder, self).copy(default)
 
+    @api.multi
+    def write(self, vals):
+        res = super(PurchaseOrder, self).write(vals)
+        if vals.get('order_line',False):
+            for rec in self:
+                if rec.state == 'purchase_order':
+                    products = rec.order_line.mapped('product_id')
+                    update_supplier = False
+                    for p in products:
+                        if p.last_purchase_date and p.last_purchase_date<=rec.date_order:
+                            p.set_product_last_purchase(rec.id)
+                            update_supplier=True
+                    if update_supplier:
+                        rec._add_supplier_to_product()
+        return res
 
 class PurchaseOrderLine(models.Model):
     _inherit = 'purchase.order.line'

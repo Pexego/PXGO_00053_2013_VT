@@ -447,6 +447,7 @@ class PromotionsRulesActions(models.Model):
         if points <= price_subtotal:
             self.create_y_line_sale_points_programme(order, points,bags)
             bags.write({'applied_state':'applied', 'order_applied_id':order.id})
+            bag_obj.with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(rules, order.partner_id)
         else:
             bags_to_change_status = self.env['res.partner.point.programme.bag']
             cont_point_applied = 0
@@ -471,6 +472,7 @@ class PromotionsRulesActions(models.Model):
                     bags_to_change_status += bag
             bags_to_change_status.write({'applied_state': 'applied', 'order_applied_id': order.id})
             self.create_y_line_sale_points_programme(order, price_subtotal,bags_to_change_status)
+            bag_obj.with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(bags_to_change_status.mapped('point_rule_id'), order.partner_id)
 
         return True
 
