@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sim_package_tree" model="ir.ui.view">
+        <field name="name">sim.package.tree</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <tree string="SIM packages">
+                <field name="code"/>
+                <field name="partner_id"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sim_package_form" model="ir.ui.view">
+        <field name="name">sim.package.form</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <form string="SIM packages">
+                <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="code" default_focus="1" placeholder="Code"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="create_date" readonly="1"/>
+                            <field name="partner_id"/>
+                        </group>
+                    </group>
+                    <field name="serial_ids" nolabel="1">
+                        <tree editable="top">
+                            <field name="code"/>
+                        </tree>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sim_package_filter" model="ir.ui.view">
+        <field name="name">sim.package.search</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <search string="Search">
+               <filter string="ES" domain="[('code','like','ES')]"/>
+               <filter string="EU" domain="[('code','like','EU')]"/>
+               <filter string="VIP" domain="[('code','like','VIP')]"/>
+               <filter string="Sold" domain="[('state','=','sold')]"/>
+               <filter string="Available" domain="[('state','=','available')]"/>
+           </search>
+        </field>
+    </record>
+
+    <record id="action_sim_package" model="ir.actions.act_window">
+        <field name="name">SIM packages</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.package</field>
+        <field name="view_type">form</field>
+        <field name="search_view_id" ref="view_sim_package_filter"/>
+        <field name="help">Manage the SIM packages</field>
+    </record>
+
+    <record id="action_sim_package_creator_scan" model="ir.actions.act_window">
+        <field name="name">Scanning SIMs</field>
+        <field name="res_model">barcode.action</field>
+        <field name="context">{'default_model': 'sim.package',
+            'default_method': 'create_sims_using_barcode',
+            'default_state': 'waiting',
+            'default_status': 'Scan SIM pack'}</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_sim_package_creator" model="ir.ui.view">
+        <field name="name">Create new SIM package</field>
+        <field name="model">sim.package.create.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create new SIM package">
+                <group>
+                    <field name="type_sim"/>
+                </group>
+                <group>
+                    <label for="new_code"/>
+                    <h1><field name="new_code" readonly="1"/></h1>
+                </group>
+                <footer>
+                    <button name="create_package" string="Scan" type="object"
+                            class="btn-primary"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sim_report" model="ir.ui.view">
+        <field name="name">sim.report.view</field>
+        <field name="model">sim.package</field>
+        <field name="arch" type="xml">
+            <tree string="SIM packages">
+                <field name="code"/>
+                <field name="sim_1"/>
+                <field name="sim_2"/>
+                <field name="sim_3"/>
+                <field name="sim_4"/>
+                <field name="sim_5"/>
+                <field name="sim_6"/>
+                <field name="sim_7"/>
+                <field name="sim_8"/>
+                <field name="sim_9"/>
+                <field name="sim_10"/>
+                <field name="qty"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_sim_package_creator" model="ir.actions.act_window">
+        <field name="name">Create SIM package</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.package.create.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_sim_package_creator"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="action_sim_package_report" model="ir.actions.act_window">
+        <field name="name">Sim Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.package</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_sim_report"/>
+        <field name="search_view_id" ref="view_sim_package_filter"/>
+    </record>
+
+    <menuitem id="menu_sim_package" action="action_sim_package" parent="mrp.menu_mrp_bom" sequence="40"/>
+    <menuitem id="menu_sim_package_creator" action="action_sim_package_creator" name="Scan SIMs"
+            parent="mrp.menu_mrp_manufacturing" sequence="50"/>
+    <menuitem id="menu_sim_report" action="action_sim_package_report" name="SIM Tags"
+              parent="mrp.menu_mrp_reporting" sequence="50"/>
+</odoo>
