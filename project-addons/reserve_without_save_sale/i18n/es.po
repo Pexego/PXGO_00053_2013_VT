@@ -43,6 +43,18 @@ msgstr "Parcialmente disponible"
 msgid "Orders with released reservation"
 msgstr "Pedidos con reservas liberadas"
 
+#. module: reserve_without_save_sale
+#: model:ir.ui.view,arch_db:reserve_without_save_sale.view_order_form_visibility_reserve_button
+msgid "update all"
+msgstr "actualizar todo"
+
+
+#. module: reserve_without_save_sale
+#: model:ir.model.fields,field_description:reserve_without_save_sale.field_sale_order_infinite_reservation
+msgid "Has Infinite Reservations"
+msgstr "Reservas infinitas"
+
+
 #. module: sale_line_add_auxiliar_field
 #: model:ir.ui.view,arch_db:reserve_without_save_sale.sale_line_add_auxiliar_field
 msgid "Reserve Stock"

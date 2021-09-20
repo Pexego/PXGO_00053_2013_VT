@@ -159,6 +159,7 @@
                                 <field name="buyer_name"/>
                             </group>
                             <group string="Shipping Address">
+                                <field name="address"/>
                                 <field name="city"/>
                                 <field name="state_id"/>
                                 <field name="country_id"/>

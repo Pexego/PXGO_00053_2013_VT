@@ -47,14 +47,17 @@ class KitchenCustomization(models.Model):
 
     def action_done(self):
         self.state = 'done'
-        picking=""
+        picking = ""
         if self.customization_line and self.customization_line[0].move_ids:
             picking = self.customization_line[0].move_ids.filtered(lambda m: m.state != 'cancel')[0].picking_id
             if picking:
                 notes = picking.internal_notes or ""
                 picking_mssg = self.env['ir.config_parameter'].sudo().get_param('kitchen.picking.message')
-                notes += "%s \n" %picking_mssg
-                picking.write({'not_sync': False,'internal_notes': notes})
+                notes += "%s \n" % picking_mssg
+                if picking.scheduled_shipping_date:
+                    picking.write({'internal_notes': notes})
+                else:
+                    picking.write({'not_sync': False, 'internal_notes': notes})
         template = self.env.ref('kitchen.send_mail_to_commercials_customization_done')
         ctx = dict()
         ctx.update({
