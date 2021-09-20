@@ -171,7 +171,7 @@ class CrmClaimRma(models.Model):
                                 'cost_unit': inv_line.product_id.standard_price,
                                 'tax_ids': [(6, 0, taxes_ids)]
                             }
-                            if products_ids[line.product_id.id] < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
+                            if products_ids[inv_line.product_id.id] < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
                                 units_available = inv_line.quantity - inv_line.claim_invoice_line_qty
                                 if units_available > 0:
                                     message += _("There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n") % \
