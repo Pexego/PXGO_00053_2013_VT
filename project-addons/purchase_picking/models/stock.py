@@ -98,8 +98,8 @@ class StockContainer(models.Model):
             res = []
             n_ref = 0
             for line in container.move_ids:
-                if line.id not in res:
-                    res.append(line.id)
+                if line.product_id.id not in res:
+                    res.append(line.product_id.id)
                     n_ref += 1
         container.n_ref = n_ref
 

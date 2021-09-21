@@ -1,0 +1,147 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sim_manager
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-03 08:48+0000\n"
+"PO-Revision-Date: 2021-09-03 08:48+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sim_manager
+#: selection:sim.package,state:0
+msgid "Available"
+msgstr "Disponibile"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_serial_ids
+msgid "Cards"
+msgstr "Carte"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+msgid "Code"
+msgstr "Codice"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_create_date
+msgid "Created on"
+msgstr "Creato en"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,help:sim_manager.action_sim_package
+msgid "Manage the SIM packages"
+msgstr "Gestire i pacchetti SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_move_id
+msgid "Move"
+msgstr "Movimento"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_code
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_package_id
+msgid "Package"
+msgstr "Pacchetto"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.act_res_partner_sim_cards
+#: model:ir.ui.view,arch_db:sim_manager.res_partner_view_buttons_add_sims
+msgid "SIM Cards"
+msgstr "Carte SIM"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_package
+#: model:ir.ui.menu,name:sim_manager.menu_sim_package
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_tree
+msgid "SIM packages"
+msgstr "pacchetti SIM"
+
+#. module: sim_manager
+#: model:ir.ui.menu,name:sim_manager.menu_sim_package_creator
+msgid "Scan SIMs"
+msgstr "Scansionare SIMs"
+
+#. module: sim_manager
+#: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
+#, python-format
+msgid "Scan the #1 serial for %s"
+msgstr "Scansiona il #1 ID per il %s"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator
+msgid "Scanning SIMs"
+msgstr "Scasionando SIMs"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_code
+msgid "Serial"
+msgstr "Nº serie"
+
+#. module: sim_manager
+#: selection:sim.package,state:0
+msgid "Sold"
+msgstr "Venduto"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_partner_id
+msgid "Sold to"
+msgstr "Venduto a"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_state
+msgid "State"
+msgstr "Stato"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:29
+#, python-format
+msgid "{} created"
+msgstr "{} creado"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Create new SIM package"
+msgstr "Creare nuovo pack SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_new_code
+msgid "New package"
+msgstr "Nuovo Pacchetto"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Scan"
+msgstr "Scansiona"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Cancel"
+msgstr "Anulla"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:70
+#, python-format
+msgid "Package %s finished. Scan for continue with next package"
+msgstr "Pachetto %s finito. Scansiona il sucesivo per continuare"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:78
+#: code:addons/sim_manager/models/sim.py:99
+#, python-format
+msgid "Scan the #%s serial for %s"
+msgstr "Scasiona il #%s ID per il %s"

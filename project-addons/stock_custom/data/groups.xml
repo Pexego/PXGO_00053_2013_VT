@@ -4,5 +4,8 @@
         <record id="group_comercial_ext" model="res.groups">
             <field name="name">Comercial externo</field>
         </record>
+        <record id="commercial_group" model="res.groups">
+            <field name="name">Comerciales - Visiotech</field>
+        </record>
     </data>
 </openerp>
