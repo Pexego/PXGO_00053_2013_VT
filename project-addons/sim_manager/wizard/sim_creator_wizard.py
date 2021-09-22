@@ -8,7 +8,7 @@ class SimPackageCreateWizard(models.TransientModel):
     _name = "sim.package.create.wizard"
 
     type_sim = fields.Selection(string='Type',
-                                selection=[('M2M_CARD_ES', 'ES'),
+                                selection=[('M2M_CARD', 'ES'),
                                            ('M2M_CARD_EU', 'EU'),
                                            ('M2M_CARD_VIP', 'VIP')],
                                 required=True)
@@ -20,7 +20,13 @@ class SimPackageCreateWizard(models.TransientModel):
         if not self.type_sim:
             self.new_code = ''
         else:
-            last_code = self.env['sim.package'].search([('code', 'ilike', self.type_sim)], order="create_date desc", limit=1)
+            if self.type_sim == 'M2M_CARD':
+                last_code = self.env['sim.package'].search([('code', 'ilike', self.type_sim),
+                                                            ('code', 'not like', 'EU'),
+                                                            ('code', 'not like', 'VIP')], order="code desc", limit=1)
+            else:
+                last_code = self.env['sim.package'].search([('code', 'ilike', self.type_sim)],
+                                                           order="code desc", limit=1)
             if last_code:
                 self.new_code = self.type_sim + '_' + str(int(last_code.code.split('_')[-1])+1).zfill(6)
             else:
