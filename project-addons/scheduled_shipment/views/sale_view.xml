@@ -34,7 +34,8 @@
             <field name="arch" type="xml">
                 <xpath expr="//header" position="inside">
                     <!-- TODO: revisar estados donde aparece el boton -->
-                    <button name="action_shedule" states="confirmed,waiting,partially_available,assigned" string="Schedule Shipping" type="object" groups="base.group_user"/>
+                    <button name="action_shedule" string="Schedule Shipping" type="object" groups="base.group_user" 
+                        attrs="{'invisible':['|', ('picking_type_code','!=','outgoing'), '|', ('state','in',('assigned')), ('block_picking','=',True)]}"/>
                 </xpath>
             </field>
         </record>
