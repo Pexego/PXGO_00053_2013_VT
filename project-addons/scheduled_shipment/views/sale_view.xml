@@ -6,7 +6,7 @@
             <field name="name">sale.order.scheduled.data</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
-            <field name="groups_id" eval="[(4,ref('base.group_system'))]"/>
+            <field name="groups_id" eval="[(4,ref('base.group_system','stock_custom.commercial_group'))]"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='sale_shipping']/field[@name='picking_policy']" position="after">
                     <field name="scheduled_date"
@@ -19,7 +19,7 @@
             <field name="name">sale.order.scheduled.data.perm</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="scheduled_shipment.view_order_form_scheduled_date"/>
-            <field name="groups_id" eval="[(4,ref('__export__.res_groups_57'))]"/>
+            <field name="groups_id" eval="[(4,ref('stock_custom.commercial_group'))]"/>
             <field name="arch" type="xml">
                 <field name="scheduled_date" position="attributes">
                    <attribute name="readonly">1</attribute>                   
