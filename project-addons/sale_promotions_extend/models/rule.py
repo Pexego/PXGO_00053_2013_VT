@@ -177,10 +177,12 @@ class PromotionsRulesActions(models.Model):
             ('tag_disc_perc_line',
              _('New discount line per product with tag')),
             ('change_pricelist_category',
-             _('Change pricelist price category'))
+             _('Change pricelist price category')),
+            ('brand_disc_perc_accumulated_reverse',
+             _('Discount % on not Brand accumulated')),
             ])
 
-
+    @api.onchange('action_type')
     def on_change(self):
         if self.action_type == 'prod_disc_perc_accumulated':
             self.product_code = 'product_code'
@@ -198,7 +200,7 @@ class PromotionsRulesActions(models.Model):
 
         elif self.action_type in [
                 'brand_disc_perc', 'brand_disc_perc_accumulated',
-                'brand_price_disc_accumulated']:
+                'brand_price_disc_accumulated', 'brand_disc_perc_accumulated_reverse']:
             self.product_code = 'brand_code'
             self.arguments = '0.00'
 
@@ -618,6 +620,13 @@ class PromotionsRulesActions(models.Model):
                                                                                                             pricelist.currency_id)
         # negative discounts (= surcharge) are included in the display price
         return max(base_price, final_price)
+
+    def action_brand_disc_perc_accumulated_reverse(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) != \
+                    order_line.product_id.product_brand_id.code and order_line.product_id.type == 'product':
+                self.apply_perc_discount_accumulated(order_line)
+        return {}
 
 
 class PromotionsRules(models.Model):

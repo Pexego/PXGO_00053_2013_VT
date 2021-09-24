@@ -565,17 +565,17 @@ class AmazonSaleOrder(models.Model):
                 #     journal_id=journal_id)
             else:
                 invoices_ids = order.deposits.create_invoice()
-            order.state = "invoice_created"
-            invoices = self.env['account.invoice'].browse(invoices_ids)
-            if len(invoices) > 1:
-                allinvoices = invoices.do_merge(keep_references=False)
-                invoices = self.env['account.invoice'].browse(list(allinvoices))
-            if invoices.invoice_line_ids:
-                tax_in_price_unit = invoices.invoice_line_ids[0].invoice_line_tax_ids.price_include
-                invoices.write({'tax_in_price_unit': tax_in_price_unit})
-            if not order.warning_price:
-                invoices.action_invoice_open()
-                order.state = 'invoice_open'
+                order.state = "invoice_created"
+                invoices = self.env['account.invoice'].browse(invoices_ids)
+                if len(invoices) > 1:
+                    allinvoices = invoices.do_merge(keep_references=False)
+                    invoices = self.env['account.invoice'].browse(list(allinvoices))
+                if invoices.invoice_line_ids:
+                    tax_in_price_unit = invoices.invoice_line_ids[0].invoice_line_tax_ids.price_include
+                    invoices.write({'tax_in_price_unit': tax_in_price_unit})
+                if not order.warning_price:
+                    invoices.action_invoice_open()
+                    order.state = 'invoice_open'
 
     def mark_to_done(self):
         if self.invoice_deposits:
