@@ -136,3 +136,13 @@ class SimSerial(models.Model):
 
     code = fields.Char(string='Serial')
     package_id = fields.Many2one('sim.package', string='Package')
+
+
+class SimType(models.Model):
+    _name = 'sim.type'
+    _description = 'simType'
+    _rec_name = 'type'
+
+    product_id = fields.Many2one('product.product')
+    type = fields.Char('Type')
+    code = fields.Char('Code')
