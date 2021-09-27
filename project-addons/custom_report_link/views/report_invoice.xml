@@ -18,7 +18,7 @@
                                 <th width="4%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
                                 <t t-if="country_code == 'ES'"> <!-- Esto es para Odoo España (Amazon) -->
                                     <t t-if="o.tax_in_price_unit">
-                                    <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price (VAT included)</strong></th>
+                                        <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price (VAT included)</strong></th>
                                     </t>
                                     <t t-if="not o.tax_in_price_unit">
                                         <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
@@ -31,6 +31,11 @@
                                         <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
                                     </t>
                                 </t>
+                                <t t-if="country_code != 'ES'">
+                                    <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
+                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
+                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
+                                </t>
                                 <th width="10%" class="text-center" style="vertical-align:middle;"><strong>Delivery Note</strong></th>
                             </t>
                             <t t-if="print_hs_code">
@@ -40,7 +45,7 @@
                                 <th width="3%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
                                 <t t-if="country_code == 'ES'"> <!-- Esto es para Odoo España (Amazon) -->
                                     <t t-if="o.tax_in_price_unit">
-                                    <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price (VAT included)</strong></th>
+                                        <th width="12%" class="text-center" style="vertical-align:middle;"><strong>Unit Price (VAT included)</strong></th>
                                     </t>
                                     <t t-if="not o.tax_in_price_unit">
                                         <th width="10%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
@@ -52,6 +57,11 @@
                                     <t t-if="not o.tax_in_price_unit">
                                         <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
                                     </t>
+                                </t>
+                                <t t-if="country_code != 'ES'">
+                                    <th width="10%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
+                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
+                                    <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
                                 </t>
                                 <th width="9%" class="text-center" style="vertical-align:middle;"><strong>Delivery Note</strong></th>
                             </t>
