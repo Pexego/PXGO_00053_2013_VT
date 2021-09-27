@@ -26,13 +26,14 @@ class ProductTemplate(models.Model):
     def create(self, vals):
         prod = super().create(vals)
         prod.property_valuation = prod.categ_id.property_valuation
-        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT' \
-                and not prod.seller_ids:
-            supplierinfo = self.env['product.supplierinfo'].create({
-                'name': 27,
-                'min_qty': 1
-            })
-            prod.seller_ids = supplierinfo
+        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT':
+            if not prod.seller_ids:
+                supplierinfo = self.env['product.supplierinfo'].create({
+                    'name': 27,
+                    'min_qty': 1
+                })
+                prod.seller_ids = supplierinfo
+            prod.last_supplier_id = prod.seller_ids[0].name.id
         return prod
 
     def set_product_template_currency_purchase(self, currency):
@@ -157,6 +158,13 @@ class ProductProduct(models.Model):
                 product.invoice_policy = 'order'
             elif product.type=='product':
                 product.invoice_policy = 'delivery'
+
+    @api.model
+    def create(self, vals):
+        prod = super().create(vals)
+        if self.env['ir.config_parameter'].sudo().get_param('country_code') == 'IT'and prod.seller_ids:
+            prod.last_supplier_id = prod.seller_ids[0].name.id
+        return prod
 
 
 class StockQuantityHistory(models.TransientModel):
