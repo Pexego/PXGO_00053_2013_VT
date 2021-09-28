@@ -271,6 +271,11 @@ class SaleOrder(models.Model):
                                         str(line.product_uom_qty) + '    '
                 if products_to_order:
                     sale.send_email_to_purchases(products_to_order)
+
+        if self.not_sync_picking:
+            for picking in self.picking_ids:
+                picking.not_sync = True
+
         return res
 
     @api.multi
