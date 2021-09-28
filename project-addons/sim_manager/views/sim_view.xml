@@ -54,6 +54,8 @@
                <filter string="Sold" domain="[('state','=','sold')]"/>
                <filter string="Available" domain="[('state','=','available')]"/>
                <field name="code" string="Paquete"/>
+               <field name="serial_ids" string="Tarjetas"/>
+               <field name="partner_id" string="Cliente"/>
            </search>
         </field>
     </record>
