@@ -301,7 +301,7 @@ class CrmClaimRma(models.Model):
                         taxes_ids = fp_obj.map_tax(line.tax_ids)
                         products_dict[line.product_id]['invoice_line_tax_ids'] = [(6, 0, taxes_ids.ids)]
                     
-                    line.invoiced = True
+                line.invoiced = True
 
             for product in products_dict:
                 products_dict[product]['line_obj'].create(products_dict[product])
