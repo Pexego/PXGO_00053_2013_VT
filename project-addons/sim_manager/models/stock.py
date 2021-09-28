@@ -16,7 +16,7 @@ class StockMove(models.Model):
                         pkg.write({'partner_id': self.partner_id.commercial_partner_id.id,
                                    'move_id': self.id,
                                    'state': 'sold'})
-                        if self.partner_id.commercial_partner_id.web:
+                        if 'VISIOTECH' not in self.partner_id.commercial_partner_id.name:
                             sim_packages.with_delay(priority=10).notify_sale_web('sold')
                 else:
                     # Notify warehouse something missing
@@ -42,7 +42,7 @@ class StockMove(models.Model):
                         sim_packages.write({'partner_id': None,
                                             'move_id': None,
                                             'state': 'available'})
-                        if self.partner_id.commercial_partner_id.web:
+                        if 'VISIOTECH' not in self.partner_id.commercial_partner_id.name:
                             sim_packages.with_delay(priority=10).notify_sale_web('return')
         return res
 
