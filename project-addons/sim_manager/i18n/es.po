@@ -186,3 +186,9 @@ msgstr "Tipos de SIM"
 #: model:ir.model.fields,field_description:sim_manager.field_sim_type_type
 msgid "Type"
 msgstr "Tipo"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/stock.py:27
+#, python-format
+msgid "Some of these SIM cards %s of the picking %s have not been found in the system."
+msgstr "Algunas de estas tarjetas SIM %s del albarán %s no se encuentran en el sistema."
