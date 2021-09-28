@@ -16,8 +16,9 @@ class StockMove(models.Model):
                         pkg.write({'partner_id': self.partner_id.commercial_partner_id.id,
                                    'move_id': self.id,
                                    'state': 'sold'})
-                        if 'VISIOTECH' not in self.partner_id.commercial_partner_id.name:
-                            sim_packages.with_delay(priority=10).notify_sale_web('sold')
+                        if 'VISIOTECH' not in self.partner_id.commercial_partner_id.name \
+                                and 'VIP' not in pkg.code:  # TODO: manejar con los tipos
+                            pkg.with_delay(priority=10).notify_sale_web('sold')
                 else:
                     # Notify warehouse something missing
                     mail_pool = self.env['mail.mail']
@@ -39,11 +40,13 @@ class StockMove(models.Model):
                 for pkg_code in vals.get('lots_text', '').split(', '):
                     sim_packages = self.env['sim.package'].search([('code', '=', pkg_code)])
                     if sim_packages:
-                        sim_packages.write({'partner_id': None,
-                                            'move_id': None,
-                                            'state': 'available'})
-                        if 'VISIOTECH' not in self.partner_id.commercial_partner_id.name:
-                            sim_packages.with_delay(priority=10).notify_sale_web('return')
+                        for pkg in sim_packages:
+                            pkg.write({'partner_id': None,
+                                       'move_id': None,
+                                       'state': 'available'})
+                            if 'VISIOTECH' not in self.partner_id.commercial_partner_id.name \
+                                    and 'VIP' not in pkg.code:  # TODO: manejar con los tipos
+                                pkg.with_delay(priority=10).notify_sale_web('sold')
         return res
 
 
