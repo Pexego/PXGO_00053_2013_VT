@@ -188,3 +188,8 @@ msgstr "No hay suficiente stock, pero tenemos un producto de reemplazo!"
 #: model:ir.ui.view,arch_db:sale_custom.sale_report_year_filter
 msgid "This Year"
 msgstr "Este año"
+
+#. module: sale_custom
+#: model:ir.actions.act_window,name:sale_custom.open_historical_orders
+msgid "Historical orders"
+msgstr "Pedidos del cliente"
