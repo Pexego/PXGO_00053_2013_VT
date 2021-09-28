@@ -28,6 +28,7 @@ msgstr "Tarjetas"
 
 #. module: sim_manager
 #: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_code
 msgid "Code"
 msgstr "Código"
 
@@ -157,3 +158,37 @@ msgstr "Paquete %s terminado. Escanea el siguiente para continuar"
 #, python-format
 msgid "Scan the #%s serial for %s"
 msgstr "Escanea el #%s ID para el %s"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,help:sim_manager.action_sim_type_config
+msgid "Manage the SIM Types"
+msgstr "Gestionar tipos de SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_type_form
+msgid "SIM Type"
+msgstr "Tipo SIM"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_type_config
+#: model:ir.ui.menu,name:sim_manager.menu_sim_type_config
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_type
+msgid "SIM Types"
+msgstr "Tipos de SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/stock.py:27
+#, python-format
+msgid "Some of these SIM cards %s of the picking %s have not been found in the system."
+msgstr "Algunas de estas tarjetas SIM %s del albarán %s no se encuentran en el sistema."
