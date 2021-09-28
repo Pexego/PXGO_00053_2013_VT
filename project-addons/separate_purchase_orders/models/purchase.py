@@ -48,6 +48,9 @@ class PurchaseOrder(models.Model):
     def action_view_invoice_custom(self):
         res = self.action_view_invoice()
         purchase_invoices = self.order_split_ids.mapped('invoice_ids')
+        context = dict(self.env.context or {})
+        context.update(create=False)
+        res['context'] = context
         if self.state == 'purchase_order' and purchase_invoices:
             if not purchase_invoices or len(purchase_invoices) > 1:
                 res['domain'] = "[('id','in',%s)]" % purchase_invoices.ids
