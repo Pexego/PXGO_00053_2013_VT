@@ -40,8 +40,6 @@
                                     </td>
                                     <td>
                                     </td>
-                                    <td>
-                                    </td>
                                 </tr>
                                 <tr style="font-weight: bold; background-color:#CCCCCC; color:#444444;">
                                     <td>
@@ -64,9 +62,6 @@
                                     </td>
                                     <td class="  text-center">
                                         % Am
-                                    </td>
-                                    <td class="  text-center">
-                                        Monthly
                                     </td>
                                     <td class="  text-center">
                                         Lifetime
@@ -97,16 +92,12 @@
                                     <span t-esc="'%.0f' % (((asset.value - asset.value_residual)*100)/asset.value)"/>%
                                 </td>
                                 <td class="text-center">
-                                    <span t-field="asset.depreciation_line_ids[0].amount"/>€
-                                </td>
-                                <td class="text-center">
                                     <span t-esc="'%.0f' % (asset.method_number/12)"/>
                                 </td>
                                 <td class="text-center">
                                     <span t-field="asset.depreciation_line_ids[-1].depreciation_date"/>
                                 </td>
                                 <tr>
-                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
