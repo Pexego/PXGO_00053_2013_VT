@@ -105,10 +105,9 @@
         <field name="name">CRM - Supplier Lines Tree</field>
         <field name="model">claim.line</field>
         <field name="arch" type="xml">
-            <tree string="Returned lines" name="returned_lines">     
+            <tree string="Supplier lines" editable="bottom">     
                 <field name="claim_id" />           
                 <field name="product_id"/>
-                <button name="equivalent_products" string="Change product" type="object" icon="fa-retweet"/>
                 <field name="equivalent_product_id" readonly="1"/>
                 <field name="name" string="Customer description"/>
                 <field name="product_returned_quantity"/>
@@ -122,7 +121,6 @@
                 <field name="move_out_customer_state"/>
                 <field name="supplier_id"/>
                 <field name="internal_description"/>
-                <button name="%(action_claim_make_repair)d" type="action" string="Create repair" attrs="{'invisible': [('repair_id', '!=', False)]}"/>
             </tree>
         </field>
     </record>
@@ -550,7 +548,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="act_crm_case_claim_lines_supplier">
-        <field name="name">Claim lines</field>
+        <field name="name">Claim supplier lines</field>
         <field name="res_model">claim.line</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
