@@ -671,3 +671,15 @@ msgstr "Precio fijo por cada producto"
 #, python-format
 msgid "New discount line per product with tag"
 msgstr "Nueva línea descuento por producto con tag"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Change pricelist price category"
+msgstr "Cambio precio de tarifa en categoría"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Discount % on not Brand accumulated"
+msgstr "Descuento % en NO marca"

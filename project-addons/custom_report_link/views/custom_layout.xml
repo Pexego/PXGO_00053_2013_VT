@@ -846,8 +846,14 @@ SWIFT/BIC: BESCPTPL
             <div class="row">
                 <br/>
                 <div class="pull-left">
-                    <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id.commercial_partner_id"
+                    <t t-if="o.partner_id.amazon_parent_id">
+                       <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id"
                              t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                    </t>
+                    <t t-if="not o.partner_id.amazon_parent_id">
+                        <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id.commercial_partner_id"
+                                 t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                    </t>
                 </div>
                 <div class="pull-right text-right">
                     <br/>
@@ -862,7 +868,13 @@ SWIFT/BIC: BESCPTPL
                             <strong style="color:#6D6E70" t-field="o.number"/>
                         </div>
                     </t>
-                    <t t-if="o.partner_id.commercial_partner_id.vat">
+                    <t t-if="o.partner_id.amazon_parent_id and o.partner_id.vat">
+                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.:
+                            <span style="font-weight: normal; color:#6D6E70"
+                                  t-field="o.partner_id.vat"/>
+                        </div>
+                    </t>
+                    <t t-if="not o.partner_id.amazon_parent_id and o.partner_id.commercial_partner_id.vat">
                         <div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.:
                             <span style="font-weight: normal; color:#6D6E70"
                                   t-field="o.partner_id.commercial_partner_id.vat"/>

@@ -14,12 +14,14 @@
     </record>
 
     <record id="amazon_marketplace_tree" model="ir.ui.view">
-        <field name="name">amazon.marketplace.form</field>
+        <field name="name">amazon.marketplace.tree</field>
         <field name="model">amazon.marketplace</field>
         <field name="arch" type="xml">
-            <tree string="Marketplaces" editable="top">
+            <tree string="Marketplaces">
                 <field name="name"/>
                 <field name="code"/>
+                <field name="amazon_name"/>
+                <field name="account_id"/>
             </tree>
         </field>
     </record>
@@ -29,10 +31,12 @@
         <field name="model">amazon.marketplace</field>
         <field name="arch" type="xml">
             <form string="Marketplaces">
-                <sheet>
+                <group>
                     <field name="name"/>
                     <field name="code"/>
-                </sheet>
+                    <field name="amazon_name"/>
+                    <field name="account_id"/>
+                </group>
             </form>
         </field>
     </record>
@@ -48,7 +52,13 @@
     <menuitem id="amazon_menu" name="Amazon" web_icon="amazon_connector,static/amazon_logo.png"
               sequence="4" action="action_show_amazon_orders" groups="amazon_connector.group_amazon"/>
 
-    <menuitem id="config_amazon_menu" name="Configuration" sequence="1"
+    <menuitem id="sales_amazon_parent_menu" name="Sales" sequence="1"
+              parent="amazon_menu"/>
+
+    <menuitem id="sales_amazon_menu" name="Sales" sequence="1" action="action_show_amazon_orders"
+              parent="sales_amazon_parent_menu"/>
+
+    <menuitem id="config_amazon_menu" name="Configuration" sequence="3"
               parent="amazon_menu"/>
 
     <menuitem id="marketplaces_menu" name="Marketplaces" sequence="1" action="action_show_marketplaces"
@@ -111,6 +121,7 @@
                             <field name="fulfillment" readonly="1"/>
                             <field name="sales_channel" readonly="1"/>
                             <field name="purchase_date" readonly="1"/>
+                            <field name="fiscal_position_id" attrs="{'readonly':[('state','!=','error')]}"/>
                         </group>
                     </group>
                     <notebook>
@@ -141,11 +152,18 @@
                             </group>
                         </page>
                         <page string="Buyer Info" name="buyer_info">
-                            <group>
+                            <group string="General Info">
                                 <field name="partner_vat"/>
                                 <field name="vat_imputation_country"/>
                                 <field name="buyer_email"/>
                                 <field name="buyer_name"/>
+                            </group>
+                            <group string="Shipping Address">
+                                <field name="address"/>
+                                <field name="city"/>
+                                <field name="state_id"/>
+                                <field name="country_id"/>
+                                <field name="zip"/>
                             </group>
                         </page>
                     </notebook>

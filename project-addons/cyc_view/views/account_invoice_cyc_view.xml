@@ -10,6 +10,7 @@
                 <field name="area_id"/>
                 <field name="user_id"/>
                 <field name="invoice_month"/>
+                <field name="invoice_quarter"/>
                 <field name="invoice_year"/>
                 <field name="credit_covered"/>
                 <field name="credit_not_covered"/>
@@ -39,6 +40,7 @@
                 <filter name="area" string="Area" context="{'group_by': 'area_id'}"/>
                 <filter name="year" string="Year" context="{'group_by': 'invoice_year'}"/>
                 <filter name="month" string="Month" context="{'group_by': 'invoice_month'}"/>
+                <filter name="quarter" string="Quarter" context="{'group_by': 'invoice_quarter'}"/>
                 <filter name="state" string="State" context="{'group_by': 'invoice_state'}"/>
             </search>
         </field>

@@ -125,18 +125,62 @@
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
             <form string="Container">
-                <group colspan="4">
-                    <group col="2" colspan="2">
-                        <field name="name"/>
-                    </group>
-                    <group col="2" colspan="2">
+                <group col="6" colspan="2">
+                    <field name="name"/>
+                    <field name="status"/>
+                    <field name="ready"/>
+                    <field name="type"/>
+                    <field name="telex"/>
+                    <label for="etd"/>
+                    <div>
+                        <field name="etd"/>
+                        <field name="departure" nolabel="1" style="padding-left: 15px;"/>
+                    </div>
+                    <field name="incoterm" context=""/>
+                    <field name="n_ref"/>
+                    <field name="eta"/>
+                    <field name="destination_port"/>
+                    <field name="ctns"/>
+                    <label for="date_expected"/>
+                    <div>
                         <field name="date_expected"/>
-                    </group>
-                    <group col="2" colspan="2">
-                        <field name="picking_ids" widget="many2many_tags"/>
-                    </group>
-                    <separator string="Related Moves" colspan="4"/>
-                    <field name="move_ids" context="{'tree_view_ref':'purchase_picking.stock_move_custom_tree'}" nolabel="1" colspan="4"/>
+                        <field name="conf" nolabel="1" style="padding-left: 15px;"/>
+                    </div>
+                    <label for="forwarder"/>
+                    <div>
+                        <field name="forwarder"/>
+                        <field name="forwarder_comercial" nolabel="1" style="padding-left: 15px;" readonly="1"/>
+                    </div>
+                    <field name="dimensions" invisible="1"/>
+                    <field name="arrived"/>
+                    <field name="dimensions"/>
+                    <field name="notes_purchases" colspan="4" style="padding-right: 20%;"/>
+                    <field name="cost"/>
+                    <field name="notes_warehouse" colspan="4" style="padding-right: 20%;"/>
+
+                </group>
+
+                <group colspan="4">
+                    <separator string="Moves" colspan="4"/>
+                    <notebook>
+                        <page string="Products">
+                            <field name="move_ids" context="{'tree_view_ref':'purchase_picking.stock_move_custom_tree'}" nolabel="1" colspan="4"/>
+                        </page>
+                        <page string="VT/IN">
+                            <field name="picking_ids" widget="one2many_list" colspan="4">
+                                <tree string="Pickings" create="false" default_order="id">
+                                    <field name="name"/>
+                                    <field name="location_id"/>
+                                    <field name="partner_id"/>
+                                    <field name="date_done"/>
+                                    <field name="origin"/>
+                                    <field name="backorder_id"/>
+                                    <field name="state"/>
+                                    <field name="id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </group>
             </form>
         </field>
@@ -177,9 +221,21 @@
         <field name="name">stock.container.tree</field>
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
-            <tree string="Containers">
+            <tree string="Containers" class="custom_tree">
                 <field name="name"/>
+                <field name="type"/>
+                <field name="incoterm"/>
+                <field name="destination_port"/>
+                <field name="forwarder_comercial"/>
+                <field name="dimensions"/>
+                <field name="ready"/>
+                <field name="etd"/>
+                <field name="eta"/>
+                <field name="status"/>
                 <field name="date_expected"/>
+                <field name="conf"/>
+                <field name="arrived"/>
+                <field name="notes_purchases"/>
             </tree>
         </field>
     </record>
@@ -189,20 +245,217 @@
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
             <search string="Containers">
-               <field name="name"/>
+                <field name="name"/>
+                <filter name="filter_by_air" string="Air shipping" domain="[('type', 'in', ['air'])]" />
+                <filter name="filter_by_road" string="Road shipping" domain="[('type', 'in', ['road'])]" />
+                <filter name="filter_by_sea" string="Sea shipping" domain="[('type', 'in', ['sea'])]" />
            </search>
         </field>
     </record>
 
-    <record model="ir.actions.act_window" id="action_stock_container">
-        <field name="name">Containers</field>
+    <record model="ir.actions.act_window" id="action_stock_container_air">
+        <field name="name">Air Shipping</field>
         <field name="res_model">stock.container</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_stock_container_tree"/>
         <field name="search_view_id" ref="view_stock_container_filter"/>
+        <field name="context">{'search_default_filter_by_air': 1, 'default_type' : 'air', 'incoterm_code' : True}</field>
     </record>
 
-    <menuitem name="Containers" parent="purchase.menu_purchase_control"
-        action="action_stock_container" id="stock_container_menu"/>
+    <record model="ir.actions.act_window" id="action_stock_container_road">
+        <field name="name">Road Shipping</field>
+        <field name="res_model">stock.container</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_stock_container_tree"/>
+        <field name="search_view_id" ref="view_stock_container_filter"/>
+        <field name="context">{'search_default_filter_by_road': 1, 'default_type' : 'road', 'incoterm_code' : True}</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_stock_container_sea">
+        <field name="name">Sea Shipping</field>
+        <field name="res_model">stock.container</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_stock_container_tree"/>
+        <field name="search_view_id" ref="view_stock_container_filter"/>
+        <field name="context">{'search_default_filter_by_sea': 1, 'default_type' : 'sea', 'incoterm_code' : True}</field>
+    </record>
+
+
+    <!-- incoterm views -->
+    <record id="incoterm_tree" model="ir.ui.view">
+        <field name="name">incoterm.tree</field>
+        <field name="model">stock.incoterms</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Incoterm">
+                <field name="code"/>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="incoterm_form" model="ir.ui.view">
+        <field name="name">incoterm.form</field>
+        <field name="model">stock.incoterms</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Incoterm">
+                <sheet>
+                    <group>
+                        <field name="active"/>
+                        <field name="code"/>
+                        <field name="name"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="incoterm_search" model="ir.ui.view">
+        <field name="name">Incoterm search</field>
+        <field name="model">stock.incoterms</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Incoterm">
+                <filter string="inactive" name="inactive"
+                        domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="act_stock_container_incoterm" model="ir.actions.act_window">
+        <field name="name">Stock container incoterm</field>
+        <field name="res_model">stock.incoterms</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="incoterm_search"/>
+    </record>
+
+    <!-- port views -->
+    <record id="port_tree" model="ir.ui.view">
+        <field name="name">port.tree</field>
+        <field name="model">stock.container.port</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="NAV/PTO">
+                <field name="port_code"/>
+                <field name="port_desc"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="port_form" model="ir.ui.view">
+        <field name="name">port.form</field>
+        <field name="model">stock.container.port</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="NAV/PTO">
+                <sheet>
+                    <group>
+                        <field name="active"/>
+                        <field name="port_code"/>
+                        <field name="port_desc"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="port_search" model="ir.ui.view">
+        <field name="name">Port search</field>
+        <field name="model">stock.container.port</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="NAV/PTO">
+                <filter string="inactive" name="inactive"
+                        domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="act_stock_container_port" model="ir.actions.act_window">
+        <field name="name">Stock container port</field>
+        <field name="res_model">stock.container.port</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="port_search"/>
+    </record>
+
+    <!-- status views -->
+    <record id="status_tree" model="ir.ui.view">
+        <field name="name">status.tree</field>
+        <field name="model">stock.container.status</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Status">
+                <field name="status_name"/>
+                <field name="status_code"/>
+                <field name="status_desc"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="status_form" model="ir.ui.view">
+        <field name="name">status.form</field>
+        <field name="model">stock.container.status</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Status">
+                <sheet>
+                    <group>
+                        <field name="active"/>
+                        <field name="status_name"/>
+                        <field name="status_code"/>
+                        <field name="status_desc"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="status_search" model="ir.ui.view">
+        <field name="name">Status search</field>
+        <field name="model">stock.container.status</field>
+        <field name="type">search</field>
+        <field name="arch" type="xml">
+            <search string="Status">
+                <filter string="inactive" name="inactive"
+                        domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="act_stock_container_status" model="ir.actions.act_window">
+        <field name="name">Stock container status</field>
+        <field name="res_model">stock.container.status</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="status_search"/>
+    </record>
+
+    <!-- menu -->
+    <menuitem name="Air shipping" parent="purchase.menu_purchase_control"
+        action="action_stock_container_air" id="stock_container_menu_air"/>
+
+    <menuitem name="Road shipping" parent="purchase.menu_purchase_control"
+        action="action_stock_container_road" id="stock_container_menu_road"/>
+
+    <menuitem name="Sea shipping" parent="purchase.menu_purchase_control"
+        action="action_stock_container_sea" id="stock_container_menu_sea"/>
+
+    <menuitem id="shipping_menu" name="Shipping"
+            parent="purchase.menu_purchase_config" />
+
+    <menuitem id="shipping_menu_incoterm" name="Incoterm"
+            parent="shipping_menu" action="act_stock_container_incoterm"/>
+
+    <menuitem id="shipping_menu_company_port" name="Shipping company and port"
+            parent="shipping_menu" action="act_stock_container_port"/>
+
+    <menuitem id="shipping_menu_status" name="Status"
+            parent="shipping_menu" action="act_stock_container_status"/>
+
 </odoo>

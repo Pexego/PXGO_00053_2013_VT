@@ -19,6 +19,7 @@
 ##############################################################################
 
 from odoo import models, fields
+from odoo.addons.queue_job.job import job
 
 
 class PartnerPointProgrammeBag(models.Model):
@@ -37,6 +38,25 @@ class PartnerPointProgrammeBag(models.Model):
         ('applied', 'Applied'),
     ], string='State', default='no')
     line_id = fields.Many2one('sale.order.line', 'Sale order line', readonly=True)
+
+    @job(retry_pattern={1: 10 * 60, 2: 20 * 60, 3: 30 * 60, 4: 40 * 60, 5: 50 * 60})
+    def recalculate_partner_point_bag_accumulated(self, rule_ids, partner_id):
+        bag_accumulated_obj = self.env['res.partner.point.programme.bag.accumulated']
+        for rule in rule_ids:
+            bag = self.env['res.partner.point.programme.bag'].search_read(
+                [('point_rule_id', '=', rule.id), ('applied_state', '=', 'no'), ('partner_id', '=', partner_id.id)],
+                ['points'])
+            points = sum(x['points'] for x in bag)
+            bag_accumulated = bag_accumulated_obj.search(
+                [('partner_id', '=', partner_id.id), ('point_rule_id', '=', rule.id)])
+            if bag_accumulated:
+                bag_accumulated.write({'points': points})
+            else:
+                bag_accumulated_obj.create({'name': rule.name,
+                                                      'point_rule_id': rule.id,
+                                                      'points': points,
+                                                      'partner_id': partner_id})
+        return True
 
 
 class PartnerPointProgrammeBagAccumulated(models.Model):

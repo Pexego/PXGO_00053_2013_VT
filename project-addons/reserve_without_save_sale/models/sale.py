@@ -19,6 +19,23 @@ class SaleOrder(models.Model):
         ('cancel', 'Cancelled'),
     ])
 
+    infinite_reservation = fields.Boolean(
+        string='Has Infinite Reservations')
+
+    @api.multi
+    def update_stock_reservation_date_validity(self):
+        now = datetime.now()
+        for sale in self:
+            for line in sale.order_line:
+                if sale.infinite_reservation:
+                    date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
+                    line.reservation_ids.write({'date_validity': date_validity})
+                else:
+                    date_validity = (now + relativedelta(days=7)).strftime("%Y-%m-%d")
+                    line.reservation_ids.write({'date_validity': date_validity})
+
+
+
     @api.multi
     @api.depends('state',
                  'order_line.reservation_ids',
@@ -189,6 +206,8 @@ class SaleOrderLine(models.Model):
             return True
 
         for line in self:
+            if line.order_id.infinite_reservation:
+                date_validity = (now + relativedelta(days=365)).strftime("%Y-%m-%d")
             if line.order_id.state in ('draft', 'sent', 'progress', 'done',
                                        'manual'):
                 continue
@@ -205,6 +224,7 @@ class SaleOrderLine(models.Model):
                     pack_reservation = self.env['stock.reservation'].search([('sale_line_id', '=', line.id)])
                     pack_reservation.write({'sale_line_id': line.id})
                     pack_reservation.write({'origin': line.order_id.name})
+                    pack_reservation.write({'date_validity': date_validity})
                 else:
                     reservation.write({'sale_line_id': line.id})
                     reservation.write({'origin': line.order_id.name})

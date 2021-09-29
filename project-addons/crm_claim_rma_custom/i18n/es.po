@@ -239,11 +239,6 @@ msgid "My Case(s)"
 msgstr "Mis casos"
 
 #. module: crm_claim_rma_custom
-#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
-msgid "New Refund"
-msgstr "Nuevo abono"
-
-#. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_make_picking_wizard_not_sync
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_make_picking_from_picking_wizard_not_sync
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_stock_location_not_sync
@@ -532,3 +527,92 @@ msgstr "<p>Estimado cliente,</p> <p>Le informamos que hemos recibido los product
 #: model:mail.template,subject:crm_claim_rma_custom.rma_received_template
 msgid "Visiotech - RMA received"
 msgstr "Visiotech - RMA recibido"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.crm_claim_rma_form_view3
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
+msgid "New Refund"
+msgstr "Nuevo abono"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.create_invoice_payment_discount_wizard
+msgid "Create Invoice Payment Discount"
+msgstr "Wizard de descuentos en facturas "
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
+msgid "This invoice has discounts"
+msgstr "Esta factura tiene descuentos"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_invoice_id
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_product_description
+msgid "Description"
+msgstr "Descripción de producto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_qty
+msgid "Quantity"
+msgstr "Cantidad"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_price_unit
+msgid "Price per Unit"
+msgstr "Precio por Unidad"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_discount
+msgid "Discount"
+msgstr "Descuento"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_tax_ids
+msgid "Taxes"
+msgstr "Impuestos"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_price_subtotal
+msgid "Price Subtotal"
+msgstr "Subtotal"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_invoice_discount_line_invoiced
+msgid "Invoiced"
+msgstr "Facturado"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_discount_wizard
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_payment_discount_form
+msgid "Create refund"
+msgstr "Crear abono"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_discount_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/wizard/invoice_discount_wiz.py:20
+#, python-format
+msgid "Crm Claim Invoice Discount"
+msgstr "Facturas con descuentos en CRM"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/crm_claim.py:331
+#, python-format
+msgid "This orders have discounts. Do you want to proceed anyways?: %s"
+msgstr "Las siguientes facturas tienen descuentos. ¿Quieres continuar?: %s"

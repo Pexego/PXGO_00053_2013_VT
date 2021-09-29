@@ -147,6 +147,12 @@ class CrmClaimRma(models.Model):
                     claim_inv_lines = claim_inv_line_obj.search([('claim_line_id', '=', claim_line.id)])
                     if claim_inv_lines:
                         continue
+                    products_ids = {}
+                    for line in claim_line.invoice_id.invoice_line_ids:
+                        if line.product_id.id in products_ids:
+                            products_ids[line.product_id.id] += line.quantity
+                        else:
+                            products_ids[line.product_id.id] = line.quantity
                     for inv_line in claim_line.invoice_id.invoice_line_ids:
                         if inv_line.product_id == claim_line.product_id:
                             if inv_line.invoice_line_tax_ids:
@@ -165,7 +171,7 @@ class CrmClaimRma(models.Model):
                                 'cost_unit': inv_line.product_id.standard_price,
                                 'tax_ids': [(6, 0, taxes_ids)]
                             }
-                            if inv_line.quantity < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
+                            if products_ids[inv_line.product_id.id] < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
                                 units_available = inv_line.quantity - inv_line.claim_invoice_line_qty
                                 if units_available > 0:
                                     message += _("There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n") % \
@@ -252,6 +258,7 @@ class CrmClaimRma(models.Model):
             inv_obj = self.env['account.invoice']
             invoice_id = inv_obj.create(header_vals)
             fp_obj = self.env['account.fiscal.position']
+            products_dict = {}
             for line in claim_obj.claim_inv_line_ids:
                 if line.invoiced:
                     continue
@@ -272,26 +279,32 @@ class CrmClaimRma(models.Model):
                     prop = self.env['ir.property'].get('property_account_income_categ_id', 'product.category')
                     account_id = prop and prop.id or False
                 account_id = fp_obj.map_account(account_id)
-                vals = {
-                    'invoice_id': invoice_id.id,
-                    'name': line.product_description,
-                    'product_id': line.product_id.id,
-                    'account_id': account_id,
-                    'quantity': line.qty,
-                    'claim_line_id': line.claim_line_id.id,
-                    'price_unit': line.price_unit,
-                    'cost_unit': line.cost_unit,
-                    'uos_id': line.product_id.uom_id.id,
-                    'discount': line.discount,
-                    'account_analytic_id': False
-                }
-                if line.tax_ids:
-                    taxes_ids = fp_obj.map_tax(line.tax_ids)
-                    vals['invoice_line_tax_ids'] = [(6, 0, taxes_ids.ids)]
-                line_obj = self.env['account.invoice.line']
-                line_obj.create(vals)
 
+                if line.product_id in products_dict and invoice_id.id == products_dict[line.product_id]['invoice_id']:
+                    products_dict[line.product_id]['quantity'] += line.qty
+                else:
+                    products_dict[line.product_id] = {
+                        'invoice_id': invoice_id.id,
+                        'name': line.product_description,
+                        'product_id': line.product_id.id,
+                        'account_id': account_id,
+                        'quantity': line.qty,
+                        'claim_line_id': line.claim_line_id.id,
+                        'price_unit': line.price_unit,
+                        'cost_unit': line.cost_unit,
+                        'uos_id': line.product_id.uom_id.id,
+                        'discount': line.discount,
+                        'account_analytic_id': False,
+                        'line_obj': self.env['account.invoice.line']
+                    }
+                    if line.tax_ids:
+                        taxes_ids = fp_obj.map_tax(line.tax_ids)
+                        products_dict[line.product_id]['invoice_line_tax_ids'] = [(6, 0, taxes_ids.ids)]
+                    
                 line.invoiced = True
+
+            for product in products_dict:
+                products_dict[product]['line_obj'].create(products_dict[product])
 
             invoice_id.compute_taxes()
             invoice_id.action_invoice_open()
@@ -310,6 +323,27 @@ class CrmClaimRma(models.Model):
             for line in claim.claim_line_ids:
                 line.sequence = seq
                 seq += 1
+
+    
+    @api.multi
+    def check_discounts(self):
+        discount_product_list = []
+        has_discount = False
+        for claim_obj in self:
+            for line in claim_obj.claim_inv_line_ids:
+                for i_line_id in line.invoice_id.invoice_line_ids:
+                    if i_line_id.product_id.name == 'Discount line' and not line.invoice_id.number in discount_product_list:
+                        has_discount = True
+
+                        discount_product_list.append(line.invoice_id.number)
+        if has_discount:
+            return self.env['invoice.discount.wiz'].create({
+                                'origin_reference': '%s,%s' % ('crm.claim', self.id),
+                                'continue_method': 'make_refund_invoice',
+                                'message': _("This orders have discounts. Do you want to proceed anyways?: %s") % ', '.join(discount_product_list)
+                            }).action_show()
+        else:
+            self.make_refund_invoice()
 
 
 class ClaimInvoiceLine(models.Model):

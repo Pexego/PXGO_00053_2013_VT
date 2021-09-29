@@ -31,15 +31,6 @@
             <field name="company_id" position="after">
                 <field name="no_promos"/>
             </field>
-            <!-- TODO: Temporal -->
-            <field name="order_line" position="after">
-                <p style="color:red" attrs="{'invisible': ['|','|',('amount_untaxed','&lt;','500'),('state','in',('sale','done','cancel')),('no_promos','=',True)]}">
-                    Promo: Se añadirá un 50XMASK-HYGIENIC gratis al tramitar
-                </p>
-                <p style="color:red" attrs="{'invisible': ['|','|',('amount_untaxed','&lt;','1000'),('state','in',('sale', 'done', 'cancel')),('no_promos','=',True)]}">
-                    Promo: Se añadirá un UT300R + BATT-6LR61 gratis al tramitar
-                </p>
-            </field>
         </field>
     </record>
 </odoo>
