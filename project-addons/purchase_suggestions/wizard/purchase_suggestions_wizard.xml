@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="purchase_suggestions_wizard" model="ir.ui.view">
+        <field name="name">purchase.suggestions.wizard.form</field>
+        <field name="model">purchase.suggestions.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Suggestions">
+                <group>
+                    <field name="date_from"/>
+                    <field name="week_level"/>
+                    <field name="month_level"/>
+                </group>
+                <footer>
+                    <button string="Calculate" type="object" name="calculate" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="Purchase Suggestions"
+                res_model="purchase.suggestions.wizard"
+                src_model="purchase.suggestions.wizard"
+                view_id="purchase_suggestions_wizard"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"
+                id="purchase_suggestions_wizard_action"/>
+
+    <menuitem id="menu_purchase_suggestions" name="Purchase Suggestions" parent="purchase.menu_purchase_control"
+              sequence="110" action="purchase_suggestions_wizard_action"/>
+
+    <record id="purchase_suggestions_statistics_tree" model="ir.ui.view">
+        <field name="name">purchase.suggestions.statistics.tree</field>
+        <field name="model">purchase.suggestions.statistics</field>
+        <field name="arch" type="xml">
+            <tree string="Statistics" editable="bottom">
+                <field name="product_id"/>
+                <field name="min"/>
+                <field name="q0"/>
+                <field name="q1"/>
+                <field name="q2"/>
+                <field name="q3"/>
+                <field name="q4"/>
+                <field name="max"/>
+                <field name="d1"/>
+                <field name="d2"/>
+                <field name="d3"/>
+                <field name="d4"/>
+                <field name="mean"/>
+                <field name="calculated_by" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+    <record id="purchase_suggestions_statistics_form" model="ir.ui.view">
+        <field name="name">purchase.suggestions.statistics.form</field>
+        <field name="model">purchase.suggestions.statistics</field>
+        <field name="arch" type="xml">
+            <form string="Statistics">
+                <field name="product_id"/>
+                <field name="min"/>
+                <field name="q0"/>
+                <field name="q1"/>
+                <field name="q2"/>
+                <field name="q3"/>
+                <field name="q4"/>
+                <field name="max"/>
+                <field name="d1"/>
+                <field name="d2"/>
+                <field name="d3"/>
+                <field name="d4"/>
+                <field name="mean"/>
+                <field name="calculated_by" invisible="1"/>
+            </form>
+        </field>
+    </record>
+    <record id="purchase_suggestions_line_tree" model="ir.ui.view">
+        <field name="name">purchase.suggestions.line.tree</field>
+        <field name="model">purchase.suggestions.line</field>
+        <field name="arch" type="xml">
+            <tree string="Purchase Suggestions Lines" editable="bottom">
+                <field name="product_id"/>
+                <field name="qty"/>
+                <field name="qty_to_purchase"/>
+                <field name="calculated_by" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="purchase_suggestions_line_form" model="ir.ui.view">
+        <field name="name">purchase.suggestions.line.form</field>
+        <field name="model">purchase.suggestions.line</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Suggestions Lines">
+                <field name="product_id"/>
+                <field name="qty"/>
+                <field name="qty_to_purchase"/>
+                <field name="calculated_by" invisible="1"/>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="purchase_suggestions_form" model="ir.ui.view">
+        <field name="name">purchase.suggestions.form</field>
+        <field name="model">purchase.suggestions</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="create_order" string="Create Order" type="object"
+                            class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="month_level"/>
+                            <field name="week_level"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Purchase Suggestions by week">
+                            <field name="statistic_weeks_ids" readonly="1"/>
+                            <field name="line_weeks_ids"/>
+                        </page>
+                        <page string="Purchase Suggestions by month">
+                            <field name="statistic_month_ids" readonly="1"/>
+                            <field name="line_month_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
