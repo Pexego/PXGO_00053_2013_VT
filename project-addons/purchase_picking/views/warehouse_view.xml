@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_stock_container_filter_warehouse" model="ir.ui.view">
+        <field name="name">stock.container.search</field>
+        <field name="model">stock.container</field>
+        <field name="arch" type="xml">
+            <search string="Containers">
+                <field name="name"/>
+                <filter name="filter_by_air" string="Air shipping" domain="[('type', 'in', ['air'])]" />
+                <filter name="filter_by_road" string="Road shipping" domain="[('type', 'in', ['road'])]" />
+                <filter name="filter_by_sea" string="Sea shipping" domain="[('type', 'in', ['sea'])]" />
+           </search>
+        </field>
+    </record>
+    <record id="view_warehouse_container_tree" model="ir.ui.view">
+        <field name="name">stock.container.tree</field>
+        <field name="model">stock.container</field>
+        <field name="arch" type="xml">
+            <tree string="Containers" class="custom_tree" default_order="date_expected desc">
+                <field name="name"/>
+                <field name="type"/>
+                <field name="eta"/>
+                <field name="n_ref"/>
+                <field name="ctns"/>
+                <field name="dimensions"/>
+                <field name="status"/>
+                <field name="pickings_warehouse"/>
+                <field name="date_expected"/>
+                <field name="conf"/>
+                <field name="forwarder_comercial"/>
+                <field name="notes_warehouse"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_stock_container_warehouse">
+        <field name="name">Shipping</field>
+        <field name="res_model">stock.container</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_warehouse_container_tree"/>
+        <field name="search_view_id" ref="view_stock_container_filter_warehouse"/>
+        <field name="context">{'incoterm_code' : True, 'create' : False, 'edit' : False, 'arrived_false' : True}</field>
+    </record>
+
+	<menuitem action="action_stock_container_warehouse" name="Shipping" parent="stock.menu_stock_warehouse_mgmt" id="menu_stock_shipping" sequence="100"/>
+</odoo>
