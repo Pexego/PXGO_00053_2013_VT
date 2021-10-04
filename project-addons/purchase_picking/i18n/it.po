@@ -24,7 +24,7 @@ msgstr "Assegnare"
 #: model:ir.ui.view,arch_db:purchase_picking.assign_container_wzd_view
 #: model:ir.actions.act_window,name:purchase_picking.action_assign_container
 msgid "Assign container"
-msgstr "Assegnare container"
+msgstr "Assegnare spedizione"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
@@ -49,12 +49,12 @@ msgstr "Consumato per"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_container_id
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_container_id
 msgid "Container"
-msgstr "Container"
+msgstr "Spedizione"
 
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_name
 msgid "Container Ref."
-msgstr "Ref. Container"
+msgstr "Ref. Spedizione"
 
 #. module: purchase_picking
 #: sql_constraint:stock.container:0
@@ -67,7 +67,7 @@ msgstr "Il riferimento al container deve essere unico"
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_tree
 msgid "Containers"
-msgstr "Containers"
+msgstr "Spedizioni"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.create_picking_move_view
@@ -229,8 +229,8 @@ msgstr "Ricevere prodotti"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
-msgid "Related Moves"
-msgstr "Movimenti relativi"
+msgid "Moves"
+msgstr "Movimenti"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.stock_move_custom_tree
@@ -328,7 +328,7 @@ msgstr 'Non vi è alcuna linea di movimento senza bolla di consegna associata"
 #: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_container_ids
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_picking_container_ids
 msgid "Containers"
-msgstr "Contenitori"
+msgstr "Spedizioni"
 
 #. module: purchase_picking
 #: code:addons/purchase_picking/models/stock.py:151
@@ -357,3 +357,144 @@ msgstr "Crea bolle raggruppate per fornitore"
 #, python-format
 msgid "Picking already created"
 msgstr "Bolla già creata"
+
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
+msgid "Products"
+msgstr "Prodotti"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_notes_warehouse
+msgid "Warehouse notes"
+msgstr "Note di magazzino"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_notes_purchases
+msgid "Purchases notes"
+msgstr "Note"
+
+
+#. module: purchase_picking
+#: model:ir.ui.menu,name:purchase_picking.shipping_menu
+msgid "Shipping"
+msgstr "Spedizione"
+
+#. module: purchase_picking
+#: model:ir.ui.menu,name:purchase_picking.shipping_menu_company_port
+msgid "Shipping company and port"
+msgstr "Compagnia di navigazione e porto"
+
+#. module: purchase_picking
+#: selection:stock.container,type:0
+msgid "Air"
+msgstr "Aereo"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_air
+msgid "Air Shipping"
+msgstr "Spedizione Aerea"
+
+#. module: purchase_picking
+#: model:ir.ui.menu,name:purchase_picking.stock_container_menu_air
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
+msgid "Air shipping"
+msgstr "Spedizione aerea"
+
+
+#. module: purchase_picking
+#: selection:stock.container,type:0
+msgid "Sea"
+msgstr "Marittimo"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_sea
+msgid "Sea Shipping"
+msgstr "Spedizione Marittima"
+
+#. module: purchase_picking
+#: model:ir.ui.menu,name:purchase_picking.stock_container_menu_sea
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
+msgid "Sea shipping"
+msgstr "Spedizione marittima"
+
+#. module: purchase_picking
+#: selection:stock.container,type:0
+msgid "Road"
+msgstr "Terra"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_road
+msgid "Road Shipping"
+msgstr "Spedizione Terrestre"
+
+#. module: purchase_picking
+#: model:ir.ui.menu,name:purchase_picking.stock_container_menu_road
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
+msgid "Road shipping"
+msgstr "Spedizione terrestre"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.act_stock_container_incoterm
+msgid "Stock container incoterm"
+msgstr "Configurazione incoterm"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.act_stock_container_port
+msgid "Stock container port"
+msgstr "Configurazione NAV/PTO"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.act_stock_container_status
+msgid "Stock container status"
+msgstr "Configurazione status"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_dimensions
+msgid "Dimensions"
+msgstr "Dimensioni"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_ready
+msgid "Ready merchandise date"
+msgstr "Data merce pronta"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_etd
+msgid "Date of departure of transport"
+msgstr "Data di partenza del trasporto"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_eta
+msgid "Arrival date at port / destination"
+msgstr "Data di arrivo al porto/destinazione"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_conf
+msgid "Confirmed"
+msgstr "Confermato"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_arrived
+msgid "All delivery notes are finalized"
+msgstr "Tutte le bolle di consegna sono finalizzate"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_status
+msgid "For more information click on the status"
+msgstr "Per maggiori informazioni clicca sullo stato"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_notes_purchases
+msgid "Purchases notes"
+msgstr "Note per gli acquisti"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_notes_warehouse
+msgid "Purchases notes"
+msgstr "Note di magazzino"
+
+#. module: purchase_picking
+#: model:ir.model.fields,help:purchase_picking.field_stock_container_departure
+msgid "Transport departure"
+msgstr "Partenza del trasporto"

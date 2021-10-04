@@ -1,0 +1,194 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* sim_manager
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-09-03 08:48+0000\n"
+"PO-Revision-Date: 2021-09-03 08:48+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sim_manager
+#: selection:sim.package,state:0
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "Available"
+msgstr "Disponible"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_serial_ids
+msgid "Cards"
+msgstr "Tarjetas"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_code
+msgid "Code"
+msgstr "Código"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_date
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,help:sim_manager.action_sim_package
+msgid "Manage the SIM packages"
+msgstr "Gestionar los paquetes SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_move_id
+msgid "Move"
+msgstr "Movimiento"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_code
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_package_id
+msgid "Package"
+msgstr "Paquete"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.act_res_partner_sim_cards
+#: model:ir.ui.view,arch_db:sim_manager.res_partner_view_buttons_add_sims
+msgid "SIM Cards"
+msgstr "Tarjetas SIM"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_package
+#: model:ir.ui.menu,name:sim_manager.menu_sim_package
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_form
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_tree
+msgid "SIM packages"
+msgstr "Paquetes SIM"
+
+#. module: sim_manager
+#: model:ir.ui.menu,name:sim_manager.menu_sim_package_creator
+msgid "Scan SIMs"
+msgstr "Escanear SIMs"
+
+#. module: sim_manager
+#: code:addons/sim_manager/wizard/sim_creator_wizard.py:40
+#, python-format
+msgid "Scan the #1 serial for %s"
+msgstr "Escanea el #1 ID para el %s"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_package_creator
+msgid "Scanning SIMs"
+msgstr "Escaneando SIMs"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_serial_code
+msgid "Serial"
+msgstr "Nº serie"
+
+#. module: sim_manager
+#: selection:sim.package,state:0
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_filter
+msgid "Sold"
+msgstr "Vendido"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_partner_id
+msgid "Sold to"
+msgstr "Vendido a"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_state
+msgid "State"
+msgstr "Estado"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:29
+#, python-format
+msgid "{} created"
+msgstr "{} creado"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Create new SIM package"
+msgstr "Crear nuevo paquete SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_new_code
+msgid "New package"
+msgstr "Nuevo Paquete"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Scan"
+msgstr "Escanear"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_package_creator
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.action_sim_package_report
+msgid "SIM Report"
+msgstr "SIM Informe"
+
+#. module: sim_manager
+#: model:ir.ui.menu,name:sim_manager.menu_sim_report
+msgid "SIM Tags"
+msgstr "Etiquetas SIM"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:70
+#, python-format
+msgid "Package %s finished. Scan for continue with next package"
+msgstr "Paquete %s terminado. Escanea el siguiente para continuar"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sim.py:78
+#: code:addons/sim_manager/models/sim.py:99
+#, python-format
+msgid "Scan the #%s serial for %s"
+msgstr "Escanea el #%s ID para el %s"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,help:sim_manager.action_sim_type_config
+msgid "Manage the SIM Types"
+msgstr "Gestionar tipos de SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: sim_manager
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_type_form
+msgid "SIM Type"
+msgstr "Tipo SIM"
+
+#. module: sim_manager
+#: model:ir.actions.act_window,name:sim_manager.action_sim_type_config
+#: model:ir.ui.menu,name:sim_manager.menu_sim_type_config
+#: model:ir.ui.view,arch_db:sim_manager.view_sim_type
+msgid "SIM Types"
+msgstr "Tipos de SIM"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sim_package_create_wizard_type_sim
+#: model:ir.model.fields,field_description:sim_manager.field_sim_type_type
+msgid "Type"
+msgstr "Tipo"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/stock.py:27
+#, python-format
+msgid "Some of these SIM cards %s of the picking %s have not been found in the system."
+msgstr "Algunas de estas tarjetas SIM %s del albarán %s no se encuentran en el sistema."

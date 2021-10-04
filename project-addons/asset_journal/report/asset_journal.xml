@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_assets_custom">
+        <t t-call="web.html_container">
+           <t t-call="asset_journal.report_assets_document" t-lang="docs[0].env.user.lang" />
+        </t>
+    </template>
+
+    <template id="report_assets_document">
+        <t t-call="custom_report_link.external_layout_custom">
+            <div class="page">
+                <t t-set="assets" t-value="docs"/>
+                <div height="20px">
+                </div>
+                <br/>
+                <div style="font-weight: bold; text-align: center;">
+                    ASSET JOURNAL  -  <span t-esc="datetime.datetime.today().strftime('%d-%m-%Y')"/>
+                </div>
+                <div class="row table-assets-info">
+                    <table class="table table-condensed" style="font-size:12px; margin-top: 5%">
+                        <tbody class="body-product-info" style="font-size:12px; color:#6D6E70;">
+                            <tr t-foreach="[x for x in assets]" t-as="asset">
+                                <tr>
+                                    <td style="font-weight: bold">
+                                        Asset: <span t-field="asset.name" style="color:#AAAAAA;"/>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr style="font-weight: bold; background-color:#CCCCCC; color:#444444;">
+                                    <td>
+                                        Category
+                                    </td>
+                                    <td class="  text-center">
+                                        Date
+                                    </td>
+                                    <td>
+                                        Supplier
+                                    </td>
+                                    <td class="  text-center">
+                                        Value
+                                    </td>
+                                    <td class="  text-center">
+                                        Value amortized
+                                    </td>
+                                    <td class="  text-center">
+                                        Value residual
+                                    </td>
+                                    <td class="  text-center">
+                                        % Am
+                                    </td>
+                                    <td class="  text-center">
+                                        Lifetime
+                                    </td>
+                                    <td class="  text-center">
+                                        Date end
+                                    </td>
+                                </tr>
+                                <td>
+                                    <span t-field="asset.category_id.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="asset.date"/>
+                                </td>
+                                <td>
+                                    <span t-field="asset.partner_id.name"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="asset.value"/>€
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.2f' % (asset.value - asset.value_residual)"/>€
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="asset.value_residual"/>€
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.0f' % (((asset.value - asset.value_residual)*100)/asset.value)"/>%
+                                </td>
+                                <td class="text-center">
+                                    <span t-esc="'%.0f' % (asset.method_number/12)"/>
+                                </td>
+                                <td class="text-center">
+                                    <span t-field="asset.depreciation_line_ids[-1].depreciation_date"/>
+                                </td>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <report
+        id="action_report_assets"
+        string="Assets Journal"
+        model="account.asset.asset"
+        report_type="qweb-pdf"
+        file="asset_journal.report_assets_custom"
+        name="asset_journal.report_assets_custom"
+        print_report_name="asset_journal"
+    />
+
+    <record id="action_report_assets" model="ir.actions.report">
+        <field name="paperformat_id" ref="asset_journal.paperformat_assets"/>
+    </record>
+</odoo>

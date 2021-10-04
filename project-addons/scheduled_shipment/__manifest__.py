@@ -13,7 +13,8 @@
         "sale",
         "stock",
         "queue_job",
-        "sale_stock"
+        "sale_stock",
+        "picking_incidences"
     ],
     "data": [
         'data/job_channel_data.xml',

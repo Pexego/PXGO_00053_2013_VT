@@ -645,3 +645,8 @@ msgstr "VISIOTECH - Prodotti inviati"
 #: model:mail.template,report_name:stock_custom.picking_done_template_claim
 msgid "Picking_${(object.name or '').replace('/','_')}"
 msgstr "Bolla_${(object.name or '').replace('/','_')}"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.view_move_review_search
+msgid "Container"
+msgstr "Spedizione"
