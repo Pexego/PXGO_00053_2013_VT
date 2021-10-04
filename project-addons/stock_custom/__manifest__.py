@@ -25,6 +25,7 @@
              'views/email_template.xml',
              'security/ir.model.access.csv',
              'data/parameters.xml',
-             'views/stock_location_views.xml'],
+             'views/stock_location_views.xml',
+             'views/stock_production_lot_views.xml'],
     'installable': True
 }

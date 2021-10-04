@@ -30,6 +30,7 @@
                         <group>
                             <field name="create_date" readonly="1"/>
                             <field name="partner_id"/>
+                            <field name="sale_id" readonly="1"/>
                         </group>
                     </group>
                     <field name="serial_ids" nolabel="1">
@@ -47,11 +48,14 @@
         <field name="model">sim.package</field>
         <field name="arch" type="xml">
             <search string="Search">
-               <filter string="ES" domain="[('code','like','ES')]"/>
+               <filter string="ES" domain="[('code','not like','EU'),('code','not like','VIP')]"/>
                <filter string="EU" domain="[('code','like','EU')]"/>
                <filter string="VIP" domain="[('code','like','VIP')]"/>
                <filter string="Sold" domain="[('state','=','sold')]"/>
                <filter string="Available" domain="[('state','=','available')]"/>
+               <field name="code" string="Paquete"/>
+               <field name="serial_ids" string="Tarjetas"/>
+               <field name="partner_id" string="Cliente"/>
            </search>
         </field>
     </record>
@@ -119,6 +123,36 @@
         </field>
     </record>
 
+    <record id="view_sim_type" model="ir.ui.view">
+        <field name="name">sim.type.view</field>
+        <field name="model">sim.type</field>
+        <field name="arch" type="xml">
+            <tree string="SIM Types">
+                <field name="type"/>
+                <field name="code"/>
+                <field name="product_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_sim_type_form" model="ir.ui.view">
+        <field name="name">sim.type.form</field>
+        <field name="model">sim.type</field>
+        <field name="arch" type="xml">
+            <form string="SIM Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="type"/>
+                            <field name="code"/>
+                            <field name="product_id"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
     <record id="action_sim_package_creator" model="ir.actions.act_window">
         <field name="name">Create SIM package</field>
         <field name="type">ir.actions.act_window</field>
@@ -137,9 +171,20 @@
         <field name="search_view_id" ref="view_sim_package_filter"/>
     </record>
 
+    <record id="action_sim_type_config" model="ir.actions.act_window">
+        <field name="name">SIM Types</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sim.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_type">form</field>
+        <field name="help">Manage the SIM Types</field>
+    </record>
+
     <menuitem id="menu_sim_package" action="action_sim_package" parent="mrp.menu_mrp_bom" sequence="40"/>
     <menuitem id="menu_sim_package_creator" action="action_sim_package_creator" name="Scan SIMs"
             parent="mrp.menu_mrp_manufacturing" sequence="50"/>
     <menuitem id="menu_sim_report" action="action_sim_package_report" name="SIM Tags"
               parent="mrp.menu_mrp_reporting" sequence="50"/>
+    <menuitem id="menu_sim_type_config" action="action_sim_type_config" name="SIM Types"
+              parent="mrp.menu_mrp_configuration" sequence="40"/>
 </odoo>

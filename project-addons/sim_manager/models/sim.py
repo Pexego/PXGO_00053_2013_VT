@@ -17,6 +17,7 @@ class SimPackage(models.Model):
     serial_ids = fields.One2many('sim.serial', 'package_id', string='Cards')
     partner_id = fields.Many2one('res.partner', string='Sold to')
     move_id = fields.Many2one('stock.move')
+    sale_id = fields.Many2one('sale.order', compute='_get_sale_order')
     state = fields.Selection(string='State',
                              default='available',
                              selection=[('available', 'Available'),
@@ -50,11 +51,16 @@ class SimPackage(models.Model):
             pkg.sim_9 = serials[8]
             pkg.sim_10 = serials[9]
 
+    @api.multi
+    def _get_sale_order(self):
+        for pkg in self:
+            pkg.sale_id = pkg.move_id.sale_line_id.order_id
+
     def create_sims_using_barcode(self, barcode):
         logger.info("Imported SIM %s" % barcode)
         max_cards = int(self.env['ir.config_parameter'].sudo().get_param('package.sim.card.max'))
 
-        created_code = self.env['sim.package'].search([], order="create_date desc", limit=1)
+        created_code = self.env['sim.package'].search([], order="code desc", limit=1)
         if len(created_code.serial_ids) < max_cards:
             sim_serial = self.env['sim.serial'].create({'code': barcode, 'package_id': created_code.id})
             if sim_serial:
@@ -83,8 +89,11 @@ class SimPackage(models.Model):
                 result['context'] = json.dumps(context)
         elif len(created_code.serial_ids) == max_cards:
             # Create the next package and return to scan all the codes
-            new_code = 'M2M_CARD_' + created_code.code.split('_')[-2] + '_' \
-                       + str(int(created_code.code.split('_')[-1])+1).zfill(6)
+            if 'EU' in created_code or 'VIP' in created_code:
+                new_code = 'M2M_CARD_' + created_code.code.split('_')[-2] + '_' \
+                           + str(int(created_code.code.split('_')[-1])+1).zfill(6)
+            else:
+                new_code = 'M2M_CARD_' + str(int(created_code.code.split('_')[-1]) + 1).zfill(6)
             pkg = self.env['sim.package'].create({'code': new_code})
 
             sim_serial = self.env['sim.serial'].create({'code': barcode, 'package_id': pkg.id})
@@ -124,6 +133,17 @@ class SimPackage(models.Model):
 class SimSerial(models.Model):
     _name = 'sim.serial'
     _description = 'simSerial'
+    _rec_name = 'code'
 
     code = fields.Char(string='Serial')
     package_id = fields.Many2one('sim.package', string='Package')
+
+
+class SimType(models.Model):
+    _name = 'sim.type'
+    _description = 'simType'
+    _rec_name = 'type'
+
+    product_id = fields.Many2one('product.product')
+    type = fields.Char('Type')
+    code = fields.Char('Code')
