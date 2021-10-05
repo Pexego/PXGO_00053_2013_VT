@@ -22,7 +22,7 @@
             <field name="groups_id" eval="[(4,ref('stock_custom.commercial_group'))]"/>
             <field name="arch" type="xml">
                 <field name="scheduled_date" position="attributes">
-                    <attribute name="attrs">{'readonly': [('state','in', ('done'))]}</attribute>
+                    <attribute name="attrs">{'readonly': [('state','in', ('done','sale'))]}</attribute>
                 </field>    
             </field>
         </record>
