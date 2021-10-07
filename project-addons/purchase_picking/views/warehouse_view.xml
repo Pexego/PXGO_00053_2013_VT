@@ -10,9 +10,12 @@
                 <filter name="filter_by_air" string="Air shipping" domain="[('type', 'in', ['air'])]" />
                 <filter name="filter_by_road" string="Road shipping" domain="[('type', 'in', ['road'])]" />
                 <filter name="filter_by_sea" string="Sea shipping" domain="[('type', 'in', ['sea'])]" />
+                <separator/>
+                <filter name="filter_by_not_arrived" string="Not arrived" domain="[('arrived', '=', False)]" context="{'arrived_false' : True}" invisible="True"/>
            </search>
         </field>
     </record>
+
     <record id="view_warehouse_container_tree" model="ir.ui.view">
         <field name="name">stock.container.tree</field>
         <field name="model">stock.container</field>
@@ -41,7 +44,7 @@
         <field name="view_mode">tree,form</field>
         <field name="view_id" ref="view_warehouse_container_tree"/>
         <field name="search_view_id" ref="view_stock_container_filter_warehouse"/>
-        <field name="context">{'incoterm_code' : True, 'create' : False, 'edit' : False, 'arrived_false' : True}</field>
+        <field name="context">{'incoterm_code' : True, 'create' : False, 'edit' : False, 'arrived_false' : True, 'search_default_filter_by_not_arrived': 1}</field>
     </record>
 
 	<menuitem action="action_stock_container_warehouse" name="Shipping" parent="stock.menu_stock_warehouse_mgmt" id="menu_stock_shipping" sequence="100"/>
