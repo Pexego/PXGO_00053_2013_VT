@@ -21,6 +21,7 @@
 from odoo import fields, models, _, tools, api, exceptions
 import time
 from urllib.request import getproxies
+import base64
 
 
 class SaleOrder(models.Model):
@@ -44,17 +45,14 @@ class SaleOrder(models.Model):
 
     @api.multi
     def check_vat_ext(self):
-        """
-        """
-        # TODO: Probar esta función al migrar el módulo del que depende su activación
         date_now = time.strftime('%Y-%m-%d %H:%M:%S')
         result = True
         sale = self[0]
         partner_vat = sale.partner_id.vat
         url = "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
         if partner_vat and not sale.force_vies_validation and \
-                sale.fiscal_position and \
-                sale.fiscal_position.require_vies_validation:
+                sale.fiscal_position_id and \
+                sale.fiscal_position_id.require_vies_validation:
             vat = partner_vat.replace(" ", "")
             try:
                 from suds.client import Client
@@ -90,7 +88,8 @@ class SaleOrder(models.Model):
                     height = height - 25
                 c.showPage()
                 c.save()
-                a = open(name, "rb").read().encode("base64")
+                with open(name, "rb") as file:
+                    a = base64.b64encode(file.read())
                 attach_vals = {
                     'name': name,
                     'datas_fname': name,
@@ -101,10 +100,14 @@ class SaleOrder(models.Model):
                 self.env['ir.attachment'].create(attach_vals)
             else:
                 result = False
+
             vals = {'vies_validation_check': result,
                     'vies_validation_timestamp': date_now,
                     'waiting_vies_validation': not result}
             sale.write(vals)
+            if not result:
+                raise exceptions. \
+                    Warning(_('The partner is not registered in VIES'))
 
         return result
 
@@ -120,11 +123,10 @@ class SaleOrder(models.Model):
                                partner_ids=followers)
         return True
 
-    #TODO: migrar parter_risk__stock_reserve__rel
-    # @api.multi
-    # def action_risk_approval(self):
-    #     self.check_vat_ext()
-    #     return super(SaleOrder, self).action_risk_approval()
+    @api.multi
+    def action_confirm(self):
+        self.check_vat_ext()
+        return super(SaleOrder, self).action_confirm()
 
     @api.multi
     def action_cancel(self):

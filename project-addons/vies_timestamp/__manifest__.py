@@ -25,9 +25,7 @@
     'description': """Adds a VIES validation timestamp when confirming sale orders. Needs installed 'suds' library before.""",
     'author': 'Alberto Luengo para Comunitea',
     'website': 'luengocabanillas.com',
-    "depends": ['sale',
-                # TODO migrar 'partner_risk__stock_reserve__rel'
-                ],
+    "depends": ['sale'],
     "data": ['views/sale_order_view.xml',
              'views/fiscal_position_view.xml'],
     "installable": True
