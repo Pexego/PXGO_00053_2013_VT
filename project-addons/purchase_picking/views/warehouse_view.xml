@@ -11,7 +11,8 @@
                 <filter name="filter_by_road" string="Road shipping" domain="[('type', 'in', ['road'])]" />
                 <filter name="filter_by_sea" string="Sea shipping" domain="[('type', 'in', ['sea'])]" />
                 <separator/>
-                <filter name="filter_by_not_arrived" string="Not arrived" domain="[('arrived', '=', False)]" context="{'arrived_false' : True}" invisible="True"/>
+                <filter name="filter_by_arrived" string="Arrived" domain="[('arrived', '=', True)]" />
+                <filter name="filter_by_not_arrived" string="Not arrived" domain="[('arrived', '=', False)]" context="{'arrived_false' : True}"/>
            </search>
         </field>
     </record>
@@ -38,7 +39,7 @@
     </record>
 
     <record model="ir.actions.act_window" id="action_stock_container_warehouse">
-        <field name="name">Shipping</field>
+        <field name="name">Arrivals</field>
         <field name="res_model">stock.container</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
@@ -47,5 +48,5 @@
         <field name="context">{'incoterm_code' : True, 'create' : False, 'edit' : False, 'arrived_false' : True, 'search_default_filter_by_not_arrived': 1}</field>
     </record>
 
-	<menuitem action="action_stock_container_warehouse" name="Shipping" parent="stock.menu_stock_warehouse_mgmt" id="menu_stock_shipping" sequence="100"/>
+	<menuitem action="action_stock_container_warehouse" name="Arrivals" parent="stock.menu_stock_warehouse_mgmt" id="menu_stock_shipping" sequence="100"/>
 </odoo>

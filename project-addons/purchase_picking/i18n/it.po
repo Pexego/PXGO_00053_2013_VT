@@ -502,3 +502,9 @@ msgstr "Note di magazzino"
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_departure
 msgid "Transport departure"
 msgstr "Partenza del trasporto"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_warehouse
+#: model:ir.ui.menu,name:purchase_picking.menu_stock_shipping
+msgid "Arrivals"
+msgstr "Arrivi"

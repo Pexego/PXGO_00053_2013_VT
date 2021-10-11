@@ -429,9 +429,7 @@ msgid "Notes"
 msgstr "Notas"
 
 #. module: purchase_picking
-#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_warehouse
 #: model:ir.ui.menu,name:purchase_picking.shipping_menu
-#: model:ir.ui.menu,name:purchase_picking.menu_stock_shipping
 msgid "Shipping"
 msgstr "Envíos"
 
@@ -548,3 +546,9 @@ msgstr "Notas almacén"
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_departure
 msgid "Transport departure"
 msgstr "Salida transporte"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_warehouse
+#: model:ir.ui.menu,name:purchase_picking.menu_stock_shipping
+msgid "Arrivals"
+msgstr "Llegadas"
