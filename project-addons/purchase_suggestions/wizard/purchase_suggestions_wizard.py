@@ -240,7 +240,7 @@ class PurchaseSuggestionsWizard(models.TransientModel):
 
     @api.multi
     def calculate(self):
-        domain = [('state', 'in', ['sale', 'done', 'reserve']), ('create_date', '>=', self.date_from),()]
+        domain = [('state', 'in', ['sale', 'done', 'reserve']), ('create_date', '>=', self.date_from)]
         fields = ['product_id', 'product_uom_qty', 'create_date']
         #Sacamos las ventas agrupadas por semana y producto
         sales_by_week = self.env['sale.order.line'].read_group(
