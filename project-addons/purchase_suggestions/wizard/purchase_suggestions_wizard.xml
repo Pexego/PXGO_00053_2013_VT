@@ -121,6 +121,9 @@
                         </group>
                     </group>
                     <notebook>
+                        <page string="Purchase Suggestions">
+                            <field name="line_ids"/>
+                        </page>
                         <page string="Purchase Suggestions by week">
                             <field name="statistic_weeks_ids" readonly="1"/>
                             <field name="line_weeks_ids"/>

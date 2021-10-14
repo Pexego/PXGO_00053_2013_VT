@@ -192,6 +192,7 @@ class PurchaseSuggestionsLine(models.TransientModel):
         selection=[('month', 'Month'),
                    ('week', 'Week')])
 
+    @api.depends('qty_to_purchase', 'qty_available')
     def _compute_qty_to_purchase(self):
         # Si las uds calculadas provienen del cálculo por semanas, la cantidad a comprar será 8 * uds + reservas - stock real
         # Si proviene de meses, la cantidad será uds + reservas - stock_real
@@ -201,10 +202,16 @@ class PurchaseSuggestionsLine(models.TransientModel):
             else:
                 qty = line.qty
             line.qty_to_purchase = qty + line.product_id.reservation_count - line.product_id.qty_available
+            line.qty_available = line.product_id.qty_available - line.product_id.reservation_count
 
     qty_to_purchase = fields.Float(
         help="If the quantity has been calculated by weeks, this field will be equal to 8 * qty + reserves - real stock,"
              " if it has been calculated by months will be equal to qty + reserves - real stock",
+        compute="_compute_qty_to_purchase",
+        store=True)
+
+    qty_available = fields.Float(
+        help="reserves, minus actual stock ",
         compute="_compute_qty_to_purchase")
 
 
@@ -212,12 +219,12 @@ class PurchaseSuggestions(models.TransientModel):
     _name = 'purchase.suggestions'
     month_level = fields.Float()
     week_level = fields.Float()
-    date_from = fields.Datetime()
+    date_from = fields.Date()
     line_weeks_ids = fields.One2many('purchase.suggestions.line', 'suggestion_id',domain=[('calculated_by','=','week')])
     statistic_weeks_ids = fields.One2many('purchase.suggestions.statistics', 'suggestion_id',domain=[('calculated_by','=','week')])
     line_month_ids = fields.One2many('purchase.suggestions.line', 'suggestion_id',domain=[('calculated_by','=','month')])
     statistic_month_ids = fields.One2many('purchase.suggestions.statistics', 'suggestion_id',domain=[('calculated_by','=','month')])
-
+    line_ids = fields.One2many('purchase.suggestions.line', 'suggestion_id', domain=[('qty_to_purchase','>','0')])
 
     def create_order(self):
         #Función que creará el PO con los productos que haya en line_ids y las cantidades que haya en qty_to_purchase
@@ -229,11 +236,11 @@ class PurchaseSuggestionsWizard(models.TransientModel):
 
     month_level = fields.Float(default=0.5)
     week_level = fields.Float(default=0.3)
-    date_from = fields.Datetime(required=True)
+    date_from = fields.Date(required=True, default='2020-09-01')
 
     @api.multi
     def calculate(self):
-        domain = [('state', 'in', ['sale', 'done']), ('create_date', '>=', self.date_from)]
+        domain = [('state', 'in', ['sale', 'done', 'reserve']), ('create_date', '>=', self.date_from),()]
         fields = ['product_id', 'product_uom_qty', 'create_date']
         #Sacamos las ventas agrupadas por semana y producto
         sales_by_week = self.env['sale.order.line'].read_group(
