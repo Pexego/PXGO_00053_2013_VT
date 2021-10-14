@@ -2,16 +2,28 @@
 <!-- © 2016 Comunitea
      License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
 <odoo>
-
         <record id="view_order_form_scheduled_date" model="ir.ui.view">
             <field name="name">sale.order.scheduled.data</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale_stock.view_order_form_inherit_sale_stock"/>
+            <field name="groups_id" eval="[(6, 0, [])]"/>
             <field name="arch" type="xml">
                 <xpath expr="//group[@name='sale_shipping']/field[@name='picking_policy']" position="after">
                     <field name="scheduled_date"
                            attrs="{'readonly': [('state','in', ('progress', 'manual', 'shipping_except', 'invoice_except', 'done', 'history', 'cancel'))]}"/>
                 </xpath>
+            </field>
+        </record>
+
+        <record id="view_order_form_scheduled_date_perm_read" model="ir.ui.view">
+            <field name="name">sale.order.scheduled.data.perm</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="scheduled_shipment.view_order_form_scheduled_date"/>
+            <field name="groups_id" eval="[(4,ref('stock_custom.commercial_group'))]"/>
+            <field name="arch" type="xml">
+                <field name="scheduled_date" position="attributes">
+                    <attribute name="attrs">{'readonly': [('state','in', ('done','sale'))]}</attribute>
+                </field>    
             </field>
         </record>
 
