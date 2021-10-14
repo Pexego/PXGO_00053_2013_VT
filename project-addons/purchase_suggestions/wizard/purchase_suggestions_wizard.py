@@ -233,18 +233,18 @@ class PurchaseSuggestionsWizard(models.TransientModel):
 
     @api.multi
     def calculate(self):
-        domain = [('state', 'in', ['sale', 'done']), ('date_order', '>=', self.date_from)]
-        fields = ['product_id', 'product_uom_qty', 'date_order']
+        domain = [('state', 'in', ['sale', 'done']), ('create_date', '>=', self.date_from)]
+        fields = ['product_id', 'product_uom_qty', 'create_date']
         #Sacamos las ventas agrupadas por semana y producto
         sales_by_week = self.env['sale.order.line'].read_group(
             domain=domain,
             fields=fields,
-            groupby=['product_id', 'date_order:week'], lazy=False)
+            groupby=['product_id', 'create_date:week'], lazy=False)
         # Sacamos las ventas agrupadas por mes y producto
         sales_by_month = self.env['sale.order.line'].with_context(lang='en_US').read_group(
             domain=domain,
             fields=fields,
-            groupby=['product_id', 'date_order:month'], lazy=False)
+            groupby=['product_id', 'create_date:month'], lazy=False)
 
         #Generamos un diccionario con el producto como clave y como valores un diccionario con la semana como clave y
         #las ventas que se han realizado en esa semana como valor
@@ -253,9 +253,9 @@ class PurchaseSuggestionsWizard(models.TransientModel):
         for elem in sales_by_week:
             product = elem.get('product_id')
             if sales_by_week_dicc.get(product[0], False):
-                sales_by_week_dicc[product[0]].update({elem['date_order:week']: elem['product_uom_qty']})
+                sales_by_week_dicc[product[0]].update({elem['create_date:week']: elem['product_uom_qty']})
             else:
-                sales_by_week_dicc[product[0]] = {elem['date_order:week']: elem['product_uom_qty']}
+                sales_by_week_dicc[product[0]] = {elem['create_date:week']: elem['product_uom_qty']}
         # Generamos un diccionario con el producto como clave y como valores un diccionario con el mes como clave y
         # las ventas que se han realizado en ese mes como valor
         # Ej: {4410:{'September 2020': 25.0,'April 2021': 21.0,'June 2020': 55.0}
@@ -263,9 +263,9 @@ class PurchaseSuggestionsWizard(models.TransientModel):
         for elem in sales_by_month:
             product = elem.get('product_id')
             if sales_by_month_dicc.get(product[0], False):
-                sales_by_month_dicc[product[0]].update({elem['date_order:month']: elem['product_uom_qty']})
+                sales_by_month_dicc[product[0]].update({elem['create_date:month']: elem['product_uom_qty']})
             else:
-                sales_by_month_dicc[product[0]] = {elem['date_order:month']: elem['product_uom_qty']}
+                sales_by_month_dicc[product[0]] = {elem['create_date:month']: elem['product_uom_qty']}
 
         #Buscamos y nos recorremos todos los packs/kits
         packs = self.env['mrp.bom'].search([])
