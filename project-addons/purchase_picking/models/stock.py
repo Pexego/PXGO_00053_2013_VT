@@ -38,7 +38,7 @@ class StockContainer(models.Model):
     notes_warehouse = fields.Char(string="Warehouse notes", help="Warehouse notes")
     conf = fields.Boolean(string="Conf", help="Confirmed")
     telex = fields.Boolean(string="Telex", help="Telex")
-    arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived")
+    arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", search='_value_search')
     cost = fields.Float(sting="Cost")
     n_ref = fields.Integer(string="Nº ref", store=False, compute="_get_ref")
     forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
@@ -51,6 +51,7 @@ class StockContainer(models.Model):
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
     ctns = fields.Char(string="Ctns")
     departure = fields.Boolean(String="Departure", help="Transport departure")
+    pickings_warehouse = fields.Char(string="Pickings", store=False, compute="_get_picking_ids")
 
     @api.multi
     def _set_arrived(self):
@@ -59,6 +60,15 @@ class StockContainer(models.Model):
             for line in container.picking_ids:
                 if line.state != 'done':
                     container.arrived = False
+
+    @api.multi
+    def _value_search(self, operator, value):
+        aux = True
+        if self.env.context.get('arrived_false'):
+            aux = False
+        recs = self.search([]).filtered(lambda x: x.arrived is aux)
+        if recs:
+            return [('id', 'in', [x.id for x in recs])]
 
     @api.multi
     def _set_date_expected(self):
@@ -80,17 +90,26 @@ class StockContainer(models.Model):
                 if max_date:
                     container.date_expected = max_date
                     container.move_ids.write({'date_expected': max_date})
-            if not container.date_expected:
-                container.date_expected = fields.Date.today()
+
 
     @api.multi
     def _get_picking_ids(self):
         for container in self:
             res = []
+            pickings_warehouse = ""
+            aux = 0
             for line in container.move_ids:
                 if line.picking_id.id not in res:
                     res.append(line.picking_id.id)
                     container.picking_ids = res
+                    aux += 1
+                    if line.picking_id and aux < 3:
+                        pickings_warehouse = pickings_warehouse + line.picking_id.name + ", "
+                if pickings_warehouse and aux < 3:
+                    container.pickings_warehouse = pickings_warehouse[:-2]
+                elif pickings_warehouse and aux >= 3:
+                    container.pickings_warehouse = pickings_warehouse + "..."
+
 
     @api.multi
     def _get_ref(self):

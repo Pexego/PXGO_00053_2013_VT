@@ -38,6 +38,7 @@
              'security/purchase_picking_security.xml',
              'wizard/assign_container_view.xml',
              'wizard/cancel_moves_view.xml',
-             'templates/assets.xml'],
+             'templates/assets.xml',
+             'views/warehouse_view.xml'],
     "installable": True
 }
