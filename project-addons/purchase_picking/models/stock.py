@@ -43,8 +43,6 @@ class StockContainer(models.Model):
     n_ref = fields.Integer(string="Nº ref", store=False, compute="_get_ref")
     forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
                                 string="FWDR")
-    destination_port = fields.Many2one('stock.container.port', string='NAV/PTO')
-    status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status')
     forwarder_comercial = fields.Char(related="forwarder.comercial", store=False, string="FWDR")
     incoterm = fields.Many2one('stock.incoterms', string='Incoterm', ondelete="restrict")
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO', ondelete="restrict")
@@ -88,8 +86,8 @@ class StockContainer(models.Model):
             if container.move_ids:
                 max_date = max(container.move_ids.mapped('date_expected') or fields.Date.today())
                 if max_date:
-                    container.date_expected = max_date
                     container.move_ids.write({'date_expected': max_date})
+                    container.date_expected = max_date
 
 
     @api.multi
