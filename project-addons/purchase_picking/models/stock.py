@@ -88,8 +88,8 @@ class StockContainer(models.Model):
             if container.move_ids:
                 max_date = max(container.move_ids.mapped('date_expected') or fields.Date.today())
                 if max_date:
-                    container.date_expected = max_date
                     container.move_ids.write({'date_expected': max_date})
+                    container.date_expected = max_date
 
 
     @api.multi
