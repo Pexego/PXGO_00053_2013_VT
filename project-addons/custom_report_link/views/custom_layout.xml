@@ -689,6 +689,7 @@ SWIFT/BIC: BESCPTPL
 
 
     <template id="external_layout_custom_invoice">
+        <t t-set="country_code" t-value="env['ir.config_parameter'].sudo().get_param('country_code')"/>
         <t t-if="not o and doc">
             <t t-set="o" t-value="doc"/>
         </t>
@@ -845,47 +846,78 @@ SWIFT/BIC: BESCPTPL
             </div>
             <div class="row">
                 <br/>
-                <div class="pull-left">
-                    <t t-if="o.partner_id.amazon_parent_id">
-                       <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id"
-                             t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
-                    </t>
-                    <t t-if="not o.partner_id.amazon_parent_id">
+                <t t-if="country_code == 'ES'"> <!-- Esto es para Odoo España (Amazon) -->
+                    <div class="pull-left">
+                        <t t-if="o.partner_id.amazon_parent_id">
+                        <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id"
+                                t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                        </t>
+                        <t t-if="not o.partner_id.amazon_parent_id">
+                            <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id.commercial_partner_id"
+                                    t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                        </t>
+                    </div>
+                    <div class="pull-right text-right">
+                        <br/>
+                        <t t-if="o.date_invoice">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">Date:
+                                <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice"
+                                    t-options='{"format": "dd/MM/yyyy"}'/>
+                            </div>
+                        </t>
+                        <t t-if="o.number">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">Invoice:
+                                <strong style="color:#6D6E70" t-field="o.number"/>
+                            </div>
+                        </t>
+                        <t t-if="o.partner_id.amazon_parent_id and o.partner_id.vat">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.:
+                                <span style="font-weight: normal; color:#6D6E70"
+                                    t-field="o.partner_id.vat"/>
+                            </div>
+                        </t>
+                        <t t-if="not o.partner_id.amazon_parent_id and o.partner_id.commercial_partner_id.vat">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.:
+                                <span style="font-weight: normal; color:#6D6E70"
+                                    t-field="o.partner_id.commercial_partner_id.vat"/>
+                            </div>
+                        </t>
+                        <t t-if="o.type == 'out_refund' and o.claim_id">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">Claim:
+                                <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+                <t t-if="country_code != 'ES'">
+                    <div class="pull-left">
                         <address style="font-size:14px; color:#6D6E70" t-field="o.partner_id.commercial_partner_id"
-                                 t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
-                    </t>
-                </div>
-                <div class="pull-right text-right">
-                    <br/>
-                    <t t-if="o.date_invoice">
-                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">Date:
-                            <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice"
-                                  t-options='{"format": "dd/MM/yyyy"}'/>
-                        </div>
-                    </t>
-                    <t t-if="o.number">
-                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">Invoice:
-                            <strong style="color:#6D6E70" t-field="o.number"/>
-                        </div>
-                    </t>
-                    <t t-if="o.partner_id.amazon_parent_id and o.partner_id.vat">
+                                t-options="{'widget': 'contact', 'fields': ['address', 'name', 'phone', 'email'], 'no_marker': false}"/>
+                    </div>
+                    <div class="pull-right text-right">
+                        <br/>
+                        <t t-if="o.date_invoice">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">Date:
+                                <span style="font-weight: normal; color:#6D6E70" t-field="o.date_invoice"
+                                    t-options='{"format": "dd/MM/yyyy"}'/>
+                            </div>
+                        </t>
+                        <t t-if="o.number">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">Invoice:
+                                <strong style="color:#6D6E70" t-field="o.number"/>
+                            </div>
+                        </t>
                         <div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.:
                             <span style="font-weight: normal; color:#6D6E70"
-                                  t-field="o.partner_id.vat"/>
+                                t-field="o.partner_id.commercial_partner_id.vat"/>
                         </div>
-                    </t>
-                    <t t-if="not o.partner_id.amazon_parent_id and o.partner_id.commercial_partner_id.vat">
-                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">C.I.F.:
-                            <span style="font-weight: normal; color:#6D6E70"
-                                  t-field="o.partner_id.commercial_partner_id.vat"/>
-                        </div>
-                    </t>
-                    <t t-if="o.type == 'out_refund' and o.claim_id">
-                        <div style="font-size:14px; font-weight: bold; color:#da1f2e">Claim:
-                            <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/>
-                        </div>
-                    </t>
-                </div>
+                        <t t-if="o.type == 'out_refund' and o.claim_id">
+                            <div style="font-size:14px; font-weight: bold; color:#da1f2e">Claim:
+                                <span style="font-weight: normal; color:#6D6E70" t-field="o.claim_id"/>
+                            </div>
+                        </t>
+                    </div>
+                </t>
             </div>
         </div>
 
