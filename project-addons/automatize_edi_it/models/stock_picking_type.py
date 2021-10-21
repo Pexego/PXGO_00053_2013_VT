@@ -28,3 +28,25 @@ class StockPicking(models.Model):
                     move_line.qty_done = move_line.product_uom_qty
             pick.action_done()
 
+
+class StockMove(models.Model):
+
+    _inherit = "stock.move"
+
+    @api.multi
+    def _action_done(self):
+        res = super()._action_done()
+        vendor_deposit_loc = self.env.ref("automatize_edi_it.stock_location_vendor_deposit")
+        for move in self:
+            if move.location_dest_id == vendor_deposit_loc:
+                domain = [('state', 'in', ['confirmed',
+                                           'partially_available']),
+                          ('picking_type_code', '=', 'incoming'),
+                          ('product_id', '=', move.product_id.id)]
+                confirmed_ids = self.\
+                    search(domain, limit=None,
+                           order="has_reservations,date_expected,sequence,id")
+                if confirmed_ids:
+                    confirmed_ids._action_assign()
+        return res
+

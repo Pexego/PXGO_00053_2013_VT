@@ -277,7 +277,7 @@ class StockPicking(models.Model):
     @api.multi
     def action_back_to_draft(self):
         for pick in self:
-            if pick.state == 'cancel':
+            if pick.state == 'cancel' and pick.sale_id:
                 pick.sale_id.state = 'sale'
         return super().action_back_to_draft()
 

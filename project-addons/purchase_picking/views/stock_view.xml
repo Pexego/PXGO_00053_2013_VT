@@ -230,6 +230,7 @@
                 <field name="dimensions"/>
                 <field name="ready"/>
                 <field name="etd"/>
+                <field name="departure"/>
                 <field name="eta"/>
                 <field name="status"/>
                 <field name="date_expected"/>
@@ -249,6 +250,13 @@
                 <filter name="filter_by_air" string="Air shipping" domain="[('type', 'in', ['air'])]" />
                 <filter name="filter_by_road" string="Road shipping" domain="[('type', 'in', ['road'])]" />
                 <filter name="filter_by_sea" string="Sea shipping" domain="[('type', 'in', ['sea'])]" />
+                <separator/>
+                <filter name="filter_by_departure" string="Departure" domain="[('departure', '=', True)]" />
+                <separator/>
+                <filter name="filter_by_arrived" string="Arrived" domain="[('arrived', '=', True)]" />
+                <filter name="filter_by_not_arrived" string="Not arrived" domain="[('arrived', '=', False)]" context="{'arrived_false' : True}"/>
+                <separator/>
+                <filter name="filter_by_conf" string="Confirmed" domain="[('conf', '=', True)]" />
            </search>
         </field>
     </record>
