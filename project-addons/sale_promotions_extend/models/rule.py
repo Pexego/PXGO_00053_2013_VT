@@ -255,7 +255,8 @@ class PromotionsRulesActions(models.Model):
                     line.discount=discount
                 else:
                     product_qty = line.product_uom_qty
-                    line.product_uom_qty=product_qty - qty
+                    line.product_uom_qty = product_qty - qty
+                    line.old_qty = product_qty
                     self.create_y_line(order, qty , line.product_id.id)
         return True
 
