@@ -80,5 +80,5 @@ msgstr "Necesita instalar la libreria \"suds\" en su sistema antes de continuar.
 #. module: vies_timestamp
 #: code:addons/vies_timestamp/sale_order.py:110
 #, python-format
-msgid "The partner is not registered in VIES"
-msgstr "El cliente no está registrado en VIES"
+msgid "The partner is not registered in VIES so the order cannot be processed under the intra-community regime"
+msgstr "El cliente no está registrado en VIES por lo que no se puede tramitar el pedido con régimen intracomunitario"

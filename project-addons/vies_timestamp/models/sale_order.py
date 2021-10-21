@@ -50,6 +50,15 @@ class SaleOrder(models.Model):
         sale = self[0]
         partner_vat = sale.partner_id.vat
         url = "http://ec.europa.eu/taxation_customs/vies/checkVatService.wsdl"
+
+        if sale.force_vies_validation:
+            result = True
+            vals = {'vies_validation_check': result,
+                    'vies_validation_timestamp': date_now,
+                    'waiting_vies_validation': not result}
+            sale.write(vals)
+            return result
+
         if partner_vat and not sale.force_vies_validation and \
                 sale.fiscal_position_id and \
                 sale.fiscal_position_id.require_vies_validation:
@@ -107,7 +116,7 @@ class SaleOrder(models.Model):
             sale.write(vals)
             if not result:
                 raise exceptions. \
-                    Warning(_('The partner is not registered in VIES'))
+                    Warning(_('The partner is not registered in VIES so the order cannot be processed under the intra-community regime'))
 
         return result
 
@@ -133,4 +142,11 @@ class SaleOrder(models.Model):
         res = super(SaleOrder, self).action_cancel()
         for order in self:
             order.waiting_vies_validation = False
+        return res
+
+    @api.multi
+    def copy(self, default=None):
+        self.ensure_one()
+        res = super(SaleOrder, self).copy(default)
+        res.force_vies_validation = False
         return res
