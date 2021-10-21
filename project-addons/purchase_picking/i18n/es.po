@@ -105,10 +105,12 @@ msgstr "Created on"
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_date_expected
 msgid "Date expected"
-msgstr "Entrega"
+msgstr "Fecha de entrega"
 
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_picking_ids
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_pickings_warehouse
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_form
 msgid "Pickings"
 msgstr "Albaranes"
 
@@ -544,3 +546,9 @@ msgstr "Notas almacén"
 #: model:ir.model.fields,help:purchase_picking.field_stock_container_departure
 msgid "Transport departure"
 msgstr "Salida transporte"
+
+#. module: purchase_picking
+#: model:ir.actions.act_window,name:purchase_picking.action_stock_container_warehouse
+#: model:ir.ui.menu,name:purchase_picking.menu_stock_shipping
+msgid "Arrivals"
+msgstr "Llegadas"
