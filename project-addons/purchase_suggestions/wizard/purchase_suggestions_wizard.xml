@@ -79,8 +79,9 @@
         <field name="model">purchase.suggestions.line</field>
         <field name="arch" type="xml">
             <tree string="Purchase Suggestions Lines" editable="bottom">
-                <field name="product_id"/>
-                <field name="qty"/>
+                <field name="product_id"  readonly="1"/>
+                <field name="qty"  readonly="1"/>
+                <field name="virtual_stock_conservative"  readonly="1"/>
                 <field name="qty_to_purchase"/>
                 <field name="calculated_by" invisible="1"/>
             </tree>
@@ -92,8 +93,9 @@
         <field name="model">purchase.suggestions.line</field>
         <field name="arch" type="xml">
             <form string="Purchase Suggestions Lines">
-                <field name="product_id"/>
-                <field name="qty"/>
+                <field name="product_id" readonly="1"/>
+                <field name="qty"  readonly="1"/>
+                <field name="virtual_stock_conservative"  readonly="1"/>
                 <field name="qty_to_purchase"/>
                 <field name="calculated_by" invisible="1"/>
             </form>
@@ -107,8 +109,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <button name="create_order" string="Create Order" type="object"
-                            class="oe_highlight"/>
+<!--                    <button name="create_order" string="Create Order" type="object"-->
+<!--                            class="oe_highlight"/>-->
                 </header>
                 <sheet>
                     <group>

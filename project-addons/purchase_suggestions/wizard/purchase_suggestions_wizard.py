@@ -192,27 +192,12 @@ class PurchaseSuggestionsLine(models.TransientModel):
         selection=[('month', 'Month'),
                    ('week', 'Week')])
 
-    @api.depends('qty_to_purchase', 'qty_available')
-    def _compute_qty_to_purchase(self):
-        # Si las uds calculadas provienen del cálculo por semanas, la cantidad a comprar será 8 * uds + reservas - stock real
-        # Si proviene de meses, la cantidad será uds + reservas - stock_real
-        for line in self:
-            if line.calculated_by == 'week':
-                qty = line.qty * 8
-            else:
-                qty = line.qty
-            line.qty_to_purchase = qty + line.product_id.reservation_count - line.product_id.qty_available
-            line.qty_available = line.product_id.qty_available - line.product_id.reservation_count
 
     qty_to_purchase = fields.Float(
         help="If the quantity has been calculated by weeks, this field will be equal to 8 * qty + reserves - real stock,"
-             " if it has been calculated by months will be equal to qty + reserves - real stock",
-        compute="_compute_qty_to_purchase",
-        store=True)
+             " if it has been calculated by months will be equal to qty + reserves - real stock")
 
-    qty_available = fields.Float(
-        help="reserves, minus actual stock ",
-        compute="_compute_qty_to_purchase")
+    virtual_stock_conservative = fields.Float(related="product_id.virtual_stock_conservative")
 
 
 class PurchaseSuggestions(models.TransientModel):
@@ -375,12 +360,17 @@ class PurchaseSuggestionsWizard(models.TransientModel):
             quantiles = quantiles_by_product[product]
             distances = distances_by_product[product]
             mean = mean_by_product[product]
-            uds = uds_by_product[product]
+            uds = round(uds_by_product[product])
             self.env['purchase.suggestions.statistics'].create(
                 {'min': quantiles['min'], 'q0': quantiles['q0'], 'q1': quantiles['q1'], 'q2': quantiles['q2'],
                  'q3': quantiles['q3'], 'q4': quantiles['q4'], 'max': quantiles['max'], 'd1': distances['d1'],
                  'd2': distances['d2'], 'd3': distances['d3'], 'd4': distances['d4'], 'mean': mean,
                  'suggestion_id': suggestion_id.id, 'calculated_by': calculated_by, 'product_id': product
                  })
+            product_obj = self.env['product.product'].browse(product)
+            if calculated_by == 'week':
+                qty_to_purchase = uds * 8 - product_obj.virtual_stock_conservative
+            else:
+                qty_to_purchase = uds - product_obj.virtual_stock_conservative
             self.env['purchase.suggestions.line'].create(
-                {'suggestion_id': suggestion_id.id, 'calculated_by': calculated_by, 'product_id': product, 'qty': uds})
+                {'suggestion_id': suggestion_id.id, 'calculated_by': calculated_by, 'product_id': product, 'qty': uds,'qty_to_purchase':qty_to_purchase})
