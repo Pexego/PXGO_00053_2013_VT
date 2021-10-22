@@ -29,7 +29,6 @@
     "data": ['views/sale_order_view.xml',
              'views/fiscal_position_view.xml',
              'security/groups.xml',
-             'security/ir.model.access.csv'
              ],
     "installable": True
 }

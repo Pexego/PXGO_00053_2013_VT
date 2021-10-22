@@ -144,9 +144,9 @@ class SaleOrder(models.Model):
             order.waiting_vies_validation = False
         return res
 
-    @api.multi
-    def copy(self, default=None):
-        self.ensure_one()
-        res = super(SaleOrder, self).copy(default)
-        res.force_vies_validation = False
-        return res
+    # @api.multi
+    # def copy(self, default=None):
+    #     self.ensure_one()
+    #     res = super(SaleOrder, self).copy(default)
+    #     res.force_vies_validation = False
+    #     return res
