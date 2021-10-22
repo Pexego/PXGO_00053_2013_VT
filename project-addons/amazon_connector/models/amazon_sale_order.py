@@ -6,6 +6,7 @@ from sp_api.base.exceptions import SellingApiException, SellingApiRequestThrottl
 from odoo.exceptions import UserError
 import re
 import time
+from stdnum.eu import vat
 
 
 class AmazonSaleOrder(models.Model):
@@ -45,6 +46,13 @@ class AmazonSaleOrder(models.Model):
     state_id = fields.Char()
     zip = fields.Char(string='Postal Code')
     fiscal_position_id = fields.Many2one("account.fiscal.position", "Fiscal Position")
+    billing_name = fields.Char()
+    billing_city = fields.Char('City')
+    billing_address = fields.Char('Address')
+    billing_country_id = fields.Many2one('res.country', string='Country', readonly=True)
+    billing_state_id = fields.Char()
+    billing_zip = fields.Char()
+    partner_id = fields.Many2one('res.partner')
 
     def _compute_count(self):
         for order in self:
@@ -227,22 +235,16 @@ class AmazonSaleOrder(models.Model):
 
                         amazon_order.buyer_email = buyer_info.get('BuyerEmail', False)
                         amazon_order.buyer_name = buyer_info.get('BuyerName', False)
-                        amazon_order.message_error += _(
-                            'This Order requires a non simplified Invoice')
-                        if amazon_order.state != 'error':
-                            amazon_order.state = 'warning'
-                        read = False
-                        while not read:
-                            try:
-                                address = orders_obj.get_order_address(order_name).payload
-                                read = True
-                            except SellingApiRequestThrottledException:
-                                time.sleep(amazon_time_rate_limit)
-                                read = False
-                            except SellingApiException as e:
-                                raise UserError(
-                                    _("Amazon API Error. Address Info Request. Order %s. '%s' \n") % (order_name, e))
-                        amazon_order.address = address.get('ShippingAddress', False).get('AddressLine1', False)
+                        if order.partner_vat:
+                            vies_response = vat.check_vies(amazon_order.partner_vat)
+                            amazon_order.billing_country_id = self.env['res.country'].search(
+                                [('code', '=', vies_response['countryCode'])]).id
+                            amazon_order.billing_name = vies_response['name']
+                            amazon_order.billing_address = vies_response['address']
+                        else:
+                            amazon_order.state = 'error'
+                            amazon_order.message_error += 'There is no vat in this order'
+
                     if amazon_order.state == 'error':
                         amazon_order.send_error_mail()
                     else:
@@ -315,24 +317,15 @@ class AmazonSaleOrder(models.Model):
 
                     amazon_order.buyer_email = buyer_info.get('BuyerEmail', False)
                     amazon_order.buyer_name = buyer_info.get('BuyerName', False)
-                    amazon_order.message_error += _(
-                        'This Order requires a non simplified Invoice')
-                    if amazon_order.state != 'error':
-                        amazon_order.state = 'warning'
-                    read = False
-                    while not read:
-                        try:
-                            address = orders_obj.get_order_address(amazon_order.name).payload
-                            read = True
-                        except SellingApiRequestThrottledException:
-                            time.sleep(amazon_time_rate_limit)
-                            read = False
-                        except SellingApiException as e:
-                            raise UserError(
-                                _("Amazon API Error. Address Info Request. Order %s. '%s' \n") % (amazon_order.name, e))
-                    amazon_order.address = address.get('ShippingAddress', False).get('AddressLine1', False)
-                    amazon_order.message_error += _(
-                        'This Order requires a non simplified Invoice')
+                    if order.partner_vat:
+                        vies_response = vat.check_vies(amazon_order.partner_vat)
+                        amazon_order.billing_country_id = self.env['res.country'].search(
+                            [('code', '=', vies_response['countryCode'])]).id
+                        amazon_order.billing_name = vies_response['name']
+                        amazon_order.billing_address = vies_response['address']
+                    else:
+                        amazon_order.state='error'
+                        amazon_order.message_error += 'There is no vat in this order'
                 if amazon_order.state in ['error', 'warning'] or amazon_order.warning_price:
                     amazon_order.send_error_mail()
 
@@ -528,54 +521,53 @@ class AmazonSaleOrder(models.Model):
         for order in self:
             if (order.partner_vat and order.vat_imputation_country and order.amount_total > 400) \
                     or order.amount_tax == 0:
-                order.state = 'warning'
                 # Código para crear la factura completa. No se incorpora todavía porque no tenemos la info de facturación de los clientes
-                # if not order.partner_vat:
-                #     raise UserError(_("There is no vat in this Order"))
-                # domain = [('name', '=', order.buyer_name)]
-                # order.state = 'warning'
-                # if order.buyer_email:
-                #     domain += [('email', '=', order.buyer_email)]
-                # partner_id = self.env['res.partner'].search(domain)
-                # if partner_id:
-                #     partner_id = partner_id[0]
-                # else:
-                #     buyer_vals = {"name": order.buyer_name,
-                #                   "active": False,
-                #                   "city": order.city,
-                #                   "zip": order.zip,
-                #                   'street': order.address,
-                #                   "country_id": order.country_id.id,
-                #                   "type": "contact",
-                #                   "email": order.buyer_email,
-                #                   "customer": True,
-                #                   "is_company": False,
-                #                   'invoice_type_id': self.env['res.partner.invoice.type'].search(
-                #                       [('name', '=', 'Diaria')]).id,
-                #                   'property_account_position_id': order.fiscal_position_id.id,
-                #                   'vat': order.partner_vat,
-                #                   'amazon_parent_id': order.deposits[0].partner_id.id,
-                #                   'customer_payment_mode_id': self.env['account.payment.mode'].search(
-                #                       [('name', '=', 'Contado'),('company_id', '=', self.env.user.company_id.id)]).id,
-                #                   'property_payment_term_id': self.env.ref('account.account_payment_term_immediate').id
-                #                   }
-                #     partner_id = self.env['res.partner'].create(buyer_vals)
-                # journal_id = self.env['account.journal'].search([('type', '=', 'sale')], order='id')[0]
-                # invoices_ids = order.deposits.with_context({'force_partner_id': partner_id}).create_invoice(
-                #     journal_id=journal_id)
+                if not order.partner_vat:
+                    raise UserError(_("There is no vat in this Order"))
+                domain = [('name', '=', order.buyer_name)]
+                if order.buyer_email:
+                    domain += [('email', '=', order.buyer_email)]
+                partner_id = self.env['res.partner'].search(domain)
+                if partner_id:
+                    partner_id = partner_id[0]
+                else:
+                    buyer_vals = {"name": order.billing_name,
+                                  "active": False,
+                                  "city": order.billing_city,
+                                  "zip": order.billing_zip,
+                                  'street': order.billing_address,
+                                  "country_id": order.billing_country_id.id,
+                                  "type": "contact",
+                                  "email": order.buyer_email,
+                                  "customer": True,
+                                  "is_company": False,
+                                  'invoice_type_id': self.env['res.partner.invoice.type'].search(
+                                      [('name', '=', 'Diaria')]).id,
+                                  'property_account_position_id': order.fiscal_position_id.id,
+                                  'vat': order.partner_vat,
+                                  'amazon_parent_id': order.deposits[0].partner_id.id,
+                                  'customer_payment_mode_id': self.env['account.payment.mode'].search(
+                                      [('name', '=', 'Contado'),('company_id', '=', self.env.user.company_id.id)]).id,
+                                  'property_payment_term_id': self.env.ref('account.account_payment_term_immediate').id
+                                  }
+                    partner_id = self.env['res.partner'].create(buyer_vals)
+                    order.partner_id=partner_id.id
+                journal_id = self.env['account.journal'].search([('type', '=', 'sale')], order='id')[0]
+                invoices_ids = order.deposits.with_context({'force_partner_id': partner_id}).create_invoice(
+                    journal_id=journal_id)
             else:
                 invoices_ids = order.deposits.create_invoice()
-                order.state = "invoice_created"
-                invoices = self.env['account.invoice'].browse(invoices_ids)
-                if len(invoices) > 1:
-                    allinvoices = invoices.do_merge(keep_references=False)
-                    invoices = self.env['account.invoice'].browse(list(allinvoices))
-                if invoices.invoice_line_ids:
-                    tax_in_price_unit = invoices.invoice_line_ids[0].invoice_line_tax_ids.price_include
-                    invoices.write({'tax_in_price_unit': tax_in_price_unit})
-                if not order.warning_price:
-                    invoices.action_invoice_open()
-                    order.state = 'invoice_open'
+            order.state = "invoice_created"
+            invoices = self.env['account.invoice'].browse(invoices_ids)
+            if len(invoices) > 1:
+                allinvoices = invoices.do_merge(keep_references=False)
+                invoices = self.env['account.invoice'].browse(list(allinvoices))
+            if invoices.invoice_line_ids:
+                tax_in_price_unit = invoices.invoice_line_ids[0].invoice_line_tax_ids.price_include
+                invoices.write({'tax_in_price_unit': tax_in_price_unit})
+            if not order.warning_price:
+                invoices.action_invoice_open()
+                order.state = 'invoice_open'
 
     def mark_to_done(self):
         if self.invoice_deposits:

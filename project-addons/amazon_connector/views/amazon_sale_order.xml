@@ -152,18 +152,30 @@
                             </group>
                         </page>
                         <page string="Buyer Info" name="buyer_info">
-                            <group string="General Info">
-                                <field name="partner_vat"/>
-                                <field name="vat_imputation_country"/>
-                                <field name="buyer_email"/>
-                                <field name="buyer_name"/>
+                            <group>
+                                <group string="General Info">
+                                    <field name="partner_vat"/>
+                                    <field name="vat_imputation_country"/>
+                                    <field name="buyer_email"/>
+                                    <field name="buyer_name"/>
+                                    <field name="billing_name"/>
+                                </group>
                             </group>
-                            <group string="Shipping Address">
-                                <field name="address"/>
-                                <field name="city"/>
-                                <field name="state_id"/>
-                                <field name="country_id"/>
-                                <field name="zip"/>
+                            <group>
+                                <group string="Shipping Address">
+                                    <field name="address"/>
+                                    <field name="city"/>
+                                    <field name="state_id"/>
+                                    <field name="country_id"/>
+                                    <field name="zip"/>
+                                </group>
+                                <group string="Billing Address">
+                                    <field name="billing_address"/>
+                                    <field name="billing_city"/>
+                                    <field name="billing_state_id"/>
+                                    <field name="billing_country_id"/>
+                                    <field name="billing_zip"/>
+                                </group>
                             </group>
                         </page>
                     </notebook>
