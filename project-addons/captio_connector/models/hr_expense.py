@@ -125,7 +125,8 @@ class HrExpense(models.Model):
                                 'journal_id': journal.id
                             })
                             account = expense["Category"]["Account"]
-                            account_id = self.env['account.account'].search([('code', '=', account)])
+                            account_id = self.env['account.account'].search([('code', '=', account),
+                                                                             ('company_id', '=', self.env.user.company_id.id)])
                             exp_vals.append({'name': line_name,
                                              'move_id': move.id,
                                              'account_id': account_id.id,
