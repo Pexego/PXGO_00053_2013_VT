@@ -23,6 +23,7 @@ class SaleOrderLine(models.Model):
     promo_qty_split = fields.Integer(help="It is the minimum quantity of product for which this promo is applied")
     old_discount = fields.Float(copy=False)
     old_price = fields.Float(copy=False)
+    old_qty = fields.Float(copy=False)
 
     @api.multi
     def invoice_line_create(self, invoice_id, qty):
@@ -43,6 +44,14 @@ class SaleOrderLine(models.Model):
             else:
                 lines += line
         return super(SaleOrderLine, lines).invoice_line_create(invoice_id, qty)
+
+    @api.multi
+    def write(self,vals):
+        product_uom_qty = vals.get('product_uom_qty',False)
+        for line in self:
+            if product_uom_qty and not 'old_qty' in vals and line.old_qty:
+                vals['old_qty'] = product_uom_qty
+        return super(SaleOrderLine, self).write(vals)
 
 
 class SaleOrder(models.Model):
@@ -106,6 +115,9 @@ class SaleOrder(models.Model):
                 line.write({'discount': line.old_discount,
                             'old_discount': 0.00,
                             'accumulated_promo': False})
+            elif line.old_qty:
+                line.write({'product_uom_qty':line.old_qty,
+                            'old_qty':0})
         return res
 
     @api.multi
