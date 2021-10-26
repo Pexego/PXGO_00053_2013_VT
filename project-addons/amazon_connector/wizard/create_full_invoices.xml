@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="create_full_invoices_wizard" model="ir.ui.view">
+        <field name="name">create.full.invoices.amazon.wizard</field>
+        <field name="model">create.full.invoices.amazon.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Amazon Orders">
+                <field name="amazon_orders" mode="tree">
+                    <tree string="Deposits" create="false" delete="false" editable="top">
+                        <field name="amazon_order" context="{'tree_view_ref': 'amazon_connector.amazon_sale_order_tree'}"/>
+                    </tree>
+                </field>
+                <footer>
+                    <button string="Create" name="create_invoices" type="object"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window name="Create Full Invoices"
+                res_model="create.full.invoices.amazon.wizard"
+                src_model="amazon.sale.order"
+                view_id="create_full_invoices_wizard"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"
+                id="create_full_invoices_action"/>
+</odoo>

@@ -1070,3 +1070,18 @@ msgstr "Impuestos incluidos en precio unitario"
 #, python-format
 msgid "Please add a valid fiscal position before retry this order"
 msgstr "Por favor, añade una posición fiscal válida antes de reintentar la lectura del pedido"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/wizard/create_full_invoices.py:59
+#: code:addons/amazon_connector/models/amazon_sale_order.py:252
+#: code:addons/amazon_connector/models/amazon_sale_order.py:346
+#, python-format
+msgid "There is no billing info in VIES"
+msgstr "No hay información de facturación en el VIES"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:255
+#: code:addons/amazon_connector/models/amazon_sale_order.py:349
+#, python-format
+msgid "There is no vat in this order"
+msgstr "No hay CIF en este pedido"
