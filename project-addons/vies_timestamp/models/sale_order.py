@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import fields, models, _, tools, api, exceptions
+from odoo import fields, models, _, tools, api, exceptions, tools
 import time
 from urllib.request import getproxies
 import base64
@@ -83,7 +83,8 @@ class SaleOrder(models.Model):
 
             if result is not None:
                 from reportlab.pdfgen import canvas
-                name = '%s_VIES.pdf' % sale.\
+                name = tools.config["data_dir"] + '/filestore/temp/'
+                name += '%s_VIES.pdf' % sale.\
                     name.replace(" ", "").replace("\\", "").replace("/", "").\
                     replace("-", "_")
                 c = canvas.Canvas(name)
