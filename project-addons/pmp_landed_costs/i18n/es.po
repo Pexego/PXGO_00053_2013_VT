@@ -18,7 +18,7 @@ msgstr ""
 #. module: pmp_landed_costs
 #: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_landed_cost_container_ids
 msgid "Containers"
-msgstr "Contenedores"
+msgstr "Envíos"
 
 #. module: pmp_landed_costs
 #: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_new_unit_cost

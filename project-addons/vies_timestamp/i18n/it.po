@@ -76,3 +76,9 @@ msgstr "In attesa di valutazione vies"
 #, python-format
 msgid "import module \"suds\" failed - check VIES needs this module"
 msgstr "NImportare modulo \"suds\" fallito- per controllare il VIES necessita questo modulo"
+
+#. module: vies_timestamp
+#: code:addons/vies_timestamp/sale_order.py:110
+#, python-format
+msgid "The partner is not registered in VIES so the order cannot be processed under the intra-community regime"
+msgstr "L'utente non è registrato en VIES quindi l'ordine non può essere evaso in regime intracomunitario"

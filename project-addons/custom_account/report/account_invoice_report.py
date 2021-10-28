@@ -39,8 +39,7 @@ class AccountInvoiceReport(models.Model):
     def _sub_select(self):
         select_str = super()._sub_select()
         select_str += ', ai.payment_mode_id,' \
-                      ' ai.number , sum(ail.quantity * ail.price_unit * ' \
-                      '(100.0-ail.discount) / 100.0) - ' \
+                      ' ai.number , sum(ail.price_subtotal) - ' \
                       'sum(coalesce(ail.cost_unit, 0)*ail.quantity) ' \
                       'as benefit, pb.name, rpa.id as area_id, ' \
                       'ai.partner_shipping_id as contact_id, ' \

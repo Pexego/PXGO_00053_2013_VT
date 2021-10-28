@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="stock.menu_action_production_lot_form" groups="base.group_no_one"/>
+
+    <record id="view_lot_moves_tree" model="ir.ui.view">
+        <field name="name">stock.lot.moves.tree</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <tree string="Serial Numbers" editable="top">
+                <field name="picking_id" readonly="1"/>
+                <field name="sale_id" readonly="1"/>
+                <field name="product_id" readonly="1"/>
+                <field name="name" readonly="1"/>
+                <field name="partner_id" readonly="1"/>
+                <field name="lots_text"/>
+                <field name="date" readonly="1"/>
+                <field name="date_done" readonly="1"/>
+                <field name="state" readonly="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="search_lot_moves_filter">
+        <field name="name">Lots Moves Filter</field>
+        <field name="model">stock.move</field>
+        <field name="arch" type="xml">
+            <search string="Product Lots Filter">
+                <field name="name"/>
+                <field name="product_id"/>
+                <field name="picking_id"/>
+                <field name="lots_text"/>
+                <group expand="0" string="Group By">
+                    <filter name="group_by_product" string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+                    <filter name="group_by_picking" string="Picking" domain="[]" context="{'group_by':'picking_id'}"/>
+                    <filter name="group_by_partner" string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_lot_moves_form" model="ir.actions.act_window">
+        <field name="name">Serial Numbers</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">stock.move</field>
+        <field name="domain">[('lots_text','!=', False)]</field>
+        <field name="view_type">form</field>
+        <field name="search_view_id" ref="search_lot_moves_filter"/>
+        <field name="view_id" ref="view_lot_moves_tree"/>
+    </record>
+
+    <menuitem action="action_lot_moves_form" id="menu_action_lot_moves"
+        parent="stock.menu_stock_inventory_control" groups="stock.group_production_lot"
+        sequence="101"/>
+</odoo>

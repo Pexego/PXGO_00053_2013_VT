@@ -63,14 +63,19 @@ class StockPicking(models.Model):
             # We do this huge condition to ensure that both fields are not empty when the mail is sent
             if ((vals.get('carrier_tracking_ref', False) and picking.carrier_name and not picking.carrier_tracking_ref) or
                     (vals.get('carrier_name', False) and picking.carrier_tracking_ref and not picking.carrier_name) or
-                    (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and\
-                    picking.picking_type_code == 'outgoing' and picking.sale_id:
+                    (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and \
+                    picking.picking_type_code == 'outgoing' and \
+                    (picking.sale_id or (picking.claim_id and picking.claim_id.delivery_type == 'shipping' and picking.location_dest_id == self.env.ref(
+                        'stock.stock_location_customers'))):
                 pickings_to_send.append(picking)
         result = super().write(vals)
         if pickings_to_send:
             for picking in pickings_to_send:
                 # We need to do this after the write, otherwise the email template won't get well some  picking values
-                picking_template = self.env.ref('stock_custom.picking_done_template')
+                if picking.claim_id:
+                    picking_template = self.env.ref('stock_custom.picking_done_template_claim')
+                else:
+                    picking_template = self.env.ref('stock_custom.picking_done_template')
                 picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
         return result
 
@@ -118,8 +123,8 @@ class StockMove(models.Model):
         ('3.low', 'Low'),
         ], readonly=False,compute='_compute_dates')
 
-    date_done = fields.Datetime(related='picking_id.date_done',store=True)
-
+    date_done = fields.Datetime(related='picking_id.date_done', store=True)
+    date_expected_conf = fields.Boolean(related='container_id.conf', store=False)
 
     def _compute_is_initial_demand_editable(self):
         super()._compute_is_initial_demand_editable()

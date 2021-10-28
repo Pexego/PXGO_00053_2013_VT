@@ -19,3 +19,5 @@
 ##############################################################################
 from . import stock_invoice_deposit
 from . import stock_sale_deposit
+from . import stock_return_deposit
+from . import stock_loss_deposit

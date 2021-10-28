@@ -88,6 +88,7 @@ class ResPartner(models.Model):
     ref_supplier = fields.Char("Ref. Supplier", size=3)
     property_product_pricelist = fields.\
         Many2one(search="_search_pricelist_name")
+    forwarder = fields.Boolean(string="Forwarder")
 
     @api.multi
     @api.depends('country_id')

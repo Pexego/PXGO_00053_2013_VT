@@ -6,6 +6,7 @@ class AccountInvoice(models.Model):
 
     amazon_order = fields.Many2one(comodel_name='amazon.sale.order')
     amazon_invoice = fields.Char()
+    tax_in_price_unit = fields.Boolean()
 
     @api.multi
     def action_invoice_open(self):
@@ -27,6 +28,11 @@ class AccountInvoice(models.Model):
             invoice = self.env['account.invoice'].browse(list(res))
             invoice.write({'name':amazon_order.name,'amazon_order':amazon_order.id,'amazon_invoice':amazon_order.amazon_invoice_name})
         return res
+
+    @api.multi
+    def _is_sii_simplified_invoice(self):
+        res = super(AccountInvoice, self)._is_sii_simplified_invoice()
+        return res and not self.partner_id.amazon_parent_id
 
 
 class AccountMove(models.Model):
