@@ -175,10 +175,16 @@ class PromotionsRulesActions(models.Model):
             ('fix_price_per_product',
              _('Fixed price per each product')),
             ('tag_disc_perc_line',
-             _('New discount line per product with tag'))
+             _('New discount line per product with tag')),
+            ('change_pricelist_category',
+             _('Change pricelist price category')),
+            ('brand_disc_perc_accumulated_reverse',
+             _('Discount % on not Brand accumulated')),
+            ('prod_disc_per_qty',
+             _('Discount % on one product based on the quantity of another')),
             ])
 
-
+    @api.onchange('action_type')
     def on_change(self):
         if self.action_type == 'prod_disc_perc_accumulated':
             self.product_code = 'product_code'
@@ -196,7 +202,7 @@ class PromotionsRulesActions(models.Model):
 
         elif self.action_type in [
                 'brand_disc_perc', 'brand_disc_perc_accumulated',
-                'brand_price_disc_accumulated']:
+                'brand_price_disc_accumulated', 'brand_disc_perc_accumulated_reverse']:
             self.product_code = 'brand_code'
             self.arguments = '0.00'
 
@@ -226,8 +232,33 @@ class PromotionsRulesActions(models.Model):
         elif self.action_type == 'disc_per_product':
             self.product_code = '["tag_product","reg_exp_product_code"]'
             self.arguments = '0.00'
-
+        elif self.action_type == 'prod_disc_per_qty':
+            self.product_code = '"product_reference",..."'
+            self.arguments = '{"product":discount, ...}'
         return super().on_change()
+
+    def action_prod_disc_per_qty(self, order):
+        product_obj = self.env['product.product']
+        products_code = eval(self.product_code)
+        products = product_obj.search([('default_code', 'in', products_code)])
+        if not products:
+            raise UserError(_("No product with the code % s") % products_code)
+        products_to_apply_discount = eval(self.arguments)
+        lines = order.order_line.filtered(lambda l: l.product_id in products)
+        if lines:
+            qty = sum(lines.mapped('product_uom_qty'))
+            product_names = products_to_apply_discount.keys()
+            lines_to_apply = order.order_line.filtered(lambda l:l.product_id.default_code in product_names)
+            for line in lines_to_apply:
+                discount = products_to_apply_discount[line.product_id.default_code]
+                if line.product_uom_qty<=qty:
+                    line.discount=discount
+                else:
+                    product_qty = line.product_uom_qty
+                    line.product_uom_qty = product_qty - qty
+                    line.old_qty = product_qty
+                    self.create_y_line(order, qty , line.product_id.id)
+        return True
 
     def apply_perc_discount_accumulated(self, order_line):
         final_discount = eval(self.arguments)
@@ -443,6 +474,7 @@ class PromotionsRulesActions(models.Model):
         if points <= price_subtotal:
             self.create_y_line_sale_points_programme(order, points,bags)
             bags.write({'applied_state':'applied', 'order_applied_id':order.id})
+            bag_obj.with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(rules, order.partner_id)
         else:
             bags_to_change_status = self.env['res.partner.point.programme.bag']
             cont_point_applied = 0
@@ -467,6 +499,7 @@ class PromotionsRulesActions(models.Model):
                     bags_to_change_status += bag
             bags_to_change_status.write({'applied_state': 'applied', 'order_applied_id': order.id})
             self.create_y_line_sale_points_programme(order, price_subtotal,bags_to_change_status)
+            bag_obj.with_delay(priority=11, eta=10).recalculate_partner_point_bag_accumulated(bags_to_change_status.mapped('point_rule_id'), order.partner_id)
 
         return True
 
@@ -578,6 +611,48 @@ class PromotionsRulesActions(models.Model):
                     'product_uom': 1
                 }
                 self.create_line(vals)
+        return {}
+
+    def action_change_pricelist_category(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) == \
+                    order_line.product_id.categ_id.name:
+                self.change_pricelist_line(order_line)
+        return {}
+
+    def change_pricelist_line(self, order_line):
+        new_pricelist_argument = eval(self.arguments)
+        product = order_line.product_id
+        new_pricelist = self.env['product.pricelist'].search([('name', '=', new_pricelist_argument)])
+        price_unit = self.env['account.tax']._fix_tax_included_price_company(
+            self._get_display_price_from_pricelist(product, new_pricelist, order_line),
+            product.taxes_id, order_line.tax_id, order_line.company_id)
+        order_line.write({'price_unit': price_unit, 'discount': 0.0, 'old_discount': 0.0, 'accumulated_promo': False})
+
+    @api.multi
+    def _get_display_price_from_pricelist(self, product, pricelist, order_line):
+        # This is a copy of _get_display_price, but here we specify the pricelist
+        if pricelist.discount_policy == 'with_discount':
+            return product.with_context(pricelist=pricelist.id).price
+        product_context = dict(self.env.context, partner_id=order_line.order_id.partner_id.id, date=order_line.order_id.date_order,
+                               uom=order_line.product_uom.id)
+        final_price, rule_id = pricelist.with_context(product_context).get_product_price_rule(
+            product, order_line.product_uom_qty or 1.0, order_line.order_id.partner_id)
+        base_price, currency_id = order_line.with_context(product_context)._get_real_price_currency(product, rule_id,
+                                                                                              order_line.product_uom_qty,
+                                                                                              order_line.product_uom,
+                                                                                              pricelist.id)
+        if currency_id != pricelist.currency_id.id:
+            base_price = self.env['res.currency'].browse(currency_id).with_context(product_context).compute(base_price,
+                                                                                                            pricelist.currency_id)
+        # negative discounts (= surcharge) are included in the display price
+        return max(base_price, final_price)
+
+    def action_brand_disc_perc_accumulated_reverse(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) != \
+                    order_line.product_id.product_brand_id.code and order_line.product_id.type == 'product':
+                self.apply_perc_discount_accumulated(order_line)
         return {}
 
 

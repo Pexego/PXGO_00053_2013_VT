@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_sim_error" model="mail.template">
+            <field name="name">SIM Error</field>
+            <field name="email_from">odoo_team@visiotechsecurity.com</field>
+            <field name="subject">[Odoo] SIM card not found</field>
+            <field name="email_to">jlmoralejo@visiotechsecurity.com</field>
+            <field name="model_id" ref="stock.model_stock_move"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html"><![CDATA[
+                <p>${ctx.get('message_warn','')}</p>
+             ]]>
+            </field>
+        </record>
+    </data>
+</odoo>

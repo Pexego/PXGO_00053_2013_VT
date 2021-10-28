@@ -11,7 +11,8 @@ or a multiple.
     "depends": [
         "product",
         "sale",
-        "sale_stock"
+        "sale_stock",
+        "picking_incidences"
     ],
     "data": [
         "views/product_view.xml"

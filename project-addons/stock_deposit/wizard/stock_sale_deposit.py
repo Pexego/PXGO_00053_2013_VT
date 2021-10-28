@@ -68,6 +68,7 @@ class StockSaleDeposit(models.TransientModel):
             'location_dest_id': picking_type_id.default_location_dest_id.id})
 
         sorted_deposits = sorted(deposits, key=lambda deposit: deposit.sale_id)
+        pickings = self.env['stock.picking']
         for deposit in sorted_deposits:
             if not picking['partner_id']:
                 partner_id = deposit.partner_id.id
@@ -87,6 +88,8 @@ class StockSaleDeposit(models.TransientModel):
                 group_id = deposit.sale_id.procurement_group_id.id
                 picking.write({'partner_id': partner_id, 'commercial': commercial,
                                'group_id': group_id, 'origin': deposit.sale_id.name})
+            if picking.location_id!=deposit.move_id.location_dest_id:
+                picking.location_id=deposit.move_id.location_dest_id.id
 
             values = {
                 'product_id': deposit.product_id.id,
@@ -104,8 +107,10 @@ class StockSaleDeposit(models.TransientModel):
             move._action_confirm()
             deposit.move_id.sale_line_id.write({'qty_invoiced': deposit.move_id.sale_line_id.qty_invoiced-deposit.product_uom_qty, 'invoice_status': 'to invoice'})
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
-        picking.action_assign()
-        picking.action_done()
+            pickings |= picking
+        for pick in pickings:
+            pick.action_assign()
+            pick.action_done()
 
 
 class StockSaleDeposit(models.TransientModel):

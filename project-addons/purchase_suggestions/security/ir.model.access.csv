@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_suggestions,access_purchase_suggestions,model_purchase_suggestions,base.group_user,1,1,1,1
+access_purchase_suggestions_wizard,access_purchase_suggestions_wizard,model_purchase_suggestions_wizard,base.group_user,1,1,1,1
+access_purchase_suggestions_line,access_purchase_suggestions_line,model_purchase_suggestions_line,base.group_user,1,1,1,1
+access_purchase_suggestions_statistics,access_purchase_suggestions_statistics,model_purchase_suggestions_statistics,base.group_user,1,1,1,1
+
+
+
+
+

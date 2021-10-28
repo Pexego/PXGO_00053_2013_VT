@@ -76,7 +76,7 @@ class AccountInvoiceContactReport(models.Model):
                                 THEN - ail.price_subtotal
                                 ELSE ail.price_subtotal
                             END) AS price_total,
-                        SUM(ail.quantity * ail.price_unit * (100.0-ail.discount) / 100.0) - sum(coalesce(ail.cost_unit, 0)*ail.quantity) as benefit
+                        SUM(ail.price_subtotal) - sum(coalesce(ail.cost_unit, 0)*ail.quantity) as benefit
         """
         return select_str
 

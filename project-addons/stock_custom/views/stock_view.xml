@@ -39,6 +39,9 @@
             <field name="company_id" position="after">
                 <field name="commercial"/>
             </field>
+            <field name="scheduled_date" position="attributes">
+                <attribute name="groups">base.group_system</attribute>
+            </field>
             <xpath expr="//sheet/notebook/page[2]/button[@name='put_in_pack']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
@@ -188,6 +191,7 @@
                 <field name="picking_type_id"/>
                 <field name="container_id" groups="purchase.group_purchase_manager"/>
                 <field name="date_expected" attrs="{'invisible': [('date_reliability', '=', '3.low')]}"/>
+                <field name="date_expected_conf" />
                 <field name="date_reliability"/>
                 <field name="state"/>
             </tree>
