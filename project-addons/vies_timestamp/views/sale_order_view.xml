@@ -12,7 +12,7 @@
                     <field name="waiting_vies_validation"/>
                     <button name="check_vat_ext" type="object" string="Check vies validation" attrs="{'invisible': [('waiting_vies_validation', '=', False)]}"/>
                     <button name="action_force_vies_validation" type="object" string="Force vies validation" attrs="{'invisible': [('waiting_vies_validation', '=', False)]}" groups="base.group_sale_manager"/>
-                    <field name="force_vies_validation"/>
+                    <field name="force_vies_validation" invisible="0" readonly="0" groups="vies_timestamp.force_vies_validation"/>
                 </group>
             </xpath>
         </field>

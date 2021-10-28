@@ -1,0 +1,287 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* purchase_suggestions
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-10-22 11:26+0000\n"
+"PO-Revision-Date: 2021-10-22 11:26+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_wizard
+msgid "Calculate"
+msgstr "Calcular"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_calculated_by
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_calculated_by
+msgid "Calculated By"
+msgstr "Calculado en"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_wizard
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_create_uid
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_create_uid
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_create_uid
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_create_uid
+msgid "Created by"
+msgstr "Credado por"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_create_date
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_create_date
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_create_date
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_d1
+msgid "D1"
+msgstr "D1"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_d2
+msgid "D2"
+msgstr "D2"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_d3
+msgid "D3"
+msgstr "D3"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_d4
+msgid "D4"
+msgstr "D4"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_date_from
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_date_from
+msgid "Date From"
+msgstr "Fecha desde"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_display_name
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_display_name
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_display_name
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_display_name
+msgid "Display Name"
+msgstr "Nombre"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_id
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_id
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_id
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_id
+msgid "ID"
+msgstr "ID"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,help:purchase_suggestions.field_purchase_suggestions_line_qty_to_purchase
+msgid "If the quantity has been calculated by weeks, this field will be equal to 8 * qty + reserves - real stock, if it has been calculated by months will be equal to qty + reserves - real stock"
+msgstr "Si la cantidad ha sido calculada por semanas, este campo será igual a 8 * la cantidad calculada - stock disponible, si ha sido calculada por meses será igual a la cantidad calculada -stock disponible"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions___last_update
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line___last_update
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics___last_update
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_write_uid
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_write_uid
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_write_uid
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_write_uid
+msgid "Last Updated by"
+msgstr "ültima actualización por"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_write_date
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_write_date
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_write_date
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_write_date
+msgid "Last Updated on"
+msgstr "Última actualziación en"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_ids
+msgid "Line"
+msgstr "Línea"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_month_ids
+msgid "Line Month"
+msgstr "Líneas por meses"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_weeks_ids
+msgid "Line Weeks"
+msgstr "Líneas por semasas"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_max
+msgid "Max"
+msgstr "Max"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_mean
+msgid "Mean"
+msgstr "Media"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_min
+msgid "Min"
+msgstr "Min"
+
+#. module: purchase_suggestions
+#: selection:purchase.suggestions.line,calculated_by:0
+#: selection:purchase.suggestions.statistics,calculated_by:0
+msgid "Month"
+msgstr "Mes"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_month_level
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_month_level
+msgid "Month Level"
+msgstr "Cota mes"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_product_id
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: purchase_suggestions
+#: code:addons/purchase_suggestions/wizard/purchase_suggestions_wizard.py:349
+#: model:ir.actions.act_window,name:purchase_suggestions.purchase_suggestions_wizard_action
+#: model:ir.ui.menu,name:purchase_suggestions.menu_purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_form
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_wizard
+#, python-format
+msgid "Purchase Suggestions"
+msgstr "Sugerencias de compras"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_line_form
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_line_tree
+msgid "Purchase Suggestions Lines"
+msgstr "Líneas de sugerencias de compras"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_form
+msgid "Purchase Suggestions by month"
+msgstr "Sugerencias de compras por meses"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_form
+msgid "Purchase Suggestions by week"
+msgstr "Sugerencias de compras por semanas"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_q0
+msgid "Q0"
+msgstr "C0"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_q1
+msgid "Q1"
+msgstr "C1"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_q2
+msgid "Q2"
+msgstr "C2"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_q3
+msgid "Q3"
+msgstr "C3"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_q4
+msgid "Q4"
+msgstr "C4"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_qty_to_purchase
+msgid "Qty To Purchase"
+msgstr "Cantidad a comprar"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_qty
+msgid "Quantity"
+msgstr "Cantidad calculada"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistic_month_ids
+msgid "Statistic Month"
+msgstr "Estadísticas mensuales"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistic_weeks_ids
+msgid "Statistic Weeks"
+msgstr "Estadísticas semanales"
+
+#. module: purchase_suggestions
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_statistics_form
+#: model:ir.ui.view,arch_db:purchase_suggestions.purchase_suggestions_statistics_tree
+msgid "Statistics"
+msgstr "Estadísticas"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_suggestion_id
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_statistics_suggestion_id
+msgid "Suggestion"
+msgstr "Sugerencia"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_line_virtual_stock_conservative
+msgid "Virtual Stock Conservative"
+msgstr "Stock disponible"
+
+#. module: purchase_suggestions
+#: selection:purchase.suggestions.line,calculated_by:0
+#: selection:purchase.suggestions.statistics,calculated_by:0
+msgid "Week"
+msgstr "Semana"
+
+#. module: purchase_suggestions
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_week_level
+#: model:ir.model.fields,field_description:purchase_suggestions.field_purchase_suggestions_wizard_week_level
+msgid "Week Level"
+msgstr "Cota Semanal"
+
+#. module: purchase_suggestions
+#: model:ir.model,name:purchase_suggestions.model_purchase_suggestions
+msgid "purchase.suggestions"
+msgstr "purchase.suggestions"
+
+#. module: purchase_suggestions
+#: model:ir.model,name:purchase_suggestions.model_purchase_suggestions_line
+msgid "purchase.suggestions.line"
+msgstr "purchase.suggestions.line"
+
+#. module: purchase_suggestions
+#: model:ir.model,name:purchase_suggestions.model_purchase_suggestions_statistics
+msgid "purchase.suggestions.statistics"
+msgstr "purchase.suggestions.statistics"
+
+#. module: purchase_suggestions
+#: model:ir.model,name:purchase_suggestions.model_purchase_suggestions_wizard
+msgid "purchase.suggestions.wizard"
+msgstr "purchase.suggestions.wizard"
