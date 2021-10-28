@@ -18,9 +18,9 @@ msgstr ""
 #. module: amazon_connector
 #: model:mail.template,body_html:amazon_connector.send_amazon_settlement
 msgid "\n"
-"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">The Amazon settlement <strong style=\"font-weight:bold;\">${object.name} - ${object.marketplace_id.name} </strong> has ended.</p>\n"
-"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">ERRORS: ${ctx.get('error_count')}</p>\n"
-"            <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">RECONCILED: ${ctx.get('reconciled_count')}</p>\n"
+"            <p>The Amazon settlement <strong>${object.name} - ${object.marketplace_id.name} </strong> has ended.</p>\n"
+"            <p>ERRORS: ${ctx.get('error_count')}</strong></p>\n"
+"            <p>RECONCILED: ${ctx.get('reconciled_count')}</p>\n"
 "         \n"
 "        "
 msgstr "\n"
@@ -56,6 +56,12 @@ msgid "Account Entry"
 msgstr "Asiento contable"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_address
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_address
+msgid "Address"
+msgstr "Dirección"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_adjustment_id
 msgid "Adjustment"
 msgstr "Ajuste"
@@ -83,30 +89,31 @@ msgid "Amazon"
 msgstr "Amazon"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:215
+#: code:addons/amazon_connector/models/amazon_sale_order.py:232
+#: code:addons/amazon_connector/models/amazon_sale_order.py:328
 #, python-format
 msgid "Amazon API Error. Buyer Info Request. Order %s. '%s' \n"
 msgstr "Amazon API Error. Petición de info del comprador. Pedido %s. '%s' \n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:129
+#: code:addons/amazon_connector/models/amazon_sale_order.py:140
 #, python-format
 msgid "Amazon API Error. No order was created due to errors. '%s' \n"
 msgstr "Error API Amazon. Ningún pedido se ha creado debido ha que se ha producido un error. '%s'"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:171
-#: code:addons/amazon_connector/models/amazon_sale_order.py:193
-#: code:addons/amazon_connector/models/amazon_sale_order.py:246
-#: code:addons/amazon_connector/models/amazon_sale_order.py:263
-#: code:addons/amazon_connector/models/amazon_settlement.py:249
+#: code:addons/amazon_connector/models/amazon_sale_order.py:182
+#: code:addons/amazon_connector/models/amazon_sale_order.py:207
+#: code:addons/amazon_connector/models/amazon_sale_order.py:285
+#: code:addons/amazon_connector/models/amazon_sale_order.py:302
+#: code:addons/amazon_connector/models/amazon_settlement.py:256
 #, python-format
 msgid "Amazon API Error. Order %s. '%s' \n"
 msgstr "Error API Amazon. Pedido %s. '%s'"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:139
-#: code:addons/amazon_connector/models/amazon_settlement.py:96
+#: code:addons/amazon_connector/models/amazon_sale_order.py:150
+#: code:addons/amazon_connector/models/amazon_settlement.py:99
 #, python-format
 msgid "Amazon API Error. Report %s. '%s' \n"
 msgstr "Error API Amazon. Informe %s. '%s'"
@@ -122,6 +129,12 @@ msgid "Amazon Connector"
 msgstr "Conector Amazon"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_partner_amazon_child_ids
+#: model:ir.model.fields,field_description:amazon_connector.field_res_users_amazon_child_ids
+msgid "Amazon Contacts"
+msgstr "Contactos Amazon"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_amazon_invoice
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amazon_invoice_name
 msgid "Amazon Invoice"
@@ -135,6 +148,7 @@ msgstr "Nombre Amazon"
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_amazon_order
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_amazon_order_id
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines_amazon_order
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_amazon_order
 #: model:ir.model.fields,field_description:amazon_connector.field_stock_deposit_amazon_order_id
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
@@ -158,11 +172,19 @@ msgstr "Nombre Pedido Amazon"
 
 #. module: amazon_connector
 #: model:ir.actions.act_window,name:amazon_connector.action_show_amazon_orders
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_wizard_amazon_orders
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_amazon_orders
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_tree
+#: model:ir.ui.view,arch_db:amazon_connector.create_full_invoices_wizard
 #: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
 msgid "Amazon Orders"
 msgstr "Pedidos de Amazon"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_res_partner_amazon_parent_id
+#: model:ir.model.fields,field_description:amazon_connector.field_res_users_amazon_parent_id
+msgid "Amazon Parent"
+msgstr "Amazon Parent"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_account_move_amazon_refund_settlement_id
@@ -175,7 +197,7 @@ msgid "Amazon Report Document"
 msgstr "Documento Origen Informe"
 
 #. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_account_move_amazon_settlement_id_21898
+#: model:ir.model.fields,field_description:amazon_connector.field_account_move_amazon_settlement_id
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
 msgid "Amazon Settlement"
 msgstr "Pagos Amazon"
@@ -227,6 +249,16 @@ msgid "Aws Secret Key"
 msgstr "AWS clave secreta"
 
 #. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+msgid "Billing Address"
+msgstr "Dirección fiscal"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_name
+msgid "Billing Name"
+msgstr "Nombre fiscal"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_buyer_email
 msgid "Buyer Email"
 msgstr "Email del comprador"
@@ -242,6 +274,7 @@ msgid "Buyer Name"
 msgstr "Nombre del comprador"
 
 #. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.create_full_invoices_wizard
 #: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
 msgid "Cancel"
 msgstr "Cancelar"
@@ -277,9 +310,20 @@ msgid "Configuration"
 msgstr "Configuración"
 
 #. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_res_partner
+msgid "Contact"
+msgstr "Cliente"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_billing_country_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_country_id
 msgid "Country"
 msgstr "País"
+
+#. module: amazon_connector
+#: model:ir.ui.view,arch_db:amazon_connector.create_full_invoices_wizard
+msgid "Create"
+msgstr "Crear"
 
 #. module: amazon_connector
 #: model:ir.actions.server,name:amazon_connector.ir_cron_create_amazon_sale_orders_ir_actions_server
@@ -289,6 +333,11 @@ msgid "Create Amazon Sale Orders"
 msgstr "Crear Pedidos Ventas Amazon"
 
 #. module: amazon_connector
+#: model:ir.actions.act_window,name:amazon_connector.create_full_invoices_action
+msgid "Create Full Invoices"
+msgstr "Crear facturas completas"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_marketplace_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_line_create_uid
@@ -296,6 +345,8 @@ msgstr "Crear Pedidos Ventas Amazon"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines_create_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_wizard_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_create_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_create_uid
 msgid "Created by"
@@ -309,6 +360,8 @@ msgstr "Creado por"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_create_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_create_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines_create_date
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_wizard_create_date
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_create_date
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_create_date
 msgid "Created on"
@@ -338,6 +391,7 @@ msgstr "Fecha de depósito"
 #: model:ir.model,name:amazon_connector.model_stock_deposit
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_deposits
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_sale_order_form
+#: model:ir.ui.view,arch_db:amazon_connector.create_full_invoices_wizard
 #: model:ir.ui.view,arch_db:amazon_connector.retry_amazon_orders_form
 msgid "Deposits"
 msgstr "Depósitos"
@@ -365,6 +419,8 @@ msgstr "Descuento"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_display_name
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_display_name
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines_display_name
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_wizard_display_name
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_display_name
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_display_name
 msgid "Display Name"
@@ -408,6 +464,11 @@ msgid "Fee"
 msgstr "Cargo"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_fiscal_position_id
+msgid "Fiscal Position"
+msgstr "Posición fiscal"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_fulfillment
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_fulfillment
 msgid "Fulfillment"
@@ -426,6 +487,8 @@ msgstr "Info. General"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_id
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines_id
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_wizard_id
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_id
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_id
 msgid "ID"
@@ -477,7 +540,7 @@ msgid "Item Event"
 msgstr "Evento del elemento"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:305
+#: code:addons/amazon_connector/models/amazon_sale_order.py:385
 #, python-format
 msgid "ItemPrice or ItemTax fields are empty %s\n"
 msgstr "Los campos ItemPrice o ItemTax vienen vacíos %s\n"
@@ -495,6 +558,8 @@ msgstr "Elementos"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item___last_update
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_event___last_update
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines___last_update
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_wizard___last_update
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines___last_update
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard___last_update
 msgid "Last Modified on"
@@ -508,6 +573,8 @@ msgstr "Última modificación en"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_write_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_write_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines_write_uid
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_wizard_write_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_write_uid
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_write_uid
 msgid "Last Updated by"
@@ -521,6 +588,8 @@ msgstr "Última actualización de"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_write_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_write_date
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines_write_date
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_wizard_write_date
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_write_date
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_wizard_write_date
 msgid "Last Updated on"
@@ -530,7 +599,7 @@ msgstr "Última actualización en"
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_item_line_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_ids
 msgid "Line"
-msgstr "Línea"
+msgstr "Line"
 
 #. module: amazon_connector
 #: model:ir.ui.view,arch_db:amazon_connector.amazon_settlement_form
@@ -583,6 +652,7 @@ msgid "Message Error"
 msgstr "Mensaje de Error"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_move_id
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_move_ids
 msgid "Move"
 msgstr "Asientos de ventas"
@@ -652,9 +722,20 @@ msgid "Partially Reconciled"
 msgstr "Conciliado Parcialmente"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_partner_vat
 msgid "Partner Vat"
 msgstr "CIF Cliente"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:307
+#, python-format
+msgid "Please add a valid fiscal position before retry this order"
+msgstr "Por favor, añade una posición fiscal válida antes de reintentar la lectura del pedido"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_zip
@@ -718,7 +799,7 @@ msgid "Product Seller Sku"
 msgstr "Sku del producto"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:302
+#: code:addons/amazon_connector/models/amazon_sale_order.py:382
 #, python-format
 msgid "Product with ASIN CODE %s not found\n"
 msgstr "El producto con código ASIN %s no ha sido encontrado \n"
@@ -761,6 +842,12 @@ msgstr "Conciliar Facturas Amazon"
 #: selection:amazon.settlement.line,state:0
 msgid "Reconciled"
 msgstr "Conciliado"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_settlement.py:690
+#, python-format
+msgid "Reconciled with more lines of the same order in other settlements %s"
+msgstr "COnciliado con más líneas del mismo pedido en otros informes %s"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_res_company_refresh_token
@@ -890,6 +977,11 @@ msgid "Tax"
 msgstr "Impuesto"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_tax_in_price_unit
+msgid "Tax In Price Unit"
+msgstr "Impuestos incluidos en precio unitario"
+
+#. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_tax
 msgid "Taxes"
 msgstr "Impuestos"
@@ -905,35 +997,62 @@ msgid "Theoretical Total Taxes"
 msgstr "Impuestos aplicados por Amazon"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:441
+#: code:addons/amazon_connector/models/amazon_sale_order.py:544
 #, python-format
 msgid "There are no deposit for this order"
 msgstr "No hay depósitos para este pedido"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:451
+#: code:addons/amazon_connector/models/amazon_sale_order.py:610
 #, python-format
 msgid "There aren't any invoices linked to this Amazon order"
 msgstr "No hay ninguna factura asociada a este pedido"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:313
+#: code:addons/amazon_connector/models/amazon_sale_order.py:252
+#: code:addons/amazon_connector/models/amazon_sale_order.py:349
+#, python-format
+msgid "There country in VIES is diferent to Amazon order country"
+msgstr "El país que nos devuelve el VIES es distinto al del pedido de Amazon"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/wizard/create_full_invoices.py:43
+#, python-format
+msgid "There country in VIES is different to Amazon order country"
+msgstr "El país que nos devuelve el VIES es distinto al del pedido de Amazon"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:255
+#: code:addons/amazon_connector/models/amazon_sale_order.py:353
+#: code:addons/amazon_connector/wizard/create_full_invoices.py:62
+#, python-format
+msgid "There is no billing info in VIES"
+msgstr "No hay información de facturación en el VIES"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:413
 #, python-format
 msgid "There is no currency with this name or it is no activated %s\n"
 msgstr "No hay ninguna moneda con este nombre o no está activa. %s \n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_settlement.py:337
+#: code:addons/amazon_connector/models/amazon_settlement.py:419
 #, python-format
 msgid "There is no invoice for this order\n"
 msgstr "No hay factura para este pedido\n"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:219
-#: code:addons/amazon_connector/models/amazon_sale_order.py:275
+#: code:addons/amazon_connector/models/amazon_sale_order.py:574
 #, python-format
-msgid "This Order requires a non simplified Invoice"
-msgstr "Este pedido necesita una factura que no sea simplificada"
+msgid "There is no vat in this Order"
+msgstr "Np hay CIF en este pedido
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_sale_order.py:258
+#: code:addons/amazon_connector/models/amazon_sale_order.py:356
+#, python-format
+msgid "There is no vat in this order"
+msgstr "No hay CIF en este pedido"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_amount_total
@@ -951,12 +1070,18 @@ msgid "Total Amount Company Currency"
 msgstr "Importe total divisa compañia"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:201
-#: code:addons/amazon_connector/models/amazon_sale_order.py:270
-#: code:addons/amazon_connector/models/amazon_settlement.py:330
+#: code:addons/amazon_connector/models/amazon_sale_order.py:216
+#: code:addons/amazon_connector/models/amazon_sale_order.py:311
+#: code:addons/amazon_connector/models/amazon_settlement.py:412
 #, python-format
 msgid "Total amount != Theoretical total amount (%f-%f)\n"
 msgstr "Total != Total enviado por Amazon (%f-%f)\n"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/models/amazon_settlement.py:695
+#, python-format
+msgid "Total amount != Theoretical total amount (%f-%f). (There are more lines in settlement %s)\n"
+msgstr "Cantidad total != Cantidad total teórica (%f-%f). (Hay más líneas en el informe %s)\n"
 
 #. module: amazon_connector
 #: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_transaction_name
@@ -995,12 +1120,13 @@ msgid "Warning Price"
 msgstr "Aviso error Precio"
 
 #. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_create_full_invoices_amazon_lines_wizard_id
 #: model:ir.model.fields,field_description:amazon_connector.field_retry_amazon_orders_lines_wizard_id
 msgid "Wizard"
 msgstr "Asistente"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/invoice.py:26
+#: code:addons/amazon_connector/models/invoice.py:27
 #, python-format
 msgid "You cannot merge invoices with differents amazon orders: %s"
 msgstr "No puedes fusionar facturas con diferentes pedidos de Amazon: %s"
@@ -1041,6 +1167,16 @@ msgid "amazon.settlement.line"
 msgstr "amazon.settlement.line"
 
 #. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_create_full_invoices_amazon_lines
+msgid "create.full.invoices.amazon.lines"
+msgstr "create.full.invoices.amazon.lines"
+
+#. module: amazon_connector
+#: model:ir.model,name:amazon_connector.model_create_full_invoices_amazon_wizard
+msgid "create.full.invoices.amazon.wizard"
+msgstr "create.full.invoices.amazon.wizard"
+
+#. module: amazon_connector
 #: model:ir.model,name:amazon_connector.model_retry_amazon_orders_lines
 msgid "retry.amazon.orders.lines"
 msgstr "retry.amazon.orders.lines"
@@ -1049,47 +1185,3 @@ msgstr "retry.amazon.orders.lines"
 #: model:ir.model,name:amazon_connector.model_retry_amazon_orders_wizard
 msgid "retry.amazon.orders.wizard"
 msgstr "retry.amazon.orders.wizard"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_settlement_line_move_id
-msgid "Move"
-msgstr "Asiento"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_fiscal_position_id
-msgid "Fiscal Position"
-msgstr "Posición fiscal"
-
-#. module: amazon_connector
-#: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_tax_in_price_unit
-msgid "Tax In Price Unit"
-msgstr "Impuestos incluidos en precio unitario"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:273
-#, python-format
-msgid "Please add a valid fiscal position before retry this order"
-msgstr "Por favor, añade una posición fiscal válida antes de reintentar la lectura del pedido"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/wizard/create_full_invoices.py:62
-#: code:addons/amazon_connector/models/amazon_sale_order.py:252
-#: code:addons/amazon_connector/models/amazon_sale_order.py:353
-#, python-format
-msgid "There is no billing info in VIES"
-msgstr "No hay información de facturación en el VIES"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:258
-#: code:addons/amazon_connector/models/amazon_sale_order.py:356
-#, python-format
-msgid "There is no vat in this order"
-msgstr "No hay CIF en este pedido"
-
-#. module: amazon_connector
-#: code:addons/amazon_connector/wizard/create_full_invoices.py:43
-#: code:addons/amazon_connector/models/amazon_sale_order.py:350
-#: code:addons/amazon_connector/models/amazon_sale_order.py:255
-#, python-format
-msgid "There country in VIES is different to Amazon order country"
-msgstr "El país que nos devuelve el VIES es distinto al del pedido de Amazon"
