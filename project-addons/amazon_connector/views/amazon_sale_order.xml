@@ -171,10 +171,7 @@
                                 </group>
                                 <group string="Billing Address">
                                     <field name="billing_address"/>
-                                    <field name="billing_city"/>
-                                    <field name="billing_state_id"/>
                                     <field name="billing_country_id"/>
-                                    <field name="billing_zip"/>
                                 </group>
                             </group>
                         </page>

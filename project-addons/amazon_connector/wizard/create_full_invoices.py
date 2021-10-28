@@ -15,7 +15,7 @@ class CreateFullInvoicesAmazonWizard(models.TransientModel):
             wiz_lines.append({'amazon_order': order.id})
         return wiz_lines
 
-    amazon_orders = fields.One2many('retry.amazon.orders.lines', "wizard_id", string='Amazon Orders',
+    amazon_orders = fields.One2many('create.full.invoices.amazon.lines', "wizard_id", string='Amazon Orders',
                                     default=_get_active_orders)
 
     @api.multi
@@ -38,24 +38,27 @@ class CreateFullInvoicesAmazonWizard(models.TransientModel):
                     [('code', '=', vies_response['countryCode'])]).id
                 amazon_order.billing_name = vies_response['name']
                 amazon_order.billing_address = vies_response['address']
-
-                if amazon_order.invoice_deposits:
-                    partner_id = amazon_order.create_partner()
-                    journal_id = self.env['account.journal'].search([('type', '=', 'sale')], order='id')[0]
-                    invoice = amazon_order.invoice_deposits.filtered(lambda i: i.state != 'cancel')
-                    invoice.write({'partner_id': partner_id.id,
-                                   'partner_shipping_id': partner_id.id,
-                                   'journal_id': journal_id.id,
-                                   'payment_term_id': partner_id.property_payment_term_id.id,
-                                   'payment_mode_id': partner_id.customer_payment_mode_id.id,
-                                   'partner_bank_id': partner_id.bank_ids and partner_id.bank_ids[0].id or False})
-
-                    invoice.action_invoice_open()
-                    amazon_order.state = 'invoice_open'
+                if amazon_order.billing_country_id.code != amazon_order.vat_imputation_country:
+                    amazon_order.state = 'error'
+                    amazon_order.message_error += _('There country in VIES is different to Amazon order country')
                 else:
-                    amazon_order.process_order()
+                    if amazon_order.invoice_deposits:
+                        partner_id = amazon_order.create_partner()
+                        journal_id = self.env['account.journal'].search([('type', '=', 'sale')], order='id')[0]
+                        invoice = amazon_order.invoice_deposits.filtered(lambda i: i.state != 'cancel')
+                        invoice.write({'partner_id': partner_id.id,
+                                       'partner_shipping_id': partner_id.id,
+                                       'journal_id': journal_id.id,
+                                       'payment_term_id': partner_id.property_payment_term_id.id,
+                                       'payment_mode_id': partner_id.customer_payment_mode_id.id,
+                                       'partner_bank_id': partner_id.bank_ids and partner_id.bank_ids[0].id or False})
+
+                        invoice.action_invoice_open()
+                        amazon_order.state = 'invoice_open'
+                    else:
+                        amazon_order.process_order()
             else:
-                amazon_order.state = 'warning'
+                amazon_order.state = 'error'
                 amazon_order.message_error += _('There is no billing info in VIES')
 
 

@@ -247,11 +247,14 @@ class AmazonSaleOrder(models.Model):
                                     [('code', '=', vies_response['countryCode'])]).id
                                 amazon_order.billing_name = vies_response['name']
                                 amazon_order.billing_address = vies_response['address']
+                                if amazon_order.billing_country_id.code!=amazon_order.vat_imputation_country:
+                                    amazon_order.state = 'error'
+                                    amazon_order.message_error += _('There country in VIES is diferent to Amazon order country')
                             else:
-                                amazon_order.state = 'warning'
+                                amazon_order.state = 'error'
                                 amazon_order.message_error += _('There is no billing info in VIES')
                         else:
-                            amazon_order.state = 'warning'
+                            amazon_order.state = 'error'
                             amazon_order.message_error += _('There is no vat in this order')
 
                     if amazon_order.state == 'error':
@@ -341,11 +344,15 @@ class AmazonSaleOrder(models.Model):
                                 [('code', '=', vies_response['countryCode'])]).id
                             amazon_order.billing_name = vies_response['name']
                             amazon_order.billing_address = vies_response['address']
+                            if amazon_order.billing_country_id.code != amazon_order.vat_imputation_country:
+                                amazon_order.state = 'error'
+                                amazon_order.message_error += _(
+                                    'There country in VIES is diferent to Amazon order country')
                         else:
-                            amazon_order.state = 'warning'
+                            amazon_order.state = 'error'
                             amazon_order.message_error += _('There is no billing info in VIES')
                     else:
-                        amazon_order.state='warning'
+                        amazon_order.state='error'
                         amazon_order.message_error += _('There is no vat in this order')
                 if amazon_order.state in ['error', 'warning'] or amazon_order.warning_price:
                     amazon_order.send_error_mail()

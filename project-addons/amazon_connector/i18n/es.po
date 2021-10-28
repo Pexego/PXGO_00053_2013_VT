@@ -1072,16 +1072,24 @@ msgid "Please add a valid fiscal position before retry this order"
 msgstr "Por favor, añade una posición fiscal válida antes de reintentar la lectura del pedido"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/wizard/create_full_invoices.py:59
+#: code:addons/amazon_connector/wizard/create_full_invoices.py:62
 #: code:addons/amazon_connector/models/amazon_sale_order.py:252
-#: code:addons/amazon_connector/models/amazon_sale_order.py:346
+#: code:addons/amazon_connector/models/amazon_sale_order.py:353
 #, python-format
 msgid "There is no billing info in VIES"
 msgstr "No hay información de facturación en el VIES"
 
 #. module: amazon_connector
-#: code:addons/amazon_connector/models/amazon_sale_order.py:255
-#: code:addons/amazon_connector/models/amazon_sale_order.py:349
+#: code:addons/amazon_connector/models/amazon_sale_order.py:258
+#: code:addons/amazon_connector/models/amazon_sale_order.py:356
 #, python-format
 msgid "There is no vat in this order"
 msgstr "No hay CIF en este pedido"
+
+#. module: amazon_connector
+#: code:addons/amazon_connector/wizard/create_full_invoices.py:43
+#: code:addons/amazon_connector/models/amazon_sale_order.py:350
+#: code:addons/amazon_connector/models/amazon_sale_order.py:255
+#, python-format
+msgid "There country in VIES is different to Amazon order country"
+msgstr "El país que nos devuelve el VIES es distinto al del pedido de Amazon"
