@@ -139,6 +139,22 @@ class CrmClaimRma(models.Model):
             for invoice_line in claim_obj.claim_inv_line_ids:
                 if not invoice_line.invoiced:
                     invoice_line.unlink()
+            invoce_product_ids = {}
+            for c_line in claim_obj.claim_line_ids:
+                if c_line.invoice_id.id not in invoce_product_ids:
+                    for line in c_line.invoice_id.invoice_line_ids:
+                        found = False
+                        if line.invoice_id.id in invoce_product_ids:
+                            for k,v in invoce_product_ids.items():
+                                if line.product_id.id in v.keys() and line.invoice_id.id == k:
+                                    invoce_product_ids[line.invoice_id.id][line.product_id.id] += line.quantity
+                                    found = True
+                                    break
+                            if not found:
+                                invoce_product_ids[line.invoice_id.id][line.product_id.id] = line.quantity
+                                
+                        else:
+                            invoce_product_ids[line.invoice_id.id] = {line.product_id.id: line.quantity}
             message = ""
             for claim_line in claim_obj.claim_line_ids:
                 vals = {}
