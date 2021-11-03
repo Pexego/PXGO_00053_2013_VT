@@ -8,3 +8,4 @@ class ResUsers(models.Model):
 
     cash_account_id = fields.Many2one('account.account', string='Cash Account')
     card_account_id = fields.Many2one('account.account', string='Card Account')
+    analytic_account_id = fields.Many2one('account.analytic.account', string='Analytic Account')
