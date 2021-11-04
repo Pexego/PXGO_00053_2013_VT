@@ -288,7 +288,7 @@ class CrmClaimRma(models.Model):
                     prop = self.env['ir.property'].get('property_account_income_categ_id', 'product.category')
                     account_id = prop and prop.id or False
                 account_id = fp_obj.map_account(account_id)
-
+                
                 vals = {
                     'invoice_id': invoice_id.id,
                     'name': line.product_description,
