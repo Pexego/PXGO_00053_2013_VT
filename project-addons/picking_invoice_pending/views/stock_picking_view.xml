@@ -15,7 +15,7 @@
             <xpath expr="//button[@name='button_validate']" position="after">
                 <button name="create_invoice"
                         attrs="{'invisible': ['|','|',('invoice_ids','!=',[]),('state', '!=', 'done'),('picking_type_code','!=','outgoing')]}"
-                        state="sales" string="Create Invoice" groups="account.group_account_manager" type="object" class="oe_highlight"/>
+                        string="Create Invoice" groups="account.group_account_manager" type="object" class="oe_highlight"/>
             </xpath>
         </field>
     </record>
