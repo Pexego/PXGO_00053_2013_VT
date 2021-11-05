@@ -49,7 +49,7 @@ class AmazonSaleOrder(models.Model):
     fiscal_position_id = fields.Many2one("account.fiscal.position", "Fiscal Position")
     billing_name = fields.Char()
     billing_address = fields.Char('Address')
-    billing_country_id = fields.Many2one('res.country', string='Country', readonly=True)
+    billing_country_id = fields.Many2one('res.country', string='Country')
     partner_id = fields.Many2one('res.partner')
 
     def _compute_count(self):
@@ -572,7 +572,7 @@ class AmazonSaleOrder(models.Model):
         # Código para crear la factura completa. No se incorpora todavía porque no tenemos la info de facturación de los clientes
         if not self.partner_vat:
             raise UserError(_("There is no vat in this Order"))
-        domain = [('name', '=', self.buyer_name)]
+        domain = [('name', '=', self.billing_name)]
         if self.buyer_email:
             domain += [('email', '=', self.buyer_email)]
         partner_id = self.env['res.partner'].search(domain)

@@ -72,7 +72,7 @@
                 <header>
                     <field name="state" widget="statusbar" readonly="1"/>
                     <button name="retry_order" string="Retry Order" type="object"
-                            attrs="{'invisible': [('state','!=','error')]}"
+                            attrs="{'invisible': [('state','!=','error'),('deposits_count','!=',0)]}"
                             class="oe_highlight"/>
                     <button name="process_order" string="Process Order" type="object"
                             attrs="{'invisible': ['|',('state','not in',['read','warning']),('invoice_deposits_count','>',0)]}"
@@ -83,7 +83,7 @@
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box"
-                         attrs="{'invisible':[('state','in',['error','read'])]}">
+                         attrs="{'invisible':[('state','in',['error','read']),('deposits_count','=',0)]}">
                         <button type="object" name="action_view_deposits"
                                 class="oe_stat_button"
                                 icon="fa-pencil-square-o">
