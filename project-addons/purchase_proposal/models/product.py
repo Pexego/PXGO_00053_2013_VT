@@ -38,7 +38,7 @@ class ProductProduct(models.Model):
     average_margin = fields.Float("Average Margin Last Sales", readonly=True, copy=False)
     ref_manufacturer = fields.Char(related='manufacturer_pref', readonly=True)
 
-    rotation_index = fields.Selection("Rotation", [(1, 'A'), (2, 'B'), (3, 'C')])
+    rotation_index = fields.Selection([(1, 'A'), (2, 'B'), (3, 'C')], string="Rotation")
 
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
