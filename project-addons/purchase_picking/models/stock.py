@@ -38,7 +38,7 @@ class StockContainer(models.Model):
     notes_warehouse = fields.Char(string="Warehouse notes", help="Warehouse notes")
     conf = fields.Boolean(string="Conf", help="Confirmed")
     telex = fields.Boolean(string="Telex", help="Telex")
-    arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", search='_value_search', store=True)
+    arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", search='_value_search')
     cost = fields.Float(sting="Cost")
     n_ref = fields.Integer(string="Nº ref", store=False, compute="_get_ref")
     forwarder = fields.Many2one('res.partner', domain="['&',('supplier','=',True),('forwarder','=',True)]",
@@ -54,10 +54,16 @@ class StockContainer(models.Model):
     @api.multi
     def _set_arrived(self):
         for container in self:
-            container.arrived = True
-            for line in container.picking_ids:
-                if line.state != 'done':
+            if container.move_ids and container.picking_ids:
+                if any(picking.move_lines for picking in container.picking_ids):
+                    container.arrived = True
+                    for line in container.picking_ids:
+                        if line.state != 'done':
+                            container.arrived = False
+                else:
                     container.arrived = False
+            else:
+                container.arrived = False
 
     @api.multi
     def _value_search(self, operator, value):
@@ -67,13 +73,6 @@ class StockContainer(models.Model):
         recs = self.search([]).filtered(lambda x: x.arrived is aux)
         if recs:
             return [('id', 'in', [x.id for x in recs])]
-
-    @api.multi
-    @api.onchange('arrived')
-    def _check_arrived(self):
-        for container in self:
-            if not container.picking_ids and not container.move_ids:
-                container.arrived = False
 
     @api.multi
     def _set_date_expected(self):
