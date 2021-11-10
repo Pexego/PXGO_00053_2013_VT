@@ -59,6 +59,19 @@ class SaleOrderLine(models.Model):
             vals = super(SaleOrderLine, self)._prepare_invoice_line(qty)
         return vals
 
+    @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
+    def _get_invoice_qty(self):
+        super()._get_invoice_qty()
+        for line in self.filtered(lambda l: l.product_id.id == self.env.ref('commercial_rules.product_discount').id):
+            qty_invoiced = 0.0
+            for invoice_line in line.invoice_lines:
+                if invoice_line.invoice_id.state != 'cancel':
+                    if invoice_line.invoice_id.type == 'out_invoice':
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+                    elif invoice_line.invoice_id.type == 'out_refund' and line.price_unit < 0:
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+            line.qty_invoiced = qty_invoiced
+
     @api.multi
     def write(self,vals):
         product_uom_qty = vals.get('product_uom_qty',False)
