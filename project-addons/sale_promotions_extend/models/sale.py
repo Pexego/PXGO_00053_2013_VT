@@ -37,13 +37,27 @@ class SaleOrderLine(models.Model):
                 # because it will create a refund
                 if total_to_invoice_dict:
                     total_to_invoice = total_to_invoice_dict.get(self.order_id.id, 0)
-                if total_to_invoice > 0 or \
-                        (total_to_invoice < 0 and not order.order_line.filtered(lambda l: l.invoice_status == 'no')) or \
-                        total_to_invoice == 0:
+                if total_to_invoice >= 0:
                     lines += line
+                if total_to_invoice < 0 and all(oline.product_id.type == 'service'
+                                                for oline in order.order_line.filtered(lambda l: l.invoice_status == 'to invoice')):
+                    invoice = self.env['account.invoice'].browse(invoice_id)
+                    if (invoice.type == 'out_refund' or not invoice.invoice_line_ids) and len(self) == 1:
+                        return super(SaleOrderLine, line).invoice_line_create(invoice_id, -qty)
             else:
                 lines += line
         return super(SaleOrderLine, lines).invoice_line_create(invoice_id, qty)
+
+    @api.multi
+    def _prepare_invoice_line(self, qty):
+        if all(oline.product_id.type == 'service' for oline in self.order_id.order_line.filtered(lambda l: l.invoice_status == 'to invoice')) \
+                and self.product_id.id == self.env.ref('commercial_rules.product_discount').id:
+            # This case is for creating a refund with the last discount on the order and positive quantities
+            vals = super(SaleOrderLine, self)._prepare_invoice_line(qty)
+            vals['price_unit'] = -vals['price_unit']
+        else:
+            vals = super(SaleOrderLine, self)._prepare_invoice_line(qty)
+        return vals
 
     @api.multi
     def write(self,vals):
