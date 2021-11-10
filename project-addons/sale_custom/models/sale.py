@@ -132,6 +132,7 @@ class SaleOrder(models.Model):
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     picking_policy = fields.Selection(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    not_sync_picking = fields.Boolean()
 
     @api.multi
     @api.onchange('partner_id')

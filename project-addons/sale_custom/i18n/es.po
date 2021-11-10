@@ -188,3 +188,8 @@ msgstr "No hay suficiente stock, pero tenemos un producto de reemplazo!"
 #: model:ir.ui.view,arch_db:sale_custom.sale_report_year_filter
 msgid "This Year"
 msgstr "Este año"
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_sync_picking
+msgid "Non-Synchronizable Picking"
+msgstr "Albarán no sincronizable"
