@@ -170,6 +170,9 @@ class ProductProduct(models.Model):
             else:
                 products.filtered(lambda p: p.id == value[0]).rotation_index = 3
 
+        product_ko = self.env['product.product'].search([('sale_ok', '=', False)])
+        product_ko.write({'rotation_index': 3})
+
 
 class ProductTemplate(models.Model):
 
