@@ -57,8 +57,8 @@
                     <field name="standard_price_2_inc" colspan="2" widget='monetary'
                            options="{'currency_field': 'cost_currency_id', 'field_digits': True}"
                            readonly="1" force_save="1"/>
-                    <label for="cost_increment"/>
-                    <div>
+                    <label for="cost_increment" groups="product_pricelist_custom.group_inc_mng"/>
+                    <div groups="product_pricelist_custom.group_inc_mng">
                         <field name="cost_increment" groups="product_pricelist_custom.group_inc_mng" class="oe_inline"/> %%
                     </div>
                 </field>
