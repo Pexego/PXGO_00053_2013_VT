@@ -29,7 +29,7 @@ class SaleOrderLine(models.Model):
     def invoice_line_create(self, invoice_id, qty):
         lines = self.env['sale.order.line']
         for line in self:
-            if line.promotion_line:
+            if line.price_unit < 0:
                 order = line.order_id
                 total_to_invoice_dict = self._context.get('total_to_invoice', False)
                 total_to_invoice = 0
@@ -51,7 +51,7 @@ class SaleOrderLine(models.Model):
     @api.multi
     def _prepare_invoice_line(self, qty):
         if all(oline.product_id.type == 'service' for oline in self.order_id.order_line.filtered(lambda l: l.invoice_status == 'to invoice')) \
-                and self.product_id.id == self.env.ref('commercial_rules.product_discount').id:
+                and self.price_unit < 0:
             # This case is for creating a refund with the last discount on the order and positive quantities
             vals = super(SaleOrderLine, self)._prepare_invoice_line(qty)
             vals['price_unit'] = -vals['price_unit']
