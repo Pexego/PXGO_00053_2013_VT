@@ -47,25 +47,24 @@ class ResPartnerRappelRel(models.Model):
              ('state', 'in', ['open', 'paid']),
              ('commercial_partner_id', '=', self.partner_id.id),
              ('company_id', '=', company_id)])
-
+        pricelist_ids = tuple(self.rappel_id.pricelist_ids.ids)
+        domain_lines=[('no_rappel', '=', False)]
+        if pricelist_ids:
+            domain_lines += [('sale_line_ids.order_id.pricelist_id','in',pricelist_ids)]
         # Si el rappel afecta al catalago entero,
         # no hacer la comprobacion por producto
         if self.rappel_id.global_application:
             refund_lines = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', [x.id for x in refunds]),
-                 ('no_rappel', '=', False)])
+                [('invoice_id', 'in', refunds.ids)] + domain_lines)
             invoice_lines = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', [x.id for x in invoices]),
-                 ('no_rappel', '=', False)])
+                [('invoice_id', 'in', invoices.ids)]+ domain_lines)
         else:
             refund_lines = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', [x.id for x in refunds]),
-                 ('product_id', 'in', products),
-                 ('no_rappel', '=', False)])
+                [('invoice_id', 'in', refunds.ids),
+                 ('product_id', 'in', products)]+ domain_lines)
             invoice_lines = self.env['account.invoice.line'].search(
-                [('invoice_id', 'in', [x.id for x in invoices]),
-                 ('product_id', 'in', products),
-                 ('no_rappel', '=', False)])
+                [('invoice_id', 'in', invoices.ids),
+                 ('product_id', 'in', products)]+ domain_lines)
 
         return invoice_lines, refund_lines
 

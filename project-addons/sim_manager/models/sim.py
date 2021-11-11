@@ -60,7 +60,7 @@ class SimPackage(models.Model):
         logger.info("Imported SIM %s" % barcode)
         max_cards = int(self.env['ir.config_parameter'].sudo().get_param('package.sim.card.max'))
 
-        created_code = self.env['sim.package'].search([], order="code desc", limit=1)
+        created_code = self
         if len(created_code.serial_ids) < max_cards:
             sim_serial = self.env['sim.serial'].create({'code': barcode, 'package_id': created_code.id})
             if sim_serial:
