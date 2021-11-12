@@ -8,6 +8,7 @@
     'data': ['views/res_config_settings_views.xml',
              'views/res_users_view.xml',
              'data/cron.xml',
-             'data/parameters.xml'],
+             'data/parameters.xml',
+             'views/account_views.xml'],
     'installable': True,
 }

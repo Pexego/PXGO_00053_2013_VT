@@ -47,4 +47,9 @@ msgstr "Importar gastos desde Captio"
 msgid "Analytic Account"
 msgstr "Cuenta Analítica"
 
+#. module: captio_connector
+#: model:ir.model.fields,field_description:captio_connector.field_account_journal_expenses_journal
+msgid "Expenses Journal"
+msgstr "Diario para gastos"
+
 

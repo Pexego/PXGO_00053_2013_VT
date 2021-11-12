@@ -85,13 +85,13 @@ class HrExpense(models.Model):
                             exp_vals = []
 
                             # Create all the necessary data
-                            if expense["PaymentMethod"]["Name"] == 'Tarjeta empresa':
+                            if expense["PaymentMethod"]["Name"] in ('Tarjeta empresa', 'Carta di credito'):
                                 payment_method = ' TJ '
-                                journal = self.env['account.journal'].search([('code', '=', 'PERS')])
+                                journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.card_account_id.id,
-                            elif expense["PaymentMethod"]["Name"] == 'Efectivo':
+                            elif expense["PaymentMethod"]["Name"] in ('Efectivo', 'Contanti'):
                                 payment_method = ' EF '
-                                journal = self.env['account.journal'].search([('code', '=', 'PERS')])
+                                journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.cash_account_id.id,
                             move_name = user.partner_id.name.upper() + payment_method + report["Code"] + \
                                         ' %s/%s ' % (count + 1, len(resp_exp))
