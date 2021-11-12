@@ -192,3 +192,9 @@ msgstr "Tipo"
 #, python-format
 msgid "Some of these SIM cards %s of the picking %s have not been found in the system."
 msgstr "Algunas de estas tarjetas SIM %s del albarán %s no se encuentran en el sistema."
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/claim.py:20
+#, python-format
+msgid "You must specify the serial number of the serial products"
+msgstr "Debes especificar el número de serie de los productos con tracking"

@@ -61,10 +61,6 @@ class Rappel(models.Model):
 
         discount_voucher_rappels = self.env['rappel'].search([('discount_voucher', '=', True)])
 
-        field = self.env['ir.model.fields'].\
-            search([('name', '=', 'property_product_pricelist'),
-                    ('model', '=', 'res.partner')], limit=1)
-
         for rappel in discount_voucher_rappels:
             pricelist_ids = tuple(rappel.pricelist_ids.ids)
             product_rappel = rappel.product_id
@@ -80,14 +76,9 @@ class Rappel(models.Model):
             partner_filter = []
             if pricelist_ids:
                 # Rappels dependientes de tarifas
-                properties = self.env['ir.property']. \
-                    search([('fields_id', '=', field.id),
-                            ('value_reference', 'in',
-                             ['product.pricelist,' +
-                              str(x) for x in pricelist_ids]),
-                            ('res_id', '!=', False)])
-
-                partner_filter.extend(["('id', 'in', [int(x.res_id.split(',')[1]) for x in properties])"])
+                orders = self.env['sale.order'].search([('pricelist_id', 'in', pricelist_ids),('state','in',['sale','done'])])
+                if orders:
+                    partner_filter.extend(["('id', 'in', orders.mapped('partner_id').ids)"])
 
             if rappel.partner_add_conditions:
                 # Rappels que depende de otros parámetros del cliente
