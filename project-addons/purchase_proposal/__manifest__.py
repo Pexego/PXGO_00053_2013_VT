@@ -12,6 +12,6 @@
                 'purchase_last_price_info',
                 'product_pricelist_custom', 'mrp'],
     "data": ['views/product_view.xml', 'data/ir.cron.xml',
-             'security/ir.model.access.csv'],
+             'security/ir.model.access.csv', 'data/parameters.xml'],
     "installable": True
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="rotation_index_a_level" model="ir.config_parameter">
+        <field name="key">rotation.index.a</field>
+        <field name="value">15</field>
+    </record>
+    <record id="rotation_index_b_level" model="ir.config_parameter">
+        <field name="key">rotation.index.b</field>
+        <field name="value">20</field>
+    </record>
+</odoo>
