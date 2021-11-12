@@ -10,16 +10,6 @@ class HrExpense(models.Model):
 
     _inherit = "hr.expense"
 
-    COUNTRY_ACCOUNTS = {
-        'España': 'AA025',
-        'Italia': 'AA026',
-        'Francia': 'AA031',
-        'Portugal': 'AA027',
-        'Norte Europa': 'AA028',
-        'Magreb': 'AA029',
-        'DACH': 'AA025'
-    }
-
     @api.model
     def get_new_token_captio(self):
 
@@ -95,19 +85,18 @@ class HrExpense(models.Model):
                             exp_vals = []
 
                             # Create all the necessary data
-                            if expense["PaymentMethod"]["Name"] == 'Tarjeta empresa':
+                            if expense["PaymentMethod"]["Name"] in ('Tarjeta empresa', 'Carta di credito'):
                                 payment_method = ' TJ '
-                                journal = self.env['account.journal'].search([('code', '=', 'PERS')])
+                                journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.card_account_id.id,
-                            elif expense["PaymentMethod"]["Name"] == 'Efectivo':
+                            elif expense["PaymentMethod"]["Name"] in ('Efectivo', 'Contanti'):
                                 payment_method = ' EF '
-                                journal = self.env['account.journal'].search([('code', '=', 'PERS')])
+                                journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.cash_account_id.id,
                             move_name = user.partner_id.name.upper() + payment_method + report["Code"] + \
                                         ' %s/%s ' % (count + 1, len(resp_exp))
                             line_name = user.partner_id.name.upper()
-                            aa_code = self.COUNTRY_ACCOUNTS.get(user.sale_team_id.name, 'AA025')
-                            analytic_account_id = self.env['account.analytic.account'].search([('code', '=', aa_code)])
+                            analytic_account_id = user.analytic_account_id.id if user.analytic_account_id else False
                             # if the expense is not from the past month or the current one, put the last day of the past month
                             if int(expense["Date"][5:7]) == datetime.now().month \
                                     or int(expense["Date"][5:7]) == (datetime.now() - timedelta(days=30)).month:
@@ -130,7 +119,7 @@ class HrExpense(models.Model):
                             exp_vals.append({'name': line_name,
                                              'move_id': move.id,
                                              'account_id': account_id.id,
-                                             'analytic_account_id': analytic_account_id.id,
+                                             'analytic_account_id': analytic_account_id,
                                              'date': exp_date,
                                              'debit': expense["FinalAmount"]["Value"],
                                              'credit': 0})
