@@ -48,8 +48,24 @@ class StockContainer(models.Model):
     destination_port = fields.Many2one('stock.container.port', string='NAV/PTO', ondelete="restrict")
     status = fields.Many2one('stock.container.status', string='Status', help='For more information click on the status', ondelete="restrict")
     ctns = fields.Char(string="Ctns")
-    departure = fields.Boolean(String="Departure", help="Transport departure")
+    departure = fields.Boolean(string="Departure", help="Transport departure")
     pickings_warehouse = fields.Char(string="Pickings", store=False, compute="_get_picking_ids")
+    set_eta = fields.Boolean(string="set_eta", help="Set eta", default=0, compute="_set_eta")
+    set_date_exp = fields.Boolean(string="set_date_expected", help="Set date expected", default=0, compute="_set_date_exp")
+
+    @api.multi
+    @api.depends('eta')
+    def _set_eta(self):
+        for container in self:
+            if container.eta:
+                container.set_eta = True
+    
+    @api.multi
+    @api.depends('date_expected')
+    def _set_date_exp(self):
+        for container in self:
+            if container.date_expected:
+                container.set_date_exp = True
 
     @api.multi
     @api.depends('move_ids', 'move_ids.picking_id', 'move_ids.picking_id.state')
