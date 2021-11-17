@@ -6,11 +6,5 @@ class ProductProduct(models.Model):
 
     sale_in_groups_of = fields.Float('Sale in groups of', default=1.0)
     description_editable = fields.Boolean('Description editable', default=False)
-
-
-
-
-
-
-
+    max_unit_size = fields.Integer('Maximun units size', default=None)
 
