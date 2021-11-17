@@ -17,11 +17,13 @@
                     <field name="list_price3" string="PVP C"/>
                     <field name="list_price4" string="PVP D"/>
                     <field name="list_price5" string="PVP E"/>
+                    <field name="list_price6" string="PVP F"/>
                     <field name="pvi1_price" string="PVI A"/>
                     <field name="pvi2_price" string="PVI B"/>
                     <field name="pvi3_price" string="PVI C"/>
                     <field name="pvi4_price" string="PVI D"/>
                     <field name="pvi5_price" string="PVI E"/>
+                    <field name="pvi6_price" string="PVI F"/>
                 </field>
                 <field name="uom_id" position="attributes">
                     <attribute name="invisible">1</attribute>
@@ -55,7 +57,10 @@
                     <field name="standard_price_2_inc" colspan="2" widget='monetary'
                            options="{'currency_field': 'cost_currency_id', 'field_digits': True}"
                            readonly="1" force_save="1"/>
-                    <field name="cost_increment" groups="product_pricelist_custom.group_inc_mng"/>
+                    <label for="cost_increment" groups="product_pricelist_custom.group_inc_mng"/>
+                    <div groups="product_pricelist_custom.group_inc_mng">
+                        <field name="cost_increment" groups="product_pricelist_custom.group_inc_mng" class="oe_inline"/> %%
+                    </div>
                 </field>
             </field>
         </record>

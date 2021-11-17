@@ -133,6 +133,8 @@ class SaleOrder(models.Model):
     picking_policy = fields.Selection(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     not_sync_picking = fields.Boolean()
+    pricelist_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
 
     @api.multi
     @api.onchange('partner_id')
@@ -147,6 +149,18 @@ class SaleOrder(models.Model):
                 self.partner_shipping_id = child.id
                 break
 
+    @api.onchange('pricelist_id')
+    def reset_lines_price(self):
+        for line in self.order_line:
+            product = line.product_id
+            line.price_unit = self.env['account.tax']._fix_tax_included_price_company(
+                line._get_display_price(product), product.taxes_id, line.tax_id, self.company_id)
+            line._onchange_discount()
+            line.write({'old_discount': 0.0, 'accumulated_promo': False})
+        if self.order_line and \
+                self.pricelist_id and self.pricelist_id.discount_policy == 'with_discount':
+            self.order_line.write({'discount': 0.0})
+
     def open_historical_orders(self):
         self.ensure_one()
         partner_id = self.partner_id.commercial_partner_id.id
@@ -157,8 +171,7 @@ class SaleOrder(models.Model):
              ('state', 'not in', ['cancel', 'draft', 'sent'])],
             limit=1, order='date_order DESC').id
         base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
-        record_url = base_url + '/web/?#id=' + str(last_order) + \
-            '&view_type=form&model=sale.order&action=' + \
+        record_url = base_url + '/web/?#view_type=list&model=sale.order&action=' + \
             str(order_view_id) + '&active_id=' + str(partner_id)
         return {
             'name': 'Historical Partner Orders',

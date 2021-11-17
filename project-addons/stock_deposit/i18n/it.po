@@ -65,6 +65,26 @@ msgid "Create sales"
 msgstr "Creare vendite"
 
 #. module: stock_deposit
+#: model:ir.actions.act_window,name:stock_deposit.stock_loss_deposit_action
+#: model:ir.ui.view,arch_db:stock_deposit.stock_loss_deposit_form
+msgid "Create loss"
+msgstr "Creare perdite"
+
+#. module: stock_deposit
+#: model:ir.actions.act_window,name:stock_deposit.stock_return_deposit_action
+#: model:ir.ui.view,arch_db:stock_deposit.stock_return_deposit_form
+msgid "Create return"
+msgstr "Creare ritorna"
+
+#. module: stock_deposit
+#: model:ir.ui.view,arch_db:stock_deposit.stock_invoice_deposit_form
+#: model:ir.ui.view,arch_db:stock_deposit.stock_loss_deposit_form
+#: model:ir.ui.view,arch_db:stock_deposit.stock_return_deposit_form
+#: model:ir.ui.view,arch_db:stock_deposit.stock_sale_deposit_form
+msgid "Cancel"
+msgstr "Anulla"
+
+#. module: stock_deposit
 #: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_create_uid
 #: model:ir.model.fields,field_description:stock_deposit.field_stock_invoice_deposit_create_uid
 msgid "Created by"

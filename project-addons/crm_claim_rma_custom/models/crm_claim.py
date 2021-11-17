@@ -139,6 +139,22 @@ class CrmClaimRma(models.Model):
             for invoice_line in claim_obj.claim_inv_line_ids:
                 if not invoice_line.invoiced:
                     invoice_line.unlink()
+            invoce_product_ids = {}
+            for c_line in claim_obj.claim_line_ids:
+                if c_line.invoice_id.id not in invoce_product_ids:
+                    for line in c_line.invoice_id.invoice_line_ids:
+                        found = False
+                        if line.invoice_id.id in invoce_product_ids:
+                            for k,v in invoce_product_ids.items():
+                                if line.product_id.id in v.keys() and line.invoice_id.id == k:
+                                    invoce_product_ids[line.invoice_id.id][line.product_id.id] += line.quantity
+                                    found = True
+                                    break
+                            if not found:
+                                invoce_product_ids[line.invoice_id.id][line.product_id.id] = line.quantity
+                                
+                        else:
+                            invoce_product_ids[line.invoice_id.id] = {line.product_id.id: line.quantity}
             message = ""
             for claim_line in claim_obj.claim_line_ids:
                 vals = {}
@@ -165,8 +181,8 @@ class CrmClaimRma(models.Model):
                                 'cost_unit': inv_line.product_id.standard_price,
                                 'tax_ids': [(6, 0, taxes_ids)]
                             }
-                            if inv_line.quantity < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
-                                units_available = inv_line.quantity - inv_line.claim_invoice_line_qty
+                            if invoce_product_ids[inv_line.invoice_id.id][inv_line.product_id.id] < inv_line.claim_invoice_line_qty + claim_line.product_returned_quantity:
+                                units_available = invoce_product_ids[inv_line.invoice_id.id][inv_line.product_id.id] - inv_line.claim_invoice_line_qty
                                 if units_available > 0:
                                     message += _("There are not enough units of this product (%s) in this invoice (%s). Only %i unit(s) left available \n") % \
                                                (inv_line.product_id.default_code, inv_line.invoice_id.number,int(units_available))
@@ -272,6 +288,7 @@ class CrmClaimRma(models.Model):
                     prop = self.env['ir.property'].get('property_account_income_categ_id', 'product.category')
                     account_id = prop and prop.id or False
                 account_id = fp_obj.map_account(account_id)
+                
                 vals = {
                     'invoice_id': invoice_id.id,
                     'name': line.product_description,

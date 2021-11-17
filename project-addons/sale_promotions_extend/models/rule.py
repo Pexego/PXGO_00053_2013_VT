@@ -177,7 +177,11 @@ class PromotionsRulesActions(models.Model):
             ('tag_disc_perc_line',
              _('New discount line per product with tag')),
             ('change_pricelist_category',
-             _('Change pricelist price category'))
+             _('Change pricelist price category')),
+            ('brand_disc_perc_accumulated_reverse',
+             _('Discount % on not Brand accumulated')),
+            ('prod_disc_per_qty',
+             _('Discount % on one product based on the quantity of another')),
             ])
 
     @api.onchange('action_type')
@@ -198,7 +202,7 @@ class PromotionsRulesActions(models.Model):
 
         elif self.action_type in [
                 'brand_disc_perc', 'brand_disc_perc_accumulated',
-                'brand_price_disc_accumulated']:
+                'brand_price_disc_accumulated', 'brand_disc_perc_accumulated_reverse']:
             self.product_code = 'brand_code'
             self.arguments = '0.00'
 
@@ -228,8 +232,33 @@ class PromotionsRulesActions(models.Model):
         elif self.action_type == 'disc_per_product':
             self.product_code = '["tag_product","reg_exp_product_code"]'
             self.arguments = '0.00'
-
+        elif self.action_type == 'prod_disc_per_qty':
+            self.product_code = '"product_reference",..."'
+            self.arguments = '{"product":discount, ...}'
         return super().on_change()
+
+    def action_prod_disc_per_qty(self, order):
+        product_obj = self.env['product.product']
+        products_code = eval(self.product_code)
+        products = product_obj.search([('default_code', 'in', products_code)])
+        if not products:
+            raise UserError(_("No product with the code % s") % products_code)
+        products_to_apply_discount = eval(self.arguments)
+        lines = order.order_line.filtered(lambda l: l.product_id in products)
+        if lines:
+            qty = sum(lines.mapped('product_uom_qty'))
+            product_names = products_to_apply_discount.keys()
+            lines_to_apply = order.order_line.filtered(lambda l:l.product_id.default_code in product_names)
+            for line in lines_to_apply:
+                discount = products_to_apply_discount[line.product_id.default_code]
+                if line.product_uom_qty<=qty:
+                    line.discount=discount
+                else:
+                    product_qty = line.product_uom_qty
+                    line.product_uom_qty = product_qty - qty
+                    line.old_qty = product_qty
+                    self.create_y_line(order, qty , line.product_id.id)
+        return True
 
     def apply_perc_discount_accumulated(self, order_line):
         final_discount = eval(self.arguments)
@@ -618,6 +647,13 @@ class PromotionsRulesActions(models.Model):
                                                                                                             pricelist.currency_id)
         # negative discounts (= surcharge) are included in the display price
         return max(base_price, final_price)
+
+    def action_brand_disc_perc_accumulated_reverse(self, order):
+        for order_line in order.order_line:
+            if eval(self.product_code) != \
+                    order_line.product_id.product_brand_id.code and order_line.product_id.type == 'product':
+                self.apply_perc_discount_accumulated(order_line)
+        return {}
 
 
 class PromotionsRules(models.Model):

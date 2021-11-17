@@ -30,6 +30,7 @@ class AccountInvoice(models.Model):
         return res
 
 
+
 class AccountMove(models.Model):
     _inherit = 'account.move'
 

@@ -1338,3 +1338,13 @@ msgstr "Mostrar"
 #: model:ir.model.fields,field_description:custom_account.field_account_invoice_report_product_report_filter
 msgid "Filter"
 msgstr "Filtro"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+msgid "Employees"
+msgstr "Empleados"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
+msgid "No Employees"
+msgstr "Sin Empleados"
