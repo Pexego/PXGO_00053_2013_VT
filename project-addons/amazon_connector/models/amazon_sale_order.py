@@ -556,6 +556,8 @@ class AmazonSaleOrder(models.Model):
                     journal_id=journal_id)
             else:
                 invoices_ids = order.deposits.create_invoice()
+                if order.deposits:
+                    order.partner_id=order.deposits[0].partner_id.id
             order.state = "invoice_created"
             invoices = self.env['account.invoice'].browse(invoices_ids)
             if len(invoices) > 1:
