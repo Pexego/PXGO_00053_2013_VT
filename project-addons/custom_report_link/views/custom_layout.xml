@@ -1172,7 +1172,7 @@ BIC: CAIXESBBXXX
                         <t t-raw="company.name"></t>
                         <t t-if="country_code == 'ES'">
                         R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, Ins 2º .- CIF:
-                        B80645518<!--<t t-raw="company.initiating_party_identifier"></t>-->
+                        B80645518 Listed in the RII-PYA with registration number 2295 and in the RII-AEE with registration number 7216.<!--<t t-raw="company.initiating_party_identifier"></t>-->
                         </t>
                     </label>
                 </div>
