@@ -159,6 +159,7 @@
                                     <field name="buyer_email"/>
                                     <field name="buyer_name"/>
                                     <field name="billing_name"/>
+                                    <field name="partner_id"/>
                                 </group>
                             </group>
                             <group>
