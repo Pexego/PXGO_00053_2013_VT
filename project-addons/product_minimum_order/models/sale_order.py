@@ -47,10 +47,10 @@ class SaleOrder(models.Model):
                             raise exceptions.Warning(
                                 _("The product {} can only be sold in groups of {}")
                                 .format(line.product_id.name, line.product_id.sale_in_groups_of))
-                        if self.product_id.max_unit_size and self.product_uom_qty > self.product_id.max_unit_size:
+                        if line.product_id.max_unit_size and line.product_uom_qty > line.product_id.max_unit_size:
                             raise exceptions.Warning(
                                 _("The product {} maximun unit size by order is {}")
-                                .format(self.product_id.name, self.product_id.max_unit_size))
+                                .format(line.product_id.name, line.product_id.max_unit_size))
 
         res = super(SaleOrder, self).action_confirm()
 
