@@ -285,7 +285,6 @@ class MiddlewareBackend(models.TransientModel):
                                               ('customer', '=', True)])
         if self.mode_export in ('export', 'update'):
             for partner in partner_ids:
-                partner.with_delay(priority=2).unlink_partner_tag_rel()
                 partner.with_delay(priority=2, eta=120).export_partner_tag_rel()
         else:
             for partner in partner_ids:
@@ -399,7 +398,6 @@ class MiddlewareBackend(models.TransientModel):
 
         if self.mode_export == 'export':
             for product in product_ids:
-                product.with_delay(priority=2).unlink_product_tag_rel()
                 product.with_delay(priority=2, eta=120).export_product_tag_rel()
         else:
             for product in product_ids:
