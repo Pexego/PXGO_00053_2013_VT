@@ -8,8 +8,9 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='preferences']/ancestor::page" position="inside">
                 <group string="Expenses" name="expenses">
-                    <field name="cash_account_id"/>
                     <field name="card_account_id"/>
+                    <field name="cash_account_id"/>
+                    <field name="analytic_account_id"/>
                 </group>
             </xpath>
         </field>

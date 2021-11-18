@@ -18,7 +18,7 @@
 #
 ##############################################################################
 
-from odoo import fields, models, _, tools, api, exceptions
+from odoo import fields, models, _, tools, api, exceptions, tools
 import time
 from urllib.request import getproxies
 import base64
@@ -83,10 +83,12 @@ class SaleOrder(models.Model):
 
             if result is not None:
                 from reportlab.pdfgen import canvas
+                route = tools.config["data_dir"] + '/filestore/'
                 name = '%s_VIES.pdf' % sale.\
                     name.replace(" ", "").replace("\\", "").replace("/", "").\
                     replace("-", "_")
-                c = canvas.Canvas(name)
+                route += name
+                c = canvas.Canvas(route)
                 height = 700
                 c.drawString(100, height, url)
                 height = height - 25
@@ -97,7 +99,7 @@ class SaleOrder(models.Model):
                     height = height - 25
                 c.showPage()
                 c.save()
-                with open(name, "rb") as file:
+                with open(route, "rb") as file:
                     a = base64.b64encode(file.read())
                 attach_vals = {
                     'name': name,

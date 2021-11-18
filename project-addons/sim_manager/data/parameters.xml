@@ -12,4 +12,12 @@
         <field name="key">web.sim.endpoint.key</field>
         <field name="value"></field>
     </record>
+    <record id="web_sim_invoice_endpoint" model="ir.config_parameter">
+        <field name="key">web.sim.invoice.endpoint</field>
+        <field name="value"></field>
+    </record>
+    <record id="web_sim_invoice_endpoint_key" model="ir.config_parameter">
+        <field name="key">web.sim.invoice.endpoint.key</field>
+        <field name="value"></field>
+    </record>
 </odoo>

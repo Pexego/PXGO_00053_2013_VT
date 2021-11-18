@@ -54,10 +54,9 @@ class StockContainer(models.Model):
     @api.multi
     def _set_arrived(self):
         for container in self:
-            container.arrived = True
-            for line in container.picking_ids:
-                if line.state != 'done':
-                    container.arrived = False
+            container.arrived = False
+            if container.picking_ids and all(pick_state == 'done' for pick_state in container.picking_ids.mapped('state')):
+                container.arrived = True
 
     @api.multi
     def _value_search(self, operator, value):

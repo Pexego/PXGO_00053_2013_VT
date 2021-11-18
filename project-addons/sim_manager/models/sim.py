@@ -60,7 +60,7 @@ class SimPackage(models.Model):
         logger.info("Imported SIM %s" % barcode)
         max_cards = int(self.env['ir.config_parameter'].sudo().get_param('package.sim.card.max'))
 
-        created_code = self.env['sim.package'].search([], order="code desc", limit=1)
+        created_code = self
         if len(created_code.serial_ids) < max_cards:
             sim_serial = self.env['sim.serial'].create({'code': barcode, 'package_id': created_code.id})
             if sim_serial:
@@ -118,8 +118,10 @@ class SimPackage(models.Model):
     @api.multi
     def notify_sale_web(self, mode):
         web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint')
+        c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
         for package in self:
             data = {
+                "origin": c_code.lower(),
                 "odoo_id": package.partner_id.id,
                 "partner_name": package.partner_id.name,
                 "mode": mode,

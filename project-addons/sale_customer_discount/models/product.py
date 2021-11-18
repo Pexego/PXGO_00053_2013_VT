@@ -69,11 +69,11 @@ class ProductProduct(models.Model):
         digits=dp.get_precision('Product Price'),
         string="Cost Price 2",
         copy=False)
-    cost_increment = fields.Float("Increment", default=0.0)
+    cost_increment = fields.Float("Increment", default=1.0)
 
     @api.onchange("cost_increment")
     def _onchange_cost_increment(self):
-        self.standard_price_2_inc = self.standard_price_2 + self.cost_increment
+        self.standard_price_2_inc = self.standard_price_2 * (1+ (self.cost_increment/100))
 
     @api.depends('list_price', 'pvd1_relation', 'pvd2_relation', 'pvd3_relation', 'pvd4_relation', 'pvd5_relation', 'pvd6_relation',
                  'standard_price_2', 'pvi1_price', 'pvi2_price', 'pvi3_price', 'pvi4_price', 'pvi5_price', 'pvi6_price')
