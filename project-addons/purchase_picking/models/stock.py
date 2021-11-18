@@ -24,7 +24,6 @@ from odoo import models, fields, api, _, exceptions
 class StockContainer(models.Model):
 
     _name = 'stock.container'
-    _order = 'write_date desc'
     type = fields.Selection([
         ('air', 'Air'),
         ('sea', 'Sea'),
@@ -50,8 +49,8 @@ class StockContainer(models.Model):
     ctns = fields.Char(string="Ctns")
     departure = fields.Boolean(string="Departure", help="Transport departure")
     pickings_warehouse = fields.Char(string="Pickings", store=False, compute="_get_picking_ids")
-    set_eta = fields.Boolean(string="set_eta", help="Set eta", default=0, compute="_set_eta")
-    set_date_exp = fields.Boolean(string="set_date_expected", help="Set date expected", default=0, compute="_set_date_exp")
+    set_eta = fields.Boolean(string="set_eta", help="Set eta", default=0, compute="_set_eta", store=True)
+    set_date_exp = fields.Boolean(string="set_date_expected", help="Set date expected", default=0, compute="_set_date_exp", store=True)
 
     @api.multi
     @api.depends('eta')

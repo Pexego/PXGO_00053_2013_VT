@@ -21,7 +21,7 @@
         <field name="name">stock.container.tree</field>
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
-            <tree string="Containers" class="custom_tree" default_order="date_expected desc set_date_exp">
+            <tree string="Containers" class="custom_tree" default_order="set_date_exp desc, date_expected desc">
                 <field name="name"/>
                 <field name="type"/>
                 <field name="eta"/>
