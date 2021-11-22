@@ -7,7 +7,7 @@ class StockMove(models.Model):
     @api.model
     def write(self, vals):
         res = super().write(vals)
-        if 'lots_text' in vals:
+        if vals.get('lots_text', False):
             if self.picking_id.picking_type_id.code == 'outgoing':
                 products = self.env['sim.type'].search([]).mapped('product_id')
                 if self.product_id in products:
