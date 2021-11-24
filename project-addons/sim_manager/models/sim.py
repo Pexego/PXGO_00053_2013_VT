@@ -58,7 +58,7 @@ class SimPackage(models.Model):
 
     def create_sims_using_barcode(self, barcode):
         logger.info("Imported SIM %s" % barcode)
-        max_cards = int(self.env['ir.config_parameter'].sudo().get_param('package.sim.card.max'))
+        max_cards = 3 #int(self.env['ir.config_parameter'].sudo().get_param('package.sim.card.max'))
 
         created_code = self
         if len(created_code.serial_ids) < max_cards:
@@ -89,7 +89,7 @@ class SimPackage(models.Model):
                 result['context'] = json.dumps(context)
         elif len(created_code.serial_ids) == max_cards:
             # Create the next package and return to scan all the codes
-            if 'EU' in created_code or 'VIP' in created_code:
+            if 'EU' in created_code.code or 'VIP' in created_code.code:
                 new_code = 'M2M_CARD_' + created_code.code.split('_')[-2] + '_' \
                            + str(int(created_code.code.split('_')[-1])+1).zfill(6)
             else:
