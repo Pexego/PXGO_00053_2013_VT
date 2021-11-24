@@ -58,7 +58,7 @@ class SimPackage(models.Model):
 
     def create_sims_using_barcode(self, barcode):
         logger.info("Imported SIM %s" % barcode)
-        max_cards = 3 #int(self.env['ir.config_parameter'].sudo().get_param('package.sim.card.max'))
+        max_cards = int(self.env['ir.config_parameter'].sudo().get_param('package.sim.card.max'))
 
         created_code = self
         if len(created_code.serial_ids) < max_cards:
