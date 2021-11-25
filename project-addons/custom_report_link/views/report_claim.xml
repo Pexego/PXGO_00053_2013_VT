@@ -201,17 +201,21 @@
                         <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
                             <thead>
                                 <tr style="font-weight: bold; background-color:#da1f2e; color:white;">
+                                    <th width="5%" style="vertical-align:middle;">Sequence</th>
                                     <th width="10%" style="vertical-align:middle;">Product</th>
                                     <th width="10%" style="vertical-align:middle;">Replacement Product</th>
                                     <th width="7%" class="text-center" style="vertical-align:middle;">Quantity</th>
                                     <!--<th>Type</th>
                                     <th>Serial/Lot</th>-->
-                                    <th width="25%" style="vertical-align:middle;">Description</th>
-                                    <th width="48%" style="vertical-align:middle;">Internal Description</th>
+                                    <th width="24%" style="vertical-align:middle;">Description</th>
+                                    <th width="44%" style="vertical-align:middle;">Internal Description</th>
                                 </tr>
                             </thead>
                             <tbody class="body-product-info" style="font-size:12px; color:#6D6E70;">
                                 <tr t-foreach="[x for x in claim.claim_line_ids if x.printable]" t-as="line_id">
+                                    <td class="col-xs-2">
+                                        <span t-field="line_id.sequence"/>
+                                    </td>
                                     <td class="col-xs-2">
                                         <span t-field="line_id.product_id.name"/>
                                     </td>
