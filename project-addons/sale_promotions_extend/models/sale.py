@@ -29,7 +29,7 @@ class SaleOrderLine(models.Model):
     def invoice_line_create(self, invoice_id, qty):
         lines = self.env['sale.order.line']
         for line in self:
-            if line.promotion_line:
+            if line.price_unit < 0:
                 order = line.order_id
                 total_to_invoice_dict = self._context.get('total_to_invoice', False)
                 total_to_invoice = 0
@@ -37,13 +37,41 @@ class SaleOrderLine(models.Model):
                 # because it will create a refund
                 if total_to_invoice_dict:
                     total_to_invoice = total_to_invoice_dict.get(self.order_id.id, 0)
-                if total_to_invoice > 0 or \
-                        (total_to_invoice < 0 and not order.order_line.filtered(lambda l: l.invoice_status == 'no')) or \
-                        total_to_invoice == 0:
+                if total_to_invoice >= 0:
                     lines += line
+                if total_to_invoice < 0 and all(oline.product_id.type == 'service'
+                                                for oline in order.order_line.filtered(lambda l: l.invoice_status == 'to invoice')):
+                    invoice = self.env['account.invoice'].browse(invoice_id)
+                    if (invoice.type == 'out_refund' or not invoice.invoice_line_ids) and len(self) == 1:
+                        return super(SaleOrderLine, line).invoice_line_create(invoice_id, -qty)
             else:
                 lines += line
         return super(SaleOrderLine, lines).invoice_line_create(invoice_id, qty)
+
+    @api.multi
+    def _prepare_invoice_line(self, qty):
+        if all(oline.product_id.type == 'service' for oline in
+               self.order_id.order_line.filtered(lambda l: l.invoice_status == 'to invoice')) \
+                and self.price_unit < 0:
+            # This case is for creating a refund with the last discount on the order and positive quantities
+            vals = super(SaleOrderLine, self)._prepare_invoice_line(qty)
+            vals['price_unit'] = -vals['price_unit']
+        else:
+            vals = super(SaleOrderLine, self)._prepare_invoice_line(qty)
+        return vals
+
+    @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
+    def _get_invoice_qty(self):
+        super()._get_invoice_qty()
+        for line in self.filtered(lambda l: l.product_id.id == self.env.ref('commercial_rules.product_discount').id):
+            qty_invoiced = 0.0
+            for invoice_line in line.invoice_lines:
+                if invoice_line.invoice_id.state != 'cancel':
+                    if invoice_line.invoice_id.type == 'out_invoice':
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+                    elif invoice_line.invoice_id.type == 'out_refund' and line.price_unit < 0:
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+            line.qty_invoiced = qty_invoiced
 
     @api.multi
     def write(self,vals):
