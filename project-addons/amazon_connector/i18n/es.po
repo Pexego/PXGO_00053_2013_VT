@@ -1190,3 +1190,8 @@ msgstr "retry.amazon.orders.wizard"
 #: model:ir.model.fields,field_description:amazon_connector.field_account_invoice_report_amazon_commercial_partner_id
 msgid "Commercial Partner"
 msgstr "Entidad Comercial"
+
+#. module: amazon_connector
+#: model:ir.model.fields,field_description:amazon_connector.field_amazon_sale_order_is_business_order
+msgid "Is Business Order"
+msgstr "Cliente empresarial"
