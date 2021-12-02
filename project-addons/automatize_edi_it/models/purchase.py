@@ -81,7 +81,9 @@ class PurchaseOrder(models.Model):
             if not output_folder:
                 raise exceptions.UserError(_("Please create an export folder"))
             output_folder.export_file(attachment.datas, attachment.name)
-            order.picking_ids._process_picking()
+            order.picking_ids.filtered(lambda p: p.picking_type_id.id != self.env.ref('stock_dropshipping.picking_type_dropship').id)._process_picking()
+            for pick in order.picking_ids.filtered(lambda p: p.picking_type_id.id == self.env.ref('stock_dropshipping.picking_type_dropship').id):
+                pick.not_sync = True
         self._check_picking_to_process()
 
     picking_type_id = fields.Many2one('stock.picking.type',
