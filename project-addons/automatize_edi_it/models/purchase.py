@@ -78,10 +78,16 @@ class PurchaseOrder(models.Model):
             attachment = self.env['ir.attachment'].browse(action['res_id'])
             output_folder = self.env['base.io.folder'].\
                 search([('direction', '=', 'export')], limit=1)
-            if not output_folder:
+            output_folder_drop = self.env['base.io.folder'].\
+                search([('direction', '=', 'dropship')], limit=1)
+            if not output_folder or not output_folder_drop:
                 raise exceptions.UserError(_("Please create an export folder"))
-            output_folder.export_file(attachment.datas, attachment.name)
-            order.picking_ids.filtered(lambda p: p.picking_type_id.id != self.env.ref('stock_dropshipping.picking_type_dropship').id)._process_picking()
+            if order.picking_type_id.id == self.env.ref('stock_dropshipping.picking_type_dropship').id:
+                output_folder_drop.export_file(attachment.datas, attachment.name)
+            else:
+                output_folder.export_file(attachment.datas, attachment.name)
+            order.picking_ids.filtered(lambda p: p.picking_type_id.id != self.env.ref('stock_dropshipping.picking_type_dropship').id)\
+                ._process_picking()
             for pick in order.picking_ids.filtered(lambda p: p.picking_type_id.id == self.env.ref('stock_dropshipping.picking_type_dropship').id):
                 pick.not_sync = True
         self._check_picking_to_process()
