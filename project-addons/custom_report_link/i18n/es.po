@@ -1200,3 +1200,10 @@ msgstr "<span>RECOGIDA</span>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "<span>SHIPPING</span>"
 msgstr "<span>ENVÍO</span>"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
+msgid "R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, Ins 2º .- CIF:\n"
+"                        B80645518 Listed in the RII-PYA with registration number 2295 and in the RII-AEE with registration number 7216."
+msgstr "R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, Ins 2º .- CIF:\n"
+"                        B80645518 Inscrita en el RII-PYA con número de inscripción registral 2295 y en el RII-AEE con número de inscripción registral 7216."

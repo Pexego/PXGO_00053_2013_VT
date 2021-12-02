@@ -132,6 +132,7 @@ class SaleOrder(models.Model):
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     picking_policy = fields.Selection(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    not_sync_picking = fields.Boolean()
     pricelist_id = fields.Many2one(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
 
@@ -284,6 +285,11 @@ class SaleOrder(models.Model):
                                         str(line.product_uom_qty) + '    '
                 if products_to_order:
                     sale.send_email_to_purchases(products_to_order)
+
+        if self.not_sync_picking:
+            for picking in self.picking_ids:
+                picking.not_sync = True
+
         return res
 
     @api.multi

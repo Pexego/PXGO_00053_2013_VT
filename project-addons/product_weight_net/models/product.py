@@ -14,6 +14,8 @@ class ProductProduct(models.Model):
 
     _inherit = 'product.product'
 
+    volume = fields.Float(digits=dp.get_precision('Stock Weight'))
+
     @api.multi
     def write(self, values):
         res = super().write(values)

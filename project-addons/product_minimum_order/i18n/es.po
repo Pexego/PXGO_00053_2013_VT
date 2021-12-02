@@ -21,7 +21,19 @@ msgid "Sale in groups of"
 msgstr "Se vende en grupos de"
 
 #. module: product_minimum_order
+#: model:ir.model.fields,field_description:product_minimum_order.field_product_product_max_unit_size
+msgid "Maximum number of units per order"
+msgstr "Número máximo de unidades por pedido"
+
+
+#. module: product_minimum_order
 #: code:addons/product_minimum_order/models/sale_order.py:27
 #, python-format
-msgid "The product %s can only be sold in groups of %s"
-msgstr "El producto %s puede ser vendido en grupos de %s"
+msgid "The product {} can only be sold in groups of {}"
+msgstr "El producto {} solo puede ser vendido en grupos de {}"
+
+#. module: product_minimum_order
+#: code:addons/product_minimum_order/models/sale_order.py:31
+#, python-format
+msgid "The product {} maximun unit size by order is {}"
+msgstr "La cantidad máxima de unidades del producto {} por pedido es {}"
