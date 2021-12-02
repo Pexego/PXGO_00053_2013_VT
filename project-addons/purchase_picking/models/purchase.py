@@ -172,3 +172,8 @@ class PurchaseOrderLine(models.Model):
                             not move.container_id:
                         move.date_expected = vals['date_planned']
         return res
+
+    def create(self, vals):
+        context2 = dict(self._context)
+        context2.pop('default_state', False)
+        return super(PurchaseOrderLine, self.with_context(context2)).create(vals)
