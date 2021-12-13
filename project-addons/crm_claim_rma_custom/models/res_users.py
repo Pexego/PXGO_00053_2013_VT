@@ -6,4 +6,6 @@ class ResUsers(models.Model):
 
     warehouse_location = fields.Selection([('madrid1', 'Madrid - Avd. del Sol'),
                                            ('madrid2', 'Madrid - Casablanca'),
-                                           ('italia', 'Italia - Arcore')], "Warehouse Location")
+                                           ('madrid3', 'Madrid - Vicálvaro'),
+                                           ('italia', 'Italia - Arcore'),
+                                           ('transit', 'In transit')], "Warehouse Location")

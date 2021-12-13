@@ -1,5 +1,6 @@
 from odoo import models, fields
 import requests
+import json
 
 
 class ResPartner(models.Model):
@@ -13,9 +14,12 @@ class ResPartner(models.Model):
         web_invoice_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint')
         api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
         c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
-        web_invoice_endpoint += '?origin=%s' % c_code.lower()
-        headers = {'x-api-key': api_key}
-        response = requests.get(web_invoice_endpoint, headers=headers)
+        headers = {'x-api-key': api_key,
+                   'Content-Type': 'application/json'}
+        data = {
+            "origin": c_code.lower()
+        }
+        response = requests.put(web_invoice_endpoint, headers=headers, data=json.dumps(data))
         if response.status_code == 200:
             for partner_data in eval(response.text):
                 if partner_data['odooId'] > 0:
