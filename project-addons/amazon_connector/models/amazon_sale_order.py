@@ -209,7 +209,8 @@ class AmazonSaleOrder(models.Model):
                     amazon_order_values.update({
                         'fulfillment': order_complete.get('FulfillmentChannel', False),
                         'sales_channel': self.env['amazon.marketplace'].search(
-                            [('amazon_name', '=', order_complete.get('SalesChannel', False))]).id})
+                            [('amazon_name', '=', order_complete.get('SalesChannel', False))]).id,
+                        'is_business_order': order_complete.get('IsBusinessOrder', False)})
                     amazon_order_values_lines = self._get_lines_values(new_order, fiscal_position)
                     amazon_order_values.update(amazon_order_values_lines)
                     amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
