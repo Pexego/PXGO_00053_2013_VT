@@ -40,8 +40,10 @@ class SaleOrder(models.Model):
                 invoice_status = 'invoiced'
             elif any(line.invoice_status == 'to invoice'
                      for line in order.order_line.filtered(lambda p: p.product_id.type in ['product', 'consu'])) or \
-                    all(line.invoice_status == 'to invoice' and line.product_id.type == 'service'
-                        for line in order.order_line):
+                    all(line.invoice_status == 'to invoice' and line.product_id.type == 'service' for line in
+                        order.order_line) or \
+                    all(line.invoice_status == 'to invoice' for line in
+                        order.order_line.filtered(lambda p: p.invoice_status != 'invoiced')):
                 invoice_status = 'to_invoice'
             elif all(line.invoice_status in ('invoiced', 'cancel', 'upselling') for line in order.order_line):
                 invoice_status = 'invoiced'
