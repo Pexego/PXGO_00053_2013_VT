@@ -201,8 +201,8 @@
                         <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
                             <thead>
                                 <tr style="font-weight: bold; background-color:#da1f2e; color:white;">
-                                    <th width="5%" style="vertical-align:middle;"></th>
-                                    <th width="10%" style="vertical-align:middle;">Product</th>
+                                    <th width="2%" style="vertical-align:middle;"></th>
+                                    <th width="12%" style="vertical-align:middle;">Product</th>
                                     <th width="10%" style="vertical-align:middle;">Replacement Product</th>
                                     <th width="7%" class="text-center" style="vertical-align:middle;">Quantity</th>
                                     <!--<th>Type</th>
