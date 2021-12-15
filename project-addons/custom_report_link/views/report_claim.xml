@@ -213,7 +213,7 @@
                             </thead>
                             <tbody class="body-product-info" style="font-size:12px; color:#6D6E70;">
                                 <tr t-foreach="[x for x in claim.claim_line_ids if x.printable]" t-as="line_id">
-                                    <td class="col-xs-2">
+                                    <td class="col-xs-1">
                                         <span t-field="line_id.sequence"/>
                                     </td>
                                     <td class="col-xs-2">
