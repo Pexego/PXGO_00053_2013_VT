@@ -4,7 +4,7 @@ from odoo import models, api, _
 class StockMove(models.Model):
     _inherit = 'stock.move'
 
-    @api.model
+    @api.multi
     def write(self, vals):
         res = super().write(vals)
         if vals.get('lots_text', False):
