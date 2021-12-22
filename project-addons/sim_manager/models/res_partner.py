@@ -1,5 +1,4 @@
 from odoo import models, fields
-from odoo.addons.component.core import Component
 import requests
 import json
 
@@ -72,12 +71,3 @@ class ResPartner(models.Model):
         else:
             error += 'Response %s with error: %s' % (response.status_code, response.text)
         print(error)
-
-
-class PartnerListener(Component):
-    _inherit = 'partner.event.listener'
-
-    def export_partner_data(self, record):
-        super().export_partner_data(record)
-        for sim_pkg in record.sim_serial_ids:
-            sim_pkg.with_delay(priority=10).notify_sale_web('sold')
