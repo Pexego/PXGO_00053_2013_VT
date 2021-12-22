@@ -52,14 +52,14 @@ class PurchaseOrder(models.Model):
     def _get_total(self):
         for order in self:
             for line in order.order_line:
-                order.total_no_disc += order.currency_id.round(line.product_qty * line.price_unit)
+                order.total_no_disc += line.product_qty * line.price_unit
 
     @api.multi
     @api.depends('order_line.price_subtotal')
     def _get_amount_discount(self):
         for order in self:
             for line in order.order_line:
-                order.total_disc += order.currency_id.round((line.product_qty * line.price_unit)) - line.price_subtotal
+                order.total_disc += (line.product_qty * line.price_unit) - line.price_subtotal
 
     @api.multi
     def test_moves_done(self):
