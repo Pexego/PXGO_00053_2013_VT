@@ -63,20 +63,19 @@ msgid "Prepaid discount cancelled"
 msgstr "Descuento por prepago cancelado"
 
 #. module: prepaid_order_discount
-#: code:addons/prepaid_order_discount/models/sale.py:95
+#: code:addons/prepaid_order_discount/models/sale.py:108
 #, python-format
 msgid "The order margin are below the limits to apply the prepayment discount"
 msgstr "El margen del pedido está por debajo de los límites para aplicar el descuento por prepago"
 
 #. module: prepaid_order_discount
-#: code:addons/prepaid_order_discount/models/sale.py:96
+#: code:addons/prepaid_order_discount/models/sale.py:109
 #, python-format
 msgid "Prepaid discount line has not been created"
 msgstr "No se ha creado línea de descuento por prepago"
 
 #. module: prepaid_order_discount
-#: code:addons/prepaid_order_discount/models/sale.py:143
+#: code:addons/prepaid_order_discount/models/sale.py:151
 #, python-format
 msgid "Prepaid option checked by Web Team"
 msgstr "Opción prepago marcado por el Equipo Web"
-
