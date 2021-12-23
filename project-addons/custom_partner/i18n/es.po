@@ -523,3 +523,9 @@ msgstr "Transitario"
 #: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_products_no
 msgid "Invoice Pending"
 msgstr "Pendientes de Facturar"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:539
+#, python-format
+msgid "Are you sure? This action will eliminate permanently the client and all his info from the web"
+msgstr "¿Estás seguro/a? Esto eliminará de forma permanente el cliente y toda su información de la web"

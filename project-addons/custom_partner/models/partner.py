@@ -532,6 +532,12 @@ class ResPartner(models.Model):
                     partner.lang = partner.parent_id.lang
         return res
 
+    @api.onchange('web')
+    def onchange_web(self):
+        if not self.web:
+            raise exceptions.Warning(
+                _("Are you sure? This action will eliminate permanently the client and all his info from the web"))
+
     # TODO: Migrar -> depende de credit_control (?)
     """def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
         today = time.strftime('%Y-%m-%d')

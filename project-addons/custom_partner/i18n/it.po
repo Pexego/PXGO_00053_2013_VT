@@ -502,3 +502,9 @@ msgstr "Spedizioniere"
 #: model:ir.ui.view,arch_db:custom_partner.res_partner_view_buttons_add_products_no
 msgid "Invoice Pending Sales"
 msgstr "Ordini in attesa di fatturazione"
+
+#. module: custom_partner
+#: code:addons/custom_partner/partner.py:539
+#, python-format
+msgid "Are you sure? This action will eliminate permanently the client and all his info from the web"
+msgstr "¿Sei sicuro/a? Questa azione eliminerà definitivamente il cliente e tutte le sue informazioni dal web"
