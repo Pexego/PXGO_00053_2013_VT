@@ -6,7 +6,8 @@ class ProductProduct(models.Model):
     @api.model
     def create(self, vals):
         res = super(ProductProduct, self).create(vals)
-        orderpoints = self.env['stock.warehouse.orderpoint.template'].search([('all_products','=',True),('auto_generate','=',True)])
-        orderpoints.write({'auto_product_ids':[(4,res.id)]})
+        if 'type' in vals and vals['type']=='product':
+            orderpoints = self.env['stock.warehouse.orderpoint.template'].search([('all_products','=',True),('auto_generate','=',True)])
+            orderpoints.write({'auto_product_ids':[(4,res.id)]})
         return res
 
