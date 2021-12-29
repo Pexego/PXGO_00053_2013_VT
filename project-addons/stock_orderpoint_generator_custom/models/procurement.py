@@ -12,7 +12,7 @@ class ProcurementGroup(models.Model):
     @api.model
     def run(self, product_id, product_qty, product_uom, location_id, name, origin, values):
         if self._context.get('remove_reserves', False):
-            product_qty -= product_id.reservation_count
+            product_qty -= product_id.waiting_reservation_count
             if product_qty <= 0:
                 return False
         return super(ProcurementGroup, self).run(product_id, product_qty, product_uom, location_id, name, origin,
