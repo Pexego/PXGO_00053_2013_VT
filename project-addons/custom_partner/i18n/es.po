@@ -525,7 +525,7 @@ msgid "Invoice Pending"
 msgstr "Pendientes de Facturar"
 
 #. module: custom_partner
-#: code:addons/custom_partner/partner.py:539
+#: code:addons/custom_partner/models/partner.py:545
 #, python-format
-msgid "Are you sure? This action will eliminate permanently the client and all his info from the web"
-msgstr "¿Estás seguro/a? Esto eliminará de forma permanente el cliente y toda su información de la web"
+msgid "You have recently deactivated the partner from web, that is supposed to be something permanent. Now you shall wait to activate the partner again."
+msgstr "Has desactivado recientemente este cliente de la web, se supone que eso es una acción permanente. Deberás esperar para activar el cliente de nuevo."
