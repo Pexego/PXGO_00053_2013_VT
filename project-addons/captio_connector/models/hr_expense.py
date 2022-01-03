@@ -49,6 +49,7 @@ class HrExpense(models.Model):
     def cron_import_captio_expenses(self):
 
         company = self.env.user.company_id
+        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
         url_api = self.env['ir.config_parameter'].sudo().get_param('captio.api_endpoint')
 
         if not company.captio_token_expire or \
@@ -116,13 +117,26 @@ class HrExpense(models.Model):
                             account = expense["Category"]["Account"]
                             account_id = self.env['account.account'].search([('code', '=', account),
                                                                              ('company_id', '=', self.env.user.company_id.id)])
+                            partner_id = None
+                            if expense["CustomFields"] and country_code == 'IT':
+                                if 5480 in [cf['Id'] for cf in expense["CustomFields"]]:
+                                    # 5480 id of the field 'fattura' in Captio Italy
+                                    i_field = [cf['Id'] for cf in expense["CustomFields"]].index(5480)
+                                    if eval(expense["CustomFields"][i_field]["Value"].capitalize()):
+                                        # Italy Supplier Account
+                                        account_id = self.env['account.account'].search([('code', '=', '250100')])
+                                        if expense["Merchant"]:
+                                            partner_id = self.env['res.partner'].search([('name', 'ilike', expense["Merchant"].split(' ')[0]),
+                                                                                         ('supplier', '=', True)])
+
                             exp_vals.append({'name': line_name,
                                              'move_id': move.id,
                                              'account_id': account_id.id,
                                              'analytic_account_id': analytic_account_id,
                                              'date': exp_date,
                                              'debit': expense["FinalAmount"]["Value"],
-                                             'credit': 0})
+                                             'credit': 0,
+                                             'partner_id': partner_id or None})
 
                             exp_vals.append({'name': line_name,
                                              'move_id': move.id,
@@ -131,6 +145,7 @@ class HrExpense(models.Model):
                                              'credit': expense["FinalAmount"]["Value"]})
 
                             move.line_ids = [(0, 0, x) for x in exp_vals]
+                            move.move_type = 'other'
                             move.post()
 
         company.captio_last_date = datetime.now()

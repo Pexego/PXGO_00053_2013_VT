@@ -62,6 +62,7 @@ class CrmClaimRma(models.Model):
     t_incidence_picking = fields.Char('Trp. inc. picking')
     warehouse_location = fields.Selection([('madrid1', 'Madrid - Avd. del Sol'),
                                            ('madrid2', 'Madrid - Casablanca'),
+                                           ('madrid3', 'Madrid - Vicálvaro'),
                                            ('italia', 'Italia - Arcore'),
                                            ('transit', 'In transit')], "Warehouse Location")
     client_ref = fields.Char('Client Ref')
@@ -224,7 +225,7 @@ class CrmClaimRma(models.Model):
         for claim_obj in self:
             invoice = False
             invoice_name = set()
-            for line in claim_obj.claim_inv_line_ids:
+            for line in sorted(claim_obj.claim_inv_line_ids, key=lambda d: d.sequence):
                 if not line.invoiced:
                     if line.invoice_id.name:
                         invoice_name.add(line.invoice_id.name)
@@ -268,7 +269,7 @@ class CrmClaimRma(models.Model):
             inv_obj = self.env['account.invoice']
             invoice_id = inv_obj.create(header_vals)
             fp_obj = self.env['account.fiscal.position']
-            for line in claim_obj.claim_inv_line_ids:
+            for line in sorted(claim_obj.claim_inv_line_ids, key=lambda d: d.sequence):
                 if line.invoiced:
                     continue
                 if line.product_id:

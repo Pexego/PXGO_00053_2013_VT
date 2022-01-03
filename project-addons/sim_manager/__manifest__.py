@@ -4,7 +4,7 @@
     'summary': '',
     'description': '',
     'author': 'Visiotech',
-    'depends': ['mrp', 'barcode_action', 'crm_claim_rma', 'stock_custom'],
+    'depends': ['mrp', 'barcode_action', 'crm_claim_rma', 'stock_custom', 'flask_middleware_connector'],
     'data': ['views/sim_view.xml', 'views/partner_view.xml', 'views/email_template.xml',
              'security/ir.model.access.csv', 'data/parameters.xml', 'data/cron.xml'],
     'installable': True,

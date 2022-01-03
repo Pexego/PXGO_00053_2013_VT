@@ -7,5 +7,4 @@ class StockWarehouseOrderpoint(models.Model):
     _inherit = 'stock.warehouse.orderpoint'
 
     min_days_id = fields.Many2one('minimum.day',
-                                  'Stock Mínimum Days',
-                                  required=True)
+                                  'Stock Mínimum Days')

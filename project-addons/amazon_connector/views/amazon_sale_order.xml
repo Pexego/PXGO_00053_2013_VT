@@ -120,6 +120,7 @@
                             <field name="amazon_invoice_name" readonly="1"/>
                             <field name="fulfillment" readonly="1"/>
                             <field name="sales_channel" readonly="1"/>
+                            <field name="is_business_order" readonly="1"/>
                             <field name="purchase_date" readonly="1"/>
                             <field name="fiscal_position_id" attrs="{'readonly':[('state','!=','error')]}"/>
                         </group>

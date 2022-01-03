@@ -51,6 +51,7 @@ class AmazonSaleOrder(models.Model):
     billing_address = fields.Char('Address')
     billing_country_id = fields.Many2one('res.country', string='Country')
     partner_id = fields.Many2one('res.partner')
+    is_business_order = fields.Boolean()
 
     def _compute_count(self):
         for order in self:
@@ -208,14 +209,25 @@ class AmazonSaleOrder(models.Model):
                     amazon_order_values.update({
                         'fulfillment': order_complete.get('FulfillmentChannel', False),
                         'sales_channel': self.env['amazon.marketplace'].search(
-                            [('amazon_name', '=', order_complete.get('SalesChannel', False))]).id})
+                            [('amazon_name', '=', order_complete.get('SalesChannel', False))]).id,
+                        'is_business_order': order_complete.get('IsBusinessOrder', False)})
                     amazon_order_values_lines = self._get_lines_values(new_order, fiscal_position)
                     amazon_order_values.update(amazon_order_values_lines)
                     amazon_order = self.env['amazon.sale.order'].create(amazon_order_values)
                     if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
-                        amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
-                            amazon_order.amount_total, amazon_order.theoretical_total_amount)
-                        amazon_order.warning_price = True
+                        warning_price = True
+                        if amazon_order.is_business_order:
+                            fiscal_position_id = self.env['account.fiscal.position'].search(
+                                [('company_id', '=', self.env.user.company_id.id),
+                                 ('country_id.code', '=', 'ES')])
+                            amazon_order.fiscal_position_id = fiscal_position_id.id
+                            amazon_order.recalculate_taxes()
+                            warning_price = abs(
+                                amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed
+                        if warning_price:
+                            amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
+                                amazon_order.amount_total, amazon_order.theoretical_total_amount)
+                            amazon_order.warning_price = True
                     if (
                             amazon_order.partner_vat and amazon_order.vat_imputation_country and amazon_order.amount_total > 400) \
                             or amazon_order.amount_tax == 0:
@@ -288,7 +300,9 @@ class AmazonSaleOrder(models.Model):
             amazon_order.write({'fulfillment': order_header.get('FulfillmentChannel', False),
                                 'sales_channel': self.env['amazon.marketplace'].search(
                                     [('amazon_name', '=', order_header.get('SalesChannel', False))]).id,
-                                'purchase_date': order_header.get('PurchaseDate', False)})
+                                'purchase_date': order_header.get('PurchaseDate', False),
+                                'is_business_order':order_header.get('IsBusinessOrder', False),
+                                'warning_price':False})
             amazon_order.message_error = ""
             read = False
             while not read:
@@ -308,9 +322,17 @@ class AmazonSaleOrder(models.Model):
                 amazon_order_values = amazon_order._get_lines_values(order, amazon_order.fiscal_position_id)
                 amazon_order.write(amazon_order_values)
                 if abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed:
-                    amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
-                        amazon_order.amount_total, amazon_order.theoretical_total_amount)
-                    amazon_order.warning_price = True
+                    warning_price=True
+                    if amazon_order.is_business_order:
+                        fiscal_position_id = self.env['account.fiscal.position'].search([('company_id','=',self.env.user.company_id.id),
+                                                                                         ('country_id.code', '=', 'ES')])
+                        amazon_order.fiscal_position_id=fiscal_position_id.id
+                        amazon_order.recalculate_taxes()
+                        warning_price=abs(amazon_order.amount_total - amazon_order.theoretical_total_amount) > amazon_max_difference_allowed
+                    if warning_price:
+                        amazon_order.message_error += _('Total amount != Theoretical total amount (%f-%f)\n') % (
+                            amazon_order.amount_total, amazon_order.theoretical_total_amount)
+                        amazon_order.warning_price = True
 
                 if (
                         amazon_order.partner_vat and amazon_order.vat_imputation_country and amazon_order.amount_total > 400) \
@@ -454,6 +476,14 @@ class AmazonSaleOrder(models.Model):
             aws_access_key=company.aws_access_key,
             role_arn=company.role_arn,
         )
+    def recalculate_taxes(self):
+        for order in self:
+            taxes_obj = self.env['account.tax'].search(
+                [('description', '=', 'S_IVA21B' if order.theoretical_total_taxes> 0 else 'S_IVA0_IC'),
+                 ('company_id', '=', self.env.user.company_id.id)])
+            taxes = order.fiscal_position_id.map_tax(taxes_obj)
+            order.order_line.write({'tax_id': [(6, 0, taxes.ids)]})
+
 
     def send_error_mail(self):
         template = self.env.ref('amazon_connector.send_mail_errors_amazon')
