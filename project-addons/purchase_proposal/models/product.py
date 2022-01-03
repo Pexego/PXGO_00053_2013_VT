@@ -38,6 +38,8 @@ class ProductProduct(models.Model):
     average_margin = fields.Float("Average Margin Last Sales", readonly=True, copy=False)
     ref_manufacturer = fields.Char(related='manufacturer_pref', readonly=True)
 
+    rotation_index = fields.Selection([(1, 'A'), (2, 'B'), (3, 'C')], string="Rotation")
+
     @api.model
     def compute_last_sixty_days_sales(self, records=False):
         country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
@@ -144,6 +146,32 @@ class ProductProduct(models.Model):
     @api.multi
     def action_compute_last_sixty_days_sales(self):
         self.compute_last_sixty_days_sales(records=self.ids)
+
+    @api.model
+    def compute_rotation_index(self):
+        rot_id_a = self.env['ir.config_parameter'].sudo().get_param('rotation.index.a')
+        rot_id_b = self.env['ir.config_parameter'].sudo().get_param('rotation.index.b')
+        product_values = []
+        products = self.env['product.product'].search([('sale_ok', '=', True)])
+        rot_a = int(len(products) * (int(rot_id_a)/100))
+        rot_b = int(len(products) * (int(rot_id_b)/100))
+
+        for product in products:
+            product_values.extend([[product.id, product.last_sixty_days_sales - product.biggest_sale_qty]])
+        product_values.sort(key=lambda p: p[1], reverse=True)
+
+        for value in product_values:
+            if rot_a > 0:
+                products.filtered(lambda p: p.id == value[0]).rotation_index = 1
+                rot_a -= 1
+            elif rot_b > 0:
+                products.filtered(lambda p: p.id == value[0]).rotation_index = 2
+                rot_b -= 1
+            else:
+                products.filtered(lambda p: p.id == value[0]).rotation_index = 3
+
+        product_ko = self.env['product.product'].search([('sale_ok', '=', False)])
+        product_ko.write({'rotation_index': 3})
 
 
 class ProductTemplate(models.Model):

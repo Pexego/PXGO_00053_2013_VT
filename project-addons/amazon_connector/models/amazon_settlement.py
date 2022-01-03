@@ -155,17 +155,20 @@ class AmazonSettlement(models.Model):
                                      'amount': float(transaction[4].text),
                                      'settlement_id': settlement.id}
                     else:
+                        cont = 1 if transaction[1].tag=='ShipmentID' else 0
                         line_vals = {'type': transaction.tag,
                                      'transaction_type': transaction[0].text,
-                                     'transaction_name': transaction[1].text,
-                                     'posted_date': transaction[2].text,
+                                     'transaction_name': transaction[cont+1].text,
+                                     'posted_date': transaction[cont+2].text,
                                      'currency_id': self.env[
                                          'res.currency'].search(
                                          [('name', '=',
-                                           transaction[3].attrib.get(
+                                           transaction[cont+3].attrib.get(
                                                'currency'))]).id,
-                                     'amount': float(transaction[3].text),
+                                     'amount': float(transaction[cont+3].text),
                                      'settlement_id': settlement.id}
+                        if cont==1:
+                            line_vals.update({'shipment_id':transaction[1].text})
                     line = self.env['amazon.settlement.line'].create(line_vals)
                     for item in transaction.iter('OtherTransactionItem'):
                         self.env['amazon.settlement.item'].create({'sku': item[0].text,
@@ -297,10 +300,10 @@ class AmazonSettlement(models.Model):
                 settlement._reconcile_amazon_settlement_lines(line_refund_ids, amazon_max_difference_allowed,
                                                               refund_mode=True)
 
-    def _create_move(self, total_amount, refund_mode=False):
+    def _create_move(self, total_amount, partner_id, refund_mode=False):
         journal_id = self.env['account.journal'].search([('code', '=', 'AMAZ'), ('name', '=', 'Amazon')])
         vals = {'journal_id': journal_id.id,
-                'date': self.deposit_date
+                'date': datetime.now()
                 }
         if not refund_mode:
             vals.update({'ref': "Pagos desde web Amazon",
@@ -313,11 +316,10 @@ class AmazonSettlement(models.Model):
             [('code', '=', '43000000'), ('company_id', '=', self.env.user.company_id.id)])
         account_trans = self.marketplace_id.account_id if self.marketplace_id else self.line_ids[
             0].marketplace_id.account_id
-        partner_id = self.env['res.partner'].search([('name', '=', 'Ventas Amazon')])
         values = {'partner_id': partner_id.id,
                   'journal_id': journal_id.id,
-                  'date': self.deposit_date,
-                  'date_maturity': self.deposit_date,
+                  'date': datetime.now(),
+                  'date_maturity': datetime.now(),
                   'company_id': self.env.user.company_id.id,
                   'move_id': move.id}
         if refund_mode:
@@ -351,12 +353,12 @@ class AmazonSettlement(models.Model):
         return move
 
     def _reconcile_amazon_settlement_lines(self, line_order_ids, amazon_max_difference_allowed, refund_mode=False):
-        lines_to_reconcile = self.env['amazon.settlement.line']
-        lines_not_reconciled = self.env['amazon.settlement.line']
         total_amount = 0
         states = ['cancel']
         lines_with_products = {}
         moves = {}
+        partner_lines ={}
+        partner_amount= {}
         lines_with_moves = self.env['amazon.settlement.line']
         if not refund_mode:
             states += ['paid']
@@ -400,39 +402,44 @@ class AmazonSettlement(models.Model):
                     line.settlement_id.currency_id)
                 positive_events = abs(line.amount_items_positive_events) / rate
                 if abs(theoretical_amount) - positive_events <= amazon_max_difference_allowed:
-                    lines_to_reconcile |= line
                     if line.move_id:
                         lines_with_moves |= line
                         if moves.get(line.move_id, False):
                             moves[line.move_id] |= line
                         else:
                             moves[line.move_id] = line
+                    else:
+                        invoice_partner = amazon_invoice.partner_id
+                        if partner_lines.get(invoice_partner,False):
+                            partner_lines[invoice_partner] |= line
+                            partner_amount[invoice_partner] += theoretical_amount
+                        else:
+                            partner_lines[invoice_partner] = line
+                            partner_amount[invoice_partner] = theoretical_amount
                 else:
                     if theoretical_amount > 0:
                         line.error = _('Total amount != Theoretical total amount (%f-%f)\n') % (
                             abs(theoretical_amount), positive_events)
-                    lines_not_reconciled += line
                     theoretical_amount = 0
                 if theoretical_amount and not line.move_id:
                     total_amount += theoretical_amount
             else:
                 line.error = _('There is no invoice for this order\n')
-                lines_not_reconciled += line
         if moves:
             for m, lines_to_r in moves.items():
                 if refund_mode:
                     lines_to_r.reconcile_refund_lines(m, lines_with_products)
                 else:
                     lines_to_r.reconcile_order_lines(m)
-        if total_amount > 0:
-            lines_to_reconcile_without_moves = lines_to_reconcile - lines_with_moves
-            if lines_to_reconcile_without_moves:
-                move = self._create_move(total_amount, refund_mode)
-                lines_to_reconcile_without_moves.write({'move_id': move.id})
+        for p, lines_group_by_partner in partner_lines.items():
+            total_amount = partner_amount.get(p)
+            if total_amount > 0:
+                move = self._create_move(total_amount, p, refund_mode)
+                lines_group_by_partner.write({'move_id': move.id})
                 if refund_mode:
-                    lines_to_reconcile_without_moves.reconcile_refund_lines(move, lines_with_products)
+                    lines_group_by_partner.reconcile_refund_lines(move, lines_with_products)
                 else:
-                    lines_to_reconcile_without_moves.reconcile_order_lines(move)
+                    lines_group_by_partner.reconcile_order_lines(move)
 
     def action_view_moves(self):
         action = self.env.ref('account.action_move_journal_line').read()[0]
@@ -665,11 +672,10 @@ class AmazonSettlementLine(models.Model):
 
     @api.multi
     def check_other_settlement(self, settlement_id):
-        lines_order_to_reconcile = self.env['amazon.settlement.line']
-
         amazon_max_difference_allowed = float(
             self.env['ir.config_parameter'].sudo().get_param('amazon.max.difference.allowed'))
-        amount_total = 0
+        partner_lines ={}
+        partner_amount= {}
         for line in self.filtered(lambda l: l.type == 'Order'):
             equal_lines = self.env['amazon.settlement.line'].search(
                 [('amazon_order_name', '=', line.amazon_order_name), ('settlement_id', '!=', line.settlement_id.id),
@@ -686,10 +692,17 @@ class AmazonSettlementLine(models.Model):
                     sum(equal_lines.mapped('amount_items_positive_events')))) / rate
                 ls = equal_lines + line
                 if abs(theoretical_amount) - positive_events <= amazon_max_difference_allowed:
-                    lines_order_to_reconcile |= line
                     ls.write({'error': _(
                         'Reconciled with more lines of the same order in other settlements %s') % ls.mapped(
                         'settlement_id.name')})
+
+                    invoice_partner = amazon_invoice.partner_id
+                    if partner_lines.get(invoice_partner, False):
+                        partner_lines[invoice_partner] |= line
+                        partner_amount[invoice_partner] += theoretical_amount
+                    else:
+                        partner_lines[invoice_partner] = line
+                        partner_amount[invoice_partner] = theoretical_amount
                 else:
                     if theoretical_amount > 0:
                         ls.write({'error': _(
@@ -697,14 +710,13 @@ class AmazonSettlementLine(models.Model):
                                                abs(theoretical_amount), positive_events,
                                                ls.mapped('settlement_id.name'))})
                     theoretical_amount = 0
-                if theoretical_amount:
-                    amount_total += theoretical_amount
-                lines_order_to_reconcile |= line
-                equal_lines.state = "reconciled"
-        if amount_total > 0:
-            move = settlement_id._create_move(amount_total)
-            if lines_order_to_reconcile:
-                lines_order_to_reconcile.reconcile_order_lines(move)
+                equal_lines.write({'state': "reconciled"})
+        for p, lines_group_by_partner in partner_lines.items():
+            total_amount = partner_amount.get(p)
+            if total_amount > 0:
+                move = settlement_id._create_move(total_amount, p)
+                lines_group_by_partner.write({'move_id': move.id})
+                lines_group_by_partner.reconcile_order_lines(move)
 
 
 class AmazonSettlementItem(models.Model):

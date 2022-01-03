@@ -262,15 +262,9 @@ class MiddlewareBackend(models.TransientModel):
         if self.mode_export == 'export':
             for tag in tag_ids:
                 tag.with_delay(priority=2).export_partner_tag()
-                for partner in tag.partner_ids:
-                    partner.with_delay(priority=2).unlink_partner_tag_rel()
-                    partner.with_delay(priority=2, eta=120).export_partner_tag_rel()
         elif self.mode_export == 'update':
             for tag in tag_ids:
                 tag.with_delay(priority=2).update_partner_tag()
-                for partner in tag.partner_ids:
-                    partner.with_delay(priority=2).unlink_partner_tag_rel()
-                    partner.with_delay(priority=2, eta=120).export_partner_tag_rel()
         else:
             for tag in tag_ids:
                 tag.with_delay(priority=2).unlink_partner_tag()
@@ -285,7 +279,6 @@ class MiddlewareBackend(models.TransientModel):
                                               ('customer', '=', True)])
         if self.mode_export in ('export', 'update'):
             for partner in partner_ids:
-                partner.with_delay(priority=2).unlink_partner_tag_rel()
                 partner.with_delay(priority=2, eta=120).export_partner_tag_rel()
         else:
             for partner in partner_ids:
@@ -377,15 +370,9 @@ class MiddlewareBackend(models.TransientModel):
         if self.mode_export == 'export':
             for tag in product_tag_ids:
                 tag.with_delay(priority=2).export_product_tag()
-                for product in tag.product_ids:
-                    product.with_delay(priority=2).unlink_product_tag_rel()
-                    product.with_delay(priority=2, eta=120).export_product_tag_rel()
         elif self.mode_export == 'update':
             for tag in product_tag_ids:
                 tag.with_delay(priority=2).update_product_tag(fields=None)
-                for product in tag.product_ids:
-                    product.with_delay(priority=2).unlink_product_tag_rel()
-                    product.with_delay(priority=2, eta=120).export_product_tag_rel()
         else:
             for tag in product_tag_ids:
                 tag.with_delay(priority=2).unlink_product_tag()
@@ -399,7 +386,6 @@ class MiddlewareBackend(models.TransientModel):
 
         if self.mode_export == 'export':
             for product in product_ids:
-                product.with_delay(priority=2).unlink_product_tag_rel()
                 product.with_delay(priority=2, eta=120).export_product_tag_rel()
         else:
             for product in product_ids:
@@ -476,7 +462,6 @@ class MiddlewareBackend(models.TransientModel):
                     elif translation.web:
                         translation.with_delay(priority=2).unlink_translation()
                         translation.with_context({'no_update':True}).web = False
-
 
     def export_countries(self,object_ids):
         res_country_obj = self.env['res.country']

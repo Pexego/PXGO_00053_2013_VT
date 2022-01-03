@@ -41,18 +41,20 @@ class InvoiceUpdatePaymentData(models.TransientModel):
         account_move_lines = self.env['account.move.line'].search([('full_reconcile_id', '=', False),
                                                                    ('account_id', '=', account_id),
                                                                    ('invoice_id', 'in', invoice_filter.ids)])
-        valid_mandate = self.partner_id.valid_mandate_id.id
+        valid_mandate = self.partner_id.valid_mandate_id
         if not valid_mandate:
             raise Warning(_("There is not a valid mandate for this partner"))
         else:
             if self.action == 'debit_receipt':
                 invoice_filter.write({'payment_mode_id': debit_receipt_mode_id,
-                                      'mandate_id': valid_mandate})
+                                      'mandate_id': valid_mandate.id,
+                                      'partner_bank_id':valid_mandate.partner_bank_id.id})
                 account_move_lines.write({'payment_mode_id': debit_receipt_mode_id,
-                                          'mandate_id': valid_mandate})
+                                          'mandate_id': valid_mandate.id,
+                                          'partner_bank_id':valid_mandate.partner_bank_id.id})
             elif self.action == 'mandate':
-                invoice_filter.write({'mandate_id': valid_mandate})
-                account_move_lines.write({'mandate_id': valid_mandate})
+                invoice_filter.write({'mandate_id': valid_mandate.id,'partner_bank_id':valid_mandate.partner_bank_id.id})
+                account_move_lines.write({'mandate_id': valid_mandate.id,'partner_bank_id':valid_mandate.partner_bank_id.id})
 
         self.info = (_("Updated invoices: %s") % (invoice_filter.mapped('number')))
 

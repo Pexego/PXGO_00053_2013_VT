@@ -29,6 +29,7 @@
 
                     <field name="biggest_sale_id" group="sales_team.group_sale_salesman"/>
                     <field name="biggest_sale_qty"/>
+                    <field name="rotation_index"/>
                 </group>
             </group>
         </field>

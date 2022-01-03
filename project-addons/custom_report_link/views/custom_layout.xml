@@ -949,92 +949,88 @@ SWIFT/BIC: BESCPTPL
                     </thead>
                     <tbody>
                         <tr style="color:#6D6E70" t-foreach="o.tax_line_ids" t-as="t">
-                            <t t-if="o.amount_untaxed != 0.00">
-                                <t t-set="bool" t-value="false"/>
+                            <t t-set="bool" t-value="false"/>
 
-                                <t t-if="t.base != 0">
-                                    <td>
-                                        <span t-esc="t.tax_id.amount"
-                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>%
-                                    </td>
-                                </t>
-
-                                <t t-if="o.type == 'out_refund'">
-                                    <td>
-                                        <span t-esc="-t.base"
-                                              t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                    </td>
-                                    <td>
-                                        <span t-esc="-t.amount"
-                                              t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                    </td>
-                                </t>
-                                <t t-if="o.type != 'out_refund'">
-                                    <td>
-                                        <span t-field="t.base"
-                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                    </td>
-                                    <td>
-                                        <span t-field="t.amount"
-                                              t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                    </td>
-                                </t>
-
-                                <t t-if="len(o.tax_line_ids) == 1">
-                                    <t t-if="o.type == 'out_refund'">
-                                        <td>
-                                            <strong t-esc="(t.amount + t.base)"
-                                                    t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                        </td>
-                                    </t>
-                                    <t t-if="o.type != 'out_refund'">
-                                        <td>
-                                            <strong t-esc="(t.amount + t.base)"
-                                                    t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
-                                        </td>
-                                    </t>
-                                </t>
-                                <t t-if="len(o.tax_line_ids) != 1">
-                                    <t t-if="o.type == 'out_refund'">
-                                        <td></td>
-                                    </t>
-                                    <t t-if="o.type != 'out_refund'">
-                                        <td></td>
-                                    </t>
-                                </t>
+                            <t t-if="t.base != 0">
+                                <td>
+                                    <span t-esc="t.tax_id.amount"
+                                            t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>%
+                                </td>
                             </t>
-                        </tr>
 
-                        <tr style="color:#6D6E70">
-                            <t t-if="o.amount_untaxed != 0.00">
-                                <t t-set="bool" t-value="false"/>
-                                <t>
-                                    <td>
-                                        <span/>
-                                    </td>
-                                </t>
-                                <t>
-                                    <td>
-                                        <span/>
-                                    </td>
-                                </t>
-                                <t>
-                                    <td>
-                                        <span/>
-                                    </td>
-                                </t>
+                            <t t-if="o.type == 'out_refund'">
+                                <td>
+                                    <span t-esc="-t.base"
+                                            t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                </td>
+                                <td>
+                                    <span t-esc="-t.amount"
+                                            t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                </td>
+                            </t>
+                            <t t-if="o.type != 'out_refund'">
+                                <td>
+                                    <span t-field="t.base"
+                                            t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                </td>
+                                <td>
+                                    <span t-field="t.amount"
+                                            t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                </td>
+                            </t>
+
+                            <t t-if="len(o.tax_line_ids) == 1">
                                 <t t-if="o.type == 'out_refund'">
                                     <td>
-                                        <strong t-esc="-o.amount_total"
+                                        <strong t-esc="(t.amount + t.base)"
                                                 t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                     </td>
                                 </t>
                                 <t t-if="o.type != 'out_refund'">
                                     <td>
-                                        <strong t-field="o.amount_total"
-                                                t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                        <strong t-esc="(t.amount + t.base)"
+                                                t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
                                     </td>
                                 </t>
+                            </t>
+                            <t t-if="len(o.tax_line_ids) != 1">
+                                <t t-if="o.type == 'out_refund'">
+                                    <td></td>
+                                </t>
+                                <t t-if="o.type != 'out_refund'">
+                                    <td></td>
+                                </t>
+                            </t>
+                        </tr>
+
+                        <tr style="color:#6D6E70">
+                            <t t-set="bool" t-value="false"/>
+                            <t>
+                                <td>
+                                    <span/>
+                                </td>
+                            </t>
+                            <t>
+                                <td>
+                                    <span/>
+                                </td>
+                            </t>
+                            <t>
+                                <td>
+                                    <span/>
+                                </td>
+                            </t>
+                            <t t-if="o.type == 'out_refund'">
+                                <td>
+                                    <strong t-esc="-o.amount_total"
+                                            t-esc-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                </td>
+                            </t>
+                            <t t-if="o.type != 'out_refund'">
+                                <td>
+                                    <strong t-field="o.amount_total"
+                                            t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;o.currency_id&quot;}"/>
+                                </td>
                             </t>
                         </tr>
                     </tbody>
@@ -1172,7 +1168,7 @@ BIC: CAIXESBBXXX
                         <t t-raw="company.name"></t>
                         <t t-if="country_code == 'ES'">
                         R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, Ins 2º .- CIF:
-                        B80645518<!--<t t-raw="company.initiating_party_identifier"></t>-->
+                        B80645518 Listed in the RII-PYA with registration number 2295 and in the RII-AEE with registration number 7216.<!--<t t-raw="company.initiating_party_identifier"></t>-->
                         </t>
                     </label>
                 </div>

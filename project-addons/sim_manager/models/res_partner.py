@@ -1,5 +1,7 @@
 from odoo import models, fields
+from odoo.addons.component.core import Component
 import requests
+import json
 
 
 class ResPartner(models.Model):
@@ -13,9 +15,12 @@ class ResPartner(models.Model):
         web_invoice_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint')
         api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
         c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
-        web_invoice_endpoint += '?origin=%s' % c_code
-        headers = {'x-api-key': api_key}
-        response = requests.get(web_invoice_endpoint, headers=headers)
+        headers = {'x-api-key': api_key,
+                   'Content-Type': 'application/json'}
+        data = {
+            "origin": c_code.lower()
+        }
+        response = requests.put(web_invoice_endpoint, headers=headers, data=json.dumps(data))
         if response.status_code == 200:
             for partner_data in eval(response.text):
                 if partner_data['odooId'] > 0:
@@ -67,3 +72,12 @@ class ResPartner(models.Model):
         else:
             error += 'Response %s with error: %s' % (response.status_code, response.text)
         print(error)
+
+
+class PartnerListener(Component):
+    _inherit = 'partner.event.listener'
+
+    def export_partner_data(self, record):
+        super().export_partner_data(record)
+        for sim_pkg in record.sim_serial_ids:
+            sim_pkg.with_delay(priority=10).notify_sale_web('sold')

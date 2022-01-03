@@ -51,6 +51,7 @@
                <filter string="ES" domain="[('code','not like','EU'),('code','not like','VIP')]"/>
                <filter string="EU" domain="[('code','like','EU')]"/>
                <filter string="VIP" domain="[('code','like','VIP')]"/>
+               <separator/>
                <filter string="Sold" domain="[('state','=','sold')]"/>
                <filter string="Available" domain="[('state','=','available')]"/>
                <field name="code" string="Paquete"/>

@@ -111,3 +111,8 @@ msgstr "días"
 #: model:ir.actions.act_window,name:purchase_proposal.action_purchase_line_product_tree_2
 msgid "Purchases"
 msgstr "Compras"
+
+#. module: purchase_proposal
+#: model:ir.model.fields,field_description:purchase_proposal.field_product_product_rotation_index
+msgid "Rotation"
+msgstr "Rotación"

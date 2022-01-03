@@ -23,7 +23,8 @@
         "web_notify",
         "sale_financial_risk",
         "custom_financial_risk",
-        "custom_partner"
+        "custom_partner",
+        "scheduled_shipment"
     ],
     "data": [
         'views/sale_view.xml', 'views/email_purchase_template.xml',

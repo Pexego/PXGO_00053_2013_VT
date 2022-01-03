@@ -132,6 +132,9 @@ class SaleOrder(models.Model):
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
     picking_policy = fields.Selection(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    not_sync_picking = fields.Boolean()
+    pricelist_id = fields.Many2one(
+        states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
 
     @api.multi
     @api.onchange('partner_id')
@@ -145,6 +148,18 @@ class SaleOrder(models.Model):
             if child.default_shipping_address:
                 self.partner_shipping_id = child.id
                 break
+
+    @api.onchange('pricelist_id')
+    def reset_lines_price(self):
+        for line in self.order_line:
+            product = line.product_id
+            line.price_unit = self.env['account.tax']._fix_tax_included_price_company(
+                line._get_display_price(product), product.taxes_id, line.tax_id, self.company_id)
+            line._onchange_discount()
+            line.write({'old_discount': 0.0, 'accumulated_promo': False})
+        if self.order_line and \
+                self.pricelist_id and self.pricelist_id.discount_policy == 'with_discount':
+            self.order_line.write({'discount': 0.0})
 
     def open_historical_orders(self):
         self.ensure_one()
@@ -270,6 +285,11 @@ class SaleOrder(models.Model):
                                         str(line.product_uom_qty) + '    '
                 if products_to_order:
                     sale.send_email_to_purchases(products_to_order)
+
+        if self.not_sync_picking:
+            for picking in self.picking_ids:
+                picking.not_sync = True
+
         return res
 
     @api.multi

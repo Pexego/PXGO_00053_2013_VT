@@ -60,7 +60,7 @@ class SimPackage(models.Model):
         logger.info("Imported SIM %s" % barcode)
         max_cards = int(self.env['ir.config_parameter'].sudo().get_param('package.sim.card.max'))
 
-        created_code = self.env['sim.package'].search([], order="code desc", limit=1)
+        created_code = self
         if len(created_code.serial_ids) < max_cards:
             sim_serial = self.env['sim.serial'].create({'code': barcode, 'package_id': created_code.id})
             if sim_serial:
@@ -89,7 +89,7 @@ class SimPackage(models.Model):
                 result['context'] = json.dumps(context)
         elif len(created_code.serial_ids) == max_cards:
             # Create the next package and return to scan all the codes
-            if 'EU' in created_code or 'VIP' in created_code:
+            if 'EU' in created_code.code or 'VIP' in created_code.code:
                 new_code = 'M2M_CARD_' + created_code.code.split('_')[-2] + '_' \
                            + str(int(created_code.code.split('_')[-1])+1).zfill(6)
             else:
@@ -118,8 +118,10 @@ class SimPackage(models.Model):
     @api.multi
     def notify_sale_web(self, mode):
         web_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.endpoint')
+        c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
         for package in self:
             data = {
+                "origin": c_code.lower(),
                 "odoo_id": package.partner_id.id,
                 "partner_name": package.partner_id.name,
                 "mode": mode,

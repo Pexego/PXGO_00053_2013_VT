@@ -1073,6 +1073,11 @@ msgid "Returned lines"
 msgstr "Líneas devueltas"
 
 #. module: crm_claim_rma
+#: model:ir.ui.view,arch_db:crm_claim_rma.crm_claim_supplier_lines_tree_view
+msgid "Supplier lines"
+msgstr "Líneas de proveedor"
+
+#. module: crm_claim_rma
 #: model:ir.model.fields,help:crm_claim_rma.field_claim_line_product_id
 msgid "Returned product"
 msgstr "Productos devueltos"
