@@ -650,3 +650,10 @@ msgstr "Bolla_${(object.name or '').replace('/','_')}"
 #: model:ir.ui.view,arch_db:stock_custom.view_move_review_search
 msgid "Container"
 msgstr "Spedizione"
+
+#. module: stock_custom
+#: code:addons/stock_custom/models/stock.py:92
+#, python-format
+msgid "You can not modify the shipping address"
+msgstr "Non puoi modificare l'indirizzo"
+
