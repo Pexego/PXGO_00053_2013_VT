@@ -84,7 +84,10 @@ class MergePurchaseOrder(models.TransientModel):
             internal_notes += order.internal_notes + "\n" if order.internal_notes else ""
             sale_notes += order.sale_notes + "\n" if order.sale_notes else ""
             if order.client_order_ref:
-                client_order_ref += order.client_order_ref + "\n"
+                if client_order_ref:
+                    client_order_ref += order.client_order_ref + "\n"
+                else:
+                    client_order_ref = order.client_order_ref + "\n"
             if merge_mode and order == so:
                 continue
             for line in order.order_line:
