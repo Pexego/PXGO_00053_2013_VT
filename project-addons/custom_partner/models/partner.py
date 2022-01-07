@@ -532,6 +532,20 @@ class ResPartner(models.Model):
                     partner.lang = partner.parent_id.lang
         return res
 
+    @api.onchange('web')
+    def onchange_web(self):
+        if self.web:
+            date = (datetime.now() - timedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
+            jobs = self.env['queue.job'].search(
+                [('model_name', '=', 'res.partner'),
+                 ('date_created', '>', date),
+                 ('record_ids', 'like', self._origin.id),
+                 ('method_name', '=', 'unlink_partner')])
+            if jobs:
+                raise exceptions.UserError(_("You have recently deactivated the partner from web, "
+                                             "that is supposed to be something permanent. "
+                                             "Now you shall wait to activate the partner again."))
+
     # TODO: Migrar -> depende de credit_control (?)
     """def _all_lines_get_with_partner(self, cr, uid, partner, company_id, days):
         today = time.strftime('%Y-%m-%d')
