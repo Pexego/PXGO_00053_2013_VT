@@ -31,26 +31,15 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='order_line']/tree" position="attributes">
-                <attribute name="limit">100</attribute>
-            </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="attributes">
-                <attribute name="options">{'no_quick_create':True,'no_create_edit':True}</attribute>
-            </xpath>
-            <button name="action_done" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </button>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="after">
+            <xpath expr="//field[@name='order_line']" position="before">
                 <field name="is_editable" invisible="1"/>
             </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='product_uom_qty']" position="attributes">
-                <attribute name="attrs">{'readonly': [('is_editable','=',False)]}</attribute>
+            <xpath expr="//field[@name='order_line']" position="attributes">
+                <attribute name="attrs">{'readonly': ['|',('is_editable','=',False),('state', 'in', ('done','cancel'))]}</attribute>
             </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="attributes">
-                <attribute name="attrs">{'readonly': [('is_editable','=',False)]}</attribute>
-            </xpath>
-            <xpath expr="//field[@name='order_line']/tree//field[@name='discount']" position="attributes">
-                <attribute name="attrs">{'readonly': [('is_editable','=',False)]}</attribute>
+
+            <xpath expr="//field[@name='order_line']/tree" position="attributes">
+                <attribute name="limit">100</attribute>
             </xpath>
         </field>
     </record>
