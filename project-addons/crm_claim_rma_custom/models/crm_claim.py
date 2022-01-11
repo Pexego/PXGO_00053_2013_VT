@@ -60,9 +60,7 @@ class CrmClaimRma(models.Model):
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
     transport_incidence = fields.Boolean('Transport incidence')
     t_incidence_picking = fields.Char('Trp. inc. picking')
-    warehouse_location = fields.Selection([('madrid1', 'Madrid - Avd. del Sol'),
-                                           ('madrid2', 'Madrid - Casablanca'),
-                                           ('madrid3', 'Madrid - Vicálvaro'),
+    warehouse_location = fields.Selection([('madrid1', 'Madrid - Vicálvaro'),
                                            ('italia', 'Italia - Arcore'),
                                            ('transit', 'In transit')], "Warehouse Location")
     client_ref = fields.Char('Client Ref')
