@@ -9,7 +9,7 @@
         <field name="interval_type">minutes</field>
         <field name="numbercall">-1</field>
         <field name="state">code</field>
-        <field name="model_id" ref="model_base_io_folder"/>
+        <field name="model_id" ref="base_io_folder.model_base_io_folder"/>
         <field name="code">model._scheduler_import_file_dropship()</field>
     </record>
 
