@@ -10,6 +10,9 @@ class ProductTemplate(models.Model):
     name = fields.Char(translate=False)
 
     description = fields.Text(copy=False)
+    observations = fields.Text(
+        'Observations', translate=True,
+        help="Aditional notes for the product.")
     description_sale = fields.Text(copy=False)
     description_purchase = fields.Text(copy=False)
     description_pickingout = fields.Text(copy=False)
