@@ -1189,3 +1189,8 @@ msgstr "Dipendente"
 #: model:ir.ui.view,arch_db:custom_account.account_invoice_report_add_filters
 msgid "No Employees"
 msgstr "Nessun Dipendente"
+
+#. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.purchase_order_tree_inherit
+msgid "Shipments"
+msgstr "spedizioni"
