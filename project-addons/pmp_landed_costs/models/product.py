@@ -31,3 +31,7 @@ class HSCode(models.Model):
             if not re.match('^[0-9]{8}\.[0-9]{2}$', code.local_code):
                 message = _('The HS Code format is incorrect')
                 raise exceptions.ValidationError(message)
+
+    @api.constrains('local_code')
+    def _hs_code(self):
+        pass
