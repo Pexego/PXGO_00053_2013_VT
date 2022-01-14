@@ -47,9 +47,11 @@ class SaleOrder(models.Model):
         # Comprobar qué descuento le corresponde
         # Si margen_pedido < margin_discount_1 -> No le corresponde descuento
         # Si margin_1 < margen_pedido < margin_2 -> Le corresponde descuento discount_1
-        # Si margen_pedido > margin_2 -> Le corresponde descuento discount_2
+        # Si margin_2 < margen_pedido < margen_3 -> Le corresponde descuento_2
+        # Si margen_pedido > margin_3 -> Le corresponde descuento discount_3
         margin_discount_1 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_1')
         margin_discount_2 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_2')
+        margin_discount_3 = self.env['ir.config_parameter'].sudo().get_param('minimum_margin.discount_perc.prepaid_3')
         prepaid_discount_product_id = self.env.ref('prepaid_order_discount.prepaid_discount_product').id
         shipping_cost_categ = self.env['product.category']. \
             with_context(lang='es_ES').search([('name', '=', 'Portes')])
@@ -74,37 +76,34 @@ class SaleOrder(models.Model):
             discount_1 = margin_discount_1.split(',')[1]
             margin_2 = int(margin_discount_2.split(',')[0])
             discount_2 = margin_discount_2.split(',')[1]
+            margin_3 = int(margin_discount_3.split(',')[0])
+            discount_3 = margin_discount_3.split(',')[1]
 
             amount_untaxed = sum(sale.order_line.filtered(
                 lambda l: l.product_id.categ_id.id not in shipping_cost_categ.ids).mapped('price_subtotal'))
+
+            def create_prepaid_discount_line(discount):
+                last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
+                discount_line_vals = {'order_id': sale.id,
+                                      'product_id': prepaid_discount_product_id,
+                                      'name': _("%s prepaid discount") % (discount + '%'),
+                                      'product_uom_qyt': 1.0,
+                                      'price_unit': -(amount_untaxed * int(discount) / 100),
+                                      'sequence': last_sequence + 1}
+                self.env['sale.order.line'].create(discount_line_vals)
+                # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
+                sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
+                if sale.payment_mode_id.name == 'Ricevuta bancaria':
+                    sale.payment_mode_id = self.env['account.payment.mode'].search(
+                        [('payment_method_code', '=', 'MP05')])
+                sale.invoice_type_id = daily_invoicing.id
+
             if margin_1 <= margin_sale < margin_2:
-                last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
-                discount_line_vals = {'order_id': sale.id,
-                                      'product_id': prepaid_discount_product_id,
-                                      'name': _("%s prepaid discount") % (discount_1 + '%'),
-                                      'product_uom_qyt': 1.0,
-                                      'price_unit': -(amount_untaxed * int(discount_1) / 100),
-                                      'sequence': last_sequence + 1}
-                self.env['sale.order.line'].create(discount_line_vals)
-                # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
-                sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
-                if sale.payment_mode_id.name == 'Ricevuta bancaria':
-                    sale.payment_mode_id = self.env['account.payment.mode'].search([('payment_method_code', '=', 'MP05')])
-                sale.invoice_type_id = daily_invoicing.id
-            elif margin_sale >= margin_2:
-                last_sequence = sale.order_line.sorted(lambda l: l.sequence)[-1].sequence
-                discount_line_vals = {'order_id': sale.id,
-                                      'product_id': prepaid_discount_product_id,
-                                      'name': _("%s prepaid discount") % (discount_2 + '%'),
-                                      'product_uom_qyt': 1.0,
-                                      'price_unit': -(amount_untaxed * int(discount_2) / 100),
-                                      'sequence': last_sequence + 1}
-                self.env['sale.order.line'].create(discount_line_vals)
-                # Se pone como método de pago "Pago Inmediato" y facturación "Diaría"
-                sale.payment_term_id = self.env.ref('account.account_payment_term_immediate').id
-                if sale.payment_mode_id.name == 'Ricevuta bancaria':
-                    sale.payment_mode_id = self.env['account.payment.mode'].search([('payment_method_code', '=', 'MP05')])
-                sale.invoice_type_id = daily_invoicing.id
+                create_prepaid_discount_line(discount_1)
+            elif margin_2 <= margin_sale < margin_3:
+                create_prepaid_discount_line(discount_2)
+            elif margin_sale >= margin_3:
+                create_prepaid_discount_line(discount_3)
             else:
                 message = _("The order margin are below the limits to apply the prepayment discount")
                 self.env.user.notify_info(title=_("Prepaid discount line has not been created"),
