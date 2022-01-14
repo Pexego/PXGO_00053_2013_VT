@@ -80,15 +80,11 @@ class CustomizationWizard(models.TransientModel):
                 raise UserError(_(
                     "You can't create a customization with a bigger quantity of the product than what appears in the order: %s") % line.sale_line_id.product_id.default_code)
             elif qty > 0:
-                new_line = {
-                    'product_id': line.sale_line_id.product_id.id,
-                    'product_qty': line.qty,
-                    'customization_id': customization.id,
-                    'sale_line_id': line.sale_line_id.id,
-                    'erase_logo': line.erase_logo,
-                    'type_ids': [(6, 0, line.type_ids.ids)]
-                }
-                lines += self.env['kitchen.customization.line'].create(new_line)
+                if line.sale_line_id.product_id.bom_ids:
+                    for bom in line.sale_line_id.product_id.bom_ids[0].bom_line_ids:
+                        lines += customization.create_line(bom.product_id,line.qty * bom.product_qty,line)
+                else:
+                    lines += customization.create_line(line.sale_line_id.product_id, line.qty, line)
         if lines:
             return {
                 'view_type': 'form',
