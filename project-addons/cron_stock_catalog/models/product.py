@@ -1,6 +1,6 @@
 from odoo import api, fields, models, _, exceptions, tools
 import base64
-from datetime import datetime
+from datetime import datetime,timedelta
 import xlsxwriter
 
 
@@ -187,6 +187,27 @@ class ProductProduct(models.Model):
                         .format(datetime.now().strftime('%m%d')),
                         "cron_stock_catalog.email_template_general_alberto_3")
 
+    def cron_eol_products(self):
+        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Cantidad pendiente"]
+
+        date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
+        discontinued_products = self.env['product.product'].search([('state', '=', 'end')])
+        rows = []
+        for product in discontinued_products:
+            moves = self.env['stock.move'].search([('state', 'in', ('partially_available', 'confirmed', 'waiting')), ('date', '>=', date),
+                 ('product_id', '=', product.id), ('sale_line_id', '!=', False)])
+            for move in moves:
+                picking_name = move.picking_id.name if move.picking_id else ""
+                qty = move.product_uom_qty
+                if move.state=='partially_available':
+                    qty -= move.reserved_availability
+                rows.append([move.sale_line_id.order_id.name,picking_name,move.sale_line_id.salesman_id.name,move.product_id.default_code,qty])
+
+        file_b64 = self.generate_xls(headers, rows)
+        self.send_email(file_b64, "eol_products",
+                        "eol_products_{}.xlsx"
+                        .format(datetime.now().strftime('%m%d')),
+                        "cron_stock_catalog.email_template_eol_products")
     @api.multi
     def send_email(self, file, name, datas_fname, template_name):
         attach = None
