@@ -30,6 +30,7 @@ class ProductProduct(models.Model):
         if res and self._context.get('modify_stock_qty', False):
             for product_id in res.keys():
                 product = self.env['product.product'].browse(product_id)
+                product_stock= res[product_id]
                 w_res_count = product.waiting_reservation_count
                 res[product_id]['outgoing_qty'] -= w_res_count
                 moves_to_location = self.env['stock.move'].search(
@@ -37,5 +38,6 @@ class ProductProduct(models.Model):
                      ('location_dest_id', '=', self._context.get('location')),
                      ('location_id', '=', self.env.ref('automatize_edi_it.stock_location_vendor_deposit').id)])
                 res[product_id]['incoming_qty'] = sum(moves_to_location.mapped('product_qty'))
-                res[product_id]['virtual_available'] = res[product_id]['incoming_qty'] - res[product_id]['outgoing_qty']
+                res[product_id]['virtual_available'] = product_stock['qty_available'] + product_stock['incoming_qty']\
+                                                       - product_stock['outgoing_qty']
         return res
