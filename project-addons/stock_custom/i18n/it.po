@@ -650,3 +650,21 @@ msgstr "Bolla_${(object.name or '').replace('/','_')}"
 #: model:ir.ui.view,arch_db:stock_custom.view_move_review_search
 msgid "Container"
 msgstr "Spedizione"
+
+#. module: stock_custom
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_observations
+#: model:ir.model.fields,field_description:stock_custom.field_product_template_observations
+#: model:ir.ui.view,arch_db:stock_custom.product_template_observations_note
+msgid "Observations"
+msgstr "Osservazioni"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_template_observations_note
+msgid "This note is for product observations."
+msgstr "Questa nota è per le osservazioni sul prodotto."
+
+#. module: stock_custom
+#: model:ir.model.fields,help:stock_custom.field_product_product_observations
+#: model:ir.model.fields,help:stock_custom.field_product_template_observations
+msgid "Aditional notes for the product."
+msgstr "Note aggiuntive per il prodotto."

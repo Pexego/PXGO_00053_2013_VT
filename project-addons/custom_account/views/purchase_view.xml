@@ -47,7 +47,7 @@
                   <attribute name="invisible">True</attribute>
               </field>
               <field name="invoice_status" position="after">
-                  <field name="picking_ids" widget="many2many_tags" />
+                  <field name="container_ids" string="Shipments" widget="many2many_tags" readonly="1"/>
               </field>
               <field name="date_planned" position="after">
                   <field name="manufacture_date"/>
