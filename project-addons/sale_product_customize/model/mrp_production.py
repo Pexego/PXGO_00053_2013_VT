@@ -25,7 +25,9 @@ class MrpProduction(models.Model):
         res = super().action_assign()
         for production in self:
             for move in production.move_raw_ids:
+                reserves = self.env['stock.reservation'].search([('move_id', '=', move.id)])
                 if move.state == 'confirmed':
+                    reserves.unlink()
                     reserv_dict = {
                         'date_validity': False,
                         'name': "{} ({})".format(production.name, move.name),
