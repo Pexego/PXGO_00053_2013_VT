@@ -45,7 +45,7 @@
                 <button class="oe_inline oe_stat_button" name="action_view_moves"
                     string="Stock moves" type="object" icon="fa-cubes" attrs="{'invisible':[('type', '=', 'service')]}"/>
                 <button class="oe_inline oe_stat_button" name="action_view_moves_dates"
-                    string="Stock moves dates" type="object" icon="fa-calendar" attrs="{'invisible':[('type', '=', 'service')]}"/>
+                    string="Stock moves dates" type="object" icon="fa-calendar" attrs="{'invisible':[('type', '=', 'service')]}" />
                 <button class="oe_inline oe_stat_button" type="action" name="%(product_graphic_stock_grouped)d"
                     string="Stock Graphic"
                     icon="fa-bar-chart"
@@ -251,6 +251,21 @@
         <field name="arch" type="xml">
             <xpath expr="//button[@name='%(stock.action_view_change_product_quantity)d']" position="attributes">
                 <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_template_observations_note" model="ir.ui.view">
+        <field name="name">product.template.common.observations.form</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='description_internal']" position="after">
+                <group name="observations_notes">
+                    <group string="Observations">
+                        <field name="observations" nolabel="1" placeholder="This note is for product observations."/>
+                    </group>
+                </group>
             </xpath>
         </field>
     </record>

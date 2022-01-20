@@ -35,7 +35,8 @@
                 <xpath expr="//header" position="inside">
                     <!-- TODO: revisar estados donde aparece el boton -->
                     <button name="action_shedule" string="Schedule Shipping" type="object" groups="base.group_user" 
-                        attrs="{'invisible':['|', ('picking_type_code','!=','outgoing'), '|', ('state','in',('assigned')), ('block_picking','=',True)]}"/>
+                        attrs="{'invisible':['|', '|', '|', ('picking_type_code','!=','outgoing'), '&amp;', ('state','in',('assigned')), ('block_picking','=',True), 
+                            '&amp;', ('state','in',('assigned')), ('not_sync','=',False), ('state', 'in', ('done','cancel'))]}"/>
                 </xpath>
             </field>
         </record>
