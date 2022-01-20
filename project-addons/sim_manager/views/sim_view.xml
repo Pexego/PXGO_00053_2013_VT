@@ -18,6 +18,8 @@
         <field name="arch" type="xml">
             <form string="SIM packages">
                 <header>
+                    <button name="%(sim_manager.action_sim_export_wizard)d" string="Sync web" type="action"
+                            groups="base.group_system"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -180,6 +182,37 @@
         <field name="view_type">form</field>
         <field name="help">Manage the SIM Types</field>
     </record>
+
+    <record id="sim_export_wizard_view" model="ir.ui.view">
+         <field name="name">SIM Export Wizard</field>
+         <field name="model">sim.export.wzd</field>
+         <field name="arch" type="xml">
+            <form string="SIM Export Wizard">
+                <group>
+                    <group>
+                        <label string="Mode"/>
+                        <field name="mode" nolabel="1"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="sync_sim_web" string="Sync" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+         </field>
+     </record>
+
+    <record id="action_sim_export_wizard" model="ir.actions.act_window">
+         <field name="name">SIM Export Wizard</field>
+         <field name="res_model">sim.export.wzd</field>
+         <field name="src_model">sim.package</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="view_type">form</field>
+         <field name="view_mode">form</field>
+         <field name="view_id" ref="sim_export_wizard_view"/>
+        <field name="context">{}</field>
+         <field name="target">new</field>
+   </record>
 
     <menuitem id="menu_sim_package" action="action_sim_package" parent="mrp.menu_mrp_bom" sequence="40"/>
     <menuitem id="menu_sim_package_creator" action="action_sim_package_creator" name="Scan SIMs"
