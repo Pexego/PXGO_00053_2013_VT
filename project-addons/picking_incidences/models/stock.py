@@ -266,6 +266,14 @@ class StockPicking(models.Model):
 
         return True
 
+    @api.multi
+    def get_signature(self):
+        self.ensure_one()
+        signature = ''
+        for move in self.move_lines.sorted(key=lambda r: r.product_id.default_code):
+            signature += '%s%s' % (move.product_id.default_code, move.product_uom_qty)
+        return signature
+
 
 class ReturnPicking(models.TransientModel):
     _inherit = 'stock.return.picking'
