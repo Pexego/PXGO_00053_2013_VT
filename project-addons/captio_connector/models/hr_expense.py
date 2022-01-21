@@ -174,7 +174,7 @@ class HrExpense(models.Model):
 
             for report in resp_repo:
                 for count, sii_expense in enumerate(report["ExpensesSIIData"]):
-                    if sii_expense["InvoiceTypeCode"] == "F1" and sii_expense["CountryCode"] == "ES":  # Full Invoice
+                    if sii_expense["InvoiceTypeCode"] == "F1" and sii_expense["SpanishNIF"]:  # Full Invoice
                         # Create full Supplier Invoice
                         # -- Detail of the expense --
                         exp_filters = '?filters={"Id":"%s"}' % sii_expense["ExpenseId"]
@@ -201,7 +201,7 @@ class HrExpense(models.Model):
                         else:
                             partner_cif = sii_expense["SpanishNIF"]
 
-                        partner = self.env['res.partner'].search([('vat', 'ilike', partner_cif)])
+                        partner = self.env['res.partner'].search([('vat', 'ilike', partner_cif), ('is_company', '=', True)])
                         if not partner:
                             p_vals = {
                                 'name': sii_expense["CompanyName"],
@@ -210,18 +210,12 @@ class HrExpense(models.Model):
                                 'is_company': True,
                                 'property_account_payable_id':
                                     self.env['account.account'].search([('code', '=', '41000000'),
-                                                                        ('company_id', '=',self.env.user.company_id.id)]),
+                                                                        ('company_id', '=', self.env.user.company_id.id)]),
                                 'supplier': True,
                                 'customer': False,
                                 'vat': partner_cif
                             }
                             partner = self.env['res.partner'].create(p_vals)
-
-                        # -- Taxes --
-                        tax_id = self.env['account.tax'].search([('type_tax_use', '=', 'purchase'),
-                                                                 ('company_id', '=', 1),
-                                                                 ('amount', '=', sii_expense["VatDetail"][1]["TaxRate"]),
-                                                                 ('description', '=like', '%\_BC')])
 
                         # -- Create Invoice --
                         journal = self.env['account.journal'].search([('code', '=', 'Servi'), ('company_id', '=', 1)])
@@ -233,15 +227,24 @@ class HrExpense(models.Model):
                                     'currency_id': 1, 'company_id': 1,
                                     'comment': 'Captio - ' + sii_expense["ExpenseExternalId"]}
                         invoice = self.env['account.invoice'].create(inv_data)
-                        line_data = {'sequence': 1,
-                                     'name': sii_expense["TransactionDescription"],
-                                     'quantity': 1, 'discount': 0, 'uom_id': 1,
-                                     'price_unit': sii_expense["VatDetail"][1]["TaxableBase"],
-                                     'account_id': l_account.id,
-                                     'account_analytic_id': a_account.id if a_account else False,
-                                     'invoice_line_tax_ids': [[6, False, [tax_id.id]]],
-                                     'invoice_id': invoice.id}
-                        line = self.env['account.invoice.line'].create(line_data)
+                        for tax_line in sii_expense["VatDetail"]:
+                            if tax_line.get("TaxableBase", 0.0):
+                                if float(tax_line.get("TaxableBase", 0.0)) != 0.0:
+                                    # -- Taxes --
+                                    tax_id = self.env['account.tax'].search([('type_tax_use', '=', 'purchase'),
+                                                                             ('company_id', '=', 1),
+                                                                             ('amount', '=', tax_line["TaxRate"]),
+                                                                             ('description', '=like', '%\_BC'),
+                                                                             ('description', 'not like', '_IC_')])
+                                    line_data = {'sequence': 1,
+                                                 'name': sii_expense["TransactionDescription"],
+                                                 'quantity': 1, 'discount': 0, 'uom_id': 1,
+                                                 'price_unit': tax_line["TaxableBase"],
+                                                 'account_id': l_account.id,
+                                                 'account_analytic_id': a_account if a_account else False,
+                                                 'invoice_line_tax_ids': [[6, False, [tax_id[0].id]]],
+                                                 'invoice_id': invoice.id}
+                                    line = self.env['account.invoice.line'].create(line_data)
                         invoice.compute_taxes()
                         invoice.action_invoice_open()
 
