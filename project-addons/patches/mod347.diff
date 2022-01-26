@@ -1,0 +1,41 @@
+diff --git a/l10n_es_aeat_mod347/models/mod347.py b/l10n_es_aeat_mod347/models/mod347.py
+index e3dc2d8..c3660ed 100644
+--- a/l10n_es_aeat_mod347/models/mod347.py
++++ b/l10n_es_aeat_mod347/models/mod347.py
+@@ -159,7 +159,7 @@ class L10nEsAeatMod347Report(models.Model):
+             'type': 'ir.actions.act_window',
+         }
+ 
+-    def _account_move_line_domain(self, taxes):
++    def _account_move_line_domain(self):
+         """Return domain for searching move lines.
+ 
+         :param: taxes: Taxes to look for in move lines.
+@@ -170,8 +170,8 @@ class L10nEsAeatMod347Report(models.Model):
+             ('date', '>=', self.date_start),
+             ('date', '<=', self.date_end),
+             '|',
+-            ('tax_ids', 'in', taxes.ids),
+-            ('tax_line_id', 'in', taxes.ids),
++            ('tax_ids', 'not in', []),
++            ('tax_line_id', '!=', False),
+         ]
+ 
+     @api.model
+@@ -212,11 +212,14 @@ class L10nEsAeatMod347Report(models.Model):
+         partner_obj = self.env['res.partner']
+         map_line = self.env.ref(map_ref)
+         taxes = self._get_taxes(map_line)
+-        domain = self._account_move_line_domain(taxes)
++        domain = self._account_move_line_domain()
+         if partner_record:
+             domain += [('partner_id', '=', partner_record.partner_id.id)]
++
++        moves = self.env['account.move.line'].search(domain)
++        lines = moves.filtered(lambda m: m.tax_ids & taxes or m.tax_line_id in taxes)
+         groups = self.env['account.move.line'].read_group(
+-            domain,
++            [('id', 'in', lines.mapped('id'))],
+             ['partner_id', 'balance'],
+             ['partner_id'],
+         )
