@@ -297,7 +297,7 @@ class CrmClaimRma(models.Model):
                     'claim_line_id': line.claim_line_id.id,
                     'price_unit': line.price_unit,
                     'cost_unit': line.cost_unit,
-                    'uos_id': line.product_id.uom_id.id,
+                    'uom_id': line.product_id.uom_id.id,
                     'discount': line.discount,
                     'account_analytic_id': False
                 }
