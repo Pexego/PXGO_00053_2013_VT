@@ -151,7 +151,7 @@ msgstr "Invia a perdite"
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to refurbish stock"
-msgstr "Invia a guasti"
+msgstr "Prodotto a danneggiato"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
