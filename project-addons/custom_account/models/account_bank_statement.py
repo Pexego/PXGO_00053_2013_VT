@@ -54,3 +54,17 @@ class AccountBankStatementLine(models.Model):
                 line.statement_id.balance_end_real += line.amount
             else:
                 raise UserError(_('There is no old statement to link'))
+    
+    @api.multi
+    def process_reconciliation(self, counterpart_aml_dicts=None, payment_aml_rec=None, new_aml_dicts=None):
+        counterpart_aml_dicts = counterpart_aml_dicts or []
+        payment_aml_rec = payment_aml_rec or self.env['account.move.line']
+
+        import ipdb
+        ipdb.set_trace()
+        if any(rec.statement_id for rec in payment_aml_rec):
+            raise UserError(_('A selected move line was already reconciled.\n - Partner: %s\n - Invoice: %s\n - Amount: %f')%(payment_aml_rec.partner_id.name,payment_aml_rec.invoice_id.number,payment_aml_rec.amount_residual))
+        for aml_dict in counterpart_aml_dicts:
+            if aml_dict['move_line'].reconciled:
+                raise UserError(_('A selected move line was already reconciled.\n - Partner: %s\n - Invoice: %s\n - Amount: %f')%(aml_dict['move_line'].partner_id.name,aml_dict['move_line'].invoice_id.number,aml_dict['move_line'].amount_residual))
+        super(AccountBankStatementLine, self).process_reconciliation(counterpart_aml_dicts, payment_aml_rec, new_aml_dicts)

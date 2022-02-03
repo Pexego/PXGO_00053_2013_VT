@@ -1353,3 +1353,16 @@ msgstr "Sin Empleados"
 #: model:ir.ui.view,arch_db:custom_account.purchase_order_tree_inherit
 msgid "Shipments"
 msgstr "Envíos"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account_bank_statement.py:64
+#: code:addons/custom_account/models/account_bank_statement.py:67
+#, python-format
+msgid "A selected move line was already reconciled.\n"
+" - Partner: %s\n"
+" - Invoice: %s\n"
+" - Amount: %f"
+msgstr "Una línea de movimiento seleccionada ya ha sido conciliada.\n"
+" - Empresa: %s\n"
+" - Factura: %s\n"
+" - Cantidad: %f"
