@@ -36,20 +36,19 @@ class SaleOrder(models.Model):
         for order in self:
             if order.state not in ('sale', 'done'):
                 invoice_status = 'no'
-            elif order.force_invoiced:
+            elif order.force_invoiced or \
+                    (order.order_line and all(line.invoice_status in ('invoiced', 'cancel', 'upselling') for line in order.order_line)):
                 invoice_status = 'invoiced'
-            elif any(line.invoice_status == 'to invoice'
-                     for line in order.order_line.filtered(lambda p: p.product_id.type in ['product', 'consu'])) or \
-                    all(line.invoice_status == 'to invoice' and line.product_id.type == 'service'
-                        for line in order.order_line):
-                invoice_status = 'to_invoice'
-            elif all(line.invoice_status in ('invoiced', 'cancel', 'upselling') for line in order.order_line):
-                invoice_status = 'invoiced'
-            elif any(line.invoice_status == 'invoiced' for line in order.order_line):
+            elif any(line.invoice_status == 'invoiced' for line in order.order_line) and all(line.invoice_status in ('invoiced', 'cancel', 'upselling', 'no') for line in order.order_line):
                 invoice_status = 'partially_invoiced'
             else:
-                invoice_status = 'no'
-
+                lines_not_invoiced = order.order_line.filtered(lambda p: p.invoice_status != 'invoiced')
+                if any(line.invoice_status == 'to invoice' for line in order.order_line.filtered(lambda p: p.product_id.type in ['product', 'consu'])) \
+                    or (order.order_line and all(line.invoice_status == 'to invoice' and line.product_id.type == 'service' for line in order.order_line)) \
+                        or (lines_not_invoiced and all(line.invoice_status == 'to invoice' for line in lines_not_invoiced)):
+                    invoice_status = 'to_invoice'
+                else:
+                    invoice_status = 'no'
             order.invoice_status_2 = invoice_status
 
 

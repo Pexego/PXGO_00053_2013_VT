@@ -14,7 +14,8 @@
         "stock",
         "queue_job",
         "sale_stock",
-        "picking_incidences"
+        "picking_incidences",
+        "crm_claim_rma_custom"
     ],
     "data": [
         'data/job_channel_data.xml',

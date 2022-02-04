@@ -221,7 +221,7 @@
         <field name="name">stock.container.tree</field>
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
-            <tree string="Containers" class="custom_tree">
+            <tree string="Containers" class="custom_tree" default_order="set_eta desc, eta asc">
                 <field name="name"/>
                 <field name="type"/>
                 <field name="incoterm"/>

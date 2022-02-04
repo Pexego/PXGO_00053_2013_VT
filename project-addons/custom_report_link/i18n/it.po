@@ -982,6 +982,11 @@ msgstr "Printable"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
+msgid "Sequence"
+msgstr "Sequenza"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.report_claim_custom_document
 msgid "Product"
 msgstr "Prodotto"
 

@@ -638,13 +638,11 @@ msgstr "\n"
 #. module: stock_custom
 #: model:mail.template,subject:stock_custom.picking_done_template
 #: model:mail.template,subject:stock_custom.picking_done_template_claim
-#: model:mail.template,subject:stock_custom.picking_done_dropship_template
 msgid "VISIOTECH - Shipped products"
 msgstr "VISIOTECH - Prodotti inviati"
 
 #. module: stock_custom
 #: model:mail.template,report_name:stock_custom.picking_done_template_claim
-#: model:mail.template,report_name:stock_custom.picking_done_dropship_template
 msgid "Picking_${(object.name or '').replace('/','_')}"
 msgstr "Bolla_${(object.name or '').replace('/','_')}"
 
@@ -654,48 +652,19 @@ msgid "Container"
 msgstr "Spedizione"
 
 #. module: stock_custom
-#: model:mail.template,body_html:stock_custom.picking_done_dropship_template
-msgid "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Dear customer,</p>\n"
-"% if object.carrier_name and object.carrier_name == \"GENERICA\":\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">We inform you that our warehouse has prepared the products corresponding to the delivery note ${object.name} of the order ${object.sale_id.name}.</p>\n"
-"% elif object.carrier_name:\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">We hereby inform you that we have sent your order # ${object.sale_id.name}, the delivery note number is${object.name}. This order is now in the process of shipping and can no longer be changed.</p>\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">The transport company responsible for the shipping of your order is\n"
-"${object.carrier_name}\n"
-"    % if object.carrier_tracking_ref:\n"
-"        and the tracking number of your order is\n"
-"${object.carrier_tracking_ref}. </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"        % if object.carrier_name == \"TNT\":\n"
-"             <a href=\"https://www.tnt.com/express/es_es/site/herramientas-envio/seguimiento.html?searchType=ref&amp;cons=${object.carrier_tracking_ref}\" style=\"text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;\"> Tracking of your order ${object.sale_id.name}</a>\n"
-"        % elif object.carrier_name == \"DHL EXPRESS\":\n"
-"            <a href=\"https://www.dhl.com/es-es/home/tracking/tracking-express.html?submit=1&amp;tracking-id=${object.carrier_tracking_ref}\" style=\"text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;\"> Tracking of your order ${object.sale_id.name}</a>\n"
-"        % endif\n"
-"        </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"        <b style=\"font-weight:bold;\">Be aware that if you receive an error checking the tracking information you may need to search by the shipments reference number instead.  Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>\n"
-"    % endif\n"
-"    </p>\n"
-"% endif\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Best regards,</p>\n"
-"            "
-msgstr "<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Estimado cliente,</p>\n"
-"% if object.carrier_name and object.carrier_name == \"GENERICA\":\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le informiamo che il nostro magazzino ha preparato i prodotti corrispondenti alla bolla di consegna ${object.name}, dell'ordine ${object.sale_id.name}.</p>\n"
-"% elif object.carrier_name:\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Le informiamo che il nostro magazzino ha preparato i prodotti corrispondenti alla bolla di consegna ${object.name}, dell'ordine ${object.sale_id.name}.</p>\n"
-"    <p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">La ditta di trasporto che cura la spedizione è \n"
-"${object.carrier_name}\n"
-"    % if object.carrier_tracking_ref:\n"
-"        e il numero di riferimento del tuo ordine è\n"
-"${object.carrier_tracking_ref}. </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"        % if object.carrier_name == \"TNT\":\n"
-"             <a href=\"https://www.tnt.com/express/es_es/site/herramientas-envio/seguimiento.html?searchType=ref&amp;cons=${object.carrier_tracking_ref}\" style=\"text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;\"> Tracking dell'ordine ${object.sale_id.name}</a>\n"
-"        % elif object.carrier_name == \"DHL EXPRESS\":\n"
-"            <a href=\"https://www.dhl.com/es-es/home/tracking/tracking-express.html?submit=1&amp;tracking-id=${object.carrier_tracking_ref}\" style=\"text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;\"> Tracking dell'ordine ${object.sale_id.name}</a>\n"
-"        % endif\n"
-"        </p><p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">\n"
-"        <b style=\"font-weight:bold;\">Le informazioni di verifica del tuo ordine potrebbero non essere disponibili al momento in cui si riceve questa e-mail.</b>\n"
-"    % endif\n"
-"    </p>\n"
-"% endif\n"
-"<p style=\"margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;\">Cordiali saluti,</p>\n"
-"            "
+#: model:ir.model.fields,field_description:stock_custom.field_product_product_observations
+#: model:ir.model.fields,field_description:stock_custom.field_product_template_observations
+#: model:ir.ui.view,arch_db:stock_custom.product_template_observations_note
+msgid "Observations"
+msgstr "Osservazioni"
+
+#. module: stock_custom
+#: model:ir.ui.view,arch_db:stock_custom.product_template_observations_note
+msgid "This note is for product observations."
+msgstr "Questa nota è per le osservazioni sul prodotto."
+
+#. module: stock_custom
+#: model:ir.model.fields,help:stock_custom.field_product_product_observations
+#: model:ir.model.fields,help:stock_custom.field_product_template_observations
+msgid "Aditional notes for the product."
+msgstr "Note aggiuntive per il prodotto."

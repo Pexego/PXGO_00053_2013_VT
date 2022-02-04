@@ -60,9 +60,7 @@ class CrmClaimRma(models.Model):
     allow_confirm_blocked = fields.Boolean('Allow confirm', copy=False)
     transport_incidence = fields.Boolean('Transport incidence')
     t_incidence_picking = fields.Char('Trp. inc. picking')
-    warehouse_location = fields.Selection([('madrid1', 'Madrid - Avd. del Sol'),
-                                           ('madrid2', 'Madrid - Casablanca'),
-                                           ('madrid3', 'Madrid - Vicálvaro'),
+    warehouse_location = fields.Selection([('madrid1', 'Madrid - Vicálvaro'),
                                            ('italia', 'Italia - Arcore'),
                                            ('transit', 'In transit')], "Warehouse Location")
     client_ref = fields.Char('Client Ref')
@@ -225,7 +223,7 @@ class CrmClaimRma(models.Model):
         for claim_obj in self:
             invoice = False
             invoice_name = set()
-            for line in claim_obj.claim_inv_line_ids:
+            for line in sorted(claim_obj.claim_inv_line_ids, key=lambda d: d.sequence):
                 if not line.invoiced:
                     if line.invoice_id.name:
                         invoice_name.add(line.invoice_id.name)
@@ -269,7 +267,7 @@ class CrmClaimRma(models.Model):
             inv_obj = self.env['account.invoice']
             invoice_id = inv_obj.create(header_vals)
             fp_obj = self.env['account.fiscal.position']
-            for line in claim_obj.claim_inv_line_ids:
+            for line in sorted(claim_obj.claim_inv_line_ids, key=lambda d: d.sequence):
                 if line.invoiced:
                     continue
                 if line.product_id:
@@ -299,7 +297,7 @@ class CrmClaimRma(models.Model):
                     'claim_line_id': line.claim_line_id.id,
                     'price_unit': line.price_unit,
                     'cost_unit': line.cost_unit,
-                    'uos_id': line.product_id.uom_id.id,
+                    'uom_id': line.product_id.uom_id.id,
                     'discount': line.discount,
                     'account_analytic_id': False
                 }

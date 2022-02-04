@@ -150,7 +150,7 @@
                                             <td class="text-center">
                                                 <span t-field="l1.price_unit" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                             </td>
-                                            <td class="text-center"><span t-esc="'%.1f'% l1.discount"/> %</td>
+                                            <td class="text-center"><span t-esc="'%.2f'% l1.discount"/> %</td>
                                             <td class="text-center">
                                                 <span t-field="l1.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                             </td>
@@ -209,7 +209,7 @@
                                             <td class="text-center">
                                                 <span t-field="l1.price_unit" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                             </td>
-                                            <td class="text-center"><span t-esc="'%.1f'% l1.discount"/> %</td>
+                                            <td class="text-center"><span t-esc="'%.2f'% l1.discount"/> %</td>
                                             <td class="text-center">
                                                 <span t-field="l1.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                             </td>
@@ -246,7 +246,7 @@
                                     <td class="text-center">
                                         <span t-field="l1.price_unit" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                     </td>
-                                    <td class="text-center"><span t-esc="'%.1f'% l1.discount"/> %</td>
+                                    <td class="text-center"><span t-esc="'%.2f'% l1.discount"/> %</td>
                                     <td class="text-center">
                                         <span t-field="l1.price_subtotal" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
                                     </td>

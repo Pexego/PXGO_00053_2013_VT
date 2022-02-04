@@ -1,6 +1,8 @@
 from odoo import models, fields
+from odoo.addons.component.core import Component
 import requests
 import json
+from datetime import datetime
 
 
 class ResPartner(models.Model):
@@ -8,7 +10,7 @@ class ResPartner(models.Model):
 
     sim_serial_ids = fields.One2many('sim.package', 'partner_id')
 
-    def invoice_sim_packages(self):
+    def invoice_sim_packages(self, month=None):
         # Call web to get the data
         error = ''
         web_invoice_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint')
@@ -16,8 +18,11 @@ class ResPartner(models.Model):
         c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
         headers = {'x-api-key': api_key,
                    'Content-Type': 'application/json'}
+        if not month:
+            month = datetime.now().month
         data = {
-            "origin": c_code.lower()
+            "origin": c_code.lower(),
+            "month": month
         }
         response = requests.put(web_invoice_endpoint, headers=headers, data=json.dumps(data))
         if response.status_code == 200:
@@ -71,3 +76,12 @@ class ResPartner(models.Model):
         else:
             error += 'Response %s with error: %s' % (response.status_code, response.text)
         print(error)
+
+
+class PartnerListener(Component):
+    _inherit = 'partner.event.listener'
+
+    def export_partner_data(self, record):
+        super().export_partner_data(record)
+        for sim_pkg in record.sim_serial_ids:
+            sim_pkg.with_delay(priority=10).notify_sale_web('sold')

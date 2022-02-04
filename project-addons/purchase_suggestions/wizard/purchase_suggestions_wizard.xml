@@ -83,7 +83,7 @@
                 <field name="qty"  readonly="1"/>
                 <field name="virtual_stock_conservative"  readonly="1"/>
                 <field name="qty_to_purchase"/>
-                <field name="calculated_by" invisible="1"/>
+                <field name="calculated_by"/>
             </tree>
         </field>
     </record>
@@ -97,7 +97,7 @@
                 <field name="qty"  readonly="1"/>
                 <field name="virtual_stock_conservative"  readonly="1"/>
                 <field name="qty_to_purchase"/>
-                <field name="calculated_by" invisible="1"/>
+                <field name="calculated_by"/>
             </form>
         </field>
     </record>
