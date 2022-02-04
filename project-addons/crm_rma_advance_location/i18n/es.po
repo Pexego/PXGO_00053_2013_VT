@@ -39,7 +39,7 @@ msgstr "Crear una recepción a la ubicación de pérdidas por rotura"
 #. module: crm_rma_advance_location
 #: model:ir.actions.act_window,name:crm_rma_advance_location.action_used_picking_from_claim_picking
 msgid "Create Incomming Shipment to Refurbish Location"
-msgstr "Crear una recepción a la ubicación de Reacondicionamiento"
+msgstr "Crear una recepción a la ubicación de averiados"
 
 #. module: crm_rma_advance_location
 #: model:ir.actions.act_window,name:crm_rma_advance_location.action_stock_picking_from_claim_picking
@@ -151,7 +151,7 @@ msgstr "Producto a pérdidas"
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to refurbish stock"
-msgstr "Producto a reacondicionamiento"
+msgstr "Producto a averiados"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
