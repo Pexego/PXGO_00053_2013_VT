@@ -202,6 +202,8 @@ class HrExpense(models.Model):
                             partner_cif = sii_expense["SpanishNIF"]
 
                         partner = self.env['res.partner'].search([('vat', 'ilike', partner_cif), ('is_company', '=', True)])
+                        fiscal_position = self.env['account.fiscal.position'].search([('company_id', '=', 1),
+                                                                                      ('country_id.code', '=', 'ES')])
                         if not partner:
                             p_vals = {
                                 'name': sii_expense["CompanyName"],
@@ -213,18 +215,21 @@ class HrExpense(models.Model):
                                                                         ('company_id', '=', self.env.user.company_id.id)]),
                                 'supplier': True,
                                 'customer': False,
-                                'vat': partner_cif
+                                'property_account_position_id': fiscal_position.id,
+                                'vat': 'ES' + partner_cif
                             }
                             partner = self.env['res.partner'].create(p_vals)
 
                         # -- Create Invoice --
                         journal = self.env['account.journal'].search([('code', '=', 'Servi'), ('company_id', '=', 1)])
+
                         inv_data = {'type': 'in_invoice',
                                     'journal_id': journal.id,
                                     'partner_id': partner.id,
                                     'reference': sii_expense["InvoiceNumber"],
                                     'date_invoice': sii_expense["IssueDate"],
                                     'currency_id': 1, 'company_id': 1,
+                                    'fiscal_position_id': fiscal_position.id,
                                     'comment': 'Captio - ' + sii_expense["ExpenseExternalId"]}
                         invoice = self.env['account.invoice'].create(inv_data)
                         for tax_line in sii_expense["VatDetail"]:
