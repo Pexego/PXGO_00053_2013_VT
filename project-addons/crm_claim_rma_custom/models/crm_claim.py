@@ -458,6 +458,7 @@ class CrmClaimLine(models.Model):
         Many2one(default=lambda self: self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
     claim_name = fields.Selection(related='claim_id.name', readonly=True)
     sequence = fields.Integer()
+    deposit_id = fields.Many2one('stock.deposit', string='Deposit')
 
     res = {}
 

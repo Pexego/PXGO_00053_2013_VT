@@ -325,3 +325,9 @@ class StockDeposit(models.Model):
                 deposit.invoice_id = False
                 deposit.revert_sale()
 
+    @api.multi
+    def name_get(self):
+        res = []
+        for record in self:
+            res.append((record.id, record.picking_id.name))
+        return res
