@@ -1,17 +1,26 @@
 diff --git a/l10n_es_aeat_mod347/models/mod347.py b/l10n_es_aeat_mod347/models/mod347.py
-index e3dc2d8..c3660ed 100644
+index e3dc2d8..d5dda76 100644
 --- a/l10n_es_aeat_mod347/models/mod347.py
 +++ b/l10n_es_aeat_mod347/models/mod347.py
-@@ -159,7 +159,7 @@ class L10nEsAeatMod347Report(models.Model):
+@@ -15,6 +15,8 @@ from datetime import datetime
+ from calendar import monthrange
+ import odoo.addons.decimal_precision as dp
+
++import itertools
++
+ KEY_TAX_MAPPING = {
+     'A': 'l10n_es_aeat_mod347.aeat_mod347_map_a',
+     'B': 'l10n_es_aeat_mod347.aeat_mod347_map_b',
+@@ -159,7 +161,7 @@ class L10nEsAeatMod347Report(models.Model):
              'type': 'ir.actions.act_window',
          }
- 
+
 -    def _account_move_line_domain(self, taxes):
 +    def _account_move_line_domain(self):
          """Return domain for searching move lines.
- 
+
          :param: taxes: Taxes to look for in move lines.
-@@ -170,8 +170,8 @@ class L10nEsAeatMod347Report(models.Model):
+@@ -170,8 +172,8 @@ class L10nEsAeatMod347Report(models.Model):
              ('date', '>=', self.date_start),
              ('date', '<=', self.date_end),
              '|',
@@ -20,22 +29,105 @@ index e3dc2d8..c3660ed 100644
 +            ('tax_ids', 'not in', []),
 +            ('tax_line_id', '!=', False),
          ]
- 
+
      @api.model
-@@ -212,11 +212,14 @@ class L10nEsAeatMod347Report(models.Model):
+@@ -207,50 +209,61 @@ class L10nEsAeatMod347Report(models.Model):
+                 'partner_country_code': country_code,
+             }
+
++    def _get_partners_ids(self):
++        query = " SELECT DISTINCT partner_id FROM account_move_line " \
++                "WHERE date BETWEEN '%s' AND '%s' AND tax_line_id IS NOT NULL " % (self.date_start, self.date_end)
++        self._cr.execute(query)
++        ids = self._cr.dictfetchall()
++        return [p['partner_id'] for p in ids]
++
+     def _create_partner_records(self, key, map_ref, partner_record=None):
+         partner_record_obj = self.env['l10n.es.aeat.mod347.partner_record']
          partner_obj = self.env['res.partner']
          map_line = self.env.ref(map_ref)
          taxes = self._get_taxes(map_line)
 -        domain = self._account_move_line_domain(taxes)
 +        domain = self._account_move_line_domain()
++        partner_ids = self._get_partners_ids()
          if partner_record:
-             domain += [('partner_id', '=', partner_record.partner_id.id)]
-+
-+        moves = self.env['account.move.line'].search(domain)
-+        lines = moves.filtered(lambda m: m.tax_ids & taxes or m.tax_line_id in taxes)
-         groups = self.env['account.move.line'].read_group(
+-            domain += [('partner_id', '=', partner_record.partner_id.id)]
+-        groups = self.env['account.move.line'].read_group(
 -            domain,
-+            [('id', 'in', lines.mapped('id'))],
-             ['partner_id', 'balance'],
-             ['partner_id'],
-         )
+-            ['partner_id', 'balance'],
+-            ['partner_id'],
+-        )
+-        filtered_groups = list(filter(
+-            lambda d: abs(d['balance']) > self.operations_limit, groups)
+-        )
+-        for group in filtered_groups:
+-            partner = partner_obj.browse(group['partner_id'][0])
+-            vals = {
+-                'report_id': self.id,
+-                'partner_id': partner.id,
+-                'representative_vat': '',
+-                'operation_key': key,
+-                'amount': (-1 if key == 'B' else 1) * group['balance'],
+-            }
+-            vals.update(self._get_partner_347_identification(partner))
+-            move_groups = self.env['account.move.line'].read_group(
+-                group['__domain'],
+-                ['move_id', 'balance'],
+-                ['move_id'],
+-            )
+-            vals['move_record_ids'] = [
+-                (0, 0, {
+-                    'move_id': move_group['move_id'][0],
+-                    'amount': abs(move_group['balance']),
+-                }) for move_group in move_groups
+-            ]
+-            if partner_record:
+-                vals['move_record_ids'][0:0] = [
+-                    (2, x) for x in partner_record.move_record_ids.ids
+-                ]
+-                partner_record.write(vals)
+-            else:
+-                partner_record_obj.create(vals)
++            partners = partner_obj.search([('id', '=', partner_record.partner_id.id)])
++        else:
++            partners = partner_obj.browse(partner_ids)
++
++        for partner in partners:
++            domain_partner = domain + [('partner_id', '=', partner.id)]
++            moves = self.env['account.move.line'].search(domain_partner)
++            lines = moves.filtered(lambda m: m.tax_ids & taxes or m.tax_line_id in taxes)
++            if lines:
++                balance = sum(lines.mapped('balance'))
++
++                if abs(balance) > self.operations_limit:
++                    vals = {
++                        'report_id': self.id,
++                        'partner_id': partner.id,
++                        'representative_vat': '',
++                        'operation_key': key,
++                        'amount': (-1 if key == 'B' else 1) * balance,
++                    }
++                    vals.update(self._get_partner_347_identification(partner))
++
++                    move_groups = []
++                    for key_m, items in itertools.groupby(lines, lambda l: l.move_id.id):
++                        balance = 0
++                        for item in list(items):
++                            balance += item.balance
++                        move_groups.append({'move_id': key_m, 'balance': balance})
++                    vals['move_record_ids'] = [
++                        (0, 0, {
++                            'move_id': move_group['move_id'],
++                            'amount': abs(move_group['balance']),
++                        }) for move_group in move_groups
++                    ]
++                    if partner_record:
++                        vals['move_record_ids'][0:0] = [
++                            (2, x) for x in partner_record.move_record_ids.ids
++                        ]
++                        partner_record.write(vals)
++                    else:
++                        partner_record_obj.create(vals)
+
+     def _create_cash_moves(self):
+         partner_obj = self.env['res.partner']
