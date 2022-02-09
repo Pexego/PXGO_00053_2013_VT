@@ -34,7 +34,7 @@ class StockContainer(models.Model):
     etd = fields.Date(string="ETD", help="Date of departure of transport")
     eta = fields.Date(string="ETA", help="Arrival date at port / destination")
     notes_purchases = fields.Char(string="Notes", help="Purchases notes")
-    notes_warehouse = fields.Char(string="Warehouse notes", help="Warehouse notes")
+    notes_warehouse = fields.Text(string="Warehouse notes", help="Warehouse notes")
     conf = fields.Boolean(string="Conf", help="Confirmed")
     telex = fields.Boolean(string="Telex", help="Telex")
     arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", store=True)
