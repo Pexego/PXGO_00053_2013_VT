@@ -106,7 +106,7 @@ class CustomizationWizard(models.TransientModel):
                 raise UserError(_(
                     "You can't create a customization with a bigger quantity of the product than what appears in the order: %s") % line.original_product_id.default_code)
             elif qty > 0:
-                lines += customization.create_line(line.sale_line_id.product_id, line.qty, line)
+                lines += customization.create_line(line.original_product_id, qty, line)
         if lines:
             return {
                 'view_type': 'form',
