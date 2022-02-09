@@ -124,7 +124,7 @@ class StockContainer(models.Model):
                 if line.product_id.id not in res:
                     res.append(line.product_id.id)
                     n_ref += 1
-        container.n_ref = n_ref
+            container.n_ref = n_ref
 
     @api.multi
     def _get_responsible(self):
