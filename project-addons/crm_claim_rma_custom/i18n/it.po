@@ -544,3 +544,13 @@ msgstr "Dir. Spedizione"
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
 msgid "Pending RMA"
 msgstr "RMAs pendenti"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
+msgid "Attach RMA"
+msgstr "Aggiungere RMA"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_att_order_id
+msgid "Attach Sale"
+msgstr "Ordine Aggiunto"

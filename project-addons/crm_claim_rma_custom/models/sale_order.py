@@ -67,6 +67,7 @@ class SaleOrderClaimWizard(models.TransientModel):
             notes = order.internal_notes or ''
             order.internal_notes = notes + _(' Add %s  Ub.: %s') % (rma.claim_id.number, rma.claim_id.location)
             rma.claim_id.stage_id = state.id
+            rma.claim_id.att_order_id = order.id
 
 
 

@@ -38,9 +38,11 @@
             <xpath expr="//button[@name='action_view_invoice']" position="before">
                 <button type="object" name="action_view_pending_rma"
                         class="oe_stat_button"
-                        icon="fa-wrench"
-                        attrs="{'invisible': [('rma_pending_count','=',0)]}">
-                    <field name="rma_pending_count" widget="statinfo" string="Pending RMA"/>
+                        style="background-color: #ECDDE8;"
+                        attrs="{'invisible': ['|',('rma_pending_count','=',0),('state', 'not in', ['reserve','draft','sent'])]}">
+                    <i class="fa fa-wrench" style="font-size: 24px; color: #875A7B; padding:6px;"/>
+                    <label string="Attach RMA" style="font-weight: normal;"/>
+                    <field name="rma_pending_count" widget="statinfo" string="Adjuntar RMA" style="padding:6px;" attrs="{'invisible':True}"/>
                 </button>
             </xpath>
         </field>
