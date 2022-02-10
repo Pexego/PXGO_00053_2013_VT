@@ -58,10 +58,7 @@ class AccountBankStatementLine(models.Model):
     @api.multi
     def process_reconciliation(self, counterpart_aml_dicts=None, payment_aml_rec=None, new_aml_dicts=None):
         counterpart_aml_dicts = counterpart_aml_dicts or []
-        payment_aml_rec = payment_aml_rec or self.env['account.move.line']
 
-        if any(rec.statement_id for rec in payment_aml_rec):
-            raise UserError(_('A selected move line has not invoice.\n - Partner: %s\n - Amount: %.2f€')%(payment_aml_rec.partner_id.name,payment_aml_rec.amount_residual))
         for aml_dict in counterpart_aml_dicts:
             if aml_dict['move_line'].reconciled:
                 raise UserError(_('A selected move line was already reconciled.\n - Partner: %s\n - Invoice: %s\n - Amount: %.2f€')%
