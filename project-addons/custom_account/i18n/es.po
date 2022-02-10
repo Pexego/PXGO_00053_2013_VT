@@ -1356,13 +1356,22 @@ msgstr "Envíos"
 
 #. module: custom_account
 #: code:addons/custom_account/models/account_bank_statement.py:64
+#, python-format
+msgid "A selected move line has not invoice.\n"
+" - Partner: %s\n"
+" - Amount: %.2f€"
+msgstr "Una línea de movimiento seleccionada no tiene factura.\n"
+" - Empresa: %s\n"
+" - Cantidad: %.2f€"
+
+#. module: custom_account
 #: code:addons/custom_account/models/account_bank_statement.py:67
 #, python-format
 msgid "A selected move line was already reconciled.\n"
 " - Partner: %s\n"
 " - Invoice: %s\n"
-" - Amount: %f"
+" - Amount: %.2f€"
 msgstr "Una línea de movimiento seleccionada ya ha sido conciliada.\n"
 " - Empresa: %s\n"
 " - Factura: %s\n"
-" - Cantidad: %f"
+" - Cantidad: %.2f€"
