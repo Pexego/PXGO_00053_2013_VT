@@ -205,7 +205,7 @@ msgid "[Odoo] Missing Bank Account on SIM invoice"
 msgstr "[Odoo] Faltan cuentas bancarias en facturas SIM"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/res_partner.py:86
+#: code:addons/sim_manager/models/res_partner.py:82
 #, python-format
 msgid "Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n"
 msgstr "El cliente %s no tiene cuenta o un mandato válido. La factura %s no se ha cambiado. \n"
