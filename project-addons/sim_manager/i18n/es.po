@@ -198,3 +198,14 @@ msgstr "Algunas de estas tarjetas SIM %s del albarán %s no se encuentran en el 
 #, python-format
 msgid "You must specify the serial number of the serial products"
 msgstr "Debes especificar el número de serie de los productos con tracking"
+
+#. module: sim_manager
+#: model:mail.template,subject:sim_manager.email_template_sim_bank_account_error
+msgid "[Odoo] Missing Bank Account on SIM invoice"
+msgstr "[Odoo] Faltan cuentas bancarias en facturas SIM"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/res_partner.py:86
+#, python-format
+msgid "Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n"
+msgstr "El cliente %s no tiene cuenta o un mandato válido. La factura %s no se ha cambiado. \n"

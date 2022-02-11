@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, _
 from odoo.addons.component.core import Component
 import requests
 import json
@@ -13,6 +13,7 @@ class ResPartner(models.Model):
     def invoice_sim_packages(self, month=None):
         # Call web to get the data
         error = ''
+        mail_bank_error_message = ''
         web_invoice_endpoint = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint')
         api_key = self.env['ir.config_parameter'].sudo().get_param('web.sim.invoice.endpoint.key')
         c_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
@@ -46,6 +47,7 @@ class ResPartner(models.Model):
                                     'company_id': 1, 'not_send_email': True}
                         invoice = self.env['account.invoice'].create(inv_data)
                         invoice._onchange_partner_id()
+
                         line_data = {'sequence': 1, 'product_id': product_sim.id, 'name': product_sim.default_code,
                                      'quantity': round(partner_data['sims'], 2), 'discount': 0, 'uom_id': 1, 'price_unit': price_unit,
                                      'account_id': line_account.id, 'invoice_id': invoice.id}
@@ -71,11 +73,32 @@ class ResPartner(models.Model):
                             line_voz.price_unit = 0.15
                         invoice.compute_taxes()
                         invoice.action_invoice_open()
+
+                        if partner.property_payment_term_id.name in ('Prepago', 'Pago inmediato'):
+                            if partner.valid_mandate_id and partner.valid_mandate_id.partner_bank_id:
+                                rd_payment = self.env['account.payment.mode'].search([('name', '=', 'Recibo domiciliado')])
+                                invoice.write({'payment_mode_id': rd_payment.id})
+                            else:
+                                mail_bank_error_message += _('Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n') \
+                                                          % (partner.name, invoice.number)
                     else:
                         error += 'Partner id %s not found ' % partner_data['odooId']
         else:
             error += 'Response %s with error: %s' % (response.status_code, response.text)
         print(error)
+
+        # Send mail to accounting if there is partners without bank account
+        if mail_bank_error_message:
+            mail_pool = self.env['mail.mail']
+            context = self._context.copy()
+            context.pop('default_state', False)
+            context['message_warn'] = mail_bank_error_message
+            template_id = self.env.ref('sim_manager.email_template_sim_bank_account_error')
+            if template_id:
+                mail_id = template_id.with_context(context).send_mail(self.id)
+                if mail_id:
+                    mail_id_check = mail_pool.browse(mail_id)
+                    mail_id_check.with_context(context).send()
 
 
 class PartnerListener(Component):
