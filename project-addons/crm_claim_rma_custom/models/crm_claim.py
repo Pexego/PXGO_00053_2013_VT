@@ -66,8 +66,10 @@ class CrmClaimRma(models.Model):
     client_ref = fields.Char('Client Ref')
     warehouse_date = fields.Date('Final Received Date')
     deposit_id = fields.Many2many('stock.picking', string='Deposit')
-
+    amazon_rma = fields.Char("ID Amazon")
+    partner_name = fields.Char(related='partner_id.name')
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
+    
 
     @api.multi
     def write(self, vals):
@@ -297,7 +299,7 @@ class CrmClaimRma(models.Model):
                     'claim_line_id': line.claim_line_id.id,
                     'price_unit': line.price_unit,
                     'cost_unit': line.cost_unit,
-                    'uos_id': line.product_id.uom_id.id,
+                    'uom_id': line.product_id.uom_id.id,
                     'discount': line.discount,
                     'account_analytic_id': False
                 }
@@ -456,6 +458,7 @@ class CrmClaimLine(models.Model):
         Many2one(default=lambda self: self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
     claim_name = fields.Selection(related='claim_id.name', readonly=True)
     sequence = fields.Integer()
+    deposit_id = fields.Many2one('stock.deposit', string='Deposit')
 
     res = {}
 
