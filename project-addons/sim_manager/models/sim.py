@@ -149,3 +149,16 @@ class SimType(models.Model):
     product_id = fields.Many2one('product.product')
     type = fields.Char('Type')
     code = fields.Char('Code')
+
+
+class SimExport(models.TransientModel):
+    _name = 'sim.export.wzd'
+
+    mode = fields.Selection(
+        string='Mode',
+        selection=[('sold', 'Sold'),
+                   ('return', 'Return'), ])
+
+    def sync_sim_web(self):
+        pkg = self.env['sim.package'].browse(self.env.context["active_ids"])
+        pkg.with_delay(priority=10).notify_sale_web(self.mode)

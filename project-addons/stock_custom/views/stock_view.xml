@@ -52,6 +52,10 @@
             <button name="action_toggle_is_locked" attrs="{'invisible': ['|', ('state', 'in', ('draft','cancel')), ('is_locked', '=', False)]}" position="attributes">
                 <attribute name="groups">base.group_system</attribute>
             </button>
+            <field name="partner_id" position="attributes">
+                    <attribute name="context">{'show_address':1, 'default_type':'delivery', 'default_web': False, 'default_dropship': True}</attribute>
+                    <attribute name="domain">['|',('is_company', '=', True),('type', '=', 'delivery')]</attribute>
+            </field>
         </field>
     </record>
 
