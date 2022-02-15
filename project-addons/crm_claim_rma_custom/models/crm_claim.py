@@ -365,10 +365,8 @@ class ClaimInvoiceLine(models.Model):
     invoice_id = fields.Many2one("account.invoice", "Invoice")
     price_unit = fields.Float("Price Unit")
     cost_unit = fields.Float("Cost Unit")
-    price_subtotal = fields.Float("Price Subtotal", compute="_get_subtotal",
-                                  readonly=True)
-    tax_ids = fields.Many2many("account.tax", "claim_line_tax",
-                               "claimline_id", "tax_id", string="Taxes")
+    price_subtotal = fields.Float("Price Subtotal", compute="_get_subtotal", readonly=True)
+    tax_ids = fields.Many2many("account.tax", "claim_line_tax", "claimline_id", "tax_id", string="Taxes")
     discount = fields.Float("Discount")
     qty = fields.Float("Quantity", default="1")
     invoiced = fields.Boolean("Invoiced")
