@@ -91,7 +91,7 @@ class WizardReconcileRibaStatementLine(models.TransientModel):
             raise exceptions.UserError(_("Statement amount cannot be grater than riba amount"))
 
         riba_lines = self.env['riba.distinta.line'].browse(self.riba_line_ids.filtered(lambda l: l.select).mapped('riba_line_id').mapped('id'))
-        move_ids = riba_lines.move_line_ids.mapped('move_line_id')
+        move_ids = riba_lines.mapped('move_line_ids').mapped('move_line_id')
         counterpart_aml_dicts = []
         for aml in move_ids:
             counterpart_aml_dicts.append({
