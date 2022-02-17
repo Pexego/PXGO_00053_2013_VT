@@ -91,6 +91,11 @@ msgid "Partner"
 msgstr "Cliente"
 
 #. module: custom_account_it
+#: model:ir.model.fields,field_description:custom_account_it.field_account_move_line_bank_id
+msgid "Bank"
+msgstr "Banco"
+
+#. module: custom_account_it
 #: model:ir.ui.view,arch_db:custom_account_it.wizard_reconcile_riba_payment_statement_line_form
 msgid "Reconcile"
 msgstr "Reconciliar"
