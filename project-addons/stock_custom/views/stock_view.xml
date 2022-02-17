@@ -193,7 +193,7 @@
                 <field name="product_uom_qty"/>
                 <field name="picking_id"/>
                 <field name="picking_type_id"/>
-                <field name="container_id" groups="purchase.group_purchase_manager"/>
+                <field name="container_id"/>
                 <field name="date_expected" attrs="{'invisible': [('date_reliability', '=', '3.low')]}"/>
                 <field name="date_expected_conf" />
                 <field name="date_reliability"/>
