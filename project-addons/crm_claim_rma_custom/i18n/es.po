@@ -616,3 +616,8 @@ msgstr "Facturas con descuentos en CRM"
 #, python-format
 msgid "This orders have discounts. Do you want to proceed anyways?: %s"
 msgstr "Las siguientes facturas tienen descuentos. ¿Quieres continuar?: %s"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_deposit_id
+msgid "Deposit"
+msgstr "Depósito"
