@@ -52,24 +52,6 @@ class MrpProduction(models.Model):
         self.move_raw_ids.write({'picking_id': pick_out.id})
         self.move_raw_ids.mapped('move_line_ids').write({'picking_id': pick_out.id})
 
-    
-    @api.multi
-    def button_mark_done(self):
-        mail_pool = self.env['mail.mail']
-        values={
-            'subject': _('Manufacturing order {} completed').format(self.name),
-            'email_to': self.user_id.login,
-            'body_html': _('Your {} manufacturing order has been completed').format(self.name)
-        }
-        msg_id = mail_pool.create(values)
-
-        if msg_id:
-            mail_pool.send([msg_id])
-
-        return super().button_mark_done()
-        
-
-
 class MrpBomLine(models.Model):
 
     _inherit = 'mrp.bom.line'
