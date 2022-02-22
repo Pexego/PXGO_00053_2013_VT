@@ -29,8 +29,7 @@ class BaseIOFolder(models.Model):
     backup_path = fields.Char(
         help="Directory where you want to move the file after the import")
     direction = fields.Selection([('import', 'Import files'),
-                                  ('export', 'Export files'),
-                                  ('dropship', 'Dropship')], required=True,
+                                  ('export', 'Export files')], required=True,
                                  default="import")
 
     @api.model

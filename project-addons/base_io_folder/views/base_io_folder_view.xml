@@ -19,7 +19,7 @@
                                 <field name="directory_path"/>
                                 <field name="direction"/>
                             </group>
-                            <group attrs="{'invisible': [('direction','in',('export', 'dropship'))]}">
+                            <group attrs="{'invisible': [('direction', '=', 'export')]}">
                                 <field name="after_import"/>
                                 <field name="backup_path"
                                        attrs="{'invisible': [('after_import','=', 'delete')], 'required': [('direction', '=', 'import'),('after_import','=', 'backup')]}"/>
