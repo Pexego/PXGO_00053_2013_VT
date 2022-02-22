@@ -522,3 +522,14 @@ msgstr "Visiotech - RMA ricevuto"
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_deposit_id
 msgid "Deposit"
 msgstr "Depositi"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_sequence
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_sequence
+msgid "Sequence"
+msgstr "Sequenza"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_price_subtotal
+msgid "Price Subtotal"
+msgstr "Prezzo Subtotale"
