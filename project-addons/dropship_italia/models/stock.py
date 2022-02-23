@@ -1,4 +1,4 @@
-from odoo import models, fields, api, _
+from odoo import models, fields, api, _, exceptions
 from odoo.addons.queue_job.job import job
 import odoorpc
 
@@ -39,3 +39,11 @@ class StockPicking(models.Model):
                     picking.action_done()
                     picking.write({'carrier_tracking_ref': self.carrier_tracking_ref,
                                    'carrier_name': self.carrier_name})
+
+    @api.multi
+    def action_cancel(self):
+        for picking in self:
+            if picking.sale_id.partner_id.name == 'VISIOTECH Italia' \
+                    and picking.sale_id.partner_shipping_id.dropship:
+                raise exceptions.UserError(_('This order cannot be canceled here, should be canceled in Italy'))
+        return super(StockPicking, self).action_cancel()
