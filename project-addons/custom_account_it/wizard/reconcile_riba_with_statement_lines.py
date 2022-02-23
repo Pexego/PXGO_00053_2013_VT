@@ -116,6 +116,21 @@ class RibaList(models.Model):
     state = fields.Selection(selection_add=[("gen_file", "Generated File")])
 
 
+class RibaListLine(models.Model):
+
+    _inherit = "riba.distinta.line"
+
+    @api.multi
+    def pay_rib_line(self):
+        for line in self:
+            line.state = 'paid'
+
+    @api.multi
+    def rev_rib_line(self):
+        for line in self:
+            line.state = 'draft'
+
+
 class RibaFileExport(models.TransientModel):
 
     _inherit = "riba.file.export"
