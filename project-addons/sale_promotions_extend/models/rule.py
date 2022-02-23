@@ -237,6 +237,13 @@ class PromotionsRulesActions(models.Model):
             self.arguments = '{"product":discount, ...}'
         return super().on_change()
 
+    def create_line(self, vals):
+        if self.env.context.get('end_line', False):
+            order = self.env['sale.order'].browse(vals['order_id'])
+            vals['sequence'] = 999
+            vals['name'] = self.promotion.with_context({'lang': order.partner_id.lang}).line_description
+        return super().create_line(vals)
+
     def action_prod_disc_per_qty(self, order):
         product_obj = self.env['product.product']
         products_code = eval(self.product_code)
@@ -654,6 +661,9 @@ class PromotionsRulesActions(models.Model):
                     order_line.product_id.product_brand_id.code and order_line.product_id.type == 'product':
                 self.apply_perc_discount_accumulated(order_line)
         return {}
+
+    def action_cart_disc_perc(self, order):
+        return super(PromotionsRulesActions, self.with_context({'end_line': True})).action_cart_disc_perc(order)
 
 
 class PromotionsRules(models.Model):

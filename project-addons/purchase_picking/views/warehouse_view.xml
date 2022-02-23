@@ -21,11 +21,11 @@
         <field name="name">stock.container.tree</field>
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
-            <tree string="Containers" class="custom_tree" default_order="set_date_exp desc, date_expected desc">
+            <tree string="Containers" class="custom_tree" default_order="set_date_exp desc, date_expected asc">
                 <field name="name"/>
                 <field name="type"/>
                 <field name="eta"/>
-                <field name="n_ref"/>
+                <field name="n_ref" class="numeric_left_rows"/>
                 <field name="ctns"/>
                 <field name="dimensions"/>
                 <field name="status"/>
