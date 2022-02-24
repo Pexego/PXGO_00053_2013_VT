@@ -75,7 +75,8 @@ class ResPartner(models.Model):
                         invoice.action_invoice_open()
 
                         if partner.property_payment_term_id.name in ('Prepago', 'Pago inmediato'):
-                            if partner.valid_mandate_id and partner.valid_mandate_id.partner_bank_id:
+                            valid_mandate = self.env['account.banking.mandate'].search_count([('partner_id', '=', partner.id), ('state', '=', 'valid')])
+                            if valid_mandate > 0:
                                 rd_payment = self.env['account.payment.mode'].search([('name', '=', 'Recibo domiciliado')])
                                 invoice.write({'payment_mode_id': rd_payment.id})
                             else:
