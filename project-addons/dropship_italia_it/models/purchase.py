@@ -38,7 +38,8 @@ class PurchaseOrder(models.Model):
             'partner_shipping_id': partner_ship[0],
             'state': 'reserve',
             'no_promos': True,
-            'allow_confirm_blocked_magreb': True
+            'allow_confirm_blocked_magreb': True,
+            'client_order_ref': purchase.name
         }
         return vals
 
