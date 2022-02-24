@@ -44,6 +44,6 @@ class StockPicking(models.Model):
     def action_cancel(self):
         for picking in self:
             if picking.sale_id.partner_id.name == 'VISIOTECH Italia' \
-                    and picking.sale_id.partner_shipping_id.dropship:
+                    and picking.sale_id.partner_shipping_id.dropship and not self.env.user.has_group('base.group_system'):
                 raise exceptions.UserError(_('This order cannot be canceled here, should be canceled in Italy'))
         return super(StockPicking, self).action_cancel()
