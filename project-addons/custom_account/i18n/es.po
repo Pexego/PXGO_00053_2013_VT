@@ -1355,7 +1355,7 @@ msgid "Shipments"
 msgstr "Envíos"
 
 #. module: custom_account
-#: code:addons/custom_account/models/account_bank_statement.py:67
+#: code:addons/custom_account/models/account_bank_statement.py:85
 #, python-format
 msgid "A selected move line was already reconciled.\n"
 " - Partner: %s\n"
