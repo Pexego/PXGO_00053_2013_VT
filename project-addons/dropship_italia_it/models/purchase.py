@@ -68,7 +68,7 @@ class PurchaseOrder(models.Model):
         context = self._context.copy()
         context['bypass_override'] = True
         context.pop('default_state', False)
-        self.with_context(context).button_confirm()
+        self.with_context(context).sudo().button_confirm()
         for pick in self.picking_ids:
             pick.not_sync = True
 
