@@ -198,7 +198,13 @@
                                 <t t-set="totalPrice" t-value="order_line.price_unit*order_line.product_qty"/>
                                 <td style="vertical-align:middle;"><span t-field="order_line.product_id.image_small" t-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;img-rounded&quot;}"/></td>
                                 <td style="vertical-align:middle;"><span t-esc="seller_ref"/></td>
-                                <td style="vertical-align:middle;"><span t-field="order_line.product_id.name"/></td>
+                                <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==order_line.product_id)"/>
+                                <t t-if="len(product_reference)==1">
+                                    <td style="vertical-align:middle;"><span t-field="product_reference.customer_reference"/></td>
+                                </t>
+                                <t t-if="len(product_reference)!=1">
+                                    <td style="vertical-align:middle;"><span t-field="order_line.product_id"/></td>
+                                </t>
                                 <td style="font-size:10px; vertical-align:middle;"><span t-field="order_line.product_id.description_purchase"/></td>
                                 <td class="text-center" style="vertical-align:middle;"><span t-field="order_line.product_id.barcode"/></td>
                                 <td class="text-center" style="vertical-align:middle;">
