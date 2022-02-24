@@ -65,7 +65,7 @@ class CrmPhonecall(models.Model):
     partner_id = fields.Many2one('res.partner', 'Contact', required=True,
                                  domain=[['is_company', '=', 1],
                                          ['customer', '=', True]])
-    delegation_id = fields.Many2one('res.partner', string='Delegation')
+    delegation_id = fields.Many2one('res.partner', related="partner_id", string='Delegation')
     contact_id = fields.Text('Contact')
     start_date = fields.Datetime('Start Date', readonly=True,
                                  default=fields.Datetime.now)
@@ -194,13 +194,13 @@ class ResPartner(models.Model):
     sat_phonecall_count = fields.Integer(compute='_sat_phonecall_count', store=False, string='SAT Calls')
     phonecall_ids = fields.One2many('crm.phonecall', 'partner_id', 'Phonecalls', domain=[('scope', '=', 'sales')])
 
-class ProductCategory(models.Model):
-    _inherit = 'product.category'
+# class ProductCategory(models.Model):
+#     _inherit = 'product.category'
 
-    @api.multi
-    def name_get(self, context=None):
-        res = []
+#     @api.multi
+#     def name_get(self, context=None):
+#         res = []
 
-        for record in self:
-            res.append((record.id, record.name))
-        return res
+#         for record in self:
+#             res.append((record.id, record.name))
+#         return res
