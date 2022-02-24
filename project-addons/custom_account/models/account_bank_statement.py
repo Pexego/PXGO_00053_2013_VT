@@ -59,12 +59,10 @@ class AccountBankStatementLine(models.Model):
     def process_reconciliation(self, counterpart_aml_dicts=None, payment_aml_rec=None, new_aml_dicts=None):
         counterpart_aml_dicts = counterpart_aml_dicts or []
 
-        reconciled_accounts = {
-            'Partner': [],
-            'Invoice': [],
-            'Amount': []
-        }
+        reconciled_accounts = {}
 
+        import ipdb
+        ipdb.set_trace()
         for aml_dict in counterpart_aml_dicts:
             if aml_dict['move_line'].reconciled:
                 reconciled_accounts['Partner'].append(aml_dict['move_line'].partner_id.name)
