@@ -320,13 +320,13 @@ msgid "In picking"
 msgstr "Bolla d' entrata"
 
 #. module: sale_product_customize
-#: code:addons/sale_product_customize/model/mrp_production.py:60
+#: code:addons/sale_product_customize/model/stock_reservation.py:76
 #, python-format
 msgid "Manufacturing order {} completed"
 msgstr "Ordine di produzione {} completato"
 
 #. module: sale_product_customize
-#: code:addons/sale_product_customize/model/mrp_production.py:62
+#: code:addons/sale_product_customize/model/stock_reservation.py:78
 #, python-format
 msgid "Your {} manufacturing order has been completed"
 msgstr "Il tuo {} ordine di produzione è stato completato"
