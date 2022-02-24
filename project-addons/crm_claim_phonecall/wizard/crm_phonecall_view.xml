@@ -138,7 +138,7 @@
             <tree string="Phone Calls" editable="top">
                 <field name="date"/>
                 <field name="partner_id" string="Partner"/>
-                <field name="delegation_id" string="Delegation"/>
+                <field name="delegation_id" string="Delegation" domain="[('id', 'child_of', [partner_id])]"/>
                 <field name="contact_id" string="Contact"/>
                 <field name="partner_salesperson"/>
                 <field name="partner_country"/>
@@ -146,7 +146,7 @@
                 <field name="call_type_sat"/>
                 <field name="brand_id" options="{'no_create': True}"/>
                 <field name="product_id" string="Product"/>
-                <field name="product_category_id" string="Product type"/>
+                <field name="product_category_id" string="Product type" context="{'display_category_name': True}"/>
                 <field name="subject" string="Subject"/>
                 <field name="description"/>
                 <field name="call_state" string="State"/>
