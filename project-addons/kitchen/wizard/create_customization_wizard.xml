@@ -14,6 +14,7 @@
                 <field name="customization_line">
                     <tree string="Customization Lines" create="false" delete="true" editable="top">
                         <field name="product_id"/>
+                        <field name="sale_product_id" readonly="1"/>
                         <field name="product_erase_logo" invisible="1"/>
                         <field name="product_qty"/>
                         <field name="qty"/>

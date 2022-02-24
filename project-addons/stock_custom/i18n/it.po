@@ -652,6 +652,13 @@ msgid "Container"
 msgstr "Spedizione"
 
 #. module: stock_custom
+#: code:addons/stock_custom/models/stock.py:92
+#, python-format
+msgid "You can not modify the shipping address"
+msgstr "Non puoi modificare l'indirizzo"
+
+
+#. module: stock_custom
 #: model:ir.model.fields,field_description:stock_custom.field_product_product_observations
 #: model:ir.model.fields,field_description:stock_custom.field_product_template_observations
 #: model:ir.ui.view,arch_db:stock_custom.product_template_observations_note
