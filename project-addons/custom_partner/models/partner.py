@@ -808,38 +808,35 @@ class ResPartner(models.Model):
     @api.depends('email')
     def _compute_mail_count(self):
         for partner in self:
-            email_list = []
+            set_emails = set()
             ids = [partner.id]
             if partner.email:
-                email_list += partner.email.split(';') + [partner.email]
+                set_emails.update(partner.email.split(';'))
             if partner.email2:
-                email_list += partner.email2.split(';') + [partner.email2]
+                set_emails.update(partner.email2.split(';'))
             if partner.child_ids:
-                child_ids = partner.child_ids.filtered(lambda c: c.email)
-                if child_ids:
-                    email_list += ';'.join(child_ids.mapped('email')).split(';') + child_ids.mapped('email')
                 ids += partner.child_ids.ids
-            domain = [('recipient_ids', 'in', ids)]
-            if email_list:
-                domain = ['|', ('email_to', 'in', email_list), ('recipient_ids', 'in', ids)]
-            mails = self.env['mail.mail'].search_read(domain, ['id'])
-            partner.mail_count = len(mails)
+                set_emails.update(';'.join(partner.child_ids.filtered(lambda c: c.email).mapped('email')).split(';'))
+            domain = ['|'] * len(set_emails)
+            for email in set_emails:
+                domain += [('email_to','like',email)]
+            domain += [('recipient_ids', 'in', ids)]
+            partner.mail_count = self.env['mail.mail'].search_count(domain)
 
     def action_view_email(self):
-        email_list = []
+        set_emails = set()
         ids = [self.id]
         if self.email:
-            email_list += self.email.split(';') + [self.email]
+            set_emails.update(self.email.split(';'))
         if self.email2:
-            email_list += self.email2.split(';') + [self.email2]
+            set_emails.update(self.email2.split(';'))
         if self.child_ids:
-            child_ids = self.child_ids.filtered(lambda c: c.email)
-            if child_ids:
-                email_list += ';'.join(child_ids.mapped('email')).split(';') + child_ids.mapped('email')
             ids += self.child_ids.ids
-        domain = [('recipient_ids', 'in', ids)]
-        if email_list:
-            domain = ['|', ('email_to', 'in', email_list), ('recipient_ids', 'in', ids)]
+            set_emails.update(';'.join(self.child_ids.filtered(lambda c: c.email).mapped('email')).split(';'))
+        domain = ['|'] * len(set_emails)
+        for email in set_emails:
+            domain += [('email_to', 'like', email)]
+        domain += [('recipient_ids', 'in', ids)]
         mails = self.env['mail.mail'].search_read(domain, ['id'])
         mail_ids = [x['id'] for x in mails]
         action = self.env.ref('custom_partner.action_view_emails').read()[0]
