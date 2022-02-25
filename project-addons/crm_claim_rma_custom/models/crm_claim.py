@@ -69,6 +69,8 @@ class CrmClaimRma(models.Model):
 
     att_order_id = fields.Many2one('sale.order', string='Attach Sale')
 
+    amazon_rma = fields.Char("ID Amazon")
+    partner_name = fields.Char(related='partner_id.name')
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
     @api.multi
@@ -458,6 +460,7 @@ class CrmClaimLine(models.Model):
         Many2one(default=lambda self: self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
     claim_name = fields.Selection(related='claim_id.name', readonly=True)
     sequence = fields.Integer()
+    deposit_id = fields.Many2one('stock.deposit', string='Deposit')
 
     res = {}
 

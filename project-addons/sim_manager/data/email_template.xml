@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="email_template_sim_bank_account_error" model="mail.template">
+            <field name="name">Bank Account Error</field>
+            <field name="email_from">odoo_team@visiotechsecurity.com</field>
+            <field name="subject">[Odoo] Missing Bank Account on SIM invoice</field>
+            <field name="email_to">contabilidad@visiotechsecurity.com</field>
+            <field name="model_id" ref="sim_manager.model_sim_package"/>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html"><![CDATA[
+                ${ctx.get('message_warn','') | safe}
+             ]]>
+            </field>
+        </record>
+    </data>
+</odoo>

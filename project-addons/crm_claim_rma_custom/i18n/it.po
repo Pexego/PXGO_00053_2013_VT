@@ -522,6 +522,11 @@ msgid "Visiotech - RMA received"
 msgstr "Visiotech - RMA ricevuto"
 
 #. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_deposit_id
+msgid "Deposit"
+msgstr "Depositi"
+
+#. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/models/sale_order.py:67
 #, python-format
 msgid " Add %s  Ub.: %s"

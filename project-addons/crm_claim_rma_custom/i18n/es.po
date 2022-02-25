@@ -622,6 +622,11 @@ msgid "This orders have discounts. Do you want to proceed anyways?: %s"
 msgstr "Las siguientes facturas tienen descuentos. ¿Quieres continuar?: %s"
 
 #. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_deposit_id
+msgid "Deposit"
+msgstr "Depósito"
+
+#. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/models/sale_order.py:67
 #, python-format
 msgid " Add %s  Ub.: %s"

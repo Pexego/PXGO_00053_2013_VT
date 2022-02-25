@@ -122,8 +122,8 @@ class SimPackage(models.Model):
         for package in self:
             data = {
                 "origin": c_code.lower(),
-                "odoo_id": package.partner_id.id,
-                "partner_name": package.partner_id.name,
+                "odoo_id": package.partner_id.id or 0,
+                "partner_name": package.partner_id.name or '',
                 "mode": mode,
                 "codes": [sim.code for sim in package.serial_ids],
             }
@@ -149,3 +149,16 @@ class SimType(models.Model):
     product_id = fields.Many2one('product.product')
     type = fields.Char('Type')
     code = fields.Char('Code')
+
+
+class SimExport(models.TransientModel):
+    _name = 'sim.export.wzd'
+
+    mode = fields.Selection(
+        string='Mode',
+        selection=[('sold', 'Sold'),
+                   ('return', 'Return'), ])
+
+    def sync_sim_web(self):
+        pkg = self.env['sim.package'].browse(self.env.context["active_ids"])
+        pkg.with_delay(priority=10).notify_sale_web(self.mode)

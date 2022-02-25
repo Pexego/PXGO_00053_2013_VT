@@ -86,6 +86,11 @@ class StockPicking(models.Model):
                 .mapped('move_lines')._action_assign()
         return res
 
+    @api.onchange('partner_id')
+    def change_partner(self):
+        if self.state in ('assigned', 'done', 'cancel') or self.block_picking:
+            raise exceptions.Warning(_("You can not modify the shipping address"))
+
 
 class StockMoveLine(models.Model):
 
