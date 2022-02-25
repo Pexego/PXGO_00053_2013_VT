@@ -108,7 +108,7 @@
                     <field name="call_type_sat"/>
                     <field name="brand_id" options="{'no_create': True}"/>
                     <field name="product_id" string="Product"/>
-                    <field name="product_category_id" string="Product type" context="{'display_name': True}"/>
+                    <field name="category_id"/>
                     <field name="subject" string="Subject"/>
                     <field name="description"/>
                     <field name="call_state" string="State"/>
@@ -125,7 +125,7 @@
     <record id="crm_phonecall_custom_wizard_action_sat" model="ir.actions.act_window">
         <field name="name">New Call</field>
         <field name="res_model">crm.phonecall</field>
-        <field name="context">{'readonly_by_pass': ['start_date', 'name'], 'default_scope': 'sat'}</field>
+        <field name="context">{'readonly_by_pass': ['start_date', 'name'], 'default_scope': 'sat', 'display_category_name': True}</field>
         <field name="view_mode">form</field>
         <field name="view_type">form</field>
         <field name="target">new</field>
@@ -151,7 +151,7 @@
                 <field name="call_type_sat"/>
                 <field name="brand_id" options="{'no_create': True}"/>
                 <field name="product_id" string="Product"/>
-                <field name="product_category_id" string="Product type"/>
+                <field name="category_id"/>
                 <field name="subject" string="Subject"/>
                 <field name="description"/>
                 <field name="call_state" string="State"/>

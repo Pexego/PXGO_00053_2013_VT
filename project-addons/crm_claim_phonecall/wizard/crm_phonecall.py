@@ -65,7 +65,7 @@ class CrmPhonecall(models.Model):
     partner_id = fields.Many2one('res.partner', 'Contact', required=True,
                                  domain=[['is_company', '=', 1],
                                          ['customer', '=', True]])
-    delegation_id = fields.Many2one('res.partner', related="partner_id", string='Delegation')
+    delegation_id = fields.Many2one('res.partner', string='Delegation')
     contact_id = fields.Text('Contact')
     start_date = fields.Datetime('Start Date', readonly=True,
                                  default=fields.Datetime.now)
@@ -80,7 +80,7 @@ class CrmPhonecall(models.Model):
     partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
     brand_id = fields.Many2one('product.brand', 'Brand')
     product_id = fields.Many2one('product.product', 'Product')
-    product_category_id = fields.Many2one('product.category', related="product_id.categ_id", string='Product type', readonly= True)
+    category_id = fields.Many2one('product.category', related='product_id.categ_id', string='Product type')
     subject = fields.Char('Call Subject')
     email_sent = fields.Boolean('Email sent', default=False, readonly=True)
     summary_id = fields.Many2one(comodel_name="crm.phonecall.summary",
@@ -205,4 +205,4 @@ class ProductCategory(models.Model):
             for record in self:
                 res.append((record.id, record.name))
             return res
-        return dict(super(ProductCategory, self).name_get())
+        return super(ProductCategory, self).name_get()
