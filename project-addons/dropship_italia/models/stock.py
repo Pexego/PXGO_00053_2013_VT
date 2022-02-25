@@ -13,7 +13,7 @@ class StockPicking(models.Model):
         for picking in self:
             if picking.sale_id.partner_id.name == 'VISIOTECH Italia' and picking.partner_id.dropship:
                 # Notify odoo IT the dropship is done
-                self.with_delay(eta=10, priority=8).notify_dropship_done()
+                self.with_delay(eta=10, priority=8).sudo().notify_dropship_done()
         return res
 
     @job(retry_pattern={1: 10 * 60})
