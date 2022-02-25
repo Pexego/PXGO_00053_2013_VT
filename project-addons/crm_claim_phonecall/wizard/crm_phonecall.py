@@ -78,7 +78,7 @@ class CrmPhonecall(models.Model):
     call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type', required=True)
     partner_country = fields.Many2one('res.country', related='partner_id.country_id', string='Country', readonly=True)
     partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
-    brand_id = fields.Many2one('product.brand', 'Brand')
+    brand_id = fields.Many2one('product.brand', related="product_id.product_brand_id", string='Brand')
     product_id = fields.Many2one('product.product', 'Product')
     category_id = fields.Many2one('product.category', related='product_id.categ_id', string='Product type')
     subject = fields.Char('Call Subject')
