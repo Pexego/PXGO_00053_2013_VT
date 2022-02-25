@@ -194,3 +194,15 @@ class ResPartner(models.Model):
     sat_phonecall_count = fields.Integer(compute='_sat_phonecall_count', store=False, string='SAT Calls')
     phonecall_ids = fields.One2many('crm.phonecall', 'partner_id', 'Phonecalls', domain=[('scope', '=', 'sales')])
 
+class ProductCategory(models.Model):
+    _inherit = 'product.category'
+
+    @api.multi
+    def name_get(self):
+        res = []
+
+        if self.env.context.get('display_category_name'):
+            for record in self:
+                res.append((record.id, record.name))
+            return res
+        return dict(super(ProductCategory, self).name_get())

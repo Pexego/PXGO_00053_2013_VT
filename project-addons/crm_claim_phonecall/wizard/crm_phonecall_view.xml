@@ -168,7 +168,7 @@
         <field name="view_id" ref="crm_case_inbound_phone_tree_view_sat"/>
         <field name="domain">[('scope', '=', 'sat')]</field>
         <field name="context">{'search_default_state': 'done', 'default_state': 'done', 'search_default_user_id': uid,
-                               'default_scope': 'sat'}</field>
+                               'default_scope': 'sat', 'display_category_name': True}</field>
         <field name="search_view_id" ref="crm_phonecall.view_crm_case_phonecalls_filter"/>
         <field name="help" type="html">
           <p class="oe_view_nocontent_create">
