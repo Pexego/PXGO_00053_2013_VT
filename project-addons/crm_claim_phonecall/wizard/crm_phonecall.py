@@ -80,7 +80,7 @@ class CrmPhonecall(models.Model):
     partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
     brand_id = fields.Many2one('product.brand', 'Brand')
     product_id = fields.Many2one('product.product', 'Product')
-    product_category_id = fields.Many2one('product.category', related="product_id.categ_id", string='Product type')
+    product_category_id = fields.Many2one('product.category', related="product_id.categ_id", string='Product type', readonly= True)
     subject = fields.Char('Call Subject')
     email_sent = fields.Boolean('Email sent', default=False, readonly=True)
     summary_id = fields.Many2one(comodel_name="crm.phonecall.summary",
