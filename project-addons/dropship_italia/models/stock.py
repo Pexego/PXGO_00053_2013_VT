@@ -13,14 +13,14 @@ class StockPicking(models.Model):
         for picking in self:
             if picking.sale_id.partner_id.name == 'VISIOTECH Italia' and picking.partner_id.dropship:
                 # Notify odoo IT the dropship is done
-                self.with_delay(eta=10, priority=8).sudo().notify_dropship_done()
+                self.with_delay(eta=10, priority=8).notify_dropship_done()
         return res
 
     @job(retry_pattern={1: 10 * 60})
     @api.multi
     def notify_dropship_done(self):
         # get the server
-        server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech IT')])
+        server = self.env['base.synchro.server'].sudo().search([('name', '=', 'Visiotech IT')])
         # Prepare the connection to the server
         odoo_it = odoorpc.ODOO(server.server_url, port=server.server_port)
         # Login
