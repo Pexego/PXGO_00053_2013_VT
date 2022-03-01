@@ -61,7 +61,9 @@ class StockDeposit(models.Model):
     state = fields.Selection([('draft', 'Draft'), ('sale', 'Sale'),
                               ('returned', 'Returned'),
                               ('invoiced', 'Invoiced'),
-                              ('loss', 'Loss')], 'State',
+                              ('loss', 'Loss'),
+                              ('rma', 'RMA'),
+                              ('damaged', 'Damaged')], 'State',
                              readonly=True, required=True)
     sale_move_id = fields.Many2one('stock.move', 'Sale Move', required=False,
                                    readonly=True, ondelete='cascade', index=1)
@@ -78,8 +80,32 @@ class StockDeposit(models.Model):
                                       readonly=True)
     user_id = fields.Many2one('res.users', 'Comercial', required=False,
                               readonly=False, ondelete='cascade', index=1)
+
+    damaged_move_id = fields.Many2one('stock.move', 'Move to damaged location', required=False,
+                                      readonly=True, ondelete='cascade', index=1)
+    damaged_picking_id = fields.Many2one(related='damaged_move_id.picking_id',
+                                         string='Damaged Picking',
+                                         readonly=True)
+
+    claim_move_id = fields.Many2one('stock.move', 'Move to RMA location', required=False,
+                                    readonly=True, ondelete='cascade', index=1)
+    claim_picking_id = fields.Many2one(related='claim_move_id.picking_id',
+                                       string='RMA Picking',
+                                       readonly=True)
     # cost_subtotal = fields.Float('Cost', related='move_id.cost_subtotal',
     #                              store=True, readonly=True) TODO:Migrar.
+
+    claim_id = fields.Many2one('crm.claim')
+
+    @api.multi
+    def set_damaged(self):
+        for d in self:
+            d.state = 'damaged'
+
+    @api.multi
+    def set_rma(self):
+        for d in self:
+            d.state = 'rma'
 
     @api.multi
     def sale(self):
@@ -111,7 +137,9 @@ class StockDeposit(models.Model):
             move._action_confirm()
             picking.action_assign()
             picking.action_done()
-            deposit.move_id.sale_line_id.write({'qty_invoiced': deposit.move_id.sale_line_id.qty_invoiced-deposit.product_uom_qty, 'invoice_status': 'to invoice'})
+            deposit.move_id.sale_line_id.write(
+                {'qty_invoiced': deposit.move_id.sale_line_id.qty_invoiced - deposit.product_uom_qty,
+                 'invoice_status': 'to invoice'})
             deposit.write({'state': 'sale', 'sale_move_id': move.id})
 
     @api.one
@@ -157,14 +185,15 @@ class StockDeposit(models.Model):
         todo_moves._force_assign()
 
     @api.multi
-    def return_deposit(self):
+    def return_deposit(self, claim_id=False):
         picking_type_id = self.env.ref('stock.picking_type_in')
         for deposit in self:
             picking = self.env['stock.picking'].create(
                 {'picking_type_id': picking_type_id.id,
                  'partner_id': deposit.partner_id.id,
                  'location_id': deposit.move_id.location_dest_id.id,
-                 'location_dest_id': picking_type_id.default_location_dest_id.id})
+                 'location_dest_id': picking_type_id.default_location_dest_id.id,
+                 'claim_id': claim_id.id if claim_id else False})
             deposit._create_stock_moves(picking)
             deposit.write({'state': 'returned',
                            'return_picking_id': picking.id})
@@ -172,8 +201,8 @@ class StockDeposit(models.Model):
     @api.model
     def send_advise_email(self):
         deposits = self.search([('return_date', '=', fields.Date.today())])
-        #~ mail_pool = self.env['mail.mail']
-        #~ mail_ids = self.env['mail.mail']
+        # ~ mail_pool = self.env['mail.mail']
+        # ~ mail_ids = self.env['mail.mail']
         template = self.env.ref('stock_deposit.stock_deposit_advise_partner', False)
         for deposit in deposits:
             ctx = dict(self._context)
@@ -188,10 +217,10 @@ class StockDeposit(models.Model):
             composer_id = self.env['mail.compose.message'].with_context(
                 ctx).create({})
             composer_id.with_context(ctx).send_mail()
-            #~ mail_id = template.send_mail(deposit.id)
-            #~ mail_ids += mail_pool.browse(mail_id)
-        #~ if mail_ids:
-            #~ mail_ids.send()
+            # ~ mail_id = template.send_mail(deposit.id)
+            # ~ mail_ids += mail_pool.browse(mail_id)
+        # ~ if mail_ids:
+        # ~ mail_ids.send()
         return True
 
     @api.multi
@@ -232,9 +261,9 @@ class StockDeposit(models.Model):
             deposit.write({'state': 'loss', 'loss_move_id': move.id})
 
     @api.multi
-    def create_invoice(self,journal_id=None):
+    def create_invoice(self, journal_id=None):
         deposit_obj = self.env['stock.deposit']
-        deposits = self.filtered(lambda d:d.state=='sale')
+        deposits = self.filtered(lambda d: d.state == 'sale')
         invoice_ids = []
         if not deposits:
             raise exceptions.Warning(_('No deposit selected'))
@@ -247,7 +276,7 @@ class StockDeposit(models.Model):
             my_context = dict(self.env.context)
             my_context['invoice_deposit'] = True
             inv_vals = sale._prepare_invoice()
-            if self.env.context.get('force_partner_id',False):
+            if self.env.context.get('force_partner_id', False):
                 partner_id = self.env.context.get('force_partner_id')
                 inv_vals['partner_id'] = partner_id.id
                 inv_vals['partner_shipping_id'] = partner_id.id
@@ -255,7 +284,8 @@ class StockDeposit(models.Model):
                     partner_id.property_payment_term_id.id
             else:
                 partner_id = sale.partner_id
-            inv_vals['journal_id'] = journal_id.id if journal_id else partner_id.commercial_partner_id.invoice_type_id.journal_id.id
+            inv_vals[
+                'journal_id'] = journal_id.id if journal_id else partner_id.commercial_partner_id.invoice_type_id.journal_id.id
             if not inv_vals.get("payment_term_id", False):
                 inv_vals['payment_term_id'] = \
                     partner_id.property_payment_term_id.id
@@ -264,18 +294,18 @@ class StockDeposit(models.Model):
                     partner_id.customer_payment_mode_id.id
             if not inv_vals.get("partner_bank_id", False):
                 inv_vals['partner_bank_id'] = partner_id.bank_ids \
-                    and partner_id.bank_ids[0].id or False
+                                              and partner_id.bank_ids[0].id or False
             invoice = self.env['account.invoice'].create(inv_vals)
             for line in sale_lines:
-                deposit = self.filtered(lambda d: d.move_id.sale_line_id.id==line.id)
-                invoice_line = line.with_context(my_context).invoice_line_create(invoice.id, sum(deposit.mapped('product_uom_qty')))
+                deposit = self.filtered(lambda d: d.move_id.sale_line_id.id == line.id)
+                invoice_line = line.with_context(my_context).invoice_line_create(invoice.id,
+                                                                                 sum(deposit.mapped('product_uom_qty')))
                 invoice_line.move_line_ids = [(4, deposit.sale_move_id.id)]
-                line.qty_invoiced=line.product_qty
+                line.qty_invoiced = line.product_qty
             invoice_ids.append(invoice.id)
             sale_deposit.write({'invoice_id': invoice.id})
         deposits.write({'state': 'invoiced'})
         return invoice_ids
-
 
     @api.multi
     def revert_sale(self):
@@ -312,15 +342,16 @@ class StockDeposit(models.Model):
                 invoice_status = 'invoiced'
             else:
                 invoice_status = 'to invoice'
-            deposit.move_id.sale_line_id.write({'qty_invoiced': new_qty_invoiced , 'invoice_status': invoice_status})
+            deposit.move_id.sale_line_id.write({'qty_invoiced': new_qty_invoiced, 'invoice_status': invoice_status})
             deposit.write({'state': 'draft', 'sale_move_id': False})
 
     @api.multi
     def revert_invoice(self):
         for deposit in self:
             if deposit.invoice_id:
-                if deposit.invoice_id.state not in ['draft','cancel']:
-                    raise UserError(_("This deposit has invoices in non-draft status, please check it before reverting it"))
+                if deposit.invoice_id.state not in ['draft', 'cancel']:
+                    raise UserError(
+                        _("This deposit has invoices in non-draft status, please check it before reverting it"))
                 deposit.invoice_id.action_invoice_cancel()
                 deposit.invoice_id = False
                 deposit.revert_sale()
@@ -331,3 +362,34 @@ class StockDeposit(models.Model):
         for record in self:
             res.append((record.id, record.picking_id.name))
         return res
+
+    @api.multi
+    def create_claim(self):
+        for deposit in self:
+            customer_type = self.env.ref('crm_claim_type.crm_claim_type_customer').id
+
+            if deposit.claim_id:
+                raise UserError(_("There is already an RMA created for this deposit"))
+            wh_ids = self.env['stock.warehouse'].search([('company_id', '=',
+                                                          self.env.user.company_id.id)])
+            commercial_partner_id = deposit.partner_id.commercial_partner_id
+            claim_vals = {
+                'user_id': self.env.user.id,
+                'claim_type': customer_type,
+                'partner_id': commercial_partner_id.id,
+                'partner_phone': commercial_partner_id.phone,
+                'email_from': commercial_partner_id.email,
+                'warehouse_id': wh_ids and wh_ids[0].id,
+            }
+            claim_id = self.env['crm.claim'].create(claim_vals)
+            line_vals = {
+                'product_id': deposit.product_id.id,
+                'deposit_id': deposit.id,
+                'claim_origine': 'broken_down',
+                'product_returned_quantity': deposit.product_uom_qty,
+                'claim_id': claim_id.id,
+                'printed': False,
+                'substate_id': self.env.ref('crm_claim_rma_custom.substate_checked').id
+            }
+            claim_line_id = self.env['claim.line'].create(line_vals)
+            deposit.claim_id = claim_id.id
