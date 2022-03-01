@@ -25,7 +25,7 @@ class SaleOrder(models.Model):
                 for picking in pickings:
                     for move in picking.move_lines:
                         move.customization_line = move.sale_line_id.customization_line.filtered(
-                            lambda l: l.state != 'cancel')
+                            lambda l: l.state != 'cancel' and l.product_id==move.product_id)
                     if picking.customization_ids.filtered(lambda p:p.state!='cancel'):
                         picking.write({'not_sync': True})
                         picking.message_post(

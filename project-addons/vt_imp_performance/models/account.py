@@ -34,7 +34,6 @@ class AccountInvoiceLine(models.Model):
 class AccountInvoice(models.Model):
     _inherit = "account.invoice"
 
-    name = fields.Char(index=False)
     date_due = fields.Date(index=False)
 
 

@@ -122,8 +122,8 @@ class SimPackage(models.Model):
         for package in self:
             data = {
                 "origin": c_code.lower(),
-                "odoo_id": package.partner_id.id,
-                "partner_name": package.partner_id.name,
+                "odoo_id": package.partner_id.id or 0,
+                "partner_name": package.partner_id.name or '',
                 "mode": mode,
                 "codes": [sim.code for sim in package.serial_ids],
             }
