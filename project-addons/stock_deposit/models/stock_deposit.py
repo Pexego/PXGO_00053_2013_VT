@@ -98,9 +98,10 @@ class StockDeposit(models.Model):
     claim_id = fields.Many2one('crm.claim')
 
     @api.multi
-    def set_damaged(self):
+    def set_damaged(self, move_id):
         for d in self:
             d.state = 'damaged'
+            d.damaged_move_id = move_id.id
 
     @api.multi
     def set_rma(self):

@@ -106,6 +106,9 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
         if picking_id:
             picking_id.action_assign()
             picking_id.action_done()
+        if prev_picking and prev_picking.move_lines and prev_picking.move_lines[0].claim_line_id.deposit_id:
+            for move in prev_picking.move_lines:
+                move.claim_line_id.deposit_id.set_damaged(move)
         rmps = self.env['crm.claim']
         for l in self.picking_line_ids:
             product = l.move_id.product_id
