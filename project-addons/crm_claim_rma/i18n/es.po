@@ -715,16 +715,6 @@ msgid "More precise description of the problem"
 msgstr "Descripción detallada del problema"
 
 #. module: crm_claim_rma
-#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_in_customer_id
-msgid "Move Line from customer picking in"
-msgstr "Movimiento entrada"
-
-#. module: crm_claim_rma
-#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_line_move_out_customer_id
-msgid "Move Line from customer picking out"
-msgstr "Movimiento salida"
-
-#. module: crm_claim_rma
 #: model:ir.ui.view,arch_db:crm_claim_rma.view_report_crm_claim_cost_filter
 msgid "My Case(s)"
 msgstr "Mi(s) Caso(s)"
@@ -1293,12 +1283,6 @@ msgid "The invoice line related to the returned product"
 msgstr "La línea de factura relacionada con el producto devuelto"
 
 #. module: crm_claim_rma
-#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_move_in_customer_id
-#: model:ir.model.fields,help:crm_claim_rma.field_claim_line_move_out_customer_id
-msgid "The move line related to the returned product"
-msgstr "El movimiento asociado al producto devuelto"
-
-#. module: crm_claim_rma
 #: code:addons/crm_claim_rma/crm_claim_rma.py:330
 #, python-format
 msgid "The product has no supplier configured."
@@ -1570,3 +1554,38 @@ msgstr "Producto borrado"
 #, python-format
 msgid "Check the status of the line"
 msgstr "Comprueba el estado de la línea"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_product_qty
+msgid "Product Qty"
+msgstr "Cantidad"
+
+#. module: crm_claim_rma
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_wizard_line_deposit_id
+msgid "Deposit"
+msgstr "Depósito"
+
+#. module: crm_claim_rma
+#: selection:claim.line,move_in_customer_state:0
+#: selection:claim.line,move_in_supplier_state:0
+#: selection:claim.line,move_out_customer_state:0
+#: selection:claim.line,move_out_supplier_state:0
+#, python-format
+msgid "Partially Sent"
+msgstr "Parcialmente Enviado"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/claim_make_picking.py:84
+msgid "All units are already processed"
+msgstr "Todas las unidades han sido procesadas"
+
+#. module: crm_claim_rma
+#: code:addons/crm_claim_rma/claim_make_picking.py:84
+msgid "It is not possible to create pickings with more units than there are in the RMA"
+msgstr "No es posible crear albaranes con más unidades de las que hay en el RMA"
+

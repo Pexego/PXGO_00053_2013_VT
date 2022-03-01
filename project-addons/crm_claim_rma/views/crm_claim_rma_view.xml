@@ -191,9 +191,7 @@
                         <field name="move_in_supplier_state" attrs="{'invisible': [('supplier_line_id', '=', False)]}"/>
                         <field name="move_out_supplier_state" attrs="{'invisible': [('supplier_line_id', '=', False)]}"/>
                         <!--field name="invoice_line_id"/>
-                        <field name="refund_line_id"/>
-                        <field name="move_in_customer_id"/>
-                        <field name="move_out_customer_id"/-->
+                        <field name="refund_line_id"/-->
                     </group>
                 </group>
                 <group>
