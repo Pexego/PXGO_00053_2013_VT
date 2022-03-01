@@ -629,8 +629,8 @@ msgstr "Depósito"
 #. module: crm_claim_rma_custom
 #: code:addons/crm_claim_rma_custom/models/sale_order.py:67
 #, python-format
-msgid " Add %s  Ub.: %s"
-msgstr " Añadir %s  Ub.: %s"
+msgid " Add %s  Ub.: %s (%s)"
+msgstr " Añadir %s  Ub.: %s (%s)"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_choose
