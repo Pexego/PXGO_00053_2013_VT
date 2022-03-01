@@ -20,7 +20,7 @@ class StockPicking(models.Model):
     @api.multi
     def notify_dropship_done(self):
         # get the server
-        server = self.env['base.synchro.server'].search([('name', '=', 'Visiotech IT')])
+        server = self.env['base.synchro.server'].sudo().search([('name', '=', 'Visiotech IT')])
         # Prepare the connection to the server
         odoo_it = odoorpc.ODOO(server.server_url, port=server.server_port)
         # Login

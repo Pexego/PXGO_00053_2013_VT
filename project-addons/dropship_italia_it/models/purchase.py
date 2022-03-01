@@ -7,8 +7,15 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     def prepare_order_es(self, purchase, odoo_es):
+        if purchase.dest_address_id.dropship or not purchase.dest_address_id.parent_id:
+            name_ship = purchase.dest_address_id.name
+        else:
+            name_ship = purchase.dest_address_id.commercial_partner_id.name + ', ' + purchase.dest_address_id.name
         partner = odoo_es.env['res.partner'].search([('name', '=', 'VISIOTECH Italia'), ('is_company', '=', True)])
-        partner_ship = odoo_es.env['res.partner'].search([('name', '=', purchase.dest_address_id.name),
+        partner_ship = odoo_es.env['res.partner'].search([('name', '=', name_ship),
+                                                          ('zip', '=', purchase.dest_address_id.zip),
+                                                          ('street', '=', purchase.dest_address_id.street),
+                                                          ('city', '=', purchase.dest_address_id.city),
                                                           ('dropship', '=', True),
                                                           ('parent_id', '=', partner[0]),
                                                           ('type', '=', 'delivery'),
@@ -17,7 +24,7 @@ class PurchaseOrder(models.Model):
             state = odoo_es.env['res.country.state'].search([('name', '=', purchase.dest_address_id.state_id.name)])
             country = odoo_es.env['res.country'].search([('name', '=', purchase.dest_address_id.country_id.name)])
             partner_vals = {
-                'name': purchase.dest_address_id.name,
+                'name': name_ship,
                 'dropship': True,
                 'email': purchase.dest_address_id.email,
                 'customer': True,
@@ -68,7 +75,7 @@ class PurchaseOrder(models.Model):
         context = self._context.copy()
         context['bypass_override'] = True
         context.pop('default_state', False)
-        self.with_context(context).button_confirm()
+        self.with_context(context).sudo().button_confirm()
         for pick in self.picking_ids:
             pick.not_sync = True
 

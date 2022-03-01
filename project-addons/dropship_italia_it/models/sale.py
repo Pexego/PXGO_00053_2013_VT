@@ -9,10 +9,17 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         res = super().action_confirm()
-        purchase = self.env['purchase.order'].search([('origin', '=', self.name)])
+        purchase = self.env['purchase.order'].search([('origin', '=', self.name), ('state', '=', 'draft')])
         if purchase:
             if purchase.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship'):
                 purchase.confirm_and_create_order_es()
+        return res
+
+    def action_cancel(self):
+        res = super().action_cancel()
+        purchase = self.env['purchase.order'].search([('origin', '=', self.name), ('state', 'in', ('done', 'purchase'))])
+        if purchase:
+            purchase[0].sudo().button_cancel()
         return res
 
     @api.onchange('all_dropship')

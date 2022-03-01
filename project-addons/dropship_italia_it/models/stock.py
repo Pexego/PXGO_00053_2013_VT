@@ -30,4 +30,7 @@ class StockPicking(models.Model):
         for picking in self:
             if picking.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship'):
                 self.cancel_es_picking()
-        return super(StockPicking, self).action_cancel()
+                res = super(StockPicking, self.sudo()).action_cancel()
+            else:
+                res = super(StockPicking, self).action_cancel()
+        return res
