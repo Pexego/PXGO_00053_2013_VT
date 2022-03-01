@@ -29,16 +29,26 @@ class StockPicking(models.Model):
         purchase_it_id = odoo_it.env['purchase.order'].search([('name', '=', self.sale_id.client_order_ref)])
         purchase_it = odoo_it.env['purchase.order'].browse(purchase_it_id)
 
-        #TODO: hacer comprobaciones de si está parcializado el de ES
-
         for picking in purchase_it.picking_ids:
             if picking.not_sync and picking.state == 'assigned' \
-                    and picking.picking_type_id == odoo_it.env.ref('stock_dropshipping.picking_type_dropship'):
+                    and picking.picking_type_id.id == odoo_it.env.ref('stock_dropshipping.picking_type_dropship').id:
                 # Check if the qty done match with the origin
                 if picking.qty == self.qty:
                     picking.action_done()
                     picking.write({'carrier_tracking_ref': self.carrier_tracking_ref,
                                    'carrier_name': self.carrier_name})
+                elif picking.qty > self.qty:
+                    done_lines = {li.product_id.name: li.quantity_done for li in self.move_lines}
+                    # Divide IT pick
+                    for line in picking.move_lines:
+                        if line.product_id.name in done_lines.keys():
+                            line.write({'qty_ready': done_lines[line.product_id.name],
+                                        'quantity_done': done_lines[line.product_id.name]})
+                            done_lines.pop(line.product_id.name)
+
+                    picking.with_incidences = True
+                    picking.move_type = 'direct'
+                    picking.action_accept_ready_qty()
 
     @api.multi
     def action_cancel(self):
