@@ -351,3 +351,30 @@ msgstr "Tutti i prodotti devono avere una descrizione del problema, si prega di 
 #: model:ir.model.fields,field_description:crm_rma_advance_location.field_res_partner_rmp_partner
 msgid "RMP partner"
 msgstr "Azienda RMP"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_from_picking_line_product_id
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_from_picking_line_product_qty
+msgid "Product Qty"
+msgstr "Qtà prodotto"
+
+#. module: crm_rma_advance_location
+#: model:ir.model.fields,field_description:crm_claim_rma.field_claim_make_picking_from_picking_line_partner_id
+msgid "Partner"
+msgstr "Cliente"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/claim_make_picking_from_picking.py:49
+#: code:addons/crm_rma_advance_location/claim_make_picking_to_refurbish.py:33
+msgid "All units are already processed"
+msgstr "Tutte le unità sono state elaborate"
+
+#. module: crm_rma_advance_location
+#: code:addons/crm_rma_advance_location/claim_make_picking_from_picking.py:130
+#: code:addons/crm_rma_advance_location/claim_make_picking_to_refurbish.py:89
+msgid "You cannot send more than %i of this product %s"
+msgstr "Non puoi inviare più di %i unità di questo prodotto %s"

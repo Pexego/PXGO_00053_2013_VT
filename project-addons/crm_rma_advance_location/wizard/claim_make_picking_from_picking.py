@@ -6,32 +6,48 @@
 # crm_claim_rma for OpenERP                                             #
 # Copyright (C) 2009-2012  Akretion, Emmanuel Samyn,                    #
 #       Benoît GUILLOT <benoit.guillot@akretion.com>                    #
-#This program is free software: you can redistribute it and/or modify   #
-#it under the terms of the GNU General Public License as published by   #
-#the Free Software Foundation, either version 3 of the License, or      #
-#(at your option) any later version.                                    #
+# This program is free software: you can redistribute it and/or modify   #
+# it under the terms of the GNU General Public License as published by   #
+# the Free Software Foundation, either version 3 of the License, or      #
+# (at your option) any later version.                                    #
 #                                                                       #
-#This program is distributed in the hope that it will be useful,        #
-#but WITHOUT ANY WARRANTY; without even the implied warranty of         #
-#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
-#GNU General Public License for more details.                           #
+# This program is distributed in the hope that it will be useful,        #
+# but WITHOUT ANY WARRANTY; without even the implied warranty of         #
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          #
+# GNU General Public License for more details.                           #
 #                                                                       #
-#You should have received a copy of the GNU General Public License      #
-#along with this program.  If not, see <http://www.gnu.org/licenses/>.  #
+# You should have received a copy of the GNU General Public License      #
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.  #
 #########################################################################
 from odoo import fields, models, api, exceptions, _
 from odoo.tools import DEFAULT_SERVER_DATETIME_FORMAT
 import time
 
 
-class ClaimMakePickingFromPicking(models.TransientModel):
+class ClaimMakePickingFromPickingLine(models.TransientModel):
+    _name = "claim_make_picking_from_picking_line"
+    product_id = fields.Many2one('product.product', related='move_id.product_id')
+    product_qty = fields.Float()
+    partner_id = fields.Many2one(related='move_id.partner_id')
+    move_id = fields.Many2one('stock.move')
 
+
+class ClaimMakePickingFromPicking(models.TransientModel):
     _name = "claim_make_picking_from_picking.wizard"
     _description = "Wizard to create pickings from picking lines"
 
     @api.model
     def _get_picking_lines(self):
-        return self.env['stock.picking'].browse(self.env.context['active_id']).move_lines
+        lines = self.env['claim_make_picking_from_picking_line']
+        for move in self.env['stock.picking'].browse(self.env.context['active_id']).move_lines:
+            if move.qty_used < move.product_uom_qty:
+                lines |= self.env['claim_make_picking_from_picking_line'].create({
+                    'move_id': move.id,
+                    'product_qty': move.product_uom_qty - move.qty_used
+                })
+        if not lines:
+            raise exceptions.UserError(_("All units are already processed"))
+        return lines
 
     # Get default source location
     @api.model
@@ -60,8 +76,8 @@ class ClaimMakePickingFromPicking(models.TransientModel):
                                                  'Dest. Location',
                                                  help="Location where the system will stock the returned products.",
                                                  required=True, default=_get_dest_loc)
-    picking_line_ids = fields.Many2many('stock.move',
-                                        'claim_picking_line_picking',
+    picking_line_ids = fields.Many2many('claim_make_picking_from_picking_line',
+                                        'claim_picking_line_claim_picking',
                                         'claim_picking_id',
                                         'picking_line_id',
                                         'Picking lines', default=_get_picking_lines)
@@ -98,48 +114,6 @@ class ClaimMakePickingFromPicking(models.TransientModel):
         wizard = self
         prev_picking = picking_obj.browse(context['active_id'])
         partner_id = prev_picking.partner_id.id
-        # create picking
-        '''picking_id = picking_obj.create(cr, uid, {
-                    'origin': prev_picking.origin,
-                    'picking_type_id': type_ids and type_ids[0],
-                    'move_type': 'one', # direct
-                    'state': 'draft',
-                    'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                    'partner_id': prev_picking.partner_id.id,
-                    'invoice_state': "none",
-                    'company_id': prev_picking.company_id.id,
-                    'location_id': wizard.picking_line_source_location.id,
-                    'location_dest_id': wizard.picking_line_dest_location.id,
-                    'note' : note,
-                    'claim_id': prev_picking.claim_id.id,
-                })
-        # Create picking lines
-        for wizard_picking_line in wizard.picking_line_ids:
-            move_id = move_obj.create(cr, uid, {
-                    'name' : wizard_picking_line.product_id.name_template, # Motif : crm id ? stock_picking_id ?
-                    'priority': '0',
-                    #'create_date':
-                    'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                    'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
-                    'product_id': wizard_picking_line.product_id.id,
-                    'product_qty': wizard_picking_line.product_qty,
-                    'product_uom': wizard_picking_line.product_uom.id,
-                    'partner_id': prev_picking.partner_id.id,
-                    'prodlot_id': wizard_picking_line.prodlot_id.id,
-                    # 'tracking_id':
-                    'picking_id': picking_id,
-                    'state': 'draft',
-                    'price_unit': wizard_picking_line.price_unit,
-                    # 'price_currency_id': claim_id.company_id.currency_id.id, # from invoice ???
-                    'company_id': prev_picking.company_id.id,
-                    'location_id': wizard.picking_line_source_location.id,
-                    'location_dest_id': wizard.picking_line_dest_location.id,
-                    'note': note,
-                })
-            wizard_move = move_obj.write(cr, uid,
-            wizard_picking_line.id,
-            {'move_dest_id': move_id},
-            context=context)'''
         default_picking_data = {
             'move_lines': [],
             'location_id': wizard.picking_line_source_location.id,
@@ -151,6 +125,11 @@ class ClaimMakePickingFromPicking(models.TransientModel):
         }
         picking_id = prev_picking.copy(default_picking_data)
         for wizard_picking_line in wizard.picking_line_ids:
+            wizard_move = wizard_picking_line.move_id
+            if wizard_picking_line.product_qty > (wizard_move.product_uom_qty - wizard_move.qty_used):
+                raise exceptions.UserError(_("You cannot send more than %i of this product %s")
+                                           % (int(wizard_move.product_uom_qty - wizard_move.qty_used),
+                                              wizard_move.product_id.default_code))
             default_move_data = {
                 'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                 'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
@@ -161,17 +140,26 @@ class ClaimMakePickingFromPicking(models.TransientModel):
                 'location_dest_id': wizard.picking_line_dest_location.id,
                 'note': note,
                 'picking_type_id': type_ids and type_ids[0].id,
+                'product_uom_qty': wizard_picking_line.product_qty,
+                'origin_move_id': wizard_move.id
             }
-            move_id = wizard_picking_line.copy(default_move_data)
+            move_id = wizard_picking_line.move_id.copy(default_move_data)
+            wizard_move.qty_used += wizard_picking_line.product_qty
 
         if picking_id:
             picking_id.action_assign()
-            #if we validate the picking, it fails because there is no quantity available
-            #picking_id.button_validate()
+            # if we validate the picking, it fails because there is no quantity available
+            # picking_id.button_validate()
 
+        if prev_picking and prev_picking.move_lines and prev_picking.move_lines[0].claim_line_id.deposit_id:
+            if context.get('picking_type', '') == 'picking_input':
+                deposits = prev_picking.move_lines.mapped('claim_line_id.deposit_id')
+                if deposits:
+                    deposits.return_deposit(claim_id=prev_picking.claim_id)
         if products:
-            message=_("You shouldn't send the following products to stock due to they are 'make to order' %s. "
-                      "Please check the picking (%s) carefully before validate it") %(str(products.mapped('default_code')),picking_id.name)
+            message = _("You shouldn't send the following products to stock due to they are 'make to order' %s. "
+                        "Please check the picking (%s) carefully before validate it") % (
+                      str(products.mapped('default_code')), picking_id.name)
             self.env.user.notify_warning(message=message, sticky=True)
 
         domain = "[('picking_type_code','=','%s'),('partner_id','=',%s)]" % (p_type, partner_id)

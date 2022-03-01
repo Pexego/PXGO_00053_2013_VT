@@ -10,6 +10,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
     def _get_picking_lines(self):
         wiz_lines = []
         for move in self.env['stock.picking'].browse(self.env.context['active_id']).move_lines:
+            if move.qty_used >= move.product_uom_qty:
+                continue
             new_line = {'product_id': move.product_id.id,
                         'move_id': move.id,
                         'product_qty': 1}
@@ -24,8 +26,11 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
             claim_id = self.env['crm.claim'].search(domain)
             if claim_id and len(claim_id) == 1:
                 new_line.update({'claim_id': claim_id.id})
-            for __ in range(int(move.product_uom_qty)):
+            qty = move.product_uom_qty - move.qty_used
+            for __ in range(int(qty)):
                 wiz_lines.append(new_line)
+        if not wiz_lines:
+            raise exceptions.UserError(_("All units are already processed"))
         return wiz_lines
 
     @api.model
@@ -79,6 +84,11 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
         }
         picking_id = prev_picking.copy(default_picking_data)
         for wizard_picking_line in self.picking_line_ids:
+            wizard_move = wizard_picking_line.move_id
+            if wizard_picking_line.product_qty > (wizard_move.product_uom_qty - wizard_move.qty_used):
+                raise exceptions.UserError(_("You cannot send more than %i of this product %s")
+                                           % (int(wizard_move.product_uom_qty - wizard_move.qty_used),
+                                              wizard_move.product_id.default_code))
             default_move_data = {
                 'date': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
                 'date_expected': time.strftime(DEFAULT_SERVER_DATETIME_FORMAT),
@@ -89,7 +99,8 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'location_dest_id': self.picking_line_dest_location.id,
                 'note': note,
                 'picking_type_id': type_ids and type_ids[0].id,
-                'product_uom_qty': 1
+                'product_uom_qty': 1,
+                'origin_move_id': wizard_move.id
             }
             wizard_picking_line.move_id.copy(default_move_data)
         if picking_id:
@@ -130,7 +141,7 @@ class ClaimMakePickingToRefurbishWizard(models.TransientModel):
                 'product_id': product.id,
                 'name': l.problem_description,
                 'claim_origine': 'broken_down',
-                'product_returned_qty': 1,
+                'product_returned_quantity': 1,
                 'claim_id': rmp_id.id,
                 'prodlot_id': l.prodlot_id,
                 'printed': False,
