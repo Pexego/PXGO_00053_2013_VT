@@ -154,7 +154,7 @@ class ProductTemplate(models.Model):
             domain = [('product_id', 'in', product.product_variant_ids.ids),
                       ('state', 'in', ('confirmed', 'assigned', 'partially_available', 'waiting')),
                       ('picking_id', '!=', False),
-                      ('location_id', '=', 12)]
+                      ('location_id', '=', self.env.ref('stock.stock_location_stock').id)]
             product.outgoing_picking_reserved_qty = sum(item['product_uom_qty'] for item in self.env['stock.move'].search_read(domain, ['product_uom_qty']))
 
     @api.multi
