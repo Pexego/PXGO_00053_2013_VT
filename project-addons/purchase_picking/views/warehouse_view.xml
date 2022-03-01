@@ -25,7 +25,7 @@
                 <field name="name"/>
                 <field name="type"/>
                 <field name="eta"/>
-                <field name="n_ref"/>
+                <field name="n_ref" class="numeric_left_rows"/>
                 <field name="ctns"/>
                 <field name="dimensions"/>
                 <field name="status"/>

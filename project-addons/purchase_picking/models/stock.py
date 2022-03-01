@@ -34,7 +34,7 @@ class StockContainer(models.Model):
     etd = fields.Date(string="ETD", help="Date of departure of transport")
     eta = fields.Date(string="ETA", help="Arrival date at port / destination")
     notes_purchases = fields.Char(string="Notes", help="Purchases notes")
-    notes_warehouse = fields.Char(string="Warehouse notes", help="Warehouse notes")
+    notes_warehouse = fields.Text(string="Warehouse notes", help="Warehouse notes")
     conf = fields.Boolean(string="Conf", help="Confirmed")
     telex = fields.Boolean(string="Telex", help="Telex")
     arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", store=True)
@@ -124,7 +124,7 @@ class StockContainer(models.Model):
                 if line.product_id.id not in res:
                     res.append(line.product_id.id)
                     n_ref += 1
-        container.n_ref = n_ref
+            container.n_ref = n_ref
 
     @api.multi
     def _get_responsible(self):
