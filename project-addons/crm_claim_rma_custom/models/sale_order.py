@@ -8,7 +8,8 @@ class SaleOrder(models.Model):
         for order in self:
             stage_sale_attach_id = self.env['crm.claim.stage'].search([('name', '=', 'Adjuntar con pedido')]).id
             pending_rmas = self.env['crm.claim'].search_count(
-                [('partner_id', '=', order.partner_id.id), ('stage_id', '=', stage_sale_attach_id)])
+                [('partner_id', '=', order.partner_id.id), ('stage_id', '=', stage_sale_attach_id),
+                 ('delivery_address_id', '=', order.partner_shipping_id.id)])
             order.rma_pending_count = pending_rmas
 
     rma_pending_count = fields.Integer(compute='_compute_rma_count', default=0)
@@ -47,7 +48,8 @@ class SaleOrderClaimWizard(models.TransientModel):
         order = self.env['sale.order'].browse(self.env.context.get('active_ids'))
         stage_sale_attach_id = self.env['crm.claim.stage'].search([('name', '=', 'Adjuntar con pedido')]).id
         pending_rmas = self.env['crm.claim'].search(
-            [('partner_id', '=', order.partner_id.id), ('stage_id', '=', stage_sale_attach_id)])
+            [('partner_id', '=', order.partner_id.id), ('stage_id', '=', stage_sale_attach_id),
+             ('delivery_address_id', '=', order.partner_shipping_id.id)])
 
         for rma in pending_rmas:
             new_line = {'choose': False,
