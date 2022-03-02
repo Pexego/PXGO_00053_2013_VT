@@ -181,16 +181,17 @@ class ClaimMakePicking(models.TransientModel):
         lines_with_deposits = self.env['claim.make.picking.wizard.line']
         pickings = self.env['stock.picking']
         for line in self.claim_line_ids:
+            claim_line = line.claim_line_id
             if self.env.context.get('picking_type') == 'out':
-                moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+                moves = claim_line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
                     'stock.picking_type_out').code and m.location_dest_id.usage in ['supplier',
                                                                                     'customer'] and m.state != 'cancel')
             else:
-                moves = line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
+                moves = claim_line.move_ids.filtered(lambda m: m.picking_code == self.env.ref(
                     'stock.picking_type_in').code and m.location_dest_id == self.env.ref(
                     'crm_rma_advance_location.stock_location_rma') and m.state != 'cancel')
             product_moves_qty = sum(moves.mapped('product_uom_qty'))
-            if line.claim_line_id.product_returned_quantity - product_moves_qty - line.product_qty < 0:
+            if claim_line.product_returned_quantity - product_moves_qty - line.product_qty < 0:
                 raise exceptions.UserError(_("It is not possible to create pickings with more units than there are in "
                                              "the RMA"))
         if self.env.context.get('picking_type') == 'in':
