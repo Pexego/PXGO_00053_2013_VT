@@ -329,7 +329,6 @@ class CrmClaimRma(models.Model):
                 line.sequence = seq
                 seq += 1
 
-    
     @api.multi
     def check_discounts(self):
         discount_product_list = []
@@ -337,9 +336,8 @@ class CrmClaimRma(models.Model):
         for claim_obj in self:
             for line in claim_obj.claim_inv_line_ids:
                 for i_line_id in line.invoice_id.invoice_line_ids:
-                    if i_line_id.product_id.name == 'Discount line' and not line.invoice_id.number in discount_product_list:
+                    if i_line_id.price_unit < 0 and line.invoice_id.number not in discount_product_list:
                         has_discount = True
-
                         discount_product_list.append(line.invoice_id.number)
         if has_discount:
             return self.env['invoice.discount.wiz'].create({
