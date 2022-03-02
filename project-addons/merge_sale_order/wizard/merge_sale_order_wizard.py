@@ -125,5 +125,6 @@ class MergePurchaseOrder(models.TransientModel):
         so.note = notes
         so.internal_notes = internal_notes
         so.sale_notes = sale_notes
-        so.client_order_ref = client_order_ref[:-4]
+        if client_order_ref:
+            so.client_order_ref = client_order_ref[:-4]
         so.message_post(body=_('This order has been created by merging these orders: %s')%sale_orders_name)
