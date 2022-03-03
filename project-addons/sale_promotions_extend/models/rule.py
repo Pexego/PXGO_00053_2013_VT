@@ -340,8 +340,7 @@ class PromotionsRulesActions(models.Model):
 
     def action_categ_disc_perc_accumulated(self, order):
         for order_line in order.order_line:
-            if eval(self.product_code) == \
-                    order_line.product_id.categ_id.code:
+            if eval(self.product_code) in order_line.product_id.categ_id.display_name:
                 self.apply_perc_discount_accumulated(order_line)
         return {}
 
@@ -380,8 +379,7 @@ class PromotionsRulesActions(models.Model):
 
     def action_categ_disc_perc(self, order):
         for order_line in order.order_line:
-            if eval(self.product_code) == \
-                    order_line.product_id.categ_id.code:
+            if eval(self.product_code) in order_line.product_id.categ_id.display_name:
                 self.apply_perc_discount(order_line)
         return {}
 
