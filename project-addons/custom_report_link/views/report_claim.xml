@@ -217,7 +217,13 @@
                                         <span t-field="line_id.sequence"/>
                                     </td>
                                     <td class="col-xs-2">
-                                        <span t-field="line_id.product_id.name"/>
+                                        <t t-set="product_reference" t-value="claim.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==line_id.product_id)"/>
+                                        <t t-if="len(product_reference)==1">
+                                            <span t-field="product_reference.customer_reference"/>
+                                        </t>
+                                        <t t-if="len(product_reference)!=1">
+                                            <span t-field="line_id.product_id"/>
+                                        </t>
                                     </td>
                                     <td class="col-xs-2">
                                         <span t-field="line_id.equivalent_product_id"/>
