@@ -78,7 +78,7 @@ class CrmPhonecall(models.Model):
     call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type', required=True)
     partner_country = fields.Many2one('res.country', related='partner_id.country_id', string='Country', readonly=True)
     partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
-    brand_id = fields.Many2one('product.brand', related="product_id.product_brand_id", string='Brand')
+    brand_id = fields.Many2one('product.brand', string='Brand')
     product_id = fields.Many2one('product.product', 'Product')
     category_id = fields.Many2one('product.category', related='product_id.categ_id', string='Product type')
     subject = fields.Char('Call Subject')
@@ -118,10 +118,10 @@ class CrmPhonecall(models.Model):
     def send_email(self):
         self.ensure_one()
         mail_pool = self.env['mail.mail']
-        context = self._context.copy()
+        context = dict(self._context)
         context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
-        template_id = self.env.ref('crm_claim_rma_custom.email_template_call_sat')
+        template_id = self.env.ref('crm_claim_phonecall.email_template_call_sat')
 
         if template_id:
             mail_id = template_id.with_context(context).send_mail(self.id)
@@ -152,14 +152,13 @@ class CrmPhonecall(models.Model):
             self.name = self.partner_id.ref + ' - ' + format_start_date[0] + \
                 ' - ' + format_start_date[1]
 
-        duration = datetime.now() - datetime.strptime(self.start_date,
-                                                      '%Y-%m-%d %H:%M:%S')
-
+        duration = datetime.now()- datetime.strptime(self.start_date,'%Y-%m-%d %H:%M:%S')
         datas = {
             'model': 'crm.phonecall',
             'create_date': self.start_date,
             'date': self.start_date,
             'partner_id': self.partner_id.id,
+            'delegation_id': self.delegation_id.id,
             'partner_ref': self.partner_id.ref,
             'user_id': self.user_id.id,
             'name': self.name or False,
@@ -169,7 +168,10 @@ class CrmPhonecall(models.Model):
             'opportunity_id': False,
             'duration': (duration.seconds / float(60)),
             'state': 'done',
-            'brand_id': self.brand_id.id
+            'product_id': self.product_id.id,
+            'brand_id': self.brand_id.id,
+            'category_id': self.category_id.id,
+            'call_state': self.call_state
         }
         self.write(datas)
 
@@ -178,6 +180,13 @@ class CrmPhonecall(models.Model):
         self.end_call()
         self.send_email()
 #       if self.call_type_sat == 'counsel' or self.call_type_sat == 'check_working':
+
+
+    @api.multi
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        if self.product_id:
+            self.brand_id = self.product_id.product_brand_id
 
 
 class ResPartner(models.Model):
