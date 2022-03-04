@@ -28,6 +28,7 @@ class StockPicking(models.Model):
 
         purchase_it_id = odoo_it.env['purchase.order'].search([('name', '=', self.sale_id.client_order_ref)])
         purchase_it = odoo_it.env['purchase.order'].browse(purchase_it_id)
+        picking_it_ids = purchase_it.picking_ids.mapped('id')
 
         for picking in purchase_it.picking_ids:
             if picking.not_sync and picking.state == 'assigned' \
@@ -49,6 +50,14 @@ class StockPicking(models.Model):
                     picking.with_incidences = True
                     picking.move_type = 'direct'
                     picking.action_accept_ready_qty()
+                    # Browse again the purchase to get the brand new picking just created
+                    new_purchase_it = odoo_it.env['purchase.order'].browse(purchase_it_id)
+                    new_picking = self.env['stock.picking'].search([('backorder_id', '=', self.id)])
+                    for new_picking_it in new_purchase_it.picking_ids:
+                        if new_picking_it.id not in picking_it_ids:
+                            new_picking_it.picking_es_id = new_picking.id
+                            new_picking_it.picking_es_str = new_picking.name
+                            break
 
     @api.multi
     def action_cancel(self):
