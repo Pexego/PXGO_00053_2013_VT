@@ -36,9 +36,9 @@ msgid "Expenses"
 msgstr "Gastos"
 
 #. module: captio_connector
-#: model:ir.actions.server,name:captio_connector.ir_cron_import_captio_expoenses_ir_actions_server
-#: model:ir.cron,cron_name:captio_connector.ir_cron_import_captio_expoenses
-#: model:ir.cron,name:captio_connector.ir_cron_import_captio_expoenses
+#: model:ir.actions.server,name:captio_connector.ir_cron_import_captio_expenses_ir_actions_server
+#: model:ir.cron,cron_name:captio_connector.ir_cron_import_captio_expenses
+#: model:ir.cron,name:captio_connector.ir_cron_import_captio_expenses
 msgid "Import Captio Expenses"
 msgstr "Importar gastos desde Captio"
 
@@ -52,4 +52,10 @@ msgstr "Cuenta Analítica"
 msgid "Expenses Journal"
 msgstr "Diario para gastos"
 
+#. module: captio_connector
+#: model:ir.actions.server,name:captio_connector.ir_cron_import_captio_expenses_invoice_ir_actions_server
+#: model:ir.cron,cron_name:captio_connector.ir_cron_import_captio_expenses_invoice
+#: model:ir.cron,name:captio_connector.ir_cron_import_captio_expenses_invoice
+msgid "Import Captio Expenses with Invoice"
+msgstr "Importar gastos desde Captio con facturas"
 

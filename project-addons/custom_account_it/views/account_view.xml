@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_riba_da_emettere_tree" model="ir.ui.view">
+        <field name="name">Issue Ri.Ba.</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="l10n_it_ricevute_bancarie.view_riba_da_emettere_tree"/>
+        <field name="arch" type="xml">
+            <field name="iban" position="after">
+                <field name="bank_id"/>
+            </field>
+        </field>
+    </record>
+    <record id="riba_filter" model="ir.ui.view">
+        <field name="name">Ri.Ba. filter</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="l10n_it_ricevute_bancarie.riba_filter"/>
+        <field name="arch" type="xml">
+            <field name="invoice_id" position="after">
+                <field name="bank_id"/>
+            </field>
+        </field>
+    </record>
+</odoo>
