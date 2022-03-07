@@ -75,6 +75,7 @@ class MergePurchaseOrder(models.TransientModel):
         }
 
     def merge_orders(self, sale_orders, so, merge_mode=False):
+        import ipdb
         notes=""
         internal_notes=""
         sale_notes=""
@@ -90,14 +91,12 @@ class MergePurchaseOrder(models.TransientModel):
                 existing_so_line = False
                 if so.order_line:
                     for so_line in so.order_line:
-                        if line.product_id == so_line.product_id and \
-                                line.price_unit == so_line.price_unit:
+                        if line.product_id == so_line.product_id and line.price_unit == so_line.price_unit:
                             existing_so_line = so_line
                             break
                 if existing_so_line:
                     if existing_so_line.product_id.categ_id.with_context(lang='es_ES').name != 'Portes':
-                        existing_so_line.product_uom_qty += \
-                            line.product_uom_qty
+                        existing_so_line.product_uom_qty += line.product_uom_qty
                         taxes = existing_so_line.tax_id + line.tax_id
                         existing_so_line.tax_id = [(6, 0, taxes.ids)]
                         analytic_tags = existing_so_line.analytic_tag_ids + line.analytic_tag_ids
