@@ -49,7 +49,7 @@ class RappelCurrentInfo(models.Model):
 
                         if send and rappel.curr_qty:
                             values.setdefault(partner.id, []).append({
-                                'concepto': rappel.rappel_id.name,
+                                'concepto': rappel.rappel_id.with_context({'lang': partner.lang}).description,
                                 'date_start': date_start.strftime('%d/%m/%Y'),
                                 'date_end': date_end.strftime('%d/%m/%Y'),
                                 'advice_timing': rappel_timing.advice_timing,

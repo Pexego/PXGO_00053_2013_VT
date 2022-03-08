@@ -27,7 +27,7 @@
     'website': 'www.comunitea.com',
     "depends": ['sale', 'purchase', 'account', 'stock_custom',
                 'stock_reserve_sale', 'sale_proforma_report',
-                'stock_picking_report_valued', 'crm_claim', 'product'],
+                'stock_picking_report_valued', 'crm_claim', 'product', 'product_customer_reference'],
     "data": [
         "data/report_paperformat.xml",
         "data/parameters.xml",
