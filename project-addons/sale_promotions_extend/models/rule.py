@@ -716,7 +716,9 @@ class PromotionsRules(models.Model):
 
     @api.model
     def apply_special_promotions(self, order):
-        active_promos = self.search([('special_promo', '=', True)])
+        domain = self._get_promotions_domain(order)
+        domain += [('special_promo', '=', True)]
+        active_promos = self.search(domain)
 
         for promotion_rule in active_promos:
             result = promotion_rule.evaluate(order)
