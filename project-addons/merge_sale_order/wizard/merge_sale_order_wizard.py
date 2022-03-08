@@ -75,7 +75,6 @@ class MergePurchaseOrder(models.TransientModel):
         }
 
     def merge_orders(self, sale_orders, so, merge_mode=False):
-        import ipdb
         notes=""
         internal_notes=""
         sale_notes=""
