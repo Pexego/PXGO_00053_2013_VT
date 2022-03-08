@@ -74,7 +74,7 @@ class StockPicking(models.Model):
                     mail_pool = self.env['mail.mail']
                     values={
                         'subject': _('Manufacturing order {} completed').format(mrp_product.name),
-                        'email_from': "Odoo-team",
+                        'email_from': "odoo_team@visiotechsecurity.com",
                         'email_to': mrp_product.user_id.login,
                         'reply_to': "",
                         'body_html': _('Your {} manufacturing order has been completed').format(mrp_product.name)
