@@ -86,9 +86,9 @@ class MergePurchaseOrder(models.TransientModel):
             if not merge_mode:
                 client_order_ref += order.client_order_ref + " + \n" if order.client_order_ref else ""
             else:
-                if  order == so:
+                if order == so:
                     continue
-                else:
+                elif so.client_order_ref:
                     so.client_order_ref += " + \n" + order.client_order_ref if order.client_order_ref else ""
             for line in order.order_line:
                 existing_so_line = False
