@@ -318,3 +318,15 @@ msgstr "Albarán de salida"
 #: field:mrp.production,picking_in:0
 msgid "In picking"
 msgstr "Albarán de entrada"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/model/stock_reservation.py:76
+#, python-format
+msgid "Manufacturing order {} completed"
+msgstr "Orden de producción {} completada"
+
+#. module: sale_product_customize
+#: code:addons/sale_product_customize/model/stock_reservation.py:78
+#, python-format
+msgid "Your {} manufacturing order has been completed"
+msgstr "Tu orden de producción {} ha sido completada"
