@@ -559,3 +559,13 @@ msgstr "Aggiungere RMA"
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_att_order_id
 msgid "Attach Sale"
 msgstr "Ordine Aggiunto"
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_sequence
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_sequence
+msgid "Sequence"
+msgstr "Sequenza"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_price_subtotal
+msgid "Price Subtotal"
+msgstr "Prezzo Subtotale"
