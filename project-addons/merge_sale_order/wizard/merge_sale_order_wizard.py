@@ -79,13 +79,17 @@ class MergePurchaseOrder(models.TransientModel):
         internal_notes=""
         sale_notes=""
         client_order_ref = ""
-        for order in sale_orders.sorted(key=id):
+        for order in sale_orders.sorted(key=lambda r: r.id):
             notes += order.note + "\n" if order.note else ""
             internal_notes += order.internal_notes + "\n" if order.internal_notes else ""
             sale_notes += order.sale_notes + "\n" if order.sale_notes else ""
-            client_order_ref += order.client_order_ref + " + \n" if order.client_order_ref else ""
-            if merge_mode and order == so:
-                continue
+            if not merge_mode:
+                client_order_ref += order.client_order_ref + " + \n" if order.client_order_ref else ""
+            else:
+                if  order == so:
+                    continue
+                else:
+                    so.client_order_ref += " + \n" + order.client_order_ref if order.client_order_ref else ""
             for line in order.order_line:
                 existing_so_line = False
                 if so.order_line:
@@ -123,6 +127,6 @@ class MergePurchaseOrder(models.TransientModel):
         so.note = notes
         so.internal_notes = internal_notes
         so.sale_notes = sale_notes
-        if client_order_ref:
+        if client_order_ref and not merge_mode:
             so.client_order_ref = client_order_ref[:-4]
         so.message_post(body=_('This order has been created by merging these orders: %s')%sale_orders_name)
