@@ -130,7 +130,13 @@
                                 </tr>
                                 <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
                                     <t t-if="l1.sale_order_id.name == p.name">
-                                            <td><span t-field="l1.product_id"/></td>
+                                            <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
+                                            <t t-if="len(product_reference)==1">
+                                                <td><span t-field="product_reference.customer_reference"/></td>
+                                            </t>
+                                            <t t-if="len(product_reference)!=1">
+                                                <td><span t-field="l1.product_id"/></td>
+                                            </t>
                                             <t t-if="print_hs_code">
                                                 <td class="text-center"><span t-field="l1.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
                                             </t>
@@ -189,7 +195,13 @@
                             <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
                                     <!--t t-if="l1.product_id.type == 'service'"-->
                                         <t t-if="not l1.origin">
-                                            <td><span t-field="l1.product_id"/></td>
+                                            <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
+                                            <t t-if="len(product_reference)==1">
+                                                <td><span t-field="product_reference.customer_reference"/></td>
+                                            </t>
+                                            <t t-if="len(product_reference)!=1">
+                                                <td><span t-field="l1.product_id"/></td>
+                                            </t>
                                             <t t-if="print_hs_code">
                                                 <td class="text-center"><span t-field="l1.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
                                             </t>
@@ -226,7 +238,13 @@
                         </t>
                         <t t-if="not o.sale_order_ids">
                            <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
-                                    <td><span t-field="l1.product_id"/></td>
+                                    <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
+                                    <t t-if="len(product_reference)==1">
+                                        <td><span t-field="product_reference.customer_reference"/></td>
+                                    </t>
+                                    <t t-if="len(product_reference)!=1">
+                                        <td><span t-field="l1.product_id"/></td>
+                                    </t>
                                     <t t-if="print_hs_code">
                                         <td class="text-center"><span t-field="l1.product_id.product_tmpl_id.hs_code_id.local_code"/></td>
                                     </t>
