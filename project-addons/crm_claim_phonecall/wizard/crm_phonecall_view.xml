@@ -98,9 +98,10 @@
         <field name="arch" type="xml">
             <form string="New Call">
                 <group>
+                    <field name="is_bigaccount" invisible="1"/>
                     <field name="start_date"/>
                     <field name="partner_id" string="Partner"/>
-                    <field name="delegation_id" string="Delegation" domain="[('id', 'child_of', [partner_id])]"/>
+                    <field name="delegation_id" string="Delegation" domain="[('id', 'child_of', [partner_id])]" attrs="{'invisible':[('is_bigaccount', '=', False)]}"/>
                     <field name="contact_id" string="Contact"/>
                     <field name="partner_salesperson"/>
                     <field name="partner_country"/>
