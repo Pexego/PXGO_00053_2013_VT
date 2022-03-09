@@ -74,6 +74,7 @@
             </field>
             <field name="model_ref_id" position="after">
                 <field name="client_ref" />
+                <field name="att_order_id"/>
             </field>
             <field name="email_from" position="after">
                 <field name="comercial"/>

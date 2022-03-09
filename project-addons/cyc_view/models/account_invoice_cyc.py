@@ -72,7 +72,7 @@ union
     left join account_payment_term apt on apt.id = ai.payment_term_id
     where ai.company_id = 1
         and ai.amount_insurance is null
-        and (ai.payment_term_id is null or apt.name not in ('Prepaid','Immediate payment'))
+        and apt.name not in ('Prepaid','Immediate payment')
         and ai.type = 'out_invoice'
         and ai.state in ('open', 'paid')
     group by p.country_id, extract(year from ai.date_invoice)::int,
