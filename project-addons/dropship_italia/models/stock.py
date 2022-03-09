@@ -38,6 +38,7 @@ class StockPicking(models.Model):
                     picking.action_done()
                     picking.write({'carrier_tracking_ref': self.carrier_tracking_ref,
                                    'carrier_name': self.carrier_name})
+                    picking.create_invoice()
                 elif picking.qty > self.qty:
                     done_lines = {li.product_id.name: li.quantity_done for li in self.move_lines}
                     # Divide IT pick
@@ -50,6 +51,9 @@ class StockPicking(models.Model):
                     picking.with_incidences = True
                     picking.move_type = 'direct'
                     picking.action_accept_ready_qty()
+                    picking.write({'carrier_tracking_ref': self.carrier_tracking_ref,
+                                   'carrier_name': self.carrier_name})
+                    picking.create_invoice()
                     # Browse again the purchase to get the brand new picking just created
                     new_purchase_it = odoo_it.env['purchase.order'].browse(purchase_it_id)
                     new_picking = self.env['stock.picking'].search([('backorder_id', '=', self.id)])
