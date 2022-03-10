@@ -75,21 +75,22 @@ class MergePurchaseOrder(models.TransientModel):
         }
 
     def merge_orders(self, sale_orders, so, merge_mode=False):
+        import ipdb
         notes=""
         internal_notes=""
         sale_notes=""
-        client_order_ref = ""
+        if merge_mode and so.client_order_ref:
+            client_order_ref = so.client_order_ref + " + \n"
+        else:
+            client_order_ref = ""
         for order in sale_orders.sorted(key=lambda r: r.id):
             notes += order.note + "\n" if order.note else ""
             internal_notes += order.internal_notes + "\n" if order.internal_notes else ""
             sale_notes += order.sale_notes + "\n" if order.sale_notes else ""
-            if not merge_mode:
-                client_order_ref += order.client_order_ref + " + \n" if order.client_order_ref else ""
-            else:
-                if order == so:
-                    continue
-                elif so.client_order_ref:
-                    so.client_order_ref += " + \n" + order.client_order_ref if order.client_order_ref else ""
+            if order == so:
+                continue
+            client_order_ref += order.client_order_ref + " + \n" if order.client_order_ref else ""
+            order.client_order_ref = order.client_order_ref + "(canceled)" if order.client_order_ref else False
             for line in order.order_line:
                 existing_so_line = False
                 if so.order_line:
@@ -127,6 +128,6 @@ class MergePurchaseOrder(models.TransientModel):
         so.note = notes
         so.internal_notes = internal_notes
         so.sale_notes = sale_notes
-        if client_order_ref and not merge_mode:
+        if client_order_ref[-4:] == " + \n":
             so.client_order_ref = client_order_ref[:-4]
         so.message_post(body=_('This order has been created by merging these orders: %s')%sale_orders_name)
