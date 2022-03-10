@@ -381,6 +381,8 @@ class StockDeposit(models.Model):
                 'partner_phone': commercial_partner_id.phone,
                 'email_from': commercial_partner_id.email,
                 'warehouse_id': wh_ids and wh_ids[0].id,
+                'comercial': deposit.user_id.id,
+                'country': commercial_partner_id.country_id.id,
             }
             claim_id = self.env['crm.claim'].create(claim_vals)
             line_vals = {

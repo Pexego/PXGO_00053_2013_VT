@@ -436,3 +436,39 @@ msgstr "Revertir Facturado"
 #, python-format
 msgid "This deposit has invoices in non-draft status, please check it before reverting it"
 msgstr "Este depósito tiene facturas en estado distinto a borrador, por favor, compruebalo antes de revertirlo"
+
+#. module: stock_deposit
+#: model:ir.ui.view,arch_db:stock_deposit.view_stock_deposit_form
+msgid "Create RMA"
+msgstr "Crear RMA"
+
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_damaged_move_id
+msgid "Move to damaged location"
+msgstr "Mov. pérdida"
+
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_claim_move_id
+msgid "Move to RMA location"
+msgstr "Movimiento a RMA"
+
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_claim_picking_id
+msgid "RMA Picking Claim"
+msgstr "Albarán de RMA"
+
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_damaged_picking_id
+msgid "Damaged Picking"
+msgstr "Albarán de Averiados"
+
+#. module: stock_deposit
+#: code:addons/stock_deposit/models/stock_deposit.py:373
+#, python-format
+msgid "There is already an RMA created for this deposit"
+msgstr "Ya hay un RMA creado para este depósito"
+
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_deposit_claim_id
+msgid "Claim"
+msgstr "RMA"
