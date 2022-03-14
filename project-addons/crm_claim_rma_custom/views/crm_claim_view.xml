@@ -97,7 +97,7 @@
                           <field name="qty"/>
                           <field name="price_unit"/>
                           <field name="discount"/>
-                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"/>
+                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" required="1"/>
                           <field name="price_subtotal"/>
                           <field name="invoiced"/>
                         </tree>
