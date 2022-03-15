@@ -1136,3 +1136,8 @@ msgid "R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, 
 "                        B80645518 Listed in the RII-PYA with registration number 2295 and in the RII-AEE with registration number 7216."
 msgstr "R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, Ins 2º .- CIF:\n"
 "                        B80645518 Iscritta al Registro Pile e Accumulatori con numero di registrazione 2295 e al Registro Apparecchiature Elettriche e Elettroniche con numero di registrazione 7216."
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "OFFER VALID FOR 30 DAYS"
+msgstr "OFFERTA VALIDA 30 GIORNI"

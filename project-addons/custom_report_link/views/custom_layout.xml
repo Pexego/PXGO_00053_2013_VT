@@ -333,6 +333,8 @@ BIC: CAIXESBBXXX
             <div class="text-center" style="font-size: 10px; font-weight: bold; color:#6D6E70;">
                 <label>
                     <br/>
+                    <br/>
+                    <p>OFFER VALID FOR 30 DAYS</p>
                     <t t-raw="company.name"></t>
                     <span t-field="company.report_footer"/>
                 </label>
