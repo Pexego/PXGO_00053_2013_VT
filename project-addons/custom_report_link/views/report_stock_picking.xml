@@ -237,7 +237,7 @@
 
     <report
         id="report_picking_dropship_custom_action"
-        string="Albarán"
+        string="Albarán Dropship"
         model="stock.picking"
         report_type="qweb-pdf"
         file="custom_report_link.report_picking_dropship_custom"
