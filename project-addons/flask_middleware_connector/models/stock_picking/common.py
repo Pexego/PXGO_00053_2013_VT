@@ -144,7 +144,7 @@ class StockMoveListener(Component):
                            "from queue_job where state = 'pending' and job_function_id = 486 and model_name = 'product.product')" % record.product_id.id)
         res = record._cr.fetchall()
         if record.product_id.show_stock_outside and not res:
-            if record.sale_ok:
+            if record.product_id.sale_ok:
                 record.product_id.with_delay(priority=12, eta=30).update_product()
         packs = self.env['mrp.bom.line'].search([('product_id', '=', record.product_id.id)]).mapped('bom_id')
         for pack in packs:
