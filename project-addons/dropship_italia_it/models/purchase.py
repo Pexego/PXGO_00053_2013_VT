@@ -22,7 +22,7 @@ class PurchaseOrder(models.Model):
                                                           ('active', '=', False)])
         if not partner_ship:
             state = odoo_es.env['res.country.state'].search([('name', '=', purchase.dest_address_id.state_id.name)])
-            country = odoo_es.env['res.country'].search([('name', '=', purchase.dest_address_id.country_id.name)])
+            country = odoo_es.env['res.country'].search([('code', '=', purchase.dest_address_id.country_id.code)])
             partner_vals = {
                 'name': name_ship,
                 'dropship': True,
