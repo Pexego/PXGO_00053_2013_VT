@@ -115,6 +115,11 @@ class RibaList(models.Model):
 
     state = fields.Selection(selection_add=[("gen_file", "Generated File")])
 
+    @api.multi
+    def back_to_draft(self):
+        for distinta in self:
+            distinta.state = 'draft'
+
 
 class RibaListLine(models.Model):
 
