@@ -141,11 +141,6 @@ class PurchaseOrder(models.Model):
                 if line.select_delete:
                     line.unlink()
 
-    def create(self, vals):
-        context2 = dict(self._context)
-        context2.pop('default_state', False)
-        return super(PurchaseOrder, self.with_context(context2)).create(vals)
-
 
 class PurchaseOrderLine(models.Model):
 
@@ -179,6 +174,8 @@ class PurchaseOrderLine(models.Model):
         return res
 
     def create(self, vals):
-        context2 = dict(self._context)
-        context2.pop('default_state', False)
-        return super(PurchaseOrderLine, self.with_context(context2)).create(vals)
+        context = self._context
+        if self._context.get('default_state', '') == 'reserve':
+            context = dict(self._context)
+            context.pop('default_state', False)
+        return super(PurchaseOrderLine, self.with_context(context)).create(vals)
