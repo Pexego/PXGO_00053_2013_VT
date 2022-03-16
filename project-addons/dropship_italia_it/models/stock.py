@@ -27,6 +27,7 @@ class StockPicking(models.Model):
 
     @api.multi
     def action_cancel(self):
+        res = True
         for picking in self:
             if picking.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship'):
                 self.cancel_es_picking()
