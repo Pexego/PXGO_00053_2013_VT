@@ -172,3 +172,10 @@ class PurchaseOrderLine(models.Model):
                             not move.container_id:
                         move.date_expected = vals['date_planned']
         return res
+
+    def create(self, vals):
+        context = self._context
+        if self._context.get('default_state', '') == 'reserve':
+            context = dict(self._context)
+            context.pop('default_state', False)
+        return super(PurchaseOrderLine, self.with_context(context)).create(vals)
