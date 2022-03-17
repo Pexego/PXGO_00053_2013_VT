@@ -17,11 +17,13 @@
         <field name="arch" type="xml">
             <form string="Battery types">
                 <sheet>
-                    <label for="name"/>
-                    <field name="name"/>
-                    <div class="text-muted">
-                        <field name="notes" placeholder="Notes"/>
-                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="notes" placeholder="Notes"/>
+                            <field name="forbidden_ship_ids" widget="many2many_tags"/>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>
