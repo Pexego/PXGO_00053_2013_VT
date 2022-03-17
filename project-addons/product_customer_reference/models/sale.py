@@ -18,7 +18,7 @@ class SaleOrder(models.Model):
             for line in sale.order_line:
                 if line.product_id.type == 'product':
                     # get file and append to the big file
-                    filename_url = "%s%s_%s.pdf" % (tech_file_url, line.product_id.default_code, self.partner_id.lang.split('_')[1])
+                    filename_url = "%s%s_%s.pdf" % (tech_file_url, line.product_id.default_code.replace("/", "_"), self.partner_id.lang.split('_')[1])
                     try:
                         req = requests.get(filename_url)
                         if req.status_code == 200:
