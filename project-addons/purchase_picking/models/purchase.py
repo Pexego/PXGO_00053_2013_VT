@@ -141,6 +141,14 @@ class PurchaseOrder(models.Model):
                 if line.select_delete:
                     line.unlink()
 
+    @api.model
+    def create(self, vals):
+        context = self._context
+        if self._context.get('default_state', '') == 'reserve':
+            context = dict(self._context)
+            context.pop('default_state', False)
+        return super(PurchaseOrder, self.with_context(context)).create(vals)
+
 
 class PurchaseOrderLine(models.Model):
 
@@ -173,6 +181,7 @@ class PurchaseOrderLine(models.Model):
                         move.date_expected = vals['date_planned']
         return res
 
+    @api.model
     def create(self, vals):
         context = self._context
         if self._context.get('default_state', '') == 'reserve':
