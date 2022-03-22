@@ -18,7 +18,6 @@
 #
 ##############################################################################
 
-from email.policy import default
 from xml.dom.minidom import ReadOnlySequentialNamedNodeMap
 from odoo import models, api, fields, exceptions, _
 from datetime import datetime
