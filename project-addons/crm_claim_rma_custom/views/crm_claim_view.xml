@@ -207,13 +207,8 @@
             <field name="claim_origine" position="after">
                 <!-- <field name="invoice_id"/> -->
                 <field name="partner_id" invisible="1"/>
-<<<<<<< Updated upstream
-                <field name="invoice_id" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
-                <field name="deposit_id" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft'),('product_id','=',product_id)]"/>
-=======
                 <field name="invoice_id" options="{'no_create': True}" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
                 <field name="deposit_id" options="{'no_create': True}" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '=', 'draft'),('product_id','=',product_id)]"/>
->>>>>>> Stashed changes
             </field>
         </field>
     </record>
