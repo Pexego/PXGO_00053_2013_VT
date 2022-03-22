@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo noupdate="1">
+    <record id="web_product_tech_file" model="ir.config_parameter">
+        <field name="key">web.product.tech.file</field>
+        <field name="value"></field>
+    </record>
+</odoo>
