@@ -73,3 +73,8 @@ msgstr "['|', ('active', '=', True), '&', ('active', '=', False), ('prospective'
 #: model:ir.model.fields,field_description:prospective_customer.field_crm_lead_contact_email
 msgid "Contact Email"
 msgstr "Email Contatto"
+
+#. module: prospective_customer
+#: model:ir.ui.view,arch_db:prospective_customer.sale_order_add_prospective_form
+msgid "Leads"
+msgstr "Opportunità"
