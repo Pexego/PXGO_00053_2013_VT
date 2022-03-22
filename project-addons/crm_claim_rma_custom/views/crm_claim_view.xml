@@ -80,6 +80,9 @@
                 <field name="country" invisible="True"/>
                 <field name="category_id" widget="many2many_tags"/>
             </field>
+            <field name="activity_summary" position="after">
+                <field name="att_order_id"/>
+            </field>
             <field name="claim_type" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
@@ -94,7 +97,7 @@
                           <field name="qty"/>
                           <field name="price_unit"/>
                           <field name="discount"/>
-                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"/>
+                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" required="1"/>
                           <field name="price_subtotal"/>
                           <field name="invoiced"/>
                         </tree>

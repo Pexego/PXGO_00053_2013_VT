@@ -19,6 +19,7 @@
 ##############################################################################
 
 from openerp import models, fields, api
+from odoo import _
 
 
 class StockReserve(models.Model):
@@ -70,6 +71,18 @@ class StockPicking(models.Model):
                     pick_in.action_assign()
                 elif mrp_product.picking_in.id == picking.id:
                     mrp_product.button_mark_done()
+                    mail_pool = self.env['mail.mail']
+                    values={
+                        'subject': _('Manufacturing order {} completed').format(mrp_product.name),
+                        'email_from': "odoo_team@visiotechsecurity.com",
+                        'email_to': mrp_product.user_id.login,
+                        'reply_to': "",
+                        'body_html': _('Your {} manufacturing order has been completed').format(mrp_product.name)
+                    }
+                    msg_id = mail_pool.create(values)
+
+                    if msg_id:
+                        mail_pool.send([msg_id])
         return res
 
 

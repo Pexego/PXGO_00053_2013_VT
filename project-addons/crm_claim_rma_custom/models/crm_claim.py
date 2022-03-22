@@ -66,10 +66,12 @@ class CrmClaimRma(models.Model):
     client_ref = fields.Char('Client Ref')
     warehouse_date = fields.Date('Final Received Date')
     deposit_id = fields.Many2many('stock.picking', string='Deposit')
+
+    att_order_id = fields.Many2one('sale.order', string='Attach Sale')
+
     amazon_rma = fields.Char("ID Amazon")
     partner_name = fields.Char(related='partner_id.name')
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
-    
 
     @api.multi
     def write(self, vals):
