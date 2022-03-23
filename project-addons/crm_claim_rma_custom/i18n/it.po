@@ -97,6 +97,8 @@ msgstr "Impossibile eliminare una linea già fatturata"
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_claim_id
 #: model:ir.model,name:crm_claim_rma_custom.model_crm_claim
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_claim_id
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_claim_id_ro
 msgid "Claim"
 msgstr "Reclamazione"
 
@@ -257,6 +259,7 @@ msgstr "Gestione Odoo"
 
 #. module: crm_claim_rma_custom
 #: model:ir.model,name:crm_claim_rma_custom.model_res_partner
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_partner_id
 msgid "Partner"
 msgstr "Azienda"
 
@@ -523,6 +526,39 @@ msgstr "Visiotech - RMA ricevuto"
 msgid "Deposit"
 msgstr "Depositi"
 
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/sale_order.py:67
+#, python-format
+msgid "\n Add %s  Ub.: %s"
+msgstr "\n Aggiungere %s  Ub.: %s"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_choose
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
+msgid "Add"
+msgstr "Aggiungere"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_partner_shipping_id
+msgid "Shipping"
+msgstr "Dir. Spedizione"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.action_show_pending_claims
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
+msgid "Pending RMA"
+msgstr "RMAs pendenti"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
+msgid "Attach RMA"
+msgstr "Aggiungere RMA"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_att_order_id
+msgid "Attach Sale"
+msgstr "Ordine Aggiunto"
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_sequence
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_sequence

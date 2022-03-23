@@ -87,6 +87,7 @@ class CrmPhonecall(models.Model):
                                  string="Summary",
                                  required=False,
                                  ondelete="restrict")
+    is_bigaccount = fields.Boolean(compute='_check_delegation', default=False)
 
     def utc_to_local(self, utc_dt):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
@@ -181,6 +182,14 @@ class CrmPhonecall(models.Model):
         self.send_email()
 #       if self.call_type_sat == 'counsel' or self.call_type_sat == 'check_working':
 
+    @api.multi
+    @api.onchange('partner_id')
+    def _check_delegation(self):
+        if self.partner_id and self.partner_id.area_id == self.env.ref('product_customer_reference.projects_big_accounts_area'):
+            self.is_bigaccount = True
+        else:
+            self.is_bigaccount = False
+            
 
     @api.multi
     @api.onchange('product_id')

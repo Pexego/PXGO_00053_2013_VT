@@ -80,6 +80,9 @@
                 <field name="country" invisible="True"/>
                 <field name="category_id" widget="many2many_tags"/>
             </field>
+            <field name="activity_summary" position="after">
+                <field name="att_order_id"/>
+            </field>
             <field name="claim_type" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
@@ -94,7 +97,7 @@
                           <field name="qty"/>
                           <field name="price_unit"/>
                           <field name="discount"/>
-                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"/>
+                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" required="1"/>
                           <field name="price_subtotal"/>
                           <field name="invoiced"/>
                         </tree>
@@ -204,8 +207,8 @@
             <field name="claim_origine" position="after">
                 <!-- <field name="invoice_id"/> -->
                 <field name="partner_id" invisible="1"/>
-                <field name="invoice_id" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
-                <field name="deposit_id" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '=', 'draft'),('product_id','=',product_id)]"/>
+                <field name="invoice_id" options="{'no_create': True}" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
+                <field name="deposit_id" options="{'no_create': True}" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '=', 'draft'),('product_id','=',product_id)]"/>
             </field>
         </field>
     </record>
