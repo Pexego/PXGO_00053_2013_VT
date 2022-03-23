@@ -36,7 +36,7 @@
                             <tr t-foreach="o.order_line" t-as="l">
                                 <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l.product_id)"/>
                                 <t t-if="len(product_reference)==1">
-                                    <td><span t-field="product_reference.customer_reference"/></td>
+                                    <td>(<span t-field="product_reference.customer_reference"/>)<span t-field="l.product_id"/></td>
                                 </t>
                                 <t t-if="len(product_reference)!=1">
                                     <td><span t-field="l.product_id"/></td>
@@ -141,7 +141,7 @@
                                 <t t-if="l.deposit">
                                     <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l.product_id)"/>
                                     <t t-if="len(product_reference)==1">
-                                        <td><span t-field="product_reference.customer_reference"/></td>
+                                        <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="line_id.product_id"/></td>
                                     </t>
                                     <t t-if="len(product_reference)!=1">
                                         <td><span t-field="l.product_id"/></td>

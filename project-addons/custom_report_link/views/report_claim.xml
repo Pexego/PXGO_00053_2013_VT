@@ -219,7 +219,7 @@
                                     <td class="col-xs-2">
                                         <t t-set="product_reference" t-value="claim.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==line_id.product_id)"/>
                                         <t t-if="len(product_reference)==1">
-                                            <span t-field="product_reference.customer_reference"/>
+                                            <td>(<span t-field="product_reference.customer_reference"/>)<span t-field="line_id.product_id"/></td>
                                         </t>
                                         <t t-if="len(product_reference)!=1">
                                             <span t-field="line_id.product_id"/>
