@@ -231,6 +231,7 @@ class HrExpense(models.Model):
                                         'date_invoice': sii_expense["IssueDate"],
                                         'currency_id': 1, 'company_id': 1,
                                         'fiscal_position_id': fiscal_position.id,
+                                        'captio_img_url': 'http://api-storage.captio.net/api/GetFile?key=' + expense_detail['UrlKey'],
                                         'comment': 'Captio - ' + sii_expense["ExpenseExternalId"]}
                             invoice = self.env['account.invoice'].create(inv_data)
                             for tax_line in sii_expense["VatDetail"]:
