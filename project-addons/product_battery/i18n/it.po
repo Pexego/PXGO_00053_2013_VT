@@ -37,3 +37,21 @@ msgstr "Note"
 #: model:ir.actions.act_window,help:product_battery.action_battery
 msgid "Manage the battery types"
 msgstr "Gestire i tipi di batteria"
+
+#. module: product_battery
+#: model:ir.model.fields,field_description:product_battery.field_product_battery_forbidden_ship_ids
+msgid "Forbidden shipping services"
+msgstr "Servizi di spedizione vietati"
+
+#. module: product_battery
+#: model:ir.model.fields,field_description:product_battery.field_sale_order_allow_ship_battery
+msgid "Allow ship batteries"
+msgstr "Permettere spedizione di batterie"
+
+#. module: product_battery
+#: code:addons/product_battery/models/sale.py:20
+#, python-format
+msgid "\n"
+"The order can not be confirmed, there are products with batteries that can not be shipped by %s"
+msgstr "\n"
+"L'ordine non puo essere confirmato, ci sono prodotti con batterie che non possono essere spedite con %s"
