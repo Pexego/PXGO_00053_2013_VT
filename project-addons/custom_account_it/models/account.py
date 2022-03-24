@@ -51,3 +51,17 @@ class GroupRiba(models.Model):
     def on_change_customer_payment_mode_id(self):
         if self.customer_payment_mode_id.name == "Ricevuta bancaria":
             self.group_riba = True
+
+
+class AccountMoveLine(models.Model):
+
+    _inherit = "account.move.line"
+
+    @api.multi
+    @api.depends("mandate_id")
+    def _get_partner_bank(self):
+        for line in self:
+            line.bank_id = line.mandate_id.partner_bank_id.bank_id
+
+    bank_id = fields.Many2one("res.bank", "Bank", compute="_get_partner_bank", store=True)
+

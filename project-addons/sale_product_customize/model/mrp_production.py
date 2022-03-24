@@ -1,6 +1,7 @@
 # © 2019 Comunitea
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 from openerp import models, fields, api
+from odoo import _
 
 
 class MrpProduction(models.Model):
@@ -25,7 +26,9 @@ class MrpProduction(models.Model):
         res = super().action_assign()
         for production in self:
             for move in production.move_raw_ids:
+                reserves = self.env['stock.reservation'].search([('move_id', '=', move.id)])
                 if move.state == 'confirmed':
+                    reserves.unlink()
                     reserv_dict = {
                         'date_validity': False,
                         'name': "{} ({})".format(production.name, move.name),
@@ -50,7 +53,6 @@ class MrpProduction(models.Model):
         self.picking_out = pick_out.id
         self.move_raw_ids.write({'picking_id': pick_out.id})
         self.move_raw_ids.mapped('move_line_ids').write({'picking_id': pick_out.id})
-
 
 class MrpBomLine(models.Model):
 

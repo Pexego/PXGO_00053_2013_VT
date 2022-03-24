@@ -188,7 +188,7 @@ class ProductProduct(models.Model):
                         "cron_stock_catalog.email_template_general_alberto_3")
 
     def cron_eol_products(self):
-        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Cantidad pendiente"]
+        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Sustitutiva","Activo","Cantidad pendiente"]
 
         date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
         discontinued_products = self.env['product.product'].search([('state', '=', 'end')])
@@ -201,13 +201,35 @@ class ProductProduct(models.Model):
                 qty = move.product_uom_qty
                 if move.state=='partially_available':
                     qty -= move.reserved_availability
-                rows.append([move.sale_line_id.order_id.name,picking_name,move.sale_line_id.salesman_id.name,move.product_id.default_code,qty])
+                first_replacement = move.product_id.get_first_no_eol_replacement_product(product_visited=set(move.product_id))
+                replacement_name = ""
+                replacement_sale_ok = ""
+                if first_replacement:
+                    replacement_name = first_replacement.default_code
+                    replacement_sale_ok = "SI" if first_replacement.sale_ok else "NO"
+                rows.append([move.sale_line_id.order_id.name,picking_name,move.sale_line_id.salesman_id.name,move.product_id.default_code,replacement_name,replacement_sale_ok,qty])
 
         file_b64 = self.generate_xls(headers, rows)
         self.send_email(file_b64, "eol_products",
                         "eol_products_{}.xlsx"
                         .format(datetime.now().strftime('%m%d')),
                         "cron_stock_catalog.email_template_eol_products")
+
+    def get_first_no_eol_replacement_product(self, product_visited, first=True):
+        """ This recursive function allows you to get the first non-eol replacement product.
+        If it doesn't exist will return the last replacement product
+        :param product_visited: a set with products which we have iterated. This param prevent infinity loops. In the first call, the value of this field must be set(original_product)
+        :param first: a boolean : 'True' if it is the first call or 'False' if it is a recursive call
+        :return  a product.product or False' if there is no replacement product"""
+
+        if self.replacement_id and self.state == 'end' and self.replacement_id not in product_visited:
+            product_visited.add(self.replacement_id)
+            return self.replacement_id.get_first_no_eol_replacement_product(product_visited=product_visited, first=False)
+        if first:
+            return self.replacement_id
+        return self
+
+
     @api.multi
     def send_email(self, file, name, datas_fname, template_name):
         attach = None

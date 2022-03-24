@@ -92,10 +92,11 @@ class SaleOrderLine(models.Model):
         """
         super(SaleOrderLine, self)._compute_invoice_status()
         for line in self:
+            reserve_loc = self.env.ref('stock_reserve.stock_location_reservation').id
             if line.order_id.state in ('sale', 'done') \
                     and line.product_id.type == 'product'\
                     and line.product_id.invoice_policy == 'delivery'\
-                    and line.move_ids \
+                    and line.move_ids.filtered(lambda l: l.location_dest_id.id != reserve_loc) \
                     and all(move.state == 'cancel' for move in line.move_ids):
                 line.invoice_status = 'cancel'
 

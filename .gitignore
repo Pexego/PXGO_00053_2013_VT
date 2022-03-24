@@ -142,3 +142,8 @@ account_treasury_forecast_banking
 automatize_edi_it
 edi_edifact
 base_synchro
+asset_journal
+captio_connector
+purchase_suggestions
+sim_manager
+stock_orderpoint_generator_custom

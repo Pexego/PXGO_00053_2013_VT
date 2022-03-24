@@ -68,7 +68,9 @@
                 <field name="t_incidence_picking" attrs="{'invisible':[('transport_incidence', '=', False)]}"/>
                 <field name="warehouse_date"/>
                 <field name="transport_incidence"/>
-                <field name="deposit_id" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id), ('location_dest_id.name','=','Deposito')]" widget="many2many_tags"/>
+                <field name="deposit_id" invisible="1" domain="['|',('partner_id.commercial_partner_id','=',partner_id),('partner_id','=',partner_id), ('location_dest_id.name','=','Deposito')]" widget="many2many_tags"/>
+                <field name="amazon_rma" attrs="{'invisible':['|',('partner_name','=',False),'!',('partner_name', 'like', 'amazon')]}"/>
+                <field name="partner_name" invisible="1"/>
             </field>
             <field name="model_ref_id" position="after">
                 <field name="client_ref" />
@@ -78,6 +80,9 @@
                 <field name="country" invisible="True"/>
                 <field name="category_id" widget="many2many_tags"/>
             </field>
+            <field name="activity_summary" position="after">
+                <field name="att_order_id"/>
+            </field>
             <field name="claim_type" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
@@ -86,16 +91,64 @@
                     <field name="claim_inv_line_ids" nolabel="1" colspan="4" editable="bottom">
                         <tree editable="bottom">
                           <field name="sequence" widget="handle"/>
-                          <field name="invoice_id" domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
+                          <field name="invoice_id" />
                           <field name="product_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
                           <field name="product_description"/>
                           <field name="qty"/>
                           <field name="price_unit"/>
                           <field name="discount"/>
-                          <field name="tax_ids" widget="many2many_tags" domain="[('parent_id','=',False),('type_tax_use','=','sale')]"/>
+                          <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]" required="1"/>
                           <field name="price_subtotal"/>
                           <field name="invoiced"/>
                         </tree>
+                        <form string="RMA Lines">
+                            <group>
+                                <group>
+                                    <label for="sequence"/>
+                                    <div>
+                                        <field name="sequence"></field>
+                                    </div>
+                                    <label for="product_id"/>
+                                    <div>
+                                        <field name="product_id" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                    </div>
+                                    <label for="product_description"/>
+                                    <div>
+                                        <field name="product_description"/>
+                                    </div>
+                                    <label for="qty"/>
+                                    <div>
+                                        <field name="qty"/>
+                                    </div>
+                                    <label for="price_unit"/>
+                                    <div>
+                                        <field name="price_unit"/>
+                                    </div>
+                                    <label for="discount"/>
+                                    <div>
+                                        <field name="discount"/>
+                                    </div>
+                                    <label for="tax_ids"/>
+                                    <div>
+                                        <field name="tax_ids" widget="many2many_tags" domain="[('type_tax_use','=','sale')]"/>
+                                    </div>
+                                    <label for="price_subtotal"/>
+                                    <div>
+                                        <field name="price_subtotal"/>
+                                    </div>
+                                </group>
+                                <group>
+                                    <label for="invoice_id"/>
+                                    <div>
+                                        <field name="invoice_id" domain="[('partner_id', 'child_of', parent.partner_id),('state', '!=', 'draft')]"/>
+                                    </div>
+                                    <label for="invoiced"/>
+                                    <div>
+                                        <field name="invoiced"/>
+                                    </div>
+                                </group>
+                            </group>
+                        </form>
                     </field>
                     <group>
                       <group>
@@ -154,7 +207,8 @@
             <field name="claim_origine" position="after">
                 <!-- <field name="invoice_id"/> -->
                 <field name="partner_id" invisible="1"/>
-                <field name="invoice_id" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
+                <field name="invoice_id" options="{'no_create': True}" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '!=', 'draft')]"/>
+                <field name="deposit_id" options="{'no_create': True}" domain="[('partner_id', 'child_of', [parent.partner_id]),('state', '=', 'draft'),('product_id','=',product_id)]"/>
             </field>
         </field>
     </record>

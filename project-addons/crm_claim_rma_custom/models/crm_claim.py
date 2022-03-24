@@ -67,6 +67,10 @@ class CrmClaimRma(models.Model):
     warehouse_date = fields.Date('Final Received Date')
     deposit_id = fields.Many2many('stock.picking', string='Deposit')
 
+    att_order_id = fields.Many2one('sale.order', string='Attach Sale')
+
+    amazon_rma = fields.Char("ID Amazon")
+    partner_name = fields.Char(related='partner_id.name')
     check_states = ['substate_received', 'substate_process', 'substate_due_receive']
 
     @api.multi
@@ -297,7 +301,7 @@ class CrmClaimRma(models.Model):
                     'claim_line_id': line.claim_line_id.id,
                     'price_unit': line.price_unit,
                     'cost_unit': line.cost_unit,
-                    'uos_id': line.product_id.uom_id.id,
+                    'uom_id': line.product_id.uom_id.id,
                     'discount': line.discount,
                     'account_analytic_id': False
                 }
@@ -327,7 +331,6 @@ class CrmClaimRma(models.Model):
                 line.sequence = seq
                 seq += 1
 
-    
     @api.multi
     def check_discounts(self):
         discount_product_list = []
@@ -335,9 +338,8 @@ class CrmClaimRma(models.Model):
         for claim_obj in self:
             for line in claim_obj.claim_inv_line_ids:
                 for i_line_id in line.invoice_id.invoice_line_ids:
-                    if i_line_id.product_id.name == 'Discount line' and not line.invoice_id.number in discount_product_list:
+                    if i_line_id.price_unit < 0 and line.invoice_id.number not in discount_product_list:
                         has_discount = True
-
                         discount_product_list.append(line.invoice_id.number)
         if has_discount:
             return self.env['invoice.discount.wiz'].create({
@@ -363,10 +365,8 @@ class ClaimInvoiceLine(models.Model):
     invoice_id = fields.Many2one("account.invoice", "Invoice")
     price_unit = fields.Float("Price Unit")
     cost_unit = fields.Float("Cost Unit")
-    price_subtotal = fields.Float("Price Subtotal", compute="_get_subtotal",
-                                  readonly=True)
-    tax_ids = fields.Many2many("account.tax", "claim_line_tax",
-                               "claimline_id", "tax_id", string="Taxes")
+    price_subtotal = fields.Float("Price Subtotal", compute="_get_subtotal", readonly=True)
+    tax_ids = fields.Many2many("account.tax", "claim_line_tax", "claimline_id", "tax_id", string="Taxes")
     discount = fields.Float("Discount")
     qty = fields.Float("Quantity", default="1")
     invoiced = fields.Boolean("Invoiced")
@@ -456,6 +456,7 @@ class CrmClaimLine(models.Model):
         Many2one(default=lambda self: self.env.ref('crm_claim_rma_custom.substate_due_receive').id)
     claim_name = fields.Selection(related='claim_id.name', readonly=True)
     sequence = fields.Integer()
+    deposit_id = fields.Many2one('stock.deposit', string='Deposit')
 
     res = {}
 

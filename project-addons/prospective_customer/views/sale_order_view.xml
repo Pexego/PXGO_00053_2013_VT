@@ -7,8 +7,21 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <field name="partner_id" position="attributes">
-                    <attribute name="domain">[('is_company', '=', True), ('customer', '=', True),('active', '=', True),('prospective', '=', False)]</attribute>
+                    <attribute name="domain">[('is_company', '=', True), ('customer', '=', True),('active', '=',
+                        True),('prospective', '=', False)]
+                    </attribute>
                 </field>
+                <xpath expr="//button[@name='action_view_invoice']" position="before">
+                    <button type="object" name="action_view_leads"
+                            class="oe_stat_button"
+                            style="background-color: #ffd5b1;"
+                            attrs="{'invisible': ['|',('leads_count','=',0),('state', 'not in', ['reserve','draft','sent'])]}">
+                        <i class="fa fa-comments-o" style="font-size: 24px; color: #ff8a16; padding:6px;"/>
+                        <label string="Leads" style="font-weight: normal;"/>
+                        <field name="leads_count" widget="statinfo" string="Leads" style="padding:6px;"
+                               attrs="{'invisible':True}"/>
+                    </button>
+                </xpath>
             </field>
         </record>
     </data>

@@ -1,50 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="report_picking_custom_data">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="o">
-                <t t-call="custom_report_link.external_layout_custom_picking">
-                        <!-- Calcular la divisa del widget para tener en cuenta casos en los que es null y que no dé error al general el informe -->
-                        <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id.id"/>
-                        <t t-if="monetary_widget">
-                            <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id"/>
-                        </t>
-                        <t t-if="not monetary_widget">
-                            <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
-                        </t>
+    <data>
+        <template id="report_picking_custom_data">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="custom_report_link.external_layout_custom_picking">
+                            <!-- Calcular la divisa del widget para tener en cuenta casos en los que es null y que no dé error al general el informe -->
+                            <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id.id"/>
+                            <t t-if="monetary_widget">
+                                <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id"/>
+                            </t>
+                            <t t-if="not monetary_widget">
+                                <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
+                            </t>
 
-                    <div class="page">
-                        <div class="row">
-                            <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
-                                    <thead>
-                                    <tr style="background-color:#da1f2e; color:white;">
-                                        <th width="15%" style="vertical-align:middle;"><strong>Reference</strong></th>
-                                        <th width="12%" class="text-center" style="vertical-align:middle;"><strong>EAN</strong></th>
-                                        <th width="38%" style="vertical-align:middle;"><strong>Description</strong></th>
-                                        <th width="5%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
-                                        <th width="8%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
-                                        <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
-                                        <th width="8%" class="text-center" style="vertical-align:middle;"><strong>Unit Cost</strong></th>
-                                        <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
-                                    </tr>
-                                </thead>
-                                <tbody style="color:6D6E70;">
-                                    <t t-set="last_pack" t-value="empty"/>
-                                    <t t-set="controller" t-value="0"/>
-                                    <t t-foreach="o.move_lines" t-as="move">
-                                            <t t-if="move.phantom_bom_component is True">
-                                                <tr>
-                                                        <tr t-if="last_pack != move.phantom_bom_component">
-                                                            <t t-set="last_pack" t-value="move.sale_line_id.product_id"/>
-                                                            <t t-set="qty" t-value="move.sale_line_id.product_uom_qty"/>
-                                                            <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;">Pack: <strong t-field="move.sale_line_id.product_id"/> (<strong t-esc="'%.0f' %  qty"/>)</td>
-                                                            <td class="text-center"></td>
-                                                            <td class="text-center"></td>
-                                                            <td class="text-center"></td>
-                                                            <td class="text-center"></td>
-                                                            <td class="text-center"></td>
-                                                        </tr>
-                                                    <td><span t-field="move.product_id"/></td>
+                        <div class="page">
+                            <div class="row">
+                                <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
+                                        <thead>
+                                        <tr style="background-color:#da1f2e; color:white;">
+                                            <th width="15%" style="vertical-align:middle;"><strong>Reference</strong></th>
+                                            <th width="12%" class="text-center" style="vertical-align:middle;"><strong>EAN</strong></th>
+                                            <th width="38%" style="vertical-align:middle;"><strong>Description</strong></th>
+                                            <th width="5%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
+                                            <th width="8%" class="text-center" style="vertical-align:middle;"><strong>Unit Price</strong></th>
+                                            <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Discount</strong></th>
+                                            <th width="8%" class="text-center" style="vertical-align:middle;"><strong>Unit Cost</strong></th>
+                                            <th width="7%" class="text-center" style="vertical-align:middle;"><strong>Amount</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="color:6D6E70;">
+                                        <t t-set="last_pack" t-value="empty"/>
+                                        <t t-set="controller" t-value="0"/>
+                                        <t t-foreach="o.move_lines" t-as="move">
+                                                <t t-if="move.phantom_bom_component is True">
+                                                    <tr>
+                                                            <tr t-if="last_pack != move.phantom_bom_component">
+                                                                <t t-set="last_pack" t-value="move.sale_line_id.product_id"/>
+                                                                <t t-set="qty" t-value="move.sale_line_id.product_uom_qty"/>
+                                                                <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==move.sale_line_id.product_id)"/>
+                                                                <t t-if="len(product_reference)==1">
+                                                                     <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;">Pack: <strong t-field="product_reference.customer_reference"/> (<strong t-esc="'%.0f' %  qty"/>)</td>
+                                                                </t>
+                                                                <t t-if="len(product_reference)!=1">
+                                                                     <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;">Pack: <strong t-field="move.sale_line_id.product_id"/> (<strong t-esc="'%.0f' %  qty"/>)</td>
+                                                                </t>
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center"></td>
+                                                            </tr>
+                                                        <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==move.product_id)"/>
+                                                        <t t-if="len(product_reference)==1">
+                                                            <td><span t-field="product_reference.customer_reference"/></td>
+                                                        </t>
+                                                        <t t-if="len(product_reference)!=1">
+                                                            <td><span t-field="move.product_id"/></td>
+                                                        </t>
+                                                        <td style="font-size:10px"><span t-field="move.product_id.product_tmpl_id.description_sale"/></td>
+                                                        <td class="text-center"><span t-esc="'%.0f'% move.product_uom_qty"/></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <t t-if="move.lots_text">
+                                                            <tr>
+                                                                <td class="text-center"></td>
+                                                                <td colspan="1" style="font-size:10px; font-weight: bold; color:#6D6E70;"><strong>Serial</strong></td>
+                                                                <td colspan="1" style="color:#6D6E70; font-size:10px"><span t-field="move.lots_text"></span></td>
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center"></td>
+                                                                <td class="text-center"></td>
+                                                            </tr>
+                                                        </t>
+                                                    </tr>
+                                                </t>
+                                        </t>
+                                        <tr t-foreach="o.move_lines" t-as="move">
+                                                <t t-if="move.phantom_bom_component is False">
+                                                    <tr t-if="controller == 0">
+                                                        <t t-set="controller" t-value="1"/>
+                                                        <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;"><strong>Sin Pack</strong></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                    </tr>
+                                                    <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==move.product_id)"/>
+                                                    <t t-if="len(product_reference)==1">
+                                                        <td><span t-field="product_reference.customer_reference"/></td>
+                                                    </t>
+                                                    <t t-if="len(product_reference)!=1">
+                                                        <td><span t-field="move.product_id"/></td>
+                                                    </t>
+                                                    <td><span t-field="move.product_id.barcode"/></td>
                                                     <td style="font-size:10px"><span t-field="move.product_id.product_tmpl_id.description_sale"/></td>
                                                     <td class="text-center"><span t-esc="'%.0f'% move.product_uom_qty"/></td>
                                                     <td class="text-center"></td>
@@ -53,87 +106,192 @@
                                                     <td class="text-center"></td>
                                                     <t t-if="move.lots_text">
                                                         <tr>
-                                                            <td class="text-center"></td>
-                                                            <td colspan="1" style="font-size:10px; font-weight: bold; color:#6D6E70;"><strong>Serial</strong></td>
-                                                            <td colspan="1" style="color:#6D6E70; font-size:10px"><span t-field="move.lots_text"></span></td>
-                                                            <td class="text-center"></td>
-                                                            <td class="text-center"></td>
-                                                            <td class="text-center"></td>
-                                                            <td class="text-center"></td>
-                                                            <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td colspan="1" style="font-size:10px; font-weight: bold; color:#6D6E70;"><strong>Serial</strong></td>
+                                                        <td colspan="1" style="color:#6D6E70; font-size:10px"><span t-field="move.lots_text"></span></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
+                                                        <td class="text-center"></td>
                                                         </tr>
                                                     </t>
-                                                </tr>
-                                            </t>
-                                    </t>
-                                    <tr t-foreach="o.move_lines" t-as="move">
-                                            <t t-if="move.phantom_bom_component is False">
-                                                <tr t-if="controller == 0">
-                                                    <t t-set="controller" t-value="1"/>
-                                                    <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;"><strong>Sin Pack</strong></td>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
-                                                </tr>
-                                                <td><span t-field="move.product_id"/></td>
-                                                <td><span t-field="move.product_id.barcode"/></td>
-                                                <td style="font-size:10px"><span t-field="move.product_id.product_tmpl_id.description_sale"/></td>
-                                                <td class="text-center"><span t-esc="'%.0f'% move.product_uom_qty"/></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <td class="text-center"></td>
-                                                <t t-if="move.lots_text">
+                                                </t>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                </t>
+                </t>
+            </t>
+
+        </template>
+
+        <template id="report_picking_dropship_custom_data">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="custom_report_link.external_layout_custom_picking_dropship">
+                            <!-- Calcular la divisa del widget para tener en cuenta casos en los que es null y que no dé error al general el informe -->
+                            <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id.id"/>
+                            <t t-if="monetary_widget">
+                                <t t-set="monetary_widget" t-value="o.sale_id.pricelist_id.currency_id"/>
+                            </t>
+                            <t t-if="not monetary_widget">
+                                <t t-set="monetary_widget" t-value="o.partner_id.eur_currency"/>
+                            </t>
+
+                        <div class="page">
+                            <div class="row">
+                                <table class="table table-condensed" style="font-size:12px; margin-top: 5%;">
+                                        <thead>
+                                        <tr style="background-color:#da1f2e; color:white;">
+                                            <th width="15%" style="vertical-align:middle;"><strong>Reference</strong></th>
+                                            <th width="12%" class="text-center" style="vertical-align:middle;"><strong>EAN</strong></th>
+                                            <th width="38%" style="vertical-align:middle;"><strong>Description</strong></th>
+                                            <th width="5%" class="text-center" style="vertical-align:middle;"><strong>Quantity</strong></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody style="color:6D6E70;">
+                                        <t t-set="last_pack" t-value="empty"/>
+                                        <t t-set="controller" t-value="0"/>
+                                        <t t-foreach="o.move_lines" t-as="move">
+                                                <t t-if="move.phantom_bom_component is True">
                                                     <tr>
-                                                    <td class="text-center"></td>
-                                                    <td colspan="1" style="font-size:10px; font-weight: bold; color:#6D6E70;"><strong>Serial</strong></td>
-                                                    <td colspan="1" style="color:#6D6E70; font-size:10px"><span t-field="move.lots_text"></span></td>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
-                                                    <td class="text-center"></td>
+                                                            <tr t-if="last_pack != move.phantom_bom_component">
+                                                                <t t-set="last_pack" t-value="move.sale_line_id.product_id"/>
+                                                                <t t-set="qty" t-value="move.sale_line_id.product_uom_qty"/>
+                                                                <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;">Pack: <strong t-field="move.sale_line_id.product_id"/> (<strong t-esc="'%.0f' %  qty"/>)</td>
+                                                                <td class="text-center"></td>
+                                                            </tr>
+                                                        <td><span t-field="move.product_id"/></td>
+                                                        <td style="font-size:10px"><span t-field="move.product_id.product_tmpl_id.description_sale"/></td>
+                                                        <td class="text-center"><span t-esc="'%.0f'% move.product_uom_qty"/></td>
+                                                        <td class="text-center"></td>
+                                                        <t t-if="move.lots_text">
+                                                            <tr>
+                                                                <td class="text-center"></td>
+                                                                <td colspan="1" style="font-size:10px; font-weight: bold; color:#6D6E70;"><strong>Serial</strong></td>
+                                                                <td colspan="1" style="color:#6D6E70; font-size:10px"><span t-field="move.lots_text"></span></td>
+                                                                <td class="text-center"></td>
+                                                            </tr>
+                                                        </t>
                                                     </tr>
                                                 </t>
-                                            </t>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                        </t>
+                                        <tr t-foreach="o.move_lines" t-as="move">
+                                                <t t-if="move.phantom_bom_component is False">
+                                                    <tr t-if="controller == 0">
+                                                        <t t-set="controller" t-value="1"/>
+                                                        <td colspan="2" style="font-size:14px; font-weight: bold; color:#6D6E70;"><strong>Sin Pack</strong></td>
+                                                        <td class="text-center"></td>
+                                                    </tr>
+                                                    <td><span t-field="move.product_id"/></td>
+                                                    <td><span t-field="move.product_id.barcode"/></td>
+                                                    <td style="font-size:10px"><span t-field="move.product_id.product_tmpl_id.description_sale"/></td>
+                                                    <td class="text-center"><span t-esc="'%.0f'% move.product_uom_qty"/></td>
+
+                                                    <t t-if="move.lots_text">
+                                                        <tr>
+                                                        <td class="text-center"></td>
+                                                        <td colspan="1" style="font-size:10px; font-weight: bold; color:#6D6E70;"><strong>Serial</strong></td>
+                                                        <td colspan="1" style="color:#6D6E70; font-size:10px"><span t-field="move.lots_text"></span></td>
+                                                        <td class="text-center"></td>
+                                                        </tr>
+                                                    </t>
+                                                </t>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                    </div>
+                </t>
+                </t>
             </t>
+        </template>
+
+        <template id="report_picking_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="custom_report_link.report_picking_custom_data" t-lang="doc.partner_id.commercial_partner_id.lang" />
+                </t>
             </t>
-        </t>
+        </template>
 
-    </template>
-
-    <template id="report_picking_custom">
-        <t t-call="web.html_container">
-            <t t-foreach="docs" t-as="doc">
-                <t t-call="custom_report_link.report_picking_custom_data" t-lang="doc.partner_id.commercial_partner_id.lang" />
+        <template id="report_picking_dropship_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="custom_report_link.report_picking_dropship_custom_data" t-lang="doc.sale_id.partner_id.commercial_partner_id.lang" />
+                </t>
             </t>
-        </t>
-    </template>
+        </template>
 
+        <report
+            id="report_picking_custom_action"
+            string="Albarán"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            file="custom_report_link.report_picking_custom"
+            name="custom_report_link.report_picking_custom"
+            print_report_name="'%s_%s' % (object.name.replace('\\', '_'), object.partner_id.commercial_partner_id.name)"
+        />
 
-    <report
-        id="report_picking_custom_action"
-        string="Albarán"
-        model="stock.picking"
-        report_type="qweb-pdf"
-        file="custom_report_link.report_picking_custom"
-        name="custom_report_link.report_picking_custom"
-        print_report_name="'%s_%s' % (object.name.replace('\\', '_'), object.partner_id.commercial_partner_id.name)"
-    />
+        <report
+            id="report_picking_dropship_custom_action"
+            string="Albarán Dropship"
+            model="stock.picking"
+            report_type="qweb-pdf"
+            file="custom_report_link.report_picking_dropship_custom"
+            name="custom_report_link.report_picking_dropship_custom"
+            print_report_name="'%s_%s' % (object.name.replace('\\', '_'), object.sale_id.partner_id.commercial_partner_id.name)"
+        />
 
-    <record id="report_picking_custom_action" model="ir.actions.report">
-        <field name="paperformat_id" ref="custom_report_link.paperformat_picking"/>
-    </record>
+        <record id="report_picking_custom_action" model="ir.actions.report">
+            <field name="paperformat_id" ref="custom_report_link.paperformat_picking"/>
+        </record>
 
-     <record id="stock_custom.action_report_picking_attachments" model="ir.actions.report">
-        <field name="paperformat_id" ref="custom_report_link.paperformat_picking"/>
-    </record>
+        <record id="report_picking_dropship_custom_action" model="ir.actions.report">
+            <field name="paperformat_id" ref="custom_report_link.paperformat_picking"/>
+        </record>
 
+         <record id="stock_custom.action_report_picking_attachments" model="ir.actions.report">
+            <field name="paperformat_id" ref="custom_report_link.paperformat_picking"/>
+        </record>
+
+    </data>
+    <data noupdate="1">
+        <record id="picking_done_dropship_template" model="mail.template">
+                <field name="name">Aviso de envío dropship</field>
+                <field name="email_from">${(object.company_id.email or 'comercial@visiotechsecurity.com')|safe}</field>
+                <field name="subject">VISIOTECH - Shipped products</field>
+                <field name="model_id" ref="stock.model_stock_picking"/>
+                <field name="email_to" >${(object.sale_id.partner_id.email or '')|safe}</field>
+                <field name="reply_to">${(object.sale_id.user_id.email or 'noreply@localhost')|safe}</field>
+                <field name="auto_delete" eval="False"/>
+                <field name="report_template" ref="custom_report_link.report_picking_dropship_custom_action"/>
+                <field name="report_name">Picking_${(object.name or '').replace('/','_')}</field>
+                <field name="body_html"><![CDATA[<p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Dear customer,</p>
+    % if object.carrier_name and object.carrier_name == "GENERICA":
+        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">We inform you that our warehouse has prepared the products corresponding to the delivery note ${object.name} of the order ${object.sale_id.name}.</p>
+    % elif object.carrier_name:
+        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">We hereby inform you that we have sent your order # ${object.sale_id.name}, the delivery note number is${object.name}. This order is now in the process of shipping and can no longer be changed.</p>
+        <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">The transport company responsible for the shipping of your order is
+    ${object.carrier_name}
+        % if object.carrier_tracking_ref:
+            and the tracking number of your order is
+    ${object.carrier_tracking_ref}. </p><p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+            % if object.carrier_name == "TNT":
+                 <a href="https://www.tnt.com/express/es_es/site/herramientas-envio/seguimiento.html?searchType=ref&amp;cons=${object.carrier_tracking_ref}" style="text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;"> Tracking of your order ${object.sale_id.name}</a>
+            % elif object.carrier_name == "DHL EXPRESS":
+                <a href="https://www.dhl.com/es-es/home/tracking/tracking-express.html?submit=1&amp;tracking-id=${object.carrier_tracking_ref}" style="text-decoration-thickness:auto;color:rgb(124, 123, 173);background-color:transparent;"> Tracking of your order ${object.sale_id.name}</a>
+            % endif
+            </p><p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">
+            <b style="font-weight:bold;">Be aware that if you receive an error checking the tracking information you may need to search by the shipments reference number instead.  Please note that the tracking information of your order may not be available at the time you receive this e-mail.</b>
+        % endif
+        </p>
+    % endif
+    <p style="margin:0px 0px 9px 0px;font-size:13px;font-family:&quot;Lucida Grande&quot;, Helvetica, Verdana, Arial, sans-serif;">Best regards,</p>
+                ]]></field>
+            </record>
+    </data>
 </odoo>

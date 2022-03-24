@@ -18,6 +18,7 @@
 #
 ##############################################################################
 
+from xml.dom.minidom import ReadOnlySequentialNamedNodeMap
 from odoo import models, api, fields, exceptions, _
 from datetime import datetime
 from odoo.exceptions import except_orm, ValidationError
@@ -36,6 +37,9 @@ CALL_TYPE = [('check_stock', 'Check Stock'),
              ('shipment_complain', 'Shipment Complain/Claim'),
              ('accounting_complain', 'Accounting Complain/Claim'),
              ('none', 'N/A')]
+
+CALL_STATE = [('recall_pending', 'Recall pending'),
+              ('done', 'Done')]
 
 CALL_TYPE_SAT = [('check_status_rma', 'Check RMA status'),
                  ('incidence_product', 'Incidence with product'),
@@ -61,23 +65,29 @@ class CrmPhonecall(models.Model):
     partner_id = fields.Many2one('res.partner', 'Contact', required=True,
                                  domain=[['is_company', '=', 1],
                                          ['customer', '=', True]])
+    delegation_id = fields.Many2one('res.partner', string='Delegation')
+    contact_id = fields.Text('Contact')
     start_date = fields.Datetime('Start Date', readonly=True,
                                  default=fields.Datetime.now)
     user_id = fields.Many2one('res.users', 'Responsible', readonly=True)
     call_type = fields.Selection(CALL_TYPE, 'Call type', required=True)
     description = fields.Text('Call Description')
+    call_state = fields.Selection(CALL_STATE, 'State')
     partner_ref = fields.Char('Ref. Contact', readonly=True, compute='get_partner_ref')
     scope = fields.Selection(SCOPE, 'Scope call')
     call_type_sat = fields.Selection(CALL_TYPE_SAT, 'Call type', required=True)
     partner_country = fields.Many2one('res.country', related='partner_id.country_id', string='Country', readonly=True)
     partner_salesperson = fields.Many2one('res.users', related='partner_id.user_id', string='Salesperson', readonly=True)
-    brand_id = fields.Many2one('product.brand', 'Brand')
+    brand_id = fields.Many2one('product.brand', string='Brand')
+    product_id = fields.Many2one('product.product', 'Product')
+    category_id = fields.Many2one('product.category', related='product_id.categ_id', string='Product type')
     subject = fields.Char('Call Subject')
     email_sent = fields.Boolean('Email sent', default=False, readonly=True)
     summary_id = fields.Many2one(comodel_name="crm.phonecall.summary",
                                  string="Summary",
                                  required=False,
                                  ondelete="restrict")
+    is_bigaccount = fields.Boolean(compute='_check_delegation', default=False)
 
     def utc_to_local(self, utc_dt):
         local_dt = utc_dt.replace(tzinfo=pytz.utc).astimezone(self.local_tz)
@@ -109,10 +119,10 @@ class CrmPhonecall(models.Model):
     def send_email(self):
         self.ensure_one()
         mail_pool = self.env['mail.mail']
-        context = self._context.copy()
+        context = dict(self._context)
         context['base_url'] = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
 
-        template_id = self.env.ref('crm_claim_rma_custom.email_template_call_sat')
+        template_id = self.env.ref('crm_claim_phonecall.email_template_call_sat')
 
         if template_id:
             mail_id = template_id.with_context(context).send_mail(self.id)
@@ -143,14 +153,13 @@ class CrmPhonecall(models.Model):
             self.name = self.partner_id.ref + ' - ' + format_start_date[0] + \
                 ' - ' + format_start_date[1]
 
-        duration = datetime.now() - datetime.strptime(self.start_date,
-                                                      '%Y-%m-%d %H:%M:%S')
-
+        duration = datetime.now()- datetime.strptime(self.start_date,'%Y-%m-%d %H:%M:%S')
         datas = {
             'model': 'crm.phonecall',
             'create_date': self.start_date,
             'date': self.start_date,
             'partner_id': self.partner_id.id,
+            'delegation_id': self.delegation_id.id,
             'partner_ref': self.partner_id.ref,
             'user_id': self.user_id.id,
             'name': self.name or False,
@@ -160,7 +169,10 @@ class CrmPhonecall(models.Model):
             'opportunity_id': False,
             'duration': (duration.seconds / float(60)),
             'state': 'done',
-            'brand_id': self.brand_id.id
+            'product_id': self.product_id.id,
+            'brand_id': self.brand_id.id,
+            'category_id': self.category_id.id,
+            'call_state': self.call_state
         }
         self.write(datas)
 
@@ -169,6 +181,21 @@ class CrmPhonecall(models.Model):
         self.end_call()
         self.send_email()
 #       if self.call_type_sat == 'counsel' or self.call_type_sat == 'check_working':
+
+    @api.multi
+    @api.onchange('partner_id')
+    def _check_delegation(self):
+        if self.partner_id and self.partner_id.area_id == self.env.ref('product_customer_reference.projects_big_accounts_area'):
+            self.is_bigaccount = True
+        else:
+            self.is_bigaccount = False
+            
+
+    @api.multi
+    @api.onchange('product_id')
+    def onchange_product_id(self):
+        if self.product_id:
+            self.brand_id = self.product_id.product_brand_id
 
 
 class ResPartner(models.Model):
@@ -184,3 +211,16 @@ class ResPartner(models.Model):
 
     sat_phonecall_count = fields.Integer(compute='_sat_phonecall_count', store=False, string='SAT Calls')
     phonecall_ids = fields.One2many('crm.phonecall', 'partner_id', 'Phonecalls', domain=[('scope', '=', 'sales')])
+
+class ProductCategory(models.Model):
+    _inherit = 'product.category'
+
+    @api.multi
+    def name_get(self):
+        res = []
+
+        if self.env.context.get('display_category_name'):
+            for record in self:
+                res.append((record.id, record.name))
+            return res
+        return super(ProductCategory, self).name_get()
