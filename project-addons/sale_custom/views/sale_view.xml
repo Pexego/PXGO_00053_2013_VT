@@ -326,6 +326,7 @@
         <field name="arch" type="xml">
             <xpath expr="//group[@name='sale_shipping']/field[@name='scheduled_date']" position="after">
                 <field name="not_sync_picking" string="Non-Synchronizable Picking" groups="base.group_system" />
+                <field name="force_generic_product" string="Force generic product" groups="base.group_system" />
             </xpath>
         </field>
     </record>
