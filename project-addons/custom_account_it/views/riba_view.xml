@@ -9,6 +9,9 @@
                <button name="pay_rib_line" type='object' attrs="{'invisible':[('state','=','paid')]}" string="Pay" icon="fa-check"/>
                <button name="rev_rib_line" type='object' attrs="{'invisible':[('state','!=','paid')]}" string="Draft" icon="fa-reply"/>
             </button>
+            <button name="confirm" position="after">
+               <button name="back_to_draft" type='object' string="Back to draft" attrs="{'invisible':[('state','!=','gen_file')]}"/>
+            </button>
         </field>
     </record>
 </odoo>
