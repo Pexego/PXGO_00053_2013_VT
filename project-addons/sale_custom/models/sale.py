@@ -12,6 +12,7 @@ class SaleOrderLine(models.Model):
 
     description_editable_related = fields.Boolean(related='product_id.description_editable', readonly=1)
 
+    select_copy = fields.Boolean(' ')
 
     def write(self, vals):
         for line in self:
@@ -302,7 +303,7 @@ class SaleOrder(models.Model):
 
         return True
 
-    def check_weight(self,onchange=False):
+    def check_weight(self, onchange=False):
         dhl_flight = self.transporter_id.name == "DHL" and self.service_id.by_air
         canary = self.partner_shipping_id and \
                  not self.env.context.get("bypass_canary_max_weight", False) and \
@@ -330,6 +331,15 @@ class SaleOrder(models.Model):
                     'message': _(
                         "This order to the Canary Islands exceeds %skg. Have you checked the shipping costs and conditions?") % canary_max_weight
                 }).action_show()
+
+    @api.multi
+    def copy_sale_lines(self):
+        for order in self:
+            for line in order.order_line:
+                if line.select_copy:
+                    line.copy({'order_id': order.id,
+                               'select_copy': False})
+                    line.select_copy = False
 
 
 class MailMail(models.Model):
