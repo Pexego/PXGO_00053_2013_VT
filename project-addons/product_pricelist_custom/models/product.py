@@ -77,7 +77,7 @@ class ProductProduct(models.Model):
     def _get_margins_relation(self):
         for prod in self:
             # Update A pricelist relation
-            pricelist_rel = prod.item_ids.filtered(lambda i: 'A' == i.pricelist_id.name[-1:]).\
+            pricelist_rel = prod.item_ids.filtered(lambda i: i.pricelist_id.name.endswith('Iberia')).\
                 sorted(key=lambda i: i.pricelist_id.sequence)
             if len(pricelist_rel) == 2 and pricelist_rel[0].fixed_price and pricelist_rel[1].fixed_price:
                 prod.relation_pvd_pvi_a = ((pricelist_rel[0].fixed_price - pricelist_rel[1].fixed_price)
@@ -85,7 +85,7 @@ class ProductProduct(models.Model):
             else:
                 prod.relation_pvd_pvi_a = 0
             # Update B pricelist relation
-            pricelist_rel = prod.item_ids.filtered(lambda i: 'B' == i.pricelist_id.name[-1:]).\
+            pricelist_rel = prod.item_ids.filtered(lambda i: i.pricelist_id.name.endswith('Europa')).\
                 sorted(key=lambda i: i.pricelist_id.sequence)
             if len(pricelist_rel) == 2 and pricelist_rel[0].fixed_price and pricelist_rel[1].fixed_price:
                 prod.relation_pvd_pvi_b = ((pricelist_rel[0].fixed_price - pricelist_rel[1].fixed_price)
@@ -94,7 +94,7 @@ class ProductProduct(models.Model):
                 prod.relation_pvd_pvi_b = 0
 
             # Update C pricelist relation
-            pricelist_rel = prod.item_ids.filtered(lambda i: 'C' == i.pricelist_id.name[-1:]).\
+            pricelist_rel = prod.item_ids.filtered(lambda i: i.pricelist_id.name.endswith('Italia')).\
                 sorted(key=lambda i: i.pricelist_id.sequence)
             if len(pricelist_rel) == 2 and pricelist_rel[0].fixed_price and pricelist_rel[1].fixed_price:
                 prod.relation_pvd_pvi_c = ((pricelist_rel[0].fixed_price - pricelist_rel[1].fixed_price)
@@ -103,7 +103,7 @@ class ProductProduct(models.Model):
                 prod.relation_pvd_pvi_c = 0
 
             # Update D pricelist relation
-            pricelist_rel = prod.item_ids.filtered(lambda i: 'D' == i.pricelist_id.name[-1:]).\
+            pricelist_rel = prod.item_ids.filtered(lambda i: i.pricelist_id.name.endswith('Francia')).\
                 sorted(key=lambda i: i.pricelist_id.sequence)
             if len(pricelist_rel) == 2 and pricelist_rel[0].fixed_price and pricelist_rel[1].fixed_price:
                 prod.relation_pvd_pvi_d = ((pricelist_rel[0].fixed_price - pricelist_rel[1].fixed_price)
@@ -111,23 +111,6 @@ class ProductProduct(models.Model):
             else:
                 prod.relation_pvd_pvi_d = 0
 
-            # Update E pricelist relation
-            pricelist_rel = prod.item_ids.filtered(lambda i: 'E' == i.pricelist_id.name[-1:]). \
-                sorted(key=lambda i: i.pricelist_id.sequence)
-            if len(pricelist_rel) == 2 and pricelist_rel[0].fixed_price and pricelist_rel[1].fixed_price:
-                prod.relation_pvd_pvi_e = ((pricelist_rel[0].fixed_price - pricelist_rel[1].fixed_price)
-                                           / pricelist_rel[0].fixed_price) * 100
-            else:
-                prod.relation_pvd_pvi_e = 0
-
-            # Update F pricelist relation
-            pricelist_rel = prod.item_ids.filtered(lambda i: 'F' == i.pricelist_id.name[-1:]). \
-                sorted(key=lambda i: i.pricelist_id.sequence)
-            if len(pricelist_rel) == 2 and pricelist_rel[0].fixed_price and pricelist_rel[1].fixed_price:
-                prod.relation_pvd_pvi_f = ((pricelist_rel[0].fixed_price - pricelist_rel[1].fixed_price)
-                                           / pricelist_rel[0].fixed_price) * 100
-            else:
-                prod.relation_pvd_pvi_f = 0
 
     @api.multi
     def get_product_price_with_pricelist(self, pricelist_name):
@@ -149,47 +132,35 @@ class ProductProduct(models.Model):
     @api.multi
     def get_list_updated_prices(self):
         prices = {
-            'list_price1': self.get_product_price_with_pricelist('PVPA'),
-            'list_price2': self.get_product_price_with_pricelist('PVPB'),
-            'list_price3': self.get_product_price_with_pricelist('PVPC'),
-            'list_price4': self.get_product_price_with_pricelist('PVPD'),
-            'list_price5': self.get_product_price_with_pricelist('PVPE'),
-            'list_price6': self.get_product_price_with_pricelist('PVPF'),
-            'pvd1_price': self.get_product_price_with_pricelist('PVDA'),
-            'pvd2_price': self.get_product_price_with_pricelist('PVDB'),
-            'pvd3_price': self.get_product_price_with_pricelist('PVDC'),
-            'pvd4_price': self.get_product_price_with_pricelist('PVDD'),
-            'pvd5_price': self.get_product_price_with_pricelist('PVDE'),
-            'pvd6_price': self.get_product_price_with_pricelist('PVDF'),
-            'pvi1_price': self.get_product_price_with_pricelist('PVIA'),
-            'pvi2_price': self.get_product_price_with_pricelist('PVIB'),
-            'pvi3_price': self.get_product_price_with_pricelist('PVIC'),
-            'pvi4_price': self.get_product_price_with_pricelist('PVID'),
-            'pvi5_price': self.get_product_price_with_pricelist('PVIE'),
-            'pvi6_price': self.get_product_price_with_pricelist('PVIF'),
-            'pvm1_price': self.get_product_price_with_pricelist('PVMA'),
-            'pvm2_price': self.get_product_price_with_pricelist('PVMB'),
-            'pvm3_price': self.get_product_price_with_pricelist('PVMC')
+            'list_price1': self.get_product_price_with_pricelist('PVPIberia'),
+            'list_price2': self.get_product_price_with_pricelist('PVPEuropa'),
+            'list_price3': self.get_product_price_with_pricelist('PVPItalia'),
+            'list_price4': self.get_product_price_with_pricelist('PVPFrancia'),
+            'pvd1_price': self.get_product_price_with_pricelist('PVDIberia'),
+            'pvd2_price': self.get_product_price_with_pricelist('PVDEuropa'),
+            'pvd3_price': self.get_product_price_with_pricelist('PVDItalia'),
+            'pvd4_price': self.get_product_price_with_pricelist('PVDFrancia'),
+            'pvi1_price': self.get_product_price_with_pricelist('PVIIberia'),
+            'pvi2_price': self.get_product_price_with_pricelist('PVIEuropa'),
+            'pvi3_price': self.get_product_price_with_pricelist('PVIItalia'),
+            'pvi4_price': self.get_product_price_with_pricelist('PVIFrancia'),
+            'pvm1_price': self.get_product_price_with_pricelist('PVMIberia'),
+            'pvm2_price': self.get_product_price_with_pricelist('PVMEuropa'),
+            'pvm3_price': self.get_product_price_with_pricelist('PVMItalia')
             }
         return prices
 
     relation_pvd_pvi_a = fields.Float(compute='_get_margins_relation',
-                                      string='PVD/PVI A relation',
+                                      string='PVD/PVI Iberia relation',
                                       digits=(5, 2), readonly=True)
     relation_pvd_pvi_b = fields.Float(compute='_get_margins_relation',
-                                      string='PVD/PVI B relation',
+                                      string='PVD/PVI Europe relation',
                                       digits=(5, 2), readonly=True)
     relation_pvd_pvi_c = fields.Float(compute='_get_margins_relation',
-                                      string='PVD/PVI C relation',
+                                      string='PVD/PVI Italy relation',
                                       digits=(5, 2), readonly=True)
     relation_pvd_pvi_d = fields.Float(compute='_get_margins_relation',
-                                      string='PVD/PVI D relation',
-                                      digits=(5, 2), readonly=True)
-    relation_pvd_pvi_e = fields.Float(compute='_get_margins_relation',
-                                      string='PVD/PVI E relation',
-                                      digits=(5, 2), readonly=True)
-    relation_pvd_pvi_f = fields.Float(compute='_get_margins_relation',
-                                      string='PVD/PVI F relation',
+                                      string='PVD/PVI France relation',
                                       digits=(5, 2), readonly=True)
 
     @api.model
@@ -237,8 +208,27 @@ class ProductTemplate(models.Model):
         Float(related="product_variant_ids.relation_pvd_pvi_c", readonly=True)
     relation_pvd_pvi_d = fields. \
         Float(related="product_variant_ids.relation_pvd_pvi_d", readonly=True)
-    relation_pvd_pvi_e = fields. \
-        Float(related="product_variant_ids.relation_pvd_pvi_e", readonly=True)
-    relation_pvd_pvi_f = fields. \
-        Float(related="product_variant_ids.relation_pvd_pvi_f", readonly=True)
 
+<<<<<<< Updated upstream
+=======
+    pvp_retail = fields.Float(related="product_variant_ids.pvp_retail")
+
+    item_ids = fields.One2many('product.pricelist.item', 'product_tmpl_id', 'Pricelist Items', domain=[('pricelist_id.active','=',True)])
+    item_no_retail_ids = fields.One2many('product.pricelist.item', compute="calculate_items_ids")
+    item_retail_ids = fields.One2many('product.pricelist.item', compute="calculate_items_ids")
+
+    def calculate_items_ids(self):
+        for product in self:
+            retails = self.env['product.pricelist.item']
+            no_retails = self.env['product.pricelist.item']
+            for item in product.item_ids:
+                if item.is_retail:
+                    retails |= item
+                else:
+                    no_retails |= item
+            product.item_retail_ids = retails
+            product.item_no_retail_ids = no_retails
+
+
+
+>>>>>>> Stashed changes
