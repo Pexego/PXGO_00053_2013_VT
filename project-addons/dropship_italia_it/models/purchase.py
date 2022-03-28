@@ -7,6 +7,17 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     def prepare_order_es(self, purchase, odoo_es):
+        transporter = False
+        service = False
+        trp_id = self.picking_ids[0].sale_id.transporter_ds_id
+        srv_id = self.picking_ids[0].sale_id.service_ds_id
+        if trp_id and srv_id:
+            obj_ship_id = self.env['base.synchro.obj'].search([('name', '=', 'Transportistas')]).id
+            transporter = self.env['base.synchro.obj.line'].search([('obj_id', '=', obj_ship_id), ('local_id', '=', trp_id.id)])
+            obj_serv_id = self.env['base.synchro.obj'].search([('name', '=', 'Servicios de transporte')]).id
+            service = self.env['base.synchro.obj.line'].search(
+                [('obj_id', '=', obj_serv_id), ('local_id', '=', srv_id.id)])
+
         if purchase.dest_address_id.dropship or not purchase.dest_address_id.parent_id:
             name_ship = purchase.dest_address_id.name
         else:
@@ -46,8 +57,13 @@ class PurchaseOrder(models.Model):
             'state': 'reserve',
             'no_promos': True,
             'allow_confirm_blocked_magreb': True,
-            'client_order_ref': purchase.name
+            'client_order_ref': purchase.name,
+            'transporter_id': transporter.id,
+            'service_id': service.id
         }
+        if transporter and service:
+            vals['transporter_id'] = transporter.remote_id
+            vals['service_id'] = service.remote_id
         return vals
 
     def prepare_order_line_es(self, line, order_es, odoo_es):
@@ -85,6 +101,9 @@ class PurchaseOrder(models.Model):
         order_es = odoo_es.env['sale.order'].browse(order_es_id)
         order_es.onchange_partner_id()
         order_es.write({'partner_shipping_id': vals['partner_shipping_id']})
+        if vals.get('transporter_id', False) and vals.get('service_id', False):
+            order_es.write({'transporter_id': vals['transporter_id'],
+                            'service_id': vals['service_id']})
 
         for line in self.order_line:
             l_vals = self.prepare_order_line_es(line, order_es_id, odoo_es)

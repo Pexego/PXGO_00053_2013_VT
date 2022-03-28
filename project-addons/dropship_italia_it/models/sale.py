@@ -7,6 +7,9 @@ class SaleOrder(models.Model):
 
     all_dropship = fields.Boolean("All Dropship")
 
+    transporter_ds_id = fields.Many2one('transportation.transporter', "Transporter")
+    service_ds_id = fields.Many2one('transportation.service', "Service")
+
     def action_confirm(self):
         res = super().action_confirm()
         purchase = self.env['purchase.order'].search([('origin', '=', self.name), ('state', '=', 'draft')])
