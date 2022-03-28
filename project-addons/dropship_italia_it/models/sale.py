@@ -1,4 +1,4 @@
-from odoo import models, api, fields
+from odoo import models, api, fields, exceptions, _
 
 
 class SaleOrder(models.Model):
@@ -12,10 +12,24 @@ class SaleOrder(models.Model):
 
     def action_confirm(self):
         res = super().action_confirm()
-        purchase = self.env['purchase.order'].search([('origin', '=', self.name), ('state', '=', 'draft')])
-        if purchase:
-            if purchase.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship'):
-                purchase.confirm_and_create_order_es()
+        for sale in self:
+            if not sale.allow_ship_battery:
+                transport_service = sale.service_ds_id
+                msg = ''
+                for line in sale.order_line:
+                    if transport_service in line.product_id.battery_id.forbidden_ship_ids:
+                        msg += "\n %s - %s" % (line.product_id.default_code, line.product_id.battery_id.name)
+                if msg:
+                    msg_error = _(
+                        "\nThe order can not be confirmed, there are products with batteries that can not be shipped by %s") \
+                                % transport_service.name
+                    msg_error += msg
+                    raise exceptions.UserError(msg_error)
+
+            purchase = self.env['purchase.order'].search([('origin', '=', sale.name), ('state', '=', 'draft')])
+            if purchase:
+                if purchase.picking_type_id == self.env.ref('stock_dropshipping.picking_type_dropship'):
+                    purchase.confirm_and_create_order_es()
         return res
 
     def action_cancel(self):
