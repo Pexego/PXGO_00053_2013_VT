@@ -38,9 +38,9 @@
             <xpath expr="//field[@name='item_ids']/tree/field[@name='date_end']" position="attributes">
                 <attribute name="invisible">True</attribute>
             </xpath>
-             <xpath expr="//field[@name='item_ids']/tree/field[@name='pricelist_id']" position="replace">
+            <xpath expr="//field[@name='item_ids']/tree/field[@name='pricelist_id']" position="replace">
                 <field name="name_pricelist"/>
-             </xpath>
+            </xpath>
             <xpath expr="//field[@name='item_ids']" position="replace"/>
             <div name="pricelist_item" position="replace"/>
             <xpath expr="//page[@name='general_information']/group" position="after">
@@ -64,17 +64,6 @@
                     </group>
                 </group>
                 <group name="relations">
-<<<<<<< Updated upstream
-                   <separator string="Relations"/>
-                   <group colspan="8" col="8">
-                       <field name="relation_pvd_pvi_a" readonly="True" colspan="2"/>
-                       <field name="relation_pvd_pvi_b" readonly="True" colspan="2"/>
-                       <field name="relation_pvd_pvi_c" readonly="True" colspan="2"/>
-                       <field name="relation_pvd_pvi_d" readonly="True" colspan="2"/>
-                       <field name="relation_pvd_pvi_e" readonly="True" colspan="2"/>
-                   </group>
-               </group>
-=======
                     <separator string="Relations"/>
                     <group colspan="8" col="8">
                         <field name="relation_pvd_pvi_a" readonly="True" colspan="2"/>
@@ -83,13 +72,14 @@
                         <field name="relation_pvd_pvi_d" readonly="True" colspan="2"/>
                     </group>
                 </group>
->>>>>>> Stashed changes
                 <group name="costs">
                     <separator string="Costs"/>
                     <group colspan="8" col="8">
                         <!--label for="standard_price" groups="base.group_user" attrs="{'invisible': [('product_variant_count', '&gt;', 1), ('is_product_variant', '=', False)]}"/-->
-                        <field name="standard_price" colspan="2" widget='monetary' options="{'currency_field': 'cost_currency_id', 'field_digits': True}"/>
-                        <field name="standard_price_2" readonly="True" colspan="2" widget='monetary' options="{'currency_field': 'cost_currency_id', 'field_digits': True}" invisible="1"/>
+                        <field name="standard_price" colspan="2" widget='monetary'
+                               options="{'currency_field': 'cost_currency_id', 'field_digits': True}"/>
+                        <field name="standard_price_2" readonly="True" colspan="2" widget='monetary'
+                               options="{'currency_field': 'cost_currency_id', 'field_digits': True}" invisible="1"/>
                     </group>
                 </group>
             </xpath>

@@ -209,26 +209,6 @@ class ProductTemplate(models.Model):
     relation_pvd_pvi_d = fields. \
         Float(related="product_variant_ids.relation_pvd_pvi_d", readonly=True)
 
-<<<<<<< Updated upstream
-=======
-    pvp_retail = fields.Float(related="product_variant_ids.pvp_retail")
+    item_ids = fields.One2many('product.pricelist.item', 'product_tmpl_id', 'Pricelist Items',
+                           domain=[('pricelist_id.active', '=', True)])
 
-    item_ids = fields.One2many('product.pricelist.item', 'product_tmpl_id', 'Pricelist Items', domain=[('pricelist_id.active','=',True)])
-    item_no_retail_ids = fields.One2many('product.pricelist.item', compute="calculate_items_ids")
-    item_retail_ids = fields.One2many('product.pricelist.item', compute="calculate_items_ids")
-
-    def calculate_items_ids(self):
-        for product in self:
-            retails = self.env['product.pricelist.item']
-            no_retails = self.env['product.pricelist.item']
-            for item in product.item_ids:
-                if item.is_retail:
-                    retails |= item
-                else:
-                    no_retails |= item
-            product.item_retail_ids = retails
-            product.item_no_retail_ids = no_retails
-
-
-
->>>>>>> Stashed changes
