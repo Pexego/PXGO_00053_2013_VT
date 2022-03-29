@@ -12,3 +12,28 @@ class SaleOrder(models.Model):
                     order.partner_id.write({'active': True, 'prospective': False})
         res = super().action_confirm()
         return res
+
+    def _leads_count(self):
+        stages = [self.env.ref('crm.stage_lead4').id, self.env.ref('crm.stage_lead3').id]
+        for order in self:
+            leads_count = self.env['crm.lead'].search_count(
+                [('partner_id', '=', order.partner_id.id), ('stage_id', 'in', stages)])
+            order.leads_count = leads_count
+
+    leads_count = fields.Integer(compute='_leads_count', default=0)
+
+    def action_view_leads(self):
+        stages = [self.env.ref('crm.stage_lead4').id, self.env.ref('crm.stage_lead3').id]
+        leads = self.env['crm.lead'].search(
+            [('partner_id', '=', self.partner_id.id), ('stage_id', 'in', stages)])
+
+        action = self.env.ref('crm.crm_lead_opportunities_tree_view').read()[0]
+
+        if len(leads) > 0:
+            action['domain'] = [('id', 'in', leads.ids)]
+            action['context'] = {
+                'default_type': 'opportunity',
+            }
+        else:
+            action = {'type': 'ir.actions.act_window_close'}
+        return action

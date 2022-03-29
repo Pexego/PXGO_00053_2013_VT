@@ -132,7 +132,7 @@
                                     <t t-if="l1.sale_order_id.name == p.name">
                                             <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
                                             <t t-if="len(product_reference)==1">
-                                                <td><span t-field="product_reference.customer_reference"/></td>
+                                                <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="l1.product_id"/></td>
                                             </t>
                                             <t t-if="len(product_reference)!=1">
                                                 <td><span t-field="l1.product_id"/></td>
@@ -197,7 +197,7 @@
                                         <t t-if="not l1.origin">
                                             <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
                                             <t t-if="len(product_reference)==1">
-                                                <td><span t-field="product_reference.customer_reference"/></td>
+                                                <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="l1.product_id"/></td>
                                             </t>
                                             <t t-if="len(product_reference)!=1">
                                                 <td><span t-field="l1.product_id"/></td>
@@ -240,7 +240,7 @@
                            <tr t-foreach="o.invoice_line_ids.sorted(key=lambda r: ('SO' in str(r.origin), r.origin or ''))" t-as="l1">
                                     <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l1.product_id)"/>
                                     <t t-if="len(product_reference)==1">
-                                        <td><span t-field="product_reference.customer_reference"/></td>
+                                        <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="l1.product_id"/></td>
                                     </t>
                                     <t t-if="len(product_reference)!=1">
                                         <td><span t-field="l1.product_id"/></td>
