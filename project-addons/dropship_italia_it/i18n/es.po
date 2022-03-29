@@ -1,0 +1,37 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* dropship_italia_it
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-23 10:27+0000\n"
+"PO-Revision-Date: 2022-02-23 10:27+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: dropship_italia_it
+#: model:ir.model.fields,field_description:dropship_italia_it.field_sale_order_all_dropship
+msgid "All Dropship"
+msgstr "Todo Dropship"
+
+#. module: dropship_italia_it
+#: model:ir.model.fields,field_description:dropship_italia_it.field_stock_picking_picking_es_str
+msgid "ES picking"
+msgstr "Albarán ES"
+
+#. module: dropship_italia_it
+#: model:ir.model.fields,field_description:dropship_italia_it.field_stock_picking_picking_es_id
+msgid "Picking Es"
+msgstr "Albarán ES"
+
+#. module: dropship_italia_it
+#: code:addons/dropship_italia_it/models/stock.py:26
+#, python-format
+msgid "The order cannot be canceled"
+msgstr "El pedido no puede ser cancelado"

@@ -182,6 +182,8 @@ class PromotionsRulesActions(models.Model):
              _('Discount % on not Brand accumulated')),
             ('prod_disc_per_qty',
              _('Discount % on one product based on the quantity of another')),
+            ('limit_product_units',
+             _('Limit quantity of a product in an order'))
             ])
 
     @api.onchange('action_type')
@@ -235,6 +237,9 @@ class PromotionsRulesActions(models.Model):
         elif self.action_type == 'prod_disc_per_qty':
             self.product_code = '"product_reference",..."'
             self.arguments = '{"product":discount, ...}'
+        elif self.action_type == 'limit_product_units':
+            self.product_code = '"product_reference",..."'
+            self.arguments = '{"product":qty, ...}'
         return super().on_change()
 
     def create_line(self, vals):
@@ -243,6 +248,31 @@ class PromotionsRulesActions(models.Model):
             vals['sequence'] = 999
             vals['name'] = self.promotion.with_context({'lang': order.partner_id.lang}).line_description
         return super().create_line(vals)
+
+    def action_limit_product_units(self, order):
+        product_obj = self.env['product.product']
+        products_code = eval(self.product_code)
+        products = product_obj.search([('default_code', 'in', products_code)])
+        if not products:
+            raise UserError(_("No product with the code % s") % products_code)
+        products_to_limit_qty = eval(self.arguments)
+        for product in products:
+            lines = order.order_line.filtered(lambda l: l.product_id == product)
+            if not lines:
+                continue
+            qty = products_to_limit_qty.get(product.default_code)
+            total_qty = sum(lines.mapped('product_qty'))
+            for line in lines:
+                if total_qty <= qty:
+                    break
+                total_diff = total_qty - qty
+                line_diff = line.product_uom_qty - total_diff
+                if line_diff >= 0:
+                    line.product_uom_qty = line_diff
+                    total_qty = 0
+                else:
+                    total_qty -= line.product_uom_qty
+                    line.product_uom_qty = 0
 
     def action_prod_disc_per_qty(self, order):
         product_obj = self.env['product.product']
@@ -310,8 +340,7 @@ class PromotionsRulesActions(models.Model):
 
     def action_categ_disc_perc_accumulated(self, order):
         for order_line in order.order_line:
-            if eval(self.product_code) == \
-                    order_line.product_id.categ_id.code:
+            if eval(self.product_code) in order_line.product_id.categ_id.display_name:
                 self.apply_perc_discount_accumulated(order_line)
         return {}
 
@@ -350,8 +379,7 @@ class PromotionsRulesActions(models.Model):
 
     def action_categ_disc_perc(self, order):
         for order_line in order.order_line:
-            if eval(self.product_code) == \
-                    order_line.product_id.categ_id.code:
+            if eval(self.product_code) in order_line.product_id.categ_id.display_name:
                 self.apply_perc_discount(order_line)
         return {}
 
@@ -686,7 +714,9 @@ class PromotionsRules(models.Model):
 
     @api.model
     def apply_special_promotions(self, order):
-        active_promos = self.search([('special_promo', '=', True)])
+        domain = self._get_promotions_domain(order)
+        domain += [('special_promo', '=', True)]
+        active_promos = self.search(domain)
 
         for promotion_rule in active_promos:
             result = promotion_rule.evaluate(order)

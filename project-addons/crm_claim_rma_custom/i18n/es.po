@@ -98,6 +98,8 @@ msgstr "No puede borrar una linea facturada."
 #. module: crm_claim_rma_custom
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_claim_id
 #: model:ir.model,name:crm_claim_rma_custom.model_crm_claim
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_claim_id
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_claim_id_ro
 msgid "Claim"
 msgstr "Reclamación"
 
@@ -602,6 +604,7 @@ msgstr "Crear abono"
 
 #. module: crm_claim_rma_custom
 #: model:ir.ui.view,arch_db:crm_claim_rma_custom.invoice_discount_wizard
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -621,3 +624,48 @@ msgstr "Las siguientes facturas tienen descuentos. ¿Quieres continuar?: %s"
 #: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_deposit_id
 msgid "Deposit"
 msgstr "Depósito"
+
+#. module: crm_claim_rma_custom
+#: code:addons/crm_claim_rma_custom/models/sale_order.py:67
+#, python-format
+msgid "\n Add %s  Ub.: %s"
+msgstr "\n Añadir %s  Ub.: %s"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_choose
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
+msgid "Add"
+msgstr "Añadir"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_sale_order_claim_wizard_line_partner_shipping_id
+msgid "Shipping"
+msgstr "Dir. Envío"
+
+#. module: crm_claim_rma_custom
+#: model:ir.actions.act_window,name:crm_claim_rma_custom.action_show_pending_claims
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.view_pending_rma_filter
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
+msgid "Pending RMA"
+msgstr "RMAs pendientes"
+
+#. module: crm_claim_rma_custom
+#: model:ir.ui.view,arch_db:crm_claim_rma_custom.sale_order_form_rma_button
+msgid "Attach RMA"
+msgstr "Adjuntar RMA"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_crm_claim_att_order_id
+msgid "Attach Sale"
+msgstr "Pedido adjunto"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_sequence
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_line_sequence
+msgid "Sequence"
+msgstr "Secuencia"
+
+#. module: crm_claim_rma_custom
+#: model:ir.model.fields,field_description:crm_claim_rma_custom.field_claim_invoice_line_price_subtotal
+msgid "Price Subtotal"
+msgstr "Precio Subtotal"

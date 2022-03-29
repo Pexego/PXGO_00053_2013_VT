@@ -34,9 +34,13 @@
                         </thead>
                         <tbody class="sale_tbody" style="color:6D6E70;">
                             <tr t-foreach="o.order_line" t-as="l">
-                                <td>
-                                    <span t-field="l.product_id.product_tmpl_id.name" />
-                                </td>
+                                <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l.product_id)"/>
+                                <t t-if="len(product_reference)==1">
+                                    <td>(<span t-field="product_reference.customer_reference"/>)<span t-field="l.product_id"/></td>
+                                </t>
+                                <t t-if="len(product_reference)!=1">
+                                    <td><span t-field="l.product_id"/></td>
+                                </t>
                                 <td style="font-size:10px">
                                     <t t-if="(l.product_id and l.product_id.description_editable) or not l.product_id">
                                         <span t-field="l.name" />
@@ -135,9 +139,13 @@
                         <tbody class="sale_tbody" style="color:6D6E70;">
                             <tr t-foreach="o.order_line" t-as="l">
                                 <t t-if="l.deposit">
-                                    <td>
-                                        <span t-field="l.product_id.product_tmpl_id.name"/>
-                                    </td>
+                                    <t t-set="product_reference" t-value="o.partner_id.commercial_partner_id.product_reference_ids.filtered(lambda product_ref:product_ref.product_id==l.product_id)"/>
+                                    <t t-if="len(product_reference)==1">
+                                        <td>(<span t-field="product_reference.customer_reference"/>) <span t-field="line_id.product_id"/></td>
+                                    </t>
+                                    <t t-if="len(product_reference)!=1">
+                                        <td><span t-field="l.product_id"/></td>
+                                    </t>
                                     <td style="font-size:10px">
                                         <span t-field="l.product_id.product_tmpl_id.description_sale"/>
                                     </td>

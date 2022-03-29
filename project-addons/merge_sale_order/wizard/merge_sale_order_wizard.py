@@ -78,30 +78,28 @@ class MergePurchaseOrder(models.TransientModel):
         notes=""
         internal_notes=""
         sale_notes=""
-        client_order_ref = False
-        for order in sale_orders:
+        if merge_mode and so.client_order_ref:
+            client_order_ref = so.client_order_ref + " + \n"
+        else:
+            client_order_ref = ""
+        for order in sale_orders.sorted(key=lambda r: r.id):
             notes += order.note + "\n" if order.note else ""
             internal_notes += order.internal_notes + "\n" if order.internal_notes else ""
             sale_notes += order.sale_notes + "\n" if order.sale_notes else ""
-            if order.client_order_ref:
-                if client_order_ref:
-                    client_order_ref += order.client_order_ref + "\n"
-                else:
-                    client_order_ref = order.client_order_ref + "\n"
-            if merge_mode and order == so:
+            if order == so:
                 continue
+            client_order_ref += order.client_order_ref + " + \n" if order.client_order_ref else ""
+            order.client_order_ref = order.client_order_ref + "(canceled)" if order.client_order_ref else False
             for line in order.order_line:
                 existing_so_line = False
                 if so.order_line:
                     for so_line in so.order_line:
-                        if line.product_id == so_line.product_id and \
-                                line.price_unit == so_line.price_unit:
+                        if line.product_id == so_line.product_id and line.price_unit == so_line.price_unit:
                             existing_so_line = so_line
                             break
                 if existing_so_line:
                     if existing_so_line.product_id.categ_id.with_context(lang='es_ES').name != 'Portes':
-                        existing_so_line.product_uom_qty += \
-                            line.product_uom_qty
+                        existing_so_line.product_uom_qty += line.product_uom_qty
                         taxes = existing_so_line.tax_id + line.tax_id
                         existing_so_line.tax_id = [(6, 0, taxes.ids)]
                         analytic_tags = existing_so_line.analytic_tag_ids + line.analytic_tag_ids
@@ -129,6 +127,6 @@ class MergePurchaseOrder(models.TransientModel):
         so.note = notes
         so.internal_notes = internal_notes
         so.sale_notes = sale_notes
-        if client_order_ref:
-            so.client_order_ref = client_order_ref
+        if client_order_ref[-4:] == " + \n":
+            so.client_order_ref = client_order_ref[:-4]
         so.message_post(body=_('This order has been created by merging these orders: %s')%sale_orders_name)

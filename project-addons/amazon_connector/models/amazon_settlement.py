@@ -155,17 +155,22 @@ class AmazonSettlement(models.Model):
                                      'amount': float(transaction[4].text),
                                      'settlement_id': settlement.id}
                     else:
-                        cont = 1 if transaction[1].tag=='ShipmentID' else 0
+                        if transaction[1].tag == 'ShipmentID':
+                            cont = 1
+                        elif transaction[1].tag == 'PostedDate':
+                            cont = -1
+                        else:
+                            cont = 0
                         line_vals = {'type': transaction.tag,
                                      'transaction_type': transaction[0].text,
-                                     'transaction_name': transaction[cont+1].text,
-                                     'posted_date': transaction[cont+2].text,
+                                     'transaction_name': transaction[cont + 1].text if cont != -1 else False,
+                                     'posted_date': transaction[cont + 2].text,
                                      'currency_id': self.env[
                                          'res.currency'].search(
                                          [('name', '=',
-                                           transaction[cont+3].attrib.get(
+                                           transaction[cont + 3].attrib.get(
                                                'currency'))]).id,
-                                     'amount': float(transaction[cont+3].text),
+                                     'amount': float(transaction[cont + 3].text),
                                      'settlement_id': settlement.id}
                         if cont==1:
                             line_vals.update({'shipment_id':transaction[1].text})

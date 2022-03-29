@@ -674,3 +674,16 @@ msgstr "Sconto % in NO marca"
 #, python-format
 msgid "Discount % on one product based on the quantity of another"
 msgstr "Sconto % su un prodotto in base alla quantità di un altro"
+
+#. modules: sale_promotions_extend
+#: selection:promos.rules.actions,action_type:0
+#, python-format
+msgid "Limit quantity of a product in an order"
+msgstr "Limitare la quantità di un prodotto in un ordine"
+
+#. module: openerp_sale_promotions
+#: code:addons/sale_promotions_extend/models/rules.py:257
+#: code:addons/sale_promotions_extend/models/rules.py:282
+#, python-format
+msgid "No product with the code %s"
+msgstr "Non ci sono prodotti con il nome %s"

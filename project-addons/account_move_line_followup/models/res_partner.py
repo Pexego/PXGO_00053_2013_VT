@@ -56,10 +56,10 @@ class ResPartner(models.Model):
                         ('partner_id', '!=', False),
                         ('move_id.state', '!=', 'draft'),
                         '|', ('debit', '>', 0), ('credit', '>', 0)],
-                       ['partner_id', 'balance'], ['partner_id'])
+                       ['partner_id', 'amount_residual'], ['partner_id'])
         valid_partner_ids = []
         for partner_data in partners_data:
-            if OPERATORS[operator](partner_data['balance'], operand):
+            if OPERATORS[operator](partner_data['amount_residual'], operand):
                 valid_partner_ids.append(partner_data['partner_id'][0])
         return [('id', 'in', valid_partner_ids)]
 
