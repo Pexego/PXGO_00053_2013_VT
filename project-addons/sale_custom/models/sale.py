@@ -237,7 +237,7 @@ class SaleOrder(models.Model):
             self.env.user.notify_warning(message=warning, sticky=True)
 
     def action_confirm(self):
-        if any(d.product_id.id == 17897 for d in self.order_line) and not self.force_generic_product:
+        if any(d.product_id.id == self.env.ref('product_product.generic_product').id for d in self.order_line) and not self.force_generic_product:
             raise UserError(_("You can't confirm a sale with the product %s.")%(next(item.product_id.name for item in self.order_line if item.product_id.id == 17897)))
         if not self.env.context.get('bypass_override', False) and (
                 not self.env.context.get('bypass_risk', False) or self.env.context.get('force_check', False)):
