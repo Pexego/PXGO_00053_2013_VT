@@ -57,9 +57,7 @@ class PurchaseOrder(models.Model):
             'state': 'reserve',
             'no_promos': True,
             'allow_confirm_blocked_magreb': True,
-            'client_order_ref': purchase.name,
-            'transporter_id': transporter.remote_id,
-            'service_id': service.remote_id
+            'client_order_ref': purchase.name
         }
         if transporter and service:
             vals['transporter_id'] = transporter.remote_id
