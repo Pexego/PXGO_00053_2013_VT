@@ -7,11 +7,13 @@ class PurchaseOrder(models.Model):
     _inherit = "purchase.order"
 
     def prepare_order_es(self, purchase, odoo_es):
+        country_code = self.env['ir.config_parameter'].sudo().get_param('country_code')
+
         if purchase.dest_address_id.dropship or not purchase.dest_address_id.parent_id:
             name_ship = purchase.dest_address_id.name
         else:
             name_ship = purchase.dest_address_id.commercial_partner_id.name + ', ' + purchase.dest_address_id.name
-        partner = odoo_es.env['res.partner'].search([('name', '=', 'VISIOTECH Italia'), ('is_company', '=', True)])
+        partner = odoo_es.env['res.partner'].search([('country_code', '=', country_code), ('is_company', '=', True)])
         partner_ship = odoo_es.env['res.partner'].search([('name', '=', name_ship),
                                                           ('zip', '=', purchase.dest_address_id.zip),
                                                           ('street', '=', purchase.dest_address_id.street),
