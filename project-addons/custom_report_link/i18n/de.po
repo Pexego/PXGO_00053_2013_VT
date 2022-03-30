@@ -252,7 +252,7 @@ msgstr "<strong>Destination Account:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
 msgid "<strong>Discount</strong>"
-msgstr "<strong>Discount</strong>"
+msgstr "<strong>Rabatt</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -291,7 +291,7 @@ msgstr "<strong>Steuerzuordnung:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "<strong>IVA</strong>"
-msgstr "<strong>IVA</strong>"
+msgstr "<strong>MwSt</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
@@ -514,7 +514,7 @@ msgstr "<strong>Total Qty</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
 msgid "<strong>Unit Cost</strong>"
-msgstr "<strong>Unit Cost</strong>"
+msgstr "<strong>Einheitspreis</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_invoice_custom_document
@@ -525,7 +525,7 @@ msgstr "<strong>Unit Cost</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
 msgid "<strong>Unit Price</strong>"
-msgstr "<strong>Einzelpreis</strong>"
+msgstr "<strong>UVP</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
@@ -667,7 +667,7 @@ msgstr "Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "C.I.F.:"
-msgstr "C.I.F.:"
+msgstr "Ust-ID (Kunden):"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
@@ -730,11 +730,6 @@ msgid "Customer ref:"
 msgstr "Kundenreferenz"
 
 #. module: custom_report_link
-#: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
-msgid "Date"
-msgstr "Datum"
-
-#. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
@@ -745,7 +740,7 @@ msgstr "Datum"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "Date:"
-msgstr "Date:"
+msgstr "Datum:"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
@@ -1079,7 +1074,7 @@ msgstr "Transfer"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 msgid "VAT:"
-msgstr "UST:"
+msgstr "USt-ID:"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_invoice
@@ -1088,7 +1083,7 @@ msgstr "UST:"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
 msgid "<b>VAT:</b>"
-msgstr "<b>UST: </b>"
+msgstr "<b>USt-ID: </b>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
