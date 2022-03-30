@@ -62,26 +62,21 @@ class AccountBankStatementLine(models.Model):
         is_reconciled = False
         reconciled_accounts = {
             'Partner': [],
-            'Invoice': [],
             'Amount': []
         }
 
         for aml_dict in counterpart_aml_dicts:
             if aml_dict['move_line'].reconciled:
                 reconciled_accounts['Partner'].append(aml_dict['move_line'].partner_id.name)
-                reconciled_accounts['Invoice'].append(str(aml_dict['move_line'].invoice_id.number))
-                reconciled_accounts['Amount'].append(str(aml_dict['move_line'].amount_residual)+'€')
+                reconciled_accounts['Amount'].append(str(aml_dict['move_line'].balance)+'€')
                 is_reconciled = True
 
         if is_reconciled:
-            partner_msg, invoice_msg, amount_msg = "", "", ""
+            partner_msg, amount_msg = "", ""
             if reconciled_accounts['Partner']:
-                partner_msg = ' | '. join(reconciled_accounts['Partner'])
-            if reconciled_accounts['Invoice']:
-                invoice_msg = ' | '. join(reconciled_accounts['Invoice'])
+                partner_msg = ' | '.join(reconciled_accounts['Partner'])
             if reconciled_accounts['Amount']:
-                amount_msg = ' | '. join(reconciled_accounts['Amount'])
+                amount_msg = ' | '.join(reconciled_accounts['Amount'])
             
-            raise UserError(_('A selected move line was already reconciled.\n - Partners: %s\n - Invoices: %s\n - Amounts: %s')%
-            (partner_msg, invoice_msg, amount_msg))
+            raise UserError(_('A selected move line was already reconciled.\n - Partners: %s\n - Amounts: %s\n')%(partner_msg, amount_msg))
         return super(AccountBankStatementLine, self).process_reconciliation(counterpart_aml_dicts, payment_aml_rec, new_aml_dicts)
