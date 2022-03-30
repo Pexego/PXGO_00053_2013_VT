@@ -141,3 +141,8 @@ msgstr "Riga estratto"
 #: model:ir.model.fields,field_description:custom_account_it.field_wizard_reconcile_riba_statement_line_statement_line_amount
 msgid "Statement line amount"
 msgstr "Quantità línea extracto"
+
+#. module: custom_account_it
+#: model:ir.ui.view,arch_db:custom_account_it.view_riba_da_emettere_tree
+msgid "Back to draft"
+msgstr "A Bozza"

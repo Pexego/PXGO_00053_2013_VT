@@ -67,9 +67,11 @@ class SaleOrderClaimWizard(models.TransientModel):
         state = self.env.ref('crm_claim_rma_custom.stage_claim_pending_rev')
         for rma in self.line_ids.filtered(lambda l: l.choose):
             notes = order.internal_notes or ''
-            order.internal_notes = notes + _(' Add %s  Ub.: %s (%s)') % (rma.claim_id.number, rma.claim_id.location, rma.claim_id.partner_id.name)
+            order.internal_notes = notes + _('\n Add %s  Ub.: %s') % (rma.claim_id.number, rma.claim_id.location)
             rma.claim_id.stage_id = state.id
             rma.claim_id.att_order_id = order.id
+        if self.line_ids.filtered(lambda l: l.choose):
+            order.internal_notes += ' (%s)' % rma.claim_id.partner_id.name
 
 
 
