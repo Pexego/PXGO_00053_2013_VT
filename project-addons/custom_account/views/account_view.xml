@@ -108,8 +108,19 @@
                 <field name="user_id" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </field>
+                <field name="number" position="before">
+                    <field name="origin"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="invoice_tree_add_origin" model="ir.ui.view">
+            <field name="name">account.invoice.tree.add_invoice_type</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="custom_account.invoice_tree_add_invoice_type"/>
+            <field name="arch" type="xml">
                 <field name="origin" position="attributes">
-                    <attribute name="invisible">True</attribute>
+                    <attribute name="groups">custom_account.group_big_accounts</attribute>
                 </field>
             </field>
         </record>
