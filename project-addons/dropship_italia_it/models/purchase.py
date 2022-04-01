@@ -29,6 +29,8 @@ class PurchaseOrder(models.Model):
                 'name': name_ship,
                 'dropship': True,
                 'email': purchase.dest_address_id.email,
+                'phone': purchase.dest_address_id.phone,
+                'mobile': purchase.dest_address_id.mobile,
                 'customer': True,
                 'is_company': False,
                 'delivery_type': 'shipping',
