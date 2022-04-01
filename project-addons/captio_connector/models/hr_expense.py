@@ -266,8 +266,20 @@ class HrExpense(models.Model):
                                 payment_method = ' EF '
                                 journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                 close_account = user.cash_account_id.id,
-                            move_name = user.partner_id.name.upper() + payment_method + report["ExternalId"] + \
-                                        ' %s/%s ' % (count + 1, len(report["ExpensesSIIData"]))
+                            if user.name == 'Generica Gastos':
+                                filters_report = '?filters={"Id":"%s"}' % report["Id"]
+                                response_report = requests.get('%s/v3.1/Reports%s' % (url_api, filters_report),
+                                                               headers={'Authorization': 'Bearer ' + token,
+                                                                        'CustomerKey': ckey})
+                                if response_report.status_code == 200:
+                                    report_detail = json.loads(response_report.text)[0]
+                                    # It should come just one expense, don't know why it's coming in array form
+                                    if report_detail:
+                                        move_name = report_detail["Name"] + ' ' + report["ExternalId"] + ' %s/%s ' % (
+                                        count + 1, len(report["ExpensesSIIData"]))
+                            else:
+                                move_name = user.partner_id.name.upper() + payment_method + report["ExternalId"] + \
+                                            ' %s/%s ' % (count + 1, len(report["ExpensesSIIData"]))
                             line_name = user.partner_id.name.upper()
                             analytic_account_id = user.analytic_account_id.id if user.analytic_account_id else False
                             # if the expense is not from the past month or the current one, put the last day of the past month
@@ -338,8 +350,19 @@ class HrExpense(models.Model):
                                         payment_method = ' EF '
                                         journal = self.env['account.journal'].search([('expenses_journal', '=', True)])
                                         close_account = user.cash_account_id.id,
-                                    move_name = user.partner_id.name.upper() + payment_method + report["ExternalId"] + \
-                                                ' %s/%s ' % (count + 1, len(report["ExpensesSIIData"]))
+                                    if user.name == 'Generica Gastos':
+                                        filters_report = '?filters={"Id":"%s"}' % report["Id"]
+                                        response_report = requests.get('%s/v3.1/Reports%s' % (url_api, filters_report),
+                                                                headers={'Authorization': 'Bearer ' + token,
+                                                                         'CustomerKey': ckey})
+                                        if response_report.status_code == 200:
+                                            report_detail = json.loads(response_report.text)[0]
+                                            # It should come just one expense, don't know why it's coming in array form
+                                            if report_detail:
+                                                move_name = report_detail["Name"] + ' ' + report["ExternalId"] + ' %s/%s ' % (count + 1, len(report["ExpensesSIIData"]))
+                                    else:
+                                        move_name = user.partner_id.name.upper() + payment_method + report["ExternalId"] + \
+                                                    ' %s/%s ' % (count + 1, len(report["ExpensesSIIData"]))
                                     line_name = user.partner_id.name.upper()
                                     analytic_account_id = user.analytic_account_id.id if user.analytic_account_id else False
                                     # if the expense is not from the past month or the current one, put the last day of the past month
