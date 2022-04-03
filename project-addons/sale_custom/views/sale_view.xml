@@ -41,6 +41,13 @@
             <xpath expr="//field[@name='order_line']/tree" position="attributes">
                 <attribute name="limit">100</attribute>
             </xpath>
+            <xpath expr="//field[@name='order_line']/tree//field[@name='product_id']" position="before">
+                <field name="select_copy" attrs="{'column_invisible': [('parent.area_id', '!=', %(product_customer_reference.projects_big_accounts_area)d)]}"/>
+            </xpath>
+            <xpath expr="//field[@name='order_line']" position="before">
+                <field name="area_id" invisible="1"/>
+                <button name="copy_sale_lines" icon="fa-copy" type="object" class="oe_right" attrs="{'invisible': [('area_id', '!=', %(product_customer_reference.projects_big_accounts_area)d)]}"/>
+            </xpath>
         </field>
     </record>
 
