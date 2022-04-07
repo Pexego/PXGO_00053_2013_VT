@@ -150,11 +150,6 @@ msgstr "Invia a perdite"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
-msgid "Product to refurbish stock"
-msgstr "Prodotto a danneggiato"
-
-#. module: crm_rma_advance_location
-#: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to stock"
 msgstr "Invia a stock"
 
@@ -351,3 +346,8 @@ msgstr "Tutti i prodotti devono avere una descrizione del problema, si prega di 
 #: model:ir.model.fields,field_description:crm_rma_advance_location.field_res_partner_rmp_partner
 msgid "RMP partner"
 msgstr "Azienda RMP"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
+msgid "Product to refurbish stock"
+msgstr "Prodotto in guasti"
