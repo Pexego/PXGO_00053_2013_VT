@@ -166,133 +166,133 @@ class AmazonReturn(models.Model):
             res.append((record.id,name))
         return res
 
-def cron_read_amazon_returns(self, data_start_time=False, data_end_time=False):
-        amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
-        credentials = self.env['amazon.sale.order']._get_credentials()
-        reports_obj = Reports(marketplace=Marketplaces.ES, credentials=credentials)
+    def cron_read_amazon_returns(self, data_start_time=False, data_end_time=False):
+            amazon_time_rate_limit = float(self.env['ir.config_parameter'].sudo().get_param('amazon.time.rate.limit'))
+            credentials = self.env['amazon.sale.order']._get_credentials()
+            reports_obj = Reports(marketplace=Marketplaces.ES, credentials=credentials)
 
-        if not data_start_time:
-            data_start_time = (datetime.utcnow() - timedelta(days=1)).isoformat()
-        if not data_end_time:
-            data_end_time = datetime.utcnow().isoformat()
-        try:
-            report_created = reports_obj.create_report(reportType="GET_FBA_FULFILLMENT_CUSTOMER_RETURNS_DATA",
-                                                       dataStartTime=data_start_time,
-                                                       dataEndTime=data_end_time).payload
-        except SellingApiException as e:
-            raise UserError(_("Amazon API Error. No return was created due to errors. '%s' \n") % e)
-        report_state = ""
-        while report_state != 'DONE':
+            if not data_start_time:
+                data_start_time = (datetime.utcnow() - timedelta(days=1)).isoformat()
+            if not data_end_time:
+                data_end_time = datetime.utcnow().isoformat()
             try:
-                report = reports_obj.get_report(report_created.get('reportId')).payload
-                report_state = report.get("processingStatus")
-            except SellingApiRequestThrottledException:
-                time.sleep(amazon_time_rate_limit)
-                continue
+                report_created = reports_obj.create_report(reportType="GET_FBA_FULFILLMENT_CUSTOMER_RETURNS_DATA",
+                                                           dataStartTime=data_start_time,
+                                                           dataEndTime=data_end_time).payload
             except SellingApiException as e:
-                raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_created.get('reportId'), e))
+                raise UserError(_("Amazon API Error. No return was created due to errors. '%s' \n") % e)
+            report_state = ""
+            while report_state != 'DONE':
+                try:
+                    report = reports_obj.get_report(report_created.get('reportId')).payload
+                    report_state = report.get("processingStatus")
+                except SellingApiRequestThrottledException:
+                    time.sleep(amazon_time_rate_limit)
+                    continue
+                except SellingApiException as e:
+                    raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report_created.get('reportId'), e))
 
-        read = False
-        while not read:
-            try:
-                last_report_document = reports_obj.get_report_document(report.get('reportDocumentId'),
-                                                                       decrypt=True).payload
-                read = True
-            except SellingApiRequestThrottledException:
-                time.sleep(amazon_time_rate_limit)
-                read = False
-            except SellingApiException as e:
-                raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report.get('reportDocumentId'), e))
-        document_lines = last_report_document.get('document').split("\n")
-        reader = csv.DictReader(document_lines, delimiter="\t")
-        data = list(reader)
-        info = json.loads(json.dumps(data))
-        returns_with_errors=self.env['amazon.return']
+            read = False
+            while not read:
+                try:
+                    last_report_document = reports_obj.get_report_document(report.get('reportDocumentId'),
+                                                                           decrypt=True).payload
+                    read = True
+                except SellingApiRequestThrottledException:
+                    time.sleep(amazon_time_rate_limit)
+                    read = False
+                except SellingApiException as e:
+                    raise UserError(_("Amazon API Error. Report %s. '%s' \n") % (report.get('reportDocumentId'), e))
+            document_lines = last_report_document.get('document').split("\n")
+            reader = csv.DictReader(document_lines, delimiter="\t")
+            data = list(reader)
+            info = json.loads(json.dumps(data))
+            returns_with_errors=self.env['amazon.return']
 
-        for row in info:
-            amazon_order_name = row.get('order-id')
-            product_asin = row.get('asin')
-            date = row.get('return-date')
-            qty = row.get('quantity')
-            a_return = self.env['amazon.return'].search([('amazon_order_name', '=', amazon_order_name),
-                                                         ('asin', '=', product_asin),
-                                                         ('return_date', '=', date), ('product_qty', '=', qty)])
-            if a_return:
-                continue
-            amazon_return = self.env['amazon.return'].create({'return_date': date,
-                                                              'amazon_order_id': self.env[
-                                                                  'amazon.sale.order'].search(
-                                                                  [('name', '=', amazon_order_name)]).id,
-                                                              'sku': row.get('sku'),
-                                                              'asin': product_asin,
-                                                              'product_qty': qty,
-                                                              'amazon_sku': row.get('fnsku'),
-                                                              'fulfillment_center': row.get(
-                                                                  'fulfillment-center-id'),
-                                                              'product_state': row.get('detailed-disposition'),
-                                                              'reason': row.get('reason'),
-                                                              'status': row.get('status'),
-                                                              'lpn': row.get('license-plate-number'),
-                                                              'product_name_amazon': row.get('product-name'),
-                                                              'customer_comments': row.get('customer-comments'),
-                                                              'product_id': self.env['product.product'].search(
-                                                                  [('asin_code', '=', product_asin)]).id,
-                                                              'amazon_order_name':amazon_order_name
-                                                              })
-            error = ""
-            if not amazon_return.amazon_order_id:
-                error += _("Unable to find amazon order for name '%s' \n" % amazon_order_name)
-            if not amazon_return.product_id:
-                error += _("Unable to find product with this ASIN '%s'\n" % product_asin)
-            if error:
-                amazon_return.error_message = error
-                returns_with_errors |= amazon_return
-                continue
-            if amazon_return.product_state == 'SELLABLE':
-                deposit = amazon_return.amazon_order_id.deposits.filtered(
-                    lambda dep: dep.product_id == amazon_return.product_id and dep.state=='invoiced')
-
-                if not deposit:
-                    error += _("Unable to find a deposit for this order")
+            for row in info:
+                amazon_order_name = row.get('order-id')
+                product_asin = row.get('asin')
+                date = row.get('return-date')
+                qty = row.get('quantity')
+                a_return = self.env['amazon.return'].search([('amazon_order_name', '=', amazon_order_name),
+                                                             ('asin', '=', product_asin),
+                                                             ('return_date', '=', date), ('product_qty', '=', qty)])
+                if a_return:
+                    continue
+                amazon_return = self.env['amazon.return'].create({'return_date': date,
+                                                                  'amazon_order_id': self.env[
+                                                                      'amazon.sale.order'].search(
+                                                                      [('name', '=', amazon_order_name)]).id,
+                                                                  'sku': row.get('sku'),
+                                                                  'asin': product_asin,
+                                                                  'product_qty': qty,
+                                                                  'amazon_sku': row.get('fnsku'),
+                                                                  'fulfillment_center': row.get(
+                                                                      'fulfillment-center-id'),
+                                                                  'product_state': row.get('detailed-disposition'),
+                                                                  'reason': row.get('reason'),
+                                                                  'status': row.get('status'),
+                                                                  'lpn': row.get('license-plate-number'),
+                                                                  'product_name_amazon': row.get('product-name'),
+                                                                  'customer_comments': row.get('customer-comments'),
+                                                                  'product_id': self.env['product.product'].search(
+                                                                      [('asin_code', '=', product_asin)]).id,
+                                                                  'amazon_order_name':amazon_order_name
+                                                                  })
+                error = ""
+                if not amazon_return.amazon_order_id:
+                    error += _("Unable to find amazon order for name '%s' \n" % amazon_order_name)
+                if not amazon_return.product_id:
+                    error += _("Unable to find product with this ASIN '%s'\n" % product_asin)
+                if error:
                     amazon_return.error_message = error
                     returns_with_errors |= amazon_return
                     continue
-                qty_deposit = sum(deposit.mapped('product_uom_qty'))
-                if qty_deposit < amazon_return.product_qty:
-                    error += _("There is no enough qty in deposit for this return")
-                    amazon_return.error_message = error
-                    returns_with_errors |= amazon_return
-                    continue
+                if amazon_return.product_state == 'SELLABLE':
+                    deposit = amazon_return.amazon_order_id.deposits.filtered(
+                        lambda dep: dep.product_id == amazon_return.product_id and dep.state=='invoiced')
+
+                    if not deposit:
+                        error += _("Unable to find a deposit for this order")
+                        amazon_return.error_message = error
+                        returns_with_errors |= amazon_return
+                        continue
+                    qty_deposit = sum(deposit.mapped('product_uom_qty'))
+                    if qty_deposit < amazon_return.product_qty:
+                        error += _("There is no enough qty in deposit for this return")
+                        amazon_return.error_message = error
+                        returns_with_errors |= amazon_return
+                        continue
+                    else:
+                        amazon_return.return_state = 'read'
+                        deposits_to_return = self.env['stock.deposit']
+                        qty_to_return = amazon_return.product_qty
+                        for d in deposit:
+                            if qty_to_return <= 0:
+                                break
+                            if d.product_uom_qty <= qty_to_return:
+                                deposits_to_return |= d
+                                qty_to_return -= d.product_uom_qty
+                            else:
+                                new_deposit = d.copy()
+                                new_deposit.write({'product_uom_qty': qty_to_return})
+                                d.write({'product_uom_qty': d.product_uom_qty - qty_to_return})
+                                deposits_to_return |= new_deposit
+                                qty_to_return -= new_deposit.product_uom_qty
+
+                        deposits_to_return.with_context({'client_warehouse': True}).return_deposit()
+                        amazon_return.deposit_ids = [(6, 0, deposits_to_return.ids)]
+                        for d in deposits_to_return:
+                            copy = d.copy({'amazon_order_id': False,
+                                         'invoice_id': False,
+                                         'state': 'draft',
+                                         'sale_move_id': False,
+                                         'loss_move_id': False,
+                                         'amazon_return_id': False,
+                                         'return_picking_id':False,
+                                         'original_deposit_id': d.id})
+                            copy.write({'product_uom_qty':d.product_uom_qty})
+
+                        amazon_return.return_state = 'done'
                 else:
-                    amazon_return.return_state = 'read'
-                    deposits_to_return = self.env['stock.deposit']
-                    qty_to_return = amazon_return.product_qty
-                    for d in deposit:
-                        if qty_to_return <= 0:
-                            break
-                        if d.product_uom_qty <= qty_to_return:
-                            deposits_to_return |= d
-                            qty_to_return -= d.product_uom_qty
-                        else:
-                            new_deposit = d.copy()
-                            new_deposit.write({'product_uom_qty': qty_to_return})
-                            d.write({'product_uom_qty': d.product_uom_qty - qty_to_return})
-                            deposits_to_return |= new_deposit
-                            qty_to_return -= new_deposit.product_uom_qty
-
-                    deposits_to_return.with_context({'client_warehouse': True}).return_deposit()
-                    amazon_return.deposit_ids = [(6, 0, deposits_to_return.ids)]
-                    for d in deposits_to_return:
-                        copy = d.copy({'amazon_order_id': False,
-                                     'invoice_id': False,
-                                     'state': 'draft',
-                                     'sale_move_id': False,
-                                     'loss_move_id': False,
-                                     'amazon_return_id': False,
-                                     'return_picking_id':False,
-                                     'original_deposit_id': d.id})
-                        copy.write({'product_uom_qty':d.product_uom_qty})
-
-                    amazon_return.return_state = 'done'
-            else:
-                amazon_return.return_state='read'
+                    amazon_return.return_state='read'
