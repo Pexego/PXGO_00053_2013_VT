@@ -109,13 +109,6 @@ class SaleOrder(models.Model):
             self.env['promos.rules'].apply_special_promotions(self)
             res = False
 
-        taxes = order.order_line.filtered(
-            lambda l: len(l.tax_id) > 0)[0].tax_id
-        for line in order.order_line:
-            if line.promotion_line:
-                line.tax_id = taxes
-                if '3 por ciento' in line.name:
-                    line.sequence = 999
         return res
 
     def release_multiple_reservation_lines(self):

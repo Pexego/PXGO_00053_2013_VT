@@ -1,0 +1,91 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* product_customer_reference
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-24 09:24+0000\n"
+"PO-Revision-Date: 2022-02-24 09:24+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: product_customer_reference
+#: model:ir.model,name:product_customer_reference.model_res_partner
+msgid "Contact"
+msgstr "Cliente"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_customer_reference
+msgid "Customer Reference"
+msgstr "Referencia cliente"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_id
+msgid "ID"
+msgstr "ID (identificación)"
+
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización de"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_product_customer_reference_product_id
+msgid "Product"
+msgstr "Producto"
+
+#. module: product_customer_reference
+#: model:ir.model.fields,field_description:product_customer_reference.field_res_partner_product_reference_ids
+#: model:ir.model.fields,field_description:product_customer_reference.field_res_users_product_reference_ids
+#: model:ir.ui.view,arch_db:product_customer_reference.view_partner_product_customer_references_form
+msgid "Product Customer References"
+msgstr "Referencias de producto del cliente"
+
+#. module: product_customer_reference
+#: code:addons/product_customer_reference/models/product.py:13
+#: sql_constraint:product.customer.reference:0
+#, python-format
+msgid "There cannot be more than one different reference per product and customer"
+msgstr "No puede haber más de una referencia por cliente y producto"
+
+#. module: product_customer_reference
+#: model:ir.model,name:product_customer_reference.model_product_customer_reference
+msgid "product.customer.reference"
+msgstr "product.customer.reference"

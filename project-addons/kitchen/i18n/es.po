@@ -552,3 +552,8 @@ msgstr "No puedes crear una personalización sin marcar el check de borrar logo 
 #: code:addons/kitchen/models/product.py:68
 msgid "You can't check the fields customizable and erase logo at the same time"
 msgstr "No puedes marcar los campos personalizable y borrar logo a la vez"
+
+#. module: kitchen
+#: model:ir.model.fields,field_description:kitchen.field_customization_line_sale_product_id
+msgid "Sale Product"
+msgstr "Producto en el Pedido"

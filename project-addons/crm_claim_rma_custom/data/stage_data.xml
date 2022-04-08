@@ -5,4 +5,14 @@
         <field name="sequence">27</field>
         <field name="case_default" eval="True"/>
     </record>
+    <record model="crm.claim.stage" id="stage_claim_pending_rev">
+        <field name="name">Pendiente revisión</field>
+        <field name="sequence">28</field>
+        <field name="case_default" eval="True"/>
+    </record>
+    <record model="crm.claim.stage" id="stage_claim_attached">
+        <field name="name">Adjuntado</field>
+        <field name="sequence">29</field>
+        <field name="case_default" eval="True"/>
+    </record>
 </odoo>

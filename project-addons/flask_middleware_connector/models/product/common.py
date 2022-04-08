@@ -54,10 +54,11 @@ class ProductTemplateListener(Component):
         if record.image or len(fields) != 1:
             for field in up_fields:
                 if field in fields:
-                    product = self.env["product.product"].search(
-                        [('product_tmpl_id', '=', record.id)])
-                    product.with_delay(priority=11, eta=60).update_product()
-                    break
+                    if record.sale_ok or "sale_ok" in fields:
+                        product = self.env["product.product"].search(
+                            [('product_tmpl_id', '=', record.id)])
+                        product.with_delay(priority=11, eta=60).update_product()
+                        break
 
 
 class ProductListener(Component):
@@ -96,8 +97,9 @@ class ProductListener(Component):
 
         for field in up_fields:
             if field in fields:
-                record.with_delay(priority=11, eta=30).update_product()
-                break
+                if record.sale_ok or "sale_ok" in fields:
+                    record.with_delay(priority=11, eta=30).update_product()
+                    break
 
         packs = self.env['mrp.bom.line'].search([('product_id', '=', record.id)]).mapped('bom_id')
         for pack in packs:

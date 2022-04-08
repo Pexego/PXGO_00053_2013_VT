@@ -50,7 +50,7 @@
             <form string="SIM packages">
                 <header>
                     <button name="%(sim_manager.action_sim_export_wizard)d" string="Sync web" type="action"
-                            groups="base.group_system"/>
+                            groups="mrp.group_mrp_user"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>

@@ -98,6 +98,7 @@
                 <field name="delivery_date" />
                 <field name="return_date" />
                 <field name="state" />
+                <field name="return_picking_id" />
             </tree>
         </field>
     </record>
