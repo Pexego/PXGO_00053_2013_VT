@@ -145,7 +145,6 @@ class ClaimMakePicking(models.TransientModel):
 
     @api.multi
     def create_move(self, claim_line, p_type, picking_id, claim, note, write_field):
-        reserv_obj = self.env['stock.reservation']
         type_ids = self.env['stock.picking.type'].search([('code', '=', p_type)])
         partner_id = claim.delivery_address_id
         move_obj = self.env['stock.move']
@@ -174,20 +173,6 @@ class ClaimMakePicking(models.TransientModel):
              'note': note,
              'claim_line_id': claim_line.id
              })
-        if p_type == 'outgoing' and claim_line.product_id.type == 'product':
-            reserv_vals = {
-                'product_id': product.id,
-                'product_uom': claim_line.product_id.uom_id.id,
-                'product_uom_qty': claim_line.product_returned_quantity,
-                'date_validity': False,
-                'name': u"{}".format(claim_line.claim_id.number),
-                'location_id': self.claim_line_source_location.id,
-                'location_dest_id': self.claim_line_dest_location.id,
-                'move_id': move_id.id,
-                'claim_id': claim_line.claim_id.id,
-            }
-            reserve = reserv_obj.create(reserv_vals)
-            reserve.reserve()
         claim_line.write({write_field: move_id.id})
 
     # If "Create" button pressed

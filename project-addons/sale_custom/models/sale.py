@@ -12,6 +12,7 @@ class SaleOrderLine(models.Model):
 
     description_editable_related = fields.Boolean(related='product_id.description_editable', readonly=1)
 
+    select_copy = fields.Boolean(' ')
 
     def write(self, vals):
         for line in self:
@@ -237,7 +238,7 @@ class SaleOrder(models.Model):
             self.env.user.notify_warning(message=warning, sticky=True)
 
     def action_confirm(self):
-        if any(d.product_id.id == 17897 for d in self.order_line) and not self.force_generic_product:
+        if any(d.product_id.id == self.env.ref('product_product.generic_product').id for d in self.order_line) and not self.force_generic_product:
             raise UserError(_("You can't confirm a sale with the product %s.")%(next(item.product_id.name for item in self.order_line if item.product_id.id == 17897)))
         if not self.env.context.get('bypass_override', False) and (
                 not self.env.context.get('bypass_risk', False) or self.env.context.get('force_check', False)):
@@ -305,7 +306,7 @@ class SaleOrder(models.Model):
 
         return True
 
-    def check_weight(self,onchange=False):
+    def check_weight(self, onchange=False):
         dhl_flight = self.transporter_id.name == "DHL" and self.service_id.by_air
         canary = self.partner_shipping_id and \
                  not self.env.context.get("bypass_canary_max_weight", False) and \
@@ -333,6 +334,15 @@ class SaleOrder(models.Model):
                     'message': _(
                         "This order to the Canary Islands exceeds %skg. Have you checked the shipping costs and conditions?") % canary_max_weight
                 }).action_show()
+
+    @api.multi
+    def copy_sale_lines(self):
+        for order in self:
+            for line in order.order_line:
+                if line.select_copy:
+                    line.copy({'order_id': order.id,
+                               'select_copy': False})
+                    line.select_copy = False
 
 
 class MailMail(models.Model):
