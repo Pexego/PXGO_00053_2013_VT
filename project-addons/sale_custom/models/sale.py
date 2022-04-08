@@ -119,6 +119,7 @@ class SaleOrder(models.Model):
     not_sync_picking = fields.Boolean()
     pricelist_id = fields.Many2one(
         states={'draft': [('readonly', False)], 'sent': [('readonly', False)], 'reserve': [('readonly', False)]})
+    force_generic_product = fields.Boolean(default= False)
 
     is_editable = fields.Boolean(compute='_get_is_editable', default=True)
 
@@ -237,6 +238,8 @@ class SaleOrder(models.Model):
             self.env.user.notify_warning(message=warning, sticky=True)
 
     def action_confirm(self):
+        if any(d.product_id.id == self.env.ref('product_product.generic_product').id for d in self.order_line) and not self.force_generic_product:
+            raise UserError(_("You can't confirm a sale with the product %s.")%(next(item.product_id.name for item in self.order_line if item.product_id.id == 17897)))
         if not self.env.context.get('bypass_override', False) and (
                 not self.env.context.get('bypass_risk', False) or self.env.context.get('force_check', False)):
             user_buyer = self.env['ir.config_parameter'].sudo().get_param(
