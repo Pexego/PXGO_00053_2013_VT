@@ -14,7 +14,7 @@ from point_programme import CustomerSalePointProgrammeRule, CustomerSalePointPro
 
 #from post import Post
 MODELS_CLASS = {
-    'invoice': Invoice, 'customer': Customer, 'customertag': CustomerTag, 'customertagcustomerrel': CustomerTagCustomerRel,
+    'customer': Customer, 'customertag': CustomerTag, 'customertagcustomerrel': CustomerTagCustomerRel, 'invoice': Invoice,
     'product': Product, 'productcategory': ProductCategory, 'rmastatus': RmaStatus,
     'rmastage': RmaStage, 'rma': Rma, 'picking': Picking, 'pickingproduct': PickingProduct,
     'rmaproduct': RmaProduct, 'country': Country, 'commercial': Commercial,
@@ -29,10 +29,16 @@ MASTER_CLASSES = {'commercial': Commercial,'productcategory': ProductCategory,
                   'country': Country, 'productbrand': ProductBrand, 'rappel': Rappel,
                   'translation': Translation, 'paymentline': PaymentLine}
 
-DEPENDENT_CLASSES = {'invoice': Invoice, 'customer': Customer, 'customertag': CustomerTag, 'customertagcustomerrel': CustomerTagCustomerRel,
-                     'product': Product, 'picking': Picking, 'pickingproduct': PickingProduct,
+SECOND_LEVEL_CLASSES = {'customer': Customer, 'product': Product}
+
+DEPENDENT_CLASSES = {'customertag': CustomerTag,'invoice': Invoice,
+                     'picking': Picking, 'pickingproduct': PickingProduct,
                      'rma': Rma, 'rmaproduct': RmaProduct,
                      'productbrandcountryrel': ProductBrandCountryRel, 'order': Order, 'producttag': ProductTag, 'producttagproductrel': ProductTagProductRel,
                      'orderproduct': OrderProduct, 'rappelcustomerinfo': RappelCustomerInfo, 'countrystate': CountryState,
-                     'Customersalepointprogrammerule': CustomerSalePointProgrammeRule, 'Customersalepointprogramme': CustomerSalePointProgramme
                      }
+
+FOUR_LEVEL_CLASSES = {'Customersalepointprogrammerule': CustomerSalePointProgrammeRule}
+
+LAST_CLASSES = {'Customersalepointprogramme': CustomerSalePointProgramme,
+                'customertagcustomerrel': CustomerTagCustomerRel}

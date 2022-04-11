@@ -2,6 +2,6 @@
 <odoo noupdate="1">
     <record id="translations_to_export" model="ir.config_parameter">
         <field name="key">translations.to.export</field>
-        <field name="value"></field>
+        <field name="value">{'product.category':['name']}</field>
     </record>
 </odoo>
