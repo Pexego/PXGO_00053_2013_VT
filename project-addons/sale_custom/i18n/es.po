@@ -198,3 +198,14 @@ msgstr "Albarán no sincronizable"
 #: model:ir.actions.act_window,name:sale_custom.open_historical_orders
 msgid "Historical orders"
 msgstr "Pedidos del cliente"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:241
+#, python-format
+msgid "You can't confirm a sale with the product %s."
+msgstr "No puedes confirmar un pedido con el producto %s."
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_sync_picking
+msgid "Force generic product"
+msgstr "Forzar producto genérico"
