@@ -12,10 +12,10 @@ class PurchaseOrder(models.Model):
         trp_id = self.picking_ids[0].sale_id.transporter_ds_id
         srv_id = self.picking_ids[0].sale_id.service_ds_id
         if trp_id and srv_id:
-            obj_ship_id = self.env['base.synchro.obj'].search([('name', '=', 'Transportistas')]).id
-            transporter = self.env['base.synchro.obj.line'].search([('obj_id', '=', obj_ship_id), ('local_id', '=', trp_id.id)])
-            obj_serv_id = self.env['base.synchro.obj'].search([('name', '=', 'Servicios de transporte')]).id
-            service = self.env['base.synchro.obj.line'].search(
+            obj_ship_id = self.env['base.synchro.obj'].sudo().search([('name', '=', 'Transportistas')]).id
+            transporter = self.env['base.synchro.obj.line'].sudo().search([('obj_id', '=', obj_ship_id), ('local_id', '=', trp_id.id)])
+            obj_serv_id = self.env['base.synchro.obj'].sudo().search([('name', '=', 'Servicios de transporte')]).id
+            service = self.env['base.synchro.obj.line'].sudo().search(
                 [('obj_id', '=', obj_serv_id), ('local_id', '=', srv_id.id)])
 
         if purchase.dest_address_id.dropship or not purchase.dest_address_id.parent_id:
