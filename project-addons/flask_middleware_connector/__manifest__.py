@@ -10,7 +10,7 @@
     'depends': ['base', 'product', 'connector', 'queue_job', 'stock',
                 'custom_partner', 'crm_claim_rma_custom',
                 'product_virtual_stock_conservative', 'mrp', 'rappel', 'product_pricelist_custom',
-                'custom_report_link', 'custom_account'],
+                'custom_report_link', 'custom_account', 'stock_custom', 'sale_point_programme'],
     'data': [
         'data/groups.xml','views/middleware_view.xml', 'views/res_users.xml',
         'views/product_view.xml', 'views/product_brand.xml',

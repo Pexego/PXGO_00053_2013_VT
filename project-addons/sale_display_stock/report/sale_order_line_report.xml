@@ -42,7 +42,6 @@
                     <filter string="Order Date" domain="[]" context="{'group_by':'date_order'}"/>
                     <filter string="Confirmation Date" domain="[]" context="{'group_by':'confirmation_date'}"/>
                     <filter string="Salesperson" domain="[]" context="{'group_by':'salesman_id'}"/>
-                    <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
                     <filter string="Line invoice status" domain="[]" context="{'group_by':'invoice_status'}"/>
                     <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
                     <filter string="Partner country" domain="[]" context="{'group_by':'country_id'}"/>
