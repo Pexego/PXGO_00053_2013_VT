@@ -49,3 +49,14 @@ class SaleOrder(models.Model):
             else:
                 for line in order.order_line:
                     line.route_id = False
+
+    @api.multi
+    @api.onchange('transporter_ds_id')
+    def onchange_transporter_ds_id(self):
+        service_ids = [x.id for x in self.transporter_ds_id.service_ids]
+        if service_ids:
+            if self.service_ds_id.id not in service_ids:
+                self.service_ds_id = False
+            return {'domain': {'service_ds_id': [('id', 'in', service_ids)]}}
+        all_services = [x.id for x in self.env['transportation.service'].search([])]
+        return {'domain': {'service_ds_id': [('id', 'in', all_services)]}}
