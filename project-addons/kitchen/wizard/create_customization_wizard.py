@@ -1,7 +1,7 @@
 from odoo import models, fields, api, exceptions, _
 
 from odoo.exceptions import UserError
-
+from requests import request
 
 class CustomizationLine(models.TransientModel):
     _name = 'customization.line'
@@ -79,6 +79,15 @@ class CustomizationWizard(models.TransientModel):
                                                                              (6, 0, self.notify_users.ids)],
                                                                          'notify_sales_team': self.notify_sales_team
                                                                          })
+        previews = []
+        if self.customization_line.mapped('type_ids').filtered(lambda t: t.preview):
+            req = request('POST',
+                          'https://172.18.2.21:5300/odoo/GetCreatedPreview?idOdooClient=%s' % self.order_id.partner_id.ref,
+                          verify=False)
+            if req.status_code != 200:
+                raise UserError(_("There are no previews for this partner"))
+            previews = req.json()
+        products_error_state = {}
         for line in self.customization_line:
             qty = line.qty
             if not line.type_ids and not line.product_erase_logo:
@@ -106,7 +115,20 @@ class CustomizationWizard(models.TransientModel):
                 raise UserError(_(
                     "You can't create a customization with a bigger quantity of the product than what appears in the order: %s") % line.original_product_id.default_code)
             elif qty > 0:
-                lines += customization.create_line(line.original_product_id, qty, line)
+                product_previews = []
+                for prev in previews:
+                    if prev.get('reference', False) == line.original_product_id.default_code:
+                        state = prev.get('status', False)
+                        if state == 'Approved':
+                            product_previews.append(prev)
+                        else:
+                            products_error_state[line.original_product_id.default_code] = state
+                    if product_previews and line.original_product_id.default_code in products_error_state:
+                        del products_error_state[line.original_product_id.default_code]
+                if not products_error_state:
+                    lines += customization.create_line(line.original_product_id, qty, line, product_previews)
+        if products_error_state:
+            raise UserError(_("There are no active previews of these products: %s" %str(products_error_state)))
         if lines:
             return {
                 'view_type': 'form',

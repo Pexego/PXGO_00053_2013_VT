@@ -107,6 +107,9 @@
                                     <field name="erase_logo"/>
                                     <field name="state" invisible="1"/>
                                     <field name="sale_line_id" invisible="1"/>
+                                    <field name="preview_selector" domain="[('line_id','=',id)]" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="photo" widget="image" resize="30px,30px" readonly="1"/>
+                                    <field name="url" widget="url" readonly="1"/>
                                 </tree>
 
                             </field>

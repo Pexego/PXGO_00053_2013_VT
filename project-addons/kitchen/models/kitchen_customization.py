@@ -1,6 +1,8 @@
 from odoo import models, fields, _, exceptions, api
 from datetime import datetime
 import pytz
+import base64
+import requests
 
 
 class KitchenCustomization(models.Model):
@@ -192,7 +194,7 @@ class KitchenCustomization(models.Model):
         }
         return self.customization_line.new(new_line)
 
-    def create_line(self, product_id, qty, line):
+    def create_line(self, product_id, qty, line, previews=None):
         new_line = {
             'product_id': product_id.id,
             'product_qty': qty,
@@ -200,7 +202,16 @@ class KitchenCustomization(models.Model):
             'sale_line_id': line.sale_line_id.id,
             'erase_logo': line.erase_logo,
             'type_ids': [(6, 0, line.type_ids.ids)]}
-        return self.env['kitchen.customization.line'].create(new_line)
+        line_c = self.env['kitchen.customization.line'].create(new_line)
+        if previews:
+            for count, preview in enumerate(previews):
+                photo = base64.b64encode(requests.get(preview.get('logo'), verify=False).content)
+                new_preview = self.env['kitchen.customization.preview'].create(
+                    {'line_id': str(line_c.id), 'photo': photo, 'name': 'Preview %s' % str(count+1),
+                     'url': preview.get('urlView'), 'state': preview.get('status')})
+                if not line_c.preview_selector:
+                    line_c.preview_selector = new_preview.id
+        return line
 
     @api.multi
     def create_backorder_customization(self, backorder_moves):
@@ -391,3 +402,19 @@ class KitchenCustomizationLine(models.Model):
                 raise exceptions.UserError(
                     _("You can't create a customization without check erase logo option of this product : %s") % line.product_id.default_code)
         return super(KitchenCustomizationLine, self).write(vals)
+
+    preview_selector = fields.Many2one('kitchen.customization.preview')
+
+    photo = fields.Binary(related="preview_selector.photo")
+    url = fields.Char(related="preview_selector.url")
+    preview_ids = fields.One2many('kitchen.customization.preview', 'line_id')
+
+
+class KitchenCustomizationPreview(models.Model):
+    _name = 'kitchen.customization.preview'
+
+    name = fields.Char()
+    photo = fields.Binary()
+    url = fields.Char()
+    line_id = fields.Many2one('kitchen.customization.line')
+    status = fields.Char()
