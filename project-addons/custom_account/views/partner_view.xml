@@ -110,7 +110,7 @@
                 </field>
                 <field name="vat" position="replace"/>
                 <field name="property_account_position_id" position="after">
-                    <field name="invoice_type_id" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)]}"/>
+                    <field name="invoice_type_id" attrs="{'required': [('is_company', '=', True),('customer', '=', True),('dropship', '=', False),('prospective', '=', False)], 'readonly':1}"/>
                     <label for="vat" string="VAT"/>
                     <div>
                         <field name="vat"/>
@@ -119,6 +119,18 @@
                 </field>
             </field>
         </record>
+
+        <record id="view_partner_form_invoice_type_id_no_readonly" model="ir.ui.view">
+                <field name="name">res.partner.form.invoice_type_id.no.readonly</field>
+                <field name="model">res.partner</field>
+                <field name="inherit_id" ref="custom_account.view_partner_form_add_required_payment_term"/>
+                <field name="groups_id" eval="[(6, 0, [ref('account.group_account_manager')])]"/>
+                <field name="arch" type="xml">
+                    <field name="invoice_type_id" position="attributes">
+                        <attribute name="readonly">0</attribute>
+                    </field>
+                </field>
+            </record>
 
         <record id="view_partner_form_add_require_pricelist" model="ir.ui.view">
             <field name="name">res.partner.form.add_require_pricelist</field>
