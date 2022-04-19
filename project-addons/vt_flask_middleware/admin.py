@@ -9,7 +9,7 @@ from app import app
 from auth import auth
 from user import User
 from sync_log import SyncLog
-from implemented_models import MODELS_CLASS, MASTER_CLASSES, DEPENDENT_CLASSES
+from implemented_models import MODELS_CLASS, MASTER_CLASSES, DEPENDENT_CLASSES, SECOND_LEVEL_CLASSES, LAST_CLASSES, FOUR_LEVEL_CLASSES
 from flask_peewee.utils import make_password
 
 #
@@ -34,7 +34,16 @@ def init_db():
     for mod_class in list(MASTER_CLASSES.keys()):
         if not MODELS_CLASS[mod_class].table_exists():
             MODELS_CLASS[mod_class].create_table()
+    for mod_class in list(SECOND_LEVEL_CLASSES.keys()):
+        if not MODELS_CLASS[mod_class].table_exists():
+            MODELS_CLASS[mod_class].create_table()
     for mod_class in sorted(DEPENDENT_CLASSES.keys()):
+        if not MODELS_CLASS[mod_class].table_exists():
+            MODELS_CLASS[mod_class].create_table()
+    for mod_class in sorted(FOUR_LEVEL_CLASSES.keys()):
+        if not MODELS_CLASS[mod_class].table_exists():
+            MODELS_CLASS[mod_class].create_table()
+    for mod_class in sorted(LAST_CLASSES.keys()):
         if not MODELS_CLASS[mod_class].table_exists():
             MODELS_CLASS[mod_class].create_table()
 

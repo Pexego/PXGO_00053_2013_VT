@@ -28,7 +28,8 @@
     "depends": ["base",
                 "product",
                 "sale",
-                "stock"
+                "stock",
+                "product_manufacturer"
                 ],
     "data": ["security/ir.model.access.csv",
              "views/product_view.xml",

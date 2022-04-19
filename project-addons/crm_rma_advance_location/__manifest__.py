@@ -52,7 +52,7 @@ WARNING: Use with caution, this module is currently not yet completely debugged 
 """,
  'images': [],
  'demo': [],
- 'depends':['purchase','crm_claim_rma','stock'],
+ 'depends':['purchase','crm_claim_rma','stock', 'payment_mode_supplier'],
  'data': [
     'wizard/claim_make_picking_from_picking_view.xml',
     'wizard/claim_make_picking_view.xml',
