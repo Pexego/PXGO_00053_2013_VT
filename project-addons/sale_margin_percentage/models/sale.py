@@ -116,7 +116,8 @@ class SaleOrder(models.Model):
             sale.margin = 0.0
             margin = 0.0
             sale_price = 0.0
-            for line in sale.order_line:
+            generic_product = self.env.ref('sale_margin_percentage.generic_product').id
+            for line in sale.order_line.filtered(lambda l: l.product_id.id != generic_product and not l.deposit):
                 if not line.deposit:
                     if line.price_unit > 0:
                         margin += line.margin or 0.0
@@ -134,16 +135,15 @@ class SaleOrder(models.Model):
             margin_rappel = 0.0
             sale_price = 0.0
             purchase_price = 0.0
-            for line in sale.order_line:
-                if not line.deposit:
-                    if line.price_unit > 0:
-                        margin_rappel += line.margin_rappel or 0.0
-                    else:
-                        margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
-                    sale_price += line.price_subtotal or 0.0
-                    purchase_price += line.product_id.standard_price_2_inc or 0.0 * line.product_uom_qty
+            generic_product = self.env.ref('sale_margin_percentage.generic_product').id
+            for line in sale.order_line.filtered(lambda l: l.product_id.id != generic_product and not l.deposit):
+                if line.price_unit > 0:
+                    margin_rappel += line.margin_rappel or 0.0
+                else:
+                    margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
+                sale_price += line.price_subtotal or 0.0
+                purchase_price += line.product_id.standard_price_2_inc or 0.0 * line.product_uom_qty
             if sale_price:
-
                 if sale_price < purchase_price:
                     sale.margin_rappel = round((margin_rappel * 100) / purchase_price, 2)
                 else:
