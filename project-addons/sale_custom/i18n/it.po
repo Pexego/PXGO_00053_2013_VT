@@ -194,3 +194,14 @@ msgstr "Quest'anno"
 #: model:ir.actions.act_window,name:sale_custom.open_historical_orders
 msgid "Historical orders"
 msgstr "Ordini dei clienti"
+
+#. module: sale_custom
+#: code:addons/sale_custom/models/sale.py:241
+#, python-format
+msgid "You can't confirm a sale with the product %s."
+msgstr "Non è possibile confermare un ordine con il prodotto %s."
+
+#. module: sale_custom
+#: model:ir.ui.view,arch_db:sale_custom.view_order_form_sync_picking
+msgid "Force generic product"
+msgstr "Forza prodotto generico"

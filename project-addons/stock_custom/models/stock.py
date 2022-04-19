@@ -86,7 +86,7 @@ class StockPicking(models.Model):
                 picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
         if pickings_dropship:
             for picking in pickings_dropship:
-                picking_template = self.env.ref('stock_custom.picking_done_dropship_template')
+                picking_template = self.env.ref('custom_report_link.picking_done_dropship_template')
                 picking_template.with_context(lang=picking.sale_id.partner_id.lang).send_mail(picking.id)
         return result
 
