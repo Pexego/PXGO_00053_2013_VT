@@ -89,8 +89,6 @@ class SaleOrderLine(models.Model):
 
     @api.multi
     def _update_reservation_price_qty(self):
-        import ipdb
-        ipdb.set_trace()
         lines_released = self.env['sale.order.line']
         if not self.env.context.get('later', False):
             for line in self:
