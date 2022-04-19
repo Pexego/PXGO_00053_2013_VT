@@ -76,6 +76,7 @@ Contributors:
                 'equivalent_products',
                 'mrp_repair',
                 'stock_reserve',
+                'sale_display_stock',
                 'crm_claim_type'
                 ],
     'data': ['wizard/claim_make_picking_view.xml',

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="generic_product" model="product.product">
+        <field name="name">Generic Product</field>
+    </record>
+</odoo>

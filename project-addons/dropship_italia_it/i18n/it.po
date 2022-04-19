@@ -35,3 +35,23 @@ msgstr "ES Bolla"
 #, python-format
 msgid "The order cannot be canceled"
 msgstr "L'ordine non può essere annullato"
+
+#. module: dropship_italia_it
+#: model:ir.model.fields,field_description:dropship_italia_it.field_sale_order_service_ds_id
+msgid "Service"
+msgstr "Servizio"
+
+#. module: dropship_italia_it
+#: model:ir.ui.view,arch_db:dropship_italia_it.sale_order_all_dropship
+msgid "Shipping"
+msgstr "Spedizione"
+
+#. module: dropship_italia_it
+#: model:ir.ui.view,arch_db:dropship_italia_it.sale_order_all_dropship
+msgid "Shipping Info"
+msgstr "Info di spedizione"
+
+#. module: dropship_italia_it
+#: model:ir.model.fields,field_description:dropship_italia_it.field_sale_order_transporter_ds_id
+msgid "Transporter"
+msgstr "Corriere"

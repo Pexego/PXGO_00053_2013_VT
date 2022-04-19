@@ -5,9 +5,21 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="model">sale.order</field>
         <field name="arch" type="xml">
-            <field name="company_id" position="after">
-                <field name="all_dropship"/>
-            </field>
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Dropship">
+                    <group>
+                        <group>
+                            <group>
+                                <separator string="Shipping"/>
+                                <field name="all_dropship"/>
+                                <field name="transporter_ds_id" domain="[('dropship', '=', True)]" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                <field name="service_ds_id" domain="[('dropship', '=', True)]" options="{'no_quick_create':True,'no_create_edit':True}"/>
+                                <separator string="Shipping Info"/>
+                            </group>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
         </field>
     </record>
 </odoo>

@@ -57,6 +57,7 @@ class Partner(models.Model):
     is_accounting = fields.Boolean('Is Acounting', compute="_is_accounting")
     risk_insurance_comment = fields.Text('Comments')
     warehouse_notes = fields.Text("Notes for warehouse")
+    country_code = fields.Char("Country code")
 
     @api.onchange("user_id")
     def on_change_user_id(self):

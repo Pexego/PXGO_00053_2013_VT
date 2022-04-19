@@ -48,6 +48,7 @@ class ProductProduct(models.Model):
     _inherit = 'product.product'
 
     ref_visiotech = fields.Char('Visiotech reference')
+    is_pack = fields.Boolean()
 
 
     def action_view_moves(self):
