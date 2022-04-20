@@ -64,9 +64,9 @@ class SaleOrderLine(models.Model):
                 sale_price = line.price_unit * line.product_uom_qty * ((100.0 - line.discount) / 100.0)
                 purchase_price = line.purchase_price * line.product_uom_qty
                 if line.product_id.product_brand_id.id in self.env['rappel'].search([('name', 'like', 'Vale Ahorro%')], limit=1).brand_ids.ids:
-                    if line.order_id.partner_id.property_product_pricelist.name in ('PVPA 55', 'PVPB 55', 'PVPC 55'):
+                    if line.order_id.partner_id.property_product_pricelist.name in ('PVPIberia 55', 'PVPEuropa 55', 'PVPItalia 55'):
                         rappel = sale_price * 0.10
-                    elif line.order_id.partner_id.property_product_pricelist.name in ('PVPA 52,5', 'PVPB 52,5', 'PVPC 52,5'):
+                    elif line.order_id.partner_id.property_product_pricelist.name in ('PVPIberia 52,5', 'PVPEuropa 52,5', 'PVPItalia 52,5'):
                         rappel = sale_price * 0.05
                     else:
                         rappel = 0.0
