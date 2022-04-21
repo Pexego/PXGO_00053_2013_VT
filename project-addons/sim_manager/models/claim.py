@@ -20,3 +20,23 @@ class ClaimMakePicking(models.TransientModel):
                 raise UserError(_("You must specify the serial number of the serial products"))
         res = super(ClaimMakePicking, self).action_create_picking()
         return res
+
+
+class ClaimLine(models.Model):
+
+    _inherit = "claim.line"
+
+    @api.onchange('prodlot_id')
+    def onchange_prodlot_id(self):
+        products = self.env['sim.type'].search([]).mapped('product_id')
+        if self.product_id in products:
+            sims = self.prodlot_id.upper().replace(" ", "").split(',')
+            sim_packages = self.env['sim.package'].search([('code', 'in', sims)])
+            if not sim_packages or len(sim_packages) != len(sims) or len(sim_packages) != self.product_returned_quantity:
+                raise UserError(_("You have introduced something wrong. Check the format"))
+            else:
+                sim_packages_p = self.env['sim.package'].search([('code', 'in', sims), ('partner_id', '=', self.partner_id.id)])
+                if not sim_packages_p or len(sim_packages_p) != len(sims) or len(sim_packages_p) != self.product_returned_quantity:
+                    raise UserError(_("Some introduced SIMs are not assigned to %s") % self.partner_id.name)
+
+
