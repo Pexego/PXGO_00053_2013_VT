@@ -187,3 +187,15 @@ msgstr "Alcuni di queste SIM card %s della bolla %s non esistono nel sistema."
 #, python-format
 msgid "You must specify the serial number of the serial products"
 msgstr "Devi specificare il numero serie dei prodotti con traking"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/claim.py:36
+#, python-format
+msgid "You have introduced something wrong. Check the format"
+msgstr "Hai messo male qualche SIM. Controlla il formatto"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/claim.py:40
+#, python-format
+msgid "Some introduced SIMs are not assigned to %s"
+msgstr "Qualche SIM non è di %s"

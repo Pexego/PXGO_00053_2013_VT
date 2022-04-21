@@ -35,8 +35,6 @@ class ClaimLine(models.Model):
             if not sim_packages or len(sim_packages) != len(sims) or len(sim_packages) != self.product_returned_quantity:
                 raise UserError(_("You have introduced something wrong. Check the format"))
             else:
-                sim_packages_p = self.env['sim.package'].search([('code', 'in', sims), ('partner_id', '=', self.partner_id.id)])
+                sim_packages_p = self.env['sim.package'].search([('code', 'in', sims), ('partner_id', '=', self.claim_id.partner_id.id)])
                 if not sim_packages_p or len(sim_packages_p) != len(sims) or len(sim_packages_p) != self.product_returned_quantity:
-                    raise UserError(_("Some introduced SIMs are not assigned to %s") % self.partner_id.name)
-
-
+                    raise UserError(_("Some introduced SIMs are not assigned to %s") % self.claim_id.partner_id.name)

@@ -209,3 +209,15 @@ msgstr "[Odoo] Faltan cuentas bancarias en facturas SIM"
 #, python-format
 msgid "Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n"
 msgstr "El cliente %s no tiene cuenta o un mandato válido. La factura %s no se ha cambiado. \n"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/claim.py:36
+#, python-format
+msgid "You have introduced something wrong. Check the format"
+msgstr "Has introducido algo mal. Comprueba el formato"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/claim.py:40
+#, python-format
+msgid "Some introduced SIMs are not assigned to %s"
+msgstr "Algunas SIMs no están asignadas a %s"
