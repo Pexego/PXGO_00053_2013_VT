@@ -144,9 +144,9 @@ class ProductProduct(models.Model):
             'pvi2_price': self.get_product_price_with_pricelist('PVIEuropa'),
             'pvi3_price': self.get_product_price_with_pricelist('PVIItalia'),
             'pvi4_price': self.get_product_price_with_pricelist('PVIFrancia'),
-            'pvm1_price': self.get_product_price_with_pricelist('PVMIberia'),
-            'pvm2_price': self.get_product_price_with_pricelist('PVMEuropa'),
-            'pvm3_price': self.get_product_price_with_pricelist('PVMItalia')
+            'pvm1_price': self.get_product_price_with_pricelist('PVMA'),
+            'pvm2_price': self.get_product_price_with_pricelist('PVMB'),
+            'pvm3_price': self.get_product_price_with_pricelist('PVMC')
             }
         return prices
 
