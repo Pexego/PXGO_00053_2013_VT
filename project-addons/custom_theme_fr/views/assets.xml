@@ -7,6 +7,7 @@
                 <link rel="stylesheet" href="/custom_theme_fr/static/src/css/style_light_responsive.css"/>
                 <!--link rel="stylesheet" href="/custom_theme/static/src/css/style_dark.css"/-->
                 <link rel="stylesheet" href="/web_responsive/static/src/less/variables.less"/>
+                <link rel="stylesheet" href="/custom_theme_fr/static/src/less/variables.less"/>
                 <link rel="stylesheet" href="/web_responsive/static/src/less/app_drawer.less"/>
             </xpath>
         </template>
