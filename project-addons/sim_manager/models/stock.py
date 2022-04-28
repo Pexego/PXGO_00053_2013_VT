@@ -15,10 +15,10 @@ class StockMove(models.Model):
                     sim_packages = self.env['sim.package'].search([('code', 'in', sims)])
                     if sim_packages and len(sim_packages) == len(sims):
                         for pkg in sim_packages:
-                            pkg.write({'partner_id': self.partner_id.commercial_partner_id.id,
+                            pkg.write({'partner_id': self.picking_id.partner_id.commercial_partner_id.id,
                                        'move_id': self.id,
                                        'state': 'sold'})
-                            if 'VISIOTECH' not in self.partner_id.commercial_partner_id.name \
+                            if 'VISIOTECH' not in self.picking_id.partner_id.commercial_partner_id.name \
                                     and 'VIP' not in pkg.code:  # TODO: manejar con los tipos
                                 pkg.with_delay(priority=10).notify_sale_web('sold')
                     else:
