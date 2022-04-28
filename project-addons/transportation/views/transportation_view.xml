@@ -23,7 +23,7 @@
                     <sheet>
                         <group>
                             <field name="name"/>
-                            <field name="partner_id"/>
+                            <field name="partner_id" required="1"/>
                             <field name="service_ids">
                                 <tree string="Service">
                                     <field name="name"/>
