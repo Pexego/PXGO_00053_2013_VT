@@ -24,7 +24,9 @@
         "sale_financial_risk",
         "custom_financial_risk",
         "custom_partner",
-        "scheduled_shipment"
+        "scheduled_shipment",
+        "product_customer_reference",
+        "product_minimum_order"
     ],
     "data": [
         'views/sale_view.xml', 'views/email_purchase_template.xml',

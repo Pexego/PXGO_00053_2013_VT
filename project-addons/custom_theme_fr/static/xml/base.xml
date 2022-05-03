@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="Throbber">
+        <div>
+            <div class="oe_blockui_spin" style="height: 50px">
+                <img src="/custom_theme/static/img/LV.gif" style="height: 50px; width: 50px"/>
+            </div>
+            <br/>
+            <div class="oe_throbber_message" style="color:white"></div>
+        </div>
+    </t>
+</templates>

@@ -10,7 +10,8 @@
     'license': 'AGPL-3',
     'depends': ['base', 'web', 'sale',
                 'stock_reserve', 'stock_reserve_sale',
-                ], # TODO: sale_display_stock y sale_product_customize
+                'sale_display_stock', 'order_invoice_policy'
+                ], # TODO: sale_product_customize
     'data': ['views/sale.xml', 'views/stock_reserve.xml',
              'data/cron.xml', 'data/parameters.xml', 'data/mail_template.xml', 'security/groups.xml'],
     'installable': True,
