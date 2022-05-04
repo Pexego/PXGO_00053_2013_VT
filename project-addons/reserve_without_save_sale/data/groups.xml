@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="res.groups" id="date_validity_editor">
+        <field name="name">Date validity editor</field>
+    </record>
+    <record model="res.groups" id="reserves_editor">
+        <field name="name">Reserves editor</field>
+    </record>
+</odoo>
