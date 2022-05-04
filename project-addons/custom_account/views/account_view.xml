@@ -108,6 +108,7 @@
                 <field name="user_id" position="attributes">
                     <attribute name="invisible">True</attribute>
                 </field>
+                <field name='origin' position="replace"/>
                 <field name="number" position="before">
                     <field name="origin" groups="custom_account.group_big_accounts"/>
                 </field>
