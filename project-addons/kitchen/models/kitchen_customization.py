@@ -74,6 +74,8 @@ class KitchenCustomization(models.Model):
         if self.notify_sales_team and self.commercial_id.sale_team_id.email:
             ctx['email_cc'] += ',%s' % self.commercial_id.sale_team_id.email
         template.with_context(ctx).send_mail(self.id)
+        #If we have previews, delete the unselected photos
+        self.delete_unselected_photos()
 
     def action_confirm(self):
         if not self.customization_line:
@@ -149,11 +151,28 @@ class KitchenCustomization(models.Model):
                 template = self.env.ref('kitchen.send_mail_cancel_customization')
                 template.with_context(context).send_mail(customization.id)
             customization.state = 'cancel'
+            # If we have previews, delete the unselected photos
+            customization.delete_unselected_photos()
 
     def action_draft(self):
         if self.order_id and self.order_id.customization_count_not_cancelled != 0:
             raise exceptions.UserError(_("You cannot activate a new customization because the selected order already "
                                          "has one, please cancel it before"))
+        if self.customization_line:
+            previews_url = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.url')
+            partner_ref = self.order_id.partner_id.ref
+            for line in self.customization_line.filtered(lambda l:l.preview_selector):
+                req = requests.request('POST', previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
+                    partner_ref, line.product_id.default_code),
+                                       verify=False)
+                if req.status_code != 200:
+                    raise exceptions.UserError(
+                        _("There are no previews for this partner and this product %s") % line.product_id.default_code)
+                previews = req.json()
+                new_previews = [x.get('status') in ['Approved','OldPreview'] for x in previews]
+                if new_previews:
+                    line.preview_ids.unlink()
+                    line.create_previews(new_previews)
         self.state = 'draft'
 
     @api.onchange('order_id')
@@ -204,13 +223,7 @@ class KitchenCustomization(models.Model):
             'type_ids': [(6, 0, line.type_ids.ids)]}
         line_c = self.env['kitchen.customization.line'].create(new_line)
         if previews:
-            for count, preview in enumerate(previews):
-                photo = base64.b64encode(requests.get(preview.get('logo'), verify=False).content)
-                new_preview = self.env['kitchen.customization.preview'].create(
-                    {'line_id': str(line_c.id), 'photo': photo, 'name': 'Preview %s' % str(count+1),
-                     'url': preview.get('urlView'), 'state': preview.get('status')})
-                if not line_c.preview_selector:
-                    line_c.preview_selector = new_preview.id
+            line_c.create_previews(previews)
         return line
 
     @api.multi
@@ -287,6 +300,37 @@ class KitchenCustomization(models.Model):
 
     backorder_id = fields.Many2one('kitchen.customization', ondelete='cascade')
     notify_sales_team = fields.Boolean()
+
+    def action_check_old_preview(self):
+        lines = self.customization_line.filtered(lambda l: l.preview_selector.name == 'OldPreview - Go to Sharepoint')
+        if lines:
+            previews_url = self.env['ir.config_parameter'].sudo().get_param('kitchen.previews.url')
+            partner_ref = self.order_id.partner_id.ref
+            for line in lines:
+                req = requests.request('POST', previews_url+'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
+                partner_ref, line.product_id.default_code),
+                              verify=False)
+                if req.status_code != 200:
+                    raise exceptions.UserError(_("There are no previews for this partner and this product %s") % line.product_id.default_code)
+                previews = req.json()
+                new_previews = [x.get('status') == 'Approved' for x in previews]
+                if new_previews:
+                    line.preview_ids.unlink()
+                    line.create_previews(new_previews)
+
+    has_old_preview = fields.Boolean(compute="_compute_has_old_preview")
+
+    def _compute_has_old_preview(self):
+        for customization in self:
+            customization.has_old_preview = len(customization.customization_line.mapped('preview_selector').filtered(
+                lambda p: p.name == "OldPreview - Go to Sharepoint")) > 0
+
+    def delete_unselected_photos(self):
+        # If we have previews, delete the unselected photos
+        for line in self.customization_line:
+            if line.preview_ids:
+                for preview in line.preview_ids.filtered(lambda p, l=line: l.preview_selector != p):
+                    preview.photo = False
 
 
 class KitchenCustomizationLine(models.Model):
@@ -408,6 +452,20 @@ class KitchenCustomizationLine(models.Model):
     photo = fields.Binary(related="preview_selector.photo")
     url = fields.Char(related="preview_selector.url")
     preview_ids = fields.One2many('kitchen.customization.preview', 'line_id')
+
+    def create_previews(self,previews):
+        for count, preview in enumerate(previews):
+            if preview.get('status') == 'OldPreview':
+                new_preview = self.env['kitchen.customization.preview'].create(
+                    {'line_id': self.id, 'name': _('OldPreview - Go to Sharepoint'),
+                     'url': 'The previews are on Sharepoint', 'state': 'OldPreview'})
+            else:
+                photo = base64.b64encode(requests.get(preview.get('logo'), verify=False).content)
+                new_preview = self.env['kitchen.customization.preview'].create(
+                    {'line_id': self.id, 'photo': photo, 'name': 'Preview %s' % str(count + 1),
+                     'url': preview.get('urlView'), 'state': preview.get('status')})
+            if not self.preview_selector:
+                self.preview_selector = new_preview.id
 
 
 class KitchenCustomizationPreview(models.Model):
