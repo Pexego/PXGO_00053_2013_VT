@@ -52,23 +52,27 @@ msgstr "Precio de coste"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_a
-msgid "PVD/PVI A relation"
-msgstr "Relación PVD/PVI A"
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_template_relation_pvd_pvi_a
+msgid "PVD/PVI Iberia relation"
+msgstr "Relación PVD/PVI Iberia"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_b
-msgid "PVD/PVI B relation"
-msgstr "Relación PVD/PVI B"
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_template_relation_pvd_pvi_b
+msgid "PVD/PVI Europe relation"
+msgstr "Relación PVD/PVI Europa"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_c
-msgid "PVD/PVI C relation"
-msgstr "Relación PVD/PVI C"
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_template_relation_pvd_pvi_c
+msgid "PVD/PVI Italy relation"
+msgstr "Relación PVD/PVI Italia"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_d
-msgid "PVD/PVI D relation"
-msgstr "Relación PVD/PVI D"
+#: model:ir.model.fields,field_description:product_pricelist_custom.field_product_template_relation_pvd_pvi_d
+msgid "PVD/PVI France relation"
+msgstr "Relación PVD/PVI Francia"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_pricelist_related_default
