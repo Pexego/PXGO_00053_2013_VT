@@ -59,43 +59,43 @@ class ResPartner(models.Model):
                             invoice = self.env['account.invoice'].create(inv_data)
                             invoice._onchange_partner_id()
 
-                        line_data = {'sequence': 1, 'product_id': product_sim.id, 'name': product_sim.default_code,
-                                     'quantity': round(partner_data['sims'], 2), 'discount': 0, 'uom_id': 1, 'price_unit': price_unit,
-                                     'account_id': line_account.id, 'invoice_id': invoice.id}
-                        line = self.env['account.invoice.line'].create(line_data)
-                        line._onchange_product_id()
-                        line._onchange_account_id()
-                        line.price_unit = price_unit
-                        if partner_data['sms'] > 0:
-                            line_data_sms = {'sequence': 1, 'product_id': product_sms.id, 'name': product_sms.default_code,
-                                             'quantity': partner_data['sms'], 'discount': 0, 'uom_id': 1, 'price_unit': 0.08,
-                                             'account_id': line_account.id, 'invoice_id': invoice.id}
-                            line_sms = self.env['account.invoice.line'].create(line_data_sms)
-                            line_sms._onchange_product_id()
-                            line_sms._onchange_account_id()
-                            line_sms.price_unit = 0.08
-                        if partner_data['voice'] > 0:
-                            line_data_voz = {'sequence': 1, 'product_id': product_voz.id, 'name': product_voz.default_code,
-                                             'quantity': partner_data['voice'], 'discount': 0, 'uom_id': 1, 'price_unit': 0.15,
-                                             'account_id': line_account.id, 'invoice_id': invoice.id}
-                            line_voz = self.env['account.invoice.line'].create(line_data_voz)
-                            line_voz._onchange_product_id()
-                            line_voz._onchange_account_id()
-                            line_voz.price_unit = 0.15
-                        invoice.compute_taxes()
-                        invoice.action_invoice_open()
+                            line_data = {'sequence': 1, 'product_id': product_sim.id, 'name': product_sim.default_code,
+                                         'quantity': round(partner_data['sims'], 2), 'discount': 0, 'uom_id': 1, 'price_unit': price_unit,
+                                         'account_id': line_account.id, 'invoice_id': invoice.id}
+                            line = self.env['account.invoice.line'].create(line_data)
+                            line._onchange_product_id()
+                            line._onchange_account_id()
+                            line.price_unit = price_unit
+                            if partner_data['sms'] > 0:
+                                line_data_sms = {'sequence': 1, 'product_id': product_sms.id, 'name': product_sms.default_code,
+                                                 'quantity': partner_data['sms'], 'discount': 0, 'uom_id': 1, 'price_unit': 0.08,
+                                                 'account_id': line_account.id, 'invoice_id': invoice.id}
+                                line_sms = self.env['account.invoice.line'].create(line_data_sms)
+                                line_sms._onchange_product_id()
+                                line_sms._onchange_account_id()
+                                line_sms.price_unit = 0.08
+                            if partner_data['voice'] > 0:
+                                line_data_voz = {'sequence': 1, 'product_id': product_voz.id, 'name': product_voz.default_code,
+                                                 'quantity': partner_data['voice'], 'discount': 0, 'uom_id': 1, 'price_unit': 0.15,
+                                                 'account_id': line_account.id, 'invoice_id': invoice.id}
+                                line_voz = self.env['account.invoice.line'].create(line_data_voz)
+                                line_voz._onchange_product_id()
+                                line_voz._onchange_account_id()
+                                line_voz.price_unit = 0.15
+                            invoice.compute_taxes()
+                            invoice.action_invoice_open()
 
-                        if partner.property_payment_term_id.with_context({'lang': 'es_ES'}).name in ('Prepago', 'Pago inmediato'):
-                            valid_mandate = self.env['account.banking.mandate'].search_count([('partner_id', '=', partner.id), ('state', '=', 'valid')])
-                            if valid_mandate > 0:
-                                rd_payment = self.env['account.payment.mode'].search([('name', '=', 'Recibo domiciliado')])
-                                invoice.write({'payment_mode_id': rd_payment.id})
-                            else:
-                                mail_bank_error_message += _('Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n') \
-                                                          % (partner.name, invoice.number)
-                        invoice.action_invoice_open()
-                    else:
-                        error += 'Partner id %s not found ' % partner_data['odooId']
+                            if partner.property_payment_term_id.with_context({'lang': 'es_ES'}).name in ('Prepago', 'Pago inmediato'):
+                                valid_mandate = self.env['account.banking.mandate'].search_count([('partner_id', '=', partner.id), ('state', '=', 'valid')])
+                                if valid_mandate > 0:
+                                    rd_payment = self.env['account.payment.mode'].search([('name', '=', 'Recibo domiciliado')])
+                                    invoice.write({'payment_mode_id': rd_payment.id})
+                                else:
+                                    mail_bank_error_message += _('Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n') \
+                                                              % (partner.name, invoice.number)
+                            invoice.action_invoice_open()
+                        else:
+                            error += 'Partner id %s not found ' % partner_data['odooId']
             else:
                 error += 'Response %s with error: %s' % (response.status_code, response.text)
 
