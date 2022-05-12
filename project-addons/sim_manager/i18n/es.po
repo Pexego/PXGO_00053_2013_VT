@@ -213,8 +213,8 @@ msgstr "El cliente %s no tiene cuenta o un mandato válido. La factura %s no se 
 #. module: sim_manager
 #: code:addons/sim_manager/models/claim.py:36
 #, python-format
-msgid "You have introduced something wrong. Check the format"
-msgstr "Has introducido algo mal. Comprueba el formato"
+msgid "The serial numbers cannot be found in the system. Check the serials and the format."
+msgstr "Los números de serie no se encuentran en el sistema. Comprueba los números y el formato."
 
 #. module: sim_manager
 #: code:addons/sim_manager/models/claim.py:40
