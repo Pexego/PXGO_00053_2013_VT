@@ -18,7 +18,7 @@ class StockMove(models.Model):
                             pkg.write({'partner_id': self.picking_id.partner_id.commercial_partner_id.id,
                                        'move_id': self.id,
                                        'state': 'sold'})
-                            if 'VISIOTECH' not in self.partner_id.commercial_partner_id.name \
+                            if 'VISIOTECH' not in self.picking_id.partner_id.commercial_partner_id.name \
                                     and 'VIP' not in pkg.code:  # TODO: manejar con los tipos
                                 pkg.with_delay(priority=10).notify_sale_web('sold')
                     else:

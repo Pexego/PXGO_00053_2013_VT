@@ -96,8 +96,8 @@ class WizardReconcileRibaStatementLine(models.TransientModel):
         for aml in move_ids:
             counterpart_aml_dicts.append({
                 'name': aml.name if aml.name != '/' else aml.move_id.name,
-                'debit': aml.credit,
-                'credit': aml.amount_residual,
+                'debit': -min(aml.amount_residual, 0.0),
+                'credit': max(aml.amount_residual, 0.0),
                 'move_line': aml
             })
         self.bank_statement_line_id.process_reconciliation(

@@ -145,6 +145,8 @@ class EdifMenssage(models.Model):
 
     def generate_invoice(self, invoice):
         invoice.ensure_one()
+
+        filter_partner_ids = self.env['ir.config_parameter'].sudo().get_param('edi_filter_partner_ids')
         msg = ""
         msg_ref = "VT{}".format(datetime.now().strftime("%Y%m%d%H%M"))
         length = 35
@@ -192,8 +194,11 @@ class EdifMenssage(models.Model):
 
         amount_discount = 0.0
         amount_net = 0.0
-        invoice_lines = invoice.invoice_line_ids.\
-            filtered(lambda l: l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes')
+        if invoice.partner_id.id in eval(filter_partner_ids):
+            invoice_lines = invoice.invoice_line_ids.\
+                filtered(lambda l: l.product_id.categ_id.with_context(lang='es_ES').name != 'Portes')
+        else:
+            invoice_lines = invoice.invoice_line_ids
         for i, line in enumerate(invoice_lines, start=1):
             amount_line_discount = (line.quantity * line.price_unit) * (line.discount / 100)
             amount_discount += amount_line_discount
@@ -204,6 +209,7 @@ class EdifMenssage(models.Model):
             msg += self.IMD(line.name.replace("\n", " ").replace("+", "-"))
             msg += self.QTY('47', str(line.quantity))
             msg += self.MOA('66', '{:.2f}'.format(line.price_subtotal))
+            msg += self.MOA('203', '{:.2f}'.format(line.price_subtotal))
             msg += self.PRI('AAA', str(round(line.price_unit * (1 - (line.discount/100)), 2)))
             if line.discount:
                 msg += self.PRI('AAB', str(line.price_unit))
@@ -223,7 +229,8 @@ class EdifMenssage(models.Model):
         msg += self.MOA('125', str(invoice.amount_untaxed))  # Base Imponible
         msg += self.MOA('176', str(invoice.amount_tax))  # Total impuestos
         msg += self.MOA('139', str(invoice.amount_total))  # Total a pagar
-        msg += self.MOA('260', str(amount_discount))
+        if invoice.partner_id.id in eval(filter_partner_ids):
+            msg += self.MOA('260', str(amount_discount))
         for tax in invoice.tax_line_ids:
             if tax.amount == 0.0:
                 msg += self.TAX('EXT', str(round(tax.tax_id.amount, 2)))
