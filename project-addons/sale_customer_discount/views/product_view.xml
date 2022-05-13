@@ -12,18 +12,14 @@
                     <attribute name="invisible">1</attribute>
                 </field>
                 <field name="lst_price" position="replace">
-                    <field name="list_price1" string="PVP A"/>
-                    <field name="list_price2" string="PVP B"/>
-                    <field name="list_price3" string="PVP C"/>
-                    <field name="list_price4" string="PVP D"/>
-                    <field name="list_price5" string="PVP E"/>
-                    <field name="list_price6" string="PVP F"/>
-                    <field name="pvi1_price" string="PVI A"/>
-                    <field name="pvi2_price" string="PVI B"/>
-                    <field name="pvi3_price" string="PVI C"/>
-                    <field name="pvi4_price" string="PVI D"/>
-                    <field name="pvi5_price" string="PVI E"/>
-                    <field name="pvi6_price" string="PVI F"/>
+                    <field name="list_price1" string="PVP Iberia"/>
+                    <field name="list_price3" string="PVP Italy"/>
+                    <field name="list_price4" string="PVP France"/>
+                    <field name="list_price2" string="PVP Europe"/>
+                    <field name="pvi1_price" string="PVI Iberia"/>
+                    <field name="pvi3_price" string="PVI Italy"/>
+                    <field name="pvi4_price" string="PVI France"/>
+                    <field name="pvi2_price" string="PVI Europe"/>
                 </field>
                 <field name="uom_id" position="attributes">
                     <attribute name="invisible">1</attribute>

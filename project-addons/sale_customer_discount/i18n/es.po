@@ -137,23 +137,43 @@ msgstr "Relación PVP_D / PVD_D"
 
 #. module: sale_customer_discount
 #: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
-msgid "PVP A"
-msgstr "PVP A"
+msgid "PVP Iberia"
+msgstr "PVP Iberia"
 
 #. module: sale_customer_discount
 #: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
-msgid "PVP B"
-msgstr "PVP B"
+msgid "PVP Europe"
+msgstr "PVP Europa"
 
 #. module: sale_customer_discount
 #: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
-msgid "PVP C"
-msgstr "PVP C"
+msgid "PVP Italy"
+msgstr "PVP Italia"
 
 #. module: sale_customer_discount
 #: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
-msgid "PVP D"
-msgstr "PVP D"
+msgid "PVP France"
+msgstr "PVP Francia"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVP Iberia"
+msgstr "PVP Iberia"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVI Europe"
+msgstr "PVI Europa"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVI Italy"
+msgstr "PVI Italia"
+
+#. module: sale_customer_discount
+#: model:ir.ui.view,arch_db:sale_customer_discount.product_product_tree_view_add_discount
+msgid "PVI France"
+msgstr "PVI Francia"
 
 #. module: sale_customer_discount
 #: model:ir.model.fields,field_description:sale_customer_discount.field_product_product_pvd1_relation
