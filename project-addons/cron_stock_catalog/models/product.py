@@ -145,7 +145,7 @@ class ProductProduct(models.Model):
 
         domain = [('sale_ok', '=', True)]
 
-        fields = ["id", "default_code", "incoming_qty", "list_price1", "list_price_3","list_price4", "list_price2",
+        fields = ["id", "default_code", "incoming_qty", "list_price1", "list_price3","list_price4", "list_price2",
                   "pvi1_price", "pvi3_price", "pvi4_price", "pvi2_price", "margin_pvd1", "margin_pvd3",
                   "margin_pvd4", 'margin_pvd2', "margin_pvi1", "margin_pvi3", "margin_pvi4", "margin_pvi2", "qty_available",
                   "virtual_available_wo_incoming", "standard_price_2", "categ_id",
