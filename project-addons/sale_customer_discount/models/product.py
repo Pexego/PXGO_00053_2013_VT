@@ -75,8 +75,8 @@ class ProductProduct(models.Model):
     def _onchange_cost_increment(self):
         self.standard_price_2_inc = self.standard_price_2 * (1+ (self.cost_increment/100))
 
-    @api.depends('list_price', 'pvd1_relation', 'pvd2_relation', 'pvd3_relation', 'pvd4_relation', 'pvd5_relation', 'pvd6_relation',
-                 'standard_price_2', 'pvi1_price', 'pvi2_price', 'pvi3_price', 'pvi4_price', 'pvi5_price', 'pvi6_price')
+    @api.depends('list_price', 'pvd1_relation', 'pvd2_relation', 'pvd3_relation', 'pvd4_relation',
+                 'standard_price_2', 'pvi1_price', 'pvi2_price', 'pvi3_price', 'pvi4_price')
     def _get_margins(self):
         for product in self:
             if product.list_price and product.pvd1_relation:
@@ -101,19 +101,6 @@ class ProductProduct(models.Model):
                     (1 - (product.standard_price_2 /
                         (product.list_price4 * product.pvd4_relation))) * \
                     100.0
-
-            if product.list_price5 and product.pvd5_relation:
-                product.margin_pvd5 = \
-                    (1 - (product.standard_price_2 /
-                        (product.list_price5 * product.pvd5_relation))) * \
-                    100.0
-
-            if product.list_price6 and product.pvd6_relation:
-                product.margin_pvd6 = \
-                    (1 - (product.standard_price_2 /
-                        (product.list_price6 * product.pvd6_relation))) * \
-                    100.0
-
             if product.pvi1_price:
                 product.margin_pvi1 = \
                     (1 - (product.standard_price_2 / product.pvi1_price)) * 100.0
@@ -142,26 +129,11 @@ class ProductProduct(models.Model):
                     product.margin_pvd_pvi_4 = \
                         ((product.pvd4_price - product.pvi4_price) / product.pvd4_price) * 100
 
-            if product.pvi5_price:
-                product.margin_pvi5 = \
-                    (1 - (product.standard_price_2 / product.pvi5_price)) * 100.0
-                if product.pvd5_price:
-                    product.margin_pvd_pvi_5 = \
-                        ((product.pvd5_price - product.pvi5_price) / product.pvd5_price) * 100
-
-            if product.pvi6_price:
-                product.margin_pvi6 = \
-                    (1 - (product.standard_price_2 / product.pvi6_price)) * 100.0
-                if product.pvd6_price:
-                    product.margin_pvd_pvi_6 = \
-                        ((product.pvd6_price - product.pvi6_price) / product.pvd6_price) * 100
 
     list_price1 = fields.Float('Sale Price 1', digits=dp.get_precision('Product Price'))
     list_price2 = fields.Float('Sale Price 2', digits=dp.get_precision('Product Price'))
     list_price3 = fields.Float('Sale Price 3', digits=dp.get_precision('Product Price'))
     list_price4 = fields.Float('Sale Price 4', digits=dp.get_precision('Product Price'))
-    list_price5 = fields.Float('Sale Price 5', digits=dp.get_precision('Product Price'))
-    list_price6 = fields.Float('Sale Price 6', digits=dp.get_precision('Product Price'))
 
     commercial_cost = fields.Float('Commercial Cost', digits=dp.get_precision('Product Price'))
 
@@ -169,22 +141,16 @@ class ProductProduct(models.Model):
     pvd2_relation = fields.Float('PVP 2 / PVD 2 relation', digits=(4, 2), default=0.5)
     pvd3_relation = fields.Float('PVP 3 / PVD 3 relation', digits=(4, 2), default=0.5)
     pvd4_relation = fields.Float('PVP 4 / PVD 4 relation', digits=(4, 2), default=0.5)
-    pvd5_relation = fields.Float('PVP 5 / PVD 5 relation', digits=(4, 2), default=0.5)
-    pvd6_relation = fields.Float('PVP 6 / PVD 6 relation', digits=(4, 2), default=0.5)
 
     pvd1_price = fields.Float('PVD 1 price', digits=dp.get_precision('Product Price'))
     pvd2_price = fields.Float('PVD 2 price', digits=dp.get_precision('Product Price'))
     pvd3_price = fields.Float('PVD 3 price', digits=dp.get_precision('Product Price'))
     pvd4_price = fields.Float('PVD 4 price', digits=dp.get_precision('Product Price'))
-    pvd5_price = fields.Float('PVD 5 price', digits=dp.get_precision('Product Price'))
-    pvd6_price = fields.Float('PVD 6 price', digits=dp.get_precision('Product Price'))
 
     pvi1_price = fields.Float('PVI 1 price', digits=dp.get_precision('Product Price'))
     pvi2_price = fields.Float('PVI 2 price', digits=dp.get_precision('Product Price'))
     pvi3_price = fields.Float('PVI 3 price', digits=dp.get_precision('Product Price'))
     pvi4_price = fields.Float('PVI 4 price', digits=dp.get_precision('Product Price'))
-    pvi5_price = fields.Float('PVI 5 price', digits=dp.get_precision('Product Price'))
-    pvi6_price = fields.Float('PVI 6 price', digits=dp.get_precision('Product Price'))
 
     pvm1_price = fields.Float('PVM 1 price', digits=dp.get_precision('Product Price'))
     pvm2_price = fields.Float('PVM 2 price', digits=dp.get_precision('Product Price'))
@@ -206,14 +172,6 @@ class ProductProduct(models.Model):
                                string="PVD 4 Margin",
                                digits=(5, 2),
                                store=True)
-    margin_pvd5 = fields.Float(computed='_get_margins',
-                               string="PVD 5 Margin",
-                               digits=(5, 2),
-                               store=True)
-    margin_pvd6 = fields.Float(computed='_get_margins',
-                               string="PVD 6 Margin",
-                               digits=(5, 2),
-                               store=True)
     margin_pvi1 = fields.Float(computed='_get_margins',
                                string="PVI 1 Margin",
                                digits=(5, 2),
@@ -230,14 +188,6 @@ class ProductProduct(models.Model):
                                string="PVI 4 Margin",
                                digits=(5, 2),
                                store=True)
-    margin_pvi5 = fields.Float(computed='_get_margins',
-                               string="PVI 5 Margin",
-                               digits=(5, 2),
-                               store=True)
-    margin_pvi6 = fields.Float(computed='_get_margins',
-                               string="PVI 6 Margin",
-                               digits=(5, 2),
-                               store=True)
     margin_pvd_pvi_1 = fields.Float(computed='_get_margins',
                                     string='PVD/PVI 1 margin',
                                     digits=(5, 2),
@@ -252,14 +202,6 @@ class ProductProduct(models.Model):
                                     store=True)
     margin_pvd_pvi_4 = fields.Float(computed='_get_margins',
                                     string='PVD/PVI 4 margin',
-                                    digits=(5, 2),
-                                    store=True)
-    margin_pvd_pvi_5 = fields.Float(computed='_get_margins',
-                                    string='PVD/PVI 5 margin',
-                                    digits=(5, 2),
-                                    store=True)
-    margin_pvd_pvi_6 = fields.Float(computed='_get_margins',
-                                    string='PVD/PVI 6 margin',
                                     digits=(5, 2),
                                     store=True)
 
@@ -311,30 +253,6 @@ class ProductProduct(models.Model):
             self.margin_pvd4 = 0
             self.margin_pvd_pvi_4 = 0
 
-    @api.onchange('pvd5_price')
-    def pvd5_price_change(self):
-        pvd5_relation = 0.5
-        if self.pvd5_price:
-            self.list_price5 = (1.0 / pvd5_relation) * self.pvd5_price
-            self.margin_pvd5 = (1 - (self.standard_price_2 / self.pvd5_price)) * 100.0
-            self.margin_pvd_pvi_5 = ((self.pvd5_price - self.pvi5_price) / self.pvd5_price) * 100
-        else:
-            self.list_price5 = 0
-            self.margin_pvd5 = 0
-            self.margin_pvd_pvi_5 = 0
-
-    @api.onchange('pvd6_price')
-    def pvd6_price_change(self):
-        pvd6_relation = 0.5
-        if self.pvd6_price:
-            self.list_price6 = (1.0 / pvd6_relation) * self.pvd6_price
-            self.margin_pvd6 = (1 - (self.standard_price_2 / self.pvd6_price)) * 100.0
-            self.margin_pvd_pvi_6 = ((self.pvd6_price - self.pvi6_price) / self.pvd6_price) * 100
-        else:
-            self.list_price6 = 0
-            self.margin_pvd6 = 0
-            self.margin_pvd_pvi_6 = 0
-
     @api.onchange('pvi1_price')
     def pvi1_price_change(self):
         if self.pvd1_price:
@@ -383,26 +301,3 @@ class ProductProduct(models.Model):
         else:
             self.margin_pvi4 = 0
 
-    @api.onchange('pvi5_price')
-    def pvi5_price_change(self):
-        if self.pvd5_price:
-            self.margin_pvd_pvi_5 = ((self.pvd5_price - self.pvi5_price) / self.pvd5_price) * 100
-        else:
-            self.margin_pvd_pvi_5 = 0
-
-        if self.pvi5_price:
-            self.margin_pvi5 = (1 - (self.standard_price_2 / self.pvi5_price)) * 100.0
-        else:
-            self.margin_pvi5 = 0
-
-    @api.onchange('pvi6_price')
-    def pvi6_price_change(self):
-        if self.pvd6_price:
-            self.margin_pvd_pvi_6 = ((self.pvd6_price - self.pvi6_price) / self.pvd6_price) * 100
-        else:
-            self.margin_pvd_pvi_6 = 0
-
-        if self.pvi6_price:
-            self.margin_pvi6 = (1 - (self.standard_price_2 / self.pvi6_price)) * 100.0
-        else:
-            self.margin_pvi6 = 0
