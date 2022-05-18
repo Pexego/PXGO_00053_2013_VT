@@ -13,6 +13,6 @@
                 'sale_display_stock', 'order_invoice_policy'
                 ], # TODO: sale_product_customize
     'data': ['views/sale.xml', 'views/stock_reserve.xml',
-             'data/cron.xml', 'data/parameters.xml', 'data/mail_template.xml', 'security/groups.xml'],
+             'data/cron.xml', 'data/parameters.xml', 'data/mail_template.xml', 'data/groups.xml'],
     'installable': True,
 }

@@ -52,23 +52,23 @@ msgstr "Prezzo di costo"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_a
-msgid "PVD/PVI A relation"
-msgstr "Relaczione PVD/PVI A"
+msgid "PVD/PVI Iberia relation"
+msgstr "Relaczione PVD/PVI Iberia"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_b
-msgid "PVD/PVI B relation"
-msgstr "Relazione PVD/PVI B"
+msgid "PVD/PVI Europe relation"
+msgstr "Relazione PVD/PVI Europa"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_c
-msgid "PVD/PVI C relation"
-msgstr "Relazione PVD/PVI C"
+msgid "PVD/PVI Italy relation"
+msgstr "Relazione PVD/PVI Italia"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_product_relation_pvd_pvi_d
-msgid "PVD/PVI D relation"
-msgstr "Relazione PVD/PVI D"
+msgid "PVD/PVI France relation"
+msgstr "Relazione PVD/PVI Francia"
 
 #. module: product_pricelist_custom
 #: model:ir.model.fields,field_description:product_pricelist_custom.field_product_pricelist_pricelist_related_default

@@ -2,5 +2,6 @@
 <odoo noupdate="1">
     <record id="generic_product" model="product.product">
         <field name="name">Generic Product</field>
+	<field name="default_code">GP</field>
     </record>
 </odoo>

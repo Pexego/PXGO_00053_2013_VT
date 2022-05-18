@@ -20,4 +20,8 @@
         <field name="key">ftp_edi_folder_out</field>
         <field name="value"></field>
     </record>
+    <record id="edi_filter_partner_ids" model="ir.config_parameter">
+        <field name="key">edi_filter_partner_ids</field>
+        <field name="value"></field>
+    </record>
 </odoo>
