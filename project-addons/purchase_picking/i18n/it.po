@@ -180,7 +180,7 @@ msgstr "Errore nella bolla"
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_production_id
 msgid "Production Order for Produced Products"
-msgstr "Ordine di produzione per i prodotti fabbricati 
+msgstr "Ordine di produzione per i prodotti fabbricati"
 
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_reservation_raw_material_production_id
@@ -324,7 +324,7 @@ msgstr "Avviso"
 #: code:addons/purchase_picking/purchase.py:112
 #, python-format
 msgid "There is any move line without associated picking"
-msgstr 'Non vi è alcuna linea di movimento senza bolla di consegna associata"
+msgstr "Non vi è alcuna linea di movimento senza bolla di consegna associata"
 
 #. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_purchase_order_container_ids
@@ -508,3 +508,8 @@ msgstr "Partenza del trasporto"
 #: model:ir.ui.menu,name:purchase_picking.menu_stock_shipping
 msgid "Arrivals"
 msgstr "Arrivi"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_move_virtual_stock_conservative
+msgid "Virtual Stock Conservative"
+msgstr "Quantità disponibile"
