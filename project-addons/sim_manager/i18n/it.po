@@ -189,13 +189,13 @@ msgid "You must specify the serial number of the serial products"
 msgstr "Devi specificare il numero serie dei prodotti con traking"
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:36
+#: code:addons/sim_manager/models/claim.py:37
 #, python-format
 msgid "The serial numbers cannot be found in the system. Check the serials and the format."
 msgstr "Los números de serie no se encuentran en el sistema. Comprueba los números y el formato."
 
 #. module: sim_manager
-#: code:addons/sim_manager/models/claim.py:40
+#: code:addons/sim_manager/models/claim.py:41
 #, python-format
 msgid "Some introduced SIMs are not assigned to %s"
 msgstr "Qualche SIM non è di %s"
