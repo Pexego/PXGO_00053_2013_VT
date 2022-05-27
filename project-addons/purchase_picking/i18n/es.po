@@ -554,3 +554,8 @@ msgstr "Salida transporte"
 #: model:ir.ui.menu,name:purchase_picking.menu_stock_shipping
 msgid "Arrivals"
 msgstr "Llegadas"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter_warehouse
+msgid "Without Incidences"
+msgstr "Sin incidencias"

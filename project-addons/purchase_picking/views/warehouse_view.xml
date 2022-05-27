@@ -13,6 +13,8 @@
                 <separator/>
                 <filter name="filter_by_arrived" string="Arrived" domain="[('arrived', '=', True)]" />
                 <filter name="filter_by_not_arrived" string="Not arrived" domain="[('arrived', '=', False)]" context="{'arrived_false' : True}"/>
+                <separator/>
+                <filter name="filter_by_incidences" string="Without Incidences" domain="[('incidences', '=', False)]" />
            </search>
         </field>
     </record>
@@ -21,7 +23,7 @@
         <field name="name">stock.container.tree</field>
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
-            <tree string="Containers" class="custom_tree" default_order="set_date_exp desc, date_expected asc">
+            <tree string="Containers" class="custom_tree" decoration-warning="type == 'road'" decoration-info="type == 'sea'" default_order="set_date_exp desc, date_expected asc">
                 <field name="name"/>
                 <field name="type"/>
                 <field name="eta"/>

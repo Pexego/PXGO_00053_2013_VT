@@ -157,6 +157,7 @@
                     <field name="notes_purchases" colspan="4" style="padding-right: 20%;"/>
                     <field name="cost"/>
                     <field name="notes_warehouse" colspan="4" style="padding-right: 20%;"/>
+                    <field name="incidences"/>
 
                 </group>
 
