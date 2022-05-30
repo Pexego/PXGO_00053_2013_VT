@@ -258,6 +258,8 @@
                 <filter name="filter_by_not_arrived" string="Not arrived" domain="[('arrived', '=', False)]" context="{'arrived_false' : True}"/>
                 <separator/>
                 <filter name="filter_by_conf" string="Confirmed" domain="[('conf', '=', True)]" />
+                <separator/>
+                <filter name="filter_by_incidences" string="Without Incidences" domain="[('incidences', '=', False)]" />
            </search>
         </field>
     </record>

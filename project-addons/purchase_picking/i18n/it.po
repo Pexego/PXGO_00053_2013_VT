@@ -511,5 +511,6 @@ msgstr "Arrivi"
 
 #. module: purchase_picking
 #: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter_warehouse
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
 msgid "Without Incidences"
 msgstr "Senza incidenti"
