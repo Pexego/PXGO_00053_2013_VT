@@ -451,3 +451,9 @@ msgstr "Devolver al almacén del cliente"
 #: selection:stock.return.deposit,options:0
 msgid "Return to our warehouse"
 msgstr "Devolver a nuestro almacén"
+
+#. module: stock_deposit
+#: code:addons/stock_deposit/wizard/stock_return_deposit.py:169
+#, python-format
+msgid "You cannot return a draft deposit to client warehouse"
+msgstr "No puedes devolver al almacén de cliente un depósito en borrador"

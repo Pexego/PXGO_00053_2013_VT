@@ -165,6 +165,8 @@ class StockDeposit(models.Model):
             location_dest_id = picking_type_id.default_location_dest_id.id
             location_id = deposit.move_id.location_dest_id.id
             if self.env.context.get("client_warehouse"):
+                if deposit.state == 'draft':
+                    raise UserError(_("You cannot return a draft deposit to client warehouse"))
                 location_dest_id = deposit.sale_move_id.location_id.id
                 location_id = deposit.sale_move_id.location_dest_id.id
             picking = self.env['stock.picking'].create({
