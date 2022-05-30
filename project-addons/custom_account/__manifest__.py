@@ -23,7 +23,7 @@
                 'account_credit_control', 'stock_picking_invoice_link',
                 'account_invoice_merge', 'customer_area',
                 'res_currency_rate_force', 'equivalent_products',
-                'purchase_picking'],
+                'purchase_picking','purchase_batch_invoicing'],
     "data": ['data/res_partner_category_data.xml',
              'data/groups.xml',
              'views/account_view.xml',
