@@ -130,7 +130,7 @@
                     <field name="status"/>
                     <field name="ready"/>
                     <field name="type"/>
-                    <field name="telex"/>
+                    <field name="telex" attrs="{'invisible':[('type','in',('air', 'road'))]}"/>
                     <label for="etd"/>
                     <div>
                         <field name="etd"/>

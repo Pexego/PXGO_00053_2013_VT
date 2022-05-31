@@ -36,7 +36,11 @@ class StockContainer(models.Model):
     notes_purchases = fields.Char(string="Notes", help="Purchases notes")
     notes_warehouse = fields.Text(string="Warehouse notes", help="Warehouse notes")
     conf = fields.Boolean(string="Conf", help="Confirmed")
-    telex = fields.Boolean(string="Telex", help="Telex")
+    telex = fields.Selection([
+        ('pending', 'Pending'),
+        ('asked', 'Asked'),
+        ('received', 'Received')
+    ])
     arrived = fields.Boolean(string="Arrived", help="Arrived", compute="_set_arrived", store=True)
     cost = fields.Float(sting="Cost")
     n_ref = fields.Integer(string="Nº ref", store=False, compute="_get_ref")
@@ -58,7 +62,7 @@ class StockContainer(models.Model):
         for container in self:
             if container.eta:
                 container.set_eta = True
-    
+
     @api.multi
     @api.depends('date_expected')
     def _set_date_exp(self):

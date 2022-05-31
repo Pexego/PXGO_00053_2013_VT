@@ -554,3 +554,18 @@ msgstr "Salida transporte"
 #: model:ir.ui.menu,name:purchase_picking.menu_stock_shipping
 msgid "Arrivals"
 msgstr "Llegadas"
+
+#. module: purchase_picking
+#: selection:stock.container,telex:0
+msgid "Pending"
+msgstr "Pendiente"
+
+#. module: purchase_picking
+#: selection:stock.container,telex:0
+msgid "Asked"
+msgstr "Pedido"
+
+#. module: purchase_picking
+#: selection:stock.container,telex:0
+msgid "Received"
+msgstr "Recibido"
