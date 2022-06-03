@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_show_returns" model="ir.actions.act_window">
+        <field name="name">Amazon Returns</field>
+        <field name="res_model">amazon.return</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="returns_amazon_menu" name="Returns" sequence="2"
+              parent="amazon_menu"/>
+
+    <menuitem id="returns_amazon_report_menu" name="Returns" sequence="1" action="action_show_returns"
+              parent="returns_amazon_menu"/>
+
+
+    <record id="amazon_return_form" model="ir.ui.view">
+        <field name="name">amazon.return.form</field>
+        <field name="model">amazon.return</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="return_state" widget="statusbar" readonly="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <div class="oe_title">
+                        <label string="Amazon Return"/>
+                        <h1>
+                            <field name="amazon_order_name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="amazon_order_id"/>
+                            <field name="fulfillment_center" readonly="1"/>
+                            <field name="lpn" readonly="1"/>
+                            <field name="return_date"/>
+                        </group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="product_qty" readonly="1"/>
+                            <field name="sku"/>
+                            <field name="asin"/>
+                            <field name="amazon_sku"/>
+                            <field name="product_state" readonly="1"/>
+                            <field name="product_name_amazon" readonly="1"/>
+                            <field name="status" readonly="1"/>
+                            <field name="reason" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Deposits">
+                            <field name="deposit_ids"/>
+                        </page>
+                    </notebook>
+                    <group>
+                        <field name="customer_comments"/>
+                        <field name="error_message" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="amazon_return_tree" model="ir.ui.view">
+        <field name="name">amazon.return.tree</field>
+        <field name="model">amazon.return</field>
+        <field name="arch" type="xml">
+            <tree string="Return">
+                <field name="amazon_order_id"/>
+                <field name="amazon_order_name"/>
+                <field name="product_id"/>
+                <field name="reason"/>
+                <field name="status"/>
+                <field name="product_state"/>
+                <field name="return_state"/>
+                <field name="error_message"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_amazon_return_filter" model="ir.ui.view">
+        <field name="name">amazon.return.filters</field>
+        <field name="model">amazon.return</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="amazon_order_name"/>
+                <field name="product_id"/>
+                <filter string="Errors" domain="[('return_state','=','error')]" name="errors_filter"/>
+            </search>
+        </field>
+    </record>
+
+</odoo>
