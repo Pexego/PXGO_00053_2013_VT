@@ -23,7 +23,7 @@
         <field name="name">stock.container.tree</field>
         <field name="model">stock.container</field>
         <field name="arch" type="xml">
-            <tree string="Containers" class="custom_tree" decoration-warning="type == 'road'" decoration-info="type == 'sea'" default_order="set_date_exp desc, date_expected asc">
+            <tree string="Containers" class="custom_tree" decoration-warning="type == 'road'" decoration-info="type == 'sea'" decoration-bf="type == 'air'" default_order="set_date_exp desc, date_expected asc">
                 <field name="name"/>
                 <field name="type"/>
                 <field name="eta"/>
@@ -35,6 +35,7 @@
                 <field name="date_expected"/>
                 <field name="conf"/>
                 <field name="forwarder_comercial"/>
+                <field name="incidences"/>
                 <field name="notes_warehouse"/>
             </tree>
         </field>

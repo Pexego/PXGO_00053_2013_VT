@@ -419,6 +419,11 @@ msgid "Products"
 msgstr "Productos"
 
 #. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_incidences
+msgid "Incidences"
+msgstr "Incidencias"
+
+#. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_notes_warehouse
 msgid "Warehouse notes"
 msgstr "Notas alm."
