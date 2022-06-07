@@ -83,9 +83,8 @@ class ResPartner(models.Model):
                                 line_voz._onchange_account_id()
                                 line_voz.price_unit = 0.15
                             invoice.compute_taxes()
-                            invoice.action_invoice_open()
-
-                            if partner.property_payment_term_id.name in ('Prepago', 'Pago inmediato'):
+                            
+                            if partner.property_payment_term_id.with_context({'lang': 'es_ES'}).name in ('Prepago', 'Pago inmediato'):
                                 valid_mandate = self.env['account.banking.mandate'].search_count([('partner_id', '=', partner.id), ('state', '=', 'valid')])
                                 if valid_mandate > 0:
                                     rd_payment = self.env['account.payment.mode'].search([('name', '=', 'Recibo domiciliado')])
@@ -93,11 +92,11 @@ class ResPartner(models.Model):
                                 else:
                                     mail_bank_error_message += _('Partner %s has not a valid mandate or account. Invoice %s has not been changed. \n') \
                                                               % (partner.name, invoice.number)
+                            invoice.action_invoice_open()
                         else:
                             error += 'Partner id %s not found ' % partner_data['odooId']
             else:
                 error += 'Response %s with error: %s' % (response.status_code, response.text)
-            print(error)
 
             # Send mail to accounting if there is partners without bank account
             if mail_bank_error_message:
