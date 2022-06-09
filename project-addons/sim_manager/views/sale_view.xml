@@ -7,7 +7,7 @@
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
             <field name="fiscal_position_id" position="after">
-                <field name="allow_sale_sim" groups="account.group_account_manager"/>
+                <field name="allow_sale_sim" groups="base.group_system"/>
             </field>
         </field>
     </record>
