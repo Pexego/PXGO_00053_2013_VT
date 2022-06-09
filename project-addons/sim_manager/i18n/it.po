@@ -187,3 +187,14 @@ msgstr "Alcuni di queste SIM card %s della bolla %s non esistono nel sistema."
 #, python-format
 msgid "You must specify the serial number of the serial products"
 msgstr "Devi specificare il numero serie dei prodotti con traking"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sale_order.py:34
+#, python-format
+msgid "Order block, the client has too many sims inactive. {}% Active"
+msgstr "Ordine bloccato, il utente ha troppe SIM innative. {}% Attivo"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sale_order_allow_sale_sim
+msgid "Allow SIM"
+msgstr "Permettere SIM"
