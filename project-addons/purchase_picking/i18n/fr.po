@@ -20,3 +20,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:purchase_picking.field_product_product_date_first_incoming
 msgid "Date First Incoming"
 msgstr "Date de première arrivée"
+
+#. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_move_virtual_stock_conservative
+msgid "Virtual Stock Conservative"
+msgstr "Quantité disponible"
