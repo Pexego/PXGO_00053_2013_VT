@@ -221,3 +221,14 @@ msgstr "Los números de serie no se encuentran en el sistema. Comprueba los núm
 #, python-format
 msgid "Some introduced SIMs are not assigned to %s"
 msgstr "Algunas SIMs no están asignadas a %s"
+
+#. module: sim_manager
+#: code:addons/sim_manager/models/sale_order.py:34
+#, python-format
+msgid "Order block, the client has too many sims inactive. {}% Active"
+msgstr "Pedido bloqueado, el cliente tiene demasiadas SIM inactivas. {}% Activo"
+
+#. module: sim_manager
+#: model:ir.model.fields,field_description:sim_manager.field_sale_order_allow_sale_sim
+msgid "Allow SIM"
+msgstr "Permitir SIM"
