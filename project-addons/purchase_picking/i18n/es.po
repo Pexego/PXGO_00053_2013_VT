@@ -419,6 +419,11 @@ msgid "Products"
 msgstr "Productos"
 
 #. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_incidences
+msgid "Incidences"
+msgstr "Incidencias"
+
+#. module: purchase_picking
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_container_notes_warehouse
 msgid "Warehouse notes"
 msgstr "Notas alm."
@@ -554,3 +559,9 @@ msgstr "Salida transporte"
 #: model:ir.ui.menu,name:purchase_picking.menu_stock_shipping
 msgid "Arrivals"
 msgstr "Llegadas"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter_warehouse
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
+msgid "Without Incidences"
+msgstr "Sin incidencias"

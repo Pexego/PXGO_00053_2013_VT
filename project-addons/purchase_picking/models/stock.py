@@ -51,6 +51,7 @@ class StockContainer(models.Model):
     pickings_warehouse = fields.Char(string="Pickings", store=False, compute="_get_picking_ids")
     set_eta = fields.Boolean(string="set_eta", help="Set eta", default=0, compute="_set_eta", store=True)
     set_date_exp = fields.Boolean(string="set_date_expected", help="Set date expected", default=0, compute="_set_date_exp", store=True)
+    incidences = fields.Boolean("Incidences")
 
     @api.multi
     @api.depends('eta')
