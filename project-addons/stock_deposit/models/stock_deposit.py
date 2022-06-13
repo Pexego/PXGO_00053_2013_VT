@@ -314,10 +314,12 @@ class StockDeposit(models.Model):
                     and partner_id.bank_ids[0].id or False
             invoice = self.env['account.invoice'].create(inv_vals)
             for line in sale_lines:
-                deposit = self.filtered(lambda d: d.move_id.sale_line_id.id==line.id)
-                invoice_line = line.with_context(my_context).invoice_line_create(invoice.id, sum(deposit.mapped('product_uom_qty')))
-                invoice_line.move_line_ids = [(4, deposit.sale_move_id.id)]
-                line.qty_invoiced=line.product_qty
+                deposit = deposits.filtered(lambda d: d.move_id.sale_line_id.id == line.id)
+                invoice_line = line.with_context(my_context).invoice_line_create(invoice.id,
+                                                                                 sum(deposit.mapped('product_uom_qty')))
+                invoice_line.move_line_ids = [(6, 0, deposit.mapped('sale_move_id.id'))]
+                line.qty_invoiced = line.product_qty
+
             invoice_ids.append(invoice.id)
             sale_deposit.write({'invoice_id': invoice.id})
         deposits.write({'state': 'invoiced'})
