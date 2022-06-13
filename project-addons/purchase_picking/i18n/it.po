@@ -423,6 +423,11 @@ msgid "Sea shipping"
 msgstr "Spedizione marittima"
 
 #. module: purchase_picking
+#: model:ir.model.fields,field_description:purchase_picking.field_stock_container_incidences
+msgid "Incidences"
+msgstr "incidenze"
+
+#. module: purchase_picking
 #: selection:stock.container,type:0
 msgid "Road"
 msgstr "Terra"
@@ -513,3 +518,9 @@ msgstr "Arrivi"
 #: model:ir.model.fields,field_description:purchase_picking.field_stock_move_virtual_stock_conservative
 msgid "Virtual Stock Conservative"
 msgstr "Quantità disponibile"
+
+#. module: purchase_picking
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter_warehouse
+#: model:ir.ui.view,arch_db:purchase_picking.view_stock_container_filter
+msgid "Without Incidences"
+msgstr "Senza incidenti"
