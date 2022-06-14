@@ -163,8 +163,7 @@ class KitchenCustomization(models.Model):
             partner_ref = self.order_id.partner_id.ref
             for line in self.customization_line.filtered(lambda l:l.preview_selector):
                 req = requests.request('POST', previews_url + 'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                    partner_ref, line.product_id.default_code),
-                                       verify=False)
+                    partner_ref, line.product_id.default_code))
                 if req.status_code != 200:
                     raise exceptions.UserError(
                         _("There are no previews for this partner and this product %s") % line.product_id.default_code)
@@ -308,8 +307,7 @@ class KitchenCustomization(models.Model):
             partner_ref = self.order_id.partner_id.ref
             for line in lines:
                 req = requests.request('POST', previews_url+'GetCreatedPreview?idOdooClient=%s&reference=%s' % (
-                partner_ref, line.product_id.default_code),
-                              verify=False)
+                partner_ref, line.product_id.default_code))
                 if req.status_code != 200:
                     raise exceptions.UserError(_("There are no previews for this partner and this product %s") % line.product_id.default_code)
                 previews = req.json()
@@ -460,7 +458,7 @@ class KitchenCustomizationLine(models.Model):
                     {'line_id': self.id, 'name': _('OldPreview - Go to Sharepoint'),
                      'url': 'The previews are on Sharepoint', 'state': 'OldPreview'})
             else:
-                photo = base64.b64encode(requests.get(preview.get('logo'), verify=False).content)
+                photo = base64.b64encode(requests.get(preview.get('logo')).content)
                 new_preview = self.env['kitchen.customization.preview'].create(
                     {'line_id': self.id, 'photo': photo, 'name': 'Preview %s' % str(count + 1),
                      'url': preview.get('urlView'), 'state': preview.get('status')})

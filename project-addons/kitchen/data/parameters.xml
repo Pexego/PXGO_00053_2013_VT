@@ -6,6 +6,6 @@
     </record>
     <record id="kitchen_previews_url" model="ir.config_parameter">
         <field name="key">kitchen.previews.url</field>
-        <field name="value">https://172.18.2.21/odoo/</field>
+        <field name="value">https://personalizaciones.visiotechsecurity.com/odoo/</field>
     </record>
 </odoo>
