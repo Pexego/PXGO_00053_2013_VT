@@ -42,8 +42,10 @@ class ProductProduct(models.Model):
                     product_fields.append(product[field][1])
                 elif field == 'state':
                     product_fields.append(translate_state[product[field]])
-                elif field == 'average_margin':
+                elif field in ('average_margin', 'standard_price', 'last_purchase_price'):
                     product_fields.append(round(product[field], 2))
+                elif field == 'last_purchase_date':
+                    product_fields.append(datetime.strptime(product[field], '%Y-%m-%d').strftime('%d/%m/%Y'))
                 else:
                     product_fields.append(product[field])
             rows.append(product_fields)
