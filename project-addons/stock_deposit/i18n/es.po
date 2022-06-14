@@ -436,3 +436,24 @@ msgstr "Revertir Facturado"
 #, python-format
 msgid "This deposit has invoices in non-draft status, please check it before reverting it"
 msgstr "Este depósito tiene facturas en estado distinto a borrador, por favor, compruebalo antes de revertirlo"
+
+#. module: stock_deposit
+#: model:ir.model.fields,field_description:stock_deposit.field_stock_return_deposit_options
+msgid "Options"
+msgstr "Opciones"
+
+#. module: stock_deposit
+#: selection:stock.return.deposit,options:0
+msgid "Return to client warehouse"
+msgstr "Devolver al almacén del cliente"
+
+#. module: stock_deposit
+#: selection:stock.return.deposit,options:0
+msgid "Return to our warehouse"
+msgstr "Devolver a nuestro almacén"
+
+#. module: stock_deposit
+#: code:addons/stock_deposit/wizard/stock_return_deposit.py:169
+#, python-format
+msgid "You cannot return a draft deposit to client warehouse"
+msgstr "No puedes devolver al almacén de cliente un depósito en borrador"

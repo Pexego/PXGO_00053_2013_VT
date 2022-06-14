@@ -158,16 +158,63 @@ class StockDeposit(models.Model):
 
     @api.multi
     def return_deposit(self):
+        sorted_deposits = sorted(self, key=lambda d: d.sale_id)
+        move_obj = self.env['stock.move']
         picking_type_id = self.env.ref('stock.picking_type_in')
-        for deposit in self:
-            picking = self.env['stock.picking'].create(
-                {'picking_type_id': picking_type_id.id,
-                 'partner_id': deposit.partner_id.id,
-                 'location_id': deposit.move_id.location_dest_id.id,
-                 'location_dest_id': picking_type_id.default_location_dest_id.id})
-            deposit._create_stock_moves(picking)
-            deposit.write({'state': 'returned',
-                           'return_picking_id': picking.id})
+        for deposit in sorted_deposits:
+            location_dest_id = picking_type_id.default_location_dest_id.id
+            location_id = deposit.move_id.location_dest_id.id
+            if self.env.context.get("client_warehouse"):
+                if deposit.state == 'draft':
+                    raise UserError(_("You cannot return a draft deposit to client warehouse"))
+                location_dest_id = deposit.sale_move_id.location_id.id
+                location_id = deposit.sale_move_id.location_dest_id.id
+            picking = self.env['stock.picking'].create({
+                'picking_type_id': picking_type_id.id,
+                'location_id': location_id,
+                'location_dest_id': location_dest_id})
+            if not picking['partner_id']:
+                partner_id = deposit.partner_id.id
+                commercial = deposit.user_id.id
+                group_id = deposit.sale_id.procurement_group_id.id
+                picking.write({'partner_id': partner_id, 'commercial': commercial,
+                               'group_id': group_id, 'origin': deposit.sale_id.name})
+
+            elif picking['group_id'] != deposit.sale_id.procurement_group_id:
+                picking = self.env['stock.picking'].create({
+                    'picking_type_id': picking_type_id.id,
+                    'partner_id': deposit.partner_id.id,
+                    'location_id': location_id,
+                    'location_dest_id': location_dest_id
+                })
+                partner_id = deposit.partner_id.id
+                commercial = deposit.user_id.id
+                group_id = deposit.sale_id.procurement_group_id.id
+                picking.write({'partner_id': partner_id, 'commercial': commercial,
+                               'group_id': group_id, 'origin': deposit.sale_id.name})
+
+            values = {
+                'product_id': deposit.product_id.id,
+                'product_uom_qty': deposit.product_uom_qty,
+                'product_uom': deposit.product_uom.id,
+                'partner_id': deposit.partner_id.id,
+                'name': 'Sale Deposit: ' + deposit.move_id.name,
+                'location_id': location_id,
+                'location_dest_id': location_dest_id,
+                'picking_id': picking.id,
+                'commercial': deposit.user_id.id,
+                'group_id': group_id
+            }
+            move = move_obj.create(values)
+            move._action_confirm()
+            deposit.write({'state': 'returned', 'return_picking_id': picking.id})
+            picking.action_assign()
+            if self.env.context.get("client_warehouse"):
+                deposit.move_id.sale_line_id.write(
+                    {'qty_invoiced': deposit.move_id.sale_line_id.qty_invoiced - deposit.product_uom_qty,
+                 'invoice_status': 'to invoice'})
+                picking.action_done()
+
 
     @api.model
     def send_advise_email(self):
@@ -267,10 +314,12 @@ class StockDeposit(models.Model):
                     and partner_id.bank_ids[0].id or False
             invoice = self.env['account.invoice'].create(inv_vals)
             for line in sale_lines:
-                deposit = self.filtered(lambda d: d.move_id.sale_line_id.id==line.id)
-                invoice_line = line.with_context(my_context).invoice_line_create(invoice.id, sum(deposit.mapped('product_uom_qty')))
-                invoice_line.move_line_ids = [(4, deposit.sale_move_id.id)]
-                line.qty_invoiced=line.product_qty
+                deposit = deposits.filtered(lambda d: d.move_id.sale_line_id.id == line.id)
+                invoice_line = line.with_context(my_context).invoice_line_create(invoice.id,
+                                                                                 sum(deposit.mapped('product_uom_qty')))
+                invoice_line.move_line_ids = [(6, 0, deposit.mapped('sale_move_id.id'))]
+                line.qty_invoiced = line.product_qty
+
             invoice_ids.append(invoice.id)
             sale_deposit.write({'invoice_id': invoice.id})
         deposits.write({'state': 'invoiced'})
