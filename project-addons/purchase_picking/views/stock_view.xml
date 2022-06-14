@@ -237,6 +237,7 @@
                 <field name="status"/>
                 <field name="date_expected"/>
                 <field name="conf"/>
+                <field name="telex"/>
                 <field name="arrived"/>
                 <field name="notes_purchases"/>
             </tree>
