@@ -11,7 +11,9 @@
     """,
     'author': 'Visiotech',
     'website': '',
-    "depends": ['custom_account','account','l10n_it_fiscal_document_type'],
-    "data": ["security/ir.model.access.csv"],
+    "depends": ['custom_account', 'sale', 'account', 'l10n_it_fiscal_document_type',
+                'l10n_it_ricevute_bancarie'],
+    "data": ["security/ir.model.access.csv", "wizard/reconcile_riba_with_statement_lines_wzd_view.xml",
+             "views/account_view.xml", "views/riba_view.xml"],
     "installable": True
 }

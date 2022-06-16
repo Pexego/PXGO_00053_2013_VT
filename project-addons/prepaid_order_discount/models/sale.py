@@ -38,7 +38,7 @@ class SaleOrder(models.Model):
             if message:
                 raise exceptions.Warning(message)
         if risk:
-            return super(SaleOrder, self.with_context(bypass_risk=True,force_check=True)).action_confirm()
+            return super(SaleOrder, self.with_context(bypass_risk=True, force_check=True)).action_confirm()
         else:
             return super().action_confirm()
 
@@ -129,14 +129,15 @@ class SaleOrder(models.Model):
             margin_rappel = 0.0
             sale_price = 0.0
             purchase_price = 0.0
-            for line in sale.order_line:
-                if not line.deposit and line.product_id.categ_id.id not in shipping_cost_categ.ids and not line.original_line_id:
-                    if line.price_unit > 0:
-                        margin_rappel += line.margin_rappel or 0.0
-                    else:
-                        margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
-                    sale_price += line.price_subtotal or 0.0
-                    purchase_price += line.product_id.standard_price_2_inc or 0.0 * line.product_uom_qty
+            generic_product = self.env.ref('sale_margin_percentage.generic_product').id
+            for line in sale.order_line.filtered(lambda l: l.product_id.id != generic_product and not l.deposit
+                              and l.product_id.categ_id.id not in shipping_cost_categ.ids and not l.original_line_id):
+                if line.price_unit > 0:
+                    margin_rappel += line.margin_rappel or 0.0
+                else:
+                    margin_rappel += (line.price_unit * line.product_uom_qty) * ((100.0 - line.discount) / 100.0)
+                sale_price += line.price_subtotal or 0.0
+                purchase_price += line.product_id.standard_price_2_inc or 0.0 * line.product_uom_qty
             if sale_price:
                 if sale_price < purchase_price:
                     return round((margin_rappel * 100) / purchase_price, 2)
@@ -146,14 +147,14 @@ class SaleOrder(models.Model):
     @api.model
     def create(self, vals):
         res = super(SaleOrder, self).create(vals)
-        if vals.get('prepaid_option', False) and self.env.user.login == self.env['ir.config_parameter'].sudo().get_param(
-                'web.user.buyer'):
+        if vals.get('prepaid_option', False) and self.env.user.login == self.env[
+            'ir.config_parameter'].sudo().get_param(
+            'web.user.buyer'):
             res.message_post(body=_("Prepaid option checked by Web Team"))
         return res
 
 
 class SaleOrderLine(models.Model):
-
     _inherit = "sale.order.line"
 
     @api.multi
@@ -162,3 +163,15 @@ class SaleOrderLine(models.Model):
         res.append(self.env.ref("prepaid_order_discount.prepaid_discount_product").id)
         return res
 
+    @api.depends('invoice_lines.invoice_id.state', 'invoice_lines.quantity')
+    def _get_invoice_qty(self):
+        super()._get_invoice_qty()
+        for line in self.filtered(lambda l: l.product_id.id == self.env.ref('prepaid_order_discount.prepaid_discount_product').id):
+            qty_invoiced = 0.0
+            for invoice_line in line.invoice_lines:
+                if invoice_line.invoice_id.state != 'cancel':
+                    if invoice_line.invoice_id.type == 'out_invoice':
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+                    elif invoice_line.invoice_id.type == 'out_refund' and line.price_unit < 0:
+                        qty_invoiced += invoice_line.uom_id._compute_quantity(invoice_line.quantity, line.product_uom)
+            line.qty_invoiced = qty_invoiced

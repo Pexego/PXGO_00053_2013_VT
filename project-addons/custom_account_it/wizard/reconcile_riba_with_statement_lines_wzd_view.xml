@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="wizard_reconcile_riba_payment_statement_line_form" model="ir.ui.view">
+        <field name="name">wizard.reconcile.riba.payment.statement.line.form</field>
+        <field name="model">wizard.reconcile.riba.statement.line</field>
+        <field name="arch" type="xml">
+            <form string="Reconcile Riba with statement lines">
+                <group>
+                    <group colspan="4">
+                        <field name="journal_id" domain="[('type', '=', 'bank')]" options="{'no_create': True, 'no_open': True}" />
+                        <field name="bank_statement_id" domain="[('journal_id', '=', journal_id),('state', '=', 'open')]" options="{'no_create': True, 'no_open': True}" />
+                        <field name="bank_statement_line_id" domain="[('statement_id', '=', bank_statement_id),('journal_entry_ids', '=', False)]" options="{'no_create': True, 'no_open': True}" />
+                        <field name="currency_id" invisible="1"/>
+                        <newline/>
+                        <field name="amount_selected"/>
+                        <field name="statement_line_amount"/>
+                        <field name="difference" attrs="{'invisible': True}"/>
+                        <field name="amount_selected_riba"/>
+                    </group>
+                    <group colspan="4" attrs="{'invisible': ['|', ('difference','=',0), ('difference','=',False)]}">
+                        <separator string="Select Ri.Ba. to reconcile" colspan="4"/>
+                        <field name="riba_line_ids" nolabel="1" colspan="4">
+                            <tree string="Riba lines" create="false" editable="top" delete="false">
+                                <field name="select"/>
+                                <field name="invoice_number"/>
+                                <field name="invoice_date"/>
+                                <field name="partner_id"/>
+                                <field name="iban"/>
+                                <field name="amount"/>
+                                <field name="due_date"/>
+                            </tree>
+                        </field>
+                    </group>
+                </group>
+                <footer>
+                    <button string="Reconcile" name="action_reconcile" type="object" colspan="2"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <act_window
+        id="action_reconcile_bank_lines_w_riba"
+        name="Reconcile with statements"
+        res_model="wizard.reconcile.riba.statement.line"
+        src_model="riba.distinta"
+        view_id="wizard_reconcile_riba_payment_statement_line_form"
+        view_mode="form"
+        key2="client_action_multi"
+        target="new"/>
+
+</odoo>

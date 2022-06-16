@@ -6,10 +6,10 @@
         <field name="arch" type="xml">
             <form string="Deposits">
                 <header>
-                    <button name="return_deposit" type="object"
+                    <button name="%(stock_return_deposit_action)d" type="action"
                         string="Return"
                         class="oe_highlight"
-                        states="draft"/>
+                        states="draft,invoiced"/>
                     <button name="sale" type="object"
                         string="Sale"
                         class="oe_highlight"

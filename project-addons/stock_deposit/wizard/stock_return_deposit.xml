@@ -5,6 +5,9 @@
         <field name="model">stock.return.deposit</field>
         <field name="arch" type="xml">
             <form string="Return deposits">
+                <group>
+                    <field name="options"/>
+                </group>
                 <label string="Deposits"/>
                 <field name="deposit_change_qty" mode="tree">
                     <tree string="Deposits" create="false" delete="false" editable="top">
@@ -25,11 +28,11 @@
     </record>
 
     <act_window name="Create return"
-        res_model="stock.return.deposit"
-        src_model="stock.deposit"
-        view_id="stock_return_deposit_form"
-        view_mode="form"
-        target="new"
-        key2="client_action_multi"
-        id="stock_return_deposit_action"/>
+                res_model="stock.return.deposit"
+                src_model="stock.deposit"
+                view_id="stock_return_deposit_form"
+                view_mode="form"
+                target="new"
+                key2="client_action_multi"
+                id="stock_return_deposit_action"/>
 </odoo>

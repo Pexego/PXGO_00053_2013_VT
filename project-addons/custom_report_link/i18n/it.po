@@ -146,6 +146,7 @@ msgstr "<strong>AMOUNT</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "<strong>Amount</strong>"
 msgstr "<strong>Importo</strong>"
 
@@ -172,6 +173,7 @@ msgstr "<strong>Balance:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>Bank Account:</strong>"
 msgstr "<strong>Conto Bancario:</strong>"
 
@@ -188,6 +190,7 @@ msgstr "<strong>Data di Reclamo\n"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>Client:</strong>"
 msgstr "<strong>Client:</strong>"
 
@@ -235,6 +238,7 @@ msgstr "<strong>Delivery Note</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "<strong>Description</strong>"
 msgstr "<strong>Descrizione</strong>"
 
@@ -249,6 +253,7 @@ msgstr "<strong>Account di Destinazione:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<b>VAT:</b>"
 msgstr "<b>IVA: </b>"
 
@@ -258,6 +263,7 @@ msgstr "<b>IVA: </b>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "<strong>Discount</strong>"
 msgstr "<strong>Sconto</strong>"
 
@@ -297,18 +303,21 @@ msgstr "<strong>Note su posizione fiscale:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>IVA</strong>"
 msgstr "<strong>IVA</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>Invoice address</strong>"
 msgstr "<strong>Indirizzo di fatturazione</strong>"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>Invoice and shipping address</strong>"
 msgstr "<strong>Indirizzo di fatturazione e di spedizione</strong>"
 
@@ -376,6 +385,7 @@ msgstr "<strong>Data di Stampa\n"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "<strong>Quantity</strong>"
 msgstr "<strong>Quantità</strong>"
 
@@ -390,6 +400,7 @@ msgstr "<strong>Quotation: </strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>REC.</strong>"
 msgstr "<strong>REC.</strong>"
 
@@ -404,6 +415,7 @@ msgstr "<strong>RET.</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "<strong>Reference</strong>"
 msgstr "<strong>Riferimento</strong>"
 
@@ -418,6 +430,7 @@ msgstr "<strong>Responsible\n"
 
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "<strong>Sin Pack</strong>"
 msgstr "<strong>Senza Pack</strong>"
 
@@ -430,6 +443,7 @@ msgstr "<strong>Sub-Totale:</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>Supplier Address:</strong>"
 msgstr "<strong>Supplier Address:</strong>"
 
@@ -459,6 +473,7 @@ msgstr "<strong>PREZZO TOTALE.</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>TOTAL</strong>"
 msgstr "<strong>TOTALE</strong>"
 
@@ -508,6 +523,7 @@ msgstr "<strong>Total Qty</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "<strong>Unit Cost</strong>"
 msgstr "<strong>Costo Unitario</strong>"
 
@@ -519,6 +535,7 @@ msgstr "<strong>Costo Unitario</strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_saleorder_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "<strong>Unit Price</strong>"
 msgstr "<strong>Prezzo Unitario</strong>"
 
@@ -538,6 +555,7 @@ msgstr "<strong>Ordine Visiotech: </strong>"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "<strong>Warehouse Address:</strong>"
 msgstr "<strong>Indirizzo di magazzino:</strong>"
 
@@ -661,6 +679,7 @@ msgstr "Bénéficiaire: LONG XIANG EXPORTACION IMPORTACION S.L.\n"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "C.I.F.:"
 msgstr "C.I.F.:"
 
@@ -690,6 +709,7 @@ msgstr "CAIXABANC\n"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_orderdeposit
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "CIF:"
 msgstr "CIF:"
 
@@ -716,6 +736,7 @@ msgstr "Reclamo:"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "Client order:"
 msgstr "Client order:"
 
@@ -739,6 +760,7 @@ msgstr "Data"
 #: model:ir.ui.view,arch_db:custom_report_link.report_overduecustom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchaseorder_custom_document
 #: model:ir.ui.view,arch_db:custom_report_link.report_purchasequotation_custom_document
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "Date:"
 msgstr "Data:"
 
@@ -913,6 +935,7 @@ msgstr "Pro-Forma"
 #. module: custom_report_link
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_data
 #: model:ir.ui.view,arch_db:custom_report_link.report_picking_custom_valued_data
+#: model:ir.ui.view,arch_db:custom_report_link.report_picking_dropship_custom_data
 msgid "Pack:"
 msgstr "Pack:"
 
@@ -935,6 +958,7 @@ msgstr "Pedido de compra"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "Picking"
 msgstr "Picking"
 
@@ -942,6 +966,7 @@ msgstr "Picking"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "Picking:"
 msgstr "Picking:"
 
@@ -1097,8 +1122,9 @@ msgstr "IVA:"
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_v
 #: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_valued
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
 msgid "Visiotech order:"
-msgstr "Visiotech order:"
+msgstr "Visiotech ordine:"
 
 #. module: custom_report_link
 #: model:ir.model,name:custom_report_link.model_report_custom_report_link_report_overcustom
@@ -1136,3 +1162,13 @@ msgid "R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, 
 "                        B80645518 Listed in the RII-PYA with registration number 2295 and in the RII-AEE with registration number 7216."
 msgstr "R.M. de Madrid: Tomo 6811, Libro 0, Folio 210, Seccion B, Hoja M-110924, Ins 2º .- CIF:\n"
 "                        B80645518 Iscritta al Registro Pile e Accumulatori con numero di registrazione 2295 e al Registro Apparecchiature Elettriche e Elettroniche con numero di registrazione 7216."
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_picking_dropship
+msgid "Order:"
+msgstr "Ordine"
+
+#. module: custom_report_link
+#: model:ir.ui.view,arch_db:custom_report_link.external_layout_custom_saleorder
+msgid "OFFER VALID FOR 30 DAYS"
+msgstr "OFFERTA VALIDA 30 GIORNI"

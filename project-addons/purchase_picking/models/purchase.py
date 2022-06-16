@@ -27,6 +27,10 @@ class PurchaseOrder(models.Model):
 
     _inherit = 'purchase.order'
 
+    def _search_containers(self, operator, value):
+        containers = self.env['stock.container'].search([('name', operator, value)])
+        return [('id', 'in', containers.mapped('picking_ids').mapped('purchase_id').ids)]
+
     picking_created = fields.Boolean('Picking created', compute='is_picking_created')
 
     date_planned = fields.Datetime(string='Scheduled Date', compute='', store=True, index=True)
@@ -35,7 +39,7 @@ class PurchaseOrder(models.Model):
 
     total_disc = fields.Float(compute='_get_amount_discount', store=True, readonly=True, string='Disc. amount')
 
-    container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers')
+    container_ids = fields.Many2many('stock.container', string='Containers', compute='_get_containers', search='_search_containers')
 
     @api.multi
     def _get_containers(self):
@@ -141,6 +145,14 @@ class PurchaseOrder(models.Model):
                 if line.select_delete:
                     line.unlink()
 
+    @api.model
+    def create(self, vals):
+        context = self._context
+        if self._context.get('default_state', '') == 'reserve':
+            context = dict(self._context)
+            context.pop('default_state', False)
+        return super(PurchaseOrder, self.with_context(context)).create(vals)
+
 
 class PurchaseOrderLine(models.Model):
 
@@ -172,3 +184,11 @@ class PurchaseOrderLine(models.Model):
                             not move.container_id:
                         move.date_expected = vals['date_planned']
         return res
+
+    @api.model
+    def create(self, vals):
+        context = self._context
+        if self._context.get('default_state', '') == 'reserve':
+            context = dict(self._context)
+            context.pop('default_state', False)
+        return super(PurchaseOrderLine, self.with_context(context)).create(vals)

@@ -1196,6 +1196,11 @@ msgid "Shipments"
 msgstr "spedizioni"
 
 #. module: custom_account
+#: model:ir.ui.view,arch_db:custom_account.view_purchase_order_filter_inherit_search
+msgid "Container"
+msgstr "Spedizioni"
+
+#. module: custom_account
 #: code:addons/custom_account/models/account_bank_statement.py:85
 #, python-format
 msgid "A selected move line was already reconciled.\n"

@@ -52,7 +52,7 @@ class StockPicking(models.Model):
 
     with_incidences = fields.Boolean('With incidences', readonly=True,
                                      copy=False)
-    block_picking = fields.Boolean('Albarán procesado Vstock')
+    block_picking = fields.Boolean('Albarán procesado Vstock', copy=False)
     partial_picking = fields.Boolean('Partial picking', default=False)
 
     state = fields.Selection(selection_add=[('partially_available', 'Partially Available')])
@@ -265,6 +265,14 @@ class StockPicking(models.Model):
             composer_id.with_context(ctx).send_mail()
 
         return True
+
+    @api.multi
+    def get_signature(self):
+        self.ensure_one()
+        signature = ''
+        for move in self.move_lines.sorted(key=lambda r: r.product_id.default_code):
+            signature += '%s%s' % (move.product_id.default_code, move.product_uom_qty)
+        return signature
 
 
 class ReturnPicking(models.TransientModel):

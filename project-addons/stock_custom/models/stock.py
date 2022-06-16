@@ -59,15 +59,22 @@ class StockPicking(models.Model):
     @api.multi
     def write(self, vals):
         pickings_to_send = []
+        pickings_dropship = []
         for picking in self:
             # We do this huge condition to ensure that both fields are not empty when the mail is sent
             if ((vals.get('carrier_tracking_ref', False) and picking.carrier_name and not picking.carrier_tracking_ref) or
                     (vals.get('carrier_name', False) and picking.carrier_tracking_ref and not picking.carrier_name) or
                     (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and \
                     picking.picking_type_code == 'outgoing' and \
+                    picking.partner_id.email and not picking.partner_id.commercial_partner_id.country_code and \
                     (picking.sale_id or (picking.claim_id and picking.claim_id.delivery_type == 'shipping' and picking.location_dest_id == self.env.ref(
                         'stock.stock_location_customers'))):
                 pickings_to_send.append(picking)
+            elif ((vals.get('carrier_tracking_ref', False) and picking.carrier_name and not picking.carrier_tracking_ref) or
+                    (vals.get('carrier_name', False) and picking.carrier_tracking_ref and not picking.carrier_name) or
+                    (vals.get('carrier_name', False) and vals.get('carrier_tracking_ref', False) and not picking.carrier_name and not picking.carrier_tracking_ref)) and \
+                    (picking.sale_id and picking.purchase_id):
+                pickings_dropship.append(picking)
         result = super().write(vals)
         if pickings_to_send:
             for picking in pickings_to_send:
@@ -77,6 +84,10 @@ class StockPicking(models.Model):
                 else:
                     picking_template = self.env.ref('stock_custom.picking_done_template')
                 picking_template.with_context(lang=picking.partner_id.commercial_partner_id.lang).send_mail(picking.id)
+        if pickings_dropship:
+            for picking in pickings_dropship:
+                picking_template = self.env.ref('custom_report_link.picking_done_dropship_template')
+                picking_template.with_context(lang=picking.sale_id.partner_id.lang).send_mail(picking.id)
         return result
 
     @api.multi

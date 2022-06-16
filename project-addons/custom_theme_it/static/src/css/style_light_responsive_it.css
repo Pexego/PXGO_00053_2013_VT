@@ -375,3 +375,7 @@ a:hover, a:focus {
     color: #4b6868;
     text-decoration: none;
 }
+
+.o_required_modifier.o_input, .o_required_modifier .o_input {
+  background-color: #CBDFDA !important;
+}

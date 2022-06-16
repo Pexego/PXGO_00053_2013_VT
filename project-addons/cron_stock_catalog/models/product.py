@@ -42,8 +42,10 @@ class ProductProduct(models.Model):
                     product_fields.append(product[field][1])
                 elif field == 'state':
                     product_fields.append(translate_state[product[field]])
-                elif field == 'average_margin':
+                elif field in ('average_margin', 'standard_price', 'last_purchase_price'):
                     product_fields.append(round(product[field], 2))
+                elif field == 'last_purchase_date':
+                    product_fields.append(datetime.strptime(product[field], '%Y-%m-%d').strftime('%d/%m/%Y'))
                 else:
                     product_fields.append(product[field])
             rows.append(product_fields)
@@ -136,18 +138,18 @@ class ProductProduct(models.Model):
 
     def cron_general_alberto_3(self):
         headers = ["ID", "Referencia interna", "Entrante",
-                   "PVP_A", "PVP_B", "PVP_C", "PVP_D", "PVI_A", "PVI_B", "PVI_C", "PVI_D",
-                   "Margen PVD_A", "Margen PVD_B", "Margen PVD_C", "Margen PVI_A", "Margen PVI_B",
-                   "Margen PVI_C", "Margen PVI_D", "Stock Real", "Stock Disponible", "Coste 2",
+                   "PVP_Iberia", "PVP_Italia", "PVP_Francia", "PVP_Europa", "PVI_Iberia", "PVI_Italia", "PVI_Francia", "PVI_Europa",
+                   "Margen PVD_Iberia", "Margen PVD_Italia", "Margen PVD_Francia","Margen PVD_Europa", "Margen PVI_Iberia", "Margen PVI_Italia",
+                   "Margen PVI_Francia", "Margen PVI_Europa", "Stock Real", "Stock Disponible", "Coste 2",
                    "Nombre de la categoría Padre", "Nombre de la categoría", "Ventas en los últimos 60 días con stock",
                    "Días de stock restantes", "Nombre de la marca", "Stock Cocina", "Estado", "Joking",
                    "Fabricando"]
 
         domain = [('sale_ok', '=', True)]
 
-        fields = ["id", "default_code", "incoming_qty", "list_price1", "list_price2", "list_price3",
-                  "list_price4", "pvi1_price", "pvi2_price", "pvi3_price", "pvi4_price", "margin_pvd1", "margin_pvd2",
-                  "margin_pvd3", "margin_pvi1", "margin_pvi2", "margin_pvi3", "margin_pvi4", "qty_available",
+        fields = ["id", "default_code", "incoming_qty", "list_price1", "list_price3","list_price4", "list_price2",
+                  "pvi1_price", "pvi3_price", "pvi4_price", "pvi2_price", "margin_pvd1", "margin_pvd3",
+                  "margin_pvd4", 'margin_pvd2', "margin_pvi1", "margin_pvi3", "margin_pvi4", "margin_pvi2", "qty_available",
                   "virtual_available_wo_incoming", "standard_price_2", "categ_id",
                   "last_sixty_days_sales", "remaining_days_sale", "product_brand_id", "qty_available_wo_wh",
                   "state", "joking", "qty_in_production"]
@@ -188,7 +190,7 @@ class ProductProduct(models.Model):
                         "cron_stock_catalog.email_template_general_alberto_3")
 
     def cron_eol_products(self):
-        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Cantidad pendiente"]
+        headers = ["Ref Pedido", "Ref Albarán", "Comercial", "Producto", "Sustitutiva","Activo","Cantidad pendiente"]
 
         date = (datetime.now() - timedelta(days=365)).strftime("%Y-%m-%d %H:%M:%S")
         discontinued_products = self.env['product.product'].search([('state', '=', 'end')])
@@ -201,13 +203,35 @@ class ProductProduct(models.Model):
                 qty = move.product_uom_qty
                 if move.state=='partially_available':
                     qty -= move.reserved_availability
-                rows.append([move.sale_line_id.order_id.name,picking_name,move.sale_line_id.salesman_id.name,move.product_id.default_code,qty])
+                first_replacement = move.product_id.get_first_no_eol_replacement_product(product_visited=set(move.product_id))
+                replacement_name = ""
+                replacement_sale_ok = ""
+                if first_replacement:
+                    replacement_name = first_replacement.default_code
+                    replacement_sale_ok = "SI" if first_replacement.sale_ok else "NO"
+                rows.append([move.sale_line_id.order_id.name,picking_name,move.sale_line_id.salesman_id.name,move.product_id.default_code,replacement_name,replacement_sale_ok,qty])
 
         file_b64 = self.generate_xls(headers, rows)
         self.send_email(file_b64, "eol_products",
                         "eol_products_{}.xlsx"
                         .format(datetime.now().strftime('%m%d')),
                         "cron_stock_catalog.email_template_eol_products")
+
+    def get_first_no_eol_replacement_product(self, product_visited, first=True):
+        """ This recursive function allows you to get the first non-eol replacement product.
+        If it doesn't exist will return the last replacement product
+        :param product_visited: a set with products which we have iterated. This param prevent infinity loops. In the first call, the value of this field must be set(original_product)
+        :param first: a boolean : 'True' if it is the first call or 'False' if it is a recursive call
+        :return  a product.product or False' if there is no replacement product"""
+
+        if self.replacement_id and self.state == 'end' and self.replacement_id not in product_visited:
+            product_visited.add(self.replacement_id)
+            return self.replacement_id.get_first_no_eol_replacement_product(product_visited=product_visited, first=False)
+        if first:
+            return self.replacement_id
+        return self
+
+
     @api.multi
     def send_email(self, file, name, datas_fname, template_name):
         attach = None

@@ -226,3 +226,49 @@ msgstr "Chiamate SAT"
 #: selection:res.partner,sat_phonecall_count:0
 msgid "SAT Calls"
 msgstr "Chiamate SAT"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_delegation_id
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+msgid "Delegation"
+msgstr "Delegazione"
+
+#. module: crm_claim_phonecall
+#: model:ir.model,name:crm_claim_phonecall.model_res_partner
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_contact_id
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+msgid "Contact"
+msgstr "Contatto"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_product_category_id
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_product_id
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+msgid "Product"
+msgstr "Prodotto"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_product_category_id
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+msgid "Product type"
+msgstr "Tipo prodotto"
+
+#. module: crm_claim_phonecall
+#: model:ir.model.fields,field_description:crm_claim_phonecall.field_crm_phonecall_call_state
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+#: model:ir.ui.view,arch_db:crm_claim_phonecall.crm_case_inbound_phone_tree_view_sat
+msgid "State"
+msgstr "Condizione"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_state:0
+msgid "Done"
+msgstr "Fatto"
+
+#. module: crm_claim_phonecall
+#: selection:crm.phonecall,call_state:0
+msgid "Recall pending"
+msgstr "Chiamata in attesa"

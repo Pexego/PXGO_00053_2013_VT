@@ -150,11 +150,6 @@ msgstr "Producto a pérdidas"
 
 #. module: crm_rma_advance_location
 #: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
-msgid "Product to refurbish stock"
-msgstr "Producto a averiados"
-
-#. module: crm_rma_advance_location
-#: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
 msgid "Product to stock"
 msgstr "Producto a existencias"
 
@@ -352,3 +347,8 @@ msgstr "Todos los productos deben tener una descripción del problema, rellénel
 #: model:ir.model.fields,field_description:crm_rma_advance_location.field_res_partner_rmp_partner
 msgid "RMP partner"
 msgstr "Empresa RMP"
+
+#. module: crm_rma_advance_location
+#: model:ir.ui.view,arch_db:crm_rma_advance_location.picking_in_form
+msgid "Product to refurbish stock"
+msgstr "Producto a reacondicionamiento"
