@@ -1199,3 +1199,15 @@ msgstr "spedizioni"
 #: model:ir.ui.view,arch_db:custom_account.view_purchase_order_filter_inherit_search
 msgid "Container"
 msgstr "Spedizioni"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account_bank_statement.py:85
+#, python-format
+msgid "A selected move line was already reconciled.\n"
+" - Partner: %s\n"
+" - Invoice: %s\n"
+" - Amount: %.2f€"
+msgstr "Una linea di spostamento selezionata è già stata riconciliata..\n"
+" - Compagnia: %s\n"
+" - Fattura: %s\n"
+" - Quantità: %.2f€"

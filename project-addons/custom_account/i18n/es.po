@@ -1358,3 +1358,15 @@ msgstr "Envíos"
 #: model:ir.ui.view,arch_db:custom_account.view_purchase_order_filter_inherit_search
 msgid "Container"
 msgstr "Envíos"
+
+#. module: custom_account
+#: code:addons/custom_account/models/account_bank_statement.py:81
+#, python-format
+msgid "A selected move line was already reconciled.\n"
+" - Partners: %s\n"
+" - Amounts: %s\n"
+""
+msgstr "Una línea de movimiento seleccionada ya ha sido conciliada.\n"
+" - Empresa: %s\n"
+" - Cantidad: %s\n"
+""
